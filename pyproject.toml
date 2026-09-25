@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tac-osm"
+version = "0.1.0"
+description = "Integrated prototype for persistent structural computation (PNDS). The TAC / CDL / CASM research lines adapted behind one interface boundary, with ablation as the primary scientific instrument."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+
+# Deliberately minimal. This is an integration repository: heavy dependencies
+# belong to the component repositories, and importing them here would make the
+# ablation surface uninterpretable. The interface package is pure Python.
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
