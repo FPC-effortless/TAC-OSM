@@ -442,3 +442,91 @@ def test_no_ablation_cell_silently_resets_provenance():
     derived = [c for c in component_matrix() if c is not base]
     for cell in derived:
         assert cell.provenance == {}, cell.name
+
+
+# --------------------------------------------------------------------------- #
+# Scheduler integrity: the family table must not be an exposure table
+# --------------------------------------------------------------------------- #
+
+def test_relational_and_state_lookup_do_not_collide_on_a_pinned_run():
+    """The two persistence-sharing families must emit different tasks.
+
+    ``_build_candidates`` is called with the same seed, marks, dim,
+    n_candidates and noise by both builders, and the derived task seed
+    depends only on the task index. Under a single-family config both
+    families advance the index by 1 per step, so they emit the same
+    candidate set and the same gold index — and a per-family accuracy table
+    built that way measures one task stream under two labels.
+
+    The environment must therefore derive family-distinct tasks, or the
+    family comparison is uninterpretable. This is the defect that made an
+    earlier baseline table show identical accuracy for two families.
+    """
+    from tac_osm.environment import (
+        build_relational_task,
+        build_lookup_task,
+        build_replay_task,
+    )
+    from tac_osm.state import PersistentStore, StateConfig
+
+    store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    n = 25
+    identical = 0
+    for idx in range(1, n + 1):
+        seed = idx * 7919
+        rel = build_relational_task(seed, dim=8, n_candidates=8)
+        lk = build_lookup_task(seed, store, dim=8, n_candidates=8)
+        rel_set = tuple(c.descriptor for c in rel.candidates)
+        lk_set = tuple(c.descriptor for c in lk.candidates)
+        if rel_set == lk_set and rel.target_action == lk.target_action:
+            identical += 1
+    assert identical == 0, (
+        f"relational and state_lookup emitted {identical}/{n} identical tasks "
+        "under the same seed: a pinned per-family table is measuring one "
+        "stream under two labels"
+    )
+
+
+def test_replay_differs_from_both_other_families():
+    """replay carries a state address the others do not, so it cannot match."""
+    from tac_osm.environment import (
+        build_relational_task,
+        build_replay_task,
+        build_lookup_task,
+    )
+    from tac_osm.state import PersistentStore, StateConfig
+
+    store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    for idx in (1, 2, 3):
+        seed = idx * 7919
+        rep = build_replay_task(seed, store, dim=8, n_candidates=8)
+        other_sets = [
+            tuple(c.descriptor for c in build_relational_task(
+                seed, dim=8, n_candidates=8).candidates),
+            tuple(c.descriptor for c in build_lookup_task(
+                seed, store, dim=8, n_candidates=8).candidates),
+        ]
+        rep_set = tuple(c.descriptor for c in rep.candidates)
+        assert rep_set not in other_sets, (
+            f"replay matched another family at index {idx}"
+        )
+
+
+def test_mixed_schedule_gives_equal_family_exposure():
+    """N_f(t) must be equal, or a family curve is an exposure curve."""
+    from tac_osm.ablation import AblationConfig, RouterSwitch
+    from tac_osm.builder import build_model
+    from collections import Counter
+
+    n = 60
+    bm = build_model(
+        AblationConfig(seed=0, router=RouterSwitch(type="learned")),
+        n_steps=n,
+    )
+    seen = Counter(
+        bm.model.environment.next_task(bm.model.state).family for _ in range(n)
+    )
+    counts = sorted(seen.values())
+    assert counts[-1] - counts[0] <= 1, (
+        f"unequal family exposure: {dict(seen)}"
+    )

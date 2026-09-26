@@ -458,6 +458,13 @@ def build_lookup_task(
     """
     _validate_shape(dim, n_candidates)
     rng = random.Random(seed)
+    # ``state_lookup`` and ``relational`` derive candidates from the same RNG
+    # sequence under the same seed, so under a single-family config — where
+    # both advance the task index by 1 per step — they emit the *same*
+    # candidate set and the same gold index. A per-family accuracy table built
+    # that way then measures one task stream under two labels. Consuming a
+    # family-distinct offset separates the streams wherever they are built.
+    rng.randrange(1 << 20)
     address = f"world_{seed % 1000:03d}"
     written = tuple(_rand_bits(rng, dim))
 
