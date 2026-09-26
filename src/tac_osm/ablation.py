@@ -103,7 +103,15 @@ class AblationConfig:
             parts.append(f"verifier_{self.verifier.type}")
         if not self.verifier.repair:
             parts.append("no_repair")
-        return "-".join(parts) if len(parts) > 1 else self.name
+        # A matrix sets ``name`` to the arm (e.g. ``router_oracle``) and the
+        # switch to the same value, which would otherwise render the label as
+        # ``router_oracle-router_oracle``. Deduplicating adjacent repeats keeps
+        # the label a name a results ledger can use as a key.
+        deduped: list[str] = []
+        for part in parts:
+            if not deduped or deduped[-1] != part:
+                deduped.append(part)
+        return "-".join(deduped) if len(deduped) > 1 else self.name
 
     def describe(self) -> dict[str, Any]:
         """Full switch state, for the results ledger."""

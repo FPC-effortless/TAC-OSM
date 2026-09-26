@@ -392,3 +392,103 @@ learned component, not a retrospective audit. See
 | `S_{t+1}` verified commit | — | — | — | **not implemented** |
 | path-level verification | — | — | — | **not run** |
 | context-scaling proof | — | — | — | **not run** |
+
+---
+
+## TAC-OSM v0.1 — the first running loop
+
+The milestone as defined in the integration plan: **one complete episode
+with routing, structural execution, action, outcome, verification, and
+state commit.** Not a demonstration of the PNDS thesis — a demonstration
+that the architecture can run, giving the ablation harness an executable
+object to measure.
+
+Verified by `tests/test_model.py` (197 tests including the 26 pre-model
+gates in `test_tac_osm.py`).
+
+| Property | Result |
+|---|---|
+| episodes run to completion | yes, every pre-registered ablation cell |
+| oracle arm accuracy | **1.0000** (12/12) |
+| learned arm accuracy | 0.0833 |
+| static arm accuracy | 0.0833 |
+| random arm accuracy | 0.1667 |
+| verified commits per episode | 5–7 of 12 steps |
+| determinism given seed | exact |
+
+The **oracle arm reaching 1.0000 is the falsification preflight passing**:
+the environment is unambiguous and the gold candidate is the circuit's
+unique maximiser, so a learned-arm shortfall is attributable to the router
+and not to a defective task. This is the property the CASM v0.1 promotion
+withdrew over, and it is why it is tested over 50 seeds rather than
+asserted.
+
+The learned arm at 0.0833 is the honest starting point. The router trains by
+REINFORCE over 12 steps on a three-family task stream, and the persistence
+families require a key-gated read it has not learned. That gap is the
+research object, not a bug.
+
+### Bugs found by writing the loop
+
+Four defects were surfaced by integration, each of which would have
+silently invalidated every downstream measurement:
+
+1. **The relevance circuit compared the wrong operands.** Inputs are laid
+   out `0..m-1` reference, `m..2m-1` descriptor, but the edges paired `2k`
+   with `2k+1` — reference against reference, descriptor against descriptor.
+   The circuit's output was then identical for satisfy and violate, which
+   made execution a tautology rather than a cross-check of routing.
+
+2. **Exact semantics were unreachable through the learned parameter.**
+   `_exact_alpha_for` returned `[1.0, 1.0]`, which `_alpha` mapped through
+   `softplus` to `1.313`. An "exact" circuit therefore ran with disagreement
+   `1 - 1.313 = -0.313` and agreement-chain products of `1.313² = 1.725` —
+   output above 1 for a Boolean relation. `softplus` never returns exactly
+   1.0, so exactness is now a distinct mode (`alpha is None`) rather than a
+   value of the learned parameter.
+
+3. **The environment's gold bookkeeping was stale after the shuffle.**
+   `_finalise` shuffles and *rebuilds* every candidate, but
+   `RelationalTaskSpec.gold_index` was computed by the caller before the
+   shuffle, and `gold_descriptor` was the pre-shuffle construction value. So
+   `target_action` pointed at a candidate that did not satisfy the relation
+   while the true satisfier sat elsewhere in the list. Every oracle arm
+   scored ~0 with the circuit correct. Both fields are now re-derived from
+   the placed candidate, inside `_finalise`, so no caller can reintroduce
+   the drift.
+
+4. **The executed trace carried `max_nodes` of padding zeros.** Path
+   verification read them as 25 phantom nodes at 0.0 and failed every step,
+   so `writes=0` across the whole episode with the computation sound. The
+   trace is now the circuit's active slice.
+
+A fifth issue was a design gap rather than a defect: path verification's
+fixed `path_tolerance` of 0.25 is meaningless for a Boolean circuit whose
+EQ nodes are legitimately 0 and 1 while the output is 0. The tolerance is
+now derived from the computation's own value range.
+
+### The verified-commit separation
+
+Per the integration plan, state write and verified state commit are kept
+apart in the code: `state.write` is unconditional at the loop level, and
+the verifier gates it. `test_the_loop_commits_only_through_the_verifier`
+pins that invariant, and the `verifier=none` arm writes on every step while
+the default arm writes 5–7 of 12. That is the ablation the architecture
+plan asks for, available now rather than designed in.
+
+### Status — conservative
+
+| Claim | Status |
+|---|---|
+| the loop runs end to end | **established** (v0.1, synthetic) |
+| the environment is unambiguous (oracle = 1.0) | **established** (50 seeds) |
+| the relevance circuit computes the environment's relation | **established** (50 seeds, exact agreement with `satisfies_relation`) |
+| routing and execution are independent computations of one relation | **established** (circuit never sees gold; router never sees the circuit) |
+| verified commit gates state mutation | **established as a mechanism**, not as a reliability claim |
+| the learned router solves the task | **not established** (0.0833) |
+| `C_executed ≈ f(\|R\|)` rather than `f(\|H\|)` | **not measured** |
+| persistence across a temporal boundary | **not measured** (state is written and read within an episode) |
+| capability, cost, transfer, intervention sensitivity | **not measured** — this is the ablation matrix's job |
+
+The v0.1 claim is deliberately narrow: the architecture exists and its
+oracle is sound. Everything in the ablation plan is the next step.
