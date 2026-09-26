@@ -155,31 +155,53 @@ The specification below is kept intact and un-amended, because it was
 pre-registered and a pre-registration is not revised to fit a result. It is
 re-queued, not withdrawn.
 
-### Stage F2 — Learning dynamics  *(the actual next step)*
+### Stage F2 — Learning dynamics  *(pre-registered; not yet run)*
 
 > The architecture is not the problem. The hypothesis class contains a
 > perfect, H-invariant solution; the environment provides enough information
 > to find it (`oracle = 1.0000`); what fails is the *update*.
 
-Two experiments, both cheap, both falsifiable against the matched-H numbers.
-They are recorded rather than pre-registered, because pre-registering requires
-a commitment this run has not earned the right to make.
+**Pre-registered in `docs/TACOSM-LEARN-001.md`.** The interventions are pinned
+to named parameters and named schedules *before* the run, because an
+improvement from an unspecified intervention is unfalsifiable — any negative
+result could be attributed to having picked the wrong knob. What was a
+two-item candidate list is now a named three-arm design:
 
-1. **Exploration vs sparse reward.** Keep REINFORCE and add exploration at
-   training time — a temperature schedule, or epsilon-greedy action selection.
-   If `routing@1` at H=256 rises toward the H=8 level, the mechanism is
-   confirmed as sparse reward and the fix is a training-time schedule, not
-   architecture.
-2. **Denser supervision without leaking.** The §34 representability gate proves
-   the relation is *computable* from the router's own inputs. A surrogate
-   reward — the score gap between gold and the best distractor under the
-   analytic vector, available without gold labels — could densify the signal
-   without breaking the leakage boundary.
+| arm | knob | value | schedule | acts on |
+|---|---|---|---|---|
+| `baseline` | — | — | — | the MATCHED-001 protocol verbatim, reproduced |
+| `epsilon_greedy` | `eps_0` | `0.30` | linear decay to 0 over `T=500` | action selection in `route` |
+| `temperature` | `tau_0` → `tau_end` | `2.0` → `0.5` | linear over `T=500` | the training softmax in `_softmax` |
 
-Neither requires an index, a new representation, or any change to the loop's
-architecture. **F1 is re-queued behind F2**, because the cost-quality trade
-that F1 measures is only meaningful once the quality term is a property of the
-scorer rather than of the optimiser.
+Both interventions are **training-only** — no arm changes the feature basis,
+the environment, the candidate generator, the evaluator, or how the router
+selects at evaluation (`epsilon = 0`, `temperature = 0.5` always). The
+benchmark is frozen: the `baseline` arm must reproduce the published
+MATCHED-001 numbers, or the run is invalid and no arm is reported.
+
+The primary endpoint is `routing@1` at `train-H = 256` (the 0.0740 number),
+with `recall@4`/`recall@8`/`recall@16`, `gold_rank`, `delta_1`, `entropy`,
+`accuracy`, `C_router` and per-seed values as secondary endpoints. The
+decision rule is committed in advance with its consequences attached —
+including the one that matters most:
+
+> **A negative F2 does not establish that persistent-state relevance routing
+> does not scale.** It establishes that these two named interventions do not
+> fix the trained router at H=256. The hypothesis class provably contains a
+> perfect H-invariant solution, so a mechanism whose hypothesis class is
+> adequate cannot be pronounced inadequate by a failure to *find* the
+> solution with one optimiser. The distinction — "the current router doesn't
+> scale" versus "the routing mechanism doesn't scale" — is exactly what the
+> measurement-layer contract exists to enforce.
+
+The surrogate-reward option MATCHED-001 recorded (a dense reward from the
+analytic margin, available without gold labels) is **deliberately not part of
+F2**. It changes the reward function rather than the exploration regime, so
+it is a different experiment with its own leakage boundary to argue; it is
+re-queued, not merged.
+
+**F1 re-queues only on the primary endpoint firing, or on the top-K signal
+being shown intact** — and those are different evidence, recorded as such.
 
 This stage also decides C5's precondition. `C_executed ≈ f(|R|)` needs a
 retrieval boundary to make `|R|` a measurable quantity, and the only retrieval

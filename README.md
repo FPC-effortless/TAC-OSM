@@ -236,6 +236,14 @@ is therefore **suspended, not abandoned** — an index measured against a
 baseline whose weakness is a training artefact is unsound in both directions.
 The learning dynamics are next (Stage F2).
 
+**Stage F2 is pre-registered, not yet run** — `docs/TACOSM-LEARN-001.md`. Two
+named training-time interventions (epsilon-greedy `eps_0 = 0.30` decaying to 0;
+temperature `2.0 → 0.5`) against the frozen MATCHED-001 baseline, with the
+decision rule and its consequences committed *before* the run. The constraint
+that makes it falsifiable rather than tunable: the knobs are constants in the
+document, not command-line arguments, and a negative result licenses a claim
+about the interventions, not about the mechanism (claim **C10**).
+
 ---
 
 ## Repository layout

@@ -300,6 +300,54 @@ rationalising it would be worse than leaving it here.
 
 ---
 
+## C10 — Falsified interventions do not falsify the mechanism
+
+> A negative intervention experiment licenses a claim about the intervention,
+> not about the mechanism it was trying to improve.
+
+**STATUS: SUPPORTED** — as a methodological claim, by the argument below. It
+is in the ledger because it is the constraint that keeps `TACOSM-LEARN-001`
+(F2) honest, and because it is the kind of constraint that gets quietly
+dropped when a result is inconvenient.
+
+F2 tests two named training-time interventions — epsilon-greedy with
+`eps_0 = 0.30` linearly decayed, and a temperature schedule from `2.0` to
+`0.5` — against the frozen MATCHED-001 baseline. If neither lifts
+`routing@1` at `train-H = 256`, the claim F2 is entitled to make is:
+
+> these two interventions do not fix the trained router at H=256 under this
+> protocol
+
+The claim it is *not* entitled to make is:
+
+> persistent-state relevance routing does not scale
+
+The reason is not rhetorical. It is a measurement-layer argument: the
+hypothesis class provably contains a perfect, H-invariant solution
+(`analytic_weights`, `routing@1 = 1.0000` at H ∈ {8, 64, 256, 512},
+`delta_1 ≈ +3.07`), so the relation is expressible and the environment is
+unambiguous (`oracle = 1.0000`). A mechanism whose hypothesis class is
+adequate cannot be pronounced inadequate by a failure to *find* the solution
+with one optimiser. That is the difference between an optimisation result and
+a representability result, and conflating them is precisely the error class
+that the `dd8f63c` audit and the §34 gate exist to catch — in the other
+direction, where an oracle passing was read as the basis being adequate.
+
+The distinction the ledger holds:
+
+- **"the current router doesn't scale"** — one trained linear scorer under one
+  update rule. An intervention experiment can address this.
+- **"persistent-state relevance routing doesn't scale"** — the mechanism.
+  No single intervention experiment can address this.
+
+F2's negative-result inspection order is pre-committed as
+`representation → training dynamics → population discrimination → retrieval
+architecture`, and F1 re-queues only on F2's primary endpoint firing or on the
+top-K signal being shown intact. Both conditions are recorded in
+`docs/TACOSM-LEARN-001.md`.
+
+---
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
