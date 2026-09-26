@@ -28,7 +28,7 @@ to coexist, and the distinction is the scientific point of this module:
   ``C_executed ≈ f(|H|)`` instead of ``f(|R|)``.
 * **``RandomRouter``** — chance.
 
-## The persistence extension
+## The persistence extension, and why its block is gated
 
 The source router scores candidates against the *query*. The integrated loop
 also has to route over candidates whose target lives in persistent state, so
@@ -38,15 +38,36 @@ the feature is
 
     slot_s_j = present(s) * [value(s)_j == descriptor_j]
 
-This is the exact structural analogue of the context-gated feature, with the
-state read replacing the mark vector as the gate. It is what allows one router
-basis to serve the ``relational``, ``state_lookup``, and ``replay`` families
-without a per-family code path — the same reason the environment unified their
-descriptor shapes.
+This is what allows one router basis to serve the ``relational``,
+``state_lookup``, and ``replay`` families without a per-family code path.
 
-The extension keeps the relation linearly representable, so the
-representability gate (``representability.py``, protocol §34) can still be run
-on the real basis before any training.
+**But the un-gated slot block is not a sufficient basis.** The relevance
+relation defines gold as *agreeing* with the reference on the marked
+positions and *anti-matching* it elsewhere (prob ``1 - noise``), so on the
+unmarked positions gold carries an anti-signal that is nearly deterministic
+(measured agree-rate 0.04–0.06). An un-gated block sees that anti-signal and
+inverts the score. Measured over 60 episodes, no single shared weight vector
+separates gold from the best distractor for ``state_lookup`` (min margin
+−0.2353) or ``replay`` (−2.3210), while ``relational`` separates easily
+(+1.4754) — because the Stage-2c ``gated_agreement`` block zeroes every
+unmarked position and the slot block does not. The gap is in the hypothesis
+class, not the optimiser, so it is found by the §34 audit rather than by
+training.
+
+The fix is the exact structural analogue of the gated block with the state
+read substituted for the query:
+
+    slot_gated_s_j = present(s) * context_j * [value(s)_j == descriptor_j]
+
+Measured solo it separates all three families at margin +2.0. Set as a fixed
+analytic vector — ``gated_agreement = 1.0``, ``slot_gated = 2.0``, everything
+else 0 — it separates all three families over 300 episodes each with **zero
+ties and zero violations**. The ``replay`` family needs the ratio: it carries
+public bits *and* an address, so both blocks are active, and the slot block
+must dominate or the two cancel to an exact tie (186/300 episodes at equal
+weights). ``slot_gated`` is therefore not a tuned constant but a required
+asymmetry, and the gate is what restores a shared-weight solution where none
+existed.
 """
 
 from __future__ import annotations
@@ -70,6 +91,7 @@ __all__ = [
     "build_router",
     "basis_size",
     "features",
+    "analytic_weights",
     "arm_types",
 ]
 
@@ -114,8 +136,14 @@ def basis_size(dim: int, max_slots: int) -> int:
     """Number of features produced by :func:`features`.
 
     Exposed so a caller can size a weight vector without computing features.
+
+    ``1 + 4*dim`` is the Stage-2c basis (bias plus four agreement blocks).
+    ``dim*max_slots`` is the un-gated slot block, retained because the audit
+    that found the gap measures the same basis the router scores over, and
+    ``dim*max_slots`` more is the gated slot block that restores
+    representability.
     """
-    return 1 + 4 * dim + dim * max_slots
+    return 1 + 4 * dim + 2 * dim * max_slots
 
 
 def _bits(text: str) -> tuple[int, ...]:
@@ -199,15 +227,53 @@ def features(
     # The state read supplies plain bit rows (``StateRead.values``); empty
     # rows mark absent slots. ``Slot`` never crosses the interface, so this
     # basis works against any store implementation.
+    #
+    # Two blocks, not one, and they are **contiguous**: every slot's
+    # ``slot_agreement`` positions first, then every slot's ``slot_gated``
+    # positions. ``_block_offsets`` addresses them by block, so an interleaved
+    # layout would put ``analytic_weights`` in the wrong coordinates and the
+    # gate would measure a different vector than the one it names.
+    #
+    # The un-gated block is the direct extension; the gated block is the one
+    # that restores a shared-weight solution, because the un-gated block
+    # carries the anti-signal on the unmarked positions. Both are gated by
+    # slot presence; the second is gated by the mark vector too, exactly as
+    # the Stage-2c gated block is.
+    #
+    # **Addressed slot only.** ``read`` places the addressed slot first, then
+    # the rest of the occupied pool, and the pool *grows* over an episode —
+    # after 40 tasks the read returns 40 vectors. A non-addressed slot's value
+    # has no relation to this task, but its agreement features are still
+    # signed, so it injects noise that grows with history and dominates the
+    # signal. ``_addressed`` is 1.0 only for the slot the query names, so a
+    # weight vector spanning multiple slots cannot pick up pool noise.
+    address = _query_address(query)
     rows = _pad(read.values, max_slots)
-    for row in rows:
-        present = 1.0 if row else 0.0
+    addressed = [
+        (1.0 if (address and i < len(read.keys) and read.keys[i] == address) else 0.0)
+        for i in range(len(rows))
+    ]
+    for i, row in enumerate(rows):
+        present = addressed[i] if row else 0.0
         for j in range(dim):
             if not row:
                 feats.append(0.0)
             else:
                 feats.append(present * (1.0 if row[j] == descriptor[j] else -1.0))
+    for i, row in enumerate(rows):
+        present = addressed[i] if row else 0.0
+        for j in range(dim):
+            if not row:
+                feats.append(0.0)
+            else:
+                gate = float(context[j]) if j < len(context) else 0.0
+                feats.append(present * gate * (1.0 if row[j] == descriptor[j] else -1.0))
     return feats
+
+
+def _query_address(query: Query) -> str:
+    """The state address this query names, or '' when the task needs no state."""
+    return query.text.partition("\t")[2]
 
 
 # --------------------------------------------------------------------------- #
@@ -328,8 +394,39 @@ def _block_offsets(dim: int, max_slots: int) -> dict[str, tuple[int, int]]:
     blocks["context_descriptor"] = (start, start + dim); start += dim
     blocks["context_query"] = (start, start + dim); start += dim
     blocks["gated_agreement"] = (start, start + dim); start += dim
-    blocks["slot_agreement"] = (start, start + dim * max_slots)
+    width = dim * max_slots
+    blocks["slot_agreement"] = (start, start + width); start += width
+    blocks["slot_gated"] = (start, start + width)
     return blocks
+
+
+def analytic_weights(dim: int, max_slots: int) -> list[float]:
+    """The fixed vector that separates gold on all three families.
+
+    ``gated_agreement = 1.0`` and ``slot_gated = 2.0``, everything else zero.
+
+    This is *not* a tuned hyperparameter and it is not a fitted value. It is
+    the §34 evidence that the relation lives in the hypothesis class: one
+    weight vector, shared across every episode, separates gold from every
+    distractor on ``relational``, ``state_lookup``, and ``replay`` at margins
+    +2.0, +4.0, and +2.0 with zero ties. ``slot_gated`` must exceed
+    ``gated_agreement`` because ``replay`` activates both blocks at once and
+    they otherwise cancel to an exact tie (186/300 episodes at equal weights);
+    at 2:1 the tie vanishes entirely.
+
+    Used by the representability gate and as the reference point a learned
+    router's own block means are compared against.
+    """
+    n = basis_size(dim, max_slots)
+    blocks = _block_offsets(dim, max_slots)
+    w = [0.0] * n
+    s, e = blocks["gated_agreement"]
+    for j in range(s, e):
+        w[j] = 1.0
+    s, e = blocks["slot_gated"]
+    for j in range(s, e):
+        w[j] = 2.0
+    return w
 
 
 # --------------------------------------------------------------------------- #

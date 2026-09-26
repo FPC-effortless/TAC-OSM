@@ -36,6 +36,7 @@ def representable(
     *,
     min_margin: float = 1e-6,
     min_episodes: int = 1,
+    shared_weights: Sequence[float] | None = None,
 ) -> dict:
     """Check that the *actual* learned feature map can express the relation.
 
@@ -56,39 +57,91 @@ def representable(
     gold_fn:
         ``(episode) -> gold index``. Used only to locate the target; it is
         never an input to the mechanism.
+    shared_weights:
+        If given, the gate is run with this **one fixed vector across every
+        episode** rather than a per-episode ideal. This is the stronger test
+        and the one that matches what a learned linear router actually has: a
+        single weight vector, not a fresh oracle per episode. The v0.1 router
+        passed a per-episode gate on ``relational`` and then failed at 0.0833,
+        because a per-episode ideal is necessary but not sufficient — the
+        ideal vector can rotate with the marked positions, which change every
+        episode, while the learned weights cannot.
 
     Returns
     -------
-    dict with ``pass``, ``n_episodes``, ``min_margin``, and ``detail``.
-    A ``False`` result means the run measures model-class expressiveness, not
-    learnability from outcomes, and any learned-arm result is uninterpretable.
+    dict with ``pass``, ``n_episodes``, ``min_margin``, ``ties``,
+    ``violations``, and ``detail``. A ``False`` result means the run measures
+    model-class expressiveness, not learnability from outcomes, and any
+    learned-arm result is uninterpretable.
     """
     if len(episodes) < min_episodes:
         return {
             "pass": False,
             "n_episodes": len(episodes),
             "min_margin": None,
+            "ties": None,
+            "violations": None,
             "detail": f"insufficient episodes: {len(episodes)} < {min_episodes}",
         }
 
     worst = None
+    ties = 0
+    violations = 0
+
+    if shared_weights is not None:
+        # The strong test: one weight vector, every episode.
+        weights = list(shared_weights)
+        for episode in episodes:
+            rows = list(feature_fn(episode))
+            if not rows:
+                return _fail(len(episodes), "feature_fn returned no rows")
+            gold = gold_fn(episode)
+            if not 0 <= gold < len(rows):
+                return _fail(
+                    len(episodes),
+                    f"gold index {gold} out of range for {len(rows)} rows",
+                )
+            gold_score = score_fn(weights, rows[gold])
+            best_other = max(
+                score_fn(weights, r) for i, r in enumerate(rows) if i != gold
+            )
+            margin = gold_score - best_other
+            if margin < 0:
+                violations += 1
+            elif margin == 0:
+                ties += 1
+            if worst is None or margin < worst:
+                worst = margin
+        passed = worst is not None and worst >= min_margin
+        return {
+            "pass": bool(passed),
+            "n_episodes": len(episodes),
+            "min_margin": worst,
+            "ties": ties,
+            "violations": violations,
+            "detail": (
+                "one shared weight vector separates gold from every distractor "
+                f"over {len(episodes)} episodes"
+                if passed
+                else "no shared weight vector separates gold from the best "
+                "distractor across episodes: the relation is not expressible "
+                "by a single linear scorer (the gap is in the hypothesis class, "
+                "not the optimiser)"
+            ),
+        }
+
+    # The original per-episode test, kept for diagnostics: it answers "could
+    # any linear scorer separate this episode", which localises a shared-weight
+    # failure to the weight space rather than the feature space.
     for episode in episodes:
         rows = list(feature_fn(episode))
         if not rows:
-            return {
-                "pass": False,
-                "n_episodes": len(episodes),
-                "min_margin": None,
-                "detail": "feature_fn returned no rows",
-            }
+            return _fail(len(episodes), "feature_fn returned no rows")
         gold = gold_fn(episode)
         if not 0 <= gold < len(rows):
-            return {
-                "pass": False,
-                "n_episodes": len(episodes),
-                "min_margin": None,
-                "detail": f"gold index {gold} out of range for {len(rows)} rows",
-            }
+            return _fail(
+                len(episodes), f"gold index {gold} out of range for {len(rows)} rows"
+            )
 
         # Choose weights that maximise the gold row's score, then measure the
         # margin against the best alternative. If the ideal weights cannot
@@ -103,6 +156,10 @@ def representable(
             margins.append(margin)
 
         best_margin = min(margins) if margins else 0.0
+        if best_margin < 0:
+            violations += 1
+        elif best_margin == 0:
+            ties += 1
         if worst is None or best_margin < worst:
             worst = best_margin
 
@@ -111,6 +168,8 @@ def representable(
         "pass": bool(passed),
         "n_episodes": len(episodes),
         "min_margin": worst,
+        "ties": ties,
+        "violations": violations,
         "detail": (
             "relation is representable through the actual feature map"
             if passed
@@ -118,6 +177,17 @@ def representable(
             "best distractor: the relation is in the null space of the "
             "feature basis (the dd8f63c failure)"
         ),
+    }
+
+
+def _fail(n_episodes: int, detail: str) -> dict:
+    return {
+        "pass": False,
+        "n_episodes": n_episodes,
+        "min_margin": None,
+        "ties": None,
+        "violations": None,
+        "detail": detail,
     }
 
 

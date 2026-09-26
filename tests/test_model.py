@@ -18,13 +18,20 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from tac_osm.ablation import AblationConfig  # noqa: E402
 from tac_osm.builder import build_model  # noqa: E402
-from tac_osm.environment import build_relational_task, parse_query, satisfies_relation  # noqa: E402
+from tac_osm.environment import (  # noqa: E402
+    build_lookup_task,
+    build_relational_task,
+    build_replay_task,
+    parse_query,
+    satisfies_relation,
+)
 from tac_osm.executor import (  # noqa: E402
     ExecutorConfig,
     StructuralExecutor,
     relevance_program,
 )
-from tac_osm.model import TacOsmModel  # noqa: E402
+from tac_osm.model import ModelConfig, TacOsmModel  # noqa: E402
+from tac_osm.state import PersistentStore, StateConfig  # noqa: E402
 from tac_osm import Structure  # noqa: E402
 
 
@@ -146,6 +153,123 @@ def test_gold_index_and_descriptor_agree_after_shuffle(seed):
     ]
     assert satisfiers == [task.target_action], (
         f"gold is not the unique satisfier: satisfiers={satisfiers}"
+    )
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_replay_circuit_uses_the_written_vector_not_the_query_bits(seed):
+    """The ``replay`` circuit's reference must be the addressed state value.
+
+    ``replay`` carries public query bits *and* a state address, and the
+    relation is built against the **written** vector. If the model's reference
+    prefers the query bits, the executor computes a relation the environment
+    never defined: gold still satisfies the true relation but the circuit says
+    it does not, so ``V_t`` rejects a correct execution and suppresses the
+    legitimate write (defect 6).
+
+    This test failed silently before the fix — gold satisfies the true
+    relation either way, so only the *circuit* disagrees — which is why it is
+    written against the circuit rather than against ``satisfies_relation``.
+    """
+    store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    task = build_replay_task(4000 + seed, store, dim=8, n_candidates=8, noise=0.0)
+    read = store.read(task.query)
+    marks = [j for j, b in enumerate(task.query.context) if b == 1]
+    gold = task.candidates[task.target_action]
+
+    model = _oracle_model(store)
+    model._last_query = task.query
+    model._last_context = task.query.context
+    reference = model._reference_for(read)
+
+    assert reference == tuple(task.detail.written_bits), (
+        f"replay reference is not the written vector: {reference} "
+        f"vs {task.detail.written_bits}"
+    )
+    # The circuit built on that reference must accept gold.
+    structure = model._structure_for(gold, 0, read)
+    output = _executor().execute(structure, model._inputs_for(read, gold)).output
+    assert output == pytest.approx(1.0), (
+        f"the replay circuit rejects gold: output={output}, reference={reference}, "
+        f"query_bits={parse_query(task.query)[0]}, marks={marks}"
+    )
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_lookup_circuit_uses_the_written_vector(seed):
+    """``state_lookup`` has no query bits, so the reference is the read itself."""
+    store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    task = build_lookup_task(5000 + seed, store, dim=8, n_candidates=8, noise=0.0)
+    read = store.read(task.query)
+    gold = task.candidates[task.target_action]
+
+    model = _oracle_model(store)
+    model._last_query = task.query
+    model._last_context = task.query.context
+    reference = model._reference_for(read)
+
+    assert reference == tuple(task.detail.written_bits)
+    structure = model._structure_for(gold, 0, read)
+    output = _executor().execute(structure, model._inputs_for(read, gold)).output
+    assert output == pytest.approx(1.0)
+
+
+@pytest.mark.parametrize("seed", range(40))
+def test_relational_circuit_uses_the_query_bits(seed):
+    """``relational`` has no address, so the reference is the public bits.
+
+    The mirror of the ``replay`` test: the address-first rule must not
+    displace the public bits when there is no address to read.
+    """
+    task = build_relational_task(6000 + seed, dim=8, n_candidates=8)
+    store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    read = store.read(task.query)
+    gold = task.candidates[task.target_action]
+
+    model = _oracle_model(store)
+    model._last_query = task.query
+    model._last_context = task.query.context
+    reference = model._reference_for(read)
+
+    assert reference == tuple(parse_query(task.query)[0])
+    structure = model._structure_for(gold, 0, read)
+    output = _executor().execute(structure, model._inputs_for(read, gold)).output
+    assert output == pytest.approx(1.0)
+
+
+def test_a_correct_execution_verifies_on_every_family():
+    """End-to-end: an oracle arm must have verification agree with success.
+
+    Defect 6's signature was ``success=True, verification.passed=False`` on
+    ``replay``. If that pairing ever reappears the verifier has been handed a
+    different relation than the environment scores against.
+    """
+    store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    model = _oracle_model(store)
+    episode = model.run()
+
+    assert episode.accuracy == 1.0
+    for step in episode.steps:
+        assert step.verification.passed, (
+            f"step {step.step} ({step.provenance['family']}) succeeded but "
+            f"verification failed: {step.verification.feedback}"
+        )
+
+
+def _oracle_model(store: PersistentStore) -> TacOsmModel:
+    """A loop whose every component is an oracle/control, for reference checks."""
+    from tac_osm.environment import WorldConfig, WorldEnvironment
+    from tac_osm.router import OracleRouter
+    from tac_osm.verifier import ThresholdVerifier, VerifierConfig
+
+    return TacOsmModel(
+        state=store,
+        router=OracleRouter(),
+        executor=_executor(),
+        verifier=ThresholdVerifier(VerifierConfig()),
+        repair=None,
+        environment=WorldEnvironment(WorldConfig(seed=0)),
+        config=ModelConfig(n_steps=12, learn=False, seed=0),
     )
 
 

@@ -25,12 +25,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from . import Candidate, PersistentState, Query, RelevanceRouter, StateRead
+from . import Candidate, PersistentState, Query, RelevanceRouter, StateRead, StateUpdate
 from .ablation import AblationConfig
 from .environment import (
     WorldConfig,
     WorldEnvironment,
+    build_lookup_task,
     build_relational_task,
+    build_replay_task,
     satisfies_relation,
 )
 from .executor import ExecutorConfig, StructuralExecutor
@@ -40,6 +42,7 @@ from .representability import representable
 from .router import (
     LearnedRelationalRouter,
     RouterConfig,
+    analytic_weights,
     build_router,
     features,
     basis_size,
@@ -148,33 +151,101 @@ def check_representability(config: AblationConfig | None = None,
     """G2: the learned router's real basis must express the target relation.
 
     Runs the §34 gate on the actual feature basis the router will use, against
-    actual episodes the environment will emit. The ideal weights are chosen to
-    maximise the gold row's score, then the margin against the best distractor
-    is measured; if the ideal weights cannot separate, no learned weights can.
+    actual episodes the environment will emit, with **one shared weight vector
+    across every episode** — the strong form, because a learned linear router
+    has a single weight vector, not a fresh oracle per episode.
+
+    The v0.1 gate ran the per-episode form on ``relational`` only. It passed,
+    and the learned arm then scored 0.0833, because a per-episode ideal is
+    necessary but not sufficient: the ideal vector can rotate with the marked
+    positions, which change every episode, while the learned weights cannot.
+    Auditing ``relational`` only also hid the two families the learned arm
+    actually failed on.
+
+    Now all three families are audited with a fixed analytic vector
+    (:func:`tac_osm.router.analytic_weights`), and the failure counts are
+    reported per family so the gap is localised to a hypothesis-class failure
+    rather than an optimisation failure.
     """
     dim = 8
     max_slots = 4
+    n_candidates = 8
     router = LearnedRelationalRouter(RouterConfig(dim=dim, max_state_slots=max_slots))
-    store = PersistentStore(StateConfig(seed=0))
-
-    episodes = [build_relational_task(1000 + i, dim=dim, n_candidates=8) for i in range(n_episodes)]
+    store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    # ``feature_fn`` reads from a *separate* store: the builders write into
+    # ``store`` to create the task, and a read interleaved with those writes
+    # returns the empty rows of a not-yet-populated key, which the feature
+    # basis then treats as a padding row. Each family is built into ``store``
+    # and read back from ``gate_store`` under the same address, so the read
+    # sees exactly the one vector that family wrote.
+    gate_store = PersistentStore(StateConfig(seed=0, n_slots=64))
 
     def feature_fn(episode: Any) -> list[list[float]]:
         query = episode.query
-        read = store.read(query)
+        read = gate_store.read(query)
         return [features(query, c.descriptor, read, dim, max_slots)
                 for c in episode.candidates]
 
     def gold_fn(episode: Any) -> int:
         return episode.target_action
 
-    def score_fn(weights: list[float], rows: list[list[float]]) -> list[float]:
-        return [sum(w * f for w, f in zip(weights, row)) for row in rows]
+    def score_fn(weights: list[float], row: list[float]) -> float:
+        """Score one feature row. ``representable`` calls this per row."""
+        return sum(w * f for w, f in zip(weights, row))
 
-    return representable(
-        score_fn=score_fn,
-        feature_fn=feature_fn,
-        gold_fn=gold_fn,
-        episodes=episodes,
-        min_margin=1e-6,
-    )
+    shared = analytic_weights(dim, max_slots)
+    families = {
+        "relational": lambda i: build_relational_task(
+            1000 + i, dim=dim, n_candidates=n_candidates),
+        "state_lookup": lambda i: build_lookup_task(
+            2000 + i, store, dim=dim, n_candidates=n_candidates),
+        "replay": lambda i: build_replay_task(
+            3000 + i, store, dim=dim, n_candidates=n_candidates),
+    }
+
+    per_family: dict[str, dict] = {}
+    worst = None
+    for name, build in families.items():
+        store.reset()
+        gate_store.reset()
+        episodes = [build(i) for i in range(n_episodes)]
+        # Mirror the world's writes into the store the gate reads from, so the
+        # read sees the vector the family's relation is built on.
+        for episode in episodes:
+            address = episode.query.text.partition("\t")[2]
+            if not address:
+                continue
+            detail = episode.detail
+            written = getattr(detail, "written_bits", None)
+            if written:
+                gate_store.write(
+                    StateUpdate(key=address, value=tuple(written),
+                                task_key=address, success_score=1.0,
+                                step=episode.query.step)
+                )
+        result = representable(
+            score_fn=score_fn,
+            feature_fn=feature_fn,
+            gold_fn=gold_fn,
+            episodes=episodes,
+            min_margin=1e-6,
+            shared_weights=shared,
+        )
+        per_family[name] = result
+        if worst is None or (result["min_margin"] is not None
+                             and result["min_margin"] < worst):
+            worst = result["min_margin"]
+
+    failed = [n for n, r in per_family.items() if not r["pass"]]
+    return {
+        "pass": not failed,
+        "n_episodes": n_episodes,
+        "min_margin": worst,
+        "per_family": per_family,
+        "weights": "gated_agreement=1.0, slot_gated=2.0",
+        "detail": (
+            "one shared analytic vector separates gold on all families"
+            if not failed
+            else f"representability failed on: {sorted(failed)}"
+        ),
+    }

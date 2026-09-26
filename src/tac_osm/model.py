@@ -316,9 +316,9 @@ class TacOsmModel:
         The structure is the relevance circuit for this candidate against the
         marked positions. The reference is the query's public bits for
         ``relational`` tasks and the *state-read* bits for the persistence
-        families, whose query carries no public bits — the whole point of
-        those families is that the target is not in the observation. Routing
-        and execution are then two *independent* computations of one relation
+        families, whose target is not in the observation. ``replay`` carries
+        both, and the address wins — see :meth:`_reference_for`. Routing and
+        execution are then two *independent* computations of one relation
         — the router scores it with a linear basis, the executor computes it
         as a Boolean circuit — so verification is a genuine cross-check rather
         than a tautology.
@@ -346,10 +346,23 @@ class TacOsmModel:
     def _reference_for(self, read: StateRead) -> tuple[int, ...]:
         """The bits the relation is measured against.
 
-        Public query bits when the task has them; otherwise the state-read
-        bits. A query carrying neither has no relation to compute.
+        **Address first.** When the query carries a state address, the target
+        lives at that address and *nowhere else*: ``replay`` carries public
+        bits *and* an address, and the relation is built against the written
+        vector, not the bits. Preferring the bits in that case made the
+        executor compute the relation against a vector the environment never
+        used, so the verifier rejected a correct execution ~75% of the time
+        on that family (defect 6; caught by the §34 audit, not by any test).
+
+        ``relational`` carries only bits and no address, so it takes the
+        public path; ``state_lookup`` carries only an address, so it takes
+        the state path. A query carrying neither has no relation to compute.
         """
-        bits, _address = parse_query_text(self._last_query)
+        bits, address = parse_query_text(self._last_query)
+        if address:
+            for key, value in zip(read.keys, read.values):
+                if key == address and value:
+                    return tuple(int(b) for b in value)
         if bits:
             return bits
         for value in read.values:

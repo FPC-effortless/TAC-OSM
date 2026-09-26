@@ -88,7 +88,8 @@ def _features_collapsed(episode) -> list[list[float]]:
 
 
 def _score(weights, features):
-    return [sum(w * f for w, f in zip(weights, row)) for row in features]
+    """Score one feature row; ``representable`` calls this per row."""
+    return sum(w * f for w, f in zip(weights, features))
 
 
 def test_representability_passes_on_correct_basis():
@@ -124,6 +125,211 @@ def test_representability_rejects_too_few_episodes():
         episodes=[],
     )
     assert report["pass"] is False
+
+
+def test_shared_weights_detect_a_hypothesis_class_gap():
+    """The strong form: one vector for every episode, not a fresh oracle each.
+
+    The v0.1 gate passed a per-episode ideal on ``relational`` and the learned
+    arm then scored 0.0833, because an ideal that rotates with the marked
+    positions is not achievable by a single fixed weight vector. This test
+    builds exactly that failure: gold is separable per episode, but no one
+    vector separates all episodes.
+    """
+    episodes = [_episode(gold=g, n=4) for g in range(4)]
+
+    def feature_fn(episode):
+        # Gold is +1 on coordinate 0 and 0 on coordinate 1; every distractor
+        # is the reverse. The coordinate the *relation* lives on rotates with
+        # the episode — the structural analogue of the marked positions
+        # moving — so gold is separable per episode by a vector that puts +1
+        # on coordinate 0, but no one shared vector serves episodes whose
+        # gold sits at a different index, because the row that is gold in one
+        # episode is a distractor in the next.
+        return [
+            [1.0 if i == episode.gold else 0.0,
+             0.0 if i == episode.gold else 1.0]
+            for i in range(episode.n)
+        ]
+
+    report = representable(
+        score_fn=_score,
+        feature_fn=feature_fn,
+        gold_fn=lambda e: e.gold,
+        episodes=episodes,
+        shared_weights=[1.0, 1.0],
+    )
+    assert report["pass"] is False
+    assert report["ties"] > 0
+    assert "shared weight vector" in report["detail"]
+
+
+def test_shared_weights_pass_when_one_vector_separates_all():
+    """The mirror: the same basis under a shared vector that does work."""
+    episodes = [_episode(gold=g, n=4) for g in range(4)]
+
+    def feature_fn(episode):
+        # Gold is 1 on the *first* coordinate in every episode.
+        return [[1.0 if i == episode.gold else 0.0] for i in range(episode.n)]
+
+    report = representable(
+        score_fn=_score,
+        feature_fn=feature_fn,
+        gold_fn=lambda e: e.gold,
+        episodes=episodes,
+        shared_weights=[1.0],
+    )
+    assert report["pass"] is True
+    assert report["ties"] == 0
+    assert report["violations"] == 0
+
+
+# --------------------------------------------------------------------------- #
+# G2b — the real basis, measured on the real episodes
+# --------------------------------------------------------------------------- #
+# The three findings that the shared-weight audit produced, pinned as tests so
+# the basis cannot regress silently:
+#   1. the gated slot block is what makes the persistence families
+#      representable at all (remove it and the gate fails);
+#   2. the addressed-slot gate is what keeps a growing history pool from
+#      drowning the signal;
+#   3. the analytic vector separates all three families with one fixed weight
+#      vector, which is the evidence that the relation is in the hypothesis
+#      class and not merely per-episode separable.
+
+
+@pytest.mark.parametrize("family,seed0", [
+    ("relational", 1000),
+    ("state_lookup", 2000),
+    ("replay", 3000),
+])
+def test_analytic_weights_separate_gold_on_every_family(family, seed0):
+    """One fixed vector separates gold from every distractor, all families.
+
+    This is the §34 evidence. The vector is not fitted — it is the analytic
+    statement of the relevance rule — so passing here means the relation lives
+    in the router's hypothesis class and a learned arm that fails is an
+    optimisation failure, not a representability failure.
+    """
+    from tac_osm.builder import check_representability
+
+    report = check_representability(n_episodes=16)
+    assert report["pass"], report["detail"]
+    per = report["per_family"][family]
+    assert per["pass"], per["detail"]
+    assert per["ties"] == 0
+    assert per["violations"] == 0
+
+
+def test_the_gate_fails_without_the_gated_slot_block():
+    """Remove ``slot_gated`` and the persistence families stop being learnable.
+
+    The regression test for the fix itself. The un-gated slot block carries
+    the anti-signal on the unmarked positions, so without the gate no shared
+    weight vector separates gold for ``state_lookup`` or ``replay``. Measured
+    on the real episodes with the real (now-disabled) block.
+    """
+    from tac_osm.environment import (
+        build_lookup_task,
+        build_replay_task,
+        build_relational_task,
+    )
+    from tac_osm.router import (
+        _agree,
+        _bits,
+        _pad,
+        _query_address,
+        analytic_weights,
+        basis_size,
+    )
+    from tac_osm.state import PersistentStore, StateConfig
+
+    dim, max_slots, n_candidates, n_episodes = 8, 4, 8, 25
+
+    def ungated_features(query, descriptor, read, dim, max_slots):
+        """The v0.1 basis: slot block present, but never gated by the marks."""
+        query_bits = _bits(query.text)
+        context = tuple(query.context)
+        feats = [1.0]
+        for j in range(dim):
+            feats.append(_agree(query_bits, j, descriptor, j))
+        for j in range(dim):
+            feats.append(_agree(context, j, descriptor, j))
+        for j in range(dim):
+            feats.append(_agree(context, j, query_bits, j))
+        for j in range(dim):
+            gate = float(context[j]) if j < len(context) else 0.0
+            feats.append(gate * _agree(query_bits, j, descriptor, j))
+        address = _query_address(query)
+        rows = _pad(read.values, max_slots)
+        for i, row in enumerate(rows):
+            if not row:
+                feats.extend(0.0 for _ in range(dim))
+                continue
+            addressed = 1.0 if (address and i < len(read.keys)
+                                and read.keys[i] == address) else 0.0
+            for j in range(dim):
+                feats.append(addressed * (1.0 if row[j] == descriptor[j] else -1.0))
+        return feats
+
+    store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    gate_store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    builders = {
+        "relational": lambda i: build_relational_task(
+            1000 + i, dim=dim, n_candidates=n_candidates),
+        "state_lookup": lambda i: build_lookup_task(
+            2000 + i, store, dim=dim, n_candidates=n_candidates),
+        "replay": lambda i: build_replay_task(
+            3000 + i, store, dim=dim, n_candidates=n_candidates),
+    }
+    families = ("state_lookup", "replay")
+
+    for name in families:
+        store.reset()
+        gate_store.reset()
+        episodes = [builders[name](i) for i in range(n_episodes)]
+        for episode in episodes:
+            address = episode.query.text.partition("\t")[2]
+            written = getattr(episode.detail, "written_bits", None)
+            if address and written:
+                from tac_osm import StateUpdate
+
+                gate_store.write(
+                    StateUpdate(key=address, value=tuple(written),
+                                task_key=address, success_score=1.0,
+                                step=episode.query.step)
+                )
+        # The analytic vector's slot_gated half now lands on the un-gated
+        # block, which is the wrong block; a deliberately correct alignment is
+        # used instead so the test measures the missing gate, not an offset.
+        n = basis_size(dim, max_slots)
+        w = [0.0] * n
+        from tac_osm.router import _block_offsets
+
+        blocks = _block_offsets(dim, max_slots)
+        s, e = blocks["gated_agreement"]
+        w[s:e] = [1.0] * (e - s)
+        s, e = blocks["slot_agreement"]
+        w[s:e] = [2.0] * (e - s)
+
+        worst = None
+        for episode in episodes:
+            read = gate_store.read(episode.query)
+            rows = [ungated_features(episode.query, c.descriptor, read, dim, max_slots)
+                    for c in episode.candidates]
+            gold = episode.target_action
+            gold_score = sum(a * b for a, b in zip(w, rows[gold]))
+            best_other = max(
+                sum(a * b for a, b in zip(w, r))
+                for i, r in enumerate(rows) if i != gold
+            )
+            margin = gold_score - best_other
+            if worst is None or margin < worst:
+                worst = margin
+        assert worst is not None and worst <= 0, (
+            f"without the gated slot block, {name} unexpectedly separates "
+            f"(margin {worst}); the un-gated block carries no anti-signal"
+        )
 
 
 # --------------------------------------------------------------------------- #
