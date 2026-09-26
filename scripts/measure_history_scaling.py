@@ -61,6 +61,7 @@ import statistics
 
 from tac_osm.ablation import AblationConfig, RouterSwitch
 from tac_osm.builder import build_model
+from tac_osm.integrity import assert_trained, snapshot_router
 
 # H is the candidate count: one relevant item plus H-1 distractors.
 # H=1 is not expressible — _validate_shape requires n_candidates >= 2, so the
@@ -84,10 +85,18 @@ def _evaluate(arm: str, n_candidates: int, n_steps: int,
     env.config.n_candidates = n_candidates
 
     if weights is not None:
-        bm.model.router.w = list(weights)
+        # Loaded through ``load_weights`` rather than assigned, so the router
+        # records where the state came from and the integrity gate can tell a
+        # copied state from one trained in place.
+        bm.model.router.load_weights(weights)
         # A copied router must not keep learning from its own eval behaviour,
         # or the sweep measures different weights at every H.
         bm.model.config.learn = False
+    # Unconditional: an evaluation that never loaded a trained state — the
+    # exact TACOSM-HS-001 failure — must not reach the measurement loop. The
+    # gate sees a zeroed vector and its outputs look plausible, so only the
+    # parameters can catch it.
+    assert_trained(snapshot_router(bm.model.router), context=f"history scaling H={n_candidates}")
 
     hits = route1 = 0
     ranks: list[int] = []

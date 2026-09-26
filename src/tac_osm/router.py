@@ -78,6 +78,7 @@ from dataclasses import dataclass
 from typing import Sequence
 
 from . import Candidate, PersistentState, Query, RoutingDecision, StateRead
+from .integrity import parameter_hash
 from .state import Slot
 
 __all__ = [
@@ -311,6 +312,10 @@ class LearnedRelationalRouter:
         self.w: list[float] = [0.0] * self.n
         self._rng = random.Random(self.config.seed)
         self._updates = 0
+        #: Provenance tag for the integrity gate: set to "training" by
+        #: construction and to "copied:<hash>" when weights are loaded from a
+        #: checkpoint, so a snapshot can say where the state came from.
+        self._integrity_source = "training"
 
     # -- scoring ----------------------------------------------------------- #
 
@@ -318,6 +323,46 @@ class LearnedRelationalRouter:
                     read: StateRead) -> list[list[float]]:
         return [features(query, c.descriptor, read, self.dim, self.max_state_slots)
                 for c in candidates]
+
+    def score(self, query: Query, state: PersistentState,
+              candidates: Sequence[Candidate]) -> list[float]:
+        """Score every candidate under the current weights.
+
+        The *ranking* ``route`` uses, with the sampling removed. Exposed so
+        that a measurement computes recall and rank from the same scoring
+        function the loop actually uses — re-deriving the ranking in a
+        measurement script was exactly how TACOSM-HS-001 produced a
+        ``routing@1`` of ~1/40 from a router that had no weights at all: the
+        script recomputed the ranking from scores it read off a router whose
+        parameters it had never loaded, so a zero vector scored as uniform.
+
+        Callers that consume ``RoutingDecision.scores`` directly do not need
+        this; it exists for the top-K and rank statistics an evaluation
+        computes before deciding, or without deciding at all.
+        """
+        read = state.read(query)
+        return [sum(w * f for w, f in zip(self.w, row))
+                for row in self._score_rows(query, candidates, read)]
+
+    def load_weights(self, weights: Sequence[float], *, source: str = "") -> None:
+        """Copy a trained parameter vector into this router.
+
+        Sets ``_integrity_source`` from the checkpoint, so a later snapshot
+        identifies the state as copied rather than trained-in-place — the two
+        are indistinguishable from the weights alone, and the distinction is
+        what keeps a sweep from measuring its own evaluation behaviour.
+
+        Raises if the length differs, because a basis with the wrong number of
+        slots is a silent scoring error, not a convenience.
+        """
+        if len(weights) != self.n:
+            raise ValueError(
+                f"cannot load {len(weights)} weights into a router expecting "
+                f"{self.n}: a mismatched basis scores a different feature "
+                "space than the one it was trained on"
+            )
+        self.w = [float(x) for x in weights]
+        self._integrity_source = source or f"copied:{parameter_hash(self.w)}"
 
     def _softmax(self, scores: Sequence[float]) -> list[float]:
         scaled = [s / max(self.temperature, 1e-6) for s in scores]

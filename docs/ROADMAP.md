@@ -15,12 +15,22 @@ architecture. Capability is then increased *inside* that controlled system.
 - the `S_t → R_t → C_t → A_t → O_t → V_t → S_{t+1}` loop
 - componentised ablations and a component matrix
 - representability gates (§34), run on the real basis
+- **a model-state integrity gate** — an evaluation cannot run against
+  untrained weights and emit a plausible number (`src/tac_osm/integrity.py`,
+  claim C4). It catches the failure class that produced a false conclusion in
+  TACOSM-HS-001, and it runs unconditionally in the history-scaling and
+  retrieval-ceiling scripts
 - oracle / random / static / full_context / learned arms
 - deterministic seeds and a verified mixed-family schedule
 - generator integrity tests, including a family-stream-independence regression
 - exact measurement commands under `scripts/`
 - persistent state interventions, structural execution, verification and repair
 - a frozen baseline (`TACOSM-BASELINE-001`) and a results ledger
+- **a claims ledger** (`docs/CLAIMS.md`) — every claim with its status and its
+  blocker, so a claim cannot drift from "measured" to "supported" without an
+  entry changing
+- **a retrieval ceiling** (`TACOSM-RETRIEVAL-001` F0) — the top-K signal
+  survives top-1 collapse at `H ≤ 64` and does not at `H ≥ 128`
 
 ## The research-integrity problem to fix first
 
@@ -100,13 +110,40 @@ detectable effect.
 H = 2,4,8,16,32,64 with the relevant problem held fixed. Establishes that the
 limitation is routing, and that total cost is `O(H)` in v0.1.
 
-### Stage F — Indexed routing
+### Stage F — Retrieval and indexing  *(F0 done; F1 not started)*
 
-`Persistent State → index (K ≪ H) → conditional router (R ≤ K) → executor`.
+F0 exists because the obvious next step is wrong. Building an index before
+establishing whether the scoring representation carries the relevance signal
+produces a cheap index around an inadequate representation, which retrieves
+the wrong candidates faster and reads as a success.
 
-Compare `full_context` vs `linear_router` vs `indexed_router` across
-H = 1 … 2048. This is the stage that can actually test the efficiency
-hypothesis, because it changes the `C_routing` term from `O(H)` to `O(K)`.
+**F0 — Retrieval ceiling** *(done — `TACOSM-RETRIEVAL-001`)*
+
+The existing router scores all H candidates; retain the top-K and measure
+`P(gold ∈ top-K)` across H × K. No new mechanism is built, so the result is a
+property of the current representation.
+
+The answer is mixed and is reported as mixed: the signal survives well at
+`H ≤ 64` (at H=64, recall climbs 0.162 → 0.530 → 0.748 → 0.920 across
+K = 1, 4, 8, 16) and does **not** saturate well at `H ≥ 128` (rec@16 falls to
+0.550 at H=256). Two readings survive the data and F0 does not separate them:
+the representation degrades with the population, or the router was trained at
+8 candidates and the sweep measures transfer. **The follow-up that separates
+them — train at matched H, re-run F0 — is the next thing to run**, because it
+decides whether F1 is worth building.
+
+**F1 — Efficient retrieval** *(not started; contingent on F0)*
+
+    H → cheap index → K ≪ H → existing scorer → R
+
+Changes `C_router` from `O(H)` to `O(K)` while reusing the existing scorer
+unchanged. Measured against F0 at matched K, because the claim is a cost-quality
+trade rather than "the index works". The four arms (A exhaustive+top-1,
+B exhaustive+top-K, C indexed+top-K, D oracle-index+top-K) and the failure
+taxonomy are pre-registered in `TACOSM-RETRIEVAL-001.md`.
+
+This is the stage that can test the efficiency hypothesis, because it inserts
+a retrieval boundary the v0.1 loop does not have.
 
 ### Stage G — State formation
 
