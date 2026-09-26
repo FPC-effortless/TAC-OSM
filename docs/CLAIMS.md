@@ -155,7 +155,10 @@ report or figure as though measured.
 > Under a frozen router, task accuracy falls as history grows because
 > relevance routing degrades, not because the environment becomes harder.
 
-**STATUS: SUPPORTED**
+**STATUS: SUPPORTED**, and **narrowed by TACOSM-MATCHED-001** — see the note
+below. The degradation is real and is attributable to the model, not the
+environment. The *reason* it happens is not the one this claim originally
+implied.
 
 `TACOSM-HS-001`, commit `91597ab`, re-verified with the integrity gate in
 place (see below). Oracle = 1.0000 at every H, so the environment is not
@@ -186,6 +189,21 @@ weights copied, `routing@1` at H=32 is 0.4250 and the decision is clearly
 informative. The *interpretation* was wrong; the corrected table is the
 result. This is the failure that motivated C4.
 
+**Narrowed by TACOSM-MATCHED-001** (`docs/TACOSM-MATCHED-001.md`, this
+commit). The claim says routing degrades, which remains true. Its original
+*mechanism* — that a linear scorer has "a fixed capacity to separate gold
+from its best distractor, and that capacity is diluted as the distractor pool
+grows" — is **refuted**. The analytic vector, one shared weight vector with no
+training, reaches `routing@1 = 1.0000` at H ∈ {8, 64, 256, 512} with
+`delta_1 ≈ +3.07`. The basis does not dilute. What degrades is the *trained*
+router, because REINFORCE sees 5 successes in 500 steps at H=256 (a 1% rate
+against 0.39% chance) and its `(1 − p_selected)` multiplier is squeezed by a
+flat softmax over a large candidate set.
+
+The measured degradation is unchanged. The sentence to strike from any
+description of it is "capacity limitation of a linear scorer"; the sentence to
+keep is "routing degrades, and the environment does not".
+
 ---
 
 ## C7 — The top-K signal survives
@@ -194,7 +212,9 @@ result. This is the failure that motivated C4.
 > retrieval mechanism: it retains substantial information about where the
 > relevant item is even after its top-1 precision has collapsed.
 
-**STATUS: SUPPORTED**, at `H ≤ 64`. **PARTIALLY SUPPORTED** overall.
+**STATUS: SUPPORTED**, at `H ≤ 64`. **PARTIALLY SUPPORTED** overall. The
+qualification's *cause* is now identified — it is a training artefact, not a
+representation limit (see below).
 
 `TACOSM-RETRIEVAL-001` F0, this commit. The existing router scores all H
 candidates; retaining the top-K by score:
@@ -214,17 +234,28 @@ whose oracle is 1.0000.
 **The qualification is the point of the measurement.** At H=128 and H=256 the
 curve *does not* saturate well: rec@16 falls to 0.762 and 0.550. The
 hypothesis "the scoring representation is adequate and only search is
-missing" is supported at `H ≤ 64` and is **not supported** at `H ≥ 128`. Two
-readings survive the data and F0 does not separate them:
+missing" is supported at `H ≤ 64` and is **not supported** at `H ≥ 128`.
+
+**The follow-up is run, and both candidate causes are refuted.** The two
+readings the claim left open were:
 
 1. the representation degrades gracefully but genuinely as the candidate
    population grows;
 2. the router was trained at 8 candidates, so the sweep measures transfer,
    and the degradation at large H is a training-horizon artefact.
 
-Separating these requires training at matched H, which is F0's open follow-up
-and is recorded in `TACOSM-RETRIEVAL-001.md` rather than resolved here. The
-claim is therefore stated at the H where it is supported and no further.
+`TACOSM-MATCHED-001` ran the matched-H design that separates them and
+produced **neither**. Reading 1 is refuted by the analytic vector reaching
+`routing@1 = 1.0000` at H ∈ {8, 64, 256, 512}. Reading 2 is refuted by the
+matched-H matrix: a router trained at H=256 is *worse at H=256*
+(`routing@1 = 0.0740`) than one trained at H=8 (`0.0640`), and the H=8 row is
+the best row at every evaluation population.
+
+The failure is in the **learning dynamics** — reward scarcity under REINFORCE
+at large H — not in the basis and not in the training population. The claim's
+qualification is therefore *not* a property of the scoring representation, and
+must not be read as one in any description of F1's viability. See
+`docs/TACOSM-MATCHED-001.md`.
 
 ---
 
@@ -280,9 +311,17 @@ than an oversight:
 * that the learned router approximates CDL's discrimination — measured
   teacher agreement is explicitly *not* the primary metric
   (`RoutingDecision.scores`);
-* that a bigger model would fix large-H routing — untested, and the evidence
-  in C7 says the representation is adequate at `H ≤ 64`;
-* that `C_executed` has been shown to scale with `|R|` — see C5.
+* that a bigger model would fix large-H routing — untested, and after
+  TACOSM-MATCHED-001 the evidence points the opposite way: the representation
+  is adequate at every H tested, so expressiveness is not the limitation and
+  capacity is not the fix;
+* that `C_executed` has been shown to scale with `|R|` — see C5;
+* that the matched-H router is a better baseline than the H=8 one — it is
+  worse at every evaluation population (see C7), and the H=8 row remains the
+  F1 baseline;
+* that the analytic vector is a solution — it is a hand-designed reference
+  point proving expressibility, not an outcome-trained router, and routing
+  with it is not a TAC-OSM result.
 
 ---
 

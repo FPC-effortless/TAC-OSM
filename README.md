@@ -1,25 +1,60 @@
-# TAC-OSM v0
+# TAC-OSM v0.1
 
-The integrated prototype for **persistent structural computation**.
+> **A controlled experimental environment for studying persistent-state-
+> conditioned relevance routing and selective computation.**
 
-This is the integration repository for three research lines that each own one
-stage of a single causal loop. It is deliberately **not** another research
-substrate repository: it does not reconstruct the source work, it adapts it
-behind a small interface boundary and then asks a question the parts cannot
-answer alone.
+That is the honest scope, and it is narrower than the architecture's ambition.
+v0.1 does not demonstrate a capability. It demonstrates a *instrument*: a loop
+in which a specific mechanism can be switched off, measured, and attributed —
+and in which a measurement that refers to nothing is caught before it is
+reported.
+
+## The central claim under test
+
+```
+C_total  =  C_address  +  C(|R|)  +  C(|A|)  +  C_verify      intended
+C_total  =  C_address  +  C(|H|)  +  C(|A|)  +  C_verify      conventional
+```
+
+where `|R|` is the relevant subset of history and `|H|` is all of it.
+
+**This is not the claim that computation is small. It is the claim that
+computation depends on the relevant subset rather than on everything that
+happened.** It is the reason the architecture exists, it is what separates it
+from running the whole context through a model, and it is the claim every
+downstream piece of work exists to test.
+
+**Its status is `UNTESTED`**, and the honest v0.1 cost model is:
+
+```
+C_total(H) = O(H) routing + O(10) execution + O(verification)
+```
+
+The executor is capped at `active_count = max_nodes = 10`, so `C_executed`
+reads 10 at every history size — a flat column that means the architecture has
+**no room to scale**, not that scaling has been demonstrated. `C_router` is the
+only cost term that genuinely varies, and it grows linearly with `H`. The
+desired decomposition is *not demonstrated*, and no figure in this repository
+may present `C_executed` as though it had been measured against `|R|` (claim
+**C5**). See `docs/MEASUREMENT_LAYERS.md` for the full accounting.
+
+The claim becomes testable when a retrieval boundary exists in the loop, which
+is what makes `|R|` a measurable quantity at all.
+
+---
+
+## What this repository exists for
+
+The loop the architecture implements:
 
 ```
 S_t → R_t → C_t → A_t → O_t → V_t → S_{t+1}
 ```
 
-> **Persistent Structural Computation:** useful computation should be
-> reusable across time through persistent state, selectively addressable
-> through learned relevance routing, executable through structural pathways,
-> and subject to verification and repair.
-
----
-
-## Why this repository exists
+state is read → the relevant subset is routed to → structure is executed → an
+action is taken → the outcome is verified → state is written. The central
+claim above is a statement about the *cost* of the second and third arrows:
+they should scale with what `R_t` selected, not with everything in `S_t`.
 
 The three source laboratories established the primitives. They have not yet
 been asked the question that matters.
@@ -138,18 +173,88 @@ confirmatory run.
 
 ---
 
+## The measurement contract
+
+Every number this repository emits belongs to one of three ordered layers.
+The ordering is strict and it is the reason the gates exist.
+
+| | Layer 1 — model validity | Layer 2 — mechanism | Layer 3 — system |
+|---|---|---|---|
+| asks | is the measurement about the model at all? | does the mechanism behave as claimed? | does the system solve the task, at what cost? |
+| on failure | **voids** every downstream number | withdraws one mechanism claim | withdraws the system claim |
+
+**A Layer 1 failure is invisible from the layers above.** A zeroed parameter
+vector produces a smooth, bounded, sensible-looking softmax. An ambiguous task
+produces a clean, reproducible accuracy. Neither is detectable in the number it
+emits — only in the preconditions, which is why Layer 1 is a *gate* and not a
+metric.
+
+That is not hypothetical. Both of this repository's expensive errors were
+Layer 1 failures published as Layer 2 findings:
+
+- **TACOSM-HS-001** reported `routing@1 ≈ 1/40` at H=32 as a routing result.
+  The router had no weights loaded: `w = [0]*n` scores every candidate
+  identically, the softmax is uniform, and `1/H` reads as a smooth degradation
+  curve. With weights loaded the number is 0.4250. Now caught by
+  `src/tac_osm/integrity.py`, which raises before any measurement runs.
+- **`dd8f63c`** shipped a learned feature map that never read `state.key`, so
+  the intended relation scored exactly 0 for every candidate while the oracle
+  *arm* reported 1.0000 for four consecutive commits. Oracle success implies
+  nothing about representability. Now a compulsory pre-training failure
+  (`representability.py`, §34).
+
+Both were caught *after* the interpretation was written. The layers exist so
+the check runs first. Full contract: `docs/MEASUREMENT_LAYERS.md`.
+
+---
+
+## What has been measured
+
+Results live in `docs/` with a pre-registered decision rule, and every claim
+in them is mirrored in `docs/CLAIMS.md` with a status and a blocker. A claim
+cannot drift from `measured` to `supported` without an entry changing there.
+
+| Experiment | Question | Result |
+|---|---|---|
+| `TACOSM-BASELINE-001` | does a cheap linear router learn the relevance relation from outcomes alone? | **yes** — 0.4396 vs `random` 0.1296, `static` 0.0376 |
+| `TACOSM-HS-001` | does accuracy fall with history because routing degrades? | **yes** — oracle 1.0000 at every H, so the environment is not the cause |
+| `TACOSM-RETRIEVAL-001` (F0) | does the top-K signal survive top-1 collapse? | **at `H ≤ 64`, yes**; **at `H ≥ 128`, no** (rec@16 → 0.550 at H=256) |
+| `TACOSM-MATCHED-001` | is the large-H loss a representation problem or a training problem? | **neither** — the learning rule is the failure |
+
+`TACOSM-MATCHED-001` is the result that redirected the roadmap. Its
+pre-registered rule committed to two outcomes and produced neither: matched-H
+training is the *worst* row at every population, while the analytic vector —
+one shared untrained weight vector — reaches `routing@1 = 1.0000` at
+H ∈ {8, 64, 256, 512}. The hypothesis class is adequate and H-invariant. What
+fails is REINFORCE's update: 5 successes in 500 steps at H=256, and 5000 steps
+leave `routing@1` at 0.0700 while the weight norm grows 12-fold and the margin
+*worsens*.
+
+> **The experiment was designed to choose an architecture, and it answered
+> that the architecture is not the problem.** Stage F1 (the retrieval index)
+is therefore **suspended, not abandoned** — an index measured against a
+baseline whose weakness is a training artefact is unsound in both directions.
+The learning dynamics are next (Stage F2).
+
+---
+
 ## Repository layout
 
 ```
 src/tac_osm/__init__.py         the five interfaces + the Environment protocol
 src/tac_osm/representability.py PNDS-URP v0.4 §34, as a compulsory pre-training test
 src/tac_osm/leakage.py          the anti-leakage boundary, checked structurally
+src/tac_osm/integrity.py        model-state gate: catches untrained weights before a run
 src/tac_osm/ablation.py         one architecture, controlled switches
-tests/test_tac_osm.py           the three pre-model gates
+tests/                          the three pre-model gates + the integrity gate
 docs/ARCHITECTURE.md            interfaces before implementations
+docs/MEASUREMENT_LAYERS.md      the three-layer measurement contract
 docs/ABLATION_PLAN.md           the primary scientific instrument
+docs/CLAIMS.md                  every claim, its status, and its blocker
+docs/ROADMAP.md                 stage order, and why F1 is behind F2
 docs/EVIDENCE_MAP.md            prior research -> interface, and the boundary
 provenance/COMPONENTS.md        binding ledger: reuse vs do_not_claim
+scripts/                        the exact commands that produced every number
 ```
 
 ---

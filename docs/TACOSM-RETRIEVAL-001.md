@@ -1,12 +1,65 @@
 # TACOSM-RETRIEVAL-001
 
-**Status:** F0 run; F1, C and D **not** started.
+**Status:** F0 run. **F1 is suspended, not merely not started** — see the
+note below. Arms C and D are not started.
 
 **Pre-registration.** Stages C and D are specified here *before* they are
 built, and their specification is contingent on F0's result — that is the
 point of running F0 first. The four arms and the cost model below are
 committed to now, before the index exists, so the index cannot be designed
 after seeing what it has to beat.
+
+---
+
+## F0's open follow-up has been run, and it closed the question
+
+The follow-up specified below — *"train at matched H and re-run F0"* — is
+`docs/TACOSM-MATCHED-001.md`. It ran, and it refuted **both** branches of the
+pre-committed decision rule:
+
+| F0 result | consequence (pre-committed) |
+|---|---|
+| recall@K saturates well at large H | F1: the representation is adequate, build the index |
+| recall@K saturates badly at large H | the problem is upstream of search; change the representation |
+
+Neither happened. Matched-H training does not recover the large-H score
+signal; it is the **worst row at every evaluation population, including its
+own**. And the representation is not inadequate — the analytic vector
+(`gated_agreement = 1.0`, `slot_gated = 2.0`, the §34 gate's own reference)
+reaches `routing@1 = 1.0000` at H ∈ {8, 64, 256, 512} with `delta_1 ≈ +3.07`,
+because `basis_size` never depends on the candidate count.
+
+The failure is in the **learning dynamics**, and it is measurable as reward
+scarcity: 5 successes in 500 training steps at H=256 (1%, against a 0.39%
+chance rate), a weight norm flat across 400 steps, and `routing@1` unchanged
+at 0.0700 from 2500 → 5000 steps while the norm grows 12-fold and the margin
+*worsens*. REINFORCE's `(1 − p_selected)` multiplier is squeezed from both
+ends when successes are rare and the softmax over H candidates is flat.
+
+**Why F1 is suspended rather than abandoned.** F1's hypothesis is a
+*cost-quality trade*: can routing computation be reduced while preserving the
+relevant candidate? The matched-H result says the quality half of that trade
+is not a representation property, so an index built now would be measured
+against a baseline whose weakness is a training artefact, not a property of
+the basis. That is not a sound measurement of an index, in either direction:
+a bad baseline makes a mediocre index look good. F1's specification below is
+kept intact and un-amended, because it was pre-registered and a
+pre-registration is not revised to fit a result. It is re-queued, not
+withdrawn.
+
+**What runs first instead.** The learning rule, not the architecture:
+
+1. exploration vs sparse reward (a temperature schedule or epsilon-greedy
+   action selection at training time); and
+2. denser supervision that does not break the leakage boundary — the
+   representability gate already proves the relation is computable from the
+   router's own inputs, so a surrogate reward is available without gold
+   labels.
+
+Neither requires an index, a new representation, or any change to the loop's
+architecture. That is the finding: the matched-H experiment was designed to
+choose an architecture, and it answered that the architecture is not the
+problem. See `docs/TACOSM-MATCHED-001.md`.
 
 ---
 

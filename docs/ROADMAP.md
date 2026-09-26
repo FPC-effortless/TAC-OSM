@@ -110,7 +110,7 @@ detectable effect.
 H = 2,4,8,16,32,64 with the relevant problem held fixed. Establishes that the
 limitation is routing, and that total cost is `O(H)` in v0.1.
 
-### Stage F — Retrieval and indexing  *(F0 done; F1 not started)*
+### Stage F — Retrieval and indexing  *(F0 done; F1 **suspended**)*
 
 F0 exists because the obvious next step is wrong. Building an index before
 establishing whether the scoring representation carries the relevance signal
@@ -126,13 +126,66 @@ property of the current representation.
 The answer is mixed and is reported as mixed: the signal survives well at
 `H ≤ 64` (at H=64, recall climbs 0.162 → 0.530 → 0.748 → 0.920 across
 K = 1, 4, 8, 16) and does **not** saturate well at `H ≥ 128` (rec@16 falls to
-0.550 at H=256). Two readings survive the data and F0 does not separate them:
+0.550 at H=256). Two readings survived the data and F0 did not separate them:
 the representation degrades with the population, or the router was trained at
-8 candidates and the sweep measures transfer. **The follow-up that separates
-them — train at matched H, re-run F0 — is the next thing to run**, because it
-decides whether F1 is worth building.
+8 candidates and the sweep measures transfer.
 
-**F1 — Efficient retrieval** *(not started; contingent on F0)*
+**F0's follow-up is run, and it closed the question.**
+`TACOSM-MATCHED-001` ran the matched-H design that was supposed to separate
+them, and produced **neither** branch of the pre-committed rule. Matched-H
+training does not recover the large-H signal — it is the **worst row at every
+evaluation population, including its own** — and the representation is *not*
+inadequate, because the analytic vector reaches `routing@1 = 1.0000` at
+H ∈ {8, 64, 256, 512} with `delta_1 ≈ +3.07`. `basis_size` never depends on
+the candidate count, so the relation is H-invariant by construction.
+
+The failure is in the **learning dynamics**: REINFORCE sees 5 successes in 500
+steps at H=256 (1% against a 0.39% chance rate), its `(1 − p_selected)`
+multiplier is squeezed by a flat softmax over a large candidate set, and
+5000 steps leave `routing@1` at 0.0700 while the weight norm grows 12-fold and
+the margin *worsens*. A wrong learning rule, not an under-trained model.
+
+**F1 is suspended, not abandoned.** F1's hypothesis is a *cost-quality trade*:
+can routing computation be reduced while preserving the relevant candidate?
+The matched-H result says the quality half of that trade is not a property of
+the representation, so an index built now would be measured against a baseline
+whose weakness is a training artefact. That is not a sound measurement of an
+index in either direction — a bad baseline makes a mediocre index look good.
+The specification below is kept intact and un-amended, because it was
+pre-registered and a pre-registration is not revised to fit a result. It is
+re-queued, not withdrawn.
+
+### Stage F2 — Learning dynamics  *(the actual next step)*
+
+> The architecture is not the problem. The hypothesis class contains a
+> perfect, H-invariant solution; the environment provides enough information
+> to find it (`oracle = 1.0000`); what fails is the *update*.
+
+Two experiments, both cheap, both falsifiable against the matched-H numbers.
+They are recorded rather than pre-registered, because pre-registering requires
+a commitment this run has not earned the right to make.
+
+1. **Exploration vs sparse reward.** Keep REINFORCE and add exploration at
+   training time — a temperature schedule, or epsilon-greedy action selection.
+   If `routing@1` at H=256 rises toward the H=8 level, the mechanism is
+   confirmed as sparse reward and the fix is a training-time schedule, not
+   architecture.
+2. **Denser supervision without leaking.** The §34 representability gate proves
+   the relation is *computable* from the router's own inputs. A surrogate
+   reward — the score gap between gold and the best distractor under the
+   analytic vector, available without gold labels — could densify the signal
+   without breaking the leakage boundary.
+
+Neither requires an index, a new representation, or any change to the loop's
+architecture. **F1 is re-queued behind F2**, because the cost-quality trade
+that F1 measures is only meaningful once the quality term is a property of the
+scorer rather than of the optimiser.
+
+This stage also decides C5's precondition. `C_executed ≈ f(|R|)` needs a
+retrieval boundary to make `|R|` a measurable quantity, and the only retrieval
+boundary worth building is one on a scorer whose numbers mean what they say.
+
+**F1 — Efficient retrieval** *(suspended; contingent on F2)*
 
     H → cheap index → K ≪ H → existing scorer → R
 
@@ -144,6 +197,23 @@ taxonomy are pre-registered in `TACOSM-RETRIEVAL-001.md`.
 
 This is the stage that can test the efficiency hypothesis, because it inserts
 a retrieval boundary the v0.1 loop does not have.
+
+### Stage F3 — Measurement layers  *(the standing contract)*
+
+Every number this repository emits belongs to exactly one of three layers, and
+the layers are ordered: a Layer 2 or Layer 3 number is uninterpretable unless
+the Layer 1 gate for the model that produced it has passed.
+
+| | Layer 1 | Layer 2 | Layer 3 |
+|---|---|---|---|
+| asks | is this measurement about the model at all? | does the mechanism behave as claimed? | does the system solve the task, at what cost? |
+| on failure | voids the run | withdraws one mechanism claim | withdraws the system claim |
+
+Both of the repository's expensive errors — the TACOSM-HS-001 untrained-weight
+sweep, and the `dd8f63c` key-blind feature map — were Layer 1 failures that
+produced plausible Layer 2 numbers read as Layer 2 findings. See
+`docs/MEASUREMENT_LAYERS.md`. This stage is a contract, not a deliverable: it
+has no end date because it applies to every future stage.
 
 ### Stage G — State formation
 
