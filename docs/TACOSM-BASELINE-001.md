@@ -9,7 +9,7 @@ difference is a finding to be reported, not a correction to be applied here.
 | field | value |
 |---|---|
 | baseline_id | TACOSM-BASELINE-001 |
-| commit | post-`a126db4`, generator-fixed (pending the next commit hash) |
+| commit | `91597ab` |
 | model | tac_osm v0.1 |
 | scheduler | strict round-robin over `families[_task_index % len(families)]` |
 | task seed | `cfg.seed * 100_003 + task_index * 7919` |
