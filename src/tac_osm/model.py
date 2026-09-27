@@ -43,7 +43,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Protocol, Sequence, runtime_checkable
 
 from . import (
     Candidate,
@@ -66,7 +66,70 @@ from .executor import program_from_descriptor, relevance_program
 from .environment import parse_query as parse_query_text
 from .router import LearnedRelationalRouter
 
-__all__ = ["ModelConfig", "TacOsmModel", "Episode", "run_episode"]
+__all__ = ["ModelConfig", "TacOsmModel", "Episode", "run_episode",
+           "RewardContext", "RewardFn", "baseline_reward"]
+
+
+@dataclass(frozen=True)
+class RewardContext:
+    """Everything the loop has in hand at the moment of the learning update.
+
+    The reward hook receives this and returns the scalar passed to
+    ``router.update``. ``Task`` carries ``target_action`` — the gold index —
+    so a hook that wants to anchor a margin to gold can. The router's own
+    ``update`` never sees this object: the hook's return value is a bare
+    ``float``, exactly as the outcome reward always was.
+
+    The hook runs *after* the transition and *only when ``config.learn`` is
+    true*, so it can widen neither the router's observable inputs nor the
+    evaluation path.
+
+    ``router`` is included because the F3 surrogate is computed from the
+    router's own scoring function, at the weights the update is about to move.
+    Handing the router to the hook does not widen the router's inputs — the
+    hook is not the router, and ``router.score`` is a function of the
+    permitted inputs it already reads — but it *is* the reason a surrogate
+    arm can only run where the router is a learned one: a hook that needs
+    ``score`` has nothing to call on an oracle or a static arm.
+    """
+
+    task: Any
+    candidates: Sequence[Candidate]
+    selected: int
+    decision: RoutingDecision
+    outcome: Outcome
+    query: Query
+    state: PersistentState
+    router: Any
+
+
+@runtime_checkable
+class RewardFn(Protocol):
+    """The reward hook's contract: one step's context, one scalar out."""
+
+    def __call__(self, ctx: RewardContext) -> float:
+        """Return the reward for this step. Must be a plain finite float."""
+        ...
+
+
+def baseline_reward(ctx: RewardContext) -> float:
+    """``float(outcome.success)`` — the MATCHED-001 protocol, verbatim.
+
+    This is what the loop hardcoded before F3, and ``ModelConfig.reward_fn =
+    None`` still calls it. It is named and exported so that:
+
+    * a measurement can assert the baseline arm's hook *is* this function,
+      rather than trusting that "no hook" means "the old behaviour";
+    * the F3 pre-registration's reproduction gate has a symbol to point at.
+
+    The value is ``1[a_t = gold]``: the environment sets
+    ``target_action = gold_index`` and scores ``success = action ==
+    target_action``, so the outcome reward is already a gold-anchored scalar.
+    That fact is the reason the F3 leakage boundary is stated in terms of
+    signal *density* rather than the absence of gold — see
+    ``docs/TACOSM-SURROGATE-001.md``.
+    """
+    return float(ctx.outcome.success)
 
 
 @dataclass
@@ -82,12 +145,21 @@ class ModelConfig:
     learn: bool = True
     seed: int = 0
     write_on_success: bool = True
+    #: The F3 reward hook. ``None`` is the baseline and must be bit-for-bit
+    #: identical to the pre-F3 hardcoded ``float(outcome.success)`` call — see
+    #: :func:`baseline_reward`. Consulted only when ``learn`` is true.
+    reward_fn: RewardFn | None = None
 
     def __post_init__(self) -> None:
         if self.n_steps < 1:
             raise ValueError(f"n_steps must be >= 1, got {self.n_steps}")
         if self.seed < 0:
             raise ValueError(f"seed must be >= 0, got {self.seed}")
+        if self.reward_fn is not None and not callable(self.reward_fn):
+            raise TypeError(
+                f"reward_fn must be a callable RewardFn or None, got "
+                f"{type(self.reward_fn).__name__}"
+            )
 
 
 @dataclass
@@ -212,11 +284,21 @@ class TacOsmModel:
 
         # Learning: REINFORCE on the outcome, through the router only.
         if self.config.learn and isinstance(self.router, LearnedRelationalRouter):
+            ctx = RewardContext(
+                task=task,
+                candidates=task.candidates,
+                selected=decision.selected,
+                decision=decision,
+                outcome=outcome,
+                query=query,
+                state=self.state,
+                router=self.router,
+            )
             self.router.update(
                 query=query,
                 candidates=task.candidates,
                 selected=decision.selected,
-                reward=float(outcome.success),
+                reward=self._reward(ctx),
                 probs=decision.scores,
                 state=self.state,
             )
@@ -294,6 +376,34 @@ class TacOsmModel:
 
 
     # -- adapters ---------------------------------------------------------- #
+
+    def _reward(self, ctx: RewardContext) -> float:
+        """The one point the F3 hook is consulted.
+
+        ``None`` is the pre-F3 behaviour — :func:`baseline_reward`, the
+        MATCHED-001 protocol. A hook is never asked twice for one step, is
+        given only the context, and its return value is passed to the router
+        untouched. The router therefore still receives a bare ``float``, so
+        no hook can widen the router's own inputs; the hook can only change
+        the value of the scalar the router was already consuming.
+
+        Runtime finite-ness is checked here rather than at hook construction
+        time so that a NaN-emitting hook fails at the step where it fired,
+        with the step's provenance in hand, instead of poisoning a mean.
+        """
+        fn = self.config.reward_fn
+        if fn is None:
+            return baseline_reward(ctx)
+        reward = fn(ctx)
+        if isinstance(reward, bool) or not isinstance(reward, (int, float)):
+            raise TypeError(
+                f"reward_fn must return a plain float, got "
+                f"{type(reward).__name__}"
+            )
+        value = float(reward)
+        if value != value or value in (float("inf"), float("-inf")):
+            raise ValueError(f"reward_fn returned a non-finite reward: {value!r}")
+        return value
 
     def _bind_oracle(self, task: Any) -> None:
         """Hand the oracle arm its target for this step, if it is the arm.
