@@ -142,6 +142,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from tac_osm.ablation import AblationConfig, RouterSwitch  # noqa: E402
 from tac_osm.builder import build_model  # noqa: E402
+from tac_osm.contract import load_contract  # noqa: E402
 from tac_osm.integrity import (  # noqa: E402
     IntegrityError,
     assert_trained,
@@ -155,6 +156,20 @@ from tac_osm.integrity import (  # noqa: E402
 # training artefact.
 H_LEVELS = (8, 64, 256)
 K_LEVELS = (1, 2, 4, 8, 16)
+
+# The registered schedule length, written as a literal so the machine-readable
+# contract in ``contracts/TACOSM-MATCHED-001.json`` can be compared with this
+# script statically — without executing it — which is what makes drift
+# detectable rather than merely re-readable.
+REGISTERED_STEPS = 500
+
+# The registered arm. MATCHED-001 is a single-arm design — the intervention is
+# *being at the matched H*, and the comparison is across the matrix rather
+# than against a control arm — so the arm set is one name. Written out for the
+# same reason ``REGISTERED_STEPS`` is: a static reader needs the literal, and
+# the ``ARMS`` name used by the other scripts' shared tests would imply a
+# multi-arm comparison that this design does not run.
+REGISTERED_ARMS = ("matched",)
 
 
 def _budgets(h: int, k_levels: tuple[int, ...]) -> tuple[int, ...]:
@@ -385,14 +400,60 @@ def _parse_levels(s: str) -> tuple[int, ...]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--steps", type=int, default=500)
+    ap.add_argument("--steps", type=int, default=REGISTERED_STEPS)
     ap.add_argument("--eval-steps", type=int, default=100)
     ap.add_argument("--seeds", default="0,1,2,3,4")
     ap.add_argument("--levels", default=",".join(str(h) for h in H_LEVELS))
+    ap.add_argument(
+        "--smoke", action="store_true",
+        help="declare this run as a smoke test and skip the contract check",
+    )
     args = ap.parse_args()
     seeds = [int(s) for s in args.seeds.split(",") if s.strip()]
     h_levels = _parse_levels(args.levels)
     k_levels = K_LEVELS
+
+    # -- 0. The machine-readable contract -------------------------------- #
+    # The pre-registration lives in ``contracts/TACOSM-MATCHED-001.json`` as
+    # well as in ``docs/``, and this check is what makes the run unable to
+    # drift from it silently. This script has a single arm, so the arm check
+    # asserts the design itself rather than a comparison between arms: a
+    # reader who sees the matched-H matrix knows from the contract that no
+    # control arm was silently added or dropped.
+    #
+    # ``--smoke`` is the one declared way to run something that is not the
+    # registered design. It weakens no check; it states out loud that this run
+    # is not a result, and prints its own deviation, so the output cannot be
+    # mistaken for a measurement.
+    contract = load_contract("TACOSM-MATCHED-001")
+    if args.smoke:
+        print("=" * 72)
+        print("SMOKE TEST — declared with --smoke; this is not a measurement")
+        print("=" * 72)
+        print("The contract check is skipped on the declared deviation, and the")
+        print("deviation is printed here so this output cannot be read as a")
+        print("result of TACOSM-MATCHED-001:")
+        problems: list[str] = []
+        for label, got, want in (
+            ("steps", args.steps, contract.steps),
+            ("eval_steps", args.eval_steps, contract.eval_steps),
+            ("levels", list(h_levels), list(contract.h_levels)),
+            ("seeds", sorted(seeds), sorted(contract.seeds)),
+            ("arms", list(REGISTERED_ARMS), [a.name for a in contract.arms]),
+        ):
+            if got != want:
+                problems.append(f"  {label}: run has {got}, registered {want}")
+        if problems:
+            print("\n".join(problems))
+        else:
+            print("  no deviation found: the registered design is in force")
+        print()
+    else:
+        contract.require_steps(args.steps)
+        contract.require_eval_steps(args.eval_steps)
+        contract.require_levels(h_levels)
+        contract.require_seeds(seeds)
+        contract.require_arms(REGISTERED_ARMS)
 
     print(f"steps={args.steps} eval_steps={args.eval_steps} seeds={seeds}")
     print("train and eval seeds match within a cell; weights are loaded and "

@@ -391,7 +391,11 @@ def _script_constants(name: str) -> dict:
 
     tree = ast.parse((SCRIPTS_DIR / name).read_text(encoding="utf-8"))
     out: dict = {}
-    for want in ("H_LEVELS", "K_LEVELS", "ARMS"):
+    # ``ARMS`` in the multi-arm scripts; ``REGISTERED_ARMS`` in the
+    # single-arm one, where the name ``ARMS`` would imply a comparison
+    # against a control arm that the design does not run. Both spell the
+    # registered arm set as a literal for this reader.
+    for want in ("H_LEVELS", "K_LEVELS", "ARMS", "REGISTERED_ARMS"):
         for node in ast.walk(tree):
             if isinstance(node, ast.Assign):
                 for target in node.targets:
@@ -506,6 +510,14 @@ def test_matched_contract_matches_its_script():
     c = load_contract("TACOSM-MATCHED-001")
     assert tuple(got["H_LEVELS"]) == c.h_levels
     assert tuple(got["K_LEVELS"]) == c.k_levels
+    # The single-arm design registers ``REGISTERED_ARMS`` rather than ``ARMS``;
+    # the arm set is one name, and the comparison is across the matrix rather
+    # than against a control arm.
+    arms = got.get("REGISTERED_ARMS", got.get("ARMS"))
+    assert tuple(arms) == tuple(a.name for a in c.arms), (
+        "the MATCHED-001 contract's arm drifted from the script's registered "
+        "tuple"
+    )
     assert c.steps == got["STEPS_DEFAULT"]
     assert c.eval_steps == got["EVAL_STEPS"]
     assert tuple(got["SEEDS"]) == c.seeds
@@ -565,13 +577,18 @@ def _script_text(name: str) -> str:
     return (SCRIPTS_DIR / name).read_text(encoding="utf-8")
 
 
-@pytest.mark.parametrize(
-    "script,experiment_id",
-    [
-        ("measure_surrogate.py", "TACOSM-SURROGATE-001"),
-        ("measure_learn.py", "TACOSM-LEARN-001"),
-    ],
+#: Every measurement script that has a contract, with its contract's id.
+#: Parametrizing the wiring tests over this is what makes a new script
+#: unforceable by accident: adding a script and a contract but forgetting to
+#: wire them fails the parametrization, not only the eye.
+_WITH_CONTRACT = (
+    ("measure_surrogate.py", "TACOSM-SURROGATE-001"),
+    ("measure_learn.py", "TACOSM-LEARN-001"),
+    ("measure_matched_h.py", "TACOSM-MATCHED-001"),
 )
+
+
+@pytest.mark.parametrize("script,experiment_id", _WITH_CONTRACT)
 def test_the_scripts_load_and_enforce_their_contract(script, experiment_id):
     """A measurement script must check its run against its contract.
 
@@ -596,13 +613,7 @@ def test_the_scripts_load_and_enforce_their_contract(script, experiment_id):
         )
 
 
-@pytest.mark.parametrize(
-    "script,experiment_id",
-    [
-        ("measure_surrogate.py", "TACOSM-SURROGATE-001"),
-        ("measure_learn.py", "TACOSM-LEARN-001"),
-    ],
-)
+@pytest.mark.parametrize("script,experiment_id", _WITH_CONTRACT)
 def test_the_scripts_declare_their_smoke_test(script, experiment_id):
     """``--smoke`` is the one declared way to run off the registered design.
 
@@ -623,6 +634,43 @@ def test_the_scripts_declare_their_smoke_test(script, experiment_id):
     # registered run's.
     assert "not a measurement" in text or "no deviation found" in text
     assert experiment_id in text
+
+
+@pytest.mark.parametrize("script,experiment_id", _WITH_CONTRACT)
+def test_every_script_pins_its_registered_steps_as_a_literal(script, experiment_id):
+    """The schedule length a script defaults to must be a literal, not a guess.
+
+    ``_resolve_steps`` follows the ``--steps`` default wherever it is bound, so
+    a script that defaulted to a bare ``500`` still passes — the value is what
+    is checked, not the spelling. What this test catches is the script whose
+    default is an expression a static reader cannot evaluate at all, which
+    would silently break the contract-to-script comparison for every reader.
+    """
+    got = _script_constants(script)
+    c = load_contract(experiment_id)
+    assert c.steps == got["STEPS_DEFAULT"], (
+        f"{script}'s --steps default is {got['STEPS_DEFAULT']}, but its "
+        f"contract registers {c.steps}. An unflagged run of that script does "
+        "not execute the registered intervention."
+    )
+
+
+@pytest.mark.parametrize("script,experiment_id", _WITH_CONTRACT)
+def test_every_script_names_its_registered_arms(script, experiment_id):
+    """The arm set is written out in every script, in whatever spelling.
+
+    ``ARMS`` for the multi-arm designs, ``REGISTERED_ARMS`` for the single-arm
+    one, whose comparison is across the matrix rather than against a control
+    arm. A script with no literal at all would be a script whose arm set can
+    only be known by running it, which is the drift the contract exists to
+    prevent.
+    """
+    got = _script_constants(script)
+    c = load_contract(experiment_id)
+    arms = got.get("REGISTERED_ARMS", got.get("ARMS"))
+    assert tuple(arms) == tuple(a.name for a in c.arms), (
+        f"{script}'s registered arm tuple does not match {experiment_id}"
+    )
 
 
 def test_the_smoke_flag_reports_every_deviation():
