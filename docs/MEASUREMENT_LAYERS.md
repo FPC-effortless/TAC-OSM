@@ -1,30 +1,111 @@
-# TAC-OSM — Three Layers of Measurement
+# TAC-OSM — Layers of Measurement
 
 **Status:** the measurement contract for this repository. Every number the
-repository emits belongs to exactly one of the three layers below, and the
-layers are **ordered**: a Layer 2 or Layer 3 number is uninterpretable unless
-the Layer 1 gate for the model that produced it has passed.
+repository emits belongs to exactly one of the layers below, and the layers
+are **ordered**: a Layer 2 or Layer 3 number is uninterpretable unless the
+Layer 1 gate for the model that produced it has passed, and no layer is
+reached before the question has been asked whether the answer is already
+inherited — Layer 0.
 
 This document exists because the repository's most expensive errors were all
 Layer 1 failures that read as Layer 2 findings. Naming the layers is what
-makes the next one visible instead of publishable.
+makes the next one visible instead of publishable. Layer 0 was added later,
+for the opposite failure: spending experimental capital re-establishing
+results the repository already held.
 
 ---
 
 ## The contract
 
-| | Layer 1 | Layer 2 | Layer 3 |
-|---|---|---|---|
-| Question | is the measurement about the model at all? | does the mechanism behave as claimed? | does the system solve the task, and at what cost? |
-| Failure mode | silent — produces a plausible wrong number | loud — produces a real number about the wrong thing | the only layer that can over-claim |
-| On failure | every downstream number is meaningless | one mechanism claim is withdrawn | one capability claim is withdrawn |
-| Reversibility | none — rerun | rerun | rerun |
+| | Layer 0 | Layer 1 | Layer 2 | Layer 3 |
+|---|---|---|---|---|
+| Question | is the answer already established, and may it be inherited? | is the measurement about the model at all? | does the mechanism behave as claimed? | does the system solve the task, and at what cost? |
+| Failure mode | invisible in the other direction — a redundant run is not detectable from its own output | silent — produces a plausible wrong number | loud — produces a real number about the wrong thing | the only layer that can over-claim |
+| On failure | nothing is withdrawn; capital is spent | every downstream number is meaningless | one mechanism claim is withdrawn | one capability claim is withdrawn |
+| Reversibility | none — the run was unnecessary | none — rerun | rerun | rerun |
 
 **A Layer 1 failure is invisible from Layer 2 and Layer 3.** That is the whole
 point. A zeroed parameter vector produces a smooth, bounded, sensible-looking
 softmax; an ambiguous task produces a clean, reproducible accuracy. Neither
 error is detectable in the numbers it emits. They are only detectable by
 checking the preconditions, which is why Layer 1 is a gate and not a metric.
+
+---
+
+## Layer 0 — Inherited evidence
+
+> **External or prior evidence that can be inherited rather than
+> experimentally re-established.**
+
+Layer 0 exists because the repository kept re-measuring things it had already
+settled. Three experiments in a row — MATCHED-001, F2, F3 — each re-printed
+the oracle control, the representability gate and the analytic-vector margins
+as part of their own runs, because those numbers were load-bearing for their
+interpretations. That is correct and will continue: an experiment that
+*consumes* an inherited row verifies it as a gate. What is not correct is
+*re-deriving* an inherited row as though it were open, which is how a
+pre-registered design drifts into a post-hoc one — the diagnostic becomes a
+finding, the finding becomes a claim, and the claim is weaker than the
+evidence it replaced because it was measured under a protocol designed for
+something else.
+
+The layer answers five questions, and a row that cannot answer all five is
+not Layer 0:
+
+| Question | What an answer looks like |
+|---|---|
+| What is already established? | A named mechanism or property, not a number. Numbers are tied to a protocol; the mechanism is what transfers. |
+| By whom, or by what source? | A commit, an experiment ID, or a provenance entry in `provenance/COMPONENTS.md`. |
+| What exactly transfers? | The mechanism, the protocol, or the *lesson* — the three are different imports and the ledger records which one. |
+| What does **not** transfer? | The exclusions. Every Layer 0 row carries its boundary, because an import without its exclusions is an over-claim. |
+| What local validation remains necessary? | The gate the inheriting experiment must still run. Layer 0 is inheritable *evidence*, not an exemption from Layer 1. |
+
+### The scale
+
+`L0` inherits cleanly, with its boundary stated. `L1` is inherited but
+required a local adaptation, so the adaptation is the contribution and is
+re-verified locally. `L2` is a TAC-OSM mechanism result — established here,
+by a named experiment, and inheritable by the next experiment but not from
+outside. `L3` is an integration result about this specific system under test.
+`L4` is a core claim of the program, which no single experiment establishes
+and which the register exists to keep honest.
+
+The register that assigns these levels is `docs/EVIDENCE_REGISTER.md`. This
+document defines what a level *means*; that one records which row carries
+which one.
+
+### The rule Layer 0 imposes
+
+**Before an experiment measures something, it must state which of its own
+components are already settled.** The statement is not a literature review;
+it is a table of the rows the design consumes, with the layer and the source
+for each. An experiment that cannot fill in the table does not know which of
+its own results would be new.
+
+The corollary, and the part that bites: **an experiment does not get to
+re-measure a Layer 0 row and report it as a finding.** It verifies it as a
+gate, or it cites it. F3's reproduction gate — nine cells, `diff = 0.0000`
+against the published MATCHED-001 baseline — is what an inherited row looks
+like when it is being consumed honestly: the baseline arm exists to prove the
+frozen reference did not move, and the deltas are then against that reference
+rather than against a re-measured one.
+
+### Where Layer 0 sits in the dependency
+
+```
+Layer 0 (inherited)  ──┐
+                      ├──►  Layer 1 (gate)  ──►  Layer 2 (mechanism)  ──►  Layer 3 (system)
+Layer 0 does not void  │       voids                withdraws                withdraws
+the run; it is the     │
+run's permission to    │
+skip re-derivation     │
+```
+
+Layer 0 is not a gate and cannot void a run, because an inherited row can be
+wrong without the current experiment being able to detect it — that is what
+makes it inherited. What it can do is make a run *redundant*: an experiment
+whose every component is L0 is not an experiment, it is a re-run, and the
+register is what makes that visible before the compute is spent.
 
 ---
 
@@ -203,8 +284,8 @@ H. The desired model — `C_total ≈ C_address + C(|R|) + C(|A|) + C_verify` wi
 this reason.
 
 This is the gap the roadmap exists to close, and it is the reason a retrieval
-boundary (Stage F1) matters more than a better router: the boundary is what
-makes `|R|` a measurable quantity at all.
+boundary (roadmap `M2.1`, historically `Stage F1`) matters more than a better
+router: the boundary is what makes `|R|` a measurable quantity at all.
 
 ### What Layer 3 requires
 
@@ -215,7 +296,7 @@ A capability-vs-computation curve needs, at minimum:
   axis, not one derived from the other;
 - frozen history levels, with the capability parity margin declared **before**
   the confirmatory run;
-- the full ablation matrix (Stage D), because a cost claim about an integrated
+- the full ablation matrix (`M1.3`), because a cost claim about an integrated
   system is not separable from which mechanisms are switched on.
 
 None of these exist in v0.1. Until they do, no figure in this repository may
@@ -228,10 +309,15 @@ present `C_executed` as though it had been measured against `|R|`.
 The dependency is one-directional and it is strict:
 
 ```
-Layer 1 (gate)  →  Layer 2 (mechanism)  →  Layer 3 (system)
-   voids              withdraws             withdraws
+Layer 0 (inherited)  ──►  Layer 1 (gate)  ──►  Layer 2 (mechanism)  ──►  Layer 3 (system)
+   does not void            voids                withdraws                withdraws
 ```
 
+- **A Layer 0 failure voids nothing.** It costs capital. An experiment that
+  re-derives an inherited row produces a correct number and a weaker claim,
+  because the number was measured under a protocol designed for a different
+  question. The register exists to make that visible before the run rather
+  than after it.
 - **A Layer 1 failure voids everything downstream.** It does not degrade the
   numbers; it makes them refer to nothing. There is no partial credit.
 - **A Layer 2 failure withdraws one mechanism claim** and may void the Layer 3
@@ -256,3 +342,19 @@ basis.
 Both were caught by Layer 1 controls *after* the interpretation was written.
 The layers exist so that the check runs first and the interpretation is
 written second.
+
+### The pattern Layer 0 is designed to break
+
+The opposite error, and the one the repository was making without noticing:
+three consecutive experiments re-measured the analytic vector and the oracle
+control as part of their own runs, in each case correctly, because the numbers
+were load-bearing. Each run was longer than it needed to be, and in each the
+*diagnostic* was at risk of being read as a *finding* — F3's own
+pre-registration records the near-miss explicitly, in the section that says
+re-running diagnostics that already have answers "is how a pre-registered
+design drifts into a post-hoc one."
+
+Layer 0 is the name for the discipline that was being applied by hand. The
+difference between consuming an inherited row and re-establishing it is the
+difference between a gate and an experiment, and the register is what keeps
+them apart.

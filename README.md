@@ -175,13 +175,16 @@ confirmatory run.
 
 ## The measurement contract
 
-Every number this repository emits belongs to one of three ordered layers.
-The ordering is strict and it is the reason the gates exist.
+Every number this repository emits belongs to one of five ordered layers:
+`L0` inherited → `L1` gate → `L2` mechanism → `L3` system → `L4` core program
+claim. The ordering is strict and it is the reason the gates exist — and the
+`L0` layer runs *first*, because the failure it catches is spending a run
+re-establishing an answer the repository already holds.
 
-| | Layer 1 — model validity | Layer 2 — mechanism | Layer 3 — system |
-|---|---|---|---|
-| asks | is the measurement about the model at all? | does the mechanism behave as claimed? | does the system solve the task, at what cost? |
-| on failure | **voids** every downstream number | withdraws one mechanism claim | withdraws the system claim |
+| | L0 — inherited | L1 — model validity | L2 — mechanism | L3 — system |
+|---|---|---|---|---|
+| asks | is the answer already established, and may it be inherited? | is the measurement about the model at all? | does the mechanism behave as claimed? | does the system solve the task, at what cost? |
+| on failure | capital is spent | **voids** every downstream number | withdraws one mechanism claim | withdraws the system claim |
 
 **A Layer 1 failure is invisible from the layers above.** A zeroed parameter
 vector produces a smooth, bounded, sensible-looking softmax. An ambiguous task
@@ -204,7 +207,9 @@ Layer 1 failures published as Layer 2 findings:
   (`representability.py`, §34).
 
 Both were caught *after* the interpretation was written. The layers exist so
-the check runs first. Full contract: `docs/MEASUREMENT_LAYERS.md`.
+the check runs first. Full contract: `docs/MEASUREMENT_LAYERS.md`, per-row
+assignment: `docs/EVIDENCE_REGISTER.md`, and the pre-experiment procedure:
+`docs/EVIDENCE_MAP.md`.
 
 ---
 
@@ -220,6 +225,8 @@ cannot drift from `measured` to `supported` without an entry changing there.
 | `TACOSM-HS-001` | does accuracy fall with history because routing degrades? | **yes** — oracle 1.0000 at every H, so the environment is not the cause |
 | `TACOSM-RETRIEVAL-001` (F0) | does the top-K signal survive top-1 collapse? | **at `H ≤ 64`, yes**; **at `H ≥ 128`, no** (rec@16 → 0.550 at H=256) |
 | `TACOSM-MATCHED-001` | is the large-H loss a representation problem or a training problem? | **neither** — the learning rule is the failure |
+| `TACOSM-LEARN-001` (F2) | do two named exploration interventions lift the large-H endpoint? | **no** — both within seed noise; `recall@16` materially *harmed* by epsilon-greedy |
+| `TACOSM-SURROGATE-001` (F3) | does a dense gold-anchored reward lift the large-H endpoint? | **top-K yes, top-1 no** — `Δ(recall@16)` = +0.0860 / +0.2460; `Δ(routing@1)` within noise |
 
 `TACOSM-MATCHED-001` is the result that redirected the roadmap. Its
 pre-registered rule committed to two outcomes and produced neither: matched-H
@@ -231,18 +238,45 @@ leave `routing@1` at 0.0700 while the weight norm grows 12-fold and the margin
 *worsens*.
 
 > **The experiment was designed to choose an architecture, and it answered
-> that the architecture is not the problem.** Stage F1 (the retrieval index)
-is therefore **suspended, not abandoned** — an index measured against a
-baseline whose weakness is a training artefact is unsound in both directions.
-The learning dynamics are next (Stage F2).
+> that the architecture is not the problem.** The retrieval index (roadmap
+> `M2.1`, historically `Stage F1`) is therefore **re-queued, not abandoned** —
+> an index measured against a baseline whose weakness is a training artefact
+> is unsound in both directions.
 
-**Stage F2 is pre-registered, not yet run** — `docs/TACOSM-LEARN-001.md`. Two
-named training-time interventions (epsilon-greedy `eps_0 = 0.30` decaying to 0;
-temperature `2.0 → 0.5`) against the frozen MATCHED-001 baseline, with the
-decision rule and its consequences committed *before* the run. The constraint
-that makes it falsifiable rather than tunable: the knobs are constants in the
-document, not command-line arguments, and a negative result licenses a claim
-about the interventions, not about the mechanism (claim **C10**).
+Two intervention experiments followed, both pre-registered with their
+decision rules committed *before* the run and their knobs pinned as constants
+in the document rather than exposed as command-line arguments. That is what
+makes them falsifiable rather than tunable, and it is why a negative result
+licenses a claim about the *interventions* and not about the mechanism
+(claim **C10**):
+
+**F2 — learning dynamics** (`docs/TACOSM-LEARN-001.md`). Epsilon-greedy
+(`eps_0 = 0.30`, linear decay) and a temperature schedule (`2.0 → 0.5`),
+both training-only. Neither lifted `routing@1` at `train-H = 256`: the
+deltas were -0.0220 and -0.0140 against a 0.0600 materiality threshold, and
+`recall@16` moved *against* both arms. What it did close is *selection* as
+the binding constraint — epsilon-greedy explored as registered (15.2% of
+steps) and saw **more** successes per step (3.8 vs 2.4, chance 0.0039), and
+the endpoint still did not move.
+
+**F3 — reward density** (`docs/TACOSM-SURROGATE-001.md`). A dense
+gold-anchored margin reward in place of the binary outcome, with the
+leakage boundary argued in advance: the surrogate is computed from the
+router's own parameters and permitted inputs, and the gold index appears
+only to anchor the margin. The result is an **asymmetry**, and the asymmetry
+is the finding — `Δ(recall@16)` = +0.0860 and +0.2460 (material), `gold_rank`
+74.70 → 25.83, but `Δ(routing@1)` = +0.0400 / +0.0240, within noise. Gold
+moved closer to the top of the ranking without separating from the single
+best distractor. The reward's non-zero rate went from 0.0048 to 0.9980, so
+the intervention landed; it landed in the bulk of the score distribution
+rather than at the top.
+
+F3 is what re-queues the retrieval index. Its registered evidence is the
+first measurement showing the large-H top-K signal is *responsive to
+training* rather than merely present on a transfer-trained router — and the
+re-queue is recorded as "top-K signal intact", explicitly **not** as
+"`routing@1` improved". The bound `K ≥ 2` travels with it, recorded as claim
+**C11**.
 
 ---
 
@@ -256,11 +290,12 @@ src/tac_osm/integrity.py        model-state gate: catches untrained weights befo
 src/tac_osm/ablation.py         one architecture, controlled switches
 tests/                          the three pre-model gates + the integrity gate
 docs/ARCHITECTURE.md            interfaces before implementations
-docs/MEASUREMENT_LAYERS.md      the three-layer measurement contract
+docs/MEASUREMENT_LAYERS.md      the layer contract: L0 inherited → L1 gate → L2 mechanism → L3 system
 docs/ABLATION_PLAN.md           the primary scientific instrument
 docs/CLAIMS.md                  every claim, its status, and its blocker
-docs/ROADMAP.md                 stage order, and why F1 is behind F2
-docs/EVIDENCE_MAP.md            prior research -> interface, and the boundary
+docs/ROADMAP.md                 milestone order M1 → M2 → M3, and the historical stage aliases
+docs/EVIDENCE_MAP.md            the pre-experiment gate: is an experiment necessary?
+docs/EVIDENCE_REGISTER.md       the L0–L4 level of every row, and what may be inherited
 provenance/COMPONENTS.md        binding ledger: reuse vs do_not_claim
 scripts/                        the exact commands that produced every number
 ```

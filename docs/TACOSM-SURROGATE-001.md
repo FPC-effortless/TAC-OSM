@@ -876,3 +876,108 @@ the score distribution. Retrieval architecture is next.
     GATE PASSED — the frozen baseline reproduces. Reporting all arms.
 
 Oracle accuracy: 1.0000 at H_eval ∈ {8, 64, 256}.
+
+---
+
+## Evidence classification — what F3 inherited, and what it established
+
+The register is `docs/EVIDENCE_REGISTER.md` and the layer definitions are in
+`docs/MEASUREMENT_LAYERS.md` §"Layer 0". This section classifies the
+components of *this* pre-registration so the next experiment does not spend
+capital re-establishing the rows that were already settled before F3 ran.
+
+The distinction that matters is between **inherited** evidence — established
+outside TAC-OSM, or by an earlier TAC-OSM experiment, and therefore not
+re-measurable by F3 — and **TAC-OSM-specific** evidence, which F3 is the
+first or only source of. F3 did not get to re-measure the inherited rows and
+did not try; the reproduction gate is the expression of that discipline, and
+its nine exact cells are the reason the deltas below are comparable to a
+frozen reference rather than to a moved one.
+
+| Component of the F3 design | Layer | Source | Why that layer |
+|---|---|---|---|
+| A binary outcome reward exists in the environment | **L0** | `WorldEnvironment` scores `success = action == target_action`; established in `TACOSM-BASELINE-001` and unchanged since | A property of the task generator, not of a learning rule. F3 consumed it as the baseline arm and measured it (non-zero on 0.48% of H=256 steps) rather than establishing it |
+| A running-mean baseline is the variance-control mechanism | **L0** | Standard policy-gradient practice; the router already centred by `1/H` before F3 (`router.update`) | The technique was inherited, not invented here. F3's contribution is *where* the baseline is taken: `mean(s_{<t})` of the surrogate, not `1/H` of the candidate count |
+| `s_gold − max_{j≠gold} s_j` as a dense supervision signal | **L0/L1** | A known mechanism (margin-based ranking loss) locally adapted to a bandit setting | The margin is prior art; adapting it to a REINFORCE update that consumes only a scalar, computed outside the router from inputs the router already holds, is the adaptation |
+| Applying dense supervision to *this* router, at *this* population | **L3** | F3 only | A TAC-OSM-specific integration hypothesis. The analytic vector proved the representation adequate (MATCHED-001) and F2 proved selection not binding, so the question of whether the *signal density* is the constraint is specific to this system at H=256 |
+| Dense supervision materially improves exact `routing@1` | **not supported** | F3, primary endpoint | The registered endpoint did not fire: +0.0400 and +0.0240 against a 0.0600 materiality threshold. Within seed noise, and the per-seed table shows overlapping distributions. This is a measured-and-honest negative on the primary endpoint, not a null |
+| Dense supervision improves top-K retrieval | **L3 supported, bounded** | F3, secondary endpoint | `Δ(recall@16)` = +0.0860 and +0.2460 at H=256, both material; `gold_rank` 74.70 → 25.83. Supported at the retrieval budgets and *not* at `K = 1`. The bound is the statement |
+| F3 resolves TAC-OSM's learning problem | **not established** | F3's own decision rule | Top-1 routing at H=256 remains at 0.0740–0.1140 against a 1.0000 oracle and a 1.0000 analytic vector. F3 moved the evidence frontier and did not close the problem |
+| The top-K signal is worth F1's existence | **L2/L3** | F0 first, F3 now | F0 showed the top-K signal survives at H ≤ 64 and fails at H ≥ 128 on a transfer-trained router. F3 is the first measurement showing the large-H top-K signal is *responsive to training* — it improved materially under a training-only intervention. Supported jointly by F0 and F3, and requires F1 to become a capability claim |
+
+**The one sentence F3 is not.** F3 is not "the router learned relevance". The
+surrogate is anchored to the gold index exactly as the outcome reward is; the
+intervention is the *density* of a signal of the same logical kind, with the
+anchor held fixed. What F3 establishes is narrower, and is stated as such:
+
+> Increasing the density of the gold-anchored learning signal substantially
+> improved top-K retrieval under the tested conditions, while failing to
+> produce a material improvement in exact top-1 routing.
+
+That asymmetry — top-K moves, top-1 does not — is the result, and it is why
+the decision rule re-queues F1 on top-K evidence while leaving the
+interpretation order untouched.
+
+**What F3 did not have to re-establish.** Three rows were inherited and were
+load-bearing for the run's interpretability:
+
+* **The hypothesis class is adequate** (MATCHED-001, L1 in TAC-OSM terms: a
+  property of the representation, established by the §34 gate and by the
+  analytic vector). Without this, a flat `routing@1` would be ambiguous
+  between "the signal did not help" and "the signal cannot help". With it,
+  the flat primary endpoint is a statement about the *update*.
+* **The environment is unambiguous** (`oracle = 1.0000` at every H, printed
+  first in the run). This is what makes the degradation attributable to the
+  model rather than to the task, and it was inherited, not re-measured.
+* **Selection is not the binding constraint** (F2: `epsilon_greedy` explored
+  15.2% of steps and saw *more* successes, 3.8 vs 2.4, with a flat endpoint).
+  This is what made the reward the next candidate rather than another
+  exploration schedule, and it is why F3's arms hold exploration at zero.
+
+**The one row F3 adds to the inherited set.** "The top-K signal is responsive
+to training at large H" did not exist as evidence before F3 — F0 measured it
+on a transfer-trained router and MATCHED-001 measured it on a matched-H one,
+neither of which varied the training signal. F3 is its only source, and it is
+the row F1 inherits.
+
+### The causal sequence, recorded
+
+F3's result is only legible as the third step of a sequence, and the sequence
+is the research narrative. Recording it here so it cannot be restated in an
+order that fits a later conclusion:
+
+```
+TACOSM-MATCHED-001  →  the representation is adequate
+                         (analytic vector: routing@1 = 1.0000 at H ∈ {8,64,256,512})
+                         so the failure is not expressiveness
+
+        TACOSM-LEARN-001 (F2)  →  an exploration intervention does not repair
+                                   the ranking
+                                   (explored 15.2% of steps, more successes,
+                                    endpoint flat)
+                                   so the failure is not selection
+
+                TACOSM-SURROGATE-001 (F3)  →  a dense gold-anchored signal
+                                               improves top-K retrieval
+                                               but not top-1 materially
+                                               (Δrecall@16 +0.0860/+0.2460,
+                                                Δrouting@1 within noise)
+
+                        therefore  →  the learning signal matters for
+                                       retrieval quality, but exact ranking
+                                       remains unresolved
+```
+
+Each step depends on the one above and each one closes a candidate location
+for the failure without closing the question. MATCHED-001 closed
+representation; F2 closed selection; F3 closes reward density as *the*
+explanation for the top-1 deficit while opening the top-K result that makes
+F1 worth running. The order is a contract: it was committed to before F2 ran
+and is not reordered to fit F3's outcome.
+
+**What the sequence forbids, restated.** No step in it licenses "the routing
+mechanism does not scale", because at every step the hypothesis class
+provably contains a perfect H-invariant solution. The sequence is a
+progressive narrowing of *where the trained router fails*, and the remaining
+candidates after F3 are the ones all three experiments left alone: a
+different update rule, and the retrieval architecture itself.

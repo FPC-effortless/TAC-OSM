@@ -246,7 +246,7 @@ hypothesis predicts exploration can move.
 6. **`C_router`** — actual routing cost, reported as the candidate count
    scored. Constant across arms by construction (`O(H)` for every arm,
    including exploration). **Reported but never the basis of a claim**: F2 is
-   a quality experiment, not a cost experiment, and `C(|R|)` is a Stage F1
+   a quality experiment, not a cost experiment, and `C(|R|)` is an `M2.1`
    quantity that does not exist yet.
 7. **`prob_margin`** — the gap in the softmax units the decision samples from.
    Reported for the same reason as in MATCHED-001: the loop is governed by the

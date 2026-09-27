@@ -19,6 +19,30 @@ Conventions:
 * A `BLOCKER` names the specific thing that must change for the status to
   move. An entry without one is either done or unfixable.
 
+### Provenance fields
+
+Every entry also carries five fields, which are the reason a claim here cannot
+be quietly upgraded from "measured once" to "established":
+
+* **TYPE** — `mechanism` · `protocol` · `lesson` · `negative` · `gate` ·
+  `core claim`. A *mechanism* is working machinery, a *protocol* is a way of
+  measuring, a *lesson* is a constraint on interpretation only. The type
+  determines what an entry can be used *for*.
+* **LAYER** — `L0` inherited · `L1` inherited and adapted · `L2` TAC-OSM
+  mechanism result · `L3` integration result · `L4` core program claim.
+  Defined in `docs/MEASUREMENT_LAYERS.md` §"Layer 0"; assigned per row in
+  `docs/EVIDENCE_REGISTER.md`. The layer answers "may this be taken as given
+  by the next experiment, or must it be measured again?"
+* **PRIOR ART** — the external antecedent, if any. Blank means the claim is
+  TAC-OSM's own, which is itself information: C4 and C8 had no antecedent
+  anywhere in the portfolio.
+* **NOT INHERITED** — the exclusions. The binding field. An import without its
+  exclusions is an over-claim, and this is where the sentence that must not
+  travel with a claim is recorded.
+* **REQUIRED EVIDENCE** — what a claimant must produce to cite the entry, and
+  what the experiment needed to run. An entry whose required evidence cannot
+  be named is not ready to be cited.
+
 ---
 
 ## C1 — Persistence
@@ -27,6 +51,19 @@ Conventions:
 > decision the observation alone does not determine.
 
 **STATUS: SUPPORTED**
+
+**TYPE:** mechanism · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** the persistent-state container and the carry/reset/shuffle
+intervention vocabulary are imported from TAC-transformer `IdentityState` (E3,
+TAC-235/236, `6cce2ce`). The container is L0; the *claim* that a written value
+changes a later decision inside a decision loop is TAC-OSM's own, because the
+source is a bandit with no temporal decision boundary.
+
+**NOT INHERITED:** long-horizon memory — the source evidence is bounded and
+synthetic. The claim holds for the three v0.1 families and no further.
+
+**REQUIRED EVIDENCE:** the named experiment and the gate that ran.
 
 `TACOSM-BASELINE-001`, commit `91597ab`. The `replay` family requires a
 written vector on the marked positions *and* the public query's anti-match;
@@ -50,6 +87,23 @@ a new experiment.
 
 **STATUS: SUPPORTED**
 
+**TYPE:** mechanism · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** `RelationalBanditRouter`'s key-gated feature map (PNDS Stage 2c,
+E2, `42f9814`) — the strongest router evidence in the portfolio and the basis
+TAC-OSM's learned router is built on. The map is L1: the mechanism is imported,
+and the adaptation — running it inside a decision loop with persistence and
+verification — is re-verified locally by the §34 gate.
+
+**NOT INHERITED:** the source's causality (Stage 2c is a bandit, not a loop);
+that the learned arm reaches the oracle ceiling (source: 0.8853 vs 1.0 at 8
+candidates); generality beyond `dim=8` bit descriptors. The source's
+large-population behaviour is also not inherited, because it was never
+measured there.
+
+**REQUIRED EVIDENCE:** the named experiment, with the representability gate
+passing jointly — a learned success without it is an uninterpretable success.
+
 `TACOSM-BASELINE-001`. Learned arm 0.4396 at 500 steps against `random`
 0.1296 and `static` 0.0376. Cost is one dot product per candidate, no LM
 forward pass — the property that keeps the `CDLTeacher` out of the runtime
@@ -68,6 +122,18 @@ excusable as an expressiveness limit.
 > A perfect oracle conceals a broken feature basis indefinitely.
 
 **STATUS: SUPPORTED**
+
+**TYPE:** lesson · **LAYER:** L0 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** PNDS-URP v0.4 §34, added after `dd8f63c` was invalidated by
+`f989430`. This is the single most transferable methodological asset in the
+portfolio and it transfers wholesale: it is a *protocol*, not a mechanism.
+
+**NOT INHERITED:** nothing — the lesson is architecture-neutral by
+construction, which is exactly why it is L0.
+
+**REQUIRED EVIDENCE:** the gate itself, run as a compulsory pre-training
+failure rather than a retrospective audit.
 
 Provenance: the `dd8f63c` failure at `cdl-attention-experiment`, where
 `PersistentStateRouter._features` never read `state.key` and analytically
@@ -90,6 +156,19 @@ vector separates gold for `state_lookup` or `replay`.
 > and is not detectable from its outputs.
 
 **STATUS: SUPPORTED**
+
+**TYPE:** gate · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** none. This failure mode was discovered inside TAC-OSM, in the
+HS-001 sweep; it has no antecedent in the portfolio's prior work, which is
+worth recording — the most expensive methodological lesson here was new here.
+
+**NOT INHERITED:** the claim cannot be inherited by any external consumer
+either, because it is a claim about *their* harness. It transfers only as the
+gate itself, not as evidence about their system.
+
+**REQUIRED EVIDENCE:** the gate running unconditionally in every measurement
+script, and the regression test that reproduces the invisibility.
 
 This is the claim the TACOSM-HS-001 measurement error established, and it is
 now pinned as a gate and as tests.
@@ -128,8 +207,25 @@ Tests: `tests/test_integrity.py`, including
 
 **STATUS: UNTESTED**
 
+**TYPE:** core claim · **LAYER:** L4 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** none. This is the program's thesis, not a finding, and it has
+no antecedent in the portfolio.
+
+**NOT INHERITED:** everything. In particular, the flat `C_executed` column in
+HS-001 is **not** support for this claim in either direction: a constant 10 at
+every H means the architecture has no room to scale, not that scaling has been
+demonstrated.
+
+**REQUIRED EVIDENCE:** a capability-vs-computation curve with total compute and
+relevant compute measured **separately** along the same axis, not one derived
+from the other, with the capability parity margin declared before the
+confirmatory run.
+
 **BLOCKER:** v0.1 executor has fixed `active_count = max_nodes = 10`; there is
-no retrieval or index boundary in the loop.
+no retrieval or index boundary in the loop. `|R|` is not a defined quantity,
+so the claim is not merely unsupported — it is currently *unstatable* as a
+measurement.
 
 This is the architecture's central efficiency claim and it is *not* supported
 by any measurement in the repository. The honest model of v0.1 cost is:
@@ -144,9 +240,9 @@ column there means the architecture has *no room* to scale, not that scaling
 has been demonstrated. `C_router` is the only cost term that genuinely varies,
 and it grows linearly with H.
 
-The claim becomes testable at Stage F1, where an index inserts a retrieval
-boundary between routing and execution. Until then it must not appear in any
-report or figure as though measured.
+The claim becomes testable at `M2.1` (`docs/ROADMAP.md`), where an index
+inserts a retrieval boundary between routing and execution. Until then it must
+not appear in any report or figure as though measured.
 
 ---
 
@@ -159,6 +255,20 @@ report or figure as though measured.
 below. The degradation is real and is attributable to the model, not the
 environment. The *reason* it happens is not the one this claim originally
 implied.
+
+**TYPE:** mechanism · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** none for the degradation; the *narrowing* is TAC-OSM's own.
+
+**NOT INHERITED:** the original mechanism. The claim as first written pointed
+at "a fixed capacity of a linear scorer to separate gold from its best
+distractor". That reading is **refuted** by the analytic vector, and the
+sentence that must not travel with this claim is "capacity limitation of a
+linear scorer".
+
+**REQUIRED EVIDENCE:** the attribution controls that separate this claim from
+its refuted mechanism: `oracle = 1.0000` (environment not the cause) and
+`exec|route` (execution not the cause).
 
 `TACOSM-HS-001`, commit `91597ab`, re-verified with the integrity gate in
 place (see below). Oracle = 1.0000 at every H, so the environment is not
@@ -216,6 +326,24 @@ keep is "routing degrades, and the environment does not".
 qualification's *cause* is now identified — it is a training artefact, not a
 representation limit (see below).
 
+**TYPE:** mechanism · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** none.
+
+**NOT INHERITED:** `H ≥ 128`, where the signal does **not** survive on a
+transfer-trained router. The qualification is part of the claim, not a caveat
+to it.
+
+**REQUIRED EVIDENCE:** `TACOSM-RETRIEVAL-001` (F0) establishes that the signal
+survives; `TACOSM-SURROGATE-001` (F3) establishes the row that matters for
+F1 — that the large-H top-K signal is *responsive to training*, improving
+materially under a training-only intervention. Neither alone supports the
+claim F1 inherits.
+
+**BLOCKER:** the claim becomes a capability claim only when a retrieval
+boundary exists, at which point it is F1's to make. Until then it is a
+mechanism claim about a scorer with no index in front of it.
+
 `TACOSM-RETRIEVAL-001` F0, this commit. The existing router scores all H
 candidates; retaining the top-K by score:
 
@@ -266,6 +394,15 @@ must not be read as one in any description of F1's viability. See
 
 **STATUS: SUPPORTED**
 
+**TYPE:** gate · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** none. Discovered inside TAC-OSM during baseline preparation.
+
+**NOT INHERITED:** nothing — the gate is a property of this generator, pinned
+by a test that fails 25/25 on the old code.
+
+**REQUIRED EVIDENCE:** `test_relational_and_state_lookup_do_not_collide_on_a_pinned_run`.
+
 Discovered during baseline preparation: `relational` and `state_lookup`
 called `_build_candidates` with the same seed, marks, dim, `n_candidates` and
 noise, so under a pinned single-family config they emitted *identical* tasks
@@ -279,7 +416,7 @@ by `step.query.provenance`, which holds the stream, exposure and schedule
 identical across families — the method `measure_baseline.py` uses.
 
 The underlying cause was coupled randomness (`seed + len(families)` deriving
-the task seed), which is why Stage B of the roadmap makes independent RNG
+the task seed), which is why `M1.1` of the roadmap makes independent RNG
 streams a hard contract rather than a style preference.
 
 ---
@@ -290,6 +427,17 @@ streams a hard contract rather than a style preference.
 > 0.2600 → 0.3463 → 0.2743 at 60/200/500.
 
 **STATUS: NOT ESTABLISHED**
+
+**TYPE:** negative · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** none.
+
+**NOT INHERITED:** an explanation. This is the point of the entry: the three
+candidate causes were checked and ruled out, and no explanation is offered
+because none was found.
+
+**REQUIRED EVIDENCE:** none is planned. Rationalising the curve would be worse
+than leaving it here.
 
 Recorded rather than explained. The three things that could have caused it
 were checked and ruled out: the family streams are now distinct (C8),
@@ -309,6 +457,21 @@ rationalising it would be worse than leaving it here.
 is in the ledger because it is the constraint that keeps `TACOSM-LEARN-001`
 (F2) honest, and because it is the kind of constraint that gets quietly
 dropped when a result is inconvenient.
+
+**TYPE:** lesson · **LAYER:** L1 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** the distinction is standard practice in experimental design;
+the *enforcement* — pre-committing the interpretation order before the run and
+recording the branch that occurred — is the PNDS-URP pre-registration protocol
+adapted to this repository.
+
+**NOT INHERITED:** any licence to pronounce on the mechanism. The reason is
+not rhetorical: the hypothesis class provably contains a perfect H-invariant
+solution, so a mechanism whose hypothesis class is adequate cannot be
+pronounced inadequate by a failure to find the solution with one optimiser.
+
+**REQUIRED EVIDENCE:** a pre-registered decision rule with its consequences
+attached, committed before the run and unamended whatever the result.
 
 F2 tests two named training-time interventions — epsilon-greedy with
 `eps_0 = 0.30` linearly decayed, and a temperature schedule from `2.0` to
@@ -363,6 +526,62 @@ a 0.0039 chance rate), and the endpoint still did not improve, which rules out
 *selection* as the binding constraint and leaves the learning rule, the
 gradient signal, and the reward shaping as the candidates. None of that is a
 verdict on the mechanism.
+
+---
+
+## C11 — Dense supervision improves top-K retrieval, not exact routing
+
+> Increasing the density of the gold-anchored learning signal substantially
+> improved top-K retrieval under the tested conditions, while failing to
+> produce a material improvement in exact top-1 routing.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-SURROGATE-001` (F3), commit
+`5943166`.
+
+**TYPE:** mechanism · **LAYER:** L3 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** the margin objective and the state-independent baseline are both
+standard (L0). What is TAC-OSM's own is applying them to *this* router at
+*this* population — an integration hypothesis, not a technique.
+
+**NOT INHERITED:** "the router learned relevance." The surrogate is anchored to
+the gold index exactly as `float(outcome.success)` is — the environment scores
+`success = action == target_action` — so both rewards are gold-anchored scalars
+of the same logical kind and the intervention is the *density* of the signal,
+with the anchor held fixed. A positive result licenses a statement about
+learnability under dense supervision, not about outcome learning.
+
+**REQUIRED EVIDENCE:** the registered run, with the reproduction gate passing
+first — all nine published MATCHED-001 baseline cells reproduced with
+`diff = 0.0000`, which is what makes every delta below a comparison against
+the frozen reference.
+
+At `train-H = 256`:
+
+| endpoint | baseline | `analytic_margin` | `analytic_margin_clipped` |
+|---|---|---|---|
+| `routing@1` | 0.0740 | 0.1140 | 0.0980 |
+| `recall@16` | 0.3020 | **0.3880** | **0.5480** |
+| `gold_rank` | 74.6960 | 48.0900 | **25.8260** |
+| successes / 500 | 2.4 | 3.8 | 2.0 |
+
+`Δ(routing@1)` = +0.0400 and +0.0240 against a pre-registered materiality
+threshold of 0.0600 — **within seed noise**. `Δ(recall@16)` = +0.0860 and
++0.2460 — **material**. The intervention landed as registered: the reward's
+non-zero rate went from 0.0048 to 0.9980 at H=256.
+
+**The asymmetry is the claim.** Gold moved closer to the top of the ranking
+without separating from the single best distractor — `delta_1` at H=256 does
+not move (−0.4383 → −0.4749) while `gold_rank` improves by a factor of three.
+The gain is in the bulk of the score distribution, not at the top.
+
+**BLOCKER:** the bound is `K ≥ 2`. At `K = 1` the endpoint did not fire, and
+exact top-1 routing at H=256 remains at 0.0740–0.1140 against a 1.0000 oracle
+and a 1.0000 analytic vector. The claim does not extend to C2, does not extend
+C7's `H ≥ 128` qualification, and does not resolve the learning problem — it
+moves the evidence frontier. Per the pre-registered decision rule, F1
+re-queues on this top-K evidence alone, recorded as "top-K signal intact" and
+*not* as "`routing@1` improved".
 
 ---
 
