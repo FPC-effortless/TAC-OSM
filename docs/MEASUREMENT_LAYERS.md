@@ -103,13 +103,25 @@ what it must not be is *attributed to the wrong mechanism*.
 that matters and the part that was missing until TACOSM-MATCHED-001:
 
 - `delta_1 = s_gold − s_best_distractor`, the gap argmax has to cross;
-- `delta_K` against the K-th competitor, for the retrieval budgets;
+- `delta_K = s_gold − s_(K)`, the gap to the K-th *competing* score, for the
+  retrieval budgets;
 - `prob_margin`, the same gap in softmax units.
 
 A `recall@16 = 0.55` is ambiguous on its own: gold may sit at rank 2 behind
 one strong distractor, or be buried among a hundred near-tied candidates. Both
 give the same recall and need different fixes. `delta_1` separates them
 directly, which is what made the matched-H result legible.
+
+**`delta_K`'s reference matters, and it had the wrong one until Audit 8.** The
+metric was defined as the gap to the K-th competitor but implemented as the
+gap to the K-th *overall* score, gold included — so `delta@1` was zero by
+construction for any scorer that ranked gold first, and the analytic vector
+reported `+0.0000` where its true margin is `+3.0`. The failure was invisible
+because the key was never printed. See Audit 8 in
+`docs/TACOSM-MATCHED-001.md`: a metric that is written but never read is not
+verified by anything downstream, and its definition cannot be checked against
+its computation. The corrected form is now printed, which is what makes it
+checkable.
 
 Note the units, because the wrong unit produces a false degradation. The
 `RoutingDecision.scores` are softmax probabilities, normalised over H, so a

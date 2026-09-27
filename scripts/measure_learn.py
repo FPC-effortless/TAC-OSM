@@ -327,7 +327,13 @@ def _evaluate(h_eval: int, weights: Sequence[float], seed: int, n_steps: int) ->
         s_best_distr.append(max(others))
         prob_margins.append(probs[gold] - max(p for i, p in enumerate(probs) if i != gold))
         entropies.append(_softmax_entropy(probs))
-        ordered = sorted(raw, reverse=True)
+        # ``delta_K`` is the gap to the K-th *competing* score, so gold is
+        # removed before ordering — the same fix as measure_matched_h.py.
+        # Sorted with gold included, ``delta@1`` is zero by construction
+        # whenever gold is the argmax, which is not a margin. This key is not
+        # part of the reproduction gate (that compares ``delta_1`` only), so
+        # the gate's published numbers are untouched by this change.
+        ordered = sorted(others, reverse=True)
         for k in ks:
             deltas[k].append(raw[gold] - ordered[k - 1])
 

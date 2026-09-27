@@ -1,0 +1,43 @@
+Fix delta_K to measure the K-th competitor, not the K-th overall score
+
+delta@K was documented as `s_gold - s_Kth-competitor` in both measurement
+scripts and in MEASUREMENT_LAYERS.md, but implemented as the gap to the K-th
+*overall* score with gold included. Since the K-th overall score *is* gold
+whenever gold sits in the top K, delta@1 was zero by construction for any
+scorer that ranked gold first: the analytic vector reported +0.0000 where its
+true margin is +3.0.
+
+The key was computed in both scripts but never printed or read by anything
+downstream, which is why the definition and the computation were able to
+disagree for as long as they did. Audit 8 in TACOSM-MATCHED-001 records the
+mechanism and the proof.
+
+- remove gold before ordering in measure_matched_h.py and measure_learn.py
+- print the delta@2/4/8/16 matrices, which the user asked for as m_K
+- note in measure_learn.py that the fix cannot move F2's published numbers:
+  the reproduction gate compares delta_1 only, computed from
+  s_gold/s_best_distr and never touching the deltas dict
+- MEASUREMENT_LAYERS.md: state the definition and record why a written-but-
+  unread metric is not verified by anything downstream
+
+Re-ran the registered protocol (--steps 500 --eval-steps 100): every one of
+the nine published MATCHED-001 values reproduces to four decimal places.
+
+Also pre-registers TACOSM-SURROGATE-001 (F3), the dense-reward experiment.
+F2 established that epsilon_greedy explored as registered and saw more
+successes per step at H=256 while the endpoint did not move, which closes
+selection as the binding constraint. The two hypotheses F2 leaves live —
+credit assignment and reward sparsity — are not separable by observation,
+because both predict the same thing F2 measured; a dense reward is what makes
+them differ. The load-bearing section is the leakage-boundary argument: the
+surrogate is computed from the router's own parameters and permitted inputs,
+with the gold index anchoring the margin, which is the training-time analogue
+of what the §34 gate already licenses for measurement. A positive result
+licenses "learnable under dense supervision", not "learned relevance from
+outcomes".
+
+Stage F3 added to ROADMAP.md; the measurement-layers contract becomes F4.
+
+Generated with [Continue](https://continue.dev)
+
+Co-Authored-By: Continue <noreply@continue.dev>

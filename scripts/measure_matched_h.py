@@ -282,7 +282,13 @@ def _evaluate(h_eval: int, weights: Sequence[float], seed: int, n_steps: int) ->
         s_best_distr.append(max(others))
         prob_margins.append(probs[gold] - max(p for i, p in enumerate(probs) if i != gold))
         entropies.append(_softmax_entropy(probs))
-        ordered = sorted(raw, reverse=True)
+        # ``delta_K`` is the gap to the K-th *competing* score, so gold is
+        # removed before ordering. Sorted with gold included, the K-th overall
+        # score *is* gold whenever gold sits in the top K, which makes
+        # ``delta@1`` zero by construction for a perfect scorer: the analytic
+        # vector reported +0.0000 at H=64 where its true margin is +3.0. The
+        # docstring's "s_gold - s_Kth-competitor" is what this computes now.
+        ordered = sorted(others, reverse=True)
         for k in ks:
             deltas[k].append(raw[gold] - ordered[k - 1])
 
@@ -443,6 +449,16 @@ def main() -> None:
                   "entropy", h_levels, rows)
     _print_matrix("prob_margin — top-1 gap in decision units",
                   "prob_margin", h_levels, rows)
+    # The K-th competitor margins. ``delta@1`` is numerically identical to
+    # ``delta_1`` now that both exclude gold, so it is not duplicated; the
+    # larger K are the new columns, and they answer the question ``recall@K``
+    # cannot: whether the residual signal at large H is one strong distractor
+    # behind gold or a field of near-tied candidates around it.
+    for k in k_levels:
+        if k <= 1:
+            continue
+        _print_matrix(f"delta@{k} — margin to the {k}-th-highest competitor",
+                      f"delta@{k}", h_levels, rows)
 
     print()
     print("How to read this:")
@@ -459,6 +475,16 @@ def main() -> None:
     print("  (non-normalised) score units so it is comparable across H.")
     print("  entropy should stay well below ln_H; ln_H means no preference at")
     print("  all.")
+    print()
+    print("  delta@K for K > 1 is the margin to the K-th best COMPETITOR, so")
+    print("  gold is excluded from the ranking it is measured against: it is")
+    print("  s_gold minus the K-th highest score among the other candidates.")
+    print("  Read it against recall@K. recall says whether gold is inside the")
+    print("  budget; delta@K says by how much. A cell with recall@16 = 0.30")
+    print("  and a small delta@16 has gold near the budget's edge; the same")
+    print("  recall with a large delta@4 has a handful of strong distractors")
+    print("  and a wide field behind them. Those need different retrieval")
+    print("  budgets, and recall alone cannot tell them apart.")
 
 
 if __name__ == "__main__":

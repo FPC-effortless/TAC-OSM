@@ -400,6 +400,17 @@ Pre-registration is only as strong as its audit trail. The run records:
    endpoints are still computed from `router.score`; only the executed action
    differs from it, which is also why `accuracy` is not `routing@1`.
 
+8. **Audit 8's `delta@K` fix, and why it cannot move this run's numbers.**
+   This script carried the same `sorted(raw, ...)` line MATCHED-001 did, in
+   which the K-th overall score includes gold and `delta@1` is zero by
+   construction for a perfect scorer. It is fixed in both scripts; see Audit 8
+   in `docs/TACOSM-MATCHED-001.md` for the mechanism and the proof. The fix is
+   inert for F2's conclusions because the reproduction gate compares
+   `delta_1` only — a key computed from `s_gold`/`s_best_distr` that never
+   touched the `deltas` dict — and none of the eight numbers in the Outcomes
+   table above is a `delta@K`. The published F2 result is unchanged; the key
+   is now correct should a future arm read it.
+
 **Layer 3 is untouched.** No cost claim is made by this experiment. `C_router`
 is reported because it is present in the loop, and it is `O(H)` for every arm
 including the exploration arms — no arm changes routing cost, and none may.

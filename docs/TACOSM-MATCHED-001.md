@@ -135,6 +135,93 @@ HS-001/F0 transfer design — and ask what the scoring function *can* do:
 
 ---
 
+## Audit 8 — `delta_K` was measuring the wrong reference
+
+The docstring has always named `delta_K` as `s_gold − s_Kth-competitor`, and
+`MEASUREMENT_LAYERS.md` quotes it as "against the K-th competitor". The
+implementation did not compute that. It sorted the *whole* score list
+including gold and subtracted the K-th overall score:
+
+```python
+ordered = sorted(raw, reverse=True)      # gold included
+deltas[k].append(raw[gold] - ordered[k - 1])
+```
+
+The K-th overall score *is* gold whenever gold sits in the top K, so `delta@1`
+is zero by construction for any scorer that ranks gold first. The analytic
+vector — the perfect scorer, `routing@1 = 1.0000` at every H — reported
+`delta@1 = +0.0000` at H=64 where its true margin is `+3.0000`. The metric was
+reporting the absence of a gap for a scorer whose gap is maximal. The number
+was never printed, so nothing downstream read it, but the claim in the
+docstring and the code disagreed, and the claim was the one to keep.
+
+The fix removes gold before ordering (`sorted(others, reverse=True)`), which
+makes `delta@1` numerically identical to the already-correct `delta_1`. Both
+scripts carried the same line; both are fixed. The key was never part of the
+F2 reproduction gate, which compares `delta_1` only.
+
+**No published number changed.** The registered protocol was re-run at
+`--steps 500 --eval-steps 100` and every one of the nine values in the three
+tables above — including `delta_1`, `routing@1` and `recall@4` — reproduced
+to four decimal places, because `delta_1` was always computed correctly from
+`s_gold`/`s_best_distr` and never touched the `deltas` dict.
+
+---
+
+## The K-th competitor margins — new columns
+
+The corrected metrics, from the same re-run. `delta@K` is now `s_gold` minus
+the K-th highest *competing* score, so a positive value means gold outranks
+that competitor by that margin. Read them paired with the recall tables: where
+`recall@K` is high and `delta@K` is small, gold sits near the edge of the
+budget; where `recall@K` is low and `delta@K` is still positive at smaller K,
+a handful of strong distractors is what beats the budget, not a flat field.
+
+### delta@2
+
+| H_train | H_eval=8 | H_eval=64 | H_eval=256 |
+|---|---|---|---|
+| 8 | +1.9812 | −0.7387 | −1.6525 |
+| 64 | +0.6755 | −0.8630 | −1.3476 |
+| 256 | −0.0020 | −0.3123 | −0.4102 |
+
+### delta@4
+
+| H_train | H_eval=8 | H_eval=64 | H_eval=256 |
+|---|---|---|---|
+| 8 | +4.1511 | +0.0025 | −1.2078 |
+| 64 | +1.8469 | −0.4464 | −1.0910 |
+| 256 | +0.2226 | −0.2276 | −0.3602 |
+
+### delta@8
+
+| H_train | H_eval=8 | H_eval=64 | H_eval=256 |
+|---|---|---|---|
+| 8 | — | +0.8833 | −0.6477 |
+| 64 | — | +0.0510 | −0.7856 |
+| 256 | — | −0.1186 | −0.2969 |
+
+### delta@16
+
+| H_train | H_eval=8 | H_eval=64 | H_eval=256 |
+|---|---|---|---|
+| 8 | — | +2.1556 | +0.0587 |
+| 64 | — | +0.7477 | −0.4074 |
+| 256 | — | +0.0257 | −0.2147 |
+
+**What the columns add to the result.** The signal is not merely "one strong
+distractor ahead of gold." At H_eval=256 the H=8-trained router keeps
+`delta@16 = +0.0587` positive — gold still outranks the 16th competitor on
+average — which is the same fact `recall@16 = 0.5800` reports, but in units
+that show the margin is thin enough that a modest budget change moves it. And
+the column-wise ordering the pre-registered reading depends on is preserved
+here too: `delta@16` at H_eval=64 falls +2.1556 → +0.7477 → +0.0257 as the
+training population grows, i.e. matched-H training degrades the K-th-competitor
+margin at every population, exactly as it degrades every other metric. The new
+columns are consistent with the conclusion, not a caveat to it.
+
+---
+
 ## Why: neither A nor B — the learning dynamics
 
 ### Test 1: the analytic vector is perfect at every H

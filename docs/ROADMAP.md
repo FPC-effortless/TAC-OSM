@@ -227,7 +227,7 @@ This stage also decides C5's precondition. `C_executed ≈ f(|R|)` needs a
 retrieval boundary to make `|R|` a measurable quantity, and the only retrieval
 boundary worth building is one on a scorer whose numbers mean what they say.
 
-**F1 — Efficient retrieval** *(suspended; contingent on F2)*
+**F1 — Efficient retrieval** *(suspended; contingent on F2/F3)*
 
     H → cheap index → K ≪ H → existing scorer → R
 
@@ -240,7 +240,47 @@ taxonomy are pre-registered in `TACOSM-RETRIEVAL-001.md`.
 This is the stage that can test the efficiency hypothesis, because it inserts
 a retrieval boundary the v0.1 loop does not have.
 
-### Stage F3 — Measurement layers  *(the standing contract)*
+### Stage F3 — Reward density  *(pre-registered; not yet run)*
+
+F2 closed two named exploration interventions without moving the endpoint, and
+it closed them in the way that matters: `epsilon_greedy` explored as registered
+(15.2% of steps) and saw **more** successes per step at H=256 (3.8 vs 2.4,
+chance 0.0039) — the exact condition the scarcity hypothesis predicts — and
+`routing@1` still did not improve. Selection is not the binding constraint.
+
+What both arms deliberately left alone is the reward itself, and that is the
+one remaining component of the update that is still binary and terminal.
+F3 intervenes on it, and only it:
+
+| arm | reward | centring | clip | exploration |
+|---|---|---|---|---|
+| `baseline` | `float(outcome.success)` | `1/H` | — | none |
+| `analytic_margin` | `s_gold − max_{j≠gold} s_j` | per-step mean across candidates | none | none |
+| `analytic_margin_clipped` | as above | as above | `[0, 1]` | none |
+
+**Pre-registered in `docs/TACOSM-SURROGATE-001.md`.** The load-bearing part of
+that document is the leakage-boundary argument: the surrogate is computed from
+the router's own parameters and its own permitted inputs, and the gold index
+appears only to anchor the margin — the training-time analogue of what the §34
+representability gate already licenses for measurement
+(`gold_fn` "is never an input to the mechanism"). A positive result licenses
+"the hypothesis class is learnable under dense supervision", **not** "the
+router learned relevance from outcomes", and is reported as the weaker claim.
+
+F3 is the experiment that separates the two hypotheses F2 left live, because
+they are not separable by observation: both credit-assignment and
+reward-sparsity predict "more useful interactions, no endpoint movement",
+which is what F2 measured. A dense reward makes them differ on the 99% of
+H=256 steps that currently carry no gradient signal at all.
+
+**A negative F3 is a stronger result than F2's.** Two named interventions on
+selection and one on reward, all failing to move the same number, constrain
+the *location* of the failure rather than listing things that do not work.
+That reopens the architecture question on firmer ground than "the current
+router doesn't work" — the inspection order is committed to in advance and is
+not reordered to fit the outcome.
+
+### Stage F4 — Measurement layers  *(the standing contract)*
 
 Every number this repository emits belongs to exactly one of three layers, and
 the layers are ordered: a Layer 2 or Layer 3 number is uninterpretable unless
