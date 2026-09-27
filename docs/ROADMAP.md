@@ -155,7 +155,7 @@ The specification below is kept intact and un-amended, because it was
 pre-registered and a pre-registration is not revised to fit a result. It is
 re-queued, not withdrawn.
 
-### Stage F2 — Learning dynamics  *(pre-registered; not yet run)*
+### Stage F2 — Learning dynamics  *(pre-registered; RUN — result: neither arm improves the endpoint)*
 
 > The architecture is not the problem. The hypothesis class contains a
 > perfect, H-invariant solution; the environment provides enough information
@@ -202,6 +202,26 @@ re-queued, not merged.
 
 **F1 re-queues only on the primary endpoint firing, or on the top-K signal
 being shown intact** — and those are different evidence, recorded as such.
+
+**F2 result (recorded in `docs/TACOSM-LEARN-001.md` under Outcomes).** The
+reproduction gate passed — the baseline arm reproduced all nine published
+MATCHED-001 numbers exactly, so the comparison is against the published
+reference. The primary endpoint did not fire: `routing@1` at H=256 moved
+-0.0220 (`epsilon_greedy`) and -0.0140 (`temperature`) against a 0.0600
+materiality threshold, i.e. within seed noise. The top-K signal was not
+intact either — `recall@16` at H=256 fell to 0.2260 from 0.3020 under
+`epsilon_greedy`, which is material *harm*.
+
+Neither F1 condition is satisfied, so F1 does not re-queue from this result.
+The commitment that matters is the one recorded above and in the
+pre-registration's "what a negative result does not license" section: this is
+*not* a representation verdict and does not scale the mechanism down. It
+locates the failure outside the *selection* stage of training —
+`epsilon_greedy` explored as registered (15.2% of steps) and saw more
+successes per step at H=256 (3.8 vs 2.4, chance 0.0039), and the endpoint
+still did not improve. The remaining candidates are the ones both arms
+deliberately left alone: the learning rule, the gradient signal, and the
+reward shaping. The surrogate-reward option below is where those live.
 
 This stage also decides C5's precondition. `C_executed ≈ f(|R|)` needs a
 retrieval boundary to make `|R|` a measurable quantity, and the only retrieval

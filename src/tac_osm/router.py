@@ -83,6 +83,7 @@ from .state import Slot
 
 __all__ = [
     "RouterConfig",
+    "ExplorationSchedule",
     "LearnedRelationalRouter",
     "StaticTotalAgreementRouter",
     "RandomRouter",
@@ -94,6 +95,7 @@ __all__ = [
     "features",
     "analytic_weights",
     "arm_types",
+    "arm_exploration",
 ]
 
 ARM_TYPES = ("learned", "static", "random", "oracle", "full_context")
@@ -102,6 +104,99 @@ ARM_TYPES = ("learned", "static", "random", "oracle", "full_context")
 def arm_types() -> tuple[str, ...]:
     """The router arms, matching ``ablation.RouterType``."""
     return ARM_TYPES
+
+
+# --------------------------------------------------------------------------- #
+# TACOSM-LEARN-001 (F2): the pre-registered exploration constants
+# --------------------------------------------------------------------------- #
+#
+# These three numbers are fixed by the TACOSM-LEARN-001 pre-registration and
+# are deliberately not reachable from any config or CLI. The pre-registration
+# is what makes F2 falsifiable: an "exploration" intervention whose strength
+# a run could tune is not an intervention, it is a search, and whatever it
+# found would be unfalsifiable. See docs/TACOSM-LEARN-001.md, "The
+# interventions".
+#
+# They are module-level constants rather than buried in the schedule class so
+# that a reader can find the number the pre-registration names in one place,
+# and so ``ExplorationSchedule``'s defaults *are* the registered values by
+# construction rather than a restatement of them.
+EPS_0 = 0.30        # epsilon-greedy rate at step 0, annealed linearly to 0
+TAU_0 = 2.0         # training softmax temperature at step 0
+TAU_END = 0.5       # ... annealed linearly to the evaluation temperature
+SCHEDULE_LENGTH = 500
+
+
+@dataclass
+class ExplorationSchedule:
+    """Training-time exploration for ``LearnedRelationalRouter``.
+
+    **These values are not hyperparameters.** They are the constants fixed by
+    the ``TACOSM-LEARN-001`` pre-registration
+    (``docs/TACOSM-LEARN-001.md``), which is why they live on a frozen
+    dataclass with no factory default on the router itself: an intervention
+    that could be tuned at call time is not the intervention that was
+    pre-registered, and a negative result obtained from a tuned value would
+    not be a result about the registered intervention at all.
+
+    Both schedules are **training-only**. Evaluation always runs at
+    ``epsilon = 0`` and ``temperature = 0.5``; see :meth:`evaluate`.
+
+    ``epsilon_greedy`` — with probability ``epsilon_t`` the selected candidate
+    is drawn uniformly at random instead of sampled from the policy's softmax;
+    otherwise the policy's own sample is used. It replaces the *action* that
+    becomes ``RoutingDecision.selected``, and nothing else: ``update`` still
+    receives ``probs[selected]``, the policy's probability of the action
+    actually taken, so REINFORCE is unchanged.
+
+    ``temperature`` — the softmax temperature *during training*, raised above
+    its evaluation value and annealed back down to it. Flattening the training
+    policy raises the probability of selecting non-greedy candidates, which
+    raises the number of successes seen per step — the quantity MATCHED-001
+    measured at 5 per 500 steps at H=256.
+    """
+
+    epsilon_greedy: bool = False
+    eps_0: float = EPS_0
+    temperature: bool = False
+    tau_0: float = TAU_0
+    tau_end: float = TAU_END
+    n_steps: int = SCHEDULE_LENGTH
+
+    def __post_init__(self) -> None:
+        if self.eps_0 < 0.0 or self.eps_0 > 1.0:
+            raise ValueError(f"eps_0 must be in [0, 1], got {self.eps_0}")
+        if self.tau_end <= 0.0:
+            raise ValueError(f"tau_end must be positive, got {self.tau_end}")
+        if self.tau_0 < self.tau_end:
+            raise ValueError(
+                f"tau_0 must be >= tau_end (anneal from hot to cold), got "
+                f"tau_0={self.tau_0} < tau_end={self.tau_end}"
+            )
+        if self.n_steps <= 0:
+            raise ValueError(f"n_steps must be positive, got {self.n_steps}")
+
+    def epsilon(self, step: int) -> float:
+        """``eps_0`` annealed linearly to 0 over the training length.
+
+        Exploration is front-loaded, where successes are rarest, and the final
+        policy is greedy. Past the schedule end it stays at 0 — a training run
+        longer than the pre-registered length must not silently keep exploring.
+        """
+        if not self.epsilon_greedy:
+            return 0.0
+        return self.eps_0 * max(0.0, 1.0 - step / self.n_steps)
+
+    def tau(self, step: int) -> float:
+        """``tau_0`` annealed linearly to ``tau_end`` over the training length.
+
+        The endpoint is deliberately the evaluation temperature, so the trained
+        policy ends in the regime it is scored in.
+        """
+        if not self.temperature:
+            return self.tau_end
+        frac = min(1.0, step / self.n_steps)
+        return self.tau_0 + (self.tau_end - self.tau_0) * frac
 
 
 @dataclass
@@ -316,6 +411,21 @@ class LearnedRelationalRouter:
         #: construction and to "copied:<hash>" when weights are loaded from a
         #: checkpoint, so a snapshot can say where the state came from.
         self._integrity_source = "training"
+        #: F2 exploration. ``None`` is the pre-F2 behaviour — REINFORCE as
+        #: written, sampling at the configured temperature with no exploration
+        #: term — so every existing measurement reproduces bit-for-bit.
+        self.exploration: ExplorationSchedule | None = None
+        #: Training step counter, advanced by ``update``. The exploration
+        #: schedules are functions of it, so the counter must live on the
+        #: router rather than being threaded through the loop: the loop does
+        #: not know a schedule exists, and a schedule that the loop had to
+        #: advance would be a per-experiment code path through the model —
+        #: exactly what the single-construction-path rule forbids.
+        self._train_step = 0
+        #: Last explored action, recorded so a harness can distinguish a
+        #: training-time exploration decision from a policy decision without
+        #: having to reconstruct the schedule. ``None`` under ``epsilon = 0``.
+        self._last_explored = False
 
     # -- scoring ----------------------------------------------------------- #
 
@@ -364,6 +474,21 @@ class LearnedRelationalRouter:
         self.w = [float(x) for x in weights]
         self._integrity_source = source or f"copied:{parameter_hash(self.w)}"
 
+    def _softmax_at(self, scores: Sequence[float], tau: float) -> list[float]:
+        """Softmax at a caller-supplied temperature.
+
+        The training path uses the *scheduled* temperature; evaluation uses the
+        configured one. Splitting them is what keeps the temperature arm from
+        leaking into evaluation: there is one method with one temperature
+        argument, and no path by which a training schedule can reach the
+        evaluation ranking.
+        """
+        scaled = [s / max(tau, 1e-6) for s in scores]
+        m = max(scaled)
+        exps = [math.exp(s - m) for s in scaled]
+        z = sum(exps)
+        return [x / z for x in exps] if z > 0 else [1.0 / len(scaled)] * len(scaled)
+
     def _softmax(self, scores: Sequence[float]) -> list[float]:
         scaled = [s / max(self.temperature, 1e-6) for s in scores]
         m = max(scaled)
@@ -375,11 +500,42 @@ class LearnedRelationalRouter:
 
     def route(self, query: Query, state: PersistentState,
               candidates: Sequence[Candidate]) -> RoutingDecision:
-        """Select one candidate. Samples at the configured temperature."""
+        """Select one candidate.
+
+        At evaluation this samples at the configured temperature. During
+        training it may explore, per the F2 schedule: the *action* is replaced
+        with probability ``epsilon_t`` by a uniform draw, and the softmax is
+        taken at the scheduled temperature ``tau_t``. In both cases
+        ``scores`` are the policy probabilities of the actions actually
+        available, so ``update`` sees the policy's probability of the action
+        actually taken and REINFORCE is unchanged.
+
+        **Exploration is training-only and acts on selection only.** It never
+        changes ``features``, the scores, the update rule, or anything the
+        ranking at evaluation is computed from. A measurement that reads the
+        ranking uses :meth:`evaluate`, not this method, so no exploration knob
+        can reach the scientific endpoint.
+        """
         read = state.read(query)
         rows = self._score_rows(query, candidates, read)
         scores = [sum(w * f for w, f in zip(self.w, row)) for row in rows]
-        probs = self._softmax(scores)
+
+        sched = self.exploration
+        if sched is None:
+            probs = self._softmax(scores)
+            self._last_explored = False
+        else:
+            probs = self._softmax_at(scores, sched.tau(self._train_step))
+            if self._rng.random() < sched.epsilon(self._train_step):
+                # Uniform draw replaces the action; the policy probabilities
+                # are still the ones reported, so the REINFORCE update keeps
+                # its ``1 - p_selected`` term honest about how likely the
+                # policy *itself* thought the action was.
+                selected = self._rng.randrange(len(probs))
+                self._last_explored = True
+                return RoutingDecision(selected=selected, scores=tuple(probs),
+                                       provenance="learned:explore")
+            self._last_explored = False
 
         u = self._rng.random()
         acc = 0.0
@@ -391,12 +547,58 @@ class LearnedRelationalRouter:
                 break
         return RoutingDecision(selected=selected, scores=tuple(probs), provenance="learned")
 
+    def evaluate(self, query: Query, state: PersistentState,
+                 candidates: Sequence[Candidate]) -> tuple[int, list[float]]:
+        """The **deterministic** ranking: the argmax of ``router.score``.
+
+        This is F2's scientific endpoint. It is deliberately not ``route``:
+
+        - ``route`` *samples*, so calling it twice on the same state gives two
+          different answers, and its ``RoutingDecision.scores`` are softmax
+          probabilities normalised over the candidate count. F2's endpoint is
+          a property of the learned parameters, not of one draw from a
+          sampling distribution.
+        - ``route`` is also where exploration lives. The pre-registration fixes
+          evaluation at ``epsilon = 0`` and ``temperature = 0.5``, and this
+          method is how that is enforced structurally rather than by
+          convention: it does not consult ``self.exploration``, so no schedule
+          can reach it.
+
+        The separation is the point of the experiment. ``epsilon``-greedy
+        changes which action is *sampled during training*; the scientific
+        question is whether that changes the learned parameters enough to
+        change the *deterministic ranking at evaluation*. The comparison is
+
+            training intervention -> learned parameters -> fixed evaluator
+
+        not the reward accumulated under the exploratory policy. Reporting the
+        latter would measure how well the exploration schedule explores, which
+        is not a claim about routing at all.
+
+        Returns the argmax index and the raw dot products, so a caller
+        computes recall, rank and margins from the same scoring function
+        ``route`` and ``update`` use internally.
+        """
+        raw = self.score(query, state, candidates)
+        best = max(raw)
+        tied = [i for i, s in enumerate(raw) if s == best]
+        selected = tied[0] if len(tied) == 1 else tied[-1]
+        return selected, raw
+
     # -- learning ---------------------------------------------------------- #
 
     def update(self, query: Query, candidates: Sequence[Candidate],
                selected: int, reward: float, probs: Sequence[float],
                state: PersistentState) -> None:
-        """REINFORCE on a scalar outcome. The gold index is never consulted."""
+        """REINFORCE on a scalar outcome. The gold index is never consulted.
+
+        **Unchanged by F2.** Both registered interventions act *upstream* of
+        this method, on which action gets selected and at what temperature the
+        policy is sampled; the gradient itself is the same expression. The
+        exploration arms are therefore comparable to the baseline under
+        exactly the update rule MATCHED-001 trained with, which is what makes
+        a difference in the result attributable to the named knob.
+        """
         read = state.read(query)
         row = features(query, candidates[selected].descriptor, read,
                        self.dim, self.max_state_slots)
@@ -406,6 +608,9 @@ class LearnedRelationalRouter:
         for k in range(self.n):
             self.w[k] += grad * row[k]
         self._updates += 1
+        # Advanced here, not in ``route``: the schedule tracks *training*
+        # progress, and the counter must not advance on an evaluation call.
+        self._train_step += 1
 
     # -- diagnostics ------------------------------------------------------- #
 
@@ -644,3 +849,44 @@ def build_router(config: RouterConfig) -> LearnedRelationalRouter | object:
     if arm == "full_context":
         return FullContextRouter(config)
     raise ValueError(f"unreachable router arm: {arm!r}")
+
+
+# --------------------------------------------------------------------------- #
+# TACOSM-LEARN-001 (F2): the registered arms
+# --------------------------------------------------------------------------- #
+
+
+#: The three arms ``TACOSM-LEARN-001`` pre-registers. ``baseline`` is ``None``
+#: because that arm *is* the MATCHED-001 protocol: no schedule, REINFORCE as
+#: written, sampling at the configured temperature. The two interventions are
+#: the schedule with one flag set, using the constants the pre-registration
+#: fixed — no arm carries a value this dict does not name, and no value here is
+#: a knob the caller may tune.
+_ARM_EXPLORATION: dict[str, ExplorationSchedule | None] = {
+    "baseline": None,
+    "epsilon_greedy": ExplorationSchedule(epsilon_greedy=True),
+    "temperature": ExplorationSchedule(temperature=True),
+}
+
+
+def arm_exploration(arm: str) -> ExplorationSchedule | None:
+    """The registered exploration schedule for an F2 arm.
+
+    Takes the arm *name*, not the parameters: this is a lookup, not a
+    constructor, so the only way to run an exploration arm is to name one of
+    the three the pre-registration defines. A caller cannot construct a
+    schedule with different values and reach the measurement path through this
+    function — the registered values are the reachable ones.
+
+    Raises ``KeyError`` for an unknown arm rather than falling back to the
+    baseline. A typo that silently trained the baseline and reported it as an
+    exploration arm would be exactly the warm-start confusion the
+    pre-registration's Layer 1 section exists to prevent.
+    """
+    if arm not in _ARM_EXPLORATION:
+        raise KeyError(
+            f"unknown F2 arm {arm!r}; expected one of {sorted(_ARM_EXPLORATION)} "
+            "(values are fixed by the TACOSM-LEARN-001 pre-registration and "
+            "cannot be supplied by the caller)"
+        )
+    return _ARM_EXPLORATION[arm]

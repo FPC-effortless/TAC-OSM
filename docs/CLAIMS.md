@@ -346,6 +346,24 @@ architecture`, and F1 re-queues only on F2's primary endpoint firing or on the
 top-K signal being shown intact. Both conditions are recorded in
 `docs/TACOSM-LEARN-001.md`.
 
+**F2 HAS RUN, AND THE CONDITIONAL FIRED.** Neither arm lifted the primary
+endpoint: `routing@1` at `train-H = 256` moved -0.0220 (`epsilon_greedy`) and
+-0.0140 (`temperature`) against a 0.0600 materiality threshold, i.e. within
+seed noise, and `recall@16` at H=256 moved against both arms — materially so
+for `epsilon_greedy` (-0.0760). The reproduction gate passed first (the
+baseline arm reproduced all nine published MATCHED-001 numbers exactly), so
+the comparison is against the published reference column.
+
+So the claim F2 makes is the one above: **these two interventions do not fix
+the trained router at H=256 under this protocol.** C10 is what keeps that
+sentence from becoming the other one. The negative result *did* locate the
+failure more narrowly than before — `epsilon_greedy` explored as registered
+(15.2% of steps) and saw more successes per step at H=256 (3.8 vs 2.4, against
+a 0.0039 chance rate), and the endpoint still did not improve, which rules out
+*selection* as the binding constraint and leaves the learning rule, the
+gradient signal, and the reward shaping as the candidates. None of that is a
+verdict on the mechanism.
+
 ---
 
 ## Claims this repository does not make

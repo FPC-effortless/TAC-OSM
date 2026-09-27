@@ -383,6 +383,22 @@ Pre-registration is only as strong as its audit trail. The run records:
    should track that count.
 5. Per-seed values for every metric, not only the mean.
 6. Oracle accuracy per eval H, printed before any arm table.
+7. **The `argmax@1` audit column.** Not a registered endpoint, and never part
+   of the decision rule. `routing@1` is MATCHED-001's `raw[gold] == max(raw)`,
+   in which a tie for first counts as a hit — the convention HS-001 and F0
+   also use, so the matrices are comparable. `LearnedRelationalRouter.evaluate`
+   breaks ties toward the last tied index instead, so a strict reading of the
+   same scores counts a tie as a miss. Both are printed: where they differ,
+   the difference is ties, and a reader can see whether a tie rule or a
+   learned ranking is doing the work.
+
+   The evaluation cell also advances the loop with the action `route`
+   *sampled* at the configured temperature, as MATCHED-001 did — not with the
+   argmax. The persistent state and the task stream depend on which action
+   ran, so an argmax-driven trajectory would not be MATCHED-001's protocol and
+   the gate would fail for a reason that is not about the arm. The ranking
+   endpoints are still computed from `router.score`; only the executed action
+   differs from it, which is also why `accuracy` is not `routing@1`.
 
 **Layer 3 is untouched.** No cost claim is made by this experiment. `C_router`
 is reported because it is present in the loop, and it is `O(H)` for every arm
@@ -425,19 +441,56 @@ the failure mode this document exists to prevent.
 
 ## Outcomes
 
-*(to be completed when the experiment runs. The decision rule above is fixed
-and is not amended by the result.)*
+**RUN.** `scripts/measure_learn.py --steps 500 --eval-steps 100 --seeds
+0,1,2,3,4`; 3 arms x 3 train-H x 5 seeds. Full log at
+`results/learn001_full.txt`.
+
+**Reproduction gate: PASSED.** The baseline arm reproduced all nine published
+MATCHED-001 numbers exactly (diff = 0.0000 on every metric at every H), so the
+comparison below is against the same reference column MATCHED-001 published.
+
+*(The decision rule above is fixed and is not amended by the result.)*
 
 | train-H | endpoint | baseline | epsilon-greedy | temperature |
 |---|---|---|---|---|
-| 8 | `routing@1` | | | |
-| 64 | `routing@1` | | | |
-| 256 | `routing@1` | | | |
-| 256 | `recall@4` | | | |
-| 256 | `recall@16` | | | |
-| 256 | `delta_1` | | | |
-| 256 | `entropy` | | | |
-| 256 | `successes / 500` | | | |
+| 8 | `routing@1` | 0.6240 | 0.6280 | 0.6140 |
+| 64 | `routing@1` | 0.1320 | 0.1380 | 0.1140 |
+| 256 | `routing@1` | 0.0740 | 0.0520 | 0.0600 |
+| 256 | `recall@4` | 0.1340 | 0.1060 | 0.1040 |
+| 256 | `recall@16` | 0.3020 | 0.2260 | 0.2700 |
+| 256 | `delta_1` | -0.4383 | -0.6221 | -0.3010 |
+| 256 | `entropy` | 5.3533 | 5.1472 | 5.4521 |
+| 256 | `successes / 500` | 2.4 | 3.8 | 1.4 |
+
+Primary endpoint, `routing@1` at H=256: `Δ(epsilon_greedy) = -0.0220`,
+`Δ(temperature) = -0.0140`, against a materiality threshold of 0.0600 (the
+baseline's own seed spread). **Both are within seed noise.** The decision rule
+row that fires is therefore *"`Δ(routing@1)` within spread"*:
+
+> **The failure is not solely exploration.** Fall through to the secondary
+> endpoints before concluding anything. This is *not* a representation verdict.
+
+The secondary endpoints do not rescue it. `recall@16` at H=256 moves
+**against** both arms: `Δ(epsilon_greedy) = -0.0760`, which is material harm
+(beyond the 0.0600 threshold), and `Δ(temperature) = -0.0320`, within noise.
+The paired strong outcome — `routing@1` *and* `recall@16` both materially
+improved — did not occur; `epsilon_greedy` materially *harmed* the shortlist.
+
+Note the direction the arms move in training-time behaviour versus the
+endpoint. `epsilon_greedy` does explore as registered (15.2% of steps) and
+does see more successes per step at H=256 (3.8 vs 2.4, against a 0.0039 chance
+rate) — the condition the scarcity hypothesis predicts — **and the endpoint
+did not improve.** More successes under exploration did not produce a scorer
+with a better large-H ranking. `temperature` flattens the policy (tau 2.0 ->
+0.5, annealed as registered) and sees *fewer* successes than baseline at every
+H, with the endpoint unchanged. Neither knob is the binding constraint.
 
 The interpretation row that fires, and the consequence committed to in the
-decision rule, is recorded here verbatim rather than paraphrased.
+decision rule, is recorded above verbatim rather than paraphrased. Per
+"**What a negative result does not license**" and **C10**, this does not
+falsify the mechanism or the representation: it narrows the location of the
+failure to something other than the *selection* stage of training, and leaves
+the learning rule, the gradient signal, and the reward shaping (all
+deliberately untouched by both arms) as the remaining candidates. The
+consequence committed to in the decision rule follows from the row: fall
+through, do not conclude, and do not add another arm from this document.
