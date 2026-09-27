@@ -1,0 +1,72 @@
+{
+  "experiment_id": "TACOSM-MATCHED-001",
+  "title": "Matched-H training: is the large-H loss a representation problem or a training problem?",
+  "question": "F0's two readings of the retrieval ceiling were not separated by the original design: does the representation degrade with the population, or was the router trained at 8 candidates so the sweep measures transfer? Train and evaluate at matched H and find out.",
+  "hypothesis": "H_rep: the large-H loss is a property of the scoring representation — the basis cannot express the relevance relation at large populations. H_train: the loss is a property of the training population — matched-H training recovers the large-H signal. The pre-committed rule expected exactly one to hold.",
+  "arms": [
+    {
+      "name": "matched",
+      "intervention": "train and evaluate at the same candidate count, at every H",
+      "acts_on": "the training population",
+      "schedule": "500 training steps at the matched H, for every H"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "routing@1",
+      "role": "the primary endpoint — the trained-state diagonal",
+      "primary": true,
+      "description": "Argmax accuracy at evaluation from raw dot products, with the router trained at the H it is evaluated at. The reproduction reference for F2 and F3."
+    },
+    {
+      "name": "recall@4",
+      "role": "secondary — the shortlist signal",
+      "primary": false
+    },
+    {
+      "name": "recall@16",
+      "role": "secondary — the budget from F0",
+      "primary": false
+    },
+    {
+      "name": "delta_1",
+      "role": "secondary — the raw top-1 margin",
+      "description": "The analytic-vector reference reaches delta_1 ~= +3.07 at every H, which is what proves the basis is adequate.",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "matched-H training recovers the large-H signal",
+      "licenses": "H_train is supported and H_rep refuted: the loss is a training-population property, and the retrieval index (M2.1, historically Stage F1) builds on a representation that is adequate at the population it is trained for.",
+      "does_not_license": "that the representation is adequate at populations it was never trained at."
+    },
+    {
+      "condition": "matched-H training does not recover the signal and the analytic vector also fails",
+      "licenses": "H_rep is supported: the basis cannot express the relation at large H, and the architecture, not the training, is the constraint.",
+      "does_not_license": "that the training rule is unimplicated — the two hypotheses are not exhaustive, and a third reading is possible."
+    }
+  ],
+  "interpretation_order": [
+    "representation",
+    "training_dynamics",
+    "population_discrimination",
+    "retrieval_architecture"
+  ],
+  "h_levels": [8, 64, 256],
+  "k_levels": [1, 2, 4, 8, 16],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 500,
+  "eval_steps": 100,
+  "held_constant": [
+    "the feature basis, the environment, the candidate generator and the evaluator are unchanged",
+    "the analytic vector — one shared untrained weight vector — is the reference that proves the basis is adequate at every H",
+    "no arm inherits another arm's weights",
+    "the model-state integrity gate runs before every measurement"
+  ],
+  "status": "run — neither pre-committed branch fired; the third reading is the result",
+  "result_note": "Matched-H training is the worst row at every evaluation population, including its own: routing@1 0.6240 -> 0.3860 (8), 0.1900 -> 0.1300 (64), 0.0640 -> 0.0740 (256). The representation is not inadequate: the analytic vector reaches routing@1 = 1.0000 at H in {8,64,256,512} with delta_1 ~= +3.07, because basis_size never depends on the candidate count. The failure is in the learning dynamics — reward scarcity under REINFORCE at large H: 5 successes in 500 steps at H=256 against a 0.39% chance rate. The experiment was designed to choose an architecture and answered that the architecture is not the problem.",
+  "result_url": "docs/TACOSM-MATCHED-001.md",
+  "layer": "L2"
+}
+ 

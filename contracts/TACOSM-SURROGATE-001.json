@@ -1,0 +1,124 @@
+{
+  "experiment_id": "TACOSM-SURROGATE-001",
+  "title": "Reward density: does a dense gold-anchored reward lift the large-H endpoint?",
+  "question": "REINFORCE at H=256 sees 5 successes in 500 steps. Is the binding constraint the reward's sparsity, or is it the update rule that consumes it?",
+  "hypothesis": "H_sparse: the binary terminal reward 1[a_t = gold] is the constraint — a denser signal of the same logical kind, with the gold anchor held fixed, lifts routing@1 at H=256. H_credit is the alternative: the policy-gradient update over one scalar is the wrong learning rule at this population, and no reward shaping within this class fixes it.",
+  "arms": [
+    {
+      "name": "baseline",
+      "intervention": "none — the MATCHED-001 protocol verbatim",
+      "acts_on": "the reproduction reference; the reward stays float(outcome.success)"
+    },
+    {
+      "name": "analytic_margin",
+      "intervention": "the analytic margin s_gold - max_{j!=gold} s_j, centred by a running mean of itself",
+      "acts_on": "the scalar passed as reward to router.update",
+      "knob": "reward_fn",
+      "value": "AnalyticMarginReward(clip=None)",
+      "schedule": "none"
+    },
+    {
+      "name": "analytic_margin_clipped",
+      "intervention": "the analytic margin as above, clipped to [0, 1]",
+      "acts_on": "the scalar passed as reward to router.update",
+      "knob": "reward_fn",
+      "value": "AnalyticMarginReward(clip=[0, 1])",
+      "schedule": "none"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "routing@1",
+      "role": "the primary endpoint: argmax accuracy at evaluation, from raw dot products",
+      "primary": true,
+      "description": "MATCHED-001's convention raw[gold] == max(raw), ties included. Computed with learn=False and no reward hook on the evaluation router, so the surrogate cannot reach the endpoint it is reported against."
+    },
+    {
+      "name": "recall@16",
+      "role": "the paired secondary endpoint: the retrieval budget from F0",
+      "primary": false,
+      "description": "Well-defined only where 16 < H. A material movement here with a flat routing@1 is the weak outcome the decision rule describes."
+    },
+    {
+      "name": "recall@4",
+      "role": "secondary — the shortlist signal",
+      "primary": false
+    },
+    {
+      "name": "recall@8",
+      "role": "secondary — the retrieval budget",
+      "primary": false
+    },
+    {
+      "name": "delta_1",
+      "role": "secondary — the raw top-1 margin s_gold - s_best_distractor",
+      "primary": false
+    },
+    {
+      "name": "gold_rank",
+      "role": "secondary — mean rank of gold; detects whether the field moved past the single best distractor",
+      "primary": false
+    },
+    {
+      "name": "accuracy",
+      "role": "secondary — the system consequence, from the executed loop",
+      "primary": false
+    },
+    {
+      "name": "entropy",
+      "role": "audit — nats; ln(H) is the uniform-scorer reference",
+      "primary": false
+    },
+    {
+      "name": "c_router",
+      "role": "audit — candidates scored, constant by construction in this experiment",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "delta(routing@1) > spread, where spread is the baseline arm's own max-minus-min across seeds",
+      "licenses": "H_sparse is supported and H_credit is refuted. The failure was the sparsity of the signal, not the rule that consumes it. Record the mechanism, then re-queue the retrieval index (M2.1, historically Stage F1) on a router whose quality is a property of the scorer rather than of the optimiser.",
+      "does_not_license": "that the router learned relevance. The surrogate is gold-anchored exactly as the outcome reward is."
+    },
+    {
+      "condition": "delta(routing@1) within spread",
+      "licenses": "H_credit is supported and H_sparse is refuted, as far as one reward class can refute it. REINFORCE with a linear basis is the wrong learning rule at this population, and this is evidence for a different rule or a different architecture rather than a bare negative. The top-K endpoints are then the secondary reading.",
+      "does_not_license": "that persistent-state relevance routing does not scale. The hypothesis class provably contains a perfect H-invariant solution (routing@1 = 1.0000 at H in {8,64,256,512} for the analytic vector), so a failure to find the solution with one optimiser is not a statement about the space."
+    },
+    {
+      "condition": "delta(routing@1) < -spread",
+      "licenses": "the intervention is harmful; record and stop. No further arm is added from this design.",
+      "does_not_license": "any conclusion about the mechanism, because a harmful intervention is a statement about the intervention."
+    }
+  ],
+  "interpretation_order": [
+    "representation",
+    "training_dynamics",
+    "population_discrimination",
+    "retrieval_architecture"
+  ],
+  "h_levels": [8, 64, 256],
+  "k_levels": [1, 2, 4, 8, 16],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 500,
+  "eval_steps": 100,
+  "held_constant": [
+    "the feature basis, the environment, the candidate generator and the evaluator are unchanged in every arm",
+    "the intervention is training-only: no arm changes how the router selects at evaluation (epsilon=0, temperature=0.5 always)",
+    "the surrogate is computed outside the router from inputs the router already holds; the router's API gains nothing and the gold index appears only to anchor the margin",
+    "the centring is a running mean of the surrogate itself, not the per-step mean of the candidate scores, which is negative under the analytic vector",
+    "no arm continues from another arm's weights and no arm carries another arm's running-mean baseline",
+    "the model-state integrity gate runs before every measurement",
+    "the reproduction gate compares the baseline arm against the published MATCHED-001 diagonal before any arm is reported"
+  ],
+  "reproduction_baseline": {
+    "8x8": {"routing@1": 0.624, "recall@4": 0.98, "delta_1": 0.6317},
+    "64x64": {"routing@1": 0.132, "recall@4": 0.32, "delta_1": -1.1857},
+    "256x256": {"routing@1": 0.074, "recall@4": 0.134, "delta_1": -0.4383}
+  },
+  "status": "run — the primary endpoint did not fire; the paired secondary endpoint did",
+  "result_note": "delta(routing@1) = +0.0400 (analytic_margin) and +0.0240 (analytic_margin_clipped) against a 0.0600 materiality threshold: within seed noise. delta(recall@16) = +0.0860 and +0.2460 at H=256, both material; gold_rank 74.70 -> 25.83; the reward's non-zero rate 0.0048 -> 0.9980. The reproduction gate passed, all nine cells diff = 0.0000. The asymmetry is the finding: the learning signal matters for retrieval quality, but exact top-1 ranking at large H remains unresolved. Recorded as claim C11 (L3, bounded at K >= 2).",
+  "result_url": "docs/TACOSM-SURROGATE-001.md",
+  "layer": "L3"
+}

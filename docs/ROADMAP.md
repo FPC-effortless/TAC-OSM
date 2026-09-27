@@ -42,7 +42,15 @@ architecture. Capability is then increased *inside* that controlled system.
   gate (`docs/EVIDENCE_MAP.md`) that answers *is an experiment actually
   necessary* before the compute is spent. Together these are what stops the
   repository re-measuring a result it already holds, or promoting a negative
-  by accumulation.
+  by accumulation
+- **machine-readable experiment contracts** (`src/tac_osm/contract.py`,
+  `contracts/*.json`) — the pre-registration as data: the registered levels,
+  seeds, schedule length, arms, endpoints, decision-rule branches and
+  interpretation order, committed before the run and compared against it by
+  the measurement scripts themselves, which raise rather than warn on a
+  mismatch. The evidence spine above is checked by reading; this is what
+  checks it by running, and a run that drifts from its registered design now
+  fails to complete instead of publishing a number it is not entitled to
 
 ## The research-integrity problem to fix first
 
@@ -133,6 +141,24 @@ produced it.
 reconstructable. Nothing here is a capability; all of it is what makes the
 later numbers citable.
 
+Two pieces joined the kernel, and neither is a capability either:
+
+- **the experiment contract** (`src/tac_osm/contract.py`, `contracts/*.json`)
+  — the pre-registration as data. The scripts that run an experiment now load
+  their contract and compare the run against it before reporting anything,
+  raising rather than warning; a `--smoke` flag is the one declared way to run
+  off the registered design, and it prints its own deviation so the output
+  cannot be mistaken for a measurement;
+- **the result summary** — a measurement script now writes a machine-readable
+  record of what it measured alongside its terminal report, so the outcome is
+  checkable against the decision rule without re-running anything. The record
+  carries no `status`: that is a scientific judgement recorded against the
+  pre-registration, not a field the instrument fills in.
+
+Both are what M1.4's layer contract is built out of. A number that cannot be
+compared with the design that produced it is a number that can only be checked
+by reading, and reading is how the two errors above happened.
+
 ### M1.1 — Benchmark hardening *(was Stage B)*
 
 `DEV` / `VAL` / `FINAL` splits, plus gates:
@@ -191,6 +217,42 @@ sweep, and the `dd8f63c` key-blind feature map — were Layer 1 failures that
 produced plausible Layer 2 numbers read as Layer 2 findings. This milestone is
 a contract, not a deliverable: it has no end date because it applies to every
 future milestone.
+
+**The contract is now machine-readable.** The documents above are the layer
+contract, and reading is how they are checked — which is also how drift gets
+in. A run that used `--steps 400` against a registered `500` differs from the
+registered design, and nothing in that run's output said so, because prose has
+no fields a program can compare. `src/tac_osm/contract.py` and
+`contracts/*.json` fix that: each experiment's registered levels, seeds,
+schedule length, arms, endpoints, decision-rule branches and interpretation
+order are committed as JSON *before* the run, and the measurement scripts
+compare the run against them and raise rather than warn on a mismatch.
+
+Three things are pinned, and only these:
+
+1. **what is held constant** — the levels, seeds and schedule length. A run
+   that changes these is a different experiment and must say so;
+2. **what is being tested** — the named arms and the surface each acts on, so
+   "which knob did this arm touch" is a field and not a paragraph;
+3. **what counts** — the endpoints, which one is primary, the materiality
+   threshold, and the decision rule's branches with their committed
+   consequences attached *before* the result is known.
+
+It deliberately does **not** pin outcomes. A contract that encoded the
+expected result would be a foregone conclusion, not a pre-registration. The
+`status` field is filled after the run and lives in the contract only so the
+*distance between the registered design and the reported outcome* is one
+lookup rather than two documents.
+
+The scripts that emit a result also emit a machine-readable summary of it
+(`results/surrogate_001.json`), so an outcome can be compared against the
+contract's decision rule without re-running anything. The summary records no
+`status` of its own: the instrument measures, it does not arbitrate the rule.
+
+This is a Layer 0 protocol import (see `docs/EVIDENCE_REGISTER.md`) — a way of
+measuring, not a measurement. It establishes no scientific claim, and no number
+becomes more trustworthy by being checked; it becomes *checkable*, which is a
+different and narrower thing.
 
 ### M1.5 — History scaling *(was Stage E — done, `TACOSM-HS-001`)*
 

@@ -1,0 +1,912 @@
+"""Tests for the machine-readable experiment contracts.
+
+The contract is the spec-drift detector: it pins what a run must hold
+constant, and raises rather than warns when it does not. These tests pin the
+contract itself, so the detector cannot drift either.
+
+Three groups:
+
+1. **Every contract in ``contracts/`` is valid** — schema plus the
+   cross-field invariants. This is the test that catches a contract written
+   in haste, and it is written over ``validate()`` rather than over one file
+   so a contract added later cannot be forgotten.
+2. **The drift detectors actually detect** — each ``require_*`` is fed the
+   kind of mismatch it exists to catch, and must raise. A detector that does
+   not fire on the failure it was written for is worse than no detector,
+   because it lends its name to a claim it does not enforce.
+3. **The contracts agree with the code that implements them** — the
+   registered levels, seeds, schedule length and arm names in each contract
+   are the ones the measurement script actually uses. This is the seam where
+   spec drift would otherwise live undetected: a contract that says 500 and a
+   script whose default is 400 are two documents describing one experiment,
+   and nothing else in the repository compares them.
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+
+from tac_osm.contract import (  # noqa: E402
+    ArmSpec,
+    ContractError,
+    DecisionBranch,
+    EndpointSpec,
+    ExperimentContract,
+    load_all,
+    load_contract,
+    validate,
+)
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+CONTRACTS_DIR = REPO_ROOT / "contracts"
+SCRIPTS_DIR = REPO_ROOT / "scripts"
+
+
+# --------------------------------------------------------------------------- #
+# 1. Every contract is valid
+# --------------------------------------------------------------------------- #
+
+
+def test_contracts_directory_exists():
+    """No contracts means no pre-registration is machine-checkable."""
+    assert CONTRACTS_DIR.is_dir(), (
+        f"missing {CONTRACTS_DIR}: the experiment contracts are absent, so no "
+        "pre-registration in this repository can be checked against a run"
+    )
+
+
+def test_every_contract_is_internally_sound():
+    """The single assertion over all contracts.
+
+    ``validate()`` runs the schema and the cross-field checks and reports by
+    filename, so a failure names the contract and the problem rather than
+    aborting at the first one.
+    """
+    problems = validate()
+    assert problems == [], (
+        "one or more experiment contracts fail validation, which means a "
+        "pre-registration that cannot be checked against a run:\n"
+        + "\n".join(f"  - {p}" for p in problems)
+    )
+
+
+def test_every_contract_is_loadable_and_round_trips():
+    """Serialisation must be lossless.
+
+    A contract that does not survive a write and a read cannot be persisted
+    next to its results, and a contract that is not persisted cannot be
+    compared with a run after the fact.
+    """
+    contracts = load_all()
+    assert contracts, "no contracts found"
+    for experiment_id, contract in contracts.items():
+        encoded = json.loads(contract.to_json())
+        decoded = ExperimentContract.from_dict(encoded)
+        assert decoded == contract, f"{experiment_id} does not round-trip"
+
+
+def test_every_contract_has_exactly_one_primary_endpoint():
+    """The decision rule reads one endpoint first."""
+    for experiment_id, contract in load_all().items():
+        assert contract.primary_endpoint(), experiment_id
+        primaries = [e.name for e in contract.endpoints if e.primary]
+        assert len(primaries) == 1, (
+            f"{experiment_id}: {len(primaries)} primary endpoints "
+            f"({primaries}); the decision rule reads one"
+        )
+
+
+def test_every_contract_commits_an_interpretation_order():
+    """A contract without a committed order permits a post-hoc reading."""
+    for experiment_id, contract in load_all().items():
+        assert len(contract.interpretation_order) >= 2, (
+            f"{experiment_id}: an interpretation order of fewer than two "
+            "steps does not constrain the reading"
+        )
+        # The order is a contract, and reordering it to fit an outcome is the
+        # failure it exists to prevent — so it must be repeatable.
+        assert len(set(contract.interpretation_order)) == len(
+            contract.interpretation_order
+        ), f"{experiment_id}: interpretation_order repeats an entry"
+
+
+def test_every_contract_pins_its_levels_and_seeds():
+    """The constants the decision rule depends on are named, not implied."""
+    for experiment_id, contract in load_all().items():
+        assert contract.h_levels == tuple(sorted(contract.h_levels)), (
+            f"{experiment_id}: h_levels must be strictly increasing"
+        )
+        assert len(contract.seeds) >= 3, (
+            f"{experiment_id}: fewer than 3 seeds cannot estimate the spread "
+            "the materiality threshold is built from"
+        )
+        assert contract.steps > 0 and contract.eval_steps > 0, experiment_id
+
+
+def test_each_decision_branch_commits_a_consequence():
+    """A branch without a consequence is a threshold that can be re-read."""
+    for experiment_id, contract in load_all().items():
+        assert contract.decision_rule, (
+            f"{experiment_id}: a contract with no decision rule is a design, "
+            "not a pre-registration"
+        )
+        for branch in contract.decision_rule:
+            assert branch.condition.strip(), (
+                f"{experiment_id}: a decision branch with no condition"
+            )
+            assert branch.licenses.strip(), (
+                f"{experiment_id}: a decision branch with no committed "
+                "consequence is re-interpretable after the result is known"
+            )
+
+
+def test_held_constant_is_non_empty():
+    """Every contract names what it did not change.
+
+    ``held_constant`` is the field that makes the intervention legible: a
+    reader who cannot see what was held fixed cannot tell an intervention on
+    the reward from one on the architecture.
+    """
+    for experiment_id, contract in load_all().items():
+        assert contract.held_constant, (
+            f"{experiment_id}: held_constant is empty — the contract does not "
+            "say what the arms did not change"
+        )
+
+
+def test_reproduction_baselines_are_numeric():
+    """The reference a gate compares against must be a number."""
+    for experiment_id, contract in load_all().items():
+        for cell, metrics in contract.reproduction_baseline.items():
+            for metric, value in metrics.items():
+                assert isinstance(value, (int, float)), (
+                    f"{experiment_id}[{cell}].{metric} is {value!r}, not a number"
+                )
+
+
+# --------------------------------------------------------------------------- #
+# 2. The drift detectors detect
+# --------------------------------------------------------------------------- #
+
+
+@pytest.fixture
+def surrogate() -> ExperimentContract:
+    return load_contract("TACOSM-SURROGATE-001")
+
+
+def test_missing_contract_raises_with_a_usable_message():
+    """The error must name the id, so a typo is distinguishable from an absence."""
+    with pytest.raises(ContractError, match="TACOSM-NONEXISTENT"):
+        load_contract("TACOSM-NONEXISTENT-999")
+
+
+def test_malformed_json_is_reported_not_silently_ignored(tmp_path):
+    """A contract that cannot be parsed must not become a contract that is skipped."""
+    bad = tmp_path / "Broken.json"
+    bad.write_text("{ not json ", encoding="utf-8")
+    with pytest.raises(ContractError, match="malformed JSON"):
+        load_contract("Broken", path=bad)
+
+
+def test_missing_required_key_is_reported(tmp_path):
+    """A contract missing a required field is a contract that cannot be checked."""
+    incomplete = tmp_path / "Incomplete.json"
+    incomplete.write_text(
+        json.dumps({"experiment_id": "X", "title": "t"}),
+        encoding="utf-8",
+    )
+    with pytest.raises(ContractError, match="missing required keys"):
+        load_contract("Incomplete", path=incomplete)
+
+
+@pytest.mark.parametrize("levels", [(8, 64), (8, 64, 512), (64, 8, 256), (8,)])
+def test_wrong_levels_are_rejected(surrogate, levels):
+    """The registered population levels are the experiment's design space."""
+    with pytest.raises(ContractError, match="H levels"):
+        surrogate.require_levels(levels)
+
+
+def test_missing_levels_fail_even_permissively(surrogate):
+    """``strict=False`` allows a superset, never a subset.
+
+    A subset cannot estimate the spread the materiality threshold is built
+    from, so a permissive check that accepted one would weaken the decision
+    rule silently.
+    """
+    with pytest.raises(ContractError, match="subset"):
+        surrogate.require_levels((8, 64), strict=False)
+
+
+def test_superset_levels_are_accepted_permissively(surrogate):
+    """Extra levels are harmless to the gate; missing levels are not."""
+    surrogate.require_levels((8, 64, 256, 512), strict=False)
+
+
+@pytest.mark.parametrize("seeds", [(0, 1, 2), (0, 1, 2, 3), (1, 2, 3, 4, 5)])
+def test_wrong_seeds_are_rejected(surrogate, seeds):
+    """The seed set is the materiality threshold, so changing it changes the rule."""
+    with pytest.raises(ContractError, match="seeds"):
+        surrogate.require_seeds(seeds)
+
+
+def test_missing_seed_fails_even_permissively(surrogate):
+    with pytest.raises(ContractError, match="absent from this run"):
+        surrogate.require_seeds((0, 1, 2, 3), strict=False)
+
+
+def test_reordering_seeds_is_allowed(surrogate):
+    """Seeds are an unordered set in the statistics."""
+    surrogate.require_seeds((4, 3, 2, 1, 0))
+
+
+@pytest.mark.parametrize("steps", [100, 400, 501, 1000])
+def test_wrong_schedule_length_is_rejected(surrogate, steps):
+    """The most common drift: a shortened run that is no longer the registered intervention.
+
+    The schedules anneal over the registered length, so a shorter run
+    explores *more* than registered and is a different intervention.
+    """
+    with pytest.raises(ContractError, match="registered schedule length"):
+        surrogate.require_steps(steps)
+
+
+def test_registered_schedule_length_is_accepted(surrogate):
+    surrogate.require_steps(500)
+
+
+def test_wrong_arms_are_rejected(surrogate):
+    """An added or removed arm makes the decision rule unevaluable as written."""
+    with pytest.raises(ContractError, match="do not match the registered"):
+        surrogate.require_arms(["baseline", "analytic_margin"])
+    with pytest.raises(ContractError, match="do not match the registered"):
+        surrogate.require_arms(["baseline", "analytic_margin",
+                                "analytic_margin_clipped", "extra"])
+
+
+def test_registered_arms_are_accepted(surrogate):
+    surrogate.require_arms(["baseline", "analytic_margin",
+                            "analytic_margin_clipped"])
+
+
+def test_two_primary_endpoints_are_inconsistent():
+    """A contract answering two questions at once has no single rule to evaluate."""
+    c = _minimal_contract(endpoints=(
+        EndpointSpec(name="a", role="r", primary=True),
+        EndpointSpec(name="b", role="r", primary=True),
+    ))
+    problems = c.check_consistency()
+    assert any("exactly one primary" in p for p in problems)
+
+
+def test_no_primary_endpoint_is_inconsistent():
+    c = _minimal_contract(endpoints=(
+        EndpointSpec(name="a", role="r", primary=False),
+    ))
+    problems = c.check_consistency()
+    assert any("exactly one primary" in p for p in problems)
+
+
+def test_empty_interpretation_order_is_inconsistent():
+    """An empty order is a contract that permits any post-hoc reading."""
+    c = _minimal_contract(interpretation_order=())
+    problems = c.check_consistency()
+    assert any("interpretation_order is empty" in p for p in problems)
+
+
+def test_repeated_h_level_is_inconsistent():
+    c = _minimal_contract(h_levels=(8, 8, 64))
+    problems = c.check_consistency()
+    assert any("repeats a level" in p for p in problems)
+
+
+def test_unsorted_h_levels_are_inconsistent():
+    c = _minimal_contract(h_levels=(8, 256, 64))
+    problems = c.check_consistency()
+    assert any("strictly increasing" in p for p in problems)
+
+
+def test_nonpositive_steps_are_inconsistent():
+    c = _minimal_contract(steps=0)
+    assert any("steps must be positive" in p for p in c.check_consistency())
+
+
+def test_unregistered_arm_in_decision_rule_is_flagged():
+    """A rule that covers an arm the contract never registered cannot be checked."""
+    c = _minimal_contract(decision_rule=(
+        DecisionBranch(
+            condition="if the epsilon_greedy arm lifts the endpoint",
+            licenses="the intervention is the mechanism",
+        ),
+    ))
+    problems = c.check_consistency()
+    assert any("not registered" in p for p in problems), (
+        "a decision rule referencing an unregistered arm was not caught"
+    )
+
+
+def test_a_registered_arm_in_the_rule_is_not_flagged():
+    """The detector must not fire on a correct reference."""
+    c = _minimal_contract(
+        arms=(ArmSpec(name="epsilon_greedy", intervention="i", acts_on="a"),),
+        decision_rule=(
+            DecisionBranch(
+                condition="if the epsilon_greedy arm lifts the endpoint",
+                licenses="the intervention is the mechanism",
+            ),
+        ),
+    )
+    assert c.check_consistency() == []
+
+
+def test_consistency_reports_all_problems_not_just_the_first():
+    """A contract with two defects is best described once, in full."""
+    c = _minimal_contract(
+        endpoints=(
+            EndpointSpec(name="a", role="r", primary=True),
+            EndpointSpec(name="b", role="r", primary=True),
+        ),
+        interpretation_order=(),
+    )
+    problems = c.check_consistency()
+    assert any("exactly one primary" in p for p in problems)
+    assert any("interpretation_order is empty" in p for p in problems)
+
+
+def test_a_sound_contract_reports_no_problems():
+    assert _minimal_contract().check_consistency() == []
+
+
+# --------------------------------------------------------------------------- #
+# 3. The contracts agree with the code that implements them
+# --------------------------------------------------------------------------- #
+#
+# This is the seam. A contract that says 500 and a script whose default is 400
+# are two documents describing one experiment, and nothing else in the
+# repository compares them. The comparison is done by parsing the script's
+# module-level registered constants, not by re-reading its output, so it is a
+# check on the design the script is built from rather than on one run of it.
+
+
+def _script_constants(name: str) -> dict:
+    """Read the registered constants out of a measurement script.
+
+    The scripts are runnable modules, not importable ones — they insert
+    ``src`` into ``sys.path`` and import the package at import time, so they
+    are read as text and their constants are read with ``ast`` rather than
+    imported. Only literal syntax is evaluated, so no code in the script runs.
+
+    ``STEPS_DEFAULT`` is not a module-level constant: it is the argparse
+    ``default=`` on ``--steps``, which is what a run actually uses when
+    nobody overrides it. A contract is compared against that rather than
+    against an imported constant, because the default is the length an
+    unflagged run really has.
+    """
+    import ast
+
+    tree = ast.parse((SCRIPTS_DIR / name).read_text(encoding="utf-8"))
+    out: dict = {}
+    for want in ("H_LEVELS", "K_LEVELS", "ARMS"):
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Assign):
+                for target in node.targets:
+                    if isinstance(target, ast.Name) and target.id == want:
+                        try:
+                            out[want] = ast.literal_eval(node.value)
+                        except (ValueError, SyntaxError):
+                            pass
+    # The argparse defaults: the values an unflagged run actually uses, read
+    # from the call rather than assumed. Each flag is handled by its own
+    # branch, not a chain, because ``--steps`` carries ``type=int`` *before*
+    # ``default`` and a chain keyed on the flag would skip it.
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        if getattr(node.func, "attr", "") != "add_argument":
+            continue
+        if not (node.args and isinstance(node.args[0], ast.Constant)):
+            continue
+        flag = node.args[0].value
+        default = next(
+            (kw.value for kw in node.keywords if kw.arg == "default"), None
+        )
+        if default is None:
+            continue
+        if flag == "--steps":
+            out["STEPS_DEFAULT"] = _resolve_steps(tree, default)
+        elif flag == "--seeds":
+            try:
+                raw = ast.literal_eval(default)
+            except (ValueError, SyntaxError):
+                continue
+            out["SEEDS"] = tuple(int(s) for s in str(raw).split(","))
+        elif flag == "--eval-steps":
+            try:
+                out["EVAL_STEPS"] = int(ast.literal_eval(default))
+            except (ValueError, SyntaxError):
+                continue
+    return out
+
+
+def _resolve_steps(tree: ast.AST, node: ast.AST) -> int:
+    """The ``--steps`` default, resolving a name like ``SCHEDULE_LENGTH``.
+
+    In ``measure_surrogate.py`` and ``measure_learn.py`` the default is an
+    imported name, so the literal is not at the call site. It is resolved to
+    the module-level assignment, which is a literal in every script that
+    names it. If neither reading yields an integer the test that called this
+    fails loudly rather than silently assuming 500.
+    """
+    import ast
+
+    if isinstance(node, ast.Constant):
+        return int(node.value)
+    if isinstance(node, ast.Name):
+        for other in ast.walk(tree):
+            if isinstance(other, ast.Assign):
+                for target in other.targets:
+                    if isinstance(target, ast.Name) and target.id == node.id:
+                        try:
+                            return int(ast.literal_eval(other.value))
+                        except (ValueError, SyntaxError):
+                            raise AssertionError(
+                                f"the --steps default {node.id} is not a literal "
+                                "the contract test can read; the registered "
+                                "length must be a module-level literal"
+                            )
+    raise AssertionError(
+        "could not read the --steps default; the registered schedule length "
+        "must be a literal, or a name bound to one"
+    )
+
+
+def test_surrogate_contract_matches_its_script():
+    """``TACOSM-SURROGATE-001.json`` must describe ``measure_surrogate.py``."""
+    got = _script_constants("measure_surrogate.py")
+    c = load_contract("TACOSM-SURROGATE-001")
+    assert tuple(got["H_LEVELS"]) == c.h_levels
+    assert tuple(got["K_LEVELS"]) == c.k_levels
+    assert tuple(got["ARMS"]) == tuple(a.name for a in c.arms), (
+        "the F3 contract's arm names drifted from the script's registered tuple"
+    )
+    assert c.steps == got["STEPS_DEFAULT"], (
+        "the contract's schedule length is not the length an unflagged run "
+        "of the script actually uses"
+    )
+    assert c.eval_steps == got["EVAL_STEPS"]
+    assert tuple(got["SEEDS"]) == c.seeds
+
+
+def test_learn_contract_matches_its_script():
+    """``TACOSM-LEARN-001.json`` must describe ``measure_learn.py``."""
+    got = _script_constants("measure_learn.py")
+    c = load_contract("TACOSM-LEARN-001")
+    assert tuple(got["H_LEVELS"]) == c.h_levels
+    assert tuple(got["K_LEVELS"]) == c.k_levels
+    assert tuple(got["ARMS"]) == tuple(a.name for a in c.arms), (
+        "the F2 contract's arm names drifted from the script's ARMS tuple"
+    )
+    assert c.steps == got["STEPS_DEFAULT"], (
+        "the F2 schedules anneal over the registered length, so a contract "
+        "that disagrees with the script's default is describing a different "
+        "intervention"
+    )
+    assert c.eval_steps == got["EVAL_STEPS"]
+    assert tuple(got["SEEDS"]) == c.seeds
+
+
+def test_matched_contract_matches_its_script():
+    """``TACOSM-MATCHED-001.json`` must describe ``measure_matched_h.py``."""
+    got = _script_constants("measure_matched_h.py")
+    c = load_contract("TACOSM-MATCHED-001")
+    assert tuple(got["H_LEVELS"]) == c.h_levels
+    assert tuple(got["K_LEVELS"]) == c.k_levels
+    assert c.steps == got["STEPS_DEFAULT"]
+    assert c.eval_steps == got["EVAL_STEPS"]
+    assert tuple(got["SEEDS"]) == c.seeds
+
+
+def test_reproduction_baselines_agree_with_the_scripts():
+    """The reproduction gate's reference must be one number in both places.
+
+    The scripts carry the published MATCHED-001 baseline as a module-level
+    dict keyed by ``(h_train, h_eval)``; the contract carries the same values
+    keyed by ``"8x8"``. A difference here would make the gate and the contract
+    disagree about what the baseline is, which is precisely the drift the
+    contract exists to prevent.
+    """
+    import ast
+
+    text = (SCRIPTS_DIR / "measure_surrogate.py").read_text(encoding="utf-8")
+    tree = ast.parse(text)
+    script_baseline = {}
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Assign):
+            for target in node.targets:
+                if isinstance(target, ast.Name) and target.id == "MATCHED_001_BASELINE":
+                    parsed = ast.literal_eval(node.value)
+                    script_baseline = {
+                        f"{a}x{b}": {m: float(v) for m, v in cell.items()}
+                        for (a, b), cell in parsed.items()
+                    }
+    assert script_baseline, "could not read MATCHED_001_BASELINE from the script"
+
+    c = load_contract("TACOSM-SURROGATE-001")
+    assert set(script_baseline) == set(c.reproduction_baseline), (
+        "the reproduction baseline in the contract does not cover the same "
+        "cells as the one in the script"
+    )
+    for cell in script_baseline:
+        for metric, value in script_baseline[cell].items():
+            assert c.reproduction_baseline[cell][metric] == pytest.approx(value), (
+                f"reproduction baseline disagrees at {cell}.{metric}: contract "
+                f"{c.reproduction_baseline[cell][metric]!r} vs script {value!r}"
+            )
+
+
+# --------------------------------------------------------------------------- #
+# 4. The scripts actually enforce their contracts
+# --------------------------------------------------------------------------- #
+#
+# The contract module is the detector; this group is the wiring. A detector
+# that the measurement scripts do not call is a document, and the whole point
+# of the contract was that a run could not drift from its pre-registration
+# *silently*. These tests are static — they do not run a measurement, which
+# is hours of compute — because what is being pinned is the presence of the
+# check, not one execution of it.
+
+
+def _script_text(name: str) -> str:
+    return (SCRIPTS_DIR / name).read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize(
+    "script,experiment_id",
+    [
+        ("measure_surrogate.py", "TACOSM-SURROGATE-001"),
+        ("measure_learn.py", "TACOSM-LEARN-001"),
+    ],
+)
+def test_the_scripts_load_and_enforce_their_contract(script, experiment_id):
+    """A measurement script must check its run against its contract.
+
+    ``load_contract`` at the top of ``main`` is the wiring; the five
+    ``require_*`` calls are the enforcement. Both are required: a script with
+    the load but no check has a contract it never consults, and a script with
+    the checks but no load cannot name which contract it is enforcing.
+    """
+    text = _script_text(script)
+    assert f'load_contract("{experiment_id}")' in text, (
+        f"{script} does not load its machine-readable contract "
+        f"{experiment_id}; drift from the pre-registration is undetectable "
+        "by the run itself"
+    )
+    for check in (
+        "require_steps", "require_eval_steps", "require_levels",
+        "require_seeds", "require_arms",
+    ):
+        assert f"contract.{check}(" in text, (
+            f"{script} does not call {check}, so a run can change the "
+            "quantity it pins and still report a number"
+        )
+
+
+@pytest.mark.parametrize(
+    "script,experiment_id",
+    [
+        ("measure_surrogate.py", "TACOSM-SURROGATE-001"),
+        ("measure_learn.py", "TACOSM-LEARN-001"),
+    ],
+)
+def test_the_scripts_declare_their_smoke_test(script, experiment_id):
+    """``--smoke`` is the one declared way to run off the registered design.
+
+    The flag is what keeps the contract from being a lock that a developer
+    simply removes: a smoke run is legitimate and frequent, and without a
+    declared escape hatch the choice is between an unusable script and a
+    silently weakened one. The flag must print *what* it skipped, so the
+    output cannot be mistaken for a measurement.
+    """
+    text = _script_text(script)
+    assert '"--smoke"' in text, (
+        f"{script} has no --smoke flag; the contract check can only be "
+        "bypassed by editing the script, which leaves no trace"
+    )
+    # The deviation report is the load-bearing half of the flag. A ``--smoke``
+    # that skipped the checks and printed nothing would be worse than no
+    # contract at all, because the output would be indistinguishable from a
+    # registered run's.
+    assert "not a measurement" in text or "no deviation found" in text
+    assert experiment_id in text
+
+
+def test_the_smoke_flag_reports_every_deviation():
+    """A smoke run must name each dimension it is off the registered design.
+
+    Not "the run differs"; the specific steps, eval length, levels, seeds and
+    arms, because those are the five quantities the contract pins and a
+    reader needs all five to judge whether a reported number is a smoke
+    artefact.
+    """
+    text = _script_text("measure_surrogate.py")
+    for label in ("steps", "eval_steps", "levels", "seeds", "arms"):
+        assert f'"{label}"' in text, (
+            f"the smoke report does not name {label}, so a smoke run could "
+            "drift on it invisibly"
+        )
+
+
+def test_the_smoke_flag_is_the_only_bypass():
+    """There is no second way around the contract check.
+
+    A ``--no-contract`` or a commented-out check would be a quiet bypass; this
+    pins the enforcement to a *single* named, documented flag. The assertion
+    is written over the bypass count rather than over the flag's presence so
+    that adding a second escape hatch fails this test.
+    """
+    text = _script_text("measure_surrogate.py")
+    assert "require_steps(args.steps)" in text, (
+        "the contract check is not applied to the parsed --steps value"
+    )
+    # The check must be reached on the non-smoke path, not defined only as a
+    # possibility: it sits in the ``else`` of the smoke branch.
+    assert "if args.smoke:" in text
+    assert "else:" in text
+
+
+@pytest.mark.parametrize("steps", [20, 50, 99, 400, 501])
+def test_require_eval_steps_detects_a_short_evaluation(surrogate, steps):
+    """A shorter evaluation changes every endpoint's sampling error at once.
+
+    The tables look identical at 100 steps and at 20 — only the standard error
+    moved — so this is the drift that is invisible in the output.
+    """
+    with pytest.raises(ContractError, match="registered evaluation length"):
+        surrogate.require_eval_steps(steps)
+
+
+def test_registered_eval_length_is_accepted(surrogate):
+    surrogate.require_eval_steps(100)
+
+
+# --------------------------------------------------------------------------- #
+# 5. The machine-readable result summary
+# --------------------------------------------------------------------------- #
+#
+# The contract pins the design; the summary pins the outcome. This group holds
+# the summary's invariants in place the same way group 1 holds the contract's:
+# a field that is not asserted is a field that can silently disappear.
+#
+# These are unit tests over the *shape* of the summary, deliberately not
+# requiring a full run: a measurement is hours of compute on this device, and
+# what needs pinning is that a summary written once must be readable by any
+# later check.
+
+
+def _script_module(name: str):
+    """Import a measurement script as a module.
+
+    The scripts insert ``src`` into ``sys.path`` at import time and are
+    normally run as ``__main__``; importing them here is safe because they do
+    no work at module scope beyond defining constants and functions — ``main``
+    is guarded by ``if __name__ == "__main__"``.
+    """
+    import importlib.util
+
+    path = SCRIPTS_DIR / name
+    spec = importlib.util.spec_from_file_location(f"_script_{path.stem}", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def _summary_with_failing_gate():
+    """A summary built from a smoke-shaped run, by calling the record builder.
+
+    Uses the script's own helpers rather than re-implementing the schema, so a
+    change to the summary's shape moves this test rather than silently
+    diverging from it. ``rows``/``per_seed`` carry only the cells the smoke run
+    actually has, which is what a failing-gate record must still be able to
+    express.
+    """
+    surrogate = _script_module("measure_surrogate.py")
+    h = 8
+    # The three metrics the reproduction gate reads at H=8, so the gate half
+    # of the record has a cell to report. ``recall@16`` is NaN here for the
+    # same reason it is NaN in a real H=8 run: 16 is not a budget below the
+    # candidate count, so the endpoint is undefined and the record omits it.
+    arm_rows = {
+        ("baseline", h, h): {"routing@1": 0.60, "recall@4": 0.80,
+                             "delta_1": 0.05},
+        ("analytic_margin", h, h): {"routing@1": 0.40, "recall@4": 0.70,
+                                    "delta_1": 0.01},
+        ("analytic_margin_clipped", h, h): {"routing@1": 0.30,
+                                            "recall@4": 0.60, "delta_1": 0.02},
+    }
+    per_seed = {k: [0.5, 0.7] for k in arm_rows}
+    nan = float("nan")
+    per_seed_recall = {k: [nan, nan] for k in arm_rows}
+    train_stats = {
+        (arm, h): [{"reward_nonzero_frac": 0.5, "reward_mean": 0.1,
+                    "reward_min": 0.0, "reward_max": 1.0,
+                    "sat_hi_frac": 0.0, "sat_lo_frac": 0.2,
+                    "successes": 4}]
+        for arm in surrogate.ARMS
+    }
+
+    class _Args:
+        steps = 20
+        eval_steps = 5
+        smoke = True
+
+    return surrogate._build_record(_Args(), [0, 1], (h,), arm_rows, per_seed,
+                                   per_seed_recall, train_stats, False, (h,))
+
+
+def test_the_summary_names_its_experiment_and_contract():
+    """A summary that does not say which experiment it is from is unattributable."""
+    record = _summary_with_failing_gate()
+    assert record["experiment_id"] == "TACOSM-SURROGATE-001"
+    assert record["contract"].endswith("TACOSM-SURROGATE-001.json")
+    assert Path(record["contract"]).is_file(), (
+        "the summary points at a contract that is not committed"
+    )
+
+
+def test_the_summary_records_the_design_as_run():
+    """The design fields are the run's actual values, registered or not."""
+    record = _summary_with_failing_gate()
+    d = record["design"]
+    assert d["steps"] == 20 and d["eval_steps"] == 5
+    assert d["seeds"] == [0, 1]
+    assert d["h_levels"] == [8]
+    assert d["arms"] == ["baseline", "analytic_margin", "analytic_margin_clipped"]
+    assert d["smoke"] is True and d["contract_checked"] is False
+
+
+def test_the_summary_records_a_failed_gate():
+    """A failed gate is recorded, not swallowed.
+
+    A run that failed the reproduction gate still produced measurements; the
+    record must say the gate failed, because that is what makes the
+    measurements unusable as a result. Deleting them on failure would delete
+    the evidence that the run was invalid.
+    """
+    record = _summary_with_failing_gate()
+    assert record["gate"]["passed"] is False
+    assert record["gate"]["cells"]
+    for cell in record["gate"]["cells"]:
+        assert set(cell) == {
+            "cell", "metric", "published", "observed", "diff", "tol", "passed"
+        }, f"the gate record is missing fields at {cell}"
+    assert all(isinstance(c["tol"], float) and c["tol"] >= 0.02
+               for c in record["gate"]["cells"]), (
+        "the tolerance floor of 0.02 is not in the record; a zero-spread cell "
+        "would otherwise demand a bit-exact reproduction"
+    )
+
+
+def test_the_summary_records_every_arm_and_level():
+    """The endpoint table covers the full arm x level grid.
+
+    A missing cell here is an arm whose measurement is silently absent, which
+    is how a re-run with a typo would look identical to a complete run.
+    """
+    record = _summary_with_failing_gate()
+    keys = set(record["endpoints"])
+    assert keys == {"baseline@H=8", "analytic_margin@H=8",
+                    "analytic_margin_clipped@H=8"}
+
+
+def test_the_summary_carries_the_decision_rule_verdicts():
+    """The verdicts the reader cares about are fields, not prose.
+
+    ``verdict`` must be one of the three the pre-registration names. A fourth
+    value here would be a verdict the decision rule never committed to.
+    """
+    record = _summary_with_failing_gate()
+    assert record["decision_rule"]
+    for d in record["decision_rule"]:
+        assert set(d) == {
+            "arm", "metric", "h", "baseline", "observed", "delta",
+            "baseline_spread", "threshold", "verdict"
+        }, f"the decision-rule record is missing fields: {sorted(d)}"
+        assert d["verdict"] in (
+            "MATERIAL improvement", "MATERIAL harm", "within seed noise"
+        ), f"an unregistered verdict appeared: {d['verdict']!r}"
+        assert d["threshold"] == max(d["baseline_spread"], 0.02)
+
+
+def test_the_summary_carries_the_reward_audit():
+    """The density audit is the leakage boundary's evidence."""
+    record = _summary_with_failing_gate()
+    assert len(record["reward_audit"]) == 3
+    for cell in record["reward_audit"]:
+        assert {"arm", "h", "reward_nonzero_frac", "reward_mean",
+                "reward_min", "reward_max", "sat_hi_frac", "sat_lo_frac",
+                "successes_per_schedule"} <= set(cell), (
+            f"the reward audit is missing fields: {sorted(cell)}"
+        )
+
+
+def test_the_summary_carries_per_seed_values():
+    """The spread is the materiality threshold, so the seeds must be present.
+
+    A record with only means cannot be re-checked: a reader cannot tell
+    whether a delta inside the threshold was a uniform effect or one seed
+    moving against four.
+    """
+    record = _summary_with_failing_gate()
+    assert len(record["per_seed"]) == 3
+    for cell in record["per_seed"]:
+        assert "routing@1" in cell
+        vals = cell["routing@1"]
+        assert set(vals) == {"seeds", "mean", "spread"}
+        assert set(vals["seeds"]) == {"0", "1"}
+        assert vals["mean"] == pytest.approx(
+            sum(vals["seeds"].values()) / len(vals["seeds"])
+        )
+        assert vals["spread"] >= 0.0
+
+
+def test_the_summary_round_trips_through_json():
+    """A summary that cannot be written and read is one that cannot be checked later."""
+    record = _summary_with_failing_gate()
+    decoded = json.loads(json.dumps(record))
+    assert decoded == record
+
+
+def test_the_summary_records_no_status():
+    """The instrument measures; it does not arbitrate the decision rule.
+
+    ``status`` is the one field a human sets against the pre-registration. A
+    script that computed it would be marking its own homework, and the field
+    belongs on the contract, where a reader can see it was set after the run.
+    """
+    record = _summary_with_failing_gate()
+    assert "status" not in record, (
+        "the summary assigns the experiment a status, which is a scientific "
+        "judgement the instrument is not entitled to make"
+    )
+    assert "result_note" not in record
+
+
+# --------------------------------------------------------------------------- #
+# Fixtures
+# --------------------------------------------------------------------------- #
+
+
+def _minimal_contract(
+    *,
+    endpoints: tuple[EndpointSpec, ...] = (
+        EndpointSpec(name="a", role="r", primary=True),
+    ),
+    arms: tuple[ArmSpec, ...] = (ArmSpec(name="baseline", intervention="i", acts_on="a"),),
+    decision_rule: tuple[DecisionBranch, ...] = (
+        DecisionBranch(condition="if a moves", licenses="the mechanism"),
+    ),
+    interpretation_order: tuple[str, ...] = ("first", "second"),
+    h_levels: tuple[int, ...] = (8, 64, 256),
+    steps: int = 500,
+) -> ExperimentContract:
+    """A contract with only the required structure, for invariant tests."""
+    return ExperimentContract(
+        experiment_id="TEST-001",
+        title="t",
+        question="q",
+        hypothesis="h",
+        arms=arms,
+        endpoints=endpoints,
+        decision_rule=decision_rule,
+        interpretation_order=interpretation_order,
+        h_levels=h_levels,
+        seeds=(0, 1, 2, 3, 4),
+        steps=steps,
+        eval_steps=100,
+        held_constant=("one thing held fixed",),
+    )

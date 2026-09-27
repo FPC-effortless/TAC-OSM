@@ -1,0 +1,118 @@
+{
+  "experiment_id": "TACOSM-LEARN-001",
+  "title": "Learning dynamics: do two named exploration interventions lift the large-H endpoint?",
+  "question": "MATCHED-001 localised the large-H failure in the learning dynamics. Is the binding constraint action selection — exploration — during training?",
+  "hypothesis": "H_explore: the trained router at H=256 sees too few successes to learn from, because the softmax over 256 candidates is near-uniform and the policy almost never selects the gold item. Named exploration interventions that increase the success rate will lift routing@1. H_credit is the alternative: the update rule itself is the constraint, and exploring more does not help it.",
+  "arms": [
+    {
+      "name": "baseline",
+      "intervention": "none — the MATCHED-001 protocol verbatim",
+      "acts_on": "the reproduction reference",
+      "schedule": "reproduces the published MATCHED-001 numbers exactly, or the run is invalid"
+    },
+    {
+      "name": "epsilon_greedy",
+      "intervention": "epsilon-greedy action selection at training time",
+      "acts_on": "action selection in route",
+      "knob": "eps_0",
+      "value": "0.30",
+      "schedule": "linear decay to 0 over T=500"
+    },
+    {
+      "name": "temperature",
+      "intervention": "training softmax temperature annealing",
+      "acts_on": "the training softmax",
+      "knob": "tau_0 -> tau_end",
+      "value": "2.0 -> 0.5",
+      "schedule": "linear over T=500"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "routing@1",
+      "role": "the primary endpoint at train-H = 256 (the 0.0740 number)",
+      "primary": true,
+      "description": "Argmax accuracy at evaluation from raw dot products, with learn=False and no exploration schedule on the evaluation router."
+    },
+    {
+      "name": "recall@4",
+      "role": "secondary — the shortlist signal",
+      "primary": false
+    },
+    {
+      "name": "recall@8",
+      "role": "secondary — the retrieval budget",
+      "primary": false
+    },
+    {
+      "name": "recall@16",
+      "role": "secondary — the budget from F0",
+      "primary": false
+    },
+    {
+      "name": "gold_rank",
+      "role": "secondary — mean rank of gold",
+      "primary": false
+    },
+    {
+      "name": "delta_1",
+      "role": "secondary — the raw top-1 margin",
+      "primary": false
+    },
+    {
+      "name": "entropy",
+      "role": "secondary — nats; ln(H) is the uniform reference",
+      "primary": false
+    },
+    {
+      "name": "accuracy",
+      "role": "secondary — the system consequence",
+      "primary": false
+    },
+    {
+      "name": "c_router",
+      "role": "secondary — candidates scored",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "delta(routing@1) > 0.0600 at train-H = 256 for either intervention arm",
+      "licenses": "H_explore is supported: the exploration regime was the constraint, and the intervention is recorded as the mechanism that lifts the endpoint. The retrieval index (M2.1, historically Stage F1) re-queues on a router whose endpoint is a property of the scorer.",
+      "does_not_license": "that the router learned relevance, or that the mechanism scales — only that this named intervention moved this named endpoint under this protocol."
+    },
+    {
+      "condition": "delta(routing@1) within the 0.0600 materiality threshold",
+      "licenses": "H_explore is refuted for these two named interventions. The failure is located outside the selection stage of training, and the remaining candidates are the learning rule, the gradient signal and the reward shaping. The top-K endpoints are read as secondary context.",
+      "does_not_license": "that persistent-state relevance routing does not scale. The hypothesis class provably contains a perfect H-invariant solution, so a mechanism whose hypothesis class is adequate cannot be pronounced inadequate by a failure to find the solution with one optimiser. This is not a representation verdict and does not scale the mechanism down."
+    }
+  ],
+  "interpretation_order": [
+    "representation",
+    "training_dynamics",
+    "population_discrimination",
+    "retrieval_architecture"
+  ],
+  "h_levels": [8, 64, 256],
+  "k_levels": [1, 2, 4, 8, 16],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 500,
+  "eval_steps": 100,
+  "held_constant": [
+    "both interventions are training-only: no arm changes the feature basis, the environment, the candidate generator, the evaluator, or how the router selects at evaluation",
+    "evaluation uses epsilon=0 and temperature=0.5 in every arm, always",
+    "the knobs are pinned as constants in the pre-registration document, not exposed as command-line arguments — an improvement from an unspecified intervention is unfalsifiable",
+    "the benchmark is frozen: the baseline arm must reproduce the published MATCHED-001 numbers or the run is invalid and no arm is reported",
+    "the surrogate-reward option MATCHED-001 recorded was deliberately not part of this experiment; it changes the reward function rather than the exploration regime, so it is a different experiment with its own leakage boundary, re-queued as M1.8",
+    "the model-state integrity gate runs before every measurement"
+  ],
+  "reproduction_baseline": {
+    "8x8": {"routing@1": 0.624, "recall@4": 0.98, "delta_1": 0.6317},
+    "64x64": {"routing@1": 0.132, "recall@4": 0.32, "delta_1": -1.1857},
+    "256x256": {"routing@1": 0.074, "recall@4": 0.134, "delta_1": -0.4383}
+  },
+  "status": "run — the primary endpoint did not fire; recall@16 was materially harmed",
+  "result_note": "The reproduction gate passed: the baseline arm reproduced all nine published MATCHED-001 numbers exactly. The primary endpoint did not fire: routing@1 at H=256 moved -0.0220 (epsilon_greedy) and -0.0140 (temperature) against a 0.0600 materiality threshold, i.e. within seed noise. The top-K signal was not intact either: recall@16 at H=256 fell to 0.2260 from 0.3020 under epsilon_greedy, which is material harm. epsilon_greedy explored as registered (15.2% of steps) and saw more successes per step at H=256 (3.8 vs 2.4, chance 0.0039) and the endpoint still did not improve. Neither M2 condition is satisfied from this result. The failure is located outside the selection stage, which re-queues the reward (M1.8). Recorded as C10.",
+  "result_url": "docs/TACOSM-LEARN-001.md",
+  "layer": "L3"
+}

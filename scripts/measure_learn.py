@@ -84,6 +84,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from tac_osm.ablation import AblationConfig, RouterSwitch  # noqa: E402
 from tac_osm.builder import build_model  # noqa: E402
+from tac_osm.contract import load_contract  # noqa: E402
 from tac_osm.integrity import (  # noqa: E402
     IntegrityError,
     assert_trained,
@@ -104,6 +105,18 @@ from tac_osm.router import (  # noqa: E402
 # population effect from a training artefact.
 H_LEVELS = (8, 64, 256)
 K_LEVELS = (1, 2, 4, 8, 16)
+
+# The registered schedule length, written as a literal so the machine-readable
+# contract in ``contracts/TACOSM-LEARN-001.json`` can be compared with this
+# script without executing it. The schedules anneal over this length, so a run
+# at a different length is a different intervention.
+REGISTERED_STEPS = 500
+assert REGISTERED_STEPS == SCHEDULE_LENGTH, (
+    "the registered schedule length disagrees with the router's "
+    "SCHEDULE_LENGTH; the annealing schedules run over SCHEDULE_LENGTH, so a "
+    "contract that pins a different value describes a different intervention"
+)
+
 ARMS = ("baseline", "epsilon_greedy", "temperature")
 
 # The MATCHED-001 baseline column, published in docs/TACOSM-MATCHED-001.md.
@@ -559,20 +572,67 @@ def _print_deltas(rows: dict[tuple[str, int, int], dict[str, float]],
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--steps", type=int, default=SCHEDULE_LENGTH)
+    ap.add_argument("--steps", type=int, default=REGISTERED_STEPS)
     ap.add_argument("--eval-steps", type=int, default=100)
     ap.add_argument("--seeds", default="0,1,2,3,4")
     ap.add_argument("--levels", default=",".join(str(h) for h in H_LEVELS))
+    ap.add_argument(
+        "--smoke", action="store_true",
+        help="declare this run as a smoke test and skip the contract check",
+    )
     args = ap.parse_args()
     seeds = [int(s) for s in args.seeds.split(",") if s.strip()]
     h_levels = _parse_levels(args.levels)
 
+    # -- 0b. The machine-readable contract ------------------------------- #
+    # The pre-registration lives in ``contracts/TACOSM-LEARN-001.json`` as
+    # well as in ``docs/``, and this check is what makes the run unable to
+    # drift from it silently. ``require_steps`` matters most for F2: the
+    # epsilon and tau schedules anneal over the registered length, so a
+    # shorter run ends at a *higher* epsilon and a *higher* temperature than
+    # the registered arm, and has tested a different exploration regime. A
+    # run that did that used to print a NOTE and then report numbers that
+    # read as though they came from the registered design.
+    #
+    # ``--smoke`` is the declared way to run something that is not the
+    # registered design. It weakens no check; it states out loud that this
+    # run is not a result, and prints its own deviation, so the output cannot
+    # be mistaken for a measurement.
+    contract = load_contract("TACOSM-LEARN-001")
+    if args.smoke:
+        print("=" * 72)
+        print("SMOKE TEST — declared with --smoke; this is not a measurement")
+        print("=" * 72)
+        print("The contract check is skipped on the declared deviation, and the")
+        print("deviation is printed here so this output cannot be read as a")
+        print("result of TACOSM-LEARN-001:")
+        problems: list[str] = []
+        for label, got, want in (
+            ("steps", args.steps, contract.steps),
+            ("eval_steps", args.eval_steps, contract.eval_steps),
+            ("levels", list(h_levels), list(contract.h_levels)),
+            ("seeds", sorted(seeds), sorted(contract.seeds)),
+            ("arms", list(ARMS), [a.name for a in contract.arms]),
+        ):
+            if got != want:
+                problems.append(f"  {label}: run has {got}, registered {want}")
+        if problems:
+            print("\n".join(problems))
+        else:
+            print("  no deviation found: the registered design is in force")
+        print()
+    else:
+        contract.require_steps(args.steps)
+        contract.require_eval_steps(args.eval_steps)
+        contract.require_levels(h_levels)
+        contract.require_seeds(seeds)
+        contract.require_arms(ARMS)
+
     if args.steps != SCHEDULE_LENGTH:
-        # Not a refusal: a shorter run is a legitimate smoke test. But the
-        # schedule is defined over the registered length, and a shorter run
-        # anneals partway, so the reproduction gate would not be comparing
-        # against MATCHED-001's protocol. Say so rather than reporting a
-        # number that looks like a gate result.
+        # Retained for the ``--smoke`` path and for any reader who finds the
+        # contract output unclear: the same statement in the script's own
+        # voice, naming the consequence for the gate rather than for the
+        # contract.
         print(f"NOTE: --steps={args.steps} but the pre-registered schedule "
               f"length is {SCHEDULE_LENGTH}. The schedules anneal over "
               f"{SCHEDULE_LENGTH} steps, so a shorter run explores more than "

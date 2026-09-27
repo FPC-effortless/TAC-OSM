@@ -211,6 +211,42 @@ the check runs first. Full contract: `docs/MEASUREMENT_LAYERS.md`, per-row
 assignment: `docs/EVIDENCE_REGISTER.md`, and the pre-experiment procedure:
 `docs/EVIDENCE_MAP.md`.
 
+### The pre-registration is checkable
+
+The layer contract is a document, and a document is checked by reading — which
+is how drift gets in. A run that used `--steps 400` against a registered `500`
+differs from the registered design, and nothing in that run's output said so,
+because prose has no fields a program can compare.
+
+`src/tac_osm/contract.py` and `contracts/*.json` fix that. Each experiment's
+registered levels, seeds, schedule length, arms, endpoints, decision-rule
+branches and interpretation order are committed as JSON **before** the run, and
+the measurement scripts compare the run against them and raise rather than warn:
+
+    contract = load_contract("TACOSM-SURROGATE-001")
+    contract.require_steps(steps)
+    contract.require_levels(h_levels)
+    contract.require_seeds(seeds)
+    contract.require_arms(ARMS)
+
+Three things are pinned, and only these — what is held constant, what is being
+tested, and what counts (the endpoints, the primary one, the materiality
+threshold, and each decision-rule branch with its consequence committed before
+the result was known). **Outcomes are deliberately not pinned**: a contract that
+encoded the expected result would be a foregone conclusion, not a
+pre-registration. The `status` field is filled after the run and lives in the
+contract only so the distance between the registered design and the reported
+outcome is one lookup rather than two documents.
+
+A script that reports a result also writes a machine-readable record of it, so
+the outcome is checkable against the decision rule without re-running anything.
+That record carries no `status` of its own — the instrument measures, it does
+not arbitrate the rule.
+
+This is a Layer 0 protocol import, not a measurement: it establishes no
+scientific claim, and no number becomes more trustworthy by being checked. It
+becomes *checkable*, which is a different and narrower thing.
+
 ---
 
 ## What has been measured
@@ -287,8 +323,10 @@ src/tac_osm/__init__.py         the five interfaces + the Environment protocol
 src/tac_osm/representability.py PNDS-URP v0.4 §34, as a compulsory pre-training test
 src/tac_osm/leakage.py          the anti-leakage boundary, checked structurally
 src/tac_osm/integrity.py        model-state gate: catches untrained weights before a run
+src/tac_osm/contract.py         the pre-registration as data: what a run must hold constant
 src/tac_osm/ablation.py         one architecture, controlled switches
-tests/                          the three pre-model gates + the integrity gate
+contracts/                      one JSON contract per experiment, committed before the run
+tests/                          the three pre-model gates + the integrity gate + the contracts
 docs/ARCHITECTURE.md            interfaces before implementations
 docs/MEASUREMENT_LAYERS.md      the layer contract: L0 inherited → L1 gate → L2 mechanism → L3 system
 docs/ABLATION_PLAN.md           the primary scientific instrument
