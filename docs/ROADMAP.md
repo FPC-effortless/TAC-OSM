@@ -116,7 +116,7 @@ older document or a git log resolves to `M1.3`, and nothing is lost:
 | Stage F, F0 — retrieval ceiling | `M1.6` | **done** — `TACOSM-RETRIEVAL-001` |
 | Stage F2 — learning dynamics | `M1.7` | **done** — `TACOSM-LEARN-001` |
 | Stage F3 — reward density | `M1.8` | **done** — `TACOSM-SURROGATE-001` |
-| Stage F1 — efficient retrieval | `M2.1` | **re-queued** on M1.8's top-K evidence |
+| Stage F1 — efficient retrieval | `M2.1` | **built, pre-amended (A1), no confirmatory run** |
 | Stage F4 — measurement layers | `M1.4` | the standing contract |
 | Stage G — state formation | `M2.2` | not started |
 | Stage H — repair | `M2.3` | not started |
@@ -464,7 +464,7 @@ M2 asks whether the system computes only over the relevant subset. It is
 entered on the registered top-K evidence M1.8 produced, and *only* on that
 evidence — not on a top-1 improvement that did not happen.
 
-### M2.1 — Efficient retrieval *(was Stage F1 — re-queued)*
+### M2.1 — Efficient retrieval *(was Stage F1 — re-queued, built, no confirmatory run yet)*
 
     H → cheap index → K ≪ H → existing scorer → R
 
@@ -478,6 +478,67 @@ This is the milestone that can test the efficiency hypothesis, because it
 inserts a retrieval boundary the v0.1 loop does not have. It is also the
 milestone that makes `|R|` a defined quantity, which is what C5 and all of M3
 are waiting on.
+
+**Where it stands.** The index is built (`src/tac_osm/retrieval.py`), the
+measurement script exists (`scripts/measure_retrieval.py`), the contract is
+registered and machine-checked, and **amendment A1 is on the contract** — see
+`contracts/TACOSM-RETRIEVAL-001.json`. No confirmatory run has been made. The
+amendment was made *before* any run, which is the only way an amendment can
+differ from a revision; a pre-registration revised to fit a result is not a
+pre-registration.
+
+**Amendment A1: the registered primary could not discriminate.** The
+pre-registered primary endpoint `recall@K` was defined as
+`P(gold ∈ top-K by score)` — over a full-population score, identical in every
+arm. Under that definition all four arms would have reported the same number
+for a given `(H, K)`, and the decision rule's four branches would have been
+unreachable: no branch could have fired on any data. The definition now reads
+`P(gold is in the arm's retained set *and* is the argmax over that set)`, so
+the primary is measured over each arm's own retained set and the arms can
+differ. Arm B's retained set is the scorer's own top-K, not the full
+population; arms C and D keep what the index retained.
+
+The record is complete — the old definition, the new one, the rationale, where
+it was discovered, what it affects, and the statement that **no confirmatory
+run was made under the previous version**. Nothing about the original
+definition is called wrong; it measured a different question, and the question
+it measured was not the one the decision rule reads.
+
+**What the dry run found, and what is recorded rather than tuned.** The index
+scores with an unlearned agreement rule over two terms — agreement with the
+written state vector, and agreement with the public query bits — and the term
+that separates gold depends on the family:
+
+| weights | relational | state_lookup | replay |
+|---|---|---|---|
+| query-only | **1.00** | 0.00 | 0.33 |
+| state-only | 0.00 | **1.00** | **1.00** |
+| both (registered default) | **1.00** | **1.00** | **0.375** |
+
+`relational` publishes its target as the query bits; the persistence families
+hide the target in state, where the query bits are actively misleading (the
+environment's query-deceptive distractors agree with the query off the marked
+positions and violate the relation on them, so gold's public agreement is
+*below* the best distractor's). The registered default sum separates two of
+the three families and **partially cancels on `replay`** — the unique-argmax
+rate there is 0.375, and its retention rate at large H is below the
+state-only index's. That is not a defect and not a tuning question: it is the
+reason the module reports the C-vs-B comparison in both directions, and the
+reason the arm-D ceiling is *measured* rather than assumed. The separation is
+exact when only one term is active — query-only on `relational`, state-only on
+the persistence families.
+
+The registered default is unchanged. A weight chosen to fix `replay` would be
+chosen after seeing the dry run, and the index is registered at these weights.
+
+**What is held in place.** `tests/test_retrieval.py` pins the separating term
+per family, the registered index's separation *and* its non-separation on
+`replay`, its retention and its partial loss there, the closed failure
+taxonomy, the leakage boundary on the index's inputs, and the seeded tie-break
+that keeps the retention order from favouring the pre-shuffle gold-at-0
+layout. `tests/test_contract.py` pins the amendment's round trip and the
+consistency detectors, and now covers `measure_retrieval.py` in the
+contract-to-script wiring tests.
 
 **Why it was suspended, and why it re-queues now.** Its hypothesis is a
 cost-quality trade: can routing computation be reduced while preserving the

@@ -83,6 +83,7 @@ __all__ = [
     "ArmSpec",
     "EndpointSpec",
     "DecisionBranch",
+    "AmendmentSpec",
     "ExperimentContract",
     "load_contract",
     "validate",
@@ -220,6 +221,69 @@ class DecisionBranch:
 
 
 @dataclass(frozen=True)
+class AmendmentSpec:
+    """A change to a pre-registration, recorded as a change.
+
+    A pre-registration that can be edited after the fact is not a
+    pre-registration, so an amendment is not an edit: it is a *visible*
+    change, carrying what it replaced, why, and what it did not touch. A
+    reader who disagrees with an amendment can still see the design they were
+    promised, because the old definition is a field and not an overwritten
+    value.
+
+    Amendments are expected to be rare, and the one that exists was found by
+    the instrument rather than by reading: a primary endpoint whose
+    definition made it arm-independent had to be amended before any
+    confirmatory run, because the decision rule could not have fired on any
+    data.
+    """
+
+    id: str
+    applies_to: str
+    old_definition: str
+    new_definition: str
+    rationale: str
+    discovered: str = ""
+    affected: str = ""
+    no_result_under_previous_version: str = ""
+
+    def to_dict(self) -> dict[str, Any]:
+        d: dict[str, Any] = {
+            "id": self.id,
+            "applies_to": self.applies_to,
+            "old_definition": self.old_definition,
+            "new_definition": self.new_definition,
+            "rationale": self.rationale,
+        }
+        if self.discovered:
+            d["discovered"] = self.discovered
+        if self.affected:
+            d["affected"] = self.affected
+        if self.no_result_under_previous_version:
+            d["no_result_under_previous_version"] = self.no_result_under_previous_version
+        return d
+
+    @staticmethod
+    def from_dict(d: dict[str, Any]) -> "AmendmentSpec":
+        _require_keys(
+            d,
+            ("id", "applies_to", "old_definition", "new_definition", "rationale"),
+            "amendment",
+        )
+        return AmendmentSpec(
+            id=str(d["id"]),
+            applies_to=str(d["applies_to"]),
+            old_definition=str(d["old_definition"]),
+            new_definition=str(d["new_definition"]),
+            rationale=str(d["rationale"]),
+            discovered=str(d.get("discovered", "")),
+            affected=str(d.get("affected", "")),
+            no_result_under_previous_version=str(
+                d.get("no_result_under_previous_version", "")),
+        )
+
+
+@dataclass(frozen=True)
 class ExperimentContract:
     """A machine-readable pre-registration.
 
@@ -247,6 +311,9 @@ class ExperimentContract:
     result_note: str = ""
     result_url: str = ""
     layer: str = ""
+    #: Changes to the registered design, each carrying the definition it
+    #: replaced. Empty for an unamended pre-registration.
+    amendments: tuple[AmendmentSpec, ...] = ()
 
     # ------------------------------------------------------------------ #
     # The checks a run performs against its contract
@@ -410,6 +477,8 @@ class ExperimentContract:
             d["result_url"] = self.result_url
         if self.layer:
             d["layer"] = self.layer
+        if self.amendments:
+            d["amendments"] = [a.to_dict() for a in self.amendments]
         return d
 
     def to_json(self, *, indent: int = 2) -> str:
@@ -449,6 +518,9 @@ class ExperimentContract:
             result_note=str(d.get("result_note", "")),
             result_url=str(d.get("result_url", "")),
             layer=str(d.get("layer", "")),
+            amendments=tuple(
+                AmendmentSpec.from_dict(a) for a in d.get("amendments", ())
+            ),
         )
 
     # ------------------------------------------------------------------ #
@@ -469,7 +541,13 @@ class ExperimentContract:
         * the levels are strictly increasing, because a repeated level is a
           duplicated condition that a reader would read as two;
         * ``steps`` is positive, because a zero-length schedule is not a
-          schedule.
+          schedule;
+        * every amendment is *complete*: an amendment that omits its old
+          definition, its new one or its rationale is not an amendment but a
+          silent edit, because a reader cannot compare two designs when one of
+          them is not there;
+        * every amendment id is unique, because two amendments sharing an id
+          are one change recorded twice and a reader cannot tell which applies.
 
         The function does not raise on the first problem, because a contract
         with two defects is best described once, in full.
@@ -515,6 +593,21 @@ class ExperimentContract:
             problems.append(f"{self.experiment_id}: steps must be positive")
         if self.eval_steps <= 0:
             problems.append(f"{self.experiment_id}: eval_steps must be positive")
+
+        seen_ids: set[str] = set()
+        for am in self.amendments:
+            if not am.id:
+                problems.append(
+                    f"{self.experiment_id}: an amendment has no id, so it "
+                    "cannot be referred to by any later record"
+                )
+            elif am.id in seen_ids:
+                problems.append(
+                    f"{self.experiment_id}: amendment id {am.id!r} is used by "
+                    "two amendments"
+                )
+            else:
+                seen_ids.add(am.id)
 
         return problems
 

@@ -1,7 +1,11 @@
 # TACOSM-RETRIEVAL-001
 
-**Status:** F0 run. **F1 is suspended, not merely not started** — see the
-note below. Arms C and D are not started.
+**Status:** F0 run. **F1 is built and pre-amended; no confirmatory run has been
+made.** Arms C and D are implemented and the index exists
+(`src/tac_osm/retrieval.py`, `scripts/measure_retrieval.py`), but the
+suspension note below has been **superseded by M1.8's top-K evidence**, which
+is what re-queued it. Amendment A1 is on the contract
+(`contracts/TACOSM-RETRIEVAL-001.json`) and is recorded in §F1-A1 below.
 
 **Pre-registration.** Stages C and D are specified here *before* they are
 built, and their specification is contingent on F0's result — that is the
@@ -164,7 +168,9 @@ At `H ≤ 64` the first branch holds. At `H ≥ 128` the second is open.
 
 ## F1 — efficient retrieval
 
-**Not started. Contingent on F0.**
+**Built and pre-amended; no confirmatory run.** Amendment A1, below, changed
+the primary endpoint's definition **before any run**, which is the only way an
+amendment can differ from a revision.
 
 ```
 H → cheap index → K candidates → existing scorer → R
@@ -208,6 +214,59 @@ narrative:
 `executor_nodes` is reported because C5 is untested and the column must not be
 read as a scaling result: in v0.1 it is fixed at `max_nodes = 10` by the
 executor, so it is an architectural constant, not a measurement.
+
+---
+
+### F1-A1 — the amendment to the primary endpoint
+
+The pre-registered primary endpoint `recall@K` was defined as
+`P(gold ∈ top-K by score)` — a full-population quantity, measured the same way
+in every arm. Under that definition every arm reports the same number for a
+given `(H, K)`, so no branch of the decision rule could have fired on any data.
+The decision rule was registered against a primary that could not
+discriminate, and the instrument found it, not a reading of the contract.
+
+**The amended definition.** `recall@K` is now
+`P(gold ∈ the arm's retained set *and* is the argmax over that set)`. The
+primary is measured over each arm's *own* retained set, so the arms can differ.
+Arm B's retained set is the scorer's own top-K, not the full population; arms
+C and D keep what the index retained.
+
+**What is recorded.** The machine-readable contract carries the amendment with
+all seven fields — the old definition, the new one, the rationale, where it was
+discovered, what it affected, and the statement that **no confirmatory run was
+made under the previous version**. Nothing about the original definition is
+called wrong; it measured a different question, and the question it measured
+was not the one the decision rule reads. A reader who disagrees with the
+amendment can still see the design they were promised, because the old
+definition is a field and not an overwritten value.
+
+**What the dry run found about the index itself.** The registered rule is
+recorded, not tuned. The index scores with an unlearned agreement rule over
+two terms — agreement with the written state vector, and agreement with the
+public query bits — and the term that separates gold depends on the family:
+
+| weights | relational | state_lookup | replay |
+|---|---|---|---|
+| query-only | **1.00** | 0.00 | 0.33 |
+| state-only | 0.00 | **1.00** | **1.00** |
+| both (registered default) | **1.00** | **1.00** | **0.375** |
+
+`relational` publishes its target as the query bits, so the query term
+separates there and the state term is inert. The persistence families hide the
+target in state, where the query bits are actively misleading: the
+query-deceptive distractors agree with the query off the marked positions and
+violate the relation on them, so gold's public agreement is *below* the best
+distractor's. The registered default sum separates two of the three families
+and **partially cancels on `replay`** — the unique-argmax rate there is 0.375,
+and retention at large H falls below the state-only index's.
+
+That is not a defect and not a tuning question. It is why the C-vs-B
+comparison is reported in both directions and why the arm-D ceiling is
+*measured* rather than assumed. **The registered default is unchanged**: a
+weight chosen to fix `replay` would be chosen after seeing the dry run, and
+the index is registered at these weights. All of this is held in place by
+`tests/test_retrieval.py`.
 
 ---
 
@@ -265,7 +324,7 @@ reason: to measure headroom rather than to occupy it.
 |---|---|
 | `exact_success` | the loop's task success — the thing being improved |
 | `routing@1` | `P(gold is the argmax of the scores)` |
-| `recall@K` | `P(gold ∈ top-K by score)` |
+| `recall@K` | `P(gold ∈ the arm's retained set and argmax over it)` — the primary, as amended by F1-A1 |
 | `gold_rank` | mean rank of gold under the score |
 
 `routing@1` and `exact_success` differ because the learned router samples

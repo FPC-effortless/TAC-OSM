@@ -33,6 +33,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 from tac_osm.contract import (  # noqa: E402
+    AmendmentSpec,
     ArmSpec,
     ContractError,
     DecisionBranch,
@@ -364,6 +365,232 @@ def test_a_sound_contract_reports_no_problems():
 
 
 # --------------------------------------------------------------------------- #
+# 2b. Amendments: a change to a pre-registration is recorded as a change
+# --------------------------------------------------------------------------- #
+#
+# A pre-registration that can be edited after the fact is not one, so an
+# amendment is not an edit: it is a visible change that carries the definition
+# it replaced. The one amendment in this repository was found by the
+# instrument, not by reading — the primary endpoint's definition made it
+# arm-independent, so no branch of the decision rule could have fired on any
+# data. That is the failure mode this group exists to keep detectable: an
+# amendment that was silently an edit would erase the design a reader was
+# promised.
+
+
+def test_an_amendment_round_trips():
+    """An amendment is a first-class part of the contract, so it survives a write and a read.
+
+    The optional fields are the ones a reader owes the record — where the
+    defect was discovered, what it affected, and whether any result exists
+    under the previous version. They are optional because an amendment
+    recorded before any run has none of them yet, but a reader who sees them
+    must see the round trip too.
+    """
+    full = AmendmentSpec(
+        id="A1",
+        applies_to="the primary endpoint's definition",
+        old_definition="P(gold in the top-K of the full population)",
+        new_definition="P(gold in the arm's retained set and argmax over it)",
+        rationale="the original was arm-independent, so no branch could fire",
+        discovered="by the instrument during the dry run, before any confirmatory run",
+        affected="the decision rule and the C-vs-B comparison",
+        no_result_under_previous_version=(
+            "no confirmatory run was made under the original definition"
+        ),
+    )
+    encoded = full.to_dict()
+    assert encoded["id"] == "A1"
+    assert encoded["old_definition"] and encoded["new_definition"]
+    assert encoded["discovered"]
+    decoded = AmendmentSpec.from_dict(encoded)
+    assert decoded == full
+
+
+def test_an_amendment_omits_its_optional_fields_when_empty():
+    """An amendment recorded before any run has no affected-field yet.
+
+    Those fields are not required, because requiring them would force an
+    amendment to state a result it does not have. Their absence must therefore
+    survive the round trip — an empty string written into the file would be
+    read back as present, and a reader would take it for a claim.
+    """
+    minimal = AmendmentSpec(
+        id="A1",
+        applies_to="an endpoint",
+        old_definition="old",
+        new_definition="new",
+        rationale="why",
+    )
+    d = minimal.to_dict()
+    assert set(d) == {"id", "applies_to", "old_definition", "new_definition", "rationale"}
+    assert AmendmentSpec.from_dict(d) == minimal
+
+
+def test_an_amendment_requires_its_five_fields():
+    """An amendment without its old definition is not a change but an overwrite.
+
+    The five required keys are what make the amendment comparable: without
+    ``old_definition`` a reader cannot see the design they were promised,
+    without ``new_definition`` they cannot see what replaced it, and without
+    ``rationale`` they cannot judge whether the change was a repair or a
+    retreat.
+    """
+    base = dict(
+        id="A1",
+        applies_to="an endpoint",
+        old_definition="old",
+        new_definition="new",
+        rationale="why",
+    )
+    for key in list(base):
+        short = {k: v for k, v in base.items() if k != key}
+        with pytest.raises(ContractError, match="missing required keys"):
+            AmendmentSpec.from_dict(short)
+
+
+def test_an_amendmentless_contract_round_trips():
+    """A contract with no amendments must not serialise the field.
+
+    An empty ``"amendments": []`` would read as a list that was once
+    populated, which is the wrong signal for an unamended pre-registration:
+    the field appears only when there is a change to see.
+    """
+    d = _minimal_contract().to_dict()
+    assert "amendments" not in d
+    assert ExperimentContract.from_dict(d).amendments == ()
+
+
+def test_a_contract_with_an_amendment_round_trips():
+    """The amendment survives the contract's round trip, not only its own.
+
+    The contract is what gets written next to a run's results, so the
+    amendment has to survive *that* round trip: a reader comparing a record
+    against its contract reads the contract from the file, and an amendment
+    lost on the way would be a change with no evidence.
+    """
+    c = _minimal_contract(
+        amendments=(
+            AmendmentSpec(
+                id="A1",
+                applies_to="the primary endpoint",
+                old_definition="old",
+                new_definition="new",
+                rationale="the original could not discriminate between arms",
+            ),
+        ),
+    )
+    decoded = ExperimentContract.from_dict(json.loads(c.to_json()))
+    assert decoded == c
+    assert decoded.amendments[0].id == "A1"
+
+
+def test_an_amendment_without_an_id_is_flagged():
+    """An amendment with no id cannot be referred to by any later record."""
+    c = _minimal_contract(
+        amendments=(
+            AmendmentSpec(id="", applies_to="x", old_definition="old",
+                          new_definition="new", rationale="why"),
+        ),
+    )
+    problems = c.check_consistency()
+    assert any("has no id" in p for p in problems), (
+        "an amendment without an id was not caught; a later record could not "
+        "name the change it is answering to"
+    )
+
+
+def test_two_amendments_sharing_an_id_are_flagged():
+    """Two amendments with one id are one change recorded twice.
+
+    A reader could not tell which applies, and a record answering to ``A1``
+    would be answering to either or both — which is the ambiguity the
+    amendment record exists to remove.
+    """
+    c = _minimal_contract(
+        amendments=(
+            AmendmentSpec(id="A1", applies_to="x", old_definition="old1",
+                          new_definition="new1", rationale="why1"),
+            AmendmentSpec(id="A1", applies_to="y", old_definition="old2",
+                          new_definition="new2", rationale="why2"),
+        ),
+    )
+    problems = c.check_consistency()
+    assert any("is used by two amendments" in p for p in problems)
+
+
+def test_two_amendments_with_distinct_ids_are_fine():
+    """The detector must not fire on the correct spelling."""
+    c = _minimal_contract(
+        amendments=(
+            AmendmentSpec(id="A1", applies_to="x", old_definition="old1",
+                          new_definition="new1", rationale="why1"),
+            AmendmentSpec(id="A2", applies_to="y", old_definition="old2",
+                          new_definition="new2", rationale="why2"),
+        ),
+    )
+    assert c.check_consistency() == []
+
+
+def test_the_amended_contract_is_internally_sound():
+    """``TACOSM-RETRIEVAL-001`` validates with the amendment present.
+
+    The amendment rewrote the primary endpoint's definition, so the contract
+    that carries it must still have exactly one primary endpoint and a
+    decision rule over registered arms. This is the assertion that the
+    amendment repaired the definition without breaking the rule it was made
+    to serve.
+    """
+    c = load_contract("TACOSM-RETRIEVAL-001")
+    assert c.check_consistency() == [], (
+        "the amended retrieval contract is self-inconsistent: "
+        + "; ".join(c.check_consistency())
+    )
+
+
+def test_the_amended_contract_records_its_amendment():
+    """The amendment is carried by the contract a run checks itself against.
+
+    Not by a separate changelog: the contract is the document a record points
+    at, so the amendment has to be there for a reader to see that the primary
+    endpoint they are reading is not the one that was first registered.
+    """
+    c = load_contract("TACOSM-RETRIEVAL-001")
+    assert len(c.amendments) == 1, (
+        f"expected exactly one amendment on the retrieval contract, found "
+        f"{len(c.amendments)}"
+    )
+    am = c.amendments[0]
+    assert am.id == "A1"
+    # The seven fields of a recorded change. Each is what a reader needs to
+    # judge the amendment rather than accept it: the two definitions are the
+    # before and after, the rationale is the judgement, and the remaining
+    # four place the change in the record.
+    for field_name in (
+        "applies_to", "old_definition", "new_definition", "rationale",
+        "discovered", "affected", "no_result_under_previous_version",
+    ):
+        assert getattr(am, field_name), (
+            f"the amendment's {field_name} is empty; an amendment that omits "
+            "a field is asking a reader to take the change on trust"
+        )
+
+
+def test_the_amended_contract_still_has_one_primary_and_four_branches():
+    """The amendment changed the definition, not the rule's structure.
+
+    The primary endpoint is still exactly one, the branches still number
+    four, and the primary is still ``recall@K`` — now under the amended
+    definition. A change that had altered the rule's shape would be a new
+    pre-registration rather than an amendment to this one.
+    """
+    c = load_contract("TACOSM-RETRIEVAL-001")
+    assert c.primary_endpoint() == "recall@K"
+    assert len(c.decision_rule) == 4
+    assert len(c.endpoints) == 8
+
+
+# --------------------------------------------------------------------------- #
 # 3. The contracts agree with the code that implements them
 # --------------------------------------------------------------------------- #
 #
@@ -587,6 +814,7 @@ _WITH_CONTRACT = (
     ("measure_surrogate.py", "TACOSM-SURROGATE-001"),
     ("measure_learn.py", "TACOSM-LEARN-001"),
     ("measure_matched_h.py", "TACOSM-MATCHED-001"),
+    ("measure_retrieval.py", "TACOSM-RETRIEVAL-001"),
 )
 
 
@@ -1040,6 +1268,7 @@ def _minimal_contract(
     interpretation_order: tuple[str, ...] = ("first", "second"),
     h_levels: tuple[int, ...] = (8, 64, 256),
     steps: int = 500,
+    amendments: tuple[AmendmentSpec, ...] = (),
 ) -> ExperimentContract:
     """A contract with only the required structure, for invariant tests."""
     return ExperimentContract(
@@ -1056,4 +1285,5 @@ def _minimal_contract(
         steps=steps,
         eval_steps=100,
         held_constant=("one thing held fixed",),
+        amendments=amendments,
     )

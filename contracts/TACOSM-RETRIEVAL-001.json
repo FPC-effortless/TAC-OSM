@@ -1,0 +1,146 @@
+{
+  "experiment_id": "TACOSM-RETRIEVAL-001",
+  "title": "Efficient retrieval: does a cheap index narrow H to K before scoring without losing the relevant candidate?",
+  "question": "C_router is O(H): the router scores every candidate. A cheap index that narrowed H to K << H before scoring would make C_router O(K), but only if the index retains the gold candidate. Is the cost-quality trade real, and at which K?",
+  "hypothesis": "H_trade: a cheap, unlearned, mark-gated agreement index retains gold at a rate close to the exhaustive scorer's top-K recall at matched K, at a routing cost that grows with K rather than with H — so the trade is real and the index is the mechanism. H_leak is the alternative the index's design exists to exclude: a filter that achieves recall by reading information the router may not have is an oracle and not an index, and its cost number is not a routing cost at all.",
+  "arms": [
+    {
+      "name": "exhaustive_top1",
+      "intervention": "none — the current architecture unchanged",
+      "acts_on": "the cost reference: score all H candidates and take the argmax",
+      "schedule": "none"
+    },
+    {
+      "name": "exhaustive_topk",
+      "intervention": "score all H candidates and retain the top-K by score — the retrieval ceiling, no index",
+      "acts_on": "the quality reference C is measured against; costs the same as exhaustive_top1 because it still scores everything. Its retained set is its top-K by score, so the arm is itself a retrieval boundary built out of the scorer",
+      "knob": "budget",
+      "value": "K in {2, 4, 16}",
+      "schedule": "none"
+    },
+    {
+      "name": "indexed_topk",
+      "intervention": "the proposed architecture: H -> cheap index -> K candidates -> existing scorer, reusing the router's own score unchanged",
+      "acts_on": "the retrieval boundary between routing and execution; the index is the only new mechanism",
+      "knob": "budget",
+      "value": "K in {2, 4, 16}, the same levels as exhaustive_topk so the comparison is at matched K",
+      "schedule": "none"
+    },
+    {
+      "name": "oracle_index_topk",
+      "intervention": "the index is told where gold is, so it retrieves the right neighbourhood by construction",
+      "acts_on": "the index cost/quality ceiling — a diagnostic, not a candidate architecture, reading information no runtime component may have",
+      "knob": "budget",
+      "value": "K in {2, 4, 16}",
+      "schedule": "none"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "recall@K",
+      "role": "the primary endpoint: P(gold is in the arm's retained set AND is the argmax of the scorer's scores over that retained set)",
+      "primary": true,
+      "description": "The capability half of the cost-quality trade, measured over the set the arm actually gave the scorer. The retained set is arm-dependent by construction — H in A, the scorer's top-K in B, the index's K in C, the index's K-1 plus gold in D — so the endpoint reads differently across arms, which is what makes the C-vs-B comparison able to fire. Decomposes as P(gold retained) x P(scorer selects gold | gold retained); index_retains_gold is the first factor and this endpoint the product."
+    },
+    {
+      "name": "index_retains_gold",
+      "role": "secondary — P(gold in the retained set); the first factor of the primary endpoint's decomposition",
+      "primary": false,
+      "description": "The index's own retention rate, separated from the scorer's ranking because a filter and a ranker fail differently. In arms A and B this is 1 by construction (no filter ran)."
+    },
+    {
+      "name": "scorer_recall@K",
+      "role": "secondary — P(gold in the top K of the scorer's scores over the FULL population, ignoring any retention)",
+      "primary": false,
+      "description": "The F0 endpoint, arm-independent by construction, retained so the F0 curve stays readable in an F1 run. Reported alongside the primary so the two are not confused: scorer_recall@K is a property of the scorer alone, recall@K is a property of the arm."
+    },
+    {
+      "name": "acc|retrieved",
+      "role": "secondary — P(loop task success | gold was retained); downstream correctness conditional on retention",
+      "primary": false,
+      "description": "A low value means the loss is not retrieval at all, so the retained-set curve is measuring something other than task-relevant relevance — the control F0 introduced and F1 keeps."
+    },
+    {
+      "name": "exact_success",
+      "role": "secondary — the loop's own task success, the thing being improved",
+      "primary": false,
+      "description": "Differs from routing@1 because the learned router samples from a softmax rather than taking the argmax; the gap is the cost of sampling, not an execution failure."
+    },
+    {
+      "name": "routing@1",
+      "role": "secondary — P(gold is the argmax of the full-population scores); reported so it is not confused with exact_success",
+      "primary": false,
+      "description": "The endpoint M1 measured and M1.8 did not move. F1's registered evidence is top-K, not top-1: a run that reported top-1 preservation as its headline would be reporting a number M1 says is not there."
+    },
+    {
+      "name": "candidates_inspected",
+      "role": "secondary — the cost half of the trade",
+      "primary": false,
+      "description": "The size of the retained set: H in arms A and B, K in arms C and D. The quantity C5 needs made measurable: this is |R|, defined only once a retrieval boundary is in the loop."
+    },
+    {
+      "name": "gold_rank",
+      "role": "secondary — mean rank of gold under the full-population score, ties against gold",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "recall@K of indexed_topk is within the baseline seed spread of exhaustive_topk at matched K, and the inspected-candidate count of indexed_topk is K rather than H",
+      "licenses": "H_trade is supported at that K: the index is a real retrieval boundary, |R| = K is a defined quantity for the first time, and C5 becomes statable rather than untested. Record the K at which the trade holds, because the bound travels with the evidence and the trade may hold at K=16 and fail at K=2.",
+      "does_not_license": "that C_executed scales with |R|. The v0.1 executor fixes active_count = max_nodes = 10, so executor_nodes is an architectural constant, not a measurement; a retrieval boundary in routing is not yet a retrieval boundary in execution."
+    },
+    {
+      "condition": "recall@K of indexed_topk is materially below exhaustive_topk at matched K",
+      "licenses": "H_trade is not supported at that K: gold is lost somewhere in the indexed arm. This is a negative result and is reported as one. index_retains_gold is what makes it interpretable — an index that discards gold (index_retains_gold low) is an argument against the index, while an index that retains gold and a scorer that then mis-ranks it (index_retains_gold close to B's, recall@K low) is not.",
+      "does_not_license": "that retrieval cannot be made cheap. This index is one unlearned rule; a negative result is a statement about the rule, not about the existence of a cheap filter."
+    },
+    {
+      "condition": "recall@K of indexed_topk materially exceeds exhaustive_topk at matched K",
+      "licenses": "the index is a better filter than the trained scorer is a ranker. Recorded as a result and not smoothed away: the environment's distractors are constructed to beat cheap agreement rules, so an index that beats the trained scorer is direct evidence that the trained scorer's ranking, not the signal, is what is weak at large H — which is consistent with MATCHED-001's finding about the learning rule.",
+      "does_not_license": "a better scorer. A better scorer is an M1 result measured under M1's protocol, and would change the baseline this experiment is defined against. The pre-registration forbids absorbing that result here."
+    },
+    {
+      "condition": "recall@K of indexed_topk equals recall@K of exhaustive_topk at matched K at every seed, because the two arms build identical retained sets",
+      "licenses": "nothing. The decision rule cannot fire and the run says so. This is a defect in the measurement design and not a result about the index: two arms whose retained sets coincide cannot be distinguished by a retained-set endpoint, and the honest report is that the comparison is undefined rather than that the arms are equivalent. Recorded as the failure mode this amendment exists to keep detectable.",
+      "does_not_license": "any statement about H_trade, H_leak, the index or the scorer. A rule that cannot fire licenses no reading at all."
+    }
+  ],
+  "interpretation_order": [
+    "retrieval_boundary",
+    "cost_quality_trade",
+    "scorer_quality",
+    "execution_scaling"
+  ],
+  "h_levels": [8, 64, 256],
+  "k_levels": [2, 4, 16],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 500,
+  "eval_steps": 100,
+  "held_constant": [
+    "the feature basis, the environment, the candidate generator and the evaluator are unchanged",
+    "the scorer is the router's own score method, reused unchanged in every arm — the index is the only new mechanism",
+    "the router is trained once at 8 candidates and weights are loaded into every evaluation router, as in F0 and MATCHED-001",
+    "the model-state integrity gate runs before every measurement",
+    "the oracle arm is 1.0000 at every H, established before any learned number is printed",
+    "the index sees only the Query, the candidates' public descriptors and the state read — the same three inputs the router has, and nothing else",
+    "the failure taxonomy is closed: every failed step is attributed to exactly one category",
+    "the same task stream in every arm of a cell, so an arm comparison is a comparison of the model rather than of the world"
+  ],
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "endpoints[recall@K], decision_rule branches 1-3, and the addition of endpoints index_retains_gold, scorer_recall@K and acc|retrieved",
+      "discovered": "by preflight smoke execution of scripts/measure_retrieval.py before any confirmatory F1 run — the instrument is what caught it, which is the point of running a smoke test on an instrument",
+      "old_definition": "P(gold in the top K by the scorer's own scores), computed over the full candidate population in every arm",
+      "new_definition": "P(gold is in the arm's retained set AND is the argmax of the scorer's scores over that retained set), with the retained set defined by the arm: all H in A, the scorer's top-K in B, the index's K in C, the index's K-1 plus gold in D",
+      "rationale": "The registered endpoint was non-discriminating across arms, not scientifically wrong: because every arm computed the same full-population ordering, recall@K was arm-independent by construction and the registered decision rule's three branches could not fire on any data. The endpoint measured the scorer and not the arm, so the C-vs-B comparison — the comparison the whole experiment exists to make — was identically zero. The amendment keeps the original quantity under a new secondary name (scorer_recall@K), which preserves the F0 evidence and keeps the arm-independent property readable rather than discarding it.",
+      "affected": "decision_rule branches 1, 2 and 3, which now read the arm-dependent endpoint; the new branch 4 records the non-firing condition itself, so a future defect of the same class is detectable as a rule rather than as an absence of result",
+      "no_result_under_previous_version": "no confirmatory F1 run was made under the previous endpoint definition. The only execution against it was a declared --smoke test at 20 training steps, 10 evaluation steps, H in {8, 64}, K in {2, 4}, seed 0, which is recorded as smoke and not as a measurement; its record carries smoke=true and contract_checked=false. No number from that run is evidence of anything about H_trade."
+    }
+  ],
+  "status": "pre-registered (amended A1; no confirmatory run)",
+  "result_note": "",
+  "result_url": "",
+  "layer": "L2"
+}
