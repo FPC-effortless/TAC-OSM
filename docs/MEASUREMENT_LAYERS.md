@@ -93,6 +93,51 @@ has no layer to be assigned, and a run that passes M0 has not yet earned one —
 Layer 1 is still the first gate that can void a measurement, and Layer 0 is
 still the first question about whether the measurement was necessary.
 
+### The M0 freeze — which scripts the three things apply to
+
+The three freezes above do not apply to every script in `scripts/`, and
+asserting that they did would be false. What the freeze asserts instead is a
+**partition**: every `measure_*.py` is either contracted or deliberately
+exempt, and both halves are enumerated in `tests/test_contract.py` group 6, so
+a script added with neither a contract nor an exemption fails the suite rather
+than emitting unregistered numbers.
+
+| script | contract | integrity gate | record | why |
+|---|---|---|---|---|
+| `measure_surrogate.py` | yes | yes | yes | contracted — the F3 arm comparison |
+| `measure_learn.py` | yes | yes | yes | contracted — the F2 arm comparison |
+| `measure_matched_h.py` | yes | yes | yes | contracted — the matched-H matrix |
+| `measure_retrieval.py` | yes | yes | yes | contracted — the F1 arms, amended A1 |
+| `measure_history_scaling.py` | exempt | yes | no | publishes the frozen `TACOSM-HS-001` reference table |
+| `measure_retrieval_ceiling.py` | exempt | yes | no | publishes the frozen F0 reference table |
+| `measure_baseline.py` | exempt | no | no | the untrained-by-design baseline |
+
+The two exempt measurement scripts still run the integrity gate, and the
+reason is the same as C4's: a frozen reference produced from untrained weights
+is a frozen *wrong* number, which is precisely the failure that made a
+published HS-001 table wrong once and had to be re-verified (see
+`docs/CLAIMS.md` §C4).
+
+`measure_baseline.py` is the exception to that exception, and it is correct
+rather than a gap. Its arms are `oracle`, `random`, `static`, `full_context`
+and `learned`; the first four need no weights at all, and the fifth trains
+*inside* the run and is measured at the end of the schedule. An
+`assert_trained` call there would be checking a router that is untrained by
+design, and its protection is the arm set rather than the gate — the baseline
+is a comparison against arms whose behaviour does not depend on training.
+`test_baseline_has_no_integrity_gate_by_design` pins both absences so the
+exemption is not found later as an oversight.
+
+**The record's absence on the exempt side is a boundary, not a hole.** The
+machine-readable record arrived with the contract system in `M1.0`, so it
+covers exactly the contracted scripts. The audit trail for the frozen
+reference is the published tables in `docs/CLAIMS.md` and
+`docs/EVIDENCE_REGISTER.md` at the frozen commits — which are committed,
+whereas `results/*.json` is gitignored. The committed table is therefore the
+auditable form of those numbers. What the test pins is that any *future*
+contracted script must reach the record, because a contract without an outcome
+to compare against is a pre-registration nothing can check after the fact.
+
 ---
 
 ## Layer 0 — Inherited evidence

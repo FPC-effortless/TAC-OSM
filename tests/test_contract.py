@@ -4,7 +4,7 @@ The contract is the spec-drift detector: it pins what a run must hold
 constant, and raises rather than warns when it does not. These tests pin the
 contract itself, so the detector cannot drift either.
 
-Three groups:
+Six groups:
 
 1. **Every contract in ``contracts/`` is valid** — schema plus the
    cross-field invariants. This is the test that catches a contract written
@@ -20,6 +20,16 @@ Three groups:
    spec drift would otherwise live undetected: a contract that says 500 and a
    script whose default is 400 are two documents describing one experiment,
    and nothing else in the repository compares them.
+4. **The scripts actually enforce their contracts** — the wiring: a detector
+   the measurement scripts do not call is a document.
+5. **The machine-readable result summary** — the outcome the contract is
+   checked against, and its invariants.
+6. **The M0 freeze** — every ``measure_*.py`` is either contracted or
+   deliberately exempt, and both halves of the partition are enumerated. This
+   is the completeness assertion the other five groups cannot make: a script
+   added with neither a contract nor an exemption is invisible to them, and
+   would emit unregistered numbers. See the ``_WITHOUT_CONTRACT`` entries for
+   the three exemptions and the reason each is correct rather than a gap.
 """
 
 from __future__ import annotations
@@ -810,6 +820,13 @@ def _script_text(name: str) -> str:
 #: Parametrizing the wiring tests over this is what makes a new script
 #: unforceable by accident: adding a script and a contract but forgetting to
 #: wire them fails the parametrization, not only the eye.
+#:
+#: This is the **frozen M0 enforcement surface** (``MEASUREMENT_LAYERS.md``
+#: §"Measurement Integrity"). The complementary list — the scripts that
+#: deliberately have no contract, and why — is ``_WITHOUT_CONTRACT`` in group
+#: 6 below. Both lists are needed: a partition asserted on one side only can
+#: drift on the other, and the three exemption entries are the ones that
+#: would otherwise look like oversights rather than decisions.
 _WITH_CONTRACT = (
     ("measure_surrogate.py", "TACOSM-SURROGATE-001"),
     ("measure_learn.py", "TACOSM-LEARN-001"),
@@ -1249,6 +1266,213 @@ def test_the_summary_records_no_status():
     # same judgement, one layer down where this test would not notice it.
     assert "status" not in record["audit"]
     assert "status" not in record["per_seed"]
+
+
+# --------------------------------------------------------------------------- #
+# 6. The M0 freeze: every measurement script is either contracted or exempt
+# --------------------------------------------------------------------------- #
+#
+# M0 ("Measurement Integrity", ``docs/MEASUREMENT_LAYERS.md``) freezes three
+# things, one of which is the contract check. Group 1 asserts the contracts
+# are valid, group 4 asserts the contracted scripts enforce them. What neither
+# asserts is that the two lists are *complete* — that a script in
+# ``scripts/measure_*.py`` is on one of them.
+#
+# That gap is how the freeze would break for real. A new measurement script
+# added without a contract is invisible to groups 1–5: it has no contract for
+# group 3 to compare against, and group 4's parametrization does not enumerate
+# the directory. It would carry the M0 surface's protection to every number it
+# emitted, and nothing would notice. Symmetrically, the three scripts that
+# predate the contract system and are correctly exempt from it were exempt
+# only by *absence* — the partition was asserted on the contracted side and
+# not at all on the other, which is how an exemption silently becomes a
+# precedent rather than a recorded decision.
+#
+# Group 6 asserts both halves. The three exemption entries below state why
+# each script needs no contract, in the script's own terms, because an
+# exemption that is not justified is an exemption that will be extended.
+
+#: The scripts deliberately outside the contract system, each with its reason.
+#:
+#: ``measure_baseline.py`` produces the frozen reference itself
+#: (``TACOSM-BASELINE-001`` at ``91597ab``): the numbers the contracted
+#: scripts' reproduction gates compare against, published before contracts
+#: existed. A contract would pin levels and seeds against a design that was
+#: already the definition of "baseline", and the numbers are frozen at
+#: ``M1.2``, not re-derived here.
+#:
+#: ``measure_history_scaling.py`` and ``measure_retrieval_ceiling.py`` are the
+#: same case one layer up. Both publish reference tables (``TACOSM-HS-001``,
+#: ``TACOSM-RETRIEVAL-001`` F0) whose re-verified digits are the reproduction
+#: targets in the *contracted* scripts' baselines. Their own numbers are
+#: already the frozen thing, and C6/C7's published tables were produced by
+#: them and are frozen where they were produced.
+#:
+#: Both still run the model-state integrity gate, because a frozen reference
+#: produced from untrained weights is a frozen wrong number (C4).
+#: ``measure_baseline.py`` runs neither the gate nor a record — it is the
+#: untrained-by-design case, and the reason is recorded in group 6 below.
+_WITHOUT_CONTRACT = (
+    (
+        "measure_baseline.py",
+        "produces the frozen reference itself: TACOSM-BASELINE-001 at 91597ab, "
+        "the numbers the contracted scripts' reproduction gates compare "
+        "against. Its arms (oracle, random, static, full_context, learned) "
+        "need no loaded weights — the learned arm trains inside the run — so "
+        "it runs neither the integrity gate nor a record, by design. Frozen "
+        "by M1.2, not re-derived under a contract that would pin the design "
+        "it defines.",
+    ),
+    (
+        "measure_history_scaling.py",
+        "publishes the TACOSM-HS-001 reference tables whose re-verified digits "
+        "are the reproduction targets in the contracted scripts' baselines "
+        "(C6, C7). Its numbers are already the frozen thing being compared "
+        "against.",
+    ),
+    (
+        "measure_retrieval_ceiling.py",
+        "publishes the TACOSM-RETRIEVAL-001 F0 reference tables the retrieval "
+        "experiment builds on. Predates the contract system, and its result "
+        "is frozen where it was produced rather than re-derived.",
+    ),
+)
+
+
+def _measurement_scripts() -> list[str]:
+    """Every ``measure_*.py`` in ``scripts/``, so the freeze is over the directory.
+
+    Enumerating here rather than listing by hand is the point: a script added
+    later appears in this list automatically, and the completeness test below
+    then asks which side of the partition it belongs on. A hand-written list
+    would have to be remembered.
+    """
+    return sorted(p.name for p in SCRIPTS_DIR.glob("measure_*.py"))
+
+
+def test_every_measurement_script_is_either_contracted_or_exempt():
+    """The M0 freeze's completeness assertion, in both directions.
+
+    A script that is on neither list has no contract and no recorded exemption
+    — an unregistered measurement, which is the one thing M0 exists to
+    prevent. A script on both is a contradiction, and a script whose name
+    appears in neither list has been forgotten by the freeze entirely.
+    """
+    contracted = {name for name, _ in _WITH_CONTRACT}
+    exempt = {name for name, _ in _WITHOUT_CONTRACT}
+    actual = set(_measurement_scripts())
+
+    unaccounted = actual - contracted - exempt
+    assert not unaccounted, (
+        "measurement scripts with neither a contract nor a recorded exemption "
+        f"were found; each needs one or the other: {sorted(unaccounted)}"
+    )
+    # A script cannot be both: an exemption that also carries a contract is
+    # not an exemption, and the reason would be unreadable.
+    assert not (contracted & exempt), (
+        "a script is in both _WITH_CONTRACT and _WITHOUT_CONTRACT, so the "
+        f"partition is not one: {sorted(contracted & exempt)}"
+    )
+
+
+def test_the_exempt_scripts_still_run_the_integrity_gate():
+    """An exemption from contracts is not an exemption from M0's second freeze.
+
+    ``measure_history_scaling.py`` and ``measure_retrieval_ceiling.py`` produce
+    the frozen reference tables the contracted scripts' reproduction gates
+    compare against, so the one thing they must not do is emit numbers from
+    untrained weights — the exact failure C4 exists for, and the failure that
+    made a published HS-001 table wrong once already (``CLAIMS.md`` §C4, "The
+    HS-001 correction, recorded").
+
+    ``measure_baseline.py`` is the exception to the exception, and it is
+    deliberate: its arms are ``oracle``, ``random``, ``static``,
+    ``full_context`` and ``learned``, and the first four need no weights at
+    all. The fifth trains *inside* the run and is measured at the end of the
+    schedule, so an ``assert_trained`` call would be checking a router that is
+    untrained by design. Its protection is not the gate but the *arm set* —
+    the baseline is a comparison against arms whose behaviour does not depend
+    on training, which is why the reference it produces is trustworthy without
+    one.
+    """
+    for name, _reason in _WITHOUT_CONTRACT:
+        if name == "measure_baseline.py":
+            continue
+        text = _script_text(name)
+        assert "assert_trained" in text, (
+            f"{name} is exempt from the contract system but does not call "
+            "assert_trained; an exempt script still runs the M0 integrity "
+            "gate, because it produces the frozen reference the contracted "
+            "scripts are checked against"
+        )
+
+
+def test_baseline_has_no_integrity_gate_by_design():
+    """The one script with no gate, and why that is correct rather than a gap.
+
+    A reader who applies the M0 checklist to ``measure_baseline.py`` finds the
+    contract check absent and the integrity gate absent, and could conclude
+    the freeze was never applied to it. Both absences are the same reason: the
+    script measures the reference, not a trained model. Pinned here so the
+    exemption is not "found" later as an oversight.
+    """
+    text = _script_text("measure_baseline.py")
+    assert "assert_trained" not in text, (
+        "measure_baseline.py runs the integrity gate, which contradicts the "
+        "exemption's reason: its arms need no trained weights"
+    )
+    assert "load_weights" not in text, (
+        "measure_baseline.py loads weights, which contradicts the exemption's "
+        "reason: the learned arm trains inside the run rather than loading a "
+        "checkpoint"
+    )
+
+
+def test_the_record_freeze_covers_the_contracted_scripts_and_not_the_exempt_ones():
+    """The boundary of M0's third freeze, stated as a boundary.
+
+    The machine-readable record arrived with the contract system in M1.0, so
+    it covers exactly the scripts that have contracts and no others. The three
+    exempt scripts predate it and report to the terminal alone.
+
+    That is a real limit on the freeze, and recording it is the point of this
+    group: an assertion that the record *did* cover them would be false, and a
+    silent gap is what a reader would otherwise have to notice by absence. The
+    audit trail for the frozen reference is the published tables in
+    ``CLAIMS.md`` and ``docs/EVIDENCE_REGISTER.md`` at the frozen commits,
+    which are committed — a record under ``results/`` would not be, because
+    ``results/*.json`` is gitignored. The committed table is therefore the
+    auditable form of these numbers, and the record's absence is not a hole in
+    the audit trail.
+
+    What the test pins is the *partition*: the record reaches every contracted
+    script, and any future script that is added to ``_WITH_CONTRACT`` is
+    required to reach it too, because the contract is what a record points at.
+    """
+    contracted = {name for name, _ in _WITH_CONTRACT}
+    for name in sorted(contracted):
+        text = _script_text(name)
+        assert "results_dir_for" in text or "write_record" in text, (
+            f"{name} has a contract but writes no machine-readable record; "
+            "the record is what a contract's outcome is checked against, so a "
+            "contracted script without one has a pre-registration nothing can "
+            "be compared to after the fact"
+        )
+    # The exempt scripts predate the record module. Naming them here rather
+    # than testing nothing is what keeps the boundary from being read as an
+    # oversight: each is a known exemption, and adding one to _WITH_CONTRACT
+    # moves it to the asserted half above.
+    exempt_without_record = {
+        name
+        for name, _ in _WITHOUT_CONTRACT
+        if "results_dir_for" not in _script_text(name)
+        and "write_record" not in _script_text(name)
+    }
+    assert exempt_without_record == {name for name, _ in _WITHOUT_CONTRACT}, (
+        "an exempt script gained a machine-readable record; if it has a "
+        "record it is no longer the frozen reference a contract would "
+        "re-derive, and its exemption entry needs to say why"
+    )
 
 
 # --------------------------------------------------------------------------- #

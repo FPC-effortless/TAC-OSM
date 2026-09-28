@@ -440,7 +440,7 @@ class ArmResult:
     arm: str
     h: int
     k: int
-    #: ``P(gold ∈ the arm's retained set AND is the armmax over that set)``.
+    #: ``P(gold ∈ the arm's retained set AND is the argmax over that set)``.
     #: The capability half of the cost-quality trade. Defined after amendment
     #: A1: arm B's retained set is its own top-K, so the primary is a single
     #: measure over each arm's *own* retained set rather than a top-K over a
