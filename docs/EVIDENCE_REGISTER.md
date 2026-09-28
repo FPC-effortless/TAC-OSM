@@ -43,7 +43,7 @@ than *sound*.
 
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
-| A pre-registration the run itself checks — the registered design committed as data, and the measurement script refusing to complete a run that does not match it | L0 | protocol | pre-registration practice (the `L1` row below); the machine-readable and self-enforcing form is local | **contract validity is not scientific validity.** The check proves the run matched the registered specification; it does not prove the registered hypothesis is true. A contract-compliant run is a *well-specified* run, not a supported one | none — `src/tac_osm/contract.py`, `contracts/*.json`, enforced by `measure_surrogate.py`, `measure_learn.py`, `measure_matched_h.py` (`1e36d2e`, `d58fd68`) | |
+| A pre-registration the run itself checks — the registered design committed as data, and the measurement script refusing to complete a run that does not match it | L0 | protocol | pre-registration practice (the `L1` row below); the machine-readable and self-enforcing form is local | **contract validity is not scientific validity.** The check proves the run matched the registered specification; it does not prove the registered hypothesis is true. A contract-compliant run is a *well-specified* run, not a supported one. **An amendment is not a revision:** a contract may be amended before the run, with the replaced definition kept as a field, and that is a pre-registration being honest rather than one being edited | none — `src/tac_osm/contract.py`, `contracts/*.json`, enforced by `measure_surrogate.py`, `measure_learn.py`, `measure_matched_h.py`, `measure_retrieval.py` (`1e36d2e`, `d58fd68`, `eed6250`) | |
 
 The distinction this row exists to hold is the one the repository's two
 expensive errors blurred, in the opposite direction from the usual one.
@@ -129,7 +129,7 @@ their bounds attached.
 | Matched-H training is the **worst** row at every evaluation population | L3 | negative | — | any generalisation beyond the registered protocol; the matched-H design is one population schedule | `TACOSM-MATCHED-001`: `routing@1` at H=256 is 0.0740 vs 0.0640 for the H=8-trained row | |
 | The learning rule is the failure, not the population and not the basis | L3 | mechanism | — | this localises the failure; it does not identify the fix | `TACOSM-MATCHED-001`: 5 successes in 500 steps at H=256, weight norm ×12, margin *worsens* | |
 | **Dense supervision improves top-K retrieval but not top-1 routing** | L3 | mechanism | — | "the router learned relevance" — the surrogate is gold-anchored exactly as the outcome reward is | `TACOSM-SURROGATE-001` (F3): primary endpoint +0.0400/+0.0240 within a 0.0600 spread; `recall@16` material; `gold_rank` 74.70 → 25.83 | |
-| `C_total` in v0.1 is `O(H) routing + O(10) execution + O(verification)` | L3 | negative | — | the *desired* cost model `C(\|R\|)` — a flat `C_executed` column means no room to scale, not that scaling was shown | `TACOSM-HS-001` | the retrieval boundary F1 would insert |
+| `C_total` in v0.1 is `O(H) routing + O(10) execution + O(verification)` | L3 | negative | — | the *desired* cost model `C(\|R\|)` — a flat `C_executed` column means no room to scale, not that scaling was shown | `TACOSM-HS-001` | the confirmatory F1 run — the boundary is built, the curve is not measured |
 
 ---
 
@@ -141,7 +141,7 @@ Layer 2 and Layer 3 rows, and each one has a standing blocker.
 
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
-| Computation depends on the relevant subset, not on total history (C5) | L4 | — | — | any measured support at present — v0.1 has no retrieval boundary, so `\|R\|` is not a defined quantity | a capability-vs-computation curve with total and relevant compute measured separately along the same axis | **no retrieval boundary in the loop** — F1 |
+| Computation depends on the relevant subset, not on total history (C5) | L4 | — | — | any measured support at present — v0.1 has no *measured* retrieval boundary. `|R|` is now a defined quantity, because the index and its cost term exist (`retrieval.py`, `candidates_inspected`), but no confirmatory run has been made, so the quantity is defined and unmeasured | a capability-vs-computation curve with total and relevant compute measured separately along the same axis | **the retrieval boundary is built and unrun** — the confirmatory F1 run |
 | Persistent state makes useful computation reusable across time | L4 | — | — | a verified write across a temporal boundary — no result exists | the `V_t → S_{t+1}` proposal/commit path, `M2.2` (`docs/ROADMAP.md`) | **unimplemented** |
 | The integrated system is more economical than full-context at capability parity | L4 | — | — | everything — this is the program's thesis, not a result | the curve in `ROADMAP.md` §"M3.1", measured | all of the above |
 

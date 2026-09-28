@@ -222,10 +222,16 @@ relevant compute measured **separately** along the same axis, not one derived
 from the other, with the capability parity margin declared before the
 confirmatory run.
 
-**BLOCKER:** v0.1 executor has fixed `active_count = max_nodes = 10`; there is
-no retrieval or index boundary in the loop. `|R|` is not a defined quantity,
-so the claim is not merely unsupported — it is currently *unstatable* as a
-measurement.
+**BLOCKER:** v0.1 executor has fixed `active_count = max_nodes = 10`. Until
+M2.1 there was no retrieval or index boundary in the loop, so `|R|` was not a
+defined quantity and the claim was not merely unsupported — it was *unstatable*
+as a measurement. **M2.1 changed the first half of that and not the second.**
+The boundary now exists (`src/tac_osm/retrieval.py`), `|R|` is now a defined
+quantity and is reported per arm as `candidates_inspected`, and the index's
+cost term is registered. **No confirmatory run has been made**, so the claim
+stays UNTESTED: the blocker is now the measurement, not the mechanism's
+absence, and the amendment A1 change to the primary endpoint is what made the
+arms comparable in the first place.
 
 This is the architecture's central efficiency claim and it is *not* supported
 by any measurement in the repository. The honest model of v0.1 cost is:
@@ -240,9 +246,13 @@ column there means the architecture has *no room* to scale, not that scaling
 has been demonstrated. `C_router` is the only cost term that genuinely varies,
 and it grows linearly with H.
 
-The claim becomes testable at `M2.1` (`docs/ROADMAP.md`), where an index
-inserts a retrieval boundary between routing and execution. Until then it must
-not appear in any report or figure as though measured.
+The claim becomes *measurable* at `M2.1` (`docs/ROADMAP.md`), where an index
+inserts a retrieval boundary between routing and execution — and M2.1 has
+built the boundary. What it has not done is run it: the capability-versus-
+computation curve is the registered evidence this claim needs, and a
+confirmatory run is what would produce it. Until that run exists the claim
+must not appear in any report or figure as though measured, however clearly
+`|R|` is now defined.
 
 ---
 
