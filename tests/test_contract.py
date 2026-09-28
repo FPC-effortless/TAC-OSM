@@ -42,6 +42,7 @@ from tac_osm.contract import (  # noqa: E402
     load_contract,
     validate,
 )
+from tac_osm.measurement import results as _results  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONTRACTS_DIR = REPO_ROOT / "contracts"
@@ -395,7 +396,8 @@ def _script_constants(name: str) -> dict:
     # single-arm one, where the name ``ARMS`` would imply a comparison
     # against a control arm that the design does not run. Both spell the
     # registered arm set as a literal for this reader.
-    for want in ("H_LEVELS", "K_LEVELS", "ARMS", "REGISTERED_ARMS"):
+    for want in ("H_LEVELS", "K_LEVELS", "ARMS", "REGISTERED_ARMS",
+                 "EXPERIMENT_ID"):
         for node in ast.walk(tree):
             if isinstance(node, ast.Assign):
                 for target in node.targets:
@@ -596,13 +598,34 @@ def test_the_scripts_load_and_enforce_their_contract(script, experiment_id):
     ``require_*`` calls are the enforcement. Both are required: a script with
     the load but no check has a contract it never consults, and a script with
     the checks but no load cannot name which contract it is enforcing.
+
+    The id may be a literal or a module-level ``EXPERIMENT_ID`` constant. The
+    constant is the better spelling — the script's record provenance, its
+    contract lookup and its smoke report all read one name, so they cannot
+    disagree — but the wiring matters more than the spelling, and both are
+    accepted so the test pins the check rather than the style.
     """
     text = _script_text(script)
-    assert f'load_contract("{experiment_id}")' in text, (
+    loaded = (
+        f'load_contract("{experiment_id}")' in text
+        or f"load_contract(EXPERIMENT_ID)" in text
+    )
+    assert loaded, (
         f"{script} does not load its machine-readable contract "
         f"{experiment_id}; drift from the pre-registration is undetectable "
         "by the run itself"
     )
+    # When the id goes through a constant, the constant must *be* the contract
+    # id: a script whose EXPERIMENT_ID disagrees with its contract has a
+    # record that attributes itself to the wrong pre-registration, which is
+    # the one disagreement that silently invalidates every other check.
+    if "load_contract(EXPERIMENT_ID)" in text and 'load_contract("' not in text:
+        got = _script_constants(script).get("EXPERIMENT_ID")
+        assert got == experiment_id, (
+            f"{script}'s EXPERIMENT_ID is {got!r}, but its contract is "
+            f"{experiment_id!r}; the record would name a pre-registration "
+            "this script does not enforce"
+        )
     for check in (
         "require_steps", "require_eval_steps", "require_levels",
         "require_seeds", "require_arms",
@@ -631,8 +654,14 @@ def test_the_scripts_declare_their_smoke_test(script, experiment_id):
     # The deviation report is the load-bearing half of the flag. A ``--smoke``
     # that skipped the checks and printed nothing would be worse than no
     # contract at all, because the output would be indistinguishable from a
-    # registered run's.
-    assert "not a measurement" in text or "no deviation found" in text
+    # registered run's. The strings live in the shared module now
+    # (:func:`tac_osm.measurement.results.report_smoke`), so what is pinned
+    # here is that the script reaches it rather than its own copy — a script
+    # with its own copy is a script whose five dimensions can drift to four.
+    assert "report_smoke(" in text, (
+        f"{script} does not call the shared smoke report; a private copy can "
+        "list four of the five dimensions and call itself complete"
+    )
     assert experiment_id in text
 
 
@@ -679,13 +708,31 @@ def test_the_smoke_flag_reports_every_deviation():
     Not "the run differs"; the specific steps, eval length, levels, seeds and
     arms, because those are the five quantities the contract pins and a
     reader needs all five to judge whether a reported number is a smoke
-    artefact.
+    artefact. The report lives in the shared module now, so the five
+    dimensions are pinned there — over every contract, since the report is
+    used by all three scripts and a dropped dimension would be silent in all
+    three at once.
     """
-    text = _script_text("measure_surrogate.py")
-    for label in ("steps", "eval_steps", "levels", "seeds", "arms"):
-        assert f'"{label}"' in text, (
-            f"the smoke report does not name {label}, so a smoke run could "
-            "drift on it invisibly"
+    for experiment_id in (cid for _, cid in _WITH_CONTRACT):
+        contract = load_contract(experiment_id)
+        # A run off the registered design on every dimension at once: the
+        # report must name all five, not the subset that first differed.
+        deviations = _results.contract_deviations(
+            contract_steps=contract.steps,
+            contract_eval_steps=contract.eval_steps,
+            contract_h_levels=contract.h_levels,
+            contract_seeds=contract.seeds,
+            contract_arms=[a.name for a in contract.arms],
+            steps=contract.steps + 1,
+            eval_steps=contract.eval_steps + 1,
+            h_levels=(8,),
+            seeds=(0, 1),
+            arms=[a.name for a in contract.arms] + ["unregistered"],
+        )
+        found = {d["dimension"] for d in deviations}
+        assert found == {"steps", "eval_steps", "levels", "seeds", "arms"}, (
+            f"the smoke report for {experiment_id} does not name all five "
+            f"dimensions; found {sorted(found)}"
         )
 
 
@@ -792,18 +839,54 @@ def _summary_with_failing_gate():
         eval_steps = 5
         smoke = True
 
-    return surrogate._build_record(_Args(), [0, 1], (h,), arm_rows, per_seed,
-                                   per_seed_recall, train_stats, False, (h,))
+    # The deviations a smoke run at these values would report. The fixture
+    # *is* a smoke run — steps 20, five eval steps, two seeds — and the
+    # deviations are the record's statement of that, so computing them from
+    # the same shared helper keeps the fixture from asserting a shape the
+    # scripts no longer produce.
+    contract = load_contract("TACOSM-SURROGATE-001")
+    deviations = tuple(_results.contract_deviations(
+        contract_steps=contract.steps,
+        contract_eval_steps=contract.eval_steps,
+        contract_h_levels=contract.h_levels,
+        contract_seeds=contract.seeds,
+        contract_arms=[a.name for a in contract.arms],
+        steps=_Args.steps,
+        eval_steps=_Args.eval_steps,
+        h_levels=(h,),
+        seeds=[0, 1],
+        arms=list(surrogate.ARMS),
+    ))
+
+    return surrogate._build_record(
+        _Args(), [0, 1], (h,), arm_rows, per_seed,
+        per_seed_recall, train_stats, False, (h,),
+        contract_source="contracts/TACOSM-SURROGATE-001.json",
+        deviations=deviations,
+    ).to_dict()
 
 
 def test_the_summary_names_its_experiment_and_contract():
     """A summary that does not say which experiment it is from is unattributable."""
     record = _summary_with_failing_gate()
-    assert record["experiment_id"] == "TACOSM-SURROGATE-001"
-    assert record["contract"].endswith("TACOSM-SURROGATE-001.json")
-    assert Path(record["contract"]).is_file(), (
+    p = record["provenance"]
+    assert p["experiment_id"] == "TACOSM-SURROGATE-001"
+    assert p["contract_source"].endswith("TACOSM-SURROGATE-001.json")
+    assert Path(REPO_ROOT / p["contract_source"]).is_file(), (
         "the summary points at a contract that is not committed"
     )
+    # The hash is what distinguishes two versions of the same id, which a
+    # contract id alone cannot show. ``"missing"`` would mean the script
+    # resolved a different directory than the contract loader — the two
+    # resolvers are deliberate, so a disagreement must be loud.
+    assert p["contract_sha256"] != "missing", (
+        "the record's contract hash is 'missing': the script cannot find the "
+        "contract it was checked against"
+    )
+    assert set(p) == {
+        "experiment_id", "contract_source", "contract_sha256", "git_commit",
+        "script", "python", "recorded_at",
+    }, f"the provenance record is missing fields: {sorted(p)}"
 
 
 def test_the_summary_records_the_design_as_run():
@@ -815,6 +898,15 @@ def test_the_summary_records_the_design_as_run():
     assert d["h_levels"] == [8]
     assert d["arms"] == ["baseline", "analytic_margin", "analytic_margin_clipped"]
     assert d["smoke"] is True and d["contract_checked"] is False
+    # A smoke run that reported no deviation would be indistinguishable from a
+    # registered one; the deviations are what makes the smoke flag worth more
+    # than deleting the check. Here the fixture is off the registered design
+    # on steps, eval length and seeds, and the record must say so.
+    dims = {d2["dimension"] for d2 in d["contract_deviations"]}
+    assert {"steps", "eval_steps", "seeds"} <= dims, (
+        "the record's design does not list every dimension the smoke run is "
+        f"off the registered design on; found {sorted(dims)}"
+    )
 
 
 def test_the_summary_records_a_failed_gate():
@@ -873,8 +965,9 @@ def test_the_summary_carries_the_decision_rule_verdicts():
 def test_the_summary_carries_the_reward_audit():
     """The density audit is the leakage boundary's evidence."""
     record = _summary_with_failing_gate()
-    assert len(record["reward_audit"]) == 3
-    for cell in record["reward_audit"]:
+    audit = record["audit"]["reward"]
+    assert len(audit) == 3
+    for cell in audit:
         assert {"arm", "h", "reward_nonzero_frac", "reward_mean",
                 "reward_min", "reward_max", "sat_hi_frac", "sat_lo_frac",
                 "successes_per_schedule"} <= set(cell), (
@@ -890,8 +983,9 @@ def test_the_summary_carries_per_seed_values():
     moving against four.
     """
     record = _summary_with_failing_gate()
-    assert len(record["per_seed"]) == 3
-    for cell in record["per_seed"]:
+    cells = record["per_seed"]["cells"]
+    assert len(cells) == 3
+    for cell in cells:
         assert "routing@1" in cell
         vals = cell["routing@1"]
         assert set(vals) == {"seeds", "mean", "spread"}
@@ -922,6 +1016,11 @@ def test_the_summary_records_no_status():
         "judgement the instrument is not entitled to make"
     )
     assert "result_note" not in record
+    # The nested payloads are the experiment's own and carry no verdict either.
+    # A ``status`` tucked inside the audit or the per-seed values would be the
+    # same judgement, one layer down where this test would not notice it.
+    assert "status" not in record["audit"]
+    assert "status" not in record["per_seed"]
 
 
 # --------------------------------------------------------------------------- #

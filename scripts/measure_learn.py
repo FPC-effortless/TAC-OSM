@@ -78,7 +78,8 @@ import math
 import os
 import statistics
 import sys
-from typing import Sequence
+from pathlib import Path
+from typing import Any, Sequence
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
@@ -91,6 +92,15 @@ from tac_osm.integrity import (  # noqa: E402
     checkpoint_to_dict,
     snapshot_router,
 )
+from tac_osm.measurement import results as _results  # noqa: E402
+from tac_osm.measurement import verdicts as _verdicts  # noqa: E402
+from tac_osm.measurement.results import (  # noqa: E402
+    Design,
+    Gate,
+    GateCell,
+    MeasurementRecord,
+    Provenance,
+)
 from tac_osm.router import (  # noqa: E402
     EPS_0,
     SCHEDULE_LENGTH,
@@ -99,6 +109,12 @@ from tac_osm.router import (  # noqa: E402
     LearnedRelationalRouter,
     arm_exploration,
 )
+
+#: The experiment this script implements. Used for the contract lookup, the
+#: record's provenance and the smoke report, so the three cannot disagree
+#: about which pre-registration a run claims — a disagreement there is the one
+#: that silently invalidates every other check.
+EXPERIMENT_ID = "TACOSM-LEARN-001"
 
 # The registered levels, unchanged from MATCHED-001. H=32 and H=128 are
 # interpolations; three levels at 8x spacing is what separates a smooth
@@ -422,16 +438,6 @@ def _parse_levels(s: str) -> tuple[int, ...]:
     return levels
 
 
-def _seed_spread(per_seed: list[float]) -> float:
-    """The pre-registered materiality threshold: max minus min across seeds.
-
-    Measured on the *arm's own* values, so it is available before any
-    comparison and does not depend on the baseline. A difference smaller than
-    this is within seed noise, whatever the two means look like.
-    """
-    return max(per_seed) - min(per_seed) if per_seed else 0.0
-
-
 def _check_reproduction(rows: dict[tuple[str, int, int], dict[str, float]],
                         per_seed: dict[tuple[str, int, int], list[float]],
                         seeds: list[int],
@@ -449,34 +455,23 @@ def _check_reproduction(rows: dict[tuple[str, int, int], dict[str, float]],
     whose gate is informative rather than binding — ``main`` prints that note
     when ``--steps`` differs from the registered length.
     """
+    cells = _gate_cells(rows, per_seed, h_levels)
     print()
     print("=" * 72)
     print("GATE: baseline reproduction of TACOSM-MATCHED-001")
     print("=" * 72)
     print(f"tolerance = the baseline arm's own seed spread, over {len(seeds)} seeds")
-    checked = sorted((k, v) for k, v in MATCHED_001_BASELINE.items()
-                     if k[0] in h_levels)
     skipped = sorted(k for k in MATCHED_001_BASELINE if k[0] not in h_levels)
     if skipped:
         print(f"not checked (absent from this run): {[k[0] for k in skipped]}")
     print()
-    ok = True
-    for (h_tr, h_ev), expected in checked:
-        got = rows[("baseline", h_tr, h_ev)]
-        for metric, want in expected.items():
-            vals = per_seed[("baseline", h_tr, h_ev)]
-            spread = _seed_spread(vals)
-            # The gate needs a floor: a spread of exactly 0 (all five seeds
-            # identical) would make the tolerance 0 and demand a bit-exact
-            # reproduction, which is stronger than the protocol promises.
-            tol = max(spread, 0.02)
-            diff = got[metric] - want
-            passed = abs(diff) <= tol
-            ok = ok and passed
-            print(f"  H={h_tr:>3} {metric:<12} published={want:+.4f} "
-                  f"observed={got[metric]:+.4f} diff={diff:+.4f} "
-                  f"tol={tol:.4f} {'PASS' if passed else 'FAIL'}")
+    for cell in cells:
+        mark = "PASS" if cell.passed else "FAIL"
+        print(f"  H={int(cell.cell.split('x')[0]):>3} {cell.metric:<12} "
+              f"published={cell.published:+.4f} observed={cell.observed:+.4f} "
+              f"diff={cell.diff:+.4f} tol={cell.tol:.4f} {mark}")
     print()
+    ok = all(c.passed for c in cells)
     if ok:
         print("GATE PASSED — the frozen baseline reproduces. Reporting all arms.")
     else:
@@ -485,6 +480,39 @@ def _check_reproduction(rows: dict[tuple[str, int, int], dict[str, float]],
         print("reported, because a comparison against a moved baseline is a")
         print("comparison against nothing. See docs/TACOSM-LEARN-001.md.")
     return ok
+
+
+def _gate_cells(rows: dict[tuple[str, int, int], dict[str, float]],
+                per_seed: dict[tuple[str, int, int], list[float]],
+                h_levels: tuple[int, ...]) -> tuple[GateCell, ...]:
+    """The reproduction gate's cells, computed once for the report and the record.
+
+    The tolerance is the seed spread floored at the pre-registered 0.02 (see
+    :func:`tac_osm.measurement.verdicts.materiality_threshold`). A gate with a
+    zero spread would otherwise demand a bit-exact reproduction, which is
+    stronger than the protocol promises.
+    """
+    out: list[GateCell] = []
+    for (h_tr, h_ev), expected in sorted(MATCHED_001_BASELINE.items()):
+        if h_tr not in h_levels:
+            continue
+        key = ("baseline", h_tr, h_ev)
+        if key not in rows or key not in per_seed:
+            continue
+        for metric, want in expected.items():
+            got = rows[key][metric]
+            tol = _verdicts.materiality_threshold(
+                _verdicts.seed_spread(per_seed[key]))
+            out.append(GateCell(
+                cell=f"{h_tr}x{h_ev}",
+                metric=metric,
+                published=want,
+                observed=got,
+                diff=got - want,
+                tol=tol,
+                passed=abs(got - want) <= tol,
+            ))
+    return tuple(out)
 
 
 def _print_training_table(stats: dict[tuple[str, int], list[dict]],
@@ -550,24 +578,242 @@ def _print_deltas(rows: dict[tuple[str, int, int], dict[str, float]],
     ``delta > 0`` is an improvement. A difference counts as material only if it
     exceeds the baseline's seed spread at that H — the pre-registered standard,
     chosen because it is measurable before any arm is compared.
+
+    The spread is taken from the table matching the metric being reported.
+    ``per_seed`` carries ``routing@1`` only; without the ``recall@16`` table a
+    secondary-endpoint delta would have been judged against the *primary*'s
+    spread, and the verdict on the paired endpoint would have been computed
+    from a number the decision rule never states.
     """
-    base = rows[("baseline", h, h)][metric]
-    spread = _seed_spread(per_seed[("baseline", h, h)])
-    print()
-    print(f"{metric} at H={h}: exploration arm minus baseline")
-    print(f"  (baseline = {base:+.4f}; materiality threshold = the baseline's "
-          f"seed spread, {spread:.4f})")
-    for arm in ARMS:
-        if arm == "baseline":
-            continue
-        got = rows[(arm, h, h)][metric]
-        delta = got - base
-        verdict = (
-            "MATERIAL improvement" if delta > max(spread, 0.02)
-            else "MATERIAL harm" if delta < -max(spread, 0.02)
-            else "within seed noise"
+    for line in _delta_lines(rows, per_seed, metric, h):
+        print(line)
+
+
+def _delta_lines(rows: dict[tuple[str, int, int], dict[str, float]],
+                 per_seed: dict[tuple[str, int, int], list[float]],
+                 per_seed_recall: dict[tuple[str, int, int], list[float]],
+                 metric: str, h: int) -> list[str]:
+    """``_print_deltas`` as lines, so the JSON record and the report agree.
+
+    The verdicts are computed once, in :func:`_delta_details`, rather than once
+    for the terminal and once for the JSON; two computations of a verdict is
+    how the record and the report come to disagree about what the rule decided.
+    """
+    details = _delta_details(rows, per_seed, per_seed_recall, metric, h)
+    if not details:
+        return []
+    spread = details[0]["baseline_spread"]
+    base = details[0]["baseline"]
+    return [
+        "",
+        f"{metric} at H={h}: exploration arm minus baseline",
+        f"  (baseline = {base:+.4f}; materiality threshold = the baseline's "
+        f"seed spread, {spread:.4f})",
+        *[f"  {d['arm']:<16} {d['observed']:+.4f}  "
+          f"delta={d['delta']:+.4f}  {d['verdict']}" for d in details],
+    ]
+
+
+def _delta_details(rows: dict[tuple[str, int, int], dict[str, float]],
+                   per_seed: dict[tuple[str, int, int], list[float]],
+                   per_seed_recall: dict[tuple[str, int, int], list[float]],
+                   metric: str, h: int) -> list[dict]:
+    """One decision-rule comparison, as fields.
+
+    The verdict comes from :func:`tac_osm.measurement.verdicts.verdict`, which
+    is the one definition of the rule the repository has. It was duplicated
+    here and in ``measure_surrogate.py`` before the measurement package
+    existed, each with its own copy of the 0.02 floor; a drift between the two
+    would have let the same delta read as material in one experiment and as
+    noise in the other, with nothing in either output to show it.
+
+    The spread is per metric: ``routing@1`` from ``per_seed``,
+    ``recall@16`` from ``per_seed_recall``. A secondary endpoint judged
+    against the primary's spread is not the threshold the decision rule names.
+    """
+    key = ("baseline", h, h)
+    if key not in rows:
+        return []
+    table = per_seed_recall if metric == "recall@16" else per_seed
+    if key not in table:
+        return []
+    base = rows[key][metric]
+    spread = _verdicts.seed_spread(table[key])
+    return [
+        _verdicts.delta_detail(
+            arm=arm, metric=metric, baseline=base,
+            observed=rows[(arm, h, h)][metric],
+            baseline_spread=spread, context={"h": h},
         )
-        print(f"  {arm:<16} {got:+.4f}  delta={delta:+.4f}  {verdict}")
+        for arm in ARMS if arm != "baseline"
+    ]
+
+
+def _build_provenance(contract_source: str) -> Provenance:
+    """What produced the record, so it is self-describing.
+
+    A reader with the JSON should be able to answer "what executable
+    specification produced this number?" without reconstructing a CLI
+    invocation from shell history. The three identifiers are the
+    pre-registration id, a content hash of that contract file, and the commit
+    the script ran from.
+    """
+    return Provenance(
+        experiment_id=EXPERIMENT_ID,
+        contract_source=contract_source,
+        contract_sha256=_results.contract_fingerprint(
+            _results.contract_path_for(__file__, EXPERIMENT_ID)),
+        git_commit=_results.git_commit(),
+        script=Path(__file__).name,
+        python=_results._python_version(),
+        recorded_at=_results.now(),
+    )
+
+
+def _results_path() -> Path:
+    """Where the machine-readable summary is written.
+
+    ``results/`` is gitignored, deliberately: the committed part of a result
+    is the script and the gates, and the JSON is regenerable from the
+    deterministic seeds.
+    """
+    return _results.results_dir_for(__file__) / "learn_001.json"
+
+
+def _build_record(args: argparse.Namespace,
+                  seeds: list[int],
+                  h_levels: tuple[int, ...],
+                  rows: dict[tuple[str, int, int], dict[str, float]],
+                  per_seed: dict[tuple[str, int, int], list[float]],
+                  per_seed_recall: dict[tuple[str, int, int], list[float]],
+                  train_stats: dict[tuple[str, int], list[dict]],
+                  gate_ok: bool,
+                  h_levels_for_gate: tuple[int, ...],
+                  *,
+                  contract_source: str,
+                  deviations: tuple[dict[str, Any], ...] = (),
+                  ) -> MeasurementRecord:
+    """The run as one record.
+
+    The envelope — provenance, design, gate, endpoints, decision rule, audit,
+    per-seed values — is shared with the other measurement scripts through
+    :mod:`tac_osm.measurement.results`, because it is what a reader needs from
+    *every* result. What goes inside ``endpoints``, ``audit`` and ``per_seed``
+    is F2's own: the audit here is the *training-behaviour* trail — the
+    explored fraction and the schedule's epsilon/tau endpoints, which prove the
+    intervention ran as registered — where F3's is the reward density. Same
+    envelope, different evidence, because the two experiments have to prove
+    different things.
+
+    Nothing here is a *claim*. Every field is a number the script measured or
+    a constant it was given; the one field that would be a scientific
+    judgement — ``status`` — is absent on purpose, and is set on the contract
+    after the run.
+    """
+    contract = load_contract(EXPERIMENT_ID)
+    primary = contract.primary_endpoint()
+    decision: list[dict] = []
+    for h in h_levels:
+        decision.extend(_delta_details(rows, per_seed, per_seed_recall, primary, h))
+    if 256 in h_levels:
+        decision.extend(
+            _delta_details(rows, per_seed, per_seed_recall, "recall@16", 256))
+
+    # The training-behaviour audit: the explored fraction, the schedule's
+    # endpoints and the success count the scarcity hypothesis is about. These
+    # are *not* scientific endpoints — the endpoint table answers the research
+    # question, and this is what shows the registered schedule actually ran.
+    audit: list[dict] = []
+    for arm in ARMS:
+        for h in h_levels:
+            cells = train_stats[(arm, h)]
+            audit.append({
+                "arm": arm,
+                "h": h,
+                "explored_frac": statistics.fmean(c["explored_frac"] for c in cells),
+                "successes_per_schedule": statistics.fmean(
+                    c["successes"] for c in cells),
+                "epsilon_first": cells[0]["epsilon_first"],
+                "epsilon_last": cells[-1]["epsilon_last"],
+                "tau_first": cells[0]["tau_first"],
+                "tau_last": cells[-1]["tau_last"],
+            })
+
+    # Per-seed values, because the spread is the materiality threshold and a
+    # mean alone does not show whether the spread and the delta are the same
+    # order of magnitude.
+    per_seed_out: list[dict] = []
+    for arm in ARMS:
+        for h in h_levels:
+            vals = per_seed[(arm, h, h)]
+            rec = per_seed_recall[(arm, h, h)]
+            cell: dict = {
+                "arm": arm,
+                "h": h,
+                "routing@1": {
+                    "seeds": {str(s): v for s, v in zip(seeds, vals)},
+                    "mean": statistics.fmean(vals),
+                    "spread": _verdicts.seed_spread(vals),
+                },
+            }
+            if all(v == v for v in rec):  # NaN-free, i.e. 16 < H
+                cell["recall@16"] = {
+                    "seeds": {str(s): v for s, v in zip(seeds, rec)},
+                    "mean": statistics.fmean(rec),
+                    "spread": _verdicts.seed_spread(rec),
+                }
+            per_seed_out.append(cell)
+
+    smoke = bool(getattr(args, "smoke", False))
+    return MeasurementRecord(
+        provenance=_build_provenance(contract_source),
+        design=Design(
+            steps=args.steps,
+            eval_steps=args.eval_steps,
+            seeds=tuple(seeds),
+            h_levels=tuple(h_levels),
+            k_levels=tuple(K_LEVELS),
+            arms=tuple(ARMS),
+            smoke=smoke,
+            contract_checked=not smoke,
+            deviations=deviations,
+        ),
+        gate=Gate(
+            name="baseline reproduction of TACOSM-MATCHED-001",
+            tolerance=f"the baseline arm's own seed spread, floored at "
+                      f"{_verdicts.SPREAD_FLOOR:g}",
+            passed=gate_ok,
+            cells=_gate_cells(rows, per_seed, h_levels_for_gate),
+        ),
+        endpoints={
+            f"{arm}@H={h}": {
+                k: v for k, v in rows[(arm, h, h)].items() if k != "n_steps"
+            }
+            for arm in ARMS for h in h_levels
+        },
+        decision_rule=tuple(decision),
+        audit={"training": audit},
+        per_seed={"cells": per_seed_out},
+    )
+
+
+def _emit_results(record: MeasurementRecord, out_path: Path) -> None:
+    """Write the machine-readable summary, after the gate and the report.
+
+    The contract made the *design* machine-readable; this makes the *outcome*
+    machine-readable, which is the other half of the same check. A result that
+    exists only as terminal output exists only as long as the terminal's
+    scrollback does.
+
+    The record is written whether the gate passed or failed. A failed gate is
+    a fact about the run, not a reason to delete the evidence: the record is
+    what a later reader would use to see that the run was invalid and why.
+    """
+    _results.write_record(record, out_path)
+    print()
+    print(f"machine-readable summary written to {out_path}")
+    print("  (status is left to the reader: the instrument measures, it does")
+    print("   not arbitrate the decision rule)")
 
 
 def main() -> None:
@@ -598,29 +844,14 @@ def main() -> None:
     # registered design. It weakens no check; it states out loud that this
     # run is not a result, and prints its own deviation, so the output cannot
     # be mistaken for a measurement.
-    contract = load_contract("TACOSM-LEARN-001")
+    contract_source = f"contracts/{EXPERIMENT_ID}.json"
+    contract = load_contract(EXPERIMENT_ID)
+    deviations: tuple[dict[str, Any], ...] = ()
     if args.smoke:
-        print("=" * 72)
-        print("SMOKE TEST — declared with --smoke; this is not a measurement")
-        print("=" * 72)
-        print("The contract check is skipped on the declared deviation, and the")
-        print("deviation is printed here so this output cannot be read as a")
-        print("result of TACOSM-LEARN-001:")
-        problems: list[str] = []
-        for label, got, want in (
-            ("steps", args.steps, contract.steps),
-            ("eval_steps", args.eval_steps, contract.eval_steps),
-            ("levels", list(h_levels), list(contract.h_levels)),
-            ("seeds", sorted(seeds), sorted(contract.seeds)),
-            ("arms", list(ARMS), [a.name for a in contract.arms]),
-        ):
-            if got != want:
-                problems.append(f"  {label}: run has {got}, registered {want}")
-        if problems:
-            print("\n".join(problems))
-        else:
-            print("  no deviation found: the registered design is in force")
-        print()
+        deviations = tuple(_results.report_smoke(
+            contract, EXPERIMENT_ID, steps=args.steps, eval_steps=args.eval_steps,
+            h_levels=h_levels, seeds=seeds, arms=ARMS,
+        ))
     else:
         contract.require_steps(args.steps)
         contract.require_eval_steps(args.eval_steps)
@@ -682,6 +913,7 @@ def main() -> None:
     # -- 3. Evaluate every trained state at its matched H ------------------- #
     rows: dict[tuple[str, int, int], dict[str, float]] = {}
     per_seed: dict[tuple[str, int, int], list[float]] = {}
+    per_seed_recall: dict[tuple[str, int, int], list[float]] = {}
     for arm in ARMS:
         for h in h_levels:
             cells = [_evaluate(h, weights[(arm, h, seed)], seed, args.eval_steps)
@@ -690,13 +922,26 @@ def main() -> None:
                 key: statistics.fmean(c[key] for c in cells) for key in cells[0]
             }
             # Kept per metric so the spread test and the deltas use the same
-            # underlying numbers the means were computed from.
+            # underlying numbers the means were computed from. The
+            # ``recall@16`` table is kept separately: the secondary endpoint's
+            # verdict is judged against its own spread, and a single table
+            # holding only ``routing@1`` would have the paired endpoint read
+            # against the primary's noise floor.
             per_seed[(arm, h, h)] = [c["routing@1"] for c in cells]
+            per_seed_recall[(arm, h, h)] = [c.get("recall@16", float("nan"))
+                                            for c in cells]
 
     # -- 4. The reproduction gate, before any arm is reported -------------- #
-    if not _check_reproduction(rows, per_seed, seeds, h_levels):
+    gate_ok = _check_reproduction(rows, per_seed, seeds, h_levels)
+    if not gate_ok:
         print()
         print("Stopping. No exploration arm is reported.")
+        _emit_results(_build_record(args, seeds, h_levels, rows, per_seed,
+                                    per_seed_recall, train_stats,
+                                    gate_ok, h_levels,
+                                    contract_source=contract_source,
+                                    deviations=deviations),
+                      _results_path())
         return
 
     # -- 5. The endpoints --------------------------------------------------- #
@@ -731,13 +976,37 @@ def main() -> None:
     print("DECISION RULE — delta vs baseline at the primary endpoint")
     print("=" * 72)
     for h in h_levels:
-        _print_deltas(rows, per_seed, "routing@1", h)
+        _print_deltas(rows, per_seed, per_seed_recall, "routing@1", h)
     # ``recall@16`` at the largest registered H is the paired secondary
     # endpoint: ``routing@1`` and ``recall@16`` together are the strong
     # outcome per the decision rule. It is only well-defined where 16 < H.
     if 256 in h_levels:
         print()
-        _print_deltas(rows, per_seed, "recall@16", 256)
+        _print_deltas(rows, per_seed, per_seed_recall, "recall@16", 256)
+
+    # -- 7. Per-seed values, so a mean cannot hide the shape --------------- #
+    # Audit item 5: per-seed values for the endpoints the decision rule reads,
+    # not only the means. The spread test runs on these, and a 5-seed mean that
+    # hides a 4-seed collapse and a 1-seed success is not a result.
+    print()
+    print("=" * 72)
+    print("PER-SEED VALUES — the endpoints the decision rule reads")
+    print("=" * 72)
+    for metric, table in (("routing@1", per_seed), ("recall@16", per_seed_recall)):
+        for h in h_levels:
+            if 16 not in _budgets(h, K_LEVELS) and metric == "recall@16":
+                continue
+            print()
+            print(f"{metric} at H={h}, per seed")
+            print(f"{'arm':<16}" + "".join(f"{'seed' + str(s):>10}" for s in seeds)
+                  + f"{'mean':>10}{'spread':>9}")
+            print("-" * (16 + 10 * len(seeds) + 19))
+            for arm in ARMS:
+                vals = table[(arm, h, h)]
+                mean = statistics.fmean(vals)
+                spread = _verdicts.seed_spread(vals)
+                cells = "".join(f"{v:>10.4f}" for v in vals)
+                print(f"{arm:<16}{cells}{mean:>10.4f}{spread:>9.4f}")
 
     print()
     print("How to read this:")
@@ -756,6 +1025,13 @@ def main() -> None:
     print()
     print("  Interpretation and the consequence that fires are recorded in")
     print("  docs/TACOSM-LEARN-001.md under 'Outcomes'.")
+
+    # -- 8. The machine-readable summary ---------------------------------- #
+    _emit_results(_build_record(args, seeds, h_levels, rows, per_seed,
+                                per_seed_recall, train_stats, gate_ok, h_levels,
+                                contract_source=contract_source,
+                                deviations=deviations),
+                  _results_path())
 
 
 if __name__ == "__main__":

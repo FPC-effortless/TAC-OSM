@@ -136,7 +136,8 @@ import math
 import os
 import statistics
 import sys
-from typing import Sequence
+from pathlib import Path
+from typing import Any, Sequence
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
@@ -149,6 +150,21 @@ from tac_osm.integrity import (  # noqa: E402
     checkpoint_to_dict,
     snapshot_router,
 )
+from tac_osm.measurement import results as _results  # noqa: E402
+from tac_osm.measurement import verdicts as _verdicts  # noqa: E402
+from tac_osm.measurement.results import (  # noqa: E402
+    Design,
+    Gate,
+    GateCell,
+    MeasurementRecord,
+    Provenance,
+)
+
+#: The experiment this script implements. Used for the contract lookup, the
+#: record's provenance and the smoke report, so the three cannot disagree
+#: about which pre-registration a run claims — a disagreement there is the one
+#: that silently invalidates every other check.
+EXPERIMENT_ID = "TACOSM-MATCHED-001"
 
 # H is the candidate count: one relevant item plus H-1 distractors. The 3x3
 # submatrix, not the full 5x5: H=32 and H=128 are interpolations, and three
@@ -386,6 +402,228 @@ def _print_matrix(title: str, metric: str, h_levels: tuple[int, ...],
         print(f"{('H_train=' + str(h_tr)):>12}  {'  '.join(cells)}")
 
 
+def _build_provenance(contract_source: str) -> Provenance:
+    """What produced the record, so it is self-describing.
+
+    A reader with the JSON can answer "what executable specification produced
+    this number?" without reconstructing a CLI invocation. The three
+    identifiers are the pre-registration id, a content hash of that contract
+    file, and the commit the script ran from. See
+    :mod:`tac_osm.measurement.results` for why all three degrade to a stated
+    non-value rather than raising.
+    """
+    return Provenance(
+        experiment_id=EXPERIMENT_ID,
+        contract_source=contract_source,
+        contract_sha256=_results.contract_fingerprint(
+            _results.contract_path_for(__file__, EXPERIMENT_ID)),
+        git_commit=_results.git_commit(),
+        script=Path(__file__).name,
+        python=_results._python_version(),
+        recorded_at=_results.now(),
+    )
+
+
+def _emit_results(record: MeasurementRecord, out_path: Path) -> None:
+    """Write the machine-readable summary.
+
+    The contract made the *design* machine-readable; this makes the *outcome*
+    machine-readable, which is the other half of the same check. ``results/``
+    is gitignored: the committed part of a result is the script and the gates,
+    and the JSON is regenerable from the deterministic seeds.
+    """
+    _results.write_record(record, out_path)
+    print()
+    print(f"machine-readable summary written to {out_path}")
+    print("  (status is left to the reader: the instrument measures, it does")
+    print("   not arbitrate the decision rule)")
+
+
+def _results_path() -> Path:
+    """Where the machine-readable summary is written."""
+    return _results.results_dir_for(__file__) / "matched_001.json"
+
+
+def _gate_cells(oracle: dict[int, float],
+                h_levels: tuple[int, ...]) -> tuple[GateCell, ...]:
+    """The oracle gate's cells, computed once for the report and the record.
+
+    The oracle is the whole gate here: MATCHED-001 registers no reproduction
+    baseline, because it *is* the baseline the other experiments reproduce.
+    What it must establish is weaker and prior — that the task has a unique
+    relation-satisfier at every population, so a learned-arm number from any
+    cell means something.
+    """
+    return tuple(
+        GateCell(
+            cell=f"oracle@{h_ev}",
+            metric="accuracy",
+            published=1.0,
+            observed=oracle[h_ev],
+            diff=oracle[h_ev] - 1.0,
+            tol=0.0,
+            passed=oracle[h_ev] >= 1.0 - 1e-12,
+        )
+        for h_ev in h_levels if h_ev in oracle
+    )
+
+
+def _build_record(args: argparse.Namespace,
+                  seeds: list[int],
+                  h_levels: tuple[int, ...],
+                  rows: dict[tuple[int, int], dict[str, float]],
+                  per_seed: dict[tuple[int, int], list[float]],
+                  per_seed_metric: dict[tuple[int, str], list[float]],
+                  oracle: dict[int, float],
+                  gate_ok: bool,
+                  *,
+                  contract_source: str,
+                  deviations: tuple[dict[str, Any], ...] = (),
+                  ) -> MeasurementRecord:
+    """The run as one record.
+
+    The envelope — provenance, design, gate, endpoints, decision rule, audit,
+    per-seed values — is shared with the other measurement scripts through
+    :mod:`tac_osm.measurement.results`, because it is what a reader needs from
+    *every* result. What goes inside ``endpoints``, ``audit`` and ``per_seed``
+    is MATCHED-001's own: this experiment keys its endpoints by
+    ``h_train x h_eval`` over the full matrix, where F3 and F2 key theirs by
+    arm and level, and neither shape is forced into the other's. Forcing them
+    would produce a third schema that serves neither experiment.
+
+    The ``decision_rule`` payload is the *evidence* the two pre-committed
+    branches read — the diagonal against the H=8 row, per endpoint — rather
+    than a verdict the instrument is not entitled to. MATCHED-001's branches
+    are qualitative: "recovers" and "falls as steeply" are comparisons a
+    reader makes against published numbers, not thresholds, so the record
+    supplies the comparison and not a judgement.
+
+    Nothing here is a *claim*. Every field is a number the script measured or
+    a constant it was given; the one field that would be a scientific
+    judgement — ``status`` — is absent on purpose, and is set on the contract
+    after the run.
+    """
+    contract = load_contract(EXPERIMENT_ID)
+    primary = contract.primary_endpoint()
+    decision: list[dict] = []
+    for h in h_levels:
+        decision.extend(_diagonal_evidence(rows, h, primary))
+    # The secondary endpoints, reported so a reader applying the rule has
+    # every number the pre-registration named and not only the primary.
+    for name in (e.name for e in contract.endpoints if not e.primary):
+        for h in h_levels:
+            if any(name in rows[(h, h_ev)] for h_ev in h_levels):
+                decision.extend(_diagonal_evidence(rows, h, name))
+
+    # The oracle audit: the environment control, per eval population. An
+    # oracle below 1.0 is what invalidates every learned number below it, so
+    # it is recorded per H rather than only printed.
+    audit = [
+        {"h_eval": h_ev, "oracle_accuracy": oracle[h_ev]}
+        for h_ev in h_levels if h_ev in oracle
+    ]
+
+    # Per-seed values on the diagonal, because the diagonal is the new
+    # evidence and a mean alone does not show whether the spread and the
+    # difference between two cells are the same order of magnitude.
+    per_seed_out: list[dict] = []
+    for h in h_levels:
+        vals = per_seed[(h, h)]
+        cell: dict = {
+            "h_train": h,
+            "h_eval": h,
+            "routing@1": {
+                "seeds": {str(s): v for s, v in zip(seeds, vals)},
+                "mean": statistics.fmean(vals),
+                "spread": _verdicts.seed_spread(vals),
+            },
+        }
+        # The secondary endpoints the contract names, where the budget is
+        # well-defined at that population (``16 < H``).
+        for name in (e.name for e in contract.endpoints if not e.primary):
+            if name in rows[(h, h)]:
+                values = per_seed_metric[(h, name)]
+                cell[name] = {
+                    "seeds": {str(s): v for s, v in zip(seeds, values)},
+                    "mean": statistics.fmean(values),
+                    "spread": _verdicts.seed_spread(values),
+                }
+        per_seed_out.append(cell)
+
+    smoke = bool(getattr(args, "smoke", False))
+    return MeasurementRecord(
+        provenance=_build_provenance(contract_source),
+        design=Design(
+            steps=args.steps,
+            eval_steps=args.eval_steps,
+            seeds=tuple(seeds),
+            h_levels=tuple(h_levels),
+            k_levels=tuple(K_LEVELS),
+            arms=tuple(REGISTERED_ARMS),
+            smoke=smoke,
+            contract_checked=not smoke,
+            deviations=deviations,
+        ),
+        gate=Gate(
+            name="oracle accuracy at every eval population (TACOSM-MATCHED-001 "
+                 "registers no reproduction baseline; it is the baseline)",
+            tolerance="oracle accuracy must be exactly 1.0",
+            passed=gate_ok,
+            cells=_gate_cells(oracle, h_levels),
+        ),
+        endpoints={
+            f"{h_tr}x{h_ev}": {k: v for k, v in rows[(h_tr, h_ev)].items()
+                               if k != "n_steps"}
+            for h_tr in h_levels for h_ev in h_levels
+        },
+        decision_rule=tuple(decision),
+        audit={"oracle": audit},
+        per_seed={"cells": per_seed_out},
+    )
+
+
+def _diagonal_evidence(rows: dict[tuple[int, int], dict[str, float]],
+                       h: int, metric: str) -> list[dict]:
+    """The comparison the pre-committed rule reads, for one endpoint.
+
+    Both branches of MATCHED-001's rule are comparisons against a published
+    row: does the diagonal *recover*, and does it fall *as steeply as the
+    H=8 transfer row*. Those are thresholds a reader applies, not ones the
+    instrument can compute, so what the record supplies is the two numbers and
+    their difference at every population — the evidence the rule is applied
+    *to*, and not the rule's conclusion. ``h=8`` is the reference row itself,
+    so at that population the comparison is the row against itself and it is
+    reported as such rather than omitted, which would hide the fact that the
+    reference is part of the same matrix.
+
+    The ``null`` fields mark a metric the population is too small for —
+    ``recall@16`` at ``H <= 16`` is not a budget, and the matrix prints ``--``
+    for the same reason. A reader applying the rule skips a row whose
+    reference is null; a record that dropped the row would not show that the
+    endpoint was undefined at that population rather than unmeasured.
+    """
+    diag = rows.get((h, h))
+    ref = rows.get((8, h))
+    if diag is None or ref is None:
+        return []
+    if metric not in diag or metric not in ref:
+        return [{
+            "endpoint": metric,
+            "h_eval": h,
+            "h_train_matched": None,
+            "h_train_8_transfer": None,
+            "delta_matched_minus_8x_transfer": None,
+        }]
+    got, want = diag[metric], ref[metric]
+    return [{
+        "endpoint": metric,
+        "h_eval": h,
+        "h_train_matched": got,
+        "h_train_8x_transfer": want,
+        "delta_matched_minus_8x_transfer": got - want,
+    }]
+
+
 def _parse_levels(s: str) -> tuple[int, ...]:
     levels = tuple(int(x) for x in s.split(",") if x.strip())
     if not levels:
@@ -423,31 +661,16 @@ def main() -> None:
     #
     # ``--smoke`` is the one declared way to run something that is not the
     # registered design. It weakens no check; it states out loud that this run
-    # is not a result, and prints its own deviation, so the output cannot be
-    # mistaken for a measurement.
-    contract = load_contract("TACOSM-MATCHED-001")
+    # is not a result, and prints its own deviation in full, so the output
+    # cannot be mistaken for a measurement.
+    contract_source = f"contracts/{EXPERIMENT_ID}.json"
+    contract = load_contract(EXPERIMENT_ID)
+    deviations: tuple[dict[str, Any], ...] = ()
     if args.smoke:
-        print("=" * 72)
-        print("SMOKE TEST — declared with --smoke; this is not a measurement")
-        print("=" * 72)
-        print("The contract check is skipped on the declared deviation, and the")
-        print("deviation is printed here so this output cannot be read as a")
-        print("result of TACOSM-MATCHED-001:")
-        problems: list[str] = []
-        for label, got, want in (
-            ("steps", args.steps, contract.steps),
-            ("eval_steps", args.eval_steps, contract.eval_steps),
-            ("levels", list(h_levels), list(contract.h_levels)),
-            ("seeds", sorted(seeds), sorted(contract.seeds)),
-            ("arms", list(REGISTERED_ARMS), [a.name for a in contract.arms]),
-        ):
-            if got != want:
-                problems.append(f"  {label}: run has {got}, registered {want}")
-        if problems:
-            print("\n".join(problems))
-        else:
-            print("  no deviation found: the registered design is in force")
-        print()
+        deviations = tuple(_results.report_smoke(
+            contract, EXPERIMENT_ID, steps=args.steps, eval_steps=args.eval_steps,
+            h_levels=h_levels, seeds=seeds, arms=REGISTERED_ARMS,
+        ))
     else:
         contract.require_steps(args.steps)
         contract.require_eval_steps(args.eval_steps)
@@ -464,10 +687,17 @@ def main() -> None:
     # -- 1. Oracle sanity, before any learned number is printed ------------- #
     # Printed first because an oracle below 1.0 invalidates everything that
     # follows it in this table, and a reader should be able to stop there.
+    # This is also the run's gate: MATCHED-001 registers no reproduction
+    # baseline (it *is* the baseline the later experiments reproduce), so the
+    # control it must establish is prior to any comparison — that the task has
+    # a unique relation-satisfier at this population.
+    oracle: dict[int, float] = {}
     print("oracle accuracy (environment control; must be 1.0):")
     for h_ev in h_levels:
         accs = [_oracle_check(h_ev, s, args.eval_steps) for s in seeds]
-        print(f"  H_eval={h_ev:>5}: {statistics.fmean(accs):.4f}")
+        oracle[h_ev] = statistics.fmean(accs)
+        print(f"  H_eval={h_ev:>5}: {oracle[h_ev]:.4f}")
+    gate_ok = all(acc >= 1.0 - 1e-12 for acc in oracle.values())
 
     # -- 2. Train one router per (train-H, seed) --------------------------- #
     # A fresh router per cell: the weights are the cell's only difference, and
@@ -491,13 +721,27 @@ def main() -> None:
     # cell, which is what makes the diagonal a matched-population measurement
     # rather than a transfer one.
     rows: dict[tuple[int, int], dict[str, float]] = {}
+    # Per-seed values, keyed by cell for the primary endpoint and by
+    # (eval-H, metric) for the rest. The spread is what separates a real
+    # difference between two cells from sampling error, and a mean alone does
+    # not show whether the spread and the difference are the same order of
+    # magnitude. The diagonal is keyed by ``(h, h)`` in both dicts, which is
+    # what the record reads.
+    per_seed: dict[tuple[int, int], list[float]] = {}
+    per_seed_metric: dict[tuple[int, str], list[float]] = {}
     for h_tr in h_levels:
         for h_ev in h_levels:
-            per_seed = [_evaluate(h_ev, trained[(h_tr, seed)], seed, args.eval_steps)
-                        for seed in seeds]
+            cells = [_evaluate(h_ev, trained[(h_tr, seed)], seed, args.eval_steps)
+                     for seed in seeds]
             rows[(h_tr, h_ev)] = {
-                key: statistics.fmean(r[key] for r in per_seed) for key in per_seed[0]
+                key: statistics.fmean(c[key] for c in cells) for key in cells[0]
             }
+            per_seed[(h_tr, h_ev)] = [c["routing@1"] for c in cells]
+            if h_tr == h_ev:
+                for key in cells[0]:
+                    if key == "n_steps":
+                        continue
+                    per_seed_metric[(h_ev, key)] = [c[key] for c in cells]
 
     # -- 4. Report --------------------------------------------------------- #
     _print_matrix("routing@1 — the argmax decision", "routing@1", h_levels, rows)
@@ -546,6 +790,45 @@ def main() -> None:
     print("  recall with a large delta@4 has a handful of strong distractors")
     print("  and a wide field behind them. Those need different retrieval")
     print("  budgets, and recall alone cannot tell them apart.")
+
+    # -- 5. Per-seed values, so a mean cannot hide the shape --------------- #
+    # The diagonal is the new evidence, so its per-seed values are the ones a
+    # reader needs in order to judge whether the difference between two cells
+    # is larger than the cells' own spread. A 5-seed mean that hides a 4-seed
+    # collapse and a 1-seed success is not a result, and the matrix above shows
+    # only the mean.
+    print()
+    print("=" * 72)
+    print("PER-SEED VALUES — the diagonal, the endpoints the decision rule reads")
+    print("=" * 72)
+    for h in h_levels:
+        vals = per_seed[(h, h)]
+        print()
+        print(f"routing@1 at H_train=H_eval={h}, per seed")
+        print(f"{'H_train':>12}" + "".join(f"{'seed' + str(s):>10}" for s in seeds)
+              + f"{'mean':>10}{'spread':>9}")
+        print("-" * (12 + 10 * len(seeds) + 19))
+        mean = statistics.fmean(vals)
+        spread = _verdicts.seed_spread(vals)
+        print(f"{('H=' + str(h)):>12}" + "".join(f"{v:>10.4f}" for v in vals)
+              + f"{mean:>10.4f}{spread:>9.4f}")
+        for name in (e.name for e in load_contract(EXPERIMENT_ID).endpoints
+                     if not e.primary):
+            if (h, name) not in per_seed_metric:
+                continue
+            pv = per_seed_metric[(h, name)]
+            pmean = statistics.fmean(pv)
+            pspread = _verdicts.seed_spread(pv)
+            print(f"{name:>12}" + "".join(f"{v:>10.4f}" for v in pv)
+                  + f"{pmean:>10.4f}{pspread:>9.4f}")
+
+    # -- 6. The machine-readable summary ---------------------------------- #
+    _emit_results(
+        _build_record(args, seeds, h_levels, rows, per_seed, per_seed_metric,
+                      oracle, gate_ok,
+                      contract_source=contract_source,
+                      deviations=deviations),
+        _results_path())
 
 
 if __name__ == "__main__":

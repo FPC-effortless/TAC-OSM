@@ -104,13 +104,12 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import json
 import math
 import os
 import statistics
 import sys
 from pathlib import Path
-from typing import Sequence
+from typing import Any, Sequence
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
@@ -123,6 +122,15 @@ from tac_osm.integrity import (  # noqa: E402
     checkpoint_to_dict,
     snapshot_router,
 )
+from tac_osm.measurement import results as _results  # noqa: E402
+from tac_osm.measurement import verdicts as _verdicts  # noqa: E402
+from tac_osm.measurement.results import (  # noqa: E402
+    Design,
+    Gate,
+    GateCell,
+    MeasurementRecord,
+    Provenance,
+)
 from tac_osm.model import baseline_reward  # noqa: E402
 from tac_osm.rewards import AnalyticMarginReward, arm_reward, baseline_arm_names  # noqa: E402
 from tac_osm.router import (  # noqa: E402
@@ -130,6 +138,12 @@ from tac_osm.router import (  # noqa: E402
     TAU_END,
     LearnedRelationalRouter,
 )
+
+#: The experiment this script implements. Used for the contract lookup, the
+#: record's provenance and the smoke report, so the three cannot disagree
+#: about which pre-registration a run claims — a disagreement there is the one
+#: that silently invalidates every other check.
+EXPERIMENT_ID = "TACOSM-SURROGATE-001"
 
 # The registered levels, unchanged from MATCHED-001: three at 8x spacing,
 # which is what separates a smooth population effect from a training
@@ -445,16 +459,6 @@ def _parse_levels(s: str) -> tuple[int, ...]:
     return levels
 
 
-def _seed_spread(per_seed: list[float]) -> float:
-    """The pre-registered materiality threshold: max minus min across seeds.
-
-    Measured on the *arm's own* values, so it is available before any
-    comparison and does not depend on the baseline. A difference smaller than
-    this is within seed noise, whatever the two means look like.
-    """
-    return max(per_seed) - min(per_seed) if per_seed else 0.0
-
-
 def _check_reproduction(rows: dict[tuple[str, int, int], dict[str, float]],
                         per_seed: dict[tuple[str, int, int], list[float]],
                         seeds: list[int],
@@ -472,34 +476,23 @@ def _check_reproduction(rows: dict[tuple[str, int, int], dict[str, float]],
     whose gate is informative rather than binding — ``main`` prints that note
     when ``--steps`` differs from the registered length.
     """
+    cells = _gate_cells(rows, per_seed, h_levels)
     print()
     print("=" * 72)
     print("GATE: baseline reproduction of TACOSM-MATCHED-001")
     print("=" * 72)
     print(f"tolerance = the baseline arm's own seed spread, over {len(seeds)} seeds")
-    checked = sorted((k, v) for k, v in MATCHED_001_BASELINE.items()
-                     if k[0] in h_levels)
     skipped = sorted(k for k in MATCHED_001_BASELINE if k[0] not in h_levels)
     if skipped:
         print(f"not checked (absent from this run): {[k[0] for k in skipped]}")
     print()
-    ok = True
-    for (h_tr, h_ev), expected in checked:
-        got = rows[("baseline", h_tr, h_ev)]
-        for metric, want in expected.items():
-            vals = per_seed[("baseline", h_tr, h_ev)]
-            spread = _seed_spread(vals)
-            # The gate needs a floor: a spread of exactly 0 (all five seeds
-            # identical) would make the tolerance 0 and demand a bit-exact
-            # reproduction, which is stronger than the protocol promises.
-            tol = max(spread, 0.02)
-            diff = got[metric] - want
-            passed = abs(diff) <= tol
-            ok = ok and passed
-            print(f"  H={h_tr:>3} {metric:<12} published={want:+.4f} "
-                  f"observed={got[metric]:+.4f} diff={diff:+.4f} "
-                  f"tol={tol:.4f} {'PASS' if passed else 'FAIL'}")
+    for cell in cells:
+        mark = "PASS" if cell.passed else "FAIL"
+        print(f"  H={int(cell.cell.split('x')[0]):>3} {cell.metric:<12} "
+              f"published={cell.published:+.4f} observed={cell.observed:+.4f} "
+              f"diff={cell.diff:+.4f} tol={cell.tol:.4f} {mark}")
     print()
+    ok = all(c.passed for c in cells)
     if ok:
         print("GATE PASSED — the frozen baseline reproduces. Reporting all arms.")
     else:
@@ -510,38 +503,37 @@ def _check_reproduction(rows: dict[tuple[str, int, int], dict[str, float]],
     return ok
 
 
-def _gate_details(rows: dict[tuple[str, int, int], dict[str, float]],
-                  per_seed: dict[tuple[str, int, int], list[float]],
-                  h_levels: tuple[int, ...]) -> list[dict]:
-    """The reproduction gate, as fields.
+def _gate_cells(rows: dict[tuple[str, int, int], dict[str, float]],
+                per_seed: dict[tuple[str, int, int], list[float]],
+                h_levels: tuple[int, ...]) -> tuple[GateCell, ...]:
+    """The reproduction gate's cells, computed once for the report and the record.
 
-    So a reader does not have to re-run the experiment to see *why* the gate
-    decided what it decided. ``tol`` is the tolerance actually used, which is
-    the spread floored at 0.02 — the floor is where a gate with a zero spread
-    would otherwise demand a bit-exact reproduction, and it belongs in the
-    record for the same reason the spread does.
+    The tolerance is the seed spread floored at the pre-registered 0.02 (see
+    :func:`tac_osm.measurement.verdicts.materiality_threshold`). A gate with a
+    zero spread would otherwise demand a bit-exact reproduction, which is
+    stronger than the protocol promises.
     """
-    out: list[dict] = []
+    out: list[GateCell] = []
     for (h_tr, h_ev), expected in sorted(MATCHED_001_BASELINE.items()):
         if h_tr not in h_levels:
             continue
         key = ("baseline", h_tr, h_ev)
-        if key not in rows:
+        if key not in rows or key not in per_seed:
             continue
         for metric, want in expected.items():
-            vals = per_seed[key]
-            spread = _seed_spread(vals)
             got = rows[key][metric]
-            out.append({
-                "cell": f"{h_tr}x{h_ev}",
-                "metric": metric,
-                "published": want,
-                "observed": got,
-                "diff": got - want,
-                "tol": max(spread, 0.02),
-                "passed": abs(got - want) <= max(spread, 0.02),
-            })
-    return out
+            tol = _verdicts.materiality_threshold(
+                _verdicts.seed_spread(per_seed[key]))
+            out.append(GateCell(
+                cell=f"{h_tr}x{h_ev}",
+                metric=metric,
+                published=want,
+                observed=got,
+                diff=got - want,
+                tol=tol,
+                passed=abs(got - want) <= tol,
+            ))
+    return tuple(out)
 
 
 def _print_reward_audit(train_stats: dict[tuple[str, int], list[dict]],
@@ -626,44 +618,27 @@ def _delta_lines(rows: dict[tuple[str, int, int], dict[str, float]],
                  metric: str, h: int) -> list[str]:
     """``_print_deltas`` as lines, so the JSON record and the report agree.
 
-    The decision-rule verdicts are computed once, here, rather than once for
-    the terminal and once for the JSON; two computations of a verdict is how
-    the record and the report come to disagree about what the rule decided.
-    The verdicts reach the JSON record through ``_delta_details``, which
-    shares this function.
+    The decision-rule verdicts are computed once, in
+    :func:`_delta_details`, rather than once for the terminal and once for
+    the JSON; two computations of a verdict is how the record and the report
+    come to disagree about what the rule decided. This function renders those
+    verdicts for the terminal, and it renders them only.
     """
-    base = rows[("baseline", h, h)][metric]
-    spread = _seed_spread(per_seed[("baseline", h, h)])
+    details = _delta_details(rows, per_seed, metric, h)
+    if not details:
+        return []
+    spread = details[0]["baseline_spread"]
+    base = details[0]["baseline"]
     lines = [
         "",
         f"{metric} at H={h}: surrogate arm minus baseline",
         f"  (baseline = {base:+.4f}; materiality threshold = the baseline's "
         f"seed spread, {spread:.4f})",
     ]
-    for arm in ARMS:
-        if arm == "baseline":
-            continue
-        got = rows[(arm, h, h)][metric]
-        delta = got - base
-        verdict = _verdict(delta, spread)
-        lines.append(f"  {arm:<22} {got:+.4f}  delta={delta:+.4f}  {verdict}")
+    for d in details:
+        lines.append(f"  {d['arm']:<22} {d['observed']:+.4f}  "
+                     f"delta={d['delta']:+.4f}  {d['verdict']}")
     return lines
-
-
-def _verdict(delta: float, spread: float) -> str:
-    """The pre-registered materiality verdict for one delta.
-
-    Extracted so the terminal report and the JSON record apply the *same*
-    rule. The floor of 0.02 is the pre-registered one: a spread below 2% at
-    100 evaluation steps is sampling error, not the experiment's noise floor,
-    and using it as the threshold would let a 1.5% difference be called
-    material.
-    """
-    if delta > max(spread, 0.02):
-        return "MATERIAL improvement"
-    if delta < -max(spread, 0.02):
-        return "MATERIAL harm"
-    return "within seed noise"
 
 
 def _delta_details(rows: dict[tuple[str, int, int], dict[str, float]],
@@ -671,32 +646,52 @@ def _delta_details(rows: dict[tuple[str, int, int], dict[str, float]],
                    metric: str, h: int) -> list[dict]:
     """One decision-rule comparison, as fields.
 
-    The verdict is computed by the same call as the terminal report, so a
-    reader comparing the two finds no discrepancy to explain.
+    The verdict comes from :func:`tac_osm.measurement.verdicts.verdict`, which
+    is the one definition of the rule the repository has. It was duplicated
+    here and in ``measure_learn.py`` before the measurement package existed,
+    each with its own copy of the 0.02 floor; a drift between the two would
+    have let the same delta read as material in one experiment and as noise in
+    the other, with nothing in either output to show it.
     """
-    base = rows[("baseline", h, h)][metric]
-    spread = _seed_spread(per_seed[("baseline", h, h)])
+    key = ("baseline", h, h)
+    if key not in rows or key not in per_seed:
+        return []
+    base = rows[key][metric]
+    spread = _verdicts.seed_spread(per_seed[key])
     out: list[dict] = []
     for arm in ARMS:
         if arm == "baseline":
             continue
         got = rows[(arm, h, h)][metric]
-        delta = got - base
-        out.append({
-            "arm": arm,
-            "metric": metric,
-            "h": h,
-            "baseline": base,
-            "observed": got,
-            "delta": delta,
-            "baseline_spread": spread,
-            "threshold": max(spread, 0.02),
-            "verdict": _verdict(delta, spread),
-        })
+        out.append(_verdicts.delta_detail(
+            arm=arm, metric=metric, baseline=base, observed=got,
+            baseline_spread=spread, context={"h": h},
+        ))
     return out
 
 
-def _emit_results(record: dict, out_path: Path) -> None:
+def _build_provenance(contract_source: str) -> Provenance:
+    """What produced the record, so it is self-describing.
+
+    A reader with the JSON should be able to answer "what executable
+    specification produced this number?" without reconstructing a CLI
+    invocation from shell history. The three identifiers are the
+    pre-registration id, a content hash of that contract file, and the commit
+    the script ran from.
+    """
+    return Provenance(
+        experiment_id=EXPERIMENT_ID,
+        contract_source=contract_source,
+        contract_sha256=_results.contract_fingerprint(
+            _results.contract_path_for(__file__, EXPERIMENT_ID)),
+        git_commit=_results.git_commit(),
+        script=Path(__file__).name,
+        python=_results._python_version(),
+        recorded_at=_results.now(),
+    )
+
+
+def _emit_results(record: MeasurementRecord, out_path: Path) -> None:
     """Write the machine-readable summary, after the gate and the report.
 
     The contract made the *design* machine-readable; this makes the *outcome*
@@ -708,19 +703,8 @@ def _emit_results(record: dict, out_path: Path) -> None:
     The record is written whether the gate passed or failed. A failed gate is
     a fact about the run, not a reason to delete the evidence: the record is
     what a later reader would use to see that the run was invalid and why.
-
-    ``status`` is the one field a human sets, and it is *not* computed here.
-    The status of an experiment is a scientific judgement recorded against the
-    pre-registration; having the script fill it in would make the *instrument*
-    the *arbiter*. The script records what was measured and lets the status be
-    written by whoever reads the decision rule — the same separation as the
-    contract's ``status`` field, filled after the run.
     """
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = out_path.with_suffix(out_path.suffix + ".tmp")
-    tmp.write_text(json.dumps(record, indent=2, sort_keys=False) + "\n",
-                   encoding="utf-8")
-    tmp.replace(out_path)
+    _results.write_record(record, out_path)
     print()
     print(f"machine-readable summary written to {out_path}")
     print("  (status is left to the reader: the instrument measures, it does")
@@ -736,8 +720,7 @@ def _results_path() -> Path:
     whoever runs the script without becoming an artifact that has to be kept
     consistent by hand.
     """
-    here = Path(__file__).resolve().parent
-    return here.parent / "results" / "surrogate_001.json"
+    return _results.results_dir_for(__file__) / "surrogate_001.json"
 
 
 def _build_record(args: argparse.Namespace,
@@ -748,20 +731,27 @@ def _build_record(args: argparse.Namespace,
                   per_seed_recall: dict[tuple[str, int, int], list[float]],
                   train_stats: dict[tuple[str, int], list[dict]],
                   gate_ok: bool,
-                  h_levels_for_gate: tuple[int, ...]) -> dict:
-    """The run as one JSON document.
+                  h_levels_for_gate: tuple[int, ...],
+                  *,
+                  contract_source: str,
+                  deviations: tuple[dict[str, Any], ...] = (),
+                  ) -> MeasurementRecord:
+    """The run as one record.
 
-    Six parts, each of which a reader would otherwise have to reconstruct
-    from the terminal: the design as it ran, the gate, the endpoints, the
-    decision-rule verdicts, the reward density audit, and the per-seed values
-    that the verdicts' thresholds are computed from.
+    The envelope — provenance, design, gate, endpoints, decision rule, audit,
+    per-seed values — is shared with the other measurement scripts through
+    :mod:`tac_osm.measurement.results`, because it is what a reader needs from
+    *every* result. What goes inside ``endpoints``, ``reward_audit`` and
+    ``per_seed`` is F3's own: this experiment keys its endpoints by arm and
+    level, MATCHED-001 keys its by ``h_train x h_eval``, and neither is forced
+    into the other's shape.
 
     Nothing here is a *claim*. Every field is a number the script measured or
-    a constant it was given; the one field that is a scientific judgement —
-    ``status`` — is absent on purpose, and is set on the contract after the
-    run.
+    a constant it was given; the one field that would be a scientific
+    judgement — ``status`` — is absent on purpose, and is set on the contract
+    after the run.
     """
-    contract = load_contract("TACOSM-SURROGATE-001")
+    contract = load_contract(EXPERIMENT_ID)
     primary = contract.primary_endpoint()
     decision: list[dict] = []
     for h in h_levels:
@@ -803,47 +793,49 @@ def _build_record(args: argparse.Namespace,
                 "routing@1": {
                     "seeds": {str(s): v for s, v in zip(seeds, vals)},
                     "mean": statistics.fmean(vals),
-                    "spread": _seed_spread(vals),
+                    "spread": _verdicts.seed_spread(vals),
                 },
             }
             if all(v == v for v in rec):  # NaN-free, i.e. 16 < H
                 cell["recall@16"] = {
                     "seeds": {str(s): v for s, v in zip(seeds, rec)},
                     "mean": statistics.fmean(rec),
-                    "spread": _seed_spread(rec),
+                    "spread": _verdicts.seed_spread(rec),
                 }
             per_seed_out.append(cell)
 
-    return {
-        "experiment_id": "TACOSM-SURROGATE-001",
-        "contract": "contracts/TACOSM-SURROGATE-001.json",
-        "design": {
-            "steps": args.steps,
-            "eval_steps": args.eval_steps,
-            "seeds": seeds,
-            "h_levels": list(h_levels),
-            "k_levels": list(K_LEVELS),
-            "arms": list(ARMS),
-            "smoke": bool(getattr(args, "smoke", False)),
-            "contract_checked": not bool(getattr(args, "smoke", False)),
-        },
-        "gate": {
-            "name": "baseline reproduction of TACOSM-MATCHED-001",
-            "tolerance": "the baseline arm's own seed spread, floored at 0.02",
-            "passed": gate_ok,
-            "cells": _gate_details(rows, per_seed, h_levels_for_gate),
-        },
-        "endpoints": {
+    smoke = bool(getattr(args, "smoke", False))
+    return MeasurementRecord(
+        provenance=_build_provenance(contract_source),
+        design=Design(
+            steps=args.steps,
+            eval_steps=args.eval_steps,
+            seeds=tuple(seeds),
+            h_levels=tuple(h_levels),
+            k_levels=tuple(K_LEVELS),
+            arms=tuple(ARMS),
+            smoke=smoke,
+            contract_checked=not smoke,
+            deviations=deviations,
+        ),
+        gate=Gate(
+            name="baseline reproduction of TACOSM-MATCHED-001",
+            tolerance=f"the baseline arm's own seed spread, floored at "
+                      f"{_verdicts.SPREAD_FLOOR:g}",
+            passed=gate_ok,
+            cells=_gate_cells(rows, per_seed, h_levels_for_gate),
+        ),
+        endpoints={
             f"{arm}@H={h}": {
                 k: v for k, v in rows[(arm, h, h)].items()
                 if k != "n_steps"
             }
             for arm in ARMS for h in h_levels
         },
-        "decision_rule": decision,
-        "reward_audit": audit,
-        "per_seed": per_seed_out,
-    }
+        decision_rule=tuple(decision),
+        audit={"reward": audit},
+        per_seed={"cells": per_seed_out},
+    )
 
 
 def main() -> None:
@@ -875,29 +867,14 @@ def main() -> None:
     # this run is not a result, which is the difference between a smoke test
     # and an unreported deviation. A smoke run still prints its deviation in
     # full, below, so its output cannot be mistaken for a measurement.
-    contract = load_contract("TACOSM-SURROGATE-001")
+    contract_source = f"contracts/{EXPERIMENT_ID}.json"
+    contract = load_contract(EXPERIMENT_ID)
+    deviations: tuple[dict[str, Any], ...] = ()
     if args.smoke:
-        print("=" * 72)
-        print("SMOKE TEST — declared with --smoke; this is not a measurement")
-        print("=" * 72)
-        print("The contract check is skipped on the declared deviation, and the")
-        print("deviation is printed here so this output cannot be read as a")
-        print("result of TACOSM-SURROGATE-001:")
-        problems: list[str] = []
-        for label, got, want in (
-            ("steps", args.steps, contract.steps),
-            ("eval_steps", args.eval_steps, contract.eval_steps),
-            ("levels", list(h_levels), list(contract.h_levels)),
-            ("seeds", sorted(seeds), sorted(contract.seeds)),
-            ("arms", list(ARMS), [a.name for a in contract.arms]),
-        ):
-            if got != want:
-                problems.append(f"  {label}: run has {got}, registered {want}")
-        if problems:
-            print("\n".join(problems))
-        else:
-            print("  no deviation found: the registered design is in force")
-        print()
+        deviations = tuple(_results.report_smoke(
+            contract, EXPERIMENT_ID, steps=args.steps, eval_steps=args.eval_steps,
+            h_levels=h_levels, seeds=seeds, arms=ARMS,
+        ))
     else:
         contract.require_steps(args.steps)
         contract.require_eval_steps(args.eval_steps)
@@ -979,7 +956,9 @@ def main() -> None:
         print("Stopping. No surrogate arm is reported.")
         _emit_results(_build_record(args, seeds, h_levels, rows, per_seed,
                                     per_seed_recall, train_stats,
-                                    gate_ok, h_levels),
+                                    gate_ok, h_levels,
+                                    contract_source=contract_source,
+                                    deviations=deviations),
                       _results_path())
         return
 
@@ -1054,7 +1033,7 @@ def main() -> None:
             for arm in ARMS:
                 vals = table[(arm, h, h)]
                 mean = statistics.fmean(vals)
-                spread = _seed_spread(vals)
+                spread = _verdicts.seed_spread(vals)
                 cells = "".join(f"{v:>10.4f}" for v in vals)
                 print(f"{arm:<22}{cells}{mean:>10.4f}{spread:>9.4f}")
 
@@ -1077,8 +1056,10 @@ def main() -> None:
 
     # -- 8. The machine-readable summary ---------------------------------- #
     _emit_results(_build_record(args, seeds, h_levels, rows, per_seed,
-                                per_seed_recall, train_stats, True, h_levels),
-                                    _results_path())
+                                per_seed_recall, train_stats, True, h_levels,
+                                contract_source=contract_source,
+                                deviations=deviations),
+                  _results_path())
 
 
 if __name__ == "__main__":

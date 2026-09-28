@@ -33,6 +33,37 @@ live: the blocker names the next experiment.
 Rows established outside TAC-OSM, or settled by a TAC-OSM experiment that is
 now closed. The mechanism transfers; the numbers do not.
 
+### The research infrastructure
+
+Rows no experiment is asked to re-derive. They are inherited as *infrastructure*
+— a way of measuring — which is why their `NOT INHERITED` field is the one that
+matters most here: **infrastructure is not evidence.** A protocol row in this
+subsection says a measurement is *checkable*, and checkable is a narrower claim
+than *sound*.
+
+| Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
+|---|---|---|---|---|---|---|
+| A pre-registration the run itself checks — the registered design committed as data, and the measurement script refusing to complete a run that does not match it | L0 | protocol | pre-registration practice (the `L1` row below); the machine-readable and self-enforcing form is local | **contract validity is not scientific validity.** The check proves the run matched the registered specification; it does not prove the registered hypothesis is true. A contract-compliant run is a *well-specified* run, not a supported one | none — `src/tac_osm/contract.py`, `contracts/*.json`, enforced by `measure_surrogate.py`, `measure_learn.py`, `measure_matched_h.py` (`1e36d2e`, `d58fd68`) | |
+
+The distinction this row exists to hold is the one the repository's two
+expensive errors blurred, in the opposite direction from the usual one.
+TACOSM-HS-001 and `dd8f63c` were runs whose numbers did not refer to what the
+docs said they did. Making the specification executable closes that hole — and
+it opens a new one if the check is read as more than it is:
+
+```
+contract validity  ≠  scientific validity
+a compliant run     ≠  a supported hypothesis
+```
+
+A contract pins what is held constant, what is being tested, and what counts.
+It deliberately does **not** pin outcomes, because a contract that encoded the
+expected result would be a foregone conclusion rather than a pre-registration.
+So the strongest statement the infrastructure licenses is *"this number came
+from the design that was committed before the run"* — which is a statement
+about provenance, not about the world. No row in `CLAIMS.md` moves status
+because a contract check passed; a claim moves when a measurement moves.
+
 ### External mechanisms
 
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
@@ -155,3 +186,14 @@ Three documents now record provenance, and they are not redundant:
 The three agree by construction: a CLAIMS entry cites its experiment, the
 experiment's rows appear here, and the imported components appear in the
 provenance ledger. A disagreement between them is a bug.
+
+A fourth, narrower ledger now exists alongside them, and it is the one that is
+checked by running rather than by reading:
+
+* **`contracts/*.json`** — the *specification* of each published measurement,
+  committed before the run and enforced by the measurement script itself. It
+  is not evidence about anything and carries no layer of its own; it is the
+  instrument that makes the rows above verifiable. Its limit is stated in its
+  row above and bears repeating: it certifies that a run matched its design.
+  It says nothing about whether the design was a good idea, or whether the
+  hypothesis the design was built to test is true.

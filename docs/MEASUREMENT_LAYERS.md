@@ -32,6 +32,69 @@ checking the preconditions, which is why Layer 1 is a gate and not a metric.
 
 ---
 
+## Measurement Integrity — the M0 protocol
+
+> Before a number is assigned a layer, the run itself must be the registered
+> run. This is milestone **M0**, and it is a protocol rather than a layer.
+
+The layers below classify *evidence*. M0 is what makes a run eligible to carry
+evidence at all, and it sits before every layer rather than in the table: the
+table classifies what a number *means*, and M0 asks whether the number came
+from the run that was committed. It is named M0, not L−1, because it is
+milestone work rather than a measurement layer — the difference between a
+harness that *can* check a run and one that *does*.
+
+Three things are frozen, and only these:
+
+* **the contract check** (`src/tac_osm/contract.py`, `contracts/*.json`) — the
+  run matches the registered levels, seeds, schedule length and arms, or the
+  script stops and reports nothing. `--smoke` is the one declared way to run
+  off the registered design; it weakens no check, and prints its deviation in
+  full so the output cannot be mistaken for a measurement;
+* **the model-state integrity gate** (`src/tac_osm/integrity.py`) — the
+  Layer 1 checks, which raise `IntegrityError` rather than return a flag, for
+  the reason in §"Why the gate raises instead of returning a flag";
+* **the machine-readable record** (`src/tac_osm/measurement/`) — the outcome
+  is written as data alongside the terminal report, with the run's provenance,
+  its design, its deviations and its per-seed values, so M0 is auditable after
+  the fact rather than only by whoever happened to be reading the screen.
+
+Two invariants hold, and the second is the one that gets forgotten:
+
+```
+1.  no contract-compliant run  ⇒  no publishable measurement
+2.  contract-compliant run     ⇏  hypothesis supported
+```
+
+**1.** A run that deviated from the registered design — a shortened schedule,
+a dropped level, an added arm — is not the intervention the decision rule was
+written about, so its numbers are not a result of that experiment. They may
+still be informative, which is why `--smoke` exists rather than a lock; the
+deviation is printed *and* recorded in the record's `contract_deviations`, so
+"this was not the registered design" is a field rather than a matter of trust.
+This is also why a smoke run's record is still written: it is the evidence
+that the run was not registered, and deleting it would delete the proof.
+
+**2.** The converse is the trap the contract system opens once it closes the
+first one. A check that the run matched the specification is a statement about
+*provenance*, not about the world: the registered hypothesis may simply be
+false, and a compliant run of a false hypothesis is a well-specified null
+result. A contract deliberately does not pin outcomes — encoding the expected
+result would make the pre-registration a foregone conclusion rather than one.
+So no row in `docs/CLAIMS.md` moves status because a contract check passed; a
+claim moves when a measurement moves. This is the `NOT INHERITED` field of the
+contract row in `docs/EVIDENCE_REGISTER.md`, and it is the reason no record
+carries a `status` field: the instrument measures, it does not arbitrate the
+decision rule.
+
+**M0 is not a column in the table above, and not a layer.** The table
+classifies evidence; M0 is the precondition for evidence. A run that fails M0
+has no layer to be assigned, and a run that passes M0 has not yet earned one —
+Layer 1 is still the first gate that can void a measurement, and Layer 0 is
+still the first question about whether the measurement was necessary.
+
+---
+
 ## Layer 0 — Inherited evidence
 
 > **External or prior evidence that can be inherited rather than
