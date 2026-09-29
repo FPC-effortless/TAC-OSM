@@ -720,7 +720,9 @@ def test_registered_measurement_scripts_execute_as_declared_smoke_tests():
     commands = [
         [sys.executable, "scripts/measure_temporal_persistence.py", "--smoke", "--steps", "3", "--eval-steps", "2", "--seeds", "0", "--levels", "1"],
         [sys.executable, "scripts/measure_selective_scaling.py", "--smoke", "--steps", "2", "--eval-steps", "2", "--seeds", "0", "--levels", "8"],
-        [sys.executable, "-m", "py_compile", "scripts/measure_c5_casm.py"],
+        [sys.executable, "scripts/measure_c5_casm.py", "--smoke",
+ "--steps", "100", "--eval-steps", "100",
+ "--seeds", "0,1,2,3,4", "--levels", "8,64,256"],
     ]
     for command in commands:
         result = subprocess.run(command, cwd=root, capture_output=True, text=True)
