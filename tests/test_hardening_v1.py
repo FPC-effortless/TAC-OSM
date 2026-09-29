@@ -321,3 +321,44 @@ def test_relation_executor_is_explicitly_a_synthetic_control_not_a_casm_claim():
     )
     assert computation.structure.provenance == "hardened_v1.synthetic_executor"
     assert computation.structure.spec["kind"] == "synthetic_relation_control"
+
+
+def test_representation_router_is_separate_from_feature_construction():
+    from tac_osm.representation_router import RepresentationSimilarityRouter
+
+    def qenc(query, state):
+        bits = query.text.partition("\t")[0]
+        return tuple(float(x) for x in bits.split()) if bits.strip() else (0.0, 0.0)
+
+    def cenc(candidate, state):
+        return tuple(float(x) for x in candidate.descriptor[:2])
+
+    task = generate_task(
+        21,
+        dim=8,
+        n_candidates=8,
+        relation="equality",
+        validity="unique",
+    )
+    router = RepresentationSimilarityRouter(qenc, cenc)
+    decision = router.route(task.public(), TemporalPersistentState(), task.candidates)
+    assert decision.provenance == "representation_similarity_r1"
+    assert len(decision.scores) == len(task.candidates)
+
+
+def test_casm_adapter_keeps_external_dependency_outside_tac_osm():
+    from tac_osm.casm_adapter import CasmExecutorAdapter
+    from tac_osm import ExecutionResult, Structure
+
+    adapter = CasmExecutorAdapter(
+        lambda spec, inputs: {
+            "output": sum(inputs),
+            "node_values": tuple(inputs),
+            "provenance": "test_casm",
+        }
+    )
+    result = adapter.execute(Structure(key="demo", spec={"op": "sum"}), (1.0, 2.0))
+    assert isinstance(result, ExecutionResult)
+    assert result.output == 3.0
+    assert result.node_values == (1.0, 2.0)
+    assert result.provenance == "test_casm"
