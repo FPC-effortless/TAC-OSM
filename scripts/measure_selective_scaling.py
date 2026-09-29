@@ -168,7 +168,7 @@ def _run(seed: int, h: int, arm: str, k: int, steps: int) -> Cell:
         costs.index_build_candidates
         + costs.address_query_positions
         + costs.candidates_routed
-    ) / STEPS
+    ) / steps
     return Cell(
         success_rate=successes / steps,
         router_candidates_per_step=costs.candidates_routed / steps,
@@ -220,8 +220,8 @@ def main() -> None:
 
     for h in levels:
         for k in K_LEVELS:
-            ex = [_run(seed, h, "exhaustive", k) for seed in seeds]
-            ix = [_run(seed, h, "indexed", k) for seed in seeds]
+            ex = [_run(seed, h, "exhaustive", k, args.steps) for seed in seeds]
+            ix = [_run(seed, h, "indexed", k, args.steps) for seed in seeds]
             ex_mean = statistics.fmean(c.success_rate for c in ex)
             ix_mean = statistics.fmean(c.success_rate for c in ix)
             endpoints[f"exhaustive@H={h},K={k}"] = {
