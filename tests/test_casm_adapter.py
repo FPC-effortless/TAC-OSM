@@ -216,7 +216,7 @@ def test_adapter_accepts_tensor_like_outputs_without_importing_tensor_library():
         del inputs
         return {
             "output": Scalar(),
-            "gates": Vector() if False else [1.0, 0.0, 0.0, 1.0],
+            "gates": [1.0, 0.0, 0.0, 1.0],
             "node_values": Vector(),
             "provenance": "tensor_like_fake",
         }
