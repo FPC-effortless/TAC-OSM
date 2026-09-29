@@ -166,10 +166,52 @@ class RepresentationEnergyRouter:
         return out
 
     def _query_input(self, query: Query, memory: AddressedMemory) -> list[float]:
-        bits = self._pad(self._bits(query))
+        # Address first, then encode the addressed reference. This keeps the
+        # representation invariant to unrelated historical slots and gives the
+        # bilinear scorer the interaction needed for context-gated equality.
+        bits = self._bits(query)
+        reference = memory.value if memory.found else bits
+        ref = self._pad(reference)
         context = self._pad(query.context)
-        mem = self._pad(memory.value)
-        return bits + context + mem + [memory.present]
+        interaction = [ref[i] * context[i] for i in range(self.config.input_dim)]
+        return ref + context + interaction + [memory.present]
+
+    def set_analytic_relation(self) -> None:
+        """Install a non-trained separating solution for the representability gate.
+
+        With one latent coordinate per input position:
+
+            z_q[j] = context[j] * (2 * reference[j] - 1)
+            z_c[j] = 2 * descriptor[j] - 1
+
+        so their dot product contributes +1 on a marked agreement and -1 on a
+        marked disagreement. Unmarked positions contribute zero. This is a
+        constructive witness that the successor representation class contains
+        the required relevance relation; it is never part of a capability run.
+        """
+        if self.config.latent_dim < self.config.input_dim:
+            raise ValueError(
+                "analytic relation requires latent_dim >= input_dim; "
+                f"got {self.config.latent_dim} < {self.config.input_dim}"
+            )
+        for row in self.wq:
+            for j in range(len(row)):
+                row[j] = 0.0
+        for row in self.wc:
+            for j in range(len(row)):
+                row[j] = 0.0
+        for j in range(len(self.bq)):
+            self.bq[j] = 0.0
+        for j in range(len(self.bc)):
+            self.bc[j] = 0.0
+
+        d = self.config.input_dim
+        for j in range(d):
+            # Query layout = [reference, context, reference*context, present].
+            self.wq[j][d + j] = -1.0
+            self.wq[j][2 * d + j] = 2.0
+            self.wc[j][j] = 2.0
+            self.bc[j] = -1.0
 
     def _candidate_input(self, candidate: Candidate) -> list[float]:
         # Candidate action/index is deliberately excluded.
