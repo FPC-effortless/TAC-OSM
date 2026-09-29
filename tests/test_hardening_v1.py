@@ -485,3 +485,17 @@ def test_registered_measurement_scripts_execute_as_declared_smoke_tests():
         assert result.returncode == 0, result.stdout + "\n" + result.stderr
         assert "SMOKE TEST" in result.stdout
         assert "machine-readable summary written" in result.stdout
+
+def test_static_population_query_uses_an_actual_tab_delimiter():
+    from tac_osm.benchmark_v1 import repeated_equality_population, task_from_population
+
+    task = task_from_population(
+        candidates=repeated_equality_population(61, dim=8, n_candidates=64),
+        reference_bits=(0, 1, 0, 1, 0, 1, 0, 1),
+        step=0,
+        state_address="address",
+        validity="multiple",
+    )
+    assert "\t" in task.query.text
+    assert "\\t" not in task.query.text
+    assert task.query.text.endswith("\taddress")
