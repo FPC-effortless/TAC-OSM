@@ -1,0 +1,163 @@
+{
+  "experiment_id": "TACOSM-SEMANTIC-001",
+  "title": "Representation-based semantic addressing: can an injected representation reduce routing input without hidden-truth access?",
+  "question": "Across held-out relations and candidate populations, does representation-based addressing preserve capability while reducing the number of candidates presented to the router?",
+  "hypothesis": "A representation address index using an encoder trained only from public query/candidate information can retain acceptable candidates at bounded query-time bucket-probe cost, reducing router input relative to exhaustive routing. Exact content addressing remains the control.",
+  "arms": [
+    {
+      "name": "exhaustive",
+      "intervention": "route over all H candidates",
+      "acts_on": "addressing/routing boundary",
+      "knob": "retained set",
+      "value": "H"
+    },
+    {
+      "name": "exact_control",
+      "intervention": "use ContentAddressIndex",
+      "acts_on": "addressing/routing boundary",
+      "knob": "K",
+      "value": "K in {2,4,8}"
+    },
+    {
+      "name": "semantic_address",
+      "intervention": "use RepresentationAddressIndex with frozen encoder and bounded LSH probes",
+      "acts_on": "addressing/routing boundary",
+      "knob": "K",
+      "value": "K in {2,4,8}"
+    }
+  ],
+  "primary_endpoint": {
+    "name": "success_rate",
+    "definition": "Observed task success using the environment evaluator after routing and execution."
+  },
+  "secondary_endpoints": [
+    "address_recall_at_k",
+    "router_candidates_per_step",
+    "address_query_probes",
+    "index_build_candidates",
+    "candidate_work_amortized",
+    "executor_invocations",
+    "wall_clock_seconds"
+  ],
+  "required_controls": [
+    "exact ContentAddressIndex remains a non-learned control",
+    "exhaustive routing remains the capability ceiling",
+    "encoder receives only public Query and PersistentState",
+    "hidden acceptable_actions and reference_bits are inaccessible to address encoders",
+    "no fallback from semantic address miss to exhaustive routing",
+    "encoder is frozen before evaluation",
+    "training data is disjoint from evaluation seeds and held-out relation/population conditions"
+  ],
+  "relation_splits": {
+    "train": [
+      "equality"
+    ],
+    "held_out": [
+      "xor_parity",
+      "majority",
+      "any_match"
+    ]
+  },
+  "h_levels": [
+    64,
+    256
+  ],
+  "k_levels": [
+    2,
+    4,
+    8
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "validity": [
+    "unique",
+    "multiple",
+    "none"
+  ],
+  "status": "pre-registered_architecture_contract",
+  "layer": "L3",
+  "endpoints": [
+    {
+      "name": "success_rate",
+      "role": "primary — task capability after addressing",
+      "primary": true,
+      "description": "Observed task success after the selected candidate is executed and verified."
+    },
+    {
+      "name": "address_recall_at_k",
+      "role": "secondary — acceptable candidates retained by the address stage",
+      "primary": false,
+      "description": "Fraction of environment-acceptable actions represented in the retained set."
+    },
+    {
+      "name": "router_candidates_per_step",
+      "role": "secondary — actual router input size",
+      "primary": false
+    },
+    {
+      "name": "address_query_probes",
+      "role": "secondary — bounded address probe count",
+      "primary": false
+    },
+    {
+      "name": "index_build_candidates",
+      "role": "secondary — one-time index construction work",
+      "primary": false
+    },
+    {
+      "name": "candidate_work_amortized",
+      "role": "secondary — build plus address plus router candidate work amortized over queries",
+      "primary": false
+    },
+    {
+      "name": "executor_invocations",
+      "role": "secondary — actual execution calls",
+      "primary": false
+    },
+    {
+      "name": "wall_clock_seconds",
+      "role": "secondary — measured end-to-end runtime",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "semantic_address success_rate remains within the exhaustive arm's seed spread while router_candidates_per_step is bounded by K and no hidden-truth access occurs",
+      "licenses": "the representation-addressing boundary preserves capability under the registered synthetic conditions.",
+      "does_not_license": "that the encoder is learned, that it beats exact retrieval, or C5."
+    },
+    {
+      "condition": "semantic_address success_rate is materially below exhaustive while address_recall_at_k is also reduced",
+      "licenses": "the current representation/addressing control loses relevant candidates under the registered budget.",
+      "does_not_license": "that selective computation is impossible or that another encoder cannot recover the loss."
+    },
+    {
+      "condition": "router_candidates_per_step grows with H in the semantic arm",
+      "licenses": "the runtime does not provide a bounded routing boundary.",
+      "does_not_license": "anything about end-to-end economic scaling."
+    }
+  ],
+  "interpretation_order": [
+    "capability",
+    "address_recall",
+    "router_input",
+    "addressing_work",
+    "end_to_end_runtime"
+  ],
+  "steps": 100,
+  "eval_steps": 100,
+  "held_constant": [
+    "same candidate universes and evaluation seeds across arms",
+    "same executor, verifier and evaluator",
+    "encoder is frozen before evaluation",
+    "hidden acceptable actions and reference_bits never enter the address encoder",
+    "semantic misses fail closed; no exhaustive fallback",
+    "exact ContentAddressIndex remains the non-learned control"
+  ],
+  "reproduction_baseline": {}
+}

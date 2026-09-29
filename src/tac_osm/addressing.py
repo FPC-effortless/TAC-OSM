@@ -84,8 +84,10 @@ class ContentAddressIndex:
         *,
         reference: Sequence[int] | None,
         k: int | None = None,
+        state: object | None = None,
         relation: str = "equality",
     ) -> AddressHit:
+        del state
         if relation not in SUPPORTED_RELATIONS:
             raise ValueError(
                 f"ContentAddressIndex supports {SUPPORTED_RELATIONS}, got {relation!r}"

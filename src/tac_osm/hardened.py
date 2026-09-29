@@ -293,9 +293,16 @@ class HardenedLoop:
     def build_index(self, candidates: Sequence[Candidate], context: Sequence[int]) -> None:
         """Build/rebuild while preserving an injected index implementation."""
         start = time.perf_counter()
-        index_type = type(self.index) if self.index is not None else ContentAddressIndex
-        builder = getattr(index_type, "build", ContentAddressIndex.build)
-        self.index = builder(candidates, context=context)
+        if self.index is not None and hasattr(self.index, "rebuild"):
+            self.index = self.index.rebuild(
+                candidates,
+                context=context,
+                state=self.benchmark.state,
+            )
+        else:
+            index_type = type(self.index) if self.index is not None else ContentAddressIndex
+            builder = getattr(index_type, "build", ContentAddressIndex.build)
+            self.index = builder(candidates, context=context)
         self.costs.index_build_candidates += len(candidates)
         self.costs.wall_clock_seconds += time.perf_counter() - start
         self._index_key = _population_key(candidates, context)
@@ -355,12 +362,14 @@ class HardenedLoop:
             bucket_size = len(retained)
             self.costs.candidates_available += len(retained)
         else:
-            hit = self.index.lookup(
-                public_query,
-                reference=visible_reference,
-                k=self.index_k,
-                relation=task.relation,
-            )
+            lookup_kwargs = {
+                "reference": visible_reference,
+                "k": self.index_k,
+                "relation": task.relation,
+            }
+            if getattr(self.index, "accepts_state", False):
+                lookup_kwargs["state"] = self.benchmark.state
+            hit = self.index.lookup(public_query, **lookup_kwargs)
             retained = hit.candidate_indices
             address_positions = hit.inspected_positions
             bucket_size = hit.bucket_size
@@ -431,7 +440,7 @@ class HardenedLoop:
                     comp,
                     alt_outcome,
                     candidate=alt_candidate,
-                    reference=reference,
+                    reference=truth_reference,
                     context=public_query.context,
                     relation=task.relation,
                 )
