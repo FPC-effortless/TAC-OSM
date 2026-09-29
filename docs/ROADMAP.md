@@ -479,6 +479,10 @@ inserts a retrieval boundary the v0.1 loop does not have. It is also the
 milestone that makes `|R|` a defined quantity, which is what C5 and all of M3
 are waiting on.
 
+**Runtime-boundary result.** The former synthetic boundary has now been implemented and measured as `TACOSM-SELECTIVE-001`. The indexed arm preserved 1.0000 success across H = 8, 64 and 256 for K = 2 and 4 while presenting only K candidates to the router; one-time index construction is accounted for separately. The corresponding temporal experiment, `TACOSM-TEMPORAL-001`, passed all persistence gates through delay 32. These establish bounded synthetic runtime mechanisms, not C5: the executor still performs constant work, and measured wall-clock time does not yet show an end-to-end advantage.
+
+The next runtime boundary is now R1: `RepresentationAddressIndex` provides bounded representation-based addressing with an injected encoder. This is an architectural control, not a learned-retrieval result. The next confirmatory step is a frozen CDL-derived encoder, followed by the validated CASM-S executor, so the experiment measures actual structural work rather than only candidate counts.
+
 **Where it stands.** The index is built (`src/tac_osm/retrieval.py`), the
 measurement script exists (`scripts/measure_retrieval.py`), the contract is
 registered and machine-checked, and **amendment A1 is on the contract** — see
