@@ -139,14 +139,14 @@ def _provenance() -> Provenance:
     )
 
 
-def _run(seed: int, h: int, arm: str, k: int) -> Cell:
+def _run(seed: int, h: int, arm: str, k: int, steps: int) -> Cell:
     population = repeated_equality_population(
         seed,
         dim=DIM,
         n_candidates=h,
         marked_positions=(0, 1),
     )
-    benchmark = StaticPopulationBenchmark(seed=seed, candidates=population, steps=STEPS)
+    benchmark = StaticPopulationBenchmark(seed=seed, candidates=population, steps=steps)
     index = None if arm == "exhaustive" else ContentAddressIndex()
     loop = HardenedLoop(
         router=PublicEqualityRouter(),
@@ -158,7 +158,7 @@ def _run(seed: int, h: int, arm: str, k: int) -> Cell:
         episode_id=f"selective-{arm}-{seed}-H{h}-K{k}",
     )
     start = time.perf_counter()
-    trajectory = loop.run(STEPS)
+    trajectory = loop.run(steps)
     elapsed = time.perf_counter() - start
     successes = sum(
         1 for row in trajectory.steps if row.observation["success"]
@@ -170,8 +170,8 @@ def _run(seed: int, h: int, arm: str, k: int) -> Cell:
         + costs.candidates_routed
     ) / STEPS
     return Cell(
-        success_rate=successes / STEPS,
-        router_candidates_per_step=costs.candidates_routed / STEPS,
+        success_rate=successes / steps,
+        router_candidates_per_step=costs.candidates_routed / steps,
         index_build_candidates=costs.index_build_candidates,
         address_query_positions=costs.address_query_positions,
         amortized_candidate_work=amortized,
