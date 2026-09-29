@@ -4,40 +4,180 @@
   "question": "When the retained candidate set is reduced from H to K before structural execution, does an acceptable candidate survive addressing, does CASM-S then compute the target relation on it, and does an independent verifier confirm it — measured as four stage-separated endpoints behind a representability gate that checks the instrument before the task population runs?",
   "hypothesis": "For the controlled multi-valid equality benchmark, exact addressing retains an acceptable candidate with probability near its analytic ceiling while executing at most K structures per query. The successor hypothesis to C5-002's is that the instrument failure was a specification error in the bridge's training target — trained on single candidates against their Boolean output, it optimised absolute accuracy while the downstream decision is a within-query separation — so a bridge trained on pairs against a margin objective separates satisfier from violator at or above the registered minimum, and a gate with eight pre-registered criteria then admits the instrument before the task population runs. The four stage endpoints remain separated as in C5-002: coverage_rate reads no CASM-S output, so an execution failure cannot depress an addressing number.",
   "arms": [
-    {"name": "exhaustive", "intervention": "execute every H candidate structure through the CASM-S evaluator, with addressing evaluated separately as the trivial retention of the full set", "acts_on": "structural execution", "knob": "retained set", "value": "H"},
-    {"name": "exact-indexed", "intervention": "content-address the candidate universe and execute only the retained K candidates, with the bucket compared against the acceptable set for the addressing endpoint", "acts_on": "structural execution", "knob": "K", "value": "{2,4}"},
-    {"name": "representation-addressed", "intervention": "retain candidates by fixed cosine similarity of public query bits and candidate descriptors, evaluated by the same addressing endpoint", "acts_on": "addressing", "knob": "K", "value": "{2,4}"}
+    {
+      "name": "exhaustive",
+      "intervention": "execute every H candidate structure through the CASM-S evaluator, with addressing evaluated separately as the trivial retention of the full set",
+      "acts_on": "structural execution",
+      "knob": "retained set",
+      "value": "H"
+    },
+    {
+      "name": "exact-indexed",
+      "intervention": "content-address the candidate universe and execute only the retained K candidates, with the bucket compared against the acceptable set for the addressing endpoint",
+      "acts_on": "structural execution",
+      "knob": "K",
+      "value": "{2,4}"
+    },
+    {
+      "name": "representation-addressed",
+      "intervention": "retain candidates by fixed cosine similarity of public query bits and candidate descriptors, evaluated by the same addressing endpoint",
+      "acts_on": "addressing",
+      "knob": "K",
+      "value": "{2,4}"
+    }
   ],
   "endpoints": [
-    {"name": "coverage_rate", "role": "primary — the (S,Q) to R stage: an acceptable candidate is retained", "primary": true, "description": "Fraction of measured queries where the retained set intersects the hidden acceptable-action set. Computed from the retained indices and the hidden acceptable set alone; no CASM-S output, selection result or verification result enters it, so an execution failure cannot depress an addressing number. This is C5-002's separation contract, carried forward unchanged."},
-    {"name": "execution_accuracy_rate", "role": "secondary — the (R,Q) to A stage: the relation is computed correctly on a retained candidate", "primary": false, "description": "Fraction of measured queries where the relation holds on a selected retained candidate. The acceptable set is hidden from the executor; the endpoint reads only the public relation, the selected candidate's descriptor and the executed output."},
-    {"name": "verification_rate", "role": "secondary — the (A,O) to V stage: an independent verifier confirms the computation", "primary": false, "description": "Fraction of measured queries where RelationConstraintVerifier agrees that the executed output matches the public relation. The verifier reads the computation's trace and the public relation only. Zero across all arms is the signature of an instrument failure rather than a negative result, which is why criterion 4 of the gate checks verifier acceptance on held-out structures before the population runs."},
-    {"name": "structures_executed_per_query", "role": "secondary — the R to W(R) stage: actual structural execution count", "primary": false, "description": "Number of retained structures submitted to CASM-S per measured query. The work endpoints are counted from the actual serialized graph submitted to the external model, so they survive an instrument failure and are what carries the 128x observation forward."},
-    {"name": "active_nodes_per_query", "role": "secondary — active CASM node count", "primary": false, "description": "Active CASM-S nodes across executed retained structures per query."},
-    {"name": "candidate_edges_per_query", "role": "secondary — CASM candidate-edge work", "primary": false, "description": "Candidate edges presented to CASM-S across all executed retained structures per query."},
-    {"name": "gate_evaluations_per_query", "role": "secondary — CASM gate work", "primary": false, "description": "Per-edge CASM-S gate evaluations across executed retained structures per query."},
-    {"name": "structural_operations_per_query", "role": "secondary — structural operation work", "primary": false, "description": "Non-input CASM-S node operations executed per query."},
-    {"name": "node_outputs_per_query", "role": "secondary — node-output work", "primary": false, "description": "Active CASM-S node outputs produced per query."},
-    {"name": "casm_forward_batches", "role": "secondary — batching diagnostic", "primary": false, "description": "Number of batched CASM-S forward calls over the measured query window. One forward can carry several structures, so this is never read as a structure count."},
-    {"name": "address_positions_per_query", "role": "secondary — addressing work, exact index", "primary": false, "description": "Candidate positions the content-address index inspects per query. This is the addressing arm's own work measure and is zero on arms that do not use the index — so it is what separates an addressing cost from an execution cost, which a single work total cannot show."},
-    {"name": "representation_candidates_scored_per_query", "role": "secondary — addressing work, representation arm", "primary": false, "description": "Candidates the fixed cosine scorer evaluates per query. Registered so the representation arm's addressing cost is visible as a cost rather than only as a coverage number, and so the arm cannot appear free."},
-    {"name": "wall_clock_seconds", "role": "secondary — end-to-end runtime diagnostic", "primary": false, "description": "Measured runtime of the C5 query window on the declared hardware. A diagnostic, never a capability endpoint."},
-    {"name": "gate_accuracy", "role": "secondary — the representability gate's own separation score", "primary": false, "description": "Fraction of held-out pairs the frozen bridge separates under the registered threshold. Reported whether or not the gate passes, because a failed gate is the instrument's report rather than an absence of one. It is not a capability endpoint and cannot be cited as one."}
+    {
+      "name": "coverage_rate",
+      "role": "primary — the (S,Q) to R stage: an acceptable candidate is retained",
+      "primary": true,
+      "description": "Fraction of measured queries where the retained set intersects the hidden acceptable-action set. Computed from the retained indices and the hidden acceptable set alone; no CASM-S output, selection result or verification result enters it, so an execution failure cannot depress an addressing number. This is C5-002's separation contract, carried forward unchanged."
+    },
+    {
+      "name": "execution_accuracy_rate",
+      "role": "secondary — the (R,Q) to A stage: the computation matches the public relation on the selected retained candidate",
+      "primary": false,
+      "description": "Fraction of measured queries where the executed output crosses the fixed threshold in agreement with the public relation applied to the selected candidate descriptor. This is a computation endpoint: it does not read hidden acceptable_actions."
+    },
+    {
+      "name": "selection_success_rate",
+      "role": "secondary — the R to A/action stage: the selected candidate is acceptable",
+      "primary": false,
+      "description": "Fraction of measured queries where the selected retained candidate is in hidden acceptable_actions. This endpoint is an action-selection/evaluator quantity and is distinct from execution_accuracy_rate; it does not certify that CASM-S computed the relation correctly."
+    },
+    {
+      "name": "verification_rate",
+      "role": "secondary — the (A,O) to V stage: an independent verifier confirms the computation",
+      "primary": false,
+      "description": "Fraction of measured queries where RelationConstraintVerifier agrees that the executed output matches the public relation. The verifier reads the computation's trace and the public relation only. Zero across all arms is the signature of an instrument failure rather than a negative result, which is why criterion 4 of the gate checks verifier acceptance on held-out structures before the population runs."
+    },
+    {
+      "name": "structures_executed_per_query",
+      "role": "secondary — the R to W(R) stage: actual structural execution count",
+      "primary": false,
+      "description": "Number of retained structures submitted to CASM-S per measured query. The work endpoints are counted from the actual serialized graph submitted to the external model, so they survive an instrument failure and are what carries the 128x observation forward."
+    },
+    {
+      "name": "active_nodes_per_query",
+      "role": "secondary — active CASM node count",
+      "primary": false,
+      "description": "Active CASM-S nodes across executed retained structures per query."
+    },
+    {
+      "name": "candidate_edges_per_query",
+      "role": "secondary — CASM candidate-edge work",
+      "primary": false,
+      "description": "Candidate edges presented to CASM-S across all executed retained structures per query."
+    },
+    {
+      "name": "gate_evaluations_per_query",
+      "role": "secondary — CASM gate work",
+      "primary": false,
+      "description": "Per-edge CASM-S gate evaluations across executed retained structures per query."
+    },
+    {
+      "name": "structural_operations_per_query",
+      "role": "secondary — structural operation work",
+      "primary": false,
+      "description": "Non-input CASM-S node operations executed per query."
+    },
+    {
+      "name": "node_outputs_per_query",
+      "role": "secondary — node-output work",
+      "primary": false,
+      "description": "Active CASM-S node outputs produced per query."
+    },
+    {
+      "name": "casm_forward_batches",
+      "role": "secondary — batching diagnostic",
+      "primary": false,
+      "description": "Number of batched CASM-S forward calls over the measured query window. One forward can carry several structures, so this is never read as a structure count."
+    },
+    {
+      "name": "address_positions_per_query",
+      "role": "secondary — addressing work, exact index",
+      "primary": false,
+      "description": "Candidate positions the content-address index inspects per query. This is the addressing arm's own work measure and is zero on arms that do not use the index — so it is what separates an addressing cost from an execution cost, which a single work total cannot show."
+    },
+    {
+      "name": "representation_candidates_scored_per_query",
+      "role": "secondary — addressing work, representation arm",
+      "primary": false,
+      "description": "Candidates the fixed cosine scorer evaluates per query. Registered so the representation arm's addressing cost is visible as a cost rather than only as a coverage number, and so the arm cannot appear free."
+    },
+    {
+      "name": "wall_clock_seconds",
+      "role": "secondary — end-to-end runtime diagnostic",
+      "primary": false,
+      "description": "Measured runtime of the C5 query window on the declared hardware. A diagnostic, never a capability endpoint."
+    },
+    {
+      "name": "gate_accuracy",
+      "role": "secondary — the representability gate's own separation score",
+      "primary": false,
+      "description": "Fraction of held-out pairs the frozen bridge separates under the registered threshold. Reported whether or not the gate passes, because a failed gate is the instrument's report rather than an absence of one. It is not a capability endpoint and cannot be cited as one."
+    }
   ],
   "decision_rule": [
-    {"condition": "any of the eight pre-registered representability criteria fails on held-out structures", "licenses": "the run terminates as instrument-invalid and no C5 capability number is reported; the failure is recorded against the criterion that fired, not against CASM-S as a substrate", "does_not_license": "any capability claim or negative capability claim, including that selective execution cannot work or that CASM-S cannot execute the relation"},
-    {"condition": "exact-indexed coverage_rate is at or above its analytic ceiling within the seed spread while structures_executed_per_query is no greater than K", "licenses": "the tested exact addressing boundary retains an acceptable candidate at the analytic ceiling for this controlled benchmark, and the measured CASM-S work follows the retained set", "does_not_license": "semantic retrieval, learned addressing, or the full system-level C5 claim"},
-    {"condition": "exact-indexed coverage_rate is materially below its analytic ceiling at the same H and K", "licenses": "retention loss is observed under the tested retained-set budget and is attributable to addressing rather than to execution, because the endpoint reads no CASM-S output", "does_not_license": "that selective execution or cheap addressing is impossible"},
-    {"condition": "execution_accuracy_rate is materially below the gate-confirmed representability reference while coverage_rate is at its ceiling", "licenses": "the failure is localized to the (R,Q) to A execution stage, and the coverage endpoint remains a valid addressing measurement", "does_not_license": "that addressing is the defect, or a general statement about CASM-S execution capability"},
-    {"condition": "verification_rate is materially below execution_accuracy_rate while both gates passed", "licenses": "the (A,O) to V verification stage disagrees with the execution stage, which is a finding about the verifier or the trace rather than about CASM-S, and requires audit before a C5 interpretation", "does_not_license": "a statement about CASM-S capability, since the two stages read the same output under different criteria"},
-    {"condition": "structures_executed_per_query or CASM work fails to decrease with the retained set under otherwise matched conditions", "licenses": "the implementation does not expose the intended structural work reduction and requires audit before a C5 interpretation", "does_not_license": "a general statement about CASM-S efficiency"}
+    {
+      "condition": "any of the eight pre-registered representability criteria fails on held-out structures",
+      "licenses": "the run terminates as instrument-invalid and no C5 capability number is reported; the failure is recorded against the criterion that fired, not against CASM-S as a substrate",
+      "does_not_license": "any capability claim or negative capability claim, including that selective execution cannot work or that CASM-S cannot execute the relation"
+    },
+    {
+      "condition": "exact-indexed coverage_rate is at or above its analytic ceiling within the seed spread while structures_executed_per_query is no greater than K",
+      "licenses": "the tested exact addressing boundary retains an acceptable candidate at the analytic ceiling for this controlled benchmark, and the measured CASM-S work follows the retained set",
+      "does_not_license": "semantic retrieval, learned addressing, or the full system-level C5 claim"
+    },
+    {
+      "condition": "exact-indexed coverage_rate is materially below its analytic ceiling at the same H and K",
+      "licenses": "retention loss is observed under the tested retained-set budget and is attributable to addressing rather than to execution, because the endpoint reads no CASM-S output",
+      "does_not_license": "that selective execution or cheap addressing is impossible"
+    },
+    {
+      "condition": "execution_accuracy_rate is materially below the gate-confirmed representability reference while coverage_rate is at its ceiling",
+      "licenses": "the failure is localized to the (R,Q) to A execution stage, and the coverage endpoint remains a valid addressing measurement",
+      "does_not_license": "that addressing is the defect, or a general statement about CASM-S execution capability"
+    },
+    {
+      "condition": "verification_rate is materially below execution_accuracy_rate while both gates passed",
+      "licenses": "the (A,O) to V verification stage disagrees with the execution stage, which is a finding about the verifier or the trace rather than about CASM-S, and requires audit before a C5 interpretation",
+      "does_not_license": "a statement about CASM-S capability, since the two stages read the same output under different criteria"
+    },
+    {
+      "condition": "structures_executed_per_query or CASM work fails to decrease with the retained set under otherwise matched conditions",
+      "licenses": "the implementation does not expose the intended structural work reduction and requires audit before a C5 interpretation",
+      "does_not_license": "a general statement about CASM-S efficiency"
+    }
   ],
-  "interpretation_order": ["representability_gate", "coverage", "execution_accuracy", "verification", "structures_executed", "CASM_work_units", "addressing_overhead", "wall_clock"],
-  "h_levels": [8, 64, 256],
-  "seeds": [0, 1, 2, 3, 4],
+  "interpretation_order": [
+    "representability_gate",
+    "coverage",
+    "execution_accuracy",
+    "verification",
+    "structures_executed",
+    "CASM_work_units",
+    "addressing_overhead",
+    "wall_clock"
+  ],
+  "h_levels": [
+    8,
+    64,
+    256
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "steps": 100,
   "eval_steps": 100,
-  "k_levels": [2, 4],
+  "k_levels": [
+    2,
+    4
+  ],
   "held_constant": [
     "CASM-S source commit is pinned to c31554413301e3c9d3e6b3f8c8c6be572a74a748",
     "the representability gate has eight registered criteria and runs before the task population; a failure of any one terminates the run as instrument-invalid, so no capability number is emitted under an unrepresentative instrument",
@@ -45,6 +185,7 @@
     "the gate evaluates held-out structures under the same ops, threshold, bridge calibration and execution path the task population uses, not a proxy task",
     "the gate's seed stream is disjoint from the task population's seeds, so the gate cannot be calibrated on the evaluation population",
     "the coverage endpoint reads only retained indices and the hidden acceptable set; no CASM-S output, selection result or verification result may enter it",
+    "execution_accuracy_rate compares the selected candidate's executed output against the public relation at the registered threshold and never reads hidden acceptable_actions; selection_success_rate separately reads hidden acceptable_actions only as the final action/evaluator quantity",
     "the acceptable set is hidden from the executor and from addressing; it is revealed only after execution for evaluation",
     "the bridge's training objective is pair_separation, registered as BRIDGE_OBJECTIVE: the loss is on the margin score(satisfying) minus score(violating) over pairs, not on the absolute level of either candidate's output",
     "bridge calibration constants are unchanged from C5-002 except the objective and the validation stream's seed: 512 training examples, 128 validation, 100 epochs, lr 2e-3, training seed 20260929, validation seed 20261001 (see amendment A1)",
@@ -93,6 +234,16 @@
       "discovered": "by static inspection of the alpha-scaled soft-Boolean ops in the pinned CASM-S source at commit c315544 (casm_v01/phase1_dag/model.py: alpha = c*softplus(alpha_eta), NOT = 1 - a*x, AND = a0*p*a1*q, XOR = a0*p + a1*q - 2*a0*p*a1*q, EQ expanded by the adapter to XOR + NOT), and by a torch-free read of the retained C5-002 checkpoint casm-s-c5-002.pt from run 36536249559 artifact 11018687523, parsed as a zip with a numpy-backed _rebuild_tensor_v2 stub, giving alpha_eta = 0.19835/0.17771. Found before any confirmatory C5-003 run; the implementation has always passed value = expected, and the amendment records the corrected convention",
       "affected": "the gate-table row for criterion 4 in docs/TACOSM-C5-003.md, whose registered constant now names the model's own output as the outcome value; the criterion-4 measure string in the run record; and the held_constant that describes the criterion. GATE_THRESHOLD, GATE_MIN_ACCURACY and criterion 2 are NOT changed, and criterion 1 still pins them at their registered values. Amendment A2's new_definition stands as the pre-A3 old_definition here: A2 resolved which half is scored, A3 resolves what the outcome's value carries",
       "no_result_under_previous_version": "no confirmatory C5-003 run has been made under either definition. The A2 convention (value = expected) has never produced a measured criterion-4 number for C5-003, and under it any alpha-scaled checkpoint short of the measure-zero manifold scores 0.0 and terminates the run as INSTRUMENT_INVALID, so no number exists to reconcile against the amendment. C5-002's run is unaffected and stands as measured: its verification_rate of 0.0 across all 75 cells is consistent with the same output-consistency failure and with the soft-op alpha scaling its own result text registered as the most likely explanation, and its gate fired on criterion 2 (separation 0.2305) rather than on criterion 4. The C5-003 --smoke run's criterion-4 value used the fake runtime's exact 0.0/1.0 outputs and is smoke, not a measurement"
+    },
+    {
+      "id": "A4",
+      "applies_to": "the measured task-stream endpoint semantics and criterion 7's determinism check",
+      "old_definition": "run_cell records execution_accuracy_rate from whether the selected action is in hidden acceptable_actions and constructs the task-stream Outcome with value = 1.0/0.0 from that hidden action result; criterion 7 records a checkpoint hash and deterministic string keys but does not execute the held-out gate twice",
+      "new_definition": "run_cell records execution_accuracy_rate from agreement between the selected execution output at GATE_THRESHOLD and the public relation applied to the selected descriptor, records selection_success_rate separately from hidden acceptable_actions, and passes the model's own execution output as Outcome.value so the task-stream verifier's output-observation consistency check is aligned with A3; criterion 7 executes the identical held-out gate batch twice and requires the output, gate and node-value records to match exactly, while retaining the checkpoint sha256 and deterministic-key checks",
+      "rationale": "A3 corrected criterion 4, but a static audit of run_cell showed the actual measured verification path still passed Outcome.value = 1.0/0.0 from hidden action acceptability. With CASM-S's soft outputs this recreates the same 1e-9 consistency failure A3 removed from the gate. The same audit showed execution_accuracy_rate was named as a computation endpoint but actually measured hidden-action selection, so a constant executor could receive execution credit when exact addressing had already isolated acceptable candidates. A4 separates computation correctness from action selection and carries the A3 output convention into the task stream. Criterion 7 was also weaker than its name: a frozen checkpoint hash establishes provenance but does not establish deterministic execution. Repeating the held-out batch under the loaded checkpoint makes the registered determinism criterion an execution check rather than a filename/hash check. No threshold, arm, population, seed, bridge objective or decision-rule capability condition changes.",
+      "discovered": "by static inspection of scripts/measure_c5_casm_003.py and src/tac_osm/structured_verifier.py before any confirmatory C5-003 run; a torch-free regression probe can demonstrate the old task-stream Outcome convention fails on soft outputs and that a non-deterministic repeated gate execution is detectable",
+      "affected": "the execution_accuracy_rate and selection_success_rate endpoint definitions and measurements in scripts/measure_c5_casm_003.py and the corresponding gate determinism criterion; docs/TACOSM-C5-003.md and the claims/evidence descriptions are updated to carry the same stage separation",
+      "no_result_under_previous_version": "no confirmatory C5-003 run has been made under the previous definition. The only executions are torch-free smoke/tests with fake runtimes, so no measured capability number exists to reconcile against A4"
     }
   ],
   "status": "pre-registered",
