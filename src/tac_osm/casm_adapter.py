@@ -208,49 +208,109 @@ class CasmGraphSpec:
 
     @classmethod
     def from_program(cls, program: Any) -> "CasmGraphSpec":
-        """Compile a TAC-OSM Program into the CASM-S candidate substrate.
+        """Compile a TAC-OSM Program into the native CASM-S grammar.
 
-        TAC-OSM relevance_program() stores its true wiring in
-        program.candidate_edges. CASM-S requires the full upper-triangular
-        candidate substrate, with true wiring hidden from the model.
-        The source generator orders candidates as destination, port, source.
+        TAC-OSM relevance_program() includes EQ as a convenience primitive.
+        The pinned CASM-S grammar has no EQ, so every EQ node is expanded
+        to XOR followed by NOT. The expanded graph is then placed on the
+        full upper-triangular candidate substrate, with the true wiring
+        intentionally omitted from the transport.
         """
-        active_nodes = tuple(program.nodes[:program.active_count])
-        if not active_nodes:
+        original_nodes = tuple(program.nodes[:program.active_count])
+        if not original_nodes:
             raise ValueError("program must contain at least one active node")
+
+        # Map each original node to its first node and its final output node
+        # after grammar expansion. Non-EQ nodes map to themselves; EQ maps
+        # to XOR -> NOT.
+        first_index: dict[int, int] = {}
+        output_index: dict[int, int] = {}
+        expanded_nodes: list[dict[str, Any]] = []
+
+        for node in original_nodes:
+            op = _op_name(node.op)
+            if op == "EQ":
+                xor_index = len(expanded_nodes)
+                expanded_nodes.append({
+                    "index": xor_index,
+                    "op": "XOR",
+                    "depth": _require_int("node.depth", node.depth),
+                    "slot": xor_index,
+                    "arity": 2,
+                })
+                not_index = len(expanded_nodes)
+                expanded_nodes.append({
+                    "index": not_index,
+                    "op": "NOT",
+                    "depth": _require_int("node.depth", node.depth) + 1,
+                    "slot": not_index,
+                    "arity": 1,
+                })
+                first_index[node.index] = xor_index
+                output_index[node.index] = not_index
+            else:
+                index = len(expanded_nodes)
+                expanded_nodes.append({
+                    "index": index,
+                    "op": op,
+                    "depth": _require_int("node.depth", node.depth),
+                    "slot": index,
+                    "arity": _require_int("node.arity", node.arity),
+                })
+                first_index[node.index] = index
+                output_index[node.index] = index
 
         nodes = tuple(
             CasmNodeSpec(
-                index=_require_int("node.index", node.index),
-                op=_op_name(node.op),
-                depth=_require_int("node.depth", node.depth),
-                slot=_require_int("node.index", node.index),
-                arity=_require_int("node.arity", node.arity),
+                index=item["index"],
+                op=item["op"],
+                depth=item["depth"],
+                slot=item["slot"],
+                arity=item["arity"],
             )
-            for node in active_nodes
+            for item in expanded_nodes
         )
 
-        edges: list[CasmEdgeSpec] = []
-        for dst in active_nodes:
+        true_edges: list[tuple[int, int, int]] = []
+        for node in original_nodes:
+            if _op_name(node.op) == "EQ":
+                true_edges.append((first_index[node.index], output_index[node.index], 0))
+        for edge in program.candidate_edges:
+            true_edges.append((
+                output_index[edge.src],
+                first_index[edge.dst],
+                _require_int("edge.port", edge.port),
+            ))
+
+        candidate_edges: list[CasmEdgeSpec] = []
+        for dst in nodes:
             for port in range(dst.arity):
                 for src in range(dst.index):
-                    edges.append(
+                    candidate_edges.append(
                         CasmEdgeSpec(
-                            index=len(edges),
+                            index=len(candidate_edges),
                             src=src,
                             dst=dst.index,
                             port=port,
                         )
                     )
 
+        # Structural sanity: every program edge must be representable on the
+        # expanded substrate. This is the bridge analogue of the source
+        # CASM copy-mask preflight, without putting the mask on the wire.
+        substrate = {(e.src, e.dst, e.port) for e in candidate_edges}
+        if not set(true_edges).issubset(substrate):
+            raise ValueError("expanded program contains an edge outside the CASM-S substrate")
+
         return cls(
             nodes=nodes,
-            candidate_edges=tuple(edges),
+            candidate_edges=tuple(candidate_edges),
             inputs=tuple(
-                _require_int("program input", index) for index in program.inputs
+                _require_int("program input", output_index[index])
+                for index in program.inputs
             ),
-            output=_require_int("program output", program.output),
-            active_count=_require_int("program active_count", program.active_count),
+            output=_require_int("program output", output_index[program.output]),
+            active_count=len(nodes),
         )
 
 def casm_graph_spec_from_episode(episode: Any) -> dict[str, Any]:
