@@ -294,7 +294,11 @@ class HardenedLoop:
         """Build/rebuild while preserving an injected index implementation."""
         start = time.perf_counter()
         if self.index is not None and hasattr(self.index, "rebuild"):
-            self.index = self.index.rebuild(candidates, context=context)
+            self.index = self.index.rebuild(
+                candidates,
+                context=context,
+                state=self.benchmark.state,
+            )
         else:
             index_type = type(self.index) if self.index is not None else ContentAddressIndex
             builder = getattr(index_type, "build", ContentAddressIndex.build)
@@ -358,13 +362,14 @@ class HardenedLoop:
             bucket_size = len(retained)
             self.costs.candidates_available += len(retained)
         else:
-            hit = self.index.lookup(
-                public_query,
-                reference=visible_reference,
-                k=self.index_k,
-                relation=task.relation,
-                state=self.benchmark.state,
-            )
+            lookup_kwargs = {
+                "reference": visible_reference,
+                "k": self.index_k,
+                "relation": task.relation,
+            }
+            if getattr(self.index, "accepts_state", False):
+                lookup_kwargs["state"] = self.benchmark.state
+            hit = self.index.lookup(public_query, **lookup_kwargs)
             retained = hit.candidate_indices
             address_positions = hit.inspected_positions
             bucket_size = hit.bucket_size
