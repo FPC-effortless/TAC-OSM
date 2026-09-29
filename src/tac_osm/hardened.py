@@ -275,6 +275,8 @@ class HardenedLoop:
     )
     executor: RelationExecutor = field(default_factory=RelationExecutor)
     episode_id: str = "episode-0"
+    before_read: Callable[[GeneratedTask, int, TemporalPersistentState], None] | None = None
+    learning_enabled: bool = True
 
     def __post_init__(self) -> None:
         self.trajectory = Trajectory(self.episode_id)
@@ -320,6 +322,8 @@ class HardenedLoop:
     def step(self, step: int) -> TrajectoryStep:
         start = time.perf_counter()
         task = self.benchmark.next_task(step)
+        if self.before_read is not None:
+            self.before_read(task, step, self.benchmark.state)
         public_query = task.public()
         state_before_snapshot = self._state_snapshot()
         state_before = self._state_digest(state_before_snapshot)
@@ -440,7 +444,7 @@ class HardenedLoop:
                 final_outcome = self.benchmark.observe(task, final_selected)
                 final_evidence = local_repair.verification
 
-        if final_evidence.valid and final_outcome.success:
+        if self.learning_enabled and final_evidence.valid and final_outcome.success:
             key = f"experience:{self.episode_id}:{step}"
             self.benchmark.state.stage_world_write(
                 StateUpdate(
@@ -507,8 +511,13 @@ class HardenedLoop:
             repair=repair_record,
             state_after={**state_after_snapshot, "digest": state_after},
             learning={
-                "state_write_staged": bool(evidence.valid and final_outcome.success),
-                "update_delay": 1 if evidence.valid and final_outcome.success else None,
+                "state_write_staged": bool(
+                    self.learning_enabled and final_evidence.valid and final_outcome.success
+                ),
+                "update_delay": (
+                    1 if self.learning_enabled and final_evidence.valid and final_outcome.success
+                    else None
+                ),
             },
             provenance={
                 "relation": task.relation,
