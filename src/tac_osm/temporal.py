@@ -110,6 +110,10 @@ class TemporalPersistentState:
     def available(self, key: str) -> bool:
         return key in self._values
 
+    def addresses(self) -> tuple[str, ...]:
+        """Return structural memory addresses without exposing stored values."""
+        return tuple(sorted(self._values))
+
     def write_step(self, key: str) -> int | None:
         return self._write_steps.get(key)
 
