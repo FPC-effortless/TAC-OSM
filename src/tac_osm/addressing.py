@@ -5,15 +5,14 @@ the expensive scorer's work, but it cannot establish a sublinear addressing
 cost because the index itself is O(H) per query.
 
 This module supplies a content-addressed benchmark control. The index is built
-once when the candidate population is materialised; query-time lookup hashes
-the query mask/value signature and returns a bounded bucket. Query-time work
-therefore depends on the number of marked positions plus the returned bucket,
-not on H.
+when a candidate population is materialised; query-time lookup hashes the query
+mask/value signature and returns a bounded bucket. Query-time work therefore
+depends on the number of marked positions plus the returned bucket, not on H.
 
-This is intentionally an exact synthetic-relation index. It is infrastructure,
-not evidence that semantic retrieval is solved. A future semantic/learned
-addresser can implement the same interface and be compared against this
-control.
+This is intentionally an exact synthetic-relation index. It supports the
+equality-on-marked-positions relation only. It is infrastructure, not evidence
+that semantic retrieval is solved. A future semantic/learned addresser can
+implement the same interface and be compared against this control.
 """
 
 from __future__ import annotations
@@ -25,11 +24,14 @@ from . import Candidate, Query
 from .environment import parse_query
 
 
+SUPPORTED_RELATIONS = ("equality",)
+
+
 def relation_signature(
     query: Query,
     reference: Sequence[int] | None,
 ) -> tuple[tuple[int, int], ...]:
-    """Canonical (position, bit) signature for the active relation."""
+    """Canonical (position, bit) signature for the equality relation."""
     q_bits, _ = parse_query(query)
     marks = tuple(query.context)
     source = tuple(reference) if reference is not None else q_bits
@@ -51,7 +53,7 @@ class AddressHit:
 
 @dataclass
 class ContentAddressIndex:
-    """Exact signature index with O(1) bucket selection after build."""
+    """Exact signature index with bounded query-time addressing."""
 
     _buckets: dict[tuple[tuple[int, int], ...], tuple[int, ...]] = field(default_factory=dict)
     built_candidates: int = 0
@@ -82,7 +84,12 @@ class ContentAddressIndex:
         *,
         reference: Sequence[int] | None,
         k: int | None = None,
+        relation: str = "equality",
     ) -> AddressHit:
+        if relation not in SUPPORTED_RELATIONS:
+            raise ValueError(
+                f"ContentAddressIndex supports {SUPPORTED_RELATIONS}, got {relation!r}"
+            )
         signature = relation_signature(query, reference)
         bucket = self._buckets.get(signature, ())
         selected = bucket if k is None else bucket[: max(0, int(k))]
