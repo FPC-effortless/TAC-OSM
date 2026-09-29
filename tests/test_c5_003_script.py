@@ -85,7 +85,7 @@ class _FakeRuntime:
     """
 
     def __init__(self, mode: str):
-        assert mode in ("separating", "constant", "inverted")
+        assert mode in ("separating", "soft-separating", "constant", "inverted")
         self.mode = mode
         self.calls = 0
         self.checkpoint = None
@@ -99,6 +99,8 @@ class _FakeRuntime:
             exact = float(all(descriptor[j] == reference[j] for j in marks))
             if self.mode == "separating":
                 output = exact
+            elif self.mode == "soft-separating":
+                output = 0.8 if exact else 0.1
             elif self.mode == "constant":
                 output = 0.3
             else:
@@ -195,6 +197,7 @@ def test_the_c5_003_contract_loads_and_has_one_primary():
     assert c.experiment_id == "TACOSM-C5-003"
     assert c.primary_endpoint() == "coverage_rate"
     assert [a.name for a in c.arms] == list(C5.ARMS)
+    assert [a.id for a in c.amendments] == ["A1", "A2", "A3", "A4"]
     assert c.check_consistency() == []
 
 
@@ -243,6 +246,7 @@ def test_the_registered_endpoints_do_not_include_the_c5_001_compound():
     names = {e.name for e in c.endpoints}
     assert "coverage_rate" in names
     assert "execution_accuracy_rate" in names
+    assert "selection_success_rate" in names
     assert "success_rate" not in names
 
 
@@ -578,7 +582,59 @@ def test_coverage_is_one_for_exact_addressing_under_a_broken_model(fake_execute)
     """
     cell = C5.run_cell(_FakeRuntime("constant"), seed=0, h=8, k=2, arm="exact-indexed")
     assert cell.coverage_rate == 1.0
+    assert cell.execution_accuracy_rate == 0.0
+    assert cell.selection_success_rate == 1.0
+
+
+def test_soft_model_uses_model_output_in_task_stream_verification(fake_execute):
+    """A3's output convention must reach the measured task-stream verifier.
+
+    Real CASM-S emits soft values, not exact 0/1 labels. The task-stream
+    Outcome therefore has to carry the same observed output that appears in
+    the computation trace; otherwise SemanticVerifier rejects before it can
+    evaluate relation semantics.
+    """
+    cell = C5.run_cell(_FakeRuntime("soft-separating"), seed=0, h=8, k=2, arm="exact-indexed")
+    assert cell.coverage_rate == 1.0
     assert cell.execution_accuracy_rate == 1.0
+    assert cell.selection_success_rate == 1.0
+    assert cell.verification_rate == 1.0
+
+
+def test_execution_accuracy_is_not_selection_success(fake_execute):
+    """A selected action can fail while the endpoint distinguishes computation."""
+    cell = C5.run_cell(_FakeRuntime("inverted"), seed=0, h=8, k=None, arm="exhaustive")
+    assert cell.selection_success_rate == 0.0
+    assert cell.execution_accuracy_rate == 0.0
+    assert cell.verification_rate == 0.0
+
+
+def test_gate_checks_actual_repeated_execution_determinism(monkeypatch):
+    """Criterion 7 must test execution, not only checkpoint provenance."""
+    _gate_with_fake_execute(monkeypatch)
+
+    class NondeterministicRuntime(_FakeRuntime):
+        def execute_many(self, structures, input_rows):
+            executions, work = super().execute_many(structures, input_rows)
+            if self.calls > 1:
+                patched = []
+                for e in executions:
+                    patched.append(CasmExecution(
+                        result=ExecutionResult(
+                            output=e.result.output + 0.001,
+                            gates=e.result.gates,
+                            node_values=e.result.node_values,
+                            provenance=e.result.provenance,
+                        ),
+                        work=e.work,
+                    ))
+                return tuple(patched), work
+            return executions, work
+
+    gate = C5.run_gate(NondeterministicRuntime("separating"))
+    record = gate.criteria["checkpoint_determinism"]
+    assert not record["passed"]
+    assert record["execution_deterministic"] is False
 
 
 def test_exhaustive_execution_collapses_under_a_broken_model(fake_execute):

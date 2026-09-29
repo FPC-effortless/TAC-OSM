@@ -1,6 +1,6 @@
 # TACOSM-C5-003 — the integrated boundary, gated before the task population
 
-**Status: pre-registered.** Not run. Amended three times before any run —
+**Status: pre-registered.** Not run. Amended four times before any run —
 amendments A1, A2 and A3, below — and none is a revision from a result,
 because no result exists to revise from. The successor to `TACOSM-C5-002`,
 which terminated as `INSTRUMENT_INVALID` (`docs/TACOSM-C5-002-RESULT.md`).
@@ -142,6 +142,28 @@ what that amendment records rather than what it quietly removes.
 
 No threshold here was tuned against a run that passed it.
 
+### A4 — the task-stream endpoint boundary and actual determinism check
+
+A3 fixed criterion 4's use of the verifier by passing the model's own output as
+`Outcome.value`. A static audit found that `run_cell` still passed the hidden
+action answer as `Outcome.value`, so the measured `verification_rate` would
+reintroduce the same `1e-9` output-consistency failure on real soft CASM-S
+outputs. A4 carries the A3 convention into the task stream.
+
+The audit also found that `execution_accuracy_rate` was measuring whether the
+selected action was in `acceptable_actions`, which is an action-selection
+quantity, not a computation quantity. A4 separates the two:
+`execution_accuracy_rate` now compares the executed output at
+`GATE_THRESHOLD` with the public relation, and `selection_success_rate`
+separately measures whether the selected action is acceptable. Neither change
+uses the hidden acceptable set to score the execution endpoint.
+
+Finally, criterion 7 now executes the same held-out gate batch twice and compares
+the output, gate and node-value records. The checkpoint hash remains recorded,
+but provenance alone is no longer treated as proof of deterministic execution.
+No confirmatory C5-003 run existed under the old definition, and no thresholds,
+arms, population, bridge objective or capability decision rule changed.
+
 ## The pair-trained bridge
 
 C5-002's bridge was trained on each candidate's Boolean output in isolation.
@@ -207,8 +229,9 @@ computed from retained indices and the hidden acceptable set alone.
 | stage | endpoint | reads | must not read |
 |---|---|---|---|
 | `(S,Q) -> R` | `coverage_rate` (primary) | retained indices ∩ hidden acceptable set | any CASM-S output, selection or verification result |
-| `(R,Q) -> A` | `execution_accuracy_rate` | the public relation, the selected descriptor, the executed output | the acceptable set |
-| `(A,O) -> V` | `verification_rate` | the verifier's own constraint check on the computation's trace | the acceptable set, and any model output other than the executed one |
+| `(R,Q) -> A` | `execution_accuracy_rate` | public relation + selected descriptor + executed output | the hidden acceptable set |
+| `R -> A` | `selection_success_rate` | selected retained index ∩ hidden acceptable set | CASM-S output; this is an evaluator/action-selection endpoint, not a computation endpoint |
+| `(A,O) -> V` | `verification_rate` | the verifier's own constraint check on the computation's trace | the hidden acceptable set |
 | `R -> W(R)` | `structures_executed_per_query` and the work units | the serialized graph submitted to CASM-S | the output's semantic value |
 
 The work endpoints are the full C5-002 set: `active_nodes_per_query`,
