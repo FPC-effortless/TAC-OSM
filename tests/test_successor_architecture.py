@@ -25,7 +25,8 @@ def test_explicit_executor_uses_true_edges_not_candidate_substrate():
     )
     assert result.output == 1.0
     assert sum(result.gates) == len(program.true_edges)
-    assert tuple(bool(g) for g in result.gates) == program.copy_mask()
+    expected = tuple((edge.src, edge.dst, edge.port) in program.true_edge_set for edge in program.candidate_edges)
+    assert tuple(bool(g) for g in result.gates) == expected
 
 
 def test_exact_mode_is_distinct_from_soft_mode():
