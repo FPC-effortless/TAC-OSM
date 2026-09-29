@@ -137,6 +137,7 @@ def test_successor_router_reports_route_time_diagnostics():
     assert diag.candidate_count == 8
     assert diag.candidates_scored == 8
     assert diag.candidate_coverage == 1.0
+    assert diag.state_pool_size == diag.state_inspected_slots
     assert 1 <= diag.selected_rank <= 8
     assert diag.selected_energy == -decision.scores[decision.selected]
 
