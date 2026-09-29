@@ -57,7 +57,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 from tac_osm import Candidate, Computation, Outcome
 from tac_osm.addressing import ContentAddressIndex
-from tac_osm.benchmark_v1 import repeated_equality_population, task_from_population
+from tac_osm.benchmark_v1 import relation_holds, repeated_equality_population, task_from_population
 from tac_osm.casm_adapter import casm_structure_from_program
 from tac_osm.casm_runtime import CASM_COMMIT, CasmExecutionWork, CasmSRuntime
 from tac_osm.contract import load_contract
@@ -271,6 +271,8 @@ def run_gate(runtime: CasmSRuntime) -> GateResult:
     pairs = make_pairs(GATE_STRUCTURES, GATE_SEED, dim=DIM, marked=MARKED)
     structures, inputs = _gate_batch(pairs)
     executions, _work = runtime.execute_many(structures, inputs)
+    # Criterion 7 is an execution determinism check, not merely provenance.
+    executions_repeat, _repeat_work = runtime.execute_many(structures, inputs)
 
     # ``degeneracy.preflight`` and ``degeneracy.discrimination`` call
     # ``score(pair, which)`` with the pair object itself, so the execution
@@ -513,10 +515,24 @@ def run_gate(runtime: CasmSRuntime) -> GateResult:
         s.key for s in structures
         if not isinstance(s.key, str) or not s.key
     ]
+    def execution_signature(rows):
+        return tuple(
+            (
+                float(e.result.output),
+                tuple(float(v) for v in e.result.gates),
+                tuple(float(v) for v in e.result.node_values),
+            )
+            for e in rows
+        )
+    first_signature = execution_signature(executions)
+    repeat_signature = execution_signature(executions_repeat)
+    execution_deterministic = first_signature == repeat_signature
     criteria["checkpoint_determinism"] = {
-        "passed": not non_deterministic_keys,
+        "passed": (not non_deterministic_keys) and execution_deterministic,
         "checkpoint_sha256": _checkpoint_sha256_of(runtime),
         "non_deterministic_keys": non_deterministic_keys,
+        "execution_deterministic": execution_deterministic,
+        "repeated_execution_records": len(executions_repeat),
         "structure_key_example": structures[0].key if structures else None,
     }
 
@@ -804,6 +820,7 @@ class CellResult:
     seed: int
     coverage_rate: float
     execution_accuracy_rate: float
+    selection_success_rate: float
     verification_rate: float
     structures_executed_per_query: float
     active_nodes_per_query: float
@@ -855,6 +872,7 @@ def run_cell(runtime: CasmSRuntime, seed: int, h: int, k: int | None, arm: str) 
 
     covered = 0
     execution_correct = 0
+    selection_success = 0
     verified = 0
     work = CasmExecutionWork.zero()
     address_positions = 0
@@ -919,9 +937,24 @@ def run_cell(runtime: CasmSRuntime, seed: int, h: int, k: int | None, arm: str) 
             action=selected_global,
             trace=(result.output,) + result.node_values,
         )
+        expected_relation = relation_holds(
+            task.relation,
+            reference,
+            selected.descriptor,
+            task.query.context,
+        )
+        actual_relation = result.output >= GATE_THRESHOLD
+        if actual_relation == expected_relation:
+            execution_correct += 1
+
+        if selected_global in task.acceptable_actions:
+            selection_success += 1
+
         outcome = Outcome(
             success=selected_global in task.acceptable_actions,
-            value=1.0 if selected_global in task.acceptable_actions else 0.0,
+            # A3 applies to the real task-stream verifier too: value is the
+            # model's observed output, not the hidden action-level answer.
+            value=result.output,
             feedback="acceptable" if selected_global in task.acceptable_actions else "not_acceptable",
             detail=None,
         )
@@ -929,8 +962,6 @@ def run_cell(runtime: CasmSRuntime, seed: int, h: int, k: int | None, arm: str) 
             computation, outcome, candidate=selected, reference=reference,
             context=task.query.context, relation=task.relation,
         )
-        if outcome.success:
-            execution_correct += 1
         if evidence.valid:
             verified += 1
 
@@ -939,6 +970,7 @@ def run_cell(runtime: CasmSRuntime, seed: int, h: int, k: int | None, arm: str) 
         arm=arm, h=h, k=k, seed=seed,
         coverage_rate=covered / QUERIES,
         execution_accuracy_rate=execution_correct / QUERIES,
+        selection_success_rate=selection_success / QUERIES,
         verification_rate=verified / QUERIES,
         structures_executed_per_query=work.structures_executed / QUERIES,
         active_nodes_per_query=work.active_nodes / QUERIES,
