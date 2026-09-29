@@ -602,7 +602,7 @@ def test_soft_model_uses_model_output_in_task_stream_verification(fake_execute):
 
 def test_execution_accuracy_is_not_selection_success(fake_execute):
     """A selected action can fail while the endpoint distinguishes computation."""
-    cell = C5.run_cell(_FakeRuntime("inverted"), seed=0, h=8, k=2, arm="exact-indexed")
+    cell = C5.run_cell(_FakeRuntime("inverted"), seed=0, h=8, k=None, arm="exhaustive")
     assert cell.selection_success_rate == 0.0
     assert cell.execution_accuracy_rate == 0.0
     assert cell.verification_rate == 0.0
@@ -618,8 +618,8 @@ def test_gate_checks_actual_repeated_execution_determinism(monkeypatch):
             if self.calls > 1:
                 patched = []
                 for e in executions:
-                    patched.append(C5.CasmExecution(
-                        result=C5.ExecutionResult(
+                    patched.append(CasmExecution(
+                        result=ExecutionResult(
                             output=e.result.output + 0.001,
                             gates=e.result.gates,
                             node_values=e.result.node_values,
