@@ -282,7 +282,11 @@ threshold constants; held-out pair accuracy at the registered minimum;
 non-degenerate output spread; actual verifier acceptance on the satisfying
 half of each held-out pair (amendment A2 — `RelationConstraintVerifier` is a
 success verifier, so two-sided acceptance is capped at one half by
-construction); no dependence on `true_edge_set`; no oracle information
+construction; and amendment A3 — the outcome's `value` field carries the
+model's own output, because `verify()`'s `1e-9` output-consistency check would
+otherwise require the alpha-scaled soft Booleans to emit exactly `1.0`, which
+they reach only on a measure-zero parameter manifold); no dependence on
+`true_edge_set`; no oracle information
 entering routing or execution; deterministic reproduction from the frozen
 checkpoint; and the pair-trained objective itself. Everything else is
 deliberately unchanged from C5-002 — same population, same relation, same

@@ -131,6 +131,16 @@ GATE_SEED = 20260930
 #: ``hi >= threshold > lo`` — rather than absolute output level, because
 #: separation is what a within-query decision depends on and C5-002 measured
 #: the cost of testing the wrong thing.
+#:
+#: A3 records a property of this number that is not obvious from above: the
+#: alpha-scaled soft Booleans do not reach it on the satisfying half from
+#: below either. The circuit's output is a product of the alphas, which is
+#: ~0.480 at the zeros initialisation and ~0.46 under the pair-trained C5-002
+#: checkpoint, so criterion 2's absolute ``hi >= 0.5`` term can fire on an
+#: instrument that separates. The threshold is unchanged anyway — it is the
+#: verifier's boundary, it is frozen by criterion 1, and moving it mid-series
+#: would break comparability with C5-002 — and the possibility is recorded in
+#: A3 rather than removed. See amendment A3.
 GATE_THRESHOLD = 0.5
 #: Minimum fraction of held-out pairs the gate must separate. C5-002's
 #: pre-registered value, unchanged after seeing 0.2305 — relaxing it would
@@ -383,14 +393,38 @@ def run_gate(runtime: CasmSRuntime) -> GateResult:
     # of every pair is structurally capped at one half, and the cap is a
     # property of the verifier rather than of the instrument. The criterion is
     # therefore *acceptance on the satisfying half*: the verifier must accept
-    # the satisfying descriptor, on the model's own output. That is the
-    # quantity that separates a working instrument from an inverted one — an
-    # anti-correlating model makes the verifier reject on the satisfying half,
-    # where a threshold-only check would see a model that is confidently wrong
-    # in the same direction on both halves. A model that separates already
-    # passes the threshold criterion (2); this criterion is the cross-check
-    # that the separation runs in the direction the benchmark's own verifier
-    # reads.
+    # the satisfying descriptor. That is the quantity that separates a working
+    # instrument from an inverted one — an anti-correlating model makes the
+    # verifier reject on the satisfying half, where a threshold-only check
+    # would see a model that is confidently wrong in the same direction on
+    # both halves.
+    #
+    # A3 changed what the outcome's ``value`` field carries. ``verify()``
+    # enforces ``abs(trace[0] - value) <= tolerance`` at ``tolerance = 1e-9``
+    # before it ever reaches the relation branch, so passing the programme's
+    # expected answer (``1.0``) as the value required the model to emit
+    # *exactly* 1.0 on every satisfying pair. CASM-S's soft Booleans are
+    # alpha-scaled — ``alpha = softplus(alpha_eta)`` per relation port — and
+    # the relevance circuit's output is a product of them, which equals 1.0
+    # only on a measure-zero manifold in parameter space. Under the pair-
+    # trained C5-002 checkpoint (``alpha`` ~= 0.797/0.786) the satisfying-half
+    # output is ~0.46, so the pre-A3 convention scored this criterion 0.0 on
+    # every pair and fired INSTRUMENT_INVALID on an instrument whose
+    # separation is exactly what this experiment trains for. The outcome now
+    # carries the model's own output, which makes the consistency check pass
+    # trivially and leaves the relation branch's ``trace[0] >= 0.5`` as the
+    # real test.
+    #
+    # Caveat, recorded rather than hidden: with ``value = trace[0]`` this
+    # criterion reduces operationally to "the satisfying-half output is at
+    # least the threshold", which is close to criterion 2's ``hi >= threshold
+    # > lo``. Its non-redundant content is that it reads the decision through
+    # the *task stream's own verifier object* rather than through a threshold
+    # comparison, so a future change to the verifier's boundary is reflected
+    # here without this criterion being edited. Note also — see amendment A3
+    # — that the alpha-scaled output does not reach the threshold from below
+    # either, so criterion 2's absolute ``hi >= 0.5`` term is itself part of
+    # what A3 records.
     verifier = RelationConstraintVerifier()
     n_agree = 0
     for pair in pairs:
@@ -404,7 +438,19 @@ def run_gate(runtime: CasmSRuntime) -> GateResult:
             action=0,
             trace=(output,),
         )
-        outcome = Outcome(success=bool(expected), value=expected)
+        # A3: the outcome value is the model's own output, not the expected
+        # answer, because verify() enforces |trace[0] - value| <= tolerance
+        # with tolerance = 1e-9. Passing the expected answer here requires the
+        # model to emit exactly 1.0 on every satisfying pair. CASM-S's soft
+        # Booleans are alpha-scaled (alpha = softplus(alpha_eta)), and the
+        # relevance circuit's final output is alpha0*alpha1*..., which
+        # reaches 1.0 only on a measure-zero manifold in parameter space.
+        # The pair-trained bridge holds alpha at roughly 0.797/0.786, giving a
+        # satisfying-half output around 0.46 — not 1.0, and read under the
+        # pre-A3 convention this criterion scored 0.0 on every pair and fired
+        # INSTRUMENT_INVALID on an instrument whose separation is exactly what
+        # the experiment trains for. See amendment A3.
+        outcome = Outcome(success=bool(expected), value=output)
         evidence = verifier.verify_task(
             computation, outcome,
             candidate=Candidate(key=structure.key, descriptor=descriptor),
@@ -425,7 +471,12 @@ def run_gate(runtime: CasmSRuntime) -> GateResult:
             "the task stream's own verifier accepts the satisfying descriptor "
             "on the model's output, over the held-out pairs; verify_task is a "
             "success verifier and necessarily rejects a violating descriptor, "
-            "so the violating half is not part of this score"
+            "so the violating half is not part of this score; per amendment "
+            "A3 the outcome's value carries the model's own output rather "
+            "than the expected answer, because verify()'s 1e-9 output "
+            "consistency check would otherwise require the model to emit "
+            "exactly 1.0, which the alpha-scaled soft Booleans do not reach "
+            "outside a measure-zero parameter manifold"
         ),
     }
 

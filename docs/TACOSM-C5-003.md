@@ -1,9 +1,9 @@
 # TACOSM-C5-003 — the integrated boundary, gated before the task population
 
-**Status: pre-registered.** Not run. Amended twice before any run — amendments
-A1 and A2, below — and neither is a revision from a result, because no result
-exists to revise from. The successor to `TACOSM-C5-002`, which terminated as
-`INSTRUMENT_INVALID` (`docs/TACOSM-C5-002-RESULT.md`).
+**Status: pre-registered.** Not run. Amended three times before any run —
+amendments A1, A2 and A3, below — and none is a revision from a result,
+because no result exists to revise from. The successor to `TACOSM-C5-002`,
+which terminated as `INSTRUMENT_INVALID` (`docs/TACOSM-C5-002-RESULT.md`).
 
 Related: `docs/TACOSM-C5-001-RESULT.md` (void),
 `docs/TACOSM-DEGENERACY-001.md` (the preflight infrastructure this experiment's
@@ -83,7 +83,7 @@ before any run. A failure of any one terminates the run as
 | 1 | frozen threshold constants | a gate whose bars moved between registration and run | `GATE_THRESHOLD = 0.5`, `GATE_MIN_ACCURACY = 0.5`, `MIN_SPREAD = 0.05`, `MIN_CLASS_SUPPORT = 2` |
 | 2 | held-out pair accuracy | a bridge that does not separate satisfier from violator — the C5-002 failure, at 0.2305 | `GATE_MIN_ACCURACY = 0.5` over `GATE_STRUCTURES = 512` pairs |
 | 3 | non-degenerate output spread | a constant or near-constant output — the C5-001 failure, `sd = 0` | `MIN_SPREAD = 0.05`, `ABSOLUTE_FLOOR = 1e-9` |
-| 4 | actual verifier acceptance | a gate that passes a model the task stream's own verifier rejects | `verification_acceptance` on the satisfying half of each of the 512 held-out pairs, minimum `GATE_MIN_ACCURACY` (see amendment A2) |
+| 4 | actual verifier acceptance | a gate that passes a model the task stream's own verifier rejects | `verification_acceptance` on the satisfying half of each of the 512 held-out pairs, minimum `GATE_MIN_ACCURACY` (see amendments A2 and A3) |
 | 5 | no dependence on `true_edge_set` | an instrument that reads the wiring it is supposed to be tested on | structural: the transported spec never carries `true_edges` (`docs/CASM-S-ADAPTER.md`) |
 | 6 | no oracle information entering routing or execution | gold leaking into the addressing or execution stage | `leakage.py`'s `FORBIDDEN_FIELDS`, audited at the gate, not assumed |
 | 7 | deterministic reproduction from the frozen checkpoint | a run whose numbers depend on which machine ran it | `checkpoint_sha256` recorded; `hash()` is per-process salted so structure keys are formatted strings, not hashes |
@@ -102,10 +102,12 @@ executed output agrees with the relation — two-sided acceptance is therefore
 capped at one half by construction, and the registered minimum of 0.5 would
 be a ceiling reached only vacuously. The satisfying half is the half that
 moves: an inverted model is rejected there, where a threshold-only check sees
-a model confidently wrong in the same direction on both. Criterion 5 and 6 are
-structural and are checked on the objects that cross the boundary, not on a
-prose assurance. Criterion 7 is what makes the run reproducible rather than
-merely repeatable.
+a model confidently wrong in the same direction on both. Amendment A3, below,
+changes what the outcome's `value` field carries on that half, and records
+that the alpha-scaled output does not reach the threshold from below either;
+criteria 5 and 6 are structural and are checked on the objects that cross
+the boundary, not on a prose assurance. Criterion 7 is what makes the run
+reproducible rather than merely repeatable.
 
 The gate runs **before** the task population. That position is the difference
 between a terminated run and a voided one, and it is the one design decision
@@ -129,6 +131,14 @@ reason the bar stays where it is, not a reason to move it.
 `MIN_SPREAD = 0.05` is loose on purpose. C5-001's output was constant, `sd =
 0`, so any positive value separates that failure from a working instrument;
 the threshold catches the *class* of failure and is not fitted to sensitivity.
+
+`GATE_THRESHOLD = 0.5` is not re-examined here, but amendment A3 records
+something about it that a reader should know: the alpha-scaled soft Booleans
+do not reach `0.5` on the satisfying half from below either — the product is
+`≈ 0.480` at initialisation and `≈ 0.46` under the C5-002 trained checkpoint.
+The threshold is nevertheless unchanged, for the reasons A3 gives, and the
+possibility that criterion 2 fires on a well-separating instrument is part of
+what that amendment records rather than what it quietly removes.
 
 No threshold here was tuned against a run that passed it.
 
@@ -268,10 +278,10 @@ against the registered design.
 
 ## Amendments
 
-Both amendments were made **before any run**, which is the only window in
+All three amendments were made **before any run**, which is the only window in
 which a pre-registration may be amended honestly: there is no result to
 protect, and the replaced definitions are kept readable in the contract rather
-than overwritten. Neither changes the hypothesis, the arms, the endpoints, the
+than overwritten. None changes the hypothesis, the arms, the endpoints, the
 decision rule or the thresholds. The full text, including each amendment's
 `old_definition`, `rationale`, `discovered` and `no_result_under_previous_version`,
 is in `contracts/TACOSM-C5-003.json`.
@@ -314,6 +324,63 @@ registered purpose ("a gate that passes a model the task stream's own verifier
 rejects") is preserved by this reading and was never achievable by the
 two-sided one. The implementation has always scored the satisfying half; the
 amendment brings the registration to what the code does.
+
+### A3 — criterion 4's outcome value, and the threshold the alphas do not reach
+
+A2 resolved *which half* criterion 4 scores. It left the outcome's `value`
+field carrying the programme's expected answer — `1.0` on the satisfying
+half. That reading is not usable, for a reason in the verifier rather than in
+the model: `verify()` enforces `abs(trace[0] − value) <= tolerance` at
+`tolerance = 1e-9` *before* it reaches the relation branch, so passing `1.0`
+as the value requires the model to emit **exactly** `1.0` on every satisfying
+pair.
+
+CASM-S's soft Booleans cannot, in general. They are alpha-scaled —
+`alpha = c * softplus(alpha_eta)` per relation port, `c = 1.0`, initialised at
+`alpha_eta = [0, 0]` so `alpha ≈ [0.693, 0.693]` — and the 2-mark relevance
+circuit compiles to `INPUT ×4, EQ, EQ, AND`, with `EQ` expanded by the adapter
+to `XOR + NOT`. The satisfying-half output is a product of the alphas, and that
+product equals `1.0` only on a measure-zero manifold in parameter space. It is
+*reachable* — `alpha0 · alpha1 = 1.0` at, say, `eta ≈ (0.60, 0.48)` — but no
+float32 gradient path lands on it. At the initialisation itself the product is
+`0.693² ≈ 0.480`, already below `1`.
+
+The retained C5-002 checkpoint (`casm-s-c5-002.pt`, run `36536249559`,
+artifact `11018687523`) makes this concrete rather than hypothetical: read
+torch-free as a zip with a numpy-backed `_rebuild_tensor_v2` stub, its trained
+parameters are `alpha_eta = [0.19835, 0.17771]`, so `alpha ≈ [0.797, 0.786]`,
+and the satisfying-half output is `≈ 0.46`. Under the pre-A3 convention,
+criterion 4 scored `0.0` on **every** pair and fired `INSTRUMENT_INVALID` on an
+instrument whose separation is exactly what this experiment trains for.
+
+The fix is narrow: the outcome's `value` now carries the model's own output,
+the same float the trace holds. The consistency check then passes by
+construction and the relation branch's `trace[0] >= 0.5` becomes the operative
+test — which still rejects an inverted model, and now accepts `0.5`–`1.0` while
+rejecting `0.03` and `0.34`.
+
+Two consequences are recorded here rather than hidden:
+
+1. **Criterion 4 becomes close to criterion 2.** With `value = trace[0]` it
+   reduces operationally to "the satisfying-half output is at least the
+   threshold", which is criterion 2's `hi >= threshold > lo` without the `> lo`
+   term. Its non-redundant content is that it reads the decision through the
+   *task stream's own verifier object* rather than through a threshold
+   comparison, so a future change to the verifier's boundary is reflected
+   here without this criterion being edited.
+2. **The alphas do not reach the threshold from below either.** At the C5-002
+   trained alphas the satisfying-half output is `≈ 0.46`, below
+   `GATE_THRESHOLD = 0.5`; at the initialisation it is `≈ 0.480`, also below.
+   The threshold is **deliberately not changed** by this amendment: it is
+   frozen by criterion 1, it is the verifier's own decision boundary rather
+   than an instrument-specific calibration, and moving it mid-series would
+   break comparability with C5-002's `0.2305` separation and its gate verdict.
+   The consequence is that criterion 2's absolute `hi >= 0.5` term is itself
+   part of what A3 records: if the pair-trained bridge's satisfying-half
+   output stays below `0.5`, criterion 2 is the criterion that fires and the
+   run terminates as `INSTRUMENT_INVALID` — which is the honest outcome for an
+   instrument that does not cross the verifier's boundary, and is a far better
+   failure than criterion 4 terminating a run on a `1e-9` technicality.
 
 ## What this experiment does not establish
 
