@@ -102,6 +102,7 @@ class TemporalBenchmark:
         self.state = state if state is not None else TemporalPersistentState()
         self._events: dict[int, TemporalTaskEvent] = {}
         self._writes: dict[int, list[tuple[str, tuple[int, ...], int]]] = {}
+        self._last_task_step = -1
 
     def schedule_lookup_probe(
         self,
@@ -172,10 +173,13 @@ class TemporalBenchmark:
         return task
 
     def next_task(self, step: int) -> GeneratedTask:
-        """Advance time, stage world events, then expose the current decision."""
-        if step < self.state.current_step:
-            raise ValueError("benchmark cannot move backwards")
-        self.state.advance_to(step)
+        """Expose exactly one causal decision boundary at a time."""
+        expected = self._last_task_step + 1
+        if step != expected:
+            raise ValueError(
+                f"temporal benchmark requires contiguous decision steps: "
+                f"expected {expected}, got {step}"
+            )
         for write_step, entries in tuple(self._writes.items()):
             if write_step != step:
                 continue
@@ -185,6 +189,8 @@ class TemporalBenchmark:
                     delay=read_step - write_step,
                 )
             del self._writes[write_step]
+        self.state.advance_to(step)
+        self._last_task_step = step
         event = self._events.get(step)
         if event is None:
             return self.schedule_task(step)
@@ -284,7 +290,7 @@ class HardenedLoop:
         read = self.benchmark.state.read(task.public())
         if read.values:
             return tuple(read.values[0])
-        bits = task.query.text.partition("\t")[0]
+        bits = task.query.text.partition("	")[0]
         if bits.strip():
             return tuple(int(x) for x in bits.split())
         return ()
@@ -479,6 +485,8 @@ class HardenedLoop:
         return row
 
     def run(self, n_steps: int) -> Trajectory:
+        if n_steps < 1:
+            raise ValueError("n_steps must be >= 1")
         for step in range(n_steps):
             self.step(step)
         return self.trajectory
