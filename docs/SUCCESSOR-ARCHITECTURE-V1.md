@@ -33,7 +33,9 @@ replace the addressor's internals without changing the routing API.
 `R_t=TopK_B(-E)`
 
 The representation maps are learned. Candidate action indices are excluded
-from the representation.
+from the representation. The query representation contains an explicit
+reference×context interaction so marked-position equality is representable by
+the bilinear scorer.
 
 Training is pairwise and outcome-derived. A successful execution supplies the
 positive candidate; the strongest current competitor is the hard negative.
@@ -42,6 +44,11 @@ A failure supplies no invented positive label.
 The current implementation still scores the complete candidate set. Its
 diagnostic `candidate_coverage` is therefore reported as 1.0. This is
 intentional: the branch does not claim sublinear candidate retrieval.
+
+For latent dimension `d_z`, query width `d_q`, candidate width `d_c`, and `N`
+candidates, route-time projection work is accounted as
+`d_z*d_q + N*d_z*d_c + N*d_z` MACs. This excludes the state-store lookup and
+Python/runtime overhead; those are measured separately.
 
 ### 3. Explicit executable graph
 
@@ -63,6 +70,15 @@ The first version is a transport/measurement layer rather than a GPU kernel.
 Work is reported as active nodes, active true edges, and structural operations.
 Candidate-edge counts are recorded as metadata so that substrate size is not
 silently confused with executed work.
+
+## Representability gate
+
+A constructive shared parameter witness is available to the successor router.
+For each bit position `j`, the witness realizes
+`z_q[j] = context[j] * (2*reference[j] - 1)` and
+`z_c[j] = 2*descriptor[j] - 1`, so the score contributes +1 for a marked
+agreement and -1 for a marked disagreement. The witness is a test oracle for
+the hypothesis class, not a training initialization for capability runs.
 
 ## What this branch does not claim
 
