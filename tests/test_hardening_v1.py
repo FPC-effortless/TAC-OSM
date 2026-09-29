@@ -396,3 +396,66 @@ def test_relation_constraint_verifier_rejects_semantically_invalid_action_withou
     assert not evidence.valid
     assert evidence.failed_constraint == "relation_unsatisfied"
     assert evidence.repair_target == f"candidate:{candidate.key}"
+
+
+def test_static_population_preserves_actions_across_queries():
+    from tac_osm.benchmark_v1 import repeated_equality_population, task_from_population
+
+    population = repeated_equality_population(41, dim=8, n_candidates=64)
+    first = task_from_population(
+        candidates=population,
+        reference_bits=(0, 0, 1, 0, 1, 0, 1, 0),
+        step=0,
+        validity="multiple",
+    )
+    second = task_from_population(
+        candidates=population,
+        reference_bits=(1, 1, 0, 1, 0, 1, 0, 1),
+        step=1,
+        validity="multiple",
+    )
+    assert first.candidates == second.candidates
+    assert first.acceptable_actions
+    assert second.acceptable_actions
+    assert first.acceptable_actions != second.acceptable_actions
+
+
+def test_hardened_index_never_receives_hidden_truth_after_reset():
+    from tac_osm.addressing import ContentAddressIndex
+    from tac_osm.hardened import HardenedLoop, TemporalBenchmark
+
+    benchmark = TemporalBenchmark(seed=51, n_candidates=16)
+    task = benchmark.schedule_lookup_probe(delay=1, key="hidden-test")
+    captured = []
+
+    class RecordingIndex(ContentAddressIndex):
+        def lookup(self, query, *, reference, k=None, relation="equality"):
+            captured.append(tuple(reference))
+            return super().lookup(query, reference=reference, k=k, relation=relation)
+
+    loop = HardenedLoop(
+        router=lambda query, state, candidates: PublicRelationRouter()(query, state, candidates),
+        benchmark=benchmark,
+        index=RecordingIndex(),
+        index_k=4,
+        repair=None,
+        learning_enabled=False,
+        before_read=lambda task, step, state: state.clear() if step == 1 else None,
+    )
+    loop.step(0)
+    loop.step(1)
+    assert captured
+    assert captured[-1] == ()
+    assert tuple(task.reference_bits) != captured[-1]
+
+
+def test_temporal_interventions_are_explicit_and_non_silent():
+    state = TemporalPersistentState()
+    state.write(__import__("tac_osm").StateUpdate(key="a", value=(0, 1, 0, 1), step=0))
+    state.write(__import__("tac_osm").StateUpdate(key="b", value=(1, 0, 1, 0), step=0))
+    state.corrupt("a", position=1)
+    assert state.read(Query(text="\ta", step=0)).values == ((0, 0, 0, 1),)
+    state.swap_values("a", "b")
+    assert state.read(Query(text="\ta", step=0)).values == ((1, 0, 1, 0),)
+    state.clear()
+    assert state.addresses() == ()
