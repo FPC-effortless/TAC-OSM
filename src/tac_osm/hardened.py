@@ -97,6 +97,7 @@ class TemporalBenchmark:
         n_candidates: int = 64,
         relation: RelationName = "equality",
         validity: ValidityMode = "unique",
+        filler_candidates: int = 1,
         state: TemporalPersistentState | None = None,
     ) -> None:
         self.seed = seed
@@ -104,6 +105,9 @@ class TemporalBenchmark:
         self.n_candidates = n_candidates
         self.relation = relation
         self.validity = validity
+        if filler_candidates < 1:
+            raise ValueError("filler_candidates must be >= 1")
+        self.filler_candidates = filler_candidates
         self.state = state if state is not None else TemporalPersistentState()
         self._events: dict[int, TemporalTaskEvent] = {}
         self._writes: dict[int, list[tuple[str, tuple[int, ...], int]]] = {}
@@ -158,7 +162,7 @@ class TemporalBenchmark:
                 filler = generate_task(
                     self.seed + 100_000 + step,
                     dim=self.dim,
-                    n_candidates=self.n_candidates,
+                    n_candidates=self.filler_candidates,
                     relation=self.relation,
                     validity=self.validity,
                     step=step,
