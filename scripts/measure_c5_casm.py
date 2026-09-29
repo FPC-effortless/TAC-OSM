@@ -303,7 +303,7 @@ def C5Benchmark_observe(task, action: int) -> Outcome:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--casm-root", required=True)
+    parser.add_argument("--casm-root")
     parser.add_argument("--checkpoint")
     parser.add_argument("--checkpoint-out")
     parser.add_argument("--train-bridge", action="store_true")
@@ -326,7 +326,11 @@ def main() -> None:
         contract.require_steps(args.steps)
         contract.require_eval_steps(args.eval_steps)
         contract.require_arms(ARMS)
-        print("SMOKE TEST: C5 contract/script wiring")
+        _results.report_smoke(
+            contract, EXPERIMENT_ID,
+            steps=args.steps, eval_steps=args.eval_steps,
+            h_levels=run_levels, seeds=run_seeds, arms=ARMS,
+        )
         print(f"machine-readable summary written to {args.output}")
         return
 
