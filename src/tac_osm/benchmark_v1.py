@@ -307,10 +307,19 @@ def task_from_population(
         for i, candidate in enumerate(candidates)
         if relation_holds(relation, reference, candidate.descriptor, marks)
     }
-    expected = {"unique": 1, "multiple": 2, "none": 0}[validity]
-    if len(acceptable) != expected:
+    if validity == "unique" and len(acceptable) != 1:
         raise ValueError(
-            f"population does not realize validity={validity}: "
+            "population does not realize validity=unique: "
+            f"found {len(acceptable)} acceptable candidates"
+        )
+    if validity == "multiple" and len(acceptable) < 2:
+        raise ValueError(
+            "population does not realize validity=multiple: "
+            f"found {len(acceptable)} acceptable candidates"
+        )
+    if validity == "none" and acceptable:
+        raise ValueError(
+            "population does not realize validity=none: "
             f"found {len(acceptable)} acceptable candidates"
         )
     bits = "" if state_address else " ".join(str(x) for x in reference)
