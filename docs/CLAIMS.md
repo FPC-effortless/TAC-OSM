@@ -235,12 +235,41 @@ cost term is registered.
 claim, because its capability half was never measured: the reference arm
 collapsed to the population base rate and the indexed arm's success was
 guaranteed by the benchmark's own acceptable-action construction. The claim
-therefore stays UNTESTED, and the blocker is now the *instrument*, not the
+therefore stays UNTESTED, and the blocker became the *instrument*, not the
 mechanism's absence. `docs/TACOSM-C5-001-RESULT.md` records the four failure
-modes and retains the artifact. The successor is `TACOSM-C5-002`, which
-separates retention, execution correctness and work into three endpoints and
-terminates as instrument-invalid if a representability gate fails —
-`docs/TACOSM-C5-002.md`.
+modes and retains the artifact.
+
+**TACOSM-C5-002 ran, and its gate fired — see below.** The successor was
+registered to fix C5-001's specific defect: it separated retention, execution
+correctness and work into three endpoints and added a representability gate
+that runs *before* the task stream and terminates the run as instrument-invalid
+if the frozen CASM-S cannot separate the relation's satisfier from a
+one-bit-flipped violator. The gate fired. It separated **59 of 256** held-out
+pairs (0.2305) against a pre-registered minimum of 0.5, so the run terminated
+before any arm was measured and produced `"cells": []` — no capability table,
+no capability number, nothing to misread.
+
+The claim therefore still stays UNTESTED, and the blocker is still the
+instrument. But the blocker is now *diagnosed*, and the diagnosis is a
+measurement rather than a guess: the bridge model reports **0.84375** absolute
+output accuracy on held-out circuits while separating satisfier from violator
+in only **0.2305** of held-out pairs. One model, one graph family, one run. The
+instrument's accuracy score is blind to its separation score — which is the
+exact error that let C5-001 complete on an unrepresentative model, now caught
+by a gate instead of by a retrospective void. See
+`docs/TACOSM-C5-002-RESULT.md`.
+
+**The successor needs a new bridge, not a new experiment ID.** The gate's
+failure localizes to the bridge's training target: it is trained on each
+candidate's Boolean output in isolation, and nothing in that objective rewards
+within-query ranking, so a model reaching 0.84375 absolute accuracy is
+*behaving as trained*. The registered fix is a bridge trained on **pairs** with
+a loss on separation, not on single candidates with a loss on absolute level.
+The four candidate causes named in C5-001's void (soft-op `alpha` scaling, the
+bridge training target, the 0.5 threshold, unlearned gate routing) remain
+unresolved — no run to date separates them — and the gate threshold stays at
+0.5 because it was pre-registered before the run and is not tunable after
+seeing the result.
 
 This is the architecture's central efficiency claim and it is *not* supported
 by any measurement in the repository. The honest model of v0.1 cost is:

@@ -286,6 +286,8 @@ cannot drift from `measured` to `supported` without an entry changing there.
 | `TACOSM-MATCHED-001` | is the large-H loss a representation problem or a training problem? | **neither** — the learning rule is the failure |
 | `TACOSM-LEARN-001` (F2) | do two named exploration interventions lift the large-H endpoint? | **no** — both within seed noise; `recall@16` materially *harmed* by epsilon-greedy |
 | `TACOSM-SURROGATE-001` (F3) | does a dense gold-anchored reward lift the large-H endpoint? | **top-K yes, top-1 no** — `Δ(recall@16)` = +0.0860 / +0.2460; `Δ(routing@1)` within noise |
+| `TACOSM-C5-001` | does reducing the executed candidate set from H to K preserve capability? | **VOID** — the reference arm collapsed to the base rate (0.2500) and the indexed arm's 1.0000 was guaranteed by the benchmark's own acceptable-action construction; `verification_rate` 0.0000 in all 75 cells |
+| `TACOSM-C5-002` | same question, with retention/execution/work separated and a representability gate *before* the task stream | **INSTRUMENT_INVALID** — the gate fired and no capability number was emitted. The bridge reports 0.84375 absolute accuracy but separates satisfier from violator in only 59/256 pairs (0.2305, minimum 0.5), so `"cells": []` |
 
 `TACOSM-MATCHED-001` is the result that redirected the roadmap. Its
 pre-registered rule committed to two outcomes and produced neither: matched-H
