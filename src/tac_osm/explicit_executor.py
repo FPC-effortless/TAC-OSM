@@ -31,11 +31,14 @@ __all__ = [
 @dataclass(frozen=True)
 class ExplicitExecutorConfig:
     mode: str = "exact"
+    max_nodes: int = 32
     alpha: tuple[float, float] = (1.0, 1.0)
 
     def __post_init__(self) -> None:
         if self.mode not in ("exact", "soft"):
             raise ValueError("mode must be 'exact' or 'soft'")
+        if self.max_nodes < 4:
+            raise ValueError("max_nodes must be >= 4")
 
 
 @dataclass(frozen=True)
