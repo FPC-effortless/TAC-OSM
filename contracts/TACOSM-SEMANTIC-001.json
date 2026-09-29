@@ -1,0 +1,61 @@
+{
+  "experiment_id": "TACOSM-SEMANTIC-001",
+  "title": "Representation-based semantic addressing: can an injected representation reduce routing input without hidden-truth access?",
+  "question": "Across held-out relations and candidate populations, does representation-based addressing preserve capability while reducing the number of candidates presented to the router?",
+  "hypothesis": "A representation address index using an encoder trained only from public query/candidate information can retain acceptable candidates at bounded query-time bucket-probe cost, reducing router input relative to exhaustive routing. Exact content addressing remains the control.",
+  "arms": [
+    {
+      "name": "exhaustive",
+      "intervention": "route over all H candidates",
+      "acts_on": "addressing/routing boundary",
+      "knob": "retained set",
+      "value": "H"
+    },
+    {
+      "name": "exact_control",
+      "intervention": "use ContentAddressIndex",
+      "acts_on": "addressing/routing boundary",
+      "knob": "K",
+      "value": "K in {2,4,8}"
+    },
+    {
+      "name": "semantic_address",
+      "intervention": "use RepresentationAddressIndex with frozen encoder and bounded LSH probes",
+      "acts_on": "addressing/routing boundary",
+      "knob": "K",
+      "value": "K in {2,4,8}"
+    }
+  ],
+  "primary_endpoint": {
+    "name": "success_rate",
+    "definition": "Observed task success using the environment evaluator after routing and execution."
+  },
+  "secondary_endpoints": [
+    "address_recall_at_k",
+    "router_candidates_per_step",
+    "address_query_probes",
+    "index_build_candidates",
+    "candidate_work_amortized",
+    "executor_invocations",
+    "wall_clock_seconds"
+  ],
+  "required_controls": [
+    "exact ContentAddressIndex remains a non-learned control",
+    "exhaustive routing remains the capability ceiling",
+    "encoder receives only public Query and PersistentState",
+    "hidden acceptable_actions and reference_bits are inaccessible to address encoders",
+    "no fallback from semantic address miss to exhaustive routing",
+    "encoder is frozen before evaluation",
+    "training data is disjoint from evaluation seeds and held-out relation/population conditions"
+  ],
+  "relation_splits": {
+    "train": ["equality"],
+    "held_out": ["xor_parity", "majority", "any_match"]
+  },
+  "h_levels": [64, 256],
+  "k_levels": [2, 4, 8],
+  "seeds": [0, 1, 2, 3, 4],
+  "validity": ["unique", "multiple", "none"],
+  "status": "pre-registered_architecture_contract",
+  "layer": "L3"
+}
