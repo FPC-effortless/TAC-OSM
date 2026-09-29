@@ -8,7 +8,7 @@ injected component, but changes the call graph to:
 The key properties are:
   * writes and reads occur on distinct enforced time boundaries;
   * retrieval is an actual runtime input to routing and execution;
-  * query-time addressing can be bounded after one-time index construction;
+  * query-time addressing can be bounded after index construction;
   * address, readout, representation, and routing are separate interfaces;
   * trajectory and cost accounting are produced by the loop itself;
   * verifier evidence is structured and repair re-executes under a fixed bound;
@@ -25,15 +25,14 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, Sequence
 
-from . import Candidate, Computation, Outcome, Query, RoutingDecision, Structure
-from .addressing import AddressCost, ContentAddressIndex
+from . import Candidate, Computation, Outcome, Query, RoutingDecision, StateUpdate, Structure
+from .addressing import AddressCost, ContentAddressIndex, SUPPORTED_RELATIONS
 from .benchmark_v1 import GeneratedTask, RelationName, ValidityMode, generate_task, relation_holds
 from .structured_verifier import BoundedExecutableRepair, SemanticVerifier, StructuredRepair
 from .temporal import TemporalPersistentState, TemporalWrite
 from .trajectory import Trajectory, TrajectoryStep
 
 Router = Callable[[Query, Any, Sequence[Candidate]], RoutingDecision]
-ComputationFn = Callable[[Candidate, Sequence[int], Sequence[int]], Computation]
 
 
 @dataclass
@@ -139,7 +138,6 @@ class TemporalBenchmark:
         )
         self._writes.setdefault(write_step, []).append((key, bits, read_step))
         self._events[read_step] = TemporalTaskEvent(step=read_step, task=task)
-        # Fill every intervening decision boundary with fresh public tasks.
         for step in range(write_step, read_step):
             if step not in self._events:
                 filler = generate_task(
@@ -183,11 +181,7 @@ class TemporalBenchmark:
                 continue
             for key, bits, read_step in entries:
                 self.state.stage_world_write(
-                    __import__("tac_osm").StateUpdate(
-                        key=key,
-                        value=bits,
-                        step=write_step,
-                    ),
+                    StateUpdate(key=key, value=bits, step=write_step),
                     delay=read_step - write_step,
                 )
             del self._writes[write_step]
@@ -244,6 +238,16 @@ def _safe_digest(mapping: dict[str, Any]) -> str:
     return hashlib.sha256(raw).hexdigest()[:16]
 
 
+def _population_key(candidates: Sequence[Candidate], context: Sequence[int]) -> str:
+    raw = repr(
+        (
+            tuple((c.key, tuple(c.descriptor)) for c in candidates),
+            tuple(context),
+        )
+    ).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+
 @dataclass
 class HardenedLoop:
     """Single call graph for exhaustive and indexed runtime arms."""
@@ -262,26 +266,27 @@ class HardenedLoop:
     def __post_init__(self) -> None:
         self.trajectory = Trajectory(self.episode_id)
         self.costs = RuntimeCosts()
-        self._index_built = False
+        self._index_key: str | None = None
         self._address_cost = AddressCost(
             build_candidates=0, query_positions=0, candidates_returned=0
         )
 
     def build_index(self, candidates: Sequence[Candidate], context: Sequence[int]) -> None:
-        """Build once when the candidate population is materialised."""
+        """Build or rebuild only when the indexed population actually changes."""
         start = time.perf_counter()
         self.index = ContentAddressIndex.build(candidates, context=context)
         self.costs.index_build_candidates += len(candidates)
         self.costs.wall_clock_seconds += time.perf_counter() - start
-        self._index_built = True
+        self._index_key = _population_key(candidates, context)
 
     def _reference(self, task: GeneratedTask) -> tuple[int, ...]:
-        """Use public query bits or the addressed state vector, never hidden gold."""
-        bits = self.benchmark.state.read(task.public())
-        if bits.values:
-            return tuple(bits.values[0])
-        if task.query.text.partition("\t")[0].strip():
-            return tuple(int(x) for x in task.query.text.partition("\t")[0].split())
+        """Use public query bits or addressed state, never hidden gold."""
+        read = self.benchmark.state.read(task.public())
+        if read.values:
+            return tuple(read.values[0])
+        bits = task.query.text.partition("\t")[0]
+        if bits.strip():
+            return tuple(int(x) for x in bits.split())
         return ()
 
     def _state_digest(self) -> str:
@@ -304,8 +309,15 @@ class HardenedLoop:
                 "must remain unreadable rather than being guessed"
             )
 
-        if self.index is not None and not self._index_built:
-            self.build_index(task.candidates, public_query.context)
+        if self.index is not None:
+            if task.relation not in SUPPORTED_RELATIONS:
+                raise ValueError(
+                    f"indexed runtime arm only supports {SUPPORTED_RELATIONS}; "
+                    f"got {task.relation!r}"
+                )
+            key = _population_key(task.candidates, public_query.context)
+            if key != self._index_key:
+                self.build_index(task.candidates, public_query.context)
 
         if self.index is None:
             retained = tuple(range(len(task.candidates)))
@@ -317,6 +329,7 @@ class HardenedLoop:
                 public_query,
                 reference=reference,
                 k=self.index_k,
+                relation=task.relation,
             )
             retained = hit.candidate_indices
             address_positions = hit.inspected_positions
@@ -335,7 +348,8 @@ class HardenedLoop:
         decision = self.router(public_query, self.benchmark.state, retained_candidates)
         if not 0 <= decision.selected < len(retained_candidates):
             raise IndexError(
-                f"router selected {decision.selected} from {len(retained_candidates)} candidates"
+                f"router selected {decision.selected} from "
+                f"{len(retained_candidates)} candidates"
             )
         selected_global = retained[decision.selected]
 
@@ -382,13 +396,11 @@ class HardenedLoop:
                 final_outcome = self.benchmark.observe(task, final_selected)
 
         if evidence.valid and final_outcome.success:
-            # Learning writes are delayed by one decision boundary, so V_t -> S_t+1
-            # is explicit rather than an immediate write inside the same step.
             key = f"experience:{self.episode_id}:{step}"
             self.benchmark.state.stage_world_write(
-                __import__("tac_osm").StateUpdate(
+                StateUpdate(
                     key=key,
-                    value=tuple(task.reference_bits),
+                    value=tuple(reference),
                     step=step,
                 ),
                 delay=1,
