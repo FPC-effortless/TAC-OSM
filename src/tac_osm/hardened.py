@@ -97,7 +97,7 @@ class TemporalBenchmark:
         n_candidates: int = 64,
         relation: RelationName = "equality",
         validity: ValidityMode = "unique",
-        filler_candidates: int = 1,
+        filler_candidates: int = 2,
         state: TemporalPersistentState | None = None,
     ) -> None:
         self.seed = seed
