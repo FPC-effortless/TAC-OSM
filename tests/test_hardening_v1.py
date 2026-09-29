@@ -158,11 +158,15 @@ def test_indexed_loop_passes_only_retained_candidates_to_router():
         index=ContentAddressIndex(),
         index_k=4,
     )
-    row = loop.step(4)
+    trajectory = loop.run(5)
+    row = trajectory.steps[-1]
     assert row.retrieval["total_candidates"] == 64
     assert row.retrieval["retained_count"] <= 4
-    assert seen == [row.retrieval["retained_count"]]
-    assert loop.costs.candidates_routed == row.retrieval["retained_count"]
+    assert len(seen) == 5
+    assert all(size <= 4 for size in seen)
+    assert loop.costs.candidates_routed == sum(
+        step.retrieval["retained_count"] for step in trajectory.steps
+    )
 
 
 def test_index_miss_fails_closed_instead_of_silently_falling_back_to_full_history():
