@@ -213,7 +213,8 @@ def run_arm(seed: int, *, learned: bool, train: bool):
 
 
 def run_no_learning(seed: int):
-    return run_arm(seed, learned=False, train=False)
+    # Same task/state construction protocol as B, but no router updates.
+    return run_arm(seed, learned=False, train=True)
 
 
 def run_learned(seed: int):
@@ -293,7 +294,10 @@ def main():
 
     for seed in SEEDS:
         result["condition_A_analytic_witness"][str(seed)] = run_analytic(seed)
-        result["condition_B_learned"][str(seed)] = run_learned(seed)
+        learned = run_learned(seed)
+        result["condition_B_learned"][str(seed)] = learned
+        # E is the execution-facing view of the same learned held-out arm.
+        result.setdefault("condition_E_learned_execution", {})[str(seed)] = learned["heldout"]
         result["condition_C_no_learning"][str(seed)] = run_no_learning(seed)
         result["condition_D_oracle"][str(seed)] = run_oracle(seed)
 
