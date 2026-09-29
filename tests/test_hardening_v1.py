@@ -288,6 +288,8 @@ def test_trajectory_is_first_class_and_contiguous():
     assert len(payload["steps"]) == 2
     assert "verification" in payload["steps"][0]
     assert "learning" in payload["steps"][0]
+    assert "available_addresses" in payload["steps"][0]["state_before"]
+    assert "pending_writes" in payload["steps"][0]["state_after"]
 
 
 def test_runtime_costs_keep_index_build_and_query_cost_separate():
