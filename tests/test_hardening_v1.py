@@ -470,6 +470,17 @@ def test_casm_adapter_keeps_external_dependency_outside_tac_osm():
     assert structure.spec == spec
     assert structure.provenance == "casm_s.test"
 
+    from tac_osm.executor import relevance_program
+
+    program = relevance_program((0, 1, 0, 1), (0, 0, 0, 1), (0, 1), max_nodes=10)
+    compiled = casm_adapter.casm_graph_spec_from_program(program)
+    assert compiled["active_count"] == program.active_count
+    assert len(compiled["candidate_edges"]) > len(program.candidate_edges)
+    assert "true_edges" not in compiled
+    assert [edge["index"] for edge in compiled["candidate_edges"]] == list(
+        range(len(compiled["candidate_edges"]))
+    )
+
     observed = {}
 
     def fake_casm(casm_spec, inputs):
@@ -708,6 +719,7 @@ def test_registered_measurement_scripts_execute_as_declared_smoke_tests():
     commands = [
         [sys.executable, "scripts/measure_temporal_persistence.py", "--smoke", "--steps", "3", "--eval-steps", "2", "--seeds", "0", "--levels", "1"],
         [sys.executable, "scripts/measure_selective_scaling.py", "--smoke", "--steps", "2", "--eval-steps", "2", "--seeds", "0", "--levels", "8"],
+        [sys.executable, "-m", "py_compile", "scripts/measure_c5_casm.py"],
     ]
     for command in commands:
         result = subprocess.run(command, cwd=root, capture_output=True, text=True)
