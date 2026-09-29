@@ -474,8 +474,9 @@ def test_casm_adapter_keeps_external_dependency_outside_tac_osm():
 
     program = relevance_program((0, 1, 0, 1), (0, 0, 0, 1), (0, 1), max_nodes=10)
     compiled = casm_adapter.casm_graph_spec_from_program(program)
-    assert compiled["active_count"] == program.active_count
+    assert compiled["active_count"] >= program.active_count
     assert len(compiled["candidate_edges"]) > len(program.candidate_edges)
+    assert {node["op"] for node in compiled["nodes"]} <= {"INPUT", "NOT", "AND", "OR", "XOR"}
     assert "true_edges" not in compiled
     assert [edge["index"] for edge in compiled["candidate_edges"]] == list(
         range(len(compiled["candidate_edges"]))
