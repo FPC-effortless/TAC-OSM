@@ -138,3 +138,14 @@ def test_successor_router_reports_route_time_diagnostics():
     assert diag.candidate_coverage == 1.0
     assert 1 <= diag.selected_rank <= 8
     assert diag.selected_energy == -decision.scores[decision.selected]
+
+def test_successor_config_freezes_single_execution_budget():
+    from tac_osm.successor_builder import SuccessorConfig
+
+    assert SuccessorConfig(top_k=1).top_k == 1
+    try:
+        SuccessorConfig(top_k=2)
+    except ValueError as exc:
+        assert "multi-candidate execution" in str(exc)
+    else:
+        raise AssertionError("top_k > 1 must not bypass the v1 execution contract")
