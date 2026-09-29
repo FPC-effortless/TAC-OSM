@@ -5,8 +5,6 @@ from __future__ import annotations
 import os
 import sys
 
-import pytest
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from tac_osm import Candidate, Query, StateUpdate, Structure
@@ -31,15 +29,17 @@ def test_explicit_executor_uses_true_edges_not_candidate_substrate():
 
 
 def test_exact_mode_is_distinct_from_soft_mode():
-    program = relevance_program((1, 0, 1, 0), (1, 1, 1, 0), [0, 2], max_nodes=16)
+    # One marked position disagrees. Exact semantics must return 0, while the
+    # explicit soft ablation retains a non-zero analog value.
+    program = relevance_program((1, 0, 1, 0), (0, 1, 1, 0), [0, 2], max_nodes=16)
     exact = ExplicitGraphExecutor(ExplicitExecutorConfig(mode="exact")).execute(
         Structure(key="p", spec=program), []
     )
     soft = ExplicitGraphExecutor(
         ExplicitExecutorConfig(mode="soft", alpha=(0.7, 0.7))
     ).execute(Structure(key="p", spec=program), [])
-    assert exact.output in (0.0, 1.0)
-    assert soft.output != exact.output
+    assert exact.output == 0.0
+    assert 0.0 < soft.output < 1.0
 
 
 def test_addressor_exposes_only_addressed_value():
