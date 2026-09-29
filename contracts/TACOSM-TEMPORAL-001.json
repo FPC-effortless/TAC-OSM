@@ -103,7 +103,7 @@
     "each probe enforces all intervening decision boundaries",
     "learning writes are disabled during the measurement so only the declared world write changes persistence",
     "results contain no scientific status field",
-    "the measured read boundary uses H=64; intervening filler decisions use one candidate solely to enforce causal passage without adding an unmeasured workload term"
+    "the measured read boundary uses H=64; intervening filler decisions use two candidates solely to enforce causal passage without adding an unmeasured workload term"
   ],
   "status": "pre-registered",
   "layer": "L3",
@@ -117,6 +117,16 @@
       "discovered": "The first registered run exposed excessive runtime before producing a result.",
       "affected": "Execution cost of filler-only boundaries; no change to read-boundary H, delay levels, arms, seeds, primary endpoint, or hidden-truth boundary.",
       "no_result_under_previous_version": "The first run had no emitted result/artifact before this amendment."
+    },
+    {
+      "id": "A2",
+      "applies_to": "intervening filler candidate count",
+      "old_definition": "Intervening filler decisions use one candidate.",
+      "new_definition": "Intervening filler decisions use two candidates, the minimum accepted by the benchmark generator.",
+      "rationale": "The benchmark generator requires n_candidates >= 2. This correction changes only the filler workload and keeps the read-boundary task at H=64.",
+      "discovered": "The first A1 amended smoke/measurement invocation failed before producing an artifact because the generator rejects one-candidate tasks.",
+      "affected": "Filler-only workload; no change to read-boundary H, delay levels, arms, seeds, primary endpoint, or hidden-truth boundary.",
+      "no_result_under_previous_version": "No scientific result was produced under A1 before this correction."
     }
   ]
 }
