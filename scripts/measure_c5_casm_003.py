@@ -1131,6 +1131,7 @@ def main() -> None:
         print(
             f"{cell.arm:>24} H={cell.h:>3} K={str(cell.k):>1} seed={cell.seed} "
             f"coverage={cell.coverage_rate:.4f} exec={cell.execution_accuracy_rate:.4f} "
+            f"selection={cell.selection_success_rate:.4f} "
             f"verification={cell.verification_rate:.4f} "
             f"structures/query={cell.structures_executed_per_query:.2f} "
             f"edges/query={cell.candidate_edges_per_query:.2f}"
