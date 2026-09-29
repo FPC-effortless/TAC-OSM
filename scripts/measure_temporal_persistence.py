@@ -122,10 +122,9 @@ def _boundary_gate(seed: int, delay: int) -> GateCell:
     )
 
 
-def _apply_arm(arm: str, task, step: int, state: TemporalPersistentState) -> None:
+def _apply_arm(arm: str, key: str, task, step: int, state: TemporalPersistentState) -> None:
     if step != task.query.step:
         return
-    _, _, key = task.query.text.partition("\t")
     if arm == "carry":
         return
     if arm == "reset":
@@ -164,7 +163,7 @@ def _run_cell(seed: int, delay: int, arm: str, repeat: int) -> Cell:
         index=None,
         repair=None,
         learning_enabled=False,
-        before_read=lambda t, s, st: _apply_arm(arm, t, s, st),
+        before_read=lambda t, s, st: _apply_arm(arm, f"memory:{seed}:{delay}:{repeat}", t, s, st),
         episode_id=f"temporal-{arm}-{seed}-{delay}-{repeat}",
     )
     trajectory = loop.run(delay + 1)
