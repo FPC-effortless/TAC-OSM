@@ -42,7 +42,7 @@ class StructuredRepair:
 
 
 class SemanticVerifier:
-    """Verifier with explicit constraints and counterexample reporting."""
+    """Verifier with explicit constraints, counterexamples, and observations."""
 
     def verify(
         self,
@@ -50,6 +50,7 @@ class SemanticVerifier:
         outcome: Outcome,
         *,
         expected_range: tuple[float, float] = (0.0, 1.0),
+        tolerance: float = 1e-9,
     ) -> VerificationEvidence:
         lo, hi = expected_range
         observed = float(outcome.value)
@@ -65,7 +66,22 @@ class SemanticVerifier:
                 confidence=1.0,
                 evidence=("observed_outcome",),
             )
+
         trace = tuple(float(v) for v in computation.trace)
+        output = trace[0] if trace else 0.0
+        if abs(output - observed) > tolerance:
+            return VerificationEvidence(
+                valid=False,
+                failed_constraint="output_observation_consistency",
+                counterexample=(
+                    f"computed output {output:.6f} != observed "
+                    f"value {observed:.6f}"
+                ),
+                repair_target="computation.output",
+                confidence=1.0,
+                evidence=("executed_output", "observed_outcome"),
+            )
+
         bad = [i for i, value in enumerate(trace) if not lo <= value <= hi]
         if bad:
             i = bad[0]
@@ -83,7 +99,7 @@ class SemanticVerifier:
         return VerificationEvidence(
             valid=True,
             confidence=1.0,
-            evidence=("observed_outcome", "executed_trace"),
+            evidence=("observed_outcome", "executed_output", "executed_trace"),
         )
 
 
