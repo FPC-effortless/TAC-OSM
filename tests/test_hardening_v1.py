@@ -200,7 +200,7 @@ def test_temporal_probe_has_intervening_decision_boundaries():
     benchmark.next_task(3)
     assert benchmark.state.read(query).values == ()
     benchmark.next_task(4)
-    assert benchmark.state.read(query).values == ((0, 1, 0, 1, 0, 1, 0, 1),)
+    assert benchmark.state.read(query).values == (read_task.reference_bits,)
 
 
 def test_learning_write_is_delayed_to_the_next_boundary():
@@ -333,7 +333,7 @@ def test_representation_router_is_separate_from_feature_construction():
         return tuple(float(x) for x in bits.split()) if bits.strip() else (0.0, 0.0)
 
     def cenc(candidate, state):
-        return tuple(float(x) for x in candidate.descriptor[:2])
+        return tuple(float(x) for x in candidate.descriptor)
 
     task = generate_task(
         21,
