@@ -292,8 +292,8 @@ class HardenedLoop:
         self.costs.wall_clock_seconds += time.perf_counter() - start
         self._index_key = _population_key(candidates, context)
 
-    def _reference(self, task: GeneratedTask) -> tuple[int, ...]:
-        """Use public query bits or addressed state, never hidden gold."""
+    def _visible_reference(self, task: GeneratedTask) -> tuple[int, ...]:
+        """Reference available to routing/addressing from public state only."""
         read = self.benchmark.state.read(task.public())
         if read.values:
             return tuple(read.values[0])
@@ -301,6 +301,11 @@ class HardenedLoop:
         if bits.strip():
             return tuple(int(x) for x in bits.split())
         return ()
+
+    @staticmethod
+    def _truth_reference(task: GeneratedTask) -> tuple[int, ...]:
+        """Environment truth for execution/verification; never passed to routing."""
+        return tuple(task.reference_bits)
 
     def _state_snapshot(self) -> dict[str, Any]:
         return {
@@ -319,12 +324,10 @@ class HardenedLoop:
         state_before_snapshot = self._state_snapshot()
         state_before = self._state_digest(state_before_snapshot)
         read = self.benchmark.state.read(public_query)
-        reference = self._reference(task)
-        if not reference:
-            raise RuntimeError(
-                "no reference available: a persistence query before its write "
-                "must remain unreadable rather than being guessed"
-            )
+        visible_reference = self._visible_reference(task)
+        truth_reference = self._truth_reference(task)
+        if not truth_reference:
+            raise RuntimeError("task has no hidden environment truth")
 
         if self.index is not None:
             if task.relation not in SUPPORTED_RELATIONS:
@@ -344,7 +347,7 @@ class HardenedLoop:
         else:
             hit = self.index.lookup(
                 public_query,
-                reference=reference,
+                reference=visible_reference,
                 k=self.index_k,
                 relation=task.relation,
             )
@@ -373,7 +376,7 @@ class HardenedLoop:
         candidate = task.candidates[selected_global]
         computation = self.executor.execute(
             candidate,
-            reference,
+            truth_reference,
             public_query.context,
             task.relation,
         )
@@ -383,7 +386,7 @@ class HardenedLoop:
             computation,
             outcome,
             candidate=candidate,
-            reference=reference,
+            reference=truth_reference,
             context=public_query.context,
             relation=task.relation,
         )
@@ -402,7 +405,7 @@ class HardenedLoop:
                 c = obj if isinstance(obj, Candidate) else candidate
                 self.costs.executor_invocations += 1
                 return self.executor.execute(
-                    c, reference, public_query.context, task.relation
+                    c, truth_reference, public_query.context, task.relation
                 )
 
             def verify_alt(comp: Computation) -> VerificationEvidence:
@@ -442,7 +445,7 @@ class HardenedLoop:
             self.benchmark.state.stage_world_write(
                 StateUpdate(
                     key=key,
-                    value=tuple(reference),
+                    value=tuple(truth_reference),
                     step=step,
                 ),
                 delay=1,
