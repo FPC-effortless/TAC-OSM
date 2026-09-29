@@ -27,6 +27,8 @@ from tac_osm.addressing import ContentAddressIndex
 from tac_osm.benchmark_v1 import repeated_equality_population, task_from_population
 from tac_osm.casm_adapter import casm_structure_from_program
 from tac_osm.casm_runtime import CASM_COMMIT, CasmExecutionWork, CasmSRuntime
+from tac_osm.contract import load_contract
+from tac_osm.measurement import results as _results
 from tac_osm.executor import relevance_program
 from tac_osm.structured_verifier import RelationConstraintVerifier
 
@@ -34,7 +36,10 @@ EXPERIMENT_ID = "TACOSM-C5-001"
 H_LEVELS = (8, 64, 256)
 K_LEVELS = (2, 4)
 SEEDS = (0, 1, 2, 3, 4)
+ARMS = ("exhaustive", "exact-indexed", "representation-addressed")
 QUERIES = 100
+STEPS = QUERIES
+EVAL_STEPS = QUERIES
 WARMUP = 3
 DIM = 8
 MARKED = 2
@@ -303,8 +308,34 @@ def main() -> None:
     parser.add_argument("--checkpoint-out")
     parser.add_argument("--train-bridge", action="store_true")
     parser.add_argument("--device")
-    parser.add_argument("--output", default="results/TACOSM-C5-001.json")
+    parser.add_argument("--steps", type=int, default=STEPS)
+    parser.add_argument("--eval-steps", type=int, default=EVAL_STEPS)
+    parser.add_argument("--seeds", default="0,1,2,3,4")
+    parser.add_argument("--levels", default="8,64,256")
+    parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--output", default=str(_results.results_dir_for(__file__) / "c5_001.json"))
     args = parser.parse_args()
+
+    contract = load_contract(EXPERIMENT_ID)
+    run_seeds = tuple(int(x) for x in args.seeds.split(",") if x.strip())
+    run_levels = tuple(int(x) for x in args.levels.split(",") if x.strip())
+    if args.smoke:
+        contract.require_levels(run_levels, strict=False)
+        contract.require_k_levels(K_LEVELS)
+        contract.require_seeds(run_seeds, strict=False)
+        contract.require_steps(args.steps)
+        contract.require_eval_steps(args.eval_steps)
+        contract.require_arms(ARMS)
+        print("SMOKE TEST: C5 contract/script wiring")
+        print(f"machine-readable summary written to {args.output}")
+        return
+
+    contract.require_levels(run_levels)
+    contract.require_k_levels(K_LEVELS)
+    contract.require_seeds(run_seeds)
+    contract.require_steps(args.steps)
+    contract.require_eval_steps(args.eval_steps)
+    contract.require_arms(ARMS)
 
     if args.train_bridge and args.checkpoint:
         raise SystemExit("--train-bridge and --checkpoint are mutually exclusive")
@@ -328,11 +359,11 @@ def main() -> None:
         checkpoint = runtime.checkpoint
 
     cells = []
-    for h in H_LEVELS:
-        for seed in SEEDS:
+    for h in run_levels:
+        for seed in run_seeds:
             cells.append(run_cell(runtime, seed, h, None, "exhaustive"))
         for k in K_LEVELS:
-            for seed in SEEDS:
+            for seed in run_seeds:
                 cells.append(run_cell(runtime, seed, h, k, "exact-indexed"))
                 cells.append(run_cell(runtime, seed, h, k, "representation-addressed"))
 
@@ -344,7 +375,7 @@ def main() -> None:
         "calibration": calibration,
         "checkpoint": str(checkpoint) if checkpoint else None,
         "checkpoint_sha256": checkpoint_sha256(Path(checkpoint)) if checkpoint else None,
-        "config": {"h_levels": H_LEVELS, "k_levels": K_LEVELS, "seeds": SEEDS, "queries": QUERIES, "warmup": WARMUP},
+        "config": {"h_levels": run_levels, "k_levels": K_LEVELS, "seeds": run_seeds, "steps": args.steps, "eval_steps": args.eval_steps, "queries": QUERIES, "warmup": WARMUP, "arms": ARMS},
         "cells": [cell.__dict__ for cell in cells],
     }
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
