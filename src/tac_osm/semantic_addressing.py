@@ -101,9 +101,7 @@ class RepresentationAddressIndex:
         buckets: dict[int, list[int]] = {}
         state = PersistentState()
         for i, candidate in enumerate(candidates):
-            vector = tuple(float(x) for x in self.candidate_encoder(
-                Query(text="", context=tuple(context)), state
-            )) if False else tuple(float(x) for x in self.candidate_encoder(candidate, state))
+            vector = tuple(float(x) for x in self.candidate_encoder(candidate, state))
             self._validate_dimension(vector)
             signature = self._signature(vector)
             buckets.setdefault(signature, []).append(i)
