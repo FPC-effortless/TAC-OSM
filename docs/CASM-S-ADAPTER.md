@@ -3,6 +3,11 @@
 This document freezes the torch-free boundary between TAC-OSM and the CASM-S
 implementation in cdl-attention-experiment.
 
+TAC-OSM relevance circuits use an EQ convenience node. Because the pinned
+CASM-S grammar has no EQ primitive, the program compiler expands EQ to
+XOR followed by NOT before constructing the CASM-S substrate. No new primitive
+is introduced at the external boundary.
+
 ## Transport object
 
 A CASM-S Episode is translated into a TAC-OSM Structure whose spec is a
