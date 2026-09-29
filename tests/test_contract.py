@@ -767,6 +767,72 @@ def test_matched_contract_matches_its_script():
     assert tuple(got["SEEDS"]) == c.seeds
 
 
+def test_c5_002_contract_matches_its_script():
+    """``TACOSM-C5-002.json`` must describe ``measure_c5_casm_002.py``.
+
+    C5-002 exists because C5-001's compound endpoint inherited an execution
+    failure into an addressing number, and the repair is structural rather
+    than a patched constant: the primary endpoint reads no CASM-S output. The
+    contract therefore pins more than levels and arms — it pins the
+    *separation*, and this test is the seam where a script that quietly
+    reintroduced a model output into ``coverage_rate`` would be caught at the
+    level of constants rather than of one run.
+    """
+    got = _script_constants("measure_c5_casm_002.py")
+    c = load_contract("TACOSM-C5-002")
+    assert got["EXPERIMENT_ID"] == c.experiment_id
+    assert tuple(got["H_LEVELS"]) == c.h_levels
+    assert tuple(got["K_LEVELS"]) == c.k_levels
+    assert tuple(got["ARMS"]) == tuple(a.name for a in c.arms)
+    assert c.steps == got["STEPS_DEFAULT"]
+    assert c.eval_steps == got["EVAL_STEPS"]
+    assert tuple(got["SEEDS"]) == c.seeds
+
+    text = _script_text("measure_c5_casm_002.py")
+    # The gate is what makes this a new pre-registration rather than a patched
+    # C5-001: it runs before the task stream and terminates the run. A script
+    # in which the gate became advisory, or ran after the cells, would be
+    # C5-001 with a new number, which is the thing the void exists to prevent.
+    assert "run_gate(runtime)" in text
+    assert "if not gate.passed:" in text
+    assert text.index("run_gate(runtime)") < text.index("for h in run_levels:")
+    # The primary endpoint is a set intersection between retained indices and
+    # the hidden acceptable set. The acceptable set is read *after* execution
+    # and only for evaluation, so the ordering in the source is itself the
+    # boundary — reading it before the execution block would move the hidden
+    # set into the addressing decision.
+    assert text.index("any(i in task.acceptable_actions") > text.index(
+        "_build_and_execute("
+    )
+
+    # Every measured CellResult field must be a registered endpoint, because
+    # the record is what a later check compares against the contract. A field
+    # the contract does not name is a number the pre-registration does not
+    # cover. The four structurals — ``arm``, ``h``, ``k``, ``seed`` — are the
+    # cell's *address in the matrix*, not measured quantities: they name which
+    # cell a number belongs to, so a contract that registered them as
+    # endpoints would be registering the design's axes as its results.
+    cell_fields = {
+        f.name for f in __import__("dataclasses").fields(
+            _script_module("measure_c5_casm_002.py").CellResult
+        )
+    }
+    structural = {"arm", "h", "k", "seed"}
+    registered = {e.name for e in c.endpoints}
+    unregistered = cell_fields - structural - registered
+    assert not unregistered, (
+        "CellResult carries measured fields the contract does not register as "
+        f"endpoints: {sorted(unregistered)}"
+    )
+    # And conversely the contract must not register an endpoint no cell
+    # carries, which would be a number the instrument never measures.
+    unmeasured = registered - cell_fields
+    assert not unmeasured, (
+        "the contract registers endpoints the script's CellResult does not "
+        f"carry: {sorted(unmeasured)}"
+    )
+
+
 def test_reproduction_baselines_agree_with_the_scripts():
     """The reproduction gate's reference must be one number in both places.
 
@@ -840,6 +906,7 @@ _WITH_CONTRACT = (
     ("measure_temporal_persistence.py", "TACOSM-TEMPORAL-001"),
     ("measure_selective_scaling.py", "TACOSM-SELECTIVE-001"),
     ("measure_c5_casm.py", "TACOSM-C5-001"),
+    ("measure_c5_casm_002.py", "TACOSM-C5-002"),
 )
 
 
@@ -1049,6 +1116,12 @@ def _script_module(name: str):
     path = SCRIPTS_DIR / name
     spec = importlib.util.spec_from_file_location(f"_script_{path.stem}", path)
     module = importlib.util.module_from_spec(spec)
+    # Registered *before* exec: a script whose module scope defines a
+    # dataclass needs to be resolvable by name while that dataclass is being
+    # processed, and CPython looks it up in ``sys.modules`` rather than in the
+    # local namespace. Without this the dataclass machinery reads
+    # ``sys.modules[cls.__module__]`` and finds ``None``.
+    sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
 

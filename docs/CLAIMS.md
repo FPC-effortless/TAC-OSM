@@ -228,10 +228,19 @@ defined quantity and the claim was not merely unsupported — it was *unstatable
 as a measurement. **M2.1 changed the first half of that and not the second.**
 The boundary now exists (`src/tac_osm/retrieval.py`), `|R|` is now a defined
 quantity and is reported per arm as `candidates_inspected`, and the index's
-cost term is registered. **No confirmatory run has been made**, so the claim
-stays UNTESTED: the blocker is now the measurement, not the mechanism's
-absence, and the amendment A1 change to the primary endpoint is what made the
-arms comparable in the first place.
+cost term is registered.
+
+**TACOSM-C5-001 ran and is VOID — see below.** A confirmatory run *was* made
+(run 36512989760, real pinned CASM-S at `c315544`) and it does not move this
+claim, because its capability half was never measured: the reference arm
+collapsed to the population base rate and the indexed arm's success was
+guaranteed by the benchmark's own acceptable-action construction. The claim
+therefore stays UNTESTED, and the blocker is now the *instrument*, not the
+mechanism's absence. `docs/TACOSM-C5-001-RESULT.md` records the four failure
+modes and retains the artifact. The successor is `TACOSM-C5-002`, which
+separates retention, execution correctness and work into three endpoints and
+terminates as instrument-invalid if a representability gate fails —
+`docs/TACOSM-C5-002.md`.
 
 This is the architecture's central efficiency claim and it is *not* supported
 by any measurement in the repository. The honest model of v0.1 cost is:
@@ -610,13 +619,22 @@ than an oversight:
   TACOSM-MATCHED-001 the evidence points the opposite way: the representation
   is adequate at every H tested, so expressiveness is not the limitation and
   capacity is not the fix;
-* that `C_executed` has been shown to scale with `|R|` — see C5;
+* that `C_executed` has been shown to scale with `|R|` — see C5. In particular,
+  the 128× reduction in submitted CASM-S work measured by `TACOSM-C5-001` is
+  an **instrument-level** observation about the accounting and the pipeline,
+  not a capability result, and it must not be cited as C5 progress. The
+  experiment that produced it is void for capability inference;
 * that the matched-H router is a better baseline than the H=8 one — it is
   worse at every evaluation population (see C7), and the H=8 row remains the
   F1 baseline;
 * that the analytic vector is a solution — it is a hand-designed reference
   point proving expressibility, not an outcome-trained router, and routing
-  with it is not a TAC-OSM result.
+  with it is not a TAC-OSM result;
+* that the `TACOSM-C5-001` void is a negative result about CASM-S — the
+  evidence establishes only that *that measurement instrument* could not
+  distinguish CASM-S execution capability from base-rate behaviour. The
+  candidate causes (soft-op `alpha` scaling, gate routing, the 0.5 threshold,
+  the bridge target) remain unresolved, and none is separated by the run.
 
 ---
 

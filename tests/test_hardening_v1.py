@@ -723,6 +723,13 @@ def test_registered_measurement_scripts_execute_as_declared_smoke_tests():
         [sys.executable, "scripts/measure_c5_casm.py", "--smoke",
  "--steps", "100", "--eval-steps", "100",
  "--seeds", "0,1,2,3,4", "--levels", "8,64,256"],
+        # C5-002's smoke path is contract-only by design: it returns before
+        # constructing the CASM-S runtime, so it runs torch-free on the
+        # control plane while still enforcing every require_* against the
+        # registered design. A smoke run that needed torch to prove it was
+        # off the registered design would be unrunnable where the design is
+        # written.
+        [sys.executable, "scripts/measure_c5_casm_002.py", "--smoke"],
     ]
     for command in commands:
         result = subprocess.run(command, cwd=root, capture_output=True, text=True)
