@@ -1,0 +1,114 @@
+{
+  "experiment_id": "TACOSM-SELECTIVE-001",
+  "title": "Selective computation boundary: can a static persistent candidate universe be routed through bounded R before execution?",
+  "question": "With a fixed candidate universe reused across many queries, does the hardened runtime preserve capability while router candidate work is bounded by the retained subset rather than H?",
+  "hypothesis": "For the controlled equality relation, an exact content-addressed index can preserve task success while changing actual router input size from H to at most K after a one-time index build. The measurement establishes the runtime boundary and its accounting, not semantic retrieval or the full PLM economic-scaling claim.",
+  "arms": [
+    {
+      "name": "exhaustive",
+      "intervention": "score the full persistent candidate universe",
+      "acts_on": "routing boundary",
+      "knob": "retained set",
+      "value": "H",
+      "schedule": "100 queries per cell"
+    },
+    {
+      "name": "indexed",
+      "intervention": "content-address the persistent candidate universe and route only the retained bucket",
+      "acts_on": "routing boundary",
+      "knob": "K",
+      "value": "K in {2,4}",
+      "schedule": "100 queries per cell"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "success_rate",
+      "role": "primary — task capability over the static candidate universe",
+      "primary": true,
+      "description": "Exact task success using the same hidden world truth and evaluator."
+    },
+    {
+      "name": "router_candidates_per_step",
+      "role": "secondary — actual number of candidates presented to the router per query",
+      "primary": false
+    },
+    {
+      "name": "index_build_candidates",
+      "role": "secondary — one-time candidate items processed to build the index",
+      "primary": false
+    },
+    {
+      "name": "address_query_positions",
+      "role": "secondary — marked positions inspected during query-time addressing",
+      "primary": false
+    },
+    {
+      "name": "amortized_candidate_work",
+      "role": "secondary — (one-time build + query addressing + router candidates) / number of queries",
+      "primary": false
+    },
+    {
+      "name": "executor_invocations",
+      "role": "secondary — actual execution calls",
+      "primary": false
+    },
+    {
+      "name": "wall_clock_seconds",
+      "role": "secondary — measured end-to-end runtime",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "indexed success_rate remains within the exhaustive arm's seed spread while router_candidates_per_step is bounded by K and the index is built once per static population",
+      "licenses": "the hardened runtime has a functioning selective-computation boundary for this controlled relation and the reported retained-set cost is real rather than hypothetical.",
+      "does_not_license": "semantic retrieval quality, learned addressing, or the L4 economic-scaling claim C5."
+    },
+    {
+      "condition": "indexed success_rate is materially below exhaustive at the same H and K",
+      "licenses": "the exact address control loses capability under the tested budget.",
+      "does_not_license": "that selective computation or cheap addressing is impossible."
+    },
+    {
+      "condition": "router_candidates_per_step still grows with H in the indexed arm",
+      "licenses": "the retrieval boundary is not actually selective in the runtime path.",
+      "does_not_license": "C5."
+    }
+  ],
+  "interpretation_order": [
+    "runtime_boundary",
+    "capability_preservation",
+    "candidate_work_scaling",
+    "wall_clock"
+  ],
+  "h_levels": [
+    8,
+    64,
+    256
+  ],
+  "k_levels": [
+    2,
+    4
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 100,
+  "eval_steps": 100,
+  "held_constant": [
+    "candidate universe is built once per (seed,H) and reused across all queries",
+    "the relation is equality on two public marked positions",
+    "candidate validity is multiple-valid: every exact signature bucket is acceptable",
+    "the same deterministic router, executor, verifier and evaluator are used in both arms",
+    "the index never receives hidden acceptable actions or hidden world truth",
+    "one-time index construction is reported separately and amortized over exactly 100 queries",
+    "this is a control measurement, not evidence for semantic retrieval or full C5"
+  ],
+  "status": "pre-registered",
+  "layer": "L3"
+}

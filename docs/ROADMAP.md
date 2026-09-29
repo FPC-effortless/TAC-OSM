@@ -116,10 +116,10 @@ older document or a git log resolves to `M1.3`, and nothing is lost:
 | Stage F, F0 — retrieval ceiling | `M1.6` | **done** — `TACOSM-RETRIEVAL-001` |
 | Stage F2 — learning dynamics | `M1.7` | **done** — `TACOSM-LEARN-001` |
 | Stage F3 — reward density | `M1.8` | **done** — `TACOSM-SURROGATE-001` |
-| Stage F1 — efficient retrieval | `M2.1` | **built, pre-amended (A1), no confirmatory run** |
+| Stage F1 — efficient retrieval | `M2.1` | legacy retrieval path superseded for C5; exact runtime control moved to TACOSM-SELECTIVE-001 |
 | Stage F4 — measurement layers | `M1.4` | the standing contract |
-| Stage G — state formation | `M2.2` | not started |
-| Stage H — repair | `M2.3` | not started |
+| Stage G — state formation | `M2.2` | temporal runtime implemented; TACOSM-TEMPORAL-001 preregistered, no result |
+| Stage H — repair | `M2.3` | structured verifier + bounded executable repair implemented; capability evaluation not run |
 | Stage I — language integration | `M3.2` | not started |
 | — *(the curve, was nameless)* | `M3.1` | not started; this is the milestone the thesis needs |
 
@@ -654,3 +654,22 @@ large Transformer rewrite · replacing attention · huge neural memory ·
 complicated MoE routing · CDL as runtime inference · dozens of configuration
 knobs · another isolated substrate repo · optimising only router accuracy ·
 optimising only training loss.
+
+## Post-hardening next measurements
+
+The previous F1 implementation was useful for endpoint-definition work, but
+it did not place retrieval in the runtime call graph and rebuilt the synthetic
+index when the candidate set changed. It therefore cannot answer C5.
+
+The hardened sequence is now:
+
+1. TACOSM-TEMPORAL-001 — verify the causal write/read boundary and measure
+   decision capability as a function of enforced delay.
+2. TACOSM-SELECTIVE-001 — reuse one candidate universe over many queries and
+   measure actual address, retained-set, router, executor and amortized cost.
+3. Only after those controls pass does the program move to a learned/semantic
+   addresser and the real CASM/PLM execution boundary.
+
+The first two experiments are control measurements. They are not evidence that
+PLM or C5 is solved. Their purpose is to ensure that the mechanism being measured
+exists in the executable call graph before compute is spent on learned architecture.

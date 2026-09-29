@@ -142,7 +142,16 @@ class TemporalBenchmark:
             reference_bits=bits,
             step=read_step,
         )
-        self._writes.setdefault(write_step, []).append((key, bits, read_step))
+        if write_step != self.state.current_step:
+            raise ValueError(
+                "world-write probes currently require write_step to equal the "
+                "benchmark's current world time; decision boundaries must not "
+                "be skipped by the scheduler"
+            )
+        self.state.stage_world_write(
+            StateUpdate(key=key, value=bits, step=write_step),
+            delay=delay,
+        )
         self._events[read_step] = TemporalTaskEvent(step=read_step, task=task)
         for step in range(write_step, read_step):
             if step not in self._events:
@@ -185,15 +194,6 @@ class TemporalBenchmark:
                 f"temporal benchmark requires contiguous decision steps: "
                 f"expected {expected}, got {step}"
             )
-        for write_step, entries in tuple(self._writes.items()):
-            if write_step != step:
-                continue
-            for key, bits, read_step in entries:
-                self.state.stage_world_write(
-                    StateUpdate(key=key, value=bits, step=write_step),
-                    delay=read_step - write_step,
-                )
-            del self._writes[write_step]
         self.state.advance_to(step)
         self._last_task_step = step
         event = self._events.get(step)
@@ -275,6 +275,8 @@ class HardenedLoop:
     )
     executor: RelationExecutor = field(default_factory=RelationExecutor)
     episode_id: str = "episode-0"
+    before_read: Callable[[GeneratedTask, int, TemporalPersistentState], None] | None = None
+    learning_enabled: bool = True
 
     def __post_init__(self) -> None:
         self.trajectory = Trajectory(self.episode_id)
@@ -285,15 +287,17 @@ class HardenedLoop:
         )
 
     def build_index(self, candidates: Sequence[Candidate], context: Sequence[int]) -> None:
-        """Build or rebuild only when the indexed population actually changes."""
+        """Build/rebuild while preserving an injected index implementation."""
         start = time.perf_counter()
-        self.index = ContentAddressIndex.build(candidates, context=context)
+        index_type = type(self.index) if self.index is not None else ContentAddressIndex
+        builder = getattr(index_type, "build", ContentAddressIndex.build)
+        self.index = builder(candidates, context=context)
         self.costs.index_build_candidates += len(candidates)
         self.costs.wall_clock_seconds += time.perf_counter() - start
         self._index_key = _population_key(candidates, context)
 
-    def _reference(self, task: GeneratedTask) -> tuple[int, ...]:
-        """Use public query bits or addressed state, never hidden gold."""
+    def _visible_reference(self, task: GeneratedTask) -> tuple[int, ...]:
+        """Reference available to routing/addressing from public state only."""
         read = self.benchmark.state.read(task.public())
         if read.values:
             return tuple(read.values[0])
@@ -301,6 +305,11 @@ class HardenedLoop:
         if bits.strip():
             return tuple(int(x) for x in bits.split())
         return ()
+
+    @staticmethod
+    def _truth_reference(task: GeneratedTask) -> tuple[int, ...]:
+        """Environment truth for execution/verification; never passed to routing."""
+        return tuple(task.reference_bits)
 
     def _state_snapshot(self) -> dict[str, Any]:
         return {
@@ -315,16 +324,16 @@ class HardenedLoop:
     def step(self, step: int) -> TrajectoryStep:
         start = time.perf_counter()
         task = self.benchmark.next_task(step)
+        if self.before_read is not None:
+            self.before_read(task, step, self.benchmark.state)
         public_query = task.public()
         state_before_snapshot = self._state_snapshot()
         state_before = self._state_digest(state_before_snapshot)
         read = self.benchmark.state.read(public_query)
-        reference = self._reference(task)
-        if not reference:
-            raise RuntimeError(
-                "no reference available: a persistence query before its write "
-                "must remain unreadable rather than being guessed"
-            )
+        visible_reference = self._visible_reference(task)
+        truth_reference = self._truth_reference(task)
+        if not truth_reference:
+            raise RuntimeError("task has no hidden environment truth")
 
         if self.index is not None:
             if task.relation not in SUPPORTED_RELATIONS:
@@ -344,7 +353,7 @@ class HardenedLoop:
         else:
             hit = self.index.lookup(
                 public_query,
-                reference=reference,
+                reference=visible_reference,
                 k=self.index_k,
                 relation=task.relation,
             )
@@ -373,7 +382,7 @@ class HardenedLoop:
         candidate = task.candidates[selected_global]
         computation = self.executor.execute(
             candidate,
-            reference,
+            truth_reference,
             public_query.context,
             task.relation,
         )
@@ -383,7 +392,7 @@ class HardenedLoop:
             computation,
             outcome,
             candidate=candidate,
-            reference=reference,
+            reference=truth_reference,
             context=public_query.context,
             relation=task.relation,
         )
@@ -402,7 +411,7 @@ class HardenedLoop:
                 c = obj if isinstance(obj, Candidate) else candidate
                 self.costs.executor_invocations += 1
                 return self.executor.execute(
-                    c, reference, public_query.context, task.relation
+                    c, truth_reference, public_query.context, task.relation
                 )
 
             def verify_alt(comp: Computation) -> VerificationEvidence:
@@ -437,12 +446,12 @@ class HardenedLoop:
                 final_outcome = self.benchmark.observe(task, final_selected)
                 final_evidence = local_repair.verification
 
-        if final_evidence.valid and final_outcome.success:
+        if self.learning_enabled and final_evidence.valid and final_outcome.success:
             key = f"experience:{self.episode_id}:{step}"
             self.benchmark.state.stage_world_write(
                 StateUpdate(
                     key=key,
-                    value=tuple(reference),
+                    value=tuple(truth_reference),
                     step=step,
                 ),
                 delay=1,
@@ -504,8 +513,13 @@ class HardenedLoop:
             repair=repair_record,
             state_after={**state_after_snapshot, "digest": state_after},
             learning={
-                "state_write_staged": bool(evidence.valid and final_outcome.success),
-                "update_delay": 1 if evidence.valid and final_outcome.success else None,
+                "state_write_staged": bool(
+                    self.learning_enabled and final_evidence.valid and final_outcome.success
+                ),
+                "update_delay": (
+                    1 if self.learning_enabled and final_evidence.valid and final_outcome.success
+                    else None
+                ),
             },
             provenance={
                 "relation": task.relation,

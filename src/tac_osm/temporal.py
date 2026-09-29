@@ -114,6 +114,32 @@ class TemporalPersistentState:
         """Return structural memory addresses without exposing stored values."""
         return tuple(sorted(self._values))
 
+    def clear(self) -> None:
+        """Reset readable persistent state while preserving the causal clock."""
+        self._values.clear()
+        self._write_steps.clear()
+
+    def corrupt(self, key: str, *, position: int = 0) -> None:
+        """Flip one stored bit as a declared memory-corruption intervention."""
+        if key not in self._values:
+            raise KeyError(key)
+        value = list(self._values[key])
+        if not value:
+            raise ValueError("cannot corrupt an empty value")
+        if not 0 <= position < len(value):
+            raise IndexError(position)
+        value[position] = 1 - int(value[position])
+        self._values[key] = tuple(value)
+
+    def swap_values(self, key_a: str, key_b: str) -> None:
+        """Swap two readable values while preserving their addresses."""
+        if key_a not in self._values or key_b not in self._values:
+            raise KeyError("both keys must be readable")
+        self._values[key_a], self._values[key_b] = (
+            self._values[key_b],
+            self._values[key_a],
+        )
+
     def write_step(self, key: str) -> int | None:
         return self._write_steps.get(key)
 

@@ -1,0 +1,109 @@
+{
+  "experiment_id": "TACOSM-TEMPORAL-001",
+  "title": "Temporal persistence: does a written state survive enforced decision boundaries?",
+  "question": "When a value is written at t and hidden behind a state address, does the system still use that value correctly at t+k after k intervening decision boundaries?",
+  "hypothesis": "Carry should preserve decision capability across increasing delays; reset and corruption controls should reduce that capability because they remove or alter the persistent representation while leaving hidden world truth and task exposure unchanged.",
+  "arms": [
+    {
+      "name": "carry",
+      "intervention": "leave the verified world write intact until the read boundary",
+      "acts_on": "persistent state",
+      "knob": "delay",
+      "value": "k",
+      "schedule": "k in {1,2,4,8,16,32}"
+    },
+    {
+      "name": "reset",
+      "intervention": "clear readable persistent state immediately before the read",
+      "acts_on": "persistent state",
+      "knob": "intervention",
+      "value": "clear",
+      "schedule": "same k"
+    },
+    {
+      "name": "corrupt",
+      "intervention": "flip one stored bit immediately before the read",
+      "acts_on": "persistent state",
+      "knob": "intervention",
+      "value": "flip one bit",
+      "schedule": "same k"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "read_available",
+      "role": "secondary — whether the addressed representation is readable at the decision boundary",
+      "primary": false,
+      "description": "State availability verifies the causal write/read separation before task success is interpreted."
+    },
+    {
+      "name": "decision_success",
+      "role": "primary — read-time task success of the state-conditioned decision",
+      "primary": true,
+      "description": "The action is evaluated against hidden environment truth; the router receives only public query/state information."
+    },
+    {
+      "name": "router_candidates",
+      "role": "secondary — number of candidates presented to the router",
+      "primary": false
+    },
+    {
+      "name": "verification_passed",
+      "role": "secondary — structured verifier acceptance",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "carry decision_success remains above the reset/control condition at a delay k",
+      "licenses": "the persistent state contributes causally at that delay under the registered task and router.",
+      "does_not_license": "long-horizon memory in general or semantic memory quality."
+    },
+    {
+      "condition": "carry collapses with increasing k while reset is similar",
+      "licenses": "the tested state-conditioned mechanism does not preserve useful information across that delay.",
+      "does_not_license": "that all persistent-state architectures fail at that horizon."
+    },
+    {
+      "condition": "carry and reset are indistinguishable because state availability is not changed as intended",
+      "licenses": "nothing; the intervention failed and the run is a design failure.",
+      "does_not_license": "a persistence conclusion."
+    }
+  ],
+  "interpretation_order": [
+    "temporal_boundary",
+    "state_availability",
+    "decision_capability",
+    "verification"
+  ],
+  "h_levels": [
+    64
+  ],
+  "k_levels": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 33,
+  "eval_steps": 100,
+  "held_constant": [
+    "candidate count and task generator are fixed at H=64",
+    "the hidden environment reference is never passed to the router or index",
+    "the same router and executor are used across arms",
+    "each probe enforces all intervening decision boundaries",
+    "learning writes are disabled during the measurement so only the declared world write changes persistence",
+    "results contain no scientific status field"
+  ],
+  "status": "pre-registered",
+  "layer": "L3"
+}

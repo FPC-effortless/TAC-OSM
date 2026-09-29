@@ -396,3 +396,106 @@ def test_relation_constraint_verifier_rejects_semantically_invalid_action_withou
     assert not evidence.valid
     assert evidence.failed_constraint == "relation_unsatisfied"
     assert evidence.repair_target == f"candidate:{candidate.key}"
+
+
+def test_static_population_preserves_actions_across_queries():
+    from tac_osm.benchmark_v1 import repeated_equality_population, task_from_population
+
+    population = repeated_equality_population(41, dim=8, n_candidates=64)
+    first = task_from_population(
+        candidates=population,
+        reference_bits=(0, 0, 1, 0, 1, 0, 1, 0),
+        step=0,
+        validity="multiple",
+    )
+    second = task_from_population(
+        candidates=population,
+        reference_bits=(1, 1, 0, 1, 0, 1, 0, 1),
+        step=1,
+        validity="multiple",
+    )
+    assert first.candidates == second.candidates
+    assert first.acceptable_actions
+    assert second.acceptable_actions
+    assert first.acceptable_actions != second.acceptable_actions
+
+
+def test_hardened_index_never_receives_hidden_truth_after_reset():
+    from tac_osm.addressing import ContentAddressIndex
+    from tac_osm.hardened import HardenedLoop, TemporalBenchmark
+
+    benchmark = TemporalBenchmark(seed=51, n_candidates=16)
+    task = benchmark.schedule_lookup_probe(delay=1, key="hidden-test")
+    captured = []
+
+    class RecordingIndex(ContentAddressIndex):
+        @classmethod
+        def build(cls, candidates, *, context):
+            base = ContentAddressIndex.build(candidates, context=context)
+            return cls(_buckets=base._buckets, built_candidates=base.built_candidates)
+
+        def lookup(self, query, *, reference, k=None, relation="equality"):
+            from tac_osm.addressing import AddressHit
+            captured.append(tuple(reference))
+            return AddressHit(
+                candidate_indices=(0,),
+                inspected_positions=len(reference),
+                bucket_size=1,
+            )
+
+    loop = HardenedLoop(
+        router=lambda query, state, candidates: PublicRelationRouter()(query, state, candidates),
+        benchmark=benchmark,
+        index=RecordingIndex(),
+        index_k=4,
+        repair=None,
+        learning_enabled=False,
+        before_read=lambda task, step, state: state.clear() if step == 1 else None,
+    )
+    loop.step(0)
+    loop.step(1)
+    assert captured
+    assert captured[-1] == ()
+    assert tuple(task.reference_bits) != captured[-1]
+
+
+def test_temporal_interventions_are_explicit_and_non_silent():
+    state = TemporalPersistentState()
+    state.write(__import__("tac_osm").StateUpdate(key="a", value=(0, 1, 0, 1), step=0))
+    state.write(__import__("tac_osm").StateUpdate(key="b", value=(1, 0, 1, 0), step=0))
+    state.corrupt("a", position=1)
+    assert state.read(Query(text="\ta", step=0)).values == ((0, 0, 0, 1),)
+    state.swap_values("a", "b")
+    assert state.read(Query(text="\ta", step=0)).values == ((1, 0, 1, 0),)
+    state.clear()
+    assert state.addresses() == ()
+
+def test_registered_measurement_scripts_execute_as_declared_smoke_tests():
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parent.parent
+    commands = [
+        [sys.executable, "scripts/measure_temporal_persistence.py", "--smoke", "--steps", "3", "--eval-steps", "2", "--seeds", "0", "--levels", "1"],
+        [sys.executable, "scripts/measure_selective_scaling.py", "--smoke", "--steps", "2", "--eval-steps", "2", "--seeds", "0", "--levels", "8"],
+    ]
+    for command in commands:
+        result = subprocess.run(command, cwd=root, capture_output=True, text=True)
+        assert result.returncode == 0, result.stdout + "\n" + result.stderr
+        assert "SMOKE TEST" in result.stdout
+        assert "machine-readable summary written" in result.stdout
+
+def test_static_population_query_uses_an_actual_tab_delimiter():
+    from tac_osm.benchmark_v1 import repeated_equality_population, task_from_population
+
+    task = task_from_population(
+        candidates=repeated_equality_population(61, dim=8, n_candidates=64),
+        reference_bits=(0, 1, 0, 1, 0, 1, 0, 1),
+        step=0,
+        state_address="address",
+        validity="multiple",
+    )
+    assert "\t" in task.query.text
+    assert "\\t" not in task.query.text
+    assert task.query.text.endswith("\taddress")

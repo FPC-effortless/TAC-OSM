@@ -228,3 +228,111 @@ def generate_task(
         validity=validity,
         reference_bits=tuple(reference),
     )
+
+
+def repeated_equality_population(
+    seed: int,
+    *,
+    dim: int = 8,
+    n_candidates: int = 64,
+    marked_positions: Sequence[int] | None = None,
+) -> tuple[Candidate, ...]:
+    """Build a static candidate universe with balanced marked-bit buckets.
+
+    This is the C5 cost control. The candidate universe is built once and then
+    reused across many queries. For the default two marked positions, every
+    2-bit signature is repeated evenly, creating multiple-valid tasks while
+    keeping the relevant signature independent of H.
+    """
+    if dim < 2:
+        raise ValueError("dim must be >= 2")
+    marks = tuple(marked_positions) if marked_positions is not None else (0, 1)
+    if not marks or any(j < 0 or j >= dim for j in marks):
+        raise ValueError("marked_positions must contain valid dimension indices")
+    n_signatures = 1 << len(marks)
+    if n_candidates % n_signatures:
+        raise ValueError(
+            f"n_candidates={n_candidates} must be divisible by {n_signatures} "
+            "to keep equality buckets balanced"
+        )
+    rng = random.Random(seed)
+    candidates: list[Candidate] = []
+    per_bucket = n_candidates // n_signatures
+    for signature_id in range(n_signatures):
+        bits = tuple((signature_id >> bit) & 1 for bit in range(len(marks)))
+        for _ in range(per_bucket):
+            desc = [rng.randrange(2) for _ in range(dim)]
+            for bit, position in zip(bits, marks):
+                desc[position] = bit
+            index = len(candidates)
+            candidates.append(
+                Candidate(
+                    key=f"c{index}",
+                    descriptor=tuple(desc),
+                    action=index,
+                    provenance="static_population_v1",
+                )
+            )
+    rng.shuffle(candidates)
+    # Actions are the candidate's fixed global ids, not their post-shuffle
+    # positions. This keeps action identity independent of candidate ordering.
+    return tuple(
+        Candidate(
+            key=c.key,
+            descriptor=c.descriptor,
+            action=i,
+            provenance=c.provenance,
+        )
+        for i, c in enumerate(candidates)
+    )
+
+
+def task_from_population(
+    *,
+    candidates: Sequence[Candidate],
+    reference_bits: Sequence[int],
+    step: int,
+    relation: RelationName = "equality",
+    state_address: str = "",
+    validity: ValidityMode = "multiple",
+) -> GeneratedTask:
+    """Make a query against an existing candidate universe without mutating it."""
+    if not candidates:
+        raise ValueError("candidate population must be non-empty")
+    reference = tuple(int(x) for x in reference_bits)
+    dim = len(reference)
+    marks = tuple(1 if j < 2 else 0 for j in range(dim))
+    acceptable = {
+        i
+        for i, candidate in enumerate(candidates)
+        if relation_holds(relation, reference, candidate.descriptor, marks)
+    }
+    if validity == "unique" and len(acceptable) != 1:
+        raise ValueError(
+            "population does not realize validity=unique: "
+            f"found {len(acceptable)} acceptable candidates"
+        )
+    if validity == "multiple" and len(acceptable) < 2:
+        raise ValueError(
+            "population does not realize validity=multiple: "
+            f"found {len(acceptable)} acceptable candidates"
+        )
+    if validity == "none" and acceptable:
+        raise ValueError(
+            "population does not realize validity=none: "
+            f"found {len(acceptable)} acceptable candidates"
+        )
+    bits = "" if state_address else " ".join(str(x) for x in reference)
+    return GeneratedTask(
+        query=Query(
+            text=f"{bits}\t{state_address}",
+            context=marks,
+            step=step,
+            provenance="static_population_v1",
+        ),
+        candidates=tuple(candidates),
+        acceptable_actions=frozenset(acceptable),
+        relation=relation,
+        validity=validity,
+        reference_bits=reference,
+    )

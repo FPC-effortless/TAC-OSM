@@ -372,6 +372,16 @@ class ExperimentContract:
                 "registered seeds, and a subset does not estimate it."
             )
 
+    def require_k_levels(self, k_levels: Sequence[int]) -> None:
+        """Require the registered K/delay levels exactly when a contract uses them."""
+        got = tuple(int(k) for k in k_levels)
+        want = tuple(self.k_levels)
+        if got != want:
+            raise ContractError(
+                f"{self.experiment_id}: K levels {got} do not match the "
+                f"registered {list(want)}."
+            )
+
     def require_eval_steps(self, eval_steps: int) -> None:
         """The evaluation length must be the registered one.
 
@@ -564,7 +574,7 @@ class ExperimentContract:
             problems.append(f"{self.experiment_id}: no arms registered")
 
         for branch in self.decision_rule:
-            for arm in _arm_names_in(branch.condition):
+            for arm in _arm_names_in(branch.condition, arm_names):
                 if arm not in arm_names:
                     problems.append(
                         f"{self.experiment_id}: decision rule references arm "
@@ -641,28 +651,29 @@ def _require_keys(d: dict[str, Any], keys: Sequence[str], label: str) -> None:
         )
 
 
-def _arm_names_in(text: str) -> set[str]:
-    """The registered arm names a decision-rule branch mentions.
+def _arm_names_in(text: str, known_arm_names: set[str] | None = None) -> set[str]:
+    """Return arm identifiers mentioned in decision-rule prose.
 
-    Used only to catch a rule that covers an arm the contract never
-    registered. Deliberately conservative: it returns the intersection of
-    identifiers in the text with *known arm-name shapes*, so it cannot
-    fabricate a false positive from ordinary words. A rule that mentions an
-    unregistered arm is caught; a rule that mentions no arm at all is not an
-    error, because the rule may be phrased over endpoints rather than arms.
+    Endpoint names often contain underscores too, so treating every snake_case
+    token as an arm creates false contract failures. An identifier is an arm
+    when it is a registered arm, or when the prose explicitly places the
+    identifier next to the word 'arm'. The second rule preserves the existing
+    negative control for an unregistered arm such as 'epsilon_greedy arm'.
     """
     import re
 
+    known_arm_names = known_arm_names or set()
+    tokens = re.findall(r"[A-Za-z_][A-Za-z0-9_]*", text)
     out: set[str] = set()
-    for tok in re.findall(r"[A-Za-z_][A-Za-z0-9_]*", text):
-        # The registered arm names across this repository are all snake_case
-        # identifiers of length >= 4 that are not ordinary English words.
-        # This test is deliberately weak in the direction of *missing* a
-        # reference rather than inventing one.
-        if len(tok) >= 4 and tok.lower() not in _COMMON_WORDS and "_" in tok:
+    for i, tok in enumerate(tokens):
+        if tok in known_arm_names:
             out.add(tok)
+            continue
+        if len(tok) >= 4 and tok.lower() not in _COMMON_WORDS and "_" in tok:
+            nearby = tokens[max(0, i - 2): i + 3]
+            if "arm" in {x.lower() for x in nearby}:
+                out.add(tok)
     return out
-
 
 #: Words that appear in decision-rule prose and are not arm names. Keeping
 #: this list small and obvious is deliberate: the check's job is to catch a

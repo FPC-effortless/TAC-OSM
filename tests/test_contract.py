@@ -271,6 +271,11 @@ def test_wrong_schedule_length_is_rejected(surrogate, steps):
 def test_registered_schedule_length_is_accepted(surrogate):
     surrogate.require_steps(500)
 
+def test_registered_k_levels_are_accepted(surrogate):
+    surrogate.require_k_levels(surrogate.k_levels)
+    with pytest.raises(ContractError, match="K levels"):
+        surrogate.require_k_levels((999,))
+
 
 def test_wrong_arms_are_rejected(surrogate):
     """An added or removed arm makes the decision rule unevaluable as written."""
@@ -832,6 +837,8 @@ _WITH_CONTRACT = (
     ("measure_learn.py", "TACOSM-LEARN-001"),
     ("measure_matched_h.py", "TACOSM-MATCHED-001"),
     ("measure_retrieval.py", "TACOSM-RETRIEVAL-001"),
+    ("measure_temporal_persistence.py", "TACOSM-TEMPORAL-001"),
+    ("measure_selective_scaling.py", "TACOSM-SELECTIVE-001"),
 )
 
 

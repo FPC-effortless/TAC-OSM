@@ -133,6 +133,14 @@ their bounds attached.
 
 ---
 
+## Hardened experiment prerequisites
+
+| Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
+|---|---|---|---|---|---|---|
+| The write/read delay is enforced in the executable benchmark | L1 | gate | persistent-state temporal vocabulary | implementation is not capability evidence | TACOSM-TEMPORAL-001 boundary gate | run the registered temporal measurement |
+| The retrieval boundary is part of the runtime call graph and its one-time build cost is separately accounted | L2 | protocol | deterministic lookup as a sparsity control | exact equality index is not semantic retrieval | TACOSM-SELECTIVE-001 with static candidate-universe reuse | run the registered selective measurement |
+| Structured verifier and bounded executable repair can re-execute without hidden gold access | L2 | mechanism | verifier-guided repair loop shape | no capability claim transfers from this control | dedicated repair evaluation | capability evaluation not run |
+
 ## Layer 4 — core program claims
 
 No single experiment establishes these. They are the claims the register
