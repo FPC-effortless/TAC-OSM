@@ -13,7 +13,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable, Sequence
 
-from . import Computation, Outcome
+from . import Candidate, Computation, Outcome
+from .benchmark_v1 import relation_holds
 
 
 @dataclass(frozen=True)
@@ -100,6 +101,70 @@ class SemanticVerifier:
             valid=True,
             confidence=1.0,
             evidence=("observed_outcome", "executed_output", "executed_trace"),
+        )
+
+
+class RelationConstraintVerifier(SemanticVerifier):
+    """Verifier that adds an independent, public task-spec constraint.
+
+    The constraint is checked only after execution/observation, so it cannot
+    leak backward into routing. It uses the public relation, addressed state
+    representation, candidate descriptor, and context; it never reads a hidden
+    acceptable-action set or target index.
+    """
+
+    def verify_task(
+        self,
+        computation: Computation,
+        outcome: Outcome,
+        *,
+        candidate: Candidate,
+        reference: Sequence[int],
+        context: Sequence[int],
+        relation: str,
+    ) -> VerificationEvidence:
+        base = self.verify(computation, outcome)
+        if not base.valid:
+            return base
+
+        expected = relation_holds(
+            relation,
+            reference,
+            candidate.descriptor,
+            context,
+        )
+        actual = bool(computation.trace and float(computation.trace[0]) >= 0.5)
+        if actual != expected:
+            return VerificationEvidence(
+                valid=False,
+                failed_constraint="relation_semantics",
+                counterexample=(
+                    f"candidate={candidate.key} expected={int(expected)} "
+                    f"computed={int(actual)}"
+                ),
+                repair_target=f"candidate:{candidate.key}",
+                confidence=1.0,
+                evidence=(
+                    "public_relation_spec",
+                    "candidate_descriptor",
+                    "executed_output",
+                ),
+            )
+
+        if not expected:
+            return VerificationEvidence(
+                valid=False,
+                failed_constraint="relation_unsatisfied",
+                counterexample=f"candidate={candidate.key} does not satisfy public relation",
+                repair_target=f"candidate:{candidate.key}",
+                confidence=1.0,
+                evidence=("public_relation_spec", "candidate_descriptor"),
+            )
+
+        return VerificationEvidence(
+            valid=True,
+            confidence=base.confidence,
+            evidence=base.evidence + ("public_relation_spec",),
         )
 
 
