@@ -325,7 +325,7 @@ def task_from_population(
     bits = "" if state_address else " ".join(str(x) for x in reference)
     return GeneratedTask(
         query=Query(
-            text=f"{bits}\\t{state_address}",
+            text=f"{bits}\t{state_address}",
             context=marks,
             step=step,
             provenance="static_population_v1",
