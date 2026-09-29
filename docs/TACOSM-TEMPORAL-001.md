@@ -108,3 +108,13 @@ router-visible information, and hidden-truth boundary are unchanged.
 The purpose is to enforce the causal sequence without allowing non-measured
 filler generation cost to dominate the experiment. A1 is recorded in the
 machine-readable contract and applies before the result run.
+
+## Amendment A2 — minimum valid filler population
+
+A1 specified one-candidate filler decisions. That cannot be executed by the
+registered generator, which requires at least two candidates. No scientific
+result was produced under A1.
+
+A2 changes the filler workload from one to two candidates, the minimum valid
+population. The read boundary remains H=64 and every registered endpoint,
+delay, arm, seed, and leakage constraint is unchanged.
