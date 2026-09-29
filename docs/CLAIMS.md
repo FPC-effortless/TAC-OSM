@@ -50,35 +50,39 @@ be quietly upgraded from "measured once" to "established":
 > Information written at step `t` can be used at step `t + k` to change a
 > decision the observation alone does not determine.
 
-**STATUS: SUPPORTED**
+**STATUS: NOT ESTABLISHED**
 
-**TYPE:** mechanism · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+**TYPE:** mechanism · **LAYER:** L4 — see `docs/EVIDENCE_REGISTER.md`
 
-**PRIOR ART:** the persistent-state container and the carry/reset/shuffle
-intervention vocabulary are imported from TAC-transformer `IdentityState` (E3,
-TAC-235/236, `6cce2ce`). The container is L0; the *claim* that a written value
-changes a later decision inside a decision loop is TAC-OSM's own, because the
-source is a bandit with no temporal decision boundary.
+**PRIOR ART:** the persistent-state container and carry/reset/shuffle
+intervention vocabulary are imported from TAC-transformer `IdentityState`
+(E3, TAC-235/236, `6cce2ce`). The container is L0; the temporal claim below
+is TAC-OSM's own.
 
-**NOT INHERITED:** long-horizon memory — the source evidence is bounded and
-synthetic. The claim holds for the three v0.1 families and no further.
+**NOT INHERITED:** the old v0 result does not establish temporal persistence.
+In v0.1 the task builder could place the target directly into persistent state
+while constructing the task that immediately reads it. That is a keyed lookup
+construction, not an enforced write-at-`t`, read-at-`t+k` boundary.
 
-**REQUIRED EVIDENCE:** the named experiment and the gate that ran.
+**REQUIRED EVIDENCE:** an experiment using the hardened temporal benchmark,
+with explicit write step, intervening decision boundaries, read step, and
+carry/reset/shuffle/corrupt controls. Report capability as a function of
+`k`, with the same candidate exposure and leakage contract across delays.
 
-`TACOSM-BASELINE-001`, commit `91597ab`. The `replay` family requires a
-written vector on the marked positions *and* the public query's anti-match;
-neither routing alone nor lookup alone solves it, and the learned arm reaches
-it (0.5325 at 500 steps) while `static` and `full_context` score ~0.03–0.04.
-The mixed schedule gives equal exposure across families, so the per-family
-comparison is not an exposure artefact (test:
-`test_mixed_schedule_gives_equal_family_exposure`).
+The architectural defect is now fixed in `src/tac_osm/temporal.py` and
+`src/tac_osm/hardened.py`: a world write is staged separately, becomes
+available only after its declared delay, and `TemporalBenchmark` rejects
+skipped decision steps. Regression tests demonstrate that a write with delay
+4 remains unreadable through steps 0–3 and is readable at step 4.
 
-The persistence interventions (`shuffled`, `reset`, `corrupted`, `random`,
-`wrong_key`) are implemented in `state.py` and prefrozen into the ablation
-matrix, so a dose–response ladder for this claim is a matrix cell rather than
-a new experiment.
+That is a **runtime contract**, not evidence that the learned system succeeds
+across time. The current status therefore remains NOT ESTABLISHED until the
+temporal experiment is run.
 
----
+The hardened path also separates state addressing from pool readout:
+`TemporalPersistentState.read(query)` resolves the named address and returns
+only that item. This removes the v0 mismatch where the store could construct a
+large history pool while the router saw only `max_state_slots = 4`.
 
 ## C2 — Relational routing
 
