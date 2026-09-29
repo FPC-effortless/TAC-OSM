@@ -141,6 +141,15 @@ script is the wrong dependency target for a library — and
 `test_make_pairs_matches_the_c5_002_gate_construction` is the seam that keeps
 the two in step.
 
+Three seed streams are used, and they are disjoint by named constant rather
+than by arithmetic: the task population's `SEEDS = (0, 1, 2, 3, 4)`, the
+bridge's `BRIDGE_SEED = 20260929`, the bridge validation stream's
+`BRIDGE_VALIDATION_SEED = 20261001`, and the gate's `GATE_SEED = 20260930`.
+The validation stream is deliberately *not* `BRIDGE_SEED + 1`, which is the
+gate's seed: a validation set that is the gate's stream with a count prefix
+would make the reported separation and the gate's verdict the same number
+twice, and would leave the gate's verdict unattributable to either.
+
 ## Arms
 
 Unchanged from C5-002, and deliberately so. The arms were not the defect; the

@@ -911,6 +911,7 @@ _WITH_CONTRACT = (
     ("measure_selective_scaling.py", "TACOSM-SELECTIVE-001"),
     ("measure_c5_casm.py", "TACOSM-C5-001"),
     ("measure_c5_casm_002.py", "TACOSM-C5-002"),
+    ("measure_c5_casm_003.py", "TACOSM-C5-003"),
 )
 
 

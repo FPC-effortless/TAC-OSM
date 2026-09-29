@@ -297,14 +297,17 @@ interpretable.
 
 **The claim still stays UNTESTED, and the blocker is still the instrument.**
 A pre-registration is not a result, and nothing above moves C5. The successor
-is not written yet: `scripts/measure_c5_casm_003.py` is a compute-plane task
-that requires `torch` and the pinned CASM-S checkout, so it is runner-only by
-definition and has not been created on this device. It must be added to
-`_WITH_CONTRACT` in `tests/test_contract.py` in the same commit it appears in,
-or the M0 partition test fails. Until a gate-confirmed run exists, this entry
-must not be read as progress on C5 — it is a registered intention, recorded so
-that the difference between "the experiment is designed" and "the claim is
-supported" stays visible.
+is now **written but not run**: `scripts/measure_c5_casm_003.py` exists and is
+registered in `_WITH_CONTRACT` (`tests/test_contract.py`), its 30 torch-free
+design tests pass, and its `--smoke` path enforces the contract on this
+control plane — but the measurement itself requires `torch` and the pinned
+CASM-S checkout, so it is runner-only by definition and no run has been
+dispatched. The compute lane is
+`.github/workflows/tacosm-c5-003.yml` (branch `compute/c5-003`). Until a
+gate-confirmed run exists, this entry must not be read as progress on C5 — it
+is a registered intention with a tested contract, recorded so that the
+difference between "the experiment is designed" and "the claim is supported"
+stays visible.
 
 This is the architecture's central efficiency claim and it is *not* supported
 by any measurement in the repository. The honest model of v0.1 cost is:
