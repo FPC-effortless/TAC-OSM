@@ -41,6 +41,7 @@ jobs:
           python - <<'PY'
           import sys
           sys.path.insert(0, "src")
+          sys.path.insert(0, "../cdl-attention-experiment")
           import torch
           from tac_osm.executor import relevance_program
           from tac_osm.casm_adapter import casm_graph_spec_from_program
