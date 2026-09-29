@@ -349,22 +349,251 @@ def test_representation_router_is_separate_from_feature_construction():
 
 
 def test_casm_adapter_keeps_external_dependency_outside_tac_osm():
-    from tac_osm.casm_adapter import CasmExecutorAdapter
+    """The CASM-S boundary is structural, ordered, torch-free, and fail-closed."""
+    import inspect
+    import json
+    from dataclasses import dataclass
+    from enum import Enum
+
     from tac_osm import ExecutionResult, Structure
+    from tac_osm import casm_adapter
 
-    adapter = CasmExecutorAdapter(
-        lambda spec, inputs: {
-            "output": sum(inputs),
-            "node_values": tuple(inputs),
-            "provenance": "test_casm",
-        }
+    class FakeOp(str, Enum):
+        INPUT = "INPUT"
+        NOT = "NOT"
+        AND = "AND"
+        OR = "OR"
+        XOR = "XOR"
+
+    @dataclass(frozen=True)
+    class FakeNode:
+        index: int
+        op: FakeOp
+        depth: int
+        slot: int
+
+        @property
+        def arity(self):
+            return {
+                FakeOp.INPUT: 0,
+                FakeOp.NOT: 1,
+                FakeOp.AND: 2,
+                FakeOp.OR: 2,
+                FakeOp.XOR: 2,
+            }[self.op]
+
+    @dataclass(frozen=True)
+    class FakeEdge:
+        src: int
+        dst: int
+        port: int
+
+    @dataclass(frozen=True)
+    class FakeEpisode:
+        nodes: tuple
+        true_edges: tuple
+        candidate_edges: tuple
+        inputs: tuple
+        output: int
+        input_values: tuple
+        target: int
+        truth_table: dict
+        active_count: int
+
+    edges = (
+        FakeEdge(0, 2, 0),
+        FakeEdge(1, 2, 0),
+        FakeEdge(0, 2, 1),
+        FakeEdge(1, 2, 1),
     )
-    result = adapter.execute(Structure(key="demo", spec={"op": "sum"}), (1.0, 2.0))
-    assert isinstance(result, ExecutionResult)
-    assert result.output == 3.0
-    assert result.node_values == (1.0, 2.0)
-    assert result.provenance == "test_casm"
+    episode = FakeEpisode(
+        nodes=(
+            FakeNode(0, FakeOp.INPUT, 0, 0),
+            FakeNode(1, FakeOp.INPUT, 0, 1),
+            FakeNode(2, FakeOp.XOR, 1, 2),
+            FakeNode(3, FakeOp.INPUT, 0, 3),
+        ),
+        true_edges=(edges[0], edges[3]),
+        candidate_edges=edges,
+        inputs=(0, 1),
+        output=2,
+        input_values=(1, 0),
+        target=3,
+        truth_table={(0, 0): 0, (0, 1): 1, (1, 0): 1, (1, 1): 0},
+        active_count=3,
+    )
 
+    spec = casm_adapter.casm_graph_spec_from_episode(episode)
+
+    # CASM-S Node/Edge field names and exact candidate-edge ordering are
+    # preserved. The explicit edge index freezes alignment with the gate
+    # tensor produced by the source model.
+    assert spec["schema"] == casm_adapter.CASM_SCHEMA
+    assert spec["kind"] == casm_adapter.CASM_KIND
+    assert spec["active_count"] == 3
+    assert spec["inputs"] == [0, 1]
+    assert spec["output"] == 2
+    assert [node["index"] for node in spec["nodes"]] == [0, 1, 2, 3]
+    assert [node["op"] for node in spec["nodes"]] == [
+        "INPUT", "INPUT", "XOR", "INPUT"
+    ]
+    assert [edge["index"] for edge in spec["candidate_edges"]] == [0, 1, 2, 3]
+    assert [
+        (edge["src"], edge["dst"], edge["port"])
+        for edge in spec["candidate_edges"]
+    ] == [
+        (0, 2, 0),
+        (1, 2, 0),
+        (0, 2, 1),
+        (1, 2, 1),
+    ]
+
+    # Hidden/oracle fields never cross the boundary, and the payload is plain
+    # JSON data rather than a live CASM/Torch object.
+    encoded = json.dumps(spec)
+    assert json.loads(encoded) == spec
+    for forbidden in (
+        "true_edges",
+        "true_edge_set",
+        "target",
+        "input_values",
+        "truth_table",
+        "acceptable_actions",
+    ):
+        assert forbidden not in spec
+        assert forbidden not in encoded
+
+    structure = casm_adapter.casm_structure_from_episode(
+        episode, key="candidate-7", provenance="casm_s.test"
+    )
+    assert isinstance(structure, Structure)
+    assert structure.spec == spec
+    assert structure.provenance == "casm_s.test"
+
+    observed = {}
+
+    def fake_casm(casm_spec, inputs):
+        observed["spec"] = casm_spec
+        observed["inputs"] = tuple(inputs)
+
+        assert all(
+            edge["index"] == i
+            for i, edge in enumerate(casm_spec["candidate_edges"])
+        )
+
+        # Same positional gate convention as CASM-S: one gate for every
+        # candidate edge, indexed by its position in candidate_edges.
+        gates = [1.0, 0.0, 0.0, 1.0]
+        values = [0.0] * casm_spec["active_count"]
+        for input_position, node_index in enumerate(casm_spec["inputs"]):
+            values[node_index] = float(inputs[input_position])
+
+        selected_by_port = {}
+        for edge, gate in zip(casm_spec["candidate_edges"], gates):
+            if gate > 0.5:
+                selected_by_port[edge["port"]] = edge["src"]
+
+        a = values[selected_by_port[0]]
+        b = values[selected_by_port[1]]
+        values[2] = float(a != b)
+
+        return {
+            "output": values[casm_spec["output"]],
+            "gates": gates,
+            "node_values": values,
+            "provenance": "fake_casm_s",
+        }
+
+    result = casm_adapter.CasmExecutorAdapter(fake_casm).execute(
+        structure, (1.0, 0.0)
+    )
+    assert observed["spec"] == spec
+    assert observed["inputs"] == (1.0, 0.0)
+    assert isinstance(result, ExecutionResult)
+    assert result.output == 1.0
+    assert result.gates == (1.0, 0.0, 0.0, 1.0)
+    assert result.node_values == (1.0, 0.0, 1.0)
+    assert result.provenance == "fake_casm_s"
+
+    # Tensor-like values are normalized by duck typing; the adapter has no
+    # tensor-library import and therefore remains runnable on Termux.
+    class Scalar:
+        def item(self):
+            return 1.0
+
+    class Vector:
+        def tolist(self):
+            return [1.0, 0.0, 1.0]
+
+    tensor_result = casm_adapter.CasmExecutorAdapter(
+        lambda _spec, _inputs: {
+            "output": Scalar(),
+            "gates": [1.0, 0.0, 0.0, 1.0],
+            "node_values": Vector(),
+        }
+    ).execute(structure, (1.0, 0.0))
+    assert tensor_result.output == 1.0
+    assert tensor_result.node_values == (1.0, 0.0, 1.0)
+
+    with pytest.raises(ValueError, match="gates length"):
+        casm_adapter.CasmExecutorAdapter(
+            lambda _spec, _inputs: {
+                "output": 1.0,
+                "gates": [1.0, 0.0],
+                "node_values": [1.0, 0.0, 1.0],
+            }
+        ).execute(structure, (1.0, 0.0))
+
+    with pytest.raises(ValueError, match="node_values length"):
+        casm_adapter.CasmExecutorAdapter(
+            lambda _spec, _inputs: {
+                "output": 1.0,
+                "gates": [1.0, 0.0, 0.0, 1.0],
+                "node_values": [1.0],
+            }
+        ).execute(structure, (1.0, 0.0))
+
+    with pytest.raises(ValueError, match="inputs length"):
+        casm_adapter.CasmExecutorAdapter(fake_casm).execute(
+            structure, (1.0,)
+        )
+
+    tampered = dict(spec)
+    tampered["candidate_edges"] = [
+        dict(edge) for edge in spec["candidate_edges"]
+    ]
+    tampered["candidate_edges"][2]["index"] = 7
+
+    calls = []
+    with pytest.raises(ValueError, match="preserve list order"):
+        casm_adapter.CasmExecutorAdapter(
+            lambda bad_spec, bad_inputs: calls.append((bad_spec, bad_inputs))
+        ).execute(
+            Structure(key="tampered", spec=tampered), (1.0, 0.0)
+        )
+    assert calls == []
+
+    typed = casm_adapter.CasmGraphSpec.from_episode(episode)
+    typed_seen = {}
+
+    def typed_fake(casm_spec, inputs):
+        typed_seen["spec"] = casm_spec
+        typed_seen["inputs"] = tuple(inputs)
+        return {
+            "output": 1.0,
+            "gates": [1.0, 0.0, 0.0, 1.0],
+            "node_values": [1.0, 0.0, 1.0],
+        }
+
+    typed_result = casm_adapter.CasmExecutorAdapter(typed_fake).execute(
+        Structure(key="typed", spec=typed), (1.0, 0.0)
+    )
+    assert typed_result.output == 1.0
+    assert typed_seen["spec"] == typed.to_dict()
+
+    source = inspect.getsource(casm_adapter)
+    assert "import torch" not in source
+    assert "from torch" not in source
 
 def test_relation_constraint_verifier_rejects_semantically_invalid_action_without_gold():
     from tac_osm.structured_verifier import RelationConstraintVerifier
