@@ -41,6 +41,29 @@ may present `C_executed` as though it had been measured against `|R|` (claim
 The claim becomes testable when a retrieval boundary exists in the loop, which
 is what makes `|R|` a measurable quantity at all.
 
+### Hardened v1 runtime
+
+The branch also contains an explicit hardened integration path in
+`src/tac_osm/hardened.py`. Its call graph is:
+
+```
+world write -> temporal boundary -> address -> retain R -> route -> execute
+-> observe -> verify -> bounded repair -> delayed learning write
+```
+
+This path fixes the v0 implementation defects identified in the architecture
+audit: temporal writes are separated from reads by an enforced delay;
+retrieval is an actual runtime input to routing and execution; query-time
+addressing is separated from one-time index construction; verifier output is
+structured; repair re-executes within a bound; and the complete trajectory is
+recorded as data.
+
+The hardened path is an engineering substrate, not a new positive result.
+The synthetic executor is explicitly a control and is not presented as a CASM
+result. Temporal persistence, semantic retrieval, and capability-vs-cost
+scaling still require their contracted measurements. See
+`docs/ARCHITECTURE-HARDENING-V1.md`.
+
 ---
 
 ## What this repository exists for
