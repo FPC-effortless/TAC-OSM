@@ -197,6 +197,7 @@ def test_the_c5_003_contract_loads_and_has_one_primary():
     assert c.experiment_id == "TACOSM-C5-003"
     assert c.primary_endpoint() == "coverage_rate"
     assert [a.name for a in c.arms] == list(C5.ARMS)
+    assert [a.id for a in c.amendments] == ["A1", "A2", "A3", "A4"]
     assert c.check_consistency() == []
 
 
