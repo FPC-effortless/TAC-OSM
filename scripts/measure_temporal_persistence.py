@@ -145,9 +145,9 @@ class Cell:
     router_candidates: float
 
 
-def _run_cell(seed: int, delay: int, arm: str) -> Cell:
+def _run_cell(seed: int, delay: int, arm: str, repeat: int) -> Cell:
     benchmark = TemporalBenchmark(
-        seed=seed,
+        seed=seed * 1000 + repeat,
         dim=8,
         n_candidates=H,
         relation="equality",
@@ -156,7 +156,7 @@ def _run_cell(seed: int, delay: int, arm: str) -> Cell:
     task = benchmark.schedule_lookup_probe(
         write_step=0,
         delay=delay,
-        key=f"memory:{seed}:{delay}",
+        key=f"memory:{seed}:{delay}:{repeat}",
     )
     loop = HardenedLoop(
         router=StateEqualityRouter(),
@@ -165,7 +165,7 @@ def _run_cell(seed: int, delay: int, arm: str) -> Cell:
         repair=None,
         learning_enabled=False,
         before_read=lambda t, s, st: _apply_arm(arm, t, s, st),
-        episode_id=f"temporal-{arm}-{seed}-{delay}",
+        episode_id=f"temporal-{arm}-{seed}-{delay}-{repeat}",
     )
     trajectory = loop.run(delay + 1)
     row = trajectory.steps[-1]
@@ -192,7 +192,7 @@ def main() -> None:
     contract = load_contract(EXPERIMENT_ID)
     deviations = ()
     if args.smoke:
-        deviations = tuple(
+        deviations_list = list(
             _results.report_smoke(
                 contract,
                 EXPERIMENT_ID,
@@ -203,6 +203,13 @@ def main() -> None:
                 arms=ARMS,
             )
         )
+        if delays != tuple(contract.k_levels):
+            deviations_list.append({
+                "dimension": "k_levels",
+                "run": list(delays),
+                "registered": list(contract.k_levels),
+            })
+        deviations = tuple(deviations_list)
     else:
         contract.require_steps(args.steps)
         contract.require_eval_steps(args.eval_steps)
@@ -222,61 +229,58 @@ def main() -> None:
     audit_cells: list[dict] = []
 
     for delay in delays:
-        carry = [_run_cell(seed, delay, "carry") for seed in seeds]
+        by_arm_seed = {}
         for arm in ARMS:
-            cells = carry if arm == "carry" else [
-                _run_cell(seed, delay, arm) for seed in seeds
-            ]
+            seed_cells = {
+                seed: [_run_cell(seed, delay, arm, repeat) for repeat in range(args.eval_steps)]
+                for seed in seeds
+            }
+            all_cells = [cell for cells in seed_cells.values() for cell in cells]
+            by_arm_seed[arm] = seed_cells
             endpoints[f"{arm}@k={delay}"] = {
-                "decision_success": statistics.fmean(c.decision_success for c in cells),
-                "read_available": statistics.fmean(c.read_available for c in cells),
-                "verification_passed": statistics.fmean(c.verification_passed for c in cells),
-                "router_candidates": statistics.fmean(c.router_candidates for c in cells),
+                "decision_success": statistics.fmean(c.decision_success for c in all_cells),
+                "read_available": statistics.fmean(c.read_available for c in all_cells),
+                "verification_passed": statistics.fmean(c.verification_passed for c in all_cells),
+                "router_candidates": statistics.fmean(c.router_candidates for c in all_cells),
             }
             per_seed[f"{arm}@k={delay}"] = {
                 "decision_success": {
-                    "seeds": {
-                        str(seed): cell.decision_success
-                        for seed, cell in zip(seeds, cells)
-                    },
-                    "mean": statistics.fmean(c.decision_success for c in cells),
-                    "spread": seed_spread([c.decision_success for c in cells]),
+                    "seeds": {str(seed): statistics.fmean(c.decision_success for c in cells) for seed, cells in seed_cells.items()},
+                    "mean": statistics.fmean(c.decision_success for c in all_cells),
+                    "spread": seed_spread([statistics.fmean(c.decision_success for c in cells) for cells in seed_cells.values()]),
                 },
                 "read_available": {
-                    "seeds": {
-                        str(seed): cell.read_available
-                        for seed, cell in zip(seeds, cells)
-                    },
-                    "mean": statistics.fmean(c.read_available for c in cells),
-                    "spread": seed_spread([c.read_available for c in cells]),
+                    "seeds": {str(seed): statistics.fmean(c.read_available for c in cells) for seed, cells in seed_cells.items()},
+                    "mean": statistics.fmean(c.read_available for c in all_cells),
+                    "spread": seed_spread([statistics.fmean(c.read_available for c in cells) for cells in seed_cells.values()]),
                 },
             }
-        carry_mean = statistics.fmean(c.decision_success for c in carry)
+        carry_by_seed = by_arm_seed["carry"]
+        carry_seed_means = {
+            seed: statistics.fmean(c.decision_success for c in cells)
+            for seed, cells in carry_by_seed.items()
+        }
+        carry_mean = statistics.fmean(carry_seed_means.values())
         for arm in ("reset", "corrupt"):
-            cells = [_run_cell(seed, delay, arm) for seed in seeds]
-            control_mean = statistics.fmean(c.decision_success for c in cells)
-            decision.append(
-                {
-                    "delay": delay,
-                    "arm": arm,
-                    "carry_decision_success": carry_mean,
-                    "control_decision_success": control_mean,
-                    "delta_carry_minus_control": carry_mean - control_mean,
-                    "control_spread": seed_spread([c.decision_success for c in cells]),
-                }
-            )
-        audit_cells.append(
-            {
-                "delay": delay,
-                "carry_read_available": statistics.fmean(c.read_available for c in carry),
-                "reset_read_available": statistics.fmean(
-                    _run_cell(seed, delay, "reset").read_available for seed in seeds
-                ),
-                "corrupt_read_available": statistics.fmean(
-                    _run_cell(seed, delay, "corrupt").read_available for seed in seeds
-                ),
+            control_seed_means = {
+                seed: statistics.fmean(c.decision_success for c in cells)
+                for seed, cells in by_arm_seed[arm].items()
             }
-        )
+            control_mean = statistics.fmean(control_seed_means.values())
+            decision.append({
+                "delay": delay,
+                "arm": arm,
+                "carry_decision_success": carry_mean,
+                "control_decision_success": control_mean,
+                "delta_carry_minus_control": carry_mean - control_mean,
+                "control_spread": seed_spread(list(control_seed_means.values())),
+            })
+        audit_cells.append({
+            "delay": delay,
+            "carry_read_available": statistics.fmean(c.read_available for cells in carry_by_seed.values() for c in cells),
+            "reset_read_available": statistics.fmean(c.read_available for cells in by_arm_seed["reset"].values() for c in cells),
+            "corrupt_read_available": statistics.fmean(c.read_available for cells in by_arm_seed["corrupt"].values() for c in cells),
+        })
 
     record = MeasurementRecord(
         provenance=_provenance(),
