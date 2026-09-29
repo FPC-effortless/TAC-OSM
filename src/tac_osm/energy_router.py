@@ -246,11 +246,15 @@ class RepresentationEnergyRouter:
             memory = self.addressor.address(query, state)
         qx = self._query_input(query, memory)
         cx_pos = self._candidate_input(candidates[selected])
-        scores = self.score(query, memory, candidates)
+        score_values = (
+            [float(x) for x in scores]
+            if scores is not None
+            else self.score(query, memory, candidates)
+        )
         negatives = [i for i in range(len(candidates)) if i != selected]
         if not negatives:
             return 0.0
-        negative = max(negatives, key=lambda i: (scores[i], -i))
+        negative = max(negatives, key=lambda i: (score_values[i], -i))
         cx_neg = self._candidate_input(candidates[negative])
 
         zq = self._linear(self.wq, self.bq, qx)
