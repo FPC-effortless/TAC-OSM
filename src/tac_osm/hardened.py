@@ -394,6 +394,10 @@ class HardenedLoop:
         final_selected = selected_global
         final_outcome = outcome
         if not evidence.valid and self.repair is not None:
+            action_to_candidate = {
+                candidate.action: candidate for candidate in retained_candidates
+            }
+
             def compute_alt(obj: object) -> Computation:
                 c = obj if isinstance(obj, Candidate) else candidate
                 self.costs.executor_invocations += 1
@@ -404,7 +408,11 @@ class HardenedLoop:
             def verify_alt(comp: Computation) -> VerificationEvidence:
                 alt_action = comp.action
                 alt_outcome = self.benchmark.observe(task, alt_action)
-                alt_candidate = retained_candidates[alt_action]
+                alt_candidate = action_to_candidate.get(alt_action)
+                if alt_candidate is None:
+                    raise RuntimeError(
+                        f"repair produced unknown candidate action {alt_action}"
+                    )
                 self.costs.verifier_checks += 1
                 return self.verifier.verify_task(
                     comp,
