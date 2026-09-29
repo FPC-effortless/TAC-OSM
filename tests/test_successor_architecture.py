@@ -8,7 +8,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from tac_osm import Candidate, Query, StateUpdate, Structure
-from tac_osm.environment import build_relational_task
+from tac_osm.environment import build_lookup_task, build_replay_task, build_relational_task
 from tac_osm.executor import relevance_program
 from tac_osm.explicit_executor import ExplicitGraphExecutor, ExplicitExecutorConfig
 from tac_osm.packed import PackedGraphBatch
@@ -149,3 +149,26 @@ def test_successor_config_freezes_single_execution_budget():
         assert "multi-candidate execution" in str(exc)
     else:
         raise AssertionError("top_k > 1 must not bypass the v1 execution contract")
+
+def test_successor_representation_has_constructive_shared_witness():
+    store = PersistentStore(StateConfig(seed=0, n_slots=64))
+    router = RepresentationEnergyRouter(
+        EnergyRouterConfig(input_dim=8, latent_dim=8, seed=5)
+    )
+    router.set_analytic_relation()
+
+    builders = (
+        lambda i: build_relational_task(1000 + i, dim=8, n_candidates=8),
+        lambda i: build_lookup_task(2000 + i, store, dim=8, n_candidates=8),
+        lambda i: build_replay_task(3000 + i, store, dim=8, n_candidates=8),
+    )
+
+    for build in builders:
+        for i in range(16):
+            task = build(i)
+            decision = router.route(task.query, store, task.candidates)
+            assert decision.selected == task.target_action
+            assert router.last_diagnostics is not None
+            assert router.last_diagnostics.selected_rank == 1
+            assert router.last_diagnostics.hard_negative_margin >= 2.0
+
