@@ -433,9 +433,9 @@ def test_hardened_index_never_receives_hidden_truth_after_reset():
             from tac_osm.addressing import AddressHit
             captured.append(tuple(reference))
             return AddressHit(
-                candidate_indices=tuple(range(len(benchmark._events[step].task.candidates))),
+                candidate_indices=(0,),
                 inspected_positions=len(reference),
-                bucket_size=len(benchmark._events[step].task.candidates),
+                bucket_size=1,
             )
 
     loop = HardenedLoop(
