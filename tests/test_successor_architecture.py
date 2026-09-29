@@ -102,3 +102,39 @@ def test_packed_batch_counts_active_work():
     assert batch.total_active_nodes == sum(p.active_count for p in programs)
     assert batch.total_active_edges == sum(len(p.true_edges) for p in programs)
     assert batch.total_candidate_edges == sum(len(p.candidate_edges) for p in programs)
+def test_successor_loop_uses_new_router_and_executor():
+    from tac_osm.successor_builder import SuccessorConfig, build_successor
+
+    model = build_successor(
+        SuccessorConfig(n_steps=3, seed=11, learn=True, executor_mode="exact")
+    )
+    episode = model.run()
+
+    assert episode.n == 3
+    assert model.router.__class__.__name__ == "RepresentationEnergyRouter"
+    assert model.executor.__class__.__name__ == "ExplicitGraphExecutor"
+    for step in episode.steps:
+        spec = step.computation.structure.spec
+        assert spec.true_edges
+        assert spec.true_edge_set <= {
+            (edge.src, edge.dst, edge.port) for edge in spec.candidate_edges
+        }
+    assert model.router.updates >= 0
+
+
+def test_successor_router_reports_route_time_diagnostics():
+    task = build_relational_task(12, dim=8, n_candidates=8)
+    store = PersistentStore(StateConfig(seed=0, n_slots=8))
+    router = RepresentationEnergyRouter(
+        EnergyRouterConfig(input_dim=8, latent_dim=16, seed=4)
+    )
+
+    decision = router.route(task.query, store, task.candidates)
+    diag = router.last_diagnostics
+
+    assert diag is not None
+    assert diag.candidate_count == 8
+    assert diag.candidates_scored == 8
+    assert diag.candidate_coverage == 1.0
+    assert 1 <= diag.selected_rank <= 8
+    assert diag.selected_energy == -decision.scores[decision.selected]
