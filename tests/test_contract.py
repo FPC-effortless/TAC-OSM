@@ -839,6 +839,7 @@ _WITH_CONTRACT = (
     ("measure_retrieval.py", "TACOSM-RETRIEVAL-001"),
     ("measure_temporal_persistence.py", "TACOSM-TEMPORAL-001"),
     ("measure_selective_scaling.py", "TACOSM-SELECTIVE-001"),
+    ("measure_c5_casm.py", "TACOSM-C5-001"),
 )
 
 

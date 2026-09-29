@@ -1,0 +1,44 @@
+{
+  "experiment_id": "TACOSM-C5-001",
+  "title": "C5 confirmatory selective structural execution with CASM-S",
+  "question": "When the retained candidate set is reduced from H to K before structural execution, does the same CASM-S evaluator perform proportionally less measured structural work while preserving task capability?",
+  "hypothesis": "For the controlled multi-valid equality benchmark, exact addressing should reduce the number of CASM-S graph executions from H to at most K without using hidden task truth in routing or addressing. The experiment measures actual CASM-S execution work associated with the retained set; it does not establish semantic retrieval, learned addressing, or general C5.",
+  "arms": [
+    {"name": "exhaustive", "intervention": "execute every H candidate structure through the CASM-S evaluator", "acts_on": "structural execution", "knob": "retained set", "value": "H"},
+    {"name": "exact-indexed", "intervention": "content-address the candidate universe and execute only the retained K candidates", "acts_on": "structural execution", "knob": "K", "value": "{2,4}"},
+    {"name": "representation-addressed", "intervention": "retain top-K candidates by fixed cosine similarity of public query bits and candidate descriptors", "acts_on": "addressing", "knob": "K", "value": "{2,4}"}
+  ],
+  "endpoints": [
+    {"name": "success_rate", "role": "primary — task capability", "primary": true, "description": "Fraction of measured queries whose final selected action is acceptable under the hidden environment evaluator."},
+    {"name": "structures_executed_per_query", "role": "secondary — actual structural execution count", "primary": false, "description": "Number of retained structures submitted to CASM-S per measured query."},
+    {"name": "candidate_edges_per_query", "role": "secondary — CASM candidate-edge work", "primary": false, "description": "Candidate edges presented to CASM-S across all executed retained structures per query."},
+    {"name": "gate_evaluations_per_query", "role": "secondary — CASM gate work", "primary": false, "description": "Per-edge CASM-S gate evaluations across executed retained structures per query."},
+    {"name": "executed_structural_operations_per_query", "role": "secondary — structural operation work", "primary": false, "description": "Non-input CASM-S node operations executed per query."},
+    {"name": "node_outputs_per_query", "role": "secondary — node-output work", "primary": false, "description": "Active CASM-S node outputs produced per query."},
+    {"name": "casm_forward_batches", "role": "secondary — batching diagnostic", "primary": false, "description": "Number of batched CASM-S forward calls over the measured query window."},
+    {"name": "wall_clock_seconds", "role": "secondary — end-to-end runtime diagnostic", "primary": false, "description": "Measured runtime of the C5 query window on the declared hardware."}
+  ],
+  "decision_rule": [
+    {"condition": "exact-indexed success_rate remains within the exhaustive arm seed spread while structures_executed_per_query is no greater than K", "licenses": "the tested exact selective-execution boundary preserves capability for this controlled benchmark and the measured CASM-S work follows the retained set", "does_not_license": "semantic retrieval, learned addressing, or the full system-level C5 claim"},
+    {"condition": "exact-indexed success_rate is materially below exhaustive at the same H and K", "licenses": "capability loss is observed under the tested retained-set budget", "does_not_license": "that selective execution or cheap addressing is impossible"},
+    {"condition": "structures_executed_per_query or CASM work fails to decrease with the retained set under otherwise matched conditions", "licenses": "the implementation does not expose the intended structural work reduction and requires audit before a C5 interpretation", "does_not_license": "a general statement about CASM-S efficiency"}
+  ],
+  "interpretation_order": ["capability", "structures_executed", "CASM_work_units", "addressing_overhead", "wall_clock"],
+  "h_levels": [8, 64, 256],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 100,
+  "eval_steps": 100,
+  "k_levels": [2, 4],
+  "held_constant": [
+    "CASM-S source commit is pinned to c31554413301e3c9d3e6b3f8c8c6be572a74a748",
+    "same CASM-S model instance and evaluator are used across all arms",
+    "same candidate population and task stream are used for matched seed and H cells",
+    "candidate validity is multiple-valid on two marked equality positions",
+    "no exhaustive fallback is permitted after an empty retained set",
+    "hidden target and acceptable_actions are used only after execution for evaluation",
+    "warmup queries are fixed at 3 and excluded from endpoint averages",
+    "CASM work is counted from the actual serialized graph submitted to the external model"
+  ],
+  "status": "pre-registered",
+  "layer": "L4"
+}
