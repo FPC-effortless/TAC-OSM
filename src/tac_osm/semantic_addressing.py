@@ -20,13 +20,13 @@ from __future__ import annotations
 import math
 import random
 from dataclasses import dataclass, field
-from typing import Callable, Sequence
+from typing import Any, Callable, Sequence
 
-from . import Candidate, PersistentState, Query
+from . import Candidate, Query
 from .addressing import AddressHit
 
-QueryEncoder = Callable[[Query, PersistentState], Sequence[float]]
-CandidateEncoder = Callable[[Candidate, PersistentState], Sequence[float]]
+QueryEncoder = Callable[[Query, Any], Sequence[float]]
+CandidateEncoder = Callable[[Candidate, Any], Sequence[float]]
 
 
 @dataclass(frozen=True)
@@ -156,7 +156,7 @@ class RepresentationAddressIndex:
         relation: str | None = None,
     ) -> SemanticAddressHit:
         del relation  # Relation is not an addressing oracle.
-        state_obj = state if state is not None else PersistentState()
+        state_obj = state
         q = tuple(float(x) for x in self.query_encoder(query, state_obj))
         self._validate_dimension(q)
         signature = self._signature(q)
