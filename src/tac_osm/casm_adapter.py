@@ -206,9 +206,77 @@ class CasmGraphSpec:
         )
 
 
+    @classmethod
+    def from_program(cls, program: Any) -> "CasmGraphSpec":
+        """Compile a TAC-OSM Program into the CASM-S candidate substrate.
+
+        TAC-OSM relevance_program() stores its true wiring in
+        program.candidate_edges. CASM-S requires the full upper-triangular
+        candidate substrate, with true wiring hidden from the model.
+        The source generator orders candidates as destination, port, source.
+        """
+        active_nodes = tuple(program.nodes[:program.active_count])
+        if not active_nodes:
+            raise ValueError("program must contain at least one active node")
+
+        nodes = tuple(
+            CasmNodeSpec(
+                index=_require_int("node.index", node.index),
+                op=_op_name(node.op),
+                depth=_require_int("node.depth", node.depth),
+                slot=_require_int("node.index", node.index),
+                arity=_require_int("node.arity", node.arity),
+            )
+            for node in active_nodes
+        )
+
+        edges: list[CasmEdgeSpec] = []
+        for dst in active_nodes:
+            for port in range(dst.arity):
+                for src in range(dst.index):
+                    edges.append(
+                        CasmEdgeSpec(
+                            index=len(edges),
+                            src=src,
+                            dst=dst.index,
+                            port=port,
+                        )
+                    )
+
+        return cls(
+            nodes=nodes,
+            candidate_edges=tuple(edges),
+            inputs=tuple(
+                _require_int("program input", index) for index in program.inputs
+            ),
+            output=_require_int("program output", program.output),
+            active_count=_require_int("program active_count", program.active_count),
+        )
+
 def casm_graph_spec_from_episode(episode: Any) -> dict[str, Any]:
     """Serialize a CASM-S episode to the portable Structure.spec mapping."""
     return CasmGraphSpec.from_episode(episode).to_dict()
+
+def casm_graph_spec_from_program(program: Any) -> dict[str, Any]:
+    """Compile a TAC-OSM Program to the portable CASM-S graph mapping."""
+    return CasmGraphSpec.from_program(program).to_dict()
+
+
+def casm_structure_from_program(
+    program: Any,
+    *,
+    key: str,
+    provenance: str = "casm_s",
+) -> Structure:
+    """Build a TAC-OSM Structure for a compiled CASM-S program."""
+    if not key:
+        raise ValueError("key must be non-empty")
+    return Structure(
+        key=key,
+        spec=casm_graph_spec_from_program(program),
+        provenance=provenance,
+    )
+
 
 
 def casm_structure_from_episode(
@@ -393,4 +461,6 @@ __all__ = [
     "CasmExecutorAdapter",
     "casm_graph_spec_from_episode",
     "casm_structure_from_episode",
+    "casm_graph_spec_from_program",
+    "casm_structure_from_program",
 ]
