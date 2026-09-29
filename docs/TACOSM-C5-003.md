@@ -1,8 +1,9 @@
 # TACOSM-C5-003 — the integrated boundary, gated before the task population
 
-**Status: pre-registered.** Not run. Not amended from a result. The successor to
-`TACOSM-C5-002`, which terminated as `INSTRUMENT_INVALID`
-(`docs/TACOSM-C5-002-RESULT.md`).
+**Status: pre-registered.** Not run. Amended twice before any run — amendments
+A1 and A2, below — and neither is a revision from a result, because no result
+exists to revise from. The successor to `TACOSM-C5-002`, which terminated as
+`INSTRUMENT_INVALID` (`docs/TACOSM-C5-002-RESULT.md`).
 
 Related: `docs/TACOSM-C5-001-RESULT.md` (void),
 `docs/TACOSM-DEGENERACY-001.md` (the preflight infrastructure this experiment's
@@ -30,9 +31,15 @@ things change, and only two:
 
 Everything else is deliberately unchanged from C5-002: the same candidate
 population, the same relation, the same arms, the same work accounting, the
-same separation contract, the same CASM-S pin, the same threshold. C5-002's
-design was right about the things that produced a clean termination; what was
-wrong was the instrument, and that is what this experiment replaces.
+same separation contract, the same CASM-S pin, the same threshold. The one
+exception is the bridge validation stream's seed, which C5-002 derived as
+`BRIDGE_SEED + 1` — the gate's own seed, so its reported validation separation
+and its gate verdict read one stream under two names. That is recorded as
+amendment A1 rather than fixed silently, because a successor that corrects a
+predecessor's design without recording it is indistinguishable from a successor
+that changed the calibration. C5-002's design was right about the things that
+produced a clean termination; what was wrong was the instrument, and that is
+what this experiment replaces.
 
 ## The architectural change
 
@@ -76,7 +83,7 @@ before any run. A failure of any one terminates the run as
 | 1 | frozen threshold constants | a gate whose bars moved between registration and run | `GATE_THRESHOLD = 0.5`, `GATE_MIN_ACCURACY = 0.5`, `MIN_SPREAD = 0.05`, `MIN_CLASS_SUPPORT = 2` |
 | 2 | held-out pair accuracy | a bridge that does not separate satisfier from violator — the C5-002 failure, at 0.2305 | `GATE_MIN_ACCURACY = 0.5` over `GATE_STRUCTURES = 512` pairs |
 | 3 | non-degenerate output spread | a constant or near-constant output — the C5-001 failure, `sd = 0` | `MIN_SPREAD = 0.05`, `ABSOLUTE_FLOOR = 1e-9` |
-| 4 | actual verifier acceptance | a gate that passes a model the task stream's own verifier rejects | `verification_acceptance` over the same 512 held-out pairs, minimum `GATE_MIN_ACCURACY` |
+| 4 | actual verifier acceptance | a gate that passes a model the task stream's own verifier rejects | `verification_acceptance` on the satisfying half of each of the 512 held-out pairs, minimum `GATE_MIN_ACCURACY` (see amendment A2) |
 | 5 | no dependence on `true_edge_set` | an instrument that reads the wiring it is supposed to be tested on | structural: the transported spec never carries `true_edges` (`docs/CASM-S-ADAPTER.md`) |
 | 6 | no oracle information entering routing or execution | gold leaking into the addressing or execution stage | `leakage.py`'s `FORBIDDEN_FIELDS`, audited at the gate, not assumed |
 | 7 | deterministic reproduction from the frozen checkpoint | a run whose numbers depend on which machine ran it | `checkpoint_sha256` recorded; `hash()` is per-process salted so structure keys are formatted strings, not hashes |
@@ -86,7 +93,16 @@ Criteria 1–3 generalise the two observed failure modes and are implemented by
 `src/tac_osm/degeneracy.py`'s `preflight`. Criterion 4 is new: C5-002's gate
 tested the model's output against the threshold, but not against the verifier
 that the task stream's own `verification_rate` endpoint reads, and the two
-agreed in that run only because both were zero. Criterion 5 and 6 are
+agreed in that run only because both were zero. It measures acceptance on the
+**satisfying half** of each pair, not over both halves:
+`RelationConstraintVerifier` is a *success* verifier, so on a descriptor the
+public relation does not hold for it rejects unconditionally
+(`structured_verifier.py`'s `relation_unsatisfied` branch) even when the
+executed output agrees with the relation — two-sided acceptance is therefore
+capped at one half by construction, and the registered minimum of 0.5 would
+be a ceiling reached only vacuously. The satisfying half is the half that
+moves: an inverted model is rejected there, where a threshold-only check sees
+a model confidently wrong in the same direction on both. Criterion 5 and 6 are
 structural and are checked on the objects that cross the boundary, not on a
 prose assurance. Criterion 7 is what makes the run reproducible rather than
 merely repeatable.
@@ -249,6 +265,55 @@ The confirmatory run must use the pre-registered values in
 contract-only and returns before constructing the CASM-S runtime, so it runs
 torch-free on the control plane while still enforcing every `require_*`
 against the registered design.
+
+## Amendments
+
+Both amendments were made **before any run**, which is the only window in
+which a pre-registration may be amended honestly: there is no result to
+protect, and the replaced definitions are kept readable in the contract rather
+than overwritten. Neither changes the hypothesis, the arms, the endpoints, the
+decision rule or the thresholds. The full text, including each amendment's
+`old_definition`, `rationale`, `discovered` and `no_result_under_previous_version`,
+is in `contracts/TACOSM-C5-003.json`.
+
+### A1 — the bridge validation stream's seed
+
+The registration asserted the bridge calibration was "unchanged from C5-002 in
+every respect except the objective". It is not. C5-002 drew its validation
+stream at `BRIDGE_SEED + 1`, which is `20260930` — the gate's own seed — so
+its reported validation accuracy (0.84375) and its gate verdict (0.2305) read
+the *same* structures under two names, and neither is an independent
+observation of the other. The registered identity was false in one unnamed
+respect, and the successor silently differed from the design it claimed to
+repeat.
+
+C5-003 names the validation stream's seed as its own constant,
+`BRIDGE_VALIDATION_SEED = 20261001`, so the three streams' disjointness is
+three visible values rather than an arithmetic offset that hid a collision.
+The five constants C5-002 named — 512 training examples, 128 validation, 100
+epochs, `lr = 2e-3`, training seed `20260929` — are unchanged. C5-002's *run*
+is unaffected and stands as measured; the amendment records a defect in its
+*design* that its own numbers could not have revealed.
+
+### A2 — criterion 4 measures the satisfying half
+
+The gate table's row 4 read as acceptance over both halves of every pair. It
+cannot be. `RelationConstraintVerifier.verify_task` is a *success* verifier:
+on a descriptor the public relation does not hold for, it returns invalid via
+the `relation_unsatisfied` branch even when the executed output agrees with
+the relation, so two-sided acceptance is capped at one half by construction —
+and the registered minimum of `0.5` would then be a ceiling the criterion
+could reach only by being vacuous.
+
+The implemented criterion scores acceptance on the **satisfying half**: the
+fraction of the 512 held-out pairs for which the verifier accepts the
+satisfying descriptor on the model's own output. That is the half that moves —
+an inverted model is rejected there, where a threshold-only check sees a model
+confidently wrong in the same direction on both halves — and the criterion's
+registered purpose ("a gate that passes a model the task stream's own verifier
+rejects") is preserved by this reading and was never achievable by the
+two-sided one. The implementation has always scored the satisfying half; the
+amendment brings the registration to what the code does.
 
 ## What this experiment does not establish
 

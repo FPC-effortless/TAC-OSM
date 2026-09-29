@@ -279,12 +279,16 @@ quantity the downstream decision actually depends on; and the gate is a
 representability gate with **eight registered criteria** evaluated before the
 task population runs (`docs/TACOSM-C5-003.md`). The eight are: frozen
 threshold constants; held-out pair accuracy at the registered minimum;
-non-degenerate output spread; actual verifier acceptance on held-out pairs; no
-dependence on `true_edge_set`; no oracle information entering routing or
-execution; deterministic reproduction from the frozen checkpoint; and the
-pair-trained objective itself. Everything else is deliberately unchanged from
-C5-002 — same population, same relation, same arms, same work accounting, same
-separation contract, same CASM-S pin, same threshold.
+non-degenerate output spread; actual verifier acceptance on the satisfying
+half of each held-out pair (amendment A2 — `RelationConstraintVerifier` is a
+success verifier, so two-sided acceptance is capped at one half by
+construction); no dependence on `true_edge_set`; no oracle information
+entering routing or execution; deterministic reproduction from the frozen
+checkpoint; and the pair-trained objective itself. Everything else is
+deliberately unchanged from C5-002 — same population, same relation, same
+arms, same work accounting, same separation contract, same CASM-S pin, same
+threshold — except the bridge validation stream's seed, which C5-002 derived
+as the gate's own seed and C5-003 names separately (amendment A1).
 
 C5-003 is registered as an **integrated-boundary** experiment rather than a
 better gate: it tests the four interfaces as one causal chain — `(S,Q) -> R`
