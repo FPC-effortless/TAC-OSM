@@ -28,7 +28,12 @@ from typing import Any, Callable, Sequence
 from . import Candidate, Computation, Outcome, Query, RoutingDecision, StateUpdate, Structure
 from .addressing import AddressCost, ContentAddressIndex, SUPPORTED_RELATIONS
 from .benchmark_v1 import GeneratedTask, RelationName, ValidityMode, generate_task, relation_holds
-from .structured_verifier import BoundedExecutableRepair, SemanticVerifier, StructuredRepair
+from .structured_verifier import (
+    BoundedExecutableRepair,
+    RelationConstraintVerifier,
+    StructuredRepair,
+    VerificationEvidence,
+)
 from .temporal import TemporalPersistentState, TemporalWrite
 from .trajectory import Trajectory, TrajectoryStep
 
@@ -262,7 +267,9 @@ class HardenedLoop:
     benchmark: TemporalBenchmark
     index: ContentAddressIndex | None = None
     index_k: int | None = None
-    verifier: SemanticVerifier = field(default_factory=SemanticVerifier)
+    verifier: RelationConstraintVerifier = field(
+        default_factory=RelationConstraintVerifier
+    )
     repair: BoundedExecutableRepair | None = field(
         default_factory=lambda: BoundedExecutableRepair(max_attempts=3)
     )
@@ -368,8 +375,16 @@ class HardenedLoop:
         )
         self.costs.executor_invocations += 1
         outcome = self.benchmark.observe(task, selected_global)
-        evidence = self.verifier.verify(computation, outcome)
+        evidence = self.verifier.verify_task(
+            computation,
+            outcome,
+            candidate=candidate,
+            reference=reference,
+            context=public_query.context,
+            relation=task.relation,
+        )
         self.costs.verifier_checks += 1
+        final_evidence = evidence
 
         repair_result: StructuredRepair | None = None
         final_selected = selected_global
@@ -382,11 +397,19 @@ class HardenedLoop:
                     c, reference, public_query.context, task.relation
                 )
 
-            def verify_alt(comp: Computation):
+            def verify_alt(comp: Computation) -> VerificationEvidence:
                 alt_action = comp.action
                 alt_outcome = self.benchmark.observe(task, alt_action)
+                alt_candidate = retained_candidates[alt_action]
                 self.costs.verifier_checks += 1
-                return self.verifier.verify(comp, alt_outcome)
+                return self.verifier.verify_task(
+                    comp,
+                    alt_outcome,
+                    candidate=alt_candidate,
+                    reference=reference,
+                    context=public_query.context,
+                    relation=task.relation,
+                )
 
             local_repair = self.repair.repair(
                 retained_candidates,
@@ -400,8 +423,9 @@ class HardenedLoop:
                 final_local = local_repair.selected_index
                 final_selected = retained[final_local]
                 final_outcome = self.benchmark.observe(task, final_selected)
+                final_evidence = local_repair.verification
 
-        if evidence.valid and final_outcome.success:
+        if final_evidence.valid and final_outcome.success:
             key = f"experience:{self.episode_id}:{step}"
             self.benchmark.state.stage_world_write(
                 StateUpdate(
@@ -436,12 +460,12 @@ class HardenedLoop:
             "feedback": final_outcome.feedback,
         }
         verification_record = {
-            "valid": evidence.valid,
-            "failed_constraint": evidence.failed_constraint,
-            "counterexample": evidence.counterexample,
-            "repair_target": evidence.repair_target,
-            "confidence": evidence.confidence,
-            "evidence": evidence.evidence,
+            "valid": final_evidence.valid,
+            "failed_constraint": final_evidence.failed_constraint,
+            "counterexample": final_evidence.counterexample,
+            "repair_target": final_evidence.repair_target,
+            "confidence": final_evidence.confidence,
+            "evidence": final_evidence.evidence,
         }
         repair_record = None if repair_result is None else {
             "attempts": repair_result.attempts,
