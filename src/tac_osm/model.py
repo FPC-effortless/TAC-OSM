@@ -282,26 +282,21 @@ class TacOsmModel:
         elif self.repair is not None:
             repair_result = self.repair.repair(computation, verification)
 
-        # Learning: REINFORCE on the outcome, through the router only.
-        if self.config.learn and isinstance(self.router, LearnedRelationalRouter):
-            ctx = RewardContext(
-                task=task,
-                candidates=task.candidates,
-                selected=decision.selected,
-                decision=decision,
-                outcome=outcome,
-                query=query,
-                state=self.state,
-                router=self.router,
-            )
-            self.router.update(
-                query=query,
-                candidates=task.candidates,
-                selected=decision.selected,
-                reward=self._reward(ctx),
-                probs=decision.scores,
-                state=self.state,
-            )
+        # Learning: delegate to the router's outcome-learning interface.
+        # The loop itself does not know whether the implementation uses
+        # REINFORCE, pairwise ranking, or another optimizer. The routing
+        # decision and its recorded scores are the complete pre-update input.
+        if self.config.learn:
+            learner = getattr(self.router, "learn_from_outcome", None)
+            if callable(learner):
+                learner(
+                    query=query,
+                    state=self.state,
+                    candidates=task.candidates,
+                    selected=decision.selected,
+                    success=bool(outcome.success),
+                    scores=decision.scores,
+                )
 
         return Step(
             step=step_index,
