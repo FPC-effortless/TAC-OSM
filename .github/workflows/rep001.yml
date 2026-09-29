@@ -38,7 +38,9 @@ jobs:
           fi
 
       - name: Run preregistered diagnostic
-        run: python scripts/run_successor_rep001.py > artifacts/REP-001.stdout.json
+        run: |
+          mkdir -p artifacts
+          python scripts/run_successor_rep001.py > artifacts/REP-001.stdout.json
 
       - name: Upload REP-001 result
         uses: actions/upload-artifact@v4
