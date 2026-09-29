@@ -372,6 +372,16 @@ class ExperimentContract:
                 "registered seeds, and a subset does not estimate it."
             )
 
+    def require_k_levels(self, k_levels: Sequence[int]) -> None:
+        """Require the registered K/delay levels exactly when a contract uses them."""
+        got = tuple(int(k) for k in k_levels)
+        want = tuple(self.k_levels)
+        if got != want:
+            raise ContractError(
+                f"{self.experiment_id}: K levels {got} do not match the "
+                f"registered {list(want)}."
+            )
+
     def require_eval_steps(self, eval_steps: int) -> None:
         """The evaluation length must be the registered one.
 
