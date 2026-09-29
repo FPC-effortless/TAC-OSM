@@ -800,9 +800,13 @@ def test_c5_002_contract_matches_its_script():
     # the hidden acceptable set. The acceptable set is read *after* execution
     # and only for evaluation, so the ordering in the source is itself the
     # boundary — reading it before the execution block would move the hidden
-    # set into the addressing decision.
+    # set into the addressing decision. The comparison is against the in-loop
+    # call site, not the function's ``def``: ``str.index`` finds the first
+    # match, and a check against the definition passes trivially for any
+    # placement at all, which would make this assertion a comment with a
+    # passing test attached.
     assert text.index("any(i in task.acceptable_actions") > text.index(
-        "_build_and_execute("
+        "executions, cell_work = _build_and_execute("
     )
 
     # Every measured CellResult field must be a registered endpoint, because
