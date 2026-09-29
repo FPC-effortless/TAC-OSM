@@ -302,18 +302,22 @@ class HardenedLoop:
             return tuple(int(x) for x in bits.split())
         return ()
 
-    def _state_digest(self) -> str:
-        visible = {
+    def _state_snapshot(self) -> dict[str, Any]:
+        return {
             "step": self.benchmark.state.current_step,
-            "pending": len(self.benchmark.state.pending()),
+            "available_addresses": self.benchmark.state.addresses(),
+            "pending_writes": len(self.benchmark.state.pending()),
         }
-        return _safe_digest(visible)
+
+    def _state_digest(self, snapshot: dict[str, Any]) -> str:
+        return _safe_digest(snapshot)
 
     def step(self, step: int) -> TrajectoryStep:
         start = time.perf_counter()
         task = self.benchmark.next_task(step)
         public_query = task.public()
-        state_before = self._state_digest()
+        state_before_snapshot = self._state_snapshot()
+        state_before = self._state_digest(state_before_snapshot)
         read = self.benchmark.state.read(public_query)
         reference = self._reference(task)
         if not reference:
@@ -436,7 +440,8 @@ class HardenedLoop:
                 delay=1,
             )
 
-        state_after = self._state_digest()
+        state_after_snapshot = self._state_snapshot()
+        state_after = self._state_digest(state_after_snapshot)
         elapsed = time.perf_counter() - start
         self.costs.wall_clock_seconds += elapsed
 
@@ -477,7 +482,7 @@ class HardenedLoop:
         row = TrajectoryStep(
             episode_id=self.episode_id,
             step=step,
-            state_before={"digest": state_before},
+            state_before={**state_before_snapshot, "digest": state_before},
             query=query_record,
             retrieval=retrieval_record,
             selected=final_selected,
@@ -489,7 +494,7 @@ class HardenedLoop:
             observation=observation_record,
             verification=verification_record,
             repair=repair_record,
-            state_after={"digest": state_after},
+            state_after={**state_after_snapshot, "digest": state_after},
             learning={
                 "state_write_staged": bool(evidence.valid and final_outcome.success),
                 "update_delay": 1 if evidence.valid and final_outcome.success else None,
