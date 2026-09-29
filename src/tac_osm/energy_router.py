@@ -66,6 +66,7 @@ class RoutingDiagnostics:
     hard_negative_margin: float | None
     state_found: bool
     state_inspected_slots: int
+    state_pool_size: int
     query_encode_macs: int
     candidate_encode_macs: int
     similarity_macs: int
@@ -104,6 +105,7 @@ class RoutingDiagnostics:
             hard_negative_margin=margin,
             state_found=memory.found,
             state_inspected_slots=memory.inspected_slots,
+            state_pool_size=memory.pool_size,
             query_encode_macs=query_macs,
             candidate_encode_macs=candidate_macs,
             similarity_macs=similarity_macs,
@@ -379,6 +381,7 @@ class RepresentationEnergyRouter:
             hard_negative_margin=margin,
             state_found=memory.found,
             state_inspected_slots=memory.inspected_slots,
+            state_pool_size=memory.pool_size,
             query_encode_macs=query_macs,
             candidate_encode_macs=candidate_macs,
             similarity_macs=similarity_macs,
