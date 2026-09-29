@@ -95,8 +95,7 @@
       "discovered": "by static inspection of the alpha-scaled soft-Boolean ops in the pinned CASM-S source at commit c315544 (casm_v01/phase1_dag/model.py: alpha = c*softplus(alpha_eta), NOT = 1 - a*x, AND = a0*p*a1*q, XOR = a0*p + a1*q - 2*a0*p*a1*q, EQ expanded by the adapter to XOR + NOT), and by a torch-free read of the retained C5-002 checkpoint casm-s-c5-002.pt from run 36536249559 artifact 11018687523, parsed as a zip with a numpy-backed _rebuild_tensor_v2 stub, giving alpha_eta = 0.19835/0.17771. Found before any confirmatory C5-003 run; the implementation has always passed value = expected, and the amendment records the corrected convention",
       "affected": "the gate-table row for criterion 4 in docs/TACOSM-C5-003.md, whose registered constant now names the model's own output as the outcome value; the criterion-4 measure string in the run record; and the held_constant that describes the criterion. GATE_THRESHOLD, GATE_MIN_ACCURACY and criterion 2 are NOT changed, and criterion 1 still pins them at their registered values. Amendment A2's new_definition stands as the pre-A3 old_definition here: A2 resolved which half is scored, A3 resolves what the outcome's value carries",
       "no_result_under_previous_version": "no confirmatory C5-003 run has been made under either definition. The A2 convention (value = expected) has never produced a measured criterion-4 number for C5-003, and under it any alpha-scaled checkpoint short of the measure-zero manifold scores 0.0 and terminates the run as INSTRUMENT_INVALID, so no number exists to reconcile against the amendment. C5-002's run is unaffected and stands as measured: its verification_rate of 0.0 across all 75 cells is consistent with the same output-consistency failure and with the soft-op alpha scaling its own result text registered as the most likely explanation, and its gate fired on criterion 2 (separation 0.2305) rather than on criterion 4. The C5-003 --smoke run's criterion-4 value used the fake runtime's exact 0.0/1.0 outputs and is smoke, not a measurement"
-    }
-,
+    },
     {
       "id": "A4",
       "applies_to": "the measured task-stream endpoint semantics and criterion 7's determinism check",
@@ -106,7 +105,8 @@
       "discovered": "by static inspection of scripts/measure_c5_casm_003.py and src/tac_osm/structured_verifier.py before any confirmatory C5-003 run; a torch-free regression probe can demonstrate the old task-stream Outcome convention fails on soft outputs and that a non-deterministic repeated gate execution is detectable",
       "affected": "the execution_accuracy_rate and selection_success_rate endpoint definitions and measurements in scripts/measure_c5_casm_003.py and the corresponding gate determinism criterion; docs/TACOSM-C5-003.md and the claims/evidence descriptions are updated to carry the same stage separation",
       "no_result_under_previous_version": "no confirmatory C5-003 run has been made under the previous definition. The only executions are torch-free smoke/tests with fake runtimes, so no measured capability number exists to reconcile against A4"
-    }  ],
+    }
+  ],
   "status": "pre-registered",
   "layer": "L4"
 }
