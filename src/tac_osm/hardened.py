@@ -287,9 +287,11 @@ class HardenedLoop:
         )
 
     def build_index(self, candidates: Sequence[Candidate], context: Sequence[int]) -> None:
-        """Build or rebuild only when the indexed population actually changes."""
+        """Build/rebuild while preserving an injected index implementation."""
         start = time.perf_counter()
-        self.index = ContentAddressIndex.build(candidates, context=context)
+        index_type = type(self.index) if self.index is not None else ContentAddressIndex
+        builder = getattr(index_type, "build", ContentAddressIndex.build)
+        self.index = builder(candidates, context=context)
         self.costs.index_build_candidates += len(candidates)
         self.costs.wall_clock_seconds += time.perf_counter() - start
         self._index_key = _population_key(candidates, context)
