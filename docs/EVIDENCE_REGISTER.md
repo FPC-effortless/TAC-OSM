@@ -108,7 +108,7 @@ experiment, **not** from outside.
 
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
-| Written state changes later decisions (C1) | L2 | mechanism | — | generality beyond the three v0.1 families | none — `TACOSM-BASELINE-001`, `91597ab` | |
+| Keyed state lookup is demonstrated; temporal persistence across enforced decision boundaries is not established (C1) | L4 | gate | — | the old v0.1 task construction did not enforce a write/read delay; the new temporal runtime is infrastructure, not capability evidence | hardened v1 temporal regression gates plus a preregistered delay sweep | **temporal experiment not run** |
 | A cheap linear router learns the relation from outcomes alone (C2) | L2 | mechanism | — | large-H behaviour — this result is at the small population where outcome supervision is dense | `TACOSM-BASELINE-001`: 0.4396 vs `random` 0.1296, `static` 0.0376 | |
 | Accuracy falls with history because routing degrades, not because the task hardens (C6) | L2 | mechanism | — | the *mechanism* — the original "linear-scorer capacity" reading is **refuted**; what degrades is the trained router under a sparse reward | `TACOSM-HS-001`, oracle 1.0000 at every H | |
 | The top-K signal survives top-1 collapse at `H ≤ 64` (C7) | L2 | mechanism | — | `H ≥ 128`, where it does **not** survive on a transfer-trained router | `TACOSM-RETRIEVAL-001` F0 | |
