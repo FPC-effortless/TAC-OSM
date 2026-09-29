@@ -429,6 +429,11 @@ def test_hardened_index_never_receives_hidden_truth_after_reset():
     captured = []
 
     class RecordingIndex(ContentAddressIndex):
+        @classmethod
+        def build(cls, candidates, *, context):
+            base = ContentAddressIndex.build(candidates, context=context)
+            return cls(_buckets=base._buckets, built_candidates=base.built_candidates)
+
         def lookup(self, query, *, reference, k=None, relation="equality"):
             from tac_osm.addressing import AddressHit
             captured.append(tuple(reference))
