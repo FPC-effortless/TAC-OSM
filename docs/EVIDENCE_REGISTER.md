@@ -141,8 +141,8 @@ Layer 2 and Layer 3 rows, and each one has a standing blocker.
 
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
-| Computation depends on the relevant subset, not on total history (C5) | L4 | — | — | any measured support at present — v0.1 has no *measured* retrieval boundary. `\|R\|` is now a defined quantity, because the index and its cost term exist (`retrieval.py`, `candidates_inspected`), but no confirmatory run has been made, so the quantity is defined and unmeasured | a capability-vs-computation curve with total and relevant compute measured separately along the same axis | **the retrieval boundary is built and unrun** — the confirmatory F1 run |
-| Persistent state makes useful computation reusable across time | L4 | — | — | a verified write across a temporal boundary — no result exists | the `V_t → S_{t+1}` proposal/commit path, `M2.2` (`docs/ROADMAP.md`) | **unimplemented** |
+| Computation depends on the relevant subset, not on total history (C5) | L4 | — | — | no measured support yet. The hardened path now has an actual address→retain→route→execute boundary, and separates one-time index construction from query-time addressing, but implementation is not evidence of scaling | a capability-vs-computation curve with total compute, index-build cost, query-time address cost, routed candidates, executor work, and capability measured separately along the same H axis | **confirmatory selective-execution measurement not run** |
+| Persistent state makes useful computation reusable across time | L4 | — | — | no temporal capability evidence yet | the hardened write-at-t/read-at-t+k benchmark plus carry/reset/shuffle/corrupt controls | **temporal persistence measurement not run** |
 | The integrated system is more economical than full-context at capability parity | L4 | — | — | everything — this is the program's thesis, not a result | the curve in `ROADMAP.md` §"M3.1", measured | all of the above |
 
 ---
