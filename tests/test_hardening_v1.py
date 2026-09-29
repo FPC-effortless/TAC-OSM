@@ -247,7 +247,7 @@ def test_bounded_repair_reexecutes_and_records_a_patch_without_gold():
     verifier = SemanticVerifier()
 
     def compute(candidate):
-        output = 0.0 if candidate == "bad" else 1.0
+        output = 1.0
         return Computation(
             structure=Structure(key=str(candidate)),
             action=0,
@@ -362,3 +362,35 @@ def test_casm_adapter_keeps_external_dependency_outside_tac_osm():
     assert result.output == 3.0
     assert result.node_values == (1.0, 2.0)
     assert result.provenance == "test_casm"
+
+
+def test_relation_constraint_verifier_rejects_semantically_invalid_action_without_gold():
+    from tac_osm.structured_verifier import RelationConstraintVerifier
+
+    task = generate_task(
+        31,
+        dim=8,
+        n_candidates=8,
+        relation="equality",
+        validity="unique",
+    )
+    bad = next(i for i in range(len(task.candidates)) if i not in task.acceptable_actions)
+    candidate = task.candidates[bad]
+    computation = RelationExecutor().execute(
+        candidate,
+        task.reference_bits,
+        task.query.context,
+        task.relation,
+    )
+    outcome = TemporalBenchmark.observe(task, bad)
+    evidence = RelationConstraintVerifier().verify_task(
+        computation,
+        outcome,
+        candidate=candidate,
+        reference=task.reference_bits,
+        context=task.query.context,
+        relation=task.relation,
+    )
+    assert not evidence.valid
+    assert evidence.failed_constraint == "relation_unsatisfied"
+    assert evidence.repair_target == f"candidate:{candidate.key}"
