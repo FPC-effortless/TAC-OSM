@@ -271,6 +271,41 @@ unresolved — no run to date separates them — and the gate threshold stays at
 0.5 because it was pre-registered before the run and is not tunable after
 seeing the result.
 
+**TACOSM-C5-003 is pre-registered and not run.** It is the first fresh
+capability experiment after the C5-002 diagnosis, and it changes two things
+only: the bridge is trained on **pairs** with a loss on separation
+(`BRIDGE_OBJECTIVE = "pair_separation"`), so the objective contains the
+quantity the downstream decision actually depends on; and the gate is a
+representability gate with **eight registered criteria** evaluated before the
+task population runs (`docs/TACOSM-C5-003.md`). The eight are: frozen
+threshold constants; held-out pair accuracy at the registered minimum;
+non-degenerate output spread; actual verifier acceptance on held-out pairs; no
+dependence on `true_edge_set`; no oracle information entering routing or
+execution; deterministic reproduction from the frozen checkpoint; and the
+pair-trained objective itself. Everything else is deliberately unchanged from
+C5-002 — same population, same relation, same arms, same work accounting, same
+separation contract, same CASM-S pin, same threshold.
+
+C5-003 is registered as an **integrated-boundary** experiment rather than a
+better gate: it tests the four interfaces as one causal chain — `(S,Q) -> R`
+addressing, `(R,Q) -> A` execution, `(A,O) -> V` verification, `R -> W(R)`
+work — and the gate decides whether that chain is attached at all. This is the
+design point C5-001's compound `success_rate` could not reach: a number that
+merges the interfaces cannot distinguish an addressing failure from an
+execution failure, and that distinction is what makes a negative result
+interpretable.
+
+**The claim still stays UNTESTED, and the blocker is still the instrument.**
+A pre-registration is not a result, and nothing above moves C5. The successor
+is not written yet: `scripts/measure_c5_casm_003.py` is a compute-plane task
+that requires `torch` and the pinned CASM-S checkout, so it is runner-only by
+definition and has not been created on this device. It must be added to
+`_WITH_CONTRACT` in `tests/test_contract.py` in the same commit it appears in,
+or the M0 partition test fails. Until a gate-confirmed run exists, this entry
+must not be read as progress on C5 — it is a registered intention, recorded so
+that the difference between "the experiment is designed" and "the claim is
+supported" stays visible.
+
 This is the architecture's central efficiency claim and it is *not* supported
 by any measurement in the repository. The honest model of v0.1 cost is:
 
