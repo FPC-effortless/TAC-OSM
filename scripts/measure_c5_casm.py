@@ -308,6 +308,8 @@ def main() -> None:
 
     if args.train_bridge and args.checkpoint:
         raise SystemExit("--train-bridge and --checkpoint are mutually exclusive")
+    if not args.train_bridge and not args.checkpoint:
+        raise SystemExit("provide --checkpoint or --train-bridge for a confirmatory run")
 
     runtime = CasmSRuntime(
         casm_root=args.casm_root,
@@ -327,10 +329,8 @@ def main() -> None:
 
     cells = []
     for h in H_LEVELS:
-        cells.append(run_cell(runtime, 0, h, None, "exhaustive"))
         for seed in SEEDS:
-            if seed == 0:
-                pass
+            cells.append(run_cell(runtime, seed, h, None, "exhaustive"))
         for k in K_LEVELS:
             for seed in SEEDS:
                 cells.append(run_cell(runtime, seed, h, k, "exact-indexed"))
