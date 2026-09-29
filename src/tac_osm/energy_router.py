@@ -136,6 +136,10 @@ class RepresentationEnergyRouter:
     def last_diagnostics(self) -> RoutingDiagnostics | None:
         return self._last_diagnostics
 
+    @property
+    def last_memory(self) -> AddressedMemory | None:
+        return self._last_memory
+
     def _bits(self, query: Query) -> tuple[int, ...]:
         raw = query.text.partition("\t")[0]
         return tuple(int(x) for x in raw.split()) if raw.strip() else ()
@@ -223,6 +227,7 @@ class RepresentationEnergyRouter:
         selected: int,
         *,
         success: bool,
+        scores: Sequence[float] | None = None,
     ) -> float:
         """One pairwise update using the strongest current hard negative.
 
@@ -236,7 +241,9 @@ class RepresentationEnergyRouter:
         if not (0 <= selected < len(candidates)):
             raise IndexError("selected candidate outside candidate set")
 
-        memory = self.addressor.address(query, state)
+        memory = self._last_memory
+        if memory is None:
+            memory = self.addressor.address(query, state)
         qx = self._query_input(query, memory)
         cx_pos = self._candidate_input(candidates[selected])
         scores = self.score(query, memory, candidates)
