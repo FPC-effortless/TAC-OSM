@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import os
 import sys
+from pathlib import Path
 
 import pytest
 
@@ -370,3 +371,63 @@ def test_a_trained_model_passes_the_gate():
     assert after.n_updates > 0
     assert not after.untrained
     assert_trained(after)  # a trained router is exactly what should pass
+
+
+# --------------------------------------------------------------------------- #
+# The frozen baseline's provenance row
+# --------------------------------------------------------------------------- #
+#
+# The frozen baseline records the size of the suite at the time it was frozen
+# (327) alongside the current size, because a frozen table and a growing suite
+# disagree and a reader is entitled to both numbers at once. Written by hand,
+# the second number rots on every commit that adds a test — it was stale
+# within one commit of being written, which is the same failure class this
+# module exists for: a number that looks trustworthy and is not.
+#
+# So the doc carries a placeholder and `scripts/sync_test_count.py` substitutes
+# the live count. This test is the gate that keeps the two in step, and it is
+# the one that fails when a test is added and the doc is not refreshed —
+# rather than a reader discovering the discrepancy later against a frozen
+# table.
+
+
+def test_the_frozen_baseline_reports_the_current_test_count():
+    """The one mutable number in the frozen doc, kept mutable by a script.
+
+    Everything else in `docs/TACOSM-BASELINE-001.md` is frozen; this row's
+    second number is the exception, and an exception that is not pinned is the
+    exception that silently stops being maintained.
+    """
+    import re
+    import subprocess
+
+    repo_root = Path(__file__).resolve().parent.parent
+    doc = repo_root / "docs" / "TACOSM-BASELINE-001.md"
+    text = doc.read_text(encoding="utf-8")
+    assert "<!--TESTCOUNT-->" not in text, (
+        "the frozen baseline carries the placeholder rather than a count; "
+        "run `python scripts/sync_test_count.py`"
+    )
+    # The frozen count is untouched: 327, and only 327.
+    m = re.search(r"test count @ freeze \| (\d+) \(current", text)
+    assert m, "the 'test count @ freeze' row is missing from the provenance table"
+    assert m.group(1) == "327", (
+        "the frozen count changed; the freeze is what later deltas compare "
+        f"against, and it was 327 (found {m.group(1)!r})"
+    )
+
+    r = subprocess.run(
+        [sys.executable, "-m", "pytest", "--collect-only", "-q"],
+        cwd=repo_root, capture_output=True, text=True,
+    )
+    live = next(
+        (int(l.split()[0]) for l in r.stdout.splitlines()
+         if "tests collected" in l),
+        None,
+    )
+    assert live is not None, "could not read the live test count"
+    assert f"current count in `tests/`: {live}" in text, (
+        f"the doc's current count is stale; the suite collects {live} tests "
+        "and the row does not say so. Run "
+        "`python scripts/sync_test_count.py` before committing."
+    )
