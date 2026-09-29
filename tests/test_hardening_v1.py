@@ -459,3 +459,18 @@ def test_temporal_interventions_are_explicit_and_non_silent():
     assert state.read(Query(text="\ta", step=0)).values == ((1, 0, 1, 0),)
     state.clear()
     assert state.addresses() == ()
+
+def test_registered_measurement_scripts_execute_as_declared_smoke_tests():
+    import subprocess
+    import sys
+
+    root = Path(__file__).resolve().parent.parent
+    commands = [
+        [sys.executable, "scripts/measure_temporal_persistence.py", "--smoke", "--steps", "3", "--eval-steps", "2", "--seeds", "0", "--levels", "1"],
+        [sys.executable, "scripts/measure_selective_scaling.py", "--smoke", "--steps", "2", "--eval-steps", "2", "--seeds", "0", "--levels", "8"],
+    ]
+    for command in commands:
+        result = subprocess.run(command, cwd=root, capture_output=True, text=True)
+        assert result.returncode == 0, result.stdout + "\n" + result.stderr
+        assert "SMOKE TEST" in result.stdout
+        assert "machine-readable summary written" in result.stdout
