@@ -430,8 +430,13 @@ def test_hardened_index_never_receives_hidden_truth_after_reset():
 
     class RecordingIndex(ContentAddressIndex):
         def lookup(self, query, *, reference, k=None, relation="equality"):
+            from tac_osm.addressing import AddressHit
             captured.append(tuple(reference))
-            return super().lookup(query, reference=reference, k=k, relation=relation)
+            return AddressHit(
+                candidate_indices=tuple(range(len(benchmark._events[step].task.candidates))),
+                inspected_positions=len(reference),
+                bucket_size=len(benchmark._events[step].task.candidates),
+            )
 
     loop = HardenedLoop(
         router=lambda query, state, candidates: PublicRelationRouter()(query, state, candidates),
@@ -463,6 +468,7 @@ def test_temporal_interventions_are_explicit_and_non_silent():
 def test_registered_measurement_scripts_execute_as_declared_smoke_tests():
     import subprocess
     import sys
+    from pathlib import Path
 
     root = Path(__file__).resolve().parent.parent
     commands = [
