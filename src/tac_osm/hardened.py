@@ -142,7 +142,16 @@ class TemporalBenchmark:
             reference_bits=bits,
             step=read_step,
         )
-        self._writes.setdefault(write_step, []).append((key, bits, read_step))
+        if write_step != self.state.current_step:
+            raise ValueError(
+                "world-write probes currently require write_step to equal the "
+                "benchmark's current world time; decision boundaries must not "
+                "be skipped by the scheduler"
+            )
+        self.state.stage_world_write(
+            StateUpdate(key=key, value=bits, step=write_step),
+            delay=delay,
+        )
         self._events[read_step] = TemporalTaskEvent(step=read_step, task=task)
         for step in range(write_step, read_step):
             if step not in self._events:
@@ -185,15 +194,6 @@ class TemporalBenchmark:
                 f"temporal benchmark requires contiguous decision steps: "
                 f"expected {expected}, got {step}"
             )
-        for write_step, entries in tuple(self._writes.items()):
-            if write_step != step:
-                continue
-            for key, bits, read_step in entries:
-                self.state.stage_world_write(
-                    StateUpdate(key=key, value=bits, step=write_step),
-                    delay=read_step - write_step,
-                )
-            del self._writes[write_step]
         self.state.advance_to(step)
         self._last_task_step = step
         event = self._events.get(step)
