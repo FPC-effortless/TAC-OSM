@@ -66,6 +66,10 @@ class RoutingDiagnostics:
     hard_negative_margin: float | None
     state_found: bool
     state_inspected_slots: int
+    query_encode_macs: int
+    candidate_encode_macs: int
+    similarity_macs: int
+    total_macs: int
 
     @classmethod
     def from_scores(
@@ -73,6 +77,10 @@ class RoutingDiagnostics:
         scores: Sequence[float],
         selected: int,
         memory: AddressedMemory,
+        *,
+        latent_dim: int,
+        raw_query_dim: int,
+        input_dim: int,
     ) -> "RoutingDiagnostics":
         if not scores:
             raise ValueError("scores cannot be empty")
@@ -84,6 +92,9 @@ class RoutingDiagnostics:
             margin = float(scores[selected] - hard_negative)
         else:
             margin = None
+        query_macs = latent_dim * raw_query_dim
+        candidate_macs = len(scores) * latent_dim * input_dim
+        similarity_macs = len(scores) * latent_dim
         return cls(
             candidate_count=len(scores),
             candidates_scored=len(scores),
@@ -93,6 +104,10 @@ class RoutingDiagnostics:
             hard_negative_margin=margin,
             state_found=memory.found,
             state_inspected_slots=memory.inspected_slots,
+            query_encode_macs=query_macs,
+            candidate_encode_macs=candidate_macs,
+            similarity_macs=similarity_macs,
+            total_macs=query_macs + candidate_macs + similarity_macs,
         )
 
 
@@ -203,7 +218,12 @@ class RepresentationEnergyRouter:
         selected = max(range(len(scores)), key=lambda i: (scores[i], -i))
         self._last_memory = memory
         self._last_diagnostics = RoutingDiagnostics.from_scores(
-            scores, selected, memory
+            scores,
+            selected,
+            memory,
+            latent_dim=self.config.latent_dim,
+            raw_query_dim=self._raw_query_dim,
+            input_dim=self.config.input_dim,
         )
         return RoutingDecision(
             selected=selected,
@@ -305,6 +325,9 @@ class RepresentationEnergyRouter:
             if hard_negative is not None
             else None
         )
+        query_macs = self.config.latent_dim * self._raw_query_dim
+        candidate_macs = len(candidates) * self.config.latent_dim * self.config.input_dim
+        similarity_macs = len(candidates) * self.config.latent_dim
         return RoutingDiagnostics(
             candidate_count=len(candidates),
             candidates_scored=len(candidates),
@@ -314,4 +337,8 @@ class RepresentationEnergyRouter:
             hard_negative_margin=margin,
             state_found=memory.found,
             state_inspected_slots=memory.inspected_slots,
+            query_encode_macs=query_macs,
+            candidate_encode_macs=candidate_macs,
+            similarity_macs=similarity_macs,
+            total_macs=query_macs + candidate_macs + similarity_macs,
         )
