@@ -95,11 +95,12 @@ class RepresentationAddressIndex:
         candidates: Sequence[Candidate],
         *,
         context: Sequence[int],
+        state: object | None = None,
     ) -> "RepresentationAddressIndex":
         # Context is intentionally not used as hidden truth. Encoders receive
         # only the public query/state or candidate/state interfaces.
         buckets: dict[int, list[int]] = {}
-        state = PersistentState()
+        del context
         for i, candidate in enumerate(candidates):
             vector = tuple(float(x) for x in self.candidate_encoder(candidate, state))
             self._validate_dimension(vector)
@@ -143,6 +144,8 @@ class RepresentationAddressIndex:
         if na == 0.0 or nb == 0.0:
             return 0.0
         return dot / (na * nb)
+
+    accepts_state = True
 
     def lookup(
         self,
