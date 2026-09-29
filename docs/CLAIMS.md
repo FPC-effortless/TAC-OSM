@@ -50,40 +50,36 @@ be quietly upgraded from "measured once" to "established":
 > Information written at step `t` can be used at step `t + k` to change a
 > decision the observation alone does not determine.
 
-**STATUS: NOT ESTABLISHED**
+**STATUS: SUPPORTED, bounded**
 
-**TYPE:** mechanism · **LAYER:** L4 — see `docs/EVIDENCE_REGISTER.md`
+**TYPE:** mechanism · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
 
 **PRIOR ART:** the persistent-state container and carry/reset/shuffle
 intervention vocabulary are imported from TAC-transformer `IdentityState`
-(E3, TAC-235/236, `6cce2ce`). The container is L0; the temporal claim below
-is TAC-OSM's own.
+(E3, TAC-235/236, `6cce2ce`). The causal write/read claim is TAC-OSM's own.
 
-**NOT INHERITED:** the old v0 result does not establish temporal persistence.
-In v0.1 the task builder could place the target directly into persistent state
-while constructing the task that immediately reads it. That is a keyed lookup
-construction, not an enforced write-at-`t`, read-at-`t+k` boundary.
+**NOT INHERITED:** semantic or learned long-horizon memory. The measured system
+uses an explicit vector store and deterministic state-conditioned router.
 
-**REQUIRED EVIDENCE:** an experiment using the hardened temporal benchmark,
-with explicit write step, intervening decision boundaries, read step, and
-carry/reset/shuffle/corrupt controls. Report capability as a function of
-`k`, with the same candidate exposure and leakage contract across delays.
+**REQUIRED EVIDENCE:** `TACOSM-TEMPORAL-001` with an enforced write-at-t,
+read-at-t+k boundary and declared interventions.
 
-The architectural defect is now fixed in `src/tac_osm/temporal.py` and
-`src/tac_osm/hardened.py`: a world write is staged separately, becomes
-available only after its declared delay, and `TemporalBenchmark` rejects
-skipped decision steps. Regression tests demonstrate that a write with delay
-4 remains unreadable through steps 0–3 and is readable at step 4.
+`TACOSM-TEMPORAL-001`, run 36509506303, passed the causal boundary gate for
+all 30 seed×delay cells. Across H=64, seeds 0–4, and k ∈ {1,2,4,8,16,32},
+carry achieved `decision_success = 1.0000` at every delay. Reset achieved
+0.0100 at k=1,2,4,8,16 and 0.0140 at k=32; corruption achieved 0.0000 at
+every delay. The carry-minus-control difference therefore remained large at
+every tested delay.
 
-That is a **runtime contract**, not evidence that the learned system succeeds
-across time. The current status therefore remains NOT ESTABLISHED until the
-temporal experiment is run.
+The result supports the bounded mechanism claim: an explicitly written state
+value remained usable after up to 32 enforced intervening decision boundaries
+and causally changed the later decision in this synthetic control.
 
-The hardened path also separates state addressing from pool readout:
-`TemporalPersistentState.read(query)` resolves the named address and returns
-only that item. This removes the v0 mismatch where the store could construct a
-large history pool while the router saw only `max_state_slots = 4`.
+It does **not** establish semantic persistent memory, learned persistent
+representation, or the broader PLM intelligence claim.
 
+The prior v0 C1 result is retired as temporal evidence because its task
+construction did not enforce the write/read delay.
 ## C2 — Relational routing
 
 > A cheap linear scorer over a hand-designed basis can learn the relevance

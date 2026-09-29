@@ -108,7 +108,7 @@ experiment, **not** from outside.
 
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
-| Keyed state lookup is demonstrated; temporal persistence across enforced decision boundaries is not established (C1) | L4 | gate | — | the old v0.1 task construction did not enforce a write/read delay; the new temporal runtime is infrastructure, not capability evidence | hardened v1 temporal regression gates plus a preregistered delay sweep | **temporal experiment not run** |
+| Temporal persistence survives enforced decision boundaries in the synthetic state control (C1) | L2 | mechanism | TAC-transformer IdentityState provides the state-container vocabulary | semantic/learned long-horizon memory is not inherited | TACOSM-TEMPORAL-001 run 36509506303: causal gate plus carry/reset/corrupt comparison through k=32 | **bounded to the synthetic vector-store control** |
 | A cheap linear router learns the relation from outcomes alone (C2) | L2 | mechanism | — | large-H behaviour — this result is at the small population where outcome supervision is dense | `TACOSM-BASELINE-001`: 0.4396 vs `random` 0.1296, `static` 0.0376 | |
 | Accuracy falls with history because routing degrades, not because the task hardens (C6) | L2 | mechanism | — | the *mechanism* — the original "linear-scorer capacity" reading is **refuted**; what degrades is the trained router under a sparse reward | `TACOSM-HS-001`, oracle 1.0000 at every H | |
 | The top-K signal survives top-1 collapse at `H ≤ 64` (C7) | L2 | mechanism | — | `H ≥ 128`, where it does **not** survive on a transfer-trained router | `TACOSM-RETRIEVAL-001` F0 | |
@@ -149,7 +149,7 @@ Layer 2 and Layer 3 rows, and each one has a standing blocker.
 
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
-| Computation depends on the relevant subset, not on total history (C5) | L4 | — | — | no measured support yet. The hardened path now has an actual address→retain→route→execute boundary, and separates one-time index construction from query-time addressing, but implementation is not evidence of scaling | a capability-vs-computation curve with total compute, index-build cost, query-time address cost, routed candidates, executor work, and capability measured separately along the same H axis | **confirmatory selective-execution measurement not run** |
+| Runtime retrieval boundary can preserve capability while bounding router input in an exact synthetic control | L3 | integration | deterministic lookup is an L0 control mechanism | semantic retrieval, learned addressing, and end-to-end compute scaling are not inherited | TACOSM-SELECTIVE-001 run 36509506303: indexed success=1.0 across H={8,64,256}, K={2,4}; actual router input bounded by K | **does not establish C5** |
 | Persistent state makes useful computation reusable across time | L4 | — | — | no temporal capability evidence yet | the hardened write-at-t/read-at-t+k benchmark plus carry/reset/shuffle/corrupt controls | **temporal persistence measurement not run** |
 | The integrated system is more economical than full-context at capability parity | L4 | — | — | everything — this is the program's thesis, not a result | the curve in `ROADMAP.md` §"M3.1", measured | all of the above |
 

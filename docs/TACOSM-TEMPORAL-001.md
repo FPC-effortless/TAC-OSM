@@ -94,3 +94,27 @@ The instrument is:
 
 A '--smoke' invocation is explicitly non-result and records its contract
 deviations.
+## Amendment A1 — filler workload
+
+The first registered run exposed excessive runtime because every intervening
+filler boundary regenerated a full H=64 candidate set. No result artifact was
+produced under that version.
+
+Before the confirmatory result, A1 changes only the intervening filler
+workload: filler decisions use one candidate, while the actual read boundary
+continues to use H=64. The write/read delay, arms, seeds, primary endpoint,
+router-visible information, and hidden-truth boundary are unchanged.
+
+The purpose is to enforce the causal sequence without allowing non-measured
+filler generation cost to dominate the experiment. A1 is recorded in the
+machine-readable contract and applies before the result run.
+
+## Amendment A2 — minimum valid filler population
+
+A1 specified one-candidate filler decisions. That cannot be executed by the
+registered generator, which requires at least two candidates. No scientific
+result was produced under A1.
+
+A2 changes the filler workload from one to two candidates, the minimum valid
+population. The read boundary remains H=64 and every registered endpoint,
+delay, arm, seed, and leakage constraint is unchanged.

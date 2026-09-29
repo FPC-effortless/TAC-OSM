@@ -1,0 +1,53 @@
+name: TACOSM registered experiments
+
+on:
+  push:
+    branches:
+      - experiments/tacosm-001
+      - experiments/tacosm-002
+
+permissions:
+  contents: read
+
+jobs:
+  temporal:
+    name: TACOSM-TEMPORAL-001
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install test dependency
+        run: python -m pip install --quiet --upgrade pip pytest
+      - name: Run registered temporal experiment
+        run: python scripts/measure_temporal_persistence.py
+      - name: Upload temporal evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tacosm-temporal-001
+          path: results/temporal_001.json
+          if-no-files-found: warn
+
+  selective:
+    name: TACOSM-SELECTIVE-001
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install test dependency
+        run: python -m pip install --quiet --upgrade pip pytest
+      - name: Run registered selective experiment
+        run: python scripts/measure_selective_scaling.py
+      - name: Upload selective evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tacosm-selective-001
+          path: results/selective_001.json
+          if-no-files-found: warn
