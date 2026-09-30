@@ -1,6 +1,6 @@
 # TACOSM-C5-LEARNED-STATE-001
 
-Status: PREREGISTERED — result pending.
+Status: AMENDED PREREGISTRATION — confirmatory result pending.
 
 ## Purpose
 
@@ -104,3 +104,26 @@ Measurement command:
 Contract:
 
 `contracts/TACOSM-C5-LEARNED-STATE-001.json`
+
+## Amendment A1
+
+The first CI run was retained as an exploratory diagnostic, not a confirmatory
+result, because the original task builder made the query noise bit depend on H.
+That made the H comparison change the query distribution as well as candidate
+population size.
+
+Before the confirmatory run, the contract was amended visibly. The query,
+persistent-state pool, target address, and target code are now generated from
+the
+`H=64` anchor for each seed/step and reused unchanged across H; only the
+candidate population is regenerated at H=64, 128, and 256.
+
+The amendment does not change the capability rule, training/evaluation split,
+learned encoder, index parameters, candidate index, or executor.
+
+## Exploratory run quarantine
+
+CI run 2 on commit `d9c9cfaf4b4982c658067139cd1490bcbf03400b` is preserved as a
+diagnostic. It completed all tests and produced an artifact, but its
+H-dependent query stream prevents it from being used to make an H-scaling
+claim. The confirmatory measurement must use the amended task stream.
