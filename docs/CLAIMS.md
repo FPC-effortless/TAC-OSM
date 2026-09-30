@@ -341,6 +341,12 @@ This advances C5 from UNTESTED to PARTIALLY SUPPORTED, bounded, for the retrieva
 
 The execution-side relation remains separately bounded by `TACOSM-C5-EXEC-001`, which measures controlled execution work against the retained relevant subset. The combined evidence is stronger than either boundary alone, but it still falls short of a generalized end-to-end C5 theorem.
 
+The independent-seed replication `TACOSM-C5-FRONTIER-REPLICATION-001` (run 36791657545, seeds 5–9) did **not** reproduce the fixed `(16,6)` configuration at M=512: capability retention was 0.6667 against the 0.80 floor. The replication was otherwise valid: executor distinctness and pooled count conservation passed, with 500 evaluations per pooled cell.
+
+The replication therefore adds a reproducibility qualification: the first accepted fixed frontier configuration is not stable under the registered seed change. This does not invalidate the original seed-0–4 measurement; it limits how far that configuration-specific result can be generalized.
+
+A secondary observation is that `(32,8)` was eligible across all three M levels on both the original 0–4 and replication 5–9 seed blocks, and its combined ten-seed minimum retention is 0.8074 with mean `states_scored_over_M` 0.0788. Because the ten-seed combination was not itself the preregistered decision rule, this remains a diagnostic observation rather than a promoted frontier claim.
+
 The honest model of v0.1 cost is:
 
 ```
