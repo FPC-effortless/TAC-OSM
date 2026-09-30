@@ -1,0 +1,64 @@
+{
+  "experiment_id":"TACOSM-C5-SIMILARITY-EVAL-001",
+  "title":"Inference similarity geometry for learned semantic state retrieval",
+  "question":"Does cosine similarity at inference materially improve target-state retrieval compared with raw dot-product inference on the same trained encoder?",
+  "hypothesis":"H_eval_geometry: the apparent retrieval improvement seen under cosine evaluation is caused by inference-time normalization rather than a change in training objective.",
+  "arms":[
+    {"name":"raw_dot_eval","intervention":"same trained encoder scored with raw dot product","acts_on":"inference metric","knob":"similarity","value":"raw dot product"},
+    {"name":"cosine_eval","intervention":"same trained encoder scored with L2-normalized cosine similarity","acts_on":"inference metric","knob":"similarity","value":"cosine"}
+  ],
+  "endpoints":[
+    {"name":"target_top1_recall","role":"primary — correct opaque persistent state selected","primary":true},
+    {"name":"target_rank_mean","role":"secondary — mean rank of correct target state","primary":false},
+    {"name":"query_projection_macs","role":"audit — same encoder query projection","primary":false},
+    {"name":"state_score_macs","role":"audit — same state dot-product arithmetic","primary":false},
+    {"name":"normalization_ops","role":"audit — extra cosine normalization operations","primary":false}
+  ],
+  "decision_rule":[
+    {
+      "condition":"cosine_eval recall >= raw_dot_eval recall + 0.10 and cosine_eval recall >= 0.50",
+      "licenses":"evidence that inference-time cosine geometry materially improves the current retriever",
+      "does_not_license":"general cosine superiority or a learned selective retriever"
+    },
+    {
+      "condition":"cosine_eval recall is within 0.05 absolute of raw_dot_eval recall",
+      "licenses":"evidence that inference metric geometry does not materially change retrieval on this workload",
+      "does_not_license":"that metric geometry is irrelevant elsewhere"
+    },
+    {
+      "condition":"cosine_eval recall < raw_dot_eval recall - 0.05",
+      "licenses":"evidence that cosine inference is harmful in this configuration",
+      "does_not_license":"that cosine inference is generally harmful"
+    },
+    {
+      "condition":"otherwise",
+      "licenses":"partial evidence that inference metric geometry affects retrieval",
+      "does_not_license":"a reliable selective retriever"
+    }
+  ],
+  "interpretation_order":["temporal availability","held-out retrieval","inference geometry","target rank","arithmetic cost"],
+  "h_levels":[64],
+  "k_levels":[],
+  "seeds":[0,1,2,3,4],
+  "steps":512,
+  "eval_steps":100,
+  "held_constant":[
+    "M=64 persistent state items",
+    "H=64 task anchor and A1 H-invariant query/state stream",
+    "one-step causal write/read delay",
+    "10-bit state codebook",
+    "training codes CODEBOOK[16:64]",
+    "evaluation codes CODEBOOK[:16]",
+    "dual linear input width=10 and latent width=16",
+    "512 epochs",
+    "one deterministic positive view per update",
+    "eight mean-gradient negatives per positive",
+    "learning rate 0.02 and margin 0.25",
+    "same raw dot-product training objective",
+    "the trained encoder is identical across scoring arms",
+    "no evaluation address or gold target enters training",
+    "prior C5 and learned-state results remain frozen"
+  ],
+  "status":"pre-registered",
+  "layer":"L3"
+}
