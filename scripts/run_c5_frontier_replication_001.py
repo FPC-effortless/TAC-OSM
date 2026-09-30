@@ -1,0 +1,638 @@
+#!/usr/bin/env python3
+# Independent-seed replication runner with exact count-conserving aggregation.
+"""Run TACOSM-C5-FRONTIER-REPLICATION-001."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import random
+import statistics
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from tac_osm import Query, StateUpdate
+from tac_osm.c5_end_to_end import EndToEndTask, build_population
+from tac_osm.contract import load_contract
+from tac_osm.learned_state_index import LearnedSemanticStateIndex, LearnedStateIndexConfig
+from tac_osm.noisy_state_tasks import CODEBOOK
+from tac_osm.product_key_index import ProductKeyConfig, ProductKeyStateIndex
+
+SEEDS = (5, 6, 7, 8, 9)
+M_LEVELS = (128, 256, 512)
+H_FIXED = 256
+K = 32
+FACTOR_CONFIGS = (
+    (8, 2), (8, 4), (8, 6), (8, 8),
+    (16, 2), (16, 4), (16, 6), (16, 8), (16, 12),
+    (32, 2), (32, 4), (32, 6), (32, 8), (32, 12),
+)
+FACTOR_SIZES = (8, 16, 32)
+ARM_NAMES = tuple(
+    f"factor_size_{factor_size}_beam_{factor_beam}"
+    for factor_size, factor_beam in FACTOR_CONFIGS
+)
+FACTOR_KMEANS_ITERATIONS = 8
+LATENT_DIM = 16
+TEACHER_EPOCHS = 512
+NEGATIVE_COUNT = 8
+EVAL_STEPS = 100
+CAPABILITY_RETENTION_FLOOR = 0.80
+TARGET_CODES = tuple(CODEBOOK[:16])
+TRAIN_CODES = tuple(CODEBOOK[16:64])
+STATE_BITS = 10
+QUERY_PROJECTION_MACS = STATE_BITS * LATENT_DIM
+
+class StateDistinctEndToEndExecutor:
+    """Fixed downstream task whose successful output uniquely identifies the state value."""
+
+    @staticmethod
+    def _state_code(reference: tuple[int, ...]) -> int:
+        value = 0
+        for bit in reference:
+            value = (value << 1) | int(bit)
+        return value
+
+    def execute_candidate(self, candidate, reference) -> tuple[int, int]:
+        if not candidate.executable_edges:
+            raise ValueError("candidate program must expose executable_edges")
+        if tuple(candidate.descriptor) != tuple(reference):
+            return 0, 12
+        return 1_000_000 + self._state_code(tuple(reference)), 12
+
+    def execute_population(self, candidates, reference) -> tuple[int, int, int]:
+        output = 0
+        work = 0
+        invocations = 0
+        for candidate in candidates:
+            contribution, units = self.execute_candidate(candidate, reference)
+            output += contribution
+            work += units
+            invocations += 1
+        return output, work, invocations
+
+
+def assert_executor_distinctness() -> None:
+    executor = StateDistinctEndToEndExecutor()
+    population = build_population(0, H_FIXED)
+    outputs = []
+    for reference in TARGET_CODES[:2]:
+        relevant = tuple(
+            candidate
+            for candidate in population
+            if tuple(candidate.descriptor) == tuple(reference)
+        )
+        if len(relevant) != 4:
+            raise AssertionError("state-distinct audit expected four relevant programs")
+        output, work, calls = executor.execute_population(relevant, reference)
+        if work != 4 * 12 or calls != 4:
+            raise AssertionError("state-distinct audit executor accounting changed")
+        outputs.append(output)
+    if outputs[0] == outputs[1]:
+        raise AssertionError("state-distinct executor collapsed two target codes")
+
+
+def _all_binary_codes() -> tuple[tuple[int, ...], ...]:
+    excluded = set(TARGET_CODES) | set(TRAIN_CODES)
+    out = []
+    for value in range(1 << STATE_BITS):
+        code = tuple(
+            (value >> (STATE_BITS - 1 - i)) & 1
+            for i in range(STATE_BITS)
+        )
+        if code not in excluded:
+            out.append(code)
+    return tuple(out)
+
+
+DECOY_CODES = _all_binary_codes()
+
+
+def make_teacher(seed: int) -> LearnedSemanticStateIndex:
+    model = LearnedSemanticStateIndex(LearnedStateIndexConfig(
+        input_dim=STATE_BITS,
+        latent_dim=LATENT_DIM,
+        learning_rate=0.02,
+        margin=0.25,
+        epochs=TEACHER_EPOCHS,
+        bucket_bits=8,
+        probe_radius=1,
+        shortlist_k=1,
+        seed=seed,
+    ))
+    updates = model.train_with_negative_coverage(
+        TRAIN_CODES,
+        negative_count=NEGATIVE_COUNT,
+        aggregation="mean",
+        positive_views=1,
+    )
+    expected = TEACHER_EPOCHS * len(TRAIN_CODES)
+    if updates != expected:
+        raise AssertionError(
+            f"unexpected teacher update count: {updates} != {expected}"
+        )
+    return model
+
+
+def build_scaled_task(seed: int, m: int, step: int) -> EndToEndTask:
+    if m not in M_LEVELS:
+        raise ValueError(f"M must be one of {M_LEVELS}")
+    target_rng = random.Random(seed * 1009 + m * 7919 + step * 104729 + 31)
+    state_rng = random.Random(seed * 3001 + m * 15485863 + 31)
+    target_value = tuple(target_rng.choice(TARGET_CODES))
+    flip = (seed + step * 3 + m) % STATE_BITS
+    bits = list(target_value)
+    bits[flip] ^= 1
+    query = Query(
+        text=" ".join(str(int(x)) for x in bits),
+        context=(1,) * STATE_BITS,
+        step=step + 1,
+        provenance="c5_product_key_coverage_frontier_query",
+    )
+
+    values = list(TARGET_CODES) + list(TRAIN_CODES)
+    if len(values) != 64:
+        raise AssertionError("base state pool must contain exactly 64 items")
+    decoys = list(DECOY_CODES)
+    state_rng.shuffle(decoys)
+    if m > 64:
+        values.extend(decoys[:m - 64])
+    state_rng.shuffle(values)
+
+    addresses = [f"frontier-state-{seed}-{m}-{i:04d}" for i in range(m)]
+    updates = tuple(
+        StateUpdate(
+            key=addresses[i],
+            value=tuple(values[i]),
+            step=0,
+            success_score=1.0,
+        )
+        for i in range(m)
+    )
+    target_address = next(
+        update.key for update in updates
+        if tuple(update.value) == target_value
+    )
+
+    candidates = build_population(seed, H_FIXED)
+    relevant = frozenset(
+        i for i, candidate in enumerate(candidates)
+        if tuple(candidate.descriptor) == target_value
+    )
+    if len(relevant) != 4:
+        raise AssertionError("task must contain four relevant programs")
+
+    executor = StateDistinctEndToEndExecutor()
+    expected, work, calls = executor.execute_population(
+        tuple(candidates[i] for i in sorted(relevant)),
+        target_value,
+    )
+    if work != 4 * 12 or calls != 4:
+        raise AssertionError("state-distinct executor changed")
+
+    return EndToEndTask(
+        query=query,
+        state_updates=updates,
+        candidates=candidates,
+        target_address=target_address,
+        target_value=target_value,
+        expected_output=expected,
+        relevant_indices=relevant,
+        step=step,
+    )
+
+
+def normalized_embeddings(
+    teacher: LearnedSemanticStateIndex,
+    task: EndToEndTask,
+) -> tuple[tuple[str, tuple[float, ...]], ...]:
+    items = []
+    for update in task.state_updates:
+        raw = teacher.encode_state(update.value)
+        norm = math.sqrt(sum(x * x for x in raw))
+        if norm <= 1e-8:
+            raise AssertionError("zero state embedding")
+        items.append((update.key, tuple(x / norm for x in raw)))
+    return tuple(items)
+
+
+def normalized_query(
+    teacher: LearnedSemanticStateIndex,
+    task: EndToEndTask,
+) -> tuple[float, ...]:
+    raw = teacher.encode_query(task.query)
+    norm = math.sqrt(sum(x * x for x in raw))
+    if norm <= 1e-8:
+        raise AssertionError("zero query embedding")
+    return tuple(x / norm for x in raw)
+
+
+def exhaustive(
+    task: EndToEndTask,
+    query: tuple[float, ...],
+    embeddings: tuple[tuple[str, tuple[float, ...]], ...],
+) -> tuple[str, int]:
+    scored = [
+        (sum(a * b for a, b in zip(query, emb)), address)
+        for address, emb in embeddings
+    ]
+    scored.sort(key=lambda item: (-item[0], item[1]))
+    return scored[0][1], QUERY_PROJECTION_MACS + len(embeddings) * LATENT_DIM
+
+
+def run_cell(
+    m: int,
+    factor_size: int,
+    factor_beam: int,
+    teacher: LearnedSemanticStateIndex,
+    embeddings: tuple[tuple[str, tuple[float, ...]], ...],
+    tasks: tuple[EndToEndTask, ...],
+) -> dict:
+    if (factor_size, factor_beam) not in FACTOR_CONFIGS:
+        raise ValueError(
+            f"invalid registered configuration: factor_size={factor_size}, "
+            f"factor_beam={factor_beam}"
+        )
+
+    first = tasks[0]
+    train_set = set(TRAIN_CODES)
+    train_items = [
+        item
+        for item, update in zip(embeddings, first.state_updates)
+        if tuple(update.value) in train_set
+    ]
+    if len(train_items) != len(TRAIN_CODES):
+        raise AssertionError("training-state population mismatch")
+
+    index = ProductKeyStateIndex(ProductKeyConfig(
+        factor_size=factor_size,
+        factor_beam=factor_beam,
+        iterations=FACTOR_KMEANS_ITERATIONS,
+        max_shortlist=K,
+    ))
+    build = index.build(embeddings, codebook_items=train_items)
+    executor = StateDistinctEndToEndExecutor()
+
+    ex_target = []
+    proposal = []
+    target_sel = []
+    success_ex = []
+    success_sel = []
+    shortlist = []
+    scored = []
+    macs = []
+
+    for task in tasks:
+        query = normalized_query(teacher, task)
+        ex_address, _ = exhaustive(task, query, embeddings)
+        ex_value = next(
+            tuple(u.value)
+            for u in task.state_updates
+            if u.key == ex_address
+        )
+        ex_target.append(int(ex_address == task.target_address))
+        ex_rel = tuple(
+            i for i, c in enumerate(task.candidates)
+            if tuple(c.descriptor) == ex_value
+        )
+        ex_out, _, _ = executor.execute_population(
+            tuple(task.candidates[i] for i in ex_rel),
+            ex_value,
+        )
+        success_ex.append(int(ex_out == task.expected_output))
+
+        hit = index.lookup(
+            query,
+            beam=factor_beam,
+            max_shortlist=K,
+        )
+        selected = hit.selected_address
+        selected_value = next(
+            (tuple(u.value) for u in task.state_updates if u.key == selected),
+            None,
+        )
+        proposal.append(int(task.target_address in hit.candidate_addresses))
+        target_sel.append(int(selected == task.target_address))
+
+        if selected_value is None:
+            success_sel.append(0)
+        else:
+            rel = tuple(
+                i for i, c in enumerate(task.candidates)
+                if tuple(c.descriptor) == selected_value
+            )
+            output, _, _ = executor.execute_population(
+                tuple(task.candidates[i] for i in rel),
+                selected_value,
+            )
+            success_sel.append(int(output == task.expected_output))
+
+        shortlist.append(len(hit.candidate_addresses))
+        scored.append(hit.state_candidates_scored)
+        macs.append(
+            QUERY_PROJECTION_MACS
+            + hit.factor_score_macs
+            + hit.state_rerank_macs
+        )
+
+    exhaustive_success = statistics.fmean(success_ex)
+    selective_success = statistics.fmean(success_sel)
+    raw_retention = (
+        selective_success / exhaustive_success
+        if exhaustive_success > 0.0
+        else 0.0
+    )
+    retention = min(1.0, raw_retention)
+
+    return {
+        "M": m,
+        "factor_size": factor_size,
+        "factor_beam": factor_beam,
+        "exhaustive_target_recall": statistics.fmean(ex_target),
+        "proposal_target_retention": statistics.fmean(proposal),
+        "selective_target_recall": statistics.fmean(target_sel),
+        "exhaustive_end_to_end_success": exhaustive_success,
+        "selective_end_to_end_success": selective_success,
+        "exhaustive_success_count": sum(success_ex),
+        "selective_success_count": sum(success_sel),
+        "evaluation_count": len(success_ex),
+        "capability_retention": retention,
+        "raw_capability_ratio": raw_retention,
+        "capability_gain": selective_success - exhaustive_success,
+        "meets_capability_floor": retention >= CAPABILITY_RETENTION_FLOOR,
+        "executor_distinctness_audit": True,
+        "shortlist_size_mean": statistics.fmean(shortlist),
+        "state_candidates_scored_mean": statistics.fmean(scored),
+        "states_scored_over_M": statistics.fmean(scored) / m,
+        "exhaustive_query_macs": QUERY_PROJECTION_MACS + m * LATENT_DIM,
+        "total_macs_mean": statistics.fmean(macs),
+        "arithmetic_reduction": 1.0 - statistics.fmean(macs) / (
+            QUERY_PROJECTION_MACS + m * LATENT_DIM
+        ),
+        "nonempty_cells": build.nonempty_cells,
+        "max_cell_size": build.max_cell_size,
+        "build_total_macs": build.total_build_macs,
+    }
+
+
+def run(smoke: bool) -> dict:
+    assert_executor_distinctness()
+    seeds = (0,) if smoke else SEEDS
+    ms = (128,) if smoke else M_LEVELS
+    steps = 5 if smoke else EVAL_STEPS
+    configs = (
+        ((8, 2), (8, 6), (16, 2), (16, 6), (32, 2), (32, 6))
+        if smoke
+        else FACTOR_CONFIGS
+    )
+
+    cells = []
+    for seed in seeds:
+        teacher = make_teacher(seed)
+        for m in ms:
+            first = build_scaled_task(seed, m, 0)
+            embeddings = normalized_embeddings(teacher, first)
+            tasks = tuple(build_scaled_task(seed, m, step) for step in range(steps))
+            for factor_size, factor_beam in configs:
+                cells.append(
+                        run_cell(
+                            m,
+                            factor_size,
+                            factor_beam,
+                            teacher,
+                            embeddings,
+                            tasks,
+                        )
+                    )
+
+    pooled = {}
+    for m in ms:
+        for factor_size, factor_beam in configs:
+                values = [
+                    cell for cell in cells
+                    if cell["M"] == m
+                    and cell["factor_size"] == factor_size
+                    and cell["factor_beam"] == factor_beam
+                ]
+                pooled[f"{m}:{factor_size}:{factor_beam}"] = {
+                    key: statistics.fmean(v[key] for v in values)
+                    for key in (
+                        "exhaustive_target_recall",
+                        "proposal_target_retention",
+                        "selective_target_recall",
+                        "exhaustive_target_recall",
+                        "proposal_target_retention",
+                        "selective_target_recall",
+                        "shortlist_size_mean",
+                        "state_candidates_scored_mean",
+                        "states_scored_over_M",
+                        "total_macs_mean",
+                        "arithmetic_reduction",
+                        "nonempty_cells",
+                        "max_cell_size",
+                        "build_total_macs",
+                        "shortlist_size_mean",
+                        "state_candidates_scored_mean",
+                        "states_scored_over_M",
+                        "total_macs_mean",
+                        "arithmetic_reduction",
+                        "nonempty_cells",
+                        "max_cell_size",
+                        "build_total_macs",
+                    )
+                }
+                pooled_key = f"{m}:{factor_size}:{factor_beam}"
+                pooled_row = pooled[pooled_key]
+                if len(values) != len(seeds):
+                    raise AssertionError("pooled cell count does not match registered seeds")
+                exhaustive_success_count = sum(
+                    int(v["exhaustive_success_count"]) for v in values
+                )
+                selective_success_count = sum(
+                    int(v["selective_success_count"]) for v in values
+                )
+                evaluation_count = sum(int(v["evaluation_count"]) for v in values)
+                expected_evaluations = len(values) * steps
+                if evaluation_count != expected_evaluations:
+                    raise AssertionError(
+                        f"pooled evaluation count mismatch: {evaluation_count} != {expected_evaluations}"
+                    )
+                if exhaustive_success_count < 0 or exhaustive_success_count > evaluation_count:
+                    raise AssertionError("invalid pooled exhaustive success count")
+                if selective_success_count < 0 or selective_success_count > evaluation_count:
+                    raise AssertionError("invalid pooled selective success count")
+                raw_capability_ratio = (
+                    selective_success_count / exhaustive_success_count
+                    if exhaustive_success_count > 0
+                    else 0.0
+                )
+                pooled_retention = min(1.0, raw_capability_ratio)
+                pooled_gain = (
+                    (selective_success_count - exhaustive_success_count) / evaluation_count
+                    if evaluation_count > 0
+                    else 0.0
+                )
+                pooled_row.update({
+                    "M": m,
+                    "factor_size": factor_size,
+                    "factor_beam": factor_beam,
+                    "exhaustive_success_count": exhaustive_success_count,
+                    "selective_success_count": selective_success_count,
+                    "evaluation_count": evaluation_count,
+                    "exhaustive_end_to_end_success": exhaustive_success_count / evaluation_count,
+                    "selective_end_to_end_success": selective_success_count / evaluation_count,
+                    "capability_retention": pooled_retention,
+                    "raw_capability_ratio": raw_capability_ratio,
+                    "capability_gain": pooled_gain,
+                    "meets_capability_floor": pooled_retention >= CAPABILITY_RETENTION_FLOOR,
+                    "aggregation_count_conserved": True,
+                })
+                if pooled_row['meets_capability_floor'] != (
+                    pooled_row['capability_retention'] >= CAPABILITY_RETENTION_FLOOR
+                ):
+                    raise AssertionError("pooled capability eligibility mismatch")
+                if abs(
+                    pooled_row['capability_retention']
+                    - min(1.0, pooled_row['selective_success_count'] / pooled_row['exhaustive_success_count'])
+                ) > 1e-12:
+                    raise AssertionError("pooled capability ratio mismatch")
+
+
+    frontier = {}
+    for m in ms:
+        eligible = [
+            row for row in pooled.values()
+            if row["M"] == m and row["meets_capability_floor"]
+        ]
+        if eligible:
+            best = min(
+                eligible,
+                key=lambda row: (
+                    row["states_scored_over_M"],
+                    row["total_macs_mean"],
+                    row["factor_size"],
+                    row["factor_beam"],
+                ),
+            )
+            frontier[str(m)] = {
+                "factor_size": best["factor_size"],
+                "factor_beam": best["factor_beam"],
+                "capability_retention": best["capability_retention"],
+                "states_scored_over_M": best["states_scored_over_M"],
+                "total_macs_mean": best["total_macs_mean"],
+            }
+        else:
+            frontier[str(m)] = None
+
+    global_eligible = []
+    for factor_size, factor_beam in FACTOR_CONFIGS:
+        rows = [
+            row for row in pooled.values()
+            if row["factor_size"] == factor_size and row["factor_beam"] == factor_beam
+        ]
+        if len(rows) == len(ms) and all(row["meets_capability_floor"] for row in rows):
+            global_eligible.append({
+                "factor_size": factor_size,
+                "factor_beam": factor_beam,
+                "mean_states_scored_over_M": statistics.fmean(
+                    row["states_scored_over_M"] for row in rows
+                ),
+                "min_capability_retention": min(
+                    row["capability_retention"] for row in rows
+                ),
+                "mean_total_macs": statistics.fmean(
+                    row["total_macs_mean"] for row in rows
+                ),
+            })
+
+    global_frontier = (
+        min(
+            global_eligible,
+            key=lambda row: (
+                row["mean_states_scored_over_M"],
+                row["mean_total_macs"],
+                row["factor_size"],
+                row["factor_beam"],
+            ),
+        )
+        if global_eligible
+        else None
+    )
+
+    fixed_frontier = (global_frontier == {
+        "factor_size": 16,
+        "factor_beam": 6,
+        "mean_states_scored_over_M": global_frontier["mean_states_scored_over_M"],
+        "min_capability_retention": global_frontier["min_capability_retention"],
+        "mean_total_macs": global_frontier["mean_total_macs"],
+    }) if global_frontier is not None else False
+    fixed_per_m_floor = all(
+        pooled[f"{m}:16:6"]["capability_retention"] >= CAPABILITY_RETENTION_FLOOR
+        for m in ms
+    )
+    replication_pass = fixed_frontier and fixed_per_m_floor
+
+    return {
+        "replication": {
+            "expected_configuration": [16, 6],
+            "global_configuration_match": fixed_frontier,
+            "per_m_capability_floor_pass": fixed_per_m_floor,
+            "replication_pass": replication_pass,
+        },
+        "protocol": {
+            "name": "TACOSM-C5-FRONTIER-REPLICATION-001",
+            "smoke": smoke,
+            "seeds": list(seeds),
+            "M_levels": list(ms),
+            "H_fixed": H_FIXED,
+            "K": K,
+            "factor_beams": sorted({factor_beam for _, factor_beam in configs}),
+            "factor_configurations": [list(config) for config in configs],
+            "factor_sizes": list(FACTOR_SIZES),
+            "factor_kmeans_iterations": FACTOR_KMEANS_ITERATIONS,
+            "latent_dim": LATENT_DIM,
+            "teacher_epochs": TEACHER_EPOCHS,
+            "negative_count": NEGATIVE_COUNT,
+            "eval_steps": steps,
+            "capability_retention_floor": CAPABILITY_RETENTION_FLOOR,
+        },
+        "pooled": pooled,
+        "frontier": frontier,
+        "global_frontier": global_frontier,
+        "cells": cells,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--no-contract", action="store_true")
+    args = parser.parse_args()
+
+    if not args.no_contract:
+        contract = load_contract("TACOSM-C5-FRONTIER-REPLICATION-001")
+        contract.require_levels((H_FIXED,))
+        contract.require_m_levels(M_LEVELS)
+        contract.require_seeds(SEEDS)
+        contract.require_k_levels([K])
+        if not args.smoke:
+            contract.require_eval_steps(EVAL_STEPS)
+        expected_arm_names = set(ARM_NAMES)
+        registered_arm_names = {arm.name for arm in contract.arms}
+        if registered_arm_names != expected_arm_names:
+            raise AssertionError("runner arms do not match preregistered contract")
+        if "0.80" not in contract.decision_rule[0].condition:
+            raise AssertionError("runner capability floor does not match contract")
+
+    result = run(args.smoke)
+    out = Path("artifacts/TACOSM-C5-FRONTIER-REPLICATION-001.json")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
+    print(json.dumps(result, indent=2, sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()
