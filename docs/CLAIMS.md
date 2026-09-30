@@ -828,6 +828,60 @@ experiment does not measure execution work proportional to |R|. A direct
 batched-execution capability/compute experiment is required before C5 can move.
 
 
+
+---
+
+## C15 — Execution work can be bounded by a retained relevant subset in a controlled workload
+
+> When the correct output requires all relevant candidate programs, an indexed
+> runtime can preserve capability while executing only the retained relevant
+> subset rather than the full candidate population.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-C5-EXEC-001`, workflow
+`36666872579`, code head `625ee3311b200ed7eae22879bd3c34f97f4a39b8`.
+
+**TYPE:** mechanism · **LAYER:** L3
+
+**PRIOR ART:** selective/conditional computation and retrieval-before-compute
+are established systems patterns. The TAC-OSM result is the controlled
+execution-work measurement below.
+
+**NOT INHERITED:** semantic retrieval, learned indexing, hardware FLOPs, or the
+full L4 C5 claim.
+
+**REQUIRED EVIDENCE:** fixed-R capability/parity experiment over
+H={64,128,256}, five seeds, 100 queries per cell, with one-time index
+construction separated from per-query execution work.
+
+The task contains exactly **R=4** relevant programs at every H. The exhaustive
+arm executes all H candidate programs; the indexed arm executes exactly four.
+
+| H | exhaustive success | selective success | exhaustive executor work | selective executor work | reduction |
+|---:|---:|---:|---:|---:|---:|
+| 64 | 1.0000 | 1.0000 | 576 | 36 | 93.75% |
+| 128 | 1.0000 | 1.0000 | 1,152 | 36 | 96.875% |
+| 256 | 1.0000 | 1.0000 | 2,304 | 36 | 98.4375% |
+
+The selective arm retained exactly four candidates at every H, so
+`R/H = 0.0625, 0.03125, 0.015625` respectively.
+
+The experiment therefore demonstrates the execution-side relation:
+
+`C_execute = O(R)` with fixed `R=4`
+
+while the exhaustive baseline scales as:
+
+`C_execute = O(H)`.
+
+The result is stronger than SELECTIVE-001's routing-only boundary because the
+correct output requires aggregation across all retained relevant programs.
+
+**BLOCKER:** the workload uses an exact public content-address index, a fixed
+synthetic executor, and a deliberately controlled relevance relation. The
+experiment does not establish semantic end-to-end computation or the broad L4
+C5 claim.
+
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
