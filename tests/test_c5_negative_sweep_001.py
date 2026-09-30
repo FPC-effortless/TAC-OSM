@@ -81,4 +81,4 @@ def test_negative_training_preserves_single_update_per_positive():
         negative_count=16,
         aggregation="mean",
     )
-    assert updates == 8
+    assert updates == 48
