@@ -15,7 +15,8 @@ from dataclasses import dataclass
 from itertools import combinations
 from typing import Sequence
 
-from . import AddressedMemory, Query
+from . import Query
+from .state_addressing import AddressedMemory
 from .temporal import TemporalPersistentState
 
 
