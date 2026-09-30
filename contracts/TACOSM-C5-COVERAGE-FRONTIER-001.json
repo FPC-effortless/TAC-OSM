@@ -1,0 +1,76 @@
+{
+  "experiment_id": "TACOSM-C5-COVERAGE-FRONTIER-001",
+  "title": "Coverage-constrained product-key granularity frontier",
+  "question": "For the registered persistent-state retrieval workload, what is the minimum fraction of states reranked that preserves a preregistered capability-retention floor?",
+  "hypothesis": "Increasing factor granularity reduces candidate occupancy, while increasing factor beam recovers coverage. The joint factor-size/beam surface should expose a measurable capability-compute frontier rather than a single universally optimal setting.",
+  "arms": {
+    "factor_sizes": [8, 16, 32],
+    "factor_beams": [2, 4, 6, 8, 12]
+  },
+  "levels": {
+    "H": [256],
+    "M": [128, 256, 512],
+    "K": [32]
+  },
+  "seeds": [0, 1, 2, 3, 4],
+  "eval_steps": 100,
+  "teacher_epochs": 512,
+  "negative_count": 8,
+  "latent_dim": 16,
+  "factor_kmeans_iterations": 8,
+  "capability_retention_floor": 0.80,
+  "capability_metric": "selective_end_to_end_success / exhaustive_end_to_end_success",
+  "primary_endpoints": [
+    "capability_retention",
+    "states_scored_over_M"
+  ],
+  "secondary_endpoints": [
+    "exhaustive_target_recall",
+    "proposal_target_retention",
+    "selective_target_recall",
+    "exhaustive_end_to_end_success",
+    "selective_end_to_end_success",
+    "shortlist_size_mean",
+    "total_macs_mean",
+    "arithmetic_reduction",
+    "nonempty_cells",
+    "max_cell_size"
+  ],
+  "decision_rule": [
+    {
+      "condition": "At each M, identify configurations with capability_retention >= 0.80 and report the minimum states_scored_over_M among them.",
+      "licenses": "a registered capability-constrained frontier on the measured workload",
+      "does_not_license": "a universal optimum, universal sublinear retrieval, or hardware wall-clock speedup"
+    },
+    {
+      "condition": "A configuration remains above the retention floor while states_scored_over_M decreases as M grows.",
+      "licenses": "evidence that the product-key mechanism can preserve a fixed capability floor with a bounded or slowly growing executed fraction on this workload",
+      "does_not_license": "general semantic addressing or a completed C5 proof"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "exhaustive cosine",
+    "proposal retention",
+    "exhaustive capability",
+    "selective capability",
+    "capability retention",
+    "states scored over M",
+    "arithmetic"
+  ],
+  "held_constant": [
+    "same width-16 raw-trained cosine teacher",
+    "same 48 training codes versus 16 held-out target codes",
+    "same one-bit noisy query construction",
+    "same H=256",
+    "same M levels",
+    "same K=32",
+    "same k-means iteration count=8",
+    "training-only codebook fitting",
+    "same exact candidate index",
+    "same downstream executor",
+    "same task seed stream across arms"
+  ],
+  "status": "preregistered",
+  "layer": "L4"
+}
