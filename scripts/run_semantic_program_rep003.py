@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from tac_osm import StateConfig, Structure
+from tac_osm import Structure
 from tac_osm.explicit_executor import ExplicitGraphExecutor
 from tac_osm.graph_program_router import (
     GraphProgramRouter,
@@ -22,7 +22,7 @@ from tac_osm.semantic_topology import (
     program_for_candidate,
     semantic_signature,
 )
-from tac_osm.state import PersistentStore
+from tac_osm.state import PersistentStore, StateConfig
 from tac_osm.topology_tasks import TOPOLOGY_EDGE_UNIVERSE
 
 
