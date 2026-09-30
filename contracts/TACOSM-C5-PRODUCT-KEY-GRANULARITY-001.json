@@ -85,11 +85,25 @@
     "arithmetic",
     "cell occupancy"
   ],
-  "h_levels": [256],
-  "m_levels": [128, 256, 512],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
   "steps": 512,
-  "k_levels": [32],
-  "seeds": [0, 1, 2, 3, 4],
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "eval_steps": 100,
   "held_constant": [
     "same width-16 raw-trained cosine teacher",
@@ -105,6 +119,81 @@
     "same downstream executor",
     "same task seed stream across arms"
   ],
-  "status": "pre-registered",
-  "layer": "L4"
+  "status": "measured",
+  "layer": "L4",
+  "result_note": {
+    "run_id": 36756106525,
+    "commit": "caa29eaade75cb5b6b26aafcaae0dcc1bfddb006",
+    "artifact_id": 11116179310,
+    "artifact_digest": "sha256:cb4c30a3a38609e5fa38d8c2eed9d1e75e653de612510da9169573e7c0746c0c",
+    "pooled": {
+      "factor_size_8": {
+        "states_scored_over_M": [
+          0.5568,
+          0.5593,
+          0.5609
+        ],
+        "selective_target_recall": [
+          0.354,
+          0.184,
+          0.054
+        ],
+        "proposal_target_retention": [
+          0.966,
+          0.982,
+          0.98
+        ],
+        "total_macs": [
+          1428.256,
+          2578.688,
+          4882.944
+        ]
+      },
+      "factor_size_16": {
+        "states_scored_over_M": [
+          0.1498,
+          0.1514,
+          0.1513
+        ],
+        "selective_target_recall": [
+          0.318,
+          0.176,
+          0.046
+        ],
+        "proposal_target_retention": [
+          0.79,
+          0.802,
+          0.83
+        ],
+        "total_macs": [
+          722.72,
+          1036.096,
+          1655.424
+        ]
+      },
+      "factor_size_32": {
+        "states_scored_over_M": [
+          0.049,
+          0.0477,
+          0.0472
+        ],
+        "selective_target_recall": [
+          0.246,
+          0.124,
+          0.046
+        ],
+        "proposal_target_retention": [
+          0.538,
+          0.526,
+          0.56
+        ],
+        "total_macs": [
+          772.448,
+          867.424,
+          1059.008
+        ]
+      }
+    },
+    "interpretation": "Factor granularity materially reduces reranking fraction: approximately 55.9% to 15.1% to 4.8% of M for factor sizes 8,16,32. This supports fixed-cell occupancy as the principal mechanism behind the factor-size-8 scaling failure. Larger granularity incurs a coverage tradeoff; factor size 16 retains substantially more coverage than 32 and is not identical to exhaustive retrieval. No universal C5 or hardware-speedup claim is licensed."
+  }
 }
