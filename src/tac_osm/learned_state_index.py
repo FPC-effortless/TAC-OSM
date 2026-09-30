@@ -348,6 +348,160 @@ class LearnedSemanticStateIndex:
                 self._trained_pairs += 1
         return self._trained_pairs
 
+
+    @staticmethod
+    def _normalize(values: Sequence[float], eps: float = 1e-8) -> tuple[list[float], float]:
+        norm = math.sqrt(sum(value * value for value in values))
+        denom = max(norm, eps)
+        return [value / denom for value in values], denom
+
+    def train_with_cosine_negative_coverage(
+        self,
+        train_codes: Sequence[Sequence[int]],
+        *,
+        negative_count: int = 8,
+        positive_views: int = 1,
+        noise_cycle: int = 10,
+    ) -> int:
+        """Train the same encoder with cosine-margin similarity.
+
+        The training schedule matches train_with_negative_coverage with
+        mean aggregation, one positive view by default, and a deterministic
+        negative pool. The only objective change is normalization of query,
+        positive-state, and negative-state embeddings before similarity.
+        """
+        if negative_count < 1:
+            raise ValueError("negative_count must be positive")
+        if positive_views < 1:
+            raise ValueError("positive_views must be positive")
+
+        codes = [tuple(int(x) for x in code) for code in train_codes]
+        if len(codes) < 2:
+            raise ValueError("at least two training codes are required")
+        if negative_count >= len(codes):
+            raise ValueError("negative_count must be smaller than training-code count")
+        for code in codes:
+            if len(code) != self.config.input_dim:
+                raise ValueError("training code width mismatch")
+
+        rng = random.Random(self.config.seed * 1009 + 17)
+        self._trained_pairs = 0
+
+        for epoch in range(self.config.epochs):
+            order = list(range(len(codes)))
+            rng.shuffle(order)
+            for local, idx in enumerate(order):
+                positive = codes[idx]
+                anchor = (idx + 1 + epoch + local) % len(codes)
+                negative_indices = [
+                    (anchor + offset) % len(codes)
+                    for offset in range(negative_count)
+                    if (anchor + offset) % len(codes) != idx
+                ]
+                if len(negative_indices) != negative_count:
+                    extra = 0
+                    while len(negative_indices) < negative_count:
+                        candidate = (anchor + negative_count + extra) % len(codes)
+                        extra += 1
+                        if candidate != idx and candidate not in negative_indices:
+                            negative_indices.append(candidate)
+
+                pos_x = self._signed(positive)
+                p_raw = self._encode(self.ws, self.bs, pos_x)
+                p_norm, p_norm_denom = self._normalize(p_raw)
+                ws_accum = [
+                    [0.0] * self.config.input_dim
+                    for _ in range(self.config.latent_dim)
+                ]
+                wq_accum = [
+                    [0.0] * self.config.input_dim
+                    for _ in range(self.config.latent_dim)
+                ]
+                bq_accum = [0.0] * self.config.latent_dim
+                pair_count = 0
+
+                for view in range(positive_views):
+                    bits = list(positive)
+                    flip_a = (
+                        idx + epoch + noise_cycle + 3 * view
+                        + (view * view + epoch * view)
+                    ) % self.config.input_dim
+                    bits[flip_a] ^= 1
+                    if positive_views > 1 and view % 2 == 1:
+                        flip_b = (
+                            idx + 2 * epoch + noise_cycle + 5 * view + 1
+                        ) % self.config.input_dim
+                        if flip_b == flip_a:
+                            flip_b = (flip_b + 1) % self.config.input_dim
+                        bits[flip_b] ^= 1
+
+                    query_x = self._signed(bits)
+                    q_raw = self._encode(self.wq, self.bq, query_x)
+                    q_norm, q_denom = self._normalize(q_raw)
+
+                    for neg_idx in negative_indices:
+                        neg_x = self._signed(codes[neg_idx])
+                        n_raw = self._encode(self.ws, self.bs, neg_x)
+                        n_norm, n_denom = self._normalize(n_raw)
+
+                        sim_pos = sum(a * b for a, b in zip(q_norm, p_norm))
+                        sim_neg = sum(a * b for a, b in zip(q_norm, n_norm))
+                        diff = sim_pos - sim_neg
+                        clipped = max(-60.0, min(60.0, self.config.margin - diff))
+                        gate = 1.0 / (1.0 + math.exp(-clipped))
+
+                        # d cosine(q_raw, v_raw) / d q_raw
+                        q_pos_grad = [
+                            (p_norm[r] - sim_pos * q_norm[r]) / q_denom
+                            for r in range(self.config.latent_dim)
+                        ]
+                        q_neg_grad = [
+                            (n_norm[r] - sim_neg * q_norm[r]) / q_denom
+                            for r in range(self.config.latent_dim)
+                        ]
+                        q_grad_descent = [
+                            gate * (q_pos_grad[r] - q_neg_grad[r])
+                            for r in range(self.config.latent_dim)
+                        ]
+
+                        # Gradient-descent direction through normalized positive
+                        # and negative state embeddings.
+                        p_grad_descent = [
+                            gate * (
+                                q_norm[r] - sim_pos * p_norm[r]
+                            ) / p_norm_denom
+                            for r in range(self.config.latent_dim)
+                        ]
+                        n_grad_descent = [
+                            -gate * (
+                                q_norm[r] - sim_neg * n_norm[r]
+                            ) / n_denom
+                            for r in range(self.config.latent_dim)
+                        ]
+
+                        for r in range(self.config.latent_dim):
+                            bq_accum[r] += q_grad_descent[r]
+                            for j in range(self.config.input_dim):
+                                wq_accum[r][j] += q_grad_descent[r] * query_x[j]
+                                ws_accum[r][j] += (
+                                    p_grad_descent[r] * pos_x[j]
+                                    + n_grad_descent[r] * neg_x[j]
+                                )
+                        pair_count += 1
+
+                scale = 1.0 / pair_count
+                for r in range(self.config.latent_dim):
+                    self.bq[r] += self.config.learning_rate * bq_accum[r] * scale
+                    for j in range(self.config.input_dim):
+                        self.wq[r][j] += (
+                            self.config.learning_rate * wq_accum[r][j] * scale
+                        )
+                        self.ws[r][j] += (
+                            self.config.learning_rate * ws_accum[r][j] * scale
+                        )
+                self._trained_pairs += 1
+        return self._trained_pairs
+
     def _neighbors(self, code: int) -> tuple[tuple[int, int], ...]:
         out = [(0, code)]
         for distance in range(1, self.config.probe_radius + 1):
