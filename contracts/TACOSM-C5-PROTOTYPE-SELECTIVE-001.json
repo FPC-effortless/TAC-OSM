@@ -1,0 +1,129 @@
+{
+  "experiment_id": "TACOSM-C5-PROTOTYPE-SELECTIVE-001",
+  "title": "Learned continuous prototype routing for bounded state retrieval",
+  "question": "Can learned continuous prototype routing replace sign-code bucketing while preserving exhaustive cosine state retrieval with a bounded four-state shortlist?",
+  "hypothesis": "H_prototype: a learned 16-prototype continuous coarse router trained only on the disjoint training codes can assign evaluation states to capacity-four buckets such that one queried prototype yields a sufficiently correct bounded shortlist for cosine reranking.",
+  "arms": [
+    {
+      "name": "exhaustive_cosine",
+      "intervention": "cosine-score all M=64 state embeddings with the trained width-16 encoder",
+      "acts_on": "state retrieval",
+      "knob": "search",
+      "value": "M=64"
+    },
+    {
+      "name": "prototype_selective",
+      "intervention": "select one learned continuous prototype, retrieve its capacity-four bucket, cosine-rerank those states, then execute the exact downstream candidates",
+      "acts_on": "state retrieval",
+      "knob": "prototype_count/capacity",
+      "value": "16 prototypes, capacity 4"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "actual_target_recall",
+      "role": "primary — correct hidden target state selected",
+      "primary": true
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "secondary — true target state is in the selected prototype bucket before reranking",
+      "primary": false
+    },
+    {
+      "name": "actual_end_to_end_success",
+      "role": "secondary — downstream output matches hidden environment truth",
+      "primary": false
+    },
+    {
+      "name": "shortlist_size",
+      "role": "audit — selected bucket size",
+      "primary": false
+    },
+    {
+      "name": "query_projection_macs",
+      "role": "audit — learned query projection",
+      "primary": false
+    },
+    {
+      "name": "prototype_score_macs",
+      "role": "audit — query-to-prototype scoring",
+      "primary": false
+    },
+    {
+      "name": "state_rerank_macs",
+      "role": "audit — cosine scoring inside selected bucket",
+      "primary": false
+    },
+    {
+      "name": "build_macs",
+      "role": "audit — one-time prototype/index construction arithmetic",
+      "primary": false
+    },
+    {
+      "name": "candidate_executor_work",
+      "role": "audit — downstream execution work",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "prototype_selective actual target recall >= exhaustive_cosine actual target recall - 0.05 AND prototype_selective actual end-to-end success >= exhaustive_cosine actual end-to-end success - 0.05 AND shortlist size <= 4",
+      "licenses": "bounded support for learned continuous prototype routing as a selective state-retrieval boundary on this workload",
+      "does_not_license": "general learned ANN guarantees, hardware speedup, or broad C5"
+    },
+    {
+      "condition": "either actual target recall or actual end-to-end success is more than 0.05 below the exhaustive-cosine reference, or shortlist exceeds 4",
+      "licenses": "the registered prototype selective boundary does not preserve the exhaustive learned-cosine capability sufficiently",
+      "does_not_license": "that learned prototype routing is impossible"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "exhaustive cosine retrieval",
+    "prototype proposal retention",
+    "selective state retrieval",
+    "downstream capability",
+    "arithmetic cost"
+  ],
+  "h_levels": [
+    64,
+    128,
+    256
+  ],
+  "k_levels": [
+    4
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
+    "M=64 persistent state items",
+    "one-step causal write/read delay",
+    "A1 H-invariant query/state stream",
+    "dual linear 10->16 encoder",
+    "raw dot-product training objective",
+    "512 training epochs",
+    "one deterministic positive view",
+    "eight mean-gradient negatives",
+    "training codes CODEBOOK[16:64]",
+    "evaluation codes CODEBOOK[:16]",
+    "16 learned prototypes",
+    "capacity four per prototype bucket",
+    "one prototype selected per query",
+    "cosine reranking within the selected bucket",
+    "exact downstream candidate index",
+    "fixed 12-work-unit executor",
+    "same learned weights used by exhaustive and selective arms",
+    "prototype construction uses only training-code embeddings; evaluation states are only assigned to buckets at runtime build",
+    "no evaluation address or gold target enters prototype learning"
+  ],
+  "status": "pre-registered",
+  "layer": "L4"
+}
