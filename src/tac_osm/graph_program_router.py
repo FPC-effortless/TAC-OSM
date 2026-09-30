@@ -301,3 +301,26 @@ def semantic_match_rank(
     negative = next((i for i in order if i != selected), None)
     margin = None if negative is None else scores[selected] - scores[negative]
     return order.index(selected) + 1, margin
+
+
+
+def semantic_target_rank(
+    query: Query,
+    candidates: Sequence[Candidate],
+    target_index: int,
+) -> tuple[int, float | None]:
+    """Return the rank of the declared target under the exact semantic matcher."""
+    if not (0 <= target_index < len(candidates)):
+        raise IndexError("target_index outside candidate set")
+    q = tuple(int(x) for x in query.text.partition("\t")[0].split())
+    q_signed = tuple(1.0 if x else -1.0 for x in q)
+    scores = []
+    for candidate in candidates:
+        signature = semantic_signature(candidate.executable_edges)
+        signed = tuple(1.0 if x else -1.0 for x in signature)
+        scores.append(sum(a * b for a, b in zip(q_signed, signed)))
+    target_score = scores[target_index]
+    rank = 1 + sum(score > target_score for i, score in enumerate(scores) if i != target_index)
+    negatives = [score for i, score in enumerate(scores) if i != target_index]
+    margin = target_score - max(negatives) if negatives else None
+    return rank, margin
