@@ -33,11 +33,11 @@ def test_registered_negative_pool_sizes_are_supported():
 
 
 def test_mean_gradient_update_count_is_independent_of_pool_size():
-    expected = 2 * 4
+    expected = 2 * 24
     for count in (1, 4, 8, 16):
         model = _model(1)
         assert model.train_with_negative_coverage(
-            CODEBOOK[16:20],
+            CODEBOOK[16:40],
             negative_count=count,
             aggregation="mean",
         ) == expected
@@ -77,7 +77,7 @@ def test_train_and_eval_codebooks_are_disjoint():
 def test_negative_training_preserves_single_update_per_positive():
     model = _model(5)
     updates = model.train_with_negative_coverage(
-        CODEBOOK[16:20],
+        CODEBOOK[16:40],
         negative_count=16,
         aggregation="mean",
     )
