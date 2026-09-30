@@ -1,6 +1,6 @@
 # TACOSM-C5-SPARSE-FUNNEL-001
 
-Status: PREREGISTERED — corrected inductive protocol; full measurement triggered.
+Status: MEASURED — see TACOSM-C5-SPARSE-FUNNEL-001-RESULT.md.
 
 ## Purpose
 
