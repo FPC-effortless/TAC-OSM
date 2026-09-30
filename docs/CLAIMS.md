@@ -200,12 +200,20 @@ Tests: `tests/test_integrity.py`, including
 
 ---
 
+committed part and the weights it verifies are reproduced rather than stored.
+
+Tests: `tests/test_integrity.py`, including
+`test_the_zero_weight_router_scores_uniformly` (the invisibility) and
+`test_the_zero_weight_router_is_caught_before_evaluation` (the gate).
+
+---
+
 ## C5 — Execution cost scales with the relevant subset, not total history
 
 > `C_executed ≈ f(|R|)`, so executed computation depends on the relevant
 > subset rather than on the size of the history.
 
-**STATUS: UNTESTED**
+**STATUS: PARTIALLY SUPPORTED, bounded**
 
 **TYPE:** core claim · **LAYER:** L4 — see `docs/EVIDENCE_REGISTER.md`
 
@@ -303,7 +311,7 @@ merges the interfaces cannot distinguish an addressing failure from an
 execution failure, and that distinction is what makes a negative result
 interpretable.
 
-**The claim still stays UNTESTED, and the blocker is still the instrument.**
+At that stage the claim remained UNTESTED; the blocker was the instrument.
 A pre-registration is not a result, and nothing above moves C5. The successor
 is now **written but not run**: `scripts/measure_c5_casm_003.py` exists and is
 registered in `_WITH_CONTRACT` (`tests/test_contract.py`), its 30 torch-free
@@ -317,8 +325,23 @@ is a registered intention with a tested contract, recorded so that the
 difference between "the experiment is designed" and "the claim is supported"
 stays visible.
 
-This is the architecture's central efficiency claim and it is *not* supported
-by any measurement in the repository. The honest model of v0.1 cost is:
+The first valid capability-constrained retrieval measurement now exists: `TACOSM-C5-COVERAGE-FRONTIER-004`, GitHub Actions run 36790982734, artifact 11131529242. The state-distinct executor audit passed all 210 cells, pooled count conservation passed all 42 pooled cells, and every pooled cell contains 500 evaluations.
+
+A fixed product-key configuration, `(factor_size=16, factor_beam=6)`, is eligible at all three tested populations and has the lowest mean `states_scored_over_M` among fixed configurations satisfying the preregistered 0.80 capability-retention floor:
+
+| M | capability retention | states scored / M | selective E2E | exhaustive E2E |
+|---:|---:|---:|---:|---:|
+| 128 | 0.8785 | 0.1498 | 0.318 | 0.362 |
+| 256 | 0.9462 | 0.1514 | 0.176 | 0.186 |
+| 512 | 0.8519 | 0.1513 | 0.046 | 0.054 |
+
+Across the three levels, this fixed configuration reranks about 15.1% of the state population on average while retaining at least 85.2% of the exhaustive reference capability. Mean selective arithmetic is 1,138.08 MACs per query; exhaustive query costs are 2,208, 4,256 and 8,352 MACs at M=128, 256 and 512.
+
+This advances C5 from UNTESTED to PARTIALLY SUPPORTED, bounded, for the retrieval/computation boundary on this synthetic workload. The retained fraction is approximately constant as M grows, so this does not demonstrate sublinear asymptotic scaling. It also does not establish universal semantic retrieval or hardware wall-clock speedup. Absolute exhaustive capability falls from 0.362 at M=128 to 0.054 at M=512, so retention is preservation of the reference, not high absolute capability.
+
+The execution-side relation remains separately bounded by `TACOSM-C5-EXEC-001`, which measures controlled execution work against the retained relevant subset. The combined evidence is stronger than either boundary alone, but it still falls short of a generalized end-to-end C5 theorem.
+
+The honest model of v0.1 cost is:
 
 ```
 C_total(H) = O(H) routing + O(10) execution + O(verification)
@@ -338,6 +361,11 @@ confirmatory run is what would produce it. Until that run exists the claim
 must not appear in any report or figure as though measured, however clearly
 `|R|` is now defined.
 
+---
+
+## C6 — Large-H routing failure is a routing problem
+
+> Under a frozen router, task accuracy falls as history grows because
 ---
 
 ## C6 — Large-H routing failure is a routing problem
