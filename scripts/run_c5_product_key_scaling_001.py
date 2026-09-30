@@ -67,8 +67,9 @@ def make_teacher(seed: int) -> LearnedSemanticStateIndex:
 def build_scaled_task(seed: int, m: int, step: int) -> EndToEndTask:
     if m not in M_LEVELS:
         raise ValueError(f"M must be one of {M_LEVELS}")
-    rng = random.Random(seed * 1009 + m * 7919 + step * 104729 + 31)
-    target_value = tuple(rng.choice(TARGET_CODES))
+    target_rng = random.Random(seed * 1009 + m * 7919 + step * 104729 + 31)
+    state_rng = random.Random(seed * 3001 + m * 15485863 + 31)
+    target_value = tuple(target_rng.choice(TARGET_CODES))
     flip = (seed + step * 3 + m) % STATE_BITS
     bits = list(target_value)
     bits[flip] ^= 1
@@ -79,18 +80,15 @@ def build_scaled_task(seed: int, m: int, step: int) -> EndToEndTask:
         provenance="c5_product_key_scaling_query",
     )
 
-    remaining_eval = [code for code in TARGET_CODES if code != target_value]
-    values = [target_value]
-    values.extend(TRAIN_CODES)
-    values.extend(remaining_eval)
+    values = list(TARGET_CODES) + list(TRAIN_CODES)
     if len(values) != 64:
         raise AssertionError("base scaled state pool must contain exactly 64 items")
     if m > 64:
         decoys = list(DECOY_CODES)
-        rng.shuffle(decoys)
+        state_rng.shuffle(decoys)
         values.extend(decoys[: m - 64])
-    rng.shuffle(values)
-    addresses = [f"scale-state-{seed}-{m}-{step}-{i:04d}" for i in range(m)]
+    state_rng.shuffle(values)
+    addresses = [f"scale-state-{seed}-{m}-{i:04d}" for i in range(m)]
     updates = tuple(
         StateUpdate(key=addresses[i], value=tuple(values[i]), step=0, success_score=1.0)
         for i in range(m)
