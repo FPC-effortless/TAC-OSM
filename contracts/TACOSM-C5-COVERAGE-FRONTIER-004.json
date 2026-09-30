@@ -226,10 +226,57 @@
     "same state-distinct downstream executor",
     "same task seed stream across arms"
   ],
-  "status": "pre-registered",
+  "status": "measured",
   "layer": "L4",
   "predecessor_1": "TACOSM-C5-COVERAGE-FRONTIER-001 (VOID: non-discriminating downstream endpoint)",
   "predecessor_2": "TACOSM-C5-COVERAGE-FRONTIER-002 (VOID: inconsistent pooled eligibility aggregation)",
   "predecessor_3": "TACOSM-C5-COVERAGE-FRONTIER-003 (VOID: truncation of pooled success counts)",
-  "protocol_note": "The scientific search surface is unchanged. This registration changes only the aggregation implementation: success counts and evaluation counts are summed exactly across seed cells, and all capability/eligibility quantities derive from those exact totals."
+  "protocol_note": "The scientific search surface is unchanged. This registration changes only the aggregation implementation: success counts and evaluation counts are summed exactly across seed cells, and all capability/eligibility quantities derive from those exact totals.",
+  "result_note": {
+    "run_id": 36790982734,
+    "measurement_commit": "50d56eef583e9764bdb38423de2611f831949bf4",
+    "artifact_id": 11131529242,
+    "artifact_digest": "sha256:7f1b8c20aae757c9daf6a552fe559b0984ccb28ff92bf74ffd32f04bc6950af2",
+    "disposition": "MEASURED",
+    "validity": {
+      "preconditions": "passed",
+      "smoke": "passed",
+      "executor_distinctness": "passed for all 210 cells",
+      "pooled_count_conservation": "passed for all 42 pooled cells",
+      "evaluation_count_per_pooled_cell": 500
+    },
+    "primary_result": {
+      "global_configuration": {
+        "factor_size": 16,
+        "factor_beam": 6
+      },
+      "mean_states_scored_over_M": 0.15081770833333333,
+      "min_capability_retention": 0.8518518518518519,
+      "mean_total_macs": 1138.08
+    },
+    "per_m_frontier": {
+      "128": {
+        "factor_size": 16,
+        "factor_beam": 6,
+        "capability_retention": 0.8784530386740331,
+        "states_scored_over_M": 0.14976562499999999,
+        "total_macs_mean": 722.72
+      },
+      "256": {
+        "factor_size": 8,
+        "factor_beam": 2,
+        "capability_retention": 0.8709677419354839,
+        "states_scored_over_M": 0.06678906250000001,
+        "total_macs_mean": 561.568
+      },
+      "512": {
+        "factor_size": 32,
+        "factor_beam": 2,
+        "capability_retention": 0.8148148148148148,
+        "states_scored_over_M": 0.008589843750000001,
+        "total_macs_mean": 742.368
+      }
+    },
+    "interpretation": "Supports a bounded capability-constrained sparse retrieval frontier on the registered synthetic workload. The fixed 16/6 configuration preserves at least 85.2% of exhaustive reference capability across all tested M while reranking about 15.1% of the state population on average. This does not establish sublinear asymptotic scaling, universal semantic retrieval, or hardware speedup. Absolute exhaustive capability falls from 36.2% at M=128 to 5.4% at M=512, so retention is relative to a weak reference ceiling at large M."
+  }
 }
