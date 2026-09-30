@@ -145,6 +145,8 @@ their bounds attached.
 | The retrieval boundary is part of the runtime call graph and its one-time build cost is separately accounted | L2 | protocol | deterministic lookup as a sparsity control | exact equality index is not semantic retrieval | TACOSM-SELECTIVE-001 with static candidate-universe reuse | run the registered selective measurement |
 | Structured verifier and bounded executable repair can re-execute without hidden gold access | L2 | mechanism | verifier-guided repair loop shape | no capability claim transfers from this control | dedicated repair evaluation | capability evaluation not run |
 
+| A capability-constrained product-key retrieval frontier can preserve >=80% of exhaustive reference capability while reducing the fraction of state embeddings reranked | L3 | mechanism | — | sublinear asymptotic scaling, universal semantic retrieval, hardware speedup, and high absolute capability at large M are not inherited | `TACOSM-C5-COVERAGE-FRONTIER-004`, run 36790982734: fixed `(16,6)` retains 0.8785/0.9462/0.8519 at M=128/256/512 while scoring 0.1498/0.1514/0.1513 of M | the fixed fraction is approximately constant in M; absolute exhaustive capability falls to 0.054 at M=512 |
+| A state-distinct downstream task can make sparse retrieval capability auditable without conflating state identity with executable structure | L3 | protocol | — | the result does not transfer to arbitrary downstream tasks | frontier-004 executor-distinctness audit passed all 210 cells | bounded to the registered synthetic executor |
 ## Layer 4 — core program claims
 
 No single experiment establishes these. They are the claims the register
