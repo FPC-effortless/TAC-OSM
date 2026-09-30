@@ -103,6 +103,7 @@ def run_seed(seed: int, h_levels: tuple[int, ...], steps: int) -> list[dict]:
             teacher_temperature=0.10, student_temperature=0.10,
             beam_width=2, max_shortlist=8, seed=seed,
         ),
+        teacher_state_addresses=teacher_addresses,
     )
     distill = proposal.fit(training_queries(seed))
     funnel = SparseRetrievalFunnel(proposal)

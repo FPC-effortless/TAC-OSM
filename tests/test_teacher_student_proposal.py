@@ -40,10 +40,15 @@ def _proposal(seed=0):
         PrototypeStateIndexConfig(prototype_count=8, bucket_capacity=8, kmeans_iterations=2),
     )
     prototypes.build(state, CODEBOOK[16:32])
+    train_codes = set(CODEBOOK[16:32])
+    train_addresses = tuple(
+        update.key for update in task.state_updates if tuple(update.value) in train_codes
+    )
     proposal = CosineTeacherStudentProposal(
         teacher,
         prototypes,
         DistillationConfig(learning_rate=0.01, epochs=2, beam_width=2, max_shortlist=16, seed=seed),
+        teacher_state_addresses=train_addresses,
     )
     return proposal, task, state
 

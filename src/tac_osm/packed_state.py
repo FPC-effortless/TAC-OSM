@@ -49,6 +49,41 @@ class PackedStateLayout:
     def state_items(self) -> int:
         return len(self.addresses)
 
+    @classmethod
+    def from_blocks(
+        cls,
+        items: Sequence[tuple[str, Sequence[float]]],
+        blocks: Sequence[Sequence[str]],
+    ) -> "PackedStateLayout":
+        """Pack state rows in block order, preserving each block contiguously."""
+        item_map = {
+            str(address): tuple(float(x) for x in embedding)
+            for address, embedding in items
+        }
+        if not item_map:
+            raise ValueError("packed state requires at least one item")
+        ordered_addresses: list[str] = []
+        seen: set[str] = set()
+        for block in blocks:
+            for raw_address in block:
+                address = str(raw_address)
+                if address not in item_map:
+                    raise ValueError("block contains unknown state address")
+                if address in seen:
+                    raise ValueError("state address appears in multiple blocks")
+                seen.add(address)
+                ordered_addresses.append(address)
+        if seen != set(item_map):
+            raise ValueError("blocks must cover every state address exactly once")
+        ordered = [(address, item_map[address]) for address in ordered_addresses]
+        dimension = len(ordered[0][1])
+        if dimension < 1 or any(len(embedding) != dimension for _, embedding in ordered):
+            raise ValueError("packed embeddings must have uniform dimension")
+        addresses = tuple(address for address, _ in ordered)
+        embeddings = tuple(embedding for _, embedding in ordered)
+        address_to_row = tuple((address, row) for row, address in enumerate(addresses))
+        return cls(addresses=addresses, embeddings=embeddings, address_to_row=address_to_row)
+
     @property
     def embedding_dim(self) -> int:
         return len(self.embeddings[0])

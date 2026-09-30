@@ -32,7 +32,10 @@ class SparseRetrievalFunnel:
         self._packed: PackedStateLayout | None = None
 
     def build_packed_layout(self) -> PackedStateLayout:
-        self._packed = PackedStateLayout.from_items(self.proposal.prototypes.state_embeddings.items())
+        self._packed = PackedStateLayout.from_blocks(
+            self.proposal.prototypes.state_embeddings.items(),
+            tuple(self.proposal.prototypes.buckets[index] for index in sorted(self.proposal.prototypes.buckets)),
+        )
         return self._packed
 
     @property

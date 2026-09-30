@@ -23,7 +23,7 @@ reranks that shortlist.
 - 512 representation-training epochs.
 - 256 proposal-distillation epochs.
 - Eight mean-gradient negatives and one positive view.
-- 48 training codes and held-out query codes.
+- 48 training codes and held-out query codes. Distillation state supervision is restricted to the persistent states whose values are in the training-code set; evaluation states are excluded from the distillation target.
 - 16 continuous prototypes with capacity four.
 - K in 4, 8, 16, using prototype beams 1, 2, 4.
 - Fixed cosine reranking.
@@ -49,7 +49,8 @@ and minimizes:
 L_KD = D_KL(P_T || p_S).
 
 The teacher is fixed during proposal training. Gold target addresses and
-downstream outputs are not used by the distillation optimizer.
+downstream outputs are not used by the distillation optimizer. Runtime reranking
+then uses the full persistent-state pool.
 
 ## Funnel
 

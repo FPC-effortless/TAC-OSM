@@ -125,9 +125,21 @@ class CosineTeacherStudentProposal:
         teacher_index: LearnedSemanticStateIndex,
         prototype_index: LearnedPrototypeStateIndex,
         config: DistillationConfig | None = None,
+        teacher_state_addresses: Sequence[str] | None = None,
     ) -> None:
         self.teacher = teacher_index
         self.prototypes = prototype_index
+        available = set(self.prototypes.state_embeddings)
+        if teacher_state_addresses is None:
+            self._teacher_state_addresses = tuple(sorted(available))
+        else:
+            selected = tuple(sorted(str(address) for address in teacher_state_addresses))
+            unknown = set(selected) - available
+            if unknown:
+                raise ValueError("teacher_state_addresses contains unknown state addresses")
+            if not selected:
+                raise ValueError("teacher_state_addresses must contain at least one state address")
+            self._teacher_state_addresses = selected
         self.config = config or DistillationConfig(
             beam_width=2,
             max_shortlist=prototype_index.config.bucket_capacity * 2,
@@ -183,19 +195,30 @@ class CosineTeacherStudentProposal:
         normalized, _ = _normalize(raw)
         return tuple(normalized)
 
-    def _teacher_state_scores(self, query: Query) -> tuple[float, ...]:
+    def _teacher_state_scores(
+        self,
+        query: Query,
+        addresses: Sequence[str] | None = None,
+    ) -> tuple[float, ...]:
         q_raw = self.teacher.encode_query(query)
         q, _ = _normalize(q_raw)
-        addresses = tuple(sorted(self.prototypes.state_embeddings))
+        selected = self._teacher_state_addresses if addresses is None else tuple(addresses)
         return tuple(
             _cosine(q, self.prototypes.state_embeddings[address])
-            for address in addresses
+            for address in selected
         )
 
-    def teacher_distribution(self, query: Query) -> tuple[tuple[str, ...], tuple[float, ...]]:
-        addresses = tuple(sorted(self.prototypes.state_embeddings))
-        scores = self._teacher_state_scores(query)
-        return addresses, _softmax(scores, self.config.teacher_temperature)
+    def teacher_distribution(
+        self,
+        query: Query,
+        *,
+        addresses: Sequence[str] | None = None,
+    ) -> tuple[tuple[str, ...], tuple[float, ...]]:
+        selected = self._teacher_state_addresses if addresses is None else tuple(addresses)
+        if not selected:
+            raise ValueError("teacher distribution requires at least one address")
+        scores = self._teacher_state_scores(query, selected)
+        return tuple(selected), _softmax(scores, self.config.teacher_temperature)
 
     def _teacher_prototype_distribution(
         self,
@@ -304,7 +327,7 @@ class CosineTeacherStudentProposal:
             raise ValueError("positive address must be present in candidate pool")
         addresses = tuple(candidate_addresses)
         scores = dict(zip(
-            *self.teacher_distribution(query)
+            *self.teacher_distribution(query, addresses=addresses)
         ))
         positive_score = float(scores[positive_address])
         ordered = sorted(
