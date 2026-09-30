@@ -125,7 +125,7 @@ def add_metric(m, task, diag, decision, execution, expected, program, learned_up
     m["candidate_coverage"].append(diag.candidate_coverage)
     m["router_macs"].append(diag.total_macs)
     m["state_slots_inspected"].append(diag.state_inspected_slots)
-    m["state_pool_size"].append(diag.pool_size)
+    m["state_pool_size"].append(diag.state_pool_size)
     m["active_nodes"].append(program.active_count)
     m["active_edges"].append(len(program.true_edges))
     m["candidate_edges"].append(len(program.candidate_edges))
