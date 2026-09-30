@@ -203,8 +203,81 @@
     "same 14 factor-size/beam configurations",
     "new independent seeds 5-9 only"
   ],
-  "status": "pre-registered",
+  "status": "measured",
   "layer": "L3",
   "provenance_anchor": "TACOSM-C5-COVERAGE-FRONTIER-004, run 36790982734, accepted fixed configuration (16,6)",
-  "protocol_note": "No model, task, index, beam, factor size, evaluation count, or capability threshold changes. Only the seed set changes from {0,1,2,3,4} to the independent set {5,6,7,8,9}. Pre-measurement contract-schema correction: exactly one primary endpoint is required by the repository contract validator; capability_retention is the sole primary endpoint, with computation and configuration-match fields retained as secondary replication context."
+  "protocol_note": "No model, task, index, beam, factor size, evaluation count, or capability threshold changes. Only the seed set changes from {0,1,2,3,4} to the independent set {5,6,7,8,9}. Pre-measurement contract-schema correction: exactly one primary endpoint is required by the repository contract validator; capability_retention is the sole primary endpoint, with computation and configuration-match fields retained as secondary replication context.",
+  "result_note": {
+    "run_id": 36791657545,
+    "measurement_commit": "ca18cf86fab349c46701e133a00a22941362914e",
+    "artifact_id": 11131704780,
+    "artifact_digest": "sha256:94d95340730c4b3ad7606351c8b59a092b3c04026ef14e74da06a775061cbade",
+    "disposition": "REPLICATION FAILED",
+    "validity": {
+      "preconditions": "passed",
+      "smoke": "passed",
+      "executor_distinctness": "passed",
+      "pooled_count_conservation": "passed",
+      "pooled_cells": 42,
+      "evaluations_per_pooled_cell": 500
+    },
+    "primary_result": {
+      "expected_configuration": [
+        16,
+        6
+      ],
+      "retention_by_M": {
+        "128": 0.9651162790697675,
+        "256": 0.9326923076923077,
+        "512": 0.6666666666666666
+      },
+      "floor_pass_all_M": false,
+      "reproduced_global_configuration": false,
+      "observed_global_configuration": {
+        "factor_size": 32,
+        "factor_beam": 8
+      },
+      "observed_global_mean_states_scored_over_M": 0.07907161458333334,
+      "observed_global_min_capability_retention": 0.872093023255814
+    },
+    "exact_16_6_counts": {
+      "128": {
+        "exhaustive_success": 172,
+        "selective_success": 166,
+        "evaluation_count": 500
+      },
+      "256": {
+        "exhaustive_success": 104,
+        "selective_success": 97,
+        "evaluation_count": 500
+      },
+      "512": {
+        "exhaustive_success": 21,
+        "selective_success": 14,
+        "evaluation_count": 500
+      }
+    },
+    "ten_seed_combined_reference": {
+      "128": {
+        "exhaustive_success": 353,
+        "selective_success": 325,
+        "evaluation_count": 1000,
+        "retention": 0.9206798866855525
+      },
+      "256": {
+        "exhaustive_success": 197,
+        "selective_success": 185,
+        "evaluation_count": 1000,
+        "retention": 0.9390862944162437
+      },
+      "512": {
+        "exhaustive_success": 48,
+        "selective_success": 37,
+        "evaluation_count": 1000,
+        "retention": 0.7708333333333334
+      }
+    },
+    "interpretation": "The accepted (16,6) frontier from seeds 0-4 does not reproduce on independent seeds 5-9 under the preregistered 0.80 floor. The failure is concentrated at M=512. On seeds 5-9, (32,8) becomes the fixed global frontier and satisfies the floor at all M. This is evidence of configuration sensitivity, not evidence that product-key sparse retrieval is invalid.",
+    "non_promotion": "The original 004 result remains valid for its registered seed set. The replication does not upgrade C5 and does not invalidate the bounded 004 claim; it limits reproducibility of the specific (16,6) configuration."
+  }
 }
