@@ -63,3 +63,5 @@ Artifact: artifacts/TACOSM-C5-PRODUCT-KEY-SCALING-001.json
 Run trigger marker: fixed-K scaling harness fixed; final registered measurement trigger repeated.
 
 Final trigger marker: execute against the corrected persistent-pool harness.
+
+Final registered-run trigger: corrected exhaustive target accounting is in place.
