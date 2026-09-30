@@ -28,6 +28,7 @@ not replace individual preregistrations or frozen result artifacts.
 | C5-LATENT-WIDTH-001 | mean recall 0.402 -> 0.460 -> 0.436 for latent width 8/16/32 | Width 16 gives a modest local improvement, but width 32 does not extend it; the registered capacity test enters saturation. |
 | C5-COSINE-OBJECTIVE-001 | raw and cosine training both reach 0.700 mean recall under fixed cosine evaluation | Training objective geometry does not materially differ under the fixed cosine metric; the higher absolute recall versus raw-dot evaluation creates a separate inference-metric confound to isolate. |
 | C5-SIMILARITY-EVAL-001 | same raw-trained model: raw-dot recall 0.460, cosine recall 0.700, +0.240 absolute in every seed | Inference-time cosine geometry materially improves retrieval on the current learned representation; training-objective change is not required to obtain the gain. |
+| C5-COSINE-SELECTIVE-001 | exhaustive cosine target recall 0.700 vs selective 0.428; end-to-end 0.833 vs 0.707; state-score arithmetic reduced 93.75% | Learned binary proposal + K=4 cosine reranking fails capability parity; the discrete proposal loses too much semantic recall despite large arithmetic savings. |
 
 ## Architecture decomposition
 
@@ -124,19 +125,22 @@ Not established:
 
 ## Next measurement boundary
 
-C5-SIMILARITY-EVAL-001 resolves the inference confound: the same raw-trained
-width-16 model reaches 0.700 mean state Top-1 recall with cosine inference versus
-0.460 with raw-dot inference, a +0.240 absolute difference across every seed.
+C5-COSINE-SELECTIVE-001 localizes the current selective failure to the discrete
+proposal boundary. Continuous cosine retrieval reaches 0.700 target recall,
+while the learned 8-bit radius-2 proposal retains the true target only 0.504
+of the time and the final K=4 cosine-reranked selective target recall is 0.428.
 
-The next step should therefore reintroduce a **bounded learned retrieval
-boundary** using cosine similarity. A candidate design is a compact approximate
-index that proposes a small state shortlist, followed by cosine re-ranking over
-that shortlist. The primary endpoint must remain direct target-state retention;
-index build cost, query projection cost, shortlist size, and re-ranking work must
-all be separately accounted for.
+The selective path reduces state-score arithmetic by 93.75% (81.1% including
+query projection), but the capability gap is too large for promotion.
 
-Broad C5 remains ungraded until this selective path demonstrates both capability
-parity and an auditable total-cost advantage over exhaustive state retrieval.
+The next intervention should therefore replace sign-code bucketing with a
+learned continuous coarse-to-fine routing layer, such as learned centroids or
+a learned prototype codebook, while keeping the width-16 cosine representation
+fixed. The proposal must remain bounded, and its training must not consume
+evaluation addresses or gold targets.
+
+Binary indexing should remain an implementation option rather than the primary
+scientific bottleneck.
 
 ## Provenance
 
@@ -144,4 +148,4 @@ The following evidence remains frozen and independently reproducible:
 
 REP-001 through REP-009, SELECTIVE-001, C5-EXEC-001, C5-END-TO-END-001,
 C5-LEARNED-STATE-001, C5-LEARNED-STATE-DIAG-001, C5-LEARNED-STATE-BUDGET-001,
-C5-NEGATIVE-SWEEP-001, C5-POSITIVE-VIEWS-001, C5-LATENT-WIDTH-001, C5-COSINE-OBJECTIVE-001, and C5-SIMILARITY-EVAL-001.
+C5-NEGATIVE-SWEEP-001, C5-POSITIVE-VIEWS-001, C5-LATENT-WIDTH-001, C5-COSINE-OBJECTIVE-001, C5-SIMILARITY-EVAL-001, and C5-COSINE-SELECTIVE-001.
