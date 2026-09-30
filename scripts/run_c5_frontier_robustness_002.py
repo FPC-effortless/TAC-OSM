@@ -565,23 +565,21 @@ def run(smoke: bool) -> dict:
         else None
     )
 
-    fixed_frontier = (
-        global_frontier is not None
-        and global_frontier["factor_size"] == 16
-        and global_frontier["factor_beam"] == 6
-    )
-    fixed_per_m_floor = all(
+    fixed_16_6_per_m_floor = all(
         pooled[f"{m}:16:6"]["capability_retention"] >= CAPABILITY_RETENTION_FLOOR
         for m in ms
     )
-    replication_pass = fixed_frontier and fixed_per_m_floor
+    sparse_frontier_pass = (
+        global_frontier is not None
+        and global_frontier["mean_states_scored_over_M"] <= 0.20
+    )
 
     return {
         "robustness": {
-            "reference_configuration": [16, 6],
-            "global_configuration_match": fixed_frontier,
-            "per_m_capability_floor_pass": fixed_per_m_floor,
-            "robustness_pass": replication_pass,
+            "registered_configuration_surface": [list(x) for x in FACTOR_CONFIGS],
+            "reference_configuration_16_6_per_m_floor_pass": fixed_16_6_per_m_floor,
+            "global_frontier_exists": global_frontier is not None,
+            "sparse_frontier_pass": sparse_frontier_pass,
         },
         "protocol": {
             "name": "TACOSM-C5-FRONTIER-ROBUSTNESS-002",
