@@ -30,9 +30,12 @@ def _model(seed=0):
 
 
 def _loss(q, p, n, margin=0.25):
-    qn = q / math.sqrt(sum(x * x for x in q))
-    pn = p / math.sqrt(sum(x * x for x in p))
-    nn = n / math.sqrt(sum(x * x for x in n))
+    qn_d = math.sqrt(sum(x * x for x in q))
+    pn_d = math.sqrt(sum(x * x for x in p))
+    nn_d = math.sqrt(sum(x * x for x in n))
+    qn = [x / qn_d for x in q]
+    pn = [x / pn_d for x in p]
+    nn = [x / nn_d for x in n]
     diff = sum(a * b for a, b in zip(qn, pn)) - sum(
         a * b for a, b in zip(qn, nn)
     )
