@@ -1,6 +1,6 @@
 # TACOSM-C5-PRODUCT-KEY-001
 
-Status: PREREGISTERED — corrected 994-test head; full measurement triggered.
+Status: MEASURED — see TACOSM-C5-PRODUCT-KEY-001-RESULT.md.
 
 ## Purpose
 
