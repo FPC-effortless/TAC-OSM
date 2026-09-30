@@ -1,98 +1,115 @@
 # TAC-OSM successor evidence synthesis — 2026-09-30
 
-This document consolidates the completed successor-architecture diagnostics.
-It does not replace their individual preregistrations or results.
+This document consolidates completed successor-architecture diagnostics. It does
+not replace individual preregistrations or frozen result artifacts.
 
 ## Evidence ladder
 
-| Experiment | Question | Result | Interpretation boundary |
-|---|---|---|---|
-| REP-001 | Can the existing successor router select among collapsed candidate observations? | A=1.000; learned≈no-learning≈0.18; exact execution=1.000 | Selection failure; candidate representation was insufficient for the tested topology distinction. |
-| REP-002 | Does explicit candidate executable topology remove the information collision? | 8/8 distinct topology observations; analytic=1.000; learned=0.2219; no-learning=0.1266 | Explicit topology makes the tested relation identifiable and partially learnable. |
-| REP-003 | Can the learner use topology for a semantic dependency, rather than exact edge-mask equality? | learned=0.2008; no-learning=0.0977; analytic=1.000 | Some semantic structural signal is learned, but performance is seed-unstable. |
-| REP-004 | Is simple training-time exploration the main learner bottleneck? | learned exploration=0.2094 vs baseline=0.2008 pooled | The registered epsilon-greedy intervention is insufficient as the sole repair. |
-| REP-005 | Can the semantic requirement cross a causal persistent-state boundary? | learned=0.1633; no-learning=0.1023; analytic=1.000; reset=160/160 fail-closed | Persistent state is usable in the tested one-boundary synthetic loop; long-horizon memory is not established. |
-| REP-006 | Can a relevant state item be identified from semantic content when its address is opaque? | **pending** | Current registered state-addressing experiment; no result until the passing CI run completes. |
+| Experiment | Result | Interpretation boundary |
+|---|---|---|
+| REP-001 | Analytic=1.000; learned≈no-learning≈0.18; execution=1.000 | Candidate observations were insufficient for the tested topology distinction. |
+| REP-002 | 8/8 topology observations distinct; analytic=1.000; learned=0.2219; no-learning=0.1266 | Explicit executable topology makes the tested relation identifiable and partially learnable. |
+| REP-003 | learned=0.2008; no-learning=0.0977; analytic=1.000 | Some semantic structural signal is learned, but seed stability is limited. |
+| REP-004 | exploration=0.2094 vs baseline=0.2008 pooled | Simple epsilon-greedy exploration is not the main repair. |
+| REP-005 | learned=0.1633; no-learning=0.1023; analytic=1.000; reset=160/160 fail-closed | The tested semantic requirement survives one causal persistent-state boundary. |
+| REP-006 | learned state Top-1 pooled=0.7047 vs no-learning=0.1859; reset 5/5 fail-closed | Bounded learned semantic addressing over an 8-item opaque state pool. |
+| REP-007 | learned > no-learning at M=2,4,8,16,32, but recall falls from .992 to .334 | Learned state addressing survives bounded population scaling but is not scale-invariant. |
+| REP-008 | exact discrete state index recall=1.000 at M=2..32; query lookup is O(1) after build | Demonstrates an exact indexing ceiling/control, not learned semantic retrieval. |
+| REP-009 | noisy Hamming index recall=1.000; learned scorer retained in a bounded shortlist with 75.3–92.9% scorer arithmetic reduction | Hand-designed approximate indexing can create a runtime retention boundary. |
+| SELECTIVE-001 | indexed success=1.000 across H=8,64,256; router input bounded at K=2/4 | Routing-side retention boundary is supported in the registered runtime. |
+| C5-EXEC-001 | selective executor work=36 vs exhaustive 576/1152/2304 for H=64/128/256; capability=1.000 | Direct bounded evidence that execution work can depend on R rather than H in the synthetic executor. |
+| C5-END-TO-END-001 | capability=1.000 for both arms; selective work=48 vs 768/1536/3072 | Bounded end-to-end relation \x60persistent state -> relevant subset -> execute(R)\x60 with exact indexes. |
+| C5-LEARNED-STATE-001 | direct target-state retention=0.170 pooled; capability rule fails in 12/15 cells | Current learned binary state index does not replace the hand-designed state index. |
 
 ## Architecture decomposition
 
-The completed sequence now separates five distinct boundaries:
+The evidence now separates:
 
 1. candidate observability;
 2. semantic structural representability;
 3. training dynamics;
 4. temporal state transport;
-5. semantic state addressing.
+5. semantic state addressing;
+6. approximate indexing;
+7. selective routing;
+8. selective execution;
+9. combined end-to-end execution;
+10. learned-vs-index quantization as a new failure boundary.
 
-The executor is not the current limiting mechanism in these diagnostics:
-exact execution remained 1.000 in the registered learned/no-learning program
-selection arms where execution was evaluated.
+The important distinction is between **semantic representation quality** and
+**retrieval/indexing quality**. C5-LEARNED-STATE-001 failed at the latter under
+its registered binary quantization, while earlier REP-006 showed that learned
+continuous semantic addressing can work over a smaller pool.
 
 ## Current compute model
 
-### Candidate routing
+For the learned state index:
 
-REP-003/REP-005 use the graph-program router:
+- query encoder: 80 MACs/query;
+- state-index construction: 5,120 MACs/build for M=64;
+- amortized state-build arithmetic over a 100-query cell: 51.2 MACs/query;
+- binary lookup: 9 Hamming probes at radius 1 over an 8-bit code.
 
-`C_route = 8*5 + H*(16*7 + 8*16 + 8)` MACs.
+These quantities are not interchangeable with the synthetic executor work
+units.
 
-At H=8, this is 2,024 MACs per routing decision before nonlinear functions and
-software overhead. The term is linear in candidate population H.
+For the bounded C5 execution path:
 
-### State addressing
+\x60C_total ≈ C_address + C_candidate_retrieval + C_execute(R) + C_verify\x60.
 
-REP-006 uses the semantic state addressor:
+The current positive C5 measurements establish only the synthetic execution
+term and exact/selective addressing controls. They do not establish that a
+learned semantic addressor provides the needed sublinear boundary.
 
-`C_state_address = 8*5 + M*(8*5 + 8)` MACs.
+## Current failure boundary
 
-At M=8, this is 424 MACs before dictionary reads, state materialization and
-software overhead. The registered implementation scans the state pool, so
-this cost is linear in M.
+C5-LEARNED-STATE-001 is informative because the continuous learned model and
+the binary indexed model can now be separated experimentally.
 
-### Execution
+The confirmatory run used 48 training codes and 16 disjoint evaluation target
+codes. The learned state index produced only 0.06--0.26 target-address
+retention by seed. The same retention was observed across H because the
+amended task stream keeps query/state generation fixed across history levels.
 
-The exact synthetic executor operates on a fixed seven-edge substrate and the
-registered programs activate two edges. Its work is therefore effectively
-constant with respect to H in these experiments.
+The downstream aggregate capability rate rises with H in this synthetic task,
+despite stable state-retention rates. That indicates the executor's aggregate
+output can alias some wrong retrieved states. Consequently, **target-state
+retention is the load-bearing endpoint for this experiment**, not the raw
+downstream capability curve.
 
-## What the architecture does NOT yet demonstrate
+## C5 status
 
-- sublinear semantic state addressing;
-- sublinear candidate retrieval;
-- computation proportional to a measured relevant subset R;
-- capability/computation parity curves;
-- large-history scaling with semantic state addressing;
-- natural-language semantic program selection;
-- long-horizon persistent learning.
+Broad C5 remains **ungraded**.
 
-The repository's C5 claim remains UNTESTED.
+Supported bounded components:
+
+\x60persistent state -> selective retention -> execute(R)\x60.
+
+Not established:
+
+- learned semantic sublinear state addressing;
+- learned sublinear candidate retrieval;
+- capability/computation parity on realistic workloads;
+- hardware latency/FLOP superiority;
+- long-horizon persistent learning;
+- natural-language semantic program selection.
 
 ## Next measurement boundary
 
-REP-006 is the current gate. A passing result should be followed by a scaled
-state-pool experiment that varies M while holding semantic task difficulty
-fixed, followed by a selective-retrieval experiment that measures:
+The immediate diagnostic is to take the **same trained encoder** from
+C5-LEARNED-STATE-001 and compare:
 
-`C_address(M) + C_route(K) + C_execute(|R|) + C_verify`
+\x60continuous semantic top-1 over M=64\x60  
+versus  
+\x608-bit binary index + radius-1 probe + K=1\x60.
 
-against the conventional:
-
-`C_full(H)`.
-
-The capability parity condition must be declared before that confirmatory
-measurement. Until then, an O(H) scan with a small constant factor is still
-linear routing, not selective computation.
+This isolates whether the loss occurs in the learned representation itself or
+at the continuous-to-discrete retrieval boundary. The result should precede
+any learned candidate-index experiment.
 
 ## Provenance
 
-Completed result records:
+The following evidence remains frozen and independently reproducible:
 
-- TACOSM-SUCCESSOR-REP-001
-- TACOSM-IDENTIFIABILITY-REP-002
-- TACOSM-SEMANTIC-PROGRAM-REP-003
-- TACOSM-LEARN-REP-004
-- TACOSM-PERSISTENT-SEMANTIC-REP-005
-
-Current registered experiment:
-
-- TACOSM-STATE-REP-006
+REP-001 through REP-009, SELECTIVE-001, C5-EXEC-001, C5-END-TO-END-001, and
+C5-LEARNED-STATE-001.
