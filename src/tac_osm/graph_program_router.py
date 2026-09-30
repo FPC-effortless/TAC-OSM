@@ -254,15 +254,22 @@ class GraphProgramRouter:
             x: Sequence[float],
             hidden: Sequence[float],
             grad_latent: Sequence[float],
-            step: float,
+            direction: float,
         ) -> None:
-            # grad_latent is gradient of +score_pos or -score_neg.
+            # grad_latent is the derivative of score_pos - score_neg with
+            # respect to this candidate latent, including the sign for the
+            # positive/negative branch.
+            old_w2 = [row[:] for row in self.w2]
             grad_hidden = [0.0] * self.config.hidden_dim
             for r in range(self.config.latent_dim):
                 for h in range(self.config.hidden_dim):
-                    self.w2[r][h] += lr * step * grad_latent[r] * hidden[h]
-                    grad_hidden[h] += self.w2[r][h] * grad_latent[r] * step
-                self.b2[r] += lr * step * grad_latent[r]
+                    grad_hidden[h] += (
+                        old_w2[r][h] * grad_latent[r] * direction
+                    )
+            for r in range(self.config.latent_dim):
+                for h in range(self.config.hidden_dim):
+                    self.w2[r][h] += lr * direction * grad_latent[r] * hidden[h]
+                self.b2[r] += lr * direction * grad_latent[r]
             for h in range(self.config.hidden_dim):
                 grad_pre = grad_hidden[h] * (1.0 - hidden[h] * hidden[h])
                 for j in range(self.config.edge_dim):
