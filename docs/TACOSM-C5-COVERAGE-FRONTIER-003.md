@@ -49,3 +49,6 @@ The runner and contract are machine-readable and the full run is gated by `[run-
 This experiment can establish a capability-constrained frontier on the registered synthetic workload. It cannot establish universal optimality, universal semantic addressing, universal sublinear retrieval, or hardware wall-clock speedup.
 
 The exhaustive reference is itself reported because its absolute capability can degrade as M increases. A high retention ratio therefore means preservation of the reference, not high absolute task capability.
+
+
+Registered full-measurement trigger: `[run-c5-frontier3-full]`.
