@@ -1,6 +1,6 @@
 # TACOSM-C5-PRODUCT-KEY-SCALING-001
 
-Status: PREREGISTERED — implementation added; result pending.
+Status: PREREGISTERED — synchronized 999-test head; full scaling measurement triggered.
 
 ## Purpose
 
