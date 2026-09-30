@@ -17,8 +17,13 @@ from tac_osm.graph_program_router import (
     GraphProgramRouterConfig,
     semantic_match_rank,
 )
-from tac_osm.semantic_topology import build_semantic_task
+from tac_osm.semantic_topology import (
+    build_semantic_task,
+    program_for_candidate,
+    semantic_signature,
+)
 from tac_osm.state import PersistentStore
+from tac_osm.topology_tasks import TOPOLOGY_EDGE_UNIVERSE
 
 
 SEEDS = (0, 1, 2, 3, 4)
@@ -31,6 +36,19 @@ def _task_seed(seed: int, step: int, heldout: bool) -> int:
     if heldout:
         return seed * 2000003 + 200000 + step * 7919 + 53
     return seed * 1000003 + step * 7919 + 41
+
+
+def _empty_metrics() -> dict:
+    return {
+        "episodes": 0,
+        "top1": [],
+        "rank": [],
+        "margin": [],
+        "exact_execution": 0,
+        "active_edges": [],
+        "candidate_edges": [],
+        "route_macs": [],
+    }
 
 
 def _summarise(metrics: dict, updates: int) -> dict:
@@ -52,38 +70,24 @@ def _summarise(metrics: dict, updates: int) -> dict:
     }
 
 
-def _empty_metrics() -> dict:
-    return {
-        "episodes": 0,
-        "top1": [],
-        "rank": [],
-        "margin": [],
-        "exact_execution": 0,
-        "active_edges": [],
-        "candidate_edges": [],
-        "route_macs": [],
-    }
-
-
-def _evaluate(task, decision, router, executor, state, metrics):
+def _evaluate_selected(task, selected_index, router, executor, metrics):
     diag = router.diagnostics_with_target(
         task.public(), task.candidates, task.target_action
     )
-    selected = task.candidates[decision.selected]
+    selected = task.candidates[selected_index]
     execution = executor.execute_with_work(
         Structure(
             key=selected.key,
-            spec=__import__("tac_osm.semantic_topology", fromlist=["program_for_candidate"])
-            .program_for_candidate(selected, input_values=task.input_values),
+            spec=program_for_candidate(selected, input_values=task.input_values),
         ),
         [],
     )
     expected = tuple(
         edge in selected.executable_edges
-        for edge in __import__("tac_osm.topology_tasks", fromlist=["TOPOLOGY_EDGE_UNIVERSE"])
-        .TOPOLOGY_EDGE_UNIVERSE
+        for edge in TOPOLOGY_EDGE_UNIVERSE
     )
     exact = tuple(bool(g) for g in execution.result.gates) == expected
+
     metrics["episodes"] += 1
     metrics["top1"].append(int(diag.selected_rank == 1))
     metrics["rank"].append(diag.selected_rank)
@@ -133,16 +137,16 @@ def run_learned(seed: int, learned: bool) -> dict:
             step=TRAIN_EPISODES + step,
         )
         decision = router.route(task.public(), state, task.candidates)
-        _evaluate(task, decision, router, executor, state, metrics)
+        _evaluate_selected(task, decision.selected, router, executor, metrics)
 
     return _summarise(metrics, router.updates)
 
 
 def run_analytic(seed: int) -> dict:
-    metrics = _empty_metrics()
-    router = GraphProgramRouter()
-    state = PersistentStore(StateConfig(seed=seed))
-    executor = ExplicitGraphExecutor()
+    top1 = []
+    ranks = []
+    margins = []
+    exact = 0
     for step in range(HELDOUT_EPISODES):
         task = build_semantic_task(
             _task_seed(seed, step, heldout=True),
@@ -150,43 +154,51 @@ def run_analytic(seed: int) -> dict:
             step=TRAIN_EPISODES + step,
         )
         rank, margin = semantic_match_rank(task.public(), task.candidates)
-        decision = type("Decision", (), {"selected": task.target_action})()
-        _evaluate(task, decision, router, executor, state, metrics)
-        metrics["top1"][-1] = int(rank == 1)
-        metrics["rank"][-1] = rank
-        metrics["margin"][-1] = margin
-        # The analytic witness is not represented by GraphProgramRouter's
-        # random score path; its cost is structural matching, so leave route
-        # MACs unset rather than pretending it used the learned model.
-        metrics["route_macs"][-1] = None
-    valid = [x for x in metrics["route_macs"] if x is not None]
-    result = _summarise(metrics, 0)
-    result["route_macs_mean"] = None
-    return result
+        top1.append(int(rank == 1))
+        ranks.append(rank)
+        margins.append(margin)
+
+        candidate = task.candidates[task.target_action]
+        execution = ExplicitGraphExecutor().execute_with_work(
+            Structure(
+                key=candidate.key,
+                spec=program_for_candidate(
+                    candidate, input_values=task.input_values
+                ),
+            ),
+            [],
+        )
+        expected = tuple(
+            edge in candidate.executable_edges
+            for edge in TOPOLOGY_EDGE_UNIVERSE
+        )
+        exact += int(
+            tuple(bool(g) for g in execution.result.gates) == expected
+        )
+
+    return {
+        "episodes": HELDOUT_EPISODES,
+        "top1_recall": statistics.fmean(top1),
+        "mean_target_rank": statistics.fmean(ranks),
+        "hard_negative_margin_mean": statistics.fmean(margins),
+        "exact_edge_execution_rate": exact / HELDOUT_EPISODES,
+        "route_macs_mean": None,
+        "updates": 0,
+    }
 
 
 def collision_probe(seed: int) -> dict:
     task = build_semantic_task(seed, n_candidates=N_CANDIDATES)
+    target_signature = semantic_signature(task.target_edges)
     return {
         "candidate_count": len(task.candidates),
-        "target_semantic_signature": [
-            int(x)
-            for x in __import__("tac_osm.semantic_topology", fromlist=["semantic_signature"])
-            .semantic_signature(task.target_edges)
-        ],
+        "target_semantic_signature": list(target_signature),
         "target_signature_count_in_pool": sum(
-            1
+            semantic_signature(c.executable_edges) == target_signature
             for c in task.candidates
-            if __import__("tac_osm.semantic_topology", fromlist=["semantic_signature"])
-            .semantic_signature(c.executable_edges)
-            == __import__("tac_osm.semantic_topology", fromlist=["semantic_signature"])
-            .semantic_signature(task.target_edges)
         ),
         "unique_raw_topologies": len(
-            {
-                tuple(c.executable_edges)
-                for c in task.candidates
-            }
+            {tuple(c.executable_edges) for c in task.candidates}
         ),
     }
 
@@ -212,7 +224,7 @@ def main() -> None:
             "heldout_episodes_per_seed": HELDOUT_EPISODES,
             "candidates": N_CANDIDATES,
             "query_width": 5,
-            "edge_width": 7,
+            "edge_width": len(TOPOLOGY_EDGE_UNIVERSE),
             "hidden_dim": 16,
             "latent_dim": 8,
             "learning_rate": 0.01,
@@ -225,6 +237,7 @@ def main() -> None:
         "condition_C_no_learning": {},
         "condition_D_oracle": {},
     }
+
     for seed in SEEDS:
         result["condition_A_analytic"][str(seed)] = run_analytic(seed)
         result["condition_B_learned"][str(seed)] = run_learned(seed, True)
