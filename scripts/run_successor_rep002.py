@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from tac_osm import Structure
 from tac_osm.energy_router import EnergyRouterConfig, RepresentationEnergyRouter
+from tac_osm.router import features
 from tac_osm.explicit_executor import ExplicitGraphExecutor
 from tac_osm.state import PersistentStore, StateConfig
 from tac_osm.topology_router import (
@@ -146,11 +147,15 @@ def collision_probe(seed: int):
     legacy = RepresentationEnergyRouter(
         EnergyRouterConfig(
             seed=seed,
-            dim=INPUT_DIM,
-            max_state_slots=0,
+            input_dim=8,
+            latent_dim=1,
         )
     )
-    legacy_scores = legacy.score(task.public(), state, task.candidates)
+    read = state.read(task.public())
+    legacy_rows = [
+        tuple(features(task.public(), c.descriptor, read, 8, 0))
+        for c in task.candidates
+    ]
     explicit = ExplicitProgramEnergyRouter()
     observations = [
         explicit.candidate_observation(candidate)
@@ -158,8 +163,8 @@ def collision_probe(seed: int):
     ]
     return {
         "candidate_count": len(task.candidates),
-        "legacy_unique_candidate_scores": len(set(legacy_scores)),
-        "legacy_all_scores_equal": len(set(legacy_scores)) == 1,
+        "legacy_unique_candidate_observations": len(set(legacy_rows)),
+        "legacy_all_observations_equal": len(set(legacy_rows)) == 1,
         "explicit_unique_topology_observations": len(set(observations)),
     }
 
