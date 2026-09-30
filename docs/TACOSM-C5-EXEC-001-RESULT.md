@@ -38,7 +38,7 @@ Each candidate program has exactly 9 registered execution work units.
 |---:|---:|---:|---:|---:|---:|---:|
 | 64 | 64 | 4 | 576 | 36 | 93.75% | 0.0625 |
 | 128 | 128 | 4 | 1,152 | 36 | 96.875% | 0.03125 |
-| 256 | 256 | 4 | 2,304 | 36 | 98.4375% | 98.4375% |
+| 256 | 256 | 4 | 2,304 | 36 | 98.4375% | 0.015625 |
 
 The final R/H value is a ratio; the execution-work reduction is 98.4375%.
 
