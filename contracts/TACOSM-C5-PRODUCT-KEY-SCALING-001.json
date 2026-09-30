@@ -1,0 +1,57 @@
+{
+  "experiment_id": "TACOSM-C5-PRODUCT-KEY-SCALING-001",
+  "title": "Fixed-K product-key state-population scaling",
+  "question": "Does a fixed K=32 product-key retrieval budget preserve target-state retrieval capability as persistent-state population M increases from 64 to 512?",
+  "hypothesis": "If product-key addressing provides genuinely sparse state computation, a fixed K=32 budget should retain substantial target recall while exhaustive state-scoring cost grows with M.",
+  "arms": [
+    {"name": "exhaustive_cosine", "intervention": "score all M persistent states with the fixed width-16 teacher", "acts_on": "reference state retrieval", "knob": "search", "value": "all M"},
+    {"name": "product_key_fixed_k32", "intervention": "same training-fitted product-key codebooks and factor beam 6 with fixed K=32", "acts_on": "selective state retrieval", "knob": "K", "value": "32"} 
+  ],
+  "endpoints": [
+    {"name": "actual_target_recall", "role": "primary downstream retrieval endpoint", "primary": true},
+    {"name": "proposal_target_retention", "role": "secondary coarse-boundary endpoint", "primary": false},
+    {"name": "actual_end_to_end_success", "role": "secondary capability endpoint", "primary": false},
+    {"name": "state_candidates_scored", "role": "audit", "primary": false},
+    {"name": "K_fraction_of_state", "role": "scaling audit", "primary": false},
+    {"name": "total_macs", "role": "audit", "primary": false}
+  ],
+  "decision_rule": [
+    {
+      "condition": "report target recall and end-to-end success against exhaustive references at every M level, together with K/M, states scored/M, and arithmetic reduction",
+      "licenses": "diagnostic evidence about fixed-budget product-key scaling on this synthetic workload",
+      "does_not_license": "a universal sublinear-compute law, ANN guarantee, or hardware speedup"
+    },
+    {
+      "condition": "target recall remains near the fixed exhaustive reference while K/M and scored-state/M fall materially with increasing M",
+      "licenses": "bounded support for fixed-budget product-key scaling on this workload",
+      "does_not_license": "broad C5 or general semantic memory claims"
+    }
+  ],
+  "interpretation_order": ["temporal availability", "exhaustive cosine", "proposal retention", "actual target recall", "downstream capability", "K over M", "states scored over M", "arithmetic"],
+  "h_levels": [256],
+  "steps": 512,
+  "k_levels": [32],
+  "seeds": [0, 1, 2, 3, 4],
+  "eval_steps": 100,
+  "M_levels": [64, 128, 256, 512],
+  "K": 32,
+  "factor_size": 8,
+  "factor_beam": 6,
+  "kmeans_iterations": 8,
+  "latent_dim": 16,
+  "teacher_epochs": 512,
+  "negative_count": 8,
+  "held_constant": [
+    "same width-16 raw-trained teacher",
+    "same 48 training codes versus 16 held-out target codes",
+    "training-only product-key codebook fitting",
+    "same factor size and factor beam",
+    "same fixed H=256 candidate population",
+    "same one-bit noisy query construction",
+    "same fixed downstream executor",
+    "state embeddings are precomputed for exhaustive and selective reference fairness",
+    "only persistent-state population M changes"
+  ],
+  "status": "pre-registered",
+  "layer": "L4"
+}
