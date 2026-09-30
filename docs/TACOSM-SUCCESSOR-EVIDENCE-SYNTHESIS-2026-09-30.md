@@ -26,6 +26,7 @@ not replace individual preregistrations or frozen result artifacts.
 | C5-NEGATIVE-SWEEP-001 | mean recall 0.272 -> 0.392 -> 0.402 -> 0.402 for 1/4/8/16 negatives | Mean-negative coverage has a strong early gain, then plateaus after eight; 16 negatives doubles training negative evaluations without improving mean Top-1. |
 | C5-POSITIVE-VIEWS-001 | mean recall 0.402 -> 0.238 -> 0.286 for 1/2/4 views | Multi-view positive averaging reduces retrieval in every seed at 2 and 4 views; the current intervention is not a useful repair. |
 | C5-LATENT-WIDTH-001 | mean recall 0.402 -> 0.460 -> 0.436 for latent width 8/16/32 | Width 16 gives a modest local improvement, but width 32 does not extend it; the registered capacity test enters saturation. |
+| C5-COSINE-OBJECTIVE-001 | raw and cosine training both reach 0.700 mean recall under fixed cosine evaluation | Training objective geometry does not materially differ under the fixed cosine metric; the higher absolute recall versus raw-dot evaluation creates a separate inference-metric confound to isolate. |
 
 ## Architecture decomposition
 
@@ -122,18 +123,19 @@ Not established:
 
 ## Next measurement boundary
 
-The positive-view and latent-width interventions do not remove the retrieval
-boundary. Positive-view averaging is harmful, while width scaling gives a small
-local peak at 16 dimensions followed by a decline at 32.
+The raw-vs-cosine training-objective experiment is a null under fixed cosine
+evaluation: both arms reach 0.700 mean Top-1 recall with mean target rank 1.3.
 
-The next intervention should therefore target the **similarity/objective
-geometry** rather than more scalar capacity. A controlled experiment should
-keep latent width 16, one positive view, and eight mean negatives fixed while
-varying normalization and/or margin/temperature. Continuous target-state
-retrieval remains the primary endpoint.
+However, this absolute level is substantially above the earlier raw-dot
+evaluation results. That comparison means inference similarity geometry is now a
+distinct confound.
 
-Binary indexing should remain excluded until continuous retrieval reaches a
-materially stronger level.
+The next controlled measurement should keep the **same trained raw-objective
+encoder** fixed and evaluate it with raw dot product versus cosine similarity.
+This isolates inference metric geometry from training-objective geometry.
+
+Binary indexing should remain excluded until the continuous retrieval boundary is
+fully understood.
 
 ## Provenance
 
@@ -141,4 +143,4 @@ The following evidence remains frozen and independently reproducible:
 
 REP-001 through REP-009, SELECTIVE-001, C5-EXEC-001, C5-END-TO-END-001,
 C5-LEARNED-STATE-001, C5-LEARNED-STATE-DIAG-001, C5-LEARNED-STATE-BUDGET-001,
-C5-NEGATIVE-SWEEP-001, C5-POSITIVE-VIEWS-001, and C5-LATENT-WIDTH-001.
+C5-NEGATIVE-SWEEP-001, C5-POSITIVE-VIEWS-001, C5-LATENT-WIDTH-001, and C5-COSINE-OBJECTIVE-001.
