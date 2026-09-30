@@ -49,4 +49,4 @@ The protocol is machine-readable in `contracts/TACOSM-C5-COVERAGE-FRONTIER-001.j
 
 ## Execution trigger
 
-This commit carries the CI marker `[run-c5-frontier-full]` only to start the registered measurement; the protocol above is unchanged.
+This commit carries the CI marker `[run-c5-frontier-full]` to start the registered measurement after the contract-schema and runner-validation fixes above. The registered scientific protocol is unchanged.
