@@ -3,52 +3,46 @@
   "title": "Coverage-constrained product-key granularity frontier",
   "question": "For the registered persistent-state retrieval workload, what is the minimum fraction of states reranked that preserves a preregistered capability-retention floor?",
   "hypothesis": "Increasing factor granularity reduces candidate occupancy, while increasing factor beam recovers coverage. The joint factor-size/beam surface should expose a measurable capability-compute frontier rather than a single universally optimal setting.",
-  "arms": {
-    "factor_sizes": [8, 16, 32],
-    "factor_beams": [2, 4, 6, 8, 12]
-  },
-  "levels": {
-    "H": [256],
-    "M": [128, 256, 512],
-    "K": [32]
-  },
-  "seeds": [0, 1, 2, 3, 4],
-  "eval_steps": 100,
-  "teacher_epochs": 512,
-  "negative_count": 8,
-  "latent_dim": 16,
-  "factor_kmeans_iterations": 8,
-  "capability_retention_floor": 0.80,
-  "capability_metric": "selective_end_to_end_success / exhaustive_end_to_end_success",
-  "primary_endpoints": [
-    "capability_retention",
-    "states_scored_over_M"
+  "arms": [
+    {"name":"factor_size_8_beam_2","intervention":"product-key factor size 8 with factor beam 2","acts_on":"factor_size_and_factor_beam","knob":"factor_size=8, factor_beam=2","value":"8,2"},
+    {"name":"factor_size_8_beam_4","intervention":"product-key factor size 8 with factor beam 4","acts_on":"factor_size_and_factor_beam","knob":"factor_size=8, factor_beam=4","value":"8,4"},
+    {"name":"factor_size_8_beam_6","intervention":"product-key factor size 8 with factor beam 6","acts_on":"factor_size_and_factor_beam","knob":"factor_size=8, factor_beam=6","value":"8,6"},
+    {"name":"factor_size_8_beam_8","intervention":"product-key factor size 8 with factor beam 8","acts_on":"factor_size_and_factor_beam","knob":"factor_size=8, factor_beam=8","value":"8,8"},
+    {"name":"factor_size_8_beam_12","intervention":"product-key factor size 8 with factor beam 12","acts_on":"factor_size_and_factor_beam","knob":"factor_size=8, factor_beam=12","value":"8,12"},
+    {"name":"factor_size_16_beam_2","intervention":"product-key factor size 16 with factor beam 2","acts_on":"factor_size_and_factor_beam","knob":"factor_size=16, factor_beam=2","value":"16,2"},
+    {"name":"factor_size_16_beam_4","intervention":"product-key factor size 16 with factor beam 4","acts_on":"factor_size_and_factor_beam","knob":"factor_size=16, factor_beam=4","value":"16,4"},
+    {"name":"factor_size_16_beam_6","intervention":"product-key factor size 16 with factor beam 6","acts_on":"factor_size_and_factor_beam","knob":"factor_size=16, factor_beam=6","value":"16,6"},
+    {"name":"factor_size_16_beam_8","intervention":"product-key factor size 16 with factor beam 8","acts_on":"factor_size_and_factor_beam","knob":"factor_size=16, factor_beam=8","value":"16,8"},
+    {"name":"factor_size_16_beam_12","intervention":"product-key factor size 16 with factor beam 12","acts_on":"factor_size_and_factor_beam","knob":"factor_size=16, factor_beam=12","value":"16,12"},
+    {"name":"factor_size_32_beam_2","intervention":"product-key factor size 32 with factor beam 2","acts_on":"factor_size_and_factor_beam","knob":"factor_size=32, factor_beam=2","value":"32,2"},
+    {"name":"factor_size_32_beam_4","intervention":"product-key factor size 32 with factor beam 4","acts_on":"factor_size_and_factor_beam","knob":"factor_size=32, factor_beam=4","value":"32,4"},
+    {"name":"factor_size_32_beam_6","intervention":"product-key factor size 32 with factor beam 6","acts_on":"factor_size_and_factor_beam","knob":"factor_size=32, factor_beam=6","value":"32,6"},
+    {"name":"factor_size_32_beam_8","intervention":"product-key factor size 32 with factor beam 8","acts_on":"factor_size_and_factor_beam","knob":"factor_size=32, factor_beam=8","value":"32,8"},
+    {"name":"factor_size_32_beam_12","intervention":"product-key factor size 32 with factor beam 12","acts_on":"factor_size_and_factor_beam","knob":"factor_size=32, factor_beam=12","value":"32,12"}
   ],
-  "secondary_endpoints": [
-    "exhaustive_target_recall",
-    "proposal_target_retention",
-    "selective_target_recall",
-    "exhaustive_end_to_end_success",
-    "selective_end_to_end_success",
-    "shortlist_size_mean",
-    "total_macs_mean",
-    "arithmetic_reduction",
-    "nonempty_cells",
-    "max_cell_size"
+  "endpoints": [
+    {"name":"capability_retention","role":"primary capability-constrained frontier endpoint","primary":true},
+    {"name":"states_scored_over_M","role":"primary computation-scaling endpoint","primary":false},
+    {"name":"exhaustive_target_recall","role":"reference retrieval endpoint","primary":false},
+    {"name":"proposal_target_retention","role":"coarse coverage diagnostic","primary":false},
+    {"name":"selective_target_recall","role":"selective retrieval endpoint","primary":false},
+    {"name":"exhaustive_end_to_end_success","role":"reference capability endpoint","primary":false},
+    {"name":"selective_end_to_end_success","role":"selective capability endpoint","primary":false},
+    {"name":"total_macs","role":"arithmetic audit","primary":false}
   ],
   "decision_rule": [
     {
-      "condition": "At each M, identify configurations with capability_retention >= 0.80 and report the minimum states_scored_over_M among them.",
-      "licenses": "a registered capability-constrained frontier on the measured workload",
-      "does_not_license": "a universal optimum, universal sublinear retrieval, or hardware wall-clock speedup"
+      "condition":"At each M, identify configurations with capability_retention >= 0.80 and report the minimum states_scored_over_M among them.",
+      "licenses":"a registered capability-constrained frontier on the measured workload",
+      "does_not_license":"a universal optimum, universal sublinear retrieval, or hardware wall-clock speedup"
     },
     {
-      "condition": "A configuration remains above the retention floor while states_scored_over_M decreases as M grows.",
-      "licenses": "evidence that the product-key mechanism can preserve a fixed capability floor with a bounded or slowly growing executed fraction on this workload",
-      "does_not_license": "general semantic addressing or a completed C5 proof"
+      "condition":"A configuration remains above the 0.80 retention floor while states_scored_over_M decreases as M grows.",
+      "licenses":"evidence that the product-key mechanism can preserve a fixed capability floor with a bounded or slowly growing executed fraction on this workload",
+      "does_not_license":"general semantic addressing or a completed C5 proof"
     }
   ],
-  "interpretation_order": [
+  "interpretation_order":[
     "temporal availability",
     "exhaustive cosine",
     "proposal retention",
@@ -58,7 +52,13 @@
     "states scored over M",
     "arithmetic"
   ],
-  "held_constant": [
+  "h_levels":[256],
+  "m_levels":[128,256,512],
+  "k_levels":[32],
+  "seeds":[0,1,2,3,4],
+  "steps":512,
+  "eval_steps":100,
+  "held_constant":[
     "same width-16 raw-trained cosine teacher",
     "same 48 training codes versus 16 held-out target codes",
     "same one-bit noisy query construction",
@@ -71,6 +71,6 @@
     "same downstream executor",
     "same task seed stream across arms"
   ],
-  "status": "preregistered",
-  "layer": "L4"
+  "status":"pre-registered",
+  "layer":"L4"
 }
