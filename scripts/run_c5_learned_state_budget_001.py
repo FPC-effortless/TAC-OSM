@@ -161,7 +161,7 @@ def main() -> None:
     contract.require_seeds(SEEDS)
     contract.require_steps(512)
     contract.require_eval_steps(EVAL_STEPS)
-    contract.require_k_levels([0])
+    contract.require_k_levels([])
     contract.require_arms(
         ["no_learning_continuous", "learned_32", "learned_128", "learned_512"]
     )
