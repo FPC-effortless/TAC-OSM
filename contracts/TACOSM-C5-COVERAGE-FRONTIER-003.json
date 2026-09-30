@@ -226,9 +226,24 @@
     "same state-distinct downstream executor",
     "same task seed stream across arms"
   ],
-  "status": "pre-registered",
+  "status": "void",
   "layer": "L4",
   "predecessor_1": "TACOSM-C5-COVERAGE-FRONTIER-001 (VOID: non-discriminating downstream endpoint)",
   "predecessor_2": "TACOSM-C5-COVERAGE-FRONTIER-002 (VOID: inconsistent pooled eligibility aggregation)",
-  "protocol_note": "This registration preserves the scientific search surface. It corrects only the aggregation implementation: pooled capability is derived from aggregate success counts, then the same scalar is used for eligibility and frontier selection. The prior voided experiments are not rewritten."
+  "protocol_note": "This registration preserves the scientific search surface. It corrects only the aggregation implementation: pooled capability is derived from aggregate success counts, then the same scalar is used for eligibility and frontier selection. The prior voided experiments are not rewritten.",
+  "result_note": {
+    "run_id": 36790451982,
+    "measurement_commit": "e92dd4ea224d1486ad7f49faffb6891a94b3de48",
+    "artifact_id": 11131032708,
+    "artifact_digest": "sha256:a5021b5d55830ab1679a8490f6b4bd91fa80cec1930635aa8d2a00cec323fa0b",
+    "disposition": "VOID",
+    "reason": "Pooled success counts were first averaged across the five seed cells and then cast to int before computing capability retention. For example, 5.4 exhaustive successes and 4.2 selective successes became 5 and 4, producing 0.80 instead of the unrounded pooled ratio 4.2/5.4. The resulting capability-retention and frontier eligibility values are therefore numerically distorted.",
+    "retained_diagnostics": [
+      "executor_distinctness_audit passed",
+      "state-scored computation metrics were measured",
+      "proposal and selective recall were measured",
+      "state-distinct end-to-end success was measured"
+    ],
+    "non_promotion": "No capability-constrained C5 frontier is promoted from this run."
+  }
 }
