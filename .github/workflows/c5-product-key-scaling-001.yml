@@ -11,6 +11,8 @@ on:
       - "contracts/TACOSM-C5-PRODUCT-KEY-SCALING-001.json"
       - ".github/workflows/c5-product-key-scaling-001.yml"
   workflow_dispatch:
+  pull_request:
+    branches: [research/c5-product-key-scaling-001]
 
 permissions:
   contents: read
@@ -30,9 +32,11 @@ jobs:
       - name: Preconditions
         run: |
           python -m pip install --quiet --upgrade pip
-          python -m pip install --quiet pytest
+          python -m pip install --quiet pytest ruff
           python -m pytest tests/ -q
           python scripts/sync_test_count.py --check
+          python -m ruff check --select F821 scripts/run_c5_product_key_scaling_001.py
+          python -m py_compile scripts/run_c5_product_key_scaling_001.py
       - name: Smoke measurement
         run: |
           mkdir -p artifacts
