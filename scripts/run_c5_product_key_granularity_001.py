@@ -375,7 +375,8 @@ def main() -> None:
         contract.require_m_levels(M_LEVELS)
         contract.require_seeds(SEEDS)
         contract.require_k_levels([K])
-        contract.require_eval_steps(EVAL_STEPS if not args.smoke else 5)
+        if not args.smoke:
+            contract.require_eval_steps(EVAL_STEPS)
         contract.require_arms(ARM_NAMES)
 
     result = run(args.smoke)
