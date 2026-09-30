@@ -59,7 +59,7 @@ def test_distillation_updates_query_student_without_gold_targets():
         [Query(text=task.query.text, step=task.query.step, provenance="train_distill")]
     )
     assert diagnostics.optimizer_updates == 2
-    assert diagnostics.teacher_candidate_score_macs > 0
+    assert diagnostics.teacher_candidate_score_macs == 16 * 8 * 2
     assert diagnostics.student_prototype_score_macs > 0
     assert diagnostics.final_kl >= 0.0
 
@@ -105,3 +105,15 @@ def test_distillation_config_rejects_invalid_temperature():
         assert "temperatures" in str(exc)
     else:
         raise AssertionError("non-positive temperature must fail")
+
+def test_distillation_teacher_pool_contains_only_training_states():
+    proposal, task, _ = _proposal(5)
+    addresses, _ = proposal.teacher_distribution(task.query)
+    values = {
+        tuple(update.value)
+        for update in task.state_updates
+        if update.key in addresses
+    }
+    assert len(addresses) == 16
+    assert values == set(CODEBOOK[16:32])
+    assert values.isdisjoint(set(CODEBOOK[:16]))
