@@ -33,6 +33,7 @@ class CosineRerankedStateIndex:
     ) -> None:
         self.index = learned_index
         self._state_embeddings: dict[str, tuple[float, ...]] = {}
+        self._last_shortlist_size = 0
         self._built = False
 
     @staticmethod
@@ -62,6 +63,10 @@ class CosineRerankedStateIndex:
     @property
     def max_shortlist(self) -> int:
         return self.index.config.shortlist_k
+
+    @property
+    def shortlist_size(self) -> int:
+        return self._last_shortlist_size
 
     @property
     def state_items(self) -> int:
@@ -95,6 +100,7 @@ class CosineRerankedStateIndex:
             raise RuntimeError("cosine selective state index has not been built")
 
         proposal = self.index.lookup(query)
+        self._last_shortlist_size = len(proposal.addresses)
         query_embedding = self._normalize(self.index.encode_query(query))
         scored: list[tuple[float, str]] = []
         for address in proposal.addresses:
