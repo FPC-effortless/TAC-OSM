@@ -38,12 +38,12 @@ def _eval_task_seed(seed: int, m: int) -> int:
     return seed * 2000003 + m * 12011 + 907
 
 
-def _query(pool, target_index: int, query_step: int) -> Query:
+def _query(pool, target_index: int, query_step: int, nonce: int) -> Query:
     return build_query_for_target(
         pool,
         target_index,
         step=query_step,
-        flip=(target_index * 3 + query_step * 5) % STATE_BITS,
+        flip=(target_index * 3 + nonce * 5 + 7) % STATE_BITS,
     ).query
 
 
@@ -62,7 +62,7 @@ def _train_addressor(seed: int, m: int) -> SemanticStateAddressor:
     rng = random.Random(seed * 701 + m * 31 + 19)
     for step in range(TRAIN_EPISODES):
         target_index = rng.randrange(m)
-        query = _query(pool, target_index, state.current_step)
+        query = _query(pool, target_index, state.current_step, step)
         decision = addressor.select(
             query,
             state,
@@ -106,7 +106,7 @@ def _evaluate(seed: int, m: int) -> dict:
 
     for step in range(HELDOUT_EPISODES):
         target_index = rng.randrange(m)
-        query = _query(eval_pool, target_index, state.current_step)
+        query = _query(eval_pool, target_index, state.current_step, step)
 
         full = addressor.select(
             query,
