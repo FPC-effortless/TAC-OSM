@@ -931,6 +931,57 @@ experiment with full cost accounting is still required before the L4 C5 claim
 can move.
 
 
+
+---
+
+## C16 — Persistent semantic selective computation can preserve capability while executing only R
+
+> In the registered synthetic end-to-end loop, a one-bit-noisy query can cross a
+> persistent state boundary, identify the relevant state value, retain exactly
+> R=4 relevant programs from a population H, and execute only those R programs
+> while matching the exhaustive H-program output.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-C5-END-TO-END-001`, workflow
+`36667352698`, clean run head
+`03bc42761a914051bc62d12588b842a1357a5618`, artifact
+`11077145266`.
+
+**TYPE:** mechanism · **LAYER:** L3
+
+**PRIOR ART:** retrieval-before-compute and selective/conditional execution
+are established architectural patterns. The specific measured combination of
+persistent state, noisy query recovery, candidate retention, and aggregate
+execution is TAC-OSM's bounded result.
+
+**NOT INHERITED:** learned semantic indexing, natural-language workloads,
+hardware FLOP/latency superiority, dynamic index maintenance, or the broad L4
+C5 program claim.
+
+**REQUIRED EVIDENCE:** M=64 persistent state, one-bit-noisy 10-bit query,
+H={64,128,256}, R=4, five seeds, 100 queries/cell, separate state addressing,
+candidate retention, and execution accounting.
+
+All 15 registered seed/H cells matched the independent aggregate evaluator at
+1.0000 in both exhaustive and selective arms.
+
+| H | R | exhaustive work | selective work | reduction | R/H |
+|---:|---:|---:|---:|---:|---:|
+| 64 | 4 | 768 | 48 | 93.75% | 0.0625 |
+| 128 | 4 | 1,536 | 48 | 96.875% | 0.03125 |
+| 256 | 4 | 3,072 | 48 | 98.4375% | 0.015625 |
+
+State target retention and all-four-program candidate retention were 1.000.
+
+The selective execution workload therefore exhibits
+`C_execute = O(R)` while the exhaustive control exhibits
+`C_execute = O(H)`, under exact capability parity in the registered synthetic
+task.
+
+**BLOCKER:** state/candidate indexes are hand-designed exact/controlled and
+the executor is synthetic fixed work. A learned semantic retrieval experiment
+and a realistic end-to-end capability/compute curve are still required before
+the broad C5 claim can move.
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
