@@ -21,7 +21,7 @@ from tac_osm.semantic_topology import (
     semantic_signature,
 )
 from tac_osm.state import PersistentStore
-from tac_osm import StateConfig
+from tac_osm.state import StateConfig
 from tac_osm.topology_tasks import TOPOLOGY_EDGE_UNIVERSE
 
 
