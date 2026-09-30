@@ -217,6 +217,27 @@ class LearnedPrototypeStateIndex:
     def build_diagnostics(self) -> PrototypeBuildDiagnostics:
         return self._build
 
+    @property
+    def prototypes(self) -> tuple[tuple[float, ...], ...]:
+        """Read-only learned prototype centers."""
+        if not self._built:
+            raise RuntimeError("prototype state index has not been built")
+        return self._prototypes
+
+    @property
+    def buckets(self) -> dict[int, tuple[str, ...]]:
+        """Read-only prototype-to-state address assignment."""
+        if not self._built:
+            raise RuntimeError("prototype state index has not been built")
+        return dict(self._buckets)
+
+    @property
+    def state_embeddings(self) -> dict[str, tuple[float, ...]]:
+        """Read-only normalized state embeddings used for reranking."""
+        if not self._built:
+            raise RuntimeError("prototype state index has not been built")
+        return dict(self._state_embeddings)
+
     def lookup(self, query: Query) -> PrototypeLookup:
         if not self._built:
             raise RuntimeError("prototype state index has not been built")

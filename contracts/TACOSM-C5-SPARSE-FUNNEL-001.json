@@ -1,0 +1,46 @@
+{
+  "experiment_id": "TACOSM-C5-SPARSE-FUNNEL-001",
+  "title": "Teacher-distilled continuous proposal with over-fetch and packed reranking",
+  "question": "Can a cheap continuous proposal retain the full-candidate cosine teacher's relevant persistent-state computation across K=4,8,16 budgets?",
+  "hypothesis": "A student trained with KL distillation to the full-candidate cosine scorer will retain more teacher-relevant state mass than the existing binary/sign-code proposal, and K=8 or K=16 over-fetch will separate budget limitation from proposal-mechanism limitation.",
+  "arms": [
+    {"name": "exhaustive_cosine", "intervention": "cosine-score all 64 persistent states with the fixed width-16 representation", "acts_on": "reference state retrieval", "knob": "search", "value": "M=64"},
+    {"name": "distilled_prototype_proposal", "intervention": "student query-to-prototype KL distillation followed by bounded prototype beam and teacher cosine reranking", "acts_on": "selective state retrieval", "knob": "K", "value": "4,8,16"}
+  ],
+  "endpoints": [
+    {"name": "teacher_target_retention", "role": "primary coarse-boundary endpoint", "primary": true},
+    {"name": "actual_target_recall", "role": "primary downstream retrieval endpoint", "primary": true},
+    {"name": "actual_end_to_end_success", "role": "secondary capability endpoint", "primary": false},
+    {"name": "shortlist_size", "role": "audit", "primary": false},
+    {"name": "total_macs", "role": "audit", "primary": false},
+    {"name": "contiguous_runs", "role": "systems audit", "primary": false}
+  ],
+  "interpretation_order": ["temporal availability", "exhaustive cosine", "teacher distribution", "proposal retention", "selective target recall", "downstream capability", "arithmetic and packing", "negative filtering"],
+  "h_levels": [64, 128, 256],
+  "k_levels": [4, 8, 16],
+  "seeds": [0, 1, 2, 3, 4],
+  "teacher_epochs": 512,
+  "distill_epochs": 256,
+  "eval_steps": 100,
+  "M": 64,
+  "R": 4,
+  "latent_dim": 16,
+  "prototype_count": 16,
+  "bucket_capacity": 4,
+  "negative_count": 8,
+  "beam_for_K": {"4": 1, "8": 2, "16": 4},
+  "held_constant": [
+    "width-16 raw-trained cosine representation",
+    "48 training semantic codes versus held-out evaluation query codes",
+    "one deterministic noisy query view",
+    "eight mean-gradient negatives",
+    "16 continuous prototypes with capacity four",
+    "exact candidate index",
+    "fixed executor",
+    "no evaluation target or address enters distillation",
+    "teacher sees the complete 64-state population",
+    "arithmetic and packing are reported separately from wall-clock behavior"
+  ],
+  "status": "pre-registered",
+  "layer": "L4"
+}
