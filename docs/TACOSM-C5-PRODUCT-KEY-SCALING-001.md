@@ -61,3 +61,5 @@ Full: python scripts/run_c5_product_key_scaling_001.py
 Artifact: artifacts/TACOSM-C5-PRODUCT-KEY-SCALING-001.json
 
 Run trigger marker: fixed-K scaling harness fixed; final registered measurement trigger repeated.
+
+Final trigger marker: execute against the corrected persistent-pool harness.
