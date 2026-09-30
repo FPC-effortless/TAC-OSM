@@ -1,6 +1,6 @@
 # TACOSM-C5-SPARSE-FUNNEL-001
 
-Status: PREREGISTERED — implementation added; measurement result pending.
+Status: PREREGISTERED — implementation added; validation run pending.
 
 ## Purpose
 
