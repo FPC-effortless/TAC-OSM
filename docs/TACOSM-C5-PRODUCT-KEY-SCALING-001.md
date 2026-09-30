@@ -1,6 +1,6 @@
 # TACOSM-C5-PRODUCT-KEY-SCALING-001
 
-Status: PREREGISTERED — final synchronized-head scaling trigger.
+Status: PREREGISTERED — corrected M-level contract; full scaling measurement triggered.
 
 ## Purpose
 
