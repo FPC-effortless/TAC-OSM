@@ -1,0 +1,43 @@
+{
+  "experiment_id": "TACOSM-STATE-REP-009",
+  "title": "Approximate selective state indexing under one-bit query noise",
+  "question": "Can an approximate Hamming index preserve learned persistent-state retrieval while reducing the number of state items seen by the learned scorer?",
+  "hypothesis": "H_index: an approximate radius-2 state index can retain the target state for noisy queries often enough that the same trained scorer preserves capability while reducing scorer work from O(M) to O(K) with K <= 4.",
+  "arms": [
+    {"name":"analytic","intervention":"identity state encoder evaluated by full scan and indexed shortlist","acts_on":"state retrieval representation"},
+    {"name":"learned_full","intervention":"trained bilinear state addressor over all M state items","acts_on":"full state scan"},
+    {"name":"learned_indexed","intervention":"the same trained addressor over the Hamming-index shortlist","acts_on":"state retrieval boundary"},
+    {"name":"no_learning","intervention":"fresh frozen random addressor over all M state items","acts_on":"full state scan"}
+  ],
+  "endpoints": [
+    {"name":"learned_indexed_top1","role":"primary — indexed learned retrieval accuracy","primary":true},
+    {"name":"learned_full_top1","role":"secondary — capability reference before filtering","primary":false},
+    {"name":"index_target_recall","role":"secondary — whether the approximate index retains the true state item","primary":false},
+    {"name":"shortlist_size","role":"secondary — retained state population K","primary":false},
+    {"name":"full_route_macs","role":"audit — learned scorer work over M","primary":false},
+    {"name":"indexed_route_macs","role":"audit — learned scorer work over K","primary":false},
+    {"name":"index_query_operations","role":"audit — fixed Hamming bucket probes","primary":false},
+    {"name":"index_build_reads","role":"audit — one-time state reads for index construction","primary":false}
+  ],
+  "decision_rule": [
+    {"condition":"learned_indexed_top1 remains within 0.05 absolute of learned_full_top1 and index_target_recall is at least 0.95 while mean shortlist is strictly below M","licenses":"bounded support for an approximate selective state-index intervention under the registered noisy task","does_not_license":"sublinear end-to-end computation, learned indexing, or general memory retrieval"},
+    {"condition":"the indexed arm loses more than 0.05 absolute capability or index_target_recall falls below 0.95","licenses":"the registered approximate index does not preserve sufficient capability under this task","does_not_license":"the impossibility of selective indexing"}
+  ],
+  "interpretation_order": ["query-noise validity","index target retention","scorer capability preservation","shortlist reduction","compute accounting"],
+  "h_levels": [8,16,32,64],
+  "seeds": [0,1,2,3,4],
+  "steps": 512,
+  "eval_steps": 256,
+  "held_constant": [
+    "state bits = 10 and fixed Hamming-3 codebook of 64 codes",
+    "each query differs from its target state code by exactly one bit",
+    "same trained addressor weights are used for learned_full and learned_indexed",
+    "Hamming radius = 2 and shortlist K = 4 are fixed before the run",
+    "state pool is fixed during each 256-query evaluation block and index is built once",
+    "opaque state addresses never appear in queries",
+    "no target address or gold field enters the index",
+    "C5 and all earlier REP evidence remain frozen"
+  ],
+  "status": "pre-registered",
+  "layer": "L3"
+}
