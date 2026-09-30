@@ -1,0 +1,210 @@
+{
+  "experiment_id": "TACOSM-C5-FRONTIER-REPLICATION-001",
+  "title": "Independent-seed replication of the C5 capability-compute frontier",
+  "question": "Does the accepted product-key configuration (factor_size=16, factor_beam=6) reproduce the preregistered >=0.80 capability-retention floor across M={128,256,512} on independent seeds, and does it remain the minimum-compute fixed configuration among the registered search surface?",
+  "hypothesis": "The accepted fixed configuration (16,6) will remain eligible at all three M levels on seeds 5-9 and remain the lowest mean states_scored_over_M among fixed configurations eligible at all M levels.",
+  "arms": [
+    {
+      "name": "factor_size_8_beam_2",
+      "intervention": "product-key factor size 8 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=2",
+      "value": "8,2"
+    },
+    {
+      "name": "factor_size_8_beam_4",
+      "intervention": "product-key factor size 8 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=4",
+      "value": "8,4"
+    },
+    {
+      "name": "factor_size_8_beam_6",
+      "intervention": "product-key factor size 8 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=6",
+      "value": "8,6"
+    },
+    {
+      "name": "factor_size_8_beam_8",
+      "intervention": "product-key factor size 8 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=8",
+      "value": "8,8"
+    },
+    {
+      "name": "factor_size_16_beam_2",
+      "intervention": "product-key factor size 16 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=2",
+      "value": "16,2"
+    },
+    {
+      "name": "factor_size_16_beam_4",
+      "intervention": "product-key factor size 16 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=4",
+      "value": "16,4"
+    },
+    {
+      "name": "factor_size_16_beam_6",
+      "intervention": "product-key factor size 16 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=6",
+      "value": "16,6"
+    },
+    {
+      "name": "factor_size_16_beam_8",
+      "intervention": "product-key factor size 16 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=8",
+      "value": "16,8"
+    },
+    {
+      "name": "factor_size_16_beam_12",
+      "intervention": "product-key factor size 16 with factor beam 12",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=12",
+      "value": "16,12"
+    },
+    {
+      "name": "factor_size_32_beam_2",
+      "intervention": "product-key factor size 32 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=2",
+      "value": "32,2"
+    },
+    {
+      "name": "factor_size_32_beam_4",
+      "intervention": "product-key factor size 32 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=4",
+      "value": "32,4"
+    },
+    {
+      "name": "factor_size_32_beam_6",
+      "intervention": "product-key factor size 32 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=6",
+      "value": "32,6"
+    },
+    {
+      "name": "factor_size_32_beam_8",
+      "intervention": "product-key factor size 32 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=8",
+      "value": "32,8"
+    },
+    {
+      "name": "factor_size_32_beam_12",
+      "intervention": "product-key factor size 32 with factor beam 12",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=12",
+      "value": "32,12"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "capability_retention",
+      "role": "primary replication endpoint",
+      "primary": true
+    },
+    {
+      "name": "states_scored_over_M",
+      "role": "primary computation endpoint",
+      "primary": true
+    },
+    {
+      "name": "global_configuration_match",
+      "role": "whether (16,6) remains the fixed frontier configuration",
+      "primary": true
+    },
+    {
+      "name": "exhaustive_end_to_end_success",
+      "role": "reference capability",
+      "primary": false
+    },
+    {
+      "name": "selective_end_to_end_success",
+      "role": "state-distinct selective capability",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_success_count",
+      "role": "exact aggregation audit",
+      "primary": false
+    },
+    {
+      "name": "selective_success_count",
+      "role": "exact aggregation audit",
+      "primary": false
+    },
+    {
+      "name": "evaluation_count",
+      "role": "exact aggregation audit",
+      "primary": false
+    },
+    {
+      "name": "executor_distinctness_audit",
+      "role": "task-validity audit",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "For each M, the (16,6) configuration must have pooled capability_retention >= 0.80.",
+      "licenses": "replication of the accepted capability floor on independent seeds",
+      "does_not_license": "generalization beyond the registered task or proof of asymptotic scaling"
+    },
+    {
+      "condition": "Across fixed configurations eligible at all three M levels, (16,6) must have the minimum mean states_scored_over_M under the same tie-break order.",
+      "licenses": "replication of the accepted fixed frontier ranking",
+      "does_not_license": "universal optimality or hardware speedup"
+    }
+  ],
+  "interpretation_order": [
+    "executor validity",
+    "exhaustive capability",
+    "selective capability",
+    "capability retention",
+    "states scored over M",
+    "global frontier ranking",
+    "arithmetic"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
+    "same teacher architecture and training objective",
+    "same 48 training codes versus 16 held-out target codes",
+    "same one-bit noisy query construction",
+    "same H=256",
+    "same M levels",
+    "same K=32",
+    "same factor codebook training and iterations",
+    "same state-distinct executor",
+    "same 14 factor-size/beam configurations",
+    "new independent seeds 5-9 only"
+  ],
+  "status": "pre-registered",
+  "layer": "L3",
+  "provenance_anchor": "TACOSM-C5-COVERAGE-FRONTIER-004, run 36790982734, accepted fixed configuration (16,6)",
+  "protocol_note": "No model, task, index, beam, factor size, evaluation count, or capability threshold changes. Only the seed set changes from {0,1,2,3,4} to the independent set {5,6,7,8,9}."
+}
