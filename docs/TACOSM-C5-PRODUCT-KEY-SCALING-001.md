@@ -1,6 +1,6 @@
 # TACOSM-C5-PRODUCT-KEY-SCALING-001
 
-Status: PREREGISTERED — corrected M-level contract; full scaling measurement triggered.
+Status: MEASURED — see TACOSM-C5-PRODUCT-KEY-SCALING-001-RESULT.md.
 
 ## Purpose
 
@@ -65,3 +65,7 @@ Run trigger marker: fixed-K scaling harness fixed; final registered measurement 
 Final trigger marker: execute against the corrected persistent-pool harness.
 
 Final registered-run trigger: corrected exhaustive target accounting is in place.
+
+Measured run: 36751997528.
+
+Key result: proposal retention stays near 1.0, but product-key over-fetch scales with M: approximately 35.4, 71.3, 143.2, and 287.2 states scored at M=64, 128, 256, and 512. The current fixed factor-size construction therefore does not establish bounded state computation as M grows.
