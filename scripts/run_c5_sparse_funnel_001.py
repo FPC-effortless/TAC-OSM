@@ -96,6 +96,13 @@ def run_seed(seed: int, h_levels: tuple[int, ...], steps: int) -> list[dict]:
         ),
     )
     build_diag = prototype.build(state, TRAIN_CODES)
+    train_code_set = set(TRAIN_CODES)
+    teacher_addresses = tuple(
+        update.key for update in first.state_updates
+        if tuple(update.value) in train_code_set
+    )
+    if len(teacher_addresses) != len(TRAIN_CODES):
+        raise AssertionError("distillation state pool must match training-code population")
     proposal = CosineTeacherStudentProposal(
         teacher, prototype,
         DistillationConfig(
