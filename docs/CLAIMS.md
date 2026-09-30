@@ -353,13 +353,11 @@ column there means the architecture has *no room* to scale, not that scaling
 has been demonstrated. `C_router` is the only cost term that genuinely varies,
 and it grows linearly with H.
 
-The claim becomes *measurable* at `M2.1` (`docs/ROADMAP.md`), where an index
-inserts a retrieval boundary between routing and execution — and M2.1 has
-built the boundary. What it has not done is run it: the capability-versus-
-computation curve is the registered evidence this claim needs, and a
-confirmatory run is what would produce it. Until that run exists the claim
-must not appear in any report or figure as though measured, however clearly
-`|R|` is now defined.
+The claim became measurable at `M2.1`, where the index inserted a
+retrieval boundary between routing and execution. `TACOSM-C5-COVERAGE-FRONTIER-004`
+is the first valid capability-vs-computation run at that boundary. Its result
+moves only the retrieval/computation portion of C5: the broader asymptotic and
+end-to-end execution claim remains bounded and unestablished.
 
 ---
 
