@@ -239,7 +239,51 @@ class LearnedPrototypeStateIndex:
             normalization_ops=2,
         )
 
-    @property
+    
+    def lookup_beam(self, query: Query, beam_width: int = 2) -> PrototypeLookup:
+        """Select the top prototype buckets and cosine-rerank their union.
+
+        The returned candidate set is bounded by beam_width *
+        bucket_capacity. The prototype count and state assignment remain fixed.
+        """
+        if not self._built:
+            raise RuntimeError("prototype state index has not been built")
+        if beam_width < 1 or beam_width > len(self._prototypes):
+            raise ValueError("beam_width must be within the prototype count")
+
+        q = self._normalize(self.index.encode_query(query))
+        prototype_scores = [
+            self._cosine(q, center) for center in self._prototypes
+        ]
+        selected_prototypes = sorted(
+            range(len(prototype_scores)),
+            key=lambda j: (-prototype_scores[j], j),
+        )[:beam_width]
+        candidate_addresses = tuple(
+            sorted(
+                {
+                    address
+                    for prototype_index in selected_prototypes
+                    for address in self._buckets[prototype_index]
+                }
+            )
+        )
+        scored = [
+            (self._cosine(q, self._state_embeddings[address]), address)
+            for address in candidate_addresses
+        ]
+        scored.sort(key=lambda item: (-item[0], item[1]))
+        address = scored[0][1] if scored else None
+        return PrototypeLookup(
+            address=address,
+            prototype_index=selected_prototypes[0],
+            candidate_addresses=candidate_addresses,
+            prototype_score_macs=len(self._prototypes) * self.index.config.latent_dim,
+            state_rerank_macs=len(candidate_addresses) * self.index.config.latent_dim,
+            normalization_ops=2,
+        )
+
+@property
     def query_projection_macs(self) -> int:
         return self.index.query_embedding_macs
 
