@@ -38,6 +38,7 @@ class ProductKeyConfig:
 @dataclass(frozen=True)
 class ProductKeyBuildDiagnostics:
     state_items: int
+    codebook_training_items: int
     embedding_dim: int
     factor_size: int
     factor_dim: int
@@ -129,17 +130,32 @@ class ProductKeyStateIndex:
         self._cells: dict[tuple[int, int], tuple[str, ...]] = {}
         self._embeddings: dict[str, tuple[float, ...]] = {}
         self._built = False
-        self._build = ProductKeyBuildDiagnostics(0, 0, 0, 0, 0, 0, 0)
+        self._build = ProductKeyBuildDiagnostics(0, 0, 0, 0, 0, 0, 0, 0)
 
     def build(
         self,
         items: Sequence[tuple[str, Sequence[float]]],
+        *,
+        codebook_items: Sequence[tuple[str, Sequence[float]]] | None = None,
     ) -> ProductKeyBuildDiagnostics:
+        """Build all runtime cells while optionally fitting codebooks on training-only items."""
         if not items:
             raise ValueError("product-key state index requires items")
         embeddings = [
             (str(address), _normalize(embedding))
             for address, embedding in items
+        ]
+        training_raw = items if codebook_items is None else codebook_items
+        if not training_raw:
+            raise ValueError("codebook_items must not be empty")
+        training_addresses = {str(address) for address, _ in training_raw}
+        item_addresses = {address for address, _ in embeddings}
+        if not training_addresses.issubset(item_addresses):
+            raise ValueError("codebook_items must be a subset of items")
+        training_map = {str(address): embedding for address, embedding in training_raw}
+        training_embeddings = [
+            (address, _normalize(training_map[address]))
+            for address in sorted(training_addresses)
         ]
         dim = len(embeddings[0][1])
         if dim < 2 or dim % 2:
@@ -147,8 +163,8 @@ class ProductKeyStateIndex:
         if any(len(embedding) != dim for _, embedding in embeddings):
             raise ValueError("all product-key embeddings must have equal dimension")
         half = dim // 2
-        first_points = tuple(embedding[:half] for _, embedding in embeddings)
-        second_points = tuple(embedding[half:] for _, embedding in embeddings)
+        first_points = tuple(embedding[:half] for _, embedding in training_embeddings)
+        second_points = tuple(embedding[half:] for _, embedding in training_embeddings)
         factor1 = _kmeans_cosine(
             first_points,
             min(self.config.factor_size, len(first_points)),
@@ -184,10 +200,11 @@ class ProductKeyStateIndex:
         max_cell = max((len(addresses) for addresses in self._cells.values()), default=0)
         factor_dim = half
         build_macs = (
-            len(embeddings) * self.config.factor_size * dim
+            len(training_embeddings) * self.config.factor_size * dim
         )
         self._build = ProductKeyBuildDiagnostics(
             state_items=len(embeddings),
+            codebook_training_items=len(training_embeddings),
             embedding_dim=dim,
             factor_size=self.config.factor_size,
             factor_dim=factor_dim,
