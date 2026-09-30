@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from scripts.run_c5_product_key_scaling_001 import build_scaled_task, M_LEVELS
+from tac_osm.noisy_state_tasks import CODEBOOK
 
 
 def test_scaling_levels_expand_state_population_without_changing_K():
@@ -17,8 +18,9 @@ def test_scaled_task_has_exactly_one_target_state():
         assert len(task.state_updates) == m
 
 
-def test_scaled_state_excludes_training_and_evaluation_decoys_from_target_pool():
+def test_scaled_state_contains_all_training_codes_and_unique_decoys():
     task = build_scaled_task(seed=1, m=512, step=3)
     values = {tuple(u.value) for u in task.state_updates}
     assert len(values) == 512
+    assert set(CODEBOOK[16:64]).issubset(values)
 
