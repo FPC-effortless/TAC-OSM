@@ -136,7 +136,7 @@ def run_cell(seed: int, h: int) -> dict:
         "retained_fraction": statistics.fmean(retained) / h,
         "state_target_retained_rate": statistics.fmean(state_target_retained),
         "candidate_bucket_exact_rate": statistics.fmean(indexed_candidate_target_retained),
-        "index_build_state_items": state_index.diagnostics.state_items,
+        "index_build_state_items": state_index.build_diagnostics.state_items,
         "index_build_candidate_items": candidate_index.built_candidates,
         "amortized_state_build_items_per_query": M / EVAL_STEPS,
         "amortized_candidate_build_items_per_query": h / EVAL_STEPS,
