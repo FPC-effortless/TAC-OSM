@@ -25,6 +25,7 @@ not replace individual preregistrations or frozen result artifacts.
 | C5-NEGATIVE-COVERAGE-001 | continuous recall 0.272 -> 0.402 with mean-8 negatives; hardest-8 = 0.204 | Negative coverage materially affects learning, but the improvement remains below reliable selective-retrieval levels and costs 8x negative evaluations. |
 | C5-NEGATIVE-SWEEP-001 | mean recall 0.272 -> 0.392 -> 0.402 -> 0.402 for 1/4/8/16 negatives | Mean-negative coverage has a strong early gain, then plateaus after eight; 16 negatives doubles training negative evaluations without improving mean Top-1. |
 | C5-POSITIVE-VIEWS-001 | mean recall 0.402 -> 0.238 -> 0.286 for 1/2/4 views | Multi-view positive averaging reduces retrieval in every seed at 2 and 4 views; the current intervention is not a useful repair. |
+| C5-LATENT-WIDTH-001 | mean recall 0.402 -> 0.460 -> 0.436 for latent width 8/16/32 | Width 16 gives a modest local improvement, but width 32 does not extend it; the registered capacity test enters saturation. |
 
 ## Architecture decomposition
 
@@ -121,17 +122,18 @@ Not established:
 
 ## Next measurement boundary
 
-The positive-view intervention is now falsified for this configuration:
-continuous recall is 0.402 with one view, 0.238 with two, and 0.286 with four.
-The effect is negative in every seed for both multi-view arms.
+The positive-view and latent-width interventions do not remove the retrieval
+boundary. Positive-view averaging is harmful, while width scaling gives a small
+local peak at 16 dimensions followed by a decline at 32.
 
-The next intervention should therefore target encoder capacity / representation
-geometry. Hold mean-8 negative coverage and one positive view fixed, and compare
-latent dimensions 8, 16, and 32 on the same held-out code split and continuous
-retrieval endpoint.
+The next intervention should therefore target the **similarity/objective
+geometry** rather than more scalar capacity. A controlled experiment should
+keep latent width 16, one positive view, and eight mean negatives fixed while
+varying normalization and/or margin/temperature. Continuous target-state
+retrieval remains the primary endpoint.
 
-Binary indexing should remain excluded until continuous retrieval is materially
-stronger.
+Binary indexing should remain excluded until continuous retrieval reaches a
+materially stronger level.
 
 ## Provenance
 
@@ -139,4 +141,4 @@ The following evidence remains frozen and independently reproducible:
 
 REP-001 through REP-009, SELECTIVE-001, C5-EXEC-001, C5-END-TO-END-001,
 C5-LEARNED-STATE-001, C5-LEARNED-STATE-DIAG-001, C5-LEARNED-STATE-BUDGET-001,
-C5-NEGATIVE-SWEEP-001, and C5-POSITIVE-VIEWS-001.
+C5-NEGATIVE-SWEEP-001, C5-POSITIVE-VIEWS-001, and C5-LATENT-WIDTH-001.
