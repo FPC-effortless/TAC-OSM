@@ -151,7 +151,7 @@ def run_cell(seed: int, m: int, steps: int) -> dict:
     train_items = [item for item, update in zip(state_embeddings, first.state_updates) if tuple(update.value) in train_set]
     build = index.build(state_embeddings, codebook_items=train_items)
     executor = EndToEndExecutor()
-    target_ex = []
+    ex_target = []
     retention = []
     target_sel = []
     success_ex = []
