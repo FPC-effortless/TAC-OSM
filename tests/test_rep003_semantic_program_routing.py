@@ -13,6 +13,7 @@ from tac_osm.graph_program_router import (
     GraphProgramRouter,
     GraphProgramRouterConfig,
     semantic_match_rank,
+    semantic_target_rank,
 )
 from tac_osm.semantic_topology import (
     build_semantic_task,
@@ -96,3 +97,13 @@ def test_semantic_query_round_trips_from_target_signature():
     task = build_semantic_task(31)
     signature = semantic_signature(task.target_edges)
     assert semantic_query(signature, step=task.query.step).text == task.query.text
+
+
+
+def test_semantic_target_rank_measures_gold_candidate():
+    task = build_semantic_task(41)
+    rank, margin = semantic_target_rank(
+        task.public(), task.candidates, task.target_action
+    )
+    assert rank == 1
+    assert margin == 4.0
