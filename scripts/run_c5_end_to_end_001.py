@@ -62,7 +62,7 @@ def run_cell(seed: int, h: int) -> dict:
         full_state_ops.append(state_ops)
 
         all_output, all_work, all_calls = executor.execute_population(
-            task.candidates
+            task.candidates, full_value
         )
         exhaustive_success.append(
             int(all_output == task.expected_output)
@@ -102,7 +102,7 @@ def run_cell(seed: int, h: int) -> dict:
             task.candidates[i] for i in candidate_hit.candidate_indices
         )
         selective_output, selective_work, selective_calls = (
-            executor.execute_population(selected_candidates)
+            executor.execute_population(selected_candidates, retrieved_value)
         )
         selective_success.append(
             int(selective_output == task.expected_output)
