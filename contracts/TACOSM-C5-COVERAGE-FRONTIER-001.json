@@ -200,7 +200,21 @@
     "same downstream executor",
     "same task seed stream across arms"
   ],
-  "status": "pre-registered",
+  "status": "void",
   "layer": "L4",
-  "protocol_note": "Pre-measurement harness correction: factor_size_8_beam_12 was invalid because ProductKeyConfig requires factor_beam <= factor_size; the invalid arm was removed before any successful registered full measurement."
+  "protocol_note": "Pre-measurement harness correction: factor_size_8_beam_12 was invalid because ProductKeyConfig requires factor_beam <= factor_size; the invalid arm was removed before any successful registered full measurement.",
+  "result_note": {
+    "run_id": 36789410610,
+    "measurement_commit": "4faf16fb31e7ff165fd9fd96d02c8f6ac61a0e4e",
+    "artifact_id": 11131500534,
+    "artifact_digest": "sha256:c009b92334055c04fdee1c0f74ad7e5b0a59819ccc678705558982f991bf0a65",
+    "disposition": "VOID",
+    "reason": "The registered capability endpoint is non-discriminating: EndToEndExecutor returns the same successful output for every reference state because the contribution depends only on executable program structure, whose aggregate is constant across state codes. Consequently selective_end_to_end_success can exceed exhaustive_end_to_end_success without retrieving the target state, invalidating capability_retention as a retrieval-capability constraint.",
+    "retained_diagnostics": [
+      "states_scored_over_M was measured successfully",
+      "proposal_target_retention and selective_target_recall were measured successfully",
+      "arithmetic metrics were measured successfully"
+    ],
+    "non_promotion": "The capability-constrained frontier and its decision rule are not promoted. No C5 claim is advanced from this run."
+  }
 }
