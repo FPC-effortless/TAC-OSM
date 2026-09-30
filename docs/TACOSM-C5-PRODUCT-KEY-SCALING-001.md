@@ -25,7 +25,7 @@ beam, query construction, and downstream executor remain fixed.
 
 Each task contains the 48 training-code states, exactly one held-out target-code
 state, the remaining held-out evaluation codes when available, and then unique
-deterministic binary decoys. Every task contains exactly one state whose value
+deterministic binary decoys. That state population and its opaque addresses are fixed across evaluation steps. Every task contains exactly one state whose value
 equals the selected target code.
 
 ## Primary scaling quantities
