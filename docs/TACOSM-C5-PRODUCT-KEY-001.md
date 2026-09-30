@@ -1,6 +1,6 @@
 # TACOSM-C5-PRODUCT-KEY-001
 
-Status: PREREGISTERED — implementation added; result pending.
+Status: PREREGISTERED — full registered measurement triggered.
 
 ## Purpose
 
