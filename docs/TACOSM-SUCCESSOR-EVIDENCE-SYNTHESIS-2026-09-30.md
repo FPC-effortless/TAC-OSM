@@ -139,5 +139,5 @@ retrieval is strong enough to justify a selective boundary.
 The following evidence remains frozen and independently reproducible:
 
 REP-001 through REP-009, SELECTIVE-001, C5-EXEC-001, C5-END-TO-END-001,
-C5-LEARNED-STATE-001, C5-LEARNED-STATE-DIAG-001, and
-C5-LEARNED-STATE-BUDGET-001.
+C5-LEARNED-STATE-001, C5-LEARNED-STATE-DIAG-001, C5-LEARNED-STATE-BUDGET-001,
+and C5-NEGATIVE-SWEEP-001.
