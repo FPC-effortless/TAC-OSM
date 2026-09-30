@@ -46,12 +46,12 @@ def test_latent_width_8_total_query_cost_is_592():
 
 def test_latent_width_16_total_query_cost_is_1184():
     model = _model(width=16)
-    assert model.query_embedding_macs + 64 * model.latent_dim == 1184
+    assert model.query_embedding_macs + 64 * model.config.latent_dim == 1184
 
 
 def test_latent_width_32_total_query_cost_is_2368():
     model = _model(width=32)
-    assert model.query_embedding_macs + 64 * model.latent_dim == 2368
+    assert model.query_embedding_macs + 64 * model.config.latent_dim == 2368
 
 
 def test_training_and_evaluation_codes_are_disjoint():
