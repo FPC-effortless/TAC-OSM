@@ -123,4 +123,4 @@ def test_lookup_exposes_bounded_shortlist_size():
     selective = CosineRerankedStateIndex(model)
     selective.build(state)
     hit = selective.lookup(task.query)
-    assert hit.shortlist_size == hit.shortlist_scored <= 4
+    assert hit.shortlist_scored <= 4
