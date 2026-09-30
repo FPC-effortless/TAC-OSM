@@ -4,29 +4,99 @@
   "question": "How much factorization beam is required at higher product-key granularity to recover at least 90% of the exhaustive cosine teacher's target recall while keeping the reranking candidate fraction low?",
   "hypothesis": "Increasing factor beam should recover proposal coverage lost at higher factor granularity, producing a measurable compute-capability frontier rather than a single universally optimal setting.",
   "arms": [
-    {"name":"factor8_beam6","intervention":"reference from prior measured experiment","factor_size":8,"factor_beam":6},
-    {"name":"factor16_beam4","intervention":"factor size 16, beam 4","factor_size":16,"factor_beam":4},
-    {"name":"factor16_beam6","intervention":"factor size 16, beam 6","factor_size":16,"factor_beam":6},
-    {"name":"factor16_beam8","intervention":"factor size 16, beam 8","factor_size":16,"factor_beam":8},
-    {"name":"factor16_beam12","intervention":"factor size 16, beam 12","factor_size":16,"factor_beam":12},
-    {"name":"factor16_beam16","intervention":"factor size 16, beam 16","factor_size":16,"factor_beam":16},
-    {"name":"factor32_beam4","intervention":"factor size 32, beam 4","factor_size":32,"factor_beam":4},
-    {"name":"factor32_beam6","intervention":"factor size 32, beam 6","factor_size":32,"factor_beam":6},
-    {"name":"factor32_beam8","intervention":"factor size 32, beam 8","factor_size":32,"factor_beam":8},
-    {"name":"factor32_beam12","intervention":"factor size 32, beam 12","factor_size":32,"factor_beam":12}
+    {
+      "name": "factor16_beam4",
+      "intervention": "factor size 16, beam 4",
+      "factor_size": 16,
+      "factor_beam": 4
+    },
+    {
+      "name": "factor16_beam6",
+      "intervention": "factor size 16, beam 6",
+      "factor_size": 16,
+      "factor_beam": 6
+    },
+    {
+      "name": "factor16_beam8",
+      "intervention": "factor size 16, beam 8",
+      "factor_size": 16,
+      "factor_beam": 8
+    },
+    {
+      "name": "factor16_beam12",
+      "intervention": "factor size 16, beam 12",
+      "factor_size": 16,
+      "factor_beam": 12
+    },
+    {
+      "name": "factor16_beam16",
+      "intervention": "factor size 16, beam 16",
+      "factor_size": 16,
+      "factor_beam": 16
+    },
+    {
+      "name": "factor32_beam4",
+      "intervention": "factor size 32, beam 4",
+      "factor_size": 32,
+      "factor_beam": 4
+    },
+    {
+      "name": "factor32_beam6",
+      "intervention": "factor size 32, beam 6",
+      "factor_size": 32,
+      "factor_beam": 6
+    },
+    {
+      "name": "factor32_beam8",
+      "intervention": "factor size 32, beam 8",
+      "factor_size": 32,
+      "factor_beam": 8
+    },
+    {
+      "name": "factor32_beam12",
+      "intervention": "factor size 32, beam 12",
+      "factor_size": 32,
+      "factor_beam": 12
+    }
   ],
   "endpoints": [
-    {"name":"target_recall_retention_ratio","role":"primary capability constraint","definition":"selective target recall divided by exhaustive cosine target recall","floor":0.90},
-    {"name":"states_scored_over_M","role":"primary computation diagnostic"},
-    {"name":"proposal_target_retention","role":"coverage diagnostic"},
-    {"name":"selective_target_recall","role":"raw capability endpoint"},
-    {"name":"selective_end_to_end_success","role":"secondary capability endpoint"},
-    {"name":"total_macs","role":"arithmetic audit"},
-    {"name":"pair_generation_ops","role":"routing audit"},
-    {"name":"shortlist_size","role":"audit"}
+    {
+      "name": "target_recall_retention_ratio",
+      "role": "primary capability constraint",
+      "definition": "selective target recall divided by exhaustive cosine target recall",
+      "floor": 0.9
+    },
+    {
+      "name": "states_scored_over_M",
+      "role": "primary computation diagnostic"
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "coverage diagnostic"
+    },
+    {
+      "name": "selective_target_recall",
+      "role": "raw capability endpoint"
+    },
+    {
+      "name": "selective_end_to_end_success",
+      "role": "secondary capability endpoint"
+    },
+    {
+      "name": "total_macs",
+      "role": "arithmetic audit"
+    },
+    {
+      "name": "pair_generation_ops",
+      "role": "routing audit"
+    },
+    {
+      "name": "shortlist_size",
+      "role": "audit"
+    }
   ],
   "decision_rule": {
-    "capability_floor": 0.90,
+    "capability_floor": 0.9,
     "evaluation": "For every M level, retain the raw ratio of selective target recall to exhaustive target recall. Report arms satisfying >=0.90 at every M. No tuning is permitted after observing outcomes.",
     "licenses": "A workload-specific compute-capability frontier for the tested product-key construction.",
     "does_not_license": "universal optimal beam size, semantic retrieval guarantees, universal sublinear scaling, or hardware wall-clock speedup."
@@ -39,14 +109,37 @@
     "end-to-end success",
     "arithmetic"
   ],
-  "h_levels": [256],
-  "m_levels": [128,256,512],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
   "steps": 512,
-  "k_levels": [32],
-  "seeds": [0,1,2,3,4],
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "eval_steps": 100,
-  "factor_sizes": [16,32],
-  "factor_beams": [4,6,8,12,16],
+  "factor_sizes": [
+    16,
+    32
+  ],
+  "factor_beams": [
+    4,
+    6,
+    8,
+    12,
+    16
+  ],
   "held_constant": [
     "same width-16 raw-trained cosine teacher",
     "same 48 training codes versus 16 held-out target codes",
@@ -61,5 +154,14 @@
     "same task seed stream across arms"
   ],
   "status": "pre-registered",
-  "layer": "L4"
+  "layer": "L4",
+  "prior_references": [
+    {
+      "name": "factor8_beam6",
+      "source_experiment": "TACOSM-C5-PRODUCT-KEY-GRANULARITY-001",
+      "status": "previously_measured_reference",
+      "factor_size": 8,
+      "factor_beam": 6
+    }
+  ]
 }
