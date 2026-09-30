@@ -73,35 +73,43 @@
       "name": "target_recall_retention_ratio",
       "role": "primary capability constraint",
       "definition": "selective target recall divided by exhaustive cosine target recall",
-      "floor": 0.9
+      "floor": 0.9,
+      "primary": true
     },
     {
       "name": "states_scored_over_M",
-      "role": "primary computation diagnostic"
+      "role": "primary computation diagnostic",
+      "primary": false
     },
     {
       "name": "proposal_target_retention",
-      "role": "coverage diagnostic"
+      "role": "coverage diagnostic",
+      "primary": false
     },
     {
       "name": "selective_target_recall",
-      "role": "raw capability endpoint"
+      "role": "raw capability endpoint",
+      "primary": false
     },
     {
       "name": "selective_end_to_end_success",
-      "role": "secondary capability endpoint"
+      "role": "secondary capability endpoint",
+      "primary": false
     },
     {
       "name": "total_macs",
-      "role": "arithmetic audit"
+      "role": "arithmetic audit",
+      "primary": false
     },
     {
       "name": "pair_generation_ops",
-      "role": "routing audit"
+      "role": "routing audit",
+      "primary": false
     },
     {
       "name": "shortlist_size",
-      "role": "audit"
+      "role": "audit",
+      "primary": false
     }
   ],
   "decision_rule": [
