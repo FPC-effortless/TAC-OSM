@@ -1,0 +1,110 @@
+{
+  "experiment_id": "TACOSM-C5-PRODUCT-KEY-GRANULARITY-001",
+  "title": "Product-key cell-granularity diagnostic for fixed-K persistent-state retrieval",
+  "question": "Does increasing product-key factor granularity reduce the fraction of persistent states subjected to teacher reranking while preserving the retrieval behavior of the fixed exhaustive reference?",
+  "hypothesis": "The fixed factor-size-8 product-key index scores a roughly constant fraction of the state population because its 64-cell topology becomes increasingly occupied. Increasing factor size should reduce state occupancy per selected cell union and therefore reduce states scored per M, subject to a possible coverage tradeoff.",
+  "arms": [
+    {
+      "name": "factor_size_8",
+      "intervention": "two-factor product-key addressing with factor size 8",
+      "acts_on": "cell granularity",
+      "knob": "factor_size",
+      "value": "8"
+    },
+    {
+      "name": "factor_size_16",
+      "intervention": "two-factor product-key addressing with factor size 16",
+      "acts_on": "cell granularity",
+      "knob": "factor_size",
+      "value": "16"
+    },
+    {
+      "name": "factor_size_32",
+      "intervention": "two-factor product-key addressing with factor size 32",
+      "acts_on": "cell granularity",
+      "knob": "factor_size",
+      "value": "32"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "actual_target_recall",
+      "role": "primary downstream retrieval endpoint",
+      "primary": true
+    },
+    {
+      "name": "states_scored_over_M",
+      "role": "primary scaling diagnostic",
+      "primary": false
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "coarse coverage diagnostic",
+      "primary": false
+    },
+    {
+      "name": "actual_end_to_end_success",
+      "role": "secondary capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "total_macs",
+      "role": "arithmetic audit",
+      "primary": false
+    },
+    {
+      "name": "shortlist_size",
+      "role": "audit",
+      "primary": false
+    },
+    {
+      "name": "nonempty_cells",
+      "role": "cell-topology audit",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "report target recall, proposal retention, states scored/M, shortlist size, nonempty cells, and arithmetic separately for factor sizes 8,16,32 at each M",
+      "licenses": "diagnostic evidence about product-key cell granularity on the registered workload",
+      "does_not_license": "universal product-key retrieval guarantees, universal sublinear scaling, or hardware wall-clock speedup"
+    },
+    {
+      "condition": "a larger factor size materially lowers states scored/M while retrieval remains close to the exhaustive reference",
+      "licenses": "bounded support that fixed-factor collision/occupancy is a principal limitation of the current product-key construction",
+      "does_not_license": "general semantic addressing or a broad C5 capability claim"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "exhaustive cosine",
+    "proposal retention",
+    "actual target recall",
+    "states scored over M",
+    "downstream capability",
+    "arithmetic",
+    "cell occupancy"
+  ],
+  "h_levels": [256],
+  "m_levels": [128, 256, 512],
+  "steps": 512,
+  "k_levels": [32],
+  "seeds": [0, 1, 2, 3, 4],
+  "eval_steps": 100,
+  "held_constant": [
+    "same width-16 raw-trained cosine teacher",
+    "same 48 training codes versus 16 held-out target codes",
+    "same one-bit noisy query construction",
+    "same H=256",
+    "same M levels",
+    "same K=32",
+    "same factor beam=6",
+    "same k-means iteration count=8",
+    "training-only codebook fitting",
+    "same exact candidate index",
+    "same downstream executor",
+    "same task seed stream across arms"
+  ],
+  "status": "pre-registered",
+  "layer": "L4"
+}
