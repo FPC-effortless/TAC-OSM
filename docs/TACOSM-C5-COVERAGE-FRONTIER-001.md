@@ -46,3 +46,7 @@ This experiment can establish a capability-constrained frontier on the registere
 ## Integrity
 
 The protocol is machine-readable in `contracts/TACOSM-C5-COVERAGE-FRONTIER-001.json`. The full measurement is gated by the commit marker `[run-c5-frontier-full]`.
+
+## Execution trigger
+
+This commit carries the CI marker `[run-c5-frontier-full]` only to start the registered measurement; the protocol above is unchanged.
