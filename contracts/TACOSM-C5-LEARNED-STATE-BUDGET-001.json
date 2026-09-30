@@ -1,45 +1,101 @@
 {
-  "experiment_id":"TACOSM-C5-LEARNED-STATE-BUDGET-001",
-  "title":"Training-budget diagnosis for learned semantic state addressing",
-  "question":"Does increasing the registered training budget materially improve the learned continuous semantic state retriever on held-out noisy codes?",
-  "hypothesis":"H_budget: if the learned continuous target-state recall rises materially with training budget, the prior retrieval failure is at least partly an optimization-budget problem; if recall remains low and changes little, the current encoder/objective is likely the limiting boundary.",
-  "arms":[
-    {"name":"no_learning_continuous","intervention":"random frozen dual encoder with continuous exhaustive state scoring","acts_on":"representation control"},
-    {"name":"learned_32","intervention":"same dual encoder trained for 32 epochs","acts_on":"training budget","knob":"epochs","value":"32"},
-    {"name":"learned_128","intervention":"same dual encoder trained for 128 epochs","acts_on":"training budget","knob":"epochs","value":"128"},
-    {"name":"learned_512","intervention":"same dual encoder trained for 512 epochs","acts_on":"training budget","knob":"epochs","value":"512"}
-  ],
-  "endpoints":[
-    {"name":"target_top1_recall","role":"primary — correct opaque persistent state selected","primary":true},
-    {"name":"continuous_target_rank","role":"secondary — mean rank of correct target state","primary":false},
-    {"name":"training_pairs","role":"secondary — number of optimizer updates","primary":false},
-    {"name":"query_macs","role":"audit — fixed continuous query scoring arithmetic","primary":false},
-    {"name":"state_build_macs","role":"audit — one-time cached state embedding arithmetic","primary":false}
-  ],
-  "decision_rule":[
+  "experiment_id": "TACOSM-C5-LEARNED-STATE-BUDGET-001",
+  "title": "Training-budget diagnosis for learned semantic state addressing",
+  "question": "Does increasing the registered training budget materially improve the learned continuous semantic state retriever on held-out noisy codes?",
+  "hypothesis": "H_budget: if the learned continuous target-state recall rises materially with training budget, the prior retrieval failure is at least partly an optimization-budget problem; if recall remains low and changes little, the current encoder/objective is likely the limiting boundary.",
+  "arms": [
     {
-      "condition":"mean learned_512 recall - mean learned_32 recall >= 0.20",
-      "licenses":"evidence that the registered learner is materially training-budget limited on this task",
-      "does_not_license":"that 512 epochs is optimal, or that learned semantic addressing generalizes beyond this workload"
+      "name": "no_learning_continuous",
+      "intervention": "random frozen dual encoder with continuous exhaustive state scoring",
+      "acts_on": "representation control"
     },
     {
-      "condition":"mean learned_512 recall - mean learned_32 recall < 0.20 and mean learned_512 recall < 0.50",
-      "licenses":"evidence that additional training budget does not remove the current low-recall boundary under this architecture/objective",
-      "does_not_license":"that the architecture cannot be improved by a different objective, representation or negative-sampling scheme"
+      "name": "learned_32",
+      "intervention": "same dual encoder trained for 32 epochs",
+      "acts_on": "training budget",
+      "knob": "epochs",
+      "value": "32"
     },
     {
-      "condition":"mean learned_512 recall >= 0.50 and mean learned_512 recall - mean learned_32 recall < 0.20",
-      "licenses":"evidence that the current learner reaches a materially usable continuous retrieval level without a large budget effect",
-      "does_not_license":"sublinear learned retrieval"
+      "name": "learned_128",
+      "intervention": "same dual encoder trained for 128 epochs",
+      "acts_on": "training budget",
+      "knob": "epochs",
+      "value": "128"
+    },
+    {
+      "name": "learned_512",
+      "intervention": "same dual encoder trained for 512 epochs",
+      "acts_on": "training budget",
+      "knob": "epochs",
+      "value": "512"
     }
   ],
-  "interpretation_order":["temporal availability","held-out retrieval","budget response","target rank","arithmetic cost"],
-  "h_levels":[64],
-  "k_levels":[0],
-  "seeds":[0,1,2,3,4],
-  "steps":512,
-  "eval_steps":100,
-  "held_constant":[
+  "endpoints": [
+    {
+      "name": "target_top1_recall",
+      "role": "primary — correct opaque persistent state selected",
+      "primary": true
+    },
+    {
+      "name": "continuous_target_rank",
+      "role": "secondary — mean rank of correct target state",
+      "primary": false
+    },
+    {
+      "name": "training_pairs",
+      "role": "secondary — number of optimizer updates",
+      "primary": false
+    },
+    {
+      "name": "query_macs",
+      "role": "audit — fixed continuous query scoring arithmetic",
+      "primary": false
+    },
+    {
+      "name": "state_build_macs",
+      "role": "audit — one-time cached state embedding arithmetic",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "mean learned_512 recall - mean learned_32 recall >= 0.20",
+      "licenses": "evidence that the registered learner is materially training-budget limited on this task",
+      "does_not_license": "that 512 epochs is optimal, or that learned semantic addressing generalizes beyond this workload"
+    },
+    {
+      "condition": "mean learned_512 recall - mean learned_32 recall < 0.20 and mean learned_512 recall < 0.50",
+      "licenses": "evidence that additional training budget does not remove the current low-recall boundary under this architecture/objective",
+      "does_not_license": "that the architecture cannot be improved by a different objective, representation or negative-sampling scheme"
+    },
+    {
+      "condition": "mean learned_512 recall >= 0.50 and mean learned_512 recall - mean learned_32 recall < 0.20",
+      "licenses": "evidence that the current learner reaches a materially usable continuous retrieval level without a large budget effect",
+      "does_not_license": "sublinear learned retrieval"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "held-out retrieval",
+    "budget response",
+    "target rank",
+    "arithmetic cost"
+  ],
+  "h_levels": [
+    64
+  ],
+  "k_levels": [],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
     "M=64 persistent state items",
     "one-step causal write/read delay",
     "10-bit state codebook",
@@ -52,6 +108,6 @@
     "no evaluation address or gold target enters training",
     "prior C5 and learned-state results remain frozen"
   ],
-  "status":"pre-registered",
-  "layer":"L3"
+  "status": "pre-registered",
+  "layer": "L3"
 }
