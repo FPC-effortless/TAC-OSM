@@ -210,19 +210,24 @@ class LearnedSemanticStateIndex:
         *,
         negative_count: int = 8,
         aggregation: str = "mean",
+        positive_views: int = 1,
         noise_cycle: int = 10,
     ) -> int:
-        """Train with a fixed-size deterministic negative pool per update.
+        """Train with controlled negative coverage and positive noise views.
 
-        negative_count=1 reproduces the existing single-negative schedule.
-        aggregation="mean" averages the margin gradients from all negatives.
-        aggregation="hardest" evaluates the pool and backpropagates only
-        through the highest-scoring negative. The update count remains one
-        per positive code per epoch, so the intervention changes negative
-        coverage rather than optimizer-update count.
+        negative_count controls the deterministic negative pool per positive
+        update. positive_views controls how many independently corrupted query
+        views of that positive are averaged into the same optimizer update.
+
+        aggregation="mean" averages the margin gradients across all selected
+        negative/view pairs. aggregation="hardest" selects the highest-scoring
+        negative per view. Existing single-view behavior is preserved when
+        positive_views=1.
         """
         if negative_count < 1:
             raise ValueError("negative_count must be positive")
+        if positive_views < 1:
+            raise ValueError("positive_views must be positive")
         if aggregation not in {"mean", "hardest"}:
             raise ValueError("aggregation must be 'mean' or 'hardest'")
 
@@ -256,53 +261,90 @@ class LearnedSemanticStateIndex:
                         if candidate != idx and candidate not in negative_indices:
                             negative_indices.append(candidate)
 
-                bits = list(positive)
-                bits[(idx + epoch + noise_cycle) % self.config.input_dim] ^= 1
-                query_x = self._signed(bits)
                 pos_x = self._signed(positive)
-                zq = self._encode(self.wq, self.bq, query_x)
                 zp = self._encode(self.ws, self.bs, pos_x)
+                ws_accum = [
+                    [0.0] * self.config.input_dim
+                    for _ in range(self.config.latent_dim)
+                ]
+                wq_accum = [
+                    [0.0] * self.config.input_dim
+                    for _ in range(self.config.latent_dim)
+                ]
+                bq_accum = [0.0] * self.config.latent_dim
+                pair_count = 0
 
-                negatives = []
-                for neg_idx in negative_indices:
-                    neg_x = self._signed(codes[neg_idx])
-                    zn = self._encode(self.ws, self.bs, neg_x)
-                    diff = sum(a * b for a, b in zip(zq, zp)) - sum(
-                        a * b for a, b in zip(zq, zn)
-                    )
-                    clipped = max(-60.0, min(60.0, self.config.margin - diff))
-                    gate = 1.0 / (1.0 + math.exp(-clipped))
-                    negatives.append((diff, gate, zn, neg_x))
+                for view in range(positive_views):
+                    bits = list(positive)
+                    flip_a = (
+                        idx + epoch + noise_cycle + 3 * view
+                        + (view * view + epoch * view)
+                    ) % self.config.input_dim
+                    bits[flip_a] ^= 1
 
-                if aggregation == "hardest":
-                    _, gate, zn, neg_x = min(
-                        negatives,
-                        key=lambda item: item[0],
-                    )
-                    selected = [(gate, zn, neg_x)]
-                else:
-                    selected = [
-                        (gate, zn, neg_x)
-                        for _, gate, zn, neg_x in negatives
-                    ]
+                    # A second deterministic view perturbation is used when
+                    # requested, so views are distinct without introducing a
+                    # stochastic/non-reproducible training stream.
+                    if positive_views > 1 and view % 2 == 1:
+                        flip_b = (
+                            idx + 2 * epoch + noise_cycle + 5 * view + 1
+                        ) % self.config.input_dim
+                        if flip_b == flip_a:
+                            flip_b = (flip_b + 1) % self.config.input_dim
+                        bits[flip_b] ^= 1
 
-                scale = 1.0 / len(selected)
+                    query_x = self._signed(bits)
+                    zq = self._encode(self.wq, self.bq, query_x)
+
+                    negatives = []
+                    for neg_idx in negative_indices:
+                        neg_x = self._signed(codes[neg_idx])
+                        zn = self._encode(self.ws, self.bs, neg_x)
+                        diff = sum(a * b for a, b in zip(zq, zp)) - sum(
+                            a * b for a, b in zip(zq, zn)
+                        )
+                        clipped = max(
+                            -60.0, min(60.0, self.config.margin - diff)
+                        )
+                        gate = 1.0 / (1.0 + math.exp(-clipped))
+                        negatives.append((diff, gate, zn, neg_x))
+
+                    if aggregation == "hardest":
+                        _, gate, zn, neg_x = min(
+                            negatives,
+                            key=lambda item: item[0],
+                        )
+                        selected = [(gate, zn, neg_x)]
+                    else:
+                        selected = [
+                            (gate, zn, neg_x)
+                            for _, gate, zn, neg_x in negatives
+                        ]
+
+                    for r in range(self.config.latent_dim):
+                        q_delta = sum(
+                            gate * (zp[r] - zn[r])
+                            for gate, zn, _ in selected
+                        )
+                        bq_accum[r] += q_delta
+                        for j in range(self.config.input_dim):
+                            wq_accum[r][j] += q_delta * query_x[j]
+                            ws_accum[r][j] += sum(
+                                gate * zq[r] * (pos_x[j] - neg_x[j])
+                                for gate, _, neg_x in selected
+                            )
+                    pair_count += len(selected)
+
+                scale = 1.0 / pair_count
                 for r in range(self.config.latent_dim):
-                    q_delta = sum(
-                        gate * (zp[r] - zn[r])
-                        for gate, zn, _ in selected
-                    ) * scale
-                    self.bq[r] += self.config.learning_rate * q_delta
+                    self.bq[r] += self.config.learning_rate * bq_accum[r] * scale
                     for j in range(self.config.input_dim):
                         self.wq[r][j] += (
-                            self.config.learning_rate * q_delta * query_x[j]
+                            self.config.learning_rate * wq_accum[r][j] * scale
                         )
-
-                        ws_delta = sum(
-                            gate * zq[r] * (pos_x[j] - neg_x[j])
-                            for gate, _, neg_x in selected
-                        ) * scale
-                        self.ws[r][j] += self.config.learning_rate * ws_delta
+                        self.ws[r][j] += (
+                            self.config.learning_rate * ws_accum[r][j] * scale
+                        )
                 self._trained_pairs += 1
         return self._trained_pairs
 
