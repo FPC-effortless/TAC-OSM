@@ -1,0 +1,218 @@
+{
+  "experiment_id": "TACOSM-C5-COVERAGE-FRONTIER-002",
+  "title": "State-distinct coverage-constrained product-key granularity frontier",
+  "question": "For the registered persistent-state retrieval workload, what is the minimum fraction of states reranked that preserves a preregistered capability-retention floor when downstream success is state-distinct?",
+  "hypothesis": "Increasing factor granularity reduces candidate occupancy, while increasing factor beam recovers coverage. With a state-distinct downstream objective, the joint factor-size/beam surface should expose a measurable capability-compute frontier.",
+  "arms": [
+    {
+      "name": "factor_size_8_beam_2",
+      "intervention": "product-key factor size 8 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=2",
+      "value": "8,2"
+    },
+    {
+      "name": "factor_size_8_beam_4",
+      "intervention": "product-key factor size 8 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=4",
+      "value": "8,4"
+    },
+    {
+      "name": "factor_size_8_beam_6",
+      "intervention": "product-key factor size 8 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=6",
+      "value": "8,6"
+    },
+    {
+      "name": "factor_size_8_beam_8",
+      "intervention": "product-key factor size 8 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=8",
+      "value": "8,8"
+    },
+    {
+      "name": "factor_size_16_beam_2",
+      "intervention": "product-key factor size 16 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=2",
+      "value": "16,2"
+    },
+    {
+      "name": "factor_size_16_beam_4",
+      "intervention": "product-key factor size 16 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=4",
+      "value": "16,4"
+    },
+    {
+      "name": "factor_size_16_beam_6",
+      "intervention": "product-key factor size 16 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=6",
+      "value": "16,6"
+    },
+    {
+      "name": "factor_size_16_beam_8",
+      "intervention": "product-key factor size 16 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=8",
+      "value": "16,8"
+    },
+    {
+      "name": "factor_size_16_beam_12",
+      "intervention": "product-key factor size 16 with factor beam 12",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=12",
+      "value": "16,12"
+    },
+    {
+      "name": "factor_size_32_beam_2",
+      "intervention": "product-key factor size 32 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=2",
+      "value": "32,2"
+    },
+    {
+      "name": "factor_size_32_beam_4",
+      "intervention": "product-key factor size 32 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=4",
+      "value": "32,4"
+    },
+    {
+      "name": "factor_size_32_beam_6",
+      "intervention": "product-key factor size 32 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=6",
+      "value": "32,6"
+    },
+    {
+      "name": "factor_size_32_beam_8",
+      "intervention": "product-key factor size 32 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=8",
+      "value": "32,8"
+    },
+    {
+      "name": "factor_size_32_beam_12",
+      "intervention": "product-key factor size 32 with factor beam 12",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=12",
+      "value": "32,12"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "capability_retention",
+      "role": "primary capability-constrained frontier endpoint, bounded to [0,1]",
+      "primary": true
+    },
+    {
+      "name": "states_scored_over_M",
+      "role": "primary computation-scaling endpoint",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_target_recall",
+      "role": "reference retrieval endpoint",
+      "primary": false
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "coarse coverage diagnostic",
+      "primary": false
+    },
+    {
+      "name": "selective_target_recall",
+      "role": "selective retrieval endpoint",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_end_to_end_success",
+      "role": "state-distinct reference capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "selective_end_to_end_success",
+      "role": "state-distinct selective capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "capability_gain",
+      "role": "selective minus exhaustive end-to-end success",
+      "primary": false
+    },
+    {
+      "name": "total_macs",
+      "role": "arithmetic audit",
+      "primary": false
+    },
+    {
+      "name": "executor_distinctness_audit",
+      "role": "task-validity audit",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "At each M, identify configurations with pooled capability_retention >= 0.80 and report the minimum states_scored_over_M among them.",
+      "licenses": "a registered capability-constrained frontier on the corrected state-distinct workload",
+      "does_not_license": "a universal optimum, universal sublinear retrieval, or hardware wall-clock speedup"
+    },
+    {
+      "condition": "Identify configurations whose pooled capability_retention >= 0.80 at every M in {128,256,512}, then report the lowest mean states_scored_over_M among those globally eligible configurations.",
+      "licenses": "evidence that one fixed product-key configuration can preserve a fixed capability floor while executing a bounded fraction of the state population on this workload",
+      "does_not_license": "general semantic addressing or a completed C5 proof"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "exhaustive cosine",
+    "proposal retention",
+    "exhaustive capability",
+    "selective capability",
+    "capability retention",
+    "states scored over M",
+    "arithmetic",
+    "executor distinctness"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
+    "same width-16 raw-trained cosine teacher",
+    "same 48 training codes versus 16 held-out target codes",
+    "same one-bit noisy query construction",
+    "same H=256",
+    "same M levels",
+    "same K=32",
+    "same k-means iteration count=8",
+    "training-only codebook fitting",
+    "same exact candidate index",
+    "same state-distinct downstream executor",
+    "same task seed stream across arms"
+  ],
+  "status": "pre-registered",
+  "layer": "L4",
+  "predecessor": "TACOSM-C5-COVERAGE-FRONTIER-001 (VOID: non-discriminating downstream endpoint)",
+  "protocol_note": "This experiment preserves the predecessor arm surface and capability floor. The downstream executor is replaced by a fixed state-distinct executor; this is a new registration, not a rewrite of the voided result."
+}
