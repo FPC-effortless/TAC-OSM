@@ -59,7 +59,8 @@ teacher cosine rerank -> executable program -> exact CASM/executor ->
 verification -> S_{t+1}.
 
 CASM remains downstream of selection. It is not used as the semantic relevance
-oracle for the proposal.
+oracle for the proposal. The registered primary endpoint is actual target-state
+recall; proposal retention remains a separate coarse-boundary diagnostic.
 
 ## Budget diagnostic
 
