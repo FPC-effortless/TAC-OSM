@@ -51,8 +51,40 @@ def _read_state_value(state, address: str) -> tuple[int, ...]:
     return tuple(int(x) for x in read.values[0])
 
 
+def _build_h_invariant_task(seed: int, h: int, step: int):
+    # Amendment A1: query/state generation is anchored at H=64 so H changes
+    # only candidate-population size, not the noisy query distribution.
+    from tac_osm.c5_end_to_end import EndToEndTask
+
+    base = build_task(seed, 64, step)
+    candidates = build_population(seed, h)
+    relevant = frozenset(
+        i
+        for i, candidate in enumerate(candidates)
+        if tuple(candidate.descriptor) == base.target_value
+    )
+    if len(relevant) != R:
+        raise AssertionError("registered task must have exactly four relevant programs")
+    expected, work, calls = EndToEndExecutor().execute_population(
+        tuple(candidates[i] for i in sorted(relevant)),
+        base.target_value,
+    )
+    assert work == R * WORK
+    assert calls == R
+    return EndToEndTask(
+        query=base.query,
+        state_updates=base.state_updates,
+        candidates=candidates,
+        target_address=base.target_address,
+        target_value=base.target_value,
+        expected_output=expected,
+        relevant_indices=relevant,
+        step=step,
+    )
+
+
 def run_cell(seed: int, h: int) -> dict:
-    first = build_task(seed, h, 0)
+    first = _build_h_invariant_task(seed, h, 0)
     population = first.candidates
     state = prepare_state(first)
 
@@ -91,7 +123,7 @@ def run_cell(seed: int, h: int) -> dict:
     candidate_positions = []
 
     for step in range(EVAL_STEPS):
-        task = build_task(seed, h, step)
+        task = _build_h_invariant_task(seed, h, step)
 
         full_address, full_value, state_ops = full_state_scan(task, state)
         full_state_ops.append(state_ops)
