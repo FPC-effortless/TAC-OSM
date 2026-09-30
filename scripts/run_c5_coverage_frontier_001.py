@@ -441,11 +441,15 @@ def main() -> None:
         contract.require_k_levels([K])
         if not args.smoke:
             contract.require_eval_steps(EVAL_STEPS)
-        expected_beams = tuple(contract.raw["arms"]["factor_beams"])
-        expected_sizes = tuple(contract.raw["arms"]["factor_sizes"])
-        if expected_beams != FACTOR_BEAMS or expected_sizes != FACTOR_SIZES:
+        expected_arm_names = {
+            f"factor_size_{factor_size}_beam_{factor_beam}"
+            for factor_size in FACTOR_SIZES
+            for factor_beam in FACTOR_BEAMS
+        }
+        registered_arm_names = {arm.name for arm in contract.arms}
+        if registered_arm_names != expected_arm_names:
             raise AssertionError("runner arms do not match preregistered contract")
-        if contract.raw["capability_retention_floor"] != CAPABILITY_RETENTION_FLOOR:
+        if "capability_retention >= 0.80" not in contract.decision_rule[0].condition:
             raise AssertionError("runner capability floor does not match contract")
 
     result = run(args.smoke)
