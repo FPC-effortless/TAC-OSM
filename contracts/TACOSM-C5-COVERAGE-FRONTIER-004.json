@@ -1,0 +1,282 @@
+{
+  "experiment_id": "TACOSM-C5-COVERAGE-FRONTIER-004",
+  "title": "Count-conserving state-distinct capability-compute frontier",
+  "question": "For the registered persistent-state retrieval workload, what is the minimum fraction of states reranked that preserves at least 80% of exhaustive reference capability under a state-distinct downstream task?",
+  "hypothesis": "Increasing factor granularity reduces candidate occupancy, while increasing factor beam recovers coverage. A count-conserving pooled-success analysis should expose the capability/computation frontier without ratio averaging or truncation artifacts.",
+  "arms": [
+    {
+      "name": "factor_size_8_beam_2",
+      "intervention": "product-key factor size 8 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=2",
+      "value": "8,2"
+    },
+    {
+      "name": "factor_size_8_beam_4",
+      "intervention": "product-key factor size 8 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=4",
+      "value": "8,4"
+    },
+    {
+      "name": "factor_size_8_beam_6",
+      "intervention": "product-key factor size 8 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=6",
+      "value": "8,6"
+    },
+    {
+      "name": "factor_size_8_beam_8",
+      "intervention": "product-key factor size 8 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=8",
+      "value": "8,8"
+    },
+    {
+      "name": "factor_size_16_beam_2",
+      "intervention": "product-key factor size 16 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=2",
+      "value": "16,2"
+    },
+    {
+      "name": "factor_size_16_beam_4",
+      "intervention": "product-key factor size 16 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=4",
+      "value": "16,4"
+    },
+    {
+      "name": "factor_size_16_beam_6",
+      "intervention": "product-key factor size 16 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=6",
+      "value": "16,6"
+    },
+    {
+      "name": "factor_size_16_beam_8",
+      "intervention": "product-key factor size 16 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=8",
+      "value": "16,8"
+    },
+    {
+      "name": "factor_size_16_beam_12",
+      "intervention": "product-key factor size 16 with factor beam 12",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=12",
+      "value": "16,12"
+    },
+    {
+      "name": "factor_size_32_beam_2",
+      "intervention": "product-key factor size 32 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=2",
+      "value": "32,2"
+    },
+    {
+      "name": "factor_size_32_beam_4",
+      "intervention": "product-key factor size 32 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=4",
+      "value": "32,4"
+    },
+    {
+      "name": "factor_size_32_beam_6",
+      "intervention": "product-key factor size 32 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=6",
+      "value": "32,6"
+    },
+    {
+      "name": "factor_size_32_beam_8",
+      "intervention": "product-key factor size 32 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=8",
+      "value": "32,8"
+    },
+    {
+      "name": "factor_size_32_beam_12",
+      "intervention": "product-key factor size 32 with factor beam 12",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=12",
+      "value": "32,12"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "capability_retention",
+      "role": "primary capability-constrained frontier endpoint; min(1, summed selective successes / summed exhaustive successes)",
+      "primary": true
+    },
+    {
+      "name": "states_scored_over_M",
+      "role": "primary computation-scaling endpoint",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_target_recall",
+      "role": "reference retrieval endpoint",
+      "primary": false
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "coarse coverage diagnostic",
+      "primary": false
+    },
+    {
+      "name": "selective_target_recall",
+      "role": "selective retrieval endpoint",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_end_to_end_success",
+      "role": "state-distinct reference capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "selective_end_to_end_success",
+      "role": "state-distinct selective capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_success_count",
+      "role": "exact integer aggregation audit",
+      "primary": false
+    },
+    {
+      "name": "selective_success_count",
+      "role": "exact integer aggregation audit",
+      "primary": false
+    },
+    {
+      "name": "evaluation_count",
+      "role": "exact integer aggregation audit",
+      "primary": false
+    },
+    {
+      "name": "capability_gain",
+      "role": "selective minus exhaustive end-to-end success",
+      "primary": false
+    },
+    {
+      "name": "total_macs",
+      "role": "arithmetic audit",
+      "primary": false
+    },
+    {
+      "name": "executor_distinctness_audit",
+      "role": "task-validity audit",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "For every M/configuration, sum integer exhaustive and selective success counts across seed cells and compute one capability_retention scalar from those sums. A configuration is eligible exactly when that stored scalar is >= 0.80.",
+      "licenses": "a registered capability-constrained frontier on the corrected state-distinct workload",
+      "does_not_license": "a universal optimum, universal sublinear retrieval, or hardware wall-clock speedup"
+    },
+    {
+      "condition": "At each M, report the eligible configuration minimizing states_scored_over_M. Also identify fixed configurations eligible at all three M levels and report the one minimizing mean states_scored_over_M.",
+      "licenses": "per-M and fixed-configuration capability/computation frontier evidence on this workload",
+      "does_not_license": "general semantic addressing or a completed C5 proof"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "exhaustive cosine",
+    "proposal retention",
+    "exhaustive capability",
+    "selective capability",
+    "capability retention",
+    "states scored over M",
+    "arithmetic",
+    "executor distinctness"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
+    "same width-16 raw-trained cosine teacher",
+    "same 48 training codes versus 16 held-out target codes",
+    "same one-bit noisy query construction",
+    "same H=256",
+    "same M levels",
+    "same K=32",
+    "same k-means iteration count=8",
+    "training-only codebook fitting",
+    "same exact product-key index",
+    "same state-distinct downstream executor",
+    "same task seed stream across arms"
+  ],
+  "status": "measured",
+  "layer": "L4",
+  "predecessor_1": "TACOSM-C5-COVERAGE-FRONTIER-001 (VOID: non-discriminating downstream endpoint)",
+  "predecessor_2": "TACOSM-C5-COVERAGE-FRONTIER-002 (VOID: inconsistent pooled eligibility aggregation)",
+  "predecessor_3": "TACOSM-C5-COVERAGE-FRONTIER-003 (VOID: truncation of pooled success counts)",
+  "protocol_note": "The scientific search surface is unchanged. This registration changes only the aggregation implementation: success counts and evaluation counts are summed exactly across seed cells, and all capability/eligibility quantities derive from those exact totals.",
+  "result_note": {
+    "run_id": 36790982734,
+    "measurement_commit": "50d56eef583e9764bdb38423de2611f831949bf4",
+    "artifact_id": 11131529242,
+    "artifact_digest": "sha256:7f1b8c20aae757c9daf6a552fe559b0984ccb28ff92bf74ffd32f04bc6950af2",
+    "disposition": "MEASURED",
+    "validity": {
+      "preconditions": "passed",
+      "smoke": "passed",
+      "executor_distinctness": "passed for all 210 cells",
+      "pooled_count_conservation": "passed for all 42 pooled cells",
+      "evaluation_count_per_pooled_cell": 500
+    },
+    "primary_result": {
+      "global_configuration": {
+        "factor_size": 16,
+        "factor_beam": 6
+      },
+      "mean_states_scored_over_M": 0.15081770833333333,
+      "min_capability_retention": 0.8518518518518519,
+      "mean_total_macs": 1138.08
+    },
+    "per_m_frontier": {
+      "128": {
+        "factor_size": 16,
+        "factor_beam": 6,
+        "capability_retention": 0.8784530386740331,
+        "states_scored_over_M": 0.14976562499999999,
+        "total_macs_mean": 722.72
+      },
+      "256": {
+        "factor_size": 8,
+        "factor_beam": 2,
+        "capability_retention": 0.8709677419354839,
+        "states_scored_over_M": 0.06678906250000001,
+        "total_macs_mean": 561.568
+      },
+      "512": {
+        "factor_size": 32,
+        "factor_beam": 2,
+        "capability_retention": 0.8148148148148148,
+        "states_scored_over_M": 0.008589843750000001,
+        "total_macs_mean": 742.368
+      }
+    },
+    "interpretation": "Supports a bounded capability-constrained sparse retrieval frontier on the registered synthetic workload. The fixed 16/6 configuration preserves at least 85.2% of exhaustive reference capability across all tested M while reranking about 15.1% of the state population on average. This does not establish sublinear asymptotic scaling, universal semantic retrieval, or hardware speedup. Absolute exhaustive capability falls from 36.2% at M=128 to 5.4% at M=512, so retention is relative to a weak reference ceiling at large M."
+  }
+}
