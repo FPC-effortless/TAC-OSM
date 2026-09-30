@@ -78,3 +78,9 @@ def test_analytic_identity_is_exact_after_one_bit_noise():
         decision = addressor.select(query, state, target_address=pool.updates[target].key)
         assert decision.selected_address == pool.updates[target].key
         assert decision.target_rank == 1
+
+def test_query_corruption_varies_deterministically_across_steps():
+    pool = build_pool(19, n_states=16)
+    q0 = build_query_for_target(pool, 5, step=1, flip=(5 * 3 + 0 * 5 + 7) % STATE_BITS).query.text
+    q1 = build_query_for_target(pool, 5, step=1, flip=(5 * 3 + 1 * 5 + 7) % STATE_BITS).query.text
+    assert q0 != q1
