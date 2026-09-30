@@ -71,3 +71,5 @@ Smoke: python scripts/run_c5_product_key_granularity_001.py --smoke
 Full: python scripts/run_c5_product_key_granularity_001.py
 
 Artifact: artifacts/TACOSM-C5-PRODUCT-KEY-GRANULARITY-001.json
+
+Measurement trigger: final registered full run is marked by commit message [run-c5-granularity-full].
