@@ -41,7 +41,7 @@ def test_latent_width_changes_query_and_state_embedding_cost():
 
 def test_latent_width_8_total_query_cost_is_592():
     model = _model(width=8)
-    assert model.query_embedding_macs + 64 * model.latent_dim == 592
+    assert model.query_embedding_macs + 64 * model.config.latent_dim == 592
 
 
 def test_latent_width_16_total_query_cost_is_1184():
