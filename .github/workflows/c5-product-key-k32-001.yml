@@ -1,0 +1,46 @@
+name: C5 product-key K32 coverage diagnostic
+
+on:
+  push:
+    branches: [research/c5-product-key-k32-001]
+    paths:
+      - "src/tac_osm/**"
+      - "tests/**"
+      - "scripts/run_c5_product_key_k32_001.py"
+      - "docs/TACOSM-C5-PRODUCT-KEY-K32-001.md"
+      - "contracts/TACOSM-C5-PRODUCT-KEY-K32-001.json"
+      - ".github/workflows/c5-product-key-k32-001.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  k32:
+    name: TACOSM-C5-PRODUCT-KEY-K32-001
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+      - name: Smoke measurement
+        run: |
+          mkdir -p artifacts
+          python scripts/run_c5_product_key_k32_001.py --smoke > artifacts/TACOSM-C5-PRODUCT-KEY-K32-001.smoke.stdout.json
+          cat artifacts/TACOSM-C5-PRODUCT-KEY-K32-001.smoke.stdout.json
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-C5-PRODUCT-KEY-K32-001-smoke
+          path: artifacts/
+          if-no-files-found: error
