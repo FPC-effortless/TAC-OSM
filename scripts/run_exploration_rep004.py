@@ -23,11 +23,11 @@ from tac_osm.graph_program_router import (
 )
 from tac_osm.semantic_topology import (
     build_semantic_task,
-    semantic_match_rank,
     program_for_candidate,
 )
 from tac_osm.state import PersistentStore, StateConfig
 from tac_osm.topology_tasks import TOPOLOGY_EDGE_UNIVERSE
+from tac_osm.graph_program_router import semantic_match_rank
 
 
 SEEDS = (0, 1, 2, 3, 4)
