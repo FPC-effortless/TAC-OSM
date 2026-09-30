@@ -1,0 +1,50 @@
+{
+  "experiment_id": "TACOSM-C5-PRODUCT-KEY-K32-001",
+  "title": "K=32 coverage diagnostic for product-key persistent-state addressing",
+  "question": "Does expanding the product-key shortlist from K=16 to K=32 close the remaining target-recall gap without reverting to exhaustive 64-state scoring?",
+  "hypothesis": "The K=16 product-key result retains most target states but still loses coverage; a K=32 factor beam should recover additional target states while retaining lower arithmetic than exhaustive cosine scoring.",
+  "arms": [
+    {"name": "exhaustive_cosine", "intervention": "cosine-score all 64 persistent states with the fixed width-16 teacher", "acts_on": "reference state retrieval", "knob": "search", "value": "M=64"},
+    {"name": "product_key_k32", "intervention": "same fixed product-key cells and codebooks with factor beam 6 and K=32", "acts_on": "selective state retrieval", "knob": "K", "value": "32"}
+  ],
+  "endpoints": [
+    {"name": "actual_target_recall", "role": "primary downstream retrieval endpoint", "primary": true},
+    {"name": "proposal_target_retention", "role": "secondary coarse-boundary endpoint", "primary": false},
+    {"name": "actual_end_to_end_success", "role": "secondary capability endpoint", "primary": false},
+    {"name": "shortlist_size", "role": "audit", "primary": false},
+    {"name": "state_candidates_scored", "role": "audit", "primary": false},
+    {"name": "total_macs", "role": "audit", "primary": false}
+  ],
+  "decision_rule": [
+    {
+      "condition": "report K=32 proposal retention, target recall, end-to-end success, scored states, and arithmetic against the fixed exhaustive reference",
+      "licenses": "diagnostic evidence about product-key coverage at K=32 on the registered workload",
+      "does_not_license": "general retrieval guarantees or hardware speedup"
+    },
+    {
+      "condition": "K=32 approaches the exhaustive target-recall reference while retaining a bounded shortlist and materially lower arithmetic",
+      "licenses": "bounded support for larger-budget product-key addressing on this workload",
+      "does_not_license": "broad C5 or universal semantic memory claims"
+    }
+  ],
+  "interpretation_order": ["temporal availability", "exhaustive cosine", "proposal retention", "actual target recall", "downstream capability", "arithmetic"],
+  "h_levels": [64, 128, 256],
+  "steps": 512,
+  "k_levels": [32],
+  "seeds": [0, 1, 2, 3, 4],
+  "eval_steps": 100,
+  "held_constant": [
+    "width-16 raw-trained cosine teacher",
+    "48 training codes versus 16 held-out query codes",
+    "training-only product-key codebook fitting",
+    "factor size 8",
+    "eight k-means iterations",
+    "same runtime 64-state cell assignment",
+    "same exact candidate index",
+    "same downstream executor",
+    "same task and query construction",
+    "only factor beam and K are changed relative to the K=16 diagnostic"
+  ],
+  "status": "pre-registered",
+  "layer": "L4"
+}
