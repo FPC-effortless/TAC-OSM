@@ -159,6 +159,9 @@ class CosineTeacherStudentProposal:
         ]
         self._bq = [0.0] * d
         self._last_kl: tuple[float, ...] = ()
+        self._teacher_prototype_assignment = self._build_training_assignment(
+            self._teacher_state_addresses
+        )
 
     @property
     def diagnostics(self) -> DistillationDiagnostics | None:
@@ -220,16 +223,39 @@ class CosineTeacherStudentProposal:
         scores = self._teacher_state_scores(query, selected)
         return tuple(selected), _softmax(scores, self.config.teacher_temperature)
 
+    def _build_training_assignment(
+        self,
+        addresses: Sequence[str],
+    ) -> dict[str, int]:
+        """Assign only training-state addresses to prototypes with capacity."""
+        capacity = self.prototypes.config.bucket_capacity
+        if len(addresses) > self.prototype_count * capacity:
+            raise ValueError("teacher training-state population exceeds prototype capacity")
+        pairs = []
+        for address in addresses:
+            embedding = self.prototypes.state_embeddings[address]
+            for prototype_index, center in enumerate(self.prototypes.prototypes):
+                pairs.append(
+                    (_cosine(embedding, center), address, prototype_index)
+                )
+        pairs.sort(key=lambda item: (-item[0], item[2], item[1]))
+        assigned: dict[str, int] = {}
+        counts = [0] * self.prototype_count
+        for _, address, prototype_index in pairs:
+            if address in assigned or counts[prototype_index] >= capacity:
+                continue
+            assigned[address] = prototype_index
+            counts[prototype_index] += 1
+        if len(assigned) != len(addresses):
+            raise AssertionError("could not assign all training states within prototype capacity")
+        return assigned
+
     def _teacher_prototype_distribution(
         self,
         addresses: Sequence[str],
         state_distribution: Sequence[float],
     ) -> tuple[float, ...]:
-        address_to_proto = {
-            address: prototype_index
-            for prototype_index, bucket in self.prototypes.buckets.items()
-            for address in bucket
-        }
+        address_to_proto = self._teacher_prototype_assignment
         mass = [0.0] * self.prototype_count
         for address, probability in zip(addresses, state_distribution):
             try:
@@ -255,7 +281,7 @@ class CosineTeacherStudentProposal:
     def fit(self, training_queries: Sequence[Query]) -> DistillationDiagnostics:
         if not training_queries:
             raise ValueError("at least one training query is required")
-        addresses = tuple(sorted(self.prototypes.state_embeddings))
+        addresses = self._teacher_state_addresses
         train_macs_per_query = len(addresses) * self.latent_dim
         student_macs_per_query = self.prototype_count * self.latent_dim
         first_loss = 0.0
