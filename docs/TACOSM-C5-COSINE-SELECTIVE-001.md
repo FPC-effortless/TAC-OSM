@@ -48,18 +48,23 @@ The same learned weights are used in both arms.
 
 ## Primary endpoint
 
-State-target retention is whether the selective retained/reranked state equals
-the state selected by exhaustive cosine for the same query.
+Actual target-state recall is whether the selective arm selects the hidden
+environment's target state for the same query.
+
+A reference endpoint also records whether the selective proposal contains the
+state selected by exhaustive cosine.
 
 ## Secondary endpoint
 
-End-to-end success compares the selective downstream output to the
-exhaustive-cosine downstream output.
+Actual end-to-end success is whether the selective downstream output matches
+the hidden environment truth. The exhaustive-cosine arm is reported as a
+capability reference, not as an oracle.
 
 ## Capability rule
 
-The selective arm must achieve state-target retention >=0.95, end-to-end
-success >=0.95, and retain at most K=4 states per query.
+The selective arm must remain within 0.05 of the exhaustive-cosine arm on both
+actual target-state recall and actual end-to-end success, while retaining at
+most K=4 states per query.
 
 ## Cost ledger
 
