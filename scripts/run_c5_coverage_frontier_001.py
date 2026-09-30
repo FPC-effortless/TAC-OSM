@@ -24,8 +24,16 @@ SEEDS = (0, 1, 2, 3, 4)
 M_LEVELS = (128, 256, 512)
 H_FIXED = 256
 K = 32
-FACTOR_BEAMS = (2, 4, 6, 8, 12)
+FACTOR_CONFIGS = (
+    (8, 2), (8, 4), (8, 6), (8, 8),
+    (16, 2), (16, 4), (16, 6), (16, 8), (16, 12),
+    (32, 2), (32, 4), (32, 6), (32, 8), (32, 12),
+)
 FACTOR_SIZES = (8, 16, 32)
+ARM_NAMES = tuple(
+    f"factor_size_{factor_size}_beam_{factor_beam}"
+    for factor_size, factor_beam in FACTOR_CONFIGS
+)
 FACTOR_KMEANS_ITERATIONS = 8
 LATENT_DIM = 16
 TEACHER_EPOCHS = 512
@@ -194,10 +202,11 @@ def run_cell(
     embeddings: tuple[tuple[str, tuple[float, ...]], ...],
     tasks: tuple[EndToEndTask, ...],
 ) -> dict:
-    if factor_size not in FACTOR_SIZES:
-        raise ValueError(f"factor_size must be one of {FACTOR_SIZES}")
-    if factor_beam not in FACTOR_BEAMS:
-        raise ValueError(f"factor_beam must be one of {FACTOR_BEAMS}")
+    if (factor_size, factor_beam) not in FACTOR_CONFIGS:
+        raise ValueError(
+            f"invalid registered configuration: factor_size={factor_size}, "
+            f"factor_beam={factor_beam}"
+        )
 
     first = tasks[0]
     train_set = set(TRAIN_CODES)
@@ -317,7 +326,11 @@ def run(smoke: bool) -> dict:
     seeds = (0,) if smoke else SEEDS
     ms = (128,) if smoke else M_LEVELS
     steps = 5 if smoke else EVAL_STEPS
-    beams = (2, 6) if smoke else FACTOR_BEAMS
+    configs = (
+        ((8, 2), (8, 6), (16, 2), (16, 6), (32, 2), (32, 6))
+        if smoke
+        else FACTOR_CONFIGS
+    )
 
     cells = []
     for seed in seeds:
@@ -326,9 +339,8 @@ def run(smoke: bool) -> dict:
             first = build_scaled_task(seed, m, 0)
             embeddings = normalized_embeddings(teacher, first)
             tasks = tuple(build_scaled_task(seed, m, step) for step in range(steps))
-            for factor_size in FACTOR_SIZES:
-                for factor_beam in beams:
-                    cells.append(
+            for factor_size, factor_beam in configs:
+                cells.append(
                         run_cell(
                             m,
                             factor_size,
@@ -341,8 +353,7 @@ def run(smoke: bool) -> dict:
 
     pooled = {}
     for m in ms:
-        for factor_size in FACTOR_SIZES:
-            for factor_beam in beams:
+        for factor_size, factor_beam in configs:
                 values = [
                     cell for cell in cells
                     if cell["M"] == m
@@ -441,11 +452,7 @@ def main() -> None:
         contract.require_k_levels([K])
         if not args.smoke:
             contract.require_eval_steps(EVAL_STEPS)
-        expected_arm_names = {
-            f"factor_size_{factor_size}_beam_{factor_beam}"
-            for factor_size in FACTOR_SIZES
-            for factor_beam in FACTOR_BEAMS
-        }
+        expected_arm_names = set(ARM_NAMES)
         registered_arm_names = {arm.name for arm in contract.arms}
         if registered_arm_names != expected_arm_names:
             raise AssertionError("runner arms do not match preregistered contract")
