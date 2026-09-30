@@ -612,7 +612,7 @@ def main() -> None:
     args = parser.parse_args()
 
     if not args.no_contract:
-        contract = load_contract("TACOSM-C5-FRONTIER-REPLICATION-001")
+        contract = load_contract("TACOSM-C5-FRONTIER-ROBUSTNESS-002")
         contract.require_levels((H_FIXED,))
         contract.require_m_levels(M_LEVELS)
         contract.require_seeds(SEEDS)
@@ -627,7 +627,7 @@ def main() -> None:
             raise AssertionError("runner capability floor does not match contract")
 
     result = run(args.smoke)
-    out = Path("artifacts/TACOSM-C5-FRONTIER-REPLICATION-001.json")
+    out = Path("artifacts/TACOSM-C5-FRONTIER-ROBUSTNESS-002.json")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(json.dumps(result, indent=2, sort_keys=True))
