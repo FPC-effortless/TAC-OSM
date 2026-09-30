@@ -23,6 +23,10 @@ class CosineSelectiveLookup:
     cosine_score_macs: int
     normalization_ops: int
 
+    @property
+    def shortlist_size(self) -> int:
+        return self.shortlist_scored
+
 
 class CosineRerankedStateIndex:
     """Bounded learned bucket proposal followed by continuous cosine reranking."""
