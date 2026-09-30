@@ -168,7 +168,7 @@ def _analytic(seed: int, m: int) -> dict:
     indexed_hits = 0
     for step in range(HELDOUT_EPISODES):
         target_index = rng.randrange(m)
-        query = _query(pool, target_index, state.current_step)
+        query = _query(pool, target_index, state.current_step, step)
         target = pool.updates[target_index].key
         full_hits += int(
             addressor.select(query, state, target_address=target).selected_address == target
