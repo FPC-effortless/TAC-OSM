@@ -43,6 +43,8 @@ class ProductKeyBuildDiagnostics:
     factor_size: int
     factor_dim: int
     build_similarity_macs: int
+    state_assignment_macs: int
+    total_build_macs: int
     nonempty_cells: int
     max_cell_size: int
 
@@ -131,7 +133,7 @@ class ProductKeyStateIndex:
         self._cells: dict[tuple[int, int], tuple[str, ...]] = {}
         self._embeddings: dict[str, tuple[float, ...]] = {}
         self._built = False
-        self._build = ProductKeyBuildDiagnostics(0, 0, 0, 0, 0, 0, 0, 0)
+        self._build = ProductKeyBuildDiagnostics(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
     def build(
         self,
@@ -200,16 +202,25 @@ class ProductKeyStateIndex:
         nonempty = len(self._cells)
         max_cell = max((len(addresses) for addresses in self._cells.values()), default=0)
         factor_dim = half
-        build_macs = (
-            len(training_embeddings) * self.config.factor_size * dim
+        codebook_fit_macs = (
+            len(training_embeddings)
+            * self.config.factor_size
+            * dim
+            * self.config.iterations
         )
+        state_assignment_macs = (
+            len(embeddings) * self.config.factor_size * dim
+        )
+        build_macs = codebook_fit_macs + state_assignment_macs
         self._build = ProductKeyBuildDiagnostics(
             state_items=len(embeddings),
             codebook_training_items=len(training_embeddings),
             embedding_dim=dim,
             factor_size=self.config.factor_size,
             factor_dim=factor_dim,
-            build_similarity_macs=build_macs,
+            build_similarity_macs=codebook_fit_macs,
+            state_assignment_macs=state_assignment_macs,
+            total_build_macs=build_macs,
             nonempty_cells=nonempty,
             max_cell_size=max_cell,
         )
