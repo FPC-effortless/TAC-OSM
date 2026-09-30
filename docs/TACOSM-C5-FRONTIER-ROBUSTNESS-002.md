@@ -59,3 +59,5 @@ Full: python scripts/run_c5_frontier_robustness_002.py
 Artifact: artifacts/TACOSM-C5-FRONTIER-ROBUSTNESS-002.json
 
 Full-run marker: [run-c5-frontier-robustness-002-full]
+
+Full measurement trigger: commit message [run-c5-frontier-robustness-002-full] is the registered measurement trigger.
