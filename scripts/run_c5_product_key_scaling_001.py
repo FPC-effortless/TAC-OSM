@@ -79,10 +79,11 @@ def build_scaled_task(seed: int, m: int, step: int) -> EndToEndTask:
         provenance="c5_product_key_scaling_query",
     )
 
-    decoys = list(DECOY_CODES)
-    rng.shuffle(decoys)
+    remaining_eval = [code for code in TARGET_CODES if code != target_value]
+    pool = list(TRAIN_CODES) + remaining_eval + list(DECOY_CODES)
+    rng.shuffle(pool)
     values = [target_value]
-    values.extend(decoys[: m - 1])
+    values.extend(pool[: m - 1])
     rng.shuffle(values)
     addresses = [f"scale-state-{seed}-{m}-{step}-{i:04d}" for i in range(m)]
     updates = tuple(
