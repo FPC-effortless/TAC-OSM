@@ -11,6 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from tac_osm import Query
+from tac_osm.contract import load_contract
 from tac_osm.graph_program_router import semantic_match_rank
 from tac_osm.semantic_state_addressor import (
     SemanticAddressingConfig,
@@ -223,6 +224,14 @@ def reset_probe(seed: int) -> dict:
 
 
 def main() -> None:
+    contract = load_contract("TACOSM-STATE-REP-006")
+    contract.require_levels([N_STATES])
+    contract.require_seeds(SEEDS)
+    contract.require_steps(TRAIN_EPISODES)
+    contract.require_eval_steps(HELDOUT_EPISODES)
+    contract.require_arms(
+        ["analytic", "learned", "no_learning", "shuffle", "reset"]
+    )
     result = {
         "protocol": {
             "name": "TACOSM-STATE-REP-006",
