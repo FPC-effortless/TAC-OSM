@@ -40,6 +40,7 @@ jobs:
         run: |
           mkdir -p artifacts
           python scripts/run_successor_rep002.py > artifacts/REP-002.stdout.json
+          cat artifacts/REP-002.stdout.json
       - name: Upload REP-002 result
         uses: actions/upload-artifact@v4
         with:
