@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Registered full-measurement trigger; no protocol or runtime logic change.
 """Run TACOSM-C5-COVERAGE-FRONTIER-002."""
 
 from __future__ import annotations
