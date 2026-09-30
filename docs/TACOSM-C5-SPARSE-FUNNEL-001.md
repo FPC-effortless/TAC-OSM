@@ -32,9 +32,10 @@ reranks that shortlist.
 
 ## Objective
 
-The teacher scores every persistent state:
+The teacher scores every training-state item during distillation:
 
-p_T(i) = softmax(s_T(q,c_i) / tau_T).
+p_T(i) = softmax(s_T(q,c_i) / tau_T). Runtime reranking scores only the bounded
+shortlist, while the exhaustive reference scores the complete 64-state population.
 
 Teacher probability mass is aggregated to the prototype buckets:
 
