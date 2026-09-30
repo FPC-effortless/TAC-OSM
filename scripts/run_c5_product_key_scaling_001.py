@@ -80,10 +80,15 @@ def build_scaled_task(seed: int, m: int, step: int) -> EndToEndTask:
     )
 
     remaining_eval = [code for code in TARGET_CODES if code != target_value]
-    pool = list(TRAIN_CODES) + remaining_eval + list(DECOY_CODES)
-    rng.shuffle(pool)
     values = [target_value]
-    values.extend(pool[: m - 1])
+    values.extend(TRAIN_CODES)
+    values.extend(remaining_eval)
+    if len(values) != 64:
+        raise AssertionError("base scaled state pool must contain exactly 64 items")
+    if m > 64:
+        decoys = list(DECOY_CODES)
+        rng.shuffle(decoys)
+        values.extend(decoys[: m - 64])
     rng.shuffle(values)
     addresses = [f"scale-state-{seed}-{m}-{step}-{i:04d}" for i in range(m)]
     updates = tuple(
