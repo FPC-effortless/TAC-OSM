@@ -11,7 +11,7 @@ For the registered persistent-state retrieval workload, what is the minimum frac
 Jointly vary:
 
 - factor size: 8, 16, 32;
-- factor beam: 2, 4, 6, 8, 12;
+- factor beam: 2, 4, 6, 8 for factor size 8; 2, 4, 6, 8, 12 for factor sizes 16 and 32;
 - M: 128, 256, 512;
 - H: 256;
 - K: 32;
@@ -44,6 +44,8 @@ It also showed that proposal coverage falls as granularity increases. The next s
 This experiment can establish a capability-constrained frontier on the registered workload. It cannot establish a universal optimum, universal semantic addressing, universal sublinear retrieval, or hardware wall-clock speedup.
 
 ## Integrity
+
+The originally drafted factor-size-8 / beam-12 combination was invalid because the index enforces `factor_beam <= factor_size`. That arm was removed before any successful registered full measurement; the remaining arm set is exactly the set enumerated by the runner.
 
 The protocol is machine-readable in `contracts/TACOSM-C5-COVERAGE-FRONTIER-001.json`. The full measurement is gated by the commit marker `[run-c5-frontier-full]`.
 
