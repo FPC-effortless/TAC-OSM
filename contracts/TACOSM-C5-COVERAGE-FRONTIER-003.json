@@ -1,0 +1,234 @@
+{
+  "experiment_id": "TACOSM-C5-COVERAGE-FRONTIER-003",
+  "title": "Audited state-distinct capability-compute frontier",
+  "question": "For the registered persistent-state retrieval workload, what is the minimum fraction of states reranked that preserves at least 80% of exhaustive reference capability under a state-distinct downstream task?",
+  "hypothesis": "Increasing factor granularity reduces candidate occupancy, while increasing factor beam recovers coverage. A valid pooled-success capability measure should expose the computation/coverage frontier without relying on per-cell ratio averaging.",
+  "arms": [
+    {
+      "name": "factor_size_8_beam_2",
+      "intervention": "product-key factor size 8 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=2",
+      "value": "8,2"
+    },
+    {
+      "name": "factor_size_8_beam_4",
+      "intervention": "product-key factor size 8 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=4",
+      "value": "8,4"
+    },
+    {
+      "name": "factor_size_8_beam_6",
+      "intervention": "product-key factor size 8 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=6",
+      "value": "8,6"
+    },
+    {
+      "name": "factor_size_8_beam_8",
+      "intervention": "product-key factor size 8 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=8, factor_beam=8",
+      "value": "8,8"
+    },
+    {
+      "name": "factor_size_16_beam_2",
+      "intervention": "product-key factor size 16 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=2",
+      "value": "16,2"
+    },
+    {
+      "name": "factor_size_16_beam_4",
+      "intervention": "product-key factor size 16 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=4",
+      "value": "16,4"
+    },
+    {
+      "name": "factor_size_16_beam_6",
+      "intervention": "product-key factor size 16 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=6",
+      "value": "16,6"
+    },
+    {
+      "name": "factor_size_16_beam_8",
+      "intervention": "product-key factor size 16 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=8",
+      "value": "16,8"
+    },
+    {
+      "name": "factor_size_16_beam_12",
+      "intervention": "product-key factor size 16 with factor beam 12",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=16, factor_beam=12",
+      "value": "16,12"
+    },
+    {
+      "name": "factor_size_32_beam_2",
+      "intervention": "product-key factor size 32 with factor beam 2",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=2",
+      "value": "32,2"
+    },
+    {
+      "name": "factor_size_32_beam_4",
+      "intervention": "product-key factor size 32 with factor beam 4",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=4",
+      "value": "32,4"
+    },
+    {
+      "name": "factor_size_32_beam_6",
+      "intervention": "product-key factor size 32 with factor beam 6",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=6",
+      "value": "32,6"
+    },
+    {
+      "name": "factor_size_32_beam_8",
+      "intervention": "product-key factor size 32 with factor beam 8",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=8",
+      "value": "32,8"
+    },
+    {
+      "name": "factor_size_32_beam_12",
+      "intervention": "product-key factor size 32 with factor beam 12",
+      "acts_on": "factor_size_and_factor_beam",
+      "knob": "factor_size=32, factor_beam=12",
+      "value": "32,12"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "capability_retention",
+      "role": "primary capability-constrained frontier endpoint; min(1, pooled selective success / pooled exhaustive success)",
+      "primary": true
+    },
+    {
+      "name": "states_scored_over_M",
+      "role": "primary computation-scaling endpoint",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_target_recall",
+      "role": "reference retrieval endpoint",
+      "primary": false
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "coarse coverage diagnostic",
+      "primary": false
+    },
+    {
+      "name": "selective_target_recall",
+      "role": "selective retrieval endpoint",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_end_to_end_success",
+      "role": "state-distinct reference capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "selective_end_to_end_success",
+      "role": "state-distinct selective capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_success_count",
+      "role": "aggregation audit",
+      "primary": false
+    },
+    {
+      "name": "selective_success_count",
+      "role": "aggregation audit",
+      "primary": false
+    },
+    {
+      "name": "evaluation_count",
+      "role": "aggregation audit",
+      "primary": false
+    },
+    {
+      "name": "capability_gain",
+      "role": "selective minus exhaustive end-to-end success",
+      "primary": false
+    },
+    {
+      "name": "total_macs",
+      "role": "arithmetic audit",
+      "primary": false
+    },
+    {
+      "name": "executor_distinctness_audit",
+      "role": "task-validity audit",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "For every M/configuration, compute capability_retention from pooled success counts only. A configuration is eligible exactly when that stored capability_retention >= 0.80.",
+      "licenses": "a registered capability-constrained frontier on the corrected state-distinct workload",
+      "does_not_license": "a universal optimum, universal sublinear retrieval, or hardware wall-clock speedup"
+    },
+    {
+      "condition": "At each M, report the eligible configuration minimizing states_scored_over_M. Also identify fixed configurations eligible at all three M levels and report the one minimizing mean states_scored_over_M.",
+      "licenses": "evidence for a per-M and fixed-configuration capability/computation frontier on this workload",
+      "does_not_license": "general semantic addressing or a completed C5 proof"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "exhaustive cosine",
+    "proposal retention",
+    "exhaustive capability",
+    "selective capability",
+    "capability retention",
+    "states scored over M",
+    "arithmetic",
+    "executor distinctness"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
+    "same width-16 raw-trained cosine teacher",
+    "same 48 training codes versus 16 held-out target codes",
+    "same one-bit noisy query construction",
+    "same H=256",
+    "same M levels",
+    "same K=32",
+    "same k-means iteration count=8",
+    "training-only codebook fitting",
+    "same exact product-key index",
+    "same state-distinct downstream executor",
+    "same task seed stream across arms"
+  ],
+  "status": "pre-registered",
+  "layer": "L4",
+  "predecessor_1": "TACOSM-C5-COVERAGE-FRONTIER-001 (VOID: non-discriminating downstream endpoint)",
+  "predecessor_2": "TACOSM-C5-COVERAGE-FRONTIER-002 (VOID: inconsistent pooled eligibility aggregation)",
+  "protocol_note": "This registration preserves the scientific search surface. It corrects only the aggregation implementation: pooled capability is derived from aggregate success counts, then the same scalar is used for eligibility and frontier selection. The prior voided experiments are not rewritten."
+}
