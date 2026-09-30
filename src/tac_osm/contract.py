@@ -301,10 +301,10 @@ class ExperimentContract:
     decision_rule: tuple[DecisionBranch, ...]
     interpretation_order: tuple[str, ...]
     h_levels: tuple[int, ...]
-    m_levels: tuple[int, ...] = ()
-    seeds: tuple[int, ...] = ()
+    seeds: tuple[int, ...]
     steps: int
     eval_steps: int
+    m_levels: tuple[int, ...] = ()
     k_levels: tuple[int, ...] = ()
     held_constant: tuple[str, ...] = ()
     reproduction_baseline: dict[str, dict[str, float]] = field(default_factory=dict)
