@@ -782,6 +782,52 @@ these results cannot support a selective-computation claim.
 
 ---
 
+
+---
+
+## C14 — The hardened selective runtime actually routes only the retained subset
+
+> For the controlled static equality workload, the indexed runtime preserves
+> capability while presenting only the retained subset R to the router.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-SELECTIVE-001`, workflow
+`36666455184`, artifact `11075954570`.
+
+**TYPE:** protocol · **LAYER:** L3
+
+**PRIOR ART:** retrieval-before-compute is established in systems such as
+retrieval-augmented transformers and sparse routing; the TAC-OSM result is the
+measured runtime boundary in this repository.
+
+**NOT INHERITED:** semantic retrieval, learned addressing, execution-work
+scaling with R, or the L4 C5 claim.
+
+**REQUIRED EVIDENCE:** the registered H={8,64,256}, K={2,4} matrix with a
+single static candidate universe reused across 100 queries per cell.
+
+The indexed arm preserved exact task success at **1.0000** in every cell while
+the router saw exactly K candidates per query:
+
+| H | K | indexed success | router candidates/query | amortized candidate work |
+|---:|---:|---:|---:|---:|
+| 8 | 2 | 1.0000 | 2.00 | 4.08 |
+| 8 | 4 | 1.0000 | 2.00 | 4.08 |
+| 64 | 2 | 1.0000 | 2.00 | 4.64 |
+| 64 | 4 | 1.0000 | 4.00 | 6.64 |
+| 256 | 2 | 1.0000 | 2.00 | 6.56 |
+| 256 | 4 | 1.0000 | 4.00 | 8.56 |
+
+The exhaustive arm routes over H candidates. One-time index construction is
+reported separately and amortized over exactly 100 queries.
+
+This establishes the **runtime retention boundary** in the controlled equality
+instrument.
+
+**BLOCKER:** the executor performs one selected-candidate invocation, so this
+experiment does not measure execution work proportional to |R|. A direct
+batched-execution capability/compute experiment is required before C5 can move.
+
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
