@@ -304,7 +304,7 @@ class LearnedPrototypeStateIndex:
             normalization_ops=2,
         )
 
-@property
+    @property
     def query_projection_macs(self) -> int:
         return self.index.query_embedding_macs
 
