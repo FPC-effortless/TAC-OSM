@@ -181,7 +181,7 @@ def run_cell(seed: int, m: int, steps: int) -> dict:
         macs.append(QUERY_PROJECTION_MACS + hit.factor_score_macs + hit.state_rerank_macs)
     values = {
         "M": m, "K": K, "factor_beam": FACTOR_BEAM,
-        "exhaustive_target_recall": statistics.fmean(target_ex),
+        "exhaustive_target_recall": statistics.fmean(ex_target),
         "proposal_target_retention": statistics.fmean(retention),
         "selective_target_recall": statistics.fmean(target_sel),
         "exhaustive_end_to_end_success": statistics.fmean(success_ex),
