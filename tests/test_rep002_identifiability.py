@@ -9,6 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from tac_osm import Candidate, StateUpdate, Structure
 from tac_osm.energy_router import EnergyRouterConfig, RepresentationEnergyRouter
+from tac_osm.router import features
 from tac_osm.explicit_executor import ExplicitGraphExecutor
 from tac_osm.leakage import audit_router_inputs
 from tac_osm.state import PersistentStore, StateConfig
@@ -30,6 +31,12 @@ def test_legacy_descriptor_router_collides_on_distinct_programs():
     task = build_topology_task(5)
     store = PersistentStore(StateConfig(seed=0, n_slots=8))
     router = RepresentationEnergyRouter(EnergyRouterConfig(seed=2))
+    read = store.read(task.public())
+    rows = [
+        tuple(features(task.public(), c.descriptor, read, 7, 0))
+        for c in task.candidates
+    ]
+    assert len(set(rows)) == 1
     scores = router.score(task.query, store, task.candidates)
     assert len(set(scores)) == 1
 
@@ -45,6 +52,7 @@ def test_action_index_permutation_does_not_change_explicit_observation():
     task = build_topology_task(11)
     router = ExplicitProgramEnergyRouter()
     before = [router.candidate_observation(c) for c in task.candidates]
+    before_scores = router.score(task.query, task.candidates)
     swapped = tuple(
         Candidate(
             key=c.key,
@@ -56,7 +64,9 @@ def test_action_index_permutation_does_not_change_explicit_observation():
         for i, c in enumerate(task.candidates)
     )
     after = [router.candidate_observation(c) for c in swapped]
+    after_scores = router.score(task.query, swapped)
     assert before == after
+    assert before_scores == after_scores
 
 
 def test_candidate_topology_passes_router_leakage_audit():
