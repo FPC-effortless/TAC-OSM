@@ -112,3 +112,15 @@ def test_same_query_parser_is_binary_width_ten():
     bits = tuple(int(x) for x in task.query.text.split())
     assert len(bits) == 10
     assert len(model.encode_query(task.query)) == 16
+
+def test_lookup_exposes_bounded_shortlist_size():
+    model = _model(7)
+    model.train_with_negative_coverage(
+        CODEBOOK[16:40], negative_count=8, aggregation="mean"
+    )
+    task = build_task(7, 64, 1)
+    state = prepare_state(task)
+    selective = CosineRerankedStateIndex(model)
+    selective.build(state)
+    hit = selective.lookup(task.query)
+    assert hit.shortlist_size == hit.shortlist_scored <= 4
