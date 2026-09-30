@@ -145,6 +145,41 @@ class SemanticStateAddressor:
         macs += len(pool) * self.config.latent_dim
         return scores, macs
 
+    def select_from_pool(
+        self,
+        query: Query,
+        pool: Sequence[AddressedMemory],
+        *,
+        target_address: str | None = None,
+        total_macs: int | None = None,
+    ) -> StateAddressingDecision:
+        if not pool:
+            raise ValueError("semantic state pool is empty")
+        scores, macs = (
+            self.score_pool(query, pool)
+            if total_macs is None
+            else (self.score_pool(query, pool)[0], total_macs)
+        )
+        selected = max(range(len(scores)), key=lambda i: (scores[i], -i))
+        rank = 1
+        if target_address is not None:
+            target_indices = [
+                i for i, item in enumerate(pool) if item.address == target_address
+            ]
+            if len(target_indices) != 1:
+                raise ValueError("target address absent or duplicated in state pool")
+            target_score = scores[target_indices[0]]
+            rank = 1 + sum(score > target_score for score in scores)
+        return StateAddressingDecision(
+            selected_index=selected,
+            selected_address=pool[selected].address,
+            scores=tuple(scores),
+            target_rank=rank,
+            inspected_items=len(pool),
+            pool_size=len(pool),
+            total_macs=macs,
+        )
+
     def select(
         self,
         query: Query,
@@ -153,9 +188,6 @@ class SemanticStateAddressor:
         target_address: str | None = None,
     ) -> StateAddressingDecision:
         pool = self.state_pool(query, state)
-        if not pool:
-            raise ValueError("semantic state pool is empty")
-        scores, macs = self.score_pool(query, pool)
         selected = max(range(len(scores)), key=lambda i: (scores[i], -i))
         rank = 1
         if target_address is not None:
