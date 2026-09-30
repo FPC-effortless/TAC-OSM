@@ -88,6 +88,16 @@ def _evaluate(seed: int, m: int) -> dict:
 
     full_hits = 0
     indexed_hits = 0
+    no_learning_hits = 0
+    no_learning = SemanticStateAddressor(
+        SemanticAddressingConfig(
+            input_dim=STATE_BITS,
+            latent_dim=8,
+            learning_rate=0.01,
+            margin=0.1,
+            seed=seed + 10000,
+        )
+    )
     index_hits = 0
     shortlist_sizes = []
     full_macs = []
@@ -126,6 +136,7 @@ def _evaluate(seed: int, m: int) -> dict:
         "queries": HELDOUT_EPISODES,
         "learned_full_top1": full_hits / HELDOUT_EPISODES,
         "learned_indexed_top1": indexed_hits / HELDOUT_EPISODES,
+        "no_learning_full_top1": no_learning_hits / HELDOUT_EPISODES,
         "index_target_recall": index_hits / HELDOUT_EPISODES,
         "shortlist_size_mean": statistics.fmean(shortlist_sizes),
         "shortlist_size_max": max(shortlist_sizes),
@@ -212,10 +223,6 @@ def main() -> None:
             cell = _evaluate(seed, m)
             result["cells"].append(cell)
 
-    # Explicit no-learning reference: one fresh random addressor on each
-    # evaluation cell, measured with the same full-scan queries.
-    for cell in result["cells"]:
-        pass
 
     out = Path("artifacts/TACOSM-STATE-REP-009.json")
     out.parent.mkdir(parents=True, exist_ok=True)
