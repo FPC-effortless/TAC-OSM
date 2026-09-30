@@ -211,8 +211,24 @@
     "same state-distinct downstream executor",
     "same task seed stream across arms"
   ],
-  "status": "pre-registered",
+  "status": "void",
   "layer": "L4",
   "predecessor": "TACOSM-C5-COVERAGE-FRONTIER-001 (VOID: non-discriminating downstream endpoint)",
-  "protocol_note": "This experiment preserves the predecessor arm surface and capability floor. The downstream executor is replaced by a fixed state-distinct executor; this is a new registration, not a rewrite of the voided result."
+  "protocol_note": "This experiment preserves the predecessor arm surface and capability floor. The downstream executor is replaced by a fixed state-distinct executor; this is a new registration, not a rewrite of the voided result.",
+  "result_note": {
+    "run_id": 36789999312,
+    "measurement_commit": "8e47ce52a67dbda419cf9316456f6fe8d86bbe93",
+    "artifact_id": 11131012112,
+    "artifact_digest": "sha256:ab406dd63773d3ee3e34f53eaa8c8df1eeb1bfe8ad69dda4b1d87ea58bec1d0b",
+    "disposition": "VOID",
+    "reason": "The full runner printed capability_retention using pooled selective/exhaustive success, but the eligibility flag meets_capability_floor was computed from the pre-update mean of per-seed/per-cell capability ratios inside dict.update. Therefore the registered frontier selection used a different quantity from the reported capability_retention. The sparse-compute measurements are retained as diagnostics; the capability-constrained frontier decision is invalid.",
+    "retained_diagnostics": [
+      "executor_distinctness_audit passed",
+      "states_scored_over_M was measured",
+      "proposal_target_retention and selective_target_recall were measured",
+      "state-distinct exhaustive/selective end-to-end success was measured",
+      "arithmetic metrics were measured"
+    ],
+    "non_promotion": "No capability-constrained frontier is promoted from this run."
+  }
 }
