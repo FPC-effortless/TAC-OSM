@@ -85,10 +85,12 @@ def test_full_and_selective_execution_produce_identical_output():
     executor = EndToEndExecutor()
     for h in (64, 128, 256):
         task = build_task(23, h, 6)
-        full_output, full_work, full_calls = executor.execute_population(task.candidates)
+        full_output, full_work, full_calls = executor.execute_population(
+            task.candidates, task.target_value
+        )
         relevant = tuple(task.candidates[i] for i in sorted(task.relevant_indices))
         selective_output, selective_work, selective_calls = executor.execute_population(
-            relevant
+            relevant, task.target_value
         )
         assert full_output == selective_output == task.expected_output
         assert full_calls == h
