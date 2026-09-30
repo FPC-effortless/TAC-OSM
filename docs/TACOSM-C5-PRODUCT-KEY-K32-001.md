@@ -1,6 +1,6 @@
 # TACOSM-C5-PRODUCT-KEY-K32-001
 
-Status: PREREGISTERED — result pending.
+Status: PREREGISTERED — full registered measurement triggered.
 
 ## Purpose
 
