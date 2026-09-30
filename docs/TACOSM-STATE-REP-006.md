@@ -103,7 +103,7 @@ At state-pool size M and latent dimension d=8:
 
 `C_state_address = 8*5 + M*(8*5 + 8)` MACs
 
-At M=8 this is 432 MACs before dictionary reads, comparisons, and Python
+At M=8 this is 424 MACs before dictionary reads, comparisons, and Python
 overhead.
 
 Crucially, this is an exhaustive semantic state scan: O(M). It is not an
