@@ -54,6 +54,7 @@ class ProductKeyLookup:
     selected_cells: tuple[tuple[int, int], ...]
     factor_score_macs: int
     pair_generation_ops: int
+    state_candidates_scored: int
     state_rerank_macs: int
     factor_beam: int
 
@@ -223,6 +224,7 @@ class ProductKeyStateIndex:
         query_embedding: Sequence[float],
         *,
         beam: int | None = None,
+        max_shortlist: int | None = None,
     ) -> ProductKeyLookup:
         if not self._built:
             raise RuntimeError("product-key index has not been built")
@@ -233,8 +235,11 @@ class ProductKeyStateIndex:
         half = dim // 2
         q1, q2 = q[:half], q[half:]
         width = self.config.factor_beam if beam is None else int(beam)
+        limit = self.config.max_shortlist if max_shortlist is None else int(max_shortlist)
         if width < 1 or width > self.config.factor_size:
             raise ValueError("beam must be within factor_size")
+        if limit < 1:
+            raise ValueError("max_shortlist must be positive")
 
         factor1_scores = [_dot(q1, center) for center in self._factor1]
         factor2_scores = [_dot(q2, center) for center in self._factor2]
@@ -253,27 +258,24 @@ class ProductKeyStateIndex:
             for cell in cells
             for address in self._cells.get(cell, ())
         })
-        # Over-fetch is deliberately bounded before the fine continuous reranker.
-        if len(addresses) > self.config.max_shortlist:
-            scored = [
-                (_dot(q, self._embeddings[address]), address)
-                for address in addresses
-            ]
-            scored.sort(key=lambda item: (-item[0], item[1]))
-            addresses = [address for _, address in scored[: self.config.max_shortlist]]
-
-        reranked = [
+        candidate_count = len(addresses)
+        scored = [
             (_dot(q, self._embeddings[address]), address)
             for address in addresses
         ]
+        scored.sort(key=lambda item: (-item[0], item[1]))
+        retained = scored[:limit]
+
+        reranked = retained
         reranked.sort(key=lambda item: (-item[0], item[1]))
         selected = reranked[0][1] if reranked else None
         return ProductKeyLookup(
-            candidate_addresses=tuple(addresses),
+            candidate_addresses=tuple(address for _, address in retained),
             selected_address=selected,
             selected_cells=cells,
             factor_score_macs=self.config.factor_size * dim,
             pair_generation_ops=len(cells),
-            state_rerank_macs=len(addresses) * dim,
+            state_candidates_scored=candidate_count,
+            state_rerank_macs=candidate_count * dim,
             factor_beam=width,
         )
