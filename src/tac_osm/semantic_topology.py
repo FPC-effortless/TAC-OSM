@@ -95,7 +95,15 @@ def build_semantic_task(
 
     rng = random.Random(seed)
     target_edges = rng.choice(topologies)
-    distractors = [edges for edges in topologies if edges != target_edges]
+    target_signature = semantic_signature(target_edges)
+    # Exclude all other programs with the same semantic signature. The target
+    # relation is therefore unique within the candidate pool, while the pool
+    # can still contain repeated non-target semantic classes.
+    distractors = [
+        edges
+        for edges in topologies
+        if edges != target_edges and semantic_signature(edges) != target_signature
+    ]
     rng.shuffle(distractors)
     chosen = [target_edges, *distractors[: n_candidates - 1]]
     rng.shuffle(chosen)
