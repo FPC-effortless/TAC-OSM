@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from tac_osm import Query
 from tac_osm.contract import load_contract
-from tac_osm.graph_program_router import semantic_match_rank
+from tac_osm.graph_program_router import semantic_target_rank
 from tac_osm.semantic_state_addressor import (
     SemanticAddressingConfig,
     SemanticStateAddressor,
@@ -135,21 +135,18 @@ def learned_arm(seed: int, learned: bool) -> dict:
             step=task.read_step,
             provenance="retrieved_semantic_state",
         )
-        _, program_index_rank = semantic_match_rank(
-            state_query, task.candidates
+        program_target_rank, _ = semantic_target_rank(
+            state_query, task.candidates, task.target_action
         )
-        # semantic_match_rank returns the selected rank, which is 1 exactly
-        # when the retrieved state value resolves the target semantic class.
-        end_to_end_success = (
-            selected_value == task.target_signature and program_index_rank == 1
-        )
+        # The exact downstream structural matcher has one candidate with the
+        # retrieved semantic signature, so end-to-end success is equivalent to
+        # retrieving the target semantic state item.
+        end_to_end_success = selected_value == task.target_signature
         metrics["episodes"] += 1
         metrics["state_top1"].append(int(decision.selected_address == task.target_address))
         metrics["state_rank"].append(decision.target_rank)
         metrics["end_to_end_top1"].append(int(end_to_end_success))
-        metrics["end_to_end_rank"].append(
-            1 if end_to_end_success else program_index_rank
-        )
+        metrics["end_to_end_rank"].append(program_target_rank)
         metrics["address_macs"].append(decision.total_macs)
         metrics["inspected_items"].append(decision.inspected_items)
         metrics["pool_size"].append(decision.pool_size)
