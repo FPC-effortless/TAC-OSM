@@ -114,12 +114,12 @@
   ],
   "decision_rule": [
     {
-      "condition": "report every registered arm's target recall, recall-retention ratio, proposal retention, states scored/M, end-to-end success, arithmetic, and routing audit values separately at each M",
+      "condition": "For arms factor16_beam4, factor16_beam6, factor16_beam8, factor16_beam12, factor16_beam16, factor32_beam4, factor32_beam6, factor32_beam8, and factor32_beam12, report target recall, recall-retention ratio, proposal retention, states scored/M, end-to-end success, arithmetic, and routing audit values separately at each M.",
       "licenses": "a workload-specific compute-capability frontier for the tested product-key construction",
       "does_not_license": "universal optimal beam size, semantic retrieval guarantees, universal sublinear scaling, or hardware wall-clock speedup"
     },
     {
-      "condition": "an arm has target_recall_retention_ratio >= 0.90 at every registered M level",
+      "condition": "For each registered arm, an arm satisfies the capability constraint when target recall retention ratio is at least 0.90 at every registered M level.",
       "licenses": "that arm satisfies the pre-registered capability floor on the tested workload",
       "does_not_license": "that the arm is generally optimal or that the result transfers beyond the registered workload"
     }
