@@ -1,0 +1,42 @@
+{
+  "experiment_id": "TACOSM-C5-EXEC-001",
+  "title": "Direct execution work scaling with retained relevant subset",
+  "question": "Can an indexed runtime preserve the exact aggregate capability while changing actual execution work from O(H) candidate programs to O(R) candidate programs with R fixed?",
+  "hypothesis": "H_exec_subset: with a fixed relevant set R=4, exact content addressing can preserve task capability while exhaustive execution work grows with H and selective execution work remains bounded by R.",
+  "arms": [
+    {"name":"exhaustive","intervention":"execute every candidate in the static universe","acts_on":"execution boundary","knob":"retained set","value":"H"},
+    {"name":"selective","intervention":"exact content-address index then execute only retained relevant candidates","acts_on":"address + execution boundary","knob":"K","value":"4","schedule":"100 queries per cell"}
+  ],
+  "endpoints": [
+    {"name":"success_rate","role":"primary — exact aggregate output matches hidden environment truth","primary":true},
+    {"name":"executor_candidates_per_query","role":"secondary — actual number of candidate programs executed","primary":false},
+    {"name":"executor_work_units_per_query","role":"secondary — actual fixed-work execution units","primary":false},
+    {"name":"retained_fraction","role":"secondary — R/H","primary":false},
+    {"name":"index_build_candidates","role":"secondary — one-time H-sized build","primary":false},
+    {"name":"address_query_positions","role":"secondary — marked positions inspected per query","primary":false},
+    {"name":"amortized_index_build_candidates","role":"secondary — one-time build amortized across queries","primary":false}
+  ],
+  "decision_rule": [
+    {"condition":"selective success_rate equals exhaustive success_rate at every registered H and selective executor_work_per_query equals 4*9 while exhaustive equals H*9","licenses":"bounded support for the execution-side selective-computation boundary: actual execution work depends on retained R rather than H in the registered synthetic workload","does_not_license":"semantic learned retrieval, long-horizon memory, hardware FLOP superiority, or the full L4 C5 claim"},
+    {"condition":"selective success_rate is materially below exhaustive at any H","licenses":"the registered selective execution boundary does not preserve capability under this task","does_not_license":"that selective computation is impossible"}
+  ],
+  "interpretation_order": ["task validity","capability parity","execution work","retained fraction","index amortization"],
+  "h_levels": [64,128,256],
+  "k_levels": [4],
+  "seeds": [0,1,2,3,4],
+  "steps": 100,
+  "eval_steps": 100,
+  "held_constant": [
+    "candidate universe is fixed per seed and H and reused for all 100 queries",
+    "exactly four relevant candidates exist for every query at every H",
+    "the same exact executor is used in exhaustive and selective arms",
+    "the selective index is built once per static population",
+    "query relation uses six public marked positions; hidden truth is only used by the independent evaluator",
+    "each candidate execution carries exactly 9 registered work units",
+    "K=4 is fixed before the run",
+    "no learning, repair, or outcome feedback is used",
+    "prior C5/REP evidence remains frozen"
+  ],
+  "status": "pre-registered",
+  "layer": "L3"
+}
