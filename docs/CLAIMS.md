@@ -677,6 +677,109 @@ moves the evidence frontier. Per the pre-registered decision rule, F1
 re-queues on this top-K evidence alone, recorded as "top-K signal intact" and
 *not* as "`routing@1` improved".
 
+
+---
+
+## C12 — Semantic state addressing through opaque addresses
+
+> A learned state-addressing mechanism can identify the persistent item whose
+> stored semantic content satisfies a query, even when the item's address is
+> opaque and absent from the query.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-STATE-REP-006`, clean registered run
+`36664979180`, code head `b548642c397b4c9289761e65f11bd4327ccec86b`.
+
+**TYPE:** mechanism · **LAYER:** L2
+
+**PRIOR ART:** generic content-addressed retrieval is established prior art;
+the specific TAC-OSM result is the tested integration of semantic state values,
+opaque addresses, and the temporal state boundary.
+
+**NOT INHERITED:** scalable addressing, long-horizon memory, learned indexing,
+or arbitrary memory semantics.
+
+**REQUIRED EVIDENCE:** the registered REP-006 protocol and its precondition
+gate. The clean run passed all **841 tests** before execution.
+
+At M=8 state items:
+
+| seed | learned Top-1 | no-learning Top-1 |
+|---:|---:|---:|
+| 0 | 0.5117 | 0.0156 |
+| 1 | 0.7422 | 0.2188 |
+| 2 | 0.2695 | 0.0156 |
+| 3 | 1.0000 | 0.4883 |
+| 4 | 1.0000 | 0.1914 |
+| pooled | **0.7047** | **0.1859** |
+
+The learned arm exceeds the frozen control in every seed.
+
+The analytic identity witness is 1.0000 at every seed. The reset intervention
+fails closed on every seed, and the opaque address set survives the value-shuffle
+control.
+
+**BLOCKER:** M=8 is a small synthetic population. The implementation performs
+an exhaustive O(M) scan. The result does not move C5.
+
+A secondary end-to-end metric from the first clean run was quarantined because
+its target-rank helper returned selected-argmax rank rather than gold rank. A
+separate exact target-rank diagnostic was added; no claim above depends on the
+quarantined endpoint.
+
+---
+
+## C13 — Semantic state addressing survives a bounded population scaling
+
+> Under the registered synthetic task and fixed learner, learned semantic
+> state-address recall remains above the no-learning control across
+> M ∈ {2,4,8,16,32}, while addressing arithmetic grows linearly with M.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-STATE-REP-007`, workflow
+`36665305689`, artifact `11075258348`.
+
+**TYPE:** mechanism · **LAYER:** L2
+
+**PRIOR ART:** the general content-addressed retrieval pattern is inherited;
+the population curve is TAC-OSM's measurement.
+
+**NOT INHERITED:** sublinear lookup, an asymptotic complexity improvement,
+long-horizon memory scaling, or capability parity at large H.
+
+**REQUIRED EVIDENCE:** the registered five-level M curve with five seeds per
+level, identical task/learner, analytic witness and no-learning control.
+
+Learned pooled Top-1 recall by state population:
+
+| M | learned | no-learning | chance |
+|---:|---:|---:|---:|
+| 2 | **0.9922** | 0.5273 | 0.5000 |
+| 4 | **0.9828** | 0.2734 | 0.2500 |
+| 8 | **0.7141** | 0.1977 | 0.1250 |
+| 16 | **0.4125** | 0.1813 | 0.0625 |
+| 32 | **0.3344** | 0.1563 | 0.0313 |
+
+The learned arm exceeds the frozen control at every registered M, while the
+analytic witness remains exactly 1.0000 throughout.
+
+The key limitation is visible in the same table: absolute recall declines
+substantially as M increases. The result therefore demonstrates bounded
+robustness of the semantic addressing relation, not scale invariance.
+
+Addressing arithmetic is:
+
+`C_state = 40 + 48M` MACs.
+
+Measured accounting matches the formula:
+136, 232, 424, 808, and 1,576 MACs at M=2,4,8,16,32 respectively.
+
+Because the implementation scans all M items, the addressing stage remains
+**O(M)**.
+
+**BLOCKER:** replace exhaustive scanning with a real learned or deterministic
+index, then measure capability and compute separately. Until that experiment,
+these results cannot support a selective-computation claim.
+
+
 ---
 
 ## Claims this repository does not make
