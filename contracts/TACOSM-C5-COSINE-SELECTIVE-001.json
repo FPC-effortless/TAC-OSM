@@ -1,0 +1,132 @@
+{
+  "experiment_id": "TACOSM-C5-COSINE-SELECTIVE-001",
+  "title": "Bounded learned state retrieval with cosine reranking",
+  "question": "Can a learned binary state proposal plus bounded cosine reranking preserve the continuous exhaustive cosine retriever's capability while reducing state-search work?",
+  "hypothesis": "H_selective_cosine: a learned 8-bit semantic index with radius-2 probing and K=4 cosine reranking will retain most of the exhaustive cosine retriever's target states and downstream capability while scoring at most four states instead of all 64.",
+  "arms": [
+    {
+      "name": "exhaustive_cosine",
+      "intervention": "continuous cosine scoring over all M=64 learned state embeddings, followed by exact candidate lookup and execution",
+      "acts_on": "state retrieval",
+      "knob": "state search",
+      "value": "M"
+    },
+    {
+      "name": "selective_cosine",
+      "intervention": "learned 8-bit binary proposal, Hamming radius 2, K=4, cosine reranking over retained states, followed by exact candidate lookup and execution",
+      "acts_on": "state retrieval",
+      "knob": "shortlist_k",
+      "value": "4"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "state_target_retention",
+      "role": "primary — selective retrieved shortlist contains the same top-level target state selected by the exhaustive cosine arm",
+      "primary": true
+    },
+    {
+      "name": "end_to_end_success",
+      "role": "secondary — exact downstream output matches the exhaustive-cosine reference output",
+      "primary": false
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "secondary — learned binary proposal contains the exhaustive target before cosine reranking",
+      "primary": false
+    },
+    {
+      "name": "shortlist_size",
+      "role": "audit — retained state addresses",
+      "primary": false
+    },
+    {
+      "name": "query_macs",
+      "role": "audit — query projection arithmetic",
+      "primary": false
+    },
+    {
+      "name": "cosine_score_macs",
+      "role": "audit — continuous reranking arithmetic",
+      "primary": false
+    },
+    {
+      "name": "build_macs",
+      "role": "audit — state-index build arithmetic",
+      "primary": false
+    },
+    {
+      "name": "binary_probe_count",
+      "role": "audit — number of probed buckets",
+      "primary": false
+    },
+    {
+      "name": "normalization_ops",
+      "role": "audit — vector normalization operations",
+      "primary": false
+    },
+    {
+      "name": "candidate_executor_work",
+      "role": "audit — downstream execution work",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "selective_cosine state_target_retention >= 0.95 AND selective_cosine end_to_end_success >= 0.95 AND selective_cosine scores <= 4 states per query",
+      "licenses": "bounded support for a learned selective state retrieval boundary with cosine reranking on this synthetic workload",
+      "does_not_license": "general semantic indexing, universal retrieval guarantees, hardware speedup, or broad C5"
+    },
+    {
+      "condition": "either state_target_retention < 0.95 or end_to_end_success < 0.95 or shortlist exceeds K=4",
+      "licenses": "the registered selective boundary does not preserve the target 0.95 capability boundary",
+      "does_not_license": "that bounded learned retrieval is impossible"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "exhaustive cosine retrieval",
+    "proposal retention",
+    "selective state retention",
+    "downstream capability",
+    "arithmetic cost"
+  ],
+  "h_levels": [
+    64,
+    128,
+    256
+  ],
+  "k_levels": [
+    4
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
+    "persistent state population M=64",
+    "one-step causal write/read delay",
+    "A1 H-invariant query/state stream",
+    "dual linear 10->16 encoder",
+    "raw dot-product training objective",
+    "512 training epochs",
+    "one deterministic positive view per update",
+    "eight mean-gradient negatives per positive",
+    "training codes CODEBOOK[16:64]",
+    "evaluation codes CODEBOOK[:16]",
+    "learned index uses 8-bit sign code and Hamming radius 2",
+    "state shortlist K=4",
+    "exact candidate index",
+    "fixed 12-work-unit executor",
+    "same learned weights are used by exhaustive and selective arms",
+    "no evaluation address or gold target enters training",
+    "prior C5 and learned-state evidence remains frozen"
+  ],
+  "status": "pre-registered",
+  "layer": "L4"
+}
