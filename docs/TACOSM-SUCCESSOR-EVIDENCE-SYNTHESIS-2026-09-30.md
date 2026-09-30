@@ -22,6 +22,7 @@ not replace individual preregistrations or frozen result artifacts.
 | C5-LEARNED-STATE-001 | target-state retention=0.170 pooled; capability rule failed in 12/15 cells | Current learned binary state index does not replace the hand-designed state index. |
 | C5-LEARNED-STATE-DIAG-001 | continuous learned recall=0.214 vs random=0.004; binary recall=0.170; continuous-binary gap=0.044 | Learned encoder contains real held-out signal; binary quantization is not the dominant current failure. |
 | C5-LEARNED-STATE-BUDGET-001 | mean continuous recall 0.214 -> 0.314 -> 0.272 at 32/128/512 epochs | Extra training budget does not reliably remove the low-recall boundary; 128 epochs is a local peak, not a demonstrated optimum. |
+| C5-NEGATIVE-COVERAGE-001 | continuous recall 0.272 -> 0.402 with mean-8 negatives; hardest-8 = 0.204 | Negative coverage materially affects learning, but the improvement remains below reliable selective-retrieval levels and costs 8x negative evaluations. |
 
 ## Architecture decomposition
 
