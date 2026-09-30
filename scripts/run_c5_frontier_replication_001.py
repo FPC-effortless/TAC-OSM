@@ -562,13 +562,11 @@ def run(smoke: bool) -> dict:
         else None
     )
 
-    fixed_frontier = (global_frontier == {
-        "factor_size": 16,
-        "factor_beam": 6,
-        "mean_states_scored_over_M": global_frontier["mean_states_scored_over_M"],
-        "min_capability_retention": global_frontier["min_capability_retention"],
-        "mean_total_macs": global_frontier["mean_total_macs"],
-    }) if global_frontier is not None else False
+    fixed_frontier = (
+        global_frontier is not None
+        and global_frontier["factor_size"] == 16
+        and global_frontier["factor_beam"] == 6
+    )
     fixed_per_m_floor = all(
         pooled[f"{m}:16:6"]["capability_retention"] >= CAPABILITY_RETENTION_FLOOR
         for m in ms
