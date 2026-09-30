@@ -14,12 +14,14 @@ not replace individual preregistrations or frozen result artifacts.
 | REP-005 | learned=0.1633; no-learning=0.1023; analytic=1.000; reset=160/160 fail-closed | The tested semantic requirement survives one causal persistent-state boundary. |
 | REP-006 | learned state Top-1 pooled=0.7047 vs no-learning=0.1859; reset 5/5 fail-closed | Bounded learned semantic addressing over an 8-item opaque state pool. |
 | REP-007 | learned > no-learning at M=2,4,8,16,32, but recall falls from .992 to .334 | Learned state addressing survives bounded population scaling but is not scale-invariant. |
-| REP-008 | exact discrete state index recall=1.000 at M=2..32; query lookup is O(1) after build | Demonstrates an exact indexing ceiling/control, not learned semantic retrieval. |
-| REP-009 | noisy Hamming index recall=1.000; learned scorer retained in a bounded shortlist with 75.3–92.9% scorer arithmetic reduction | Hand-designed approximate indexing can create a runtime retention boundary. |
+| REP-008 | exact discrete state index recall=1.000 at M=2..32; query lookup is O(1) after build | Exact discrete indexing control, not learned semantic retrieval. |
+| REP-009 | noisy Hamming index recall=1.000; learned scorer retained in bounded shortlist with 75.3–92.9% scorer arithmetic reduction | Hand-designed approximate indexing can create a runtime retention boundary. |
 | SELECTIVE-001 | indexed success=1.000 across H=8,64,256; router input bounded at K=2/4 | Routing-side retention boundary is supported in the registered runtime. |
 | C5-EXEC-001 | selective executor work=36 vs exhaustive 576/1152/2304 for H=64/128/256; capability=1.000 | Direct bounded evidence that execution work can depend on R rather than H in the synthetic executor. |
-| C5-END-TO-END-001 | capability=1.000 for both arms; selective work=48 vs 768/1536/3072 | Bounded end-to-end relation \x60persistent state -> relevant subset -> execute(R)\x60 with exact indexes. |
-| C5-LEARNED-STATE-001 | direct target-state retention=0.170 pooled; capability rule fails in 12/15 cells | Current learned binary state index does not replace the hand-designed state index. |
+| C5-END-TO-END-001 | capability=1.000 for both arms; selective work=48 vs 768/1536/3072 | Bounded end-to-end relation \`persistent state -> relevant subset -> execute(R)\` with exact indexes. |
+| C5-LEARNED-STATE-001 | target-state retention=0.170 pooled; capability rule failed in 12/15 cells | Current learned binary state index does not replace the hand-designed state index. |
+| C5-LEARNED-STATE-DIAG-001 | continuous learned recall=0.214 vs random=0.004; binary recall=0.170; continuous-binary gap=0.044 | Learned encoder contains real held-out signal; binary quantization is not the dominant current failure. |
+| C5-LEARNED-STATE-BUDGET-001 | mean continuous recall 0.214 -> 0.314 -> 0.272 at 32/128/512 epochs | Extra training budget does not reliably remove the low-recall boundary; 128 epochs is a local peak, not a demonstrated optimum. |
 
 ## Architecture decomposition
 
@@ -34,60 +36,80 @@ The evidence now separates:
 7. selective routing;
 8. selective execution;
 9. combined end-to-end execution;
-10. learned-vs-index quantization as a new failure boundary.
+10. learned-vs-index retrieval failure;
+11. training-budget response.
 
-The important distinction is between **semantic representation quality** and
-**retrieval/indexing quality**. C5-LEARNED-STATE-001 failed at the latter under
-its registered binary quantization, while earlier REP-006 showed that learned
-continuous semantic addressing can work over a smaller pool.
+The central remaining issue is not whether the encoder can learn any signal.
+It clearly can. The question is whether the representation/objective can
+produce sufficiently reliable state retrieval to make the selective boundary
+safe.
 
 ## Current compute model
 
-For the learned state index:
+For the learned continuous state retriever:
 
-- query encoder: 80 MACs/query;
-- state-index construction: 5,120 MACs/build for M=64;
-- amortized state-build arithmetic over a 100-query cell: 51.2 MACs/query;
-- binary lookup: 9 Hamming probes at radius 1 over an 8-bit code.
+- query encoder = 80 MACs/query;
+- 64 cached state embeddings x 8-dimensional dot products = 512 MACs/query;
+- continuous inference = **592 MACs/query**;
+- state embedding build = **5,120 MACs/build**.
 
-These quantities are not interchangeable with the synthetic executor work
-units.
+For the learned binary state index:
 
-For the bounded C5 execution path:
+- query encoder = 80 MACs/query;
+- Hamming radius-1 lookup = 9 probes;
+- build arithmetic = 5,120 MACs/build.
 
-\x60C_total ≈ C_address + C_candidate_retrieval + C_execute(R) + C_verify\x60.
+For bounded C5 execution:
 
-The current positive C5 measurements establish only the synthetic execution
-term and exact/selective addressing controls. They do not establish that a
-learned semantic addressor provides the needed sublinear boundary.
+\`C_total ≈ C_address + C_candidate_retrieval + C_execute(R) + C_verify\`.
 
-## Current failure boundary
+The current positive C5 result establishes only the synthetic execution and
+exact/selective addressing controls. A learned state addressor has not yet
+demonstrated the required high-recall boundary.
 
-C5-LEARNED-STATE-001 is informative because the continuous learned model and
-the binary indexed model can now be separated experimentally.
+## Learned-state failure boundary
 
-The confirmatory run used 48 training codes and 16 disjoint evaluation target
-codes. The learned state index produced only 0.06--0.26 target-address
-retention by seed. The same retention was observed across H because the
-amended task stream keeps query/state generation fixed across history levels.
+C5-LEARNED-STATE-DIAG-001 shows:
 
-The downstream aggregate capability rate rises with H in this synthetic task,
-despite stable state-retention rates. That indicates the executor's aggregate
-output can alias some wrong retrieved states. Consequently, **target-state
-retention is the load-bearing endpoint for this experiment**, not the raw
-downstream capability curve.
+- no-learning continuous recall = 0.004;
+- learned continuous recall = 0.214;
+- learned binary recall = 0.170.
 
-## C5 status
+Thus the model learns real held-out semantic information. The binary
+quantization gap is only 0.044 absolute on the same queries, below the
+registered 0.20 diagnostic threshold.
+
+C5-LEARNED-STATE-BUDGET-001 then varied training budget without changing the
+representation, task stream, or evaluation split:
+
+- 32 epochs: 0.214 mean recall;
+- 128 epochs: 0.314;
+- 512 epochs: 0.272.
+
+The 32 -> 512 change is only +0.058. More updates improve some seeds and
+degrade others, while target rank generally improves at the largest budget.
+The result therefore does not support a simple “train longer” explanation for
+the low Top-1 boundary.
+
+## Current C5 status
 
 Broad C5 remains **ungraded**.
 
 Supported bounded components:
 
-\x60persistent state -> selective retention -> execute(R)\x60.
+\`persistent state -> selective retention -> execute(R)\`.
+
+Also supported:
+
+- learned continuous semantic signal above a random control;
+- direct identification of binary indexing as a non-dominant loss source;
+- direct evidence that training budget alone is insufficient to eliminate the
+  low-recall boundary in the current learner.
 
 Not established:
 
-- learned semantic sublinear state addressing;
+- reliable learned selective state retrieval;
+- learned sublinear semantic state addressing;
 - learned sublinear candidate retrieval;
 - capability/computation parity on realistic workloads;
 - hardware latency/FLOP superiority;
@@ -96,20 +118,22 @@ Not established:
 
 ## Next measurement boundary
 
-The immediate diagnostic is to take the **same trained encoder** from
-C5-LEARNED-STATE-001 and compare:
+The next intervention should target the **learning objective / negative
+coverage** rather than simply increasing budget or changing the index.
 
-\x60continuous semantic top-1 over M=64\x60  
-versus  
-\x608-bit binary index + radius-1 probe + K=1\x60.
+The current learner trains each code against one deterministic negative. The next
+controlled measurement should keep the 512-epoch budget fixed and compare
+registered negative-sampling coverage, including a hard-negative set, while
+keeping the held-out evaluation code split and A1 task stream unchanged.
 
-This isolates whether the loss occurs in the learned representation itself or
-at the continuous-to-discrete retrieval boundary. The result should precede
-any learned candidate-index experiment.
+The criterion should remain direct target-state retrieval, with continuous
+scoring first. Binary indexing should only be reintroduced after continuous
+retrieval is strong enough to justify a selective boundary.
 
 ## Provenance
 
 The following evidence remains frozen and independently reproducible:
 
-REP-001 through REP-009, SELECTIVE-001, C5-EXEC-001, C5-END-TO-END-001, and
-C5-LEARNED-STATE-001.
+REP-001 through REP-009, SELECTIVE-001, C5-EXEC-001, C5-END-TO-END-001,
+C5-LEARNED-STATE-001, C5-LEARNED-STATE-DIAG-001, and
+C5-LEARNED-STATE-BUDGET-001.
