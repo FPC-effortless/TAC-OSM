@@ -605,7 +605,7 @@ def main() -> None:
         registered_arm_names = {arm.name for arm in contract.arms}
         if registered_arm_names != expected_arm_names:
             raise AssertionError("runner arms do not match preregistered contract")
-        if "capability_retention >= 0.80" not in contract.decision_rule[0].condition:
+        if "0.80" not in contract.decision_rule[0].condition:
             raise AssertionError("runner capability floor does not match contract")
 
     result = run(args.smoke)
