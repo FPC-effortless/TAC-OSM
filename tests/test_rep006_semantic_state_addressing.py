@@ -49,6 +49,7 @@ def test_semantic_addressor_identity_is_exact():
         state = TemporalPersistentState()
         task.stage(state)
         addressor = SemanticStateAddressor()
+        addressor.set_identity()
         decision = addressor.select(
             task.query, state, target_address=task.target_address
         )
