@@ -78,8 +78,8 @@ def test_training_and_evaluation_codebooks_are_disjoint():
 def test_eight_negatives_remain_below_training_pool_size():
     model = _model()
     assert model.train_with_negative_coverage(
-        CODEBOOK[16:24],
+        CODEBOOK[16:25],
         negative_count=8,
         aggregation="mean",
         positive_views=1,
-    ) == 16
+    ) == 18
