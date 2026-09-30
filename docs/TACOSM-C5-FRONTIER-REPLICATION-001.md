@@ -38,3 +38,6 @@ The state-distinct executor and exact count-conserving pooled aggregation are in
 A successful replication strengthens confidence in the bounded C5 retrieval/computation result on this synthetic workload. It does not establish sublinear asymptotic scaling, universal semantic retrieval, universal optimality of `(16,6)`, or hardware wall-clock speedup.
 
 The accepted C5-004 result remains the primary evidence record; this replication is an independent-seed reproducibility test.
+
+
+Registered full-measurement trigger: `[run-c5-frontier-rep1-full]`.
