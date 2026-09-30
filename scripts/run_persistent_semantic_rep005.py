@@ -153,7 +153,7 @@ def run_analytic(seed: int) -> dict:
     for step in range(HELDOUT_EPISODES):
         task = build_persistent_semantic_task(
             task_seed(seed, step, True),
-            write_step=TRAIN_EPISODES + step,
+            write_step=step,
             delay=DELAY, n_candidates=N_CANDIDATES, address=ADDRESS,
         )
         stage_and_advance(state, task)
