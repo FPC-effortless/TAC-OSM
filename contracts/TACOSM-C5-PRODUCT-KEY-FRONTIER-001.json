@@ -176,7 +176,7 @@
     "same downstream executor",
     "same task seed stream across arms"
   ],
-  "status": "pre-registered",
+  "status": "measured",
   "layer": "L4",
   "prior_references": [
     {
@@ -186,5 +186,6 @@
       "factor_size": 8,
       "factor_beam": 6
     }
-  ]
+  ],
+  "result_note": "Full run 36793158179 established that only factor16/beam12 and factor16/beam16 meet the 0.90 target-recall-retention floor across M={128,256,512}; their maximum states_scored/M are 0.5619 and 1.0. All tested configurations at <=0.20 states_scored/M fail the 0.90 floor at some M. Increasing beam recovers coverage but returns substantial computation."
 }
