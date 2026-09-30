@@ -301,7 +301,8 @@ class ExperimentContract:
     decision_rule: tuple[DecisionBranch, ...]
     interpretation_order: tuple[str, ...]
     h_levels: tuple[int, ...]
-    seeds: tuple[int, ...]
+    m_levels: tuple[int, ...] = ()
+    seeds: tuple[int, ...] = ()
     steps: int
     eval_steps: int
     k_levels: tuple[int, ...] = ()
@@ -370,6 +371,16 @@ class ExperimentContract:
                 f"{self.experiment_id}: seeds {missing} are absent from this run. "
                 "The spread the decision rule reads is measured over the "
                 "registered seeds, and a subset does not estimate it."
+            )
+
+    def require_m_levels(self, m_levels: Sequence[int]) -> None:
+        """Require registered persistent-state population levels exactly."""
+        got = tuple(int(m) for m in m_levels)
+        want = tuple(self.m_levels)
+        if got != want:
+            raise ContractError(
+                f"{self.experiment_id}: M levels {got} do not match the "
+                f"registered {list(want)}."
             )
 
     def require_k_levels(self, k_levels: Sequence[int]) -> None:
@@ -471,6 +482,8 @@ class ExperimentContract:
             "steps": self.steps,
             "eval_steps": self.eval_steps,
         }
+        if self.m_levels:
+            d["m_levels"] = list(self.m_levels)
         if self.k_levels:
             d["k_levels"] = list(self.k_levels)
         if self.held_constant:
@@ -515,6 +528,7 @@ class ExperimentContract:
             decision_rule=tuple(DecisionBranch.from_dict(b) for b in d["decision_rule"]),
             interpretation_order=tuple(str(x) for x in d["interpretation_order"]),
             h_levels=tuple(int(h) for h in d["h_levels"]),
+            m_levels=tuple(int(m) for m in d.get("m_levels", ())),
             seeds=tuple(int(s) for s in d["seeds"]),
             steps=int(d["steps"]),
             eval_steps=int(d["eval_steps"]),
