@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Run preregistered TACOSM-LEARN-REP-004 exploration intervention."""
+"""Run preregistered TACOSM-LEARN-REP-004 exploration intervention.
+
+The runner records training successes separately from held-out routing so
+exploration effects are not conflated with evaluation-time stochasticity.
+"""
 
 from __future__ import annotations
 
