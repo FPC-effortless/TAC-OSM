@@ -45,3 +45,23 @@ def test_product_key_requires_even_uniform_embeddings():
         assert "equal dimension" in str(exc)
     else:
         raise AssertionError("mixed dimensions must fail")
+
+def test_product_key_codebooks_can_be_fit_on_a_training_subset():
+    items = _items()
+    train = items[:8]
+    index = ProductKeyStateIndex(
+        ProductKeyConfig(factor_size=4, factor_beam=2, iterations=2, max_shortlist=4)
+    )
+    diag = index.build(items, codebook_items=train)
+    assert diag.state_items == 16
+    assert diag.codebook_training_items == 8
+
+
+def test_product_key_rejects_training_items_outside_runtime_pool():
+    index = ProductKeyStateIndex(ProductKeyConfig(factor_size=4, factor_beam=2, iterations=2))
+    try:
+        index.build(_items(), codebook_items=[("missing", (1.0, 0.0, 0.0, 0.0))])
+    except ValueError as exc:
+        assert "subset" in str(exc)
+    else:
+        raise AssertionError("external codebook item must fail")
