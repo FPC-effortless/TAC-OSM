@@ -203,6 +203,109 @@ class LearnedSemanticStateIndex:
                 self._trained_pairs += 1
         return self._trained_pairs
 
+
+    def train_with_negative_coverage(
+        self,
+        train_codes: Sequence[Sequence[int]],
+        *,
+        negative_count: int = 8,
+        aggregation: str = "mean",
+        noise_cycle: int = 10,
+    ) -> int:
+        """Train with a fixed-size deterministic negative pool per update.
+
+        negative_count=1 reproduces the existing single-negative schedule.
+        aggregation="mean" averages the margin gradients from all negatives.
+        aggregation="hardest" evaluates the pool and backpropagates only
+        through the highest-scoring negative. The update count remains one
+        per positive code per epoch, so the intervention changes negative
+        coverage rather than optimizer-update count.
+        """
+        if negative_count < 1:
+            raise ValueError("negative_count must be positive")
+        if aggregation not in {"mean", "hardest"}:
+            raise ValueError("aggregation must be 'mean' or 'hardest'")
+
+        codes = [tuple(int(x) for x in code) for code in train_codes]
+        if len(codes) < 2:
+            raise ValueError("at least two training codes are required")
+        if negative_count >= len(codes):
+            raise ValueError("negative_count must be smaller than training-code count")
+        for code in codes:
+            if len(code) != self.config.input_dim:
+                raise ValueError("training code width mismatch")
+
+        rng = random.Random(self.config.seed * 1009 + 17)
+        self._trained_pairs = 0
+        for epoch in range(self.config.epochs):
+            order = list(range(len(codes)))
+            rng.shuffle(order)
+            for local, idx in enumerate(order):
+                positive = codes[idx]
+                anchor = (idx + 1 + epoch + local) % len(codes)
+                negative_indices = [
+                    (anchor + offset) % len(codes)
+                    for offset in range(negative_count)
+                    if (anchor + offset) % len(codes) != idx
+                ]
+                if len(negative_indices) != negative_count:
+                    extra = 0
+                    while len(negative_indices) < negative_count:
+                        candidate = (anchor + negative_count + extra) % len(codes)
+                        extra += 1
+                        if candidate != idx and candidate not in negative_indices:
+                            negative_indices.append(candidate)
+
+                bits = list(positive)
+                bits[(idx + epoch + noise_cycle) % self.config.input_dim] ^= 1
+                query_x = self._signed(bits)
+                pos_x = self._signed(positive)
+                zq = self._encode(self.wq, self.bq, query_x)
+                zp = self._encode(self.ws, self.bs, pos_x)
+
+                negatives = []
+                for neg_idx in negative_indices:
+                    neg_x = self._signed(codes[neg_idx])
+                    zn = self._encode(self.ws, self.bs, neg_x)
+                    diff = sum(a * b for a, b in zip(zq, zp)) - sum(
+                        a * b for a, b in zip(zq, zn)
+                    )
+                    clipped = max(-60.0, min(60.0, self.config.margin - diff))
+                    gate = 1.0 / (1.0 + math.exp(-clipped))
+                    negatives.append((diff, gate, zn, neg_x))
+
+                if aggregation == "hardest":
+                    _, gate, zn, neg_x = min(
+                        negatives,
+                        key=lambda item: item[0],
+                    )
+                    selected = [(gate, zn, neg_x)]
+                else:
+                    selected = [
+                        (gate, zn, neg_x)
+                        for _, gate, zn, neg_x in negatives
+                    ]
+
+                scale = 1.0 / len(selected)
+                for r in range(self.config.latent_dim):
+                    q_delta = sum(
+                        gate * (zp[r] - zn[r])
+                        for gate, zn, _ in selected
+                    ) * scale
+                    self.bq[r] += self.config.learning_rate * q_delta
+                    for j in range(self.config.input_dim):
+                        self.wq[r][j] += (
+                            self.config.learning_rate * q_delta * query_x[j]
+                        )
+
+                        ws_delta = sum(
+                            gate * zq[r] * (pos_x[j] - neg_x[j])
+                            for gate, _, neg_x in selected
+                        ) * scale
+                        self.ws[r][j] += self.config.learning_rate * ws_delta
+                self._trained_pairs += 1
+        return self._trained_pairs
+
     def _neighbors(self, code: int) -> tuple[tuple[int, int], ...]:
         out = [(0, code)]
         for distance in range(1, self.config.probe_radius + 1):
