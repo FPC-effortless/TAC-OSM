@@ -72,6 +72,8 @@ def summarise(metrics: dict, updates: int) -> dict:
 
 def prepare_state(task) -> TemporalPersistentState:
     state = TemporalPersistentState()
+    if task.write_step > 0:
+        state.advance_to(task.write_step)
     task.stage(state)
     return state
 
