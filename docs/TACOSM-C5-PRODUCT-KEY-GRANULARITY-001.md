@@ -1,6 +1,8 @@
 # TACOSM-C5-PRODUCT-KEY-GRANULARITY-001
 
-Status: PRE-REGISTERED.
+Status: MEASURED.
+
+See `docs/TACOSM-C5-PRODUCT-KEY-GRANULARITY-001-RESULT.md` for the registered measurement result.
 
 ## Purpose
 
