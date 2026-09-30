@@ -1,6 +1,6 @@
 # TACOSM-C5-PRODUCT-KEY-K32-001
 
-Status: PREREGISTERED — final K32 trigger issued.
+Status: PREREGISTERED — corrected 996-test head; final K32 measurement triggered.
 
 ## Purpose
 
