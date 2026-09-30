@@ -49,3 +49,6 @@ This experiment can establish a capability-constrained frontier on the registere
 The exhaustive reference is reported separately because its absolute capability may degrade as M increases. Retention therefore measures preservation of the reference, not high absolute task capability.
 
 The full measurement is triggered only by `[run-c5-frontier4-full]`.
+
+
+Registered full-measurement trigger: `[run-c5-frontier4-full]`.
