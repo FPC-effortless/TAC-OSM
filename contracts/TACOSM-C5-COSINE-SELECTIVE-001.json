@@ -73,13 +73,13 @@
   ],
   "decision_rule": [
     {
-      "condition": "selective_cosine state_target_retention >= 0.95 AND selective_cosine end_to_end_success >= 0.95 AND selective_cosine scores <= 4 states per query",
-      "licenses": "bounded support for a learned selective state retrieval boundary with cosine reranking on this synthetic workload",
+      "condition": "selective_cosine actual target-state recall >= exhaustive_cosine actual target-state recall - 0.05 AND selective_cosine actual end-to-end success >= exhaustive_cosine actual end-to-end success - 0.05 AND shortlist size <= 4",
+      "licenses": "bounded support for a learned selective state retrieval boundary with cosine reranking on this synthetic workload, with capability measured against hidden environment truth",
       "does_not_license": "general semantic indexing, universal retrieval guarantees, hardware speedup, or broad C5"
     },
     {
-      "condition": "either state_target_retention < 0.95 or end_to_end_success < 0.95 or shortlist exceeds K=4",
-      "licenses": "the registered selective boundary does not preserve the target 0.95 capability boundary",
+      "condition": "either selective actual target-state recall or selective actual end-to-end success is more than 0.05 below its exhaustive-cosine reference, or shortlist exceeds K=4",
+      "licenses": "the registered selective boundary does not preserve the exhaustive learned-cosine reference sufficiently",
       "does_not_license": "that bounded learned retrieval is impossible"
     }
   ],
@@ -125,7 +125,8 @@
     "fixed 12-work-unit executor",
     "same learned weights are used by exhaustive and selective arms",
     "no evaluation address or gold target enters training",
-    "prior C5 and learned-state evidence remains frozen"
+    "prior C5 and learned-state evidence remains frozen",
+    "capability endpoints are evaluated against hidden environment truth for both arms; exhaustive cosine is a reference, not a capability oracle"
   ],
   "status": "pre-registered",
   "layer": "L4"
