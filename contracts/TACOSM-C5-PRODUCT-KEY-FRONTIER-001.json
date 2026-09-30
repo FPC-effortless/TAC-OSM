@@ -104,12 +104,18 @@
       "role": "audit"
     }
   ],
-  "decision_rule": {
-    "capability_floor": 0.9,
-    "evaluation": "For every M level, retain the raw ratio of selective target recall to exhaustive target recall. Report arms satisfying >=0.90 at every M. No tuning is permitted after observing outcomes.",
-    "licenses": "A workload-specific compute-capability frontier for the tested product-key construction.",
-    "does_not_license": "universal optimal beam size, semantic retrieval guarantees, universal sublinear scaling, or hardware wall-clock speedup."
-  },
+  "decision_rule": [
+    {
+      "condition": "report every registered arm's target recall, recall-retention ratio, proposal retention, states scored/M, end-to-end success, arithmetic, and routing audit values separately at each M",
+      "licenses": "a workload-specific compute-capability frontier for the tested product-key construction",
+      "does_not_license": "universal optimal beam size, semantic retrieval guarantees, universal sublinear scaling, or hardware wall-clock speedup"
+    },
+    {
+      "condition": "an arm has target_recall_retention_ratio >= 0.90 at every registered M level",
+      "licenses": "that arm satisfies the pre-registered capability floor on the tested workload",
+      "does_not_license": "that the arm is generally optimal or that the result transfers beyond the registered workload"
+    }
+  ],
   "interpretation_order": [
     "exhaustive cosine",
     "proposal retention",
