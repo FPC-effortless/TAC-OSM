@@ -37,8 +37,9 @@ def test_legacy_descriptor_router_collides_on_distinct_programs():
         for c in task.candidates
     ]
     assert len(set(rows)) == 1
-    scores = router.score(task.query, store, task.candidates)
-    assert len(set(scores)) == 1
+    # The feature-row collision is the direct observation-boundary test.
+    # Do not route through the successor score API here: that API expects
+    # AddressedMemory, while this control is deliberately descriptor-only.
 
 
 def test_explicit_router_distinguishes_candidate_programs():
