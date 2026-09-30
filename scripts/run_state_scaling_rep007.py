@@ -10,6 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from tac_osm.contract import load_contract
 from tac_osm.semantic_state_addressor import SemanticAddressingConfig, SemanticStateAddressor
 from tac_osm.semantic_state_tasks import build_semantic_state_task
 from tac_osm.temporal import TemporalPersistentState
@@ -117,6 +118,12 @@ def analytic(m: int, seed: int):
 
 
 def main():
+    contract = load_contract("TACOSM-STATE-REP-007")
+    contract.require_levels(M_LEVELS)
+    contract.require_seeds(SEEDS)
+    contract.require_steps(TRAIN_EPISODES)
+    contract.require_eval_steps(HELDOUT_EPISODES)
+    contract.require_arms(["analytic", "learned", "no_learning"])
     result = {
         'protocol': {
             'name': 'TACOSM-STATE-REP-007',
