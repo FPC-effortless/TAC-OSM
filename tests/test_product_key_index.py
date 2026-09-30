@@ -33,7 +33,8 @@ def test_product_key_lookup_is_bounded():
     index.build(_items())
     hit = index.lookup((1.0, 0.0, 0.0, 0.0))
     assert len(hit.candidate_addresses) <= 4
-    assert hit.state_rerank_macs <= 16
+    assert hit.state_candidates_scored >= len(hit.candidate_addresses)
+    assert hit.state_rerank_macs == hit.state_candidates_scored * 4
     assert hit.factor_score_macs == 16
 
 
@@ -65,3 +66,11 @@ def test_product_key_rejects_training_items_outside_runtime_pool():
         assert "subset" in str(exc)
     else:
         raise AssertionError("external codebook item must fail")
+
+def test_product_key_lookup_allows_per_query_shortlist_budget():
+    index = ProductKeyStateIndex(
+        ProductKeyConfig(factor_size=4, factor_beam=2, iterations=2, max_shortlist=16)
+    )
+    index.build(_items())
+    hit = index.lookup((1.0, 0.0, 0.0, 0.0), beam=2, max_shortlist=2)
+    assert len(hit.candidate_addresses) <= 2
