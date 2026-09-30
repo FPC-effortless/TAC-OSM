@@ -39,22 +39,30 @@ class EndToEndTask:
 class EndToEndExecutor:
     """Fixed candidate program whose work is counted per executed program."""
 
-    def execute_candidate(self, candidate: Candidate) -> tuple[int, int]:
+    def execute_candidate(
+        self,
+        candidate: Candidate,
+        reference: Sequence[int],
+    ) -> tuple[int, int]:
         if not candidate.executable_edges:
             raise ValueError("candidate program must expose executable_edges")
+        if tuple(candidate.descriptor) != tuple(reference):
+            return 0, WORK_UNITS_PER_CANDIDATE
         contribution = 1 + sum(
             src + dst + port for src, dst, port in candidate.executable_edges
         )
         return contribution, WORK_UNITS_PER_CANDIDATE
 
     def execute_population(
-        self, candidates: Sequence[Candidate]
+        self,
+        candidates: Sequence[Candidate],
+        reference: Sequence[int],
     ) -> tuple[int, int, int]:
         output = 0
         work = 0
         invocations = 0
         for candidate in candidates:
-            contribution, units = self.execute_candidate(candidate)
+            contribution, units = self.execute_candidate(candidate, reference)
             output += contribution
             work += units
             invocations += 1
@@ -149,7 +157,8 @@ def build_task(seed: int, h: int, step: int) -> EndToEndTask:
         )
 
     expected, work, calls = EndToEndExecutor().execute_population(
-        tuple(candidates[i] for i in sorted(relevant))
+        tuple(candidates[i] for i in sorted(relevant)),
+        target_code,
     )
     assert calls == 4
     assert work == 4 * WORK_UNITS_PER_CANDIDATE
