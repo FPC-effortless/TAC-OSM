@@ -99,8 +99,7 @@ def build_query_for_target(pool: NoisyStatePool, target_index: int, *, step: int
     update = pool.updates[target_index]
     target = tuple(update.value)
     actual_step = pool.read_step if step is None else step
-    rng = random.Random(update.key.__hash__() & 0xFFFFFFFF if flip is None else flip + 13)
-    flip_index = rng.randrange(len(target)) if flip is None else int(flip) % len(target)
+    flip_index = ((target_index * 3) + pool.write_step * 5) % len(target) if flip is None else int(flip) % len(target)
     query = noisy_query(target, step=actual_step, flip=flip_index)
     return NoisyStateQuery(query=query, target_address=update.key, target_value=target)
 
