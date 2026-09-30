@@ -231,7 +231,8 @@ def main() -> None:
     args = parser.parse_args()
     if not args.no_contract:
         contract = load_contract("TACOSM-C5-PRODUCT-KEY-SCALING-001")
-        contract.require_levels(M_LEVELS)
+        contract.require_levels((H_FIXED,))
+        contract.require_m_levels(M_LEVELS)
         contract.require_seeds(SEEDS)
         contract.require_k_levels([K])
     result = run(args.smoke)
