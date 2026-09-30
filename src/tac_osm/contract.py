@@ -613,6 +613,15 @@ class ExperimentContract:
             problems.append(
                 f"{self.experiment_id}: h_levels is not strictly increasing"
             )
+        if self.m_levels:
+            if len(set(self.m_levels)) != len(self.m_levels):
+                problems.append(
+                    f"{self.experiment_id}: m_levels repeats a level"
+                )
+            elif list(self.m_levels) != sorted(self.m_levels):
+                problems.append(
+                    f"{self.experiment_id}: m_levels is not strictly increasing"
+                )
         if self.steps <= 0:
             problems.append(f"{self.experiment_id}: steps must be positive")
         if self.eval_steps <= 0:
