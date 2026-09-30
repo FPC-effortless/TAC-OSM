@@ -123,26 +123,31 @@ class LearnedPrototypeStateIndex:
     ) -> tuple[dict[int, tuple[str, ...]], int]:
         p = len(centers)
         capacity = self.config.bucket_capacity
-        scores = []
         d = self.index.config.latent_dim
+        pair_scores = []
         for state_idx, (address, emb) in enumerate(state_embeddings):
             for prototype_idx, center in enumerate(centers):
-                scores.append((
-                    self._cosine(emb, center),
-                    state_idx,
-                    prototype_idx,
-                    address,
-                ))
-        scores.sort(key=lambda item: (-item[0], item[2], item[3]))
-        assigned: dict[int, str] = {}
+                pair_scores.append(
+                    (
+                        self._cosine(emb, center),
+                        state_idx,
+                        prototype_idx,
+                        address,
+                    )
+                )
+        pair_scores.sort(key=lambda item: (-item[0], item[2], item[3]))
+
+        assigned: dict[int, int] = {}
         counts = [0] * p
-        for _, state_idx, prototype_idx, address in scores:
+
+        for _, state_idx, prototype_idx, _ in pair_scores:
             if state_idx in assigned or counts[prototype_idx] >= capacity:
                 continue
-            assigned[state_idx] = address
+            assigned[state_idx] = prototype_idx
             counts[prototype_idx] += 1
+
         if len(assigned) < len(state_embeddings):
-            for state_idx, (address, emb) in enumerate(state_embeddings):
+            for state_idx, (_, emb) in enumerate(state_embeddings):
                 if state_idx in assigned:
                     continue
                 available = [j for j in range(p) if counts[j] < capacity]
@@ -152,53 +157,23 @@ class LearnedPrototypeStateIndex:
                     available,
                     key=lambda j: (self._cosine(emb, centers[j]), -j),
                 )
-                assigned[state_idx] = address
+                assigned[state_idx] = prototype_idx
                 counts[prototype_idx] += 1
+
         buckets = {j: [] for j in range(p)}
-        reverse = {address: state_idx for state_idx, address in assigned.items()}
         for state_idx, (address, _) in enumerate(state_embeddings):
-            selected = max(
-                range(p),
-                key=lambda j: (self._cosine(state_embeddings[state_idx][1], centers[j]), -j),
-            )
-            # Capacity-constrained assignment can move a state to a non-nearest
-            # prototype; recover the actual selected prototype from assignment.
-            assigned_address = assigned[state_idx]
-            owner = None
-            for j in range(p):
-                if assigned_address in buckets[j]:
-                    owner = j
-                    break
-            if owner is None:
-                # The address has not been inserted yet; defer and resolve below.
-                pass
-        # Reconstruct owner map directly from the greedy assignment order.
-        owner_map: dict[str, int] = {}
-        assigned_keys = {address: idx for idx, address in assigned.items()}
-        for j in range(p):
-            owner_map_candidates = [
-                (
-                    score,
-                    state_idx,
-                    address,
-                )
-                for score, state_idx, prototype_idx, address in scores
-                if prototype_idx == j and assigned_keys.get(address) == state_idx
-            ]
-            for _, state_idx, address in owner_map_candidates:
-                owner_map[address] = j
-        # Every state was assigned exactly once; any pathological tie is resolved
-        # deterministically from the first assignment in the sorted pair list.
-        for state_idx, (address, _) in enumerate(state_embeddings):
-            if address not in owner_map:
-                available = [j for j in range(p) if len(buckets[j]) < capacity]
-                if not available:
-                    raise AssertionError("missing owner with no capacity")
-                j = max(available, key=lambda x: (self._cosine(state_embeddings[state_idx][1], centers[x]), -x))
-                owner_map[address] = j
-            buckets[owner_map[address]].append(address)
-        buckets = {j: sorted(addresses) for j, addresses in buckets.items()}
-        return {j: tuple(addresses) for j, addresses in buckets.items()}, len(state_embeddings) * p * d
+            prototype_idx = assigned[state_idx]
+            buckets[prototype_idx].append(address)
+
+        buckets = {
+            j: tuple(sorted(addresses))
+            for j, addresses in buckets.items()
+        }
+        if sum(len(addresses) for addresses in buckets.values()) != len(state_embeddings):
+            raise AssertionError("state bucket assignment lost items")
+        if any(len(addresses) > capacity for addresses in buckets.values()):
+            raise AssertionError("state bucket capacity exceeded")
+        return buckets, len(state_embeddings) * p * d
 
     def build(
         self,
