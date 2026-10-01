@@ -80,7 +80,7 @@
     "primary_eval_distribution": "same generator distribution with unseen exact programs; candidate pools are generated independently of router-visible support examples",
     "secondary_eval_distribution": "held-out NOT->XOR structural role-pair; training excludes that role-pair",
     "evaluation_tasks_per_seed_M": 32,
-    "verifier_examples_per_task": 8,
+    "verifier_examples_per_task": 12,
     "router_visible_examples_per_task": 4
   },
   "leakage_rules": [
@@ -91,7 +91,8 @@
     "A candidate is not marked negative unless its executed outputs fail at least one public task example.",
     "Candidate pool construction must not condition decoy inclusion on router-visible support examples.",
     "Verifier-only input/output examples are disjoint from router-visible support examples and are not passed to routing.",
-    "Opaque task addresses are derived only from router-visible support examples and contain no target index, target ID, or hidden verifier data."
+    "Opaque task addresses are derived only from router-visible support examples and contain no target index, target ID, or hidden verifier data.",
+    "All 12 remaining truth-table rows are verifier-only; together with the four router-visible rows they cover the complete 4-input Boolean truth table."
   ],
   "execution_work_contract": {
     "gate_evaluations": "number of candidate edges scored by CASM-S",
