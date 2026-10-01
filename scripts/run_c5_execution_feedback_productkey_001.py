@@ -85,23 +85,34 @@ def make_arm(seed,m,product):
         q=query_for(seed,m,step,target)
         ti=target_index(candidates,target)
         if product:
+            decision,diag=router.route(q,state,candidates,training_keys=training_keys)
+        else:
+            decision=router.route(q,state,candidates)
+            diag=None
+        selected=decision.selected
+        ok=selected==ti
+        detail=SimpleNamespace(gold_index=ti,candidates=candidates)
+        outcome=Outcome(ok,float(ok),"ok" if ok else "wrong_candidate",detail)
+        ver=VerificationResult(ok,"accept" if ok else "reject")
         if product:
-            memory = router.representation.last_memory
+            memory=router.representation.last_memory
             if memory is None:
-                memory = router.representation.addressor.address(q,state)
-            feedback_scores = router.representation.score(q,memory,candidates)
-            feedback_selected = selected
+                memory=router.representation.addressor.address(q,state)
+            feedback_scores=router.representation.score(q,memory,candidates)
+            feedback_selected=selected
             if feedback_selected < 0:
                 feedback_order=sorted(range(len(feedback_scores)),
                                       key=lambda i:(-feedback_scores[i],i))
                 feedback_selected=next(i for i in feedback_order if i != ti)
-            router.learn_from_verifier(query=q,state=state,candidates=candidates,
-                                       selected=feedback_selected,outcome=outcome,verification=ver,
-                                       scores=feedback_scores)
+            router.learn_from_verifier(
+                query=q,state=state,candidates=candidates,
+                selected=feedback_selected,outcome=outcome,verification=ver,
+                scores=feedback_scores,
+            )
         else:
-            router.learn_from_outcome(q,state,candidates,selected,success=ok,scores=decision.scores)
-
-            router.learn_from_outcome(q,state,candidates,selected,success=ok,scores=decision.scores)
+            router.learn_from_outcome(
+                q,state,candidates,selected,success=ok,scores=decision.scores
+            )
     metrics=[]
     admitted=[]
     rerank=[]
