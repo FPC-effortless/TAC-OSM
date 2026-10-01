@@ -1,57 +1,121 @@
 {
-  "name": "TACOSM-INTEGRATED-EXECUTION-FEEDBACK-AXON-001",
-  "version": "0.1",
-  "status": "registered_before_measurement",
-  "design": {
-    "c5": {
-      "m": 128,
-      "beam_diagnostic": 8,
-      "seeds": [0, 1, 2],
-      "train_steps": 900,
-      "eval_steps": 300,
-      "arms": ["outcome_only", "verifier_feedback"],
-      "primary": "eval_top1_recall",
-      "secondary": ["top8_admission_recall", "mean_target_rank", "verifier_accept_rate"],
-      "meaningful_improvement_threshold": 0.10
+  "experiment_id": "TACOSM-INTEGRATED-EXECUTION-FEEDBACK-AXON-001",
+  "title": "Integrated verifier-driven execution feedback and operator learning",
+  "question": "Can post-execution verification improve sparse routing and can verified experience be converted into reusable, transferable transition operators?",
+  "hypothesis": "Verifier-derived positives and execution-failing hard negatives should improve routing over outcome-only updates, while verified transitions should support predictive state transitions, structural abstraction, operator consolidation, durable reconstruction, and verified composition.",
+  "arms": [
+    {
+      "name": "outcome_only",
+      "intervention": "existing post-outcome pairwise successor router update",
+      "acts_on": "router parameters",
+      "knob": "learning_signal",
+      "value": "selected outcome success"
     },
-    "pst": {
-      "primary": "heldout_transition_accuracy",
-      "success_threshold": 0.95
-    },
-    "structmeans": {
-      "clusters": 3,
-      "primary": "cluster_purity",
-      "success_threshold": 0.85,
-      "secondary": "verified_records_per_centroid"
-    },
-    "axon": {
-      "primary": "parameterized_reuse_accuracy",
-      "success_threshold": 0.95
-    },
-    "seca": {
-      "primary": "verified_novel_composites",
-      "success_threshold": 1,
-      "secondary": "post_seca_composite_success_minus_pre_seca"
-    },
-    "regm": {
-      "primary": "retained_competence_after_raw_removal",
-      "success_threshold": 0.95
-    },
-    "closed_loop": {
-      "required": [
-        "verified transition learning",
-        "durable reconstruction",
-        "verified operator consolidation",
-        "novel verified composition",
-        "post-composition reuse"
-      ]
+    {
+      "name": "verifier_feedback",
+      "intervention": "post-execution verifier positives and rejected hard negatives",
+      "acts_on": "router parameters and representation",
+      "knob": "learning_signal",
+      "value": "execution verification"
     }
-  },
-  "non_claims": [
-    "does not establish sublinear routing",
-    "does not establish hardware speedup",
-    "does not establish universal reasoning",
-    "does not treat verifier-derived labels as human preference",
-    "does not use old C5 teacher results as proof of execution-driven superiority"
-  ]
+  ],
+  "endpoints": [
+    {
+      "name": "eval_top1_recall",
+      "role": "primary routing capability endpoint",
+      "primary": true,
+      "description": "held-out target rank-1 recall after training"
+    },
+    {
+      "name": "top8_admission_recall",
+      "role": "admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "mean_target_rank",
+      "role": "ranking diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verifier_accept_rate",
+      "role": "execution verification diagnostic",
+      "primary": false
+    },
+    {
+      "name": "heldout_transition_accuracy",
+      "role": "PST diagnostic",
+      "primary": false
+    },
+    {
+      "name": "structmeans_purity",
+      "role": "structural abstraction diagnostic",
+      "primary": false
+    },
+    {
+      "name": "axon_reuse_accuracy",
+      "role": "procedural consolidation diagnostic",
+      "primary": false
+    },
+    {
+      "name": "retained_competence_after_raw_removal",
+      "role": "durable experience diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verified_novel_composites",
+      "role": "SECA diagnostic",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "Compare outcome_only and verifier_feedback on eval_top1_recall over the registered seeds; report admission, target rank and verification diagnostics for both arms.",
+      "licenses": "a workload-specific test of execution-driven routing learning.",
+      "does_not_license": "universal routing improvement or asymptotic sublinear scaling."
+    },
+    {
+      "condition": "A procedural mechanism is counted as supported only when its registered endpoint reaches its precommitted threshold on held-out or independently verified examples.",
+      "licenses": "support for that mechanism on this synthetic workload.",
+      "does_not_license": "universal reasoning, broad-domain continual learning, or hardware speedup."
+    }
+  ],
+  "interpretation_order": [
+    "eval_top1_recall",
+    "top8_admission_recall",
+    "mean_target_rank",
+    "verifier_accept_rate",
+    "heldout_transition_accuracy",
+    "structmeans_purity",
+    "axon_reuse_accuracy",
+    "retained_competence_after_raw_removal",
+    "verified_novel_composites"
+  ],
+  "h_levels": [
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "steps": 900,
+  "eval_steps": 300,
+  "k_levels": [
+    8
+  ],
+  "held_constant": [
+    "dim=8",
+    "latent_dim=16",
+    "factor-count/product-key geometry unchanged from current successor baseline",
+    "exact deterministic execution",
+    "post-execution verification only",
+    "mixed relational/state_lookup/replay task families",
+    "M=128 in the registered C5 execution-feedback measurement",
+    "training seed and evaluation seed separation",
+    "PST/StructMeans/AXON/REGM/SSA/SECA procedural dimensions remain dependency-free"
+  ],
+  "status": "pre-registered",
+  "layer": "L5"
 }
