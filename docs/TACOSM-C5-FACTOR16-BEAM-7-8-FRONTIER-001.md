@@ -89,3 +89,6 @@ artifacts/TACOSM-C5-FACTOR16-BEAM-7-8-FRONTIER-001.json
 Full-run trigger:
 
 [run-c5-factor16-beam-7-8-frontier-001-full]
+## Dispatch record
+
+Registered full measurement trigger applied to this non-design annotation commit. The protocol and decision rule above are unchanged.
