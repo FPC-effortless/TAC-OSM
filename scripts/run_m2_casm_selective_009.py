@@ -450,13 +450,12 @@ def evaluate_router(
 
 def aggregate(seed_results: dict) -> dict:
     out = {}
-    for representation, by_m in seed_results.items():
+    for representation, by_seed in seed_results.items():
         out[representation] = {}
-        for m in M_LEVELS:
-            rows = [seed_results[representation][str(s)][str(m)] for s in SEEDS]
-            all_trials = []
-            for r in rows:
-                all_trials.extend(r["trials"])
+        m_keys = sorted({int(m) for by_m in by_seed.values() for m in by_m})
+        for m in m_keys:
+            rows = [by_seed[str(s)][str(m)] for s in SEEDS if str(s) in by_seed and str(m) in by_seed[str(s)]]
+            all_trials = [t for r in rows for t in r["trials"]]
             pooled_ex = sum(int(t["exhaustive"]["semantic_success"]) for t in all_trials)
             n = len(all_trials)
             ex_rate = pooled_ex / max(1, n)
@@ -465,22 +464,79 @@ def aggregate(seed_results: dict) -> dict:
                 "exhaustive_success": ex_rate,
                 "budgets": {},
             }
+            ex_work_total = sum(t["exhaustive"]["execution_work_units"] for t in all_trials)
             for b in BUDGETS:
                 sem = sum(t["budgets"][str(b)]["semantic_success"] for t in all_trials) / max(1, n)
                 adapt = sum(t["budgets"][str(b)]["adaptive_semantic_success"] for t in all_trials) / max(1, n)
                 route = sum(t["budgets"][str(b)]["routing_recall"] for t in all_trials) / max(1, n)
-                work_frac = sum(t["budgets"][str(b)]["fixed_budget_execution_work_units"] for t in all_trials) / max(1, sum(t["exhaustive"]["execution_work_units"] for t in all_trials))
-                adapt_work_frac = sum(t["budgets"][str(b)]["adaptive_execution_work_units"] for t in all_trials) / max(1, sum(t["exhaustive"]["execution_work_units"] for t in all_trials))
+                work = sum(t["budgets"][str(b)]["fixed_budget_execution_work_units"] for t in all_trials)
+                adapt_work = sum(t["budgets"][str(b)]["adaptive_execution_work_units"] for t in all_trials)
                 out[representation][str(m)]["budgets"][str(b)] = {
                     "routing_recall": route,
                     "semantic_success": sem,
                     "adaptive_semantic_success": adapt,
                     "capability_retention_vs_exhaustive": sem / ex_rate if ex_rate > 0 else None,
                     "adaptive_capability_retention_vs_exhaustive": adapt / ex_rate if ex_rate > 0 else None,
-                    "execution_work_fraction": work_frac,
-                    "adaptive_execution_work_fraction": adapt_work_frac,
+                    "execution_work_fraction": work / max(1, ex_work_total),
+                    "adaptive_execution_work_fraction": adapt_work / max(1, ex_work_total),
                 }
     return out
+
+
+def persistence_replay_experiment(
+    seed: int,
+    adapter: CASMSAdapter,
+    router: TwoTowerRouter,
+    representation: str,
+    train_structures: set[tuple],
+    *,
+    smoke: bool,
+) -> dict:
+    memory = PersistentTaskMemory()
+    anchors = 2 if smoke else 8
+    records = []
+    for i in range(anchors):
+        task, pool = make_task_pool(
+            seed * 5000 + i,
+            64,
+            heldout=False,
+            train_structures=train_structures,
+        )
+        memory.write_task(task.task_id, task.examples)
+        before = evaluate_router(router, representation, task, pool, adapter, memory)
+        committed = False
+        verified = before["budgets"]["4"]["adaptive_verified_candidate_indices"]
+        if verified:
+            memory.commit_verified_experience(task.task_id, structural_key(pool[verified[0]]))
+            committed = True
+        # Intervening task writes exercise persistence without changing the anchor state.
+        for j in range(2 if smoke else 8):
+            other, _other_pool = make_task_pool(
+                seed * 7000 + i * 101 + j,
+                32,
+                heldout=False,
+                train_structures=train_structures,
+            )
+            memory.write_task(other.task_id, other.examples)
+        after = evaluate_router(
+            router, representation, task, pool, adapter, memory, use_experience=True
+        )
+        records.append({
+            "task_id": task.task_id,
+            "verified_experience_committed": committed,
+            "top1_before": float(before["rank"] == 1),
+            "top1_after": float(after["rank"] == 1),
+            "adaptive_work_fraction_before": before["budgets"]["4"]["adaptive_execution_work_fraction"],
+            "adaptive_work_fraction_after": after["budgets"]["4"]["adaptive_execution_work_fraction"],
+        })
+    return {
+        "anchors": records,
+        "verified_write_rate": sum(int(r["verified_experience_committed"]) for r in records) / max(1, len(records)),
+        "top1_before_mean": sum(r["top1_before"] for r in records) / max(1, len(records)),
+        "top1_after_mean": sum(r["top1_after"] for r in records) / max(1, len(records)),
+        "adaptive_work_fraction_before_mean": sum(r["adaptive_work_fraction_before"] for r in records) / max(1, len(records)),
+        "adaptive_work_fraction_after_mean": sum(r["adaptive_work_fraction_after"] for r in records) / max(1, len(records)),
+    }
 
 
 def main() -> None:
@@ -491,19 +547,25 @@ def main() -> None:
 
     seeds = (0,) if args.smoke else SEEDS
     m_levels = (32, 64) if args.smoke else M_LEVELS
-    tasks_per_m = 4 if args.smoke else EVAL_TASKS_PER_SEED_M
+    tasks_per_m = 2 if args.smoke else EVAL_TASKS_PER_SEED_M
 
     all_results = {"structural": {}, "summary": {}}
     executor_meta = {}
+    persistence_results = {"structural": {}, "summary": {}}
 
     for seed in seeds:
-        adapter, meta, executor_train = train_casm(seed)
+        adapter, meta, _executor_train = train_casm(seed)
         executor_meta[str(seed)] = meta
         primary_router_train = generate_unique_programs(seed + 2111, TRAIN_PROGRAMS)
+        role_holdout_router_train = generate_unique_programs(
+            seed + 3111, TRAIN_PROGRAMS, exclude_role_pair=ROLE_HOLDOUT
+        )
+
         for rep in ("structural", "summary"):
             router = fit_router(seed, adapter, primary_router_train, representation=rep)
             all_results[rep][str(seed)] = {}
-            train_structures = {structural_key(ep) for ep in role_holdout_router_train}
+            primary_train_structures = {structural_key(ep) for ep in primary_router_train}
+
             for m in m_levels:
                 trials = []
                 for i in range(tasks_per_m):
@@ -511,39 +573,55 @@ def main() -> None:
                         seed * 100 + i,
                         m,
                         heldout=False,
-                        train_structures=train_structures,
+                        train_structures=primary_train_structures,
                     )
+                    memory = PersistentTaskMemory()
+                    memory.write_task(task.task_id, task.examples)
+                    measurement = evaluate_router(router, rep, task, pool, adapter, memory)
+                    if measurement["budgets"]["4"]["adaptive_verified_candidate_indices"]:
+                        idx = measurement["budgets"]["4"]["adaptive_verified_candidate_indices"][0]
+                        memory.commit_verified_experience(task.task_id, structural_key(pool[idx]))
                     trials.append({
                         "task": {
+                            "task_id": task.task_id,
                             "target_index": task.target_index,
                             "examples": task.examples,
                         },
-                        **evaluate_router(router, rep, task, pool, adapter),
+                        **measurement,
                     })
                 all_results[rep][str(seed)][str(m)] = {"trials": trials}
-        # Secondary structural-holdout condition.
-        role_holdout_router_train = generate_unique_programs(
-            seed + 3111, TRAIN_PROGRAMS, exclude_role_pair=ROLE_HOLDOUT
-        )
-        primary_train_structures = {structural_key(ep) for ep in primary_router_train}
+
+            persistence_results[rep][str(seed)] = persistence_replay_experiment(
+                seed,
+                adapter,
+                router,
+                rep,
+                primary_train_structures,
+                smoke=args.smoke,
+            )
+
+        holdout_train_structures = {structural_key(ep) for ep in role_holdout_router_train}
         for rep in ("structural", "summary"):
             router = fit_router(seed, adapter, role_holdout_router_train, representation=rep)
             all_results.setdefault("secondary_role_holdout", {}).setdefault(rep, {})[str(seed)] = {}
             for m in m_levels:
                 trials = []
-                for i in range(max(2, tasks_per_m // 2)):
+                for i in range(max(1, tasks_per_m // 2)):
                     task, pool = make_task_pool(
                         seed * 1000 + i,
                         m,
                         heldout=True,
-                        train_structures=train_structures,
+                        train_structures=holdout_train_structures,
                     )
+                    memory = PersistentTaskMemory()
+                    memory.write_task(task.task_id, task.examples)
                     trials.append({
                         "task": {
+                            "task_id": task.task_id,
                             "target_index": task.target_index,
                             "examples": task.examples,
                         },
-                        **evaluate_router(router, rep, task, pool, adapter),
+                        **evaluate_router(router, rep, task, pool, adapter, memory),
                     })
                 all_results["secondary_role_holdout"][rep][str(seed)][str(m)] = {"trials": trials}
 
@@ -561,18 +639,20 @@ def main() -> None:
             "capacity_matched_router": True,
             "target_id_hidden_from_router": True,
             "true_edges_hidden_from_router": True,
+            "primary_target_programs_are_exact_structure_disjoint": True,
+            "secondary_role_holdout": ROLE_HOLDOUT,
         },
         "executor_meta": executor_meta,
         "results": all_results,
-        "aggregate": aggregate({
-            rep: all_results[rep] for rep in ("structural", "summary")
-        }) if not args.smoke else {},
+        "aggregate": aggregate({rep: all_results[rep] for rep in ("structural", "summary")}),
+        "persistence_replay": persistence_results,
         "scope": {
             "primary": "selective execution work versus capability using actual CASM-S",
             "routing_cost_is_separate": True,
             "asymptotic_claim": False,
             "language_semantics": False,
             "structural_holdout_is_secondary": True,
+            "persistence_replay_is_secondary_mechanism_test": True,
         },
         "peak_rss_mb": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0,
     }
