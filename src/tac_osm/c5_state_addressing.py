@@ -178,7 +178,7 @@ class C5PersistentStateAdmission:
         state, index, tables = self._prepare(m)
         bits, _ = self._parse(query)
         qvec = self.router.inner.encode_query(query, self._empty_temporal())
-        position = {c.key: c.key for c in state.records()}
+        position = {record.record_id: record.record_id for record in state.records()}
 
         raw_addresses, raw_count, hash_ops = prefix_lookup(
             index,
