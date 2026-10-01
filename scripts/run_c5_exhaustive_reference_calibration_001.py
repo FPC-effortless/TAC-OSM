@@ -27,7 +27,7 @@ from scripts.run_c5_frontier_robustness_002 import (
     normalized_query,
 )
 
-TEACHER_EPOCHS = 512
+TARGET_TEACHER_UPDATES = 24576
 LATENT_DIM = 16
 STATE_BITS = 10
 K = 32
@@ -40,14 +40,20 @@ MATERIALITY_THRESHOLD = 0.10
 def make_teacher(
     seed: int,
     train_codes: tuple[tuple[int, ...], ...],
-) -> LearnedSemanticStateIndex:
+) -> tuple[LearnedSemanticStateIndex, int, int]:
+    teacher_epochs = max(1, round(TARGET_TEACHER_UPDATES / len(train_codes)))
+    actual_updates = teacher_epochs * len(train_codes)
+    if abs(actual_updates - TARGET_TEACHER_UPDATES) > TARGET_TEACHER_UPDATES * 0.01:
+        raise AssertionError(
+            f"teacher update budget drift: {actual_updates} vs target {TARGET_TEACHER_UPDATES}"
+        )
     model = LearnedSemanticStateIndex(
         LearnedStateIndexConfig(
             input_dim=STATE_BITS,
             latent_dim=LATENT_DIM,
             learning_rate=0.02,
             margin=0.25,
-            epochs=TEACHER_EPOCHS,
+            epochs=teacher_epochs,
             bucket_bits=8,
             probe_radius=1,
             shortlist_k=1,
@@ -60,12 +66,14 @@ def make_teacher(
         aggregation="mean",
         positive_views=1,
     )
-    expected = TEACHER_EPOCHS * len(train_codes)
+    expected = actual_updates
     if updates != expected:
         raise AssertionError(
             f"teacher update count mismatch: {updates} != {expected}"
         )
-    return model
+    if updates != actual_updates:
+        raise AssertionError(f"teacher update count mismatch: {updates} != {actual_updates}")
+    return model, teacher_epochs, actual_updates
 
 
 def matched_training_codes(first_task, m: int) -> tuple[tuple[int, ...], ...]:
@@ -92,6 +100,8 @@ def evaluate_arm(
     m: int,
     arm: str,
     teacher: LearnedSemanticStateIndex,
+    teacher_epochs: int,
+    teacher_updates: int,
     tasks,
     train_codes: tuple[tuple[int, ...], ...],
 ) -> dict:
@@ -110,7 +120,9 @@ def evaluate_arm(
         "M": m,
         "arm": arm,
         "training_population_size": len(train_codes),
-        "teacher_updates": TEACHER_EPOCHS * len(train_codes),
+        "teacher_epochs": teacher_epochs,
+        "teacher_updates": teacher_updates,
+        "target_teacher_updates": TARGET_TEACHER_UPDATES,
         "exhaustive_target_successes": successes,
         "evaluation_count": len(tasks),
         "exhaustive_target_recall": successes / len(tasks),
@@ -173,13 +185,15 @@ def run(smoke: bool) -> dict:
             }
             tasks = tuple(build_scaled_task(seed, m, step) for step in range(steps))
             for arm in ARMS:
-                teacher = make_teacher(seed, train_sets[arm])
+                teacher, teacher_epochs, teacher_updates = make_teacher(seed, train_sets[arm])
                 cells.append(
                     evaluate_arm(
                         seed,
                         m,
                         arm,
                         teacher,
+                        teacher_epochs,
+                        teacher_updates,
                         tasks,
                         train_sets[arm],
                     )
@@ -269,7 +283,7 @@ def run(smoke: bool) -> dict:
             "H_fixed": H_FIXED,
             "K": K,
             "eval_steps": steps,
-            "teacher_epochs": TEACHER_EPOCHS,
+            "target_teacher_updates": TARGET_TEACHER_UPDATES,
             "negative_count": NEGATIVE_COUNT,
             "latent_dim": LATENT_DIM,
             "target_code_count": len(TARGET_CODES),
