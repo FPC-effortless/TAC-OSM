@@ -158,6 +158,7 @@ class StateLookupTaskSpec:
     key: str
     written_bits: tuple[int, ...]
     n_marked: int
+    gold_index: int = -1
 
 
 @dataclass(frozen=True)
@@ -171,6 +172,7 @@ class ReplayTaskSpec:
     key: str
     written_bits: tuple[int, ...]
     n_marked: int
+    gold_index: int = -1
 
 
 # --------------------------------------------------------------------------- #
@@ -344,6 +346,10 @@ def _with_gold_descriptor(detail: Any, gold_descriptor: tuple[int, ...],
         return dataclasses.replace(
             detail, gold_descriptor=gold_descriptor, gold_index=gold_index
         )
+    if isinstance(detail, StateLookupTaskSpec):
+        return dataclasses.replace(detail, gold_index=gold_index)
+    if isinstance(detail, ReplayTaskSpec):
+        return dataclasses.replace(detail, gold_index=gold_index)
     return detail
 
 
