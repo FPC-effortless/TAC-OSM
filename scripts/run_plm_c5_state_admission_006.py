@@ -11,7 +11,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from tac_osm.c5_noisy_full_phase import build_population
+from tac_osm.c5_admission_scaling_audit import build_population_extended
 from tac_osm.c5_state_addressing import C5PersistentStateAdmission, make_persistent_query
 
 EXPERIMENT_ID = "TACOSM-PLM-C5-STATE-ADMISSION-006"
@@ -25,10 +25,7 @@ def main() -> None:
     for seed in SEEDS:
         adapter = C5PersistentStateAdmission(seed=seed)
         for m in M_LEVELS:
-            candidates = build_population(seed, m) if m == 1024 else __import__(
-                "tac_osm.c5_admission_scaling_audit",
-                fromlist=["build_population_extended"],
-            ).build_population_extended(seed, m)
+            candidates = build_population_extended(seed, m)
             target_descriptor = candidates[seed % len(candidates)].descriptor
             target_ids = tuple(
                 c.key for c in candidates if c.descriptor == target_descriptor
