@@ -281,3 +281,17 @@ The registered K90 counts candidate entries, not distinct semantic classes. In a
 
 **Correction:** report both candidate-level K90 and class-level K90 where repeated classes exist. Use unique candidates for the primary population-scaling experiment.
 
+
+### A12 — PR #55 target codes are not actually held out from learning (P1)
+
+The product-key bridge declares TARGET_CODES and TRAIN_CODES separately, but its training population contains TARGET_CODES plus TRAIN_CODES. Training repeatedly samples TARGET_CODES as the correct target and sends verifier outcomes back to the router. Therefore the target identities are exposed during training and are learned from positive outcomes.
+
+The phrase “target codes held out” is only true for the factor-codebook training subset, not for the learned router's task distribution.
+
+**Correction:** for a generalization claim, target identities or the structural families that generate them must be absent from training positives and, where required by the hypothesis, absent from training candidate populations. A separate transfer experiment can deliberately allow target identities as negatives/positives, but it must not be labeled held-out generalization.
+
+### A13 — PR #55 dense vs product-key comparison is doubly confounded
+
+Besides the router-update mismatch, the product-key arm uses a factor-codebook construction trained only from TRAIN_CODES while the dense arm directly scores the complete candidate set. These are different supervision and input boundaries, so the comparison mixes representation architecture with which candidate identities are available to the learned index.
+
+**Correction:** define a common training-visible candidate universe for matched-capacity comparisons, and separately test target-identity holdout as its own generalization axis.
