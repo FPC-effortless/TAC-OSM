@@ -37,7 +37,7 @@ def test_type_weighted_structural_rerank_prefers_exact_kind():
             action=1,
         ),
     ]
-    router = StructuralProductKeyRouter(factor_size=2)
+    router = StructuralProductKeyRouter(factor_size=2, factor_beam=2)
     q = tuple(map(float, OperatorDescriptor("toggle", (1,0,1,0,1,0,1,0)).encode()))
     assert router._exact_score(candidates[0], (q,)) > router._exact_score(candidates[1], (q,))
 
