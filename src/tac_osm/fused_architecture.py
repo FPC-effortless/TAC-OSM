@@ -265,8 +265,11 @@ class FusedOperatorRouter:
             query, state, candidates, training_keys=training_keys
         )
         pkm_indices = tuple(
-            i for i, score in enumerate(pkm_decision.scores)
-            if score != float("-inf")
+            i
+            for i, _ in sorted(
+                ((i, score) for i, score in enumerate(pkm_decision.scores) if score != float("-inf")),
+                key=lambda pair: (-pair[1], pair[0]),
+            )
         )
         pkm_selected = candidates[pkm_decision.selected] if pkm_decision.selected >= 0 else None
 
