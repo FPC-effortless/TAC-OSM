@@ -26,39 +26,48 @@
   "endpoints": [
     {
       "name": "eval_top1_recall",
-      "primary": true
+      "primary": true,
+      "role": "primary capability"
     },
     {
       "name": "proposal_admission_recall",
-      "primary": false
+      "primary": false,
+      "role": "admission diagnostic"
     },
     {
       "name": "conditional_selection_given_admission",
-      "primary": false
+      "primary": false,
+      "role": "post-admission selection diagnostic"
     },
     {
       "name": "mean_target_rank",
-      "primary": false
+      "primary": false,
+      "role": "ranking diagnostic"
     },
     {
       "name": "state_candidates_scored_mean",
-      "primary": false
+      "primary": false,
+      "role": "rerank work"
     },
     {
       "name": "states_scored_over_M",
-      "primary": false
+      "primary": false,
+      "role": "sparsity diagnostic"
     },
     {
       "name": "factor_score_macs_mean",
-      "primary": false
+      "primary": false,
+      "role": "factor routing cost"
     },
     {
       "name": "state_rerank_macs_mean",
-      "primary": false
+      "primary": false,
+      "role": "rerank cost"
     },
     {
       "name": "amortized_build_macs_per_query",
-      "primary": false
+      "primary": false,
+      "role": "index build cost"
     }
   ],
   "m_levels": [
