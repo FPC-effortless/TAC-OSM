@@ -220,6 +220,7 @@ class OperatorRecord:
 @dataclass(frozen=True)
 class OperatorAddressResult:
     target_name: str
+    selected: tuple[str, ...]
     raw_candidates: int
     admitted_candidates: int
     probes: int
@@ -284,6 +285,7 @@ class HierarchicalOperatorIndex:
         )
         return OperatorAddressResult(
             target_name,
+            tuple(admitted),
             len(raw),
             len(admitted),
             probes,
