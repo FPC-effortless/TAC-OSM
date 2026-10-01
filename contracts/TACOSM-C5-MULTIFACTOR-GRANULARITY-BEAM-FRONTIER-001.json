@@ -154,12 +154,41 @@
     "exact pooled success-count aggregation",
     "capability floor = 0.90"
   ],
-  "status": "PRE-REGISTERED",
+  "status": "measured",
   "layer": "L4",
   "prior_reference": {
     "experiment": "TACOSM-C5-FRONTIER-ROBUSTNESS-002",
     "configuration": "two-factor factor_size=16, factor_beam=6",
     "mean_states_scored_over_M": 0.1542864583,
     "minimum_capability_retention": 0.8113207547
+  },
+  "result_note": {
+    "run_id": 36806032589,
+    "measurement_commit": "9f7e1e46def57db7d6d1f491c3aba756f334ddfc",
+    "artifact_id": 11137229446,
+    "artifact_digest": "sha256:7c80367df42bd7191c54953d64328b62fb710d5d741ebf32b20703c1dac91ac0",
+    "disposition": "NO ELIGIBLE ARM: all factor-size-16 three-factor beams fail the 0.90 retention floor at one or more registered M levels",
+    "pooled_results": {
+      "128": {
+        "4": 0.694300518134715,
+        "5": 0.7564766839378239,
+        "6": 0.8549222797927462
+      },
+      "256": {
+        "4": 0.8493975903614458,
+        "5": 0.9156626506024096,
+        "6": 0.8674698795180723
+      },
+      "512": {
+        "4": 0.8679245283018868,
+        "5": 0.8679245283018868,
+        "6": 0.9622641509433962
+      }
+    },
+    "max_states_scored_over_M": {
+      "4": 0.030015625,
+      "5": 0.0489921875,
+      "6": 0.075337890625
+    }
   }
 }
