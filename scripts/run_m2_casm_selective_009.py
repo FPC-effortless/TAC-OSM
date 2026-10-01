@@ -117,6 +117,8 @@ def generate_unique_programs(
     *,
     exclude_role_pair: tuple[str, str] | None = None,
     include_role_pair: tuple[str, str] | None = None,
+    exclude_structures: set[tuple] | None = None,
+    exclude_truths: set[tuple[int, ...]] | None = None,
 ) -> list[CASMEpisode]:
     gen = BooleanDAGGenerator(max_nodes=MAX_NODES, min_nodes=MAX_NODES, seed=seed)
     rows: list[CASMEpisode] = []
@@ -138,6 +140,10 @@ def generate_unique_programs(
         ts = truth_signature(ep)
         if sk in seen_structures or ts in seen_truths:
             continue
+        if exclude_structures is not None and sk in exclude_structures:
+            continue
+        if exclude_truths is not None and ts in exclude_truths:
+            continue
         rows.append(ep)
         seen_structures.add(sk)
         seen_truths.add(ts)
@@ -157,15 +163,25 @@ def make_task_pool(
     heldout: bool,
     train_structures: set[tuple],
     train_truths: set[tuple[int, ...]] | None = None,
+    target: CASMEpisode | None = None,
 ) -> tuple[TaskSpec, list[CASMEpisode]]:
-    if heldout:
+    if target is None:
         candidates = generate_unique_programs(
             seed + 7000 + m,
             m * 3,
-            include_role_pair=ROLE_HOLDOUT,
+            include_role_pair=ROLE_HOLDOUT if heldout else None,
         )
     else:
-        candidates = generate_unique_programs(seed + 7000 + m, m * 3)
+        candidates = [target]
+        decoy_structures = {structural_key(target)}
+        decoy_truths = {truth_signature(target)}
+        candidates.extend(generate_unique_programs(
+            seed + 7000 + m,
+            m * 3,
+            include_role_pair=ROLE_HOLDOUT if heldout else None,
+            exclude_structures=decoy_structures,
+            exclude_truths=decoy_truths,
+        ))
     rng = random.Random(seed * 1_000_003 + m * 7919 + (1 if heldout else 0))
     for ep in candidates:
         if structural_key(ep) in train_structures:
@@ -203,7 +219,13 @@ def make_task_pool(
     raise RuntimeError(f"failed to construct a valid task pool for M={m}")
 
 
-def make_executor_training_programs(seed: int, *, exclude_role_pair: tuple[str, str] | None = None) -> list[CASMEpisode]:
+def make_executor_training_programs(
+    seed: int,
+    *,
+    exclude_role_pair: tuple[str, str] | None = None,
+    exclude_structures: set[tuple] | None = None,
+    exclude_truths: set[tuple[int, ...]] | None = None,
+) -> list[CASMEpisode]:
     gen = BooleanDAGGenerator(max_nodes=MAX_NODES, min_nodes=MAX_NODES, seed=seed + 111)
     train: list[CASMEpisode] = []
     seen: set[tuple] = set()
@@ -212,6 +234,10 @@ def make_executor_training_programs(seed: int, *, exclude_role_pair: tuple[str, 
         sk = structural_key(ep)
         if sk in seen:
             continue
+        if exclude_structures is not None and sk in exclude_structures:
+            continue
+        if exclude_truths is not None and truth_signature(ep) in exclude_truths:
+            continue
         if exclude_role_pair and role_pair_present(ep, *exclude_role_pair):
             continue
         train.append(ep)
@@ -219,8 +245,8 @@ def make_executor_training_programs(seed: int, *, exclude_role_pair: tuple[str, 
     return train
 
 
-def train_casm(seed: int) -> tuple[CASMSAdapter, dict, list[CASMEpisode]]:
-    train = make_executor_training_programs(seed, exclude_role_pair=None)
+def train_casm(seed: int, *, exclude_structures: set[tuple] | None = None, exclude_truths: set[tuple[int, ...]] | None = None) -> tuple[CASMSAdapter, dict, list[CASMEpisode]]:
+    train = make_executor_training_programs(seed, exclude_role_pair=None, exclude_structures=exclude_structures, exclude_truths=exclude_truths)
 
     casm = CASMS(max_nodes=MAX_NODES, dim=32, temperature=2.0, seed=seed)
     device = torch.device("cpu")
