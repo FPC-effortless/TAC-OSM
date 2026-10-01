@@ -232,6 +232,53 @@ class ProductKeyRelationRouter:
         self.updates += 1
 
 
+class AnalyticRelationalRouter(CDLPersistentRelationRouter):
+    """Baseline learner with an explicit persisted-operation constant channel.
+
+    The baseline has a,b,a*b features gated by the persisted operation but no
+    operation-specific constant. AND/OR therefore need a constant term. This
+    arm adds four persisted-op gate features so the exact Boolean signed
+    relations are representable without consulting the corrupted public hint.
+    """
+
+    def __init__(self, *, seed: int, learning_rate: float = 0.012, soft_target_epsilon: float = 0.05) -> None:
+        super().__init__(
+            seed=seed,
+            learning_rate=learning_rate,
+            soft_target_epsilon=soft_target_epsilon,
+        )
+        self.query_dim = 4 * 3 * DIM + N_OPS + N_OPS + 1
+        scale = 0.04
+        self.wq = [
+            [self.rng.uniform(-scale, scale) for _ in range(self.query_dim)]
+            for _ in range(LATENT_DIM)
+        ]
+        self.bq = [0.0] * LATENT_DIM
+
+    def _query_features(self, query: Query, state: TemporalPersistentState) -> list[float]:
+        read = state.read(query)
+        if not read.values:
+            left = right = (0,) * DIM
+            state_op = 0
+            present = 0.0
+        else:
+            left, right, state_op = decode_state_value(read.values[0])
+            present = 1.0
+        a = [2.0 * x - 1.0 for x in left]
+        b = [2.0 * x - 1.0 for x in right]
+        p = [x * y for x, y in zip(a, b)]
+        blocks: list[float] = []
+        for op in range(N_OPS):
+            gate = 1.0 if op == state_op else 0.0
+            blocks.extend(gate * a[i] for i in range(DIM))
+            blocks.extend(gate * b[i] for i in range(DIM))
+            blocks.extend(gate * p[i] for i in range(DIM))
+        op_constants = [1.0 if op == state_op else 0.0 for op in range(N_OPS)]
+        ctx = list(query.context[:N_OPS])
+        ctx.extend([0.0] * (N_OPS - len(ctx)))
+        return blocks + op_constants + ctx + [present]
+
+
 class BitwiseLateInteractionRouter:
     """Independent per-bit query/candidate channels with summed interaction."""
 
@@ -327,13 +374,23 @@ class BitwiseLateInteractionRouter:
 
 
 def analytic_relational_initialize(router) -> None:
-    required = 4 * 3 * DIM + N_OPS + 1
-    if getattr(router, "query_dim", None) != required:
-        raise TypeError("baseline query shape required")
+    """Initialize an exact signed-bit relational solution.
+
+    XOR  = -a*b
+    XNOR = +a*b
+    AND  = (a+b+a*b-1)/2
+    OR   = (a+b-a*b+1)/2
+
+    The explicit persisted-operation constant channel supplies the +/-1/2
+    offset required by AND/OR without using the corrupted public hint.
+    """
+    if not isinstance(router, AnalyticRelationalRouter):
+        raise TypeError("analytic initialization requires AnalyticRelationalRouter")
     router.wq = [[0.0] * router.query_dim for _ in range(LATENT_DIM)]
     router.bq = [0.0] * LATENT_DIM
     router.wc = [[0.0] * DIM for _ in range(LATENT_DIM)]
     router.bc = [0.0] * LATENT_DIM
+    const_base = 4 * 3 * DIM
     for i in range(DIM):
         router.wc[i][i] = 1.0
         for op in range(N_OPS):
@@ -341,6 +398,7 @@ def analytic_relational_initialize(router) -> None:
             ai = base + i
             bi = base + DIM + i
             pi = base + 2 * DIM + i
+            gate_i = const_base + op
             if op == 0:
                 router.wq[i][pi] = -1.0
             elif op == 1:
@@ -349,13 +407,12 @@ def analytic_relational_initialize(router) -> None:
                 router.wq[i][ai] = 0.5
                 router.wq[i][bi] = 0.5
                 router.wq[i][pi] = 0.5
-                router.bq[i] = -0.5
+                router.wq[i][gate_i] = -0.5
             else:
                 router.wq[i][ai] = 0.5
                 router.wq[i][bi] = 0.5
                 router.wq[i][pi] = -0.5
-                router.bq[i] = 0.5
-
+                router.wq[i][gate_i] = 0.5
 
 def train_exhaustive(router, seed: int, steps: int) -> None:
     levels = (64, 128, 256)
@@ -403,12 +460,16 @@ def hard_negative_distill(router, seed: int, steps: int) -> int:
 
 def build_router(arm: str, seed: int):
     if arm in {"control", "outcome_distill", "analytic_init"}:
-        router = CDLPersistentRelationRouter(
-            seed=seed, learning_rate=0.012, soft_target_epsilon=0.05
-        )
         if arm == "analytic_init":
+            router = AnalyticRelationalRouter(
+                seed=seed, learning_rate=0.012, soft_target_epsilon=0.05
+            )
             analytic_relational_initialize(router)
             train_exhaustive(router, seed, TRAIN_STEPS)
+        else:
+            router = CDLPersistentRelationRouter(
+                seed=seed, learning_rate=0.012, soft_target_epsilon=0.05
+            )
         elif arm == "outcome_distill":
             train_exhaustive(router, seed, BASELINE_STEPS)
             hard_negative_distill(router, seed, DISTILL_STEPS)
@@ -451,7 +512,7 @@ def exact_relation_hash_lookup(trial: PersistentRelationTrial, state: TemporalPe
     for candidate_op in range(N_OPS):
         matches.append(by_descriptor.get(apply_relation(left, right, candidate_op)))
     selected = matches[op]
-    return (-1 if selected is None else selected + 1), N_OPS
+    return (-1 if selected is None else 1), N_OPS
 
 
 def operand_hamming_rank(trial, state) -> int:

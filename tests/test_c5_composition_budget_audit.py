@@ -2,6 +2,7 @@
 from tac_osm.c5_composition_budget_audit import (
     ProductKeyRelationRouter,
     BitwiseLateInteractionRouter,
+    AnalyticRelationalRouter,
     analytic_relational_initialize,
     exact_relation_hash_lookup,
     verify_split_disjointness,
@@ -15,7 +16,7 @@ from tac_osm.c5_persistent_relational_loop import (
 )
 
 def test_analytic_initialization_matches_boolean_relation_basis() -> None:
-    router = CDLPersistentRelationRouter(seed=0, learning_rate=0.012, soft_target_epsilon=0.05)
+    router = AnalyticRelationalRouter(seed=0, learning_rate=0.012, soft_target_epsilon=0.05)
     analytic_relational_initialize(router)
     for op in range(4):
         left = tuple((i + op) % 2 for i in range(DIM))
