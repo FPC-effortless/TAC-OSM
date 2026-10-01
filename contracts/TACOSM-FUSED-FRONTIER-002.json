@@ -1,0 +1,69 @@
+{
+  "experiment_id": "TACOSM-FUSED-FRONTIER-002",
+  "title": "Identifiable held-out routing with deterministic structural product-key addressing",
+  "question": "Does a compositional operator descriptor restore held-out operator admission at fixed absolute budgets, and can StructMeans and PST improve that address without adding execution-time verifier information?",
+  "hypothesis": "The failure in frontier 001 is primarily representational/admission: a deterministic operator descriptor indexed by product keys should admit unseen toggle signatures better than the learned candidate embedding, while StructMeans should reduce the kind search space and PST should improve final transition compatibility.",
+  "arms": [
+    {
+      "name": "learned_pkm",
+      "intervention": "existing verifier-trained learned candidate representation with product-key routing",
+      "acts_on": "routing representation",
+      "knob": "representation"
+    },
+    {
+      "name": "structural_pkm",
+      "intervention": "deterministic operator descriptor in the same factorized product-key index",
+      "acts_on": "routing representation",
+      "knob": "representation"
+    },
+    {
+      "name": "structural_pkm_structmeans",
+      "intervention": "deterministic descriptor product-key routing plus StructMeans operator-kind admission",
+      "acts_on": "routing architecture",
+      "knob": "structural_gate"
+    },
+    {
+      "name": "structural_pkm_structmeans_pst",
+      "intervention": "deterministic descriptor product-key routing plus StructMeans admission plus PST reranking",
+      "acts_on": "routing architecture",
+      "knob": "transition_reranker"
+    }
+  ],
+  "endpoints": [
+    {"name": "execution_success", "role": "primary capability endpoint", "primary": true},
+    {"name": "exact_target_success", "role": "identifiable target-selection diagnostic", "primary": false},
+    {"name": "pkm_admission_recall", "role": "coarse admission diagnostic", "primary": false},
+    {"name": "final_admission_recall", "role": "final shortlist admission diagnostic", "primary": false},
+    {"name": "internal_exact_addresses_scored", "role": "internal address work", "primary": false},
+    {"name": "internal_exact_addresses_scored_over_M", "role": "internal scaling diagnostic", "primary": false},
+    {"name": "factor_score_macs", "role": "factor routing arithmetic", "primary": false},
+    {"name": "structural_gate_ops", "role": "family gate arithmetic", "primary": false},
+    {"name": "pst_prediction_ops", "role": "transition prediction arithmetic", "primary": false}
+  ],
+  "task_protocol": {
+    "training_codebook": 48,
+    "held_out_targets": "toggle operators with indices >= 48",
+    "identifiability": "retain only state/goal pairs for which exactly one candidate in the full library reaches the goal",
+    "evaluation_success": "selected candidate is executable and reaches the goal",
+    "target_index": "post-hoc only; never exposed to route()"
+  },
+  "M_levels": [128, 256, 512],
+  "absolute_budgets": [4, 8, 16],
+  "seeds": [10, 11, 12],
+  "product_key": {
+    "factor_count": 3,
+    "factor_size": 16,
+    "factor_beam": 7,
+    "max_shortlist": 32
+  },
+  "rules": [
+    "No verifier outcome enters evaluation routing.",
+    "No C5 or asymptotic claim from final shortlist size alone.",
+    "All internal exact address scoring is counted separately.",
+    "StructMeans is trained only on verified training transitions.",
+    "PST is trained only on verified training transitions.",
+    "Execution success is primary; exact target index is diagnostic.",
+    "SECA is excluded from this single-step admission experiment and remains a separate composition mechanism."
+  ],
+  "status": "pre-registered"
+}
