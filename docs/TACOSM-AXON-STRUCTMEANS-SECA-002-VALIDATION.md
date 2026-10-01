@@ -3,3 +3,4 @@
 This file only forces a fresh CI event after the phase-2 test/provenance repairs.
 No experimental parameter is changed.
 Fresh trigger commit after dedicated phase-2 workflow installation.
+Master-hosted workflow trigger after CI infrastructure install.
