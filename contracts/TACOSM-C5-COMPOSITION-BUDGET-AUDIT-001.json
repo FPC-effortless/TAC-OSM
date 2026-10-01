@@ -1,0 +1,77 @@
+{
+  "experiment_id": "TACOSM-C5-COMPOSITION-BUDGET-AUDIT-001",
+  "title": "C5 composition representation and execution budget audit",
+  "status": "pre-registered",
+  "question": "Which registered representation and verifier-coupled training interventions reduce compositional rank degradation and the admission-to-execution budget loss in the persistent relational C5 loop?",
+  "held_constant": [
+    "TACOSM-C5-PERSISTENT-RELATIONAL-LOOP-001 task generator",
+    "two persisted 16-bit operands plus persisted operation",
+    "three-boundary persistence delay with three decoy writes",
+    "opaque address plus one-bit-corrupted public operation hint",
+    "CASM executor and verifier",
+    "five seeds: 0,1,2,3,4",
+    "1200 training updates per arm",
+    "64 calibration trials and 64 held-out trials per seed/M",
+    "candidate M levels 64,128,256,512,1024,2048,4096,8192",
+    "OR-LSH random-hyperplane index",
+    "LSH table cap 128",
+    "fixed execution budgets 1,2,4,8,16,32,64",
+    "no held-out arm selection"
+  ],
+  "splits": {
+    "calibration_offset": 300000,
+    "heldout_offset": 500000,
+    "distill_offset": 200000,
+    "rule": "calibration and held-out episode keys must have zero intersection; counts and SHA256 digests are emitted"
+  },
+  "diagnostics": [
+    "per-operation XOR/XNOR/AND/OR Top-1 and mean rank",
+    "baseline query-tower hidden nonlinearity presence",
+    "baseline explicit a*b pairwise feature presence",
+    "per-seed mean-rank and P90 bootstrap 95% CIs at M=1024",
+    "mean dense rank as exact-verifier expected executions",
+    "empirical L90(M) sweep using integer L in [1,128]",
+    "pooled L90 power fit and mean-execution power fit",
+    "persistent-vs-reset routing control at M=1024"
+  ],
+  "arms": [
+    {"name": "control", "intervention": "existing CDLPersistentRelationRouter with matched 1200 exhaustive updates"},
+    {"name": "analytic_init", "intervention": "exact Boolean relation initialization followed by matched 1200 exhaustive updates"},
+    {"name": "product_key", "intervention": "candidate descriptor split into two 8-bit product-key subspaces with learned 8-D subkeys"},
+    {"name": "late_interaction", "intervention": "independent per-bit interaction channels with summed structured score"},
+    {"name": "outcome_distill", "intervention": "control with 800 exhaustive plus 400 CASM-failure hard-negative updates"},
+    {"name": "product_key_distill", "intervention": "product-key with 800 exhaustive plus 400 CASM-failure hard-negative updates"},
+    {"name": "late_interaction_distill", "intervention": "per-bit interaction with 800 exhaustive plus 400 CASM-failure hard-negative updates"}
+  ],
+  "exact_reference": {
+    "name": "persistent relational hash solver",
+    "rule": "derive all four relation descriptors from persisted operands, perform four descriptor-index hash lookups, select persisted operation",
+    "capability_expectation": "rank 1 when the target descriptor is in the candidate population",
+    "runtime_in_M": "O(1) after descriptor-to-index hash tables are built",
+    "not_a_learned_arm": true
+  },
+  "sparse_protocol": {
+    "L90": "smallest integer L with at least 0.90 calibration target admission at each M",
+    "K90": "90th percentile dense target rank on calibration",
+    "budget_curve": "execute admitted candidates in score order up to fixed B and stop on exact verification",
+    "adaptive_budget": {
+      "cap": 16,
+      "rule": "standardized rank-1 to rank-4 score margin: >=1.0 => B=1; >=0.5 => B=4; >=0.25 => B=8; otherwise B=16"
+    }
+  },
+  "primary_endpoints": [
+    "M=1024 dense P90 rank",
+    "M=1024 dense Top-1",
+    "M=1024 K90",
+    "M=1024 sparse success-vs-budget curve",
+    "pooled L90(M)",
+    "pooled mean expected dense executions across M=64..8192"
+  ],
+  "interpretation_rules": [
+    "Use the exact solver only as a task-semantic capability/cost reference.",
+    "Treat mean dense rank as exact-verifier expected execution count only in the dense rank-ordered thought experiment.",
+    "Do not treat finite-range power fits as asymptotic theorems.",
+    "Do not select a representation using the held-out stream.",
+    "No semantic-language or general-intelligence claim."
+  ]
+}
