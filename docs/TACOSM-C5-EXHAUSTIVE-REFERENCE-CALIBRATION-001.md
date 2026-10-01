@@ -121,3 +121,7 @@ artifacts/TACOSM-C5-EXHAUSTIVE-REFERENCE-CALIBRATION-001.json
 Full-run trigger:
 
 [run-c5-exhaustive-reference-calibration-001-full]
+
+## Dispatch record
+
+Registered full measurement trigger applied to this non-design annotation commit. Amendment CAL-001-A1 and the fixed update budget remain unchanged.
