@@ -40,7 +40,7 @@ def test_structural_product_key_builds_only_from_verified_training_signatures():
                 action=idx,
             )
         )
-    router = StructuralProductKeyRouter()
+    router = StructuralProductKeyRouter(factor_size=8)
     router.build(candidates, training_records=rows)
     assert router.index.build_diagnostics.codebook_training_items == 9
     assert len(router.index.build_diagnostics.factor_dims) == 3
