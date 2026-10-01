@@ -118,7 +118,7 @@ class C5PersistentStateAdmission:
         tables: int,
         seed_suffix: int = 0,
     ) -> ORLSHIndex:
-        candidates = build_population_extended(self.seed + m, m)
+        candidates = build_population_extended(self.seed, m)
         index = ORLSHIndex(
             latent_dim=16,
             bits=max(1, math.ceil(math.log2(m))),
