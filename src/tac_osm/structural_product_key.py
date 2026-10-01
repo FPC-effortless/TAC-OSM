@@ -180,11 +180,16 @@ class StructuralProductKeyRouter:
         candidate: Candidate,
         query_vectors: Sequence[tuple[float, ...]],
     ) -> float:
+        # Type identity must dominate mask overlap. Without this weighting,
+        # a candidate of the wrong operator family can outscore the exact
+        # target because mask overlap is dense across the 8-bit signature.
         desc = tuple(float(x) for x in candidate.descriptor)
-        return max(
-            sum(a * b for a, b in zip(desc, q))
-            for q in query_vectors
-        )
+        best = float("-inf")
+        for q in query_vectors:
+            kind_score = 8.0 * sum(a * b for a, b in zip(desc[:3], q[:3]))
+            mask_score = sum(a * b for a, b in zip(desc[3:], q[3:]))
+            best = max(best, kind_score + mask_score)
+        return best
 
     def route(
         self,
