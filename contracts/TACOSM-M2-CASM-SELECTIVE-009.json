@@ -1,7 +1,7 @@
 {
   "experiment_id": "TACOSM-M2-CASM-SELECTIVE-009",
   "version": "0.3-final",
-  "status": "preregistered_final",
+  "status": "preregistered",
   "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
   "external_executor": {
     "repository": "FPC-effortless/cdl-attention-experiment",
@@ -159,5 +159,145 @@
     "measurement_commit_must_be_tree_identical_to_final_preregistration": true,
     "post_freeze_protocol_changes": "not admissible; require a new experiment identifier",
     "full_run_trigger": "tree-identical empty commit with [run-m2-casm-selective-009-full]"
-  }
+  },
+  "title": "M2 actual CASM selective execution",
+  "question": "Does a learned structural representation reduce actual structural execution while preserving capability relative to exhaustive CASM execution?",
+  "hypothesis": "Selective structural routing should preserve useful task capability while reducing actual CASM-S execution work relative to exhaustive execution, under unique candidates and held-out structure.",
+  "arms": [
+    {
+      "name": "structural_tower",
+      "intervention": "frozen CASM-S structural representation plus learned query-to-structure tower",
+      "acts_on": "representation and routing",
+      "knob": "representation",
+      "value": "frozen CASM-S structural encoder"
+    },
+    {
+      "name": "summary_tower",
+      "intervention": "matched learned query-to-summary tower using a fixed public structural summary",
+      "acts_on": "representation and routing",
+      "knob": "representation",
+      "value": "fixed 32-dimensional public summary"
+    },
+    {
+      "name": "random",
+      "intervention": "uniform candidate selection",
+      "acts_on": "routing control",
+      "knob": "router",
+      "value": "random"
+    },
+    {
+      "name": "exhaustive",
+      "intervention": "execute every candidate with the same pinned CASM-S evaluator",
+      "acts_on": "execution control",
+      "knob": "execution",
+      "value": "all candidates"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "selective_execution_work_fraction_at_capability",
+      "role": "primary selective execution endpoint",
+      "primary": true,
+      "description": "Minimum selective CASM-S execution work fraction among registered budgets with at least 0.80 semantic capability retention versus exhaustive execution at the same M."
+    },
+    {
+      "name": "routing_recall_at_B",
+      "role": "routing admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "semantic_success_at_B",
+      "role": "fixed-budget capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "adaptive_semantic_success",
+      "role": "adaptive execution capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "execution_work_units",
+      "role": "actual CASM execution work",
+      "primary": false
+    },
+    {
+      "name": "routing_work_units",
+      "role": "query-side routing work",
+      "primary": false
+    },
+    {
+      "name": "index_build_work_units",
+      "role": "index/build work diagnostic",
+      "primary": false
+    },
+    {
+      "name": "execution_wall_clock_ms",
+      "role": "secondary runtime diagnostic",
+      "primary": false
+    },
+    {
+      "name": "peak_memory_mb",
+      "role": "secondary memory diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verified_experience_replay",
+      "role": "secondary persistence mechanism endpoint",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "At each registered M, at least one structural_tower budget satisfies capability retention >= 0.80 versus exhaustive execution.",
+      "licenses": "bounded evidence that selective structural routing can preserve capability while reducing actual CASM-S work under the registered workload.",
+      "does_not_license": "asymptotic sublinear scaling, universal program retrieval, language intelligence, or hardware speedup."
+    },
+    {
+      "condition": "No registered selective budget meets capability retention >= 0.80 at a registered M.",
+      "licenses": "the registered selective mechanism does not meet the capability-constrained execution criterion at that M.",
+      "does_not_license": "a general impossibility result for selective structural computation."
+    },
+    {
+      "condition": "Exhaustive CASM-S semantic success is below 0.80 at a registered M.",
+      "licenses": "the downstream executor ceiling is insufficient for a capability-relative selective verdict at that M.",
+      "does_not_license": "a routing failure attribution at that M."
+    }
+  ],
+  "interpretation_order": [
+    "contract and anti-leakage gates",
+    "CASM-S executor ceiling",
+    "representation integrity",
+    "routing recall",
+    "semantic capability",
+    "actual CASM execution work",
+    "adaptive execution",
+    "persistence replay",
+    "scope limits"
+  ],
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 1200,
+  "eval_steps": 32,
+  "held_constant": [
+    "pinned CASM-S commit and Python 3.12 runtime",
+    "four input Boolean programs on a fixed 10-node substrate",
+    "four router-visible examples and twelve verifier-only truth-table rows",
+    "target ID, target index, true wiring, and hidden target descriptor absent from router inputs",
+    "unique candidate structures and unique complete truth tables",
+    "five fixed seeds",
+    "router architecture and trainable parameter count matched between structural and summary arms",
+    "adaptive execution rule fixed before evaluation outcomes"
+  ]
 }
