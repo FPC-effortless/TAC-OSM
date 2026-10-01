@@ -155,6 +155,7 @@ def make_task_pool(
     *,
     heldout: bool,
     train_structures: set[tuple],
+    train_truths: set[tuple[int, ...]] | None = None,
 ) -> tuple[TaskSpec, list[CASMEpisode]]:
     if heldout:
         candidates = generate_unique_programs(
@@ -167,6 +168,8 @@ def make_task_pool(
     rng = random.Random(seed * 1_000_003 + m * 7919 + (1 if heldout else 0))
     for ep in candidates:
         if structural_key(ep) in train_structures:
+            continue
+        if train_truths is not None and truth_signature(ep) in train_truths:
             continue
         keys = sorted(ep.truth_table)
         support_keys = rng.sample(keys, SUPPORT_ROWS)
@@ -639,6 +642,7 @@ def main() -> None:
             )
 
         holdout_train_structures = {structural_key(ep) for ep in role_holdout_router_train}
+        holdout_train_truths = {truth_signature(ep) for ep in role_holdout_router_train}
         for rep in ("structural", "summary"):
             router = fit_router(seed, adapter, role_holdout_router_train, representation=rep)
             all_results.setdefault("secondary_role_holdout", {}).setdefault(rep, {})[str(seed)] = {}
@@ -650,6 +654,7 @@ def main() -> None:
                         m,
                         heldout=True,
                         train_structures=holdout_train_structures,
+                        train_truths=holdout_train_truths,
                     )
                     memory = PersistentTaskMemory()
                     memory.write_task(task.task_id, task.examples)
