@@ -131,6 +131,7 @@ class MultiFactorProductKeyStateIndex:
         self._factors: tuple[tuple[tuple[float, ...], ...], ...] = ()
         self._cells: dict[tuple[int, ...], tuple[str, ...]] = {}
         self._embeddings: dict[str, tuple[float, ...]] = {}
+        self._address_cells: dict[str, tuple[int, ...]] = {}
         self._built = False
         self._slices: tuple[tuple[int, int], ...] = ()
         self._build = MultiFactorBuildDiagnostics(0, 0, 0, 0, 0, (), 0, 0, 0)
@@ -199,6 +200,11 @@ class MultiFactorProductKeyStateIndex:
             if addresses
         }
         self._embeddings = dict(embeddings)
+        self._address_cells = {
+            address: cell
+            for cell, addresses in self._cells.items()
+            for address in addresses
+        }
         self._built = True
 
         nonempty = len(self._cells)
@@ -262,9 +268,33 @@ class MultiFactorProductKeyStateIndex:
             for cell in cells
             for address in self._cells.get(cell, ())
         })
+
+        # Optional cheap middle filter: rank candidate addresses by their
+        # factor-center score and exact-rerank only a fixed number. This changes
+        # only the rerank boundary; the product-key admission cells are fixed.
+        rerank_cap = self.config.max_shortlist
+        coarse_scores = []
+        factor_lookup = [
+            {idx: scores[idx] for idx in range(self.config.factor_size)}
+            for scores in [
+                [_dot(q[start:end], center) for center in centers]
+                for (start, end), centers in zip(self._slices, self._factors)
+            ]
+        ]
+        if hasattr(self.config, "max_rerank_candidates"):
+            rerank_cap = int(getattr(self.config, "max_rerank_candidates"))
+        for address in addresses:
+            cell = self._address_cells[address]
+            coarse_scores.append((
+                sum(factor_lookup[f][cell[f]] for f in range(self.config.factor_count)),
+                address,
+            ))
+        coarse_scores.sort(key=lambda item: (-item[0], item[1]))
+        rerank_addresses = [address for _, address in coarse_scores[:min(rerank_cap, len(coarse_scores))]]
+
         scored = [
             (_dot(q, self._embeddings[address]), address)
-            for address in addresses
+            for address in rerank_addresses
         ]
         scored.sort(key=lambda item: (-item[0], item[1]))
         retained = scored[:limit]
@@ -276,7 +306,7 @@ class MultiFactorProductKeyStateIndex:
             selected_cells=tuple(cells),
             factor_score_macs=factor_score_macs,
             pair_generation_ops=len(cells),
-            state_candidates_scored=len(addresses),
-            state_rerank_macs=len(addresses) * self._build.embedding_dim,
+            state_candidates_scored=len(rerank_addresses),
+            state_rerank_macs=len(rerank_addresses) * self._build.embedding_dim,
             factor_beam=width,
         )
