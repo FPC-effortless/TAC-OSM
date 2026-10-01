@@ -198,3 +198,4 @@ while approximately preserving:
 Desired empirical behavior is selective state addressing, selective operator addressing, bounded useful execution, stable verified state, and evidence-driven capacity growth.
 
 This is the research target, not a current result.
+
