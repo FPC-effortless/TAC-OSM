@@ -1,0 +1,49 @@
+{
+  "experiment_id": "TACOSM-C5-MULTIFACTOR-BEAM-001",
+  "title": "Three-factor product-key beam recovery frontier",
+  "question": "Can increasing beam within the 3-factor, factor-size-8 product-key construction recover capability while remaining materially sparser than the validated two-factor frontier?",
+  "hypothesis": "Beam increases should recover proposal coverage while increasing the selected-cell union, potentially exposing an intermediate capability/computation region.",
+  "arms": [
+    {"name":"three_factor_8_beam3","intervention":"three-factor product-key addressing, factor size 8, beam 3","acts_on":"factor beam","factor_count":3,"factor_size":8,"factor_beam":3},
+    {"name":"three_factor_8_beam4","intervention":"three-factor product-key addressing, factor size 8, beam 4","acts_on":"factor beam","factor_count":3,"factor_size":8,"factor_beam":4},
+    {"name":"three_factor_8_beam5","intervention":"three-factor product-key addressing, factor size 8, beam 5","acts_on":"factor beam","factor_count":3,"factor_size":8,"factor_beam":5},
+    {"name":"three_factor_8_beam6","intervention":"three-factor product-key addressing, factor size 8, beam 6","acts_on":"factor beam","factor_count":3,"factor_size":8,"factor_beam":6}
+  ],
+  "endpoints": [
+    {"name":"selective_target_recall","role":"primary retrieval endpoint","primary":true},
+    {"name":"target_recall_retention_ratio","role":"capability retention versus exhaustive cosine reference","primary":false},
+    {"name":"proposal_target_retention","role":"coverage diagnostic","primary":false},
+    {"name":"states_scored_over_M","role":"primary computation diagnostic","primary":false},
+    {"name":"state_candidates_scored_mean","role":"absolute reranking set size","primary":false},
+    {"name":"selective_end_to_end_success","role":"secondary capability endpoint","primary":false},
+    {"name":"total_macs_mean","role":"arithmetic audit","primary":false},
+    {"name":"pair_generation_ops_mean","role":"routing audit","primary":false},
+    {"name":"max_cell_size","role":"occupancy audit","primary":false}
+  ],
+  "decision_rule": [
+    {
+      "condition":"For three_factor_8_beam3, three_factor_8_beam4, three_factor_8_beam5, and three_factor_8_beam6, report exact pooled target recall, capability retention, proposal retention, states scored/M, end-to-end success, arithmetic, routing operations, and occupancy at each M.",
+      "licenses":"a workload-specific 3-factor beam/capability frontier",
+      "does_not_license":"universal optimal beam, semantic retrieval, asymptotic guarantees, or hardware speedup"
+    },
+    {
+      "condition":"A configuration is capability-qualified only if exact pooled target_recall_retention_ratio is at least 0.85 at every M level.",
+      "licenses":"that configuration meets the preregistered capability floor on this workload",
+      "does_not_license":"general optimality or seed invariance"
+    }
+  ],
+  "interpretation_order":["exhaustive cosine reference","proposal retention","selective recall","capability retention","states scored/M","end-to-end success","arithmetic"],
+  "h_levels":[256],
+  "m_levels":[128,256,512],
+  "steps":512,
+  "k_levels":[32],
+  "seeds":[10,11,12,13,14,15,16,17,18,19],
+  "eval_steps":100,
+  "factor_count_levels":[3],
+  "factor_size_levels":[8],
+  "factor_beam_levels":[3,4,5,6],
+  "capability_floor":0.85,
+  "held_constant":["same width-16 raw-trained cosine teacher","same training-only codebook regime","same one-bit noisy query construction","same H=256","same M levels","same K=32","same factor_count=3","same factor_size=8","same k-means iterations=8","same state-distinct executor","same seeds 10-19","same task stream","same 100 evaluation steps"],
+  "status":"pre-registered",
+  "layer":"L4"
+}
