@@ -50,7 +50,8 @@ This is a calibration intervention, not access to target labels or target values
 - seeds=10-19
 - 100 evaluation tasks per seed/M/arm
 - width-16 cosine teacher
-- same training objective, learning rate, margin, negative count, and 512 epochs
+- same training objective, learning rate, margin, and negative count
+- target approximately 24,576 optimizer updates in both arms; the matched arm uses rounded integer epochs and records actual updates within 1% of the target
 - exhaustive cosine retrieval across every one of the M persistent states
 
 ## Primary endpoint
@@ -72,6 +73,15 @@ the highest tested population.
 The threshold is fixed before measurement and is substantially smaller than the
 historical 0.333 absolute decline from M=128 to M=512.
 
+## Pre-dispatch amendment CAL-001-A1
+
+The original registration used 512 epochs for both arms. That would have given the
+matched arm substantially more optimizer updates because its training population
+grows with M. Before any full measurement, this was amended to an approximately
+fixed 24,576-update budget for both arms. The old definition and rationale are
+preserved in the machine-readable contract. No result was produced under the
+superseded schedule.
+
 No outcome from this study changes the registered C5 frontier verdict.
 
 ## Secondary stability analysis
@@ -91,6 +101,8 @@ non-target exposure.
 - No codebook or task-generation changes are permitted after registration.
 - The result remains a calibration result even if exhaustive recall improves
   substantially.
+- Actual teacher update counts must be reported; population matching must not
+  be credited with an effect attributable only to a larger optimizer budget.
 
 ## Reproduction
 
