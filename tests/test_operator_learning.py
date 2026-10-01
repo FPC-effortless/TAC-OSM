@@ -1,6 +1,7 @@
 from tac_osm.operator_learning import (
     AXONConsolidator,
     ExperienceStore,
+    FixedAXONConsolidator,
     PrimitiveOperator,
     PSTLearner,
     SECAEngine,
@@ -85,7 +86,7 @@ def test_seca_accepts_novel_compositions():
     rows = _records(60)
     pst = PSTLearner(("toggle", "set1", "set0"))
     pst.fit(rows)
-    macros = AXONConsolidator(min_support=4).consolidate(rows)
+    macros = FixedAXONConsolidator(min_support=4).consolidate(rows)
     candidates = SECAEngine().propose(macros, max_pairs=4)
     accepted = SECAEngine().verify(
         candidates,
