@@ -20,6 +20,7 @@ from tac_osm.multifactor_product_key_index import (
     MultiFactorProductKeyStateIndex,
 )
 from tac_osm.product_key_index import ProductKeyConfig, ProductKeyStateIndex
+from tac_osm.noisy_state_tasks import CODEBOOK
 from scripts.run_c5_frontier_robustness_002 import (
     H_FIXED,
     K,
@@ -79,7 +80,7 @@ def assert_executor_distinctness() -> None:
     executor = StateDistinctEndToEndExecutor()
     population = build_population(0, H_FIXED)
     outputs = []
-    for reference in __import__("tac_osm.noisy_state_tasks", fromlist=["CODEBOOK"]).CODEBOOK[:2]:
+    for reference in CODEBOOK[:2]:
         relevant = tuple(
             candidate
             for candidate in population
