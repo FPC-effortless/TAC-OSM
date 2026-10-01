@@ -50,3 +50,5 @@ Full: python scripts/run_c5_multifactor_beam_001.py
 Artifact: artifacts/TACOSM-C5-MULTIFACTOR-BEAM-001.json
 
 Full-run marker: [run-c5-multifactor-beam-001-full]
+
+CI trigger verification complete.
