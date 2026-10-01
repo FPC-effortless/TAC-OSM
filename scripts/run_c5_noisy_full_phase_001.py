@@ -121,7 +121,7 @@ def evaluate_seed(seed: int, router: CDLDenseNoisyRouter):
         calibration = trials_for(seed, m, CONFIG.calibration_trials, offset=7)
         heldout = trials_for(seed + 100, m, CONFIG.eval_trials, offset=9)
 
-        cdl_ranks = [router.inner.best_valid_rank(trial) for trial in calibration]
+        cdl_ranks = [router.best_valid_rank(trial) for trial in calibration]
         hamming_ranks = [hamming.best_valid_rank(trial) for trial in calibration]
         k90 = max(1, min(m, sorted(cdl_ranks)[max(0, math.ceil(0.90 * len(cdl_ranks)) - 1)]))
         k95 = max(1, min(m, sorted(cdl_ranks)[max(0, math.ceil(0.95 * len(cdl_ranks)) - 1)]))
@@ -158,7 +158,7 @@ def evaluate_seed(seed: int, router: CDLDenseNoisyRouter):
         sparse90 = []
         sparse95 = []
         for trial in heldout:
-            rank = router.inner.best_valid_rank(trial)
+            rank = router.best_valid_rank(trial)
             cov90.append(int(rank <= k90))
             cov95.append(int(rank <= k95))
             for k, rows in ((k90, sparse90), (k95, sparse95)):
