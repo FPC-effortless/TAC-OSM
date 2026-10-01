@@ -1,6 +1,6 @@
 # TACOSM-FUSED-FRONTIER-001 — Result
 
-**Status: measured.** Registered run completed on 2026-10-01 at commit \`9701a25eba4d0f18e37? NO\`.
+**Status: measured — diagnostic, not promoted as a primary capability result.** Registered run completed on 2026-10-01 at commit \`9701a25eba4d0f18e37? NO\`.
 
 ## Provenance
 
@@ -24,7 +24,7 @@
 
 ## Primary routing result
 
-The result does **not** support capability-preserving fusion on this exact held-out-signature routing workload.
+The result does **not** support capability-preserving fusion on the registered exact-target routing diagnostic. A methodological limitation was discovered after the run: some state/goal pairs can be satisfied by more than one operator signature, so exact target-index selection is not always an identifiable task. The numbers below remain valid diagnostics of exact-target retrieval, but are not promoted as the primary capability result.
 
 | M | mode | B=4 top-1 | B=8 top-1 | B=16 top-1 |
 |---:|---|---:|---:|---:|
@@ -127,3 +127,10 @@ The next experiment should compare:
 Keep the same M, seeds, and absolute budgets, and report all internal address-scoring work. The primary diagnostic is whether exact-signature admission rises substantially before adding any new execution machinery.
 
 **No claim of generalized reasoning, continual learning, or C5 follows from this experiment.**
+
+
+## Methodological correction for the next phase
+
+The next measurement will make target selection identifiable by sampling held-out target/state pairs for which exactly one library operator produces the requested goal. It will also promote environment execution success — whether the selected operator actually reaches the goal — as the capability endpoint.
+
+The current run therefore establishes a routing failure signal, but the corrected unique-target protocol is required before comparing architectural capability claims.
