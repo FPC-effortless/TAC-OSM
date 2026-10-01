@@ -1,0 +1,78 @@
+{
+  "experiment_id": "TACOSM-FUSED-FRONTIER-003",
+  "title": "Factor-geometry scaling of deterministic structural routing",
+  "question": "Can increasing product-key factorization depth reduce exact-address routing work while preserving the held-out execution capability recovered in frontier 002?",
+  "hypothesis": "The dense exact-address region in the three-factor index is caused by factor-cell collisions. More factor partitions with controlled beam width should reduce exact-address candidates and total route arithmetic, with PST retained as the transition-compatibility scorer.",
+  "arms": [
+    {"name":"3f16_b7","intervention":"3 factors x 16 cells, beam 7","acts_on":"index geometry"},
+    {"name":"4f16_b4","intervention":"4 factors x 16 cells, beam 4","acts_on":"index geometry"},
+    {"name":"4f16_b5","intervention":"4 factors x 16 cells, beam 5","acts_on":"index geometry"},
+    {"name":"4f16_b7","intervention":"4 factors x 16 cells, beam 7","acts_on":"index geometry"},
+    {"name":"5f8_b4","intervention":"5 factors x 8 cells, beam 4","acts_on":"index geometry"}
+  ],
+  "endpoints": [
+    {"name":"execution_success","role":"primary capability endpoint","primary":true},
+    {"name":"internal_exact_addresses_scored","role":"primary scaling diagnostic","primary":false},
+    {"name":"internal_exact_addresses_scored_over_M","role":"primary scaling diagnostic","primary":false},
+    {"name":"route_ops_excluding_build","role":"primary total routing arithmetic","primary":false},
+    {"name":"pkm_admission_recall","role":"coarse admission diagnostic","primary":false},
+    {"name":"final_admission_recall","role":"final admission diagnostic","primary":false},
+    {"name":"factor_score_macs","role":"factor arithmetic","primary":false},
+    {"name":"pair_generation_ops","role":"cell expansion arithmetic","primary":false},
+    {"name":"internal_exact_rerank_ops","role":"exact address arithmetic","primary":false},
+    {"name":"pst_prediction_ops","role":"transition prediction arithmetic","primary":false},
+    {"name":"build_macs","role":"index build arithmetic","primary":false}
+  ],
+  "task_protocol": {
+    "training_codebook":48,
+    "evaluation":"80 unique-target held-out toggle tasks per seed/M cell",
+    "family_gate":"StructMeans cluster budget 2",
+    "transition_scorer":"PST trained only on verified training transitions",
+    "execution":"selected candidate executed against goal",
+    "verifier_information":"not available to route()"
+  },
+  "M_levels":[128,256,512],
+  "absolute_budgets":[4,8,16],
+  "seeds":[10,11,12],
+  "steps":600,
+  "eval_steps":80,
+  "k_levels":[4,8,16],
+  "h_levels":[1],
+  "held_constant":[
+    "operator state dimension=8",
+    "operator kinds=toggle,set1,set0",
+    "verified training operators=48 (16 per kind)",
+    "deterministic 11-dimensional operator descriptor",
+    "StructMeans clusters=3 and cluster budget=2",
+    "PST model and training records unchanged from frontier 002",
+    "unique-target task construction unchanged from frontier 002",
+    "no SECA or verifier feedback in single-step routing"
+  ],
+  "decision_rule":[
+    {
+      "condition":"Report execution_success and all routing arithmetic for every geometry at every M and absolute budget.",
+      "licenses":"workload-specific evidence about factor-geometry tradeoffs.",
+      "does_not_license":"C5 or asymptotic claims unless total routing work and internal address work both stop increasing with M."
+    },
+    {
+      "condition":"A geometry is a candidate for the next phase only if its capability curve is competitive with the frontier-002 structural+PST control and its internal address fraction is materially lower at larger M.",
+      "licenses":"selection of an engineering configuration for further testing.",
+      "does_not_license":"universal superiority or broad-domain generalization."
+    }
+  ],
+  "interpretation_order":[
+    "execution_success",
+    "internal_exact_addresses_scored",
+    "internal_exact_addresses_scored_over_M",
+    "route_ops_excluding_build",
+    "pkm_admission_recall",
+    "final_admission_recall",
+    "factor_score_macs",
+    "pair_generation_ops",
+    "internal_exact_rerank_ops",
+    "pst_prediction_ops",
+    "build_macs"
+  ],
+  "status":"pre-registered",
+  "layer":"L5"
+}
