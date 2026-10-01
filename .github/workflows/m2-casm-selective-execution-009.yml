@@ -31,11 +31,16 @@ jobs:
           path: third_party/cdl-attention-experiment
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.13"
       - name: Install TAC-OSM and test dependencies
         run: python -m pip install --quiet -e . pytest
       - name: Install pinned CASM runtime
         run: python -m pip install --quiet torch
+      - name: Static runner validation
+        run: python -m py_compile scripts/run_m2_casm_selective_009.py src/tac_osm/casm_s_adapter.py
+      - name: External CASM phase tests
+        working-directory: third_party/cdl-attention-experiment
+        run: python -m pytest casm_v01/phase1_dag/test_phase1.py -q
       - name: Verify external executor commit
         run: |
           test "$(git -C third_party/cdl-attention-experiment rev-parse HEAD)" = "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
