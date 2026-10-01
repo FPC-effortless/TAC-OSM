@@ -120,6 +120,7 @@ def summarize(rows):
             "dense_mean_rank": statistics.fmean(r["dense_target_rank"] for r in g),
             "dense_top1_rate": statistics.fmean(float(r["dense_top1"]) for r in g),
             "address_mean_raw_candidates": statistics.fmean(r["address_raw_candidates"] for r in g),
+            "address_mean_entries_touched": statistics.fmean(r["address_entries_touched"] for r in g),
             "address_mean_candidates": statistics.fmean(r["address_candidate_count"] for r in g),
             "address_mean_lookups": statistics.fmean(r["address_lookups"] for r in g),
             "address_full_scan_fallback_rate": statistics.fmean(float(r["address_full_scan_fallback"]) for r in g),
