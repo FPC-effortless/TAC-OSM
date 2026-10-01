@@ -1955,3 +1955,55 @@ G. Only after A-F pass, test verified-experience priors and CLM-style editable s
 H. Then perform compute-backed Transformer/KV, scan and bounded-state comparisons with wall-clock, memory and I/O.
 
 This is the shortest evidence-preserving route to the final PLM result.
+
+
+---
+
+## Scientific Audit 008 addendum — 2026-10-01
+
+The unified research plan is now constrained by the repository-wide scientific audit in `research/SCIENTIFIC-AUDIT-008.md`.
+
+### Evidence status changes
+
+PR #59 high-M candidate-rank growth is a repeated-class multiplicity control, not evidence of representation degradation. The population repeats a fixed 64-class codebook, and candidate-level P90/K90 scale with copy multiplicity.
+
+PR #55 product-key execution-feedback versus dense routing is not a matched architectural comparison. The dense arm receives far fewer effective learning updates, and the nominally held-out target codes are exposed as positive training targets.
+
+PR #61 representation arms are not parameter/compute matched, so differences are exploratory rather than causal representation comparisons.
+
+PR #64 `outcome_field_all_candidates` is an oracle dense-label diagnostic. It is not a learned CASM outcome field, and its original OOD slice was not support-held out.
+
+PR #62 unified PLM online-learning results using `correct_record` after failure are privileged-supervision results. The audit branch changes the default so privileged online correction is opt-in.
+
+### New mandatory gates
+
+Population scaling uses unique candidate descriptors and pooled trial-level quantiles.
+
+Compositional evaluation excludes a declared structural family from training and separately excludes exact training target descriptors.
+
+Representation gates use deterministic witnesses over the actual function class.
+
+Routing cost includes query encoding, candidate encoding, and similarity arithmetic; system claims additionally require build/maintenance, memory, and wall-clock accounting.
+
+Operator-family metadata and exact target records are treated as privileged information whenever they are exposed to learning or operator selection.
+
+The confirmatory execution phase must use an actual CASM-S adapter, with active-node, candidate-edge, gate-evaluation, and structural-operation accounting. Synthetic relation executors remain mechanism controls only.
+
+### Promotion rule
+
+A mechanism is not promoted from exploratory evidence to a PLM capability result unless:
+
+1. integrity and split gates pass;
+2. representability passes deterministically;
+3. structural holdout is genuinely held out;
+4. capability is preserved at matched learning/computation budget;
+5. addressing/admission and actual CASM execution costs are both measured;
+6. verifier/state updates are provenance-traceable.
+
+No finite-range fitted exponent is treated as an asymptotic theorem.
+
+### Current scientific question
+
+Can the unified PLM preserve capability as unique persistent-state and operator populations grow while routing and actual executed structural computation remain bounded by relevant structure rather than accumulated state?
+
+The next confirmatory phase is therefore the frozen CDL representation + actual CASM-S selective execution integration, followed by a unique-population C5/PLM scaling benchmark.

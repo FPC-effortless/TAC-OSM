@@ -72,3 +72,18 @@ def test_false_acceptance_stress_can_commit_wrong_experience():
     assert result.verification.passed
     assert result.verification.false_accept
     assert plm.state.writes >= 1
+
+
+def test_privileged_online_correction_is_opt_in():
+    assert PLMConfig().allow_privileged_online_correction is False
+    assert PLMConfig(allow_privileged_online_correction=True).allow_privileged_online_correction is True
+
+
+def test_composite_operator_rejects_unsupported_binary_second_stage():
+    pool = build_operator_pool()
+    pool.synthesize_not()
+    pool.synthesize_composite("not_xor", "xor", "not")
+    assert "not_xor" in pool.operators
+    import pytest
+    with pytest.raises(ValueError, match="unary second operators"):
+        pool.synthesize_composite("bad", "xor", "and")
