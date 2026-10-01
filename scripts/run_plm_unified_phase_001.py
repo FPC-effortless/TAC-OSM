@@ -50,6 +50,10 @@ def train_router(seed: int) -> BinaryCDL:
 def rank_target(router, task, records):
     ranked = router.rank(task.query_bits, records)
     ids = [x.record_id for x in ranked]
+    if task.target_id not in ids:
+        # Censored rank: target was not admitted to the local set.
+        # Keeping this as n+1 preserves the miss rather than dropping it.
+        return len(ids) + 1, False
     return ids.index(task.target_id) + 1, ids[0] == task.target_id
 
 
