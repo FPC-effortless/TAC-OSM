@@ -116,12 +116,23 @@ class Program:
     active_count: int
     input_values: tuple[int, ...] = ()
     exact: bool = False
+    # candidate_edges is the public substrate; true_edges is the executable
+    # program topology. Keeping them separate is a semantic invariant.
+    true_edges: tuple[Edge, ...] = ()
 
-    input_values: tuple[int, ...] = ()
+    def __post_init__(self) -> None:
+        candidate = {(e.src, e.dst, e.port) for e in self.candidate_edges}
+        true = {(e.src, e.dst, e.port) for e in self.true_edges}
+        if not true.issubset(candidate):
+            raise ValueError("true_edges must be a subset of candidate_edges")
+        if len(candidate) != len(self.candidate_edges):
+            raise ValueError("candidate_edges must not contain duplicates")
+        if len(true) != len(self.true_edges):
+            raise ValueError("true_edges must not contain duplicates")
 
     @property
     def true_edge_set(self) -> set[tuple[int, int, int]]:
-        return {(e.src, e.dst, e.port) for e in self.candidate_edges}
+        return {(e.src, e.dst, e.port) for e in self.true_edges}
 
 
 def _alpha(strength: Sequence[float], port: int) -> float:
@@ -452,14 +463,19 @@ def build_program(seed: int, *, dim: int = 8, max_nodes: int = 10) -> Program:
             nodes.append(Node(index=i, op=op, depth=1, arity=op.arity))
 
     edges: list[Edge] = []
+    true_edges: list[Edge] = []
     for dst in range(n_inputs, max_nodes):
-        for src in range(dst):
-            for port in range(nodes[dst].arity):
+        predecessors = list(range(dst))
+        for port in range(nodes[dst].arity):
+            for src in predecessors:
                 edges.append(Edge(src=src, dst=dst, port=port))
+            src = rng.choice(predecessors)
+            true_edges.append(Edge(src=src, dst=dst, port=port))
 
     return Program(
         nodes=tuple(nodes),
         candidate_edges=tuple(edges),
+        true_edges=tuple(true_edges),
         inputs=inputs,
         output=max_nodes - 1,
         active_count=max_nodes,
@@ -489,13 +505,19 @@ def program_from_descriptor(descriptor: Sequence[int], *,
             nodes.append(Node(index=i, op=op, depth=1, arity=arity))
 
     edges: list[Edge] = []
+    true_edges: list[Edge] = []
     for dst in range(n_inputs, max_nodes):
-        for src in range(dst):
-            for port in range(nodes[dst].arity):
+        predecessors = list(range(dst))
+        for port in range(nodes[dst].arity):
+            for src in predecessors:
                 edges.append(Edge(src=src, dst=dst, port=port))
+            true_edges.append(
+                Edge(src=predecessors[port % len(predecessors)], dst=dst, port=port)
+            )
     return Program(
         nodes=tuple(nodes),
         candidate_edges=tuple(edges),
+        true_edges=tuple(true_edges),
         inputs=inputs,
         output=max_nodes - 1,
         active_count=max_nodes,
@@ -622,4 +644,5 @@ def relevance_program(
         output=and_base + len(marks) - 2 if len(marks) > 1 else and_base,
         active_count=total,
         exact=True,
+        true_edges=tuple(edges),
     )

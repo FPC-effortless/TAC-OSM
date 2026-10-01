@@ -1,0 +1,33 @@
+name: Integrated execution feedback and operator-learning research
+
+on:
+  push:
+    branches: [research/axon-integrated-loop-v1]
+  pull_request:
+    branches: [successor/arch-v1]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install test runner
+        run: python -m pip install --quiet pytest
+      - name: Full test suite
+        run: python -m pytest tests/ -q
+      - name: Integrated research run
+        run: python scripts/run_integrated_execution_feedback_axon_001.py
+      - name: Upload integrated artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-INTEGRATED-001
+          path: artifacts/TACOSM-INTEGRATED-001.json
+          if-no-files-found: error
