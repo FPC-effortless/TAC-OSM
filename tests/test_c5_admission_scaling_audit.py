@@ -54,3 +54,8 @@ def test_dense_extension_uses_same_noisy_trial_boundary() -> None:
     cfg = AuditConfig()
     assert cfg.dense_m_levels[-3:] == (2048, 4096, 8192)
     assert cfg.sweep_m == 1024
+
+
+def test_sweep_table_counts_cannot_be_cap_bound() -> None:
+    cfg = AuditConfig()
+    assert max(cfg.lsh_tables) < cfg.lsh_cap
