@@ -1,0 +1,50 @@
+name: REP-006 semantic state addressing
+
+on:
+  push:
+    branches: [research/rep006-semantic-state-addressing]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "scripts/run_semantic_state_rep006.py"
+      - "docs/TACOSM-STATE-REP-006.md"
+      - ".github/workflows/rep006.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rep006:
+    name: TACOSM-STATE-REP-006
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+          if git diff --name-only origin/master...HEAD | grep -E 'C5-001|C5-002|C5-003'; then
+            echo "Frozen C5 evidence changed; REP-006 is invalid."
+            exit 1
+          fi
+      - name: Run preregistered diagnostic
+        run: |
+          mkdir -p artifacts
+          python scripts/run_semantic_state_rep006.py > artifacts/REP-006.stdout.json
+          cat artifacts/REP-006.stdout.json
+      - name: Upload REP-006 result
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-STATE-REP-006
+          path: artifacts/
+          if-no-files-found: error

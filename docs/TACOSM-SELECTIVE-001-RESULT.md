@@ -1,41 +1,71 @@
-# TACOSM-SELECTIVE-001 — Result
+# TACOSM-SELECTIVE-001 RESULT
 
-Run: GitHub Actions 36509506303
-Measurement commit: `ebb1dad73edd79c94bac97af6ac42c7d8729af1f`
-Contract fingerprint: `7c7db37bef062e02`
-Artifact: `tacosm-selective-001` (artifact 11009135323)
-Configuration: H={8,64,256}, K={2,4}, seeds 0–4, 100 queries per cell.
-Indexed-control capability gate: **PASS for all 6 indexed cells**.
+## Current registered run
+
+- workflow: `36666455184`
+- measurement commit: `0ef94bed1ffda74e4a10c46cfc34aeb50c311ba7`
+- full test gate: **858 passed**
+- measurement gate: **PASS**
+- artifact: `TACOSM-SELECTIVE-001`
+- artifact id: `11075954570`
+- artifact zip SHA-256: `c0cf905f7d5c874654d13d9a599cb9f099ae4ffe216e26b7720c67e4abdf6f00`
+- configuration: H={8,64,256}, K={2,4}, seeds 0–4, 100 queries per cell.
 
 ## Primary endpoint
 
-| H | K | exhaustive success | indexed success | indexed router candidates/query | indexed amortized candidate work |
+| H | K | Exhaustive success | Indexed success | Indexed router candidates/query | Indexed amortized candidate work |
 |---:|---:|---:|---:|---:|---:|
-| 8 | 2 | 1.0000 | 1.0000 | 2 | 4.08 |
-| 8 | 4 | 1.0000 | 1.0000 | 2 | 4.08 |
-| 64 | 2 | 1.0000 | 1.0000 | 2 | 4.64 |
-| 64 | 4 | 1.0000 | 1.0000 | 4 | 6.64 |
-| 256 | 2 | 1.0000 | 1.0000 | 2 | 6.56 |
-| 256 | 4 | 1.0000 | 1.0000 | 4 | 8.56 |
+| 8 | 2 | 1.0000 | 1.0000 | 2.00 | 4.08 |
+| 8 | 4 | 1.0000 | 1.0000 | 2.00 | 4.08 |
+| 64 | 2 | 1.0000 | 1.0000 | 2.00 | 4.64 |
+| 64 | 4 | 1.0000 | 1.0000 | 4.00 | 6.64 |
+| 256 | 2 | 1.0000 | 1.0000 | 2.00 | 6.56 |
+| 256 | 4 | 1.0000 | 1.0000 | 4.00 | 8.56 |
 
-The indexed arm builds the exact equality index once per static population and
-then routes only the retained bucket. At H=256 this changes actual router
-input from 256 candidates to 2 or 4.
+All six indexed cells preserved the exhaustive 1.0000 task capability.
 
-The one-time build is included in `amortized_candidate_work` over the declared
-100 queries. Query-time address inspection is 2 marked positions per query.
+## Runtime boundary
+
+The exhaustive arm routes over H candidates each query. The indexed arm builds
+an exact public equality index once for the static candidate population and
+then presents only the retained bucket to the router.
+
+At H=256 the router therefore receives only 2 or 4 candidates instead of 256.
+
+The one-time index build remains included in `amortized_candidate_work` over
+the declared 100 queries. Query-time addressing inspects the two marked
+positions.
 
 ## Interpretation
 
-The result establishes that the repaired **runtime retrieval boundary is real**
-for this exact synthetic equality control: indexed execution preserves the
-same 1.0 capability while the router receives a bounded retained set.
+This establishes a bounded **selective routing boundary** in the hardened
+runtime for the registered equality control.
 
-It does **not** establish the full C5 economic claim. Executor invocations remain
-one per successful task in both arms, and wall-clock time is nearly identical
-because this control's executor is deliberately tiny. The result therefore
-supports the runtime boundary and candidate-work accounting, not an end-to-end
-compute or latency reduction claim.
+It does not establish the full C5 claim because execution still performs one
+selected-candidate invocation per task. The executor's own work therefore does
+not yet scale with the retained subset R.
 
-The indexed control is exact content addressing, not semantic or learned
-retrieval. A learned/semantic addresser must be evaluated separately.
+It also does not establish semantic learned retrieval or hardware latency
+improvement. The indexed control uses exact content addressing, and the
+synthetic executor is deliberately tiny.
+
+## Relation to C5
+
+SELECTIVE-001 establishes:
+
+`H -> retain R -> route(R)`.
+
+It does not yet establish:
+
+`H -> retain R -> execute(R)`.
+
+That distinction is the next experimental boundary. A C5-facing experiment
+must require the correct result to depend on aggregating over all relevant
+candidate programs, so the exhaustive arm executes H programs and the indexed
+arm executes only R programs under matched capability.
+
+## Frozen evidence
+
+REP-001 through REP-009 and prior C5 measurements remain separate historical
+records. This document supersedes the earlier SELECTIVE-001 result only as the
+latest recorded run; it does not rewrite the frozen baseline.

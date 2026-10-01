@@ -1,0 +1,51 @@
+name: REP-008 exact state-index ceiling
+
+on:
+  push:
+    branches: [research/rep008-state-index-ceiling]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "scripts/run_state_index_rep008.py"
+      - "docs/TACOSM-STATE-REP-008.md"
+      - "contracts/TACOSM-STATE-REP-008.json"
+      - ".github/workflows/rep008.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rep008:
+    name: TACOSM-STATE-REP-008
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+          if git diff --name-only origin/master...HEAD | grep -E 'C5-001|C5-002|C5-003'; then
+            echo "Frozen C5 evidence changed; REP-008 is invalid."
+            exit 1
+          fi
+      - name: Run registered ceiling
+        run: |
+          mkdir -p artifacts
+          python scripts/run_state_index_rep008.py > artifacts/REP-008.stdout.json
+          cat artifacts/REP-008.stdout.json
+      - name: Upload REP-008 result
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-STATE-REP-008
+          path: artifacts/
+          if-no-files-found: error

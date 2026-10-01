@@ -1,0 +1,64 @@
+{
+  "experiment_id":"TACOSM-C5-LATENT-WIDTH-001",
+  "title":"Latent-width scaling for learned semantic state addressing",
+  "question":"Does increasing latent width improve the learned continuous semantic state retriever when training budget and negative coverage are fixed?",
+  "hypothesis":"H_width: the current low-recall boundary is partly capacity-limited; increasing latent width from 8 to 16 to 32 should improve held-out target-state recall before saturation.",
+  "arms":[
+    {"name":"latent_8","intervention":"dual linear encoder with latent dimension 8","acts_on":"representation capacity","knob":"latent_dim","value":"8"},
+    {"name":"latent_16","intervention":"dual linear encoder with latent dimension 16","acts_on":"representation capacity","knob":"latent_dim","value":"16"},
+    {"name":"latent_32","intervention":"dual linear encoder with latent dimension 32","acts_on":"representation capacity","knob":"latent_dim","value":"32"}
+  ],
+  "endpoints":[
+    {"name":"target_top1_recall","role":"primary — correct opaque persistent state selected","primary":true},
+    {"name":"target_rank_mean","role":"secondary — mean rank of correct target state","primary":false},
+    {"name":"training_updates","role":"secondary — fixed optimizer updates across arms","primary":false},
+    {"name":"negative_evaluations_total","role":"secondary — fixed negative coverage but width-dependent arithmetic","primary":false},
+    {"name":"query_macs","role":"audit — continuous inference arithmetic","primary":false},
+    {"name":"state_build_macs","role":"audit — one-time state embedding arithmetic","primary":false}
+  ],
+  "decision_rule":[
+    {
+      "condition":"latent_32 recall >= latent_8 recall + 0.15 and latent_32 recall >= 0.50",
+      "licenses":"evidence that encoder capacity is a material limiting factor in the current semantic retriever",
+      "does_not_license":"that 32 dimensions is optimal or that width generalizes to other workloads"
+    },
+    {
+      "condition":"latent_32 recall is within 0.05 absolute of latent_8 recall",
+      "licenses":"evidence that increasing latent width is largely saturated in this configuration",
+      "does_not_license":"that different representation families would not help"
+    },
+    {
+      "condition":"latent_32 recall improves over latent_8 by >0.05 and <0.15",
+      "licenses":"partial evidence that representation capacity contributes to retrieval quality",
+      "does_not_license":"a reliable selective retriever"
+    },
+    {
+      "condition":"latent_32 recall < latent_8 recall - 0.05",
+      "licenses":"evidence that wider latent representations reverse the observed gain in this workload",
+      "does_not_license":"that larger width is generally harmful"
+    }
+  ],
+  "interpretation_order":["temporal availability","held-out retrieval","capacity response","target rank","training overhead","inference arithmetic"],
+  "h_levels":[64],
+  "k_levels":[],
+  "seeds":[0,1,2,3,4],
+  "steps":512,
+  "eval_steps":100,
+  "held_constant":[
+    "M=64 persistent state items",
+    "H=64 task anchor and A1 H-invariant query/state stream",
+    "one-step causal write/read delay",
+    "10-bit state codebook",
+    "training codes CODEBOOK[16:64]",
+    "evaluation codes CODEBOOK[:16]",
+    "one deterministic positive view per update",
+    "eight mean-gradient negatives per positive",
+    "512 training epochs",
+    "learning rate 0.02 and margin 0.25",
+    "continuous exhaustive state scoring only",
+    "no evaluation address or gold target enters training",
+    "prior C5 and learned-state results remain frozen"
+  ],
+  "status":"pre-registered",
+  "layer":"L3"
+}
