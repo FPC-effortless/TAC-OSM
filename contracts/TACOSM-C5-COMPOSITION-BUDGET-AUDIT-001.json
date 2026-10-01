@@ -1,0 +1,200 @@
+{
+  "experiment_id": "TACOSM-C5-COMPOSITION-BUDGET-AUDIT-001",
+  "title": "C5 composition representation and execution budget audit",
+  "question": "Which registered representation and verifier-coupled training interventions reduce compositional rank degradation and the admission-to-execution budget loss in the persistent relational C5 loop?",
+  "hypothesis": "The principal loss will separate into relation representation, LSH admission, and execution-budget effects; structured relational representations and outcome-coupled hard negatives may reduce dense rank and move verified targets toward small execution budgets without changing the persistent substrate or verifier.",
+  "arms": [
+    {
+      "name": "control",
+      "intervention": "existing persistent relational CDL router with matched 1200 exhaustive updates",
+      "acts_on": "composition representation",
+      "knob": "arm",
+      "value": "control"
+    },
+    {
+      "name": "analytic_init",
+      "intervention": "exact signed Boolean relational initialization with an explicit persisted-operation constant channel, followed by matched 1200 exhaustive updates",
+      "acts_on": "composition representation",
+      "knob": "initialization",
+      "value": "analytic"
+    },
+    {
+      "name": "product_key",
+      "intervention": "split candidate descriptors into two 8-bit product-key subspaces with learned 8-D subkeys",
+      "acts_on": "composition representation",
+      "knob": "candidate factorization",
+      "value": "two 8-bit subspaces"
+    },
+    {
+      "name": "late_interaction",
+      "intervention": "independent per-bit query/candidate channels with summed interaction score",
+      "acts_on": "composition representation",
+      "knob": "late interaction",
+      "value": "per-bit"
+    },
+    {
+      "name": "outcome_distill",
+      "intervention": "control with 800 exhaustive updates followed by 400 pairwise updates from actual CASM verification failures",
+      "acts_on": "training interface",
+      "knob": "negative source",
+      "value": "CASM failures"
+    },
+    {
+      "name": "product_key_distill",
+      "intervention": "product-key representation with 800 exhaustive updates followed by 400 CASM-failure hard-negative updates",
+      "acts_on": "representation + training interface",
+      "knob": "combination",
+      "value": "product-key + distillation"
+    },
+    {
+      "name": "late_interaction_distill",
+      "intervention": "per-bit interaction representation with 800 exhaustive updates followed by 400 CASM-failure hard-negative updates",
+      "acts_on": "representation + training interface",
+      "knob": "combination",
+      "value": "late interaction + distillation"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "M1024_dense_P90_rank",
+      "role": "primary representation endpoint",
+      "primary": true
+    },
+    {
+      "name": "M1024_dense_top1",
+      "role": "primary learned-routing capability diagnostic",
+      "primary": false
+    },
+    {
+      "name": "M1024_K90",
+      "role": "calibrated shortlist diagnostic",
+      "primary": false
+    },
+    {
+      "name": "M1024_sparse_success_budget_curve",
+      "role": "execution-budget endpoint",
+      "primary": false
+    },
+    {
+      "name": "pooled_L90_M",
+      "role": "LSH scaling diagnostic",
+      "primary": false
+    },
+    {
+      "name": "pooled_mean_dense_expected_executions",
+      "role": "expected execution scaling diagnostic",
+      "primary": false
+    },
+    {
+      "name": "per_operation_top1",
+      "role": "representability diagnostic",
+      "primary": false
+    },
+    {
+      "name": "per_seed_bootstrap_rank_CI",
+      "role": "uncertainty diagnostic",
+      "primary": false
+    },
+    {
+      "name": "persistent_reset_M1024",
+      "role": "persistence control diagnostic",
+      "primary": false
+    },
+    {
+      "name": "exact_relational_hash_reference",
+      "role": "task-semantic capability/cost reference",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "Report control mean dense target rank as expected exact-verifier executions across M=64..8192 and report the pooled finite-range power fit.",
+      "licenses": "descriptive workload-specific execution scaling.",
+      "does_not_license": "an asymptotic theorem or a generic complexity claim."
+    },
+    {
+      "condition": "Report empirical L90(M) at every registered M using the smallest integer L with at least 0.90 target collision on calibration; do not replace it with the iid estimate.",
+      "licenses": "measured LSH admission scaling.",
+      "does_not_license": "an optimal table count outside the registered operating rule."
+    },
+    {
+      "condition": "Report calibration and held-out counts, digests, and zero intersection; do not select an arm from held-out results.",
+      "licenses": "an auditable split and preregistered arm comparison.",
+      "does_not_license": "post-hoc tuning."
+    },
+    {
+      "condition": "Report per-operation XOR/XNOR/AND/OR routing performance and the baseline feature inventory before attributing failure to composition difficulty.",
+      "licenses": "a representability diagnosis for the registered synthetic workload.",
+      "does_not_license": "semantic generalization."
+    },
+    {
+      "condition": "Report fixed execution-budget curves and the preregistered adaptive policy against exact verification.",
+      "licenses": "a representation-versus-budget tradeoff on this workload.",
+      "does_not_license": "a claim that the adaptive policy is generally optimal."
+    },
+    {
+      "condition": "Use the exact persistent relational hash solver only as a task-semantic capability/cost reference.",
+      "licenses": "a concrete exact upper-bound comparison.",
+      "does_not_license": "calling the exact solver learned retrieval."
+    }
+  ],
+  "held_constant": [
+    "TACOSM-C5-PERSISTENT-RELATIONAL-LOOP-001 task generator",
+    "two persisted 16-bit operands plus persisted operation",
+    "three-boundary persistence delay with three decoy writes",
+    "opaque address plus one-bit-corrupted public operation hint",
+    "CASM executor and verifier",
+    "five seeds 0,1,2,3,4",
+    "1200 total training updates per arm",
+    "64 calibration and 64 held-out trials per seed/M",
+    "candidate M levels 64,128,256,512,1024,2048,4096,8192",
+    "OR-LSH random-hyperplane index with cap 128",
+    "fixed execution budgets 1,2,4,8,16,32,64",
+    "no held-out arm selection"
+  ],
+  "h_levels": [
+    63
+  ],
+  "m_levels": [
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048,
+    4096,
+    8192
+  ],
+  "k_levels": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 1200,
+  "eval_steps": 64,
+  "interpretation_order": [
+    "contract and split integrity",
+    "baseline feature and per-operation representability gate",
+    "exact relational reference",
+    "expected dense execution scaling",
+    "empirical L90(M)",
+    "per-seed uncertainty at M=1024",
+    "representation arms",
+    "hard-negative combination arms",
+    "fixed execution-budget curves",
+    "persistent-vs-reset control",
+    "scope limits"
+  ],
+  "status": "pre-registered"
+}
