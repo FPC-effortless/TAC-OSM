@@ -167,19 +167,24 @@ def make_task_pool(
     raise RuntimeError(f"failed to construct a support-discriminative task for M={m}")
 
 
-def train_casm(seed: int) -> tuple[object, dict]:
+def make_executor_training_programs(seed: int, *, exclude_role_pair: tuple[str, str] | None = None) -> list[CASMEpisode]:
     gen = BooleanDAGGenerator(max_nodes=MAX_NODES, min_nodes=MAX_NODES, seed=seed + 111)
     train: list[CASMEpisode] = []
-    seen = set()
+    seen: set[tuple] = set()
     while len(train) < TRAIN_PROGRAMS:
         ep = gen._make(MAX_NODES, input_count=INPUT_COUNT)
         sk = structural_key(ep)
         if sk in seen:
             continue
-        if role_pair_present(ep, *ROLE_HOLDOUT):
+        if exclude_role_pair and role_pair_present(ep, *exclude_role_pair):
             continue
         train.append(ep)
         seen.add(sk)
+    return train
+
+
+def train_casm(seed: int) -> tuple[CASMSAdapter, dict, list[CASMEpisode]]:
+    train = make_executor_training_programs(seed, exclude_role_pair=None)
 
     casm = CASMS(max_nodes=MAX_NODES, dim=32, temperature=2.0, seed=seed)
     device = torch.device("cpu")
@@ -205,9 +210,9 @@ def train_casm(seed: int) -> tuple[object, dict]:
     return adapter, {
         "train_programs": len(train),
         "train_epochs": EXECUTOR_TRAIN_EPOCHS,
-        "role_pair_excluded_from_executor_training": ROLE_HOLDOUT,
+        "role_pair_excluded_from_executor_training": None,
         "train_structures": [structural_key(ep) for ep in train],
-    }
+    }, train
 
 
 def build_summary(ep: CASMEpisode) -> list[float]:
@@ -453,18 +458,13 @@ def main() -> None:
     executor_meta = {}
 
     for seed in seeds:
-        adapter, meta = train_casm(seed)
+        adapter, meta, executor_train = train_casm(seed)
         executor_meta[str(seed)] = meta
-        train_programs = [
-            # Reconstruct exactly the training generator regime recorded above.
-            ep for ep in generate_unique_programs(
-                seed + 111, TRAIN_PROGRAMS, exclude_role_pair=ROLE_HOLDOUT
-            )
-        ]
+        primary_router_train = generate_unique_programs(seed + 2111, TRAIN_PROGRAMS)
         for rep in ("structural", "summary"):
-            router = fit_router(seed, adapter, train_programs, representation=rep)
+            router = fit_router(seed, adapter, primary_router_train, representation=rep)
             all_results[rep][str(seed)] = {}
-            train_structures = {structural_key(ep) for ep in train_programs}
+            train_structures = {structural_key(ep) for ep in role_holdout_router_train}
             for m in m_levels:
                 trials = []
                 for i in range(tasks_per_m):
@@ -483,8 +483,12 @@ def main() -> None:
                     })
                 all_results[rep][str(seed)][str(m)] = {"trials": trials}
         # Secondary structural-holdout condition.
+        role_holdout_router_train = generate_unique_programs(
+            seed + 3111, TRAIN_PROGRAMS, exclude_role_pair=ROLE_HOLDOUT
+        )
+        primary_train_structures = {structural_key(ep) for ep in primary_router_train}
         for rep in ("structural", "summary"):
-            router = fit_router(seed, adapter, train_programs, representation=rep)
+            router = fit_router(seed, adapter, role_holdout_router_train, representation=rep)
             all_results.setdefault("secondary_role_holdout", {}).setdefault(rep, {})[str(seed)] = {}
             for m in m_levels:
                 trials = []
