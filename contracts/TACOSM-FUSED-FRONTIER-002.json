@@ -30,15 +30,51 @@
     }
   ],
   "endpoints": [
-    {"name": "execution_success", "role": "primary capability endpoint", "primary": true},
-    {"name": "exact_target_success", "role": "identifiable target-selection diagnostic", "primary": false},
-    {"name": "pkm_admission_recall", "role": "coarse admission diagnostic", "primary": false},
-    {"name": "final_admission_recall", "role": "final shortlist admission diagnostic", "primary": false},
-    {"name": "internal_exact_addresses_scored", "role": "internal address work", "primary": false},
-    {"name": "internal_exact_addresses_scored_over_M", "role": "internal scaling diagnostic", "primary": false},
-    {"name": "factor_score_macs", "role": "factor routing arithmetic", "primary": false},
-    {"name": "structural_gate_ops", "role": "family gate arithmetic", "primary": false},
-    {"name": "pst_prediction_ops", "role": "transition prediction arithmetic", "primary": false}
+    {
+      "name": "execution_success",
+      "role": "primary capability endpoint",
+      "primary": true
+    },
+    {
+      "name": "exact_target_success",
+      "role": "identifiable target-selection diagnostic",
+      "primary": false
+    },
+    {
+      "name": "pkm_admission_recall",
+      "role": "coarse admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "final_admission_recall",
+      "role": "final shortlist admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "internal_exact_addresses_scored",
+      "role": "internal address work",
+      "primary": false
+    },
+    {
+      "name": "internal_exact_addresses_scored_over_M",
+      "role": "internal scaling diagnostic",
+      "primary": false
+    },
+    {
+      "name": "factor_score_macs",
+      "role": "factor routing arithmetic",
+      "primary": false
+    },
+    {
+      "name": "structural_gate_ops",
+      "role": "family gate arithmetic",
+      "primary": false
+    },
+    {
+      "name": "pst_prediction_ops",
+      "role": "transition prediction arithmetic",
+      "primary": false
+    }
   ],
   "task_protocol": {
     "training_codebook": 48,
@@ -47,9 +83,21 @@
     "evaluation_success": "selected candidate is executable and reaches the goal",
     "target_index": "post-hoc only; never exposed to route()"
   },
-  "M_levels": [128, 256, 512],
-  "absolute_budgets": [4, 8, 16],
-  "seeds": [10, 11, 12],
+  "M_levels": [
+    128,
+    256,
+    512
+  ],
+  "absolute_budgets": [
+    4,
+    8,
+    16
+  ],
+  "seeds": [
+    10,
+    11,
+    12
+  ],
   "product_key": {
     "factor_count": 3,
     "factor_size": 16,
@@ -65,5 +113,38 @@
     "Execution success is primary; exact target index is diagnostic.",
     "SECA is excluded from this single-step admission experiment and remains a separate composition mechanism."
   ],
-  "status": "pre-registered"
+  "status": "pre-registered",
+  "decision_rule": [
+    {
+      "condition": "Compare all four arms at every registered M and absolute budget using execution_success and admission/cost diagnostics.",
+      "licenses": "a workload-specific comparison of routing interventions.",
+      "does_not_license": "universal routing improvement, hardware speedup, or asymptotic sublinear addressing."
+    },
+    {
+      "condition": "If structural_pkm materially raises exact/behavioral admission relative to learned_pkm under the same budget, the compositional descriptor hypothesis is supported on this workload.",
+      "licenses": "support for structural address representation on this synthetic operator family.",
+      "does_not_license": "general-purpose semantic indexing."
+    }
+  ],
+  "interpretation_order": [
+    "execution_success",
+    "exact_target_success",
+    "pkm_admission_recall",
+    "final_admission_recall",
+    "internal_exact_addresses_scored",
+    "internal_exact_addresses_scored_over_M",
+    "factor_score_macs",
+    "structural_gate_ops",
+    "pst_prediction_ops"
+  ],
+  "h_levels": [
+    1
+  ],
+  "steps": 600,
+  "eval_steps": 80,
+  "k_levels": [
+    4,
+    8,
+    16
+  ]
 }
