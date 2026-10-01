@@ -3,12 +3,25 @@ on:
   pull_request:
     branches:
       - research/unified-plm-clm-final-2026-10-01
+    paths:
+      - "scripts/run_plm_representation_interface_007.py"
+      - "tests/test_plm_representation_interface_007.py"
+      - "src/tac_osm/c5_persistent_relational_loop.py"
+      - "src/tac_osm/plm_unified.py"
   push:
     branches:
       - research/plm-representation-interface-007
+    paths:
+      - "scripts/run_plm_representation_interface_007.py"
+      - "tests/test_plm_representation_interface_007.py"
+      - "src/tac_osm/c5_persistent_relational_loop.py"
+      - "src/tac_osm/plm_unified.py"
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   research:
     runs-on: ubuntu-latest
