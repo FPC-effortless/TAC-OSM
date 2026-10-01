@@ -421,14 +421,36 @@ def consolidation_results(
         for _ in range(4):
             state = tuple(rng.randrange(2) for _ in range(DIM))
             reuse.append(int(macro.execute(state) == apply_operator(state, primitive)))
-    heldout_rows = bootstrap_records(candidates, seed + 333, repeats=2)
+    rng_held = random.Random(seed + 333)
+    heldout_rows: list[TransitionRecord] = []
+    for candidate in candidates[TRAIN_KEYS:TRAIN_KEYS + min(48, len(candidates) - TRAIN_KEYS)]:
+        op = candidate_operator(candidate)
+        for rep in range(2):
+            before = tuple(rng_held.randrange(2) for _ in range(DIM))
+            heldout_rows.append(
+                TransitionRecord(
+                    before=before,
+                    operator=op,
+                    after=apply_operator(before, op),
+                    verified=True,
+                    episode=10000 + rep,
+                    step=len(heldout_rows),
+                )
+            )
     reconstructed = store.reconstruct_pst(("toggle", "set1", "set0"))
     return {
         "regm_verified_records": store.stored_records,
-        "pst_reconstruction_accuracy": reconstructed.transition_accuracy(heldout_rows),
-        "structmeans_kind_purity": sm.purity(heldout_rows),
-        "structmeans_signature_purity": sm.signature_purity(heldout_rows),
-        "structmeans_compression_ratio": sm.compression_ratio(heldout_rows),
+        "pst_reconstruction_accuracy_heldout_signature": (
+            reconstructed.transition_accuracy(heldout_rows)
+        ),
+        "structmeans_kind_purity_train": sm.purity(store.records),
+        "structmeans_kind_purity_heldout_signature": sm.purity(heldout_rows),
+        "structmeans_signature_purity_train": sm.signature_purity(store.records),
+        "structmeans_signature_purity_heldout_signature": sm.signature_purity(heldout_rows),
+        "structmeans_compression_ratio_train": sm.compression_ratio(store.records),
+        "structmeans_compression_ratio_heldout_signature": (
+            sm.compression_ratio(heldout_rows)
+        ),
         "axon_macros": len(axon_macros),
         "axon_bound_reuse_accuracy": statistics.fmean(reuse) if reuse else 0.0,
     }
