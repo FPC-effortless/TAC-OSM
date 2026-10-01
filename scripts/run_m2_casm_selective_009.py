@@ -150,6 +150,45 @@ def generate_unique_programs(
     return rows
 
 
+def build_eval_target_manifest(
+    seed: int,
+    m_levels: Sequence[int],
+    tasks_per_m: int,
+) -> tuple[dict[tuple[int, int], CASMEpisode], dict[tuple[int, int], CASMEpisode]]:
+    primary_n = len(m_levels) * tasks_per_m
+    secondary_n = len(m_levels) * max(1, tasks_per_m // 2)
+    primary = generate_unique_programs(seed + 9001, primary_n)
+    primary_truths = {truth_signature(ep) for ep in primary}
+    secondary = generate_unique_programs(
+        seed + 9002,
+        secondary_n,
+        include_role_pair=ROLE_HOLDOUT,
+        exclude_truths=primary_truths,
+    )
+    primary_map: dict[tuple[int, int], CASMEpisode] = {}
+    secondary_map: dict[tuple[int, int], CASMEpisode] = {}
+    pos = 0
+    for m in m_levels:
+        for i in range(tasks_per_m):
+            primary_map[(m, i)] = primary[pos]
+            pos += 1
+    pos = 0
+    for m in m_levels:
+        for i in range(max(1, tasks_per_m // 2)):
+            secondary_map[(m, i)] = secondary[pos]
+            pos += 1
+    return primary_map, secondary_map
+
+
+def manifest_sets(*manifests: dict[tuple[int, int], CASMEpisode]) -> tuple[set[tuple], set[tuple[int, ...]]]:
+    structures = set()
+    truths = set()
+    for manifest in manifests:
+        structures.update(structural_key(ep) for ep in manifest.values())
+        truths.update(truth_signature(ep) for ep in manifest.values())
+    return structures, truths
+
+
 def sample_support(ep: CASMEpisode, rng: random.Random) -> tuple[tuple[tuple[int, ...], int], ...]:
     keys = sorted(ep.truth_table)
     selected = rng.sample(keys, SUPPORT_ROWS)
@@ -299,8 +338,15 @@ def build_summary(ep: CASMEpisode) -> list[float]:
     for d in range(min(10, MAX_NODES)):
         out[8 + d] = float(sum(int(n.depth == d) for n in ep.nodes[:ep.active_count]))
     out[18] = float(len(ep.candidate_edges))
-    out[19] = float(len(ep.true_edges))
-    out[20] = float(len(ep.true_edges)) / max(1, ep.active_count - len(ep.inputs))
+    # Public structural edge count is derivable from node arities; the oracle
+    # true-edge set must never enter the summary representation.
+    public_edge_count = sum(
+        int(node.arity)
+        for node in ep.nodes[:ep.active_count]
+        if node.op.value != "INPUT"
+    )
+    out[19] = float(public_edge_count)
+    out[20] = float(public_edge_count) / max(1, ep.active_count - len(ep.inputs))
     for i, node in enumerate(ep.nodes[:ep.active_count]):
         if node.op.value in op_names:
             out[21 + (i % 11)] += 1.0
@@ -653,11 +699,30 @@ def main() -> None:
     persistence_results = {"structural": {}, "summary": {}}
 
     for seed in seeds:
-        adapter, meta, _executor_train = train_casm(seed)
+        primary_manifest, secondary_manifest = build_eval_target_manifest(
+            seed, m_levels, tasks_per_m
+        )
+        forbidden_structures, forbidden_truths = manifest_sets(
+            primary_manifest, secondary_manifest
+        )
+        adapter, meta, _executor_train = train_casm(
+            seed,
+            exclude_structures=forbidden_structures,
+            exclude_truths=forbidden_truths,
+        )
         executor_meta[str(seed)] = meta
-        primary_router_train = generate_unique_programs(seed + 2111, TRAIN_PROGRAMS)
+        primary_router_train = generate_unique_programs(
+            seed + 2111,
+            TRAIN_PROGRAMS,
+            exclude_structures=forbidden_structures,
+            exclude_truths=forbidden_truths,
+        )
         role_holdout_router_train = generate_unique_programs(
-            seed + 3111, TRAIN_PROGRAMS, exclude_role_pair=ROLE_HOLDOUT
+            seed + 3111,
+            TRAIN_PROGRAMS,
+            exclude_role_pair=ROLE_HOLDOUT,
+            exclude_structures=forbidden_structures,
+            exclude_truths=forbidden_truths,
         )
 
         for rep in ("structural", "summary"):
@@ -673,6 +738,8 @@ def main() -> None:
                         m,
                         heldout=False,
                         train_structures=primary_train_structures,
+                        train_truths=forbidden_truths,
+                        target=primary_manifest[(m, i)],
                     )
                     memory = PersistentTaskMemory()
                     memory.write_task(task.task_id, task.examples)
@@ -713,7 +780,8 @@ def main() -> None:
                         m,
                         heldout=True,
                         train_structures=holdout_train_structures,
-                        train_truths=holdout_train_truths,
+                        train_truths=forbidden_truths | holdout_train_truths,
+                        target=secondary_manifest[(m, i)],
                     )
                     memory = PersistentTaskMemory()
                     memory.write_task(task.task_id, task.examples)
