@@ -353,3 +353,11 @@ Even with unique candidates, a target descriptor seen during training can be mem
 The registered PR #46 calibration workflow has a completed smoke job, but its full measurement job was skipped. Therefore the repository does not currently contain a verified full calibration result from that registration.
 
 **Disposition:** exhaustive-reference capability at larger M remains an unresolved calibration gate. Historical sparse-retention ratios that depend on an uncalibrated exhaustive denominator remain reference-relative diagnostics, not independent capability measurements.
+
+### A21 — C5 frontier-004 downstream executor is a synthetic equality oracle (P1)
+
+The state-distinct frontier executor returns a large target-specific output when `candidate.descriptor == reference` and a fixed failure output otherwise. It records constant work per relevant candidate but does not execute a learned or external CASM structure.
+
+**Disposition:** the frontier-004 result is valid as a count-conserving selective state-admission/retrieval mechanism test under its registered synthetic evaluator. It is not evidence that selective routing reduces actual structural computation.
+
+**Correction:** the confirmatory M2 experiment must use the pinned CASM-S adapter and actual execution-work units as already specified in repository issue #6.
