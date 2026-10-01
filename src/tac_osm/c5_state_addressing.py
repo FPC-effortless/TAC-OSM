@@ -141,7 +141,10 @@ class C5PersistentStateAdmission:
                 seed=self.seed,
             )
         )
-        candidates = build_population_extended(self.seed + m, m)
+        # The persistent records and indexed candidate keys must come from
+        # the same population. Mixing populations invalidates returned IDs
+        # and can deterministically suppress target admission.
+        candidates = build_population_extended(self.seed, m)
         state.load(
             tuple(
                 MemoryRecord(
@@ -176,8 +179,7 @@ class C5PersistentStateAdmission:
         del state
         bits, _ = self._parse(query)
         qvec = self.router.inner.encode_query(query, self._empty_temporal())
-        position_candidates = build_population_extended(self.seed + m, m)
-        position = {c.key: c.key for c in position_candidates}
+        position = {c.key: c.key for c in state.records()}
 
         raw_addresses, raw_count, hash_ops = prefix_lookup(
             index,
