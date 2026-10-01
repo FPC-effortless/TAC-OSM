@@ -1,0 +1,161 @@
+{
+  "experiment_id": "TACOSM-C5-FACTOR16-BEAM-7-8-FRONTIER-001",
+  "title": "Factor-size-16 three-factor beam-7/8 frontier",
+  "question": "Can increasing the factor-size-16 three-factor beam beyond 6 recover the 0.90 capability floor while keeping the reranked state fraction below the robust two-factor reference?",
+  "hypothesis": "At factor_size=16 and factor_count=3, increasing beam from 6 to 7 or 8 should raise product-cell admission enough to recover low-M capability; beam 8 has a geometric cell fraction of (8/16)^3=12.5%, still below the 0.1542864583 reference.",
+  "arms": [
+    {
+      "name": "three_factor_16_beam7",
+      "intervention": "three-factor product-key addressing with factor size 16 and beam 7",
+      "acts_on": "factor beam / admitted product cells",
+      "knob": "factor_beam=7",
+      "value": "7"
+    },
+    {
+      "name": "three_factor_16_beam8",
+      "intervention": "three-factor product-key addressing with factor size 16 and beam 8",
+      "acts_on": "factor beam / admitted product cells",
+      "knob": "factor_beam=8",
+      "value": "8"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "target_recall_retention_ratio",
+      "role": "primary capability endpoint",
+      "primary": true,
+      "description": "selective target recall divided by exhaustive target recall"
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "admission ceiling diagnostic",
+      "primary": false
+    },
+    {
+      "name": "conditional_selection_given_admission",
+      "role": "post-admission reranking diagnostic",
+      "primary": false
+    },
+    {
+      "name": "states_scored_over_M",
+      "role": "primary computation diagnostic",
+      "primary": false
+    },
+    {
+      "name": "state_candidates_scored_mean",
+      "role": "absolute reranking count",
+      "primary": false
+    },
+    {
+      "name": "pair_generation_ops_mean",
+      "role": "routing combinatorics audit",
+      "primary": false
+    },
+    {
+      "name": "total_macs_mean",
+      "role": "arithmetic audit",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_target_recall",
+      "role": "reference capability",
+      "primary": false
+    },
+    {
+      "name": "nonempty_cells",
+      "role": "topology audit",
+      "primary": false
+    },
+    {
+      "name": "max_cell_size",
+      "role": "occupancy audit",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "For every registered beam in {7,8} and M in {128,256,512}, report exact pooled exhaustive and selective target counts, retention, proposal retention, conditional selection given admission, states scored/M, absolute scored count, pair-generation operations, arithmetic, and occupancy.",
+      "licenses": "a workload-specific factor-size-16 beam-frontier measurement beyond beam 6.",
+      "does_not_license": "universal beam optimality, semantic retrieval guarantees, asymptotic sublinear scaling, or hardware speedup."
+    },
+    {
+      "condition": "A beam is capability-eligible only when target_recall_retention_ratio is at least 0.90 at every registered M.",
+      "licenses": "that the registered beam meets the capability floor on the tested workload.",
+      "does_not_license": "general capability parity."
+    },
+    {
+      "condition": "An eligible beam improves the registered robust two-factor reference only when mean states_scored_over_M across M={128,256,512} is strictly below 0.1542864583.",
+      "licenses": "a workload-specific frontier improvement relative to the preregistered reference.",
+      "does_not_license": "sublinear asymptotic scaling or universal architectural superiority."
+    }
+  ],
+  "interpretation_order": [
+    "exhaustive target recall",
+    "proposal target retention",
+    "target recall retention",
+    "conditional selection given admission",
+    "states scored over M",
+    "pair-generation operations",
+    "total arithmetic",
+    "cell occupancy"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
+    "H=256",
+    "M={128,256,512}",
+    "K=32",
+    "factor_count=3",
+    "factor_size=16",
+    "registered factor beams={7,8}",
+    "seeds=10-19",
+    "100 evaluation tasks per seed/M/arm",
+    "width-16 cosine teacher and training-only codebook fitting",
+    "48 fixed training codes versus 16 held-out target codes",
+    "one-bit noisy query construction",
+    "eight cosine k-means iterations",
+    "state-distinct downstream executor",
+    "exact pooled count aggregation",
+    "capability floor=0.90",
+    "reference mean states_scored_over_M=0.1542864583"
+  ],
+  "status": "measured",
+  "layer": "L4",
+  "protocol_note": "Direct continuation of the measured factor-size-16 beam-4/5/6 experiment. Beams 7 and 8 are registered as a new experiment; no outcome from the prior measurement changes the verdict rule. The additional conditional_selection_given_admission endpoint decomposes post-admission reranking loss from coarse-cell admission loss.",
+  "result": {
+    "run_id": 36810637731,
+    "artifact_id": 11138988228,
+    "artifact_sha256": "7888514cd45383c680c58e483a49f6adaccf14ec4bf66bcee120d614765e229a",
+    "artifact_size_bytes": 5085,
+    "eligible_arms": [
+      "three_factor_16_beam7"
+    ],
+    "ineligible_arms": [
+      "three_factor_16_beam8"
+    ],
+    "c5_status": "UNTESTED"
+  }
+}
