@@ -1,0 +1,51 @@
+name: REP-007 persistent state scaling
+
+on:
+  push:
+    branches: [research/rep007-state-scaling]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "scripts/run_state_scaling_rep007.py"
+      - "docs/TACOSM-STATE-REP-007.md"
+      - "contracts/TACOSM-STATE-REP-007.json"
+      - ".github/workflows/rep007.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rep007:
+    name: TACOSM-STATE-REP-007
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+          if git diff --name-only origin/master...HEAD | grep -E 'C5-001|C5-002|C5-003'; then
+            echo "Frozen C5 evidence changed; REP-007 is invalid."
+            exit 1
+          fi
+      - name: Run preregistered scaling
+        run: |
+          mkdir -p artifacts
+          python scripts/run_state_scaling_rep007.py > artifacts/REP-007.stdout.json
+          cat artifacts/REP-007.stdout.json
+      - name: Upload REP-007 result
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-STATE-REP-007
+          path: artifacts/
+          if-no-files-found: error

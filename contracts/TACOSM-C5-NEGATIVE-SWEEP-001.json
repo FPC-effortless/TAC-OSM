@@ -1,0 +1,60 @@
+{
+  "experiment_id":"TACOSM-C5-NEGATIVE-SWEEP-001",
+  "title":"Negative-pool coverage sweep for learned semantic state addressing",
+  "question":"How does mean-gradient negative-pool size affect the learned continuous semantic state retriever at a fixed 512-epoch training budget?",
+  "hypothesis":"H_sweep: the recall gain from broader negative coverage will continue from 1 to 4 to 8 negatives but will eventually saturate or reverse as the negative pool approaches the available training-code population.",
+  "arms":[
+    {"name":"mean_1","intervention":"one deterministic negative per positive update, mean margin gradient","acts_on":"learning objective","knob":"negative_count","value":"1"},
+    {"name":"mean_4","intervention":"four deterministic negatives per positive update, mean margin gradient","acts_on":"learning objective","knob":"negative_count","value":"4"},
+    {"name":"mean_8","intervention":"eight deterministic negatives per positive update, mean margin gradient","acts_on":"learning objective","knob":"negative_count","value":"8"},
+    {"name":"mean_16","intervention":"sixteen deterministic negatives per positive update, mean margin gradient","acts_on":"learning objective","knob":"negative_count","value":"16"}
+  ],
+  "endpoints":[
+    {"name":"target_top1_recall","role":"primary — correct opaque persistent state selected","primary":true},
+    {"name":"target_rank_mean","role":"secondary — mean rank of correct target state","primary":false},
+    {"name":"training_updates","role":"secondary — optimizer updates; fixed across arms","primary":false},
+    {"name":"negative_evaluations_total","role":"secondary — total negative examples scored during training","primary":false},
+    {"name":"query_macs","role":"audit — continuous inference arithmetic","primary":false},
+    {"name":"state_build_macs","role":"audit — one-time cached state embedding arithmetic","primary":false}
+  ],
+  "decision_rule":[
+    {
+      "condition":"mean_16 recall is >= mean_8 recall + 0.10",
+      "licenses":"evidence that broader negative coverage continues to materially improve retrieval beyond eight negatives",
+      "does_not_license":"that sixteen negatives is optimal"
+    },
+    {
+      "condition":"mean_16 recall is between mean_8 recall - 0.05 and mean_8 recall + 0.10",
+      "licenses":"evidence of saturation/plateau after eight negatives under this objective",
+      "does_not_license":"global optimality of eight negatives"
+    },
+    {
+      "condition":"mean_16 recall < mean_8 recall - 0.05",
+      "licenses":"evidence that excessive negative coverage reverses the observed gain on this workload",
+      "does_not_license":"that broader negatives are generally harmful"
+    }
+  ],
+  "interpretation_order":["temporal availability","held-out retrieval","coverage response","target rank","training overhead","inference arithmetic"],
+  "h_levels":[64],
+  "seeds":[0,1,2,3,4],
+  "steps":512,
+  "eval_steps":100,
+  "held_constant":[
+    "M=64 persistent state items",
+    "H=64 task anchor and A1 H-invariant query/state stream",
+    "one-step causal write/read delay",
+    "10-bit state codebook",
+    "training codes CODEBOOK[16:64]",
+    "evaluation codes CODEBOOK[:16]",
+    "dual linear 10->8 encoder",
+    "learning rate 0.02 and margin 0.25",
+    "512 epochs for every arm",
+    "one optimizer update per positive code per epoch",
+    "mean-gradient aggregation for every arm",
+    "continuous exhaustive state scoring only",
+    "no evaluation address or gold target enters training",
+    "prior C5 and learned-state results remain frozen"
+  ],
+  "status":"pre-registered",
+  "layer":"L3"
+}
