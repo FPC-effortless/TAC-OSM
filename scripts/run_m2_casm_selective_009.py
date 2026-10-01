@@ -366,10 +366,11 @@ def evaluate_router(
     with torch.no_grad():
         scores = router(q, c)[0].tolist()
     experience_keys = memory.experience_keys(task.task_id) if use_experience else frozenset()
+    experience_bonus = 5.0
     order = sorted(
         range(len(candidates)),
         key=lambda i: (
-            -(scores[i] + (5.0 if structural_key(candidates[i]) in experience_keys else 0.0)),
+            -(scores[i] + (experience_bonus if structural_key(candidates[i]) in experience_keys else 0.0)),
             i,
         ),
     )
