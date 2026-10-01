@@ -19,7 +19,7 @@ difference is a finding to be reported, not a correction to be applied here.
 | seeds | 0, 1, 2, 3, 4 |
 | measurement command | `python scripts/measure_baseline.py --n-steps <N> --seeds 0,1,2,3,4` |
 | interface symbols | 19 |
-| test count @ freeze | 327 (current count in `tests/`: 795) |
+| | test count @ freeze | 327 (current count in `tests/`: 909) |
 
 ## Measured baseline
 

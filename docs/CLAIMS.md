@@ -677,7 +677,210 @@ moves the evidence frontier. Per the pre-registered decision rule, F1
 re-queues on this top-K evidence alone, recorded as "top-K signal intact" and
 *not* as "`routing@1` improved".
 
+
 ---
+
+## C12 — Semantic state addressing through opaque addresses
+
+> A learned state-addressing mechanism can identify the persistent item whose
+> stored semantic content satisfies a query, even when the item's address is
+> opaque and absent from the query.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-STATE-REP-006`, clean registered run
+`36664979180`, code head `b548642c397b4c9289761e65f11bd4327ccec86b`.
+
+**TYPE:** mechanism · **LAYER:** L2
+
+**PRIOR ART:** generic content-addressed retrieval is established prior art;
+the specific TAC-OSM result is the tested integration of semantic state values,
+opaque addresses, and the temporal state boundary.
+
+**NOT INHERITED:** scalable addressing, long-horizon memory, learned indexing,
+or arbitrary memory semantics.
+
+**REQUIRED EVIDENCE:** the registered REP-006 protocol and its precondition
+gate. The clean run passed all **841 tests** before execution.
+
+At M=8 state items:
+
+| seed | learned Top-1 | no-learning Top-1 |
+|---:|---:|---:|
+| 0 | 0.5117 | 0.0156 |
+| 1 | 0.7422 | 0.2188 |
+| 2 | 0.2695 | 0.0156 |
+| 3 | 1.0000 | 0.4883 |
+| 4 | 1.0000 | 0.1914 |
+| pooled | **0.7047** | **0.1859** |
+
+The learned arm exceeds the frozen control in every seed.
+
+The analytic identity witness is 1.0000 at every seed. The reset intervention
+fails closed on every seed, and the opaque address set survives the value-shuffle
+control.
+
+**BLOCKER:** M=8 is a small synthetic population. The implementation performs
+an exhaustive O(M) scan. The result does not move C5.
+
+A secondary end-to-end metric from the first clean run was quarantined because
+its target-rank helper returned selected-argmax rank rather than gold rank. A
+separate exact target-rank diagnostic was added; no claim above depends on the
+quarantined endpoint.
+
+---
+
+## C13 — Semantic state addressing survives a bounded population scaling
+
+> Under the registered synthetic task and fixed learner, learned semantic
+> state-address recall remains above the no-learning control across
+> M ∈ {2,4,8,16,32}, while addressing arithmetic grows linearly with M.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-STATE-REP-007`, workflow
+`36665305689`, artifact `11075258348`.
+
+**TYPE:** mechanism · **LAYER:** L2
+
+**PRIOR ART:** the general content-addressed retrieval pattern is inherited;
+the population curve is TAC-OSM's measurement.
+
+**NOT INHERITED:** sublinear lookup, an asymptotic complexity improvement,
+long-horizon memory scaling, or capability parity at large H.
+
+**REQUIRED EVIDENCE:** the registered five-level M curve with five seeds per
+level, identical task/learner, analytic witness and no-learning control.
+
+Learned pooled Top-1 recall by state population:
+
+| M | learned | no-learning | chance |
+|---:|---:|---:|---:|
+| 2 | **0.9922** | 0.5273 | 0.5000 |
+| 4 | **0.9828** | 0.2734 | 0.2500 |
+| 8 | **0.7141** | 0.1977 | 0.1250 |
+| 16 | **0.4125** | 0.1813 | 0.0625 |
+| 32 | **0.3344** | 0.1563 | 0.0313 |
+
+The learned arm exceeds the frozen control at every registered M, while the
+analytic witness remains exactly 1.0000 throughout.
+
+The key limitation is visible in the same table: absolute recall declines
+substantially as M increases. The result therefore demonstrates bounded
+robustness of the semantic addressing relation, not scale invariance.
+
+Addressing arithmetic is:
+
+`C_state = 40 + 48M` MACs.
+
+Measured accounting matches the formula:
+136, 232, 424, 808, and 1,576 MACs at M=2,4,8,16,32 respectively.
+
+Because the implementation scans all M items, the addressing stage remains
+**O(M)**.
+
+**BLOCKER:** replace exhaustive scanning with a real learned or deterministic
+index, then measure capability and compute separately. Until that experiment,
+these results cannot support a selective-computation claim.
+
+
+---
+
+
+---
+
+## C14 — The hardened selective runtime actually routes only the retained subset
+
+> For the controlled static equality workload, the indexed runtime preserves
+> capability while presenting only the retained subset R to the router.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-SELECTIVE-001`, workflow
+`36666455184`, artifact `11075954570`.
+
+**TYPE:** protocol · **LAYER:** L3
+
+**PRIOR ART:** retrieval-before-compute is established in systems such as
+retrieval-augmented transformers and sparse routing; the TAC-OSM result is the
+measured runtime boundary in this repository.
+
+**NOT INHERITED:** semantic retrieval, learned addressing, execution-work
+scaling with R, or the L4 C5 claim.
+
+**REQUIRED EVIDENCE:** the registered H={8,64,256}, K={2,4} matrix with a
+single static candidate universe reused across 100 queries per cell.
+
+The indexed arm preserved exact task success at **1.0000** in every cell while
+the router saw exactly K candidates per query:
+
+| H | K | indexed success | router candidates/query | amortized candidate work |
+|---:|---:|---:|---:|---:|
+| 8 | 2 | 1.0000 | 2.00 | 4.08 |
+| 8 | 4 | 1.0000 | 2.00 | 4.08 |
+| 64 | 2 | 1.0000 | 2.00 | 4.64 |
+| 64 | 4 | 1.0000 | 4.00 | 6.64 |
+| 256 | 2 | 1.0000 | 2.00 | 6.56 |
+| 256 | 4 | 1.0000 | 4.00 | 8.56 |
+
+The exhaustive arm routes over H candidates. One-time index construction is
+reported separately and amortized over exactly 100 queries.
+
+This establishes the **runtime retention boundary** in the controlled equality
+instrument.
+
+**BLOCKER:** the executor performs one selected-candidate invocation, so this
+experiment does not measure execution work proportional to |R|. A direct
+batched-execution capability/compute experiment is required before C5 can move.
+
+
+
+---
+
+## C15 — Execution work can be bounded by a retained relevant subset in a controlled workload
+
+> When the correct output requires all relevant candidate programs, an indexed
+> runtime can preserve capability while executing only the retained relevant
+> subset rather than the full candidate population.
+
+**STATUS: SUPPORTED, bounded** — `TACOSM-C5-EXEC-001`, workflow
+`36666872579`, code head `625ee3311b200ed7eae22879bd3c34f97f4a39b8`.
+
+**TYPE:** mechanism · **LAYER:** L3
+
+**PRIOR ART:** selective/conditional computation and retrieval-before-compute
+are established systems patterns. The TAC-OSM result is the controlled
+execution-work measurement below.
+
+**NOT INHERITED:** semantic retrieval, learned indexing, hardware FLOPs, or the
+full L4 C5 claim.
+
+**REQUIRED EVIDENCE:** fixed-R capability/parity experiment over
+H={64,128,256}, five seeds, 100 queries per cell, with one-time index
+construction separated from per-query execution work.
+
+The task contains exactly **R=4** relevant programs at every H. The exhaustive
+arm executes all H candidate programs; the indexed arm executes exactly four.
+
+| H | exhaustive success | selective success | exhaustive executor work | selective executor work | reduction |
+|---:|---:|---:|---:|---:|---:|
+| 64 | 1.0000 | 1.0000 | 576 | 36 | 93.75% |
+| 128 | 1.0000 | 1.0000 | 1,152 | 36 | 96.875% |
+| 256 | 1.0000 | 1.0000 | 2,304 | 36 | 98.4375% |
+
+The selective arm retained exactly four candidates at every H, so
+`R/H = 0.0625, 0.03125, 0.015625` respectively.
+
+The experiment therefore demonstrates the execution-side relation:
+
+`C_execute = O(R)` with fixed `R=4`
+
+while the exhaustive baseline scales as:
+
+`C_execute = O(H)`.
+
+The result is stronger than SELECTIVE-001's routing-only boundary because the
+correct output requires aggregation across all retained relevant programs.
+
+**BLOCKER:** the workload uses an exact public content-address index, a fixed
+synthetic executor, and a deliberately controlled relevance relation. The
+experiment does not establish semantic end-to-end computation or the broad L4
+C5 claim.
+
 
 ## Claims this repository does not make
 

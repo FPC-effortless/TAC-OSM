@@ -1,0 +1,38 @@
+{
+  "experiment_id": "TACOSM-STATE-REP-007",
+  "title": "Persistent semantic state population scaling",
+  "question": "How does learned semantic state-address recall change as the number of opaque persistent state items increases, under a fixed task and learner?",
+  "hypothesis": "H_scale: learned semantic addressing retains a measurable advantage over a frozen no-learning control as the persistent state pool grows, while addressing cost grows with the scanned pool.",
+  "arms": [
+    {"name":"analytic","intervention":"identity embeddings as exact state-addressing witness","acts_on":"semantic state addressor"},
+    {"name":"learned","intervention":"learned bilinear semantic state addressor","acts_on":"semantic state addressor","knob":"none","value":"fixed from REP-006: learning_rate=0.01, margin=0.1"},
+    {"name":"no_learning","intervention":"same random initialization with no parameter updates","acts_on":"semantic state addressor"}
+  ],
+  "endpoints": [
+    {"name":"state_top1_recall","role":"primary — correct opaque state address selected","primary":true},
+    {"name":"mean_target_state_rank","role":"secondary — rank of the target state item","primary":false},
+    {"name":"address_macs","role":"audit — learned state-addressing arithmetic","primary":false},
+    {"name":"training_successes","role":"audit — verified positive selections during training","primary":false}
+  ],
+  "decision_rule": [
+    {"condition":"learned state_top1_recall exceeds no_learning at a registered M level","licenses":"bounded evidence that the learned state addressor exploits semantic state content at that population size","does_not_license":"sublinear lookup or long-horizon memory"},
+    {"condition":"learned state_top1_recall fails to exceed no_learning throughout the registered M levels","licenses":"the registered learner does not demonstrate scalable semantic state addressing under this protocol","does_not_license":"semantic state addressing is impossible"}
+  ],
+  "interpretation_order": ["task uniqueness","analytic representability","learned state addressing","population scaling","addressing cost"],
+  "h_levels": [2,4,8,16,32],
+  "seeds": [0,1,2,3,4],
+  "steps": 512,
+  "eval_steps": 256,
+  "held_constant": [
+    "same five-bit semantic signature task as REP-006",
+    "same opaque randomized address generation",
+    "same exact one-boundary temporal write/read delay",
+    "same 5->8 bilinear addressor and learning rule",
+    "same 8 downstream candidate programs and exact structural matcher",
+    "M denotes persistent state-item population",
+    "addressing scans all M state items; no learned index is introduced",
+    "C5 and prior REP evidence remain frozen"
+  ],
+  "status": "pre-registered",
+  "layer": "L2"
+}
