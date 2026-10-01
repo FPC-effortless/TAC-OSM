@@ -23,6 +23,7 @@ __all__ = [
     "StructMeans",
     "MacroOperator",
     "AXONConsolidator",
+    "FixedAXONConsolidator",
     "ExperienceStore",
     "SparseOperatorRouter",
     "SECAEngine",
@@ -194,6 +195,18 @@ class StructMeans:
         return len([r for r in records if r.verified]) / max(1, len(self.centroids))
 
 
+    def signature_purity(self, records: Sequence[TransitionRecord]) -> float:
+        """Cluster purity using exact operator signatures as structural labels."""
+        rows = [r for r in records if r.verified]
+        if not rows:
+            return 0.0
+        grouped: dict[int, Counter[tuple[str, tuple[int, ...]]]] = defaultdict(Counter)
+        for rec in rows:
+            grouped[self.assign(rec)][rec.operator.signature] += 1
+        correct = sum(max(counter.values()) for counter in grouped.values())
+        return correct / len(rows)
+
+
 def _mask_for_goal(
     kind: str,
     state: Sequence[int],
@@ -280,6 +293,33 @@ class AXONConsolidator:
             )
         return tuple(macros)
 
+
+class FixedAXONConsolidator:
+    """Consolidate repeated *typed-and-bound* operators without widening them."""
+
+    def __init__(self, min_support: int = 4) -> None:
+        self.min_support = min_support
+
+    def consolidate(self, records: Sequence[TransitionRecord]) -> tuple[MacroOperator, ...]:
+        counts: Counter[tuple[str, tuple[int, ...]]] = Counter(
+            (r.operator.kind, r.operator.mask)
+            for r in records
+            if r.verified
+        )
+        macros: list[MacroOperator] = []
+        for (kind, mask), support in sorted(counts.items()):
+            if support < self.min_support:
+                continue
+            macros.append(
+                MacroOperator(
+                    name=f"axon:{kind}:{''.join(map(str, mask))}",
+                    steps=(PrimitiveOperator(kind, mask),),
+                    support=support,
+                    source_kind=kind,
+                    parameterized=False,
+                )
+            )
+        return tuple(macros)
 
 class ExperienceStore:
     """REGM-like reconstructible experience.
