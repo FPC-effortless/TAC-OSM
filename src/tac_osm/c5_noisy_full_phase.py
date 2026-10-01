@@ -40,6 +40,7 @@ CLASS_COPIES = 16
 M_LEVELS = (64, 128, 256, 512, 1024)
 NOISE_BITS = 1
 CONTEXT = tuple(1 for _ in range(DIM))
+MARK_POSITIONS = tuple(range(DIM))
 WORK_PER_EXECUTION = 1
 
 
@@ -222,7 +223,7 @@ class NoisyCASMExecutor:
         program = relevance_program(
             observed,
             candidate.descriptor,
-            CONTEXT,
+            MARK_POSITIONS,
             max_nodes=self.executor.max_nodes,
         )
         structure = Structure(
