@@ -90,7 +90,7 @@
     18,
     19
   ],
-  "steps": 512,
+  "steps": 24576,
   "eval_steps": 100,
   "held_constant": [
     "H=256",
@@ -98,13 +98,26 @@
     "seeds=10-19",
     "100 evaluation tasks per seed/M/arm",
     "width-16 cosine teacher architecture",
-    "teacher learning rate, margin, epochs, negative coverage, and optimizer implementation",
     "one-bit noisy query construction",
     "target codebook remains CODEBOOK[:16] and is excluded from both training arms",
     "state-distinct downstream executor is unchanged",
-    "exhaustive cosine scoring over all M states"
+    "exhaustive cosine scoring over all M states",
+    "teacher learning rate, margin, negative coverage, and optimizer implementation",
+    "teacher optimizer-update budget approximately 24576 for both arms, with actual update counts recorded"
   ],
   "status": "pre-registered",
   "layer": "L3",
-  "protocol_note": "Diagnostic study only. The current_48 arm reproduces the historical teacher exposure. The matched_M_minus_16 arm trains on the exact non-target state values present in the corresponding M-level evaluation population, which contains 48 fixed training codes plus M-64 decoys. All 16 target codes remain excluded from both training sets. The study does not modify or reinterpret TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001."
+  "protocol_note": "Diagnostic study only. The current_48 arm uses the historical 48-code training population and exactly 24576 optimizer updates. The matched_M_minus_16 arm trains on the exact non-target state values present in the corresponding M-level evaluation population, while using an epoch count rounded to keep total optimizer updates within 1% of 24576. All 16 target codes remain excluded from both training sets. Amendment CAL-001-A1 was recorded before any full measurement to remove the original population-size/update-budget confound. The study does not modify or reinterpret TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.",
+  "amendments": [
+    {
+      "id": "CAL-001-A1",
+      "applies_to": "teacher training schedule",
+      "old_definition": "Both teacher arms use 512 epochs, so the matched_M_minus_16 arm receives substantially more optimizer updates as M grows.",
+      "new_definition": "Both teacher arms target approximately 24576 optimizer updates. current_48 uses 512 epochs (24576 updates); matched_M_minus_16 uses round(24576 / training_population_size) epochs and records the resulting actual update count, constrained to within 1% of the target budget.",
+      "rationale": "The original design confounded training-population exposure with optimizer budget. Fixing the update budget makes the primary comparison interpretable as a calibration-population intervention rather than a simultaneous compute intervention.",
+      "discovered": "Pre-dispatch code audit on 2026-10-01.",
+      "affected": "PR #46 only. No full measurement was conducted under the previous schedule.",
+      "no_result_under_previous_version": "true"
+    }
+  ]
 }
