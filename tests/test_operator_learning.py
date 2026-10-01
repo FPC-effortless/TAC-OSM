@@ -56,7 +56,8 @@ def test_axon_produces_parameterized_reusable_operators():
     macros = axon.consolidate(rows)
     assert {m.source_kind for m in macros} == {"toggle", "set1", "set0"}
     goal = apply_operator(rows[0].before, PrimitiveOperator("toggle", (1, 0, 1, 0, 1, 0, 1, 0)))
-    bound = macros[0].bind_to_goal(rows[0].before, goal)
+    toggle_macro = next(m for m in macros if m.source_kind == "toggle")
+    bound = toggle_macro.bind_to_goal(rows[0].before, goal)
     assert bound.execute(rows[0].before) == goal
 
 
