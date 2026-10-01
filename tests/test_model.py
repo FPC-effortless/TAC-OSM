@@ -36,8 +36,49 @@ from tac_osm import Structure  # noqa: E402
 
 
 # --------------------------------------------------------------------------- #
-# The relevance circuit: it must compute the environment's own relation
+# Program topology: substrate and executable wiring must be distinct
 # --------------------------------------------------------------------------- #
+
+def test_program_copy_mask_is_not_vacuous():
+    """The oracle mask must select explicit program edges, not the substrate."""
+    from tac_osm.executor import build_program, copy_mask
+
+    program = build_program(123, dim=8, max_nodes=10)
+    mask = copy_mask(program)
+
+    assert 0 < sum(mask) < len(mask), (
+        "copy_mask became all-zero or all-one; true topology is not distinct "
+        "from the candidate substrate"
+    )
+    assert len(program.true_edge_set) == len(program.true_edges)
+    assert program.true_edge_set <= {
+        (e.src, e.dst, e.port) for e in program.candidate_edges
+    }
+
+
+def test_program_rejects_true_edges_outside_substrate():
+    from tac_osm.executor import Edge, INPUT, Node, Program
+
+    nodes = (
+        Node(0, INPUT, 0, 0),
+        Node(1, INPUT, 0, 0),
+        Node(2, __import__("tac_osm.executor", fromlist=["XOR"]).XOR, 1, 2),
+    )
+    candidate = (Edge(0, 2, 0), Edge(1, 2, 1))
+    outside = Edge(0, 2, 1)
+    with pytest.raises(ValueError, match="subset"):
+        Program(
+            nodes=nodes,
+            candidate_edges=candidate,
+            true_edges=(outside,),
+            inputs=(0, 1),
+            output=2,
+            active_count=3,
+        )
+
+
+# --------------------------------------------------------------------------- #
+# The relevance circuit: it must compute the environment's own relation
 
 
 def _executor() -> StructuralExecutor:

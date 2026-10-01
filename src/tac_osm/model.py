@@ -282,26 +282,43 @@ class TacOsmModel:
         elif self.repair is not None:
             repair_result = self.repair.repair(computation, verification)
 
-        # Learning: REINFORCE on the outcome, through the router only.
-        if self.config.learn and isinstance(self.router, LearnedRelationalRouter):
-            ctx = RewardContext(
-                task=task,
-                candidates=task.candidates,
-                selected=decision.selected,
-                decision=decision,
-                outcome=outcome,
-                query=query,
-                state=self.state,
-                router=self.router,
-            )
-            self.router.update(
-                query=query,
-                candidates=task.candidates,
-                selected=decision.selected,
-                reward=self._reward(ctx),
-                probs=decision.scores,
-                state=self.state,
-            )
+        # Learning boundary:
+        # - successor routers own their outcome update;
+        # - legacy routers retain the frozen RewardContext/reward_fn contract.
+        # This preserves historical experiments while keeping the successor
+        # path independent of the legacy scalar reward API.
+        if self.config.learn:
+            if self.router.__class__.__name__ == "RepresentationEnergyRouter":
+                learner = getattr(self.router, "learn_from_outcome", None)
+                if callable(learner):
+                    learner(
+                        query=query,
+                        state=self.state,
+                        candidates=task.candidates,
+                        selected=decision.selected,
+                        success=bool(outcome.success),
+                        scores=decision.scores,
+                    )
+            elif isinstance(self.router, LearnedRelationalRouter):
+                ctx = RewardContext(
+                    task=task,
+                    candidates=task.candidates,
+                    selected=decision.selected,
+                    decision=decision,
+                    outcome=outcome,
+                    query=query,
+                    state=self.state,
+                    router=self.router,
+                )
+                reward = self._reward(ctx)
+                self.router.update(
+                    query=query,
+                    candidates=task.candidates,
+                    selected=decision.selected,
+                    reward=reward,
+                    probs=decision.scores,
+                    state=self.state,
+                )
 
         return Step(
             step=step_index,
