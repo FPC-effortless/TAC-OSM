@@ -359,6 +359,7 @@ def procedural_phase(seed: int = 7) -> dict[str, object]:
     accepted = seca.verify(
         proposals,
         verify_states,
+        independent_reference,
     )
     independent_accepted = tuple(
         macro
