@@ -54,3 +54,12 @@ def test_verifier_covers_full_truth_table_complement():
         for c in candidates
         if c is not target
     )
+
+
+def test_native_contract_arms_match_runner():
+    import json
+    p = ROOT / "contracts" / "TACOSM-M2-CASM-SELECTIVE-009.json"
+    data = json.loads(p.read_text())
+    assert [a["name"] for a in data["arms"]] == [
+        "structural_tower", "summary_tower", "exhaustive"
+    ]
