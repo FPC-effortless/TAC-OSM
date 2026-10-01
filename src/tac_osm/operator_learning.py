@@ -374,18 +374,14 @@ class SECAEngine:
         self,
         candidates: Sequence[MacroOperator],
         states: Sequence[tuple[int, ...]],
+        reference,
     ) -> tuple[MacroOperator, ...]:
+        """Keep only compositions that agree with an independent reference."""
+        if not callable(reference):
+            raise TypeError("reference must be callable")
         accepted: list[MacroOperator] = []
         for macro in candidates:
-            if all(macro.execute(state) == self._ground_truth(state, macro) for state in states):
+            if all(macro.execute(state) == reference(state, macro) for state in states):
                 accepted.append(macro)
         return tuple(accepted)
 
-    @staticmethod
-    def _ground_truth(
-        state: Sequence[int], macro: MacroOperator
-    ) -> tuple[int, ...]:
-        current = tuple(state)
-        for step in macro.steps:
-            current = apply_operator(current, step)
-        return current
