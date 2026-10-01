@@ -79,8 +79,12 @@ def evaluate_seed(seed: int, router):
 
         cdl_eval = [dense_rank(router, *episode) for episode in heldout]
         h_eval = [hamming_rank(*episode) for episode in heldout]
+        # Reset routing uses fresh copies of the exact same deterministic
+        # held-out task stream, so clearing the control state cannot mutate the
+        # persistent episodes later used by the sparse funnel.
+        reset_episodes = fresh_trials(seed, m, CONFIG.eval_trials, offset=9)
         reset_eval = []
-        for trial, state in heldout:
+        for trial, state in reset_episodes:
             state.clear()
             reset_eval.append(
                 router.rank(trial.query, state, trial.candidates).index(trial.target_index) + 1
