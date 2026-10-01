@@ -258,3 +258,26 @@ ID-only improvements are not sufficient.
 Can a representation/admission mechanism preserve task capability as persistent state and operator populations grow under unique distractors, true structural holdouts, matched compute, and complete cost accounting?
 
 Until that passes, verifier, repair, plasticity, and state-editing results should remain mechanism evidence rather than evidence that the complete PLM hypothesis is validated.
+
+## Additional LSH metric vulnerabilities
+
+### A9 — Repeated classes also confound LSH bucket/rerank scaling (P1)
+
+When a class is replicated, identical candidate embeddings hash to the same LSH buckets. Bucket population and rerank counts therefore grow partly because the benchmark has more copies of the same vector, not because the router is handling more distinct semantic alternatives.
+
+Admission recall can remain high because any copy can satisfy the target-class condition while rerank work rises from duplicate entries.
+
+**Correction:** use unique candidate descriptors for population-scaling claims. For repeated-class diagnostic controls, report unique-class bucket counts separately from candidate-copy counts.
+
+### A10 — PR #58/#59 p2 is a sampled-decoy collision diagnostic, not a population-wide collision rate (P2)
+
+The p1/p2 estimator samples a small number of random non-target decoys per trial and aggregates hyperplane collisions. It is useful for diagnosing LSH behavior, but it does not characterize the full negative collision distribution.
+
+**Correction:** report it explicitly as a sampled pairwise collision diagnostic. For operating-point selection, also report candidate bucket-size distribution and target admission over the complete evaluation population.
+
+### A11 — K90 is also sensitive to duplicate copies (P1)
+
+The registered K90 counts candidate entries, not distinct semantic classes. In a repeated-class population, a fixed class-level uncertainty can require an increasing number of candidate copies to reach the same class-level coverage.
+
+**Correction:** report both candidate-level K90 and class-level K90 where repeated classes exist. Use unique candidates for the primary population-scaling experiment.
+
