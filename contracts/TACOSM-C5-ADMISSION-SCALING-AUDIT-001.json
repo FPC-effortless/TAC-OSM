@@ -27,11 +27,38 @@
     "no persistent state input to the main arm",
     "no hidden-target input to the router"
   ],
-  "dense_M": [64, 128, 256, 512, 1024, 2048, 4096, 8192],
+  "dense_M": [
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048,
+    4096,
+    8192
+  ],
   "lsh_M": 1024,
-  "lsh_tables": [1, 2, 4, 8, 10, 12, 16, 24, 32, 48, 64],
+  "lsh_tables": [
+    1,
+    2,
+    4,
+    8,
+    10,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+  ],
   "table_cap": 128,
-  "seeds": [0, 1, 2, 3, 4],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "train_steps": 800,
   "calibration_trials": 64,
   "heldout_trials": 64,
@@ -52,5 +79,75 @@
     "The main arm has no persistent state input; persistence remains untested by this audit.",
     "The sweep cap is 128 and the maximum requested table count is 64, so the intervention is unbound by the cap."
   ],
-  "status": "registered"
+  "status": "registered",
+  "endpoints": [
+    {
+      "name": "dense_P90_rank_M8192",
+      "role": "primary dense-scaling endpoint",
+      "primary": true
+    },
+    {
+      "name": "dense_local_P90_exponents",
+      "role": "high-M scaling diagnostic",
+      "primary": false
+    },
+    {
+      "name": "lsh_admission_recall_curve_M1024",
+      "role": "primary LSH admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "lsh_rerank_fraction_curve_M1024",
+      "role": "LSH work diagnostic",
+      "primary": false
+    },
+    {
+      "name": "theoretical_L90",
+      "role": "iid collision diagnostic",
+      "primary": false
+    },
+    {
+      "name": "p1",
+      "role": "one-table target collision probability",
+      "primary": false
+    },
+    {
+      "name": "p2",
+      "role": "one-table decoy collision probability",
+      "primary": false
+    },
+    {
+      "name": "K90",
+      "role": "calibration-derived dense shortlist size",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "contract and anti-leakage gates",
+    "high-M dense rank distribution",
+    "local P90 rank exponents",
+    "M=1024 K90 calibration",
+    "one-table LSH p1/p2",
+    "iid theoretical L90 diagnostic",
+    "explicit LSH table-count recall/work curve",
+    "semantic and persistence scope limits"
+  ],
+  "h_levels": [
+    63
+  ],
+  "steps": 800,
+  "eval_steps": 64,
+  "k_levels": [
+    1,
+    2,
+    4,
+    8,
+    10,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+  ]
 }
