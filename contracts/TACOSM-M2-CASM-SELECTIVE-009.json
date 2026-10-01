@@ -1,0 +1,89 @@
+{
+  "experiment_id": "TACOSM-M2-CASM-SELECTIVE-009",
+  "version": "0.1",
+  "status": "preregistered",
+  "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
+  "external_executor": {
+    "repository": "FPC-effortless/cdl-attention-experiment",
+    "commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748",
+    "path": "casm_v01/phase1_dag/model.py"
+  },
+  "primary_question": "Does a learned structural representation reduce actual structural execution while preserving capability relative to exhaustive CASM execution?",
+  "primary_endpoint": {
+    "name": "selective_execution_work_fraction_at_capability",
+    "population_levels": [32, 64, 128, 256, 512],
+    "budgets": [1, 2, 4, 8],
+    "capability_floor": 0.8,
+    "criterion": "At a population level M, an arm is capability-eligible when selective semantic success divided by exhaustive semantic success is >= 0.80. Report the minimum execution-work fraction among eligible budgets; no winner is selected across representations."
+  },
+  "secondary_endpoints": [
+    "routing_recall_at_B",
+    "semantic_success_at_B",
+    "adaptive_executed_candidates",
+    "selective_execution_work_units",
+    "exhaustive_execution_work_units",
+    "query_routing_work_units",
+    "index_build_work_units",
+    "selective_wall_clock_ms",
+    "exhaustive_wall_clock_ms",
+    "peak_memory_mb",
+    "casm_gate_evaluations",
+    "casm_structural_node_operations",
+    "casm_edge_message_operations"
+  ],
+  "router_arms": {
+    "structural_tower": {
+      "description": "Frozen CASM-S structural representation plus learned query tower and candidate projection.",
+      "trainable_parameter_budget": "shared fixed query MLP and 32x32 candidate projection"
+    },
+    "summary_tower": {
+      "description": "Hand-designed public node-local structural summary with the same tower architecture and trainable parameter budget."
+    },
+    "random": {
+      "description": "Uniform candidate order; no learned parameters."
+    },
+    "exhaustive": {
+      "description": "Execute all M candidates with the same CASM-S evaluator; capability ceiling/control."
+    }
+  },
+  "data_protocol": {
+    "train_programs": 256,
+    "training_steps": 1200,
+    "seeds": [0, 1, 2, 3, 4],
+    "support_examples_per_task": 4,
+    "fixed_input_count": 4,
+    "unique_candidate_truth_tables": true,
+    "unique_candidate_structures": true,
+    "train_eval_exact_structure_disjoint": true,
+    "primary_eval_distribution": "same generator distribution with unseen exact programs",
+    "secondary_eval_distribution": "held-out NOT->XOR structural role-pair; training excludes that role-pair",
+    "evaluation_tasks_per_seed_M": 32
+  },
+  "leakage_rules": [
+    "Router input contains only public support input/output examples and candidate public structural descriptors.",
+    "Target index, target record ID, full candidate truth tables, true wiring, true edges, verifier output, and outcome are evaluator-only.",
+    "CASM-S structural encoder receives nodes, depth, position, arity, and existence only; true edges are not passed into routing.",
+    "Candidate semantic success is verified from executed outputs against public task examples, not descriptor equality.",
+    "A candidate is not marked negative unless its executed outputs fail at least one public task example."
+  ],
+  "execution_work_contract": {
+    "gate_evaluations": "number of candidate edges scored by CASM-S",
+    "edge_message_operations": "number of candidate-edge message aggregation operations",
+    "structural_node_operations": "number of active non-input nodes executed",
+    "total_structural_work_units": "gate_evaluations + edge_message_operations + structural_node_operations"
+  },
+  "statistical_contract": {
+    "primary_estimate": "pooled trial-level semantic success and execution-work fraction",
+    "uncertainty": "seed bootstrap 95 percent confidence interval",
+    "multiple_comparisons": "descriptive across M and budgets; no global arm winner claim",
+    "training_selection": "no held-out outcome used to choose training hyperparameters or arm"
+  },
+  "promotion_rule": [
+    "CASM exhaustive capability >= 0.80 on the primary eval condition",
+    "integrity and split checks pass",
+    "router target IDs are absent from runtime inputs",
+    "selective execution work is measured from actual CASM operations",
+    "capability retention and execution work are both reported",
+    "no asymptotic scaling claim from finite M"
+  ]
+}
