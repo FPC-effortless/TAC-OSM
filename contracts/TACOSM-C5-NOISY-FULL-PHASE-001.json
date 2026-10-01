@@ -1,0 +1,218 @@
+{
+  "experiment_id": "TACOSM-C5-NOISY-FULL-PHASE-001",
+  "title": "Leakage-corrected C5 noisy fused loop: CDL recovery to bounded CASM execution",
+  "question": "When the clean target is hidden and CDL must operate only on a one-bit-corrupted public query, can calibrated sparse admission feed a bounded CASM verifier loop as M grows?",
+  "hypothesis": "On a fixed error-correcting semantic codebook, noisy CDL outcome training should recover the relevant class with a bounded rank distribution; OR-LSH admission should preserve most of that recall at a smaller rerank fraction; verifier-gated repair should convert admitted candidates into successful actions without access to the hidden target.",
+  "arms": [
+    {
+      "name": "hamming_public",
+      "intervention": "public-query Hamming nearest-neighbor reference",
+      "acts_on": "routing reference",
+      "knob": "router",
+      "value": "Hamming distance"
+    },
+    {
+      "name": "cdl_noisy_dense",
+      "intervention": "outcome-trained dense CDL routing on noisy query only",
+      "acts_on": "routing representation",
+      "knob": "router",
+      "value": "CDL Q/K"
+    },
+    {
+      "name": "cdl_noisy_sparse_casm",
+      "intervention": "CDL Q/K + OR-LSH + calibrated K + exact CASM + outcome verifier/repair",
+      "acts_on": "routing and execution subset",
+      "knob": "fused_loop",
+      "value": "enabled"
+    },
+    {
+      "name": "persistent_clean_control",
+      "intervention": "separate upper-bound control reading clean target from delayed persistent state",
+      "acts_on": "persistence control",
+      "knob": "state_access",
+      "value": "clean_target"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "sparse_final_success",
+      "role": "primary fused-loop capability endpoint",
+      "primary": true
+    },
+    {
+      "name": "cdl_mean_best_valid_rank",
+      "role": "dense representation diagnostic",
+      "primary": false
+    },
+    {
+      "name": "cdl_p90_best_valid_rank",
+      "role": "dense scaling diagnostic",
+      "primary": false
+    },
+    {
+      "name": "hamming_mean_best_valid_rank",
+      "role": "nonlearned routing reference",
+      "primary": false
+    },
+    {
+      "name": "hamming_top1_valid",
+      "role": "nonlearned routing reference",
+      "primary": false
+    },
+    {
+      "name": "K90",
+      "role": "calibrated shortlist size",
+      "primary": false
+    },
+    {
+      "name": "K95",
+      "role": "higher-coverage shortlist size",
+      "primary": false
+    },
+    {
+      "name": "heldout_coverage90",
+      "role": "empirical held-out calibration coverage",
+      "primary": false
+    },
+    {
+      "name": "heldout_coverage95",
+      "role": "empirical held-out calibration coverage",
+      "primary": false
+    },
+    {
+      "name": "p1",
+      "role": "LSH target collision probability",
+      "primary": false
+    },
+    {
+      "name": "p2",
+      "role": "LSH decoy collision probability",
+      "primary": false
+    },
+    {
+      "name": "rho",
+      "role": "LSH retrieval exponent estimate",
+      "primary": false
+    },
+    {
+      "name": "sparse90_admission_recall",
+      "role": "fused admission recall",
+      "primary": false
+    },
+    {
+      "name": "sparse90_first_attempt_success",
+      "role": "pre-repair success",
+      "primary": false
+    },
+    {
+      "name": "sparse90_final_success",
+      "role": "post-repair verified success",
+      "primary": false
+    },
+    {
+      "name": "sparse90_rerank_fraction",
+      "role": "candidate reranking fraction",
+      "primary": false
+    },
+    {
+      "name": "sparse90_routing_ops",
+      "role": "arithmetic query routing work",
+      "primary": false
+    },
+    {
+      "name": "sparse90_repairs",
+      "role": "verifier-driven repair attempts",
+      "primary": false
+    },
+    {
+      "name": "persistent_clean_control_M128",
+      "role": "clean persistent upper-bound control",
+      "primary": false
+    },
+    {
+      "name": "reset_control_M128",
+      "role": "reset persistence control",
+      "primary": false
+    },
+    {
+      "name": "online_final_success_M128",
+      "role": "closed-loop online endpoint",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "Report all registered M levels for Hamming, dense CDL, and sparse CDL+LSH+CASM+Verifier; do not select the reported operating point using held-out outcomes.",
+      "licenses": "workload-specific diagnosis of representation, admission, execution, and repair bottlenecks.",
+      "does_not_license": "general semantic capability or universal sparse scaling."
+    },
+    {
+      "condition": "A sublinear routing statement requires the measured query-work exponent beta to be below 1 and no LSH table cap to bind at any reported M.",
+      "licenses": "an empirical scaling statement on the registered workload.",
+      "does_not_license": "a complexity theorem or hardware speedup."
+    },
+    {
+      "condition": "Conformal K is fit only on calibration trials and evaluated on a separate held-out stream; coverage is reported empirically and interpreted conditionally on exchangeability.",
+      "licenses": "calibrated shortlist behavior under the registered sampling scheme.",
+      "does_not_license": "distribution-free guarantees under arbitrary shift."
+    },
+    {
+      "condition": "Verifier-driven success must be produced after CASM execution and may use only noisy public query, candidate data, execution trace, and environment outcome.",
+      "licenses": "evidence that execution/verification is separated from hidden-target routing.",
+      "does_not_license": "verification of the hidden target relation itself."
+    }
+  ],
+  "interpretation_order": [
+    "anti-leakage gates",
+    "codebook validity and repeated-action balance",
+    "Hamming reference",
+    "dense CDL rank distribution",
+    "conformal K and held-out coverage",
+    "LSH p1/p2/rho",
+    "admission recall and reranking cost",
+    "CASM execution and verifier repair",
+    "persistent clean/reset controls",
+    "online verified learning"
+  ],
+  "h_levels": [
+    63
+  ],
+  "m_levels": [
+    64,
+    128,
+    256,
+    512,
+    1024
+  ],
+  "k_levels": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 800,
+  "eval_steps": 64,
+  "held_constant": [
+    "16-bit binary semantic codebook with 64 classes and minimum Hamming distance 3",
+    "one-bit query corruption for the main arm",
+    "M populations repeat all 64 classes equally",
+    "main router query contains only noisy bits; no address field",
+    "hidden valid-action set never enters router or verifier inputs",
+    "CASM compares candidate descriptor to the observed noisy query, not hidden target",
+    "environment exposes success only after action execution",
+    "verified experience learning occurs only after environment success and verification",
+    "LSH uses OR-over-tables random hyperplanes with table count derived from measured rho"
+  ],
+  "status": "pre-registered",
+  "layer": "L3"
+}
