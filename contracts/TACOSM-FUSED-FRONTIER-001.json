@@ -2,36 +2,121 @@
   "experiment_id": "TACOSM-FUSED-FRONTIER-001",
   "title": "Fused sparse addressing, structural admission, predictive transition routing, and verified operator consolidation",
   "question": "Can the validated product-key addressing frontier and the PST-StructMeans-AXON-REGM-SECA loop be composed so that final decision work is fixed as M grows while preserving held-out operator capability?",
-  "primary_comparisons": [
-    "product-key -> fixed shortlist",
-    "product-key -> StructMeans -> fixed shortlist",
-    "product-key -> StructMeans -> PST -> fixed shortlist"
+  "hypothesis": "A structural middle index and predictive transition scorer should improve target admission and selection at fixed absolute routing budgets, while verified experience should support PST reconstruction, AXON reuse, and independently verified SECA composition.",
+  "arms": [
+    {
+      "name": "pkm",
+      "intervention": "product-key addressing followed by a fixed absolute final shortlist",
+      "acts_on": "routing architecture",
+      "knob": "structural_intervention",
+      "value": "none"
+    },
+    {
+      "name": "structmeans",
+      "intervention": "product-key addressing followed by StructMeans structural admission and a fixed absolute shortlist",
+      "acts_on": "routing architecture",
+      "knob": "structural_intervention",
+      "value": "StructMeans"
+    },
+    {
+      "name": "pst",
+      "intervention": "product-key addressing followed by StructMeans admission and PST transition reranking",
+      "acts_on": "routing architecture",
+      "knob": "structural_intervention",
+      "value": "StructMeans+PST"
+    }
   ],
-  "closed_loop": [
-    "verified execution -> REGM experience",
-    "REGM -> PST reconstruction",
-    "verified repeated operators -> AXON consolidation",
-    "retrieval failure -> SECA composition",
-    "SECA result -> independent verification -> operator memory"
+  "endpoints": [
+    {
+      "name": "top1_success",
+      "role": "primary fused routing capability endpoint",
+      "primary": true,
+      "description": "held-out single-step target selection success under the registered absolute final budget"
+    },
+    {
+      "name": "pkm_admission_recall",
+      "role": "coarse admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "final_admission_recall",
+      "role": "post-structural admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "pkm_internal_scored_mean",
+      "role": "internal product-key exact-address work",
+      "primary": false
+    },
+    {
+      "name": "pkm_internal_scored_over_M",
+      "role": "internal product-key scaling diagnostic",
+      "primary": false
+    },
+    {
+      "name": "factor_score_macs_mean",
+      "role": "factor routing arithmetic",
+      "primary": false
+    },
+    {
+      "name": "structural_ops_mean",
+      "role": "structural admission arithmetic",
+      "primary": false
+    },
+    {
+      "name": "pst_prediction_ops_mean",
+      "role": "transition-prediction arithmetic",
+      "primary": false
+    },
+    {
+      "name": "pre_seca_success",
+      "role": "novel composition baseline",
+      "primary": false
+    },
+    {
+      "name": "post_seca_success",
+      "role": "verified composition diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verified_novel_composites",
+      "role": "operator creation diagnostic",
+      "primary": false
+    },
+    {
+      "name": "pst_reconstruction_accuracy_heldout_signature",
+      "role": "durable transition-law diagnostic",
+      "primary": false
+    },
+    {
+      "name": "axon_bound_reuse_accuracy",
+      "role": "operator consolidation diagnostic",
+      "primary": false
+    }
   ],
-  "M_levels": [128, 256, 512],
-  "absolute_budgets": [4, 8, 16],
-  "seeds": [10, 11, 12],
-  "product_key": {
-    "factor_count": 3,
-    "factor_size": 16,
-    "factor_beam": 7,
-    "max_shortlist": 32,
-    "refresh_interval_updates": 32
-  },
-  "primary_endpoints": [
+  "decision_rule": [
+    {
+      "condition": "Compare pkm, structmeans, and pst at every registered M and absolute budget; report top1_success and all routing-cost diagnostics without selecting an outcome-dependent winner.",
+      "licenses": "a workload-specific comparison of the fused routing interventions.",
+      "does_not_license": "universal routing improvement, hardware speedup, or asymptotic sublinear addressing."
+    },
+    {
+      "condition": "If pst_reconstruction_accuracy_heldout_signature and axon_bound_reuse_accuracy meet their independently verified thresholds, the corresponding consolidation mechanisms are supported on this synthetic operator family.",
+      "licenses": "support for verified transition reconstruction and bound operator reuse on this workload.",
+      "does_not_license": "broad-domain continual learning or universal reasoning."
+    },
+    {
+      "condition": "post_seca_success is evaluated only on tasks for which single-step retrieval did not already solve the composite target.",
+      "licenses": "evidence that verified composition can create executable composite operators on the registered workload.",
+      "does_not_license": "that SECA repairs poor base retrieval."
+    }
+  ],
+  "interpretation_order": [
     "top1_success",
     "pkm_admission_recall",
     "final_admission_recall",
     "pkm_internal_scored_mean",
-    "pkm_internal_scored_over_M"
-  ],
-  "secondary_endpoints": [
+    "pkm_internal_scored_over_M",
     "factor_score_macs_mean",
     "structural_ops_mean",
     "pst_prediction_ops_mean",
@@ -41,12 +126,33 @@
     "pst_reconstruction_accuracy_heldout_signature",
     "axon_bound_reuse_accuracy"
   ],
-  "rules": [
-    "No C5 or sublinear claim from a bounded final shortlist alone.",
-    "Product-key internal exact address scoring remains part of measured routing cost.",
-    "StructMeans and PST are fit only from verified training experience; held-out operator signatures are excluded from bootstrap/codebook training.",
-    "SECA is evaluated after base retrieval and is not used to rescue single-step routing metrics.",
-    "Post-execution verifier information never enters route()."
+  "h_levels": [
+    1
   ],
-  "status": "registered_before_measurement"
+  "seeds": [
+    10,
+    11,
+    12
+  ],
+  "steps": 600,
+  "eval_steps": 80,
+  "k_levels": [
+    4,
+    8,
+    16
+  ],
+  "held_constant": [
+    "operator state dimension=8",
+    "three operator kinds: toggle, set1, set0",
+    "48 training operators: 16 per kind",
+    "product-key factor_count=3, factor_size=16, factor_beam=7, max_shortlist=32",
+    "product-key refresh interval=32 representation updates",
+    "StructMeans clusters=3 and cluster budget=2",
+    "training uses verified transitions only for PST/StructMeans",
+    "held-out operator signatures are excluded from the structural training set",
+    "SECA is not used to alter single-step routing metrics",
+    "product-key internal exact address scoring is reported separately from final absolute budget"
+  ],
+  "status": "pre-registered",
+  "layer": "L5"
 }
