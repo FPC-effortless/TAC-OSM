@@ -1,0 +1,117 @@
+{
+  "experiment_id": "TACOSM-C5-PROTOTYPE-BEAM-001",
+  "title": "Top-two learned prototype beam for bounded state retrieval",
+  "question": "Does increasing coarse-routing beam width from one prototype to two preserve the learned cosine retriever with a bounded K=8 shortlist?",
+  "hypothesis": "H_beam: the poor one-prototype result is partly a coarse-routing recall problem; top-two prototype routing with K=8 should materially increase target retention while remaining selective.",
+  "arms": [
+    {
+      "name": "exhaustive_cosine",
+      "intervention": "cosine-score all 64 states with the fixed raw-trained width-16 encoder",
+      "acts_on": "reference state retrieval",
+      "knob": "search",
+      "value": "M=64"
+    },
+    {
+      "name": "prototype_beam",
+      "intervention": "top-two learned continuous prototypes, union of capacity-four buckets, cosine rerank over K<=8 states",
+      "acts_on": "state retrieval",
+      "knob": "beam_width",
+      "value": "2"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "actual_target_recall",
+      "role": "primary — hidden target state selected",
+      "primary": true
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "secondary — hidden target is in top-two prototype bucket union",
+      "primary": false
+    },
+    {
+      "name": "actual_end_to_end_success",
+      "role": "secondary — downstream output matches hidden truth",
+      "primary": false
+    },
+    {
+      "name": "shortlist_size",
+      "role": "audit — retained state addresses",
+      "primary": false
+    },
+    {
+      "name": "prototype_score_macs",
+      "role": "audit — query-to-prototype scoring",
+      "primary": false
+    },
+    {
+      "name": "state_rerank_macs",
+      "role": "audit — cosine state scoring",
+      "primary": false
+    },
+    {
+      "name": "build_macs",
+      "role": "audit — one-time prototype construction",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "prototype_beam actual target recall >= exhaustive_cosine actual target recall - 0.05 AND prototype_beam actual end-to-end success >= exhaustive_cosine actual end-to-end success - 0.05 AND shortlist size <= 8",
+      "licenses": "bounded support for two-prototype learned continuous routing as a selective state-retrieval mechanism on this workload",
+      "does_not_license": "general semantic ANN guarantees or broad C5"
+    },
+    {
+      "condition": "either actual target recall or actual end-to-end success is >0.05 below exhaustive-cosine reference, or shortlist exceeds K=8",
+      "licenses": "two-prototype learned continuous routing does not preserve the registered capability boundary",
+      "does_not_license": "that larger beams cannot help"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "exhaustive cosine",
+    "proposal retention",
+    "selective target recall",
+    "downstream capability",
+    "cost"
+  ],
+  "h_levels": [
+    64,
+    128,
+    256
+  ],
+  "k_levels": [
+    8
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
+    "M=64 persistent state items",
+    "one-step causal write/read delay",
+    "A1 H-invariant task stream",
+    "same raw-trained width-16 encoder",
+    "512 training epochs",
+    "one deterministic positive view",
+    "eight mean-gradient negatives",
+    "training and evaluation code split",
+    "16 learned prototypes and capacity-four assignment",
+    "top-two prototype beam",
+    "K=8 maximum state shortlist",
+    "cosine reranking",
+    "exact candidate index",
+    "fixed 12-work-unit executor",
+    "same prototype centroids and state bucket assignment as C5-PROTOTYPE-SELECTIVE-001",
+    "no retraining or prototype refitting in this experiment",
+    "no evaluation address or gold target enters prototype construction"
+  ],
+  "status": "pre-registered",
+  "layer": "L4"
+}

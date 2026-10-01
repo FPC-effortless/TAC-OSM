@@ -1,0 +1,47 @@
+name: C5 sparse retrieval funnel
+
+on:
+  push:
+    branches: [research/c5-sparse-funnel-001]
+    paths:
+      - "src/tac_osm/**"
+      - "tests/**"
+      - "scripts/run_c5_sparse_funnel_001.py"
+      - "docs/TACOSM-C5-SPARSE-FUNNEL-001.md"
+      - "contracts/TACOSM-C5-SPARSE-FUNNEL-001.json"
+      - ".github/workflows/c5-sparse-funnel-001.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  c5-sparse-funnel:
+    name: TACOSM-C5-SPARSE-FUNNEL-001
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+      - name: Registered sparse-funnel smoke
+        run: |
+          mkdir -p artifacts
+          python scripts/run_c5_sparse_funnel_001.py --smoke > artifacts/C5-SPARSE-FUNNEL-001.smoke.stdout.json
+          cat artifacts/C5-SPARSE-FUNNEL-001.smoke.stdout.json
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-C5-SPARSE-FUNNEL-001-smoke
+          path: artifacts/
+          if-no-files-found: error

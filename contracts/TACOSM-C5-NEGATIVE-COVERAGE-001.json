@@ -1,0 +1,58 @@
+{
+  "experiment_id":"TACOSM-C5-NEGATIVE-COVERAGE-001",
+  "title":"Negative-coverage diagnosis for learned semantic state addressing",
+  "question":"Does changing negative-sample coverage or hardness materially improve the current learned continuous semantic state retriever at a fixed 512-epoch budget?",
+  "hypothesis":"H_negative: the current low-recall boundary is partly caused by training each positive against only one deterministic negative; controlled multi-negative coverage or hard-negative selection should improve held-out target-state retrieval without changing encoder capacity, training budget, or evaluation data.",
+  "arms":[
+    {"name":"single_negative","intervention":"current deterministic single-negative objective","acts_on":"learning objective","knob":"negative_count","value":"1"},
+    {"name":"mean_8_negatives","intervention":"8 deterministic negatives per positive update, mean margin gradient","acts_on":"learning objective","knob":"negative_count","value":"8"},
+    {"name":"hardest_8_negatives","intervention":"8 deterministic negatives scored per update, backpropagate through the highest-scoring negative","acts_on":"learning objective","knob":"negative_count","value":"8 with hardest selection"}
+  ],
+  "endpoints":[
+    {"name":"target_top1_recall","role":"primary — correct opaque persistent state selected","primary":true},
+    {"name":"target_rank_mean","role":"secondary — mean rank of correct target state","primary":false},
+    {"name":"training_updates","role":"secondary — optimizer updates; held constant across arms","primary":false},
+    {"name":"negative_evaluations","role":"secondary — negative scoring evaluations per training update","primary":false},
+    {"name":"query_macs","role":"audit — continuous inference arithmetic","primary":false},
+    {"name":"state_build_macs","role":"audit — one-time cached state embedding arithmetic","primary":false}
+  ],
+  "decision_rule":[
+    {
+      "condition":"either alternative has mean target_top1_recall >= single_negative + 0.20 and >= 0.50",
+      "licenses":"evidence that negative coverage/objective design is a material limiting factor for the current learner on this workload",
+      "does_not_license":"that the tested objective is optimal or that semantic addressing generalizes"
+    },
+    {
+      "condition":"at least one alternative has mean target_top1_recall >= single_negative + 0.10, but no alternative satisfies the 0.20 and 0.50 threshold",
+      "licenses":"partial evidence that negative coverage/objective design materially affects retrieval",
+      "does_not_license":"a reliable selective retriever or optimal training objective"
+    },
+    {
+      "condition":"all alternatives improve mean recall by < 0.10 over single_negative",
+      "licenses":"no material evidence in this test that negative coverage alone removes the current representation boundary",
+      "does_not_license":"that the objective cannot be improved by other changes"
+    }
+  ],
+  "interpretation_order":["temporal availability","held-out retrieval","objective response","target rank","training overhead","inference arithmetic"],
+  "h_levels":[64],
+  "seeds":[0,1,2,3,4],
+  "steps":512,
+  "eval_steps":100,
+  "held_constant":[
+    "M=64 persistent state items",
+    "H=64 task anchor and A1 H-invariant query/state stream",
+    "one-step causal write/read delay",
+    "10-bit state codebook",
+    "training codes CODEBOOK[16:64]",
+    "evaluation codes CODEBOOK[:16]",
+    "dual linear 10->8 encoder",
+    "learning rate 0.02 and margin 0.25",
+    "512 epochs for every arm",
+    "one optimizer update per positive code per epoch",
+    "continuous exhaustive state scoring only",
+    "no evaluation address or gold target enters training",
+    "prior C5, learned-state diagnosis and budget results remain frozen"
+  ],
+  "status":"pre-registered",
+  "layer":"L3"
+}

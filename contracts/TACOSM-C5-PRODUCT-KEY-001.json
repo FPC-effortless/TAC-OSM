@@ -1,0 +1,51 @@
+{
+  "experiment_id": "TACOSM-C5-PRODUCT-KEY-001",
+  "title": "Training-only product-key addressing for bounded persistent-state retrieval",
+  "question": "Can factorized product-key addressing preserve the fixed cosine teacher's target retrieval while restricting the fine reranker to K=4,8,16 states?",
+  "hypothesis": "Factorizing the fixed width-16 representation into two training-fitted codebooks may provide higher coarse target retention than the learned prototype proposal at comparable bounded shortlist budgets.",
+  "arms": [
+    {"name": "exhaustive_cosine", "intervention": "cosine-score all 64 persistent states with the fixed width-16 teacher representation", "acts_on": "reference state retrieval", "knob": "search", "value": "M=64"},
+    {"name": "product_key", "intervention": "training-only two-factor product-key cell proposal followed by the same fixed cosine reranker", "acts_on": "selective state retrieval", "knob": "K", "value": "4,8,16"}
+  ],
+  "endpoints": [
+    {"name": "actual_target_recall", "role": "primary downstream retrieval endpoint", "primary": true},
+    {"name": "proposal_target_retention", "role": "secondary coarse-boundary endpoint", "primary": false},
+    {"name": "actual_end_to_end_success", "role": "secondary capability endpoint", "primary": false},
+    {"name": "shortlist_size", "role": "audit", "primary": false},
+    {"name": "state_candidates_scored", "role": "audit", "primary": false},
+    {"name": "total_macs", "role": "audit", "primary": false}
+  ],
+  "decision_rule": [
+    {
+      "condition": "report proposal retention, actual target recall, end-to-end success, state candidates scored, and total arithmetic separately for K=4,8,16",
+      "licenses": "diagnostic evidence about training-only product-key addressing on the registered workload",
+      "does_not_license": "universal product-key retrieval guarantees or hardware wall-clock speedup"
+    },
+    {
+      "condition": "actual target recall and end-to-end success approach the exhaustive cosine reference while retained states and arithmetic remain bounded",
+      "licenses": "bounded support for the product-key sparse retrieval mechanism on this workload",
+      "does_not_license": "broad C5 or general semantic memory claims"
+    }
+  ],
+  "interpretation_order": ["temporal availability", "exhaustive cosine", "proposal retention", "actual target recall", "downstream capability", "arithmetic", "state-cell occupancy"],
+  "h_levels": [64, 128, 256],
+  "steps": 512,
+  "k_levels": [4, 8, 16],
+  "seeds": [0, 1, 2, 3, 4],
+  "eval_steps": 100,
+  "held_constant": [
+    "width-16 raw-trained cosine teacher",
+    "48 training semantic codes versus 16 held-out query codes",
+    "training-only factor codebook fitting",
+    "all 64 runtime persistent states are assigned to the learned product-key cells",
+    "exact candidate index",
+    "fixed downstream executor",
+    "same noisy query construction",
+    "same K budgets and beam mapping as the sparse-funnel diagnostic",
+    "arithmetic is reported separately from wall-clock behavior"
+  ],
+  "status": "measured",
+  "result_note": "Full registered run 36699321108: pooled K=16 actual target recall 0.6240 and end-to-end success 0.7980 versus exhaustive 0.7000 and 0.8333. Artifact 11089197442, digest sha256:f0ed3bea00e2ef71b17234db16244f1d475e7567079a2af30b036c185c07c0d1.",
+  "result_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/36699321108",
+  "layer": "L4"
+}

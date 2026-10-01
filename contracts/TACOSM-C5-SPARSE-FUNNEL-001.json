@@ -1,0 +1,63 @@
+{
+  "experiment_id": "TACOSM-C5-SPARSE-FUNNEL-001",
+  "title": "Teacher-distilled continuous proposal with over-fetch and packed reranking",
+  "question": "Can a cheap continuous proposal retain the full-candidate cosine teacher's relevant persistent-state computation across K=4,8,16 budgets?",
+  "hypothesis": "A student trained with KL distillation to the full-candidate cosine scorer will retain more teacher-relevant state mass than the existing binary/sign-code proposal, and K=8 or K=16 over-fetch will separate budget limitation from proposal-mechanism limitation.",
+  "arms": [
+    {"name": "exhaustive_cosine", "intervention": "cosine-score all 64 persistent states with the fixed width-16 representation", "acts_on": "reference state retrieval", "knob": "search", "value": "M=64"},
+    {"name": "distilled_prototype_proposal", "intervention": "student query-to-prototype KL distillation followed by bounded prototype beam and teacher cosine reranking", "acts_on": "selective state retrieval", "knob": "K", "value": "4,8,16"}
+  ],
+  "endpoints": [
+    {"name": "teacher_target_retention", "role": "secondary coarse-boundary endpoint", "primary": false},
+    {"name": "actual_target_recall", "role": "primary downstream retrieval endpoint", "primary": true},
+    {"name": "actual_end_to_end_success", "role": "secondary capability endpoint", "primary": false},
+    {"name": "shortlist_size", "role": "audit", "primary": false},
+    {"name": "total_macs", "role": "audit", "primary": false},
+    {"name": "contiguous_runs", "role": "systems audit", "primary": false}
+  ],
+  "decision_rule": [
+    {
+      "condition": "report proposal retention, actual target recall, end-to-end success, and total arithmetic separately for K=4,8,16",
+      "licenses": "diagnostic evidence about the learned proposal funnel on the registered workload",
+      "does_not_license": "a universal retrieval guarantee or hardware wall-clock speedup"
+    },
+    {
+      "condition": "actual target recall and end-to-end success approach the exhaustive cosine reference while total arithmetic remains materially lower",
+      "licenses": "bounded support for a distilled sparse funnel on this workload",
+      "does_not_license": "broad C5 or general semantic memory claims"
+    }
+  ],
+  "interpretation_order": ["temporal availability", "exhaustive cosine", "teacher distribution", "proposal retention", "selective target recall", "downstream capability", "arithmetic and packing", "negative filtering"],
+  "h_levels": [64, 128, 256],
+  "steps": 512,
+  "k_levels": [4, 8, 16],
+  "seeds": [0, 1, 2, 3, 4],
+  "teacher_epochs": 512,
+  "distill_epochs": 256,
+  "eval_steps": 100,
+  "M": 64,
+  "R": 4,
+  "latent_dim": 16,
+  "prototype_count": 16,
+  "bucket_capacity": 4,
+  "negative_count": 8,
+  "beam_for_K": {"4": 1, "8": 2, "16": 4},
+  "held_constant": [
+    "width-16 raw-trained cosine representation",
+    "48 training semantic codes versus held-out evaluation query codes",
+    "distillation state supervision restricted to states whose values are training codes",
+    "one deterministic noisy query view",
+    "eight mean-gradient negatives",
+    "16 continuous prototypes with capacity four",
+    "exact candidate index",
+    "fixed executor",
+    "no evaluation target or address enters distillation",
+    "runtime teacher reranking uses only the bounded shortlist",
+    "exhaustive reference retrieval scores the complete 64-state population",
+    "arithmetic and packing are reported separately from wall-clock behavior"
+  ],
+  "status": "measured",
+  "result_note": "Full registered run 36698358062: capability boundary not preserved; pooled K=16 target recall 0.4540 and end-to-end success 0.7213 versus exhaustive references 0.7000 and 0.8333. Artifact 11089146615, digest sha256:441829017da558e1c8147745bb387897b433d193feb08a786bac6fa965589f2c.",
+  "result_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/36698358062",
+  "layer": "L4"
+}
