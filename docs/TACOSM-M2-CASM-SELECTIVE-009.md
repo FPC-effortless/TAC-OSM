@@ -97,7 +97,9 @@ Primary evaluation targets are disjoint from router training in both exact progr
 
 ## Final preregistration freeze
 
-Contract version: `0.3.1-final`.
+Contract version: `0.3.3-final`.
+
+Amendments 0.3.2 and 0.3.3 were premeasurement repairs only: full truth-table training for CASM-S and removal of the unmeasured random arm. No primary endpoint, population, seed, budget, leakage, or decision rule changed.
 
 Amendment 0.3.1 repaired only the JSON shape to satisfy the repository-native `ExperimentContract` schema after a premeasurement smoke failure. No scientific endpoint, arm, population, seed, budget, or leakage rule changed.
 
