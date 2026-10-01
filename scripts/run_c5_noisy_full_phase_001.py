@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from tac_osm.c5_noisy_full_phase import (
     CDLDenseNoisyRouter,
+    CLASS_COPIES,
     HammingBaseline,
     NoisyCASMExecutor,
     NoisyEnvironment,
