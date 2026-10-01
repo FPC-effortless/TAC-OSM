@@ -57,9 +57,35 @@ ROLE_HOLDOUT = ("NOT", "XOR")
 
 @dataclass(frozen=True)
 class TaskSpec:
+    task_id: str
     examples: tuple[tuple[tuple[int, ...], int], ...]
     target_truth: tuple[int, ...]
     target_index: int
+
+
+class PersistentTaskMemory:
+    """Opaque task-addressed state plus verifier-gated experience."""
+
+    def __init__(self) -> None:
+        self._tasks: dict[str, tuple[tuple[tuple[int, ...], int], ...]] = {}
+        self._experience: dict[str, set[tuple]] = {}
+
+    def write_task(self, task_id: str, examples) -> None:
+        value = tuple(examples)
+        if task_id in self._tasks and self._tasks[task_id] != value:
+            raise ValueError("task address collision with different content")
+        self._tasks[task_id] = value
+
+    def read_task(self, task_id: str):
+        if task_id not in self._tasks:
+            raise KeyError(task_id)
+        return self._tasks[task_id]
+
+    def commit_verified_experience(self, task_id: str, candidate_key: tuple) -> None:
+        self._experience.setdefault(task_id, set()).add(candidate_key)
+
+    def experience_keys(self, task_id: str) -> frozenset[tuple]:
+        return frozenset(self._experience.get(task_id, set()))
 
 
 def truth_signature(ep: CASMEpisode) -> tuple[int, ...]:
@@ -159,6 +185,7 @@ def make_task_pool(
         rng.shuffle(pool)
         target_idx = next(i for i, x in enumerate(pool) if structural_key(x) == structural_key(ep))
         task = TaskSpec(
+            task_id=f"m2:{seed}:{m}:{int(heldout)}:{target_idx}",
             examples=support_sig,
             target_truth=truth_signature(ep),
             target_index=target_idx,
