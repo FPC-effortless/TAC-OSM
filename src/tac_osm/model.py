@@ -203,6 +203,7 @@ class TacOsmModel:
         verifier: Any,
         repair: RepairController | None,
         environment: Environment,
+        computation_selector: Any | None = None,
         config: ModelConfig | None = None,
     ) -> None:
         self.state = state
@@ -211,6 +212,9 @@ class TacOsmModel:
         self.verifier = verifier
         self.repair = repair
         self.environment = environment
+        # Optional explicit CASM computation-selection boundary. Legacy runs
+        # keep the original relevance_program path unchanged.
+        self.computation_selector = computation_selector
         self.config = config if config is not None else ModelConfig()
         self._rng = random.Random(self.config.seed)
         self.episodes: list[Episode] = []
@@ -476,6 +480,16 @@ class TacOsmModel:
                 "relevance circuit has no reference: query carries no bits and "
                 "state read is empty, so the relation is undefined for this step"
             )
+        if self.computation_selector is not None:
+            selector = getattr(self.computation_selector, "select", None)
+            if not callable(selector):
+                raise TypeError("computation_selector must expose select()")
+            return selector(
+                reference=reference,
+                candidate=candidate,
+                marks=marks,
+                step_index=step_index,
+            )
         program = relevance_program(
             reference, candidate.descriptor, marks, max_nodes=self._max_nodes()
         )
@@ -560,10 +574,26 @@ class TacOsmModel:
         one, which is what lets a later ``replay`` task read the value back.
         """
         address = task.query.text.partition("\t")[2]
-        key = address or f"step_{step_index:04d}"
+        # World facts written by the environment occupy address keys. Never
+        # overwrite them with a learning write: verified experience gets its
+        # own namespace, so persistence and learning remain independently
+        # measurable.
+        key = (
+            f"experience:{task.family}:{step_index:04d}:{address}"
+            if address
+            else f"experience:{task.family}:{step_index:04d}"
+        )
+        value = self._descriptor_bits(task)
+        if not value:
+            # Pure lookup/replay facts are hidden in world state. The selected
+            # candidate is not in the public query, so preserve that fact as a
+            # post-hoc verified experience via the candidate descriptor.
+            target = getattr(getattr(task, "detail", None), "written_bits", ())
+            if target:
+                value = tuple(int(b) for b in target)
         return StateUpdate(
             key=key,
-            value=self._descriptor_bits(task),
+            value=value,
             task_key=task.family,
             success_score=float(outcome.success),
             step=step_index,
