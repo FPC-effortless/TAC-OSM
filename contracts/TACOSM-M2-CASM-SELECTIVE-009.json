@@ -77,11 +77,12 @@
     "unique_candidate_truth_tables": true,
     "unique_candidate_structures": true,
     "train_eval_exact_structure_disjoint": true,
-    "primary_eval_distribution": "same generator distribution with unseen exact programs; candidate pools are generated independently of router-visible support examples",
+    "primary_eval_distribution": "same generator distribution with unseen exact structures and unseen truth tables; candidate pools are generated independently of router-visible support examples",
     "secondary_eval_distribution": "held-out NOT->XOR structural role-pair; training excludes that role-pair",
     "evaluation_tasks_per_seed_M": 32,
     "verifier_examples_per_task": 12,
-    "router_visible_examples_per_task": 4
+    "router_visible_examples_per_task": 4,
+    "train_eval_truth_disjoint": true
   },
   "leakage_rules": [
     "Router input contains only public support input/output examples and candidate public structural descriptors.",
@@ -92,7 +93,8 @@
     "Candidate pool construction must not condition decoy inclusion on router-visible support examples.",
     "Verifier-only input/output examples are disjoint from router-visible support examples and are not passed to routing.",
     "Opaque task addresses are derived only from router-visible support examples and contain no target index, target ID, or hidden verifier data.",
-    "All 12 remaining truth-table rows are verifier-only; together with the four router-visible rows they cover the complete 4-input Boolean truth table."
+    "All 12 remaining truth-table rows are verifier-only; together with the four router-visible rows they cover the complete 4-input Boolean truth table.",
+    "Primary evaluation target truth tables are absent from router training as well as target structures."
   ],
   "execution_work_contract": {
     "gate_evaluations": "number of candidate edges scored by CASM-S",
