@@ -57,8 +57,11 @@ def main() -> None:
             }
         )
 
-    all_caps_unbound = all(not seed["index_actual_tables"] >= max(CONFIG.lsh_tables)
-                           for seed in lsh_per_seed)
+    all_caps_unbound = all(
+        seed["index_actual_tables"] < CONFIG.lsh_cap
+        and seed["index_actual_tables"] >= max(CONFIG.lsh_tables)
+        for seed in lsh_per_seed
+    )
     result = {
         "protocol": {
             "name": "TACOSM-C5-ADMISSION-SCALING-AUDIT-001",
