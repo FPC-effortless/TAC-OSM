@@ -337,16 +337,27 @@ def evaluate_router(
     task: TaskSpec,
     candidates: Sequence[CASMEpisode],
     adapter: CASMSAdapter,
+    memory: PersistentTaskMemory,
+    *,
+    use_experience: bool = False,
 ) -> dict:
+    examples = memory.read_task(task.task_id)
     if representation == "structural":
         with torch.no_grad():
             c = adapter.encode_structure(candidates).cpu()
     else:
         c = torch.stack([torch.tensor(build_summary(ep), dtype=torch.float32) for ep in candidates])
-    q = torch.tensor([query_vector(task.examples)], dtype=torch.float32)
+    q = torch.tensor([query_vector(examples)], dtype=torch.float32)
     with torch.no_grad():
         scores = router(q, c)[0].tolist()
-    order = sorted(range(len(candidates)), key=lambda i: (-scores[i], i))
+    experience_keys = memory.experience_keys(task.task_id) if use_experience else frozenset()
+    order = sorted(
+        range(len(candidates)),
+        key=lambda i: (
+            -(scores[i] + (5.0 if structural_key(candidates[i]) in experience_keys else 0.0)),
+            i,
+        ),
+    )
     rank = order.index(task.target_index) + 1
     per_candidate_work = [adapter.work_for_episode(ep) for ep in candidates]
 
@@ -361,7 +372,7 @@ def evaluate_router(
         reps = []
         runtime = []
         for idx in indices:
-            for bits, _out in task.examples:
+            for bits, _out in examples:
                 reps.append(candidates[idx])
                 runtime.append(list(bits))
         t0 = time.perf_counter()
@@ -371,7 +382,7 @@ def evaluate_router(
         for j, (_idx) in enumerate(indices):
             start = j * SUPPORT_ROWS
             vals = outputs[start : start + SUPPORT_ROWS]
-            expected = [float(y) for _, y in task.examples]
+            expected = [float(y) for _, y in examples]
             ok = ok and all((float(v) >= 0.5) == (float(y) >= 0.5) for v, y in zip(vals, expected))
         work = WorkAccounting(0, 0, 0)
         for idx in indices:
