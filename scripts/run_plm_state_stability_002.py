@@ -37,7 +37,7 @@ def main() -> None:
     )
     by_rate = []
     for rate in RATES:
-        group = [r for r in rows if r.arm == "false_accept" and r.false_accept_rate == rate]
+        group = [r for r in rows if r.false_accept_rate == rate]
         by_rate.append({
             "false_accept_rate": rate,
             "wrong_write_rate_mean": statistics.fmean(r.wrong_write_rate for r in group),
