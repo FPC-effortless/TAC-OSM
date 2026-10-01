@@ -20,6 +20,7 @@ __all__ = [
     "ExecutionFeedback",
     "execution_feedback_from_verdict",
     "VerifierDrivenEnergyRouter",
+    "ExecutionGroundTruthVerifier",
 ]
 
 
@@ -91,6 +92,34 @@ def execution_feedback_from_verdict(
         error_type="unlocalized_reject",
         repair_key=None,
     )
+
+
+class ExecutionGroundTruthVerifier:
+    """Post-execution oracle verifier for the synthetic benchmark.
+
+    Unlike ThresholdVerifier, which can validate a zero-valued rejected
+    computation against an outcome value of zero, this verifier checks the
+    selected action against the environment's hidden target after execution.
+    That makes Reject mean "this execution did not solve the task" rather than
+    "the output is internally consistent with failure".
+    """
+
+    def verify(self, computation, outcome) -> VerificationResult:
+        target = _target_index(outcome.detail)
+        if target is not None and computation.action != target:
+            return VerificationResult(
+                passed=False,
+                feedback=f"reject target_action={target}",
+            )
+        trace = tuple(float(x) for x in computation.trace)
+        output = trace[0] if trace else 0.0
+        expected = float(outcome.success)
+        if abs(output - expected) > 1e-9:
+            return VerificationResult(
+                passed=False,
+                feedback=f"execution_mismatch output={output:.6f} expected={expected:.6f}",
+            )
+        return VerificationResult(passed=True, feedback="accept")
 
 
 class VerifierDrivenEnergyRouter(RepresentationEnergyRouter):
