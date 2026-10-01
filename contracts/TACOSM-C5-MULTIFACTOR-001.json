@@ -1,0 +1,85 @@
+{
+  "experiment_id": "TACOSM-C5-MULTIFACTOR-001",
+  "title": "C5 factorization-depth diagnostic for product-key state retrieval",
+  "question": "Does increasing product-key factorization depth from two factors to three reduce the state reranking fraction while retaining the same retrieval capability under a matched small cell-admission budget?",
+  "hypothesis": "Three-factor addressing should distribute the same 16-dimensional state representation across more independent codebooks, allowing finer Cartesian cell resolution and reducing candidate occupancy at comparable factor beam.",
+  "arms": [
+    {
+      "name": "two_factor_16_beam6",
+      "acts_on": "factorization depth reference",
+      "factor_count": 2,
+      "factor_size": 16,
+      "factor_beam": 6
+    },
+    {
+      "name": "three_factor_8_beam3",
+      "acts_on": "factorization depth and cell topology",
+      "factor_count": 3,
+      "factor_size": 8,
+      "factor_beam": 3
+    },
+    {
+      "name": "three_factor_16_beam3",
+      "acts_on": "factorization depth and cell topology",
+      "factor_count": 3,
+      "factor_size": 16,
+      "factor_beam": 3
+    }
+  ],
+  "endpoints": [
+    {"name": "selective_target_recall", "role": "primary downstream retrieval endpoint", "primary": true},
+    {"name": "proposal_target_retention", "role": "coverage diagnostic", "primary": false},
+    {"name": "states_scored_over_M", "role": "primary computation diagnostic", "primary": false},
+    {"name": "state_candidates_scored_mean", "role": "absolute candidate-count diagnostic", "primary": false},
+    {"name": "selective_end_to_end_success", "role": "secondary capability endpoint", "primary": false},
+    {"name": "total_macs_mean", "role": "arithmetic audit", "primary": false},
+    {"name": "nonempty_cells", "role": "topology audit", "primary": false},
+    {"name": "max_cell_size", "role": "occupancy audit", "primary": false}
+  ],
+  "decision_rule": [
+    {
+      "condition": "For two_factor_16_beam6, three_factor_8_beam3, and three_factor_16_beam3, report pooled target recall, proposal retention, states scored/M, absolute states scored, end-to-end success, arithmetic, and cell occupancy separately at each M.",
+      "licenses": "a workload-specific factorization-depth comparison on the registered C5 product-key construction",
+      "does_not_license": "universal optimal factor count, semantic retrieval guarantees, asymptotic sublinear scaling, or hardware speedup"
+    },
+    {
+      "condition": "A three-factor arm supports the depth hypothesis only if it reduces states_scored_over_M relative to two_factor_16_beam6 without a material retrieval regression on the registered workload.",
+      "licenses": "evidence that factorization depth is a useful mechanism for reducing cell occupancy in this workload",
+      "does_not_license": "that the three-factor construction is generally superior"
+    }
+  ],
+  "interpretation_order": [
+    "exhaustive cosine reference",
+    "proposal retention",
+    "selective target recall",
+    "states scored over M",
+    "absolute states scored",
+    "end-to-end success",
+    "arithmetic",
+    "cell occupancy"
+  ],
+  "h_levels": [256],
+  "m_levels": [128, 256, 512],
+  "steps": 512,
+  "k_levels": [32],
+  "seeds": [10,11,12,13,14,15,16,17,18,19],
+  "eval_steps": 100,
+  "factor_count_levels": [2,3],
+  "factor_size_levels": [8,16],
+  "factor_beam_levels": [3,6],
+  "held_constant": [
+    "same width-16 raw-trained cosine teacher",
+    "same 48 training codes versus 16 held-out target codes",
+    "same one-bit noisy query construction",
+    "same H=256",
+    "same M levels",
+    "same K=32",
+    "same k-means iteration count=8",
+    "training-only codebook fitting",
+    "same exact downstream executor",
+    "same task seed stream",
+    "same ten independent seeds 10-19"
+  ],
+  "status": "pre-registered",
+  "layer": "L4"
+}
