@@ -15,6 +15,7 @@ class MultiFactorProductKeyConfig:
     factor_beam: int = 3
     iterations: int = 8
     max_shortlist: int = 32
+    max_rerank_candidates: int = 32
 
     def __post_init__(self) -> None:
         if self.factor_count < 2:
@@ -27,6 +28,8 @@ class MultiFactorProductKeyConfig:
             raise ValueError("iterations must be positive")
         if self.max_shortlist < 1:
             raise ValueError("max_shortlist must be positive")
+        if self.max_rerank_candidates < 1:
+            raise ValueError("max_rerank_candidates must be positive")
 
 
 @dataclass(frozen=True)
@@ -272,7 +275,7 @@ class MultiFactorProductKeyStateIndex:
         # Optional cheap middle filter: rank candidate addresses by their
         # factor-center score and exact-rerank only a fixed number. This changes
         # only the rerank boundary; the product-key admission cells are fixed.
-        rerank_cap = self.config.max_shortlist
+        rerank_cap = self.config.max_rerank_candidates
         coarse_scores = []
         factor_lookup = [
             {idx: scores[idx] for idx in range(self.config.factor_size)}
@@ -281,8 +284,6 @@ class MultiFactorProductKeyStateIndex:
                 for (start, end), centers in zip(self._slices, self._factors)
             ]
         ]
-        if hasattr(self.config, "max_rerank_candidates"):
-            rerank_cap = int(getattr(self.config, "max_rerank_candidates"))
         for address in addresses:
             cell = self._address_cells[address]
             coarse_scores.append((
