@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-M2-CASM-SELECTIVE-009",
-  "version": "0.3.2-final",
+  "version": "0.3.3-final",
   "status": "preregistered",
   "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
   "external_executor": {
@@ -54,9 +54,6 @@
     },
     "summary_tower": {
       "description": "Hand-designed public node-local structural summary with the same tower architecture and trainable parameter budget."
-    },
-    "random": {
-      "description": "Uniform candidate order; no learned parameters."
     },
     "exhaustive": {
       "description": "Execute all M candidates with the same CASM-S evaluator; capability ceiling/control."
@@ -173,6 +170,14 @@
         "all scientific population, budget, split, leakage, and endpoint definitions remain unchanged"
       ],
       "measurement_started": false
+    },
+    {
+      "version": "0.3.3",
+      "stage": "premeasurement contract consistency repair",
+      "changes": [
+        "removed the registered random arm because the runner does not independently measure a random control in this experiment"
+      ],
+      "measurement_started": false
     }
   ],
   "freeze_rule": {
@@ -197,13 +202,6 @@
       "acts_on": "representation and routing",
       "knob": "representation",
       "value": "fixed 32-dimensional public summary"
-    },
-    {
-      "name": "random",
-      "intervention": "uniform candidate selection",
-      "acts_on": "routing control",
-      "knob": "router",
-      "value": "random"
     },
     {
       "name": "exhaustive",
