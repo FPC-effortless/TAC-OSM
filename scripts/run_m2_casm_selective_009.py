@@ -602,6 +602,12 @@ def main() -> None:
     registered_m = tuple(int(x) for x in contract["h_levels"])
     registered_seeds = tuple(int(x) for x in contract["seeds"])
     registered_budgets = tuple(int(x) for x in contract["k_levels"])
+    from tac_osm.contract import load_contract
+    parsed_contract = load_contract(
+        "TACOSM-M2-CASM-SELECTIVE-009",
+        path=ROOT / "contracts" / "TACOSM-M2-CASM-SELECTIVE-009.json",
+    )
+    parsed_contract.require_arms(["structural_tower", "summary_tower", "exhaustive"])
     if tuple(M_LEVELS) != registered_m or tuple(SEEDS) != registered_seeds or tuple(BUDGETS) != registered_budgets:
         raise RuntimeError("M2 implementation constants do not match the final preregistered contract")
     if contract["steps"] != ROUTER_STEPS or contract["eval_steps"] != EVAL_TASKS_PER_SEED_M:
