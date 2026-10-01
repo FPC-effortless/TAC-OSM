@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-M2-CASM-SELECTIVE-009",
-  "version": "0.3.1-final",
+  "version": "0.3.2-final",
   "status": "preregistered",
   "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
   "external_executor": {
@@ -82,7 +82,8 @@
     "evaluation_tasks_per_seed_M": 32,
     "verifier_examples_per_task": 12,
     "router_visible_examples_per_task": 4,
-    "train_eval_truth_disjoint": true
+    "train_eval_truth_disjoint": true,
+    "executor_training_truth_table_rows_per_program": 16
   },
   "leakage_rules": [
     "Router input contains only public support input/output examples and candidate public structural descriptors.",
@@ -162,6 +163,16 @@
         "retained all M2 scientific protocol fields unchanged"
       ],
       "measurement_started": false
+    },
+    {
+      "version": "0.3.2",
+      "stage": "schema and executor-training premeasurement repair",
+      "changes": [
+        "aligned contract with native ExperimentContract schema",
+        "CASM-S executor training now covers all 16 truth-table rows for each training program",
+        "all scientific population, budget, split, leakage, and endpoint definitions remain unchanged"
+      ],
+      "measurement_started": false
     }
   ],
   "freeze_rule": {
@@ -171,7 +182,7 @@
   },
   "title": "M2 actual CASM selective execution",
   "question": "Does a learned structural representation reduce actual structural execution while preserving capability relative to exhaustive CASM execution?",
-  "hypothesis": "Selective structural routing should preserve useful task capability while reducing actual CASM-S execution work relative to exhaustive execution, under unique candidates and held-out structure.",
+  "hypothesis": "Selective structural routing should preserve useful task capability while reducing actual CASM-S execution work relative to exhaustive execution, under unique candidates, unseen exact programs, unseen Boolean truth tables, and full-truth-table semantic verification.",
   "arms": [
     {
       "name": "structural_tower",
@@ -307,6 +318,7 @@
     "unique candidate structures and unique complete truth tables",
     "five fixed seeds",
     "router architecture and trainable parameter count matched between structural and summary arms",
-    "adaptive execution rule fixed before evaluation outcomes"
+    "adaptive execution rule fixed before evaluation outcomes",
+    "CASM-S executor is trained over every input row of each registered training program, not a single sampled runtime input"
   ]
 }
