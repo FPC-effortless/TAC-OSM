@@ -505,7 +505,10 @@ class UnifiedPLM:
         if not candidates:
             out = ActionOutcome(False, None, "no_candidates")
             v = self.verifier.verify(out)
-            return StepResult(step, None, None, out, v, False, True, address, 0, address.index_lookups)
+            return StepResult(
+                step, None, None, out, v, False, True, address, 0,
+                address.index_lookups + address.raw_candidates
+            )
 
         by_id = {r.record_id: r for r in candidates}
         correct = self.state.get(task.target_id)
@@ -560,7 +563,7 @@ class UnifiedPLM:
         return StepResult(
             step, attempted[0] if attempted else None, None, out, v, False,
             repaired, address, execution_cost,
-            address.index_lookups + address.candidates_scored + execution_cost,
+            address.index_lookups + address.raw_candidates + address.candidates_scored + execution_cost,
         )
 
     def learn_and_consolidate(self) -> dict[str, int]:
