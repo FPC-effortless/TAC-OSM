@@ -1,0 +1,78 @@
+name: C5 three-factor factor-size-16 beam frontier
+
+on:
+  push:
+    branches: [research/c5-multifactor-granularity-beam-frontier-001]
+    paths:
+      - "src/tac_osm/**"
+      - "scripts/run_c5_multifactor_granularity_beam_frontier_001.py"
+      - "contracts/TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.json"
+      - "docs/TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.md"
+      - ".github/workflows/c5-multifactor-granularity-beam-frontier-001.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001 smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest ruff
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+          python -m ruff check --select F821 scripts/run_c5_multifactor_granularity_beam_frontier_001.py src/tac_osm/multifactor_product_key_index.py
+          python -m py_compile scripts/run_c5_multifactor_granularity_beam_frontier_001.py src/tac_osm/multifactor_product_key_index.py
+      - name: Registered smoke
+        run: |
+          mkdir -p artifacts
+          python scripts/run_c5_multifactor_granularity_beam_frontier_001.py --smoke > artifacts/TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.smoke.stdout.json
+          cat artifacts/TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.smoke.stdout.json
+      - name: Upload smoke artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001-smoke
+          path: artifacts/
+          if-no-files-found: error
+
+  full:
+    name: TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001 full
+    if: contains(github.event.head_commit.message, '[run-c5-multifactor-beam-frontier-full]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest ruff
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+          python -m ruff check --select F821 scripts/run_c5_multifactor_granularity_beam_frontier_001.py src/tac_osm/multifactor_product_key_index.py
+          python -m py_compile scripts/run_c5_multifactor_granularity_beam_frontier_001.py src/tac_osm/multifactor_product_key_index.py
+      - name: Full registered measurement
+        run: |
+          mkdir -p artifacts
+          python scripts/run_c5_multifactor_granularity_beam_frontier_001.py > artifacts/TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.json
+          cat artifacts/TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.json
+      - name: Upload full artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001-full
+          path: artifacts/TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.json
+          if-no-files-found: error

@@ -1,0 +1,165 @@
+{
+  "experiment_id": "TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001",
+  "title": "Three-factor factor-size-16 beam frontier for product-key state retrieval",
+  "question": "Can increasing product-key factor granularity from 8 to 16 improve the capability/computation frontier of three-factor addressing at beams 4, 5, and 6?",
+  "hypothesis": "Finer factor cells should reduce state occupancy enough that a three-factor factor-size-16 configuration can meet the 0.90 capability floor at a lower reranking fraction than the current approximately 0.1543 two-factor robust frontier, while beam expansion controls coverage.",
+  "arms": [
+    {
+      "name": "three_factor_16_beam4",
+      "intervention": "three-factor product-key addressing with factor size 16 and beam 4",
+      "acts_on": "factor beam / admitted product cells",
+      "factor_count": 3,
+      "factor_size": 16,
+      "factor_beam": 4
+    },
+    {
+      "name": "three_factor_16_beam5",
+      "intervention": "three-factor product-key addressing with factor size 16 and beam 5",
+      "acts_on": "factor beam / admitted product cells",
+      "factor_count": 3,
+      "factor_size": 16,
+      "factor_beam": 5
+    },
+    {
+      "name": "three_factor_16_beam6",
+      "intervention": "three-factor product-key addressing with factor size 16 and beam 6",
+      "acts_on": "factor beam / admitted product cells",
+      "factor_count": 3,
+      "factor_size": 16,
+      "factor_beam": 6
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "target_recall_retention_ratio",
+      "role": "primary capability constraint",
+      "definition": "selective target recall divided by exhaustive target recall",
+      "floor": 0.9,
+      "primary": true
+    },
+    {
+      "name": "states_scored_over_M",
+      "role": "primary computation diagnostic",
+      "primary": false
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "coverage diagnostic",
+      "primary": false
+    },
+    {
+      "name": "selective_target_recall",
+      "role": "raw retrieval endpoint",
+      "primary": false
+    },
+    {
+      "name": "selective_end_to_end_success",
+      "role": "secondary capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "total_macs_mean",
+      "role": "arithmetic audit",
+      "primary": false
+    },
+    {
+      "name": "pair_generation_ops_mean",
+      "role": "routing audit",
+      "primary": false
+    },
+    {
+      "name": "nonempty_cells",
+      "role": "topology audit",
+      "primary": false
+    },
+    {
+      "name": "max_cell_size",
+      "role": "occupancy audit",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "Report every registered arm separately at every M with exact pooled target counts, target-recall retention ratio, proposal retention, states scored/M, end-to-end success, arithmetic, pair generation, and occupancy.",
+      "licenses": "a workload-specific three-factor factor-size-16 capability/computation frontier",
+      "does_not_license": "universal optimal beam size, semantic retrieval guarantees, asymptotic sublinear scaling, or hardware wall-clock speedup"
+    },
+    {
+      "condition": "An arm satisfies the capability constraint when target-recall retention ratio is at least 0.90 at every registered M level.",
+      "licenses": "that the arm meets the pre-registered capability floor on the tested workload",
+      "does_not_license": "that the arm is generally optimal"
+    },
+    {
+      "condition": "An eligible fixed arm improves the current robust two-factor frontier when its mean states_scored_over_M across M={128,256,512} is strictly below 0.1542864583.",
+      "licenses": "evidence that factor-size-16 three-factor addressing improves the currently validated sparse capability frontier on the registered workload and seed set",
+      "does_not_license": "a general architectural superiority claim or asymptotic scaling"
+    }
+  ],
+  "interpretation_order": [
+    "exhaustive target recall",
+    "proposal retention",
+    "target recall retention ratio",
+    "states scored over M",
+    "end-to-end success",
+    "arithmetic",
+    "cell occupancy"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
+  "steps": 512,
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "eval_steps": 100,
+  "factor_count_levels": [
+    3
+  ],
+  "factor_size_levels": [
+    16
+  ],
+  "factor_beam_levels": [
+    4,
+    5,
+    6
+  ],
+  "held_constant": [
+    "factor_count = 3",
+    "factor_size = 16",
+    "factor beam is evaluated only at the registered values 4, 5, and 6",
+    "H = 256",
+    "M = {128, 256, 512}",
+    "K = 32",
+    "seeds = 10-19",
+    "100 evaluation steps per seed/M/arm",
+    "width-16 cosine teacher and training-only codebook fitting",
+    "state-distinct downstream executor",
+    "exact pooled success-count aggregation",
+    "capability floor = 0.90"
+  ],
+  "status": "PRE-REGISTERED",
+  "layer": "L4",
+  "prior_reference": {
+    "experiment": "TACOSM-C5-FRONTIER-ROBUSTNESS-002",
+    "configuration": "two-factor factor_size=16, factor_beam=6",
+    "mean_states_scored_over_M": 0.1542864583,
+    "minimum_capability_retention": 0.8113207547
+  }
+}
