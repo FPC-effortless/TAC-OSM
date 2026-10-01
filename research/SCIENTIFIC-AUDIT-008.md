@@ -348,11 +348,25 @@ Even with unique candidates, a target descriptor seen during training can be mem
 
 **Correction:** the authoritative audit runner records all training target descriptors and rejects evaluation samples whose target descriptor was observed during training. The structural holdout additionally excludes the declared training support family. This separates structural generalization from exact target-identity memorization.
 
-### A20 — Exhaustive-reference calibration (#46) has no full measurement artifact
+### A20 — PR #46 exhaustive reference calibration: disposition retained, evidence corrected
 
-The registered PR #46 calibration workflow has a completed smoke job, but its full measurement job was skipped. Therefore the repository does not currently contain a verified full calibration result from that registration.
+The evidence statement in the original A20 (no full measurement artifact) is superseded. It was accurate at this audit's branch point but is stale.
 
-**Disposition:** exhaustive-reference capability at larger M remains an unresolved calibration gate. Historical sparse-retention ratios that depend on an uncalibrated exhaustive denominator remain reference-relative diagnostics, not independent capability measurements.
+**Superseded evidence:** the original A20 observed that the registered PR #46 calibration workflow had a completed smoke job while its full measurement job was skipped, and concluded that the repository contained no verified full calibration result. That was true when this audit branched: merge-base `0283838` (2026-09-29) does not contain the result, and run `36810643404` had not completed at that time.
+
+**Corrected evidence:** run `36810643404` subsequently completed successfully and produced full artifact `11139324912` (SHA-256 `def220ea15c44d07c1dbfc15d8d2b0f00225ef4179459a4b63a126e0b6fe5980`, 1,964 bytes, `expired: false`), under protocol amendment CAL-001-A1. The result is recorded in commit `6783e64` (2026-10-01 05:10 UTC+1) as `docs/TACOSM-C5-EXHAUSTIVE-REFERENCE-CALIBRATION-001-RESULT.md`. That commit is not an ancestor of this audit branch, which is the sole reason the original A20 did not see it. This is a temporal-provenance artifact of parallel branches, not a contradiction.
+
+**Measured result:** the population-exposure confound is confirmed at M=128 and M=256, with paired differences of +0.286 (0.386 to 0.672) and +0.220 (0.166 to 0.386). At the staked M=512 level the observed difference is +0.072 (0.053 to 0.125) with a paired seed-bootstrap 95% CI of [+0.031, +0.115]. The lower bound is below the preregistered +0.10 materiality threshold, so the materiality criterion is not met. The matched teacher still degrades strongly with population size (0.672 to 0.386 to 0.125), so population exposure explains a substantial part but not all of the historical exhaustive-reference collapse.
+
+**Disposition, stated by category:**
+
+- **Supported:** a population-exposure confound is present in the historical exhaustive-reference denominator at M=128 and M=256, and CAL-001-A1 successfully removed the original optimizer-update confound by matching both arms to approximately 24,576 teacher updates.
+- **Narrowed:** the confound is materially smaller than the raw collapse suggests. The measured effect at the staked level is +0.072, and the matched arm still degrades with M.
+- **Unresolved:** exhaustive-reference capability at large M remains an open calibration gate. Because the preregistered materiality test at M=512 was not met, this measurement neither establishes nor excludes that a matched-population teacher preserves exhaustive recall at large M.
+- **Invalid:** the original A20 rationale, "has no full measurement artifact," must not be cited. The artifact exists.
+- **Unchanged:** historical sparse-retention ratios that use the exhaustive denominator remain reference-relative diagnostics, not independent capability measurements. This calibration is calibration only; it does not establish selective-retrieval capability, a sparse-frontier win, semantic generalization, or asymptotic scaling, and it does not change the registered C5 status.
+
+**Correction:** cite run `36810643404` / artifact `11139324912` / commit `6783e64` as the authoritative calibration source. Do not cite this audit's original A20 evidence statement. If the M=512 materiality question is to be closed, it requires a new preregistered measurement with adequate power rather than re-reading of this artifact.
 
 ### A21 — C5 frontier-004 downstream executor is a synthetic equality oracle (P1)
 
