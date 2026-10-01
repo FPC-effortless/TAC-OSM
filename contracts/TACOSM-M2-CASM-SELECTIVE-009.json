@@ -1,7 +1,7 @@
 {
   "experiment_id": "TACOSM-M2-CASM-SELECTIVE-009",
-  "version": "0.1",
-  "status": "preregistered",
+  "version": "0.3-final",
+  "status": "preregistered_final",
   "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
   "external_executor": {
     "repository": "FPC-effortless/cdl-attention-experiment",
@@ -122,5 +122,42 @@
     "intervening_writes": "unrelated task records are inserted before anchor replay",
     "replay_metric": "compare routing and adaptive execution before and after verified experience",
     "target_id_hidden": true
+  },
+  "amendment_history": [
+    {
+      "version": "0.1",
+      "stage": "initial registration",
+      "reason": "register actual CASM-S selective execution question and capability/work endpoints"
+    },
+    {
+      "version": "0.2",
+      "stage": "pre-measurement hardening",
+      "changes": [
+        "candidate pools no longer condition on router-visible support rows",
+        "four router-visible rows separated from verifier-only rows",
+        "all 12 remaining truth-table rows used for verifier",
+        "opaque task address derived only from router-visible examples",
+        "primary targets disjoint from training in exact structure and full truth table",
+        "CASM structural representation work added to execution accounting",
+        "router parameter-matching and baseline provenance gates added",
+        "primary executor training includes all role pairs; role holdout applies only to router secondary evaluation"
+      ],
+      "measurement_started": false
+    },
+    {
+      "version": "0.3-final",
+      "stage": "final pre-measurement freeze",
+      "changes": [
+        "CPU-only PyTorch runtime aligned to Python 3.12/CASM-S CI",
+        "verified-experience replay bonus fixed at 5.0",
+        "full run provenance manifest includes contract digest, TAC-OSM SHA, run ID, Python, Torch, and external executor SHA"
+      ],
+      "measurement_started": false
+    }
+  ],
+  "freeze_rule": {
+    "measurement_commit_must_be_tree_identical_to_final_preregistration": true,
+    "post_freeze_protocol_changes": "not admissible; require a new experiment identifier",
+    "full_run_trigger": "tree-identical empty commit with [run-m2-casm-selective-009-full]"
   }
 }
