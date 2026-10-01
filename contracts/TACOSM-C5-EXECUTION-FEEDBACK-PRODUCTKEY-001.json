@@ -7,17 +7,20 @@
     {
       "name": "dense_outcome_only",
       "intervention": "dense RepresentationEnergyRouter with success-only outcome update",
-      "primary_role": "capability control"
+      "primary_role": "capability control",
+      "acts_on": "representation parameters"
     },
     {
       "name": "dense_verifier_feedback",
       "intervention": "dense VerifierDrivenEnergyRouter with post-execution repair positives and rejected hard negatives",
-      "primary_role": "learning-signal control"
+      "primary_role": "learning-signal control",
+      "acts_on": "representation parameters"
     },
     {
       "name": "productkey_verifier_feedback",
       "intervention": "same verifier-trained representation with 3-factor factor16 beam7 index and max shortlist 32",
-      "primary_role": "sparse routing"
+      "primary_role": "sparse routing",
+      "acts_on": "representation parameters + sparse index"
     }
   ],
   "endpoints": [
