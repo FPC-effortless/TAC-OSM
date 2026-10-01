@@ -78,13 +78,13 @@ def evaluate_seed(seed: int, router):
         k95 = max(1, min(m, empirical_quantile(cdl_cal, 0.95)))
 
         cdl_eval = [dense_rank(router, *episode) for episode in heldout]
+        h_eval = [hamming_rank(*episode) for episode in heldout]
         reset_eval = []
         for trial, state in heldout:
             state.clear()
             reset_eval.append(
                 router.rank(trial.query, state, trial.candidates).index(trial.target_index) + 1
             )
-        h_eval = [hamming_rank(*make_episode(seed=seed, step=10000 + 1000 + i, m=m)) for i in range(CONFIG.eval_trials)]
         dense_rows.append({
             "M": m,
             "mean_rank": statistics.fmean(cdl_eval),
