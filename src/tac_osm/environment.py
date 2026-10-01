@@ -158,6 +158,7 @@ class StateLookupTaskSpec:
     key: str
     written_bits: tuple[int, ...]
     n_marked: int
+    gold_index: int = -1
 
 
 @dataclass(frozen=True)
@@ -171,6 +172,7 @@ class ReplayTaskSpec:
     key: str
     written_bits: tuple[int, ...]
     n_marked: int
+    gold_index: int = -1
 
 
 # --------------------------------------------------------------------------- #
@@ -344,6 +346,10 @@ def _with_gold_descriptor(detail: Any, gold_descriptor: tuple[int, ...],
         return dataclasses.replace(
             detail, gold_descriptor=gold_descriptor, gold_index=gold_index
         )
+    if isinstance(detail, StateLookupTaskSpec):
+        return dataclasses.replace(detail, gold_index=gold_index)
+    if isinstance(detail, ReplayTaskSpec):
+        return dataclasses.replace(detail, gold_index=gold_index)
     return detail
 
 
@@ -499,7 +505,7 @@ def build_lookup_task(
         step=step,
         family="state_lookup",
         detail=StateLookupTaskSpec(
-            key=address, written_bits=written, n_marked=len(marks)
+            key=address, written_bits=written, n_marked=len(marks), gold_index=-1
         ),
     )
 
@@ -555,7 +561,9 @@ def build_replay_task(
         address=address,
         step=step,
         family="replay",
-        detail=ReplayTaskSpec(key=address, written_bits=written, n_marked=len(marks)),
+        detail=ReplayTaskSpec(
+            key=address, written_bits=written, n_marked=len(marks), gold_index=-1
+        ),
     )
 
 
