@@ -66,7 +66,7 @@ The bounded-state arm is a capacity analogue, not an implementation of a named S
 Relevance:
 - dense target rank;
 - dense Top-1;
-- local target rank;
+- local target rank (censored at admitted-set size + 1 when target is not admitted);
 - local Top-1.
 
 Addressing:
