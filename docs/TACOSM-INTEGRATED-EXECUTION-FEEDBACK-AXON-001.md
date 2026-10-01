@@ -47,3 +47,7 @@ The experiment does not establish:
 - universal reasoning;
 - broad-domain continual learning;
 - human-preference alignment.
+
+
+## Rerun marker
+This branch is the synchronized measurement branch for the registered run; no protocol fields are changed.
