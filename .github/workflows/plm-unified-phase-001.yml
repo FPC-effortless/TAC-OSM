@@ -1,0 +1,34 @@
+name: Research PLM unified phase 001
+
+on:
+  pull_request:
+    branches:
+      - research/c5-composition-budget-audit-001
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install pytest
+        run: python -m pip install --quiet pytest
+      - name: Full repository suite
+        run: python -m pytest tests/ -q
+      - name: Unified PLM unit tests
+        run: python -m pytest tests/test_plm_unified.py -q
+      - name: Run unified PLM phase
+        run: python scripts/run_plm_unified_phase_001.py
+      - name: Upload unified PLM artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-UNIFIED-PHASE-001
+          path: artifacts/TACOSM-PLM-UNIFIED-PHASE-001.json
+          if-no-files-found: error
