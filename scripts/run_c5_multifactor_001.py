@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from tac_osm.contract import load_contract
+from tac_osm.c5_end_to_end import build_population
 from tac_osm.learned_state_index import LearnedSemanticStateIndex
 from tac_osm.multifactor_product_key_index import (
     MultiFactorProductKeyConfig,
