@@ -154,7 +154,6 @@ def build_population(seed: int, m: int) -> tuple[Candidate, ...]:
             descriptor=c.descriptor,
             action=i,
             provenance=c.provenance,
-            executable_edges=c.executable_edges,
         )
         for i, c in enumerate(candidates)
     )
