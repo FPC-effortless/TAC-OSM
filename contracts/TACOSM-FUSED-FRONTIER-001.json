@@ -1,0 +1,52 @@
+{
+  "experiment_id": "TACOSM-FUSED-FRONTIER-001",
+  "title": "Fused sparse addressing, structural admission, predictive transition routing, and verified operator consolidation",
+  "question": "Can the validated product-key addressing frontier and the PST-StructMeans-AXON-REGM-SECA loop be composed so that final decision work is fixed as M grows while preserving held-out operator capability?",
+  "primary_comparisons": [
+    "product-key -> fixed shortlist",
+    "product-key -> StructMeans -> fixed shortlist",
+    "product-key -> StructMeans -> PST -> fixed shortlist"
+  ],
+  "closed_loop": [
+    "verified execution -> REGM experience",
+    "REGM -> PST reconstruction",
+    "verified repeated operators -> AXON consolidation",
+    "retrieval failure -> SECA composition",
+    "SECA result -> independent verification -> operator memory"
+  ],
+  "M_levels": [128, 256, 512],
+  "absolute_budgets": [4, 8, 16],
+  "seeds": [10, 11, 12],
+  "product_key": {
+    "factor_count": 3,
+    "factor_size": 16,
+    "factor_beam": 7,
+    "max_shortlist": 32,
+    "refresh_interval_updates": 32
+  },
+  "primary_endpoints": [
+    "top1_success",
+    "pkm_admission_recall",
+    "final_admission_recall",
+    "pkm_internal_scored_mean",
+    "pkm_internal_scored_over_M"
+  ],
+  "secondary_endpoints": [
+    "factor_score_macs_mean",
+    "structural_ops_mean",
+    "pst_prediction_ops_mean",
+    "pre_seca_success",
+    "post_seca_success",
+    "verified_novel_composites",
+    "pst_reconstruction_accuracy_heldout_signature",
+    "axon_bound_reuse_accuracy"
+  ],
+  "rules": [
+    "No C5 or sublinear claim from a bounded final shortlist alone.",
+    "Product-key internal exact address scoring remains part of measured routing cost.",
+    "StructMeans and PST are fit only from verified training experience; held-out operator signatures are excluded from bootstrap/codebook training.",
+    "SECA is evaluated after base retrieval and is not used to rescue single-step routing metrics.",
+    "Post-execution verifier information never enters route()."
+  ],
+  "status": "registered_before_measurement"
+}
