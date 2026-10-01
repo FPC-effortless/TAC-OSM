@@ -180,7 +180,7 @@ def run_c5_arm(
         ranks: list[int] = []
         successes = 0
         for step in part:
-            target = getattr(step.outcome.detail, "target_action", None)
+            target = getattr(step.outcome.detail, "gold_index", None)
             if not isinstance(target, int):
                 continue
             order = sorted(
