@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-M2-CASM-SELECTIVE-009",
-  "version": "0.3.3-final",
+  "version": "0.3.4-final",
   "status": "preregistered",
   "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
   "external_executor": {
@@ -80,7 +80,9 @@
     "verifier_examples_per_task": 12,
     "router_visible_examples_per_task": 4,
     "train_eval_truth_disjoint": true,
-    "executor_training_truth_table_rows_per_program": 16
+    "executor_training_truth_table_rows_per_program": 16,
+    "executor_training_excludes_evaluation_truths": true,
+    "executor_training_excludes_evaluation_structures": true
   },
   "leakage_rules": [
     "Router input contains only public support input/output examples and candidate public structural descriptors.",
@@ -104,7 +106,10 @@
     "primary_estimate": "pooled trial-level semantic success and execution-work fraction",
     "uncertainty": "seed bootstrap 95 percent confidence interval",
     "multiple_comparisons": "descriptive across M and budgets; no global arm winner claim",
-    "training_selection": "no held-out outcome used to choose training hyperparameters or arm"
+    "training_selection": "no held-out outcome used to choose training hyperparameters or arm",
+    "seed_bootstrap_rounds": 4000,
+    "exhaustive_ceiling_floor": 0.8,
+    "primary_eligibility": "No selective retention verdict is interpretable unless pooled exhaustive CASM-S semantic success at the same M is >= 0.80."
   },
   "promotion_rule": [
     "CASM exhaustive capability >= 0.80 on the primary eval condition",
@@ -178,6 +183,18 @@
         "removed the registered random arm because the runner does not independently measure a random control in this experiment"
       ],
       "measurement_started": false
+    },
+    {
+      "version": "0.3.4",
+      "stage": "premeasurement metric and representation hardening",
+      "changes": [
+        "candidate router cost proxy now includes query projection, candidate projection, and similarity work",
+        "primary exhaustive-capability floor is encoded in the result artifact",
+        "seed bootstrap 95 percent CIs are computed for semantic success, routing recall, and execution-work fractions",
+        "matched summary representation uses only public node-local descriptors and derived arity counts",
+        "evaluation target structures and full truth tables are excluded from executor pretraining"
+      ],
+      "measurement_started": false
     }
   ],
   "freeze_rule": {
@@ -239,13 +256,13 @@
       "primary": false
     },
     {
-      "name": "routing_work_units",
-      "role": "query-side routing work",
+      "name": "candidate_representation_routing_work_units",
+      "role": "query-side routing computation diagnostic",
       "primary": false
     },
     {
-      "name": "index_build_work_units",
-      "role": "index/build work diagnostic",
+      "name": "routing_work_units",
+      "role": "query-side routing work",
       "primary": false
     },
     {
