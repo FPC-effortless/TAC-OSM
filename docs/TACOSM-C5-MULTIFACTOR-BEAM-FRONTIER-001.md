@@ -65,5 +65,6 @@ Full-run trigger: [run-c5-multifactor-beam-frontier-full]
 
 ## Operational trigger
 
-The following commit only dispatches the already-registered full measurement;
-it does not change the contract, arms, thresholds, seeds, or analysis rule.
+The commit carrying the registered trigger token only dispatches the already
+registered measurement. It does not change the contract, arms, thresholds,
+seeds, or analysis rule.
