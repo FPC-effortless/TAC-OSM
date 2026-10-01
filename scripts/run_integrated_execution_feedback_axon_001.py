@@ -20,7 +20,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from tac_osm import ModelConfig
+from tac_osm.model import ModelConfig
 from tac_osm.environment import WorldConfig, WorldEnvironment
 from tac_osm.energy_router import EnergyRouterConfig, RepresentationEnergyRouter
 from tac_osm.explicit_executor import ExplicitExecutorConfig, ExplicitGraphExecutor
