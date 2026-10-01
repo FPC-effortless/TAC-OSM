@@ -193,7 +193,7 @@ def make_task_pool(
             target_index=target_idx,
         )
         return task, pool
-    raise RuntimeError(f"failed to construct a support-discriminative task for M={m}")
+    raise RuntimeError(f"failed to construct a valid task pool for M={m}")
 
 
 def make_executor_training_programs(seed: int, *, exclude_role_pair: tuple[str, str] | None = None) -> list[CASMEpisode]:
@@ -392,17 +392,18 @@ def evaluate_router(
         elapsed = (time.perf_counter() - t0) * 1000.0
         ok = True
         for j, (_idx) in enumerate(indices):
-            start = j * SUPPORT_ROWS
-            vals = outputs[start : start + SUPPORT_ROWS]
+            n_verify = len(task.verification_examples)
+            start = j * n_verify
+            vals = outputs[start : start + n_verify]
             expected = [float(y) for _, y in task.verification_examples]
             ok = ok and all((float(v) >= 0.5) == (float(y) >= 0.5) for v, y in zip(vals, expected))
         work = WorkAccounting(0, 0, 0)
         for idx in indices:
             wa = per_candidate_work[idx]
             work = WorkAccounting(
-                work.gate_evaluations + wa.gate_evaluations * SUPPORT_ROWS,
-                work.edge_message_operations + wa.edge_message_operations * SUPPORT_ROWS,
-                work.structural_node_operations + wa.structural_node_operations * SUPPORT_ROWS,
+                work.gate_evaluations + wa.gate_evaluations * len(task.verification_examples),
+                work.edge_message_operations + wa.edge_message_operations * len(task.verification_examples),
+                work.structural_node_operations + wa.structural_node_operations * len(task.verification_examples),
             )
         return ok, work.total, elapsed, {
             "gate_evaluations": work.gate_evaluations,
