@@ -386,7 +386,7 @@ def procedural_phase(seed: int = 7) -> dict[str, object]:
         successes = 0
         for state, goal, _target in composite_rows:
             chosen, _ = router.route(state, goal, library, budget=1)
-            if chosen and chosen[0].execute(state) == goal:
+            if chosen and chosen[0].execute(state, goal) == goal:
                 successes += 1
         return successes / len(composite_rows) if composite_rows else 0.0
 
