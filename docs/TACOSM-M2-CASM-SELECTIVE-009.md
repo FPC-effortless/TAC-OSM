@@ -78,3 +78,14 @@ It would not establish:
 
 A failure can be localized to representation/routing, CASM execution, or verifier/task-interface limitations.
 
+
+
+## Verified persistent experience (secondary)
+
+Task state is addressed through an opaque task ID. The router resolves only the public input/output examples associated with that address.
+
+After execution, only a candidate that satisfies all public task examples under the actual CASM-S executor is eligible for a durable experience write. The stored experience identifies the verified candidate structure, not the evaluator's target ID.
+
+The replay test inserts unrelated task states between an anchor task's first execution and replay. It measures whether verified experience changes Top-1 routing or reduces adaptive CASM execution work.
+
+This is a persistence mechanism test, not a claim of generalization from memorized task identities.
