@@ -11,8 +11,19 @@
   "primary_question": "Does a learned structural representation reduce actual structural execution while preserving capability relative to exhaustive CASM execution?",
   "primary_endpoint": {
     "name": "selective_execution_work_fraction_at_capability",
-    "population_levels": [32, 64, 128, 256, 512],
-    "budgets": [1, 2, 4, 8],
+    "population_levels": [
+      32,
+      64,
+      128,
+      256,
+      512
+    ],
+    "budgets": [
+      1,
+      2,
+      4,
+      8
+    ],
     "capability_floor": 0.8,
     "criterion": "At a population level M, an arm is capability-eligible when selective semantic success divided by exhaustive semantic success is >= 0.80. Report the minimum execution-work fraction among eligible budgets; no winner is selected across representations."
   },
@@ -29,7 +40,12 @@
     "peak_memory_mb",
     "casm_gate_evaluations",
     "casm_structural_node_operations",
-    "casm_edge_message_operations"
+    "casm_edge_message_operations",
+    "verified_experience_write_rate",
+    "replay_top1_before",
+    "replay_top1_after",
+    "replay_adaptive_work_fraction_before",
+    "replay_adaptive_work_fraction_after"
   ],
   "router_arms": {
     "structural_tower": {
@@ -49,7 +65,13 @@
   "data_protocol": {
     "train_programs": 256,
     "training_steps": 1200,
-    "seeds": [0, 1, 2, 3, 4],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
     "support_examples_per_task": 4,
     "fixed_input_count": 4,
     "unique_candidate_truth_tables": true,
@@ -85,5 +107,12 @@
     "selective execution work is measured from actual CASM operations",
     "capability retention and execution work are both reported",
     "no asymptotic scaling claim from finite M"
-  ]
+  ],
+  "persistent_experience": {
+    "task_state": "opaque task address resolves public task examples",
+    "commit_rule": "only candidates that pass all public task examples after actual CASM-S execution can be written as experience",
+    "intervening_writes": "unrelated task records are inserted before anchor replay",
+    "replay_metric": "compare routing and adaptive execution before and after verified experience",
+    "target_id_hidden": true
+  }
 }
