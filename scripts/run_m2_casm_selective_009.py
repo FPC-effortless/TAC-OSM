@@ -225,15 +225,23 @@ def train_casm(seed: int) -> tuple[CASMSAdapter, dict, list[CASMEpisode]]:
     device = torch.device("cpu")
     casm = casm.to(device)
     opt = torch.optim.AdamW(casm.parameters(), lr=2e-3)
+    # Train the executor on the complete 4-input truth table of every program.
+    # This isolates executor learning from the single-runtime-input sampling
+    # that would otherwise make later 12-row semantic verification ambiguous.
     for _epoch in range(EXECUTOR_TRAIN_EPOCHS):
-        order = list(range(len(train)))
-        random.Random(seed * 101 + _epoch).shuffle(order)
+        examples: list[tuple[CASMEpisode, list[int], float]] = []
+        for ep in train:
+            for bits, target in sorted(ep.truth_table.items()):
+                examples.append((ep, list(bits), float(target)))
+        random.Random(seed * 101 + _epoch).shuffle(examples)
         casm.train()
-        for start in range(0, len(order), EXECUTOR_BATCH):
-            batch = [train[i] for i in order[start : start + EXECUTOR_BATCH]]
-            runtime = [list(ep.input_values) for ep in batch]
+        for start in range(0, len(examples), EXECUTOR_BATCH):
+            chunk = examples[start : start + EXECUTOR_BATCH]
+            batch = [row[0] for row in chunk]
+            runtime = [row[1] for row in chunk]
+            targets = [row[2] for row in chunk]
             x = torch.tensor(runtime, dtype=torch.float32, device=device)
-            target = torch.tensor([ep.target for ep in batch], dtype=torch.float32, device=device)
+            target = torch.tensor(targets, dtype=torch.float32, device=device)
             pred, _g, _meta = casm(batch, x)
             loss = nn.functional.mse_loss(pred, target)
             opt.zero_grad(set_to_none=True)
@@ -564,6 +572,16 @@ def persistence_replay_experiment(
     }
 
 
+def load_final_contract() -> dict:
+    import json
+    p = ROOT / "contracts" / "TACOSM-M2-CASM-SELECTIVE-009.json"
+    raw = json.loads(p.read_text())
+    from tac_osm.contract import load_contract
+    contract = load_contract("TACOSM-M2-CASM-SELECTIVE-009", path=p)
+    contract.primary_endpoint()
+    return raw
+
+
 def provenance_snapshot() -> dict[str, object]:
     import hashlib
     import platform
@@ -580,14 +598,22 @@ def provenance_snapshot() -> dict[str, object]:
 
 
 def main() -> None:
+    contract = load_final_contract()
+    registered_m = tuple(int(x) for x in contract["h_levels"])
+    registered_seeds = tuple(int(x) for x in contract["seeds"])
+    registered_budgets = tuple(int(x) for x in contract["k_levels"])
+    if tuple(M_LEVELS) != registered_m or tuple(SEEDS) != registered_seeds or tuple(BUDGETS) != registered_budgets:
+        raise RuntimeError("M2 implementation constants do not match the final preregistered contract")
+    if contract["steps"] != ROUTER_STEPS or contract["eval_steps"] != EVAL_TASKS_PER_SEED_M:
+        raise RuntimeError("M2 training/evaluation schedule does not match the final preregistration")
     parser = argparse.ArgumentParser()
     parser.add_argument("--smoke", action="store_true")
     parser.add_argument("--output", default="artifacts/TACOSM-M2-CASM-SELECTIVE-009.json")
     args = parser.parse_args()
 
-    seeds = (0,) if args.smoke else SEEDS
-    m_levels = (32, 64) if args.smoke else M_LEVELS
-    tasks_per_m = 2 if args.smoke else EVAL_TASKS_PER_SEED_M
+    seeds = (0,) if args.smoke else list(contract["seeds"])
+    m_levels = (32, 64) if args.smoke else list(contract["h_levels"])
+    tasks_per_m = 2 if args.smoke else int(contract["eval_steps"])
 
     all_results = {"structural": {}, "summary": {}}
     executor_meta = {}
