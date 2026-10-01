@@ -377,7 +377,10 @@ def router_parameter_count(router: nn.Module) -> int:
 def router_query_mac_proxy(m: int) -> int:
     input_dim = SUPPORT_ROWS * (INPUT_COUNT + 1)
     hidden = 64
-    return input_dim * hidden + hidden * LATENT_DIM + m * LATENT_DIM
+    query_projection = input_dim * hidden + hidden * LATENT_DIM
+    candidate_projection = m * LATENT_DIM * LATENT_DIM
+    similarities = m * LATENT_DIM
+    return query_projection + candidate_projection + similarities
 
 
 def query_vector(examples: Sequence[tuple[tuple[int, ...], int]]) -> list[float]:
@@ -542,7 +545,7 @@ def evaluate_router(
         "rank": rank,
         "routing_recall": {str(b): float(rank <= b) for b in BUDGETS},
         "routing_query_mac_proxy": router_query_mac_proxy(len(candidates)),
-        "candidate_index_build_mac_proxy": len(candidates) * 32 * LATENT_DIM,
+        "candidate_representation_routing_mac_proxy": router_query_mac_proxy(len(candidates)),
         "verifier_examples": len(task.verification_examples),
         "exhaustive": {
             "semantic_success": float(ex_ok),
@@ -552,6 +555,26 @@ def evaluate_router(
         },
         "budgets": budgets,
     }
+
+
+def bootstrap_mean_ci(values: Sequence[float], *, seed: int, rounds: int = 4000) -> tuple[float, float]:
+    if not values:
+        return (0.0, 0.0)
+    if len(values) == 1:
+        x = float(values[0])
+        return (x, x)
+    rng = random.Random(seed)
+    n = len(values)
+    samples = []
+    for _ in range(rounds):
+        total = 0.0
+        for _j in range(n):
+            total += float(values[rng.randrange(n)])
+        samples.append(total / n)
+    samples.sort()
+    lo = samples[int(0.025 * (rounds - 1))]
+    hi = samples[int(0.975 * (rounds - 1))]
+    return float(lo), float(hi)
 
 
 def aggregate(seed_results: dict) -> dict:
@@ -565,29 +588,88 @@ def aggregate(seed_results: dict) -> dict:
             pooled_ex = sum(int(t["exhaustive"]["semantic_success"]) for t in all_trials)
             n = len(all_trials)
             ex_rate = pooled_ex / max(1, n)
+            ceiling_pass = ex_rate >= 0.80
             out[representation][str(m)] = {
                 "trials": n,
                 "exhaustive_success": ex_rate,
+                "exhaustive_ceiling_pass": ceiling_pass,
                 "budgets": {},
             }
             ex_work_total = sum(t["exhaustive"]["execution_work_units"] for t in all_trials)
             for b in BUDGETS:
+                sem_values = [
+                    sum(t["budgets"][str(b)]["semantic_success"] for t in by_seed_row["trials"]) / max(1, len(by_seed_row["trials"]))
+                    for by_seed_row in rows
+                ]
+                adapt_values = [
+                    sum(t["budgets"][str(b)]["adaptive_semantic_success"] for t in by_seed_row["trials"]) / max(1, len(by_seed_row["trials"]))
+                    for by_seed_row in rows
+                ]
+                route_values = [
+                    sum(t["budgets"][str(b)]["routing_recall"] for t in by_seed_row["trials"]) / max(1, len(by_seed_row["trials"]))
+                    for by_seed_row in rows
+                ]
+                work_values = [
+                    sum(t["budgets"][str(b)]["fixed_budget_execution_work_units"] for t in by_seed_row["trials"])
+                    / max(1, sum(t["exhaustive"]["execution_work_units"] for t in by_seed_row["trials"]))
+                    for by_seed_row in rows
+                ]
+                adapt_work_values = [
+                    sum(t["budgets"][str(b)]["adaptive_execution_work_units"] for t in by_seed_row["trials"])
+                    / max(1, sum(t["exhaustive"]["execution_work_units"] for t in by_seed_row["trials"]))
+                    for by_seed_row in rows
+                ]
                 sem = sum(t["budgets"][str(b)]["semantic_success"] for t in all_trials) / max(1, n)
                 adapt = sum(t["budgets"][str(b)]["adaptive_semantic_success"] for t in all_trials) / max(1, n)
                 route = sum(t["budgets"][str(b)]["routing_recall"] for t in all_trials) / max(1, n)
                 work = sum(t["budgets"][str(b)]["fixed_budget_execution_work_units"] for t in all_trials)
                 adapt_work = sum(t["budgets"][str(b)]["adaptive_execution_work_units"] for t in all_trials)
+                retention = sem / ex_rate if ex_rate > 0 else None
+                adapt_retention = adapt / ex_rate if ex_rate > 0 else None
+                primary_eligible = bool(ceiling_pass and retention is not None and retention >= 0.80)
                 out[representation][str(m)]["budgets"][str(b)] = {
                     "routing_recall": route,
                     "semantic_success": sem,
                     "adaptive_semantic_success": adapt,
-                    "capability_retention_vs_exhaustive": sem / ex_rate if ex_rate > 0 else None,
-                    "adaptive_capability_retention_vs_exhaustive": adapt / ex_rate if ex_rate > 0 else None,
+                    "capability_retention_vs_exhaustive": retention,
+                    "adaptive_capability_retention_vs_exhaustive": adapt_retention,
+                    "exhaustive_ceiling_pass": ceiling_pass,
+                    "primary_eligible": primary_eligible,
                     "execution_work_fraction": work / max(1, ex_work_total),
                     "adaptive_execution_work_fraction": adapt_work / max(1, ex_work_total),
+                    "seed_bootstrap_95ci_semantic_success": bootstrap_mean_ci(sem_values, seed=8009 + m * 17 + b),
+                    "seed_bootstrap_95ci_execution_work_fraction": bootstrap_mean_ci(work_values, seed=8011 + m * 17 + b),
+                    "seed_bootstrap_95ci_adaptive_work_fraction": bootstrap_mean_ci(adapt_work_values, seed=8013 + m * 17 + b),
+                    "seed_bootstrap_95ci_routing_recall": bootstrap_mean_ci(route_values, seed=8017 + m * 17 + b),
                 }
+            eligible = [
+                (b, row)
+                for b, row in out[representation][str(m)]["budgets"].items()
+                if row["primary_eligible"]
+            ]
+            out[representation][str(m)]["primary_endpoint"] = (
+                {
+                    "eligible": True,
+                    "best_budget_by_execution_work_fraction": min(
+                        eligible, key=lambda br: (
+                            br[1]["execution_work_fraction"],
+                            int(br[0]),
+                        ),
+                    )[0],
+                    "min_execution_work_fraction": min(
+                        row["execution_work_fraction"] for _, row in eligible
+                    ),
+                }
+                if eligible else {
+                    "eligible": False,
+                    "reason": (
+                        "exhaustive_casm_ceiling_below_0.80"
+                        if not ceiling_pass
+                        else "no_registered_budget_reached_0.80_capability_retention"
+                    ),
+                }
+            )
     return out
-
 
 def persistence_replay_experiment(
     seed: int,
