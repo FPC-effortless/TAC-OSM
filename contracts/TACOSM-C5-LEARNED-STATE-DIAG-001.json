@@ -1,0 +1,55 @@
+{
+  "experiment_id":"TACOSM-C5-LEARNED-STATE-DIAG-001",
+  "title":"Continuous versus binary retrieval diagnosis for learned state addressing",
+  "question":"Does the failure of the learned binary state index arise primarily from the learned semantic representation or from continuous-to-binary quantization and bucket probing?",
+  "hypothesis":"H_diag: if the same trained encoder recovers held-out targets with continuous exhaustive scoring but the binary index does not, the dominant failure boundary is the discrete index; if both continuous and binary retrieval are poor, the learned representation is the limiting boundary.",
+  "arms":[
+    {"name":"no_learning_continuous","intervention":"random frozen dual encoder with continuous exhaustive state scoring","acts_on":"representation baseline"},
+    {"name":"learned_continuous","intervention":"trained dual encoder with continuous exhaustive state scoring","acts_on":"learned semantic representation"},
+    {"name":"learned_binary","intervention":"same trained encoder with 8-bit sign quantization, radius-1 bucket probing and K=1","acts_on":"quantization and indexed retrieval"}
+  ],
+  "endpoints":[
+    {"name":"target_top1_recall","role":"primary — correct persistent state selected","primary":true},
+    {"name":"query_macs","role":"audit — learned query encoder arithmetic","primary":false},
+    {"name":"continuous_state_score_macs","role":"audit — continuous exhaustive scoring arithmetic per query","primary":false},
+    {"name":"binary_probe_count","role":"audit — binary index dictionary probes per query","primary":false},
+    {"name":"binary_build_macs","role":"audit — one-time state embedding arithmetic","primary":false},
+    {"name":"continuous_target_rank","role":"secondary — rank of correct state under continuous scoring","primary":false}
+  ],
+  "decision_rule":[
+    {
+      "condition":"learned_continuous recall exceeds no_learning_continuous recall and learned_binary recall is at least 0.20 below learned_continuous recall",
+      "licenses":"the current learned model contains usable semantic signal, while the registered binary retrieval boundary materially loses that signal",
+      "does_not_license":"general learned indexing or semantic memory"
+    },
+    {
+      "condition":"learned_continuous recall does not exceed no_learning_continuous recall",
+      "licenses":"the current learned representation does not demonstrate held-out semantic state retrieval under the registered continuous scoring test",
+      "does_not_license":"that learned semantic addressing is impossible"
+    },
+    {
+      "condition":"learned_continuous recall exceeds no_learning_continuous recall and learned_binary recall is within 0.20 of learned_continuous recall",
+      "licenses":"the observed C5-LEARNED-STATE-001 loss is not primarily explained by the registered binary quantization boundary",
+      "does_not_license":"sublinear learned retrieval"
+    }
+  ],
+  "interpretation_order":["temporal availability","continuous representation retrieval","binary retrieval","retrieval gap","arithmetic cost"],
+  "h_levels":[64],
+  "k_levels":[1],
+  "seeds":[0,1,2,3,4],
+  "steps":32,
+  "eval_steps":100,
+  "held_constant":[
+    "M=64 persistent state items",
+    "one-step causal write/read delay",
+    "training codes CODEBOOK[16:64]",
+    "evaluation codes CODEBOOK[:16]",
+    "same dual linear 10->8 encoder and 32-epoch training as C5-LEARNED-STATE-001",
+    "same H-invariant query/state generation amendment A1",
+    "binary arm uses the exact learned index parameters from C5-LEARNED-STATE-001",
+    "no evaluation address or gold target enters training",
+    "prior C5 and REP evidence remains frozen"
+  ],
+  "status":"pre-registered",
+  "layer":"L3"
+}

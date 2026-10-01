@@ -72,12 +72,22 @@ class Candidate:
     ``provenance`` is the field that lets an integration repo keep research
     dependencies without collapsing their origins: a candidate knows whether
     it came from a CASM DAG, a CDL memory, or an oracle.
+
+    ``executable_edges`` is deliberately candidate-local. It makes the
+    executable program explicit at the candidate boundary so a router is not
+    asked to infer hidden wiring from node-local observables. It contains no
+    target/gold field and is optional for legacy descriptor-only candidates.
     """
 
     key: str
     descriptor: tuple[int, ...]
     action: int = 0
     provenance: str = "synthetic"
+    # Optional candidate-owned executable topology. This is the program the
+    # candidate proposes to execute, not a gold label. Routing may inspect it
+    # in tasks where program identity is part of the observable candidate.
+    # Each entry is an (src, dst, port) triple matching executor.Edge.
+    executable_edges: tuple[tuple[int, int, int], ...] = ()
 
 
 @dataclass(frozen=True)
