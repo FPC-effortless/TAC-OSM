@@ -93,6 +93,7 @@ def evaluate_seed(seed: int, router: BinaryCDL):
             "dense_top1": dense_top1,
             "address_raw_candidates": address.raw_candidates,
             "address_candidate_count": address.candidates_scored,
+            "address_entries_touched": address.entries_touched,
             "address_lookups": address.index_lookups,
             "address_full_scan_fallback": address.used_full_scan_fallback,
             "address_target_admitted": address.target_admitted,
@@ -212,8 +213,8 @@ def main():
             "fast_lr": 0.10,
         },
         "cost_accounting": {
-            "address_proxy": "index_lookups + candidates_scored",
-            "raw_address_population": "raw candidates before admission cap",
+            "address_proxy": "index_lookups + raw_candidates + candidates_scored",
+            "raw_address_population": "raw candidates before admission cap; charged once in address proxy",
             "execution_cost": "operator steps actually attempted before verification",
             "total_cost_proxy": "address proxy + execution cost",
             "future_requirement": "wall-clock + memory + I/O on compute-backed benchmark",
