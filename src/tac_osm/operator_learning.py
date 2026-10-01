@@ -27,6 +27,8 @@ __all__ = [
     "ExperienceStore",
     "SparseOperatorRouter",
     "SECAEngine",
+    "LoopUpdate",
+    "VerifiedOperatorLoop",
     "apply_operator",
 ]
 
@@ -373,6 +375,122 @@ class SparseOperatorRouter:
         scored.sort(key=lambda pair: (pair[1], pair[0].name))
         return tuple(op for op, _ in scored[:budget]), scored
 
+
+@dataclass(frozen=True)
+class LoopUpdate:
+    ingested: bool
+    pst_accuracy: float
+    structure_purity: float
+    operator_count: int
+    novel_operator_count: int
+
+
+class VerifiedOperatorLoop:
+    """One auditable experience -> operator -> verification learning loop.
+
+    The loop deliberately separates post-execution observation from routing.
+    A caller first supplies a verified TransitionRecord. That record is the
+    only durable learning input. Rebuild then updates PST, StructMeans and
+    AXON; SECA may propose new bound compositions and retains only those that
+    agree with an independently supplied verifier/reference.
+    """
+
+    def __init__(
+        self,
+        kinds: Sequence[str],
+        *,
+        structmeans_k: int,
+        structmeans_seed: int = 0,
+        axon_min_support: int = 4,
+    ) -> None:
+        if not kinds:
+            raise ValueError("kinds must not be empty")
+        self.kinds = tuple(kinds)
+        self.store = ExperienceStore()
+        self.pst = PSTLearner(self.kinds)
+        self.structmeans = StructMeans(
+            structmeans_k, self.kinds, seed=structmeans_seed
+        )
+        self.axon = FixedAXONConsolidator(min_support=axon_min_support)
+        self.seca = SECAEngine()
+        self.macros: tuple[MacroOperator, ...] = ()
+        self.novel_macros: tuple[MacroOperator, ...] = ()
+
+    @property
+    def library(self) -> tuple[MacroOperator, ...]:
+        return self.macros + self.novel_macros
+
+    def ingest(self, record: TransitionRecord) -> bool:
+        committed = self.store.append(record)
+        if committed:
+            self.rebuild()
+        return committed
+
+    def ingest_many(self, records: Iterable[TransitionRecord]) -> int:
+        committed = sum(self.store.append(record) for record in records)
+        if committed:
+            self.rebuild()
+        return committed
+
+    def rebuild(self) -> LoopUpdate:
+        if not self.store.records:
+            self.macros = ()
+            self.novel_macros = ()
+            return LoopUpdate(False, 0.0, 0.0, 0, 0)
+
+        self.pst = self.store.reconstruct_pst(self.kinds)
+        self.structmeans.fit(self.store.records)
+        self.macros = self.axon.consolidate(self.store.records)
+        return LoopUpdate(
+            ingested=True,
+            pst_accuracy=self.pst.transition_accuracy(self.store.records),
+            structure_purity=self.structmeans.signature_purity(self.store.records),
+            operator_count=len(self.macros),
+            novel_operator_count=len(self.novel_macros),
+        )
+
+    def route(
+        self,
+        state: Sequence[int],
+        goal: Sequence[int],
+        *,
+        budget: int = 1,
+    ) -> tuple[tuple[MacroOperator, ...], list[tuple[MacroOperator, int]]]:
+        router = SparseOperatorRouter(self.pst)
+        return router.route(state, goal, self.library, budget=budget)
+
+    def discover(
+        self,
+        states: Sequence[tuple[int, ...]],
+        reference,
+        *,
+        max_pairs: int = 32,
+    ) -> tuple[MacroOperator, ...]:
+        proposals = self.seca.propose(self.macros, max_pairs=max_pairs)
+        accepted = self.seca.verify(proposals, states, reference)
+        existing = {m.name for m in self.novel_macros}
+        fresh = tuple(m for m in accepted if m.name not in existing)
+        self.novel_macros = self.novel_macros + fresh
+        return fresh
+
+    def step(
+        self,
+        record: TransitionRecord,
+        *,
+        discovery_states: Sequence[tuple[int, ...]] = (),
+        reference=None,
+    ) -> LoopUpdate:
+        self.ingest(record)
+        novel = ()
+        if discovery_states and reference is not None:
+            novel = self.discover(discovery_states, reference)
+        return LoopUpdate(
+            ingested=True,
+            pst_accuracy=self.pst.transition_accuracy(self.store.records),
+            structure_purity=self.structmeans.signature_purity(self.store.records),
+            operator_count=len(self.macros),
+            novel_operator_count=len(self.novel_macros),
+        )
 
 class SECAEngine:
     """Generate novel operator compositions and retain verified ones."""
