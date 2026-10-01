@@ -97,7 +97,9 @@ Primary evaluation targets are disjoint from router training in both exact progr
 
 ## Final preregistration freeze
 
-Contract version: `0.3-final`.
+Contract version: `0.3.1-final`.
+
+Amendment 0.3.1 repaired only the JSON shape to satisfy the repository-native `ExperimentContract` schema after a premeasurement smoke failure. No scientific endpoint, arm, population, seed, budget, or leakage rule changed.
 
 All protocol changes listed in the contract amendment history occurred before measurement began. The measurement commit must be tree-identical to this final registration. Any later protocol change constitutes a new experiment identifier rather than an amendment to this run.
 
