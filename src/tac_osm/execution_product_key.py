@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from typing import Sequence
 
 from . import Candidate, Outcome, PersistentState, Query, RoutingDecision, VerificationResult
+from .energy_router import EnergyRouterConfig
 from .execution_feedback import VerifierDrivenEnergyRouter
 from .multifactor_product_key_index import (
     MultiFactorProductKeyConfig,
@@ -51,7 +52,7 @@ class ExecutionFeedbackProductKeyRouter:
         if refresh_interval_updates < 1:
             raise ValueError("refresh_interval_updates must be positive")
         self.representation = VerifierDrivenEnergyRouter(
-            config=__import__("tac_osm.energy_router", fromlist=["EnergyRouterConfig"]).EnergyRouterConfig(
+            config=EnergyRouterConfig(
                 input_dim=input_dim,
                 latent_dim=latent_dim,
                 learning_rate=learning_rate,
