@@ -1,0 +1,90 @@
+{
+  "experiment_id": "TACOSM-C5-FULL-PHASE-001",
+  "title": "Full C5 fused loop: rank scaling, conformal K, OR-LSH admission, CASM-K execution, verifier, and closed-loop learning",
+  "question": "Can a dense outcome-trained CDL Q/K shortlister support calibrated bounded-K admission so exact CASM execution and verification decouple final correctness from M?",
+  "hypothesis": [
+    "The exhaustive target-rank distribution grows sublinearly with population M on the registered state-addressing workload.",
+    "Split-conformal calibration yields a held-out K(M,alpha) with empirical coverage near the requested level.",
+    "OR-over-tables random-hyperplane admission can retain the target with materially fewer reranked candidates than M when p1 is high and p2 is near 0.5.",
+    "Exact CASM execution plus a post-execution verifier makes conditional selection accuracy substantially higher than raw CDL Top-1 precision.",
+    "Verified candidates written to the experience namespace improve subsequent routing without contaminating world state."
+  ],
+  "held_constant": [
+    "dim=16, exact equality relation over all bits",
+    "fresh target code each training step",
+    "training M sampled log-uniformly in [8,256]",
+    "evaluation at 8..1024, including 512 and 1024 extrapolation",
+    "candidate action/index never enters routing features",
+    "CASM routing/execution information boundary",
+    "verifier receives no hidden target index"
+  ],
+  "gates": [
+    "CASM exhaustive verifier success must be exactly one candidate per valid trial",
+    "No router input may contain target_index or acceptable_actions",
+    "Target codes must be unique within each population",
+    "Persistent world writes become visible only after a one-step temporal boundary"
+  ],
+  "endpoints": [
+    "oracle_persistent_success",
+    "oracle_reset_success",
+    "mean_target_rank",
+    "p90_target_rank",
+    "p95_target_rank",
+    "rank_scaling_exponent_gamma",
+    "conformal_K_90",
+    "conformal_K_95",
+    "conformal_empirical_coverage_90",
+    "conformal_empirical_coverage_95",
+    "p1",
+    "p2",
+    "rho",
+    "lsh_tables",
+    "candidate_rerank_fraction",
+    "CASM_executed_candidates",
+    "verifier_selection_given_admission",
+    "overall_sparse_success",
+    "experience_commit_rate",
+    "online_first_attempt_success",
+    "online_final_success"
+  ],
+  "capability_rule": "Do not claim sublinear addressing unless measured routing work exponent is <1 and no table cap binds. Do not claim high absolute capability from retention alone.",
+  "coverage_rule": "Report calibrated K and empirical held-out coverage separately; conformal guarantee is conditional on exchangeability.",
+  "execution_rule": "CASM execution count must equal the number of admitted candidates and be bounded by calibrated K.",
+  "non_claims": [
+    "synthetic equality state-addressing does not establish language-level semantic retrieval",
+    "arithmetic MACs are not hardware wall-clock speedups",
+    "index build cost is reported separately from query cost",
+    "online learning results are descriptive unless preregistered causal interventions isolate the update"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "train_steps": 600,
+  "calibration_trials": 64,
+  "eval_trials": 64,
+  "online_trials": 96,
+  "train_M": [
+    8,
+    256
+  ],
+  "eval_M": [
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024
+  ],
+  "alpha": [
+    0.1,
+    0.05
+  ],
+  "index": "OR-over-tables random hyperplane LSH",
+  "shortlist_policy": "K is obtained from held-out exhaustive target-rank calibration; no beam sweep is used to choose K"
+}\n
