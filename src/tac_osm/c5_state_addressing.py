@@ -103,6 +103,7 @@ class C5PersistentStateAdmission:
 
         self._indexes: dict[int, ORLSHIndex] = {}
         self._states: dict[int, TypedPersistentState] = {}
+        self._tables: dict[int, int] = {}
 
     def _trial(self, seed: int, *, step: int, m: int):
         from .c5_noisy_full_phase import make_trial
@@ -119,7 +120,7 @@ class C5PersistentStateAdmission:
         tables: int,
         seed_suffix: int = 0,
     ) -> ORLSHIndex:
-        candidates = build_population_extended(self.seed + m + seed_suffix, m)
+        candidates = build_population_extended(self.seed + m, m)
         index = ORLSHIndex(
             latent_dim=16,
             bits=max(1, math.ceil(math.log2(m))),
@@ -165,7 +166,6 @@ class C5PersistentStateAdmission:
         self._tables[m] = tables
         return state, index, tables
 
-    _tables: dict[int, int] = {}
 
     def lookup(
         self,
