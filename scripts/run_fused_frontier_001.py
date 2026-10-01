@@ -550,10 +550,27 @@ def main() -> None:
     consolidation_rows = [run["consolidation"] for run in runs]
     pooled_consolidation = {
         "regm_verified_records": statistics.fmean(float(x["regm_verified_records"]) for x in consolidation_rows),
-        "pst_reconstruction_accuracy": statistics.fmean(float(x["pst_reconstruction_accuracy"]) for x in consolidation_rows),
-        "structmeans_kind_purity": statistics.fmean(float(x["structmeans_kind_purity"]) for x in consolidation_rows),
-        "structmeans_signature_purity": statistics.fmean(float(x["structmeans_signature_purity"]) for x in consolidation_rows),
-        "structmeans_compression_ratio": statistics.fmean(float(x["structmeans_compression_ratio"]) for x in consolidation_rows),
+        "pst_reconstruction_accuracy_heldout_signature": statistics.fmean(
+            float(x["pst_reconstruction_accuracy_heldout_signature"]) for x in consolidation_rows
+        ),
+        "structmeans_kind_purity_train": statistics.fmean(
+            float(x["structmeans_kind_purity_train"]) for x in consolidation_rows
+        ),
+        "structmeans_kind_purity_heldout_signature": statistics.fmean(
+            float(x["structmeans_kind_purity_heldout_signature"]) for x in consolidation_rows
+        ),
+        "structmeans_signature_purity_train": statistics.fmean(
+            float(x["structmeans_signature_purity_train"]) for x in consolidation_rows
+        ),
+        "structmeans_signature_purity_heldout_signature": statistics.fmean(
+            float(x["structmeans_signature_purity_heldout_signature"]) for x in consolidation_rows
+        ),
+        "structmeans_compression_ratio_train": statistics.fmean(
+            float(x["structmeans_compression_ratio_train"]) for x in consolidation_rows
+        ),
+        "structmeans_compression_ratio_heldout_signature": statistics.fmean(
+            float(x["structmeans_compression_ratio_heldout_signature"]) for x in consolidation_rows
+        ),
         "axon_macros": statistics.fmean(float(x["axon_macros"]) for x in consolidation_rows),
         "axon_bound_reuse_accuracy": statistics.fmean(float(x["axon_bound_reuse_accuracy"]) for x in consolidation_rows),
     }
