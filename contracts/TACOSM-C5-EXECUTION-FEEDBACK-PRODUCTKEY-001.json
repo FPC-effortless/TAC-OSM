@@ -83,5 +83,32 @@
     "results on this synthetic workload do not establish universal reasoning"
   ],
   "status": "pre-registered",
-  "layer": "L5"
+  "layer": "L5",
+  "decision_rule": [
+    {
+      "condition": "Compare all three arms at every registered M; report primary and diagnostic endpoints without selecting an outcome-dependent best arm.",
+      "licenses": "a workload-specific comparison of learning signal and routing mechanism.",
+      "does_not_license": "universal routing improvement, asymptotic scaling, or hardware speedup."
+    },
+    {
+      "condition": "A sparse arm may be called compute-efficient only when its measured inference routing work and build/amortization assumptions are both explicitly reported.",
+      "licenses": "the measured cost decomposition for this workload.",
+      "does_not_license": "sublinear addressing unless routing work grows sublinearly with M."
+    }
+  ],
+  "interpretation_order": [
+    "eval_top1_recall",
+    "proposal_admission_recall",
+    "conditional_selection_given_admission",
+    "mean_target_rank",
+    "state_candidates_scored_mean",
+    "states_scored_over_M",
+    "factor_score_macs_mean",
+    "state_rerank_macs_mean",
+    "amortized_build_macs_per_query"
+  ],
+  "h_levels": [
+    256
+  ],
+  "steps": 900
 }
