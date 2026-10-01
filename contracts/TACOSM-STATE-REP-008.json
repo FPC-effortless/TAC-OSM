@@ -1,0 +1,37 @@
+{
+  "experiment_id": "TACOSM-STATE-REP-008",
+  "title": "Exact semantic state-index query-time ceiling",
+  "question": "How much query-time state-addressing work can be removed by precomputing an exact semantic index over a fixed persistent state pool?",
+  "hypothesis": "H_index_ceiling: exact precomputation can preserve state-addressing recall while replacing the O(M) learned scan with O(1) query-time lookup, at the cost of O(M) index construction.",
+  "arms": [
+    {"name":"exact_index","intervention":"build an exact semantic signature -> address inverted index once before repeated queries","acts_on":"persistent state addressing"},
+    {"name":"full_scan","intervention":"scan all state items with the REP-006 bilinear addressor on every query","acts_on":"persistent state addressing"}
+  ],
+  "endpoints": [
+    {"name":"state_top1_recall","role":"primary — exact target-address retrieval","primary":true},
+    {"name":"index_build_reads","role":"secondary — one-time state reads used to construct the index","primary":false},
+    {"name":"query_operations","role":"secondary — query-time dictionary operations","primary":false},
+    {"name":"scan_macs","role":"audit — full-scan learned address arithmetic","primary":false},
+    {"name":"amortized_build_reads_per_query","role":"secondary — index construction amortized over repeated queries","primary":false}
+  ],
+  "decision_rule": [
+    {"condition":"exact_index state_top1_recall equals 1.0 and full_scan state_top1_recall equals 1.0","licenses":"the exact index is a valid upper-bound ceiling for query-time state-addressing cost on the registered synthetic task","does_not_license":"learned semantic indexing"},
+    {"condition":"exact_index fails to preserve recall","licenses":"the exact-index construction is invalid for the registered task","does_not_license":"anything about learned state addressing"}
+  ],
+  "interpretation_order": ["index correctness","recall preservation","build cost","query cost","amortization"],
+  "h_levels": [2,4,8,16,32],
+  "seeds": [0,1,2,3,4],
+  "steps": 256,
+  "eval_steps": 256,
+  "held_constant": [
+    "same REP-006 semantic state task construction and opaque addresses",
+    "one persistent state pool is built once and queried repeatedly 256 times",
+    "M denotes state-item population",
+    "full scan uses the existing bilinear semantic addressor without learning",
+    "index is exact and deterministic; no learned parameters are introduced",
+    "candidate program routing is excluded from this ceiling measurement",
+    "C5 and prior REP evidence remain frozen"
+  ],
+  "status": "pre-registered",
+  "layer": "L2"
+}

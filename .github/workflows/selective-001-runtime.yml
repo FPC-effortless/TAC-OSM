@@ -1,0 +1,50 @@
+name: TACOSM-SELECTIVE-001 runtime boundary
+
+on:
+  push:
+    branches: [research/selective-001-runtime]
+    paths:
+      - "src/tac_osm/**"
+      - "scripts/measure_selective_scaling.py"
+      - "contracts/TACOSM-SELECTIVE-001.json"
+      - "docs/TACOSM-SELECTIVE-001.md"
+      - ".github/workflows/selective-001-runtime.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  selective:
+    name: TACOSM-SELECTIVE-001
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+          if git diff --name-only origin/master...HEAD | grep -E 'C5-001|C5-002|C5-003'; then
+            echo "Frozen C5 evidence changed; SELECTIVE-001 is invalid."
+            exit 1
+          fi
+      - name: Run registered selective boundary
+        run: |
+          mkdir -p artifacts
+          python scripts/measure_selective_scaling.py > artifacts/SELECTIVE-001.stdout.json
+          cat artifacts/SELECTIVE-001.stdout.json
+      - name: Upload measurement
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-SELECTIVE-001
+          path: artifacts/
+          if-no-files-found: error

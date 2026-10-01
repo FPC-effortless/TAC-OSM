@@ -1,0 +1,51 @@
+name: C5 execution subset boundary
+
+on:
+  push:
+    branches: [research/c5-exec-subset-001]
+    paths:
+      - "src/tac_osm/**"
+      - "tests/**"
+      - "scripts/run_c5_exec_subset_001.py"
+      - "docs/TACOSM-C5-EXEC-001.md"
+      - "contracts/TACOSM-C5-EXEC-001.json"
+      - ".github/workflows/c5-exec-subset-001.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  c5-exec:
+    name: TACOSM-C5-EXEC-001
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+          if git diff --name-only origin/master...HEAD | grep -E 'C5-001|C5-002|C5-003'; then
+            echo "Frozen C5 evidence changed; C5-EXEC-001 is invalid."
+            exit 1
+          fi
+      - name: Run registered execution-subset experiment
+        run: |
+          mkdir -p artifacts
+          python scripts/run_c5_exec_subset_001.py > artifacts/C5-EXEC-001.stdout.json
+          cat artifacts/C5-EXEC-001.stdout.json
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-C5-EXEC-001
+          path: artifacts/
+          if-no-files-found: error
