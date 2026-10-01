@@ -335,3 +335,15 @@ The current code does not reject this configuration explicitly.
 The research prose sometimes treats this as total routing/computation cost.
 
 **Correction:** report router feature/similarity operations separately and include them in the end-to-end query cost ledger. Keep the current number as an index-plus-candidate-count proxy.
+
+### A18 — Corrected-audit dense routing cost previously omitted encoding work (P1)
+
+The first implementation of the audit runner recorded only latent-space similarity work `M * d`. Full dense routing also performs query encoding and candidate encoding.
+
+**Correction:** the authoritative audit runner now records query encoding, candidate encoding, and similarity operations separately and sums all three for the dense query-side routing metric.
+
+### A19 — Train/evaluation target identity overlap required an explicit guard (P1)
+
+Even with unique candidates, a target descriptor seen during training can be memorized by the descriptor encoder and recur at evaluation. This is especially important because the candidate encoder receives the descriptor directly.
+
+**Correction:** the authoritative audit runner records all training target descriptors and rejects evaluation samples whose target descriptor was observed during training. The structural holdout additionally excludes the declared training support family. This separates structural generalization from exact target-identity memorization.
