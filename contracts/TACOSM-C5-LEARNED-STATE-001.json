@@ -1,0 +1,126 @@
+{
+  "experiment_id": "TACOSM-C5-LEARNED-STATE-001",
+  "title": "Learned semantic coarse indexing for persistent-state retrieval",
+  "question": "Can a learned semantic representation replace the hand-designed persistent-state index while preserving capability on held-out noisy queries and keeping the retained state shortlist bounded?",
+  "hypothesis": "H_learned_index: a dual linear semantic encoder trained only on disjoint training codes will retrieve the correct persistent state item through a compact binary bucket index on the held-out evaluation codes, with indexed capability no worse than 0.05 below exhaustive at every registered H and seed.",
+  "arms": [
+    {
+      "name": "exhaustive",
+      "intervention": "scan all M=64 persistent state items and execute the exact candidate path",
+      "acts_on": "state addressing",
+      "knob": "M",
+      "value": "64"
+    },
+    {
+      "name": "learned_selective",
+      "intervention": "learned semantic dual encoder, binary bucket index, bounded Hamming probes, exact candidate index, execute four retained programs",
+      "acts_on": "state addressing and candidate retention",
+      "knob": "shortlist_k",
+      "value": "1"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "success_rate",
+      "role": "primary — aggregate output matches hidden environment truth",
+      "primary": true
+    },
+    {
+      "name": "state_target_retention",
+      "role": "secondary — correct state address survives learned index",
+      "primary": false
+    },
+    {
+      "name": "shortlist_size",
+      "role": "secondary — learned index retained-state population",
+      "primary": false
+    },
+    {
+      "name": "query_probes",
+      "role": "secondary — learned binary-index probes",
+      "primary": false
+    },
+    {
+      "name": "query_embedding_macs",
+      "role": "secondary — learned query encoder arithmetic",
+      "primary": false
+    },
+    {
+      "name": "build_embedding_macs",
+      "role": "secondary — one-time state encoder arithmetic",
+      "primary": false
+    },
+    {
+      "name": "candidate_executor_work",
+      "role": "secondary — selective executor work",
+      "primary": false
+    },
+    {
+      "name": "candidate_retention",
+      "role": "secondary — exact candidate bucket retains all four relevant programs",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "learned_selective success_rate >= exhaustive success_rate - 0.05 at every registered H and seed; learned shortlist size <= 1; all four relevant programs are retained whenever the target state is retained",
+      "licenses": "bounded support that the learned semantic state representation can cross the persistent retrieval boundary in this synthetic workload",
+      "does_not_license": "general semantic memory, universal approximate nearest-neighbor retrieval, hardware speedup, natural-language reasoning, or the broad L4 C5 claim"
+    },
+    {
+      "condition": "learned_selective success_rate < exhaustive success_rate - 0.05 in any registered H/seed or target-state retention fails",
+      "licenses": "the registered learned semantic state-index mechanism does not preserve the preregistered capability boundary",
+      "does_not_license": "that learned semantic indexing is impossible"
+    }
+  ],
+  "interpretation_order": [
+    "temporal availability",
+    "state retrieval correctness",
+    "candidate retention",
+    "capability parity",
+    "query arithmetic",
+    "index build arithmetic"
+  ],
+  "h_levels": [
+    64,
+    128,
+    256
+  ],
+  "k_levels": [
+    1
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 32,
+  "eval_steps": 100,
+  "held_constant": [
+    "persistent state population M=64",
+    "one-step causal write/read delay",
+    "10-bit state codebook",
+    "evaluation targets are CODEBOOK[:16]; training codes are CODEBOOK[16:64]",
+    "exactly four candidate programs are relevant to each evaluation state code",
+    "same fixed-work executor is used as TACOSM-C5-END-TO-END-001",
+    "exact candidate index remains the capability-matched control",
+    "prior C5 and REP evidence remains frozen",
+    "no evaluation address or gold target is used during index training"
+  ],
+  "status": "amended-preregistered",
+  "layer": "L3",
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "evaluation task stream across H",
+      "old_definition": "build_task(seed, h, step) is called independently at each H, and its registered query noise bit therefore depends on H",
+      "new_definition": "for each seed/step, the query and persistent-state task are generated once from build_task(seed, 64, step); candidate populations are then regenerated at each registered H while reusing that same query, target address, state values, and target code",
+      "rationale": "The first CI run showed large capability differences by H. Because the original task builder computes the query flip from H, H changed the input distribution as well as candidate population size. The confirmatory run must isolate the intended H scaling variable.",
+      "discovered": "After the first registered CI run, before any confirmatory result was declared.",
+      "affected": "Query/noise generation only. Training/evaluation code split, state population, candidate relation, capability rule, encoder, index, shortlist, and executor are unchanged.",
+      "no_result_under_previous_version": "The first CI run is retained as an exploratory diagnostic and is not a confirmatory result for this contract."
+    }
+  ]
+}

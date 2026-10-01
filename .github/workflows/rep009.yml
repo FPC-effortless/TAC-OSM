@@ -1,0 +1,51 @@
+name: REP-009 noisy selective state index
+
+on:
+  push:
+    branches: [research/rep009-noisy-state-index]
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "scripts/run_noisy_state_index_rep009.py"
+      - "docs/TACOSM-STATE-REP-009.md"
+      - "contracts/TACOSM-STATE-REP-009.json"
+      - ".github/workflows/rep009.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rep009:
+    name: TACOSM-STATE-REP-009
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.13
+      - name: Preconditions
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+          if git diff --name-only origin/master...HEAD | grep -E 'C5-001|C5-002|C5-003'; then
+            echo "Frozen C5 evidence changed; REP-009 is invalid."
+            exit 1
+          fi
+      - name: Run registered selective-index experiment
+        run: |
+          mkdir -p artifacts
+          python scripts/run_noisy_state_index_rep009.py > artifacts/REP-009.stdout.json
+          cat artifacts/REP-009.stdout.json
+      - name: Upload REP-009 result
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-STATE-REP-009
+          path: artifacts/
+          if-no-files-found: error

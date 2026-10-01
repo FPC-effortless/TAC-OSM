@@ -1,0 +1,44 @@
+{
+  "experiment_id": "TACOSM-C5-END-TO-END-001",
+  "title": "End-to-end persistent semantic selective computation",
+  "question": "Can a runtime combine noisy persistent-state addressing, candidate retention, and batched execution while preserving capability and making execution work depend on a fixed relevant subset rather than H?",
+  "hypothesis": "H_end_to_end: with M=64 persistent semantic state items and R=4 relevant programs held fixed, the indexed runtime will preserve the exhaustive capability while state and execution work remain bounded and exhaustive execution work grows with H.",
+  "arms": [
+    {"name":"exhaustive","intervention":"full H-state scan, full H candidate matching, execute all H programs","acts_on":"state addressing and execution","knob":"none","value":"H"},
+    {"name":"selective","intervention":"Hamming state index, exact candidate index, execute only retained R=4 programs","acts_on":"state addressing, candidate retention, execution","knob":"K","value":"state K=1, candidate K=4"}
+  ],
+  "endpoints": [
+    {"name":"success_rate","role":"primary — aggregate output matches hidden environment truth","primary":true},
+    {"name":"executor_calls","role":"secondary — actual number of candidate programs executed","primary":false},
+    {"name":"executor_work","role":"secondary — fixed execution work units","primary":false},
+    {"name":"state_address_work","role":"secondary — exhaustive scan vs indexed probes","primary":false},
+    {"name":"candidate_address_work","role":"secondary — exhaustive candidate matching vs indexed positions","primary":false},
+    {"name":"retained_fraction","role":"secondary — R/H","primary":false},
+    {"name":"state_index_retention","role":"secondary — target state survives approximate state index","primary":false},
+    {"name":"candidate_index_retention","role":"secondary — all relevant programs survive candidate index","primary":false}
+  ],
+  "decision_rule": [
+    {"condition":"selective success_rate equals exhaustive success_rate at every H; selective executor work equals 12R; exhaustive executor work equals 12H; target state and all four relevant candidates are retained in every cell","licenses":"bounded support for the combined persistent selective-computation runtime: execution work depends on R while capability is preserved under the registered synthetic task","does_not_license":"general semantic memory, learned indexing, hardware superiority, or the full L4 C5 claim"},
+    {"condition":"selective success_rate is lower than exhaustive at any H or relevant execution work exceeds 12R","licenses":"the registered end-to-end selective runtime does not preserve capability/work isolation under this task","does_not_license":"that selective computation is impossible"}
+  ],
+  "interpretation_order": ["temporal availability","state-address correctness","candidate-retention correctness","capability parity","execution work","addressing work"],
+  "h_levels": [64,128,256],
+  "k_levels": [4],
+  "seeds": [0,1,2,3,4],
+  "steps": 100,
+  "eval_steps": 100,
+  "held_constant": [
+    "persistent state population M=64",
+    "one-step causal write/read delay",
+    "10-bit state codebook and exactly one flipped query bit",
+    "state index Hamming radius=2 and state shortlist=1",
+    "candidate population uses four programs per state code",
+    "query targets one of the first 16 state codes and therefore exactly four relevant programs exist at every H",
+    "candidate index is built once per static population and queried for each evaluation task",
+    "same fixed-work executor is used by exhaustive and selective arms",
+    "no learning or repair is used in this runtime experiment",
+    "prior REP/C5 evidence remains frozen"
+  ],
+  "status": "pre-registered",
+  "layer": "L3"
+}
