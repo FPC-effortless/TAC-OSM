@@ -459,23 +459,25 @@ def hard_negative_distill(router, seed: int, steps: int) -> int:
 
 
 def build_router(arm: str, seed: int):
-    if arm in {"control", "outcome_distill", "analytic_init"}:
-        if arm == "analytic_init":
-            router = AnalyticRelationalRouter(
-                seed=seed, learning_rate=0.012, soft_target_epsilon=0.05
-            )
-            analytic_relational_initialize(router)
-            train_exhaustive(router, seed, TRAIN_STEPS)
-        else:
-            router = CDLPersistentRelationRouter(
-                seed=seed, learning_rate=0.012, soft_target_epsilon=0.05
-            )
-        elif arm == "outcome_distill":
+    if arm == "analytic_init":
+        router = AnalyticRelationalRouter(
+            seed=seed, learning_rate=0.012, soft_target_epsilon=0.05
+        )
+        analytic_relational_initialize(router)
+        train_exhaustive(router, seed, TRAIN_STEPS)
+        return router
+
+    if arm in {"control", "outcome_distill"}:
+        router = CDLPersistentRelationRouter(
+            seed=seed, learning_rate=0.012, soft_target_epsilon=0.05
+        )
+        if arm == "outcome_distill":
             train_exhaustive(router, seed, BASELINE_STEPS)
             hard_negative_distill(router, seed, DISTILL_STEPS)
         else:
             train_exhaustive(router, seed, TRAIN_STEPS)
         return router
+
     if arm in {"product_key", "product_key_distill"}:
         router = ProductKeyRelationRouter(seed=seed)
         train_exhaustive(router, seed, BASELINE_STEPS)
@@ -484,6 +486,7 @@ def build_router(arm: str, seed: int):
         else:
             train_exhaustive(router, seed, DISTILL_STEPS)
         return router
+
     if arm in {"late_interaction", "late_interaction_distill"}:
         router = BitwiseLateInteractionRouter(seed=seed)
         train_exhaustive(router, seed, BASELINE_STEPS)
@@ -492,8 +495,8 @@ def build_router(arm: str, seed: int):
         else:
             train_exhaustive(router, seed, DISTILL_STEPS)
         return router
-    raise ValueError(arm)
 
+    raise ValueError(arm)
 
 def dense_rank(router, trial, state):
     qz = router.encode_query(trial.query, state)
