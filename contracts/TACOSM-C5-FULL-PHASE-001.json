@@ -22,27 +22,121 @@
     "Persistent world writes become visible only after a one-step temporal boundary"
   ],
   "endpoints": [
-    "oracle_persistent_success",
-    "oracle_reset_success",
-    "mean_target_rank",
-    "p90_target_rank",
-    "p95_target_rank",
-    "rank_scaling_exponent_gamma",
-    "conformal_K_90",
-    "conformal_K_95",
-    "conformal_empirical_coverage_90",
-    "conformal_empirical_coverage_95",
-    "p1",
-    "p2",
-    "rho",
-    "lsh_tables",
-    "candidate_rerank_fraction",
-    "CASM_executed_candidates",
-    "verifier_selection_given_admission",
-    "overall_sparse_success",
-    "experience_commit_rate",
-    "online_first_attempt_success",
-    "online_final_success"
+    {
+      "name": "sparse_final_success",
+      "role": "overall sparse-funnel capability",
+      "primary": true
+    },
+    {
+      "name": "mean_target_rank",
+      "role": "exhaustive rank diagnostic",
+      "primary": false
+    },
+    {
+      "name": "p90_target_rank",
+      "role": "90th-percentile exhaustive rank",
+      "primary": false
+    },
+    {
+      "name": "p95_target_rank",
+      "role": "95th-percentile exhaustive rank",
+      "primary": false
+    },
+    {
+      "name": "rank_scaling_exponent_gamma",
+      "role": "target-rank scaling exponent",
+      "primary": false
+    },
+    {
+      "name": "conformal_K_90",
+      "role": "90%-coverage calibrated shortlist",
+      "primary": false
+    },
+    {
+      "name": "conformal_K_95",
+      "role": "95%-coverage calibrated shortlist",
+      "primary": false
+    },
+    {
+      "name": "heldout_coverage_90",
+      "role": "empirical held-out coverage at K90",
+      "primary": false
+    },
+    {
+      "name": "heldout_coverage_95",
+      "role": "empirical held-out coverage at K95",
+      "primary": false
+    },
+    {
+      "name": "p1",
+      "role": "LSH target hash agreement",
+      "primary": false
+    },
+    {
+      "name": "p2",
+      "role": "LSH decoy hash agreement",
+      "primary": false
+    },
+    {
+      "name": "rho",
+      "role": "LSH retrieval exponent estimate",
+      "primary": false
+    },
+    {
+      "name": "requested_lsh_tables",
+      "role": "derived table count",
+      "primary": false
+    },
+    {
+      "name": "sparse_admission_recall",
+      "role": "target admission recall",
+      "primary": false
+    },
+    {
+      "name": "sparse_conditional_selection",
+      "role": "selection conditional on admission",
+      "primary": false
+    },
+    {
+      "name": "sparse_rerank_fraction",
+      "role": "candidate rerank fraction",
+      "primary": false
+    },
+    {
+      "name": "sparse_executed_candidates",
+      "role": "CASM candidates executed",
+      "primary": false
+    },
+    {
+      "name": "sparse_query_routing_ops",
+      "role": "query routing arithmetic",
+      "primary": false
+    },
+    {
+      "name": "oracle_persistent_success_M8",
+      "role": "oracle persistence control",
+      "primary": false
+    },
+    {
+      "name": "oracle_reset_success_M8",
+      "role": "oracle reset control",
+      "primary": false
+    },
+    {
+      "name": "online_first_attempt_success_M128",
+      "role": "closed-loop first attempt success",
+      "primary": false
+    },
+    {
+      "name": "online_final_success_M128",
+      "role": "closed-loop final success",
+      "primary": false
+    },
+    {
+      "name": "experience_commit_rate_M128",
+      "role": "verified experience write rate",
+      "primary": false
+    }
   ],
   "capability_rule": "Do not claim sublinear addressing unless measured routing work exponent is <1 and no table cap binds. Do not claim high absolute capability from retention alone.",
   "coverage_rule": "Report calibrated K and empirical held-out coverage separately; conformal guarantee is conditional on exchangeability.",
