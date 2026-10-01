@@ -125,19 +125,21 @@ def make_unique_trial(seed: int, step: int, m: int, *, mode: str) -> tuple[Persi
         return trial, state
 
 
-def train_control(seed: int, steps: int = CONTROL_STEPS) -> CDLPersistentRelationRouter:
+def train_control(seed: int, steps: int = CONTROL_STEPS) -> tuple[CDLPersistentRelationRouter, set[tuple[int, ...]]]:
     router = CDLPersistentRelationRouter(
         seed=seed, learning_rate=0.012, soft_target_epsilon=0.05
     )
+    seen_targets: set[tuple[int, ...]] = set()
     for step in range(steps):
         m = TRAIN_M[step % len(TRAIN_M)]
         trial, state = make_unique_trial(seed, step, m, mode="train")
         router.train_exhaustive(trial.query, state, trial.candidates, trial.target_index)
-    return router
+        seen_targets.add(trial.target_descriptor)
+    return router, seen_targets
 
 
-def train_outcome(seed: int) -> tuple[CDLPersistentRelationRouter, int]:
-    router = train_control(seed, steps=OUTCOME_BASE_STEPS)
+def train_outcome(seed: int) -> tuple[CDLPersistentRelationRouter, int, set[tuple[int, ...]]]:
+    router, seen_targets = train_control(seed, steps=OUTCOME_BASE_STEPS)
     env_evaluations = 0
     for step in range(OUTCOME_STEPS):
         m = TRAIN_M[step % len(TRAIN_M)]
@@ -182,19 +184,34 @@ def train_outcome(seed: int) -> tuple[CDLPersistentRelationRouter, int]:
                     router.wc[r][j] += lr * g * cx[j]
                 router.bc[r] += lr * g
         router.updates += 1
-    return router, env_evaluations
+        seen_targets.add(trial.target_descriptor)
+    return router, env_evaluations, seen_targets
 
 
-def evaluate(router, seed: int, *, mode: str) -> dict[str, object]:
+def evaluate(
+    router,
+    seed: int,
+    *,
+    mode: str,
+    forbidden_targets: set[tuple[int, ...]] | None = None,
+) -> dict[str, object]:
     by_m = {}
     for m in EVAL_M:
         ranks = []
         routing_ops = []
         recall_at = {str(k): [] for k in RECALL_K}
+        forbidden = forbidden_targets or set()
         for i in range(TRIALS):
-            trial, state = make_unique_trial(
-                seed, 400_000 + i + m * 17, m, mode=mode
-            )
+            retry = 0
+            while True:
+                trial, state = make_unique_trial(
+                    seed, 400_000 + i + m * 17 + retry * 1_000_003, m, mode=mode
+                )
+                if trial.target_descriptor not in forbidden:
+                    break
+                retry += 1
+                if retry > 1000:
+                    raise RuntimeError("unable to generate target-disjoint evaluation sample")
             scores = router.score_all(trial.query, state, trial.candidates)
             order = sorted(range(len(scores)), key=lambda j: (-scores[j], j))
             rank = order.index(trial.target_index) + 1
@@ -222,12 +239,16 @@ def main() -> None:
     outcome = {}
     outcome_eval_cost = {}
     routers = {}
+    seen_control = {}
+    seen_outcome = {}
     for seed in SEEDS:
-        c = train_control(seed)
-        o, env_evals = train_outcome(seed)
+        c, seen_c = train_control(seed)
+        o, env_evals, seen_o = train_outcome(seed)
         routers[str(seed)] = (c, o)
-        control[str(seed)] = evaluate(c, seed, mode="eval")
-        outcome[str(seed)] = evaluate(o, seed, mode="eval")
+        seen_control[str(seed)] = seen_c
+        seen_outcome[str(seed)] = seen_o
+        control[str(seed)] = evaluate(c, seed, mode="eval", forbidden_targets=seen_c)
+        outcome[str(seed)] = evaluate(o, seed, mode="eval", forbidden_targets=seen_o)
         outcome_eval_cost[str(seed)] = env_evals
 
     def pool(arm):
@@ -263,8 +284,8 @@ def main() -> None:
         },
         "outcome_training_environment_evaluations": outcome_eval_cost,
         "ood_holdout": {
-            "control": {str(s): evaluate(routers[str(s)][0], s, mode="ood") for s in SEEDS},
-            "outcome_field_environment": {str(s): evaluate(routers[str(s)][1], s, mode="ood") for s in SEEDS},
+            "control": {str(s): evaluate(routers[str(s)][0], s, mode="ood", forbidden_targets=seen_control[str(s)]) for s in SEEDS},
+            "outcome_field_environment": {str(s): evaluate(routers[str(s)][1], s, mode="ood", forbidden_targets=seen_outcome[str(s)]) for s in SEEDS},
         },
         "scope": {
             "semantic_language": False,
