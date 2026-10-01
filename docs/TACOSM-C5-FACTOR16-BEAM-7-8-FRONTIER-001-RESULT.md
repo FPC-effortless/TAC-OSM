@@ -49,8 +49,8 @@ an asymptotic claim.
 ## Admission versus post-admission selection
 
 Beam 7 pooled proposal retention is 0.794, 0.762, and 0.786 at M=128,256,512.
-Conditional selection given admission is approximately 0.436, 0.198, and 0.061
-respectively.
+Using the pooled proposal and selective counts, conditional selection given admission is
+348/794 = 0.438, 151/762 = 0.198, and 48/786 = 0.061 respectively.
 
 The registered result therefore does not isolate a single bottleneck: both
 admission and post-admission selection contribute to end-to-end loss.
