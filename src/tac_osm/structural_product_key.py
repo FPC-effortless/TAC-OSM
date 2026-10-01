@@ -23,7 +23,7 @@ from .multifactor_product_key_index import (
     MultiFactorProductKeyConfig,
     MultiFactorProductKeyStateIndex,
 )
-from .operator_learning import StructMeans, TransitionRecord, transition_features
+from .operator_learning import PrimitiveOperator, StructMeans, TransitionRecord, transition_features
 from .fused_architecture import KINDS, OperatorDescriptor, _goal_mask, candidate_operator
 
 
@@ -112,9 +112,6 @@ class StructuralProductKeyRouter:
             ))
             for candidate in candidates
         ]
-        training_keys = {
-            f"op" for _ in ()
-        }
         # Codebook ownership is explicit: only records marked verified by the
         # supplied training history contribute codebook items.
         training_signatures = {
@@ -159,7 +156,7 @@ class StructuralProductKeyRouter:
                 vector = transition_features(
                     TransitionRecord(
                         before=tuple(int(x) for x in state),
-                        operator=__import__("tac_osm.operator_learning", fromlist=["PrimitiveOperator"]).PrimitiveOperator(kind, tuple(mask)),
+                        operator=PrimitiveOperator(kind, tuple(mask)),
                         after=tuple(int(x) for x in goal),
                         verified=True,
                         episode=-1,
