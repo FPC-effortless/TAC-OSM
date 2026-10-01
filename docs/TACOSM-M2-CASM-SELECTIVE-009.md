@@ -93,3 +93,12 @@ This is a persistence mechanism test, not a claim of generalization from memoriz
 ### Train/evaluation separation
 
 Primary evaluation targets are disjoint from router training in both exact program structure and complete truth table. Decoy pools are generated independently of the router-visible support examples. Four input/output rows are routed to the model; the remaining twelve rows are withheld for verifier-only semantic verification.
+
+
+## Final preregistration freeze
+
+Contract version: `0.3-final`.
+
+All protocol changes listed in the contract amendment history occurred before measurement began. The measurement commit must be tree-identical to this final registration. Any later protocol change constitutes a new experiment identifier rather than an amendment to this run.
+
+The authoritative full measurement is triggered by an empty, tree-identical commit carrying `[run-m2-casm-selective-009-full]`. The resulting run manifest records the exact TAC-OSM commit, contract digest, external CASM-S commit, runtime versions, and workflow run ID.
