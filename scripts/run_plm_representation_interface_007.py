@@ -100,7 +100,7 @@ def representability_gate():
         per={}
         for op in range(N_OPS):
             A=[relation_features((a,)*DIM,(b,)*DIM,op,analytic) for a,b in combos]
-            vals=apply_relation((a,)*DIM,(b,)*DIM,op)[0] for a,b in combos
+            vals=[apply_relation((a,)*DIM,(b,)*DIM,op)[0] for a,b in combos]
             per[OPS[op]]=exact_fit_residual(A,vals)
         rows[arm]=per
     return rows
