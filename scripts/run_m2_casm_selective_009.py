@@ -10,6 +10,7 @@ No target ID, true wiring, or hidden target descriptor enters router inputs.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import os
@@ -185,8 +186,9 @@ def make_task_pool(
             continue
         rng.shuffle(pool)
         target_idx = next(i for i, x in enumerate(pool) if structural_key(x) == structural_key(ep))
+        address_digest = hashlib.sha256(repr(support_sig).encode("utf-8")).hexdigest()[:16]
         task = TaskSpec(
-            task_id=f"m2:{seed}:{m}:{int(heldout)}:{target_idx}",
+            task_id=f"m2:{seed}:{m}:{int(heldout)}:{address_digest}",
             examples=support_sig,
             verification_examples=verification_sig,
             target_truth=truth_signature(ep),
