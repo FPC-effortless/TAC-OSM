@@ -81,7 +81,7 @@ def test_verifier_learning_localizes_lookup_target_post_hoc() -> None:
     from tac_osm import Computation
     from tac_osm import Outcome
 
-    wrong = (decision.selected + 1) % len(task.candidates)
+    wrong = (task.target_action + 1) % len(task.candidates)
     outcome = Outcome(
         success=(wrong == task.target_action),
         value=float(wrong == task.target_action),
@@ -119,6 +119,7 @@ def test_full_loop_preserves_world_fact_and_writes_experience_namespace() -> Non
         )
     )
     router = CDLStudentRouter(CDLConfig(input_dim=8, latent_dim=16, seed=seed))
+    router.set_analytic_relation()
     model = TacOsmModel(
         state=state,
         router=router,
