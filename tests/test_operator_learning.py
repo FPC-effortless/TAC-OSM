@@ -11,10 +11,12 @@ from tac_osm.operator_learning import (
 
 
 def _records(n=30, dim=8):
+    from random import Random
+    rng = Random(123)
     kinds = ("toggle", "set1", "set0")
     rows = []
     for i in range(n):
-        state = tuple((i + j) % 2 for j in range(dim))
+        state = tuple(rng.randrange(2) for _ in range(dim))
         kind = kinds[i % len(kinds)]
         mask = tuple(1 if ((i + j) % 3 == 0) else 0 for j in range(dim))
         op = PrimitiveOperator(kind, mask)
