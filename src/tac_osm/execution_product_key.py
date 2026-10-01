@@ -157,9 +157,11 @@ class ExecutionFeedbackProductKeyRouter:
             beam=self.index_config.factor_beam,
             max_shortlist=self.index_config.max_shortlist,
         )
-        if hit.selected_address is None:
-            raise RuntimeError("product-key index returned no candidate")
-        selected = self._candidate_by_key[hit.selected_address]
+        selected = (
+            self._candidate_by_key[hit.selected_address]
+            if hit.selected_address is not None
+            else -1
+        )
 
         # Only shortlisted candidates receive a score in the routing decision.
         # This avoids an O(M) inference-time dense score just for diagnostics.
