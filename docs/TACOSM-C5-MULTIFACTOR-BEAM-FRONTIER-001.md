@@ -57,8 +57,13 @@ unchanged rather than retuned or recomputed.
 
 Smoke: python scripts/run_c5_multifactor_beam_frontier_001.py --smoke
 
-Full: python scripts/run_c5_multifactor_beam_frontier_001.py
+Full: python scripts/run_c5_multifactor_beam-frontier_001.py
 
 Artifact: artifacts/TACOSM-C5-MULTIFACTOR-BEAM-FRONTIER-001.json
 
 Full-run trigger: [run-c5-multifactor-beam-frontier-full]
+
+## Operational trigger
+
+The following commit only dispatches the already-registered full measurement;
+it does not change the contract, arms, thresholds, seeds, or analysis rule.
