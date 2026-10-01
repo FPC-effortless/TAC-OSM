@@ -47,6 +47,7 @@ EXECUTOR_BATCH = 32
 ROUTER_STEPS = 1200
 ROUTER_BATCH = 32
 SUPPORT_ROWS = 4
+VERIFIER_ROWS = 12
 M_LEVELS = (32, 64, 128, 256, 512)
 BUDGETS = (1, 2, 4, 8)
 EVAL_TASKS_PER_SEED_M = 32
@@ -170,7 +171,7 @@ def make_task_pool(
         keys = sorted(ep.truth_table)
         support_keys = rng.sample(keys, SUPPORT_ROWS)
         remaining_keys = [k for k in keys if k not in support_keys]
-        verification_keys = tuple(rng.sample(remaining_keys, min(8, len(remaining_keys))))
+        verification_keys = tuple(remaining_keys)
         support_sig = tuple((tuple(bits), int(ep.truth_table[bits])) for bits in support_keys)
         verification_sig = tuple((tuple(bits), int(ep.truth_table[bits])) for bits in verification_keys)
         pool = [ep]
