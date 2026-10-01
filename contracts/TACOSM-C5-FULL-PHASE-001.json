@@ -1,0 +1,269 @@
+{
+  "experiment_id": "TACOSM-C5-FULL-PHASE-001",
+  "title": "Full C5 fused loop: rank scaling, conformal K, OR-LSH admission, CASM-K execution, verifier, and closed-loop learning",
+  "question": "Can a dense outcome-trained CDL Q/K shortlister support calibrated bounded-K admission so exact CASM execution and verification decouple final correctness from M?",
+  "hypothesis": "The exhaustive target-rank distribution may grow sublinearly with M; split-conformal calibration may yield a held-out shortlist K with the requested coverage; OR-over-tables LSH may retain the target with a smaller reranking population; exact CASM plus independent verification may decouple final selection from CDL Top-1 precision; verified experience writes may improve later routing.",
+  "held_constant": [
+    "dim=16 and exact equality relation across all 16 state bits",
+    "fresh target code sampled at every training step",
+    "training population M sampled log-uniformly from 8 through 256",
+    "evaluation populations M={8,16,32,64,128,256,512,1024}",
+    "two disjoint held-out trial streams for conformal calibration and evaluation",
+    "candidate action/index and hidden acceptable-action sets are excluded from router inputs",
+    "CASM execution uses the exact relevance_program path; verifier receives public candidate/reference data only",
+    "persistent world write is staged with one-step delay before query read",
+    "verified writes use the experience: namespace",
+    "LSH uses random-hyperplane tables; requested table count is derived from measured rho and capped only for the registered safety limit of 128"
+  ],
+  "gates": [
+    "CASM exhaustive verifier success must be exactly one candidate per valid trial",
+    "No router input may contain target_index or acceptable_actions",
+    "Target codes must be unique within each population",
+    "Persistent world writes become visible only after a one-step temporal boundary"
+  ],
+  "endpoints": [
+    {
+      "name": "sparse_final_success",
+      "role": "overall sparse-funnel capability",
+      "primary": true
+    },
+    {
+      "name": "mean_target_rank",
+      "role": "exhaustive rank diagnostic",
+      "primary": false
+    },
+    {
+      "name": "p90_target_rank",
+      "role": "90th-percentile exhaustive rank",
+      "primary": false
+    },
+    {
+      "name": "p95_target_rank",
+      "role": "95th-percentile exhaustive rank",
+      "primary": false
+    },
+    {
+      "name": "rank_scaling_exponent_gamma",
+      "role": "target-rank scaling exponent",
+      "primary": false
+    },
+    {
+      "name": "conformal_K_90",
+      "role": "90%-coverage calibrated shortlist",
+      "primary": false
+    },
+    {
+      "name": "conformal_K_95",
+      "role": "95%-coverage calibrated shortlist",
+      "primary": false
+    },
+    {
+      "name": "heldout_coverage_90",
+      "role": "empirical held-out coverage at K90",
+      "primary": false
+    },
+    {
+      "name": "heldout_coverage_95",
+      "role": "empirical held-out coverage at K95",
+      "primary": false
+    },
+    {
+      "name": "p1",
+      "role": "LSH target hash agreement",
+      "primary": false
+    },
+    {
+      "name": "p2",
+      "role": "LSH decoy hash agreement",
+      "primary": false
+    },
+    {
+      "name": "rho",
+      "role": "LSH retrieval exponent estimate",
+      "primary": false
+    },
+    {
+      "name": "requested_lsh_tables",
+      "role": "derived table count",
+      "primary": false
+    },
+    {
+      "name": "sparse_admission_recall",
+      "role": "target admission recall",
+      "primary": false
+    },
+    {
+      "name": "sparse_conditional_selection",
+      "role": "selection conditional on admission",
+      "primary": false
+    },
+    {
+      "name": "sparse_rerank_fraction",
+      "role": "candidate rerank fraction",
+      "primary": false
+    },
+    {
+      "name": "sparse_executed_candidates",
+      "role": "CASM candidates executed",
+      "primary": false
+    },
+    {
+      "name": "sparse_query_routing_ops",
+      "role": "query routing arithmetic",
+      "primary": false
+    },
+    {
+      "name": "oracle_persistent_success_M8",
+      "role": "oracle persistence control",
+      "primary": false
+    },
+    {
+      "name": "oracle_reset_success_M8",
+      "role": "oracle reset control",
+      "primary": false
+    },
+    {
+      "name": "online_first_attempt_success_M128",
+      "role": "closed-loop first attempt success",
+      "primary": false
+    },
+    {
+      "name": "online_final_success_M128",
+      "role": "closed-loop final success",
+      "primary": false
+    },
+    {
+      "name": "experience_commit_rate_M128",
+      "role": "verified experience write rate",
+      "primary": false
+    }
+  ],
+  "capability_rule": "Do not claim sublinear addressing unless measured routing work exponent is <1 and no table cap binds. Do not claim high absolute capability from retention alone.",
+  "coverage_rule": "Report calibrated K and empirical held-out coverage separately; conformal guarantee is conditional on exchangeability.",
+  "execution_rule": "CASM execution count must equal the number of admitted candidates and be bounded by calibrated K.",
+  "non_claims": [
+    "synthetic equality state-addressing does not establish language-level semantic retrieval",
+    "arithmetic MACs are not hardware wall-clock speedups",
+    "index build cost is reported separately from query cost",
+    "online learning results are descriptive unless preregistered causal interventions isolate the update"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "train_steps": 600,
+  "calibration_trials": 64,
+  "eval_trials": 64,
+  "online_trials": 96,
+  "train_M": [
+    8,
+    256
+  ],
+  "eval_M": [
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024
+  ],
+  "alpha": [
+    0.1,
+    0.05
+  ],
+  "index": "OR-over-tables random hyperplane LSH",
+  "shortlist_policy": "K is obtained from held-out exhaustive target-rank calibration; no beam sweep is used to choose K",
+  "arms": [
+    {
+      "name": "exhaustive_oracle",
+      "intervention": "exhaustive exact CASM+verifier scoring of all M candidates",
+      "acts_on": "reference capability",
+      "knob": "execution_population",
+      "value": "M"
+    },
+    {
+      "name": "dense_cdl_student",
+      "intervention": "dense Q/K student trained on exhaustive downstream outcomes",
+      "acts_on": "router representation",
+      "knob": "outcome_distillation",
+      "value": "dense"
+    },
+    {
+      "name": "orlsh_cdl_casm",
+      "intervention": "same student with OR-over-tables LSH, calibrated K, exact CASM execution and verifier",
+      "acts_on": "inference routing and execution subset",
+      "knob": "sparse_funnel",
+      "value": "OR-LSH+K"
+    },
+    {
+      "name": "closed_loop_experience",
+      "intervention": "verified successful candidates update the router and write only to experience namespace",
+      "acts_on": "post-verification learning",
+      "knob": "verified_learning",
+      "value": "enabled"
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "Run the registered exhaustive, dense-student, sparse-funnel, and closed-loop measurements at every M and report the complete endpoint set without outcome-dependent arm selection.",
+      "licenses": "a workload-specific capability/routing/execution/learning measurement.",
+      "does_not_license": "universal routing superiority, a hardware speedup, or a general theorem."
+    },
+    {
+      "condition": "A sublinear routing claim requires measured query-routing exponent beta < 1 and no LSH table cap at the evaluated points.",
+      "licenses": "a bounded empirical scaling statement for this workload.",
+      "does_not_license": "sublinear scaling where the cap binds or where build cost dominates the reported regime."
+    },
+    {
+      "condition": "A conformal coverage statement is conditional on the exchangeability assumptions of the calibration/test split; empirical held-out coverage is reported separately.",
+      "licenses": "calibrated shortlist coverage under the registered sampling protocol.",
+      "does_not_license": "distribution-free coverage under arbitrary distribution shift."
+    }
+  ],
+  "interpretation_order": [
+    "gate validity and exactly-one-target invariant",
+    "exhaustive target-rank distribution by M",
+    "rank scaling exponent gamma",
+    "conformal K and empirical held-out coverage",
+    "p1 and p2 separation and rho",
+    "OR-LSH admission recall and rerank fraction",
+    "CASM executed candidate count and verifier selection",
+    "oracle persistent versus reset control",
+    "closed-loop experience commit rate and online success",
+    "query routing versus index-build arithmetic cost"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024
+  ],
+  "k_levels": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128
+  ],
+  "steps": 600,
+  "eval_steps": 64,
+  "layer": "L3",
+  "status": "measured",
+  "result_note": "Measured integration pass. Run 36829950787 completed with 800 repository tests passing. On this workload, gamma=0.000, beta=0.255, K90=1, p1≈0.931–0.960, p2≈0.481–0.512, rho≈0.060–0.103, oracle persistent M8=1.0 versus reset=0.140625, and online final success M128=0.8104167. The primary limitation is that the router reads the exact target descriptor from persistent state via the public address, making the rank task nearly trivial; therefore this result does not validate the original noisy-recovery admission bottleneck.",
+  "result_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/36829950787"
+}
