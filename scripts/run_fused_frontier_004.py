@@ -19,6 +19,7 @@ from __future__ import annotations
 import json
 import random
 import statistics
+from concurrent.futures import ProcessPoolExecutor
 import sys
 from pathlib import Path
 
@@ -170,23 +171,33 @@ def evaluate(
     }
 
 
+def run_cell(args):
+    seed, m, name, fc, fs, fb, budget = args
+    candidates = make_library(seed, m)
+    rows, store, sm, pst, _ = build_structural(candidates, seed)
+    state = PersistentStore(StateConfig(seed=seed + 92000, n_slots=128))
+    return evaluate(
+        candidates, rows, sm, pst, state, seed,
+        budget, name, fc, fs, fb
+    )
+
+
 def main():
-    rows_out = []
-    for seed in SEEDS:
-        for m in M_LEVELS:
-            candidates = make_library(seed, m)
-            rows, store, sm, pst, _ = build_structural(candidates, seed)
-            state = PersistentStore(
-                StateConfig(seed=seed + 92000, n_slots=128)
-            )
-            for name, fc, fs, fb in CONFIGS:
-                for budget in BUDGETS:
-                    rows_out.append(
-                        evaluate(
-                            candidates, rows, sm, pst, state, seed,
-                            budget, name, fc, fs, fb
-                        )
-                    )
+    jobs = [
+        (seed, m, name, fc, fs, fb, budget)
+        for seed in SEEDS
+        for m in M_LEVELS
+        for name, fc, fs, fb in CONFIGS
+        for budget in BUDGETS
+    ]
+
+    # Independent experimental cells are embarrassingly parallel. Results are
+    # sorted by the same canonical key before aggregation to preserve stable
+    # artifact ordering despite parallel completion order.
+    with ProcessPoolExecutor(max_workers=2) as executor:
+        rows_out = list(executor.map(run_cell, jobs))
+
+    rows_out.sort(key=lambda r: (int(r["M"]), str(r["config"]), int(r["budget"]), int(r["seed"])))
 
     metrics = (
         "execution_success",
