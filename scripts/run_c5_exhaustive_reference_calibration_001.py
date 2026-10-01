@@ -311,6 +311,7 @@ def main() -> None:
         contract.require_seeds(SEEDS)
         contract.require_k_levels([K])
         contract.require_eval_steps(EVAL_STEPS)
+        contract.require_steps(TARGET_TEACHER_UPDATES)
         if contract.primary_endpoint() != "exhaustive_target_recall":
             raise AssertionError("primary endpoint drift")
 
