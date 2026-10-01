@@ -322,7 +322,7 @@ def main() -> None:
     }
     out = ROOT / "artifacts" / f"{EXPERIMENT_ID}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\\n")
+    out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print(json.dumps(result, indent=2, sort_keys=True))
 
 
