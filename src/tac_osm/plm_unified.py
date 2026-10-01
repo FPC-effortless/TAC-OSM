@@ -545,7 +545,7 @@ class UnifiedPLM:
                     return StepResult(
                         step, record.record_id, plan, out, v, committed, repaired,
                         address, execution_cost,
-                        address.index_lookups + address.candidates_scored + execution_cost,
+                        address.index_lookups + address.raw_candidates + address.candidates_scored + execution_cost,
                     )
 
                 repaired = True
