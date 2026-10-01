@@ -31,7 +31,6 @@ from run_fused_frontier_002 import (
     build_structural,
     make_library,
     q_for,
-    unique_single_tasks,
 )
 from tac_osm.fused_architecture import candidate_operator
 from tac_osm.operator_learning import apply_operator
@@ -45,6 +44,34 @@ CONFIGS = (
     ("4f16_b4", 4, 16, 4),
 )
 CLUSTER_BUDGET = 2
+
+
+def unique_single_tasks(candidates, seed):
+    """Construct exactly the same identifiable task family without an O(M) scan.
+
+    For a held-out toggle operator, state XOR mask is a bijection over states:
+    two distinct toggle masks cannot yield the same goal for the same state.
+    Requiring at least one 0->1 and one 1->0 changed bit additionally excludes
+    set1/set0 as alternative explanations. Therefore every sampled task in
+    this family is uniquely identifiable by construction.
+    """
+    rng = random.Random(seed + 901)
+    held_toggle = [
+        i for i in range(48, len(candidates))
+        if candidate_operator(candidates[i]).kind == "toggle"
+    ]
+    if not held_toggle:
+        raise RuntimeError("no held-out toggle operators")
+    tasks = []
+    while len(tasks) < EVAL_SINGLE:
+        target = held_toggle[rng.randrange(len(held_toggle))]
+        op = candidate_operator(candidates[target])
+        state = tuple(rng.randrange(2) for _ in range(DIM))
+        changed = [i for i, bit in enumerate(op.mask) if bit]
+        if any(state[i] == 0 for i in changed) and any(state[i] == 1 for i in changed):
+            goal = apply_operator(state, op)
+            tasks.append((state, goal, target))
+    return tasks
 
 
 def evaluate(
