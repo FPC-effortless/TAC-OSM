@@ -68,3 +68,5 @@ Full: python scripts/run_c5_multifactor_001.py
 Artifact: artifacts/TACOSM-C5-MULTIFACTOR-001.json
 
 Full-run marker: [run-c5-multifactor-001-full]
+
+Full measurement trigger: commit message [run-c5-multifactor-001-full] is the registered measurement trigger.
