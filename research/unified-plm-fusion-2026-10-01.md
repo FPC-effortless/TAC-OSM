@@ -1410,3 +1410,340 @@ C_{\text{useful}}\propto
 \]
 
 That is the test that determines whether PLM represents a genuine architectural shift or merely relocates the conventional sequence-model bottleneck.
+
+
+---
+
+# 35. CLM fusion: editable context becomes a learned state transition
+
+Context Language Models (Shao et al., arXiv:2609.37725, September 2026) provide an external validated architecture at the textual-state layer.
+
+Standard append-only context is approximately:
+\[
+c_{t+1}=c_t\oplus x_t.
+\]
+
+CLM instead learns:
+\[
+c_{t+1}=f_\theta^{CLM}(c_t).
+\]
+
+The model can edit its own context by rewriting, deleting, compressing, reorganizing, and maintaining trackers. The paper also co-designs Suffix Cache Reuse so unchanged tail context can remain reusable after edits. Reported results include lower FLOP use at matched task performance, including a reported 35% server-side saving from suffix-cache reuse versus standard SGLang in the measured setting.
+
+The durable contribution for PLM is:
+\[
+\boxed{\text{learned control over persistent mutable state}}
+\]
+
+PLM generalizes this from textual state to typed structured computational state.
+
+---
+
+# 36. CLM, CDL, CASM and PLM correspondence
+
+\[
+\text{CLM context editing}
+\subset
+\text{CDL state editing}
+\subset
+\text{CASM state transformation}
+\subset
+\text{PLM verified state evolution}.
+\]
+
+CLM asks: What context should exist next?
+
+CDL asks: What persistent information/state is relevant and how should it be represented?
+
+CASM asks: What computation should operate on that selected state?
+
+PLM adds: What action/outcome is produced, was it verified, and what should persist?
+
+Textual context remains one valid state representation, not the definition of PLM.
+
+---
+
+# 37. CLM-derived reusable state operators
+
+CLM reports emergent reusable context-management functions. The unified PLM operator library should generalize this idea:
+
+\[
+\mathcal O=\{T_1,\ldots,T_k\},\qquad T_i:S\rightarrow S'.
+\]
+
+Candidate operators include retain_verified, compress_stale, preserve_unresolved, merge_equivalent, invalidate_stale, promote_evidence, retract_state, rebuild_local_state, route_to_specialist, verify_transition, and repair_transition.
+
+These are hypotheses for learned operators, not hard-coded conclusions.
+
+CASM should eventually select reusable operators rather than merely tokens/candidates.
+
+---
+
+# 38. CLM-derived compute-reuse hierarchy
+
+\[
+\text{text/KV reuse}
+\rightarrow
+\text{structured-state reuse}
+\rightarrow
+\text{verified-computation reuse}.
+\]
+
+CLM's Suffix Cache Reuse addresses the first transition. TAC targets the second. PLM targets the third.
+
+The strongest PLM computational hypothesis is:
+\[
+C_t\approx C(R_t)+C(G_t)+C(\Delta S_t),
+\]
+rather than cost being proportional to accumulated context, state, or operators.
+
+---
+
+# 39. Current authoritative TAC-OSM results before the composition audit
+
+PR #59 measured dense P90 best-valid ranks
+\[
+M=64,128,256,512,1024,2048,4096,8192
+\]
+as
+\[
+2,3,5,9,17,33,65,129,
+\]
+with local exponents
+\[
+0.585,0.737,0.848,0.918,0.957,0.978,0.989
+\]
+and finite-range \(\gamma=0.8732\). This does not establish asymptotic sublinear scaling.
+
+At M=1024, explicit LSH admission recall rose from 35.94% at one table to 97.50% at 64 tables while rerank fraction rose from 1.03% to 17.00%. Dense-rank degradation and LSH admission loss are therefore separate failure planes.
+
+PR #60 embedded persistence in the noisy routing funnel. Persistent state held two 16-bit operands plus an operation; the target relation was not stored. The public query had only an opaque address plus one-bit-corrupted operation hint; state became usable after three temporal boundaries and unrelated writes.
+
+Persistent temporal availability and relation reconstruction were both 100%; reset reconstruction was 0%. At M=1024, Top-1 was 47.50%, P90 rank 104.4, and K90 81.0. Sparse final success for M=64..1024 was 73.13%, 68.44%, 67.19%, 58.44%, 59.06%. The bottleneck therefore moved upstream into compositional representation/routing rather than basic persistence.
+
+---
+
+# 40. Current #61 composition-audit status
+
+PR #61 registers M=64..8192 dense scaling, empirical L90(M), split integrity, an exact relational hash reference, per-operation XOR/XNOR/AND/OR representability, bootstrap CIs, execution budgets 1/2/4/8/16/32/64, adaptive budget, control, analytic relational initialization, product-key factorization, per-bit late interaction, and CASM-failure hard-negative distillation.
+
+The first composition-audit execution was cancelled. The registered job was rerun and entered execution successfully. Its final scientific result must come from the completed rerun artifact, not from the cancelled attempt.
+
+A separate execution-feedback product-key bridge workflow failed because its configured script did not exist in the checked-out commit. Its repository gate nevertheless passed 825 tests. The infrastructure failure is not scientific evidence against product-key composition.
+
+---
+
+# 41. Representation-collapse gate
+
+The #60 M=1024 degradation is consistent with, but does not prove, representation collapse.
+
+Measure:
+\[
+r_{eff}(Z)=\frac{(\sum_i\sigma_i)^2}{\sum_i\sigma_i^2}
+\]
+plus the full pairwise cosine distribution, covariance spectral entropy, and norm concentration.
+
+Decision:
+\[
+\text{collapse confirmed}\Rightarrow\text{orthogonality intervention}.
+\]
+
+Do not import orthogonality solely because it fixed a historical TAC failure.
+
+---
+
+# 42. Representability gate
+
+Before calling a failure optimization or routing failure, determine whether the student's actual function class can represent XOR, XNOR, AND, and OR.
+
+Run an oracle fit constrained to the same student function class.
+
+\[
+\boxed{\text{oracle cannot reach floor}\Rightarrow\text{representability failure}}
+\]
+
+\[
+\boxed{\text{oracle reaches floor but learner fails}\Rightarrow\text{optimization/interface failure}}
+\]
+
+#61 registers the per-operation diagnostics and analytic basis, but registration is not a passing result.
+
+---
+
+# 43. Factorized-composition falsifier
+
+Product-key/factorized composition must be evaluated against a held-out compositional falsifier because the earlier CASM L2 family produced 0/18 held-out compositional routing.
+
+Promotion requires both:
+\[
+\text{ID improvement}\land\text{held-out composition improvement}.
+\]
+
+ID-only gains do not license a representation claim.
+
+---
+
+# 44. One cross-cutting OOD problem
+
+The train-to-OOD gap should be tracked as one permanent item spanning R14 Level-3, USEF-X LOO-to-OOD, the 48-code teacher evaluated through M=1024, CASM L2 holdout failure, and factorized-composition risk.
+
+Unified question:
+\[
+\boxed{\text{Does the learned structural rule generalize outside the sampled training distribution?}}
+\]
+
+Every representation arm should be measured:
+\[
+ID\rightarrow\text{composition holdout}\rightarrow M\text{-scaling}\rightarrow OOD.
+\]
+
+---
+
+# 45. Discrete-routing learning problem
+
+Inference currently has:
+\[
+CDL\rightarrow LSH\rightarrow TopK\rightarrow CASM.
+\]
+
+A skipped candidate produces no downstream CASM outcome, creating a counterfactual blind spot.
+
+Preferred intervention:
+\[
+\boxed{\text{train dense CDL on all-candidate outcomes}}
+\]
+
+For each training episode:
+\[
+\{(q,c_i,y_i)\}_{i=1}^{M},
+\qquad y_i=V(CASM(s,c_i)).
+\]
+
+Train the dense router on all candidates first; use sparse admission only at inference:
+\[
+CDL\rightarrow LSH\rightarrow K\rightarrow CASM.
+\]
+
+If discrete-gradient methods are still needed afterward, test Gumbel or straight-through Top-K separately.
+
+---
+
+# 46. Verified-experience prior
+
+USEF-X reported 34--46% beam-work savings from prefix-trace memory. The PLM analogue is:
+\[
+score(c)=score_{CDL}(c)+\lambda score_{experience}(c).
+\]
+
+Verified experience is a prior, not truth:
+\[
+\boxed{\text{experience prior}\neq\text{authoritative state}}.
+\]
+
+Measure rank reduction, table reduction, CASM executions, search/beam work, and end-to-end verified success.
+
+---
+
+# 47. Repair status
+
+Historical R13 showed repair was net harmful. Current fused-loop measurements show a smaller downstream recovery in the reported experiments, approximately 3--5 percentage points.
+
+The causal order remains:
+\[
+representation\rightarrow admission\rightarrow execution\rightarrow verification\rightarrow repair.
+\]
+
+Repair cannot recover a target that was never admitted. Verified-only writes preserve:
+\[
+\boxed{Learn\;refuses\;unvalidated\;promotion}.
+\]
+
+---
+
+# 48. Final experiment dependency after CLM fusion
+
+\[
+G_0\rightarrow G_1\rightarrow G_2\rightarrow G_3\rightarrow G_4\rightarrow G_5\rightarrow G_6\rightarrow G_7
+\]
+
+where:
+- G0 = integrity/leakage/provenance;
+- G1 = representability;
+- G2 = representation geometry;
+- G3 = OOD compositional generalization;
+- G4 = exhaustive all-candidate CDL training;
+- G5 = discrete LSH admission;
+- G6 = CASM/adaptive execution budget;
+- G7 = verified experience and learned state editing.
+
+Upstream failure blocks downstream interpretation.
+
+---
+
+# 49. Final-results surface
+
+The final report must put the following side by side:
+
+| Axis | Required result |
+|---|---|
+| Persistence | persistent vs reset reconstruction |
+| Representability | oracle floor for XOR/XNOR/AND/OR |
+| Geometry | effective rank, cosine, spectral concentration |
+| Dense routing | Top-1, mean rank, P90, K90 |
+| High-M scaling | local rank/P90 exponents through M=8192 |
+| LSH | empirical L90 and recall/work curve |
+| Execution | success vs fixed CASM budget |
+| Adaptive execution | success vs mean executed candidates |
+| OOD | composition and population-shift results |
+| Learning interface | exhaustive vs skipped-candidate training |
+| Experience | verified-prior effect |
+| Repair | first-attempt vs final success |
+| State editing | immutable vs structured editable vs CLM-like textual state |
+| System cost | FLOPs/MACs, wall-clock, memory/I/O, break-even M* |
+
+---
+
+# 50. Final unified hypothesis
+
+\[
+\boxed{\textbf{Intelligence is partly the learned control of persistent computational state.}}
+\]
+
+CLM establishes learned textual state control. TAC establishes temporal/persistent state continuity. CDL establishes selective information addressing. CASM establishes selective computation. Verification controls state-transition trust. Fast/slow plasticity controls continual learning. Dynamic capacity controls acquisition of new computation. Consolidation turns verified experience into reusable structure.
+
+The strongest testable form is:
+\[
+\boxed{\text{useful computation should scale with relevant structure and required computation, not accumulated history, state, or capacity}.}
+\]
+
+This remains a hypothesis until the benchmark ladder demonstrates it against dense-scan, Transformer/KV, and SSM-style baselines.
+
+---
+
+# 51. Status ledger
+
+FINAL / VERIFIED:
+- temporal persistence and reset control;
+- persistent relational reconstruction;
+- separation of dense-rank and LSH-admission bottlenecks;
+- high-M dense-rank degradation through M=8192;
+- no defensible asymptotic sublinear interpretation from the observed local dense-rank curve;
+- downstream repair/recovery behavior;
+- verified-only promotion rule;
+- exact relational reference;
+- the registered representability/OOD/budget gates.
+
+NOT YET VALIDATED:
+- representation collapse as the cause of the M=1024 failure;
+- orthogonality as the correct fix;
+- product-key/factorized compositional generalization;
+- all-candidate outcome training;
+- Gumbel/straight-through routing;
+- verified-experience prior in TAC-OSM;
+- CLM-style editable structured state advantage;
+- structured-state reuse versus token/suffix-cache reuse;
+- complete PLM scaling hypothesis.
+
+INFRASTRUCTURE:
+- the product-key bridge workflow failure is a missing-script error;
+- the first #61 composition run was cancelled; the rerun is authoritative.
