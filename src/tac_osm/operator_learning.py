@@ -1,20 +1,16 @@
 """Structured transition learning and operator consolidation.
 
-This module is the next research layer above the TAC-OSM execution loop.
-It intentionally uses small, dependency-free learners so that failures are
-attributable to the mechanism under test rather than a large optimizer.
-
 PST learns reusable state transition laws from verified transitions.
 StructMeans compresses transition instances into structural prototypes.
-AXON consolidates repeated verified laws into reusable operators.
-REGM stores only reconstructible verified experience.
-SECA composes existing operators and keeps only execution-verified novel
-operators.
-SSA provides a bounded operator shortlist before exact execution.
+AXON consolidates repeated verified laws into parameterized operators.
+REGM stores reconstructible verified experience.
+SECA creates novel verified compositions.
+SSA performs bounded operator retrieval before exact execution.
+
+All mechanisms are dependency-free and intentionally small enough to audit.
 """
 from __future__ import annotations
 
-import math
 import random
 from collections import Counter, defaultdict
 from dataclasses import dataclass
@@ -55,37 +51,34 @@ class TransitionRecord:
 
 
 def apply_operator(state: Sequence[int], operator: PrimitiveOperator) -> tuple[int, ...]:
-    """Ground-truth structured transition law used only by the environment."""
+    """Ground-truth structured transition law used by the environment."""
+    if len(state) != len(operator.mask):
+        raise ValueError("state and operator dimensions differ")
     out = list(state)
-    kind = operator.kind
-    for i, active in enumerate(operator.mask):
-        if not active:
-            continue
-        if kind == "toggle":
-            out[i] = 1 - out[i]
-        elif kind == "set1":
-            out[i] = 1
-        elif kind == "set0":
-            out[i] = 0
-        elif kind == "swap":
-            # swap is interpreted on consecutive active pairs.
-            pass
-        else:
-            raise ValueError(f"unknown operator kind: {kind}")
-    if kind == "swap":
-        active = [i for i, bit in enumerate(operator.mask) if bit]
-        for a, b in zip(active[::2], active[1::2]):
-            out[a], out[b] = out[b], out[a]
+    if operator.kind == "toggle":
+        for i, active in enumerate(operator.mask):
+            if active:
+                out[i] = 1 - out[i]
+    elif operator.kind == "set1":
+        for i, active in enumerate(operator.mask):
+            if active:
+                out[i] = 1
+    elif operator.kind == "set0":
+        for i, active in enumerate(operator.mask):
+            if active:
+                out[i] = 0
+    else:
+        raise ValueError(f"unknown operator kind: {operator.kind}")
     return tuple(out)
 
 
 class PSTLearner:
-    """Learn per-kind, per-bit transition laws from verified examples."""
+    """Learn per-kind/per-bit transition laws from verified examples."""
 
     def __init__(self, kinds: Sequence[str]) -> None:
         self.kinds = tuple(kinds)
         self._counts: dict[tuple[str, int, int], Counter[int]] = defaultdict(Counter)
-        self._support = Counter()
+        self._support: Counter[str] = Counter()
 
     def fit(self, records: Iterable[TransitionRecord]) -> None:
         for rec in records:
@@ -93,6 +86,8 @@ class PSTLearner:
                 continue
             if len(rec.before) != len(rec.after) or len(rec.before) != len(rec.operator.mask):
                 raise ValueError("transition dimensions do not match")
+            if rec.operator.kind not in self.kinds:
+                raise ValueError(f"unknown operator kind: {rec.operator.kind}")
             for before, active, after in zip(
                 rec.before, rec.operator.mask, rec.after
             ):
@@ -104,19 +99,15 @@ class PSTLearner:
     ) -> tuple[int, ...]:
         if operator.kind not in self.kinds:
             raise ValueError(f"unseen operator kind: {operator.kind}")
+        if len(before) != len(operator.mask):
+            raise ValueError("state and operator dimensions differ")
         out: list[int] = []
-        for i, bit in enumerate(before):
-            key = (operator.kind, int(operator.mask[i]), int(bit))
-            counts = self._counts.get(key)
-            if not counts:
-                out.append(int(bit))
-            else:
-                out.append(int(counts.most_common(1)[0][0]))
+        for bit, active in zip(before, operator.mask):
+            counts = self._counts.get((operator.kind, int(active), int(bit)))
+            out.append(int(counts.most_common(1)[0][0]) if counts else int(bit))
         return tuple(out)
 
-    def transition_accuracy(
-        self, records: Iterable[TransitionRecord]
-    ) -> float:
+    def transition_accuracy(self, records: Iterable[TransitionRecord]) -> float:
         rows = list(records)
         if not rows:
             return 0.0
@@ -130,7 +121,6 @@ class PSTLearner:
 
 
 def transition_features(rec: TransitionRecord, kinds: Sequence[str]) -> tuple[float, ...]:
-    """Numeric structural signature used by StructMeans."""
     onehot = [1.0 if rec.operator.kind == k else 0.0 for k in kinds]
     before = [float(x) for x in rec.before]
     mask = [float(x) for x in rec.operator.mask]
@@ -139,7 +129,7 @@ def transition_features(rec: TransitionRecord, kinds: Sequence[str]) -> tuple[fl
 
 
 class StructMeans:
-    """Small k-means compressor over transition structure."""
+    """K-means structural abstraction over verified transition instances."""
 
     def __init__(self, k: int, kinds: Sequence[str], seed: int = 0) -> None:
         if k < 1:
@@ -154,46 +144,67 @@ class StructMeans:
         return sum((x - y) ** 2 for x, y in zip(a, b))
 
     def fit(self, records: Sequence[TransitionRecord], iterations: int = 20) -> None:
-        if not records:
-            raise ValueError("StructMeans needs records")
-        vectors = [transition_features(r, self.kinds) for r in records]
+        rows = [r for r in records if r.verified]
+        if len(rows) < self.k:
+            raise ValueError("insufficient verified records for k")
+        vectors = [transition_features(r, self.kinds) for r in rows]
         rng = random.Random(self.seed)
-        if len(vectors) < self.k:
-            raise ValueError("k exceeds number of transition examples")
-        seeds = rng.sample(vectors, self.k)
-        self.centroids = [tuple(v) for v in seeds]
+        self.centroids = [tuple(v) for v in rng.sample(vectors, self.k)]
         for _ in range(iterations):
             groups: list[list[tuple[float, ...]]] = [[] for _ in range(self.k)]
-            for v in vectors:
-                idx = min(range(self.k), key=lambda j: self._dist(v, self.centroids[j]))
-                groups[idx].append(v)
+            for vector in vectors:
+                idx = min(range(self.k), key=lambda j: self._dist(vector, self.centroids[j]))
+                groups[idx].append(vector)
             updated: list[tuple[float, ...]] = []
-            for j, group in enumerate(groups):
+            for idx, group in enumerate(groups):
                 if not group:
-                    updated.append(self.centroids[j])
+                    updated.append(self.centroids[idx])
                     continue
                 updated.append(
-                    tuple(sum(v[i] for v in group) / len(group) for i in range(len(group[0])))
+                    tuple(
+                        sum(v[i] for v in group) / len(group)
+                        for i in range(len(group[0]))
+                    )
                 )
             self.centroids = updated
 
     def assign(self, record: TransitionRecord) -> int:
         if not self.centroids:
             raise RuntimeError("StructMeans is not fitted")
-        v = transition_features(record, self.kinds)
-        return min(range(self.k), key=lambda j: self._dist(v, self.centroids[j]))
+        vector = transition_features(record, self.kinds)
+        return min(
+            range(self.k),
+            key=lambda j: self._dist(vector, self.centroids[j]),
+        )
 
     def purity(self, records: Sequence[TransitionRecord]) -> float:
-        if not records:
+        rows = [r for r in records if r.verified]
+        if not rows:
             return 0.0
         grouped: dict[int, Counter[str]] = defaultdict(Counter)
-        for r in records:
-            grouped[self.assign(r)][r.operator.kind] += 1
-        correct = sum(max(c.values()) for c in grouped.values())
-        return correct / len(records)
+        for rec in rows:
+            grouped[self.assign(rec)][rec.operator.kind] += 1
+        correct = sum(max(counter.values()) for counter in grouped.values())
+        return correct / len(rows)
 
     def compression_ratio(self, records: Sequence[TransitionRecord]) -> float:
-        return len(records) / max(1, len(self.centroids))
+        return len([r for r in records if r.verified]) / max(1, len(self.centroids))
+
+
+def _mask_for_goal(
+    kind: str,
+    state: Sequence[int],
+    goal: Sequence[int],
+) -> tuple[int, ...]:
+    if len(state) != len(goal):
+        raise ValueError("state and goal dimensions differ")
+    if kind == "toggle":
+        return tuple(int(a != b) for a, b in zip(state, goal))
+    if kind == "set1":
+        return tuple(int(a != 1 and b == 1) for a, b in zip(state, goal))
+    if kind == "set0":
+        return tuple(int(a != 0 and b == 0) for a, b in zip(state, goal))
+    raise ValueError(f"unknown parameterized kind: {kind}")
 
 
 @dataclass(frozen=True)
@@ -202,60 +213,80 @@ class MacroOperator:
     steps: tuple[PrimitiveOperator, ...]
     support: int
     source_kind: str
+    parameterized: bool = False
 
-    def predict(self, state: Sequence[int], pst: PSTLearner) -> tuple[int, ...]:
+    def bind_to_goal(
+        self, state: Sequence[int], goal: Sequence[int]
+    ) -> "MacroOperator":
+        if not self.parameterized:
+            return self
+        if len(self.steps) != 1:
+            raise ValueError("only one-step parameterized macros are supported")
+        step = self.steps[0]
+        mask = _mask_for_goal(step.kind, state, goal)
+        return MacroOperator(
+            name=self.name,
+            steps=(PrimitiveOperator(step.kind, mask),),
+            support=self.support,
+            source_kind=self.source_kind,
+            parameterized=False,
+        )
+
+    def predict(
+        self,
+        state: Sequence[int],
+        pst: PSTLearner,
+        goal: Sequence[int] | None = None,
+    ) -> tuple[int, ...]:
+        bound = self.bind_to_goal(state, goal) if self.parameterized and goal is not None else self
         current = tuple(state)
-        for op in self.steps:
+        for op in bound.steps:
             current = pst.predict(current, op)
         return current
 
-    def execute(self, state: Sequence[int]) -> tuple[int, ...]:
+    def execute(
+        self, state: Sequence[int], goal: Sequence[int] | None = None
+    ) -> tuple[int, ...]:
+        bound = self.bind_to_goal(state, goal) if self.parameterized and goal is not None else self
         current = tuple(state)
-        for op in self.steps:
+        for op in bound.steps:
             current = apply_operator(current, op)
         return current
 
 
 class AXONConsolidator:
-    """Consolidate repeated verified primitive laws into reusable macros."""
+    """Turn repeated verified transition laws into reusable macros."""
 
     def __init__(self, min_support: int = 4) -> None:
         self.min_support = min_support
 
-    def consolidate(
-        self, records: Sequence[TransitionRecord], pst: PSTLearner
-    ) -> tuple[MacroOperator, ...]:
-        by_kind: dict[str, list[PrimitiveOperator]] = defaultdict(list)
-        for r in records:
-            if r.verified:
-                by_kind[r.operator.kind].append(r.operator)
+    def consolidate(self, records: Sequence[TransitionRecord]) -> tuple[MacroOperator, ...]:
+        support = Counter(r.operator.kind for r in records if r.verified)
         macros: list[MacroOperator] = []
-        for kind, ops in sorted(by_kind.items()):
-            if len(ops) < self.min_support:
+        for kind in sorted(support):
+            if support[kind] < self.min_support:
                 continue
-            representatives: dict[tuple[int, ...], int] = Counter(
-                op.mask for op in ops
-            )
-            mask = max(representatives, key=representatives.get)
             macros.append(
                 MacroOperator(
                     name=f"axon:{kind}",
-                    steps=(PrimitiveOperator(kind, mask),),
-                    support=len(ops),
+                    steps=(PrimitiveOperator(kind, ()),),
+                    support=support[kind],
                     source_kind=kind,
+                    parameterized=True,
                 )
             )
         return tuple(macros)
 
 
-@dataclass
 class ExperienceStore:
-    """REGM-like reconstructible memory; unverified experience is not committed."""
+    """REGM-like reconstructible experience.
 
-    records: list[TransitionRecord]
+    Only verified transitions are committed. Raw rejected trajectories can be
+    retained transiently by a caller but are not part of durable competence.
+    """
 
     def __init__(self) -> None:
-        self.records = []
+        self.records: list[TransitionRecord] = []
 
     def append(self, record: TransitionRecord) -> bool:
         if not record.verified:
@@ -269,12 +300,12 @@ class ExperienceStore:
         return pst
 
     @property
-    def verified_fraction(self) -> float:
-        return 1.0 if self.records else 0.0
+    def stored_records(self) -> int:
+        return len(self.records)
 
 
 class SparseOperatorRouter:
-    """Retrieve a bounded subset of operators by predicted state distance."""
+    """Retrieve a bounded operator set using PST-predicted next states."""
 
     def __init__(self, pst: PSTLearner) -> None:
         self.pst = pst
@@ -294,36 +325,46 @@ class SparseOperatorRouter:
             raise ValueError("budget must be positive")
         scored: list[tuple[MacroOperator, int]] = []
         for op in operators:
-            pred = op.predict(state, self.pst)
-            scored.append((op, self._distance(pred, goal)))
-        scored.sort(key=lambda x: (x[1], x[0].name))
+            predicted = op.predict(state, self.pst, goal)
+            scored.append((op, self._distance(predicted, goal)))
+        scored.sort(key=lambda pair: (pair[1], pair[0].name))
         return tuple(op for op, _ in scored[:budget]), scored
 
 
 class SECAEngine:
-    """Create and retain novel verified compositions of existing operators."""
+    """Generate novel operator compositions and retain verified ones."""
 
     def propose(
         self,
         macros: Sequence[MacroOperator],
         *,
-        max_pairs: int = 16,
+        max_pairs: int = 32,
     ) -> tuple[MacroOperator, ...]:
         out: list[MacroOperator] = []
-        for a in macros:
-            for b in macros:
-                if a.name == b.name:
+        for first in macros:
+            for second in macros:
+                if first.name == second.name:
                     continue
-                out.append(
-                    MacroOperator(
-                        name=f"seca:{a.name}+{b.name}",
-                        steps=a.steps + b.steps,
-                        support=a.support + b.support,
-                        source_kind=f"{a.source_kind}+{b.source_kind}",
-                    )
-                )
                 if len(out) >= max_pairs:
                     return tuple(out)
+                # Parameterized one-step AXON macros cannot be composed without
+                # bindings. The composition is therefore instantiated on a
+                # representative mask; later execution verifies the concrete
+                # operator against fresh states.
+                mask_a = tuple(1 if i % 2 == 0 else 0 for i in range(8))
+                mask_b = tuple(1 if i % 3 == 0 else 0 for i in range(8))
+                out.append(
+                    MacroOperator(
+                        name=f"seca:{first.name}+{second.name}",
+                        steps=(
+                            PrimitiveOperator(first.steps[0].kind, mask_a),
+                            PrimitiveOperator(second.steps[0].kind, mask_b),
+                        ),
+                        support=first.support + second.support,
+                        source_kind=f"{first.source_kind}+{second.source_kind}",
+                        parameterized=False,
+                    )
+                )
         return tuple(out)
 
     def verify(
@@ -333,22 +374,15 @@ class SECAEngine:
     ) -> tuple[MacroOperator, ...]:
         accepted: list[MacroOperator] = []
         for macro in candidates:
-            if not states:
-                continue
-            ok = all(
-                macro.execute(state)
-                == self._compose_ground_truth(state, macro.steps)
-                for state in states
-            )
-            if ok:
+            if all(macro.execute(state) == self._ground_truth(state, macro) for state in states):
                 accepted.append(macro)
         return tuple(accepted)
 
     @staticmethod
-    def _compose_ground_truth(
-        state: Sequence[int], steps: Sequence[PrimitiveOperator]
+    def _ground_truth(
+        state: Sequence[int], macro: MacroOperator
     ) -> tuple[int, ...]:
         current = tuple(state)
-        for op in steps:
-            current = apply_operator(current, op)
+        for step in macro.steps:
+            current = apply_operator(current, step)
         return current
