@@ -1,0 +1,35 @@
+name: TACOSM fused CDL-CASM full loop 001
+
+on:
+  push:
+    branches:
+      - research/fused-cdl-casm-full-loop-001
+  pull_request:
+    branches:
+      - research/fused-cdl-casm-full-loop-001
+  workflow_dispatch:
+
+jobs:
+  test-and-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install package and test dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[test]"
+      - name: Unit tests
+        run: python -m pytest -q
+      - name: Full fused research loop
+        run: python scripts/run_fused_cdl_casm_full_loop_001.py
+      - name: Upload experiment result
+        uses: actions/upload-artifact@v4
+        with:
+          name: fused-cdl-casm-001-results
+          path: results/fused_cdl_casm_001.json
