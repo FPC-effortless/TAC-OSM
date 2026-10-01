@@ -361,3 +361,33 @@ The state-distinct frontier executor returns a large target-specific output when
 **Disposition:** the frontier-004 result is valid as a count-conserving selective state-admission/retrieval mechanism test under its registered synthetic evaluator. It is not evidence that selective routing reduces actual structural computation.
 
 **Correction:** the confirmatory M2 experiment must use the pinned CASM-S adapter and actual execution-work units as already specified in repository issue #6.
+
+### A22 — AXON/SSA operator routing is goal-conditioned with privileged action construction (P0)
+
+In the phase-2 operator-learning runner, `SparseOperatorRouter.route(state, goal, operators, budget)` passes the complete goal to `MacroOperator.predict()`. Parameterized macros then call `bind_to_goal(state, goal)`, and `_mask_for_goal()` directly constructs the exact operator mask from the goal.
+
+This means the operator selector is not inferring an action from state and outcome history alone. The desired post-state is supplied as an action-construction input.
+
+**Disposition:** single-operator route success in this phase is not evidence of autonomous operator selection or action discovery.
+
+**Correction:** the confirmatory operator benchmark must hide the goal from routing. The router may observe public task/state information and verified history; the goal can remain evaluator-only. A separate goal-conditioned planning baseline may be retained as an explicit privileged control.
+
+### A23 — StructMeans purity is label-assisted and outcome-inclusive (P1)
+
+`transition_features()` includes an 8x one-hot encoding of the operator kind and the complete `after` state. Therefore kind purity is partly trivial label recovery, while signature purity has access to the realized outcome.
+
+**Disposition:** these purity numbers do not establish unsupervised discovery of structural roles or causal transition signatures.
+
+**Correction:** use an evaluator-hidden structural encoding, report cluster stability, and test whether learned clusters predict held-out transitions without receiving operator labels or future target states as routing inputs.
+
+### A24 — FixedAXON is exact grouping, not learned consolidation (P1)
+
+`FixedAXONConsolidator` counts exact `(kind, mask)` pairs and creates one macro per recurring pair. This is a useful deterministic baseline for reusable operators, but it is not learned parameterized consolidation.
+
+**Disposition:** report it as exact verified consolidation/control.
+
+### A25 — SECA verification is exhaustive reference verification over a very small composition set (P2)
+
+SECA proposes bounded pairwise compositions and accepts only when every selected validation state exactly matches an independent reference. This is appropriate as a synthetic falsifier, but the proposed search space is tiny and the reference is available to every candidate.
+
+**Correction:** retain exact reference verification as the falsification oracle, while reporting proposal-space size, validation-state count, and false-accept/false-reject stress separately. Do not call acceptance alone evidence of general compositional discovery.
