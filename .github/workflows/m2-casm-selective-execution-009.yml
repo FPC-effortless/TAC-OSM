@@ -45,6 +45,8 @@ jobs:
         run: python -m pytest casm_v01/phase1_dag/test_phase1.py -q
       - name: Verify external executor commit
         run: test "$(git -C third_party/cdl-attention-experiment rev-parse HEAD)" = "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+      - name: Baseline provenance gate
+        run: python scripts/sync_test_count.py --check
       - name: Full repository suite
         run: python -m pytest tests/ -q
       - name: M2 protocol tests
