@@ -295,3 +295,43 @@ The phrase “target codes held out” is only true for the factor-codebook trai
 Besides the router-update mismatch, the product-key arm uses a factor-codebook construction trained only from TRAIN_CODES while the dense arm directly scores the complete candidate set. These are different supervision and input boundaries, so the comparison mixes representation architecture with which candidate identities are available to the learned index.
 
 **Correction:** define a common training-visible candidate universe for matched-capacity comparisons, and separately test target-identity holdout as its own generalization axis.
+
+### A14 — Unified PLM online learning receives the exact correct record after failure (P0)
+
+In `UnifiedPLM.step()`, a failed action calls:
+
+`self.router.update(task.query_bits, record, -1.0, correct_record=correct)`.
+
+`BinaryCDL.update()` then explicitly updates the `correct_record` when reward is negative. The evaluator therefore supplies the exact successful target record to the learner after a failed action.
+
+This is privileged target supervision, not outcome-only learning. It can materially improve subsequent routing without the learner discovering the target from environment feedback.
+
+**Disposition:** any PR62 online-learning/plasticity result that used this path must be labeled privileged online correction. It cannot support a claim of learning solely from post-action outcomes.
+
+**Correction:** add an outcome-only mode in which a failed action produces only the observed failure; the learner does not receive `correct_record`, target ID, target descriptor, or hidden acceptable-action metadata. Run a paired privileged-supervision control separately if useful.
+
+### A15 — Unified PLM operator selection uses stored operator identity (P1)
+
+`MemoryRecord.operator_family` is populated for every world/distractor record and passed to `OperatorPool.plans(record.operator_family)`. The operator planner therefore gets the correct operator family from the record.
+
+This is not learned operator selection. It is metadata-assisted operator routing.
+
+**Disposition:** P1-P5 operator-scaling and adaptive-CASM results are mechanism tests with privileged operator-family hints, not tests of autonomous operator discovery.
+
+**Correction:** add an operator-hidden condition where `operator_family` is absent or randomized at routing time, and measure operator-selection errors separately from state addressing.
+
+### A16 — Operator composition hook is not generic (P1)
+
+`OperatorPool.synthesize_composite()` composes the first operator output into a one-element tuple for the second operator. This is valid only when the second operator has arity 1. A binary second operator will receive too few operands.
+
+The current code does not reject this configuration explicitly.
+
+**Correction:** either implement a typed composition interface with argument routing or reject unsupported compositions deterministically. No current headline result should depend on this hook until that gate passes.
+
+### A17 — Unified PLM cost does not include router arithmetic explicitly (P1)
+
+`StepResult.total_cost` adds index probes, raw/admitted candidate counts, and CASM execution cost, but does not include the arithmetic needed by `BinaryCDL.rank()` to score each admitted candidate.
+
+The research prose sometimes treats this as total routing/computation cost.
+
+**Correction:** report router feature/similarity operations separately and include them in the end-to-end query cost ledger. Keep the current number as an index-plus-candidate-count proxy.
