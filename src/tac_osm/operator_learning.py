@@ -388,21 +388,15 @@ class SECAEngine:
             for second in macros:
                 if first.name == second.name:
                     continue
+                if first.parameterized or second.parameterized:
+                    # SECA only composes already-bound executable structures.
+                    continue
                 if len(out) >= max_pairs:
                     return tuple(out)
-                # Parameterized one-step AXON macros cannot be composed without
-                # bindings. The composition is therefore instantiated on a
-                # representative mask; later execution verifies the concrete
-                # operator against fresh states.
-                mask_a = tuple(1 if i % 2 == 0 else 0 for i in range(8))
-                mask_b = tuple(1 if i % 3 == 0 else 0 for i in range(8))
                 out.append(
                     MacroOperator(
                         name=f"seca:{first.name}+{second.name}",
-                        steps=(
-                            PrimitiveOperator(first.steps[0].kind, mask_a),
-                            PrimitiveOperator(second.steps[0].kind, mask_b),
-                        ),
+                        steps=first.steps + second.steps,
                         support=first.support + second.support,
                         source_kind=f"{first.source_kind}+{second.source_kind}",
                         parameterized=False,
