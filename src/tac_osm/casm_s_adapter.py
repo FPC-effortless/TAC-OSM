@@ -11,6 +11,7 @@ from typing import Sequence
 
 @dataclass(frozen=True)
 class WorkAccounting:
+    representation_node_operations: int
     gate_evaluations: int
     edge_message_operations: int
     structural_node_operations: int
@@ -18,7 +19,8 @@ class WorkAccounting:
     @property
     def total(self) -> int:
         return (
-            self.gate_evaluations
+            self.representation_node_operations
+            + self.gate_evaluations
             + self.edge_message_operations
             + self.structural_node_operations
         )
@@ -38,6 +40,7 @@ class CASMSAdapter:
         structural_nodes = max(0, episode.active_count - input_nodes)
         edge_count = len(episode.candidate_edges)
         return WorkAccounting(
+            representation_node_operations=episode.active_count,
             gate_evaluations=edge_count,
             edge_message_operations=edge_count,
             structural_node_operations=structural_nodes,
