@@ -45,6 +45,7 @@ class ExecutionFeedbackProductKeyRouter:
         factor_size: int = 16,
         factor_beam: int = 7,
         max_shortlist: int = 32,
+        rerank_cap: int = 32,
         refresh_interval_updates: int = 32,
         learning_rate: float = 0.01,
         margin: float = 0.1,
@@ -67,6 +68,7 @@ class ExecutionFeedbackProductKeyRouter:
             factor_beam=factor_beam,
             iterations=8,
             max_shortlist=max_shortlist,
+            max_rerank_candidates=rerank_cap,
         )
         self.refresh_interval_updates = refresh_interval_updates
         self._index = MultiFactorProductKeyStateIndex(self.index_config)
