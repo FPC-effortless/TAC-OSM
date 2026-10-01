@@ -2,21 +2,18 @@
   "experiment_id": "TACOSM-C5-FULL-PHASE-001",
   "title": "Full C5 fused loop: rank scaling, conformal K, OR-LSH admission, CASM-K execution, verifier, and closed-loop learning",
   "question": "Can a dense outcome-trained CDL Q/K shortlister support calibrated bounded-K admission so exact CASM execution and verification decouple final correctness from M?",
-  "hypothesis": [
-    "The exhaustive target-rank distribution grows sublinearly with population M on the registered state-addressing workload.",
-    "Split-conformal calibration yields a held-out K(M,alpha) with empirical coverage near the requested level.",
-    "OR-over-tables random-hyperplane admission can retain the target with materially fewer reranked candidates than M when p1 is high and p2 is near 0.5.",
-    "Exact CASM execution plus a post-execution verifier makes conditional selection accuracy substantially higher than raw CDL Top-1 precision.",
-    "Verified candidates written to the experience namespace improve subsequent routing without contaminating world state."
-  ],
+  "hypothesis": "The exhaustive target-rank distribution may grow sublinearly with M; split-conformal calibration may yield a held-out shortlist K with the requested coverage; OR-over-tables LSH may retain the target with a smaller reranking population; exact CASM plus independent verification may decouple final selection from CDL Top-1 precision; verified experience writes may improve later routing.",
   "held_constant": [
-    "dim=16, exact equality relation over all bits",
-    "fresh target code each training step",
-    "training M sampled log-uniformly in [8,256]",
-    "evaluation at 8..1024, including 512 and 1024 extrapolation",
-    "candidate action/index never enters routing features",
-    "CASM routing/execution information boundary",
-    "verifier receives no hidden target index"
+    "dim=16 and exact equality relation across all 16 state bits",
+    "fresh target code sampled at every training step",
+    "training population M sampled log-uniformly from 8 through 256",
+    "evaluation populations M={8,16,32,64,128,256,512,1024}",
+    "two disjoint held-out trial streams for conformal calibration and evaluation",
+    "candidate action/index and hidden acceptable-action sets are excluded from router inputs",
+    "CASM execution uses the exact relevance_program path; verifier receives public candidate/reference data only",
+    "persistent world write is staged with one-step delay before query read",
+    "verified writes use the experience: namespace",
+    "LSH uses random-hyperplane tables; requested table count is derived from measured rho and capped only for the registered safety limit of 128"
   ],
   "gates": [
     "CASM exhaustive verifier success must be exactly one candidate per valid trial",
@@ -86,5 +83,90 @@
     0.05
   ],
   "index": "OR-over-tables random hyperplane LSH",
-  "shortlist_policy": "K is obtained from held-out exhaustive target-rank calibration; no beam sweep is used to choose K"
+  "shortlist_policy": "K is obtained from held-out exhaustive target-rank calibration; no beam sweep is used to choose K",
+  "arms": [
+    {
+      "name": "exhaustive_oracle",
+      "intervention": "exhaustive exact CASM+verifier scoring of all M candidates",
+      "acts_on": "reference capability",
+      "knob": "execution_population",
+      "value": "M"
+    },
+    {
+      "name": "dense_cdl_student",
+      "intervention": "dense Q/K student trained on exhaustive downstream outcomes",
+      "acts_on": "router representation",
+      "knob": "outcome_distillation",
+      "value": "dense"
+    },
+    {
+      "name": "orlsh_cdl_casm",
+      "intervention": "same student with OR-over-tables LSH, calibrated K, exact CASM execution and verifier",
+      "acts_on": "inference routing and execution subset",
+      "knob": "sparse_funnel",
+      "value": "OR-LSH+K"
+    },
+    {
+      "name": "closed_loop_experience",
+      "intervention": "verified successful candidates update the router and write only to experience namespace",
+      "acts_on": "post-verification learning",
+      "knob": "verified_learning",
+      "value": "enabled"
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "Run the registered exhaustive, dense-student, sparse-funnel, and closed-loop measurements at every M and report the complete endpoint set without outcome-dependent arm selection.",
+      "licenses": "a workload-specific capability/routing/execution/learning measurement.",
+      "does_not_license": "universal routing superiority, a hardware speedup, or a general theorem."
+    },
+    {
+      "condition": "A sublinear routing claim requires measured query-routing exponent beta < 1 and no LSH table cap at the evaluated points.",
+      "licenses": "a bounded empirical scaling statement for this workload.",
+      "does_not_license": "sublinear scaling where the cap binds or where build cost dominates the reported regime."
+    },
+    {
+      "condition": "A conformal coverage statement is conditional on the exchangeability assumptions of the calibration/test split; empirical held-out coverage is reported separately.",
+      "licenses": "calibrated shortlist coverage under the registered sampling protocol.",
+      "does_not_license": "distribution-free coverage under arbitrary distribution shift."
+    }
+  ],
+  "interpretation_order": [
+    "gate validity and exactly-one-target invariant",
+    "exhaustive target-rank distribution by M",
+    "rank scaling exponent gamma",
+    "conformal K and empirical held-out coverage",
+    "p1 and p2 separation and rho",
+    "OR-LSH admission recall and rerank fraction",
+    "CASM executed candidate count and verifier selection",
+    "oracle persistent versus reset control",
+    "closed-loop experience commit rate and online success",
+    "query routing versus index-build arithmetic cost"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024
+  ],
+  "k_levels": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128
+  ],
+  "steps": 600,
+  "eval_steps": 64,
+  "layer": "L3"
 }
