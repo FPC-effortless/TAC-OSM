@@ -281,6 +281,16 @@ class TwoTowerRouter(nn.Module):
         return zq @ zc.T
 
 
+def router_parameter_count(router: nn.Module) -> int:
+    return sum(int(p.numel()) for p in router.parameters())
+
+
+def router_query_mac_proxy(m: int) -> int:
+    input_dim = SUPPORT_ROWS * (INPUT_COUNT + 1)
+    hidden = 64
+    return input_dim * hidden + hidden * LATENT_DIM + m * LATENT_DIM
+
+
 def query_vector(examples: Sequence[tuple[tuple[int, ...], int]]) -> list[float]:
     out: list[float] = []
     for bits, y in examples:
@@ -438,6 +448,8 @@ def evaluate_router(
     return {
         "rank": rank,
         "routing_recall": {str(b): float(rank <= b) for b in BUDGETS},
+        "routing_query_mac_proxy": router_query_mac_proxy(len(candidates)),
+        "candidate_index_build_mac_proxy": len(candidates) * 32 * LATENT_DIM,
         "exhaustive": {
             "semantic_success": float(ex_ok),
             "execution_work_units": ex_work,
@@ -631,6 +643,10 @@ def main() -> None:
         "external_executor_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748",
         "protocol": {
             "seeds": list(seeds),
+            "router_trainable_parameters": {
+                "structural": int(router_parameter_count(fit_router(0, train_casm(0)[0], generate_unique_programs(2111, min(TRAIN_PROGRAMS, 32)), representation="structural"))),
+                "summary": int(router_parameter_count(fit_router(0, train_casm(0)[0], generate_unique_programs(2111, min(TRAIN_PROGRAMS, 32)), representation="summary"))),
+            },
             "M_levels": list(m_levels),
             "budgets": list(BUDGETS),
             "support_rows": SUPPORT_ROWS,
