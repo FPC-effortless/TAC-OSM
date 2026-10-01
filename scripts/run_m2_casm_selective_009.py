@@ -59,6 +59,7 @@ ROLE_HOLDOUT = ("NOT", "XOR")
 class TaskSpec:
     task_id: str
     examples: tuple[tuple[tuple[int, ...], int], ...]
+    verification_examples: tuple[tuple[tuple[int, ...], int], ...]
     target_truth: tuple[int, ...]
     target_index: int
 
@@ -165,17 +166,17 @@ def make_task_pool(
     for ep in candidates:
         if structural_key(ep) in train_structures:
             continue
-        support = sample_support(ep, rng)
-        support_sig = tuple((tuple(bits), out) for bits, out in support)
+        keys = sorted(ep.truth_table)
+        support_keys = rng.sample(keys, SUPPORT_ROWS)
+        remaining_keys = [k for k in keys if k not in support_keys]
+        verification_keys = tuple(rng.sample(remaining_keys, min(8, len(remaining_keys))))
+        support_sig = tuple((tuple(bits), int(ep.truth_table[bits])) for bits in support_keys)
+        verification_sig = tuple((tuple(bits), int(ep.truth_table[bits])) for bits in verification_keys)
         pool = [ep]
         for decoy in candidates:
             if structural_key(decoy) == structural_key(ep):
                 continue
             if truth_signature(decoy) == truth_signature(ep):
-                continue
-            decoy_outputs = tuple(int(decoy.truth_table[bits]) for bits, _ in support)
-            target_outputs = tuple(int(out) for _, out in support)
-            if decoy_outputs == target_outputs:
                 continue
             pool.append(decoy)
             if len(pool) == m:
@@ -187,6 +188,7 @@ def make_task_pool(
         task = TaskSpec(
             task_id=f"m2:{seed}:{m}:{int(heldout)}:{target_idx}",
             examples=support_sig,
+            verification_examples=verification_sig,
             target_truth=truth_signature(ep),
             target_index=target_idx,
         )
@@ -382,7 +384,7 @@ def evaluate_router(
         reps = []
         runtime = []
         for idx in indices:
-            for bits, _out in examples:
+            for bits, _out in task.verification_examples:
                 reps.append(candidates[idx])
                 runtime.append(list(bits))
         t0 = time.perf_counter()
@@ -392,7 +394,7 @@ def evaluate_router(
         for j, (_idx) in enumerate(indices):
             start = j * SUPPORT_ROWS
             vals = outputs[start : start + SUPPORT_ROWS]
-            expected = [float(y) for _, y in examples]
+            expected = [float(y) for _, y in task.verification_examples]
             ok = ok and all((float(v) >= 0.5) == (float(y) >= 0.5) for v, y in zip(vals, expected))
         work = WorkAccounting(0, 0, 0)
         for idx in indices:
@@ -450,6 +452,7 @@ def evaluate_router(
         "routing_recall": {str(b): float(rank <= b) for b in BUDGETS},
         "routing_query_mac_proxy": router_query_mac_proxy(len(candidates)),
         "candidate_index_build_mac_proxy": len(candidates) * 32 * LATENT_DIM,
+        "verifier_examples": len(task.verification_examples),
         "exhaustive": {
             "semantic_success": float(ex_ok),
             "execution_work_units": ex_work,
@@ -597,7 +600,8 @@ def main() -> None:
                         "task": {
                             "task_id": task.task_id,
                             "target_index": task.target_index,
-                            "examples": task.examples,
+                            "router_visible_examples": task.examples,
+                            "verifier_only_examples": task.verification_examples,
                         },
                         **measurement,
                     })
@@ -631,7 +635,8 @@ def main() -> None:
                         "task": {
                             "task_id": task.task_id,
                             "target_index": task.target_index,
-                            "examples": task.examples,
+                            "router_visible_examples": task.examples,
+                            "verifier_only_examples": task.verification_examples,
                         },
                         **evaluate_router(router, rep, task, pool, adapter, memory),
                     })
