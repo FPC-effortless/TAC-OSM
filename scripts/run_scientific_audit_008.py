@@ -251,7 +251,6 @@ def main() -> None:
             "control_steps": CONTROL_STEPS,
             "outcome_base_steps": OUTCOME_BASE_STEPS,
             "outcome_steps": OUTCOME_STEPS,
-            "outcome_steps": OUTCOME_STEPS,
             "train_M": list(TRAIN_M),
             "eval_M": list(EVAL_M),
             "trials_per_seed": TRIALS,
@@ -264,14 +263,8 @@ def main() -> None:
         },
         "outcome_training_environment_evaluations": outcome_eval_cost,
         "ood_holdout": {
-            "control": {
-                str(s): evaluate(train_control(s), s, mode="ood")
-                for s in SEEDS
-            },
-            "outcome_field_environment": {
-                str(s): evaluate(train_outcome(s)[0], s, mode="ood")
-                for s in SEEDS
-            },
+            "control": {str(s): evaluate(routers[str(s)][0], s, mode="ood") for s in SEEDS},
+            "outcome_field_environment": {str(s): evaluate(routers[str(s)][1], s, mode="ood") for s in SEEDS},
         },
         "scope": {
             "semantic_language": False,
