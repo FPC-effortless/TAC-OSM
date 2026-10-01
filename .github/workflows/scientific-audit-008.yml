@@ -1,0 +1,31 @@
+name: Research scientific audit 008
+on:
+  push:
+    branches:
+      - research/scientific-audit-008
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install package and test dependencies
+        run: python -m pip install --quiet -e . pytest
+      - name: Full repository suite
+        run: python -m pytest tests/ -q
+      - name: Audit tests
+        run: python -m pytest tests/test_scientific_audit_008.py -q
+      - name: Run corrected audit
+        run: python scripts/run_scientific_audit_008.py
+      - name: Upload audit artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-SCIENTIFIC-AUDIT-008
+          path: artifacts/TACOSM-SCIENTIFIC-AUDIT-008.json
+          if-no-files-found: error
