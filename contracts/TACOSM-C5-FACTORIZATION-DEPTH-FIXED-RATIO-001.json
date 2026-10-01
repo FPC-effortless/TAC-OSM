@@ -1,0 +1,156 @@
+{
+  "experiment_id": "TACOSM-C5-FACTORIZATION-DEPTH-FIXED-RATIO-001",
+  "title": "C5 factorization-depth sweep at fixed per-factor beam ratio",
+  "question": "At approximately fixed B/F=0.625, does increasing product-key factorization depth from two through five factors change target retention and reduce the fraction of states subjected to reranking?",
+  "hypothesis": "At a fixed per-factor beam ratio B/F, proposal coverage and capability retention should be approximately depth-invariant while states_scored_over_M should decrease approximately as (B/F)^d. Deeper factorization may deviate from this because narrower factor slices can change the learned product-key geometry.",
+  "arms": [
+    {
+      "name": "d2_f8_b5",
+      "intervention": "two-factor product-key addressing with factor size 8 and beam 5",
+      "acts_on": "factorization depth",
+      "knob": "factor_count=2",
+      "value": "2"
+    },
+    {
+      "name": "d3_f8_b5",
+      "intervention": "three-factor product-key addressing with factor size 8 and beam 5",
+      "acts_on": "factorization depth",
+      "knob": "factor_count=3",
+      "value": "3"
+    },
+    {
+      "name": "d4_f8_b5",
+      "intervention": "four-factor product-key addressing with factor size 8 and beam 5",
+      "acts_on": "factorization depth",
+      "knob": "factor_count=4",
+      "value": "4"
+    },
+    {
+      "name": "d5_f8_b5",
+      "intervention": "five-factor product-key addressing with factor size 8 and beam 5",
+      "acts_on": "factorization depth",
+      "knob": "factor_count=5",
+      "value": "5"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "target_recall_retention_ratio",
+      "role": "primary capability endpoint",
+      "primary": true,
+      "description": "selective target recall divided by exhaustive target recall"
+    },
+    {
+      "name": "proposal_target_retention",
+      "role": "admission coverage endpoint",
+      "primary": false
+    },
+    {
+      "name": "states_scored_over_M",
+      "role": "primary computation diagnostic",
+      "primary": false
+    },
+    {
+      "name": "state_candidates_scored_mean",
+      "role": "absolute reranking count",
+      "primary": false
+    },
+    {
+      "name": "pair_generation_ops_mean",
+      "role": "routing combinatorics audit",
+      "primary": false
+    },
+    {
+      "name": "total_macs_mean",
+      "role": "arithmetic audit",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_target_recall",
+      "role": "reference-capability context",
+      "primary": false
+    },
+    {
+      "name": "nonempty_cells",
+      "role": "topology audit",
+      "primary": false
+    },
+    {
+      "name": "max_cell_size",
+      "role": "occupancy audit",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "For every registered depth d in {2,3,4,5} and every M in {128,256,512}, report exhaustive target recall, selective target recall, target-recall retention, proposal retention, states scored/M, absolute scored count, pair-generation operations, arithmetic, and occupancy with exact pooled counts.",
+      "licenses": "a workload-specific factorization-depth measurement at fixed B/F on the registered C5 construction.",
+      "does_not_license": "universal optimal factor count, semantic retrieval guarantees, asymptotic sublinear scaling, or hardware speedup."
+    },
+    {
+      "condition": "A depth arm satisfies the registered capability floor only when target_recall_retention_ratio is at least 0.90 at every M.",
+      "licenses": "that the specific fixed-depth arm meets the registered capability floor on the tested workload.",
+      "does_not_license": "that the depth is generally optimal."
+    },
+    {
+      "condition": "Compare observed states_scored_over_M with the fixed-ratio geometric reference (5/8)^d and report the deviation for every depth.",
+      "licenses": "evidence about whether the reranking fraction follows the expected product-cell fraction at fixed B/F.",
+      "does_not_license": "an asymptotic scaling theorem."
+    }
+  ],
+  "interpretation_order": [
+    "exhaustive capability",
+    "proposal retention",
+    "target-recall retention",
+    "states scored over M",
+    "geometric fixed-ratio reference",
+    "pair-generation operations",
+    "total arithmetic",
+    "cell occupancy"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "steps": 512,
+  "eval_steps": 100,
+  "held_constant": [
+    "H=256",
+    "M={128,256,512}",
+    "K=32",
+    "factor_size=8",
+    "factor_beam=5",
+    "B/F=0.625 for every arm",
+    "seeds=10-19",
+    "100 evaluation tasks per seed/M/arm",
+    "width-16 raw-trained cosine teacher",
+    "48 fixed training codes versus 16 held-out target codes",
+    "one-bit noisy query construction",
+    "eight cosine k-means iterations",
+    "training-only codebook fitting",
+    "state-distinct downstream executor",
+    "same task stream and pooled count aggregation"
+  ],
+  "status": "pre-registered",
+  "layer": "L4",
+  "protocol_note": "Mechanism experiment only. The depth sweep is evaluated through the same generalized multi-factor product-key implementation for all four depths. The registered geometric reference predicts scored fractions of 39.06%, 24.41%, 15.26%, and 9.54% for d=2,3,4,5 respectively. These are expectations, not decision thresholds."
+}
