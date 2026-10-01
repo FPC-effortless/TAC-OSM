@@ -90,7 +90,7 @@ def c5_metrics(episode) -> dict[str, float | int]:
     rejected = 0
     for step in episode.steps:
         task = step.outcome.detail
-        target = getattr(task, "target_action", None)
+        target = getattr(task, "gold_index", None)
         if not isinstance(target, int):
             continue
         scores = list(step.decision.scores)
