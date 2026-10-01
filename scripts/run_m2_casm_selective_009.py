@@ -756,7 +756,7 @@ def main() -> None:
     contract = load_final_contract()
     registered_m = tuple(int(x) for x in contract["h_levels"])
     registered_seeds = tuple(int(x) for x in contract["seeds"])
-    registered_budgets = tuple(int(x) for x in contract["k_levels"])
+    registered_budgets = tuple(int(x) for x in contract["primary_endpoint"]["budgets"])
     from tac_osm.contract import load_contract
     parsed_contract = load_contract(
         "TACOSM-M2-CASM-SELECTIVE-009",
