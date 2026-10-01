@@ -356,6 +356,13 @@ The evidence statement in the original A20 (no full measurement artifact) is sup
 
 **Corrected evidence:** run `36810643404` subsequently completed successfully and produced full artifact `11139324912` (SHA-256 `def220ea15c44d07c1dbfc15d8d2b0f00225ef4179459a4b63a126e0b6fe5980`, 1,964 bytes, `expired: false`), under protocol amendment CAL-001-A1. The result is recorded in commit `6783e64` (2026-10-01 05:10 UTC+1) as `docs/TACOSM-C5-EXHAUSTIVE-REFERENCE-CALIBRATION-001-RESULT.md`. That commit is not an ancestor of this audit branch, which is the sole reason the original A20 did not see it. This is a temporal-provenance artifact of parallel branches, not a contradiction.
 
+**Evidence tiers:** the citation is split by durability, so that the experimental record does not depend on the lifecycle of any source branch.
+
+- **Primary (experimental record):** run `36810643404`; artifact `11139324912`; status `expired: false`; SHA-256 `def220ea15c44d07c1dbfc15d8d2b0f00225ef4179459a4b63a126e0b6fe5980`; protocol amendment CAL-001-A1.
+- **Secondary (result document):** commit `6783e64`, reached via `research/c5-exhaustive-reference-calibration-001` or `research/c5-full-phase-fused-loop-001`, as `docs/TACOSM-C5-EXHAUSTIVE-REFERENCE-CALIBRATION-001-RESULT.md`.
+
+The primary tier is authoritative for whether the measurement exists and what it measured. The secondary tier is reproducibility and interpretation. A branch is a persistence mechanism for the secondary tier only, and is not a precondition for the primary tier: deleting either branch does not invalidate the run or the artifact, and PR #46 remaining open is not a scientific defect. If PR #46 later merges, the secondary citation becomes more durable; if it is closed or the branches are removed, the primary experimental evidence remains identifiable.
+
 **Measured result:** the population-exposure confound is confirmed at M=128 and M=256, with paired differences of +0.286 (0.386 to 0.672) and +0.220 (0.166 to 0.386). At the staked M=512 level the observed difference is +0.072 (0.053 to 0.125) with a paired seed-bootstrap 95% CI of [+0.031, +0.115]. The lower bound is below the preregistered +0.10 materiality threshold, so the materiality criterion is not met. The matched teacher still degrades strongly with population size (0.672 to 0.386 to 0.125), so population exposure explains a substantial part but not all of the historical exhaustive-reference collapse.
 
 **Disposition, stated by category:**
