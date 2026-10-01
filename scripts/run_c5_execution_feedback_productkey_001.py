@@ -119,6 +119,7 @@ def make_arm(seed,m,product):
     factor_macs=[]
     pair_ops=[]
     build_macs=[]
+    rerank_macs=[]
     accepted=0
     for step in range(EVAL_STEPS):
         rng=random.Random(seed*1009+m*7919+(TRAIN_STEPS+step)*104729)
@@ -132,6 +133,7 @@ def make_arm(seed,m,product):
             order=sorted(shortlist_indices,key=lambda i:(-scores[i],i))
             admitted.append(int(ti in shortlist_indices))
             rerank.append(diag.state_candidates_scored)
+            rerank_macs.append(diag.state_rerank_macs)
             factor_macs.append(diag.factor_score_macs)
             pair_ops.append(diag.pair_generation_ops)
             build_macs.append(diag.build_total_macs/ max(1,diag.refresh_count))
@@ -163,6 +165,7 @@ def make_arm(seed,m,product):
             "factor_score_macs_mean":statistics.fmean(factor_macs),
             "pair_generation_ops_mean":statistics.fmean(pair_ops),
             "amortized_build_macs_per_query":statistics.fmean(build_macs),
+            "state_rerank_macs_mean":statistics.fmean(rerank_macs),
             "max_shortlist":32,"factor_beam":7,
         })
     return result
@@ -177,19 +180,25 @@ def main():
     for product in (False,True):
         for m in M_LEVELS:
             vals=[r for r in rows if r["product_key"]==product and r["M"]==m]
-            pooled[("product_key" if product else "dense",m)]={
-                "M":m,"arm":"product_key" if product else "dense",
+            agg={
+                "M":m,
+                "arm":"product_key" if product else "dense",
                 "eval_top1_recall":statistics.fmean(v["eval_top1_recall"] for v in vals),
                 "mean_target_rank":statistics.fmean(v["mean_target_rank"] for v in vals),
                 "router_updates":statistics.fmean(v["router_updates"] for v in vals),
-                **({"proposal_admission_recall":statistics.fmean(v["proposal_admission_recall"] for v in vals),
+            }
+            if product:
+                agg.update({
+                    "proposal_admission_recall":statistics.fmean(v["proposal_admission_recall"] for v in vals),
                     "conditional_selection_given_admission":statistics.fmean(v["conditional_selection_given_admission"] for v in vals),
                     "state_candidates_scored_mean":statistics.fmean(v["state_candidates_scored_mean"] for v in vals),
                     "states_scored_over_M":statistics.fmean(v["states_scored_over_M"] for v in vals),
                     "factor_score_macs_mean":statistics.fmean(v["factor_score_macs_mean"] for v in vals),
                     "pair_generation_ops_mean":statistics.fmean(v["pair_generation_ops_mean"] for v in vals),
-                    "amortized_build_macs_per_query":statistics.fmean(v["amortized_build_macs_per_query"] for v in vals)}, product_key),
-            }
+                    "amortized_build_macs_per_query":statistics.fmean(v["amortized_build_macs_per_query"] for v in vals),
+                    "state_rerank_macs_mean":statistics.fmean(v["state_rerank_macs_mean"] for v in vals),
+                })
+            pooled[("product_key" if product else "dense",m)]=agg
     return {"protocol":{"name":"TACOSM-C5-EXECUTION-FEEDBACK-PRODUCTKEY-001",
                         "seeds":list(SEEDS),"M_levels":list(M_LEVELS),
                         "train_steps":TRAIN_STEPS,"eval_steps":EVAL_STEPS,
