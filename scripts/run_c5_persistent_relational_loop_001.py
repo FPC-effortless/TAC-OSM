@@ -78,7 +78,13 @@ def evaluate_seed(seed: int, router):
         k95 = max(1, min(m, empirical_quantile(cdl_cal, 0.95)))
 
         cdl_eval = [dense_rank(router, *episode) for episode in heldout]
-        h_eval = [hamming_rank(*episode) for episode in heldout]
+        reset_eval = []
+        for trial, state in heldout:
+            state.clear()
+            reset_eval.append(
+                router.rank(trial.query, state, trial.candidates).index(trial.target_index) + 1
+            )
+        h_eval = [hamming_rank(*make_episode(seed=seed, step=10000 + 1000 + i, m=m)) for i in range(CONFIG.eval_trials)]
         dense_rows.append({
             "M": m,
             "mean_rank": statistics.fmean(cdl_eval),
@@ -86,6 +92,9 @@ def evaluate_seed(seed: int, router):
             "top1": sum(r == 1 for r in cdl_eval) / len(cdl_eval),
             "hamming_mean_rank": statistics.fmean(h_eval),
             "hamming_top1": sum(r == 1 for r in h_eval) / len(h_eval),
+            "reset_mean_rank": statistics.fmean(reset_eval),
+            "reset_P90_rank": empirical_quantile(reset_eval, 0.90),
+            "reset_top1": sum(r == 1 for r in reset_eval) / len(reset_eval),
             "oracle_rank": persistent_oracle_rank(heldout[0][0]),
             "K90": k90,
             "K95": k95,
@@ -242,6 +251,9 @@ def main() -> None:
             "top1": statistics.fmean(r["top1"] for r in dr),
             "hamming_mean_rank": statistics.fmean(r["hamming_mean_rank"] for r in dr),
             "hamming_top1": statistics.fmean(r["hamming_top1"] for r in dr),
+            "reset_mean_rank": statistics.fmean(r["reset_mean_rank"] for r in dr),
+            "reset_P90_rank": statistics.fmean(r["reset_P90_rank"] for r in dr),
+            "reset_top1": statistics.fmean(r["reset_top1"] for r in dr),
             "K90": statistics.fmean(r["K90"] for r in dr),
             "K95": statistics.fmean(r["K95"] for r in dr),
         })
