@@ -97,12 +97,17 @@ Primary evaluation targets are disjoint from router training in both exact progr
 
 ## Final preregistration freeze
 
-Contract version: `0.3.3-final`.
+Contract version: `0.3.4-final`.
 
-Amendments 0.3.2 and 0.3.3 were premeasurement repairs only: full truth-table training for CASM-S and removal of the unmeasured random arm. No primary endpoint, population, seed, budget, leakage, or decision rule changed.
+Amendments 0.3.2–0.3.4 were premeasurement repairs only: full truth-table training for CASM-S, removal of the unmeasured random arm, and final hardening of routing-cost accounting, bootstrap uncertainty, public representation features, and executor/evaluation disjointness. No primary endpoint, population, seed, budget, leakage, or decision rule changed.
 
 Amendment 0.3.1 repaired only the JSON shape to satisfy the repository-native `ExperimentContract` schema after a premeasurement smoke failure. No scientific endpoint, arm, population, seed, budget, or leakage rule changed.
 
 All protocol changes listed in the contract amendment history occurred before measurement began. The measurement commit must be tree-identical to this final registration. Any later protocol change constitutes a new experiment identifier rather than an amendment to this run.
 
 The authoritative full measurement is triggered by an empty, tree-identical commit carrying `[run-m2-casm-selective-009-full]`. The resulting run manifest records the exact TAC-OSM commit, contract digest, external CASM-S commit, runtime versions, and workflow run ID.
+
+
+### Final isolation constraints
+
+The frozen CASM-S executor is trained on programs disjoint from every primary and secondary evaluation target in exact structure and complete truth table. The matched summary arm uses only public node-local descriptors and derived operator arities; the evaluator-only true-edge set is excluded from its input.
