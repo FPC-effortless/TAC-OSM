@@ -345,13 +345,14 @@ def main():
                 p_rank, _ = dense_rank(router, trial, state)
                 persistent.append(p_rank)
                 read = state.read(trial.query)
+                persisted_op = rank_op(trial, state)
                 state.clear()
                 qz = router.encode_query(trial.query, state)
                 scores = [router.score_embeddings(qz, router.encode_candidate(c)) for c in trial.candidates]
                 order = sorted(range(len(scores)), key=lambda i: (-scores[i], i))
                 reset.append(order.index(trial.target_index) + 1)
                 if read.values:
-                    per_op[OPS[rank_op(trial, state)]].append(p_rank)
+                    per_op[OPS[persisted_op]].append(p_rank)
             result["persistent_reset"][arm][str(seed)] = {
                 "persistent_top1": statistics.fmean(x == 1 for x in persistent),
                 "reset_top1": statistics.fmean(x == 1 for x in reset),
