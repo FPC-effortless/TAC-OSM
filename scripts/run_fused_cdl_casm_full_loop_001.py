@@ -319,7 +319,8 @@ def run_seed(seed: int, *, train_steps: int = 180, eval_steps: int = 90) -> dict
         "eval_steps": eval_steps,
         "train_success": _finite_mean([float(r["success"]) for r in train_rows]),
         "trained_updates": cdl.updates if cdl else 0,
-        "experience_writes": train_state.writes,
+        "verified_experience_writes": sum(1 for r in train_rows if r["wrote"]),
+        "total_state_writes": train_state.writes,
         "persistent_occupancy": train_state.occupancy,
         "eval": {
             "overall_top1": _finite_mean([float(r["success"]) for r in eval_rows]),
@@ -360,6 +361,21 @@ def main() -> None:
     pooled = []
     for run in runs:
         pooled.extend(run["eval"]["rows"])
+    family_rows = defaultdict(list)
+    for row in pooled:
+        family_rows[row["family"]].append(row)
+    pooled_family = {
+        family: {
+            "steps": len(rows),
+            "top1": _finite_mean([float(r["success"]) for r in rows]),
+            "admission_recall_k": _finite_mean(
+                [float(r["target_in_admission"]) for r in rows]
+            ),
+            "mean_target_rank": _finite_mean([float(r["target_rank"]) for r in rows]),
+        }
+        for family, rows in sorted(family_rows.items())
+    }
+
     summary = {
         "seeds": list(seeds),
         "n_runs": len(runs),
@@ -384,7 +400,13 @@ def main() -> None:
             [float(r["state_pool_size"]) for r in pooled]
         ),
         "mean_trained_updates": _finite_mean([float(r["trained_updates"]) for r in runs]),
-        "mean_experience_writes": _finite_mean([float(r["experience_writes"]) for r in runs]),
+        "mean_verified_experience_writes": _finite_mean(
+            [float(r["verified_experience_writes"]) for r in runs]
+        ),
+        "mean_total_state_writes": _finite_mean(
+            [float(r["total_state_writes"]) for r in runs]
+        ),
+        "pooled_family": pooled_family,
         "control_static_top1": _finite_mean(
             [float(r["controls"]["static"]["top1"]) for r in runs]
         ),
@@ -409,8 +431,11 @@ def main() -> None:
 
     print("=== TACOSM-FUSED-CDL-CASM-001 ===")
     for key, value in summary.items():
-        if key not in {"runs", "non_claims"}:
+        if key not in {"runs", "non_claims", "pooled_family"}:
             print(f"{key}: {value}")
+    print("pooled_family:")
+    for family, values in pooled_family.items():
+        print(f"  {family}: {values}")
     print(f"result_file: {OUT / 'fused_cdl_casm_001.json'}")
 
 
