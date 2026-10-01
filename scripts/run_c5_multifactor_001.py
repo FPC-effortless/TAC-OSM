@@ -13,8 +13,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from tac_osm.c5_end_to_end import EndToEndTask
-from scripts.run_c5_frontier_replication_001 import StateDistinctEndToEndExecutor
 from tac_osm.contract import load_contract
 from tac_osm.learned_state_index import LearnedSemanticStateIndex
 from tac_osm.multifactor_product_key_index import (
@@ -45,6 +43,56 @@ ARMS = (
     ("three_factor_8_beam3", 3, 8, 3),
     ("three_factor_16_beam3", 3, 16, 3),
 )
+
+
+
+class StateDistinctEndToEndExecutor:
+    """Fixed downstream task whose successful output uniquely identifies the state value."""
+
+    @staticmethod
+    def _state_code(reference: tuple[int, ...]) -> int:
+        value = 0
+        for bit in reference:
+            value = (value << 1) | int(bit)
+        return value
+
+    def execute_candidate(self, candidate, reference) -> tuple[int, int]:
+        if not candidate.executable_edges:
+            raise ValueError("candidate program must expose executable_edges")
+        if tuple(candidate.descriptor) != tuple(reference):
+            return 0, 12
+        return 1_000_000 + self._state_code(tuple(reference)), 12
+
+    def execute_population(self, candidates, reference) -> tuple[int, int, int]:
+        output = 0
+        work = 0
+        invocations = 0
+        for candidate in candidates:
+            contribution, units = self.execute_candidate(candidate, reference)
+            output += contribution
+            work += units
+            invocations += 1
+        return output, work, invocations
+
+
+def assert_executor_distinctness() -> None:
+    executor = StateDistinctEndToEndExecutor()
+    population = build_population(0, H_FIXED)
+    outputs = []
+    for reference in __import__("tac_osm.noisy_state_tasks", fromlist=["CODEBOOK"]).CODEBOOK[:2]:
+        relevant = tuple(
+            candidate
+            for candidate in population
+            if tuple(candidate.descriptor) == tuple(reference)
+        )
+        if len(relevant) != 4:
+            raise AssertionError("state-distinct audit expected four relevant programs")
+        output, work, calls = executor.execute_population(relevant, reference)
+        if work != 4 * 12 or calls != 4:
+            raise AssertionError("state-distinct audit executor accounting changed")
+        outputs.append(output)
+    if outputs[0] == outputs[1]:
+        raise AssertionError("state-distinct executor collapsed two target codes")
 
 
 def evaluate_arm(
@@ -192,6 +240,7 @@ def evaluate_arm(
 
 
 def run(smoke: bool) -> dict:
+    assert_executor_distinctness()
     seeds = (10,) if smoke else SEEDS
     ms = (128,) if smoke else M_LEVELS
     steps = 5 if smoke else EVAL_STEPS
