@@ -20,11 +20,10 @@ def test_pooled_quantile_is_trial_level():
 
 
 def test_structural_holdout_changes_support():
-    train_trial, _ = make_unique_trial(0, 1, 64, mode="train")
-    ood_trial, state = make_unique_trial(0, 2, 64, mode="ood")
-    left, right, _ = decode_state_value(state.read(ood_trial.query).values[0])
-    assert all(not (a == 1 and b == 1) for c in [train_trial] for bit in range(DIM)
-               for a, b in [decode_state_value(state.read(ood_trial.query).values[0])[0][bit:bit+1][0],
-                             decode_state_value(state.read(ood_trial.query).values[0])[1][bit:bit+1][0]])
+    train_trial, train_state = make_unique_trial(0, 1, 64, mode="train")
+    ood_trial, ood_state = make_unique_trial(0, 2, 64, mode="ood")
+    train_left, train_right, _ = decode_state_value(train_state.read(train_trial.query).values[0])
+    left, right, _ = decode_state_value(ood_state.read(ood_trial.query).values[0])
+    assert all(not (train_left[i] == 1 and train_right[i] == 1) for i in range(DIM))
     assert all(left[i] == 1 and right[i] == 1 for i in range(4))
     assert ood_trial.target_descriptor in {c.descriptor for c in ood_trial.candidates}
