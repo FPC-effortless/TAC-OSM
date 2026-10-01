@@ -213,9 +213,23 @@
     "same 14 factor-size/beam configurations",
     "new independent seeds 5-9 only"
   ],
-  "status": "pre-registered",
+  "status": "measured",
   "layer": "L3",
   "provenance_anchor": "TACOSM-C5-COVERAGE-FRONTIER-004 plus TACOSM-C5-FRONTIER-REPLICATION-001",
   "protocol_note": "No model, task, index, beam, factor size, evaluation count, or capability threshold changes. Only the seed set changes from {0,1,2,3,4} to the independent set {5,6,7,8,9}. Pre-measurement contract-schema correction: exactly one primary endpoint is required by the repository contract validator; capability_retention is the sole primary endpoint, with computation and configuration-match fields retained as secondary replication context.",
-  "predecessor": "TACOSM-C5-FRONTIER-REPLICATION-001"
+  "predecessor": "TACOSM-C5-FRONTIER-REPLICATION-001",
+  "result_note": {
+    "run_id": 36793799316,
+    "measurement_commit": "4b011641e6e5887d5190279150636dad0b327d9c",
+    "artifact_id": 11133237411,
+    "artifact_digest": "sha256:c0cc6ae55bd5900a4a206e5c6ee409c4d66159ff418729f135fa3786a2d8c97e",
+    "disposition": "ROBUST POOLED FRONTIER CONFIRMED ON SEEDS 10-19",
+    "global_frontier": {
+      "factor_size": 16,
+      "factor_beam": 6,
+      "mean_states_scored_over_M": 0.15428645833333332,
+      "min_capability_retention": 0.8113207547169812
+    },
+    "limitation": "Seed-level variation remains substantial at M=512; the preregistered decision is pooled across ten independent seeds."
+  }
 }
