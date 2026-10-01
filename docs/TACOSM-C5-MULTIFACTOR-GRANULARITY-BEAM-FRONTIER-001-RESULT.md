@@ -62,6 +62,46 @@ Beam 5 clears the floor at M=256 only. The M=512 ratios are reference-relative
 to an exhaustive baseline with only 53/1000 target successes and therefore are
 not strong independent capability evidence.
 
+## Admission versus post-admission selection
+
+The artifact separates two necessary stages:
+
+[
+	ext{selective target recall} leq 	ext{proposal target retention}
+]
+
+because a target absent from the admitted product-cell union cannot be selected
+by the downstream cosine reranker.
+
+At M=128, the proposal-retention ceiling is only 0.470 / 0.585 / 0.705 for
+beams 4 / 5 / 6. Therefore none of these beams could possibly reach the 0.90
+registered capability floor at M=128, even with a perfect post-admission
+reranker.
+
+At M=256, the corresponding ceilings are 0.439 / 0.587 / 0.688, so again no
+beam 4-6 configuration can reach 0.90 final target recall by reranker changes
+alone.
+
+There is also a post-admission selection loss. The conditional probability of
+selecting the target given that it was admitted is:
+
+| M | beam 4 | beam 5 | beam 6 |
+|---:|---:|---:|---:|
+| 128 | 0.5702 | 0.4991 | 0.4681 |
+| 256 | 0.3212 | 0.2589 | 0.2093 |
+| 512 | 0.0960 | 0.0730 | 0.0703 |
+
+The M=512 conditional values are dominated by the weak exhaustive denominator
+and should not be treated as absolute capability estimates. The lower-M values
+nevertheless show that the failure is not exclusively an admission problem:
+even among tasks whose targets enter the admitted candidate set, the current
+cosine reranker often selects another state.
+
+This decomposition motivates two independent next steps: increasing beam only
+to test whether admission can cross the 0.90 ceiling while staying below the
+compute reference, and separately stabilizing the teacher/reference plus
+post-admission ranking mechanism.
+
 ## Sparsity result
 
 The factor-size-16 three-factor construction sharply reduces the reranked
