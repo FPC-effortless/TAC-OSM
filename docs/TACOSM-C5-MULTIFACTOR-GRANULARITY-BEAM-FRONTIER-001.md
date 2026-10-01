@@ -76,6 +76,36 @@ This experiment must be measured only after the contract and smoke path pass.
 A commit carrying the full-run token dispatches the already registered full
 measurement; the token is deliberately absent from the registration commit.
 
+## Pre-run prediction addendum (non-binding)
+
+This addendum records a falsifiable prediction made before the registered full
+measurement. It does not alter the contract, primary capability floor,
+frontier-improvement criterion, registered arms, or verdict rule.
+
+**Hypothesis:** retention at M=128 and M=256 depends primarily on B/F rather
+than on F itself.
+
+For F=16, d=3, and B=4/5/6 (B/F = 0.25/0.3125/0.375), the prediction is that
+all three arms remain below 0.90 retention at both M=128 and M=256, with
+roughly 0.6-0.8 retention.
+
+Under the product-cell occupancy model, the scored fraction has floor
+
+    scored/M ≈ (B/F)^3
+
+giving approximately 1.6%, 3.0%, and 5.3% for beams 4, 5, and 6 respectively.
+The observed two-factor beam-6 fractions make this a lower-bound heuristic,
+not a registered outcome.
+
+The specific falsifier for the B/F-only retention hypothesis is any F=16 arm
+that reaches at least 0.90 retention at both M=128 and M=256. Such an outcome
+would refute this pre-run hypothesis without changing the registered primary
+verdict rule, which still requires the capability floor at every registered M.
+
+Secondary analysis may report the exhaustive-reference capability at each M
+and seed-bootstrap uncertainty around retention. These analyses are
+diagnostic only and cannot convert a primary failure into a pass.
+
 ## Reproduction
 
 Smoke:
