@@ -76,6 +76,7 @@ class AddressResult:
     index_lookups: int
     raw_candidates: int
     candidates_scored: int
+    entries_touched: int
     full_population: int
     target_admitted: bool
     used_full_scan_fallback: bool
@@ -494,7 +495,7 @@ class UnifiedPLM:
         admitted = target_id in {r.record_id for r in rows} if target_id else False
         return AddressResult(
             tuple(r.record_id for r in rows), probes, raw, len(rows),
-            self.state.size, admitted, fallback
+            raw, self.state.size, admitted, fallback
         )
 
     def step(self, task: RelationTask, *, step: int) -> StepResult:
