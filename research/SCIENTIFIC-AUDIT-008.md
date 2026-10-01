@@ -347,3 +347,9 @@ The first implementation of the audit runner recorded only latent-space similari
 Even with unique candidates, a target descriptor seen during training can be memorized by the descriptor encoder and recur at evaluation. This is especially important because the candidate encoder receives the descriptor directly.
 
 **Correction:** the authoritative audit runner records all training target descriptors and rejects evaluation samples whose target descriptor was observed during training. The structural holdout additionally excludes the declared training support family. This separates structural generalization from exact target-identity memorization.
+
+### A20 — Exhaustive-reference calibration (#46) has no full measurement artifact
+
+The registered PR #46 calibration workflow has a completed smoke job, but its full measurement job was skipped. Therefore the repository does not currently contain a verified full calibration result from that registration.
+
+**Disposition:** exhaustive-reference capability at larger M remains an unresolved calibration gate. Historical sparse-retention ratios that depend on an uncalibrated exhaustive denominator remain reference-relative diagnostics, not independent capability measurements.
