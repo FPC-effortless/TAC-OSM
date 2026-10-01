@@ -35,6 +35,7 @@ sys.path.insert(0, str(CASM_SOURCE_ROOT))
 sys.path.insert(0, str(ROOT / "src"))
 
 from casm_v01.phase1_dag.generator import BooleanDAGGenerator, Episode as CASMEpisode
+from casm_v01.phase1_dag.model import CASMS
 from tac_osm.casm_s_adapter import CASMSAdapter, WorkAccounting
 
 
