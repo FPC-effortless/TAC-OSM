@@ -13,7 +13,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from tac_osm.c5_end_to_end import EndToEndExecutor
+from tac_osm.c5_end_to_end import EndToEndTask
+from scripts.run_c5_frontier_replication_001 import StateDistinctEndToEndExecutor
 from tac_osm.contract import load_contract
 from tac_osm.learned_state_index import LearnedSemanticStateIndex
 from tac_osm.multifactor_product_key_index import (
@@ -90,7 +91,7 @@ def evaluate_arm(
         raise AssertionError(f"unsupported factor count: {factor_count}")
 
     build = index.build(embeddings, codebook_items=train_items)
-    executor = EndToEndExecutor()
+    executor = StateDistinctEndToEndExecutor()
 
     exhaustive_target = []
     selective_target = []
