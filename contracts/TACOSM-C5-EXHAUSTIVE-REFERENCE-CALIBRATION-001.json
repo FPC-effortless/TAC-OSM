@@ -105,7 +105,7 @@
     "teacher learning rate, margin, negative coverage, and optimizer implementation",
     "teacher optimizer-update budget approximately 24576 for both arms, with actual update counts recorded"
   ],
-  "status": "pre-registered",
+  "status": "measured",
   "layer": "L3",
   "protocol_note": "Diagnostic study only. The current_48 arm uses the historical 48-code training population and exactly 24576 optimizer updates. The matched_M_minus_16 arm trains on the exact non-target state values present in the corresponding M-level evaluation population, while using an epoch count rounded to keep total optimizer updates within 1% of 24576. All 16 target codes remain excluded from both training sets. Amendment CAL-001-A1 was recorded before any full measurement to remove the original population-size/update-budget confound. The study does not modify or reinterpret TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.",
   "amendments": [
@@ -119,5 +119,18 @@
       "affected": "PR #46 only. No full measurement was conducted under the previous schedule.",
       "no_result_under_previous_version": "true"
     }
-  ]
+  ],
+  "result": {
+    "run_id": 36810643404,
+    "artifact_id": 11139324912,
+    "artifact_sha256": "def220ea15c44d07c1dbfc15d8d2b0f00225ef4179459a4b63a126e0b6fe5980",
+    "artifact_size_bytes": 1964,
+    "materiality_supported_at_M512": false,
+    "mean_difference_M512": 0.072,
+    "seed_bootstrap_95_ci_M512": [
+      0.031,
+      0.115
+    ],
+    "c5_status": "UNCHANGED"
+  }
 }
