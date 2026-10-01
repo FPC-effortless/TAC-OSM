@@ -13,4 +13,4 @@ All arms receive 1200 total updates. No held-out arm selection is performed.
 The workload remains synthetic XOR/XNOR/AND/OR relational routing. No semantic-language, general-memory, or asymptotic-complexity claim is licensed.
 
 Authoritative measurement command:
-python scripts/run_c5_composition_budget_audit_001.py
+python scripts/run_c5_composition_budget_audit_fast_001.py
