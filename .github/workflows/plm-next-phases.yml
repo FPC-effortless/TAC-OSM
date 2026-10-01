@@ -35,6 +35,8 @@ jobs:
         run: python scripts/run_plm_plasticity_004.py
       - name: Run P5 joint state + operator scaling
         run: python scripts/run_plm_joint_scaling_005.py
+      - name: Run P6 C5 persistent-state admission transfer
+        run: python scripts/run_plm_c5_state_admission_006.py
       - name: Upload next-phase artifacts
         uses: actions/upload-artifact@v4
         with:
