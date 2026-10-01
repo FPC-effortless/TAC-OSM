@@ -1,0 +1,57 @@
+{
+  "name": "TACOSM-INTEGRATED-EXECUTION-FEEDBACK-AXON-001",
+  "version": "0.1",
+  "status": "registered_before_measurement",
+  "design": {
+    "c5": {
+      "m": 128,
+      "beam_diagnostic": 8,
+      "seeds": [0, 1, 2],
+      "train_steps": 900,
+      "eval_steps": 300,
+      "arms": ["outcome_only", "verifier_feedback"],
+      "primary": "eval_top1_recall",
+      "secondary": ["top8_admission_recall", "mean_target_rank", "verifier_accept_rate"],
+      "meaningful_improvement_threshold": 0.10
+    },
+    "pst": {
+      "primary": "heldout_transition_accuracy",
+      "success_threshold": 0.95
+    },
+    "structmeans": {
+      "clusters": 3,
+      "primary": "cluster_purity",
+      "success_threshold": 0.85,
+      "secondary": "verified_records_per_centroid"
+    },
+    "axon": {
+      "primary": "parameterized_reuse_accuracy",
+      "success_threshold": 0.95
+    },
+    "seca": {
+      "primary": "verified_novel_composites",
+      "success_threshold": 1,
+      "secondary": "post_seca_composite_success_minus_pre_seca"
+    },
+    "regm": {
+      "primary": "retained_competence_after_raw_removal",
+      "success_threshold": 0.95
+    },
+    "closed_loop": {
+      "required": [
+        "verified transition learning",
+        "durable reconstruction",
+        "verified operator consolidation",
+        "novel verified composition",
+        "post-composition reuse"
+      ]
+    }
+  },
+  "non_claims": [
+    "does not establish sublinear routing",
+    "does not establish hardware speedup",
+    "does not establish universal reasoning",
+    "does not treat verifier-derived labels as human preference",
+    "does not use old C5 teacher results as proof of execution-driven superiority"
+  ]
+}

@@ -288,7 +288,22 @@ class TacOsmModel:
         # This preserves historical experiments while keeping the successor
         # path independent of the legacy scalar reward API.
         if self.config.learn:
-            if self.router.__class__.__name__ == "RepresentationEnergyRouter":
+            # Successor learners may consume the full post-verification signal.
+            # This method is called only after routing, execution, outcome and
+            # verification, so a verifier-derived label cannot leak into the
+            # decision that produced it.
+            verifier_learner = getattr(self.router, "learn_from_verifier", None)
+            if callable(verifier_learner):
+                verifier_learner(
+                    query=query,
+                    state=self.state,
+                    candidates=task.candidates,
+                    selected=decision.selected,
+                    outcome=outcome,
+                    verification=verification,
+                    scores=decision.scores,
+                )
+            elif self.router.__class__.__name__ == "RepresentationEnergyRouter":
                 learner = getattr(self.router, "learn_from_outcome", None)
                 if callable(learner):
                     learner(
