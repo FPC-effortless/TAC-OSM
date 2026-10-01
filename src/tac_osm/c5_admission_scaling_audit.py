@@ -359,7 +359,7 @@ def lsh_sweep_for_seed(
                 "mean_rerank_count": statistics.fmean(rerank_counts),
                 "mean_routing_ops": statistics.fmean(routing_ops),
                 "routing_fraction": statistics.fmean(routing_ops) / m,
-                "cap_bound": tables >= index.actual_tables,
+                "cap_bound": tables > index.actual_tables,
                 "is_theoretical_L90": tables == l90_theory,
             }
         )
