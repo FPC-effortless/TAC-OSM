@@ -82,6 +82,19 @@ def rank_witness_residual(analytic, op):
         return 0.0
     return 1.0
 
+def relation_features(left,right,op,analytic=False):
+    a=[2*x-1 for x in left]; b=[2*x-1 for x in right]
+    p=[x*y for x,y in zip(a,b)]
+    blocks=[]
+    for k in range(N_OPS):
+        gate=1.0 if k==op else 0.0
+        blocks += [gate*x for x in a] + [gate*x for x in b] + [gate*x for x in p]
+    if analytic:
+        blocks += [1.0 if k==op else 0.0 for k in range(N_OPS)]
+    blocks += [1.0 if k==op else 0.0 for k in range(N_OPS)]
+    blocks += [1.0]
+    return blocks
+
 def representability_gate():
     rows={}
     combos=[(0,0),(0,1),(1,0),(1,1)]
