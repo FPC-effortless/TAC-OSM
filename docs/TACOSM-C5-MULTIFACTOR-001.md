@@ -69,4 +69,4 @@ Artifact: artifacts/TACOSM-C5-MULTIFACTOR-001.json
 
 Full-run marker: [run-c5-multifactor-001-full]
 
-Full measurement trigger: commit message [run-c5-multifactor-001-full] is the registered measurement trigger.
+Full measurement trigger: [run-c5-multifactor-001-full]
