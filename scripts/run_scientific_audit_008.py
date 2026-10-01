@@ -216,8 +216,11 @@ def evaluate(
             order = sorted(range(len(scores)), key=lambda j: (-scores[j], j))
             rank = order.index(trial.target_index) + 1
             ranks.append(rank)
-            # Dense score cost is included explicitly as query-side work.
-            routing_ops.append(m * router.latent_dim)
+            # Full dense routing arithmetic: query encoding + candidate encoding + similarities.
+            query_encode_ops = router.latent_dim * router.query_dim
+            candidate_encode_ops = m * router.latent_dim * DIM
+            similarity_ops = m * router.latent_dim
+            routing_ops.append(query_encode_ops + candidate_encode_ops + similarity_ops)
             for k in RECALL_K:
                 recall_at[str(k)].append(float(rank <= k))
         by_m[str(m)] = {
@@ -227,7 +230,7 @@ def evaluate(
             "P90_rank": pooled_quantile(ranks, 0.90),
             "Top1": statistics.fmean(float(r == 1) for r in ranks),
             "RecallAtK": {k: statistics.fmean(v) for k, v in recall_at.items()},
-            "mean_dense_score_ops": statistics.fmean(routing_ops),
+            "mean_dense_routing_ops": statistics.fmean(routing_ops),
         }
     return by_m
 
