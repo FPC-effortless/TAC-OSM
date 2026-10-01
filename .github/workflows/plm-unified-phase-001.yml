@@ -18,8 +18,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      - name: Install pytest
-        run: python -m pip install --quiet pytest
+      - name: Install package and test dependencies
+        run: python -m pip install --quiet -e . pytest
       - name: Full repository suite
         run: python -m pytest tests/ -q
       - name: Unified PLM unit tests
