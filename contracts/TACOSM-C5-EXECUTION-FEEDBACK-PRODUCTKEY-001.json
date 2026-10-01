@@ -94,7 +94,7 @@
     "verifier repair uses post-execution hidden target information and therefore is not a pure binary reward signal",
     "results on this synthetic workload do not establish universal reasoning"
   ],
-  "status": "pre-registered",
+  "status": "measured",
   "layer": "L5",
   "decision_rule": [
     {
@@ -133,5 +133,12 @@
     "factor_count=3, factor_size=16, factor_beam=7, max_shortlist=32",
     "product-key index is inference-time routing; dense verifier scoring is training-only",
     "index refresh interval=32 learner updates"
-  ]
+  ],
+  "result": {
+    "run_id": 36819603954,
+    "artifact_id": 11142589095,
+    "artifact_digest": "sha256:f36c481ee5c84acd959027d77ecc0fa6154ddc085412bdac8e26e1562dc51420",
+    "decision": "negative_for_current_product_key_capability_preservation",
+    "headline": "Verifier-driven learning improves dense routing, but factor16 beam7 product-key routing does not preserve the prior C5 frontier across M."
+  }
 }
