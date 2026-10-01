@@ -7,12 +7,16 @@
     {
       "name": "dense_scaling",
       "intervention": "extend the same leakage-corrected noisy CDL router to M=2048,4096,8192 without changing training",
-      "primary": true
+      "acts_on": "evaluation population size",
+      "knob": "M",
+      "value": "64..8192"
     },
     {
       "name": "lsh_table_sweep",
       "intervention": "fixed noisy CDL representation with OR-LSH tables swept over 1,2,4,8,10,12,16,24,32,48,64 at M=1024",
-      "primary": true
+      "acts_on": "LSH admission",
+      "knob": "tables",
+      "value": "1,2,4,8,10,12,16,24,32,48,64"
     }
   ],
   "held_constant": [
@@ -79,7 +83,6 @@
     "The main arm has no persistent state input; persistence remains untested by this audit.",
     "The sweep cap is 128 and the maximum requested table count is 64, so the intervention is unbound by the cap."
   ],
-  "status": "registered",
   "endpoints": [
     {
       "name": "dense_P90_rank_M8192",
@@ -149,5 +152,6 @@
     32,
     48,
     64
-  ]
+  ],
+  "status": "pre-registered"
 }
