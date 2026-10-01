@@ -563,7 +563,7 @@ class CASMVerifier:
             output=float(execution.output),
             verified=verdict.valid,
             node_count=len(execution.node_values),
-            edge_count=len(program.true_edges),
+            edge_count=len(getattr(program, "true_edges", getattr(program, "true_edge_set", ()))),
         )
 
 
