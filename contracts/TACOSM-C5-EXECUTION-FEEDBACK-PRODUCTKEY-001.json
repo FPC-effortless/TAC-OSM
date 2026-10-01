@@ -1,0 +1,87 @@
+{
+  "experiment_id": "TACOSM-C5-EXECUTION-FEEDBACK-PRODUCTKEY-001",
+  "title": "Verifier-driven representation learning with factorized product-key routing",
+  "question": "Can post-execution verifier feedback improve a learned representation enough for the existing factorized product-key index to retain useful state retrieval while keeping the inference shortlist bounded?",
+  "hypothesis": "Verifier-driven contrastive updates will improve held-out target retrieval relative to outcome-only dense updates, and the learned representation can be sparsified by factorized product-key routing without requiring exhaustive inference scoring.",
+  "arms": [
+    {
+      "name": "dense_outcome_only",
+      "intervention": "dense RepresentationEnergyRouter with success-only outcome update",
+      "primary_role": "capability control"
+    },
+    {
+      "name": "dense_verifier_feedback",
+      "intervention": "dense VerifierDrivenEnergyRouter with post-execution repair positives and rejected hard negatives",
+      "primary_role": "learning-signal control"
+    },
+    {
+      "name": "productkey_verifier_feedback",
+      "intervention": "same verifier-trained representation with 3-factor factor16 beam7 index and max shortlist 32",
+      "primary_role": "sparse routing"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "eval_top1_recall",
+      "primary": true
+    },
+    {
+      "name": "proposal_admission_recall",
+      "primary": false
+    },
+    {
+      "name": "conditional_selection_given_admission",
+      "primary": false
+    },
+    {
+      "name": "mean_target_rank",
+      "primary": false
+    },
+    {
+      "name": "state_candidates_scored_mean",
+      "primary": false
+    },
+    {
+      "name": "states_scored_over_M",
+      "primary": false
+    },
+    {
+      "name": "factor_score_macs_mean",
+      "primary": false
+    },
+    {
+      "name": "state_rerank_macs_mean",
+      "primary": false
+    },
+    {
+      "name": "amortized_build_macs_per_query",
+      "primary": false
+    }
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    10,
+    11,
+    12
+  ],
+  "train_steps": 900,
+  "eval_steps": 300,
+  "refresh_interval_updates": 32,
+  "factor_count": 3,
+  "factor_size": 16,
+  "factor_beam": 7,
+  "max_shortlist": 32,
+  "capability_rule": "Report all endpoints by M. No sublinear claim unless routing work itself is shown to grow sublinearly with M.",
+  "non_claims": [
+    "sparse execution fraction is not equivalent to sublinear addressing",
+    "index build cost is measured separately from query cost",
+    "verifier repair uses post-execution hidden target information and therefore is not a pure binary reward signal",
+    "results on this synthetic workload do not establish universal reasoning"
+  ],
+  "status": "pre-registered",
+  "layer": "L5"
+}
