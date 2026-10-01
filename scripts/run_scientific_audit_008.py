@@ -38,7 +38,8 @@ from tac_osm.c5_persistent_relational_loop import (
 from tac_osm.temporal import TemporalPersistentState
 
 SEEDS = (0, 1, 2, 3, 4)
-TRAIN_STEPS = 600
+CONTROL_STEPS = 800
+OUTCOME_BASE_STEPS = 600
 OUTCOME_STEPS = 200
 TRAIN_M = (64, 128, 256)
 EVAL_M = (64, 128, 256, 512, 1024, 2048, 4096, 8192)
@@ -124,11 +125,11 @@ def make_unique_trial(seed: int, step: int, m: int, *, mode: str) -> tuple[Persi
         return trial, state
 
 
-def train_control(seed: int) -> CDLPersistentRelationRouter:
+def train_control(seed: int, steps: int = CONTROL_STEPS) -> CDLPersistentRelationRouter:
     router = CDLPersistentRelationRouter(
         seed=seed, learning_rate=0.012, soft_target_epsilon=0.05
     )
-    for step in range(TRAIN_STEPS):
+    for step in range(steps):
         m = TRAIN_M[step % len(TRAIN_M)]
         trial, state = make_unique_trial(seed, step, m, mode="train")
         router.train_exhaustive(trial.query, state, trial.candidates, trial.target_index)
@@ -136,7 +137,7 @@ def train_control(seed: int) -> CDLPersistentRelationRouter:
 
 
 def train_outcome(seed: int) -> tuple[CDLPersistentRelationRouter, int]:
-    router = train_control(seed)
+    router = train_control(seed, steps=OUTCOME_BASE_STEPS)
     env_evaluations = 0
     for step in range(OUTCOME_STEPS):
         m = TRAIN_M[step % len(TRAIN_M)]
@@ -204,6 +205,7 @@ def evaluate(router, seed: int, *, mode: str) -> dict[str, object]:
                 recall_at[str(k)].append(float(rank <= k))
         by_m[str(m)] = {
             "n": len(ranks),
+            "trial_ranks": ranks,
             "mean_rank": statistics.fmean(ranks),
             "P90_rank": pooled_quantile(ranks, 0.90),
             "Top1": statistics.fmean(float(r == 1) for r in ranks),
@@ -219,9 +221,11 @@ def main() -> None:
     control = {}
     outcome = {}
     outcome_eval_cost = {}
+    routers = {}
     for seed in SEEDS:
         c = train_control(seed)
         o, env_evals = train_outcome(seed)
+        routers[str(seed)] = (c, o)
         control[str(seed)] = evaluate(c, seed, mode="eval")
         outcome[str(seed)] = evaluate(o, seed, mode="eval")
         outcome_eval_cost[str(seed)] = env_evals
@@ -230,12 +234,12 @@ def main() -> None:
         out = {}
         for m in EVAL_M:
             rows = [arm[str(s)][str(m)] for s in SEEDS]
-            # Reconstruct pooled quantiles from stored trial ranks is not
-            # possible from these summaries; therefore pooled P90 is computed
-            # by rerunning a deterministic pooled collection below.
+            pooled = [rank for r in rows for rank in r["trial_ranks"]]
             out[str(m)] = {
-                "mean_of_seed_means": statistics.fmean(r["mean_rank"] for r in rows),
-                "mean_of_seed_top1": statistics.fmean(r["Top1"] for r in rows),
+                "pooled_n": len(pooled),
+                "pooled_mean_rank": statistics.fmean(pooled),
+                "pooled_P90_rank": pooled_quantile(pooled, 0.90),
+                "pooled_Top1": statistics.fmean(float(x == 1) for x in pooled),
             }
         return out
 
@@ -244,7 +248,9 @@ def main() -> None:
         "status": "measured",
         "protocol": {
             "seeds": list(SEEDS),
-            "train_steps": TRAIN_STEPS,
+            "control_steps": CONTROL_STEPS,
+            "outcome_base_steps": OUTCOME_BASE_STEPS,
+            "outcome_steps": OUTCOME_STEPS,
             "outcome_steps": OUTCOME_STEPS,
             "train_M": list(TRAIN_M),
             "eval_M": list(EVAL_M),
