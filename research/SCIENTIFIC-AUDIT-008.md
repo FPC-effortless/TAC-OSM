@@ -391,3 +391,43 @@ This means the operator selector is not inferring an action from state and outco
 SECA proposes bounded pairwise compositions and accepts only when every selected validation state exactly matches an independent reference. This is appropriate as a synthetic falsifier, but the proposed search space is tiny and the reference is available to every candidate.
 
 **Correction:** retain exact reference verification as the falsification oracle, while reporting proposal-space size, validation-state count, and false-accept/false-reject stress separately. Do not call acceptance alone evidence of general compositional discovery.
+
+### A26 — RewardContext exposes gold action to reward hooks (P0)
+
+The shared `RewardContext` object contains the task object, whose `target_action` is the evaluator's gold index. Its documentation explicitly permits a reward hook to use this field to anchor a margin.
+
+Therefore the mere presence of a scalar reward function does not define an outcome-only learning boundary. A hook can reconstruct privileged labels from the context.
+
+**Correction:** outcome-only experiments must use a restricted reward payload containing only post-action observations, or a machine-checked wrapper that rejects access to target fields. Privileged reward hooks remain separate controls.
+
+### A27 — Verifier feedback localizes the exact target after a failed action without executing it (P0)
+
+`execution_feedback_from_verdict()` reads `gold_index`/`target_action` from post-action outcome metadata. After a failure it immediately marks the hidden target as a positive and the selected action as a negative. The target candidate therefore receives positive training signal even though it was not executed.
+
+This is target-supervised repair localization, not discovery from outcome evidence.
+
+**Correction:** a true outcome-only feedback condition must either execute candidate actions until evidence localizes the useful candidate, or return only an unlocalized failure signal. Target localization can remain an explicit privileged-verifier control.
+
+### A28 — The verifier-feedback arm is not connected to the common model update hook (P0)
+
+`VerifierDrivenEnergyRouter` inherits `RepresentationEnergyRouter`, while `TacOsmModel.step()` performs its generic learning update only when the router is an instance of `LearnedRelationalRouter`. The shown integrated execution-feedback runner constructs `VerifierDrivenEnergyRouter` and passes it to `TacOsmModel`, but the common step therefore does not call `learn_from_verifier()`.
+
+Unless a separate runner path invokes that method, the advertised verifier-feedback arm does not receive its intended verifier-driven updates.
+
+**Disposition:** any integrated C5 verifier-feedback result must be considered implementation-invalid until its actual update count is demonstrated and the learning call path is tested end-to-end.
+
+**Correction:** connect the verifier-feedback protocol through the common learned-router interface, or invoke it explicitly in a registered runner. Record actual update counts and assert that feedback-bearing cells perform nonzero updates.
+
+### A29 — “Outcome field” supervision can collapse to exact target-index reward (P0/P1)
+
+The corrected audit environment path uses `PersistentRelationEnvironment.act()`, whose success is `index == target_index`, and the current audit runner explicitly sets `casm_output=0.0`. Therefore this environment outcome is functionally a target-index label. It is useful as an outcome-interface diagnostic but is not an independently generated environmental consequence of executing a candidate program.
+
+**Correction:** the confirmatory outcome-field arm must derive the label from the actual candidate action's environment transition or CASM execution, with the target index inaccessible to the learner.
+
+### A30 — Accepted verifier outcomes label all unexecuted candidates as negatives (P1)
+
+In `execution_feedback_from_verdict()`, a successful selected action sets every unexecuted candidate as negative. Only the selected action was observed to succeed; the other candidates were not executed.
+
+This is an unverified assumption unless the environment is known to be single-solution and the candidate set is guaranteed mutually exclusive by construction.
+
+**Correction:** negative labels should be assigned only to executed failures or to candidates proven incompatible by an independent exclusion invariant. Otherwise keep them unlabeled.
