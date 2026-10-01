@@ -1,0 +1,136 @@
+{
+  "experiment_id": "TACOSM-C5-EXHAUSTIVE-REFERENCE-CALIBRATION-001",
+  "title": "Calibration of exhaustive C5 reference capability under matched non-target state populations",
+  "question": "Does matching the teacher's non-target training population to the evaluated M-dependent state population prevent the exhaustive target-retrieval collapse observed as M increases?",
+  "hypothesis": "The M-dependent degradation of exhaustive target recall is partly caused by training the width-16 teacher on only 48 non-target codes while evaluation adds increasingly many decoys. A teacher trained on the same M-dependent non-target value distribution, while keeping all 16 target codes held out, should reduce the M-dependent recall decline.",
+  "arms": [
+    {
+      "name": "current_48",
+      "intervention": "current teacher training regime using the fixed 48 non-target codebook states",
+      "acts_on": "teacher training population",
+      "knob": "training_population=48_fixed",
+      "value": "48"
+    },
+    {
+      "name": "matched_M_minus_16",
+      "intervention": "teacher training on the exact non-target values present in the evaluated M-level population",
+      "acts_on": "teacher training population",
+      "knob": "training_population=M-16",
+      "value": "M-16"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "exhaustive_target_recall",
+      "role": "primary calibration endpoint",
+      "primary": true,
+      "description": "fraction of evaluation tasks for which exhaustive cosine retrieval selects the target address"
+    },
+    {
+      "name": "seed_bootstrap_ci",
+      "role": "uncertainty around exhaustive target recall",
+      "primary": false
+    },
+    {
+      "name": "paired_512_minus_128_delta",
+      "role": "reference-stability diagnostic",
+      "primary": false
+    },
+    {
+      "name": "teacher_updates",
+      "role": "training-compute audit",
+      "primary": false
+    },
+    {
+      "name": "training_population_size",
+      "role": "intervention audit",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "At each registered M, report pooled exhaustive_target_recall for both arms and a seed-bootstrap 95% interval; at M=512, compute the paired seed-bootstrap 95% interval for matched_M_minus_16 minus current_48.",
+      "licenses": "a workload-specific calibration result showing whether M-matched non-target teacher training materially changes the exhaustive reference capability.",
+      "does_not_license": "selective-retrieval capability, a sparse-frontier win, semantic generalization beyond the tested code distribution, or asymptotic scaling."
+    },
+    {
+      "condition": "The preregistered materiality threshold at M=512 is a lower bootstrap bound above +0.10 for (matched_M_minus_16 - current_48).",
+      "licenses": "material evidence that matched teacher-population exposure improves the exhaustive reference at the highest tested population.",
+      "does_not_license": "that teacher calibration alone solves the sparse retrieval problem."
+    }
+  ],
+  "interpretation_order": [
+    "training-population integrity",
+    "exhaustive target recall",
+    "seed-bootstrap uncertainty",
+    "paired M=512-minus-M=128 change",
+    "teacher training compute",
+    "non-target holdout integrity"
+  ],
+  "h_levels": [
+    256
+  ],
+  "m_levels": [
+    128,
+    256,
+    512
+  ],
+  "k_levels": [
+    32
+  ],
+  "seeds": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "steps": 24576,
+  "eval_steps": 100,
+  "held_constant": [
+    "H=256",
+    "M={128,256,512}",
+    "seeds=10-19",
+    "100 evaluation tasks per seed/M/arm",
+    "width-16 cosine teacher architecture",
+    "one-bit noisy query construction",
+    "target codebook remains CODEBOOK[:16] and is excluded from both training arms",
+    "state-distinct downstream executor is unchanged",
+    "exhaustive cosine scoring over all M states",
+    "teacher learning rate, margin, negative coverage, and optimizer implementation",
+    "teacher optimizer-update budget approximately 24576 for both arms, with actual update counts recorded"
+  ],
+  "status": "measured",
+  "layer": "L3",
+  "protocol_note": "Diagnostic study only. The current_48 arm uses the historical 48-code training population and exactly 24576 optimizer updates. The matched_M_minus_16 arm trains on the exact non-target state values present in the corresponding M-level evaluation population, while using an epoch count rounded to keep total optimizer updates within 1% of 24576. All 16 target codes remain excluded from both training sets. Amendment CAL-001-A1 was recorded before any full measurement to remove the original population-size/update-budget confound. The study does not modify or reinterpret TACOSM-C5-MULTIFACTOR-GRANULARITY-BEAM-FRONTIER-001.",
+  "amendments": [
+    {
+      "id": "CAL-001-A1",
+      "applies_to": "teacher training schedule",
+      "old_definition": "Both teacher arms use 512 epochs, so the matched_M_minus_16 arm receives substantially more optimizer updates as M grows.",
+      "new_definition": "Both teacher arms target approximately 24576 optimizer updates. current_48 uses 512 epochs (24576 updates); matched_M_minus_16 uses round(24576 / training_population_size) epochs and records the resulting actual update count, constrained to within 1% of the target budget.",
+      "rationale": "The original design confounded training-population exposure with optimizer budget. Fixing the update budget makes the primary comparison interpretable as a calibration-population intervention rather than a simultaneous compute intervention.",
+      "discovered": "Pre-dispatch code audit on 2026-10-01.",
+      "affected": "PR #46 only. No full measurement was conducted under the previous schedule.",
+      "no_result_under_previous_version": "true"
+    }
+  ],
+  "result": {
+    "run_id": 36810643404,
+    "artifact_id": 11139324912,
+    "artifact_sha256": "def220ea15c44d07c1dbfc15d8d2b0f00225ef4179459a4b63a126e0b6fe5980",
+    "artifact_size_bytes": 1964,
+    "materiality_supported_at_M512": false,
+    "mean_difference_M512": 0.072,
+    "seed_bootstrap_95_ci_M512": [
+      0.031,
+      0.115
+    ],
+    "c5_status": "UNCHANGED"
+  }
+}
