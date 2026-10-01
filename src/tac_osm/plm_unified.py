@@ -131,6 +131,7 @@ class PLMConfig:
     consolidation_threshold: int = 256
     prune_after: int = 32
     seed: int = 0
+    allow_privileged_online_correction: bool = False
 
 
 class TypedPersistentState:
@@ -405,8 +406,13 @@ class OperatorPool:
         if name in self.operators:
             return
         a, b = self.operators[first], self.operators[second]
+        if b.arity != 1:
+            raise ValueError(
+                "synthesize_composite currently supports only unary second operators; "
+                f"got {second} with arity {b.arity}"
+            )
         self.register(OperatorSpec(
-            name, 2, lambda x: b.fn((a.fn(x),)), name, a.cost + b.cost
+            name, a.arity, lambda x: b.fn((a.fn(x),)), name, a.cost + b.cost
         ))
 
 
@@ -552,7 +558,12 @@ class UnifiedPLM:
                     )
 
                 repaired = True
-                self.router.update(task.query_bits, record, -1.0, correct_record=correct)
+                self.router.update(
+                    task.query_bits,
+                    record,
+                    -1.0,
+                    correct_record=(correct if self.config.allow_privileged_online_correction else None),
+                )
                 if execution_cost >= self.config.max_executions:
                     break
             if execution_cost >= self.config.max_executions:
