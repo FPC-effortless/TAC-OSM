@@ -11,6 +11,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from tac_osm.c5_persistent_relational_loop import (
+    DIM,
     CDLPersistentRelationRouter,
     PersistentRelationConfig,
     PersistentRelationTrial,
