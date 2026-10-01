@@ -135,8 +135,8 @@ def evaluate_seed(seed: int, router: CDLDenseNoisyRouter):
             cap=CONFIG.lsh_tables_cap,
             seed=seed * 1009 + m,
         )
-        population = build_population(seed, m)
-        probe.build(router.inner.candidate_embeddings(population))
+        calibration_population = build_population(seed, m)
+        probe.build(router.inner.candidate_embeddings(calibration_population))
         p1s, p2s = [], []
         for trial in calibration[: min(32, len(calibration))]:
             p1, p2 = estimate_p1_p2(router, probe, trial, samples=4)
@@ -144,6 +144,7 @@ def evaluate_seed(seed: int, router: CDLDenseNoisyRouter):
             p2s.append(p2)
         p1, p2 = statistics.fmean(p1s), statistics.fmean(p2s)
         rho, requested_tables = derive_tables(p1, p2, m)
+        eval_population = build_population(seed + 100, m)
         lsh = ORLSHIndex(
             latent_dim=16,
             bits=bits,
@@ -151,7 +152,7 @@ def evaluate_seed(seed: int, router: CDLDenseNoisyRouter):
             cap=CONFIG.lsh_tables_cap,
             seed=seed * 9176 + m,
         )
-        lsh.build(router.inner.candidate_embeddings(population))
+        lsh.build(router.inner.candidate_embeddings(eval_population))
 
         cov90 = []
         cov95 = []
