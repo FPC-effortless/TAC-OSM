@@ -258,6 +258,8 @@ def eval_learned(
         "internal_exact_addresses_scored": statistics.fmean(scored),
         "internal_exact_addresses_scored_over_M": statistics.fmean(scored) / len(candidates),
         "factor_score_macs": statistics.fmean(factor),
+        "pst_prediction_ops": 0.0,
+        "structural_gate_ops": 0.0,
     }
 
 
