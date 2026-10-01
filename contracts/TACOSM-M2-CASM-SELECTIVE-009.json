@@ -77,16 +77,20 @@
     "unique_candidate_truth_tables": true,
     "unique_candidate_structures": true,
     "train_eval_exact_structure_disjoint": true,
-    "primary_eval_distribution": "same generator distribution with unseen exact programs",
+    "primary_eval_distribution": "same generator distribution with unseen exact programs; candidate pools are generated independently of router-visible support examples",
     "secondary_eval_distribution": "held-out NOT->XOR structural role-pair; training excludes that role-pair",
-    "evaluation_tasks_per_seed_M": 32
+    "evaluation_tasks_per_seed_M": 32,
+    "verifier_examples_per_task": 8,
+    "router_visible_examples_per_task": 4
   },
   "leakage_rules": [
     "Router input contains only public support input/output examples and candidate public structural descriptors.",
     "Target index, target record ID, full candidate truth tables, true wiring, true edges, verifier output, and outcome are evaluator-only.",
     "CASM-S structural encoder receives nodes, depth, position, arity, and existence only; true edges are not passed into routing.",
     "Candidate semantic success is verified from executed outputs against public task examples, not descriptor equality.",
-    "A candidate is not marked negative unless its executed outputs fail at least one public task example."
+    "A candidate is not marked negative unless its executed outputs fail at least one public task example.",
+    "Candidate pool construction must not condition decoy inclusion on router-visible support examples.",
+    "Verifier-only input/output examples are disjoint from router-visible support examples and are not passed to routing."
   ],
   "execution_work_contract": {
     "gate_evaluations": "number of candidate edges scored by CASM-S",
