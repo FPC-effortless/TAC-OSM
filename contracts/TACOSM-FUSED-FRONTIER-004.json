@@ -4,32 +4,110 @@
   "question": "Does deterministic 4f16/b4 structural addressing retain capability and acceptable total routing cost at M=1024 and M=2048?",
   "hypothesis": "The 4-factor/16-cell beam-4 geometry selected in frontier 003 will retain higher selectivity than the 3-factor/16-cell beam-7 control as M increases, while PST maintains transition compatibility.",
   "arms": [
-    {"name":"3f16_b7","intervention":"three-factor control","acts_on":"index geometry"},
-    {"name":"4f16_b4","intervention":"selected four-factor beam-4 geometry","acts_on":"index geometry"}
+    {
+      "name": "3f16_b7",
+      "intervention": "three-factor control",
+      "acts_on": "index geometry"
+    },
+    {
+      "name": "4f16_b4",
+      "intervention": "selected four-factor beam-4 geometry",
+      "acts_on": "index geometry"
+    }
   ],
   "endpoints": [
-    {"name":"execution_success","role":"primary capability endpoint","primary":true},
-    {"name":"internal_exact_addresses_scored","role":"primary scaling endpoint","primary":false},
-    {"name":"internal_exact_addresses_scored_over_M","role":"primary scaling endpoint","primary":false},
-    {"name":"route_ops_excluding_build","role":"primary total routing arithmetic","primary":false},
-    {"name":"pkm_admission_recall","role":"admission diagnostic","primary":false},
-    {"name":"final_admission_recall","role":"final shortlist diagnostic","primary":false},
-    {"name":"factor_score_macs","role":"factor arithmetic","primary":false},
-    {"name":"pair_generation_ops","role":"cell expansion","primary":false},
-    {"name":"internal_exact_rerank_ops","role":"exact address arithmetic","primary":false},
-    {"name":"pst_prediction_ops","role":"transition prediction arithmetic","primary":false},
-    {"name":"build_macs","role":"index construction arithmetic","primary":false},
-    {"name":"max_cell_size","role":"collision diagnostic","primary":false},
-    {"name":"nonempty_cells","role":"occupancy diagnostic","primary":false}
+    {
+      "name": "execution_success",
+      "role": "primary capability endpoint",
+      "primary": true
+    },
+    {
+      "name": "internal_exact_addresses_scored",
+      "role": "primary scaling endpoint",
+      "primary": false
+    },
+    {
+      "name": "internal_exact_addresses_scored_over_M",
+      "role": "primary scaling endpoint",
+      "primary": false
+    },
+    {
+      "name": "route_ops_excluding_build",
+      "role": "primary total routing arithmetic",
+      "primary": false
+    },
+    {
+      "name": "pkm_admission_recall",
+      "role": "admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "final_admission_recall",
+      "role": "final shortlist diagnostic",
+      "primary": false
+    },
+    {
+      "name": "factor_score_macs",
+      "role": "factor arithmetic",
+      "primary": false
+    },
+    {
+      "name": "pair_generation_ops",
+      "role": "cell expansion",
+      "primary": false
+    },
+    {
+      "name": "internal_exact_rerank_ops",
+      "role": "exact address arithmetic",
+      "primary": false
+    },
+    {
+      "name": "pst_prediction_ops",
+      "role": "transition prediction arithmetic",
+      "primary": false
+    },
+    {
+      "name": "build_macs",
+      "role": "index construction arithmetic",
+      "primary": false
+    },
+    {
+      "name": "max_cell_size",
+      "role": "collision diagnostic",
+      "primary": false
+    },
+    {
+      "name": "nonempty_cells",
+      "role": "occupancy diagnostic",
+      "primary": false
+    }
   ],
-  "M_levels":[512,1024,2048],
-  "absolute_budgets":[16,32,64],
-  "seeds":[10,11,12],
-  "steps":0,
-  "eval_steps":80,
-  "k_levels":[16,32,64],
-  "h_levels":[1],
-  "held_constant":[
+  "M_levels": [
+    512,
+    1024,
+    2048
+  ],
+  "absolute_budgets": [
+    16,
+    32,
+    64
+  ],
+  "seeds": [
+    10,
+    11,
+    12
+  ],
+  "steps": 0,
+  "eval_steps": 80,
+  "k_levels": [
+    16,
+    32,
+    64
+  ],
+  "h_levels": [
+    1
+  ],
+  "held_constant": [
     "state dimension=8",
     "operator kinds=toggle,set1,set0",
     "verified training operators=48",
@@ -40,18 +118,33 @@
     "no SECA or verifier feedback in routing",
     "4f16/b4 is the candidate geometry selected from frontier 003"
   ],
-  "decision_rule":[
+  "decision_rule": [
     {
-      "condition":"Report capability and total routing work across M=512,1024,2048 at each absolute budget.",
-      "licenses":"workload-specific large-M scaling evidence.",
-      "does_not_license":"C5 or universal sparse-retrieval claims."
+      "condition": "Report capability and total routing work across M=512,1024,2048 at each absolute budget.",
+      "licenses": "workload-specific large-M scaling evidence.",
+      "does_not_license": "C5 or universal sparse-retrieval claims."
     },
     {
-      "condition":"If 4f16/b4 remains materially more selective than 3f16/b7 and retains usable execution capability, it becomes the engineering base for the next hierarchical-index intervention.",
-      "licenses":"choice of the base configuration for the next experiment.",
-      "does_not_license":"asymptotic boundedness."
+      "condition": "If 4f16/b4 remains materially more selective than 3f16/b7 and retains usable execution capability, it becomes the engineering base for the next hierarchical-index intervention.",
+      "licenses": "choice of the base configuration for the next experiment.",
+      "does_not_license": "asymptotic boundedness."
     }
   ],
-  "status":"pre-registered",
-  "layer":"L5"
+  "status": "pre-registered",
+  "layer": "L5",
+  "interpretation_order": [
+    "execution_success",
+    "internal_exact_addresses_scored",
+    "internal_exact_addresses_scored_over_M",
+    "route_ops_excluding_build",
+    "pkm_admission_recall",
+    "final_admission_recall",
+    "factor_score_macs",
+    "pair_generation_ops",
+    "internal_exact_rerank_ops",
+    "pst_prediction_ops",
+    "build_macs",
+    "max_cell_size",
+    "nonempty_cells"
+  ]
 }
