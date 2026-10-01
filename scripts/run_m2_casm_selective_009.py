@@ -425,6 +425,7 @@ def evaluate_router(
             "adaptive_semantic_success": float(adaptive_ok),
             "fixed_budget_executed_candidates": len(selected),
             "adaptive_executed_candidates": len(adaptive_indices),
+            "adaptive_verified_candidate_indices": [adaptive_indices[-1]] if adaptive_ok and adaptive_indices else [],
             "fixed_budget_execution_work_units": work,
             "fixed_budget_execution_work_fraction": work / max(1, ex_work),
             "adaptive_execution_work_units": adaptive_work,
