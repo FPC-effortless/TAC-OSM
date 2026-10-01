@@ -14,5 +14,5 @@ def test_registered_integrated_runner(capsys):
     data = json.loads(artifact.read_text())
     with capsys.disabled():
         print("\n=== TACOSM-INTEGRATED-001 ===")
-        print(json.dumps(data["c5"]["pooled"], sort_keys=True))
+        print(json.dumps(data["c5"], sort_keys=True))
         print(json.dumps(data["procedural"], sort_keys=True))
