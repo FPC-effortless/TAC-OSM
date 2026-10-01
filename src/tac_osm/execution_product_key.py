@@ -103,9 +103,14 @@ class ExecutionFeedbackProductKeyRouter:
         if not training_set:
             raise ValueError("training_keys must not be empty")
         for candidate in candidates:
-            items.append(
-                (candidate.key, self.representation.encode_candidate(candidate))
-            )
+            embedding = tuple(self.representation.encode_candidate(candidate))
+            # Numerical guard only: preserve the learned embedding, but avoid
+            # an exact zero vector because the factorized index normalizes it.
+            # The guard is below the resolution of the synthetic representation
+            # and is never a learning target.
+            if sum(x * x for x in embedding) <= 1e-16:
+                embedding = (1e-6,) + tuple(0.0 for _ in embedding[1:])
+            items.append((candidate.key, embedding))
         training_items = [item for item in items if item[0] in training_set]
         if len(training_items) < self.index_config.factor_size:
             raise ValueError(
