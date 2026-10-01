@@ -644,8 +644,8 @@ def main() -> None:
         "protocol": {
             "seeds": list(seeds),
             "router_trainable_parameters": {
-                "structural": int(router_parameter_count(fit_router(0, train_casm(0)[0], generate_unique_programs(2111, min(TRAIN_PROGRAMS, 32)), representation="structural"))),
-                "summary": int(router_parameter_count(fit_router(0, train_casm(0)[0], generate_unique_programs(2111, min(TRAIN_PROGRAMS, 32)), representation="summary"))),
+                "structural": 20 * 64 + 64 + 64 * LATENT_DIM + LATENT_DIM + LATENT_DIM * LATENT_DIM + LATENT_DIM,
+                "summary": 20 * 64 + 64 + 64 * LATENT_DIM + LATENT_DIM + 32 * LATENT_DIM + LATENT_DIM,
             },
             "M_levels": list(m_levels),
             "budgets": list(BUDGETS),
