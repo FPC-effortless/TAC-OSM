@@ -1,0 +1,56 @@
+{
+  "experiment_id": "TACOSM-C5-ADMISSION-SCALING-AUDIT-001",
+  "title": "C5 admission and dense-rank scaling audit",
+  "question": "Does dense-CDL rank continue toward linear growth at M=2048,4096,8192, and can explicit OR-LSH table-count scaling recover the valid candidates admitted by the calibrated dense K90 shortlist at M=1024?",
+  "hypothesis": "The dense rank curve will show increasing local P90 exponents at higher M, while explicit LSH table scaling will expose a recall/compute frontier that is hidden by the current m^rho table rule.",
+  "arms": [
+    {
+      "name": "dense_scaling",
+      "intervention": "extend the same leakage-corrected noisy CDL router to M=2048,4096,8192 without changing training",
+      "primary": true
+    },
+    {
+      "name": "lsh_table_sweep",
+      "intervention": "fixed noisy CDL representation with OR-LSH tables swept over 1,2,4,8,10,12,16,24,32,48,64 at M=1024",
+      "primary": true
+    }
+  ],
+  "held_constant": [
+    "C5 noisy task generator",
+    "16-bit 64-class codebook and one-bit public-query corruption",
+    "same CDL learner, latent dimension, learning rate, training steps, and train M distribution",
+    "same candidate duplication factor per class",
+    "same dense ranking definition",
+    "same OR-LSH random-hyperplane family within a sweep",
+    "same K90 calibration procedure",
+    "same held-out trial stream per seed",
+    "no persistent state input to the main arm",
+    "no hidden-target input to the router"
+  ],
+  "dense_M": [64, 128, 256, 512, 1024, 2048, 4096, 8192],
+  "lsh_M": 1024,
+  "lsh_tables": [1, 2, 4, 8, 10, 12, 16, 24, 32, 48, 64],
+  "table_cap": 128,
+  "seeds": [0, 1, 2, 3, 4],
+  "train_steps": 800,
+  "calibration_trials": 64,
+  "heldout_trials": 64,
+  "decision_rule": [
+    {
+      "condition": "Report local P90 rank exponents for every consecutive M doubling and fit the full-range exponent.",
+      "licenses": "descriptive dense-CDL scaling behavior on the registered synthetic workload.",
+      "does_not_license": "a sublinear claim when the local exponent trends toward 1, or any theorem."
+    },
+    {
+      "condition": "Report every registered LSH table count, including the calibration-derived iid L90 diagnostic, without selecting an operating point from held-out outcomes.",
+      "licenses": "an admission recall versus reranking-work curve for the fixed representation.",
+      "does_not_license": "claim that a specific L is optimal without a separately registered operating-point rule."
+    }
+  ],
+  "scientific_gates": [
+    "The Hamming reference is treated as a routing solvability reference, not as evidence of learned semantic retrieval.",
+    "The main arm has no persistent state input; persistence remains untested by this audit.",
+    "The sweep cap is 128 and the maximum requested table count is 64, so the intervention is unbound by the cap."
+  ],
+  "status": "registered"
+}
