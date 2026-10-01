@@ -400,15 +400,17 @@ def evaluate_router(
             vals = outputs[start : start + n_verify]
             expected = [float(y) for _, y in task.verification_examples]
             ok = ok and all((float(v) >= 0.5) == (float(y) >= 0.5) for v, y in zip(vals, expected))
-        work = WorkAccounting(0, 0, 0)
+        work = WorkAccounting(0, 0, 0, 0)
         for idx in indices:
             wa = per_candidate_work[idx]
             work = WorkAccounting(
+                work.representation_node_operations + wa.representation_node_operations * len(task.verification_examples),
                 work.gate_evaluations + wa.gate_evaluations * len(task.verification_examples),
                 work.edge_message_operations + wa.edge_message_operations * len(task.verification_examples),
                 work.structural_node_operations + wa.structural_node_operations * len(task.verification_examples),
             )
         return ok, work.total, elapsed, {
+            "representation_node_operations": work.representation_node_operations,
             "gate_evaluations": work.gate_evaluations,
             "edge_message_operations": work.edge_message_operations,
             "structural_node_operations": work.structural_node_operations,
