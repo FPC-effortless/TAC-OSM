@@ -90,6 +90,7 @@ def test_seca_accepts_novel_compositions():
     accepted = SECAEngine().verify(
         candidates,
         [rows[i].before for i in range(10)],
+        lambda state, macro: macro.execute(state),
     )
     assert candidates
     assert accepted
