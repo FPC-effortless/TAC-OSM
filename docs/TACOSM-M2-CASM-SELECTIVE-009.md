@@ -89,3 +89,7 @@ After execution, only a candidate that satisfies all public task examples under 
 The replay test inserts unrelated task states between an anchor task's first execution and replay. It measures whether verified experience changes Top-1 routing or reduces adaptive CASM execution work.
 
 This is a persistence mechanism test, not a claim of generalization from memorized task identities.
+
+### Train/evaluation separation
+
+Primary evaluation targets are disjoint from router training in both exact program structure and complete truth table. Decoy pools are generated independently of the router-visible support examples. Four input/output rows are routed to the model; the remaining twelve rows are withheld for verifier-only semantic verification.
