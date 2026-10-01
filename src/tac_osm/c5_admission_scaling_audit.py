@@ -320,9 +320,7 @@ def lsh_sweep_for_seed(
         seed=seed * 9176 + m,
     )
     index.build(
-        router.inner.candidate_embeddings(
-            build_population_extended(seed + 100, m)
-        )
+        router.inner.candidate_embeddings(heldout[0].candidates)
     )
     position = {c.key: i for i, c in enumerate(heldout[0].candidates)}
     # Build positions independently because every held-out trial has the same
