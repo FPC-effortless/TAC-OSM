@@ -10,10 +10,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from tac_osm.plm_research_phases import (
+    StateStabilityRow,
     aggregate_rows,
     run_no_verifier_control,
     run_state_stability,
 )
+import statistics
 
 EXPERIMENT_ID = "TACOSM-PLM-STATE-STABILITY-002"
 SEEDS = tuple(range(5))
@@ -33,6 +35,17 @@ def main() -> None:
         run_no_verifier_control(seed=seed, horizon=HORIZON)
         for seed in SEEDS
     )
+    by_rate = []
+    for rate in RATES:
+        group = [r for r in rows if r.arm == "false_accept" and r.false_accept_rate == rate]
+        by_rate.append({
+            "false_accept_rate": rate,
+            "wrong_write_rate_mean": statistics.fmean(r.wrong_write_rate for r in group),
+            "wrong_verified_writes_mean": statistics.fmean(r.wrong_verified_writes for r in group),
+            "verified_writes_mean": statistics.fmean(r.verified_writes for r in group),
+            "final_state_size_mean": statistics.fmean(r.final_state_size for r in group),
+        })
+
     result = {
         "experiment_id": EXPERIMENT_ID,
         "status": "measured",
@@ -60,6 +73,7 @@ def main() -> None:
         ],
         "rows": [r.__dict__ for r in rows],
         "summary_by_arm": aggregate_rows(rows, "arm"),
+        "dose_response": by_rate,
         "decision_rules": [
             "Strict rate=0 is the verifier-gated control.",
             "No-verifier accepts every proposal and is an upper contamination control.",
