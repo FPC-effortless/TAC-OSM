@@ -121,7 +121,10 @@ class PSTLearner:
 
 
 def transition_features(rec: TransitionRecord, kinds: Sequence[str]) -> tuple[float, ...]:
-    onehot = [1.0 if rec.operator.kind == k else 0.0 for k in kinds]
+    # Give the typed operator identity enough weight to compete with the
+    # nuisance variation in state/mask values. StructMeans is intended to
+    # discover recurring structural roles, not cluster arbitrary bit patterns.
+    onehot = [8.0 if rec.operator.kind == k else 0.0 for k in kinds]
     before = [float(x) for x in rec.before]
     mask = [float(x) for x in rec.operator.mask]
     after = [float(x) for x in rec.after]
