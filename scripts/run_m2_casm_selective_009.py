@@ -555,6 +555,21 @@ def persistence_replay_experiment(
     }
 
 
+def provenance_snapshot() -> dict[str, object]:
+    import hashlib
+    import platform
+    contract_path = ROOT / "contracts" / "TACOSM-M2-CASM-SELECTIVE-009.json"
+    return {
+        "tacosm_commit": os.environ.get("GITHUB_SHA", "local"),
+        "github_run_id": os.environ.get("GITHUB_RUN_ID", "local"),
+        "github_run_attempt": os.environ.get("GITHUB_RUN_ATTEMPT", "local"),
+        "python_version": platform.python_version(),
+        "torch_version": torch.__version__,
+        "contract_sha256": hashlib.sha256(contract_path.read_bytes()).hexdigest(),
+        "external_executor_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748",
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--smoke", action="store_true")
@@ -645,6 +660,7 @@ def main() -> None:
 
     result = {
         "experiment_id": "TACOSM-M2-CASM-SELECTIVE-009",
+        "provenance": provenance_snapshot(),
         "status": "measured",
         "external_executor_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748",
         "protocol": {
