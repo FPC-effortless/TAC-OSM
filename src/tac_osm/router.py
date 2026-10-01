@@ -631,6 +631,39 @@ class LearnedRelationalRouter:
         out["bias"] = self.w[0]
         return out
 
+    def learn_from_outcome(
+        self,
+        query: Query,
+        state: PersistentState,
+        candidates: Sequence[Candidate],
+        selected: int,
+        *,
+        success: bool,
+        scores: Sequence[float] | None = None,
+    ) -> float:
+        """Compatibility learning hook for the common model interface.
+
+        The successor model can ask every outcome-learning router to expose the
+        same method. Legacy REINFORCE keeps its original update rule; the
+        representation router uses a different optimizer behind the same
+        boundary. Scores are the policy probabilities recorded at routing
+        time, so training-time sampling is not reconstructed after the fact.
+        """
+        if scores is None:
+            _, raw = self.evaluate(query, state, candidates)
+            probs = self._softmax(raw)
+        else:
+            probs = tuple(float(x) for x in scores)
+        self.update(
+            query=query,
+            candidates=candidates,
+            selected=selected,
+            reward=float(success),
+            probs=probs,
+            state=state,
+        )
+        return float(success)
+
     @property
     def updates(self) -> int:
         return self._updates

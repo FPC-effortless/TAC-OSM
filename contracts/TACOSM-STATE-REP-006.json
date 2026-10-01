@@ -1,0 +1,103 @@
+{
+  "experiment_id": "TACOSM-STATE-REP-006",
+  "title": "Semantic addressing over opaque persistent state",
+  "question": "Can a router identify a semantically relevant persistent state item when its address is opaque and absent from the public query?",
+  "hypothesis": "H_address: explicit semantic state content is sufficient for a learned addressor to recover the relevant state item above the frozen no-learning control after a causal write/read boundary.",
+  "arms": [
+    {
+      "name": "analytic",
+      "intervention": "identity embeddings as an exact representability witness",
+      "acts_on": "semantic state addressor"
+    },
+    {
+      "name": "learned",
+      "intervention": "learned bilinear semantic state addressor",
+      "acts_on": "semantic state addressor",
+      "knob": "learn_from_success",
+      "value": "0.01 learning rate, 0.1 margin",
+      "schedule": "512 training episodes"
+    },
+    {
+      "name": "no_learning",
+      "intervention": "identical architecture with frozen random parameters",
+      "acts_on": "semantic state addressor"
+    },
+    {
+      "name": "shuffle",
+      "intervention": "preserve opaque addresses while swapping stored values",
+      "acts_on": "persistent state contents"
+    },
+    {
+      "name": "reset",
+      "intervention": "clear all state after the causal write and before routing",
+      "acts_on": "persistent state availability"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "state_top1_recall",
+      "role": "primary — whether the correct opaque state address is selected",
+      "primary": true,
+      "description": "Top-1 recall over the held-out state pool."
+    },
+    {
+      "name": "end_to_end_top1_recall",
+      "role": "secondary — whether the retrieved semantic state resolves the exact downstream program choice",
+      "primary": false
+    },
+    {
+      "name": "mean_target_state_rank",
+      "role": "secondary — rank of the correct opaque state item",
+      "primary": false
+    },
+    {
+      "name": "state_address_macs",
+      "role": "audit — learned semantic addressing arithmetic",
+      "primary": false
+    },
+    {
+      "name": "inspected_state_items",
+      "role": "audit — state population inspected per decision",
+      "primary": false
+    },
+    {
+      "name": "reset_fail_closed",
+      "role": "audit — cleared state must not be silently replaced",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "learned state_top1_recall exceeds no_learning state_top1_recall across the registered seeds and the endpoint is directionally above chance",
+      "licenses": "bounded support for learned semantic addressing on the registered synthetic state pool",
+      "does_not_license": "sublinear addressing, long-horizon memory, or general semantic retrieval"
+    },
+    {
+      "condition": "learned state_top1_recall does not exceed no_learning state_top1_recall",
+      "licenses": "the registered learner does not demonstrate exploitation of the semantic state signal",
+      "does_not_license": "a claim that semantic addressing is impossible"
+    }
+  ],
+  "interpretation_order": [
+    "temporal state availability",
+    "state representability",
+    "state addressing",
+    "downstream program selection",
+    "compute scaling"
+  ],
+  "h_levels": [8],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 512,
+  "eval_steps": 256,
+  "held_constant": [
+    "h_levels=8 denotes the persistent state-pool population in this experiment; the candidate program population is also fixed at 8",
+    "state write occurs one boundary before the read",
+    "state addresses are opaque randomized keys and never appear in the public query",
+    "exact downstream program matching is held fixed so the primary endpoint isolates state addressing",
+    "learning uses only verified selection success and the strongest in-pool negative",
+    "no epsilon-greedy or other exploration intervention is used",
+    "prior C5 and REP-001 through REP-005 evidence remains frozen"
+  ],
+  "status": "pre-registered",
+  "layer": "L2"
+}
