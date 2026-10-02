@@ -113,7 +113,7 @@ def evaluate(model: AddressDiagnosisModel, episodes: list[tuple], control: str =
     return {
         "q2_accuracy": totals / n,
         "target_memory_attention": attention_mass / n,
-        "write_target_accuracy": write_correct / (n * 3),
+        "write_target_address_accuracy": write_correct / (n * 3),
     }
 
 
