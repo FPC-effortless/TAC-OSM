@@ -327,6 +327,16 @@
       "discovered": "Confirmatory run 37019001079 import failure.",
       "affected": "Execution environment only; model, data, metrics, seeds and decision rules unchanged.",
       "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A10",
+      "applies_to": "synthetic modality observation maps",
+      "old_definition": "The initial image renderer folded a,b with modulo positions and the initial audio renderer combined b into a modulo-3 frequency, making distinct latent states observationally identical.",
+      "new_definition": "Image uses independent spatial codes for a,b,c; audio uses separated harmonic frequency bands for a,b,c. The full observation map remains the fixed synthetic input space but is injective over the registered state set.",
+      "rationale": "The representability/identifiability gate must be testing whether the intended predictive relation is learnable from the observation, not whether the benchmark hides the state in an intentionally aliased rendering.",
+      "discovered": "Confirmatory run 37019339996 identifiability gate stopped on image before any capability measurement; no scientific result was produced.",
+      "affected": "Synthetic renderers only; model architecture, seeds, held-out domain split, thresholds and decision rules unchanged.",
+      "no_result_under_previous_version": "true"
     }
   ],
   "held_constant": [
