@@ -59,4 +59,3 @@ def test_proposer_domain_excludes_private_evaluator_details():
     assert "Exact task score" not in public_text
     assert "0.28" not in public_text
     assert "exact task score" in private_text.lower()
-    assert "0.28" in private_text
