@@ -1,0 +1,188 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-003",
+  "version": 1,
+  "status": "pre-registered",
+  "question": "After correcting q1/q2 target-entity construction, is the E2E-001 failure localized to learned persistent-state write addressing, learned read addressing, or lack of a coherent shared address interface?",
+  "hypothesis": "Explicit structural entity addressing on the write path, read path, or both will localize the persistent-state failure without changing the multimodal representation, CASM, verifier, optimizer, held-out compositions, or seed schedule.",
+  "arms": [
+    {
+      "name": "explicit_write",
+      "intervention": "observation entity identity selects the persistent write slot; query read addressing remains learned",
+      "acts_on": "persistent write address",
+      "knob": "write_mode",
+      "value": "explicit"
+    },
+    {
+      "name": "explicit_read",
+      "intervention": "query entity identity selects the persistent read slot; observation write addressing remains learned",
+      "acts_on": "persistent read address",
+      "knob": "read_mode",
+      "value": "explicit"
+    },
+    {
+      "name": "explicit_both",
+      "intervention": "observation entity identity selects the persistent write slot and query entity identity selects the persistent read slot",
+      "acts_on": "persistent address interface",
+      "knob": "write_mode/read_mode",
+      "value": "explicit/explicit"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_explicit_both",
+      "role": "primary",
+      "primary": true,
+      "description": "Mean q2 accuracy over 400 corrected held-out episodes per seed with explicit write and explicit read addressing."
+    },
+    {
+      "name": "heldout_q2_accuracy_explicit_write",
+      "role": "secondary",
+      "primary": false,
+      "description": "Mean q2 accuracy for the explicit-write/learned-read arm."
+    },
+    {
+      "name": "heldout_q2_accuracy_explicit_read",
+      "role": "secondary",
+      "primary": false,
+      "description": "Mean q2 accuracy for the learned-write/explicit-read arm."
+    },
+    {
+      "name": "heldout_q2_accuracy_no_memory_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Paired no-memory control for explicit-both."
+    },
+    {
+      "name": "heldout_q2_accuracy_shuffled_image_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Paired image-alignment control for explicit-both."
+    },
+    {
+      "name": "heldout_q2_accuracy_text_only_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Unimodal diagnostic."
+    },
+    {
+      "name": "heldout_q2_accuracy_image_only_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Unimodal diagnostic."
+    },
+    {
+      "name": "heldout_q2_accuracy_audio_only_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Unimodal diagnostic."
+    },
+    {
+      "name": "target_memory_attention_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Mean target-slot attention for explicit-both."
+    },
+    {
+      "name": "write_target_address_accuracy",
+      "role": "secondary",
+      "primary": false,
+      "description": "Mean write target-address accuracy."
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "benchmark-integrity and information-flow checks pass and explicit_both mean q2 accuracy >= 0.80 with every seed >= 0.40",
+      "licenses": "the corrected synthetic address-intervention system meets the registered capability criterion",
+      "does_not_license": "real-world multimodal capability, semantic addressing, arbitrary learned operators, or scaling"
+    },
+    {
+      "condition": "explicit_both fails the primary criterion but all integrity checks pass",
+      "licenses": "the explicit-both intervention does not meet the criterion; single-path diagnostics localize the failure without ranking arms",
+      "does_not_license": "persistent-state impossibility or PLM impossibility"
+    },
+    {
+      "condition": "explicit_write materially differs from explicit_read",
+      "licenses": "evidence localizing the corrected benchmark failure toward one address path",
+      "does_not_license": "a general memory-system claim"
+    },
+    {
+      "condition": "explicit_both differs materially from both single-path arms",
+      "licenses": "evidence that write/read address coherence is consequential in this synthetic task",
+      "does_not_license": "semantic addressing generally"
+    },
+    {
+      "condition": "q1/q2 entity identities overlap, held-out composition appears in TRAIN_COMBOS, or answer/outcome information enters before action",
+      "licenses": "instrument invalid; no scientific interpretation",
+      "does_not_license": "a negative capability conclusion"
+    }
+  ],
+  "interpretation_order": [
+    "benchmark_integrity",
+    "information_flow",
+    "primary_endpoint",
+    "single_path_diagnostics",
+    "explicit_both_vs_frozen_invalid_history",
+    "memory_control",
+    "alignment_control",
+    "unimodal_controls",
+    "address_diagnostics"
+  ],
+  "h_levels": [
+    3
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "held_constant": [
+    "corrected canonical benchmark generator",
+    "q1 always targets entities[0] and q2 always targets entities[1]",
+    "same 12 complementary latent bits: text 0-3, image 4-7, audio 8-11",
+    "same eight held-out compositions as E2E-001, with strict training exclusion",
+    "same entity_count=16 and hidden_dim=40",
+    "same batch_size=96",
+    "same AdamW lr=0.002 and weight_decay=0.0001",
+    "same observation noise=0.03",
+    "same 300 training steps and 400 evaluation episodes per seed",
+    "E2E-001 and E2E-002 numeric outputs are provenance-only and are not used for tuning or baseline selection",
+    "all three arms use the same code and environment apart from the registered address intervention",
+    "controls use the same corrected held-out episodes as the explicit-both arm within each seed"
+  ],
+  "reproduction_baseline": {
+    "invalid_history": {
+      "e2e001": "VOID benchmark generator: q1/q2 target-entity construction was incorrect",
+      "e2e002": "VOID benchmark generator inherited the same defect"
+    }
+  },
+  "information_flow": {
+    "pre_action": "corrected text/image/audio observations -> encoders -> shared representation -> persistent write -> query-conditioned read -> CASM -> action",
+    "post_action": "environment outcome -> verifier -> differentiable verified write",
+    "forbidden_before_action": [
+      "answer",
+      "target_payload",
+      "evaluation_correctness"
+    ],
+    "allowed_after_action": [
+      "environment_outcome",
+      "verifier_supervision"
+    ]
+  },
+  "scientific_boundaries": [
+    "Synthetic multimodal mechanism benchmark only.",
+    "No real-world language, vision, or audio capability claim.",
+    "No asymptotic scaling claim.",
+    "Explicit entity-address arms are structural controls, not evidence of learned semantic addressing.",
+    "Operator identity is public in this phase, so operator-selection accuracy is not interpreted as autonomous operator discovery."
+  ],
+  "statistics": {
+    "seed_bootstrap_samples": 5000,
+    "seed_bootstrap_seed": 20261002,
+    "confidence_level": 0.95
+  },
+  "amendments": []
+}
