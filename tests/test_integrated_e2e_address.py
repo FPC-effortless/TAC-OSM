@@ -59,3 +59,10 @@ def test_address_diagnosis_backward_reaches_integrated_surfaces():
         param = dict(model.named_parameters())[name]
         assert param.grad is not None
         assert th.isfinite(param.grad).all()
+
+
+def test_address_state_matches_base_verifier_write_signature():
+    import inspect
+    from tac_osm.integrated_e2e_address import AddressDiagnosisState
+    params = list(inspect.signature(AddressDiagnosisState.write).parameters)
+    assert params[:4] == ["self", "memory", "z", "target_entity"]
