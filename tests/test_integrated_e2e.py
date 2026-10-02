@@ -77,3 +77,20 @@ def test_pre_action_query_has_no_outcome_argument():
 def test_latent_state_is_complementary_12_bit():
     from tac_osm.integrated_e2e import LATENT_BITS
     assert LATENT_BITS == 12
+
+
+def test_all_registered_query_pairs_are_canonical():
+    from scripts.run_integrated_e2e_001 import TRAIN_COMBOS, HELDOUT
+    assert all(i < j for _, i, j in TRAIN_COMBOS)
+    assert all(i < j for _, i, j in HELDOUT)
+    assert all((op, j, i) not in TRAIN_COMBOS for op, i, j in HELDOUT)
+
+
+def test_heldout_queries_cross_modal():
+    from scripts.run_integrated_e2e_001 import HELDOUT
+    assert all(
+        (i < 4) != (j < 4)
+        or (4 <= i < 8) != (4 <= j < 8)
+        or (8 <= i < 12) != (8 <= j < 12)
+        for _, i, j in HELDOUT
+    )
