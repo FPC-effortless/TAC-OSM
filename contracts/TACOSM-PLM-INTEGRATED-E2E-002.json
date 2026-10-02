@@ -136,5 +136,18 @@
     }
   },
   "status": "pre-registered",
-  "layer": "L3"
+  "layer": "L3",
+  "version": 2,
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "pre-measurement implementation interface",
+      "old_definition": "diagnostic state write method accepted argument name entity",
+      "new_definition": "diagnostic state write method matches the base verifier contract and accepts target_entity",
+      "rationale": "Inherited post-action verifier calls target_entity; the first focused test exposed the mismatch before measurement.",
+      "discovered": "Focused Torch gate run 37063091703",
+      "affected": "implementation interface only; no scientific parameter or decision rule changed",
+      "no_result_under_previous_version": "No scientific benchmark result was produced under the superseded implementation."
+    }
+  ]
 }
