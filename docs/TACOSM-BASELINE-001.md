@@ -19,7 +19,7 @@ difference is a finding to be reported, not a correction to be applied here.
 | seeds | 0, 1, 2, 3, 4 |
 | measurement command | `python scripts/measure_baseline.py --n-steps <N> --seeds 0,1,2,3,4` |
 | interface symbols | 19 |
-| test count @ freeze | 327 (current count in `tests/`: 795) |
+| test count @ freeze | 327 (current count in `tests/`: 800) |
 
 ## Measured baseline
 
@@ -65,10 +65,10 @@ Per-family accuracy of the learned arm:
   horizon between a write and the query that reads it.
 - **Persistent write is not established.** The loop's verified-write path is
   exercised, but its contribution is not isolated.
-- **`state_lookup` non-monotonicity is unexplained.** Accuracy rises to 0.3463
-  at 200 steps then falls to 0.2743 at 500, over equal exposure at each point.
-  This is a real effect in the measurement, not a scheduling artifact — the
-  streams are now distinct and exposure is equal — but the cause is not
+- **`state_lookup` non-monotonicity is unexplained.** Accuracy rises to
+  0.3463 at 200 steps then falls to 0.2743 at 500, over equal exposure at each
+  point. This is a real effect in the measurement, not a scheduling artifact —
+  the streams are now distinct and exposure is equal — but the cause is not
   identified here.
 - **History scaling is not tested.** H is fixed at the environment default.
 
@@ -101,7 +101,8 @@ tasks were identical, not the learning.
 
 **Fixed** by having `build_lookup_task` consume a family-distinct RNG offset
 before generating candidates, which separates the streams wherever they are
-built. Regressed by `test_relational_and_state_lookup_do_not_collide_on_a_pinned_run`.
+built. Regressed by
+`test_relational_and_state_lookup_do_not_collide_on_a_pinned_run`.
 
 Before the fix:
 
