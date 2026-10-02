@@ -94,3 +94,14 @@ uncertainty.
 **A6** corrected verifier semantics: it predicts environment success from
 pre-verification evidence; the observed outcome is the correctness target; only
 successful outcomes can modify authoritative state.
+
+
+**A7** corrected the episode-state tensor contract: persistent state is initialized
+from the observation batch dimension, not the time dimension.
+
+**A8** corrected the train/evaluation split: `TRAIN_COMBOS` is now the complete
+canonical pair set minus the exact held-out compositions, so the held-out
+tuples cannot appear in training.
+
+The full repository test gate exposed these as concrete implementation defects
+before any confirmatory benchmark result was allowed.
