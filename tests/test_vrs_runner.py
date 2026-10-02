@@ -52,3 +52,11 @@ def test_representation_distance_is_dimension_normalized():
     a=(0.0,)*5
     b=(0.35,)*5
     assert mod.representation_distance(a,b) == 0.35
+
+def test_proposer_domain_excludes_private_evaluator_details():
+    public_text=(ROOT/"research/vrs-001/PROPOSER-DOMAIN-001.md").read_text()
+    private_text=(ROOT/"research/vrs-001/DOMAIN-001.md").read_text()
+    assert "Exact task score" not in public_text
+    assert "0.28" not in public_text
+    assert "exact task score" in private_text.lower()
+    assert "0.28" in private_text
