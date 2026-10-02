@@ -114,7 +114,7 @@ def has_role_pair(ep: Episode, pair=ROLE_HOLDOUT) -> bool:
 
 
 def generate(seed: int, count: int, *, exclude_role_pair=None,
-             exclude_structures=None, exclude_truths=None):
+             require_role_pair=False, exclude_structures=None, exclude_truths=None):
     gen = BooleanDAGGenerator(max_nodes=MAX_NODES, min_nodes=MAX_NODES, seed=seed)
     out = []
     seen_s = set()
@@ -126,6 +126,8 @@ def generate(seed: int, count: int, *, exclude_role_pair=None,
             raise RuntimeError("unique program generation stalled")
         ep = gen._make(MAX_NODES, input_count=INPUT_COUNT)
         if exclude_role_pair and has_role_pair(ep, exclude_role_pair):
+            continue
+        if require_role_pair and not has_role_pair(ep):
             continue
         sk = structure_key(ep)
         ts = truth_signature(ep)
@@ -142,22 +144,15 @@ def generate(seed: int, count: int, *, exclude_role_pair=None,
 
 
 def build_manifest(seed: int, m_levels: Sequence[int], tasks_per_m: int,
-                   *, role_holdout=False):
+                   *, role_holdout=False, exclude_structures=None, exclude_truths=None):
+    total = len(m_levels) * tasks_per_m
     rows = generate(
         seed + (9003 if role_holdout else 9001),
-        len(m_levels) * tasks_per_m,
-        **({"exclude_role_pair": ROLE_HOLDOUT} if False else {})
+        total,
+        require_role_pair=role_holdout,
+        exclude_structures=exclude_structures,
+        exclude_truths=exclude_truths,
     )
-    if role_holdout:
-        rows = generate(
-            seed + 9003,
-            len(m_levels) * tasks_per_m,
-            exclude_role_pair=None,
-        )
-        rows = [ep for ep in rows if has_role_pair(ep)]
-        while len(rows) < len(m_levels) * tasks_per_m:
-            rows.extend([ep for ep in generate(seed + 9004 + len(rows), tasks_per_m) if has_role_pair(ep)])
-        rows = rows[: len(m_levels) * tasks_per_m]
     result = {}
     k = 0
     for m in m_levels:
@@ -166,9 +161,10 @@ def build_manifest(seed: int, m_levels: Sequence[int], tasks_per_m: int,
             k += 1
     return result
 
-
 def make_task(seed: int, m: int, target: Episode, train_structures, train_truths, *,
               heldout=False):
+    if structure_key(target) in train_structures or truth_signature(target) in train_truths:
+        raise RuntimeError("target is not disjoint from training structures/truth tables")
     decoys = generate(
         seed + 7000 + m,
         m * 4,
