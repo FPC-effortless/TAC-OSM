@@ -72,7 +72,8 @@ def test_non_near_fixed_pair_is_not_silently_treated_as_equivalent():
     )
     assert result.near_pairs == 0
     assert result.checked_transitions == 0
-    assert result.passed is True
+    assert result.applicable is False
+    assert result.passed is False
 
 
 def test_anchor_mismatch_is_rejected():
@@ -129,3 +130,58 @@ def test_action_schedule_must_match_declared_horizon():
         pass
     else:
         raise AssertionError("mismatched horizon must be rejected")
+
+
+def test_constant_representation_cannot_pass_dynamic_gate():
+    validator = RepresentationValidator(lambda sid: (0.0,))
+    cases = (
+        FixedTransitionCase("pair", "a", "b", ("act",), 1),
+    )
+    result = validator.validate_dynamic(
+        cases,
+        transition=lambda sid, action: "next_" + sid,
+        outcome=lambda sid, action: 0,
+        near_threshold=0.0,
+        successor_tolerance=0.0,
+    )
+    assert result.applicable is True
+    assert result.violations == ()
+    assert result.passed is True
+
+
+def test_dynamic_gate_reports_non_vacuous_denominator():
+    validator = RepresentationValidator(lambda sid: (0.0 if sid in {"a", "b"} else 1.0,))
+    cases = (
+        FixedTransitionCase("near", "a", "b", ("act", "act2"), 2),
+        FixedTransitionCase("far", "a", "c", ("act",), 1),
+    )
+    result = validator.validate_dynamic(
+        cases,
+        transition=lambda sid, action: sid,
+        outcome=lambda sid, action: 0,
+        near_threshold=0.1,
+        successor_tolerance=0.0,
+    )
+    assert result.considered_pairs == 2
+    assert result.near_pairs == 1
+    assert result.checked_transitions == 2
+    assert result.applicable is True
+
+
+def test_dynamic_gate_rejects_representation_with_divergent_future_outcome():
+    validator = RepresentationValidator(
+        lambda sid: {"a": (0.0,), "b": (0.0,), "a2": (0.0,), "b2": (0.0,)}[sid]
+    )
+    cases = (
+        FixedTransitionCase("outcome", "a", "b", ("act",), 1),
+    )
+    result = validator.validate_dynamic(
+        cases,
+        transition=lambda sid, action: "a2" if sid == "a" else "b2",
+        outcome=lambda sid, action: 1 if sid == "a" else 0,
+        near_threshold=0.0,
+        successor_tolerance=0.0,
+    )
+    assert result.applicable is True
+    assert len(result.violations) == 1
+    assert result.passed is False
