@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
-  "version": 2,
+  "version": 3,
   "status": "registered",
   "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute a learned operator choice, verify the post-action outcome, and remain capable on held-out modality/operator/query compositions?",
   "primary_endpoint": {
@@ -80,7 +80,6 @@
         4
       ]
     ],
-    "query_noise": 0.03,
     "observation_noise": 0.03,
     "optimizer": "AdamW",
     "learning_rate": 0.002,
@@ -121,6 +120,14 @@
         "remove modality_reconstruction_loss from the secondary endpoint list",
         "add operator_selection_accuracy and target_memory_attention",
         "evaluate normal and all controls on the same held-out episodes per seed"
+      ]
+    },
+    {
+      "id": "A2",
+      "timing": "pre-measurement",
+      "reason": "Remove a registered query-noise parameter that is not implemented by the benchmark generator.",
+      "changes": [
+        "remove protocol.query_noise; preserve observation_noise=0.03"
       ]
     }
   ]
