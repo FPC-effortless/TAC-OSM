@@ -24,7 +24,7 @@ class TypedPersistentState(nn.Module):
 
     def write(self, memory: Tensor, content: Tensor, target_entity: Tensor):
         probs = F.one_hot(target_entity.long(), num_classes=self.entity_count).to(content.dtype)
-        memory = (1.0 - probs.unsqueeze(-1)) * memory + probs.unsqueeze(-1) * content
+        memory = (1.0 - probs.unsqueeze(-1)) * memory + probs.unsqueeze(-1) * content.unsqueeze(1)
         return memory, probs
 
     def read(self, memory: Tensor, entity: Tensor):
