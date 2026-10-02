@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
-  "version": 9,
+  "version": 10,
   "status": "pre-registered",
   "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute a learned operator choice, verify the post-action outcome, and remain capable on held-out modality/operator/query compositions?",
   "primary_endpoint": {
@@ -215,6 +215,16 @@
       "discovered": "Static code/protocol audit before confirmatory measurement; no confirmatory result was produced under the superseded definition.",
       "affected": "Benchmark implementation and/or preregistration only; no scientific result.",
       "no_result_under_previous_version": "No confirmatory result exists under the superseded definition."
+    },
+    {
+      "id": "A9",
+      "applies_to": "top-level contract schema fields",
+      "old_definition": "seeds were recorded only inside the auxiliary protocol object and the test expected status=registered",
+      "new_definition": "seeds are recorded in the schema-required top-level seeds field and status remains pre-registered until a confirmatory result exists",
+      "rationale": "The repository contract loader reads the top-level schema fields; auxiliary protocol metadata cannot substitute for them. A pre-registration should also remain pre-registered until measurement rather than fabricate a post-registration status.",
+      "discovered": "Full repository contract-validation gate on run 37061979572 before benchmark execution.",
+      "affected": "contract schema compatibility only; no experimental parameter or decision rule changed.",
+      "no_result_under_previous_version": "No confirmatory benchmark result was produced under the superseded contract."
     }
   ],
   "statistics": {
@@ -377,5 +387,12 @@
   ],
   "result_note": "",
   "result_url": "",
-  "layer": "L3"
+  "layer": "L3",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ]
 }
