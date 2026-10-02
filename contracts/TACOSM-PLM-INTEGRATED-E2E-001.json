@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
-  "version": 7,
+  "version": 9,
   "status": "registered",
   "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute a learned operator choice, verify the post-action outcome, and remain capable on held-out modality/operator/query compositions?",
   "primary_endpoint": {
@@ -194,6 +194,22 @@
         "verifier target is the observed environment success outcome",
         "only successful outcomes can create or modify authoritative persistent state",
         "verifier controls write strength after the success gate"
+      ]
+    },
+    {
+      "id": "A7",
+      "timing": "pre-measurement",
+      "reason": "Correct tensor-shape semantics so episode state is initialized with the observation batch dimension.",
+      "changes": [
+        "forward_episode uses observations.shape[1] for persistent-state batch size"
+      ]
+    },
+    {
+      "id": "A8",
+      "timing": "pre-measurement",
+      "reason": "Correct training/evaluation composition separation so held-out tuples are removed from TRAIN_COMBOS rather than merely declared.",
+      "changes": [
+        "define ALL_COMBOS then exclude HELDOUT to form TRAIN_COMBOS"
       ]
     }
   ],
