@@ -139,8 +139,14 @@ class DynamicValidationResult:
         return len(self.violations) / self.checked_transitions
 
     @property
+    def applicable(self) -> bool:
+        """Whether the dynamic-validity test exercised at least one near pair."""
+        return self.near_pairs > 0 and self.checked_transitions > 0
+
+    @property
     def passed(self) -> bool:
-        return not self.violations
+        """A pass requires evidence; an empty test set is not a success."""
+        return self.applicable and not self.violations
 
 
 class RepresentationError(ValueError):
@@ -231,8 +237,11 @@ class RepresentationValidator:
                 if action_extractor is not None
                 else case.actions
             )
-            if case.horizon != 0 and not actions:
-                raise RepresentationError(f"no actions for nonzero horizon: {case.pair_id}")
+            if len(actions) != case.horizon:
+                raise RepresentationError(
+                    f"action schedule length {len(actions)} does not match "
+                    f"horizon {case.horizon}: {case.pair_id}"
+                )
 
             current_a, current_b = case.state_a, case.state_b
             for action in actions:
