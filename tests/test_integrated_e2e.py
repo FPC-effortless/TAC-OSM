@@ -58,3 +58,17 @@ def test_modality_encoders_preserve_expected_shapes():
         th.randn(4, 1, 96),
     )
     assert z.shape == (4, 40)
+
+
+def test_preregistered_compositions_are_strictly_disjoint():
+    from scripts.run_integrated_e2e_001 import HELDOUT, TRAIN_COMBOS
+
+    assert set(HELDOUT).isdisjoint(TRAIN_COMBOS)
+
+
+def test_pre_action_query_has_no_outcome_argument():
+    import inspect
+
+    model = IntegratedE2EModel()
+    names = list(inspect.signature(model.query).parameters)
+    assert names == ["memory", "entity", "i", "j", "op"]
