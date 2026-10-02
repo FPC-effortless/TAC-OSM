@@ -67,7 +67,10 @@ The test suite checks:
 - NOT→XOR holdout generation;
 - train/evaluation structure and truth-table disjointness;
 - target-index independence of semantic execution;
-- primary bootstrap selection rule.
+- primary bootstrap selection rule;
+- candidate-order invariance for exhaustive semantics;
+- deterministic constant-score base-rate control;
+- explicit failure of the exhaustive reference when its truth table is tampered.
 
 The confirmatory interpretation must separately inspect routing recall, semantic capability, actual execution work, adaptive execution, and persistence replay.
 
