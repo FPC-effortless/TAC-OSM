@@ -20,8 +20,8 @@ def test_registered_contract_matches_runner():
     contract = json.loads(
         (ROOT / "contracts" / "TACOSM-PLM-INTEGRATED-E2E-001.json").read_text()
     )
-    assert contract["status"] == "registered"
-    assert contract["protocol"]["seeds"] == [0, 1, 2, 3, 4]
+    assert contract["status"] == "pre-registered"
+    assert contract["seeds"] == [0, 1, 2, 3, 4]
     assert contract["protocol"]["train_steps"] == STEPS
     assert contract["protocol"]["batch_size"] == BATCH_SIZE
     assert contract["protocol"]["latent_bits"] == BITS == 12
