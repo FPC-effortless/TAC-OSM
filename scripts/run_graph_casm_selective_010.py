@@ -5,7 +5,6 @@ Public executable program graphs are routed; exact topological execution is the
 control. This separates executable-structure sufficiency from selective
 candidate routing.
 """
-from __future__ import annotations
 
 import argparse
 import hashlib
