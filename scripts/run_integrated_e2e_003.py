@@ -180,7 +180,6 @@ def main() -> None:
         "arm":args.arm,
         "provenance":{
             "git_commit":os.environ.get("GITHUB_SHA","unknown"),
-            "pr_head_sha":os.environ.get("GITHUB_HEAD_SHA","unknown"),
             "workflow_run_id":os.environ.get("GITHUB_RUN_ID","unknown"),
             "python_version":platform.python_version(),
             "torch_version":torch.__version__,
