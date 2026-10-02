@@ -153,6 +153,21 @@ def mask_for(rows):
     if not keep: raise ProposalError("feature filtering removed every representation dimension")
     return tuple(keep)
 
+def effective_rank(rows, tol=1e-8):
+    if not rows: return 0
+    cols=[[float(r[j]) for r in rows] for j in range(len(rows[0]))]
+    basis=[]
+    for col in cols:
+        v=list(col)
+        for b in basis:
+            den=sum(x*x for x in b)
+            if den:
+                a=sum(x*y for x,y in zip(v,b))/den
+                v=[x-a*y for x,y in zip(v,b)]
+        if math.sqrt(sum(x*x for x in v)) > tol:
+            basis.append(v)
+    return len(basis)
+
 def masked(v, keep): return tuple(v[i] for i in keep)
 
 def route(rows, q, k):
@@ -298,12 +313,32 @@ def run(proposal_path, smoke=False):
         boot=None if not boot_vals else {"mean":statistics.fmean(boot_vals),
             "lo":boot_vals[min(100,len(boot_vals)-1)],
             "hi":boot_vals[max(0,len(boot_vals)-101)]}
+        primary = None
+        if selected is not None:
+            sk,sv=selected
+            raw_route=m*5
+            sem_route=m*len(keep)
+            raw_steady=raw_route+sk*WORK_PER_CANDIDATE
+            sem_steady=sem_route+sk*WORK_PER_CANDIDATE
+            build_cost=p.raw["build_cost_units"]
+            denom=max(raw_steady-sem_steady,0)
+            break_even=None
+            if p.raw["build_cost_unit"]=="execution_work_units" and denom>0:
+                break_even=build_cost/denom
+            primary={"K":sk,
+                "execution_work_fraction":sv["execution_work_fraction"],
+                "capability_retention":sv["capability_retention"],
+                "representation_dimension":len(keep),
+                "steady_state_raw_cost_units":raw_steady,
+                "steady_state_semantic_cost_units":sem_steady,
+                "representation_build_cost_units":build_cost,
+                "break_even_queries":break_even}
+        geometry_rows=[p.vec(s) for s in states(0,m)]
+        geometry_sem=[masked(v,keep) for v in geometry_rows]
         out["by_M"][str(m)]={"rows":rows,"pooled_by_K":pooled,"dynamic":dynamic_rows,
-            "primary":None if selected is None else {
-                "K":selected[0],
-                "execution_work_fraction":selected[1]["execution_work_fraction"],
-                "capability_retention":selected[1]["capability_retention"]},
-            "seed_primary_bootstrap":boot}
+            "geometry":{"dimension_before_filter":p.dim,"dimension_after_filter":len(keep),
+                        "effective_rank":effective_rank(geometry_sem)},
+            "primary":primary,"seed_primary_bootstrap":boot}
     return out
 
 def main():
