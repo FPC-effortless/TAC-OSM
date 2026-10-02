@@ -460,6 +460,52 @@ def aggregate(by_seed):
     return out
 
 
+def primary_bootstrap_ci(seed_blocks, m: int, rounds: int = 4000, seed: int = 12000):
+    """Bootstrap the complete minimum-over-budgets primary-selection rule."""
+    available = [
+        str(s) for s in SEEDS
+        if str(s) in seed_blocks and str(m) in seed_blocks[str(s)]
+    ]
+    if len(available) <= 1:
+        return {"ci95": None, "valid_fraction": 0.0}
+    rng = random.Random(seed + m)
+    selected = []
+    for _ in range(rounds):
+        sampled = [rng.choice(available) for _ in available]
+        trials = []
+        for sid in sampled:
+            trials.extend(seed_blocks[sid][str(m)]["trials"])
+        ex = sum(
+            float(t["exhaustive"]["semantic_success"]) for t in trials
+        ) / max(1, len(trials))
+        eligible = []
+        for b in BUDGETS:
+            sem = sum(
+                float(t["budgets"][str(b)]["semantic_success"]) for t in trials
+            ) / max(1, len(trials))
+            ew = sum(
+                float(t["exhaustive"]["execution_work_units"]) for t in trials
+            )
+            bw = sum(
+                float(t["budgets"][str(b)]["fixed_budget_execution_work_units"])
+                for t in trials
+            )
+            retention = sem / ex if ex > 0 else None
+            if ex >= 0.80 and retention is not None and retention >= 0.80:
+                eligible.append(bw / max(1.0, ew))
+        if eligible:
+            selected.append(min(eligible))
+    if not selected:
+        return {"ci95": None, "valid_fraction": 0.0}
+    selected.sort()
+    lo = selected[int(0.025 * (len(selected) - 1))]
+    hi = selected[int(0.975 * (len(selected) - 1))]
+    return {
+        "ci95": [float(lo), float(hi)],
+        "valid_fraction": float(len(selected) / rounds),
+    }
+
+
 def write_json(path: Path, payload: dict):
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
@@ -477,36 +523,74 @@ def main():
     m_levels = (32, 64) if args.smoke else M_LEVELS
     tasks_per_m = 2 if args.smoke else 32
     results = {"graph": {}, "summary": {}}
+    holdout_results = {"graph": {}, "summary": {}}
     checks = {}
     output = ROOT / args.output
 
     for seed in seeds:
         training = generate(seed + 100, TRAIN_PROGRAMS)
-        manifest = build_manifest(seed, m_levels, tasks_per_m)
-        forbidden_s = {structure_key(ep) for ep in manifest.values()}
-        forbidden_t = {truth_signature(ep) for ep in manifest.values()}
-        checks[str(seed)] = executor_check(training[:32] + list(manifest.values()))
-        if not checks[str(seed)]["pass"]:
-            raise RuntimeError("exact graph executor check failed")
         train_s = {structure_key(ep) for ep in training}
         train_t = {truth_signature(ep) for ep in training}
+        manifest = build_manifest(
+            seed, m_levels, tasks_per_m,
+            exclude_structures=train_s, exclude_truths=train_t,
+        )
+        holdout_manifest = build_manifest(
+            seed, m_levels, tasks_per_m,
+            role_holdout=True,
+            exclude_structures=train_s, exclude_truths=train_t,
+        )
+        forbidden_s = {structure_key(ep) for ep in manifest.values()}
+        forbidden_t = {truth_signature(ep) for ep in manifest.values()}
+        holdout_s = {structure_key(ep) for ep in holdout_manifest.values()}
+        holdout_t = {truth_signature(ep) for ep in holdout_manifest.values()}
+        split_failures = []
+        if train_s & forbidden_s or train_t & forbidden_t:
+            split_failures.append("primary train/evaluation overlap")
+        if train_s & holdout_s or train_t & holdout_t:
+            split_failures.append("holdout train/evaluation overlap")
+        if any(not has_role_pair(ep) for ep in holdout_manifest.values()):
+            split_failures.append("secondary-role holdout contains a non-NOT/XOR target")
+        checks[str(seed)] = {
+            "executor": executor_check(
+                training[:32] + list(manifest.values()) + list(holdout_manifest.values())
+            ),
+            "split_integrity": {
+                "pass": not split_failures,
+                "failures": split_failures,
+            },
+        }
+        if not checks[str(seed)]["executor"]["pass"]:
+            raise RuntimeError("exact graph executor check failed")
+        if split_failures:
+            raise RuntimeError("benchmark split integrity failed: " + "; ".join(split_failures))
 
         for rep in ("graph", "summary"):
             router = fit_router(seed, training, rep)
             results[rep][str(seed)] = {}
+            holdout_results[rep][str(seed)] = {}
             for m in m_levels:
                 trials = []
+                role_holdout_trials = []
                 for i in range(tasks_per_m):
                     task, pool = make_task(
                         seed * 100 + i, m, manifest[(m, i)],
-                        train_s - forbidden_s, train_t - forbidden_t,
+                        train_s, train_t,
                     )
                     mem = Memory()
                     mem.write(task.task_id, task.support)
                     measured = evaluate(router, rep, task, pool, mem)
                     verified = measured["budgets"]["4"]["adaptive_semantic_success"] > 0
+                    replayed = None
                     if verified:
-                        mem.commit(task.task_id, structure_key(pool[measured["rank"] - 1]))
+                        target_candidate = pool[task.target_index]
+                        mem.commit(task.task_id, structure_key(target_candidate))
+                        for j in range(3):
+                            mem.write(
+                                f"g10:unrelated:{seed}:{m}:{i}:{j}",
+                                task.support,
+                            )
+                        replayed = evaluate(router, rep, task, pool, mem)
                     trials.append({
                         "task": {
                             "task_id": task.task_id,
@@ -515,8 +599,48 @@ def main():
                             "verifier_only_examples": task.verify,
                         },
                         **measured,
+                        "persistent_experience_replay": {
+                            "verified_before_commit": bool(verified),
+                            "performed": replayed is not None,
+                            "intervening_writes": 3 if replayed is not None else 0,
+                            "before_rank": measured["rank"],
+                            "after_rank": replayed["rank"] if replayed else None,
+                            "before_adaptive_semantic_success": measured["budgets"]["4"]["adaptive_semantic_success"],
+                            "after_adaptive_semantic_success": (
+                                replayed["budgets"]["4"]["adaptive_semantic_success"]
+                                if replayed else None
+                            ),
+                            "before_adaptive_execution_work_units": measured["budgets"]["4"]["adaptive_execution_work_units"],
+                            "after_adaptive_execution_work_units": (
+                                replayed["budgets"]["4"]["adaptive_execution_work_units"]
+                                if replayed else None
+                            ),
+                        },
+                    })
+
+                    htask, hpool = make_task(
+                        seed * 100 + i + 500000,
+                        m,
+                        holdout_manifest[(m, i)],
+                        train_s,
+                        train_t,
+                        heldout=True,
+                    )
+                    hmem = Memory()
+                    hmem.write(htask.task_id, htask.support)
+                    hmeasured = evaluate(router, rep, htask, hpool, hmem)
+                    role_holdout_trials.append({
+                        "task": {
+                            "task_id": htask.task_id,
+                            "target_index": htask.target_index,
+                            "router_visible_examples": htask.support,
+                            "verifier_only_examples": htask.verify,
+                            "requires_NOT_XOR_pair": True,
+                        },
+                        **hmeasured,
                     })
                 results[rep][str(seed)][str(m)] = {"trials": trials}
+                holdout_results[rep][str(seed)][str(m)] = {"trials": role_holdout_trials}
                 write_json(output, {
                     "experiment_id": "TACOSM-GRAPH-CASM-SELECTIVE-010",
                     "status": "checkpoint",
@@ -529,7 +653,47 @@ def main():
                     },
                     "executor_checks": checks,
                     "results": results,
+                    "secondary_role_holdout": holdout_results,
                 })
+
+    aggregated = aggregate(results)
+    for rep, rows in aggregated.items():
+        for m, row in rows.items():
+            row["primary_endpoint_bootstrap"] = primary_bootstrap_ci(
+                results[rep], int(m)
+            )
+
+    holdout_aggregate = {}
+    for rep, seed_rows in holdout_results.items():
+        holdout_aggregate[rep] = {}
+        for m in sorted({m for rows in seed_rows.values() for m in rows}):
+            trials = [
+                t
+                for seed_rows_one in seed_rows.values()
+                for t in seed_rows_one[str(m)]["trials"]
+            ]
+            ex = sum(
+                t["exhaustive"]["semantic_success"] for t in trials
+            ) / max(1, len(trials))
+            holdout_aggregate[rep][str(m)] = {
+                "trials": len(trials),
+                "exhaustive_success": ex,
+                "budgets": {
+                    str(b): {
+                        "routing_recall": sum(
+                            t["budgets"][str(b)]["routing_recall"] for t in trials
+                        ) / max(1, len(trials)),
+                        "semantic_success": sum(
+                            t["budgets"][str(b)]["semantic_success"] for t in trials
+                        ) / max(1, len(trials)),
+                        "adaptive_semantic_success": sum(
+                            t["budgets"][str(b)]["adaptive_semantic_success"]
+                            for t in trials
+                        ) / max(1, len(trials)),
+                    }
+                    for b in BUDGETS
+                },
+            }
 
     final = {
         "experiment_id": "TACOSM-GRAPH-CASM-SELECTIVE-010",
@@ -551,10 +715,15 @@ def main():
             "candidate_feature_dimension": FEATURE_DIM,
             "graph_wiring_public": True,
             "exact_graph_executor": True,
+            "primary_train_eval_structure_disjoint": True,
+            "primary_train_eval_truth_disjoint": True,
+            "secondary_role_holdout": list(ROLE_HOLDOUT),
+            "persistent_experience_replay": "before/after verified commit with three unrelated writes",
         },
         "executor_checks": checks,
         "results": results,
         "aggregate": aggregate(results),
+        "secondary_role_holdout": holdout_results,
         "scope": {
             "primary": "selective execution work conditional on public executable program graph",
             "asymptotic_claim": False,
