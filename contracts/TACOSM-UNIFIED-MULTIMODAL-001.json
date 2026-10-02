@@ -214,5 +214,19 @@
       "changes": "Added schema-compliant arms/endpoints/interpretation_order/h_levels/steps/eval_steps while preserving the scientific question, modalities, seeds, split rule, materiality thresholds and leakage controls.",
       "no_scientific_result_under_previous_version": true
     }
-  ]
+  ],
+  "held_constant": [
+    "modality adapters and shared latent dimensions",
+    "train/validation/test world seeds and residue split",
+    "training steps, batch size, optimizer, learning rate and weight decay",
+    "proposal K=2 and route K=1",
+    "verification latent-MSE threshold",
+    "anti-collapse floor",
+    "no fallback from proposal miss",
+    "post-verification-only memory writes",
+    "test checkpoint frozen before test evaluation",
+    "same test populations across all ablations and seeds"
+  ],
+  "layer": "L5",
+  "reproduction_baseline": {}
 }
