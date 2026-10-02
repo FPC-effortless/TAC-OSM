@@ -1,0 +1,140 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-002",
+  "title": "Persistent-state address-path diagnosis for the integrated multimodal PLM chain",
+  "question": "Is the E2E-001 failure caused primarily by the learned persistent-state write path, the learned read path, or the use of incompatible write/read address spaces?",
+  "hypothesis": "Providing an explicit entity address to the persistent write path, read path, or both will localize the E2E-001 addressing failure; the strongest improvement is expected when both persistent-state paths use the same explicit entity address.",
+  "arms": [
+    {
+      "name": "explicit_write",
+      "intervention": "use the observed entity identity as the persistent-state write address while retaining learned query-time read addressing",
+      "acts_on": "persistent-state write address"
+    },
+    {
+      "name": "explicit_read",
+      "intervention": "use the query entity identity as the persistent-state read address while retaining learned observation-time write addressing",
+      "acts_on": "persistent-state read address"
+    },
+    {
+      "name": "explicit_both",
+      "intervention": "use the observed entity identity for writes and the query entity identity for reads",
+      "acts_on": "persistent-state address interface"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_explicit_both",
+      "role": "primary — held-out q2 accuracy with explicit entity addressing on both state paths",
+      "primary": true
+    },
+    {
+      "name": "heldout_q2_accuracy_explicit_write",
+      "role": "secondary — write-path diagnostic",
+      "primary": false
+    },
+    {
+      "name": "heldout_q2_accuracy_explicit_read",
+      "role": "secondary — read-path diagnostic",
+      "primary": false
+    },
+    {
+      "name": "heldout_q2_accuracy_no_memory_explicit_both",
+      "role": "secondary — persistence control",
+      "primary": false
+    },
+    {
+      "name": "heldout_q2_accuracy_shuffled_image_explicit_both",
+      "role": "secondary — multimodal alignment control",
+      "primary": false
+    },
+    {
+      "name": "target_memory_attention_explicit_both",
+      "role": "secondary diagnostic — target slot attention",
+      "primary": false
+    },
+    {
+      "name": "write_target_address_accuracy",
+      "role": "secondary diagnostic — learned/write intervention address assignment",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity checks pass and explicit_both mean q2 accuracy is at least 0.80 with every seed at least 0.40",
+      "licenses": "explicit entity-addressed persistent state satisfies the registered synthetic capability criterion",
+      "does_not_license": "real-world multimodal capability, semantic retrieval, arbitrary learned operators, or scaling"
+    },
+    {
+      "condition": "explicit_both passes integrity but fails the primary criterion",
+      "licenses": "the address-path intervention does not meet the criterion; the explicit_write and explicit_read arms are retained for localization",
+      "does_not_license": "that persistent state or PLM is impossible"
+    },
+    {
+      "condition": "explicit_write materially recovers q2 while explicit_read does not",
+      "licenses": "evidence localizing the E2E-001 failure toward learned persistent writing",
+      "does_not_license": "a general claim about memory systems"
+    },
+    {
+      "condition": "explicit_read materially recovers q2 while explicit_write does not",
+      "licenses": "evidence localizing the E2E-001 failure toward learned persistent reading",
+      "does_not_license": "a general claim about memory systems"
+    },
+    {
+      "condition": "explicit_both materially recovers q2 while either single-path intervention does not",
+      "licenses": "evidence that coherence between write and read addressing is the relevant interface",
+      "does_not_license": "a general claim about semantic addressing"
+    },
+    {
+      "condition": "a train/eval composition overlap or answer leakage is detected",
+      "licenses": "instrument invalid and no scientific interpretation",
+      "does_not_license": "a negative scientific conclusion"
+    }
+  ],
+  "interpretation_order": [
+    "benchmark_integrity",
+    "information_flow",
+    "primary_endpoint",
+    "write_diagnostic",
+    "read_diagnostic",
+    "explicit_both_vs_frozen_e2e001",
+    "memory_control",
+    "alignment_control",
+    "attention_diagnostic"
+  ],
+  "h_levels": [
+    3
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "held_constant": [
+    "same 12 complementary latent bits as E2E-001",
+    "text bits 0-3, image bits 4-7, audio bits 8-11",
+    "same eight held-out canonical operator/index compositions as E2E-001",
+    "same batch_size=96",
+    "same hidden_dim=40",
+    "same entity_count=16",
+    "same optimizer AdamW lr=0.002 weight_decay=0.0001",
+    "same observation noise=0.03",
+    "same training steps=300",
+    "same evaluation episode generator and seed set",
+    "the E2E-001 result mean=0.5200 is a frozen diagnostic comparator, not a re-fit baseline"
+  ],
+  "reproduction_baseline": {
+    "e2e001_frozen": {
+      "seed0": 0.5475,
+      "seed1": 0.4925,
+      "seed2": 0.5075,
+      "seed3": 0.5425,
+      "seed4": 0.51,
+      "mean": 0.52
+    }
+  },
+  "status": "pre-registered",
+  "layer": "L3"
+}
