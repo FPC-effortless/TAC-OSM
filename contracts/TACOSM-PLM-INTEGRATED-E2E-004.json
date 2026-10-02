@@ -1,0 +1,177 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-004",
+  "title": "Typed persistent-state content interface diagnosis for integrated multimodal PLM",
+  "question": "Can a typed persistent state carrying the supervised 12-bit observation content restore held-out computation after E2E-003 showed that correct structural addressing was not sufficient?",
+  "hypothesis": "The E2E-003 failure is concentrated in the unconstrained hidden-state-to-CASM content interface. A typed persistent state whose content is the supervised 12-bit representation will materially improve held-out computation, while an oracle typed state should establish the exact downstream execution ceiling.",
+  "arms": [
+    {
+      "name": "typed_learned",
+      "intervention": "store the supervised 12-bit representation output in the explicitly addressed persistent slot and execute the requested Boolean operator directly over the stored typed bits",
+      "acts_on": "state-content/execution interface"
+    },
+    {
+      "name": "typed_oracle",
+      "intervention": "store the true 12-bit observation payload in the explicitly addressed persistent slot and execute the requested Boolean operator directly over the stored typed bits",
+      "acts_on": "downstream execution ceiling"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_typed_learned",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "heldout_q2_accuracy_typed_oracle",
+      "role": "execution ceiling",
+      "primary": false
+    },
+    {
+      "name": "heldout_q1_accuracy_typed_learned",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "typed_learned_bit_accuracy",
+      "role": "secondary representation diagnostic",
+      "primary": false
+    },
+    {
+      "name": "typed_learned_q2_accuracy_no_memory",
+      "role": "secondary persistence control",
+      "primary": false
+    },
+    {
+      "name": "typed_learned_memory_drop",
+      "role": "secondary persistence contribution",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "typed_oracle q2 mean is below 1.00",
+      "licenses": "the exact typed downstream execution reference is not behaving as specified and the experiment is instrument-invalid",
+      "does_not_license": "a scientific negative about representation"
+    },
+    {
+      "condition": "typed_oracle q2 mean is 1.00 and typed_learned q2 mean is at least 0.80 with every seed at least 0.40",
+      "licenses": "the supervised typed persistent-state interface meets the registered synthetic capability criterion",
+      "does_not_license": "learned semantic state addressing, natural multimodal competence, autonomous operator discovery, or scaling"
+    },
+    {
+      "condition": "typed_oracle q2 mean is 1.00 and typed_learned q2 mean is below 0.80",
+      "licenses": "typed persistent content does not meet the registered capability criterion; bit reconstruction and memory controls localize the remaining failure",
+      "does_not_license": "that typed state, persistent state, CASM, or PLM is impossible"
+    },
+    {
+      "condition": "typed_learned q2 mean exceeds the frozen E2E-003 explicit-both mean by at least 0.05",
+      "licenses": "the typed content interface materially improves this synthetic computation over the frozen hidden-state interface",
+      "does_not_license": "a general representation theorem"
+    },
+    {
+      "condition": "q1/q2 entity identities overlap, held-out composition appears in TRAIN_COMBOS, answer/outcome enters before action, or arm provenance differs",
+      "licenses": "instrument invalid; no scientific interpretation",
+      "does_not_license": "a negative capability conclusion"
+    }
+  ],
+  "interpretation_order": [
+    "benchmark_integrity",
+    "information_flow",
+    "oracle_execution_ceiling",
+    "primary_endpoint",
+    "bit_reconstruction",
+    "memory_control",
+    "frozen_E2E3_comparator"
+  ],
+  "h_levels": [
+    3
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "held_constant": [
+    "corrected canonical benchmark generator from E2E-003",
+    "q1 targets entities[0] and q2 targets entities[1]",
+    "same 12 complementary latent bits: text 0-3, image 4-7, audio 8-11",
+    "same eight held-out operator/index compositions",
+    "same entity_count=16 and batch_size=96",
+    "same AdamW lr=0.002 and weight_decay=0.0001",
+    "same observation noise=0.03",
+    "same 300 training steps and 400 evaluation episodes per seed",
+    "explicit entity addressing is fixed because E2E-003 showed addressing was not sufficient to rescue the hidden-state interface",
+    "the oracle arm is an execution ceiling and is not trained",
+    "the frozen E2E-003 mean 0.5200 is a comparator only and is not used for tuning"
+  ],
+  "reproduction_baseline": {
+    "e2e003_explicit_both": {
+      "q2_mean": 0.52
+    }
+  },
+  "statistics": {
+    "seed_bootstrap_samples": 5000,
+    "seed_bootstrap_seed": 20261002,
+    "confidence_level": 0.95,
+    "materiality_threshold": 0.05
+  },
+  "status": "pre-registered",
+  "layer": "L3",
+  "version": 5,
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "premeasurement regression-test source",
+      "old_definition": "the E2E-004 regression test fixture contained a missing closing parenthesis in the synthetic query tuple",
+      "new_definition": "the regression test fixture is syntactically valid and covers temporal/held-out validity, exact typed execution, and representation gradient flow",
+      "rationale": "The focused gate must be able to collect the scientific test module before any measurement.",
+      "discovered": "Premeasurement static audit after initial E2E-004 implementation.",
+      "affected": "test syntax only; no scientific parameter or decision rule changed",
+      "no_result_under_previous_version": "No E2E-004 measurement existed under the syntax-invalid test."
+    },
+    {
+      "id": "A2",
+      "applies_to": "result artifact serialization",
+      "old_definition": "the runner and aggregator generated literal unterminated newline strings in their JSON write calls",
+      "new_definition": "the runner and aggregator serialize JSON with a valid escaped newline sequence",
+      "rationale": "Artifact production is part of the measurement contract; malformed serialization would prevent an inspectable scientific record.",
+      "discovered": "E2E-004 focused/full repository gate.",
+      "affected": "artifact serialization only; no scientific parameter or decision rule changed",
+      "no_result_under_previous_version": "No E2E-004 scientific arm executed under the malformed serializer."
+    },
+    {
+      "id": "A3",
+      "applies_to": "final artifact-writer source",
+      "old_definition": "the serializer repair left a duplicate malformed writer line below the corrected writer",
+      "new_definition": "the runner and aggregator each contain exactly one valid JSON serialization statement",
+      "rationale": "The focused repository gate exposed the duplicate stale source after the first serializer repair.",
+      "discovered": "E2E-004 full repository gate run 37071372992",
+      "affected": "source syntax only; no scientific parameter, arm, benchmark or decision rule changed",
+      "no_result_under_previous_version": "No E2E-004 scientific arm executed under the duplicate malformed source."
+    },
+    {
+      "id": "A4",
+      "applies_to": "typed persistent-state batch write",
+      "old_definition": "write broadcast the [B, bits] content tensor directly against [B, entity, bits] memory",
+      "new_definition": "write broadcasts content as [B,1,bits] so each batch item updates only its one-hot entity slot",
+      "rationale": "The full-suite gate exposed a tensor-shape error before scientific execution.",
+      "discovered": "E2E-004 gate run 37071508153",
+      "affected": "implementation tensor broadcasting only; no scientific parameter changed",
+      "no_result_under_previous_version": "No E2E-004 arm executed under the faulty batch broadcast."
+    },
+    {
+      "id": "A5",
+      "applies_to": "exact operator regression test",
+      "old_definition": "XNOR expected 0 for inputs (1,1)",
+      "new_definition": "XNOR expected 1 for inputs (1,1)",
+      "rationale": "The Boolean regression fixture contained a truth-table assertion error.",
+      "discovered": "E2E-004 gate run 37071508153",
+      "affected": "test expectation only; operator implementation unchanged",
+      "no_result_under_previous_version": "No E2E-004 arm executed under the incorrect test expectation."
+    }
+  ]
+}
