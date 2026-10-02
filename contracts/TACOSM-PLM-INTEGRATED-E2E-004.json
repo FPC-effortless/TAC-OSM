@@ -121,7 +121,7 @@
   },
   "status": "pre-registered",
   "layer": "L3",
-  "version": 3,
+  "version": 5,
   "amendments": [
     {
       "id": "A1",
@@ -152,6 +152,26 @@
       "discovered": "E2E-004 full repository gate run 37071372992",
       "affected": "source syntax only; no scientific parameter, arm, benchmark or decision rule changed",
       "no_result_under_previous_version": "No E2E-004 scientific arm executed under the duplicate malformed source."
+    },
+    {
+      "id": "A4",
+      "applies_to": "typed persistent-state batch write",
+      "old_definition": "write broadcast the [B, bits] content tensor directly against [B, entity, bits] memory",
+      "new_definition": "write broadcasts content as [B,1,bits] so each batch item updates only its one-hot entity slot",
+      "rationale": "The full-suite gate exposed a tensor-shape error before scientific execution.",
+      "discovered": "E2E-004 gate run 37071508153",
+      "affected": "implementation tensor broadcasting only; no scientific parameter changed",
+      "no_result_under_previous_version": "No E2E-004 arm executed under the faulty batch broadcast."
+    },
+    {
+      "id": "A5",
+      "applies_to": "exact operator regression test",
+      "old_definition": "XNOR expected 0 for inputs (1,1)",
+      "new_definition": "XNOR expected 1 for inputs (1,1)",
+      "rationale": "The Boolean regression fixture contained a truth-table assertion error.",
+      "discovered": "E2E-004 gate run 37071508153",
+      "affected": "test expectation only; operator implementation unchanged",
+      "no_result_under_previous_version": "No E2E-004 arm executed under the incorrect test expectation."
     }
   ]
 }
