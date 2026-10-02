@@ -17,6 +17,7 @@ ROOT = __file__
 sys.path.insert(0, str(__import__("pathlib").Path(ROOT).resolve().parents[1]))
 
 from tac_osm.integrated_e2e import OPS
+from tac_osm.contract import load_contract
 from tac_osm.integrated_e2e_address import AddressDiagnosisConfig, AddressDiagnosisModel
 from scripts.run_integrated_e2e_001 import (
     BITS, HELDOUT, BATCH_SIZE, STEPS, batchify, sample_episode,
@@ -129,7 +130,22 @@ def bootstrap(values: list[float], samples: int = 5000, seed: int = 20261002) ->
     ]
 
 
+def validate_contract() -> None:
+    contract = load_contract("TACOSM-PLM-INTEGRATED-E2E-002")
+    contract.require_levels((3,))
+    contract.require_seeds(SEEDS)
+    contract.require_steps(STEPS)
+    contract.require_eval_steps(400)
+    contract.require_arms(tuple(ARMS.keys()))
+    problems = contract.check_consistency()
+    if problems:
+        raise RuntimeError(
+            "E2E-002 contract consistency failure: " + " | ".join(problems)
+        )
+
+
 def main() -> None:
+    validate_contract()
     seed_models = {
         arm: [(seed, train_seed(seed, *modes)) for seed in SEEDS]
         for arm, modes in ARMS.items()
