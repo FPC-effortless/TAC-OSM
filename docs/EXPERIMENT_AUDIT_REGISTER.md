@@ -4,6 +4,7 @@ This register is the portfolio-level scientific-process ledger. It is distinct f
 
 | Experiment | Benchmark | Leakage | Protocol | Instrument | Implementation | Statistics | Provenance | Current disposition |
 |---|---|---|---|---|---|---|---|---|
+| TACOSM-TEMPORAL-001 / C1 | PASS* | PASS* | PASS* | PASS* | PASS* | QUALIFIED | PASS* | **CONDITIONAL / bounded persistence mechanism**; synthetic explicit state, k≤32; no semantic-memory claim |
 | TACOSM-TEMPORAL-001 | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | Existing bounded result; audit before reuse |
 | TACOSM-BASELINE-001 | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | Existing mechanism result; audit before reuse |
 | TACOSM-HS-001 | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | **HISTORICAL FAILURE FOUND** | **historical integrity defect** | REVIEW NEEDED | REVIEW NEEDED | Historical result constrained by C4; audit provenance |
@@ -13,6 +14,7 @@ This register is the portfolio-level scientific-process ledger. It is distinct f
 | TACOSM-C5-001 | **FAILED** | REVIEWED/RECORD | REVIEWED | **VOID** | REVIEWED | REVIEW NEEDED | REVIEWED | VOID; do not use as C5 evidence |
 | TACOSM-C5-002 | **FAILED GATE** | REVIEW NEEDED | REVIEWED | **BLOCKED BY REPRESENTABILITY GATE** | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | Instrument-invalid; successor required |
 | TACOSM-C5-003 | REQUIRED BEFORE RUN | REQUIRED BEFORE RUN | PREREGISTERED | REQUIRED BEFORE RUN | REQUIRED BEFORE RUN | REQUIRED BEFORE RUN | REQUIRED BEFORE RUN | Do not run until audit passes |
+| TACOSM-SELECTIVE-001 / runtime boundary | PASS* | PASS* | PASS* | PASS* | PASS* | QUALIFIED | PASS* | **CONDITIONAL / bounded runtime-boundary evidence**; exact equality addressing, saturated capability; no semantic/end-to-end speedup claim |
 | TACOSM-SELECTIVE-001 | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | REVIEW NEEDED | Bounded runtime mechanism; audit before reuse |
 | TACOSM-GRAPH-CASM-SELECTIVE-010 / PR #68 | REQUIRED NOW | REQUIRED NOW | PREREGISTERED | REQUIRED NOW | REQUIRED NOW | REQUIRED NOW | REQUIRED NOW | **NO SCIENTIFIC RESULT DISPOSITION YET** |
 | TACOSM-VRS-DYNAMIC-REPRESENTATION-001 / PR #69 | REQUIRED BEFORE RUN | REQUIRED BEFORE RUN | PREREGISTERED | REQUIRED BEFORE RUN | REQUIRED BEFORE RUN | REQUIRED BEFORE RUN | REQUIRED BEFORE RUN | **NO MEASUREMENT RESULT** |
