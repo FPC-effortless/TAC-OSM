@@ -1,5 +1,9 @@
 name: Unified native model multimodal research 001
 
+concurrency:
+  group: unified-native-model-001-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches:
