@@ -109,7 +109,8 @@
     "actual structural execution work is counted from executed graph operations rather than proxy arithmetic",
     "representation build cost and steady-state query cost are reported separately and the amortization horizon is declared",
     "all train/evaluation exact structures, truth tables, and target identities are independently hashed and split before measurement",
-    "numeric constants are fixed before confirmatory measurement: near-pair distance threshold 0.35, dynamic outcome divergence tolerance 0, state-feature variance floor 1e-6, feature absolute-correlation filter 0.98, exact-task evaluation work 12 units per executed candidate"
+    "numeric constants are fixed before confirmatory measurement: normalized near-pair distance threshold 0.35, dynamic outcome divergence tolerance 0, state-feature variance floor 1e-6, feature absolute-correlation filter 0.98, exact-task evaluation work 12 units per executed candidate",
+    "proposal generation may see only the frozen domain description, public state descriptions needed to evaluate the representation, and public task descriptions needed to produce query coordinates; outcomes, target identities, truth tables, benchmark results, and post-action states are forbidden"
   ],
   "decision_rule": [
     {
@@ -176,6 +177,16 @@
       "discovered": "2026-10-02 implementation/protocol review, before confirmatory measurement.",
       "affected": "only implementation specification and auditability; no VRS confirmatory outcome exists under the superseded definition.",
       "no_result_under_previous_version": "No VRS confirmatory measurement was run before A3."
+    },
+    {
+      "id": "A4",
+      "applies_to": "proposal input visibility and representation-neighbor metric",
+      "old_definition": "The protocol described proposal inputs as the domain/task specification and treated the near-pair threshold as a raw Euclidean distance, leaving the exact visible state/task data boundary and dimension normalization implicit.",
+      "new_definition": "The proposer may use the frozen domain description plus public state/task descriptions needed to compute state and query coordinates, but no action outcomes, target identities, truth tables, verifier outputs, or benchmark results. Representation-neighbor distance is normalized Euclidean distance divided by sqrt(retained dimension), with threshold <=0.35. All four finite one-step actions are evaluated exhaustively; multi-step checks use the fixed seeded schedules.",
+      "rationale": "A scored external representation necessarily needs state/task values to materialize coordinates. Making that visibility explicit prevents an impossible/ambiguous interface from being silently interpreted as unrestricted benchmark access. Dimension-normalized distance prevents changing the number of retained dimensions from mechanically changing the neighbor criterion.",
+      "discovered": "2026-10-02 methodological review, before any VRS confirmatory measurement.",
+      "affected": "proposal-generation input contract, dynamic pair metric, and one-step action coverage; no VRS confirmatory outcome exists under the previous definition.",
+      "no_result_under_previous_version": "No VRS confirmatory measurement was run before A4."
     }
   ],
   "sections": {
@@ -204,7 +215,7 @@
     "proposal_protocol": {
       "representation_family": "multidimensional semantic features proposed from a frozen natural-language domain description, then calibrated with explicit anchor states",
       "proposer_role": "slow semantic representation synthesis; not runtime inference",
-      "proposal_inputs": "domain description and public representation task specification only",
+      "proposal_inputs": "frozen domain description, public state descriptions/values needed to compute the proposed representation, and public task descriptions/values needed to produce query coordinates; no actions, outcomes, target identities, truth tables, or benchmark results",
       "outcome_visibility": "none during proposal generation",
       "scoring": "proposal features are applied consistently across all batches using the same anchors",
       "numerical_postprocessing": "training-only variance/correlation filtering and fixed rescaling; no post-result feature selection",
@@ -235,12 +246,29 @@
           "outcome_visibility"
         ],
         "outcome_visibility_must_equal": "none"
+      },
+      "input_visibility": {
+        "allowed": [
+          "domain description",
+          "state descriptions/values",
+          "task descriptions/values"
+        ],
+        "forbidden": [
+          "action outcomes",
+          "post-action states",
+          "target identities",
+          "truth tables",
+          "success labels",
+          "benchmark results",
+          "verifier outputs"
+        ],
+        "attestation_required": "outcome_visibility must equal 'none' and the generation artifact must record the frozen prompt/model provenance"
       }
     },
     "dynamic_validity": {
-      "near_pair_definition": "For the fixed pre-generated pair set, select the representation-near subset using a preregistered distance threshold after calibration. The denominator and pair identities are fixed before representation generation; no post-hoc pair construction is allowed.",
-      "one_step_test": "for each registered action a, compare successor representations and task-relevant outputs",
-      "multi_step_test": "repeat for horizon k in history_delay_k under the same action schedule where valid",
+      "near_pair_definition": "For the fixed pre-generated pair set, select the representation-near subset using normalized Euclidean distance (raw Euclidean distance divided by sqrt of retained representation dimension) with the preregistered threshold after calibration. The denominator and pair identities are fixed before representation generation; no post-hoc pair construction is allowed.",
+      "one_step_test": "for each registered action a, compare successor safety outcomes for every fixed one-step pair; the finite four-action one-step space is evaluated exhaustively",
+      "multi_step_test": "for each registered multi-step horizon k in history_delay_k, evaluate the representation against the fixed seeded action schedule for each fixed near pair",
       "failure_evidence": "counterexample trajectory is stored with the representation coordinates, action, successor states, and verifier outcome",
       "principle": "static similarity does not license persistent equivalence unless future behavior is preserved",
       "fixed_pair_construction": "State-pair evaluation sets are generated and hashed before any representation is scored. Pair membership is independent of all representation coordinates. The representation only determines which fixed pairs satisfy the registered near-neighbor threshold.",
@@ -255,7 +283,8 @@
       },
       "comparison_rule": "For each fixed representation-near pair and each fixed action in the registered schedule, dynamic validity is violated when the exact future safety outcome differs between paired states. Successor-coordinate divergence is diagnostic only in VRS-001 because the frozen proposal artifact scores the fixed state universe, not arbitrary successors.",
       "denominator": "checked_transitions over representation-near pairs from the fixed pair set",
-      "applicability_gate": "near_pairs >= 1 and checked_transitions >= 1; otherwise instrument-invalid"
+      "applicability_gate": "near_pairs >= 1 and checked_transitions >= 1; otherwise instrument-invalid",
+      "distance_metric": "normalized_euclidean = euclidean_distance / sqrt(retained_dimension)"
     },
     "cost_model": {
       "total": "C_rep_build + C_state_address + C_state_route + C_operator_select + C_exec + C_verify + C_write + C_IO",
