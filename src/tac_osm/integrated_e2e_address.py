@@ -1,4 +1,4 @@
-"""E2E-002 persistent-state write/read addressing diagnosis.
+"""Corrected integrated E2E persistent-state write/read addressing diagnosis.
 
 This reuses the frozen E2E-001 encoder/CASM stack and changes only the
 persistent-state address intervention. Explicit entity addresses are metadata
