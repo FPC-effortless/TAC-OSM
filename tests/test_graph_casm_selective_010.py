@@ -163,15 +163,11 @@ def test_constant_router_cannot_create_above_base_rate_selective_success():
 
 
 def test_executor_failure_is_not_silently_promoted():
+    import copy
     ep = MODULE.generate(2030, 1)[0]
-    # The intact executor must pass its complete truth table.
     assert MODULE.executor_check([ep])["pass"]
-    # Changing an expected truth-table bit produces an explicit failing reference.
-    tampered = MODULE.generate(2031, 1)[0]
-    original = dict(tampered.truth_table)
+    tampered = copy.deepcopy(MODULE.generate(2031, 1)[0])
     first_key = next(iter(tampered.truth_table))
-    tampered.truth_table[first_key] = 1 - int(tampered.truth_table[first_key])
-    assert tampered.truth_table[first_key] != original[first_key]
-    # Restore original so this remains an instrument-control test, not a benchmark mutation.
-    tampered.truth_table[first_key] = original[first_key]
-    assert MODULE.executor_check([tampered])["pass"]
+    original = int(tampered.truth_table[first_key])
+    tampered.truth_table[first_key] = 1 - original
+    assert MODULE.executor_check([tampered])["pass"] is False
