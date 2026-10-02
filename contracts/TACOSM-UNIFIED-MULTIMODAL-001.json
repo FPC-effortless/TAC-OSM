@@ -337,6 +337,26 @@
       "discovered": "Confirmatory run 37019339996 identifiability gate stopped on image before any capability measurement; no scientific result was produced.",
       "affected": "Synthetic renderers only; model architecture, seeds, held-out domain split, thresholds and decision rules unchanged.",
       "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A11",
+      "applies_to": "no_persistence ablation",
+      "old_definition": "The no_persistence arm disabled memory reads but still accepted verified writes during training.",
+      "new_definition": "The no_persistence arm disables both memory contribution and persistence writes.",
+      "rationale": "An ablation of persistence must remove the persistence mechanism rather than silently accumulating an unused side channel.",
+      "discovered": "Pre-confirmatory ablation audit; no confirmatory result existed.",
+      "affected": "Ablation implementation only; full-arm parameters and primary decision rules unchanged.",
+      "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A12",
+      "applies_to": "representability gate",
+      "old_definition": "The contract required a representability gate but the runner did not emit an explicit constructive witness.",
+      "new_definition": "The runner constructs a finite observation+action lookup witness over all 256 registered states and 4 actions for each modality, independent of learned parameters.",
+      "rationale": "The unified benchmark needs the same separation already established in REP-001: a target must be representable before learnability is tested. The witness is an interface-level finite computability witness, while learned recovery remains a separate capability test.",
+      "discovered": "Pre-confirmatory gate audit; no confirmatory result existed.",
+      "affected": "Precondition reporting only; model, data, thresholds and evaluation rules unchanged.",
+      "no_result_under_previous_version": "true"
     }
   ],
   "held_constant": [
