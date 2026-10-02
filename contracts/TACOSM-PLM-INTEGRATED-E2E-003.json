@@ -1,0 +1,256 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-003",
+  "version": 8,
+  "status": "pre-registered",
+  "question": "After correcting q1/q2 target-entity construction, is the E2E-001 failure localized to learned persistent-state write addressing, learned read addressing, or lack of a coherent shared address interface?",
+  "hypothesis": "Explicit structural entity addressing on the write path, read path, or both will localize the persistent-state failure without changing the multimodal representation, CASM, verifier, optimizer, held-out compositions, or seed schedule.",
+  "arms": [
+    {
+      "name": "explicit_write",
+      "intervention": "observation entity identity selects the persistent write slot; query read addressing remains learned",
+      "acts_on": "persistent write address",
+      "knob": "write_mode",
+      "value": "explicit"
+    },
+    {
+      "name": "explicit_read",
+      "intervention": "query entity identity selects the persistent read slot; observation write addressing remains learned",
+      "acts_on": "persistent read address",
+      "knob": "read_mode",
+      "value": "explicit"
+    },
+    {
+      "name": "explicit_both",
+      "intervention": "observation entity identity selects the persistent write slot and query entity identity selects the persistent read slot",
+      "acts_on": "persistent address interface",
+      "knob": "write_mode/read_mode",
+      "value": "explicit/explicit"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_explicit_both",
+      "role": "primary",
+      "primary": true,
+      "description": "Mean q2 accuracy over 400 corrected held-out episodes per seed with explicit write and explicit read addressing."
+    },
+    {
+      "name": "heldout_q2_accuracy_explicit_write",
+      "role": "secondary",
+      "primary": false,
+      "description": "Mean q2 accuracy for the explicit-write/learned-read arm."
+    },
+    {
+      "name": "heldout_q2_accuracy_explicit_read",
+      "role": "secondary",
+      "primary": false,
+      "description": "Mean q2 accuracy for the learned-write/explicit-read arm."
+    },
+    {
+      "name": "heldout_q2_accuracy_no_memory_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Paired no-memory control for explicit-both."
+    },
+    {
+      "name": "heldout_q2_accuracy_shuffled_image_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Paired image-alignment control for explicit-both."
+    },
+    {
+      "name": "heldout_q2_accuracy_text_only_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Unimodal diagnostic."
+    },
+    {
+      "name": "heldout_q2_accuracy_image_only_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Unimodal diagnostic."
+    },
+    {
+      "name": "heldout_q2_accuracy_audio_only_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Unimodal diagnostic."
+    },
+    {
+      "name": "target_memory_attention_explicit_both",
+      "role": "secondary",
+      "primary": false,
+      "description": "Mean target-slot attention for explicit-both."
+    },
+    {
+      "name": "write_target_address_accuracy",
+      "role": "secondary",
+      "primary": false,
+      "description": "Mean write target-address accuracy."
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "benchmark-integrity and information-flow checks pass and explicit_both mean q2 accuracy >= 0.80 with every seed >= 0.40",
+      "licenses": "the corrected synthetic address-intervention system meets the registered capability criterion",
+      "does_not_license": "real-world multimodal capability, semantic addressing, arbitrary learned operators, or scaling"
+    },
+    {
+      "condition": "explicit_both fails the primary criterion but all integrity checks pass",
+      "licenses": "the explicit-both intervention does not meet the criterion; single-path diagnostics localize the failure without ranking arms",
+      "does_not_license": "persistent-state impossibility or PLM impossibility"
+    },
+    {
+      "condition": "explicit_write differs by at least 0.05 from explicit_read",
+      "licenses": "evidence localizing the corrected benchmark failure toward one address path",
+      "does_not_license": "a general memory-system claim"
+    },
+    {
+      "condition": "explicit_both differs by at least 0.05 from both single-path arms",
+      "licenses": "evidence that write/read address coherence is consequential in this synthetic task",
+      "does_not_license": "semantic addressing generally"
+    },
+    {
+      "condition": "q1/q2 entity identities overlap, held-out composition appears in TRAIN_COMBOS, or answer/outcome information enters before action",
+      "licenses": "instrument invalid; no scientific interpretation",
+      "does_not_license": "a negative capability conclusion"
+    }
+  ],
+  "interpretation_order": [
+    "benchmark_integrity",
+    "information_flow",
+    "primary_endpoint",
+    "single_path_diagnostics",
+    "explicit_both_vs_frozen_invalid_history",
+    "memory_control",
+    "alignment_control",
+    "unimodal_controls",
+    "address_diagnostics"
+  ],
+  "h_levels": [
+    3
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "held_constant": [
+    "corrected canonical benchmark generator",
+    "q1 always targets entities[0] and q2 always targets entities[1]",
+    "same 12 complementary latent bits: text 0-3, image 4-7, audio 8-11",
+    "same eight held-out compositions as E2E-001, with strict training exclusion",
+    "same entity_count=16 and hidden_dim=40",
+    "same batch_size=96",
+    "same AdamW lr=0.002 and weight_decay=0.0001",
+    "same observation noise=0.03",
+    "same 300 training steps and 400 evaluation episodes per seed",
+    "all three arms use the same code and environment apart from the registered address intervention",
+    "controls use the same corrected held-out episodes as the explicit-both arm within each seed",
+    "E2E-001 and E2E-002 are invalid provenance-only artifacts and are not used for tuning or baseline selection"
+  ],
+  "information_flow": {
+    "pre_action": "corrected text/image/audio observations -> encoders -> shared representation -> persistent write -> query-conditioned read -> CASM -> action",
+    "post_action": "environment outcome -> verifier -> differentiable verified write",
+    "forbidden_before_action": [
+      "answer",
+      "target_payload",
+      "evaluation_correctness"
+    ],
+    "allowed_after_action": [
+      "environment_outcome",
+      "verifier_supervision"
+    ]
+  },
+  "scientific_boundaries": [
+    "Synthetic multimodal mechanism benchmark only.",
+    "No real-world language, vision, or audio capability claim.",
+    "No asymptotic scaling claim.",
+    "Explicit entity-address arms are structural controls, not evidence of learned semantic addressing.",
+    "Operator identity is public in this phase, so operator-selection accuracy is not interpreted as autonomous operator discovery."
+  ],
+  "statistics": {
+    "seed_bootstrap_samples": 5000,
+    "seed_bootstrap_seed": 20261002,
+    "confidence_level": 0.95,
+    "provenance_rule": "all three arm artifacts must report the same checked-out GITHUB_SHA before aggregation"
+  },
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "diagnostic decision-rule effect size",
+      "old_definition": "single-path or explicit-both differences were described as materially different without a registered numerical threshold",
+      "new_definition": "diagnostic pairwise differences are material only when the absolute mean q2 difference is at least 0.05",
+      "rationale": "A diagnostic decision rule must not introduce a post-hoc interpretation threshold through prose.",
+      "discovered": "Pre-measurement scientific-process audit.",
+      "affected": "diagnostic interpretation only; primary endpoint, benchmark, seeds and training schedule unchanged",
+      "no_result_under_previous_version": "No E2E-003 measurement existed under the unquantified rule."
+    },
+    {
+      "id": "A2",
+      "applies_to": "explicit-both vs single-path diagnostic decision rule",
+      "old_definition": "the explicit-both arm was described using an unquantified material-difference condition",
+      "new_definition": "an explicit-both difference is diagnostic only when its mean q2 accuracy differs by at least 0.05 from each single-path arm",
+      "rationale": "Prevent post-hoc prose from deciding what constitutes a meaningful arm difference.",
+      "discovered": "Pre-measurement audit of the corrected contract.",
+      "affected": "diagnostic interpretation only; primary endpoint and experimental parameters unchanged",
+      "no_result_under_previous_version": "No E2E-003 measurement existed under the unquantified rule."
+    },
+    {
+      "id": "A3",
+      "applies_to": "contract schema title field",
+      "old_definition": "E2E-003 contract omitted the schema-required top-level title field",
+      "new_definition": "E2E-003 contract includes the required top-level title field",
+      "rationale": "Repository contract validation requires title before any measurement can be considered valid.",
+      "discovered": "Full repository gate run 37068686061",
+      "affected": "contract metadata only; no scientific parameter or decision rule changed",
+      "no_result_under_previous_version": "No E2E-003 scientific arm executed under the malformed contract."
+    },
+    {
+      "id": "A4",
+      "applies_to": "arm-artifact provenance fields",
+      "old_definition": "arm artifacts recorded GITHUB_HEAD_SHA as pr_head_sha and aggregation required that field to match",
+      "new_definition": "arm artifacts record the checked-out GITHUB_SHA as git_commit and aggregation requires this checkout SHA to match across all three arms",
+      "rationale": "The definitive E2E-003 run is branch/push-triggered, where GITHUB_HEAD_SHA is not a standard GitHub Actions variable. Provenance must identify the actual code checked out by each arm job.",
+      "discovered": "Premeasurement provenance audit after direct inspection of the Actions event model.",
+      "affected": "provenance schema and aggregation check only; no experiment parameter, benchmark, arm, or decision rule changed",
+      "no_result_under_previous_version": "No valid E2E-003 combined result existed under the incompatible provenance field."
+    },
+    {
+      "id": "A5",
+      "applies_to": "contract reproduction_baseline representation",
+      "old_definition": "reproduction_baseline contained string-valued invalid-history notes",
+      "new_definition": "invalid-history notes are recorded in held_constant/provenance documentation; reproduction_baseline is omitted because the contract schema accepts numeric baselines only",
+      "rationale": "The contract loader coerces reproduction baseline cells to float; historical invalidity descriptions therefore cannot be stored in that field.",
+      "discovered": "Full repository gate run 37069300655",
+      "affected": "contract schema representation only; no scientific parameter, benchmark, arm, or decision rule changed",
+      "no_result_under_previous_version": "No E2E-003 scientific arm executed under the schema-invalid contract."
+    },
+    {
+      "id": "A6",
+      "applies_to": "evaluation held-out composition validation",
+      "old_definition": "validator compared query prefix (entity, i, j) against registered (operator, i, j) held-out tuples",
+      "new_definition": "validator derives each query composition as (operator, i, j) before checking held-out membership and training exclusion",
+      "rationale": "The preflight gate exposed a coordinate-order bug that rejected every held-out evaluation episode before measurement.",
+      "discovered": "Full repository gate run 37069520555",
+      "affected": "benchmark validation logic only; no benchmark values, seeds, arms, or decision rule changed",
+      "no_result_under_previous_version": "No E2E-003 scientific arm executed under the faulty validator."
+    },
+    {
+      "id": "A7",
+      "applies_to": "benchmark unit-test tuple indexing",
+      "old_definition": "benchmark regression tests compared query tuple prefix (entity, i, j) to composition tuples (operator, i, j)",
+      "new_definition": "benchmark regression tests explicitly construct the composition as (operator, i, j) from q[3], q[1], q[2]",
+      "rationale": "The gate exposed stale coordinate assumptions in the tests after the query representation was corrected to include target entity.",
+      "discovered": "Full repository gate run 37069563300",
+      "affected": "test assertions only; no benchmark generator, training/evaluation data, arm, or decision rule changed",
+      "no_result_under_previous_version": "No E2E-003 scientific arm executed with the failing regression tests."
+    }
+  ],
+  "diagnostic_materiality_threshold": 0.05,
+  "title": "Corrected temporal persistent-state address-path diagnosis for the integrated multimodal PLM chain"
+}
