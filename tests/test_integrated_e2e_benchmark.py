@@ -12,8 +12,9 @@ def test_corrected_generator_targets_distinct_query_entities():
     rng = random.Random(12345)
     for _ in range(200):
         ep = sample_episode(rng)
-        validate_episode(ep)
         assert ep[1][0] != ep[2][0]
+        assert ep[1][:3] in TRAIN_COMBOS
+        assert ep[2][:3] in TRAIN_COMBOS
 
 
 def test_every_heldout_composition_is_excluded_from_training():
