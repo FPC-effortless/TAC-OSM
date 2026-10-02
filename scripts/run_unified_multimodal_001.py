@@ -416,7 +416,18 @@ def checkpoint_hash(model):
 
 
 @torch.no_grad()
-def evaluate(model, rows, memory, include_memory=True):
+def target_normalizers(rows):
+    out = {}
+    data = batch_tensors(rows)
+    for modality, (_x, y, _a) in data.items():
+        if modality != "language":
+            mean_target = y.mean(0, keepdim=True)
+            out[modality] = float(F.mse_loss(mean_target.expand_as(y), y))
+    return out
+
+
+@torch.no_grad()
+def evaluate(model, rows, memory, include_memory=True, normalizers=None):
     model.eval()
     data = batch_tensors(rows)
     metrics = {}
@@ -446,9 +457,12 @@ def evaluate(model, rows, memory, include_memory=True):
             }
         else:
             mse = float(F.mse_loss(output, y))
+            baseline_mse = float((normalizers or {}).get(modality, 0.0))
+            normalized = 1.0 - mse / baseline_mse if baseline_mse > 0.0 else 0.0
             metrics[modality] = {
                 "mse": mse,
-                "normalized_score": 1.0 / (1.0 + mse),
+                "baseline_mse_train_only": baseline_mse,
+                "normalized_score": normalized,
             }
 
         action_predictions = torch.stack(
@@ -592,8 +606,9 @@ def train_one(seed, disable, steps, batch_size, shared_transition=True):
 
     collapse = anti_collapse_report(model, train_rows)
     frozen_hash = checkpoint_hash(model)
-    val = evaluate(model, val_rows, memory)
-    test = evaluate(model, test_rows, memory)
+    normalizers = target_normalizers(train_rows)
+    val = evaluate(model, val_rows, memory, normalizers=normalizers)
+    test = evaluate(model, test_rows, memory, normalizers=normalizers)
 
     # Two-stage selection: cheap proposal first, exact transition reranking second.
     routing = {m: {"proposal_recall": 0.0, "conditional_route": 0.0, "goal_conditioned": True} for m in MODALITIES}
@@ -773,6 +788,7 @@ def main():
             "confirmatory": args.confirmatory,
             "verify_latent_mse_threshold": VERIFY_LATENT_MSE,
             "anti_collapse_floor": ANTI_COLLAPSE_FLOOR,
+            "image_audio_normalization": "1 - model_MSE / train_only_constant_baseline_MSE",
         },
         "preconditions": {
             "split_audit": split,
