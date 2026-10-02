@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-003",
-  "version": 6,
+  "version": 7,
   "status": "pre-registered",
   "question": "After correcting q1/q2 target-entity construction, is the E2E-001 failure localized to learned persistent-state write addressing, learned read addressing, or lack of a coherent shared address interface?",
   "hypothesis": "Explicit structural entity addressing on the write path, read path, or both will localize the persistent-state failure without changing the multimodal representation, CASM, verifier, optimizer, held-out compositions, or seed schedule.",
@@ -229,6 +229,16 @@
       "discovered": "Full repository gate run 37069300655",
       "affected": "contract schema representation only; no scientific parameter, benchmark, arm, or decision rule changed",
       "no_result_under_previous_version": "No E2E-003 scientific arm executed under the schema-invalid contract."
+    },
+    {
+      "id": "A6",
+      "applies_to": "evaluation held-out composition validation",
+      "old_definition": "validator compared query prefix (entity, i, j) against registered (operator, i, j) held-out tuples",
+      "new_definition": "validator derives each query composition as (operator, i, j) before checking held-out membership and training exclusion",
+      "rationale": "The preflight gate exposed a coordinate-order bug that rejected every held-out evaluation episode before measurement.",
+      "discovered": "Full repository gate run 37069520555",
+      "affected": "benchmark validation logic only; no benchmark values, seeds, arms, or decision rule changed",
+      "no_result_under_previous_version": "No E2E-003 scientific arm executed under the faulty validator."
     }
   ],
   "diagnostic_materiality_threshold": 0.05,
