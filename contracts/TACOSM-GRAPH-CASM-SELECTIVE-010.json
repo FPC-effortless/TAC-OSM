@@ -1,0 +1,117 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-SELECTIVE-010",
+  "version": "0.1-preregistered",
+  "status": "preregistered",
+  "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
+  "primary_question": "When executable program wiring is part of the public candidate representation, can selective candidate routing reduce actual graph-execution work while preserving task capability?",
+  "primary_endpoint": {
+    "name": "selective_execution_work_fraction_at_capability",
+    "population_levels": [32, 64, 128, 256, 512],
+    "budgets": [1, 2, 4, 8],
+    "capability_floor": 0.8,
+    "criterion": "At each M, report the minimum exact graph-execution work fraction among registered budgets whose semantic success is at least 0.80 of exhaustive exact graph execution."
+  },
+  "representation_arms": {
+    "graph": {
+      "description": "Complete public executable program graph: node-local descriptors plus true program wiring.",
+      "router_representation": "frozen graph descriptor followed by learned candidate projection"
+    },
+    "summary": {
+      "description": "Public node-local structural summary with the graph-wiring field removed; matched candidate projection and query tower.",
+      "router_representation": "fixed public summary followed by learned candidate projection"
+    }
+  },
+  "execution_control": {
+    "name": "exact_graph_executor",
+    "description": "Deterministic topological execution using the candidate's public program wiring and Boolean operator semantics.",
+    "purpose": "establishes an executable-substrate ceiling independently of learned routing"
+  },
+  "data_protocol": {
+    "train_programs": 256,
+    "seeds": [0, 1, 2, 3, 4],
+    "population_levels": [32, 64, 128, 256, 512],
+    "evaluation_tasks_per_seed_M": 32,
+    "support_examples_per_task": 4,
+    "verifier_examples_per_task": 12,
+    "fixed_input_count": 4,
+    "max_nodes": 10,
+    "unique_candidate_truth_tables": true,
+    "unique_candidate_structures": true,
+    "train_eval_exact_structure_disjoint": true,
+    "train_eval_truth_disjoint": true,
+    "secondary_role_holdout": ["NOT", "XOR"],
+    "executor_training": "none; exact executable graph control"
+  },
+  "leakage_rules": [
+    "Router input contains public support input/output examples and public candidate graph descriptors.",
+    "Candidate program wiring is public in this experiment because executable graph structure is the registered intervention.",
+    "Target index, verifier-only examples, and outcome are evaluator-only.",
+    "Candidate pool construction does not condition decoy inclusion on router-visible support rows.",
+    "The twelve verifier-only rows are disjoint from the four router-visible rows and complete the 4-input truth table.",
+    "Primary evaluation targets are absent from router training in exact structure and complete truth table."
+  ],
+  "execution_work_contract": {
+    "graph_edge_operations": "one operation for each true program edge traversed during execution",
+    "structural_node_operations": "one operation for each active non-input node executed",
+    "total_execution_work_units": "graph_edge_operations + structural_node_operations"
+  },
+  "statistical_contract": {
+    "primary_estimate": "pooled trial-level semantic success and execution-work fraction",
+    "uncertainty": "seed bootstrap 95 percent confidence interval",
+    "seed_bootstrap_rounds": 4000,
+    "primary_eligibility": "exhaustive exact graph execution must have semantic success >= 0.80; a materially lower ceiling indicates an implementation error"
+  },
+  "promotion_rule": [
+    "exact graph executor passes complete truth-table checks",
+    "train/evaluation structure and truth-table split checks pass",
+    "target identity is absent from router inputs",
+    "selective execution work is counted from actual graph operations",
+    "capability retention and execution work are both reported",
+    "no asymptotic scaling claim from finite M"
+  ],
+  "persistent_experience": {
+    "task_state": "opaque address resolves router-visible task examples",
+    "commit_rule": "only a candidate that passes all verifier examples after exact graph execution may be committed",
+    "intervening_writes": "unrelated task records are inserted before anchor replay",
+    "replay_metric": "routing and adaptive execution work before versus after verified experience"
+  },
+  "router": {
+    "query_input_dimension": 20,
+    "hidden_dimension": 64,
+    "latent_dimension": 32,
+    "temperature": 0.10,
+    "learning_rate": 0.001,
+    "steps": 1200,
+    "candidate_feature_dimension": 290,
+    "candidate_projection": "290 -> 32 for both representation arms",
+    "capacity_matched_candidate_projection": true
+  },
+  "decision_rule": [
+    {
+      "condition": "At M, a registered budget reaches at least 0.80 semantic retention versus exhaustive exact graph execution.",
+      "licenses": "bounded evidence of capability-constrained selective execution under the registered executable-graph workload.",
+      "does_not_license": "asymptotic sublinear scaling, hardware speedup, general language capability, or universal program retrieval."
+    },
+    {
+      "condition": "No registered budget reaches 0.80 retention at M.",
+      "licenses": "the registered router does not meet the capability-constrained criterion at that M.",
+      "does_not_license": "a general impossibility result."
+    }
+  ],
+  "interpretation_order": [
+    "contract and split integrity",
+    "exact executor ceiling",
+    "representation integrity",
+    "routing recall",
+    "semantic capability",
+    "actual graph execution work",
+    "adaptive execution",
+    "verified-experience replay",
+    "scope limits"
+  ],
+  "amendment_history": [],
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require a new experiment identifier",
+    "checkpointing": "result files may be written after each seed/M without changing the scientific grid"
+  }
+}
