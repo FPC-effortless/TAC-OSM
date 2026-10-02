@@ -1,0 +1,174 @@
+{
+  "experiment_id": "TACOSM-C5-PERSISTENT-RELATIONAL-LOOP-001",
+  "title": "C5 persistent relational full loop",
+  "question": "Can the C5 sparse funnel route to a target that must be compositionally derived from temporally persistent state, when the public query does not contain the target descriptor and the relevance relation is not direct Hamming proximity?",
+  "hypothesis": "A state-aware CDL router trained on post-action outcomes can learn the persistent relational mapping and feed bounded CASM verification, while resetting persistent state should collapse routing capability toward chance.",
+  "arms": [
+    {
+      "name": "persistent_relational",
+      "intervention": "read temporally committed operands and operation from persistent state during noisy query routing and CASM verification",
+      "acts_on": "persistent state + relevance routing",
+      "knob": "state_access",
+      "value": "delayed_operands_and_operation"
+    },
+    {
+      "name": "reset_control",
+      "intervention": "clear the persistent state before routing",
+      "acts_on": "persistent state",
+      "knob": "state_access",
+      "value": "reset"
+    },
+    {
+      "name": "operand_hamming_reference",
+      "intervention": "rank candidates by Hamming distance to either persisted operand",
+      "acts_on": "routing reference",
+      "knob": "router",
+      "value": "min_distance_to_operands"
+    },
+    {
+      "name": "persistent_composition_oracle",
+      "intervention": "derive the relation from persisted operands and operation without learning",
+      "acts_on": "upper-bound control",
+      "knob": "router",
+      "value": "exact_relation"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "persistent_dense_top1",
+      "role": "primary learned routing endpoint",
+      "primary": true
+    },
+    {
+      "name": "persistent_dense_P90_rank",
+      "role": "dense routing diagnostic",
+      "primary": false
+    },
+    {
+      "name": "reset_dense_top1",
+      "role": "persistence ablation diagnostic",
+      "primary": false
+    },
+    {
+      "name": "sparse_admission_recall",
+      "role": "fused admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "sparse_final_success",
+      "role": "fused-loop execution endpoint",
+      "primary": false
+    },
+    {
+      "name": "K90",
+      "role": "calibrated shortlist size",
+      "primary": false
+    },
+    {
+      "name": "p1",
+      "role": "LSH target collision probability",
+      "primary": false
+    },
+    {
+      "name": "p2",
+      "role": "LSH decoy collision probability",
+      "primary": false
+    },
+    {
+      "name": "rho",
+      "role": "LSH geometry diagnostic",
+      "primary": false
+    },
+    {
+      "name": "persistence_boundary_success",
+      "role": "temporal state availability control",
+      "primary": false
+    },
+    {
+      "name": "online_final_success",
+      "role": "closed-loop online endpoint",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "Report persistent and reset dense routing across every registered M. Do not tune M or training based on held-out results.",
+      "licenses": "workload-specific evidence about whether the learned router uses the persistent relational state.",
+      "does_not_license": "a general claim about memory or semantic intelligence."
+    },
+    {
+      "condition": "Report the complete calibration-derived sparse funnel at every M, including K90 and measured LSH geometry.",
+      "licenses": "separation of representation, admission, and execution effects in the persistent relational workload.",
+      "does_not_license": "an optimal sparse operating point."
+    },
+    {
+      "condition": "The target descriptor must never be stored in persistent state, query text, or verifier-side task metadata.",
+      "licenses": "an anti-leakage relational persistence result.",
+      "does_not_license": "a result on arbitrary hidden-state tasks."
+    },
+    {
+      "condition": "The temporal state must be unavailable before its registered delay and readable after the delay despite intervening writes.",
+      "licenses": "a bounded persistence-with-interference control.",
+      "does_not_license": "indefinite persistence."
+    }
+  ],
+  "held_constant": [
+    "16-bit candidate descriptors",
+    "four boolean relations: XOR, XNOR, AND, OR",
+    "target generated from persisted operands and operation, never stored",
+    "one-bit corrupted public operation hint",
+    "state write delay of 3 decision boundaries",
+    "three unrelated intervening writes",
+    "M levels 64,128,256,512,1024",
+    "five seeds",
+    "800 exhaustive training steps per seed",
+    "64 calibration and 64 held-out trials per seed/M",
+    "LSH cap of 128",
+    "CASM and verifier budget of four admitted execution attempts",
+    "verified online updates only after successful execution and verification"
+  ],
+  "h_levels": [
+    63
+  ],
+  "m_levels": [
+    64,
+    128,
+    256,
+    512,
+    1024
+  ],
+  "k_levels": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 800,
+  "eval_steps": 64,
+  "interpretation_order": [
+    "contract and anti-leakage gates",
+    "temporal boundary",
+    "persistent dense routing",
+    "reset dense routing",
+    "operand-Hamming reference",
+    "conformal K",
+    "LSH geometry",
+    "sparse admission",
+    "CASM execution and verifier",
+    "online verified learning",
+    "scope limits"
+  ],
+  "status": "measured",
+  "result_note": "Run 36845079770 completed successfully with 820 repository tests passing. Persistent temporal boundary and relation reconstruction controls are 100%, reset reconstruction 0%. Dense persistent Top-1 is 77.81%, 68.13%, 63.44%, 58.44%, 47.50% for M=64..1024; P90 ranks 3.8,12.4,19.6,26.4,104.4 and K90 5.4,17.8,21.0,57.4,81.0. Full-range gamma=1.0650, with unstable finite-sample local exponents 1.706,0.661,0.430,1.984. Operand-Hamming Top-1 is 24.38%,19.69%,17.50%,10.00%,7.81%. Sparse admission/final success are 73.44/73.13%, 70.94/68.44%, 67.81/67.19%, 62.19/58.44%, 65.31/59.06%. Online M128 final success=74.38%. Authoritative artifact 11152968667, digest sha256:e3ce62436294d43e702dfdcd76faa03b42753579f27fcef160e08bc98771b563.",
+  "result_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/36845079770"
+}
