@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-003",
-  "version": 7,
+  "version": 8,
   "status": "pre-registered",
   "question": "After correcting q1/q2 target-entity construction, is the E2E-001 failure localized to learned persistent-state write addressing, learned read addressing, or lack of a coherent shared address interface?",
   "hypothesis": "Explicit structural entity addressing on the write path, read path, or both will localize the persistent-state failure without changing the multimodal representation, CASM, verifier, optimizer, held-out compositions, or seed schedule.",
@@ -239,6 +239,16 @@
       "discovered": "Full repository gate run 37069520555",
       "affected": "benchmark validation logic only; no benchmark values, seeds, arms, or decision rule changed",
       "no_result_under_previous_version": "No E2E-003 scientific arm executed under the faulty validator."
+    },
+    {
+      "id": "A7",
+      "applies_to": "benchmark unit-test tuple indexing",
+      "old_definition": "benchmark regression tests compared query tuple prefix (entity, i, j) to composition tuples (operator, i, j)",
+      "new_definition": "benchmark regression tests explicitly construct the composition as (operator, i, j) from q[3], q[1], q[2]",
+      "rationale": "The gate exposed stale coordinate assumptions in the tests after the query representation was corrected to include target entity.",
+      "discovered": "Full repository gate run 37069563300",
+      "affected": "test assertions only; no benchmark generator, training/evaluation data, arm, or decision rule changed",
+      "no_result_under_previous_version": "No E2E-003 scientific arm executed with the failing regression tests."
     }
   ],
   "diagnostic_materiality_threshold": 0.05,
