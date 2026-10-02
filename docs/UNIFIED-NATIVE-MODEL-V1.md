@@ -64,7 +64,7 @@ The transition model supports counterfactual rollouts:
 
 hat Z_(t+k+1) = T_theta(hat Z_(t+k), a_(t+k), K_t)
 
-Planning is constrained by a computation budget. External candidate retrieval and internal program routing are different problems and have separate accounting.
+Planning is constrained by a computation budget. External candidate retrieval and internal program routing are different problems and have separate accounting. Any goal-conditioned action-selection experiment must make the goal observation an explicit learner-visible input; using an unobserved future target to construct the proposal or route is leakage and invalidates the measurement.
 
 ## 7. Executable structures
 
