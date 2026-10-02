@@ -94,3 +94,22 @@ def test_heldout_queries_cross_modal():
         or (8 <= i < 12) != (8 <= j < 12)
         for _, i, j in HELDOUT
     )
+
+
+def test_verified_feedback_write_is_entity_addressed():
+    import torch as th
+
+    from tac_osm.integrated_e2e import PersistentKeyValueState
+
+    state = PersistentKeyValueState(hidden=8, entity_count=4)
+    memory = th.zeros(1, 4, 8)
+    z = th.ones(1, 8)
+    updated, probs = state.write(
+        memory, z, strength=th.ones(1), target_entity=th.tensor([2])
+    )
+    assert probs.shape == (1, 4)
+    assert probs[0].tolist() == [0.0, 0.0, 1.0, 0.0]
+    assert th.count_nonzero(updated[0, 0]) == 0
+    assert th.count_nonzero(updated[0, 1]) == 0
+    assert th.count_nonzero(updated[0, 2]) == 8
+    assert th.count_nonzero(updated[0, 3]) == 0
