@@ -239,3 +239,20 @@ between write and read?" The next experiment must test that interface directly.
 
 The corrected experiment must independently generate q1 and q2 and assert
 that their entity identities differ before any measurement is reported.
+
+
+---
+
+## E2E-003 corrected temporal/address diagnosis
+
+| Evidence | Layer | Disposition | What it supports | Boundary |
+|---|---|---|---|---|
+| explicit-write, explicit-read, explicit-both arms | L3 | VALID | correct structural addressing did not improve held-out q2 capability | no learned semantic addressing claim |
+| explicit-both paired controls | L3 | VALID | no measurable persistence, image-alignment, or unimodal contribution under this protocol | no general multimodal/memory impossibility claim |
+| combined seed results | L3 | VALID | all three arms produced the same five q2 values | bounded to corrected synthetic benchmark |
+
+Primary explicit-both q2 = **0.5200**; seed-bootstrap 95% interval
+**[0.5020, 0.5385]**; minimum seed **0.4925**.
+
+Next diagnostic: explicitly align state content representation with CASM rather
+than changing addressing again.
