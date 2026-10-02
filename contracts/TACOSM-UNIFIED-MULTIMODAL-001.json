@@ -122,23 +122,28 @@
   "arms": [
     {
       "name": "full",
-      "intervention": "all registered unified components enabled"
+      "intervention": "all registered unified components enabled",
+      "acts_on": "entire unified architecture"
     },
     {
       "name": "no_persistence",
-      "intervention": "disable persistent experience/knowledge contribution during inference and learning"
+      "intervention": "disable persistent experience/knowledge contribution during inference and learning",
+      "acts_on": "persistent knowledge contribution"
     },
     {
       "name": "no_predictive_transition",
-      "intervention": "disable action-conditioned latent transition prediction"
+      "intervention": "disable action-conditioned latent transition prediction",
+      "acts_on": "action-conditioned transition model"
     },
     {
       "name": "no_cross_modal_alignment",
-      "intervention": "disable paired cross-modal latent alignment"
+      "intervention": "disable paired cross-modal latent alignment",
+      "acts_on": "shared cross-modal representation constraint"
     },
     {
       "name": "no_structure_discovery",
-      "intervention": "replace learned structure decomposition with identity latent"
+      "intervention": "replace learned structure decomposition with identity latent",
+      "acts_on": "structure discovery latent decomposition"
     }
   ],
   "endpoints": [
@@ -212,6 +217,13 @@
       "before_run": true,
       "reason": "The initial contract draft used modality-specific primary endpoint fields and omitted the repository ExperimentContract schema's required arms/endpoints/interpretation_order/h_levels/steps/eval_steps fields. The runner never produced a confirmatory artifact because repository contract validation failed first.",
       "changes": "Added schema-compliant arms/endpoints/interpretation_order/h_levels/steps/eval_steps while preserving the scientific question, modalities, seeds, split rule, materiality thresholds and leakage controls.",
+      "no_scientific_result_under_previous_version": true
+    },
+    {
+      "id": "A2",
+      "before_run": true,
+      "reason": "Repository contract schema requires acts_on for each arm.",
+      "changes": "Added acts_on to all five registered arms; no hypotheses, thresholds, seeds, endpoints or decision rules changed.",
       "no_scientific_result_under_previous_version": true
     }
   ],
