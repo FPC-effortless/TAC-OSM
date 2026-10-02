@@ -66,3 +66,9 @@ def test_address_state_matches_base_verifier_write_signature():
     from tac_osm.integrated_e2e_address import AddressDiagnosisState
     params = list(inspect.signature(AddressDiagnosisState.write).parameters)
     assert params[:4] == ["self", "memory", "z", "target_entity"]
+
+
+def test_e2e002_contract_is_loadable_and_consistent():
+    from tac_osm.contract import load_contract
+    contract = load_contract("TACOSM-PLM-INTEGRATED-E2E-002")
+    assert contract.check_consistency() == []
