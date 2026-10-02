@@ -270,6 +270,7 @@ without unacceptable capability loss.
 The runner must record at least:
 
 - dynamic equivalence violation rate;
+- the fixed pair-set digest and the number of fixed pairs evaluated;
 - future capability retention;
 - anchor consistency across batches/checkpoints;
 - effective representation rank;
@@ -318,7 +319,10 @@ Failure blocks the confirmatory run.
 
 ### Step 3 — Dynamic validity
 
-Select near-neighbor state pairs under the frozen geometry.
+Generate and hash the state-pair evaluation set **before any representation is scored**. Pair membership cannot depend on the proposed geometry.
+
+The frozen representation then identifies which of those fixed pairs are
+near under the registered threshold.
 
 For registered actions and horizons:
 
