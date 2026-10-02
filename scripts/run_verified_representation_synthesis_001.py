@@ -33,6 +33,23 @@ DELTA = {
     "repair": (0.04, 0.00, -0.02, -0.12),
 }
 FEATURE_KEYS = {"name", "description", "anchors", "unit_interval", "source"}
+
+
+def digest(obj):
+    return hashlib.sha256(json.dumps(obj, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+def clamp(x): return max(0.0, min(1.0, float(x)))
+
+@dataclass(frozen=True)
+class State:
+    id: str; power: float; grip: float; heat: float; wear: float; affinity: float
+    def raw(self): return (self.power, self.grip, 1-self.heat, 1-self.wear, self.affinity)
+
+@dataclass(frozen=True)
+class Task:
+    id: str; required_power: float; roughness: float; volatility: float; terrain: float
+    def raw(self): return (self.required_power, self.roughness, 1-self.volatility, 0.8, self.terrain)
+
 ANCHOR_LEVELS = {"low": 0.0, "mid": 0.5, "high": 1.0}
 CALIBRATION_STATES = tuple(
     State(f"cal:{i}", *vals) for i, vals in enumerate((
@@ -92,22 +109,6 @@ SOURCES = {"power": lambda s: s.power, "grip": lambda s: s.grip,
            "thermal_stability": lambda s: 1-s.heat,
            "mechanical_integrity": lambda s: 1-s.wear,
            "terrain_affinity": lambda s: s.affinity}
-
-def digest(obj):
-    return hashlib.sha256(json.dumps(obj, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
-
-def clamp(x): return max(0.0, min(1.0, float(x)))
-
-@dataclass(frozen=True)
-class State:
-    id: str; power: float; grip: float; heat: float; wear: float; affinity: float
-    def raw(self): return (self.power, self.grip, 1-self.heat, 1-self.wear, self.affinity)
-
-@dataclass(frozen=True)
-class Task:
-    id: str; required_power: float; roughness: float; volatility: float; terrain: float
-    def raw(self): return (self.required_power, self.roughness, 1-self.volatility, 0.8, self.terrain)
-
 def states(seed, m):
     r = random.Random(seed*1000003 + m*7919 + 101)
     return tuple(State(f"s:{seed}:{m}:{i}", r.random(), r.random(), r.random()*0.8,
