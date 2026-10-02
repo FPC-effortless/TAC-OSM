@@ -201,7 +201,7 @@ class IntegratedE2EModel(nn.Module):
         text: Tensor,
         image: Tensor,
         audio: Tensor,
-    ) -> tuple[Tensor, Tensor, Tensor]:
+    ) -> tuple[Tensor, Tensor, Tensor, Tensor]:
         t = self.text(text)
         v = self.image(image)
         a = self.audio(audio)
