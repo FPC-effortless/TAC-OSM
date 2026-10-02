@@ -20,6 +20,7 @@ import numpy as np
 import torch
 from torch import nn
 import torch.nn.functional as F
+from tac_osm.contract import load_contract
 
 TRAIN_WORLD_SEED = 17001
 VAL_WORLD_SEED = 17002
@@ -656,6 +657,13 @@ def main():
         )
 
     seeds = tuple(int(x) for x in args.seeds.split(","))
+    contract = load_contract("TACOSM-UNIFIED-MULTIMODAL-001")
+    contract.require_levels((96,))
+    contract.require_seeds(seeds)
+    contract.require_steps(args.steps)
+    contract.require_eval_steps(48)
+    contract.require_arms(["full", "no_persistence", "no_predictive_transition", "no_cross_modal_alignment", "no_structure_discovery"])
+    contract.primary_endpoint()
 
     train_probe = World(TRAIN_WORLD_SEED, 24, "train").make()
     val_probe = World(VAL_WORLD_SEED, 12, "val").make()
@@ -745,6 +753,8 @@ def main():
     payload = {
         "protocol": {
             "experiment_id": "TACOSM-UNIFIED-MULTIMODAL-001",
+            "contract_sha256": hashlib.sha256(Path(__file__).resolve().parents[1].joinpath("contracts/TACOSM-UNIFIED-MULTIMODAL-001.json").read_bytes()).hexdigest(),
+            "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
             "train_world_seed": TRAIN_WORLD_SEED,
             "validation_world_seed": VAL_WORLD_SEED,
             "test_world_seed": TEST_WORLD_SEED,
