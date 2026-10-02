@@ -72,3 +72,8 @@ def test_pre_action_query_has_no_outcome_argument():
     model = IntegratedE2EModel()
     names = list(inspect.signature(model.query).parameters)
     assert names == ["memory", "entity", "i", "j", "op"]
+
+
+def test_latent_state_is_complementary_12_bit():
+    from tac_osm.integrated_e2e import LATENT_BITS
+    assert LATENT_BITS == 12
