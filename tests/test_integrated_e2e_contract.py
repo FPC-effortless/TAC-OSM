@@ -1,5 +1,8 @@
 import json
 from pathlib import Path
+import pytest
+
+pytest.importorskip("torch")
 
 from scripts.run_integrated_e2e_001 import (
     BITS,
