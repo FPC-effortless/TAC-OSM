@@ -96,3 +96,11 @@ They must not inherit the numerical P90/K90 as pooled-trial quantiles, the gamma
 ## Required successor
 
 The next composition-representation experiment should preserve the successful persistence boundary and intervention controls, retain per-trial raw ranks, and compare representation/operator variants under matched training and evaluation. Its primary endpoint should be a pre-registered seed-level statistic with raw per-trial artifact retention so both pooled and hierarchical uncertainty can be audited.
+
+## Statistical sensitivity bound from published marginals
+
+The published persistent/reset Top-1 rates correspond to 249/320 persistent successes and 42/320 reset successes. Because the reset arm uses the same deterministic held-out episode stream, a paired test is the conceptually correct comparison, but the artifact does not retain the 320 paired binary outcomes.
+
+A worst-case paired sensitivity bound can nevertheless be derived from the marginals alone. The largest possible discordant set consistent with the two marginals is b=249 (persistent success/reset failure) and c=42 (persistent failure/reset success), giving b+c=291 and b-c=207. Under McNemar's exact null, the two-sided binomial tail is approximately 5.83e-37. Every other feasible pairing has no larger p-value because it has no larger discordant set with the same observed difference.
+
+This is a sensitivity bound, not the primary reported inferential statistic. The raw paired outcomes should be retained in all future experiments so the exact paired analysis is directly auditable.
