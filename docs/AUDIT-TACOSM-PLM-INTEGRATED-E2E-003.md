@@ -46,3 +46,6 @@ registered seed set, episode generator, optimization schedule, or evaluation.
 
 No result may be interpreted as real-world multimodal understanding, learned
 semantic addressing, autonomous operator discovery, or asymptotic scaling.
+
+
+<!-- Non-scientific retrigger marker after base-branch workflow installation; protocol unchanged. -->
