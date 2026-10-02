@@ -15,6 +15,10 @@ import random
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Tuple
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
 
 import numpy as np
 import torch
