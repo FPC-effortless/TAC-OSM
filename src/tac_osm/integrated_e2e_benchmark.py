@@ -154,9 +154,15 @@ def validate_episode(episode: tuple) -> None:
     _, q1, q2, _ = episode
     if q1[0] == q2[0]:
         raise AssertionError("q1 and q2 must target distinct entities")
-    if q1[:3] not in HELDOUT:
-        raise AssertionError("evaluation q1 composition is not registered held-out")
-    if q2[:3] not in HELDOUT:
-        raise AssertionError("evaluation q2 composition is not registered held-out")
-    if q1[:3] in TRAIN_COMBOS or q2[:3] in TRAIN_COMBOS:
+    q1_composition = (q1[3], q1[1], q1[2])
+    q2_composition = (q2[3], q2[1], q2[2])
+    if q1_composition not in HELDOUT:
+        raise AssertionError(
+            "evaluation q1 composition is not registered held-out"
+        )
+    if q2_composition not in HELDOUT:
+        raise AssertionError(
+            "evaluation q2 composition is not registered held-out"
+        )
+    if q1_composition in TRAIN_COMBOS or q2_composition in TRAIN_COMBOS:
         raise AssertionError("held-out composition leaked into training set")
