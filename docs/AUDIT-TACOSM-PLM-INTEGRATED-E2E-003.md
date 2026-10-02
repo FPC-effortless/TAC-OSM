@@ -47,5 +47,9 @@ registered seed set, episode generator, optimization schedule, or evaluation.
 No result may be interpreted as real-world multimodal understanding, learned
 semantic addressing, autonomous operator discovery, or asymptotic scaling.
 
+The master baseline count is maintained on master only. The scientific branch
+carries the merge-ref count needed by the repository provenance gate; this has
+no scientific effect.
+
 
 <!-- Non-scientific retrigger marker after base-branch workflow installation; protocol unchanged. -->
