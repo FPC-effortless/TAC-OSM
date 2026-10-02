@@ -1,0 +1,89 @@
+{
+  "experiment_id": "TACOSM-REPRESENTATION-REFINEMENT-002",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
+  "title": "Verifier-guided representation refinement: can persistent semantic structure be repaired from counterexamples without regressing verified behavior?",
+  "question": "When a frozen representation fails a registered dynamic-validity test, can structured verifier counterexamples guide a bounded representation refinement process that reduces future behavioral violations while preserving previously verified invariants?",
+  "hypothesis": "Targeted representation refinement driven by structured counterexamples will reduce dynamic-validity violations and recover or preserve task capability more effectively than leaving the representation frozen, while a no-regression gate will prevent repaired representations from silently invalidating previously verified behavioral constraints.",
+  "arms": [
+    {"name":"frozen","intervention":"retain the initial VRS representation unchanged after counterexamples","acts_on":"representation update"},
+    {"name":"error_driven_refinement","intervention":"generate a revised representation proposal from the frozen representation plus structured verifier counterexamples; re-calibrate and re-validate before admission","acts_on":"representation update"},
+    {"name":"scalar_refinement_control","intervention":"apply the same counterexample-driven refinement budget to a one-dimensional scalar representation","acts_on":"representation update"},
+    {"name":"oracle_behavioral_repair","intervention":"diagnostic-only refinement using exhaustive future-behavior information unavailable to practical refinement","acts_on":"representation update"}
+  ],
+  "endpoints": [
+    {"name":"dynamic_violation_rate_after_refinement","role":"primary — dynamic-validity violation rate after the fixed refinement budget, among representations satisfying the no-regression and capability gates","primary":true,"description":"Final violation rate over the fixed pre-generated dynamic test set after the registered number of refinement cycles."},
+    {"name":"capability_retention","role":"secondary — exact task capability relative to the initial raw-state reference","primary":false},
+    {"name":"counterexample_resolution_rate","role":"secondary — proportion of previously observed verifier counterexamples no longer reproduced after refinement","primary":false},
+    {"name":"new_violation_rate","role":"secondary — violations introduced on previously unseen fixed validation cases","primary":false},
+    {"name":"verified_invariant_retention","role":"secondary — fraction of previously verified anchors/behavioral invariants still satisfied","primary":false},
+    {"name":"representation_drift","role":"secondary — geometric/version distance between successive representations","primary":false},
+    {"name":"refinement_cost","role":"secondary — semantic proposal/extraction calls, wall-clock, and downstream validation compute per refinement cycle","primary":false}
+  ],
+  "h_levels": [64,128,256,512],
+  "seeds": [0,1,2,3,4],
+  "steps": 1200,
+  "eval_steps": 64,
+  "k_levels": [1,2,3],
+  "held_constant": [
+    "initial representation proposal and calibration are identical across refinement arms",
+    "fixed training/evaluation structures, truth tables, pair sets, action schedules, verifier, exact executor, seeds, and capability definition",
+    "all counterexample cases are generated before representation refinement begins and are hashed",
+    "repair/refinement cannot observe hidden target identity or unexecuted future outcomes except through the registered structured verifier record",
+    "refinement budget is fixed at three proposal cycles",
+    "oracle_behavioral_repair is diagnostic-only and cannot win the practical primary endpoint",
+    "previously verified invariants are immutable admission constraints unless explicitly marked as a registered replacement",
+    "new validation cases are independent of the counterexamples used to drive refinement",
+    "all representation versions and proposal artifacts are persisted with content digests",
+    "representation construction and validation cost are separately reported"
+  ],
+  "decision_rule": [
+    {"condition":"The initial representation fails dynamic validity but all integrity gates pass.","licenses":"representation failure is eligible for structured repair testing.","does_not_license":"permission to change the representation until the result looks favorable."},
+    {"condition":"error_driven_refinement lowers dynamic_violation_rate_after_refinement, retains >=0.80 capability, and retains all previously verified invariants within the registered tolerance.","licenses":"bounded evidence for verifier-guided representation repair on the registered workload.","does_not_license":"general representation self-improvement, asymptotic scaling, or universal LLM repair."},
+    {"condition":"refinement lowers old counterexamples but introduces new violations or loses verified invariants.","licenses":"evidence of representation repair tradeoff/failure under the registered regime; the repaired version is not admitted as persistent verified structure.","does_not_license":"net representation improvement."},
+    {"condition":"no refinement arm reduces the primary endpoint while passing capability and no-regression gates.","licenses":"the registered repair process does not solve the representation failure.","does_not_license":"impossibility of representation refinement."}
+  ],
+  "interpretation_order":["proposal and verifier provenance","initial representation validity","fixed counterexample/validation split integrity","no-regression invariants","counterexample resolution","new violations","final dynamic validity","capability","refinement cost","scope limits"],
+  "sections": {
+    "refinement_protocol": {
+      "cycles":3,
+      "generator_inputs":["current representation feature definitions","current calibration anchors","structured verifier counterexamples","task-level failure summary"],
+      "forbidden_inputs":["hidden target identity","verifier-only future rows not present in the counterexample","oracle behavioral representation","post-refinement validation outcomes"],
+      "proposal_freeze":"Each proposed version is frozen before its own validation run. A validation result cannot modify the proposal that produced it."
+    },
+    "no_regression": {
+      "invariant_types":["point anchors","behavioral anchors","previously validated dynamic cases"],
+      "admission":"A repaired representation is persistent/verified only if all registered invariants remain satisfied within tolerance.",
+      "replacement":"Changing an invariant definition requires a new experiment identifier rather than an outcome-dependent edit."
+    },
+    "data_splits": {
+      "counterexamples":"fixed and representation-independent",
+      "repair_validation":"fixed cases distinct from counterexample-driving cases",
+      "final_test":"hidden from refinement and representation repair",
+      "target_disjointness":"train/evaluation structures and complete truth tables are independently split"
+    },
+    "research_lineage": {
+      "prior_art":[
+        "Abstraction Agent, arXiv:2609.04303 — semantic feature synthesis with downstream solver evaluation and proposed solver-in-loop refinement",
+        "LLMs as Feature Engineers for Text-and-Tabular Prediction, arXiv:2609.21894 — separate proposal/extraction loop driven by explicit downstream errors",
+        "VERDI, arXiv:2608.09537 — counterexample/contradiction-guided diagnostic evolution and target-side validation",
+        "RefineICL, arXiv:2609.27679 — support-driven in-situ representation refinement without parameter updates",
+        "LOTUS, arXiv:2608.15509 — behavioral/bisimulation constraints for task representations"
+      ],
+      "not_inherited":[
+        "none of these establish verifier-guided persistent representation repair in TAC-OSM",
+        "none establish no-regression under continual representation updates",
+        "none establish selective operator execution after representation repair"
+      ]
+    },
+    "nonclaims":[
+      "no asymptotic scaling claim",
+      "no claim that every verifier counterexample has a representational fix",
+      "no claim that LLM repair is intrinsically superior to non-LLM optimization",
+      "no claim that representation drift toward a lower dynamic-violation rate is globally beneficial",
+      "no claim that repaired representations replace underlying evidence"
+    ]
+  },
+  "amendments":[]
+}
