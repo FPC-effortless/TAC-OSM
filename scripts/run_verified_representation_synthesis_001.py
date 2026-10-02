@@ -320,11 +320,17 @@ class Proposal:
                     )
 
     def require_confirmatory(self):
+        prov = self.raw["provenance"]
         if (
             self.mode != "scored"
             or self.raw["proposer"].lower() == "deterministic-fixture"
+            or prov.get("generation_mode") != "zero_shot_external"
+            or prov.get("evidence_status") != "confirmatory_candidate"
         ):
-            raise ProposalError("only an external frozen scored proposal is confirmatory")
+            raise ProposalError(
+                "confirmatory VRS requires an external zero-shot frozen proposal "
+                "with explicit candidate-evidence provenance"
+            )
 
     def vec(self, s):
         if self.mode == "scored":
