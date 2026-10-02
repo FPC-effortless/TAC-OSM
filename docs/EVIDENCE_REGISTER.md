@@ -225,3 +225,17 @@ checked by running rather than by reading:
 The evidence therefore moves the immediate blocker from "can the integrated chain
 be trained?" to "can a trainable persistent-state address space be made coherent
 between write and read?" The next experiment must test that interface directly.
+
+
+---
+
+## Integrated E2E generator audit — invalidation
+
+| Evidence | Layer | Type | Disposition | Reason |
+|---|---|---|---|---|
+| E2E-001 measured q2=0.5200 and controls | L3 | negative/localization | **VOID** | shared generator ignored the query entity argument and made q1 and q2 target the same entity, violating the registered temporal protocol |
+| E2E-002 address diagnosis run 37067955696 | L3 | pre-confirmatory | **VOID / no scientific result** | inherited the same malformed generator; runner failed before artifact creation |
+| E2E-001 artifact 11251182171 | provenance only | historical artifact | retained but non-evidentiary | historical reproducibility record only; no number may be used for tuning or baseline selection |
+
+The corrected experiment must independently generate q1 and q2 and assert
+that their entity identities differ before any measurement is reported.
