@@ -1,0 +1,52 @@
+name: Research PLM integrated multimodal end-to-end 001
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - research/plm-integrated-e2e-001
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --quiet -e . pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Unit tests
+        run: python -m pytest tests/test_integrated_e2e.py -q
+
+  confirmatory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --quiet -e . pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Full test suite
+        run: python -m pytest tests/ -q
+      - name: Run preregistered benchmark
+        run: python scripts/run_integrated_e2e_001.py
+      - name: Upload scientific artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-INTEGRATED-E2E-001
+          path: artifacts/TACOSM-PLM-INTEGRATED-E2E-001.json
+          if-no-files-found: error
