@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
-  "version": 3,
+  "version": 4,
   "status": "registered",
   "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute a learned operator choice, verify the post-action outcome, and remain capable on held-out modality/operator/query compositions?",
   "primary_endpoint": {
@@ -34,7 +34,7 @@
     "batch_size": 96,
     "hidden_dim": 40,
     "entity_count": 16,
-    "latent_bits": 8,
+    "latent_bits": 12,
     "observation_entities_per_episode": 3,
     "memory_slots": 16,
     "query_count": 2,
@@ -42,48 +42,68 @@
       [
         "xor",
         0,
-        1
+        4
       ],
       [
         "xor",
-        2,
-        3
+        5,
+        8
       ],
       [
         "and",
-        4,
-        5
-      ],
-      [
-        "and",
-        6,
-        7
-      ],
-      [
-        "or",
-        0,
-        7
-      ],
-      [
-        "or",
         1,
+        9
+      ],
+      [
+        "and",
+        2,
         6
       ],
       [
-        "xnor",
-        2,
-        5
+        "or",
+        7,
+        10
+      ],
+      [
+        "or",
+        3,
+        11
       ],
       [
         "xnor",
-        3,
-        4
+        4,
+        9
+      ],
+      [
+        "xnor",
+        6,
+        11
       ]
     ],
     "observation_noise": 0.03,
     "optimizer": "AdamW",
     "learning_rate": 0.002,
-    "weight_decay": 0.0001
+    "weight_decay": 0.0001,
+    "complementary_modalities": {
+      "text_bits": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "image_bits": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "audio_bits": [
+        8,
+        9,
+        10,
+        11
+      ]
+    }
   },
   "information_flow": {
     "pre_action": "text,image,audio -> encoders -> shared representation -> persistent write -> query-conditioned read -> operator selection -> action",
@@ -128,6 +148,17 @@
       "reason": "Remove a registered query-noise parameter that is not implemented by the benchmark generator.",
       "changes": [
         "remove protocol.query_noise; preserve observation_noise=0.03"
+      ]
+    },
+    {
+      "id": "A3",
+      "timing": "pre-measurement",
+      "reason": "Strengthen multimodal identifiability and close two benchmark leakage/shortcut paths before confirmatory execution.",
+      "changes": [
+        "change latent state from 8 to 12 bits",
+        "assign bits 0-3 to text, 4-7 to image, and 8-11 to audio so no single modality contains the full payload",
+        "restrict training/evaluation index pairs to canonical i<j because Boolean operators are commutative",
+        "make q1 and q2 target different observed entities so q1 outcome cannot directly supply q2's target state"
       ]
     }
   ]
