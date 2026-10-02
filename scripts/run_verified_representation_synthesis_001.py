@@ -259,12 +259,18 @@ def run(proposal_path, smoke=False):
             raise ProposalError("scored query coverage is not exactly the frozen evaluation universe")
     if not smoke: p.require_confirmatory()
     anchor_checks=0
-    by_id={s.id:s for s in universe_states}
+    calibration_by_id={s.id:s for s in CALIBRATION_STATES}
     for idx,f in enumerate(p.raw["features"]):
+        levels={a.get("name"):float(a.get("value")) for a in f.get("anchors",[])}
+        if set(levels) != set(ANCHOR_LEVELS):
+            raise ProposalError("each feature must provide low/mid/high calibration anchors")
+        for name, expected in ANCHOR_LEVELS.items():
+            if abs(levels[name]-expected)>1e-6:
+                raise ProposalError(f"anchor {name} must have value {expected}")
         for a in f.get("anchors",[]):
-            s=by_id.get(str(a["state_id"]))
+            s=calibration_by_id.get(str(a["state_id"]))
             if s is None or abs(p.vec(s)[idx]-float(a["value"])) > 1e-6:
-                raise ProposalError(f"anchor mismatch: {a['state_id']}")
+                raise ProposalError(f"anchor mismatch or non-calibration state: {a['state_id']}")
             anchor_checks += 1
     if not anchor_checks: raise ProposalError("no calibration anchors")
     out={"experiment_id":CONTRACT,"status":"smoke" if smoke else "measured",
