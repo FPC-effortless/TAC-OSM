@@ -451,10 +451,15 @@ def evaluate(model, rows, memory, include_memory=True, normalizers=None):
                     y.view(-1),
                 )
             )
-            chance = 1.0 / VOCAB
-            normalized = (accuracy - chance) / (1.0 - chance)
+            baseline_accuracy = float((normalizers or {}).get(modality, 1.0 / VOCAB))
+            normalized = (
+                (accuracy - baseline_accuracy) / (1.0 - baseline_accuracy)
+                if baseline_accuracy < 1.0
+                else 0.0
+            )
             metrics[modality] = {
                 "token_accuracy": accuracy,
+                "baseline_accuracy_train_only": baseline_accuracy,
                 "normalized_score": normalized,
                 "loss": loss,
             }
