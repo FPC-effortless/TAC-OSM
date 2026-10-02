@@ -588,16 +588,19 @@ def train_one(seed, disable, steps, batch_size, shared_transition=True):
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
 
-        # The target observation becomes available only after the prediction
-        # above and is committed only if the fixed verifier accepts it.
+        # Atomic temporal boundary: all modality predictions at this step use
+        # the same pre-step persistent state. Future targets are committed only
+        # after every modality has been predicted and verified.
         with torch.no_grad():
+            pending_writes = []
+            memory_before_batch = memory.tensors()
             for modality, (x, y, action) in data.items():
                 z = model.encode(modality, x)
                 z_target = model.encode(modality, y)
                 predicted = model.predict(
                     z,
                     action,
-                    memory.tensors(),
+                    memory_before_batch,
                     modality,
                 )
                 for i in range(z.shape[0]):
@@ -605,12 +608,17 @@ def train_one(seed, disable, steps, batch_size, shared_transition=True):
                         ((predicted[i] - z_target[i]) ** 2).mean()
                     )
                     verified = latent_mse <= VERIFY_LATENT_MSE
-                    memory.propose_after_verification(
-                        z[i],
-                        int(action[i]),
-                        z_target[i],
-                        verified,
+                    pending_writes.append(
+                        (z[i], int(action[i]), z_target[i], verified)
                     )
+
+            for z_i, action_i, z_target_i, verified_i in pending_writes:
+                memory.propose_after_verification(
+                    z_i,
+                    action_i,
+                    z_target_i,
+                    verified_i,
+                )
 
     collapse = anti_collapse_report(model, train_rows)
     frozen_hash = checkpoint_hash(model)
