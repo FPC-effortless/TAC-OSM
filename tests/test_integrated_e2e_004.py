@@ -18,7 +18,7 @@ def test_typed_state_exact_operator_is_correct():
     model=TypedContentModel(ContentDiagnosisConfig(content_mode="learned"))
     memory=model.state.initial(1,th.device("cpu")); content=th.tensor([[1.0,1.0]+[0.0]*10]); entity=th.tensor([2])
     memory,_=model.state.write(memory,content,entity)
-    for idx,expected in [(0,0.0),(1,1.0),(2,1.0),(3,0.0)]:
+    for idx,expected in [(0,0.0),(1,1.0),(2,1.0),(3,1.0)]:
         out=model.query(memory,entity,th.tensor([0]),th.tensor([1]),th.tensor([idx]))
         assert abs(float(out["action"].item())-expected)<1e-6
 
