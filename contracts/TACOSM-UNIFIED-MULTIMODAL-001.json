@@ -1,28 +1,89 @@
 {
-  "experiment_id":"TACOSM-UNIFIED-MULTIMODAL-001",
-  "title":"Unified Persistent Structural World Model: language, image and audio predictive capability",
-  "status":"pre_registered",
-  "question":"Can one shared persistent structural predictive substrate model language, image and audio observations while preserving explicit structure discovery, addressing, proposal, routing, planning, verification and verified persistence?",
-  "hypothesis":"A shared predictive structural latent with modality-specific observation/decoding adapters can learn held-out next-observation structure across language, image and audio. Persistence, predictive transition learning, and cross-modal alignment are causal components to be localized by ablation.",
-  "pilot_policy":"Any experiment executed before this contract is committed is implementation-only and excluded from confirmatory inference; it may not set thresholds, select models, or select test conditions.",
-  "modalities":["language","image","audio"],
-  "seeds":[0,1,2,3,4],
-  "train_world_seed":17001,
-  "validation_world_seed":17002,
-  "test_world_seed":17003,
-  "split_rule":"semantic-factor holdout using disjoint residue classes; no example-level overlap",
-  "model":{"latent":32,"slots":4,"slot_dim":8,"operators":4,"proposal_k":2,"route_k":1,"planning_depth":2},
-  "training":{"steps":420,"batch_size":18,"optimizer":"AdamW","learning_rate":0.002,"weight_decay":0.0001,"gradient_clip":1.0},
-  "primary_endpoints":{"language":"heldout_token_accuracy","image":"heldout_normalized_prediction_score","audio":"heldout_normalized_prediction_score","all":"all_modalities_individually_pass"},
-  "secondary_endpoints":["goal_conditioned_operator_selection_accuracy","proposal_recall_at_2","latent_prediction_error","cross_modal_pair_separation","verified_write_rate","memory_occupancy","operator_library_size"],
-  "ablations":[
-    {"name":"full","disable":[]},
-    {"name":"no_persistence","disable":["persistence"]},
-    {"name":"no_predictive_transition","disable":["prediction"]},
-    {"name":"no_cross_modal_alignment","disable":["alignment"]},
-    {"name":"no_structure_discovery","disable":["structure"]}
+  "experiment_id": "TACOSM-UNIFIED-MULTIMODAL-001",
+  "title": "Unified Persistent Structural World Model: language, image and audio predictive capability",
+  "status": "pre_registered",
+  "question": "Can one shared persistent structural predictive substrate model language, image and audio observations while preserving explicit structure discovery, addressing, proposal, routing, planning, verification and verified persistence?",
+  "hypothesis": "A shared predictive structural latent with modality-specific observation/decoding adapters can learn held-out next-observation structure across language, image and audio. Persistence, predictive transition learning, and cross-modal alignment are causal components to be localized by ablation.",
+  "pilot_policy": "Any experiment executed before this contract is committed is implementation-only and excluded from confirmatory inference; it may not set thresholds, select models, or select test conditions.",
+  "modalities": [
+    "language",
+    "image",
+    "audio"
   ],
-  "leakage_controls":[
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "train_world_seed": 17001,
+  "validation_world_seed": 17002,
+  "test_world_seed": 17003,
+  "split_rule": "semantic-factor holdout using disjoint residue classes; no example-level overlap",
+  "model": {
+    "latent": 32,
+    "slots": 4,
+    "slot_dim": 8,
+    "operators": 4,
+    "proposal_k": 2,
+    "route_k": 1,
+    "planning_depth": 2
+  },
+  "training": {
+    "steps": 420,
+    "batch_size": 18,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "gradient_clip": 1
+  },
+  "primary_endpoints": {
+    "language": "heldout_token_accuracy",
+    "image": "heldout_normalized_prediction_score",
+    "audio": "heldout_normalized_prediction_score",
+    "all": "all_modalities_individually_pass"
+  },
+  "secondary_endpoints": [
+    "goal_conditioned_operator_selection_accuracy",
+    "proposal_recall_at_2",
+    "latent_prediction_error",
+    "cross_modal_pair_separation",
+    "verified_write_rate",
+    "memory_occupancy",
+    "operator_library_size"
+  ],
+  "ablations": [
+    {
+      "name": "full",
+      "disable": []
+    },
+    {
+      "name": "no_persistence",
+      "disable": [
+        "persistence"
+      ]
+    },
+    {
+      "name": "no_predictive_transition",
+      "disable": [
+        "prediction"
+      ]
+    },
+    {
+      "name": "no_cross_modal_alignment",
+      "disable": [
+        "alignment"
+      ]
+    },
+    {
+      "name": "no_structure_discovery",
+      "disable": [
+        "structure"
+      ]
+    }
+  ],
+  "leakage_controls": [
     "semantic factor IDs are never model inputs",
     "future target observations are never passed to the current encoder",
     "goal-conditioned routing never receives the hidden action ID",
@@ -34,12 +95,124 @@
     "train, validation and test world seeds are fixed before measurement",
     "all arms use identical generated populations and deterministic preprocessing"
   ],
-  "preconditions":["contract validation","repository tests","representability gate","identifiability gate","anti-collapse check","split disjointness","deterministic replay","no hidden-truth access"],
-  "decision_rule":[
+  "preconditions": [
+    "contract validation",
+    "repository tests",
+    "representability gate",
+    "identifiability gate",
+    "anti-collapse check",
+    "split disjointness",
+    "deterministic replay",
+    "no hidden-truth access"
+  ],
+  "decision_rule": [
     "A modality is counted as modeled only if its primary endpoint exceeds the untrained/random control by the preregistered materiality threshold.",
     "The all-modality capability claim is valid only if language, image and audio independently pass.",
     "Ablation differences are mechanism-localization results only; a negative ablation cannot refute the architecture.",
     "No natural-world or general-intelligence claim is promoted from this synthetic benchmark."
   ],
-  "materiality":{"language_accuracy_delta":0.05,"image_normalized_score_delta":0.03,"audio_normalized_score_delta":0.03,"route_accuracy_delta":0.10,"proposal_recall_delta":0.10,"cross_modal_separation_delta":0.10}
+  "materiality": {
+    "language_accuracy_delta": 0.05,
+    "image_normalized_score_delta": 0.03,
+    "audio_normalized_score_delta": 0.03,
+    "route_accuracy_delta": 0.1,
+    "proposal_recall_delta": 0.1,
+    "cross_modal_separation_delta": 0.1
+  },
+  "arms": [
+    {
+      "name": "full",
+      "intervention": "all registered unified components enabled"
+    },
+    {
+      "name": "no_persistence",
+      "intervention": "disable persistent experience/knowledge contribution during inference and learning"
+    },
+    {
+      "name": "no_predictive_transition",
+      "intervention": "disable action-conditioned latent transition prediction"
+    },
+    {
+      "name": "no_cross_modal_alignment",
+      "intervention": "disable paired cross-modal latent alignment"
+    },
+    {
+      "name": "no_structure_discovery",
+      "intervention": "replace learned structure decomposition with identity latent"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "all_modalities_individually_pass",
+      "role": "primary — every registered modality exceeds its frozen untrained control by its materiality threshold",
+      "primary": true
+    },
+    {
+      "name": "language_heldout_token_accuracy",
+      "role": "secondary — held-out language predictive modeling"
+    },
+    {
+      "name": "image_heldout_normalized_prediction_score",
+      "role": "secondary — held-out image predictive modeling"
+    },
+    {
+      "name": "audio_heldout_normalized_prediction_score",
+      "role": "secondary — held-out audio predictive modeling"
+    },
+    {
+      "name": "goal_conditioned_operator_selection_accuracy",
+      "role": "secondary — action-conditioned computation selection"
+    },
+    {
+      "name": "proposal_recall_at_2",
+      "role": "secondary — target survives cheap proposal stage"
+    },
+    {
+      "name": "latent_prediction_error",
+      "role": "secondary — next-state predictive error"
+    },
+    {
+      "name": "cross_modal_pair_separation",
+      "role": "secondary — paired views closer than shuffled views"
+    },
+    {
+      "name": "verified_write_rate",
+      "role": "secondary — post-verification memory commitment"
+    },
+    {
+      "name": "memory_occupancy",
+      "role": "audit — retained knowledge size"
+    },
+    {
+      "name": "operator_library_size",
+      "role": "audit — durable executable structure count"
+    }
+  ],
+  "interpretation_order": [
+    "representability_gate",
+    "identifiability_gate",
+    "split_integrity",
+    "anti_collapse",
+    "language",
+    "image",
+    "audio",
+    "cross_modal_alignment",
+    "proposal_coverage",
+    "conditional_route",
+    "verified_persistence"
+  ],
+  "h_levels": [
+    96
+  ],
+  "steps": 420,
+  "eval_steps": 48,
+  "amendments": [
+    {
+      "id": "A1",
+      "before_run": true,
+      "reason": "The initial contract draft used modality-specific primary endpoint fields and omitted the repository ExperimentContract schema's required arms/endpoints/interpretation_order/h_levels/steps/eval_steps fields. The runner never produced a confirmatory artifact because repository contract validation failed first.",
+      "changes": "Added schema-compliant arms/endpoints/interpretation_order/h_levels/steps/eval_steps while preserving the scientific question, modalities, seeds, split rule, materiality thresholds and leakage controls.",
+      "no_scientific_result_under_previous_version": true
+    }
+  ]
 }
