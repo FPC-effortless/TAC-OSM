@@ -46,3 +46,9 @@ def test_scored_proposal_requires_query_coverage():
         pass
     else:
         raise AssertionError("scored proposal must require scored query coverage")
+
+def test_representation_distance_is_dimension_normalized():
+    mod=load_runner()
+    a=(0.0,)*5
+    b=(0.35,)*5
+    assert mod.representation_distance(a,b) == 0.35
