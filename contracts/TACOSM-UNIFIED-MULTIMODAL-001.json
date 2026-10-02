@@ -20,7 +20,7 @@
   "train_world_seed": 17001,
   "validation_world_seed": 17002,
   "test_world_seed": 17003,
-  "split_rule": "semantic-factor holdout using disjoint residue classes; no example-level overlap",
+  "split_rule": "transition-invariant domain holdout on factor c: train c in {0,1}, validation c={2}, test c={3}; actions never modify c; no source or future-target domain crosses splits",
   "model": {
     "latent": 32,
     "slots": 4,
@@ -276,6 +276,16 @@
       "rationale": "Without this correction, persistent-learning evidence would be contaminated by unverified future-target injection.",
       "discovered": "Internal causal audit before a clean confirmatory run; no confirmatory artifact existed under the prior implementation.",
       "affected": "Training-time memory write path; no test split or threshold changed.",
+      "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A5",
+      "applies_to": "semantic train/validation/test split",
+      "old_definition": "Source examples were disjoint by a residue-class rule, but actions could change the residue and therefore allow training targets to enter the nominal validation/test semantic domain.",
+      "new_definition": "Train uses c={0,1}, validation c={2}, test c={3}; the action transition leaves c invariant, so both source states and future target states remain domain-disjoint across splits.",
+      "rationale": "Source-level disjointness is insufficient for a predictive model: a training future target can itself leak a held-out state domain. The corrected split closes the future-state leakage path without using test outcomes.",
+      "discovered": "Pre-confirmatory causal split audit on the benchmark generator; no confirmatory result existed.",
+      "affected": "Synthetic data generator and split audit only; seeds, model size, optimization budget, endpoint thresholds and decision rules are unchanged.",
       "no_result_under_previous_version": "true"
     }
   ],
