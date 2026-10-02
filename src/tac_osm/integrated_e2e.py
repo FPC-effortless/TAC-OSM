@@ -264,15 +264,19 @@ class IntegratedE2EModel(nn.Module):
     ) -> tuple[Tensor, Tensor]:
         feedback = outcome.float().view(-1, 1)
         verifier_input = torch.cat(
-            [query_result["read"], query_result["action"].view(-1, 1), feedback],
+            [query_result["read"], query_result["action"].view(-1, 1)],
             dim=-1,
         )
         verifier_logit = self.verifier(verifier_input)
+        verifier_prob = verifier_logit.sigmoid()
         outcome_embedding = self.outcome_project(feedback)
-        gate = torch.sigmoid(
+        # Environment feedback is post-action evidence. Only a successful
+        # outcome may create/update authoritative state; the learned verifier
+        # controls the strength of that valid write.
+        gate = feedback * torch.sigmoid(
             self.write_gate(
                 torch.cat(
-                    [query_result["read"], outcome_embedding, verifier_logit.sigmoid()],
+                    [query_result["read"], outcome_embedding, verifier_prob],
                     dim=-1,
                 )
             )
@@ -283,9 +287,7 @@ class IntegratedE2EModel(nn.Module):
             strength=gate,
             target_entity=query_result["entity"],
         )
-        verifier_target = (
-            query_result["logits"].argmax(-1) == outcome.long()
-        ).float().view(-1, 1)
+        verifier_target = feedback
         return memory, torch.cat([verifier_logit, verifier_target], dim=-1)
 
     def forward_episode(
