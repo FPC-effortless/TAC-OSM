@@ -717,6 +717,7 @@ def main():
     ]
 
     control = []
+    train_baselines = target_normalizers(World(TRAIN_WORLD_SEED, 96, "train").make())
     for seed in seeds:
         seed_all(seed)
         rows = World(TEST_WORLD_SEED, 48, "test").make()
@@ -724,16 +725,18 @@ def main():
         control.append(
             {
                 "seed": seed,
-                "test": evaluate(untrained, rows, DurableMemory(max_items=1), include_memory=False),
+                "test": evaluate(
+                    untrained,
+                    rows,
+                    DurableMemory(max_items=1),
+                    include_memory=False,
+                    normalizers=train_baselines,
+                ),
             }
         )
 
     def modality_metric(row, modality):
-        return float(
-            row["test"][modality][
-                "token_accuracy" if modality == "language" else "normalized_score"
-            ]
-        )
+        return float(row["test"][modality]["normalized_score"])
 
     trained_full = [
         r for r in results if r["ablation"] == ["none"]
