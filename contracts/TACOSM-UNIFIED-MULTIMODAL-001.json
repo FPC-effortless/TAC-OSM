@@ -307,6 +307,16 @@
       "discovered": "Pre-confirmatory measurement-method audit; no confirmatory result existed.",
       "affected": "Metric normalization and control calculation only; model architecture, data split, seeds, thresholds and decision rule remain unchanged.",
       "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A8",
+      "applies_to": "multimodal training memory boundary",
+      "old_definition": "Verified future latents were committed during the modality loop, so later modalities in the same training batch could read those same-step future targets.",
+      "new_definition": "All modalities use a frozen pre-step memory snapshot for prediction; all post-prediction verification decisions are collected first; verified writes commit only after the complete batch.",
+      "rationale": "A shared persistent substrate must not receive a future observation from one simultaneous modality before another modality has made its own current-step prediction.",
+      "discovered": "Pre-confirmatory cross-modal causal audit; no confirmatory result existed.",
+      "affected": "Training memory timing only; seeds, splits, architecture, thresholds and metric definitions remain unchanged.",
+      "no_result_under_previous_version": "true"
     }
   ],
   "held_constant": [
