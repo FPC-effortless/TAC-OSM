@@ -15,11 +15,11 @@ def test_end_to_end_backward_reaches_all_chain_surfaces():
     image = th.rand(steps, batch, 1, 16, 16)
     audio = th.randn(steps, batch, 1, 96)
     entities = th.randint(0, 16, (steps, batch))
-    payloads = th.randint(0, 2, (steps, batch, 8)).float()
+    payloads = th.randint(0, 2, (steps, batch, 12)).float()
     q = (
         th.randint(0, 16, (batch,)),
-        th.randint(0, 8, (batch,)),
-        th.randint(0, 8, (batch,)),
+        th.randint(0, 12, (batch,)),
+        th.randint(0, 12, (batch,)),
         th.randint(0, 4, (batch,)),
         th.randint(0, 2, (batch,)),
     )
