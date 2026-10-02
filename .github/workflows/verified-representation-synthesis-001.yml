@@ -35,7 +35,8 @@ jobs:
       - name: Repository suite
         run: python -m pytest tests/ -q
       - name: Verify VRS contract
-        run: python - <<'PY'
+        run: |
+          python - <<'PY'
           import json
           from tac_osm.contract import load_contract
           path = "contracts/TACOSM-VRS-DYNAMIC-REPRESENTATION-001.json"
@@ -46,6 +47,7 @@ jobs:
           assert len(contract.amendments) == 1
           assert contract.amendments[0].id == "A1"
           assert contract.experiment_id == "TACOSM-VRS-DYNAMIC-REPRESENTATION-001"
+          PY
       - name: Representation tests
         run: python -m pytest tests/test_representation.py -q
 
