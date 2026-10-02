@@ -121,6 +121,27 @@
   },
   "status": "pre-registered",
   "layer": "L3",
-  "version": 1,
-  "amendments": []
+  "version": 2,
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "premeasurement regression-test source",
+      "old_definition": "the E2E-004 regression test fixture contained a missing closing parenthesis in the synthetic query tuple",
+      "new_definition": "the regression test fixture is syntactically valid and covers temporal/held-out validity, exact typed execution, and representation gradient flow",
+      "rationale": "The focused gate must be able to collect the scientific test module before any measurement.",
+      "discovered": "Premeasurement static audit after initial E2E-004 implementation.",
+      "affected": "test syntax only; no scientific parameter or decision rule changed",
+      "no_result_under_previous_version": "No E2E-004 measurement existed under the syntax-invalid test."
+    },
+    {
+      "id": "A2",
+      "applies_to": "result artifact serialization",
+      "old_definition": "the runner and aggregator generated literal unterminated newline strings in their JSON write calls",
+      "new_definition": "the runner and aggregator serialize JSON with a valid escaped newline sequence",
+      "rationale": "Artifact production is part of the measurement contract; malformed serialization would prevent an inspectable scientific record.",
+      "discovered": "E2E-004 focused/full repository gate.",
+      "affected": "artifact serialization only; no scientific parameter or decision rule changed",
+      "no_result_under_previous_version": "No E2E-004 scientific arm executed under the malformed serializer."
+    }
+  ]
 }
