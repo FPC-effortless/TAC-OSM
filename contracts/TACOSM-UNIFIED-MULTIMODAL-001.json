@@ -317,6 +317,16 @@
       "discovered": "Pre-confirmatory cross-modal causal audit; no confirmatory result existed.",
       "affected": "Training memory timing only; seeds, splits, architecture, thresholds and metric definitions remain unchanged.",
       "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A9",
+      "applies_to": "confirmatory execution environment",
+      "old_definition": "The numerical runner imported tac_osm without adding the source tree to its Python module path; the authorized run failed before measurement.",
+      "new_definition": "The runner explicitly adds repository src/ to sys.path and the confirmatory workflow sets PYTHONPATH=src.",
+      "rationale": "The failure occurred before model construction and produced no scientific artifact. Making the package boundary explicit makes the registered runner reproducible from a clean checkout.",
+      "discovered": "Confirmatory run 37019001079 import failure.",
+      "affected": "Execution environment only; model, data, metrics, seeds and decision rules unchanged.",
+      "no_result_under_previous_version": "true"
     }
   ],
   "held_constant": [
