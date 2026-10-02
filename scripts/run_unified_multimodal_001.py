@@ -775,13 +775,11 @@ def main():
             r for r in results
             if r["ablation"] == (list(arm) if arm else ["none"])
         ]
-        grouped[name] = {
-            "n": len(rr),
-            modality: float(
+        grouped[name] = {"n": len(rr)}
+        for modality in MODALITIES:
+            grouped[name][modality] = float(
                 np.mean([modality_metric(r, modality) for r in rr])
             )
-            for modality in MODALITIES
-        }
 
     payload = {
         "protocol": {
