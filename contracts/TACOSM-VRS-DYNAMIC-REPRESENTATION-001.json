@@ -1,0 +1,297 @@
+{
+  "experiment_id": "TACOSM-VRS-DYNAMIC-REPRESENTATION-001",
+  "version": "0.2-preregistered",
+  "status": "pre-registered",
+  "base_commit": "eadc884341b7ca42d52b2965eddfabb428eb3621",
+  "title": "Verified representation synthesis: does a calibrated semantic geometry preserve future-relevant computation while enabling selective execution?",
+  "question": "When a representation is synthesized from a domain description, calibrated with explicit anchors, and frozen before outcome evaluation, does it preserve the state distinctions needed for future computation while supporting capability-constrained selective execution?",
+  "hypothesis": "A semantically synthesized and calibrated multidimensional representation will preserve more task-relevant future behavior than a scalar baseline at matched abstraction budgets, and any representation that appears locally compact but fails dynamic equivalence will be rejected by the registered downstream verifier rather than promoted from semantic plausibility alone.",
+  "arms": [
+    {
+      "name": "raw_state",
+      "intervention": "retain the complete router-visible persistent state representation without abstraction; capability reference",
+      "acts_on": "state representation"
+    },
+    {
+      "name": "scalar_baseline",
+      "intervention": "compress each state to the registered scalar relevance/value coordinate",
+      "acts_on": "state representation"
+    },
+    {
+      "name": "semantic_geometry",
+      "intervention": "use a frozen multidimensional representation synthesized from the domain description, with explicit 0/0.5/1 calibration anchors and training-only numerical filtering",
+      "acts_on": "state representation"
+    },
+    {
+      "name": "oracle_behavioral",
+      "intervention": "diagnostic-only representation derived from exhaustive future action/outcome behavior; not eligible for the primary capability-cost endpoint",
+      "acts_on": "state representation"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "capability_constrained_execution_work_fraction",
+      "role": "primary — minimum measured execution-work fraction among registered abstractions that retain >=0.80 capability relative to raw-state reference",
+      "primary": true,
+      "description": "At each registered population level, identify the lowest measured downstream exact-task evaluation work fraction among registered abstraction budgets whose exact-task success is at least 0.80 of the raw-state reference."
+    },
+    {
+      "name": "dynamic_equivalence_violation",
+      "role": "secondary — rate at which states judged equivalent by the representation exhibit materially different future behavior under registered actions",
+      "primary": false,
+      "description": "Conditional violation rate over representation-near state pairs under one- and multi-step action-conditioned transition checks."
+    },
+    {
+      "name": "future_capability_retention",
+      "role": "secondary — exact task capability after abstraction relative to raw-state reference",
+      "primary": false
+    },
+    {
+      "name": "representation_anchor_consistency",
+      "role": "secondary — stability of calibrated feature semantics across batches and temporal checkpoints",
+      "primary": false
+    },
+    {
+      "name": "representation_effective_rank",
+      "role": "secondary — effective rank of the representation and concentration diagnostics",
+      "primary": false
+    },
+    {
+      "name": "state_routing_work",
+      "role": "secondary — actual addressing/routing operations before structural execution",
+      "primary": false
+    },
+    {
+      "name": "operator_execution_work",
+      "role": "secondary — actual structural execution work after state selection",
+      "primary": false
+    },
+    {
+      "name": "amortized_representation_build_cost",
+      "role": "secondary — one-time semantic representation construction cost amortized over declared query count",
+      "primary": false
+    },
+    {
+      "name": "representation_build_break_even_queries",
+      "role": "secondary — query count required for synthesized-representation construction cost to break even against the matched runtime control",
+      "primary": false,
+      "description": "Derived only when semantic representation construction reduces steady-state cost; reports the declared amortization horizon needed to recover one-time construction cost."
+    }
+  ],
+  "h_levels": [
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 1200,
+  "eval_steps": 64,
+  "k_levels": [
+    4,
+    8,
+    16,
+    32
+  ],
+  "held_constant": [
+    "exact task generator, target-disjoint evaluation construction, verifier, exact executor, seeds, and capability definition",
+    "representation proposal is generated before confirmatory evaluation and then frozen; outcome data cannot modify the proposal",
+    "all non-oracle arms use the same downstream router capacity and optimizer budget where a learned router is used",
+    "calibration anchors are fixed before state scoring and reused across all batches",
+    "raw-state reference defines capability without representation compression and is not eligible as a selective-computation improvement claim",
+    "oracle_behavioral is diagnostic-only and cannot win the primary endpoint",
+    "actual structural execution work is counted from executed graph operations rather than proxy arithmetic",
+    "representation build cost and steady-state query cost are reported separately and the amortization horizon is declared",
+    "all train/evaluation exact structures, truth tables, and target identities are independently hashed and split before measurement",
+    "numeric constants are fixed before confirmatory measurement: near-pair distance threshold 0.35, dynamic outcome divergence tolerance 0, state-feature variance floor 1e-6, feature absolute-correlation filter 0.98, exact-task evaluation work 12 units per executed candidate"
+  ],
+  "decision_rule": [
+    {
+      "condition": "All Layer 0/1 integrity gates pass and the frozen semantic representation is deterministic under the declared proposal artifact.",
+      "licenses": "the representation is eligible for downstream testing.",
+      "does_not_license": "semantic correctness or dynamic validity."
+    },
+    {
+      "condition": "At a population level, semantic_geometry reaches >=0.80 capability retention and has lower actual execution-work fraction than the scalar_baseline under the same registered abstraction budget.",
+      "licenses": "bounded evidence that synthesized multidimensional representation improves capability-constrained selective computation on the registered workload.",
+      "does_not_license": "asymptotic scaling, general language intelligence, or superiority over all representation methods."
+    },
+    {
+      "condition": "semantic_geometry meets capability retention but fails the dynamic-equivalence gate beyond the registered tolerance.",
+      "licenses": "the representation is useful for the measured static task but dynamically unsafe under the registered transition test; it is not admitted as a persistent representation.",
+      "does_not_license": "a persistent-PLM representation claim."
+    },
+    {
+      "condition": "no registered semantic_geometry budget reaches 0.80 retention.",
+      "licenses": "the registered synthesized representation does not meet the bounded selective-computation criterion at that population.",
+      "does_not_license": "an impossibility claim about representation synthesis."
+    }
+  ],
+  "interpretation_order": [
+    "proposal artifact provenance and prompt/model freeze",
+    "Layer 0 inherited evidence and exclusions",
+    "Layer 1 representability/leakage/model-integrity gates",
+    "anchor calibration consistency",
+    "static representation geometry",
+    "dynamic equivalence under action-conditioned transitions",
+    "exact task capability",
+    "actual state-routing work",
+    "actual structural execution work",
+    "amortized representation construction cost",
+    "scope limits"
+  ],
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "dynamic_validity and cost accounting",
+      "old_definition": "Dynamic test pairs were described as near-neighbor state pairs selected under the frozen geometry; the registration did not explicitly require pair construction to precede representation scoring.",
+      "new_definition": "State-pair identities and action schedules are generated and hashed independently of the representation before any representation is scored; the representation only determines which fixed pairs satisfy the preregistered near-neighbor threshold. The contract also explicitly records representation-build break-even accounting.",
+      "rationale": "Methodological integrity review identified post-representation pair selection as a potential selection bias: a representation could avoid difficult pairs by changing which states count as neighbors. The amendment closes that pathway before measurement and adds explicit amortization accounting for the cost of semantic representation construction.",
+      "discovered": "2026-10-02 review of the preregistered VRS design, before any confirmatory measurement.",
+      "affected": "dynamic equivalence denominator, pair construction protocol, and cost reporting; no population, seed, capability threshold, representation arm, or outcome was measured under the previous definition.",
+      "no_result_under_previous_version": "No VRS measurement was run under the previous definition."
+    },
+    {
+      "id": "A2",
+      "applies_to": "dynamic-validity gate applicability",
+      "old_definition": "A dynamic-validation result was considered a pass whenever no recorded violations existed.",
+      "new_definition": "A dynamic-validation result is admissible only when at least one fixed representation-near pair and at least one transition are actually evaluated; zero applicable pairs is an instrument-invalid result, not a pass. Declared action-horizon lengths must also match exactly.",
+      "rationale": "Instrument review found that a representation could move every fixed test pair outside the near-neighbor threshold and thereby obtain a vacuous pass with zero dynamic evidence. The gate must distinguish 'no violations observed' from 'nothing was tested'.",
+      "discovered": "2026-10-02 validator implementation review, before any VRS confirmatory measurement.",
+      "affected": "only validation applicability and action-schedule integrity; no scientific population, seed, arm, endpoint threshold, or outcome was measured under the previous definition.",
+      "no_result_under_previous_version": "No VRS measurement was run under the previous definition."
+    },
+    {
+      "id": "A3",
+      "applies_to": "implementation baseline, proposal artifact boundary, numeric validation thresholds, and execution-work instrument",
+      "old_definition": "The contract left the exact master baseline, proposal scoring artifact contents, near-pair numeric threshold, dynamic outcome tolerance, representation-filter thresholds, and exact downstream work unit unspecified.",
+      "new_definition": "Confirmatory VRS uses master@eadc884341b7ca42d52b2965eddfabb428eb3621; the semantic proposal must be an external frozen scored artifact containing complete registered state/task coverage plus proposer/prompt/domain provenance; numeric constants are fixed at near-pair distance <=0.35, dynamic outcome divergence tolerance 0, variance floor 1e-6, correlation filter 0.98; downstream exact-task evaluation counts 12 work units per executed candidate.",
+      "rationale": "An implementation can otherwise choose these values after seeing data, creating researcher degrees of freedom that invalidate the registered primary endpoint.",
+      "discovered": "2026-10-02 implementation/protocol review, before confirmatory measurement.",
+      "affected": "only implementation specification and auditability; no VRS confirmatory outcome exists under the superseded definition.",
+      "no_result_under_previous_version": "No VRS confirmatory measurement was run before A3."
+    }
+  ],
+  "sections": {
+    "level_semantics": {
+      "h_levels": "The shared ExperimentContract field h_levels is used for persistent-state population M because the contract schema predates explicit M/E/H terminology. This semantic mapping is fixed for this experiment and is not a change to the scientific variable.",
+      "k_levels": "Registered abstraction/selection budgets K."
+    },
+    "scaling_axes": {
+      "persistent_state_population_M": [
+        64,
+        128,
+        256,
+        512
+      ],
+      "operator_population_E": [
+        4
+      ],
+      "history_delay_k": [
+        1,
+        4,
+        16,
+        32
+      ],
+      "note": "E is held fixed in this representation-validation phase. Joint M×E×H scaling is a later experiment and is not inferred here."
+    },
+    "proposal_protocol": {
+      "representation_family": "multidimensional semantic features proposed from a frozen natural-language domain description, then calibrated with explicit anchor states",
+      "proposer_role": "slow semantic representation synthesis; not runtime inference",
+      "proposal_inputs": "domain description and public representation task specification only",
+      "outcome_visibility": "none during proposal generation",
+      "scoring": "proposal features are applied consistently across all batches using the same anchors",
+      "numerical_postprocessing": "training-only variance/correlation filtering and fixed rescaling; no post-result feature selection",
+      "artifact_requirement": "proposal text, feature definitions, anchor definitions, proposer model identifier, prompt hash, generation timestamp, temperature/decoding settings, and full scored-feature artifact must be frozen before confirmatory evaluation",
+      "external_artifact": {
+        "required": true,
+        "mode": "scored",
+        "required_fields": [
+          "proposal_id",
+          "proposer",
+          "prompt_hash",
+          "domain_hash",
+          "state_universe_hash",
+          "task_universe_hash",
+          "features",
+          "provenance",
+          "scored_states",
+          "scored_queries"
+        ],
+        "complete_coverage_required": true,
+        "smoke_fixture_policy": "research/vrs-001/proposal_smoke.json is expression-based and may be used only for smoke tests; it is invalid for confirmatory evidence.",
+        "provenance_required": [
+          "proposer_model_identifier",
+          "prompt_hash",
+          "domain_description_hash",
+          "generation_timestamp",
+          "decoding_settings",
+          "outcome_visibility"
+        ],
+        "outcome_visibility_must_equal": "none"
+      }
+    },
+    "dynamic_validity": {
+      "near_pair_definition": "For the fixed pre-generated pair set, select the representation-near subset using a preregistered distance threshold after calibration. The denominator and pair identities are fixed before representation generation; no post-hoc pair construction is allowed.",
+      "one_step_test": "for each registered action a, compare successor representations and task-relevant outputs",
+      "multi_step_test": "repeat for horizon k in history_delay_k under the same action schedule where valid",
+      "failure_evidence": "counterexample trajectory is stored with the representation coordinates, action, successor states, and verifier outcome",
+      "principle": "static similarity does not license persistent equivalence unless future behavior is preserved",
+      "fixed_pair_construction": "State-pair evaluation sets are generated and hashed before any representation is scored. Pair membership is independent of all representation coordinates. The representation only determines which fixed pairs satisfy the registered near-neighbor threshold.",
+      "action_sampling": "Actions and multi-step schedules are fixed by the task generator before representation evaluation. Where the action space is finite and tractable, all relevant actions are evaluated; otherwise a representation-independent seeded action subset is fixed in the contract.",
+      "minimum_applicable_pairs": 1,
+      "minimum_applicable_transitions": 1,
+      "vacuous_pass": "Forbidden. If zero near pairs or zero transitions are evaluated, the test is instrument-inapplicable and cannot admit the representation.",
+      "near_pair_threshold": 0.35,
+      "behavior_tolerance": {
+        "type": "binary_outcome",
+        "maximum_divergence": 0
+      },
+      "comparison_rule": "For each fixed representation-near pair and each fixed action in the registered schedule, dynamic validity is violated when the exact future safety outcome differs between paired states. Successor-coordinate divergence is diagnostic only in VRS-001 because the frozen proposal artifact scores the fixed state universe, not arbitrary successors.",
+      "denominator": "checked_transitions over representation-near pairs from the fixed pair set",
+      "applicability_gate": "near_pairs >= 1 and checked_transitions >= 1; otherwise instrument-invalid"
+    },
+    "cost_model": {
+      "total": "C_rep_build + C_state_address + C_state_route + C_operator_select + C_exec + C_verify + C_write + C_IO",
+      "primary_runtime": "steady-state query cost excludes one-time representation construction only when amortization is separately reported",
+      "requirement": "no proxy term may be substituted for actual execution work in the primary endpoint",
+      "break_even": "Q_break_even is admissible only when proposal provenance explicitly declares build_cost_unit='execution_work_units'. Otherwise representation construction cost is reported but no break-even claim is computed.",
+      "exact_task_execution_work": "12 units per evaluated candidate",
+      "primary": "actual downstream exact-task evaluation work; state-routing work is reported separately"
+    },
+    "provenance": {
+      "prior_art": [
+        "Abstraction Agent, arXiv:2609.04303 — LLM-discovered calibrated continuous strategic features plus downstream solver verification",
+        "VERDI, arXiv:2608.09537 — retrieved experience remains a hypothesis until target-side validation; diagnostic fingerprints evolve under contradiction",
+        "Compositional Behavioral Semantics for State Abstraction in Reinforcement Learning, ICML 2026 / arXiv:2606.25357 — behavioral structures can be specified compositionally with soundness-oriented transfer conditions"
+      ],
+      "not_inherited": [
+        "Abstraction Agent does not establish dynamic equivalence under future transitions",
+        "Abstraction Agent does not establish persistent state evolution or selective operator execution",
+        "VERDI does not establish the representation used here or a universal transfer law",
+        "Behavioral-semantics theory does not validate an LLM-synthesized representation on this benchmark"
+      ]
+    },
+    "nonclaims": [
+      "no asymptotic complexity claim from finite population levels",
+      "no claim that Euclidean geometry is intrinsic to the environment",
+      "no claim that LLM semantic scoring is correct merely because parsing succeeds",
+      "no claim that representation compression is safe without dynamic verification",
+      "no claim that the semantic representation replaces exact state evidence",
+      "no dynamic-validity claim from representation-selected pairs; pair identities must be fixed independently of the representation"
+    ],
+    "confirmatory_implementation": {
+      "runner": "scripts/run_verified_representation_synthesis_001.py",
+      "proposal_source": "external frozen artifact supplied via --proposal",
+      "no_llm_runtime": true,
+      "proposal_freeze": "proposal artifact must be complete before the benchmark and its digest is included in the result",
+      "smoke_is_non_evidence": true
+    }
+  }
+}
