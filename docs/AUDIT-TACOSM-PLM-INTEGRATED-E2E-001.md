@@ -74,3 +74,23 @@ between-seed uncertainty. This phase does not authorize scaling-law claims.
 - no hardware or asymptotic efficiency result.
 
 No confirmatory result is contained in this audit.
+
+
+## Amendments recorded after initial audit
+
+**A1** paired evaluation controls and aligned the registered secondary metrics with
+the runner.
+
+**A2** removed an unused query-noise parameter rather than claiming it was active.
+
+**A3** replaced redundant modality copies with complementary 12-bit modality
+content, canonical unordered query pairs, and distinct q1/q2 target entities.
+
+**A4** registered the operator-prior baseline and deterministic seed-bootstrap
+uncertainty.
+
+**A5** made verifier feedback writes explicitly entity-addressed.
+
+**A6** corrected verifier semantics: it predicts environment success from
+pre-verification evidence; the observed outcome is the correctness target; only
+successful outcomes can modify authoritative state.
