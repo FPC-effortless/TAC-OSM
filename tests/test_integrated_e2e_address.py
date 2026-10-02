@@ -15,7 +15,7 @@ def test_explicit_state_paths_are_one_hot_and_entity_local():
     memory = th.zeros(2, 4, 8)
     z = th.ones(2, 8)
     entities = th.tensor([1, 3])
-    updated, probs = state.write(memory, z, entity=entities)
+    updated, probs = state.write(memory, z, target_entity=entities)
     assert th.allclose(probs[0], th.tensor([0., 1., 0., 0.]))
     assert th.allclose(probs[1], th.tensor([0., 0., 0., 1.]))
     read, attention = state.read(updated, th.zeros(2, 8), entity=entities)
