@@ -101,6 +101,20 @@ the adaptation is what is re-verified locally rather than cited.
 
 ---
 
+## Unified native-model research boundaries
+
+These rows are new research targets on branch `research/unified-native-model-v1`.
+They do not promote historical evidence and do not alter frozen results.
+
+| Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
+|---|---|---|---|---|---|---|
+| Representability and identifiability are separate prerequisites for learned structure | L1 | gate | successor REP-001 failure analysis | passing a representability witness does not prove learnability | paired constructive witness + observation-identifiability collision audit | execute the unified gate on every new task family |
+| Predictive/action-sufficient latent state is the target representation | L1 | mechanism | DeepMDP / predictive-state representation literature | external theoretical guarantees do not transfer automatically | future-state and action-conditioned held-out prediction plus causal perturbation | no unified measurement yet |
+| Proposal coverage and post-admission selection are separate causal stages | L1 | mechanism | TAC-OSM retrieval decomposition | product-key sparse frontier does not imply learned semantic proposal | proposal recall plus conditional route success under the same test population | learned proposal parity |
+| Verified-only persistent experience can improve future held-out computation | L1 | mechanism | TAC temporal result + operator-learning controls | explicit persistence does not establish learned write utility | write/no-write/retraction ablation with future-task benefit and provenance audit | causal write experiment |
+| A shared predictive structural substrate can model language, image and audio | L1 | capability target | multimodal JEPA / predictive-state prior art | natural-world competence and human-level understanding | TACOSM-UNIFIED-MULTIMODAL-001 preregistered experiment | clean confirmatory run |
+| Shared executable knowledge can be consolidated from verified experience | L1 | mechanism | AXON/SECA phase-2 validation + program-induction prior art | synthetic phase-2 results do not establish cross-domain reuse | held-out operator transfer and independent-reference verification | integrated causal consolidation run |
+
 ## Layer 2 — TAC-OSM mechanism results
 
 Established here, by a named experiment. Inheritable by the next TAC-OSM
