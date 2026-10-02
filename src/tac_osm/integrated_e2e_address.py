@@ -46,14 +46,14 @@ class AddressDiagnosisState(nn.Module):
         return torch.zeros(batch, self.entity_count, self.hidden, device=device)
 
     def write(
-        self, memory: Tensor, z: Tensor, entity: Tensor | None = None,
+        self, memory: Tensor, z: Tensor, target_entity: Tensor | None = None,
         strength: Tensor | None = None
     ) -> tuple[Tensor, Tensor]:
         if self.write_mode == "explicit":
-            if entity is None:
-                raise ValueError("explicit write requires entity")
+            if target_entity is None:
+                raise ValueError("explicit write requires target_entity")
             probs = F.one_hot(
-                entity.long(), num_classes=self.entity_count
+                target_entity.long(), num_classes=self.entity_count
             ).to(z.dtype)
         else:
             probs = F.softmax(self.write_entity(z), dim=-1)
@@ -100,7 +100,7 @@ class AddressDiagnosisModel(IntegratedE2EModel):
     def observation_write(
         self, memory: Tensor, z: Tensor, entity: Tensor | None = None
     ) -> tuple[Tensor, Tensor]:
-        return self.state.write(memory, z, entity=entity)
+        return self.state.write(memory, z, target_entity=entity)
 
     def query(
         self, memory: Tensor, entity: Tensor, i: Tensor, j: Tensor, op: Tensor
