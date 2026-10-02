@@ -80,11 +80,11 @@ may inherit it.
 | Learned conditional routing | PNDS Stage 2c | E2 — 0.8853 vs static 0.0000, t=258 | L1 | **strongest router evidence** |
 | Verification | TAC `VerifierGuidedRepairController` | E3 — TAC-267→274 | L0 | **provisional** |
 | Repair | TAC `ProceduralMemoryStore` | E3 — bounded sandbox repair | L0 | **candidate** |
-| Persistent write | — | **not implemented** | — | **implement** |
-| Temporal state transition | — | Stage 4W pre-registered only | — | **implement** |
-| Verified state commit | — | **not implemented** | — | **implement** |
-| Path-level verification | — | **not run** | — | **implement** |
-| Full `S→R→C→A→O→V→S` loop | — | — | — | **new** |
+| Persistent write | `src/tac_osm/state.py`, `src/tac_osm/unified.py` | implementation-level | L1 | **implemented; not yet independently causal** |
+| Temporal state transition | `TACOSM-TEMPORAL-001` | E3-equivalent TAC-OSM controlled result | L2 | **validated bounded explicit write/read persistence through k=32** |
+| Verified state commit | `src/tac_osm/unified.py::KnowledgeStore` | implementation-level | L1 | **implemented; causal contribution still unmeasured** |
+| Path-level verification | `src/tac_osm/verifier.py` | implementation-level | L1 | **implemented; comparative measurement not run** |
+| Full `I→D→Z→M→P→R→Pi→C→A→O→V→W→L` loop | unified native model v1 | — | — | **new research target** |
 
 ---
 
@@ -146,19 +146,23 @@ training signal, and the bound — `K ≥ 2`, `K = 1` flat — travels with it.
 
 ## The gap the map exposes
 
-The map is mostly filled for the loop's first five terms. The last two are
-empty, and they are the ones the thesis actually needs:
+The map now separates two different unresolved questions.
 
-> **`V_t` → `S_{t+1}`: whether verification gates a state update.**
+First, **verified persistence in the learned loop** remains open. The temporal
+benchmark has validated an explicit write/read mechanism: a vector written at
+t remains causally readable through k=32 under carry while reset destroys the
+effect. What remains unmeasured is whether a learned write policy and
+verification gate select useful experience, preserve it, and improve future
+decisions better than always-write/no-write controls.
 
-No repository has run path-level verification, verified-only commit, or a
-persistent write across a temporal boundary. Stage 4W is pre-registered but
-unexecuted. This is where the program's claim actually lives, and it is
-where the integrated model earns its keep: those transitions become testable
-in situ rather than in isolation.
+Second, **learned selective computation** remains open at the asymptotic level.
+The product-key frontier demonstrates real capability/computation tradeoffs,
+but fixed-factor construction still scores a growing fraction of persistent
+state as M increases. Learned semantic proposal and end-to-end CASM-connected
+selection therefore remain live blockers.
 
-The second gap is narrower but more immediate: **a retrieval boundary.** Until
-one exists, `|R|` is not a defined quantity, C5 is untestable rather than
-merely untested, and every top-K result in this repository is a statement
-about a scorer with no index in front of it. `M2.1` is the experiment that
-closes that gap, and F3 is what gave it a reason to.
+The unified-native-model benchmark adds a third research boundary: whether a
+single predictive structural substrate can learn language, image, and audio
+tasks without moving hidden truth across the pre-action information boundary.
+That benchmark is preregistered separately and cannot inherit modality claims
+from any individual prior experiment.
