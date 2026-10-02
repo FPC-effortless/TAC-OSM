@@ -121,6 +121,27 @@ selective computation mechanism used in this experiment.
 
 Source: arXiv:2608.09537.
 
+### Task-conditioned routing signatures
+
+A 2026 study of sparse MoE routing reports that prompts from the same task
+category induce similar expert-activation signatures and that these signatures
+contain enough information for task classification. This supports a useful
+measurement idea for TAC-OSM: operator-selection traces can be stored as
+structured telemetry and analyzed as computational state.
+
+The result does **not** establish that such signatures are causal, optimal, or
+computationally cheaper. For PLM they should therefore be treated as a
+diagnostic representation of the operator-routing surface:
+
+    query/state -> operator router -> routing signature
+
+A later P3 experiment should measure whether the routing signature is stable
+under task-preserving perturbations, whether it predicts useful operator
+specialization, and whether any compression of the signature preserves actual
+execution capability.
+
+Source: arXiv:2603.11114.
+
 ### Compositional behavioral semantics
 
 The ICML 2026 framework of Zhang, Luo, and Baltieri gives a more formal
