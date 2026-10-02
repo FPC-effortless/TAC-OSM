@@ -485,14 +485,10 @@ def run(proposal_path, smoke=False):
             cases[(seed, m)] = fixed_cases(seed, ps)
 
     p = Proposal.load(proposal_path)
-    expected_domain_hash = digest(
-        {
-            "domain_version": DOMAIN_VERSION,
-            "state_fields": ["power", "grip", "heat", "wear", "affinity"],
-            "actions": DELTA,
-            "outcome": "post-action safety over power/grip/heat/wear",
-        }
-    )
+    proposer_domain = ROOT / "research/vrs-001/PROPOSER-DOMAIN-001.md"
+    expected_domain_hash = hashlib.sha256(
+        proposer_domain.read_bytes()
+    ).hexdigest()
     if p.raw["domain_hash"] != expected_domain_hash:
         raise ProposalError("domain hash mismatch")
 
