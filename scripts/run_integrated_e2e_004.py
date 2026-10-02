@@ -68,6 +68,6 @@ def main():
             rows.append({"seed":seed,"typed_learned_q1_accuracy":normal["q1_accuracy"],"typed_learned_q2_accuracy":normal["q2_accuracy"],"typed_learned_bit_accuracy":normal["bit_accuracy"],"typed_learned_no_memory_q2_accuracy":ctrl["q2_accuracy"]})
     key=f"{args.arm}_q2_accuracy"; vals=[r[key] for r in rows]
     output={"experiment_id":"TACOSM-PLM-INTEGRATED-E2E-004","status":"measured","arm":args.arm,"provenance":{"git_commit":os.environ.get("GITHUB_SHA","unknown"),"workflow_run_id":os.environ.get("GITHUB_RUN_ID","unknown"),"python_version":platform.python_version(),"torch_version":torch.__version__,"platform":platform.platform()},"protocol":{"seeds":SEEDS,"steps":STEPS,"batch_size":BATCH_SIZE,"eval_episodes":EVAL_EPISODES,"heldout_compositions":HELDOUT},"seed_results":rows,"summary":{"q2_accuracy_mean":statistics.fmean(vals),"q2_accuracy_seed_bootstrap_ci95":bootstrap(vals),"min_seed_q2_accuracy":min(vals)}}
-    out=Path(args.output or f"artifacts/TACOSM-PLM-INTEGRATED-E2E-004-{args.arm}.json"); out.parent.mkdir(parents=True,exist_ok=True); out.write_text(json.dumps(output,indent=2,sort_keys=True)+"
+    out=Path(args.output or f"artifacts/TACOSM-PLM-INTEGRATED-E2E-004-{args.arm}.json"); out.parent.mkdir(parents=True,exist_ok=True); out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n"); print(json.dumps(output, indent=2, sort_keys=True))
 "); print(json.dumps(output,indent=2,sort_keys=True))
 if __name__=="__main__": main()
