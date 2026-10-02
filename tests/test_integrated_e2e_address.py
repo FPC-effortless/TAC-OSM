@@ -72,3 +72,16 @@ def test_e2e002_contract_is_loadable_and_consistent():
     from tac_osm.contract import load_contract
     contract = load_contract("TACOSM-PLM-INTEGRATED-E2E-002")
     assert contract.check_consistency() == []
+
+
+def test_e2e002_evaluator_controls_all_have_defined_inputs():
+    from scripts.run_integrated_e2e_001 import sample_episode
+    from scripts.run_integrated_e2e_002 import evaluate
+    model = AddressDiagnosisModel(
+        AddressDiagnosisConfig(hidden_dim=40, write_mode="explicit", read_mode="explicit")
+    )
+    ep = sample_episode(__import__("random").Random(4242))
+    for control in ("normal", "no_memory", "shuffle_image", "text_only", "image_only", "audio_only"):
+        out = evaluate(model, [ep], control)
+        assert set(out) >= {"q2_accuracy", "target_memory_attention", "write_target_address_accuracy"}
+        assert all(float(v) == float(v) for v in out.values())
