@@ -1,3 +1,6 @@
+import pytest
+
+torch = pytest.importorskip("torch")
 import random
 
 from tac_osm.integrated_e2e_benchmark import (
