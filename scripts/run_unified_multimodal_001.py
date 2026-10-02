@@ -170,6 +170,33 @@ def split_audit(train_rows, val_rows, test_rows):
     }
 
 
+def representability_audit():
+    # Constructive witness: over the finite registered state/action domain,
+    # a direct observation+action lookup table exactly specifies the next
+    # observation. This is a representability witness independent of learned
+    # parameters; the neural learner still has to recover it from data.
+    world = World(TRAIN_WORLD_SEED, 1, "train")
+    states = [(a, b, c) for a in range(8) for b in range(8) for c in range(4)]
+    report = {}
+    for modality in MODALITIES:
+        table = {}
+        for state in states:
+            x = tuple(float(v) for v in world.render(modality, state).tolist())
+            for action in range(N_OPS):
+                key = (x, action)
+                y = tuple(float(v) for v in world.render(modality, world.transition(state, action)).tolist())
+                table[key] = y
+        if len(table) != len(states) * N_OPS:
+            raise RuntimeError(f"{modality} finite witness is not well-defined")
+        report[modality] = {
+            "finite_lookup_witness": True,
+            "state_count": len(states),
+            "action_count": N_OPS,
+            "table_entries": len(table),
+        }
+    return report
+
+
 def identifiability_audit():
     world = World(TRAIN_WORLD_SEED, 1, "train")
     states = [(a, b, c) for a in range(8) for b in range(8) for c in range(4)]
@@ -622,13 +649,14 @@ def train_one(seed, disable, steps, batch_size, shared_transition=True):
                         (z[i], int(action[i]), z_target[i], verified)
                     )
 
-            for z_i, action_i, z_target_i, verified_i in pending_writes:
-                memory.propose_after_verification(
-                    z_i,
-                    action_i,
-                    z_target_i,
-                    verified_i,
-                )
+            if "persistence" not in disable:
+                for z_i, action_i, z_target_i, verified_i in pending_writes:
+                    memory.propose_after_verification(
+                        z_i,
+                        action_i,
+                        z_target_i,
+                        verified_i,
+                    )
 
     collapse = anti_collapse_report(model, train_rows)
     frozen_hash = checkpoint_hash(model)
@@ -718,6 +746,7 @@ def main():
     test_probe = World(TEST_WORLD_SEED, 12, "test").make()
 
     split = split_audit(train_probe, val_probe, test_probe)
+    representability = representability_audit()
     identifiability = identifiability_audit()
 
     arms = [
@@ -819,6 +848,7 @@ def main():
         },
         "preconditions": {
             "split_audit": split,
+            "representability": representability,
             "identifiability": identifiability,
         },
         "controls": {
