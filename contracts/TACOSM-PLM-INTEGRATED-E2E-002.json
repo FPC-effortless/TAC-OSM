@@ -137,7 +137,7 @@
   },
   "status": "pre-registered",
   "layer": "L3",
-  "version": 3,
+  "version": 4,
   "amendments": [
     {
       "id": "A1",
@@ -158,6 +158,16 @@
       "discovered": "Focused Torch gate run 37063224280",
       "affected": "test code only; no scientific parameter or decision rule changed",
       "no_result_under_previous_version": "No scientific benchmark result was produced under the superseded test interface."
+    },
+    {
+      "id": "A3",
+      "applies_to": "runner contract enforcement",
+      "old_definition": "the E2E-002 measurement runner did not load or enforce its machine-readable preregistration",
+      "new_definition": "the runner loads E2E-002's contract and requires registered levels, seeds, steps, evaluation length, arms, and consistency before training",
+      "rationale": "Contract compliance must be executable; documentation-only preregistration permits silent drift.",
+      "discovered": "Static scientific-process audit after E2E-002 preflight failures and before confirmatory execution.",
+      "affected": "scientific-process enforcement only; no arm, hyperparameter, benchmark, or decision-rule value changed",
+      "no_result_under_previous_version": "No E2E-002 diagnostic measurement was executed under the unenforced runner."
     }
   ]
 }
