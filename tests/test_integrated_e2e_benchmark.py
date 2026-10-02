@@ -28,5 +28,6 @@ def test_corrected_generator_handles_each_registered_heldout_pair():
                 continue
             ep = sample_episode(rng, combo1=combo1, combo2=combo2)
             validate_episode(ep)
-            assert ep[1][:3] == combo1[:1] + ep[1][1:3] if False else True
+            assert ep[1][:3] == combo1
+            assert ep[2][:3] == combo2
             assert ep[1][0] != ep[2][0]
