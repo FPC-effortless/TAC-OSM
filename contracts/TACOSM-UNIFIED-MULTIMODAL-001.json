@@ -106,10 +106,26 @@
     "no hidden-truth access"
   ],
   "decision_rule": [
-    "A modality is counted as modeled only if its primary endpoint exceeds the untrained/random control by the preregistered materiality threshold.",
-    "The all-modality capability claim is valid only if language, image and audio independently pass.",
-    "Ablation differences are mechanism-localization results only; a negative ablation cannot refute the architecture.",
-    "No natural-world or general-intelligence claim is promoted from this synthetic benchmark."
+    {
+      "condition": "Any pre-run representability or identifiability gate fails.",
+      "licenses": "Terminate the measurement as instrument-invalid; emit no modality capability number.",
+      "does_not_license": "Any claim about the underlying architecture or modality."
+    },
+    {
+      "condition": "A modality's frozen test endpoint exceeds its untrained control by at least its preregistered materiality threshold.",
+      "licenses": "The unified model passes the registered synthetic modeling test for that modality.",
+      "does_not_license": "Natural-world understanding or general multimodal competence."
+    },
+    {
+      "condition": "All three modality endpoints independently pass.",
+      "licenses": "The shared substrate passes the registered all-modality synthetic modeling criterion.",
+      "does_not_license": "Real-world multimodal competence or general intelligence."
+    },
+    {
+      "condition": "An ablation differs materially from the full model on a registered endpoint.",
+      "licenses": "The intervention provides mechanism-localization evidence under this synthetic workload.",
+      "does_not_license": "A universal statement that the component is necessary for intelligence."
+    }
   ],
   "materiality": {
     "language_accuracy_delta": 0.05,
@@ -154,43 +170,53 @@
     },
     {
       "name": "language_heldout_token_accuracy",
-      "role": "secondary — held-out language predictive modeling"
+      "role": "secondary — held-out language predictive modeling",
+      "primary": false
     },
     {
       "name": "image_heldout_normalized_prediction_score",
-      "role": "secondary — held-out image predictive modeling"
+      "role": "secondary — held-out image predictive modeling",
+      "primary": false
     },
     {
       "name": "audio_heldout_normalized_prediction_score",
-      "role": "secondary — held-out audio predictive modeling"
+      "role": "secondary — held-out audio predictive modeling",
+      "primary": false
     },
     {
       "name": "goal_conditioned_operator_selection_accuracy",
-      "role": "secondary — action-conditioned computation selection"
+      "role": "secondary — action-conditioned computation selection",
+      "primary": false
     },
     {
       "name": "proposal_recall_at_2",
-      "role": "secondary — target survives cheap proposal stage"
+      "role": "secondary — target survives cheap proposal stage",
+      "primary": false
     },
     {
       "name": "latent_prediction_error",
-      "role": "secondary — next-state predictive error"
+      "role": "secondary — next-state predictive error",
+      "primary": false
     },
     {
       "name": "cross_modal_pair_separation",
-      "role": "secondary — paired views closer than shuffled views"
+      "role": "secondary — paired views closer than shuffled views",
+      "primary": false
     },
     {
       "name": "verified_write_rate",
-      "role": "secondary — post-verification memory commitment"
+      "role": "secondary — post-verification memory commitment",
+      "primary": false
     },
     {
       "name": "memory_occupancy",
-      "role": "audit — retained knowledge size"
+      "role": "audit — retained knowledge size",
+      "primary": false
     },
     {
       "name": "operator_library_size",
-      "role": "audit — durable executable structure count"
+      "role": "audit — durable executable structure count",
+      "primary": false
     }
   ],
   "interpretation_order": [
@@ -214,17 +240,43 @@
   "amendments": [
     {
       "id": "A1",
-      "before_run": true,
-      "reason": "The initial contract draft used modality-specific primary endpoint fields and omitted the repository ExperimentContract schema's required arms/endpoints/interpretation_order/h_levels/steps/eval_steps fields. The runner never produced a confirmatory artifact because repository contract validation failed first.",
-      "changes": "Added schema-compliant arms/endpoints/interpretation_order/h_levels/steps/eval_steps while preserving the scientific question, modalities, seeds, split rule, materiality thresholds and leakage controls.",
-      "no_scientific_result_under_previous_version": true
+      "applies_to": "contract schema",
+      "old_definition": "Initial contract used non-schema primary endpoint and decision-rule forms and omitted required experiment fields.",
+      "new_definition": "Contract conforms to ExperimentContract with schema-compliant arms, endpoints, decisions, interpretation order and run lengths.",
+      "rationale": "Repository contract validation is a precondition to any scientific run; the malformed draft cannot produce a result.",
+      "discovered": "CI contract-validation run 37016398842.",
+      "affected": "Specification serialization only; scientific hypothesis, modalities, seeds and thresholds unchanged.",
+      "no_result_under_previous_version": "true"
     },
     {
       "id": "A2",
-      "before_run": true,
-      "reason": "Repository contract schema requires acts_on for each arm.",
-      "changes": "Added acts_on to all five registered arms; no hypotheses, thresholds, seeds, endpoints or decision rules changed.",
-      "no_scientific_result_under_previous_version": true
+      "applies_to": "arm schema",
+      "old_definition": "Registered arms omitted acts_on.",
+      "new_definition": "Every arm declares the component boundary it intervenes on.",
+      "rationale": "The repository schema requires acts_on so intervention scope is machine-checkable.",
+      "discovered": "CI run 37017129585.",
+      "affected": "Schema only; no scientific parameter changed.",
+      "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A3",
+      "applies_to": "endpoint schema",
+      "old_definition": "Only the primary endpoint declared a primary flag.",
+      "new_definition": "Every endpoint explicitly declares primary=false except the one registered primary endpoint.",
+      "rationale": "Endpoint role must be machine-checkable and exactly one primary endpoint must exist.",
+      "discovered": "CI run 37017371559.",
+      "affected": "Schema only; no endpoint definition changed.",
+      "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A4",
+      "applies_to": "pre-confirmatory runner",
+      "old_definition": "The prototype wrote target latents to durable memory without an explicit post-prediction verification decision.",
+      "new_definition": "DurableMemory commits a target latent only after the fixed verifier threshold accepts the predicted latent transition.",
+      "rationale": "Without this correction, persistent-learning evidence would be contaminated by unverified future-target injection.",
+      "discovered": "Internal causal audit before a clean confirmatory run; no confirmatory artifact existed under the prior implementation.",
+      "affected": "Training-time memory write path; no test split or threshold changed.",
+      "no_result_under_previous_version": "true"
     }
   ],
   "held_constant": [
