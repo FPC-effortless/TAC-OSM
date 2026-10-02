@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-003",
-  "version": 1,
+  "version": 2,
   "status": "pre-registered",
   "question": "After correcting q1/q2 target-entity construction, is the E2E-001 failure localized to learned persistent-state write addressing, learned read addressing, or lack of a coherent shared address interface?",
   "hypothesis": "Explicit structural entity addressing on the write path, read path, or both will localize the persistent-state failure without changing the multimodal representation, CASM, verifier, optimizer, held-out compositions, or seed schedule.",
@@ -101,7 +101,7 @@
       "does_not_license": "persistent-state impossibility or PLM impossibility"
     },
     {
-      "condition": "explicit_write materially differs from explicit_read",
+      "condition": "explicit_write differs by at least 0.05 from explicit_read",
       "licenses": "evidence localizing the corrected benchmark failure toward one address path",
       "does_not_license": "a general memory-system claim"
     },
@@ -184,5 +184,17 @@
     "seed_bootstrap_seed": 20261002,
     "confidence_level": 0.95
   },
-  "amendments": []
-}
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "diagnostic decision-rule effect size",
+      "old_definition": "single-path or explicit-both differences were described as materially different without a registered numerical threshold",
+      "new_definition": "diagnostic pairwise differences are material only when the absolute mean q2 difference is at least 0.05",
+      "rationale": "A diagnostic decision rule must not introduce a post-hoc interpretation threshold through prose.",
+      "discovered": "Pre-measurement scientific-process audit.",
+      "affected": "diagnostic interpretation only; primary endpoint, benchmark, seeds and training schedule unchanged",
+      "no_result_under_previous_version": "No E2E-003 measurement existed under the unquantified rule."
+    }
+  ],
+  "diagnostic_materiality_threshold": 0.05
+}\n
