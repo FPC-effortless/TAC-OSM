@@ -74,13 +74,11 @@ def evaluate(model: AddressDiagnosisModel, episodes: list[tuple], control: str =
         memory = model.state.initial(1, torch.device("cpu"))
         for k in range(3):
             image = batch["image"][k]
+            batch_text = batch["text"][k]
             if control == "shuffle_image":
                 image = batch["image"][(k + 1) % 3]
             elif control == "text_only":
                 image = torch.zeros_like(image)
-                batch_text = batch["text"][k]
-            else:
-                batch_text = batch["text"][k]
             text = batch_text
             audio = batch["audio"][k]
             if control == "text_only":
