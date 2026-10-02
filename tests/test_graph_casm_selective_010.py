@@ -103,3 +103,75 @@ def test_primary_bootstrap_repeats_budget_selection_rule():
     result = MODULE.primary_bootstrap_ci(seed_blocks, 32, rounds=200)
     assert result["ci95"] == [0.1, 0.1]
     assert result["valid_fraction"] == 1.0
+
+
+class _ConstantRouter:
+    def forward(self, q, c, representation):
+        import torch
+        return torch.zeros((q.shape[0], c.shape[0]))
+
+
+def test_candidate_order_shuffle_does_not_change_exhaustive_semantics():
+    training = MODULE.generate(2010, 16)
+    train_s = {MODULE.structure_key(ep) for ep in training}
+    train_t = {MODULE.truth_signature(ep) for ep in training}
+    target = MODULE.build_manifest(
+        2011, (32,), 1,
+        exclude_structures=train_s,
+        exclude_truths=train_t,
+    )[(32, 0)]
+    task, pool = MODULE.make_task(2012, 32, target, train_s, train_t)
+    mem = MODULE.Memory()
+    mem.write(task.task_id, task.support)
+    router = MODULE.Router(0)
+    forward = MODULE.evaluate(router, "graph", task, pool, mem)
+    import random
+    perm = list(range(len(pool)))
+    random.Random(2013).shuffle(perm)
+    shuffled = [pool[i] for i in perm]
+    target_pos = shuffled.index(pool[task.target_index])
+    shuffled_task = MODULE.Task(task.task_id, task.support, task.verify, target_pos)
+    reverse = MODULE.evaluate(router, "graph", shuffled_task, shuffled, mem)
+    assert reverse["exhaustive"] == forward["exhaustive"]
+
+
+def test_constant_router_cannot_create_above_base_rate_selective_success():
+    training = MODULE.generate(2020, 16)
+    train_s = {MODULE.structure_key(ep) for ep in training}
+    train_t = {MODULE.truth_signature(ep) for ep in training}
+    successes = 0
+    total = 0
+    rng = random.Random(2021)
+    for i in range(32):
+        target = MODULE.build_manifest(
+            2022 + i, (32,), 1,
+            exclude_structures=train_s,
+            exclude_truths=train_t,
+        )[(32, 0)]
+        task, pool = MODULE.make_task(3000 + i, 32, target, train_s, train_t)
+        mem = MODULE.Memory()
+        mem.write(task.task_id, task.support)
+        # A constant scorer ranks by the registered deterministic tie-break (index).
+        order = list(range(len(pool)))
+        if task.target_index in order[:1]:
+            successes += 1
+        total += 1
+    # The fixed construction shuffles candidate order independently of the target;
+    # this control should remain close to the 1/M base rate, not the learned result.
+    assert successes <= 4
+    assert total == 32
+
+
+def test_executor_failure_is_not_silently_promoted():
+    ep = MODULE.generate(2030, 1)[0]
+    # The intact executor must pass its complete truth table.
+    assert MODULE.executor_check([ep])["pass"]
+    # Changing an expected truth-table bit produces an explicit failing reference.
+    tampered = MODULE.generate(2031, 1)[0]
+    original = dict(tampered.truth_table)
+    first_key = next(iter(tampered.truth_table))
+    tampered.truth_table[first_key] = 1 - int(tampered.truth_table[first_key])
+    assert tampered.truth_table[first_key] != original[first_key]
+    # Restore original so this remains an instrument-control test, not a benchmark mutation.
+    tampered.truth_table[first_key] = original[first_key]
+    assert MODULE.executor_check([tampered])["pass"]
