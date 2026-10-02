@@ -107,8 +107,14 @@ class PersistentKeyValueState(nn.Module):
         memory: Tensor,
         z: Tensor,
         strength: Tensor | None = None,
+        target_entity: Tensor | None = None,
     ) -> tuple[Tensor, Tensor]:
-        write_probs = F.softmax(self.write_entity(z), dim=-1)
+        if target_entity is None:
+            write_probs = F.softmax(self.write_entity(z), dim=-1)
+        else:
+            write_probs = F.one_hot(
+                target_entity.long(), num_classes=self.entity_count
+            ).to(z.dtype)
         if strength is not None:
             write_probs = write_probs * strength.view(-1, 1)
         value = self.write_value(z).unsqueeze(1)
@@ -241,6 +247,7 @@ class IntegratedE2EModel(nn.Module):
         logits = torch.stack((-action, action), dim=-1)
         return {
             "query": q,
+            "entity": entity,
             "read": state_read,
             "attention": attention,
             "action": action,
@@ -271,7 +278,10 @@ class IntegratedE2EModel(nn.Module):
             )
         )
         memory, _ = self.state.write(
-            memory, query_result["read"] + outcome_embedding, strength=gate
+            memory,
+            query_result["read"] + outcome_embedding,
+            strength=gate,
+            target_entity=query_result["entity"],
         )
         verifier_target = (
             query_result["logits"].argmax(-1) == outcome.long()
