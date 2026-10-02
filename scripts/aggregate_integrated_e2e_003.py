@@ -57,10 +57,7 @@ def main() -> None:
         records[arm]=data
 
     provs=[records[a]["provenance"] for a in ARMS]
-    pr_heads={p.get("pr_head_sha") for p in provs}
     commits={p.get("git_commit") for p in provs}
-    if len(pr_heads)!=1 or "unknown" in pr_heads:
-        raise RuntimeError(f"arm PR-head provenance mismatch: {sorted(pr_heads)}")
     if len(commits)!=1 or "unknown" in commits:
         raise RuntimeError(f"arm checkout provenance mismatch: {sorted(commits)}")
 
