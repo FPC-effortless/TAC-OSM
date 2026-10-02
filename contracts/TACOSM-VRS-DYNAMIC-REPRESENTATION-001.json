@@ -70,6 +70,12 @@
       "name": "amortized_representation_build_cost",
       "role": "secondary — one-time semantic representation construction cost amortized over declared query count",
       "primary": false
+    },
+    {
+      "name": "representation_build_break_even_queries",
+      "role": "secondary — query count required for synthesized-representation construction cost to break even against the matched runtime control",
+      "primary": false,
+      "description": "Derived only when semantic representation construction reduces steady-state cost; reports the declared amortization horizon needed to recover one-time construction cost."
     }
   ],
   "h_levels": [
@@ -173,16 +179,19 @@
       "artifact_requirement": "proposal text, feature definitions, anchor definitions, proposer model identifier, prompt hash, generation timestamp, temperature/decoding settings, and full scored-feature artifact must be frozen before confirmatory evaluation"
     },
     "dynamic_validity": {
-      "near_pair_definition": "representation distance <= preregistered delta after anchor calibration and fixed normalization",
+      "near_pair_definition": "For the fixed pre-generated pair set, select the representation-near subset using a preregistered distance threshold after calibration. The denominator and pair identities are fixed before representation generation; no post-hoc pair construction is allowed.",
       "one_step_test": "for each registered action a, compare successor representations and task-relevant outputs",
       "multi_step_test": "repeat for horizon k in history_delay_k under the same action schedule where valid",
       "failure_evidence": "counterexample trajectory is stored with the representation coordinates, action, successor states, and verifier outcome",
-      "principle": "static similarity does not license persistent equivalence unless future behavior is preserved"
+      "principle": "static similarity does not license persistent equivalence unless future behavior is preserved",
+      "fixed_pair_construction": "State-pair evaluation sets are generated and hashed before any representation is scored. Pair membership is independent of all representation coordinates. The representation only determines which fixed pairs satisfy the registered near-neighbor threshold.",
+      "action_sampling": "Actions and multi-step schedules are fixed by the task generator before representation evaluation. Where the action space is finite and tractable, all relevant actions are evaluated; otherwise a representation-independent seeded action subset is fixed in the contract."
     },
     "cost_model": {
       "total": "C_rep_build + C_state_address + C_state_route + C_operator_select + C_exec + C_verify + C_write + C_IO",
       "primary_runtime": "steady-state query cost excludes one-time representation construction only when amortization is separately reported",
-      "requirement": "no proxy term may be substituted for actual execution work in the primary endpoint"
+      "requirement": "no proxy term may be substituted for actual execution work in the primary endpoint",
+      "break_even": "Q_break_even = C_rep_build / max(C_raw_runtime - C_semantic_runtime, 0), reported only when the denominator is positive and with all numerator/denominator components separately recorded."
     },
     "provenance": {
       "prior_art": [
@@ -202,7 +211,8 @@
       "no claim that Euclidean geometry is intrinsic to the environment",
       "no claim that LLM semantic scoring is correct merely because parsing succeeds",
       "no claim that representation compression is safe without dynamic verification",
-      "no claim that the semantic representation replaces exact state evidence"
+      "no claim that the semantic representation replaces exact state evidence",
+      "no dynamic-validity claim from representation-selected pairs; pair identities must be fixed independently of the representation"
     ]
   }
 }
