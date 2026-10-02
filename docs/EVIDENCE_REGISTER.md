@@ -68,7 +68,7 @@ because a contract check passed; a claim moves when a measurement moves.
 
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
-| A persistent state container whose read/write is causally load-bearing | L0 | mechanism | TAC-transformer `IdentityState`, E3 (TAC-235/236, `6cce2ce`) | long-horizon memory (source evidence is bounded); the **write** across a temporal boundary — no source result exists | none — adopted as an interface | |
+| A persistent state container whose read/write is causally load-bearing | L0 | mechanism | TAC-transformer `IdentityState`, E3 (TAC-235/236, `6cce2ce`) | long-horizon memory; semantic write learning; continual consolidation | none — adopted as an interface | |
 | The verify → localize → select → patch → re-verify loop shape | L0 | mechanism | TAC-transformer `ProceduralMemoryStore`, E3 (`b079ca5`) | the REAL017 lineage that used it is **do-not-cite until audited** (verifier received corruption labels, repair path received gold slots); only the *shape* transfers | none — adopted as an interface | |
 | A structural executor over a DAG with copy-mask preflight | L0 | mechanism | CASM `phase1_dag`, E3 (`c315544`) | *learned* structural routing — Phase 1.5A failed 0/18 at loss 0.0012; the substrate transfers, the learned map does not | none | |
 | State addressing by key, with a key-blind feature map as a named failure mode | L0 | lesson | PNDS Stage 3b-r2, E4; `dd8f63c` → `f989430` | nothing beyond the lesson | none — adopted as gate §34 | |
@@ -154,7 +154,7 @@ Layer 2 and Layer 3 rows, and each one has a standing blocker.
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
 | Runtime retrieval boundary can preserve capability while bounding router input in an exact synthetic control | L3 | integration | deterministic lookup is an L0 control mechanism | semantic retrieval, learned addressing, and end-to-end compute scaling are not inherited | TACOSM-SELECTIVE-001 run 36509506303: indexed success=1.0 across H={8,64,256}, K={2,4}; actual router input bounded by K | **does not establish C5** |
-| Persistent state makes useful computation reusable across time | L4 | — | — | no temporal capability evidence yet | the hardened write-at-t/read-at-t+k benchmark plus carry/reset/shuffle/corrupt controls | **temporal persistence measurement not run** |
+| Persistent state makes useful computation reusable across time | L2 | mechanism | — | semantic/learned long-horizon memory; learned write policy; verified-only commit | `TACOSM-TEMPORAL-001` run 36509506303: carry=1.0 and reset≈0.01 through k=32 with pre-read causal gate passing | **bounded to explicit synthetic vector-state persistence; learned write/consolidation remains unestablished** |
 | The integrated system is more economical than full-context at capability parity | L4 | — | — | everything — this is the program's thesis, not a result | the curve in `ROADMAP.md` §"M3.1", measured | all of the above |
 
 ---
