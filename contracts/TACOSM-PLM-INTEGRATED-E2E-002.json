@@ -137,7 +137,7 @@
   },
   "status": "pre-registered",
   "layer": "L3",
-  "version": 2,
+  "version": 3,
   "amendments": [
     {
       "id": "A1",
@@ -148,6 +148,16 @@
       "discovered": "Focused Torch gate run 37063091703",
       "affected": "implementation interface only; no scientific parameter or decision rule changed",
       "no_result_under_previous_version": "No scientific benchmark result was produced under the superseded implementation."
+    },
+    {
+      "id": "A2",
+      "applies_to": "pre-measurement test interface",
+      "old_definition": "explicit state test used keyword entity for state.write",
+      "new_definition": "explicit state test uses target_entity matching the inherited state contract",
+      "rationale": "The focused gate exposed a stale test call after the API-standardization correction.",
+      "discovered": "Focused Torch gate run 37063224280",
+      "affected": "test code only; no scientific parameter or decision rule changed",
+      "no_result_under_previous_version": "No scientific benchmark result was produced under the superseded test interface."
     }
   ]
 }
