@@ -42,6 +42,11 @@ __all__ = [
     "RepairController",
     # the environment
     "Environment",
+    # unified native model
+    "Budget",
+    "Observation",
+    "PredictiveState",
+    "UnifiedPersistentStructuralWorldModel",
 ]
 
 
@@ -332,3 +337,7 @@ class Environment(Protocol):
     def success(self, query: Query, outcome: Outcome) -> bool:
         """Score the outcome. The router never sees this."""
         ...
+
+
+# The unified core is dependency-free and therefore safe to expose at the package boundary.
+from .unified import Budget, Observation, PredictiveState, UnifiedPersistentStructuralWorldModel
