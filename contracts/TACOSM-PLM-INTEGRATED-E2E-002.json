@@ -137,7 +137,7 @@
   },
   "status": "pre-registered",
   "layer": "L3",
-  "version": 4,
+  "version": 5,
   "amendments": [
     {
       "id": "A1",
@@ -168,6 +168,16 @@
       "discovered": "Static scientific-process audit after E2E-002 preflight failures and before confirmatory execution.",
       "affected": "scientific-process enforcement only; no arm, hyperparameter, benchmark, or decision-rule value changed",
       "no_result_under_previous_version": "No E2E-002 diagnostic measurement was executed under the unenforced runner."
+    },
+    {
+      "id": "A4",
+      "applies_to": "diagnostic output metric naming",
+      "old_definition": "runner emitted the diagnostic as write_target_accuracy",
+      "new_definition": "runner emits write_target_address_accuracy, matching the registered endpoint name",
+      "rationale": "Keep the machine-readable result schema aligned with the preregistered endpoint set.",
+      "discovered": "Premeasurement static contract-to-runner audit.",
+      "affected": "output field name only; no data, arm, parameter, or decision rule changed",
+      "no_result_under_previous_version": "No scientific benchmark result was produced under the mismatched output naming."
     }
   ]
 }
