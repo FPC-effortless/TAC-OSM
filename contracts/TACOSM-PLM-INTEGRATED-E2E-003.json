@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-003",
-  "version": 4,
+  "version": 5,
   "status": "pre-registered",
   "question": "After correcting q1/q2 target-entity construction, is the E2E-001 failure localized to learned persistent-state write addressing, learned read addressing, or lack of a coherent shared address interface?",
   "hypothesis": "Explicit structural entity addressing on the write path, read path, or both will localize the persistent-state failure without changing the multimodal representation, CASM, verifier, optimizer, held-out compositions, or seed schedule.",
@@ -183,7 +183,7 @@
     "seed_bootstrap_samples": 5000,
     "seed_bootstrap_seed": 20261002,
     "confidence_level": 0.95,
-    "provenance_rule": "all three arm artifacts must report the same experiment head and merged checkout SHA before aggregation"
+    "provenance_rule": "all three arm artifacts must report the same checked-out GITHUB_SHA before aggregation"
   },
   "amendments": [
     {
@@ -215,6 +215,16 @@
       "discovered": "Full repository gate run 37068686061",
       "affected": "contract metadata only; no scientific parameter or decision rule changed",
       "no_result_under_previous_version": "No E2E-003 scientific arm executed under the malformed contract."
+    },
+    {
+      "id": "A4",
+      "applies_to": "arm-artifact provenance fields",
+      "old_definition": "arm artifacts recorded GITHUB_HEAD_SHA as pr_head_sha and aggregation required that field to match",
+      "new_definition": "arm artifacts record the checked-out GITHUB_SHA as git_commit and aggregation requires this checkout SHA to match across all three arms",
+      "rationale": "The definitive E2E-003 run is branch/push-triggered, where GITHUB_HEAD_SHA is not a standard GitHub Actions variable. Provenance must identify the actual code checked out by each arm job.",
+      "discovered": "Premeasurement provenance audit after direct inspection of the Actions event model.",
+      "affected": "provenance schema and aggregation check only; no experiment parameter, benchmark, arm, or decision rule changed",
+      "no_result_under_previous_version": "No valid E2E-003 combined result existed under the incompatible provenance field."
     }
   ],
   "diagnostic_materiality_threshold": 0.05,
