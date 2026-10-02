@@ -200,14 +200,14 @@ def evaluate_seed(model: IntegratedE2EModel, seed: int, control: str = "normal")
         if control == "no_memory":
             memory.zero_()
         out1 = model.query(
-            memory, *batch["q1"]
+            memory, *batch["q1"][:-1]
         )
         total1 += int(out1["logits"].argmax(-1).item() == batch["q1"][-1].item())
         if control != "no_memory":
             memory, _ = model.post_action_update(
                 memory, out1, batch["q1"][-1]
             )
-        out2 = model.query(memory, *batch["q2"])
+        out2 = model.query(memory, *batch["q2"][:-1])
         total2 += int(out2["logits"].argmax(-1).item() == batch["q2"][-1].item())
     return {"q1_accuracy": total1 / 400, "q2_accuracy": total2 / 400}
 
