@@ -76,12 +76,14 @@ class W:
         self.calls += 1
         self.verified.append(verification.valid)
         return (
-            MemoryWrite(
-                "add",
-                "a",
-                execution.output,
-                1.0,
-                "verified",
+            (
+                MemoryWrite(
+                    "add",
+                    "a",
+                    execution.output,
+                    1.0,
+                    "verified",
+                ),
             )
             if verification.valid
             else ()
