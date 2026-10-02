@@ -287,6 +287,16 @@
       "discovered": "Pre-confirmatory causal split audit on the benchmark generator; no confirmatory result existed.",
       "affected": "Synthetic data generator and split audit only; seeds, model size, optimization budget, endpoint thresholds and decision rules are unchanged.",
       "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A6",
+      "applies_to": "image/audio primary metric normalization",
+      "old_definition": "normalized_score = 1/(1+MSE), an arbitrary bounded transform",
+      "new_definition": "normalized_score = 1 - model_MSE / training-only constant-predictor MSE, with the constant baseline fitted only from training targets",
+      "rationale": "The metric should measure predictive improvement relative to a declared data baseline rather than an arbitrary nonlinear transform of error. The baseline is derived only from training targets and cannot leak test information.",
+      "discovered": "Pre-confirmatory measurement-method audit; no confirmatory result existed.",
+      "affected": "Metric definition only; the model, data splits, thresholds, seeds and primary decision rule remain unchanged.",
+      "no_result_under_previous_version": "true"
     }
   ],
   "held_constant": [
