@@ -1,8 +1,8 @@
 {
   "experiment_id": "TACOSM-VRS-DYNAMIC-REPRESENTATION-001",
-  "version": "0.1-preregistered",
+  "version": "0.2-preregistered",
   "status": "pre-registered",
-  "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
+  "base_commit": "eadc884341b7ca42d52b2965eddfabb428eb3621",
   "title": "Verified representation synthesis: does a calibrated semantic geometry preserve future-relevant computation while enabling selective execution?",
   "question": "When a representation is synthesized from a domain description, calibrated with explicit anchors, and frozen before outcome evaluation, does it preserve the state distinctions needed for future computation while supporting capability-constrained selective execution?",
   "hypothesis": "A semantically synthesized and calibrated multidimensional representation will preserve more task-relevant future behavior than a scalar baseline at matched abstraction budgets, and any representation that appears locally compact but fails dynamic equivalence will be rejected by the registered downstream verifier rather than promoted from semantic plausibility alone.",
@@ -33,7 +33,7 @@
       "name": "capability_constrained_execution_work_fraction",
       "role": "primary — minimum measured execution-work fraction among registered abstractions that retain >=0.80 capability relative to raw-state reference",
       "primary": true,
-      "description": "At each registered population level, identify the lowest actual execution-work fraction among registered abstraction budgets whose exact task success is at least 0.80 of the raw-state reference."
+      "description": "At each registered population level, identify the lowest measured downstream exact-task evaluation work fraction among registered abstraction budgets whose exact-task success is at least 0.80 of the raw-state reference."
     },
     {
       "name": "dynamic_equivalence_violation",
@@ -108,7 +108,8 @@
     "oracle_behavioral is diagnostic-only and cannot win the primary endpoint",
     "actual structural execution work is counted from executed graph operations rather than proxy arithmetic",
     "representation build cost and steady-state query cost are reported separately and the amortization horizon is declared",
-    "all train/evaluation exact structures, truth tables, and target identities are independently hashed and split before measurement"
+    "all train/evaluation exact structures, truth tables, and target identities are independently hashed and split before measurement",
+    "numeric constants are fixed before confirmatory measurement: near-pair distance threshold 0.35, dynamic outcome divergence tolerance 0, state-feature variance floor 1e-6, feature absolute-correlation filter 0.98, exact-task evaluation work 12 units per executed candidate"
   ],
   "decision_rule": [
     {
@@ -165,6 +166,16 @@
       "discovered": "2026-10-02 validator implementation review, before any VRS confirmatory measurement.",
       "affected": "only validation applicability and action-schedule integrity; no scientific population, seed, arm, endpoint threshold, or outcome was measured under the previous definition.",
       "no_result_under_previous_version": "No VRS measurement was run under the previous definition."
+    },
+    {
+      "id": "A3",
+      "applies_to": "implementation baseline, proposal artifact boundary, numeric validation thresholds, and execution-work instrument",
+      "old_definition": "The contract left the exact master baseline, proposal scoring artifact contents, near-pair numeric threshold, dynamic outcome tolerance, representation-filter thresholds, and exact downstream work unit unspecified.",
+      "new_definition": "Confirmatory VRS uses master@eadc884341b7ca42d52b2965eddfabb428eb3621; the semantic proposal must be an external frozen scored artifact containing complete registered state/task coverage plus proposer/prompt/domain provenance; numeric constants are fixed at near-pair distance <=0.35, dynamic outcome divergence tolerance 0, variance floor 1e-6, correlation filter 0.98; downstream exact-task evaluation counts 12 work units per executed candidate.",
+      "rationale": "An implementation can otherwise choose these values after seeing data, creating researcher degrees of freedom that invalidate the registered primary endpoint.",
+      "discovered": "2026-10-02 implementation/protocol review, before confirmatory measurement.",
+      "affected": "only implementation specification and auditability; no VRS confirmatory outcome exists under the superseded definition.",
+      "no_result_under_previous_version": "No VRS confirmatory measurement was run before A3."
     }
   ],
   "sections": {
@@ -197,7 +208,34 @@
       "outcome_visibility": "none during proposal generation",
       "scoring": "proposal features are applied consistently across all batches using the same anchors",
       "numerical_postprocessing": "training-only variance/correlation filtering and fixed rescaling; no post-result feature selection",
-      "artifact_requirement": "proposal text, feature definitions, anchor definitions, proposer model identifier, prompt hash, generation timestamp, temperature/decoding settings, and full scored-feature artifact must be frozen before confirmatory evaluation"
+      "artifact_requirement": "proposal text, feature definitions, anchor definitions, proposer model identifier, prompt hash, generation timestamp, temperature/decoding settings, and full scored-feature artifact must be frozen before confirmatory evaluation",
+      "external_artifact": {
+        "required": true,
+        "mode": "scored",
+        "required_fields": [
+          "proposal_id",
+          "proposer",
+          "prompt_hash",
+          "domain_hash",
+          "state_universe_hash",
+          "task_universe_hash",
+          "features",
+          "provenance",
+          "scored_states",
+          "scored_queries"
+        ],
+        "complete_coverage_required": true,
+        "smoke_fixture_policy": "research/vrs-001/proposal_smoke.json is expression-based and may be used only for smoke tests; it is invalid for confirmatory evidence.",
+        "provenance_required": [
+          "proposer_model_identifier",
+          "prompt_hash",
+          "domain_description_hash",
+          "generation_timestamp",
+          "decoding_settings",
+          "outcome_visibility"
+        ],
+        "outcome_visibility_must_equal": "none"
+      }
     },
     "dynamic_validity": {
       "near_pair_definition": "For the fixed pre-generated pair set, select the representation-near subset using a preregistered distance threshold after calibration. The denominator and pair identities are fixed before representation generation; no post-hoc pair construction is allowed.",
@@ -209,13 +247,23 @@
       "action_sampling": "Actions and multi-step schedules are fixed by the task generator before representation evaluation. Where the action space is finite and tractable, all relevant actions are evaluated; otherwise a representation-independent seeded action subset is fixed in the contract.",
       "minimum_applicable_pairs": 1,
       "minimum_applicable_transitions": 1,
-      "vacuous_pass": "Forbidden. If zero near pairs or zero transitions are evaluated, the test is instrument-inapplicable and cannot admit the representation."
+      "vacuous_pass": "Forbidden. If zero near pairs or zero transitions are evaluated, the test is instrument-inapplicable and cannot admit the representation.",
+      "near_pair_threshold": 0.35,
+      "behavior_tolerance": {
+        "type": "binary_outcome",
+        "maximum_divergence": 0
+      },
+      "comparison_rule": "For each fixed representation-near pair and each fixed action in the registered schedule, dynamic validity is violated when the exact future safety outcome differs between paired states. Successor-coordinate divergence is diagnostic only in VRS-001 because the frozen proposal artifact scores the fixed state universe, not arbitrary successors.",
+      "denominator": "checked_transitions over representation-near pairs from the fixed pair set",
+      "applicability_gate": "near_pairs >= 1 and checked_transitions >= 1; otherwise instrument-invalid"
     },
     "cost_model": {
       "total": "C_rep_build + C_state_address + C_state_route + C_operator_select + C_exec + C_verify + C_write + C_IO",
       "primary_runtime": "steady-state query cost excludes one-time representation construction only when amortization is separately reported",
       "requirement": "no proxy term may be substituted for actual execution work in the primary endpoint",
-      "break_even": "Q_break_even = C_rep_build / max(C_raw_runtime - C_semantic_runtime, 0), reported only when the denominator is positive and with all numerator/denominator components separately recorded."
+      "break_even": "Q_break_even is admissible only when proposal provenance explicitly declares build_cost_unit='execution_work_units'. Otherwise representation construction cost is reported but no break-even claim is computed.",
+      "exact_task_execution_work": "12 units per evaluated candidate",
+      "primary": "actual downstream exact-task evaluation work; state-routing work is reported separately"
     },
     "provenance": {
       "prior_art": [
@@ -237,6 +285,13 @@
       "no claim that representation compression is safe without dynamic verification",
       "no claim that the semantic representation replaces exact state evidence",
       "no dynamic-validity claim from representation-selected pairs; pair identities must be fixed independently of the representation"
-    ]
+    ],
+    "confirmatory_implementation": {
+      "runner": "scripts/run_verified_representation_synthesis_001.py",
+      "proposal_source": "external frozen artifact supplied via --proposal",
+      "no_llm_runtime": true,
+      "proposal_freeze": "proposal artifact must be complete before the benchmark and its digest is included in the result",
+      "smoke_is_non_evidence": true
+    }
   }
 }
