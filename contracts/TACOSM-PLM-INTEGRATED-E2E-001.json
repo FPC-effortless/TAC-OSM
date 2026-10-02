@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
-  "version": 6,
+  "version": 7,
   "status": "registered",
   "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute a learned operator choice, verify the post-action outcome, and remain capable on held-out modality/operator/query compositions?",
   "primary_endpoint": {
@@ -183,6 +183,17 @@
         "post-action verified feedback writes only to the entity whose action was executed",
         "verifier output continues to control write strength",
         "prevent q1 feedback from changing another entity's persistent slot"
+      ]
+    },
+    {
+      "id": "A6",
+      "timing": "pre-measurement",
+      "reason": "Correct verifier semantics so the verifier predicts environment success from pre-verification evidence and the environment outcome is the sole correctness target.",
+      "changes": [
+        "verifier input excludes the outcome label",
+        "verifier target is the observed environment success outcome",
+        "only successful outcomes can create or modify authoritative persistent state",
+        "verifier controls write strength after the success gate"
       ]
     }
   ],
