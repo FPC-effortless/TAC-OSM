@@ -34,7 +34,7 @@ At query time the raw observation is absent. The query contains only:
 - two latent-bit indices;
 - an operator identity (XOR, AND, OR, XNOR).
 
-The model must retrieve the persistent state for the target entity and execute the requested operation.
+q1 and q2 target different observed entities. The model must retrieve the persistent state for each target entity and execute the requested operation; a verified q1 outcome therefore cannot directly provide q2's target state.
 
 ## End-to-end trainable chain
 
@@ -107,7 +107,7 @@ Two modalities are removed. This is a diagnostic, not the primary endpoint.
 
 ### Held-out composition
 
-The exact operator/index tuples used at evaluation are excluded from training.
+The exact operator/index tuples used at evaluation are excluded from training, including their reversed index order. Because the Boolean operators are commutative, only canonical i<j pairs are admitted to the benchmark.
 
 ## Scientific decision rules
 
