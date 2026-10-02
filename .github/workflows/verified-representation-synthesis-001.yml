@@ -44,8 +44,8 @@ jobs:
           contract = load_contract("TACOSM-VRS-DYNAMIC-REPRESENTATION-001")
           assert contract.experiment_id == raw["experiment_id"]
           assert contract.status == "pre-registered"
-          assert len(contract.amendments) == 1
-          assert contract.amendments[0].id == "A1"
+          assert len(contract.amendments) == 2
+          assert [a.id for a in contract.amendments] == ["A1", "A2"]
           assert contract.experiment_id == "TACOSM-VRS-DYNAMIC-REPRESENTATION-001"
           PY
       - name: Representation tests
