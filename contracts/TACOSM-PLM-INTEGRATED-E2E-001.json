@@ -1,12 +1,12 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
-  "version": 1,
+  "version": 2,
   "status": "registered",
   "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute a learned operator choice, verify the post-action outcome, and remain capable on held-out modality/operator/query compositions?",
   "primary_endpoint": {
     "name": "heldout_q2_accuracy_all_modalities",
     "unit": "episode",
-    "threshold": 0.80,
+    "threshold": 0.8,
     "selection": "none"
   },
   "secondary_endpoints": [
@@ -17,12 +17,19 @@
     "heldout_q2_accuracy_image_only",
     "heldout_q2_accuracy_audio_only",
     "cross_modal_alignment_drop",
-    "modality_reconstruction_loss",
+    "operator_selection_accuracy",
+    "target_memory_attention",
     "operator_selection_accuracy",
     "target_memory_attention"
   ],
   "protocol": {
-    "seeds": [0, 1, 2, 3, 4],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
     "train_steps": 300,
     "batch_size": 96,
     "hidden_dim": 40,
@@ -32,14 +39,46 @@
     "memory_slots": 16,
     "query_count": 2,
     "query_pairs_train_excluded_from_test": [
-      ["xor", 0, 1],
-      ["xor", 2, 3],
-      ["and", 4, 5],
-      ["and", 6, 7],
-      ["or", 0, 7],
-      ["or", 1, 6],
-      ["xnor", 2, 5],
-      ["xnor", 3, 4]
+      [
+        "xor",
+        0,
+        1
+      ],
+      [
+        "xor",
+        2,
+        3
+      ],
+      [
+        "and",
+        4,
+        5
+      ],
+      [
+        "and",
+        6,
+        7
+      ],
+      [
+        "or",
+        0,
+        7
+      ],
+      [
+        "or",
+        1,
+        6
+      ],
+      [
+        "xnor",
+        2,
+        5
+      ],
+      [
+        "xnor",
+        3,
+        4
+      ]
     ],
     "query_noise": 0.03,
     "observation_noise": 0.03,
@@ -50,8 +89,15 @@
   "information_flow": {
     "pre_action": "text,image,audio -> encoders -> shared representation -> persistent write -> query-conditioned read -> operator selection -> action",
     "post_action": "environment outcome -> verifier -> differentiable write gate -> persistent state update",
-    "forbidden_before_action": ["answer", "target payload", "evaluation correctness"],
-    "allowed_after_action": ["environment outcome", "verifier supervision"]
+    "forbidden_before_action": [
+      "answer",
+      "target payload",
+      "evaluation correctness"
+    ],
+    "allowed_after_action": [
+      "environment outcome",
+      "verifier supervision"
+    ]
   },
   "controls": {
     "no_memory": "zero all persistent values before query",
@@ -65,5 +111,17 @@
     "Auxiliary representation losses are training scaffolds and are not available at inference.",
     "The verifier receives post-action environment feedback; it must not be interpreted as a pre-action oracle.",
     "The first phase does not claim that end-to-end learning makes every component necessary; necessity is tested by ablation."
+  ],
+  "amendments": [
+    {
+      "id": "A1",
+      "timing": "pre-measurement",
+      "reason": "Align preregistered secondary endpoints and paired-control evaluation with the authoritative runner before any confirmatory measurement.",
+      "changes": [
+        "remove modality_reconstruction_loss from the secondary endpoint list",
+        "add operator_selection_accuracy and target_memory_attention",
+        "evaluate normal and all controls on the same held-out episodes per seed"
+      ]
+    }
   ]
 }
