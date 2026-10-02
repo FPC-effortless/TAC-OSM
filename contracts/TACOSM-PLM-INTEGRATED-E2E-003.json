@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-003",
-  "version": 5,
+  "version": 6,
   "status": "pre-registered",
   "question": "After correcting q1/q2 target-entity construction, is the E2E-001 failure localized to learned persistent-state write addressing, learned read addressing, or lack of a coherent shared address interface?",
   "hypothesis": "Explicit structural entity addressing on the write path, read path, or both will localize the persistent-state failure without changing the multimodal representation, CASM, verifier, optimizer, held-out compositions, or seed schedule.",
@@ -149,16 +149,10 @@
     "same AdamW lr=0.002 and weight_decay=0.0001",
     "same observation noise=0.03",
     "same 300 training steps and 400 evaluation episodes per seed",
-    "E2E-001 and E2E-002 numeric outputs are provenance-only and are not used for tuning or baseline selection",
     "all three arms use the same code and environment apart from the registered address intervention",
-    "controls use the same corrected held-out episodes as the explicit-both arm within each seed"
+    "controls use the same corrected held-out episodes as the explicit-both arm within each seed",
+    "E2E-001 and E2E-002 are invalid provenance-only artifacts and are not used for tuning or baseline selection"
   ],
-  "reproduction_baseline": {
-    "invalid_history": {
-      "e2e001": "VOID benchmark generator: q1/q2 target-entity construction was incorrect",
-      "e2e002": "VOID benchmark generator inherited the same defect"
-    }
-  },
   "information_flow": {
     "pre_action": "corrected text/image/audio observations -> encoders -> shared representation -> persistent write -> query-conditioned read -> CASM -> action",
     "post_action": "environment outcome -> verifier -> differentiable verified write",
@@ -225,6 +219,16 @@
       "discovered": "Premeasurement provenance audit after direct inspection of the Actions event model.",
       "affected": "provenance schema and aggregation check only; no experiment parameter, benchmark, arm, or decision rule changed",
       "no_result_under_previous_version": "No valid E2E-003 combined result existed under the incompatible provenance field."
+    },
+    {
+      "id": "A5",
+      "applies_to": "contract reproduction_baseline representation",
+      "old_definition": "reproduction_baseline contained string-valued invalid-history notes",
+      "new_definition": "invalid-history notes are recorded in held_constant/provenance documentation; reproduction_baseline is omitted because the contract schema accepts numeric baselines only",
+      "rationale": "The contract loader coerces reproduction baseline cells to float; historical invalidity descriptions therefore cannot be stored in that field.",
+      "discovered": "Full repository gate run 37069300655",
+      "affected": "contract schema representation only; no scientific parameter, benchmark, arm, or decision rule changed",
+      "no_result_under_previous_version": "No E2E-003 scientific arm executed under the schema-invalid contract."
     }
   ],
   "diagnostic_materiality_threshold": 0.05,
