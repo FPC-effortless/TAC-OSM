@@ -593,11 +593,11 @@ def train_one(seed, disable, steps, batch_size, shared_transition=True):
         rows = [r for r in test_rows if r.modality == modality]
         x, _y, action = batch_tensors(rows)[modality]
         z = model.encode(modality, x)
-        z_target = model.encode(
+        z_goal = model.encode(
             modality,
             batch_tensors(rows)[modality][1],
         )
-        delta = z_target - z
+        delta = z_goal - z
         prototypes = model.action_emb.weight + model.op_delta
         cheap_scores = F.normalize(delta, -1) @ F.normalize(prototypes, -1).T
         proposed = cheap_scores.topk(min(2, N_OPS), -1).indices
