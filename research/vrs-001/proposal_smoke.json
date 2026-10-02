@@ -1,0 +1,26 @@
+{
+  "proposal_id": "VRS-SMOKE-CANONICAL-001",
+  "proposer": "deterministic-fixture",
+  "prompt_hash": "smoke-only",
+  "domain_hash": "7ae0a81eb95aa7b0527ada74dc43e67f0694d80d3fd8f3327e6b37ae1af464cd",
+  "state_universe_hash": "smoke-only",
+  "task_universe_hash": "smoke-only",
+  "features": [
+    {"name":"power","description":"available rover power","source":"power","unit_interval":true,"anchors":[{"name":"anchor","state_id":"s:0:64:0","value":0.9333998699011475}]},
+    {"name":"grip","description":"terrain grip","source":"grip","unit_interval":true,"anchors":[{"name":"anchor","state_id":"s:0:64:0","value":0.3405952589866813}]},
+    {"name":"thermal_stability","description":"inverse heat load","source":"thermal_stability","unit_interval":true,"anchors":[{"name":"anchor","state_id":"s:0:64:0","value":0.6269051278413194}]},
+    {"name":"mechanical_integrity","description":"inverse wear","source":"mechanical_integrity","unit_interval":true,"anchors":[{"name":"anchor","state_id":"s:0:64:0","value":0.3403751911465869}]},
+    {"name":"terrain_affinity","description":"terrain compatibility","source":"terrain_affinity","unit_interval":true,"anchors":[{"name":"anchor","state_id":"s:0:64:0","value":0.625823790228315}]}
+  ],
+  "mode": "expression",
+  "build_cost_units": 0,
+  "build_cost_unit": "smoke_only",
+  "provenance": {
+    "proposer_model_identifier": "deterministic-fixture",
+    "prompt_hash": "smoke-only",
+    "domain_description_hash": "7ae0a81eb95aa7b0527ada74dc43e67f0694d80d3fd8f3327e6b37ae1af464cd",
+    "generation_timestamp": "2026-10-02T00:00:00Z",
+    "decoding_settings": {"temperature":0},
+    "outcome_visibility":"none"
+  }
+}
