@@ -247,6 +247,12 @@ def main() -> None:
     summary["memory_drop"] = summary["normal_q2"] - summary["no_memory_q2"]
     output = {
         "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
+        "provenance": {
+            "git_commit": os.environ.get("GITHUB_SHA", "unknown"),
+            "python_version": platform.python_version(),
+            "torch_version": torch.__version__,
+            "platform": platform.platform(),
+        },
         "status": "measured",
         "protocol": {
             "seeds": SEEDS,
