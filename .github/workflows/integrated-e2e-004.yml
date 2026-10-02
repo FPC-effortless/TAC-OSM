@@ -46,7 +46,7 @@ jobs:
           python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
       - name: Run registered arm
         env:
-          E2E004_ARM: \${{ matrix.arm }}
+          E2E004_ARM: ${{ matrix.arm }}
         run: |
           python scripts/run_integrated_e2e_004.py \
             --arm "$E2E004_ARM" \
@@ -54,8 +54,8 @@ jobs:
       - name: Upload arm artifact
         uses: actions/upload-artifact@v4
         with:
-          name: TACOSM-PLM-INTEGRATED-E2E-004-\${{ matrix.arm }}
-          path: artifacts/TACOSM-PLM-INTEGRATED-E2E-004-\${{ matrix.arm }}.json
+          name: TACOSM-PLM-INTEGRATED-E2E-004-${{ matrix.arm }}
+          path: artifacts/TACOSM-PLM-INTEGRATED-E2E-004-${{ matrix.arm }}.json
           if-no-files-found: error
 
   aggregate:
