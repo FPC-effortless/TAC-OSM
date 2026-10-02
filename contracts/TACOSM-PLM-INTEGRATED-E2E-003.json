@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-003",
-  "version": 3,
+  "version": 4,
   "status": "pre-registered",
   "question": "After correcting q1/q2 target-entity construction, is the E2E-001 failure localized to learned persistent-state write addressing, learned read addressing, or lack of a coherent shared address interface?",
   "hypothesis": "Explicit structural entity addressing on the write path, read path, or both will localize the persistent-state failure without changing the multimodal representation, CASM, verifier, optimizer, held-out compositions, or seed schedule.",
@@ -205,7 +205,18 @@
       "discovered": "Pre-measurement audit of the corrected contract.",
       "affected": "diagnostic interpretation only; primary endpoint and experimental parameters unchanged",
       "no_result_under_previous_version": "No E2E-003 measurement existed under the unquantified rule."
+    },
+    {
+      "id": "A3",
+      "applies_to": "contract schema title field",
+      "old_definition": "E2E-003 contract omitted the schema-required top-level title field",
+      "new_definition": "E2E-003 contract includes the required top-level title field",
+      "rationale": "Repository contract validation requires title before any measurement can be considered valid.",
+      "discovered": "Full repository gate run 37068686061",
+      "affected": "contract metadata only; no scientific parameter or decision rule changed",
+      "no_result_under_previous_version": "No E2E-003 scientific arm executed under the malformed contract."
     }
   ],
-  "diagnostic_materiality_threshold": 0.05
+  "diagnostic_materiality_threshold": 0.05,
+  "title": "Corrected temporal persistent-state address-path diagnosis for the integrated multimodal PLM chain"
 }
