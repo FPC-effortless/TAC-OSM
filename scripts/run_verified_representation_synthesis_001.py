@@ -36,6 +36,50 @@ FEATURE_KEYS = {"name", "description", "anchors", "unit_interval", "source"}
 ANCHOR_LEVELS = {"low": 0.0, "mid": 0.5, "high": 1.0}
 CALIBRATION_STATES = tuple(
     State(f"cal:{i}", *vals) for i, vals in enumerate((
+        (0.00,0.25,0.25,0.25,0.25),(0.50,0.25,0.25,0.25,0.25),(1.00,0.25,0.25,0.25,0.25),
+        (0.25,0.00,0.25,0.25,0.25),(0.25,0.50,0.25,0.25,0.25),(0.25,1.00,0.25,0.25,0.25),
+        (0.25,0.25,1.00,0.25,0.25),(0.25,0.25,0.50,0.25,0.25),(0.25,0.25,0.00,0.25,0.25),
+        (0.25,0.25,0.25,1.00,0.25),(0.25,0.25,0.25,0.50,0.25),(0.25,0.25,0.25,0.00,0.25),
+        (0.25,0.25,0.25,0.25,0.00),(0.25,0.25,0.25,0.25,0.50),(0.25,0.25,0.25,0.25,1.00),
+    ))
+)!/usr/bin/env python3
+"""Confirmatory runner for TACOSM-VRS-DYNAMIC-REPRESENTATION-001.
+
+The proposer is external and frozen. This runner only validates the frozen
+artifact and evaluates fixed representations on a deterministic synthetic
+domain. The checked-in smoke fixture is never admissible as confirmatory
+evidence.
+"""
+from __future__ import annotations
+import argparse, hashlib, json, math, random, statistics
+from dataclasses import asdict, dataclass
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+CONTRACT = "TACOSM-VRS-DYNAMIC-REPRESENTATION-001"
+SEEDS = (0, 1, 2, 3, 4)
+M_LEVELS = (64, 128, 256, 512)
+K_LEVELS = (4, 8, 16, 32)
+TRIALS = 64
+HORIZONS = (1, 4, 16, 32)
+NEAR = 0.35
+CAP_FLOOR = 0.80
+SUCCESS_TOL = 0.02
+WORK_PER_CANDIDATE = 12
+VAR_FLOOR = 1e-6
+CORR_LIMIT = 0.98
+DOMAIN_VERSION = "rover-dynamics-v1"
+ACTIONS = ("drive", "climb", "cool", "repair")
+DELTA = {
+    "drive": (0.08, 0.00, 0.05, 0.03),
+    "climb": (0.06, 0.08, 0.08, 0.04),
+    "cool": (0.01, 0.00, -0.15, 0.00),
+    "repair": (0.04, 0.00, -0.02, -0.12),
+}
+FEATURE_KEYS = {"name", "description", "anchors", "unit_interval", "source"}
+ANCHOR_LEVELS = {"low": 0.0, "mid": 0.5, "high": 1.0}
+CALIBRATION_STATES = tuple(
+    State(f"cal:{i}", *vals) for i, vals in enumerate((
         (0.05,0.15,0.75,0.75,0.05),(0.15,0.35,0.55,0.55,0.20),
         (0.25,0.55,0.35,0.35,0.35),(0.35,0.75,0.15,0.15,0.50),
         (0.50,0.25,0.65,0.40,0.65),(0.65,0.45,0.45,0.25,0.80),
