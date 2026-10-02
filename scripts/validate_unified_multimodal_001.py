@@ -13,6 +13,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 CONTRACT=ROOT/"contracts"/"TACOSM-UNIFIED-MULTIMODAL-001.json"
 RUNNER=ROOT/"scripts"/"run_unified_multimodal_001.py"
+CORE=ROOT/"src"/"tac_osm"/"unified.py"
 
 REQUIRED=(
     "experiment_id","title","question","hypothesis","arms","endpoints",
@@ -46,10 +47,15 @@ def main():
                     raise SystemExit(f"forbidden truth argument(s) in {node.name}: {bad}")
 
     text=RUNNER.read_text()
-    required_literals=("proposal miss", "verified", "TEST_WORLD_SEED", "TRAIN_WORLD_SEED", "VAL_WORLD_SEED")
-    missing_literals=[x for x in required_literals if x not in text]
-    if missing_literals:
-        raise SystemExit(f"runner missing required integrity markers: {missing_literals}")
+    runner_literals=("TEST_WORLD_SEED", "TRAIN_WORLD_SEED", "VAL_WORLD_SEED", "verified")
+    missing_runner=[x for x in runner_literals if x not in text]
+    core_text=CORE.read_text()
+    core_literals=("proposal miss", "hidden-truth fallback")
+    missing_core=[x for x in core_literals if x not in core_text]
+    if missing_runner:
+        raise SystemExit(f"runner missing required integrity markers: {missing_runner}")
+    if missing_core:
+        raise SystemExit(f"unified core missing no-fallback markers: {missing_core}")
 
     print("UNIFIED-MULTIMODAL-001 PREFLIGHT: PASS")
     print("contract schema: PASS")
