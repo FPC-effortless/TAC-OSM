@@ -239,3 +239,26 @@ between write and read?" The next experiment must test that interface directly.
 
 The corrected experiment must independently generate q1 and q2 and assert
 that their entity identities differ before any measurement is reported.
+
+
+---
+
+## E2E-003 corrected temporal/address diagnosis
+
+| Evidence | Layer | Type | Disposition | What it supports |
+|---|---|---|---|---|
+| Corrected E2E-003 explicit-write, explicit-read and explicit-both arms | L3 | negative/localization | **VALID** | correct structural addressing on either or both persistent-state paths did not improve held-out q2 capability |
+| Explicit-both paired controls | L3 | localization | **VALID** | no measurable persistence, image-alignment, or unimodal contribution under this protocol |
+| Cross-arm seed results | L3 | statistical | **VALID** | all three arms produced identical seed-level q2 values: 0.5475, 0.4925, 0.5075, 0.5425, 0.5100 |
+
+Primary:
+mean q2 = **0.5200**, seed-bootstrap 95% interval
+**[0.5020, 0.5385]**, minimum seed **0.4925**.
+
+The result is bounded to the corrected synthetic implementation. It does not
+support impossibility claims about PLM, persistent state, multimodal fusion,
+CASM, or learned addressing.
+
+The immediate next diagnostic is the representation-to-CASM content interface:
+the supervised representation bit head and the CASM bit head are currently
+separate learned projections.
