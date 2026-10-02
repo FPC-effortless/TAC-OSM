@@ -588,7 +588,7 @@ def train_one(seed, disable, steps, batch_size, shared_transition=True):
     test = evaluate(model, test_rows, memory)
 
     # Two-stage selection: cheap proposal first, exact transition reranking second.
-    routing = {m: {"proposal_recall": 0.0, "conditional_route": 0.0} for m in MODALITIES}
+    routing = {m: {"proposal_recall": 0.0, "conditional_route": 0.0, "goal_conditioned": True} for m in MODALITIES}
     for modality in MODALITIES:
         rows = [r for r in test_rows if r.modality == modality]
         x, _y, action = batch_tensors(rows)[modality]
@@ -621,7 +621,7 @@ def train_one(seed, disable, steps, batch_size, shared_transition=True):
                 ],
                 1,
             ).squeeze(0)
-            distance = ((predictions - z_target[i]) ** 2).mean(-1)
+            distance = ((predictions - z_goal[i]) ** 2).mean(-1)
             good += int(int(candidates[int(distance.argmin())]) == int(action[i]))
 
         routing[modality]["conditional_route"] = good / denominator if denominator else 0.0
