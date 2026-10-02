@@ -95,3 +95,37 @@ def test_anchor_mismatch_is_rejected():
         pass
     else:
         raise AssertionError("anchor mismatch must be rejected")
+
+def test_empty_neighborhood_does_not_pass_dynamic_gate():
+    validator = RepresentationValidator(lambda sid: (float(sid),))
+    cases = (
+        FixedTransitionCase("pair-far", "0", "2", ("act",), 1),
+    )
+    result = validator.validate_dynamic(
+        cases,
+        transition=lambda sid, action: sid,
+        outcome=lambda sid, action: 0,
+        near_threshold=0.5,
+        successor_tolerance=0.0,
+    )
+    assert result.applicable is False
+    assert result.passed is False
+
+
+def test_action_schedule_must_match_declared_horizon():
+    validator = RepresentationValidator(lambda sid: (0.0,))
+    cases = (
+        FixedTransitionCase("bad-horizon", "a", "a", ("act",), 2),
+    )
+    try:
+        validator.validate_dynamic(
+            cases,
+            transition=lambda sid, action: sid,
+            outcome=lambda sid, action: 0,
+            near_threshold=0.1,
+            successor_tolerance=0.0,
+        )
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("mismatched horizon must be rejected")
