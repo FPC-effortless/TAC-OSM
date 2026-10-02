@@ -42,6 +42,8 @@ def main() -> None:
         data=json.loads(p.read_text())
         if data["arm"]!=arm:
             raise RuntimeError(f"artifact arm mismatch for {arm}")
+        if data["experiment_id"]!="TACOSM-PLM-INTEGRATED-E2E-003":
+            raise RuntimeError(f"experiment mismatch for {arm}")
         if tuple(data["protocol"]["seeds"]) != SEEDS:
             raise RuntimeError(f"seed mismatch for {arm}")
         if data["protocol"]["steps"] != 300 or data["protocol"]["evaluation_episodes_per_seed"] != 400:
@@ -53,6 +55,14 @@ def main() -> None:
         if len(rows)!=5 or len({r["seed"] for r in rows})!=5:
             raise RuntimeError(f"duplicate/missing seed rows for {arm}")
         records[arm]=data
+
+    provs=[records[a]["provenance"] for a in ARMS]
+    pr_heads={p.get("pr_head_sha") for p in provs}
+    commits={p.get("git_commit") for p in provs}
+    if len(pr_heads)!=1 or "unknown" in pr_heads:
+        raise RuntimeError(f"arm PR-head provenance mismatch: {sorted(pr_heads)}")
+    if len(commits)!=1 or "unknown" in commits:
+        raise RuntimeError(f"arm checkout provenance mismatch: {sorted(commits)}")
 
     both=records["explicit_both"]
     seed_rows=both["seed_results"]
