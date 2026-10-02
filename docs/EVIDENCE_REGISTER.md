@@ -209,3 +209,19 @@ checked by running rather than by reading:
   row above and bears repeating: it certifies that a run matched its design.
   It says nothing about whether the design was a good idea, or whether the
   hypothesis the design was built to test is true.
+
+
+---
+
+## E2E-001 post-measurement evidence disposition
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Integrated multimodal E2E-001: mean q2 = 0.5200, seed-bootstrap 95% CI [0.5020, 0.5385] | L3 | negative | the registered synthetic integrated implementation failed its 0.80 primary criterion | no general PLM impossibility; no real-world multimodal claim; no scaling claim | all five seeds retained; artifact 11251182171; workflow 37062142549 |
+| Memory and image-alignment controls exactly equal the integrated arm | L3 | localization | no measurable persistence or image-alignment contribution under this protocol | no claim that persistence/fusion is useless generally | paired evaluation episodes and zero bootstrap drops |
+| Target memory attention ≈ 0.06094 with 16 slots | L3 | diagnostic | supports the hypothesis that target-specific state addressing did not emerge | not a formal hypothesis test of uniform attention | uniform reference is 0.0625; attention diagnostic was secondary |
+| Operator selection = 1.0000 | L3 | diagnostic | query-label echoing is working | autonomous operator discovery/routing | operator ID was explicit and supervised |
+
+The evidence therefore moves the immediate blocker from "can the integrated chain
+be trained?" to "can a trainable persistent-state address space be made coherent
+between write and read?" The next experiment must test that interface directly.
