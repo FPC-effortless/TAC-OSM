@@ -57,16 +57,14 @@ class World:
         self.residue = {"train": 2, "val": 1, "test": 0}[split]
 
     def semantic(self, _i: int) -> Tuple[int, int, int]:
+        # Domain holdout is transition-invariant: actions never modify c.
+        # Train/validation/test therefore have disjoint target-state domains,
+        # not merely disjoint source examples.
+        c_values = {"train": (0, 1), "val": (2,), "test": (3,)}[self.split]
         a = int(self.rng.integers(0, 8))
         b = int(self.rng.integers(0, 8))
-        c = int(self.rng.integers(0, 4))
-        for _ in range(512):
-            if (a * 3 + b + c) % 5 == self.residue:
-                return a, b, c
-            a = int(self.rng.integers(0, 8))
-            b = int(self.rng.integers(0, 8))
-            c = int(self.rng.integers(0, 4))
-        raise RuntimeError("semantic generator failed to hit registered residue")
+        c = int(self.rng.choice(c_values))
+        return a, b, c
 
     @staticmethod
     def transition(s, op):
@@ -76,7 +74,7 @@ class World:
         elif op == 1:
             b = (b + 1) % 8
         elif op == 2:
-            c = (c + 1) % 4
+            a = (a + 2) % 8
         elif op == 3:
             a = (a + 1) % 8
             b = (b + 2) % 8
@@ -145,11 +143,20 @@ def split_audit(train_rows, val_rows, test_rows):
     )
     if not disjoint:
         raise RuntimeError("train/validation/test semantic leakage detected")
+    domains = [{r.semantic[2] for r in rows} for rows in (train_rows, val_rows, test_rows)]
+    if not (
+        domains[0].isdisjoint(domains[1])
+        and domains[0].isdisjoint(domains[2])
+        and domains[1].isdisjoint(domains[2])
+    ):
+        raise RuntimeError("train/validation/test domain leakage detected")
     return {
         "train_semantics": len(semantic_sets[0]),
         "validation_semantics": len(semantic_sets[1]),
         "test_semantics": len(semantic_sets[2]),
+        "domain_sets": [sorted(d) for d in domains],
         "pairwise_disjoint": True,
+        "target_domain_disjoint": True,
     }
 
 
