@@ -46,7 +46,7 @@ def main():
                     raise SystemExit(f"forbidden truth argument(s) in {node.name}: {bad}")
 
     text=RUNNER.read_text()
-    required_literals=("no retrieval miss","verified","TEST_WORLD_SEED","TRAIN_WORLD_SEED","VAL_WORLD_SEED")
+    required_literals=("proposal miss", "verified", "TEST_WORLD_SEED", "TRAIN_WORLD_SEED", "VAL_WORLD_SEED")
     missing_literals=[x for x in required_literals if x not in text]
     if missing_literals:
         raise SystemExit(f"runner missing required integrity markers: {missing_literals}")
