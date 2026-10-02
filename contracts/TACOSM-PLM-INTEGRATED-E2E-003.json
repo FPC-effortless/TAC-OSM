@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-003",
-  "version": 2,
+  "version": 3,
   "status": "pre-registered",
   "question": "After correcting q1/q2 target-entity construction, is the E2E-001 failure localized to learned persistent-state write addressing, learned read addressing, or lack of a coherent shared address interface?",
   "hypothesis": "Explicit structural entity addressing on the write path, read path, or both will localize the persistent-state failure without changing the multimodal representation, CASM, verifier, optimizer, held-out compositions, or seed schedule.",
@@ -106,7 +106,7 @@
       "does_not_license": "a general memory-system claim"
     },
     {
-      "condition": "explicit_both differs materially from both single-path arms",
+      "condition": "explicit_both differs by at least 0.05 from both single-path arms",
       "licenses": "evidence that write/read address coherence is consequential in this synthetic task",
       "does_not_license": "semantic addressing generally"
     },
@@ -182,7 +182,8 @@
   "statistics": {
     "seed_bootstrap_samples": 5000,
     "seed_bootstrap_seed": 20261002,
-    "confidence_level": 0.95
+    "confidence_level": 0.95,
+    "provenance_rule": "all three arm artifacts must report the same experiment head and merged checkout SHA before aggregation"
   },
   "amendments": [
     {
@@ -194,7 +195,17 @@
       "discovered": "Pre-measurement scientific-process audit.",
       "affected": "diagnostic interpretation only; primary endpoint, benchmark, seeds and training schedule unchanged",
       "no_result_under_previous_version": "No E2E-003 measurement existed under the unquantified rule."
+    },
+    {
+      "id": "A2",
+      "applies_to": "explicit-both vs single-path diagnostic decision rule",
+      "old_definition": "the explicit-both arm was described using an unquantified material-difference condition",
+      "new_definition": "an explicit-both difference is diagnostic only when its mean q2 accuracy differs by at least 0.05 from each single-path arm",
+      "rationale": "Prevent post-hoc prose from deciding what constitutes a meaningful arm difference.",
+      "discovered": "Pre-measurement audit of the corrected contract.",
+      "affected": "diagnostic interpretation only; primary endpoint and experimental parameters unchanged",
+      "no_result_under_previous_version": "No E2E-003 measurement existed under the unquantified rule."
     }
   ],
   "diagnostic_materiality_threshold": 0.05
-}\n
+}
