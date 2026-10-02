@@ -3,7 +3,67 @@
   "version": "0.1-preregistered",
   "status": "preregistered",
   "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
-  "primary_question": "When executable program wiring is part of the public candidate representation, can selective candidate routing reduce actual graph-execution work while preserving task capability?",
+  "title": "Graph CASM selective execution: can routing over a public executable program graph reduce actual execution work at preserved capability?",
+  "question": "When executable program wiring is part of the public candidate representation, can selective candidate routing reduce actual graph-execution work while preserving task capability?",
+  "hypothesis": "When the true program wiring is public, a learned router ranked over graph-featured candidates can hit a budget and execute only a bounded prefix of the ranked pool while retaining at least 0.80 of the exhaustive exact graph executor's semantic success; removing the wiring field from the public representation removes that capability, because the router can no longer distinguish programs that share node-local descriptors and differ in hidden wiring.",
+  "arms": [
+    {
+      "name": "graph",
+      "intervention": "route candidates over a complete public executable program graph, with the 200-bit wiring field present in the candidate representation",
+      "acts_on": "candidate representation"
+    },
+    {
+      "name": "summary",
+      "intervention": "route candidates over a public node-local structural summary with the 200-bit wiring field removed, at matched candidate projection and query tower",
+      "acts_on": "candidate representation"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "selective_execution_work_fraction_at_capability",
+      "role": "primary — minimum exact graph-execution work fraction among budgets at capability retention >= 0.80 of exhaustive exact execution",
+      "primary": true,
+      "description": "At each population level M, the least execution-work fraction over registered budgets whose semantic success is at least 0.80 of the exhaustive exact graph executor."
+    },
+    {
+      "name": "exhaustive_exact_graph_success",
+      "role": "secondary — exhaustive exact graph executor semantic success, the capability ceiling and primary-eligibility gate",
+      "primary": false
+    },
+    {
+      "name": "capability_retention_vs_exhaustive",
+      "role": "secondary — per-budget semantic success relative to the exhaustive exact graph executor",
+      "primary": false
+    },
+    {
+      "name": "routing_recall",
+      "role": "secondary — fraction of evaluation tasks where the target program is inside the executed budget",
+      "primary": false
+    },
+    {
+      "name": "execution_work_units",
+      "role": "secondary — actual graph operations, edge traversals plus active non-input node operations",
+      "primary": false
+    },
+    {
+      "name": "adaptive_execution_work_fraction",
+      "primary": false,
+      "role": "secondary — execution-work fraction under adaptive execution, which executes ranked candidates until one passes all verifier rows rather than a fixed prefix"
+    }
+  ],
+  "h_levels": [32, 64, 128, 256, 512],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 1200,
+  "eval_steps": 32,
+  "held_constant": [
+    "the exact graph executor, the candidate generator, and the 16-row truth-table check are identical in both arms",
+    "candidate feature dimension (290), candidate projection, query tower, optimizer, learning rate, temperature, and router training steps are matched across arms",
+    "support and verifier rows (4 public, 12 verifier-only), seeds, population levels, and budgets are identical in both arms",
+    "the candidate pool is constructed without conditioning decoy inclusion on router-visible support rows",
+    "the target index and the verifier-only rows never enter router inputs",
+    "execution work is counted from actual graph operations only, not from an estimated cost model",
+    "the NOT/XOR role pair is held out of the secondary-role evaluation construction"
+  ],
   "primary_endpoint": {
     "name": "selective_execution_work_fraction_at_capability",
     "population_levels": [32, 64, 128, 256, 512],
