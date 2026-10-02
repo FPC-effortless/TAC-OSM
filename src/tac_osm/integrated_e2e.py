@@ -191,7 +191,7 @@ class IntegratedE2EModel(nn.Module):
         self.operator_query = nn.Embedding(operator_count, config.hidden_dim)
         self.casm = CASMOperators(config.hidden_dim, config.latent_bits)
         self.verifier = nn.Sequential(
-            nn.Linear(config.hidden_dim + 2, config.hidden_dim),
+            nn.Linear(config.hidden_dim + 1, config.hidden_dim),
             nn.GELU(),
             nn.Linear(config.hidden_dim, 1),
         )
