@@ -259,6 +259,29 @@ def evaluate_seed(
         "target_memory_attention": attention_mass / n,
     }
 
+def seed_bootstrap_ci(
+    values: list[float],
+    *,
+    samples: int = 5000,
+    seed: int = 20261002,
+    alpha: float = 0.05,
+) -> tuple[float, float]:
+    rng = random.Random(seed)
+    means = []
+    n = len(values)
+    for _ in range(samples):
+        draw = [values[rng.randrange(n)] for _ in range(n)]
+        means.append(statistics.fmean(draw))
+    means.sort()
+    lo = means[int((alpha / 2) * samples)]
+    hi = means[int((1 - alpha / 2) * samples) - 1]
+    return lo, hi
+
+
+def theoretical_operator_prior_baseline() -> float:
+    return (0.50 + 0.75 + 0.75 + 0.50) / 4
+
+
 def summarize(rows: list[dict[str, float]]) -> dict[str, float]:
     return {
         key: statistics.fmean(row[key] for row in rows)
@@ -321,6 +344,14 @@ def main() -> None:
     summary["seed_failure_threshold_pass"] = bool(
         summary["all_seed_min_q2"] >= 0.40
     )
+    summary["theoretical_operator_prior_accuracy"] = theoretical_operator_prior_baseline()
+
+    q2_values = [r["normal_q2"] for r in results]
+    memory_drops = [r["normal_q2"] - r["no_memory_q2"] for r in results]
+    alignment_drops = [r["normal_q2"] - r["shuffle_image_q2"] for r in results]
+    summary["primary_q2_seed_bootstrap_ci95"] = seed_bootstrap_ci(q2_values)
+    summary["memory_drop_seed_bootstrap_ci95"] = seed_bootstrap_ci(memory_drops)
+    summary["alignment_drop_seed_bootstrap_ci95"] = seed_bootstrap_ci(alignment_drops)
 
     output = {
         "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
@@ -336,6 +367,13 @@ def main() -> None:
             "steps": STEPS,
             "batch_size": BATCH_SIZE,
             "heldout_compositions": HELDOUT,
+            "evaluation_episodes_per_seed": 400,
+            "operator_prior_baseline": theoretical_operator_prior_baseline(),
+            "seed_bootstrap": {
+                "samples": 5000,
+                "seed": 20261002,
+                "confidence": 0.95,
+            },
         },
         "seed_results": results,
         "summary": summary,
