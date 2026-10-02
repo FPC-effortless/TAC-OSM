@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
-  "version": 5,
+  "version": 6,
   "status": "registered",
   "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute a learned operator choice, verify the post-action outcome, and remain capable on held-out modality/operator/query compositions?",
   "primary_endpoint": {
@@ -173,6 +173,16 @@
         "add theoretical_operator_prior_accuracy to secondary endpoints",
         "add deterministic seed bootstrap with fixed resample count and seed",
         "report bootstrap intervals for primary q2 accuracy and paired control drops"
+      ]
+    },
+    {
+      "id": "A5",
+      "timing": "pre-measurement",
+      "reason": "Align persistent state transition semantics with the intended PLM chain.",
+      "changes": [
+        "post-action verified feedback writes only to the entity whose action was executed",
+        "verifier output continues to control write strength",
+        "prevent q1 feedback from changing another entity's persistent slot"
       ]
     }
   ],
