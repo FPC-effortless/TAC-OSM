@@ -183,36 +183,72 @@ def train_seed(seed: int) -> IntegratedE2EModel:
 
 
 @torch.no_grad()
-def evaluate_seed(model: IntegratedE2EModel, seed: int, control: str = "normal") -> dict[str, float]:
-    rng = random.Random(100000 + seed)
+def evaluate_seed(
+    model: IntegratedE2EModel,
+    episodes: list[tuple],
+    control: str = "normal",
+) -> dict[str, float]:
     total1 = total2 = 0
-    for _ in range(400):
-        combo1, combo2 = rng.sample(HELDOUT, 2)
-        ep = sample_episode(rng, combo1=combo1, combo2=combo2)
+    op_correct = 0
+    attention_mass = 0.0
+
+    for ep in episodes:
         batch = batchify([ep])
-        memory = model.state.initial(1, torch.device("cpu"))
+        device = torch.device("cpu")
+        memory = model.state.initial(1, device)
+
         for k in range(3):
+            text = batch["text"][k]
             image = batch["image"][k]
+            audio = batch["audio"][k]
             if control == "shuffle_image":
                 image = batch["image"][(k + 1) % 3]
-            z, _, _, _ = model.encode(
-                batch["text"][k], image, batch["audio"][k]
-            )
+            elif control == "text_only":
+                image = torch.zeros_like(image)
+                audio = torch.zeros_like(audio)
+            elif control == "image_only":
+                text = torch.full_like(text, 1)
+                audio = torch.zeros_like(audio)
+            elif control == "audio_only":
+                text = torch.full_like(text, 1)
+                image = torch.zeros_like(image)
+
+            z, _, _, _ = model.encode(text, image, audio)
             memory, _ = model.observation_write(memory, z)
+
         if control == "no_memory":
             memory.zero_()
-        out1 = model.query(
-            memory, *batch["q1"][:-1]
+
+        q1 = batch["q1"]
+        q2 = batch["q2"]
+        out1 = model.query(memory, *q1[:-1])
+        total1 += int(
+            out1["logits"].argmax(-1).item() == q1[-1].item()
         )
-        total1 += int(out1["logits"].argmax(-1).item() == batch["q1"][-1].item())
+        op_correct += int(
+            out1["operator_prob"].argmax(-1).item() == q1[3].item()
+        )
+        attention_mass += float(
+            out1["attention"][0, q1[0].item()].item()
+        )
+
         if control != "no_memory":
             memory, _ = model.post_action_update(
-                memory, out1, batch["q1"][-1]
+                memory, out1, q1[-1]
             )
-        out2 = model.query(memory, *batch["q2"][:-1])
-        total2 += int(out2["logits"].argmax(-1).item() == batch["q2"][-1].item())
-    return {"q1_accuracy": total1 / 400, "q2_accuracy": total2 / 400}
 
+        out2 = model.query(memory, *q2[:-1])
+        total2 += int(
+            out2["logits"].argmax(-1).item() == q2[-1].item()
+        )
+
+    n = len(episodes)
+    return {
+        "q1_accuracy": total1 / n,
+        "q2_accuracy": total2 / n,
+        "operator_selection_accuracy": op_correct / n,
+        "target_memory_attention": attention_mass / n,
+    }
 
 def summarize(rows: list[dict[str, float]]) -> dict[str, float]:
     return {
@@ -224,16 +260,39 @@ def summarize(rows: list[dict[str, float]]) -> dict[str, float]:
 def main() -> None:
     seed_models = [(seed, train_seed(seed)) for seed in SEEDS]
     results = []
+    controls = (
+        "normal",
+        "no_memory",
+        "shuffle_image",
+        "text_only",
+        "image_only",
+        "audio_only",
+    )
     for seed, model in seed_models:
-        normal = evaluate_seed(model, seed, "normal")
-        no_memory = evaluate_seed(model, seed, "no_memory")
-        shuffled = evaluate_seed(model, seed, "shuffle_image")
+        rng = random.Random(100000 + seed)
+        eval_episodes = []
+        for _ in range(400):
+            combo1, combo2 = rng.sample(HELDOUT, 2)
+            eval_episodes.append(
+                sample_episode(rng, combo1=combo1, combo2=combo2)
+            )
+
+        evaluated = {
+            control: evaluate_seed(model, eval_episodes, control)
+            for control in controls
+        }
+        normal = evaluated["normal"]
         results.append({
             "seed": seed,
             "normal_q1": normal["q1_accuracy"],
             "normal_q2": normal["q2_accuracy"],
-            "no_memory_q2": no_memory["q2_accuracy"],
-            "shuffle_image_q2": shuffled["q2_accuracy"],
+            "normal_operator_selection": normal["operator_selection_accuracy"],
+            "normal_target_memory_attention": normal["target_memory_attention"],
+            "no_memory_q2": evaluated["no_memory"]["q2_accuracy"],
+            "shuffle_image_q2": evaluated["shuffle_image"]["q2_accuracy"],
+            "text_only_q2": evaluated["text_only"]["q2_accuracy"],
+            "image_only_q2": evaluated["image_only"]["q2_accuracy"],
+            "audio_only_q2": evaluated["audio_only"]["q2_accuracy"],
         })
 
     summary = {
@@ -245,6 +304,15 @@ def main() -> None:
         summary["normal_q2"] - summary["shuffle_image_q2"]
     )
     summary["memory_drop"] = summary["normal_q2"] - summary["no_memory_q2"]
+    summary["text_only_gap"] = summary["normal_q2"] - summary["text_only_q2"]
+    summary["image_only_gap"] = summary["normal_q2"] - summary["image_only_q2"]
+    summary["audio_only_gap"] = summary["normal_q2"] - summary["audio_only_q2"]
+    summary["primary_pass"] = bool(summary["normal_q2"] >= 0.80)
+    summary["all_seed_min_q2"] = min(r["normal_q2"] for r in results)
+    summary["seed_failure_threshold_pass"] = bool(
+        summary["all_seed_min_q2"] >= 0.40
+    )
+
     output = {
         "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
         "provenance": {
