@@ -31,13 +31,12 @@ SEEDS = (0, 1, 2, 3, 4)
 STEPS = 300
 BATCH_SIZE = 96
 ENTITY_COUNT = 16
-BITS = 8
+BITS = 12
 TRAIN_COMBOS = tuple(
     (op, i, j)
     for op in OPS
     for i in range(BITS)
-    for j in range(BITS)
-    if i != j
+    for j in range(i + 1, BITS)
 )
 HELDOUT = (
     ("xor", 0, 1),
@@ -62,30 +61,40 @@ class EpisodeBatch:
     q2: tuple[Tensor, Tensor, Tensor, Tensor, Tensor]
 
 
+def _noise(shape: tuple[int, ...], rng: random.Random) -> Tensor:
+    generator = torch.Generator(device="cpu")
+    generator.manual_seed(rng.randrange(2**31))
+    return torch.randn(shape, generator=generator)
+
+
 def make_modalities(entity: int, bits: list[int], rng: random.Random):
+    # Complementary information: no single modality contains the full
+    # payload. Text owns bits 0-3, image owns bits 4-7, audio owns bits 8-11.
     text = torch.tensor(
-        [2, 4 + entity, *[20 + b for b in bits], *([1] * 0)],
+        [2, 4 + entity, 3, *[20 + b for b in bits[:4]]],
         dtype=torch.long,
     )
+
     image = torch.zeros(1, 16, 16)
-    for idx, bit in enumerate(bits):
-        r = (idx // 4) * 3 + 1
-        c = (idx % 4) * 3 + 1
-        image[0, r:r+2, c:c+2] = float(bit)
+    for idx, bit in enumerate(bits[4:8]):
+        r = (idx // 2) * 6 + 1
+        c = (idx % 2) * 6 + 1
+        image[0, r:r+3, c:c+3] = float(bit)
     for k in range(4):
         image[0, k, :] = float((entity >> k) & 1)
-    image += 0.03 * torch.randn_like(image)
+    image += 0.03 * _noise((1, 16, 16), rng)
     image.clamp_(0.0, 1.0)
 
     t = torch.linspace(0, 1, 96)
     audio = torch.zeros(96)
     base = 2 + entity % 5
-    for idx, bit in enumerate(bits):
-        seg = slice(idx * 12, (idx + 1) * 12)
+    for idx, bit in enumerate(bits[8:12]):
+        seg = slice(idx * 24, (idx + 1) * 24)
+        local_t = t[seg]
         audio[seg] = (1 if bit else -1) * torch.sin(
-            2 * math.pi * (base + idx + 1) * t[seg]
+            2 * math.pi * (base + idx + 1) * local_t
         )
-    audio += 0.03 * torch.randn_like(audio)
+    audio += 0.03 * _noise((96,), rng)
     return text, image, audio
 
 
@@ -97,9 +106,9 @@ def sample_episode(
     entities = rng.sample(range(ENTITY_COUNT), 3)
     payload = {e: [rng.randrange(2) for _ in range(BITS)] for e in entities}
 
-    def make_query(combo):
+    def make_query(combo, entity):
         op, i, j = combo
-        a, b = payload[entities[0]][i], payload[entities[0]][j]
+        a, b = payload[entity][i], payload[entity][j]
         y = {
             "xor": a ^ b,
             "and": a & b,
@@ -113,7 +122,7 @@ def sample_episode(
     obs = []
     for entity in entities:
         obs.append((entity, *make_modalities(entity, payload[entity], rng)))
-    return obs, make_query(combo1), make_query(combo2), payload
+    return obs, make_query(combo1, entities[0]), make_query(combo2, entities[1]), payload
 
 
 def batchify(episodes: Iterable[tuple]):
