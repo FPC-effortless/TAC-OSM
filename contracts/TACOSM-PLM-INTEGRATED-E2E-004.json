@@ -121,7 +121,7 @@
   },
   "status": "pre-registered",
   "layer": "L3",
-  "version": 2,
+  "version": 3,
   "amendments": [
     {
       "id": "A1",
@@ -142,6 +142,16 @@
       "discovered": "E2E-004 focused/full repository gate.",
       "affected": "artifact serialization only; no scientific parameter or decision rule changed",
       "no_result_under_previous_version": "No E2E-004 scientific arm executed under the malformed serializer."
+    },
+    {
+      "id": "A3",
+      "applies_to": "final artifact-writer source",
+      "old_definition": "the serializer repair left a duplicate malformed writer line below the corrected writer",
+      "new_definition": "the runner and aggregator each contain exactly one valid JSON serialization statement",
+      "rationale": "The focused repository gate exposed the duplicate stale source after the first serializer repair.",
+      "discovered": "E2E-004 full repository gate run 37071372992",
+      "affected": "source syntax only; no scientific parameter, arm, benchmark or decision rule changed",
+      "no_result_under_previous_version": "No E2E-004 scientific arm executed under the duplicate malformed source."
     }
   ]
 }
