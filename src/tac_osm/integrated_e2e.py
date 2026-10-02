@@ -20,7 +20,7 @@ import torch.nn.functional as F
 
 
 OPS = ("xor", "and", "or", "xnor")
-LATENT_BITS = 8
+LATENT_BITS = 12
 
 
 @dataclass(frozen=True)
