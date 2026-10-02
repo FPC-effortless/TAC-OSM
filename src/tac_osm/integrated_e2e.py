@@ -298,7 +298,7 @@ class IntegratedE2EModel(nn.Module):
         q1: tuple[Tensor, Tensor, Tensor, Tensor, Tensor],
         q2: tuple[Tensor, Tensor, Tensor, Tensor, Tensor],
     ) -> dict[str, Tensor]:
-        memory = self.state.initial(observations["text"].shape[0], observations["text"].device)
+        memory = self.state.initial(observations["text"].shape[1], observations["text"].device)
         entity_loss = 0.0
         bit_loss = 0.0
         for t in range(observations["text"].shape[0]):
