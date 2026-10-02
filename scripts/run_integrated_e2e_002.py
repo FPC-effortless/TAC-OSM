@@ -167,7 +167,7 @@ def main() -> None:
             normal = evaluate(model, eval_episodes, "normal")
             row[arm] = normal["q2_accuracy"]
             row[f"{arm}_attention"] = normal["target_memory_attention"]
-            row[f"{arm}_write_accuracy"] = normal["write_target_accuracy"]
+            row[f"{arm}_write_target_address_accuracy"] = normal["write_target_address_accuracy"]
         # Controls only for explicit_both to keep the diagnostic focused.
         both = dict(seed_models["explicit_both"])[seed]
         for control in ("no_memory", "shuffle_image", "text_only", "image_only", "audio_only"):
@@ -198,7 +198,13 @@ def main() -> None:
         },
         "seed_results":results,
         "summary":{
-            "explicit_both_mean_q2":statistics.fmean(both_values),
+            "heldout_q2_accuracy_explicit_both":statistics.fmean(both_values),
+            "heldout_q2_accuracy_explicit_write":statistics.fmean(
+                r["explicit_write"] for r in results
+            ),
+            "heldout_q2_accuracy_explicit_read":statistics.fmean(
+                r["explicit_read"] for r in results
+            ),
             "explicit_both_seed_bootstrap_ci95":bootstrap(both_values),
             "explicit_both_primary_pass":statistics.fmean(both_values)>=0.80,
             "explicit_both_min_seed":min(both_values),
