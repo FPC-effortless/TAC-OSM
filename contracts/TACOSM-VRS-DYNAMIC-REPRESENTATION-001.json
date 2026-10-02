@@ -145,7 +145,18 @@
     "amortized representation construction cost",
     "scope limits"
   ],
-  "amendments": [],
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "dynamic_validity and cost accounting",
+      "old_definition": "Dynamic test pairs were described as near-neighbor state pairs selected under the frozen geometry; the registration did not explicitly require pair construction to precede representation scoring.",
+      "new_definition": "State-pair identities and action schedules are generated and hashed independently of the representation before any representation is scored; the representation only determines which fixed pairs satisfy the preregistered near-neighbor threshold. The contract also explicitly records representation-build break-even accounting.",
+      "rationale": "Methodological integrity review identified post-representation pair selection as a potential selection bias: a representation could avoid difficult pairs by changing which states count as neighbors. The amendment closes that pathway before measurement and adds explicit amortization accounting for the cost of semantic representation construction.",
+      "discovered": "2026-10-02 review of the preregistered VRS design, before any confirmatory measurement.",
+      "affected": "dynamic equivalence denominator, pair construction protocol, and cost reporting; no population, seed, capability threshold, representation arm, or outcome was measured under the previous definition.",
+      "no_result_under_previous_version": "No VRS measurement was run under the previous definition."
+    }
+  ],
   "sections": {
     "level_semantics": {
       "h_levels": "The shared ExperimentContract field h_levels is used for persistent-state population M because the contract schema predates explicit M/E/H terminology. This semantic mapping is fixed for this experiment and is not a change to the scientific variable.",
