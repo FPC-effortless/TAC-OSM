@@ -1,6 +1,18 @@
 name: Research graph CASM selective execution 010
 
 on:
+  pull_request:
+    branches:
+      - research/unified-plm-clm-final-2026-10-01
+    paths:
+      - contracts/TACOSM-GRAPH-CASM-SELECTIVE-010.json
+      - contracts/**
+      - docs/TACOSM-GRAPH-CASM-SELECTIVE-010.md
+      - docs/TACOSM-BASELINE-001.md
+      - scripts/run_graph_casm_selective_010.py
+      - tests/test_graph_casm_selective_010.py
+      - src/**
+      - .github/workflows/graph-casm-selective-010.yml
   push:
     branches:
       - research/graph-casm-selective-010
@@ -63,7 +75,7 @@ jobs:
 
   full:
     name: G-CASM-010 full measurement
-    if: contains(github.event.head_commit.message, '[run-graph-casm-selective-010-full]') || github.event_name == 'workflow_dispatch'
+    if: contains(github.event.head_commit.message, '[run-graph-casm-selective-010-full]') || contains(github.event.pull_request.body, '[run-graph-casm-selective-010-full]') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
