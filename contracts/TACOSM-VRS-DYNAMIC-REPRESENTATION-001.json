@@ -187,6 +187,16 @@
       "discovered": "2026-10-02 methodological review, before any VRS confirmatory measurement.",
       "affected": "proposal-generation input contract, dynamic pair metric, and one-step action coverage; no VRS confirmatory outcome exists under the previous definition.",
       "no_result_under_previous_version": "No VRS confirmatory measurement was run before A4."
+    },
+    {
+      "id": "A5",
+      "applies_to": "benchmark leakage and proposer input boundary",
+      "old_definition": "The proposal protocol used a domain-description hash that could refer to a document containing the exact downstream task score, making the evaluator definition potentially visible to the representation proposer.",
+      "new_definition": "The only proposer-visible domain artifact is research/vrs-001/PROPOSER-DOMAIN-001.md, frozen and hashed. The benchmark-private DOMAIN-001.md contains evaluator-side score/safety details and is forbidden as proposer input. The external scored artifact must carry the SHA-256 of the proposer-visible domain artifact.",
+      "rationale": "Providing the exact evaluation objective to the abstraction generator would convert representation discovery into objective-specific feature reconstruction and invalidate the intended pre-evaluator abstraction boundary.",
+      "discovered": "2026-10-02 benchmark leakage review, before any VRS confirmatory measurement.",
+      "affected": "proposer input visibility and domain provenance; no VRS confirmatory outcome exists under the previous definition.",
+      "no_result_under_previous_version": "No VRS confirmatory measurement was run before A5."
     }
   ],
   "sections": {
@@ -215,7 +225,7 @@
     "proposal_protocol": {
       "representation_family": "multidimensional semantic features proposed from a frozen natural-language domain description, then calibrated with explicit anchor states",
       "proposer_role": "slow semantic representation synthesis; not runtime inference",
-      "proposal_inputs": "frozen domain description, public state descriptions/values needed to compute the proposed representation, and public task descriptions/values needed to produce query coordinates; no actions, outcomes, target identities, truth tables, or benchmark results",
+      "proposal_inputs": "research/vrs-001/PROPOSER-DOMAIN-001.md plus the public state/task rows generated for the frozen universe; no benchmark-private evaluator specification is visible to the proposer",
       "outcome_visibility": "none during proposal generation",
       "scoring": "proposal features are applied consistently across all batches using the same anchors",
       "numerical_postprocessing": "training-only variance/correlation filtering and fixed rescaling; no post-result feature selection",
@@ -263,6 +273,19 @@
           "verifier outputs"
         ],
         "attestation_required": "outcome_visibility must equal 'none' and the generation artifact must record the frozen prompt/model provenance"
+      },
+      "proposer_domain_artifact": {
+        "path": "research/vrs-001/PROPOSER-DOMAIN-001.md",
+        "classification": "proposer-visible",
+        "sha256": "0a1488de183bb572b259a8fb8606da087b860a669a176867894d7a27c3861038",
+        "benchmark_private_domain": "research/vrs-001/DOMAIN-001.md",
+        "private_fields": [
+          "exact task-score weights",
+          "exact safety thresholds",
+          "target identities",
+          "truth tables",
+          "benchmark outcomes"
+        ]
       }
     },
     "dynamic_validity": {
