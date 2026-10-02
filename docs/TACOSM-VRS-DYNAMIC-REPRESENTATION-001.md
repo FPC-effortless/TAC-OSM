@@ -518,3 +518,19 @@ registers their replacement.
 This is the representation-level analogue of verifier-gated state writes in the
 existing PLM substrate.
 
+
+## Instrument amendment A2 — non-vacuous dynamic validation
+
+The dynamic-validity gate cannot pass when the representation produces zero
+applicable near pairs or zero evaluated transitions. Such a result means the
+instrument tested nothing about future behavior, not that the representation
+was valid.
+
+The implementation therefore requires:
+
+    near_pairs >= 1
+    checked_transitions >= 1
+
+and requires the fixed action schedule length to equal the declared horizon.
+This is an instrument-integrity amendment made before any confirmatory VRS
+measurement; no scientific outcome was observed under the superseded rule.
