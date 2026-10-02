@@ -1,0 +1,25 @@
+name: Unified native model multimodal research 001
+on:
+  push:
+    branches:
+      - research/unified-native-model-v1
+  workflow_dispatch:
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install research dependencies
+        run: python -m pip install --quiet pytest numpy torch
+      - name: Repository tests
+        run: python -m pytest tests/ -q
+      - name: Confirmatory multimodal experiment
+        run: python scripts/run_unified_multimodal_001.py --confirmatory
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-UNIFIED-MULTIMODAL-001
+          path: artifacts/TACOSM-UNIFIED-MULTIMODAL-001.json
