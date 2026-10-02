@@ -420,7 +420,10 @@ def target_normalizers(rows):
     out = {}
     data = batch_tensors(rows)
     for modality, (_x, y, _a) in data.items():
-        if modality != "language":
+        if modality == "language":
+            counts = torch.bincount(y.view(-1), minlength=VOCAB)
+            out[modality] = float(counts.max()) / float(y.numel())
+        else:
             mean_target = y.mean(0, keepdim=True)
             out[modality] = float(F.mse_loss(mean_target.expand_as(y), y))
     return out
