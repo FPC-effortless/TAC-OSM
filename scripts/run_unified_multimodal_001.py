@@ -94,19 +94,25 @@ class World:
                 dtype=np.int64,
             )
         if modality == "image":
+            # Injective synthetic rendering: independent spatial codes for a,
+            # b and c. No modulo folding is allowed because that would make
+            # different latent states observationally identical.
             img = np.zeros((8, 8), dtype=np.float32)
-            x = a % 6
-            y = b % 6
-            img[y : y + 2, x : x + 2] = 1.0
-            img[(c + 3) % 8, x] = 0.5
-            img[y, (a + b + c) % 8] = 0.25
+            img[0, a] = 1.0
+            img[b, 0] += 0.6
+            img[7, 1 + c] += 0.25
+            img[2 + (a + b) % 5, 7] += 0.15
             return img.reshape(-1)
         t = np.arange(64, dtype=np.float32)
-        freq = 2 + a + (b % 3)
-        phase = 0.15 * c
+        # Two independent harmonics encode a and b; a third tone encodes c.
+        # Frequencies are separated so the state map is injective at 64 samples.
+        f_a = 2 + a
+        f_b = 18 + b
+        f_c = 28 + c
         return (
-            0.5 * np.sin(2 * np.pi * freq * t / 64 + phase)
-            + 0.1 * np.sin(2 * np.pi * (freq + 1) * t / 64)
+            0.55 * np.sin(2 * np.pi * f_a * t / 64)
+            + 0.30 * np.sin(2 * np.pi * f_b * t / 64 + 0.17)
+            + 0.10 * np.sin(2 * np.pi * f_c * t / 64 + 0.31)
         ).astype(np.float32)
 
     def make(self):
