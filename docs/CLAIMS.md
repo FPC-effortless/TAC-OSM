@@ -719,3 +719,48 @@ An entry changes when the measurement changes, not when the prose does. A
 claim found in a doc with no entry here is unsupported by definition, and a
 `SUPPORTED` entry whose experiment cannot be re-run is a `PARTIALLY
 SUPPORTED` entry waiting to be discovered.
+
+
+---
+
+## C12 — Integrated multimodal E2E-001 fails the registered capability criterion
+
+> Under the registered synthetic benchmark, the first jointly trained text/image/audio persistent-computation chain did not reach the capability threshold and showed no measurable contribution from persistent state or image alignment.
+
+**STATUS: NOT ESTABLISHED**
+
+**TYPE:** negative · **LAYER:** L3
+
+**PRIOR ART:** none for this exact integrated claim.
+
+**NOT INHERITED:** the negative does not establish that PLM, multimodal fusion,
+persistent state, or CASM is impossible. It does not concern real-world
+language, vision or audio competence, arbitrary learned operator synthesis, or
+scaling.
+
+**REQUIRED EVIDENCE:** TACOSM-PLM-INTEGRATED-E2E-001, workflow run
+37062142549, experiment head ca74399b713931abe6393de3b76bd859585635b26,
+artifact 11251182171.
+
+The five registered seed q2 accuracies were 0.5475, 0.4925, 0.5075, 0.5425,
+and 0.5100. Mean = **0.5200**; deterministic seed-bootstrap 95% interval
+= **[0.5020, 0.5385]**. The preregistered threshold was 0.80.
+
+No-memory, image-shuffle, text-only, image-only, and audio-only controls all
+also averaged **0.5200**, with memory and alignment drops exactly zero.
+
+Target-slot attention averaged **0.060937** against the uniform 16-slot
+reference of **0.0625**.
+
+Operator-selection accuracy was **1.0000**, but the operator identity was
+provided explicitly by the query and supervised, so this does not establish
+autonomous operator discovery or routing.
+
+The result therefore localizes the current implementation failure toward
+representation/state addressing rather than providing evidence against the
+PLM hypothesis itself.
+
+**BLOCKER:** persistent-state write/read addressing and the shared multimodal
+representation remain unresolved. The next experiment should diagnose the
+write path, read path, and shared address space with preregistered controls
+rather than tune the failed model toward the primary threshold.
