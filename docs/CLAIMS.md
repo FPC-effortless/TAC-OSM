@@ -819,3 +819,41 @@ scientific number.
 
 The branch is closed. A corrected experiment with a new ID must independently
 generate q1/q2 queries and assert distinct target entities before measurement.
+
+
+---
+
+## C14 — Corrected integrated temporal/address benchmark fails the primary capability criterion
+
+**STATUS: NOT ESTABLISHED**
+
+**TYPE:** negative · **LAYER:** L3
+
+The first valid corrected integrated multimodal persistent-computation benchmark
+did not reach the preregistered primary threshold.
+
+Required evidence:
+workflow 37069959733, experiment head
+d638ce29a828084d6cdcaa0fd38fd70b5cb89d53, combined artifact 11254731258.
+
+Primary explicit-both q2 accuracy:
+**0.5200**, five-seed bootstrap 95% interval **[0.5020, 0.5385]**;
+minimum seed **0.4925**.
+
+All three address interventions produced the same five seed values:
+explicit-write **0.5200**, explicit-read **0.5200**, explicit-both **0.5200**.
+
+For explicit-both, no-memory, shuffled-image, text-only, image-only, and audio-only
+controls all averaged **0.5200**.
+
+Interpretation is therefore limited to this synthetic implementation and protocol.
+The result does not establish that PLM, persistent state, multimodal fusion, or
+CASM is impossible. It does not test natural multimodal competence, learned
+semantic addressing, autonomous operator discovery, or scaling.
+
+Immediate blocker:
+the representation-to-executable-state interface remains unresolved. The
+representation's supervised bit projection and CASM's state bit projection are
+separate learned functions with no shared content interface.
+
+The earlier E2E-001 and E2E-002 numbers remain invalid/provenance-only.
