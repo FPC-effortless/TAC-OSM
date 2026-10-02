@@ -137,7 +137,7 @@
   },
   "status": "pre-registered",
   "layer": "L3",
-  "version": 5,
+  "version": 6,
   "amendments": [
     {
       "id": "A1",
@@ -178,6 +178,16 @@
       "discovered": "Premeasurement static contract-to-runner audit.",
       "affected": "output field name only; no data, arm, parameter, or decision rule changed",
       "no_result_under_previous_version": "No scientific benchmark result was produced under the mismatched output naming."
+    },
+    {
+      "id": "A5",
+      "applies_to": "runner diagnostic metric access and output schema",
+      "old_definition": "main read a stale write_target_accuracy field and did not emit the three arm endpoint names explicitly",
+      "new_definition": "main reads write_target_address_accuracy and emits endpoint-aligned explicit_both, explicit_write, and explicit_read q2 summaries",
+      "rationale": "Prevent a runtime KeyError and align the machine-readable measurement artifact with the preregistered endpoint names.",
+      "discovered": "Static contract-to-runner audit before confirmatory execution.",
+      "affected": "runner output plumbing only; no scientific parameter or decision rule changed",
+      "no_result_under_previous_version": "No E2E-002 scientific measurement was executed under the stale metric schema."
     }
   ]
 }
