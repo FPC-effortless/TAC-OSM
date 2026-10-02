@@ -45,6 +45,10 @@ design.
 The invalid E2E-001 and E2E-002 numbers are not used to choose hyperparameters,
 seeds, or intervention decisions.
 
+The branch-local baseline test count is bookkeeping only: master contains 807
+and this branch contains four additional tests, so its CI merge ref is expected
+to collect 811.
+
 ## Scientific boundary
 
 A recovery under explicit addressing shows that the corresponding learned
