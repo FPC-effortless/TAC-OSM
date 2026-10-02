@@ -213,10 +213,18 @@ def run(proposal_path, smoke=False):
         "outcome":"post-action safety over power/grip/heat/wear"}):
         raise ProposalError("domain hash mismatch")
     if p.mode == "scored":
-        if p.raw["state_universe_hash"] != digest([asdict(s) for s in universe_states]):
+        state_hash = digest([asdict(s) for s in universe_states])
+        task_hash = digest([asdict(t) for t in universe_tasks])
+        if p.raw["state_universe_hash"] != state_hash:
             raise ProposalError("state universe hash mismatch")
-        if p.raw["task_universe_hash"] != digest([asdict(t) for t in universe_tasks]):
+        if p.raw["task_universe_hash"] != task_hash:
             raise ProposalError("task universe hash mismatch")
+        expected_states = {s.id for s in universe_states}
+        expected_tasks = {t.id for t in universe_tasks}
+        if set(p.raw["scored_states"]) != expected_states:
+            raise ProposalError("scored state coverage is not exactly the frozen evaluation universe")
+        if set(p.raw["scored_queries"]) != expected_tasks:
+            raise ProposalError("scored query coverage is not exactly the frozen evaluation universe")
     if not smoke: p.require_confirmatory()
     anchor_checks=0
     by_id={s.id:s for s in universe_states}
@@ -236,14 +244,14 @@ def run(proposal_path, smoke=False):
          "anchor_checks":anchor_checks,"by_M":{}}
     for m in selected_m:
         rows=[]
-        seed_primary=[]
         dynamic_rows={}
+        by_k={k:[] for k in (K_LEVELS if not smoke else (4,8))}
         for seed in selected_seeds:
             pool=states(seed,m); ts=tasks(seed,m)
             raw_reps=[s.raw() for s in pool]
             scalar=[[statistics.fmean(s.raw())] for s in pool]
             semantic=[p.vec(s) for s in pool]
-            keep=mask_for(semantic[:min(64,len(semantic))])
+            keep=mask_for([p.vec(s) for s in calibration_states])
             sem=[masked(v,keep) for v in semantic]
             raw_q={t.id:t.raw() for t in ts}
             scalar_q={t.id:(statistics.fmean(t.raw()),) for t in ts}
@@ -254,16 +262,48 @@ def run(proposal_path, smoke=False):
                 sr=evaluate(pool,ts,scalar,scalar_q,k)
                 mr=evaluate(pool,ts,sem,semantic_q,k)
                 rows.append({"seed":seed,"K":k,"raw":rr,"scalar":sr,"semantic":mr})
-                seed_primary.append(mr["work_units"]/(m*WORK_PER_CANDIDATE))
+                by_k[k].append(mr)
             dynamic_rows[str(seed)]=dynamic(p,pool,cases[(seed,m)],keep)
-        eligible=[r for r in rows if r["semantic"]["success"] >= CAP_FLOOR*r["semantic"]["raw_success"]]
-        selected=min(eligible,key=lambda r:r["semantic"]["work_units"]/(m*WORK_PER_CANDIDATE)) if eligible else None
-        out["by_M"][str(m)]={"rows":rows,"dynamic":dynamic_rows,
+        pooled={}
+        for k,cells in by_k.items():
+            sem=sum(c["success"] for c in cells)/len(cells)
+            raw=sum(c["raw_success"] for c in cells)/len(cells)
+            pooled[str(k)]={"semantic_success":sem,"raw_reference_success":raw,
+                            "capability_retention":sem/max(raw,1e-12),
+                            "execution_work_fraction":k/m}
+        eligible=[(int(k),v) for k,v in pooled.items()
+                  if v["semantic_success"] >= CAP_FLOOR*v["raw_reference_success"]]
+        selected=min(eligible,key=lambda kv:kv[1]["execution_work_fraction"]) if eligible else None
+
+        seed_blocks={seed:{} for seed in selected_seeds}
+        for r in rows:
+            seed_blocks[r["seed"]][r["K"]] = {
+                "success":r["semantic"]["success"],
+                "raw_success":r["raw"]["raw_success"]
+            }
+        boot_vals=[]
+        rng=random.Random(7919)
+        for _ in range(4000):
+            sampled=[selected_seeds[rng.randrange(len(selected_seeds))] for _ in selected_seeds]
+            choices=[]
+            for k in by_k:
+                cells=[seed_blocks[seed][k] for seed in sampled]
+                sem=sum(c["success"] for c in cells)/len(cells)
+                raw=sum(c["raw_success"] for c in cells)/len(cells)
+                if sem >= CAP_FLOOR*raw:
+                    choices.append(k/m)
+            if choices:
+                boot_vals.append(min(choices))
+        boot_vals.sort()
+        boot=None if not boot_vals else {"mean":statistics.fmean(boot_vals),
+            "lo":boot_vals[min(100,len(boot_vals)-1)],
+            "hi":boot_vals[max(0,len(boot_vals)-101)]}
+        out["by_M"][str(m)]={"rows":rows,"pooled_by_K":pooled,"dynamic":dynamic_rows,
             "primary":None if selected is None else {
-                "K":selected["K"],
-                "execution_work_fraction":selected["semantic"]["work_units"]/(m*WORK_PER_CANDIDATE),
-                "capability_retention":selected["semantic"]["success"]/max(selected["raw"]["success"],1e-12)},
-            "seed_primary_bootstrap":bootstrap(seed_primary) if seed_primary else None}
+                "K":selected[0],
+                "execution_work_fraction":selected[1]["execution_work_fraction"],
+                "capability_retention":selected[1]["capability_retention"]},
+            "seed_primary_bootstrap":boot}
     return out
 
 def main():
