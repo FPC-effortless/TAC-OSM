@@ -48,7 +48,7 @@ jobs:
         working-directory: third_party/cdl-attention-experiment
         run: python -m pytest casm_v01/phase1_dag/test_phase1.py -q
       - name: Verify pinned source
-        run: test "$(git -C third_party/cdl-attention-experiment rev-parse HEAD)" = "c31554413301e3d9d3e6b3f8c8c6be572a74a748"
+        run: test "$(git -C third_party/cdl-attention-experiment rev-parse HEAD)" = "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
       - name: Smoke benchmark
         env:
           CASM_SOURCE_ROOT: third_party/cdl-attention-experiment

@@ -529,7 +529,7 @@ def main():
                         "run_id": os.environ.get("GITHUB_RUN_ID", "local"),
                         "python": sys.version,
                         "torch": torch.__version__,
-                        "generator_commit": "c31554413301e3d9d3e6b3f8c8c6be572a74a748",
+                        "generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748",
                     },
                     "executor_checks": checks,
                     "results": results,
@@ -543,7 +543,7 @@ def main():
             "run_id": os.environ.get("GITHUB_RUN_ID", "local"),
             "python": sys.version,
             "torch": torch.__version__,
-            "generator_commit": "c31554413301e3d9d3e6b3f8c8c6be572a74a748",
+            "generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748",
         },
         "protocol": {
             "seeds": list(seeds),
