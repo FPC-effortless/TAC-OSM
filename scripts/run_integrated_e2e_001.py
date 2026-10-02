@@ -39,14 +39,14 @@ TRAIN_COMBOS = tuple(
     for j in range(i + 1, BITS)
 )
 HELDOUT = (
-    ("xor", 0, 1),
-    ("xor", 2, 3),
-    ("and", 4, 5),
-    ("and", 6, 7),
-    ("or", 0, 7),
-    ("or", 1, 6),
-    ("xnor", 2, 5),
-    ("xnor", 3, 4),
+    ("xor", 0, 4),
+    ("xor", 5, 8),
+    ("and", 1, 9),
+    ("and", 2, 6),
+    ("or", 7, 10),
+    ("or", 3, 11),
+    ("xnor", 4, 9),
+    ("xnor", 6, 11),
 )
 
 
