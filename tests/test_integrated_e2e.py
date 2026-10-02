@@ -113,3 +113,21 @@ def test_verified_feedback_write_is_entity_addressed():
     assert th.count_nonzero(updated[0, 1]) == 0
     assert th.count_nonzero(updated[0, 2]) == 8
     assert th.count_nonzero(updated[0, 3]) == 0
+
+
+def test_verifier_consumes_only_pre_verification_features():
+    import torch as th
+
+    model = IntegratedE2EModel()
+    assert model.verifier[0].in_features == 41
+    memory = model.state.initial(1, th.device("cpu"))
+    q = {
+        "entity": th.tensor([0]),
+        "read": th.zeros(1, 40),
+        "action": th.zeros(1),
+    }
+    # The call signature requires an observed environment outcome separately;
+    # it must not be embedded in verifier_input itself.
+    updated, verifier = model.post_action_update(memory, q, th.tensor([1]))
+    assert verifier.shape == (1, 2)
+    assert th.isfinite(updated).all()
