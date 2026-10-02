@@ -2,27 +2,35 @@ name: Research verified representation synthesis 001
 
 on:
   pull_request:
-    branches:
-      - research/unified-plm-clm-final-2026-10-01
-  push:
-    branches:
-      - research/verified-representation-synthesis-001
+    branches: [master]
     paths:
       - contracts/TACOSM-VRS-DYNAMIC-REPRESENTATION-001.json
-      - docs/TACOSM-VRS-DYNAMIC-REPRESENTATION-001.md
-      - src/tac_osm/representation.py
-      - tests/test_representation.py
-      - src/tac_osm/contract.py
-      - tests/test_contract.py
-      - pyproject.toml
+      - docs/**
+      - research/vrs-001/**
+      - scripts/run_verified_representation_synthesis_001.py
+      - src/**
+      - tests/**
       - .github/workflows/verified-representation-synthesis-001.yml
+  push:
+    branches: [research/verified-representation-synthesis-001]
   workflow_dispatch:
+    inputs:
+      proposal_path:
+        description: Repository path to the frozen external scored proposal artifact
+        required: true
+        type: string
+      confirmatory:
+        description: Run the registered confirmatory grid
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
 
 jobs:
-  research:
+  preflight:
+    name: VRS-001 preflight and smoke
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -30,25 +38,50 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install package and test dependencies
+      - name: Install test dependencies
         run: python -m pip install --quiet -e . pytest
-      - name: Repository suite
-        run: python -m pytest tests/ -q
-      - name: Verify VRS contract
+      - name: Syntax and focused tests
         run: |
-          python - <<'PY'
-          import json
-          from tac_osm.contract import load_contract
-          path = "contracts/TACOSM-VRS-DYNAMIC-REPRESENTATION-001.json"
-          raw = json.load(open(path, encoding="utf-8"))
-          contract = load_contract("TACOSM-VRS-DYNAMIC-REPRESENTATION-001")
-          assert contract.experiment_id == raw["experiment_id"]
-          assert contract.status == "pre-registered"
-          assert len(contract.amendments) == 2
-          assert [a.id for a in contract.amendments] == ["A1", "A2"]
-          assert contract.experiment_id == "TACOSM-VRS-DYNAMIC-REPRESENTATION-001"
-          PY
-      - name: Representation tests
-        run: python -m pytest tests/test_representation.py -q
+          python -m py_compile scripts/run_verified_representation_synthesis_001.py
+          python -m pytest tests/test_representation.py tests/test_vrs_runner.py -q
+      - name: Repository tests
+        run: python -m pytest tests/ -q
+      - name: Smoke only
+        run: python scripts/run_verified_representation_synthesis_001.py --proposal research/vrs-001/proposal_smoke.json --smoke
+      - name: Confirm checked-in fixture is non-confirmatory
+        run: |
+          if python scripts/run_verified_representation_synthesis_001.py --proposal research/vrs-001/proposal_smoke.json; then
+            echo "ERROR: smoke fixture was accepted as confirmatory"
+            exit 1
+          fi
+      - name: Upload smoke artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-VRS-DYNAMIC-REPRESENTATION-001-smoke
+          path: artifacts/TACOSM-VRS-DYNAMIC-REPRESENTATION-001.json
+          if-no-files-found: ignore
 
-# Validation trigger checksum: 2026-10-02-A1
+  confirmatory:
+    name: VRS-001 registered confirmatory measurement
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.confirmatory == true }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest
+      - name: Full integrity suite
+        run: python -m pytest tests/ -q
+      - name: Run frozen scored proposal
+        run: python scripts/run_verified_representation_synthesis_001.py --proposal "${{ inputs.proposal_path }}"
+      - name: Upload confirmatory artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-VRS-DYNAMIC-REPRESENTATION-001-confirmatory
+          path: artifacts/TACOSM-VRS-DYNAMIC-REPRESENTATION-001.json
+          if-no-files-found: ignore
