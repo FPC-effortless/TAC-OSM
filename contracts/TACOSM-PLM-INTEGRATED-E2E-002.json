@@ -137,7 +137,7 @@
   },
   "status": "pre-registered",
   "layer": "L3",
-  "version": 6,
+  "version": 7,
   "amendments": [
     {
       "id": "A1",
@@ -188,6 +188,16 @@
       "discovered": "Static contract-to-runner audit before confirmatory execution.",
       "affected": "runner output plumbing only; no scientific parameter or decision rule changed",
       "no_result_under_previous_version": "No E2E-002 scientific measurement was executed under the stale metric schema."
+    },
+    {
+      "id": "A6",
+      "applies_to": "pre-measurement evaluator control branching",
+      "old_definition": "evaluate left batch_text undefined for non-text-only control branches",
+      "new_definition": "evaluate initializes the text observation for every step before applying control-specific modality interventions",
+      "rationale": "The first scientific run reached the evaluator and failed with UnboundLocalError before producing any measurement.",
+      "discovered": "Confirmatory run 37063799293",
+      "affected": "runner control plumbing only; no arm, benchmark, training schedule, or decision rule changed",
+      "no_result_under_previous_version": "No E2E-002 scientific artifact was produced under the faulty evaluator."
     }
   ]
 }
