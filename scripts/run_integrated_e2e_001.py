@@ -32,12 +32,6 @@ STEPS = 300
 BATCH_SIZE = 96
 ENTITY_COUNT = 16
 BITS = 12
-TRAIN_COMBOS = tuple(
-    (op, i, j)
-    for op in OPS
-    for i in range(BITS)
-    for j in range(i + 1, BITS)
-)
 HELDOUT = (
     ("xor", 0, 4),
     ("xor", 5, 8),
@@ -48,6 +42,13 @@ HELDOUT = (
     ("xnor", 4, 9),
     ("xnor", 6, 11),
 )
+ALL_COMBOS = tuple(
+    (op, i, j)
+    for op in OPS
+    for i in range(BITS)
+    for j in range(i + 1, BITS)
+)
+TRAIN_COMBOS = tuple(combo for combo in ALL_COMBOS if combo not in HELDOUT)
 
 
 @dataclass(frozen=True)
