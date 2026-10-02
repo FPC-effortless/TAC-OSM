@@ -428,3 +428,93 @@ The intended contribution is narrower and testable:
       -> persistent repair
 
 That is the bridge from Abstraction Agent to the unified PLM research program.
+
+## Research addendum — representation refinement and behavioral anchors
+
+Two additional 2026 results sharpen the post-VRS research path.
+
+### LOTUS: temporal/behavioral representation constraints
+
+LOTUS defines universal task representations from temporal-logic structure and
+uses a bisimulation metric to provide guarantees around behavioral equivalence,
+optimality fidelity, and trajectory robustness. The relevant lesson for PLM is
+not the specific LTL encoder. It is that representation validity can be stated
+as a **behavioral constraint**, rather than as geometric similarity alone.
+
+This suggests a second kind of anchor for future PLM representations:
+
+    point anchor:
+        Phi(s_anchor) = z_anchor
+
+    behavioral anchor:
+        B(Phi, s_anchor, a, horizon) = declared_property
+
+A behavioral anchor can assert, for example, that two states represented as
+equivalent must retain the same admissible action/outcome relation over a
+registered horizon.
+
+Source: arXiv:2608.15509.
+
+### RefineICL: representation refinement without parameter updates
+
+RefineICL treats support examples as instructions for updating an episode's
+representations while leaving model parameters fixed. Its interventions report
+that removing an intermediate support update degrades later query behavior,
+which makes the evolving representation itself a causal object of the model's
+computation rather than merely a passive cache.
+
+The PLM implication is a useful two-timescale separation:
+
+    slow representation structure:
+        Phi_shared
+
+    fast contextual/state refinement:
+        DeltaPhi_t
+
+with persistent consolidation deciding when a fast refinement becomes part of
+shared structure. This fits the PLM distinction between slow shared structure
+and fast specialist adaptation without requiring global parameter updates at
+every decision.
+
+Source: arXiv:2609.27679.
+
+### Error-driven feature synthesis
+
+The September 2026 feature-engineering work strengthens the same principle from
+a different direction: the generator LLM proposes features, a separate
+extractor materializes them, and concrete downstream errors such as ranking
+inversions are translated into natural-language feedback for the next proposal.
+The reported framework therefore closes a practical loop:
+
+    proposal -> extraction -> downstream error -> targeted feature repair
+
+The PLM analogue should preserve the error itself as structured evidence before
+converting it into any representation update. In particular, a failed task
+should not directly rewrite Phi. It should produce a counterexample record:
+
+    (Phi_version, state_pair, action, horizon, observed_divergence, verifier)
+
+and only a later repair stage may propose Phi'.
+
+Source: arXiv:2609.21894.
+
+### Consequence for VRS
+
+VRS-001 should therefore be treated as the **static-to-dynamic admission
+experiment**. It does not yet test representation learning across time.
+
+The next representation experiment should test:
+
+    Phi_t
+      -> verifier counterexamples
+      -> targeted refinement DeltaPhi_t
+      -> dynamic re-validation
+      -> selective persistence/consolidation
+
+with an explicit no-regression condition: a repaired representation must retain
+previously verified behavioral invariants unless the experiment explicitly
+registers their replacement.
+
+This is the representation-level analogue of verifier-gated state writes in the
+existing PLM substrate.
+
