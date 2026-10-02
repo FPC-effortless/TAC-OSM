@@ -314,6 +314,10 @@ class ExperimentContract:
     #: Changes to the registered design, each carrying the definition it
     #: replaced. Empty for an unamended pre-registration.
     amendments: tuple[AmendmentSpec, ...] = ()
+    #: Sections this contract carries that the shared schema does not name.
+    #: Preserved verbatim on save/reload so a pre-registration carrying more
+    #: than the shared schema is not silently truncated by the round trip.
+    sections: dict[str, Any] = field(default_factory=dict)
 
     # ------------------------------------------------------------------ #
     # The checks a run performs against its contract
@@ -489,6 +493,13 @@ class ExperimentContract:
             d["layer"] = self.layer
         if self.amendments:
             d["amendments"] = [a.to_dict() for a in self.amendments]
+        # Extra sections are emitted after the canonical keys and only when
+        # the canonical schema does not already provide one, so a contract
+        # that carries a section the shared schema also models is not written
+        # twice under two spellings.
+        for key, value in self.sections.items():
+            if key not in d:
+                d[key] = value
         return d
 
     def to_json(self, *, indent: int = 2) -> str:
@@ -505,6 +516,22 @@ class ExperimentContract:
             ),
             "contract",
         )
+        # Keys the shared schema does not model are not errors: a
+        # pre-registration may carry sections the common schema has no field
+        # for (an experiment-specific protocol, its own work accounting, a
+        # promotion rule). Dropping them would make the round trip lossy, so
+        # they are carried verbatim and written back by ``to_dict``.
+        consumed = {
+            "experiment_id", "title", "question", "hypothesis", "arms",
+            "endpoints", "decision_rule", "interpretation_order", "h_levels",
+            "seeds", "steps", "eval_steps", "k_levels", "held_constant",
+            "reproduction_baseline", "status", "result_note", "result_url",
+            "layer", "amendments", "sections",
+        }
+        sections = {
+            str(k): v for k, v in d.items()
+            if k not in consumed and not k.startswith("_")
+        }
         return ExperimentContract(
             experiment_id=str(d["experiment_id"]),
             title=str(d["title"]),
@@ -531,6 +558,7 @@ class ExperimentContract:
             amendments=tuple(
                 AmendmentSpec.from_dict(a) for a in d.get("amendments", ())
             ),
+            sections=sections,
         )
 
     # ------------------------------------------------------------------ #
