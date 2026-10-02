@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
-  "version": 4,
+  "version": 5,
   "status": "registered",
   "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute a learned operator choice, verify the post-action outcome, and remain capable on held-out modality/operator/query compositions?",
   "primary_endpoint": {
@@ -20,7 +20,11 @@
     "operator_selection_accuracy",
     "target_memory_attention",
     "operator_selection_accuracy",
-    "target_memory_attention"
+    "target_memory_attention",
+    "theoretical_operator_prior_accuracy",
+    "primary_q2_seed_bootstrap_ci",
+    "memory_drop_seed_bootstrap_ci",
+    "alignment_drop_seed_bootstrap_ci"
   ],
   "protocol": {
     "seeds": [
@@ -160,6 +164,21 @@
         "restrict training/evaluation index pairs to canonical i<j because Boolean operators are commutative",
         "make q1 and q2 target different observed entities so q1 outcome cannot directly supply q2's target state"
       ]
+    },
+    {
+      "id": "A4",
+      "timing": "pre-measurement",
+      "reason": "Make the trivial operator-prior baseline and seed uncertainty mandatory outputs.",
+      "changes": [
+        "add theoretical_operator_prior_accuracy to secondary endpoints",
+        "add deterministic seed bootstrap with fixed resample count and seed",
+        "report bootstrap intervals for primary q2 accuracy and paired control drops"
+      ]
     }
-  ]
+  ],
+  "statistics": {
+    "seed_bootstrap_samples": 5000,
+    "seed_bootstrap_seed": 20261002,
+    "confidence_level": 0.95
+  }
 }
