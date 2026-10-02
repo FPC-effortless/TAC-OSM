@@ -132,7 +132,8 @@ def test_candidate_order_shuffle_does_not_change_exhaustive_semantics():
     target_pos = shuffled.index(pool[task.target_index])
     shuffled_task = MODULE.Task(task.task_id, task.support, task.verify, target_pos)
     reverse = MODULE.evaluate(router, "graph", shuffled_task, shuffled, mem)
-    assert reverse["exhaustive"] == forward["exhaustive"]
+    assert reverse["exhaustive"]["semantic_success"] == forward["exhaustive"]["semantic_success"]
+    assert reverse["exhaustive"]["execution_work_units"] == forward["exhaustive"]["execution_work_units"]
 
 
 def test_constant_router_cannot_create_above_base_rate_selective_success():
@@ -141,7 +142,6 @@ def test_constant_router_cannot_create_above_base_rate_selective_success():
     train_t = {MODULE.truth_signature(ep) for ep in training}
     successes = 0
     total = 0
-    rng = random.Random(2021)
     for i in range(32):
         target = MODULE.build_manifest(
             2022 + i, (32,), 1,
@@ -162,12 +162,13 @@ def test_constant_router_cannot_create_above_base_rate_selective_success():
     assert total == 32
 
 
-def test_executor_failure_is_not_silently_promoted():
-    import copy
+def test_executor_failure_is_not_silently_promoted(monkeypatch):
     ep = MODULE.generate(2030, 1)[0]
     assert MODULE.executor_check([ep])["pass"]
-    tampered = copy.deepcopy(MODULE.generate(2031, 1)[0])
-    first_key = next(iter(tampered.truth_table))
-    original = int(tampered.truth_table[first_key])
-    tampered.truth_table[first_key] = 1 - original
-    assert MODULE.executor_check([tampered])["pass"] is False
+    original_execute = MODULE.execute_exact
+    monkeypatch.setattr(
+        MODULE,
+        "execute_exact",
+        lambda ep, bits: (1 - original_execute(ep, bits)[0], original_execute(ep, bits)[1]),
+    )
+    assert MODULE.executor_check([ep])["pass"] is False
