@@ -401,6 +401,14 @@ def masked(v, keep):
     return tuple(v[i] for i in keep)
 
 
+def representation_distance(a, b):
+    if len(a) != len(b):
+        raise ProposalError("representation vectors must have equal dimension")
+    if not a:
+        raise ProposalError("representation dimension must be positive")
+    return math.dist(a, b) / math.sqrt(len(a))
+
+
 def route(rows, q, k):
     order = sorted(
         range(len(rows)),
@@ -433,7 +441,7 @@ def dynamic(proposal, pool, cases, keep):
     near = checked = viol = 0
     for c in cases:
         a, b = byid[c["a"]], byid[c["b"]]
-        if math.dist(masked(proposal.vec(a), keep), masked(proposal.vec(b), keep)) > NEAR:
+        if representation_distance(masked(proposal.vec(a), keep), masked(proposal.vec(b), keep)) > NEAR:
             continue
         near += 1
         if len(c["actions"]) != c["horizon"]:
