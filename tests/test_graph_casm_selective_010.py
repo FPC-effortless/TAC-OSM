@@ -35,3 +35,71 @@ def test_exact_graph_work_is_positive_and_proportional_to_rows():
     _, one = MODULE.execute_exact(ep, (0, 0, 0, 0))
     assert one.total > 0
     assert MODULE.candidate_work(ep, MODULE.VERIFIER_ROWS) == one.total * MODULE.VERIFIER_ROWS
+
+
+def test_secondary_role_holdout_requires_registered_not_xor_pair():
+    programs = MODULE.generate(2001, 8, require_role_pair=True)
+    assert programs
+    assert all(MODULE.has_role_pair(ep) for ep in programs)
+
+
+def test_target_split_is_disjoint_from_training_structures_and_truths():
+    training = MODULE.generate(2002, 32)
+    train_s = {MODULE.structure_key(ep) for ep in training}
+    train_t = {MODULE.truth_signature(ep) for ep in training}
+    manifest = MODULE.build_manifest(
+        2003, (32,), 8,
+        exclude_structures=train_s,
+        exclude_truths=train_t,
+    )
+    assert not train_s.intersection(MODULE.structure_key(ep) for ep in manifest.values())
+    assert not train_t.intersection(MODULE.truth_signature(ep) for ep in manifest.values())
+
+
+def test_target_index_is_not_used_by_semantic_execution():
+    training = MODULE.generate(2004, 32)
+    train_s = {MODULE.structure_key(ep) for ep in training}
+    train_t = {MODULE.truth_signature(ep) for ep in training}
+    target = MODULE.build_manifest(
+        2005, (32,), 1,
+        exclude_structures=train_s,
+        exclude_truths=train_t,
+    )[(32, 0)]
+    task, pool = MODULE.make_task(2006, 32, target, train_s, train_t)
+    model = MODULE.Router(0)
+    mem = MODULE.Memory()
+    mem.write(task.task_id, task.support)
+    original = MODULE.evaluate(model, "graph", task, pool, mem)
+    alternate_index = (task.target_index + 1) % len(pool)
+    alternate = MODULE.Task(
+        task.task_id,
+        task.support,
+        task.verify,
+        alternate_index,
+    )
+    changed = MODULE.evaluate(model, "graph", alternate, pool, mem)
+    for budget in MODULE.BUDGETS:
+        key = str(budget)
+        assert changed["budgets"][key]["semantic_success"] == original["budgets"][key]["semantic_success"]
+        assert changed["budgets"][key]["fixed_budget_execution_work_units"] == original["budgets"][key]["fixed_budget_execution_work_units"]
+    assert changed["exhaustive"]["semantic_success"] == original["exhaustive"]["semantic_success"]
+    assert changed["exhaustive"]["execution_work_units"] == original["exhaustive"]["execution_work_units"]
+
+
+def test_primary_bootstrap_repeats_budget_selection_rule():
+    trial = {
+        "exhaustive": {"semantic_success": 1.0, "execution_work_units": 100.0},
+        "budgets": {
+            "1": {"semantic_success": 0.9, "fixed_budget_execution_work_units": 10.0},
+            "2": {"semantic_success": 0.95, "fixed_budget_execution_work_units": 20.0},
+            "4": {"semantic_success": 0.7, "fixed_budget_execution_work_units": 40.0},
+            "8": {"semantic_success": 0.5, "fixed_budget_execution_work_units": 80.0},
+        },
+    }
+    seed_blocks = {
+        str(seed): {"32": {"trials": [trial, trial]}}
+        for seed in MODULE.SEEDS
+    }
+    result = MODULE.primary_bootstrap_ci(seed_blocks, 32, rounds=200)
+    assert result["ci95"] == [0.1, 0.1]
+    assert result["valid_fraction"] == 1.0
