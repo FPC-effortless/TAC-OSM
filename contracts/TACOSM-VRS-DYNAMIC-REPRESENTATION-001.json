@@ -155,6 +155,16 @@
       "discovered": "2026-10-02 review of the preregistered VRS design, before any confirmatory measurement.",
       "affected": "dynamic equivalence denominator, pair construction protocol, and cost reporting; no population, seed, capability threshold, representation arm, or outcome was measured under the previous definition.",
       "no_result_under_previous_version": "No VRS measurement was run under the previous definition."
+    },
+    {
+      "id": "A2",
+      "applies_to": "dynamic-validity gate applicability",
+      "old_definition": "A dynamic-validation result was considered a pass whenever no recorded violations existed.",
+      "new_definition": "A dynamic-validation result is admissible only when at least one fixed representation-near pair and at least one transition are actually evaluated; zero applicable pairs is an instrument-invalid result, not a pass. Declared action-horizon lengths must also match exactly.",
+      "rationale": "Instrument review found that a representation could move every fixed test pair outside the near-neighbor threshold and thereby obtain a vacuous pass with zero dynamic evidence. The gate must distinguish 'no violations observed' from 'nothing was tested'.",
+      "discovered": "2026-10-02 validator implementation review, before any VRS confirmatory measurement.",
+      "affected": "only validation applicability and action-schedule integrity; no scientific population, seed, arm, endpoint threshold, or outcome was measured under the previous definition.",
+      "no_result_under_previous_version": "No VRS measurement was run under the previous definition."
     }
   ],
   "sections": {
@@ -196,7 +206,10 @@
       "failure_evidence": "counterexample trajectory is stored with the representation coordinates, action, successor states, and verifier outcome",
       "principle": "static similarity does not license persistent equivalence unless future behavior is preserved",
       "fixed_pair_construction": "State-pair evaluation sets are generated and hashed before any representation is scored. Pair membership is independent of all representation coordinates. The representation only determines which fixed pairs satisfy the registered near-neighbor threshold.",
-      "action_sampling": "Actions and multi-step schedules are fixed by the task generator before representation evaluation. Where the action space is finite and tractable, all relevant actions are evaluated; otherwise a representation-independent seeded action subset is fixed in the contract."
+      "action_sampling": "Actions and multi-step schedules are fixed by the task generator before representation evaluation. Where the action space is finite and tractable, all relevant actions are evaluated; otherwise a representation-independent seeded action subset is fixed in the contract.",
+      "minimum_applicable_pairs": 1,
+      "minimum_applicable_transitions": 1,
+      "vacuous_pass": "Forbidden. If zero near pairs or zero transitions are evaluated, the test is instrument-inapplicable and cannot admit the representation."
     },
     "cost_model": {
       "total": "C_rep_build + C_state_address + C_state_route + C_operator_select + C_exec + C_verify + C_write + C_IO",
