@@ -2007,3 +2007,24 @@ No finite-range fitted exponent is treated as an asymptotic theorem.
 Can the unified PLM preserve capability as unique persistent-state and operator populations grow while routing and actual executed structural computation remain bounded by relevant structure rather than accumulated state?
 
 The next confirmatory phase is therefore the frozen CDL representation + actual CASM-S selective execution integration, followed by a unique-population C5/PLM scaling benchmark.
+
+---
+
+## M2 actual structural execution phase — 009
+
+The post-audit research boundary is now instantiated as `TACOSM-M2-CASM-SELECTIVE-009`.
+
+This phase uses the pinned external CASM-S implementation at
+`FPC-effortless/cdl-attention-experiment@c31554413301e3c9d3e6b3f8c8c6be572a74a748`.
+
+The substantive evaluator is no longer descriptor equality. Each task supplies four public input/output examples. A selected candidate is actually executed by CASM-S on those examples, and the post-execution verifier accepts only when all public examples are reproduced.
+
+The routing representation is separated from execution. The primary structural arm uses a frozen node-local CASM-S structural representation; a matched summary arm uses a fixed public structural summary with the same trainable two-tower parameterization; random selection is a chance control; exhaustive CASM-S execution defines the capability ceiling.
+
+Primary M levels are 32, 64, 128, 256, 512. Admission budgets are 1, 2, 4, 8.
+
+The primary endpoint is selective execution work fraction subject to >=0.80 capability retention relative to exhaustive CASM-S capability, reported per M and budget. Query-time routing work, index-build work, actual CASM structural work, and wall-clock are separate metrics.
+
+The primary evaluation has exact train/evaluation program disjointness. A secondary structural generalization condition holds out direct NOT->XOR role pairs from executor/router training.
+
+No result is interpreted as asymptotic scaling, hardware speedup, universal semantic retrieval, or autonomous operator discovery.

@@ -1,0 +1,339 @@
+{
+  "experiment_id": "TACOSM-M2-CASM-SELECTIVE-009",
+  "version": "0.3.4-final",
+  "status": "preregistered",
+  "base_commit": "e837b68df615f5b43c871fe39488f69a5ff77fbf",
+  "external_executor": {
+    "repository": "FPC-effortless/cdl-attention-experiment",
+    "commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748",
+    "path": "casm_v01/phase1_dag/model.py"
+  },
+  "primary_question": "Does a learned structural representation reduce actual structural execution while preserving capability relative to exhaustive CASM execution?",
+  "primary_endpoint": {
+    "name": "selective_execution_work_fraction_at_capability",
+    "population_levels": [
+      32,
+      64,
+      128,
+      256,
+      512
+    ],
+    "budgets": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "capability_floor": 0.8,
+    "criterion": "At a population level M, an arm is capability-eligible when selective semantic success divided by exhaustive semantic success is >= 0.80. Report the minimum execution-work fraction among eligible budgets; no winner is selected across representations."
+  },
+  "secondary_endpoints": [
+    "routing_recall_at_B",
+    "semantic_success_at_B",
+    "adaptive_executed_candidates",
+    "selective_execution_work_units",
+    "exhaustive_execution_work_units",
+    "query_routing_work_units",
+    "index_build_work_units",
+    "selective_wall_clock_ms",
+    "exhaustive_wall_clock_ms",
+    "peak_memory_mb",
+    "casm_gate_evaluations",
+    "casm_structural_node_operations",
+    "casm_edge_message_operations",
+    "verified_experience_write_rate",
+    "replay_top1_before",
+    "replay_top1_after",
+    "replay_adaptive_work_fraction_before",
+    "replay_adaptive_work_fraction_after"
+  ],
+  "router_arms": {
+    "structural_tower": {
+      "description": "Frozen CASM-S structural representation plus learned query tower and candidate projection.",
+      "trainable_parameter_budget": "shared fixed query MLP and 32x32 candidate projection"
+    },
+    "summary_tower": {
+      "description": "Hand-designed public node-local structural summary with the same tower architecture and trainable parameter budget."
+    },
+    "exhaustive": {
+      "description": "Execute all M candidates with the same CASM-S evaluator; capability ceiling/control."
+    }
+  },
+  "data_protocol": {
+    "train_programs": 256,
+    "training_steps": 1200,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "support_examples_per_task": 4,
+    "fixed_input_count": 4,
+    "unique_candidate_truth_tables": true,
+    "unique_candidate_structures": true,
+    "train_eval_exact_structure_disjoint": true,
+    "primary_eval_distribution": "same generator distribution with unseen exact structures and unseen truth tables; candidate pools are generated independently of router-visible support examples",
+    "secondary_eval_distribution": "held-out NOT->XOR structural role-pair; training excludes that role-pair",
+    "evaluation_tasks_per_seed_M": 32,
+    "verifier_examples_per_task": 12,
+    "router_visible_examples_per_task": 4,
+    "train_eval_truth_disjoint": true,
+    "executor_training_truth_table_rows_per_program": 16,
+    "executor_training_excludes_evaluation_truths": true,
+    "executor_training_excludes_evaluation_structures": true
+  },
+  "leakage_rules": [
+    "Router input contains only public support input/output examples and candidate public structural descriptors.",
+    "Target index, target record ID, full candidate truth tables, true wiring, true edges, verifier output, and outcome are evaluator-only.",
+    "CASM-S structural encoder receives nodes, depth, position, arity, and existence only; true edges are not passed into routing.",
+    "Candidate semantic success is verified from executed outputs against public task examples, not descriptor equality.",
+    "A candidate is not marked negative unless its executed outputs fail at least one public task example.",
+    "Candidate pool construction must not condition decoy inclusion on router-visible support examples.",
+    "Verifier-only input/output examples are disjoint from router-visible support examples and are not passed to routing.",
+    "Opaque task addresses are derived only from router-visible support examples and contain no target index, target ID, or hidden verifier data.",
+    "All 12 remaining truth-table rows are verifier-only; together with the four router-visible rows they cover the complete 4-input Boolean truth table.",
+    "Primary evaluation target truth tables are absent from router training as well as target structures."
+  ],
+  "execution_work_contract": {
+    "gate_evaluations": "number of candidate edges scored by CASM-S",
+    "edge_message_operations": "number of candidate-edge message aggregation operations",
+    "structural_node_operations": "number of active non-input nodes executed",
+    "total_structural_work_units": "gate_evaluations + edge_message_operations + structural_node_operations"
+  },
+  "statistical_contract": {
+    "primary_estimate": "pooled trial-level semantic success and execution-work fraction",
+    "uncertainty": "seed bootstrap 95 percent confidence interval",
+    "multiple_comparisons": "descriptive across M and budgets; no global arm winner claim",
+    "training_selection": "no held-out outcome used to choose training hyperparameters or arm",
+    "seed_bootstrap_rounds": 4000,
+    "exhaustive_ceiling_floor": 0.8,
+    "primary_eligibility": "No selective retention verdict is interpretable unless pooled exhaustive CASM-S semantic success at the same M is >= 0.80."
+  },
+  "promotion_rule": [
+    "CASM exhaustive capability >= 0.80 on the primary eval condition",
+    "integrity and split checks pass",
+    "router target IDs are absent from runtime inputs",
+    "selective execution work is measured from actual CASM operations",
+    "capability retention and execution work are both reported",
+    "no asymptotic scaling claim from finite M"
+  ],
+  "persistent_experience": {
+    "task_state": "opaque task address resolves public task examples",
+    "commit_rule": "only candidates that pass all public task examples after actual CASM-S execution can be written as experience",
+    "intervening_writes": "unrelated task records are inserted before anchor replay",
+    "replay_metric": "compare routing and adaptive execution before and after verified experience",
+    "target_id_hidden": true
+  },
+  "amendment_history": [
+    {
+      "version": "0.1",
+      "stage": "initial registration",
+      "reason": "register actual CASM-S selective execution question and capability/work endpoints"
+    },
+    {
+      "version": "0.2",
+      "stage": "pre-measurement hardening",
+      "changes": [
+        "candidate pools no longer condition on router-visible support rows",
+        "four router-visible rows separated from verifier-only rows",
+        "all 12 remaining truth-table rows used for verifier",
+        "opaque task address derived only from router-visible examples",
+        "primary targets disjoint from training in exact structure and full truth table",
+        "CASM structural representation work added to execution accounting",
+        "router parameter-matching and baseline provenance gates added",
+        "primary executor training includes all role pairs; role holdout applies only to router secondary evaluation"
+      ],
+      "measurement_started": false
+    },
+    {
+      "version": "0.3-final",
+      "stage": "final pre-measurement freeze",
+      "changes": [
+        "CPU-only PyTorch runtime aligned to Python 3.12/CASM-S CI",
+        "verified-experience replay bonus fixed at 5.0",
+        "full run provenance manifest includes contract digest, TAC-OSM SHA, run ID, Python, Torch, and external executor SHA"
+      ],
+      "measurement_started": false
+    },
+    {
+      "version": "0.3.1",
+      "stage": "schema-only premeasurement repair",
+      "changes": [
+        "aligned the M2 contract with the repository-native ExperimentContract schema",
+        "retained all M2 scientific protocol fields unchanged"
+      ],
+      "measurement_started": false
+    },
+    {
+      "version": "0.3.2",
+      "stage": "schema and executor-training premeasurement repair",
+      "changes": [
+        "aligned contract with native ExperimentContract schema",
+        "CASM-S executor training now covers all 16 truth-table rows for each training program",
+        "all scientific population, budget, split, leakage, and endpoint definitions remain unchanged"
+      ],
+      "measurement_started": false
+    },
+    {
+      "version": "0.3.3",
+      "stage": "premeasurement contract consistency repair",
+      "changes": [
+        "removed the registered random arm because the runner does not independently measure a random control in this experiment"
+      ],
+      "measurement_started": false
+    },
+    {
+      "version": "0.3.4",
+      "stage": "premeasurement metric and representation hardening",
+      "changes": [
+        "candidate router cost proxy now includes query projection, candidate projection, and similarity work",
+        "primary exhaustive-capability floor is encoded in the result artifact",
+        "seed bootstrap 95 percent CIs are computed for semantic success, routing recall, and execution-work fractions",
+        "matched summary representation uses only public node-local descriptors and derived arity counts",
+        "evaluation target structures and full truth tables are excluded from executor pretraining"
+      ],
+      "measurement_started": false
+    }
+  ],
+  "freeze_rule": {
+    "measurement_commit_must_be_tree_identical_to_final_preregistration": true,
+    "post_freeze_protocol_changes": "not admissible; require a new experiment identifier",
+    "full_run_trigger": "tree-identical empty commit with [run-m2-casm-selective-009-full]"
+  },
+  "title": "M2 actual CASM selective execution",
+  "question": "Does a learned structural representation reduce actual structural execution while preserving capability relative to exhaustive CASM execution?",
+  "hypothesis": "Selective structural routing should preserve useful task capability while reducing actual CASM-S execution work relative to exhaustive execution, under unique candidates, unseen exact programs, unseen Boolean truth tables, and full-truth-table semantic verification.",
+  "arms": [
+    {
+      "name": "structural_tower",
+      "intervention": "frozen CASM-S structural representation plus learned query-to-structure tower",
+      "acts_on": "representation and routing",
+      "knob": "representation",
+      "value": "frozen CASM-S structural encoder"
+    },
+    {
+      "name": "summary_tower",
+      "intervention": "matched learned query-to-summary tower using a fixed public structural summary",
+      "acts_on": "representation and routing",
+      "knob": "representation",
+      "value": "fixed 32-dimensional public summary"
+    },
+    {
+      "name": "exhaustive",
+      "intervention": "execute every candidate with the same pinned CASM-S evaluator",
+      "acts_on": "execution control",
+      "knob": "execution",
+      "value": "all candidates"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "selective_execution_work_fraction_at_capability",
+      "role": "primary selective execution endpoint",
+      "primary": true,
+      "description": "Minimum selective CASM-S execution work fraction among registered budgets with at least 0.80 semantic capability retention versus exhaustive execution at the same M."
+    },
+    {
+      "name": "routing_recall_at_B",
+      "role": "routing admission diagnostic",
+      "primary": false
+    },
+    {
+      "name": "semantic_success_at_B",
+      "role": "fixed-budget capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "adaptive_semantic_success",
+      "role": "adaptive execution capability endpoint",
+      "primary": false
+    },
+    {
+      "name": "execution_work_units",
+      "role": "actual CASM execution work",
+      "primary": false
+    },
+    {
+      "name": "candidate_representation_routing_work_units",
+      "role": "query-side routing computation diagnostic",
+      "primary": false
+    },
+    {
+      "name": "routing_work_units",
+      "role": "query-side routing work",
+      "primary": false
+    },
+    {
+      "name": "execution_wall_clock_ms",
+      "role": "secondary runtime diagnostic",
+      "primary": false
+    },
+    {
+      "name": "peak_memory_mb",
+      "role": "secondary memory diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verified_experience_replay",
+      "role": "secondary persistence mechanism endpoint",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "At each registered M, at least one structural_tower budget satisfies capability retention >= 0.80 versus exhaustive execution.",
+      "licenses": "bounded evidence that selective structural routing can preserve capability while reducing actual CASM-S work under the registered workload.",
+      "does_not_license": "asymptotic sublinear scaling, universal program retrieval, language intelligence, or hardware speedup."
+    },
+    {
+      "condition": "No registered selective budget meets capability retention >= 0.80 at a registered M.",
+      "licenses": "the registered selective mechanism does not meet the capability-constrained execution criterion at that M.",
+      "does_not_license": "a general impossibility result for selective structural computation."
+    },
+    {
+      "condition": "Exhaustive CASM-S semantic success is below 0.80 at a registered M.",
+      "licenses": "the downstream executor ceiling is insufficient for a capability-relative selective verdict at that M.",
+      "does_not_license": "a routing failure attribution at that M."
+    }
+  ],
+  "interpretation_order": [
+    "contract and anti-leakage gates",
+    "CASM-S executor ceiling",
+    "representation integrity",
+    "routing recall",
+    "semantic capability",
+    "actual CASM execution work",
+    "adaptive execution",
+    "persistence replay",
+    "scope limits"
+  ],
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 1200,
+  "eval_steps": 32,
+  "held_constant": [
+    "pinned CASM-S commit and Python 3.12 runtime",
+    "four input Boolean programs on a fixed 10-node substrate",
+    "four router-visible examples and twelve verifier-only truth-table rows",
+    "target ID, target index, true wiring, and hidden target descriptor absent from router inputs",
+    "unique candidate structures and unique complete truth tables",
+    "five fixed seeds",
+    "router architecture and trainable parameter count matched between structural and summary arms",
+    "adaptive execution rule fixed before evaluation outcomes",
+    "CASM-S executor is trained over every input row of each registered training program, not a single sampled runtime input"
+  ]
+}

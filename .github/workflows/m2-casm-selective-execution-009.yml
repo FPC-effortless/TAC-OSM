@@ -1,0 +1,107 @@
+name: Research M2 actual CASM selective execution 009
+on:
+  push:
+    branches:
+      - research/m2-casm-selective-execution-009
+    paths:
+      - "contracts/TACOSM-M2-CASM-SELECTIVE-009.json"
+      - "docs/TACOSM-M2-CASM-SELECTIVE-009.md"
+      - "scripts/run_m2_casm_selective_009.py"
+      - "src/tac_osm/casm_s_adapter.py"
+      - "tests/test_m2_casm_selective_009.py"
+      - ".github/workflows/m2-casm-selective-execution-009.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: m2-casm-selective-009-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  smoke:
+    name: M2-009 smoke/preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install TAC-OSM and test dependencies
+        run: python -m pip install --quiet -e . pytest ruff
+      - name: Install pinned CASM runtime
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Static runner validation
+        run: python -m py_compile scripts/run_m2_casm_selective_009.py src/tac_osm/casm_s_adapter.py
+      - name: Ruff undefined-name gate
+        run: python -m ruff check --select F821 scripts/run_m2_casm_selective_009.py src/tac_osm/casm_s_adapter.py
+      - name: External CASM phase tests
+        working-directory: third_party/cdl-attention-experiment
+        run: python -m pytest casm_v01/phase1_dag/test_phase1.py -q
+      - name: Verify external executor commit
+        run: test "$(git -C third_party/cdl-attention-experiment rev-parse HEAD)" = "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+      - name: Baseline provenance gate
+        run: python scripts/sync_test_count.py --check
+      - name: Full repository suite
+        run: python -m pytest tests/ -q
+      - name: M2 protocol tests
+        run: python -m pytest tests/test_m2_casm_selective_009.py -q
+      - name: M2 smoke benchmark
+        env:
+          CASM_SOURCE_ROOT: third_party/cdl-attention-experiment
+        run: python scripts/run_m2_casm_selective_009.py --smoke
+      - name: Upload smoke artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-M2-CASM-SELECTIVE-009-smoke
+          path: artifacts/TACOSM-M2-CASM-SELECTIVE-009.json
+          if-no-files-found: error
+  full:
+    name: M2-009 full measurement
+    if: contains(github.event.head_commit.message, '[run-m2-casm-selective-009-full]') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install TAC-OSM and test dependencies
+        run: python -m pip install --quiet -e . pytest
+      - name: Install pinned CASM runtime
+        run: python -m pip install --quiet torch
+      - name: Static runner validation
+        run: python -m py_compile scripts/run_m2_casm_selective_009.py src/tac_osm/casm_s_adapter.py
+      - name: External CASM phase tests
+        working-directory: third_party/cdl-attention-experiment
+        run: python -m pytest casm_v01/phase1_dag/test_phase1.py -q
+      - name: Verify external executor commit
+        run: test "$(git -C third_party/cdl-attention-experiment rev-parse HEAD)" = "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+      - name: Full repository suite
+        run: python -m pytest tests/ -q
+      - name: M2 protocol tests
+        run: python -m pytest tests/test_m2_casm_selective_009.py -q
+      - name: Execute M2 benchmark
+        env:
+          CASM_SOURCE_ROOT: third_party/cdl-attention-experiment
+        run: python scripts/run_m2_casm_selective_009.py
+      - name: Upload M2 artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-M2-CASM-SELECTIVE-009
+          path: artifacts/TACOSM-M2-CASM-SELECTIVE-009.json
+          if-no-files-found: error
