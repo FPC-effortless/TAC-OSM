@@ -9,6 +9,7 @@ def load_runner():
     spec=importlib.util.spec_from_file_location("vrs_runner",SCRIPT)
     mod=importlib.util.module_from_spec(spec)
     assert spec.loader is not None
+    sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
     return mod
 
@@ -31,6 +32,7 @@ def test_smoke_run_is_non_evidence():
     assert out["status"]=="smoke"
     assert out["protocol"]["M"]==[64]
     assert out["protocol"]["K"]==[4,8]
+    assert out["anchor_checks"] == 15
 
 def test_scored_proposal_requires_query_coverage():
     mod=load_runner()
