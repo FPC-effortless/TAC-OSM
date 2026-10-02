@@ -33,6 +33,17 @@ DELTA = {
     "repair": (0.04, 0.00, -0.02, -0.12),
 }
 FEATURE_KEYS = {"name", "description", "anchors", "unit_interval", "source"}
+ANCHOR_LEVELS = {"low": 0.0, "mid": 0.5, "high": 1.0}
+CALIBRATION_STATES = tuple(
+    State(f"cal:{i}", *vals) for i, vals in enumerate((
+        (0.05,0.15,0.75,0.75,0.05),(0.15,0.35,0.55,0.55,0.20),
+        (0.25,0.55,0.35,0.35,0.35),(0.35,0.75,0.15,0.15,0.50),
+        (0.50,0.25,0.65,0.40,0.65),(0.65,0.45,0.45,0.25,0.80),
+        (0.80,0.65,0.25,0.15,0.35),(0.95,0.90,0.05,0.05,0.95),
+        (0.10,0.80,0.70,0.20,0.10),(0.30,0.20,0.20,0.70,0.90),
+        (0.55,0.60,0.40,0.60,0.20),(0.75,0.30,0.10,0.45,0.70),
+    ))
+)
 SOURCES = {"power": lambda s: s.power, "grip": lambda s: s.grip,
            "thermal_stability": lambda s: 1-s.heat,
            "mechanical_integrity": lambda s: 1-s.wear,
@@ -118,14 +129,20 @@ class Proposal:
             for a in f.get("anchors", []):
                 if set(a) - {"name","state_id","value"}:
                     raise ProposalError("anchor contains unregistered fields")
-        if self.mode == "scored" and not self.raw.get("scored_states"):
-            raise ProposalError("scored proposal has no scored_states")
+        if self.mode == "scored":
+            if not self.raw.get("scored_states"):
+                raise ProposalError("scored proposal has no scored_states")
+            if not self.raw.get("scored_queries"):
+                raise ProposalError("scored proposal has no scored_queries")
+            if set(self.raw.get("scored_calibration_states", {})) != {s.id for s in CALIBRATION_STATES}:
+                raise ProposalError("scored proposal must cover exactly the frozen calibration states")
     def require_confirmatory(self):
         if self.mode != "scored" or self.raw["proposer"].lower() == "deterministic-fixture":
             raise ProposalError("only an external frozen scored proposal is confirmatory")
     def vec(self, s):
         if self.mode == "scored":
-            try: return tuple(float(x) for x in self.raw["scored_states"][s.id])
+            table = self.raw["scored_calibration_states"] if s.id.startswith("cal:") else self.raw["scored_states"]
+            try: return tuple(float(x) for x in table[s.id])
             except KeyError as e: raise ProposalError(f"missing scored state {s.id}") from e
         vals = [SOURCES[f.get("source")](s) for f in self.raw["features"] if f.get("source") in SOURCES]
         if len(vals) != self.dim: raise ProposalError("unsupported smoke feature source or dimension")
