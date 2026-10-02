@@ -1,0 +1,93 @@
+name: Research graph CASM selective execution 010
+
+on:
+  push:
+    branches:
+      - research/graph-casm-selective-010
+    paths:
+      - contracts/TACOSM-GRAPH-CASM-SELECTIVE-010.json
+      - docs/TACOSM-GRAPH-CASM-SELECTIVE-010.md
+      - scripts/run_graph_casm_selective_010.py
+      - tests/test_graph_casm_selective_010.py
+      - .github/workflows/graph-casm-selective-010.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: G-CASM-010 smoke/preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest ruff torch
+      - name: Static validation
+        run: python -m py_compile scripts/run_graph_casm_selective_010.py && python -m ruff check --select F821 scripts/run_graph_casm_selective_010.py
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: Experiment tests
+        run: python -m pytest tests/test_graph_casm_selective_010.py -q
+      - name: External generator tests
+        working-directory: third_party/cdl-attention-experiment
+        run: python -m pytest casm_v01/phase1_dag/test_phase1.py -q
+      - name: Verify pinned source
+        run: test "$(git -C third_party/cdl-attention-experiment rev-parse HEAD)" = "c31554413301e3d9d3e6b3f8c8c6be572a74a748"
+      - name: Smoke benchmark
+        env:
+          CASM_SOURCE_ROOT: third_party/cdl-attention-experiment
+        run: python scripts/run_graph_casm_selective_010.py --smoke
+      - name: Upload smoke artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-GRAPH-CASM-SELECTIVE-010-smoke
+          path: artifacts/TACOSM-GRAPH-CASM-SELECTIVE-010.json
+          if-no-files-found: ignore
+
+  full:
+    name: G-CASM-010 full measurement
+    if: contains(github.event.head_commit.message, '[run-graph-casm-selective-010-full]') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest torch
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: Experiment tests
+        run: python -m pytest tests/test_graph_casm_selective_010.py -q
+      - name: Execute full benchmark
+        env:
+          CASM_SOURCE_ROOT: third_party/cdl-attention-experiment
+        run: python scripts/run_graph_casm_selective_010.py
+      - name: Upload checkpoint or result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-GRAPH-CASM-SELECTIVE-010
+          path: artifacts/TACOSM-GRAPH-CASM-SELECTIVE-010.json
+          if-no-files-found: ignore
