@@ -22,6 +22,17 @@ The diagnostic constructs exactly such a pair:
 
 For the pinned CASM-S implementation, the structural encodings and gate values are identical for the two programs.
 
+### Reproduction result
+
+The diagnostic was independently reproduced against the pinned model logic:
+
+- truth tables equal: **false**
+- public structural encodings equal: **true**
+- CASM-S gate tensors equal: **true**
+- maximum gate-tensor difference: **0.0**
+
+This establishes the information bottleneck mechanically; it does not depend on executor optimizer convergence.
+
 ## Interpretation
 
 This is an executor identifiability ceiling, not evidence that the 25-epoch optimizer simply failed to converge.
