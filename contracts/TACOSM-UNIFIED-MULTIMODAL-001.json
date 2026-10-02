@@ -297,6 +297,16 @@
       "discovered": "Pre-confirmatory measurement-method audit; no confirmatory result existed.",
       "affected": "Metric definition only; the model, data splits, thresholds, seeds and primary decision rule remain unchanged.",
       "no_result_under_previous_version": "true"
+    },
+    {
+      "id": "A7",
+      "applies_to": "modality primary metric comparability",
+      "old_definition": "Language was compared using raw token accuracy while image/audio used a different transformed MSE metric.",
+      "new_definition": "All three modalities use a primary normalized prediction score relative to a training-only baseline: language uses training-mode token accuracy; image/audio use a training-only constant-predictor MSE.",
+      "rationale": "A shared model claim should use comparable improvement-over-baseline metrics without using validation/test information to construct the baseline.",
+      "discovered": "Pre-confirmatory measurement-method audit; no confirmatory result existed.",
+      "affected": "Metric normalization and control calculation only; model architecture, data split, seeds, thresholds and decision rule remain unchanged.",
+      "no_result_under_previous_version": "true"
     }
   ],
   "held_constant": [
