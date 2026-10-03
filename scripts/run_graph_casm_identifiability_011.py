@@ -103,9 +103,12 @@ def run(smoke: bool):
         for m in m_levels:
             for i in range(tasks_per_m):
                 target = manifest[(m, i)]
-                candidates_task, target_index, _old_support = g010.make_task(
+                # g010.make_task returns (Task, candidates): the Task carries
+                # target_index as an attribute, not as a separate value.
+                task, candidates_task = g010.make_task(
                     seed * 100 + i, m, target, train_s, train_t
                 )
+                target_index = task.target_index
                 index = BehaviorIndex(candidates_task)
                 if len(index.postings) < 2:
                     raise RuntimeError("behavior index unexpectedly degenerate")
@@ -138,7 +141,9 @@ def run(smoke: bool):
                         "index_posting_entries_scanned": index_work,
                         "index_build_execution_work": index.build_work,
                         "candidate_truth_signatures_unique": True,
-                        "target_truth_signature": format(target_sig, "016b"),
+                        # g010.truth_signature is a tuple of output bits, not an
+                        # int, so it is stored as the sequence it is.
+                        "target_truth_signature": list(target_sig),
                     }
                     rows.append(row)
         checks.append({
