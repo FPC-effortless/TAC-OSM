@@ -48,15 +48,63 @@ DOC = REPO_ROOT / "docs" / "TACOSM-BASELINE-001.md"
 #: number looks correct, and this does not.
 MARKER = "<!--TESTCOUNT-->"
 
+#: The pinned generator the two gated test modules load from. When it is
+#: absent those modules skip at import and are never collected; when it is
+#: present — as on CI — they are collected like any other module. The count
+#: has to land on the same number either way, so the correction below is
+#: conditional on this directory rather than applied unconditionally.
+GATED_SOURCE = REPO_ROOT / "third_party" / "cdl-attention-experiment"
+
 
 def live_test_count() -> int:
-    """The number of tests pytest would collect.
+    """The number of tests the suite collects.
 
-    Collected rather than run, because the count is what a reader compares
-    against the frozen figure — running the suite to count it would make this
-    a seconds-to-minutes task rather than a subsecond one, and the count does
-    not depend on the tests passing.
+    Counted by running pytest, because a static count is not available:
+    parametrized tests multiply at collection time, so the number of collected
+    cases is not the number of `def test_` lines in the sources.
+
+    One collection is not enough on its own. Two modules skip at import time
+    when the pinned generator under `third_party/` is absent —
+
+        tests/test_graph_casm_selective_010.py
+        tests/test_graph_casm_identifiability_011.py
+
+    — and a module-level `pytest.skip` is not collected at all, so the count
+    is 14 lower on a checkout without the generator than on CI, which checks
+    it out. The doc has to carry one number that is right in both, so the
+    collection is corrected by the count of cases the gate swallowed — and
+    only when the generator is actually absent, or CI would double-count.
     """
+    collected = _pytest_collected()
+    if collected is None:
+        raise RuntimeError("could not read a test count from pytest")
+    if GATED_SOURCE.exists():
+        return collected
+    return collected + _gated_case_count()
+
+
+def _gated_case_count() -> int:
+    """Cases the collection misses because their modules skip at import.
+
+    Every gated module guards on the pinned generator's directory and skips
+    without it, so its cases are collected on CI and nowhere else. None is
+    parametrized, so a module's case count is its declared test-function count.
+    """
+    total = 0
+    for path in (REPO_ROOT / "tests").glob("test_*.py"):
+        source = path.read_text(encoding="utf-8")
+        if 'pytest.skip("pinned external generator is not checked out"' not in source:
+            continue
+        total += sum(
+            1
+            for line in source.splitlines()
+            if line.startswith("def test_") or line.startswith("async def test_")
+        )
+    return total
+
+
+def _pytest_collected() -> int | None:
+    """What pytest collected in *this* checkout, for the `--verify` report."""
     r = subprocess.run(
         [sys.executable, "-m", "pytest", "--collect-only", "-q"],
         cwd=REPO_ROOT,
@@ -64,12 +112,9 @@ def live_test_count() -> int:
         text=True,
     )
     for line in r.stdout.splitlines():
-        # pytest's summary line: "648 tests collected in 0.32s"
         if "tests collected" in line:
             return int(line.split()[0])
-    raise RuntimeError(
-        f"could not read a test count from pytest; output was:\n{r.stdout}\n{r.stderr}"
-    )
+    return None
 
 
 #: The prose that carries the count, with the number itself as a regex group.
@@ -113,9 +158,22 @@ def main(argv: list[str]) -> int:
         action="store_true",
         help="report whether the doc is stale without writing to it",
     )
+    ap.add_argument(
+        "--verify",
+        action="store_true",
+        help="also report what pytest itself collects, to expose any gap",
+    )
     args = ap.parse_args(argv)
 
     count = live_test_count()
+    if args.verify:
+        # Show the terms the count is built from. Where the generator is
+        # present the collection already includes the gated cases and the
+        # correction is zero; where it is absent, the correction is the count
+        # of cases the gate swallowed.
+        gated = 0 if GATED_SOURCE.exists() else _gated_case_count()
+        print(f"verify: collection {_pytest_collected()} "
+              f"+ gated {gated} = {count}")
     text = DOC.read_text(encoding="utf-8")
 
     if args.check:

@@ -399,7 +399,7 @@ def test_the_frozen_baseline_reports_the_current_test_count():
     exception that silently stops being maintained.
     """
     import re
-    import subprocess
+    import importlib.util
 
     repo_root = Path(__file__).resolve().parent.parent
     doc = repo_root / "docs" / "TACOSM-BASELINE-001.md"
@@ -416,18 +416,22 @@ def test_the_frozen_baseline_reports_the_current_test_count():
         f"against, and it was 327 (found {m.group(1)!r})"
     )
 
-    r = subprocess.run(
-        [sys.executable, "-m", "pytest", "--collect-only", "-q"],
-        cwd=repo_root, capture_output=True, text=True,
+    # The count comes from the same function the sync script writes from, not
+    # from a second collection here. Two independent collections disagree:
+    # `test_graph_casm_selective_010.py` and
+    # `test_graph_casm_identifiability_011.py` skip at module import when the
+    # pinned generator under `third_party/` is absent, and a module-level
+    # skip is never collected at all — so the same suite reports 14 fewer
+    # tests on a checkout without it than on CI, which does check it out. The
+    # document has to carry one number, so both read the same source of truth.
+    spec = importlib.util.spec_from_file_location(
+        "sync_test_count", repo_root / "scripts" / "sync_test_count.py",
     )
-    live = next(
-        (int(l.split()[0]) for l in r.stdout.splitlines()
-         if "tests collected" in l),
-        None,
-    )
-    assert live is not None, "could not read the live test count"
+    sync = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sync)
+    live = sync.live_test_count()
     assert f"current count in `tests/`: {live}" in text, (
-        f"the doc's current count is stale; the suite collects {live} tests "
+        f"the doc's current count is stale; the suite carries {live} tests "
         "and the row does not say so. Run "
         "`python scripts/sync_test_count.py` before committing."
     )
