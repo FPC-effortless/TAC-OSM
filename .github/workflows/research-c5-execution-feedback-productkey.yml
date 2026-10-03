@@ -3,13 +3,24 @@ name: Research C5 execution-feedback product-key bridge
 on:
   pull_request:
     branches: [master]
+    paths:
+      - contracts/TACOSM-C5-EXECUTION-FEEDBACK-PRODUCTKEY-001.json
+      - docs/TACOSM-C5-EXECUTION-FEEDBACK-PRODUCTKEY-001*
+      - scripts/run_c5_execution_feedback_productkey_001.py
+      - tests/test_c5_execution_feedback_productkey.py
+      - .github/workflows/research-c5-execution-feedback-productkey.yml
   workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: c5-execution-feedback-productkey-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   research:
+    if: ${{ hashFiles('scripts/run_c5_execution_feedback_productkey_001.py') != '' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
