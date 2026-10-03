@@ -1,0 +1,131 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-IDENTIFIABILITY-011",
+  "version": "0.1-preregistered",
+  "status": "preregistered",
+  "base_commit": "06c36f4cda96b8b0ae4411013c7fdf8939b1d8f8",
+  "title": "Public-support identifiability audit for executable graph routing",
+  "question": "Is the target executable program identifiable from the router-visible support examples under the registered graph-candidate generator, before learned routing is evaluated?",
+  "hypothesis": "Four public truth-table support rows are insufficient to uniquely identify the target in a nontrivial fraction of candidate pools; increasing the registered support set should reduce support-equivalent candidate multiplicity. This is a benchmark identifiability audit, not evidence about learned routing quality.",
+  "arms": [
+    {
+      "name": "support_identifiability",
+      "intervention": "measure target-consistent candidate multiplicity for prespecified public support sizes",
+      "acts_on": "benchmark information boundary"
+    },
+    {
+      "name": "behavior_index_control",
+      "intervention": "retrieve support-consistent candidates using an exact inverted index over candidate truth-table behavior computed from public executable graphs",
+      "acts_on": "semantic addressing control"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "target_unique_fraction",
+      "role": "primary benchmark-identifiability endpoint at support_size=4",
+      "primary": true
+    },
+    {
+      "name": "support_consistent_count",
+      "role": "primary diagnostic of public-information ambiguity",
+      "primary": false
+    },
+    {
+      "name": "expected_uniform_tie_success",
+      "role": "diagnostic upper-bound reference under uniform choice among support-equivalent candidates",
+      "primary": false
+    },
+    {
+      "name": "behavior_index_candidate_count",
+      "role": "exact semantic-addressing control output size",
+      "primary": false
+    },
+    {
+      "name": "behavior_index_posting_entries_scanned",
+      "role": "query-time index work proxy",
+      "primary": false
+    },
+    {
+      "name": "behavior_index_build_execution_work",
+      "role": "index-build execution work proxy",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "At support_size=4, target_unique_fraction is low or support_consistent_count materially exceeds 1.",
+      "licenses": "a benchmark identifiability warning: the target is not generally determined by the router-visible evidence under the registered candidate generator.",
+      "does_not_license": "a negative conclusion about learned routing, graph representations, CASM, or PLM."
+    },
+    {
+      "condition": "Support_size sweep shows target_unique_fraction increasing toward 1 while the candidate universe and target generation remain fixed.",
+      "licenses": "evidence that public support information, rather than optimizer changes, controls target identifiability on this synthetic benchmark.",
+      "does_not_license": "a learned semantic-retrieval result."
+    },
+    {
+      "condition": "The exact behavior index reproduces the scan-derived support-consistent set at every tested cell.",
+      "licenses": "a deterministic semantic-addressing control for candidate behavior under the registered executable-graph workload.",
+      "does_not_license": "sublinear hardware speedup or learned semantic routing."
+    }
+  ],
+  "interpretation_order": [
+    "contract integrity",
+    "candidate truth-signature uniqueness",
+    "support-size identifiability",
+    "exact behavior-index agreement",
+    "query/build work proxies",
+    "scope limits"
+  ],
+  "h_levels": [32, 64, 128, 256, 512],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 0,
+  "eval_steps": 32,
+  "k_levels": [4, 8, 12, 16],
+  "held_constant": [
+    "the pinned CASM BooleanDAGGenerator commit c31554413301e3c9d3e6b3f8c8c6be572a74a748",
+    "the graph-candidate generator and exact executable graph semantics from G-CASM-010",
+    "train_programs=256 with exact structure and truth-signature exclusion",
+    "primary population levels M=32,64,128,256,512",
+    "32 tasks per seed/M",
+    "the candidate pool is generated once per task and reused across all support sizes",
+    "support rows are selected from one deterministic permutation per task and prefixes of size 4,8,12,16 are evaluated",
+    "the target index, target structure ID, verifier-only rows, and hidden truth table are not used by the query operation",
+    "no learned router is trained or tuned in this experiment"
+  ],
+  "data_protocol": {
+    "support_sizes": [4, 8, 12, 16],
+    "population_levels": [32, 64, 128, 256, 512],
+    "tasks_per_seed_M": 32,
+    "unique_candidate_truth_tables": true,
+    "candidate_order_randomized": true,
+    "target_structure_disjoint_from_training": true,
+    "target_truth_disjoint_from_training": true
+  },
+  "behavior_index": {
+    "construction": "execute every candidate graph over all 16 input assignments and insert each (input_assignment, output_bit) pair into an inverted posting list",
+    "query": "intersect the posting lists for the observed support rows",
+    "target_information": "none beyond the public support rows and public candidate graphs",
+    "build_work": "sum exact graph execution operations for all candidates and all 16 input assignments",
+    "query_work": "posting entries inspected plus set-intersection operations",
+    "semantic_control": "index result must exactly equal a linear scan for every support size"
+  },
+  "statistical_contract": {
+    "primary_estimate": "pooled task-level fraction with target_unique_fraction=1",
+    "uncertainty": "seed bootstrap 95 percent confidence interval",
+    "bootstrap_rounds": 4000
+  },
+  "promotion_rule": [
+    "all candidate truth signatures are unique within each generated pool",
+    "linear-scan support-consistency and inverted-index support-consistency agree for every task/support size",
+    "candidate pool is unchanged across support-size comparisons",
+    "no target index or verifier-only row enters the query function",
+    "raw task-level counts are retained in the artifact",
+    "no learned capability or asymptotic-complexity claim is made"
+  ],
+  "scope": {
+    "learned_routing": false,
+    "semantic_language": false,
+    "casm_capability": false,
+    "asymptotic_claim": false,
+    "hardware_speedup_claim": false
+  }
+}
