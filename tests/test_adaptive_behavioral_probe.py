@@ -47,3 +47,25 @@ def test_empty_inputs_fail_closed():
         pass
     else:
         raise AssertionError("empty compatible set must fail")
+
+
+@dataclass
+class TupleKeyEP:
+    truth_table: dict[tuple[int, int], int]
+
+
+def test_tuple_key_truth_tables_use_explicit_row_keys():
+    candidates = [
+        TupleKeyEP({(0, 0): 0, (1, 1): 0}),
+        TupleKeyEP({(0, 0): 0, (1, 1): 1}),
+        TupleKeyEP({(0, 0): 1, (1, 1): 0}),
+        TupleKeyEP({(0, 0): 1, (1, 1): 1}),
+    ]
+    rows = ((0, 0), (1, 1))
+    selector = AdaptiveBehavioralProbeSelector()
+    d = selector.choose(candidates, (0, 1, 2, 3), (0, 1), row_keys=rows)
+    assert d.row_index == 0
+    assert (d.partition_zero, d.partition_one) == (2, 2)
+    assert selector.filter_compatible(
+        candidates, (0, 1, 2, 3), 1, 1, row_keys=rows
+    ) == (1, 3)
