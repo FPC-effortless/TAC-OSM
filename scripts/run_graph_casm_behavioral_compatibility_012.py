@@ -275,24 +275,27 @@ def rank_candidates(
     return order, scores, pair_logits
 
 
-def execute_subset(candidates, indices, verify_rows):
+def execute_candidates(candidates, indices, verify_rows, *, stop_on_success: bool):
     start = time.perf_counter()
     ok_any = False
     total_work = 0
+    used = 0
     for idx in indices:
         candidate = candidates[idx]
-        ok = True
+        ok = bool(verify_rows)
+        used += 1
         for bits, expected in verify_rows:
             got, work = g010.execute_exact(candidate, bits)
             total_work += work.total
             if got != int(expected):
                 ok = False
                 break
-        if ok and verify_rows:
+        if ok:
             ok_any = True
-            break
+            if stop_on_success:
+                break
     elapsed_ms = (time.perf_counter() - start) * 1000.0
-    return ok_any, total_work, elapsed_ms
+    return ok_any, total_work, elapsed_ms, used
 
 
 def evaluate_behavioral(model, representation, task, candidates):
@@ -302,8 +305,8 @@ def evaluate_behavioral(model, representation, task, candidates):
     relevant = set(exact_support_consistent(candidates, task.support))
     if task.target_index not in relevant:
         raise RuntimeError("target omitted from exact support-consistent set")
-    exhaustive_ok, exhaustive_work, exhaustive_ms = execute_subset(
-        candidates, range(len(candidates)), task.verify
+    exhaustive_ok, exhaustive_work, exhaustive_ms, exhaustive_used = execute_candidates(
+        candidates, range(len(candidates)), task.verify, stop_on_success=False
     )
     if not exhaustive_ok:
         raise RuntimeError("exhaustive exact verification failed for target task")
@@ -311,11 +314,11 @@ def evaluate_behavioral(model, representation, task, candidates):
     budgets = {}
     for budget in BUDGETS:
         selected = order[:budget]
-        fixed_ok, fixed_work, fixed_ms = execute_subset(
-            candidates, selected, task.verify
+        fixed_ok, fixed_work, fixed_ms, fixed_used = execute_candidates(
+            candidates, selected, task.verify, stop_on_success=False
         )
-        adaptive_ok, adaptive_work, adaptive_ms = execute_subset(
-            candidates, selected, task.verify
+        adaptive_ok, adaptive_work, adaptive_ms, adaptive_used = execute_candidates(
+            candidates, selected, task.verify, stop_on_success=True
         )
         budgets[str(budget)] = {
             "target_in_budget": float(task.target_index in selected),
@@ -327,12 +330,7 @@ def evaluate_behavioral(model, representation, task, candidates):
             "semantic_success": float(fixed_ok),
             "adaptive_semantic_success": float(adaptive_ok),
             "fixed_budget_executed_candidates": budget,
-            "adaptive_executed_candidates": (
-                budget if not adaptive_ok else next(
-                    j + 1 for j, idx in enumerate(selected)
-                    if execute_subset(candidates, [idx], task.verify)[0]
-                )
-            ),
+            "adaptive_executed_candidates": adaptive_used,
             "fixed_budget_execution_work_units": fixed_work,
             "adaptive_execution_work_units": adaptive_work,
             "fixed_budget_execution_work_fraction": fixed_work / max(1, exhaustive_work),
@@ -373,14 +371,16 @@ def deterministic_control(candidates, task, kind: str, seed: int):
         raise ValueError(kind)
     relevant = set(exact_support_consistent(candidates, task.support))
     metrics = {}
-    exhaustive_ok, exhaustive_work, _ = execute_subset(
-        candidates, range(len(candidates)), task.verify
+    exhaustive_ok, exhaustive_work, _, _ = execute_candidates(
+        candidates, range(len(candidates)), task.verify, stop_on_success=False
     )
     if not exhaustive_ok:
         raise RuntimeError("control exhaustive verifier failed")
     for budget in BUDGETS:
         selected = order[:budget]
-        ok, work, _ = execute_subset(candidates, selected, task.verify)
+        ok, work, _, _ = execute_candidates(
+            candidates, selected, task.verify, stop_on_success=False
+        )
         metrics[str(budget)] = {
             "routing_recall": float(task.target_index in selected),
             "support_set_recall": len(set(selected) & relevant) / max(1, len(relevant)),
