@@ -76,11 +76,27 @@
       "primary": false
     }
   ],
-  "h_levels": [32, 64, 128, 256, 512],
-  "seeds": [0, 1, 2, 3, 4],
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "steps": 1200,
   "eval_steps": 32,
-  "k_levels": [4, 8, 12],
+  "k_levels": [
+    4,
+    8,
+    12
+  ],
   "held_constant": [
     "G-CASM-010 candidate generator and pinned external CASM generator commit",
     "train/evaluation exact structure and complete truth-table disjointness",
@@ -108,7 +124,11 @@
   "data_protocol": {
     "train_programs": 256,
     "evaluation_tasks_per_seed_M": 32,
-    "support_sizes": [4, 8, 12],
+    "support_sizes": [
+      4,
+      8,
+      12
+    ],
     "verifier_rows": "all non-support rows, so 12/8/4 rows respectively",
     "candidate_truth_tables_unique": true,
     "candidate_structures_unique": true,
@@ -136,10 +156,21 @@
     "training/evaluation structure and truth-table split assertions"
   ],
   "primary_endpoint": {
-    "population_levels": [32, 64, 128, 256, 512],
+    "population_levels": [
+      32,
+      64,
+      128,
+      256,
+      512
+    ],
     "support_size": 4,
-    "budgets": [1, 2, 4, 8],
-    "capability_floor": 0.80,
+    "budgets": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "capability_floor": 0.8,
     "criterion": "At each M, report the minimum adaptive execution-work fraction among budgets retaining at least 0.80 of exhaustive exact-graph semantic success."
   },
   "statistical_contract": {
@@ -189,7 +220,18 @@
     "parent_commit": "06c36f4cda96b8b0ae4411013c7fdf8939b1d8f8",
     "external_generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
   },
-  "amendment_history": [],
+  "amendment_history": [
+    {
+      "id": "A1",
+      "applies_to": "legacy_graph support_set_recall serialization",
+      "old_definition": "legacy_graph trial budgets emitted routing and execution fields but did not emit the support_set_recall diagnostic consumed by the common 012 summarizer",
+      "new_definition": "legacy_graph trial budgets emit support_set_recall and support_set_hit computed from the observed support rows and the legacy router's exact candidate ordering",
+      "rationale": "The confirmatory run completed repository and experiment gates but terminated during final summarization with KeyError('support_set_recall'). The missing field is an instrument/recording defect; adding it does not change the intervention, training, evaluation tasks, or primary decision rule.",
+      "discovered": "G-CASM-012 full confirmatory run 37209451643, during summary serialization before scientific result completion.",
+      "affected": "legacy diagnostic serialization only; no scientific parameter, arm, benchmark, or endpoint decision rule changed.",
+      "no_result_under_previous_version": "The run produced a checkpoint artifact containing raw trials but no completed scientific summary; no confirmatory result was reported under the faulty writer."
+    }
+  ],
   "freeze_rule": {
     "post_measurement_protocol_changes": "require a new experiment identifier",
     "smoke_runs": "must not enter confirmatory evidence",
