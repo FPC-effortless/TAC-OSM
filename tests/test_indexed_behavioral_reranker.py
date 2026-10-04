@@ -75,3 +75,4 @@ def test_exact_index_reuses_one_library_and_masks_prefix():
     prefix, _ = index.retrieve(support, population_size=32)
     assert set(prefix).issubset(set(full))
     assert all(i < 32 for i in prefix)
+
