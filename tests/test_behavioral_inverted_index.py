@@ -21,7 +21,7 @@ def test_index_retrieves_exact_support_consistent_candidates():
     candidates = g010.generate(13001, 32)
     support = tuple(
         (tuple(bits), int(candidates[0].truth_table[bits]))
-        for bits in g010.INPUT_ROWS[:4]
+        for bits in tuple(__import__('itertools').product((0, 1), repeat=g010.INPUT_COUNT))[:4]
     )
     index = BehavioralInvertedIndex(candidates)
     got, cost = index.retrieve(support)
@@ -39,7 +39,7 @@ def test_nested_population_mask_does_not_expose_larger_library():
     candidates = g010.generate(13003, 64)
     support = tuple(
         (tuple(bits), int(candidates[0].truth_table[bits]))
-        for bits in g010.INPUT_ROWS[:4]
+        for bits in tuple(__import__('itertools').product((0, 1), repeat=g010.INPUT_COUNT))[:4]
     )
     index = BehavioralInvertedIndex(candidates)
     got, _ = index.retrieve(support, population_size=32)
@@ -50,7 +50,7 @@ def test_candidate_order_changes_ids_but_not_behavioral_identity():
     candidates = g010.generate(13004, 32)
     support = tuple(
         (tuple(bits), int(candidates[0].truth_table[bits]))
-        for bits in g010.INPUT_ROWS[:4]
+        for bits in tuple(__import__('itertools').product((0, 1), repeat=g010.INPUT_COUNT))[:4]
     )
     index1 = BehavioralInvertedIndex(candidates)
     got1, _ = index1.retrieve(support)
