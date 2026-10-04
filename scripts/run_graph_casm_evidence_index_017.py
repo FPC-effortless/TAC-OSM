@@ -79,7 +79,7 @@ def indexed_select(index, costs, m: int):
     return chosen, query_units
 
 
-def evaluate(cache, index, costs, m: int, task):
+def evaluate(cache, index, costs, m: int, task, cache_amortized: float, index_build_amortized: float):
     exhaustive, exhaustive_units = exhaustive_select(cache, m)
     indexed, indexed_units = indexed_select(index, costs, m)
 
@@ -105,6 +105,15 @@ def evaluate(cache, index, costs, m: int, task):
 
     row = int(exhaustive.action.parameters[0])
     env_work = cache.trace[(task.target_index, row)][1] + TRACE_WIDTH
+    exhaustive_total_work = (
+        exhaustive_units + float(exhaustive.expected_cost) + cache_amortized
+    )
+    indexed_total_work = (
+        indexed_units
+        + float(indexed.expected_cost)
+        + cache_amortized
+        + index_build_amortized
+    )
     result = {
         "target_index": task.target_index,
         "selected_row": row,
@@ -113,8 +122,12 @@ def evaluate(cache, index, costs, m: int, task):
         "expected_environment_work_units": float(exhaustive.expected_cost),
         "exhaustive_selector_work_units": exhaustive_units,
         "indexed_selector_work_units": indexed_units,
-        "exhaustive_information_per_work": exhaustive.information_per_work,
-        "indexed_information_per_work": indexed.information_per_work,
+        "exhaustive_environment_information_per_work": exhaustive.information_per_work,
+        "indexed_environment_information_per_work": indexed.information_per_work,
+        "exhaustive_total_work_units": float(exhaustive_total_work),
+        "indexed_total_work_units": float(indexed_total_work),
+        "exhaustive_information_per_total_work": exhaustive.information_gain_bits / max(1.0, exhaustive_total_work),
+        "indexed_information_per_total_work": exhaustive.information_gain_bits / max(1.0, indexed_total_work),
         "realized_target_environment_work_units": float(env_work),
         "selector_exact_match": True,
     }
@@ -148,18 +161,18 @@ def summarize(raw, cache_meta, index_meta, seeds, m_levels):
         for seed in seeds:
             rows = raw[str(seed)][str(m)]
             ex.append(
-                statistics.fmean(r["exhaustive_information_per_work"] for r in rows)
+                statistics.fmean(r["exhaustive_information_per_total_work"] for r in rows)
             )
             ix.append(
-                statistics.fmean(r["indexed_information_per_work"] for r in rows)
+                statistics.fmean(r["indexed_information_per_total_work"] for r in rows)
             )
             exact_matches.extend(r["selector_exact_match"] for r in rows)
 
         by_m[str(m)] = {
             "trials": len(exact_matches),
-            "exhaustive_information_per_work_mean": statistics.fmean(ex),
-            "indexed_information_per_work_mean": statistics.fmean(ix),
-            "mean_total_cost_delta": statistics.fmean(ix[i] - ex[i] for i in range(len(seeds))),
+            "exhaustive_information_per_total_work_mean": statistics.fmean(ex),
+            "indexed_information_per_total_work_mean": statistics.fmean(ix),
+            "mean_total_information_per_work_delta": statistics.fmean(ix[i] - ex[i] for i in range(len(seeds))),
             "selector_exact_action_agreement": statistics.fmean(
                 float(x) for x in exact_matches
             ),
@@ -256,7 +269,23 @@ def main(smoke: bool = False):
         for m in m_levels:
             for task_i in range(tasks_per_m):
                 task = g15.build_query_task(seed, m, task_i)
-                result = evaluate(cache, index, costs, m, task)
+                cache_amortized = (
+                    cache_info["candidate_cache_trace_work_units"]
+                    / REGISTERED_TASKS_PER_SEED
+                )
+                index_build_amortized = (
+                    index.build_prediction_units
+                    + index.build_posting_writes
+                ) / REGISTERED_TASKS_PER_SEED
+                result = evaluate(
+                    cache,
+                    index,
+                    costs,
+                    m,
+                    task,
+                    cache_amortized,
+                    index_build_amortized,
+                )
                 raw[str(seed)][str(m)].append(result)
 
     final = {
