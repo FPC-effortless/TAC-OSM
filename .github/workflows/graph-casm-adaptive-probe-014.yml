@@ -78,7 +78,7 @@ jobs:
           assert c.check_consistency() == []
           c.require_levels((32,64,128,256,512))
           c.require_seeds((0,1,2,3,4))
-          c.require_steps(0)
+          c.require_steps(1)
           c.require_eval_steps(32)
           c.require_k_levels((1,2,4,6,8))
           c.require_arms(["adaptive_minimax","fixed_random"])
