@@ -275,12 +275,12 @@ def bootstrap_ci(values: Sequence[float], seed: int, rounds: int = 4000):
         float(draws[int(0.975 * (rounds - 1))]),
     ]
 
-def summarize(raw, seeds: Sequence[int]) -> dict:
+def summarize(raw, seeds: Sequence[int], m_levels: Sequence[int]) -> dict:
     strategies = ("adaptive_minimax", "fixed_random")
     summary = {}
     for strategy in strategies:
         summary[strategy] = {}
-        for m in M_LEVELS:
+        for m in m_levels:
             summary[strategy][str(m)] = {}
             for k in PROBE_BUDGETS:
                 flat = []
@@ -318,7 +318,7 @@ def summarize(raw, seeds: Sequence[int]) -> dict:
                 summary[strategy][str(m)][str(k)] = row
 
     primary = {}
-    for m in M_LEVELS:
+    for m in m_levels:
         seed_deltas = []
         seed_adaptive = []
         seed_fixed = []
@@ -435,7 +435,7 @@ def main(smoke: bool = False):
             "train_programs": TRAIN_PROGRAMS,
         },
         "checks": checks,
-        "summary": summarize(raw, seeds),
+        "summary": summarize(raw, seeds, m_levels),
         "results": raw,
         "scope": {
             "exact_selector_is_finite_domain_ceiling": True,
