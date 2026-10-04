@@ -84,23 +84,26 @@ def adaptive_trajectory(
     library: Sequence,
     task: QueryTask,
     max_steps: int,
+    population_size: int,
 ) -> dict:
     selector = AdaptiveBehavioralProbeSelector()
-    compatible = tuple(range(len(library)))
+    compatible = tuple(range(population_size))
     available = set(range(len(INPUT_ROWS)))
     chosen: list[int] = []
     counts: list[int] = []
     decisions: list[dict] = []
 
     for _ in range(max_steps):
-        decision = selector.choose(library, compatible, available)
+        decision = selector.choose(
+            library, compatible, available, row_keys=INPUT_ROWS
+        )
         row = decision.row_index
         y = int(library[task.target_index].truth_table[INPUT_ROWS[row]])
 
         chosen.append(row)
         available.remove(row)
         compatible = selector.filter_compatible(
-            library, compatible, row, y
+            library, compatible, row, y, row_keys=INPUT_ROWS
         )
         counts.append(len(compatible))
         decisions.append({
@@ -189,7 +192,9 @@ def evaluate_strategy(
     task_i: int,
 ) -> dict:
     if strategy == "adaptive_minimax":
-        traj = adaptive_trajectory(library, task, max(PROBE_BUDGETS))
+        traj = adaptive_trajectory(
+            library, task, max(PROBE_BUDGETS), m
+        )
     elif strategy == "fixed_random":
         traj = fixed_trajectory(library, task, max(PROBE_BUDGETS), seed, m, task_i)
     else:
