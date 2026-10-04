@@ -49,9 +49,9 @@ It may not use:
 - verifier labels before the probe action;
 - any result from this confirmatory run.
 
-## Ceiling interpretation
+## Heuristic interpretation
 
-The selector is an exact finite-domain information-acquisition ceiling, not a
+The selector is an exact finite-domain identity-blind heuristic, not a
 learned policy. A positive result says that adaptive observation placement has
 causal leverage on the registered workload. The next experiment, if warranted,
 should learn the probe policy from training behavior while retaining this exact
