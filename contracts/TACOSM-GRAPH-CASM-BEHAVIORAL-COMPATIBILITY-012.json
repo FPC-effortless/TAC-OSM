@@ -220,7 +220,12 @@
     "parent_commit": "06c36f4cda96b8b0ae4411013c7fdf8939b1d8f8",
     "external_generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
   },
-  "amendment_history": [
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require a new experiment identifier",
+    "smoke_runs": "must not enter confirmatory evidence",
+    "result_artifact": "immutable after scientific disposition"
+  },
+  "amendments": [
     {
       "id": "A1",
       "applies_to": "legacy_graph support_set_recall serialization",
@@ -230,11 +235,16 @@
       "discovered": "G-CASM-012 full confirmatory run 37209451643, during summary serialization before scientific result completion.",
       "affected": "legacy diagnostic serialization only; no scientific parameter, arm, benchmark, or endpoint decision rule changed.",
       "no_result_under_previous_version": "The run produced a checkpoint artifact containing raw trials but no completed scientific summary; no confirmatory result was reported under the faulty writer."
+    },
+    {
+      "id": "A2",
+      "applies_to": "primary endpoint aggregation",
+      "old_definition": "minimum eligible adaptive execution-work fraction was selected after pooling trials across seeds, despite the statistical contract defining the seed as the independent resampling unit",
+      "new_definition": "each seed independently applies the exhaustive/capability eligibility rule and selects its minimum eligible budget; the primary estimate is the mean of those seed-level minima and the bootstrap repeats that seed-level selection inside each resample",
+      "rationale": "The contract explicitly specifies seed-level aggregation and no task-level IID assumption. The pooled selection could produce an eligible primary value even when one or more seeds failed the capability floor.",
+      "discovered": "Pre-rerun audit of G-CASM-012 after the summary-field instrumentation failure, before any valid result was accepted.",
+      "affected": "primary endpoint aggregation and bootstrap implementation only; no training schedule, arm, benchmark, or decision threshold changed",
+      "no_result_under_previous_version": "No completed scientific result existed because the same run terminated during final summarization with a KeyError before the final artifact was emitted."
     }
-  ],
-  "freeze_rule": {
-    "post_measurement_protocol_changes": "require a new experiment identifier",
-    "smoke_runs": "must not enter confirmatory evidence",
-    "result_artifact": "immutable after scientific disposition"
-  }
+  ]
 }
