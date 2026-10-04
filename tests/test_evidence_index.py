@@ -32,6 +32,7 @@ def test_index_filters_to_prefix_population():
         0,
         idx.full_bitmap(4),
         population_size=4,
+        expected_cost=1.0,
     )
     assert score.expected_remaining_candidates == 2.0
 
