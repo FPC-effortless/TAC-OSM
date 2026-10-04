@@ -4,7 +4,7 @@
   "status": "pre-registered",
   "title": "Adaptive evidence acquisition for behavioral hypothesis elimination",
   "question": "Can adaptive selection of the next observable behavior row reduce candidate ambiguity and exact verification work at a fixed evidence budget, compared with the frozen non-adaptive support order?",
-  "hypothesis": "A target-identity-blind minimax probe selector should reduce the remaining behavior-compatible candidate set faster than the frozen random support order, especially at large M, improving capability at the same number of observed rows.",
+  "hypothesis": "A target-identity-blind greedy minimax probe selector should reduce the remaining behavior-compatible candidate set faster than the frozen random support order on at least some larger-M workloads, improving capability at the same number of observed rows.",
   "arms": [
     {
       "name": "adaptive_minimax",
@@ -150,12 +150,12 @@
     },
     {
       "condition": "Adaptive ceiling fails to beat the frozen support order.",
-      "licenses": "the registered finite-domain upper-bound strategy does not improve this workload at the fixed evidence budget.",
+      "licenses": "the registered greedy adaptive policy does not improve this workload at the fixed evidence budget.",
       "does_not_license": "impossibility of learned or representation-aware probing elsewhere."
     }
   ],
   "scope": {
-    "finite_domain_exact_ceiling": true,
+    "finite_domain_exact_ceiling": false,
     "asymptotic_claim": false,
     "semantic_generalization_claim": false,
     "language_image_audio_claim": false,
