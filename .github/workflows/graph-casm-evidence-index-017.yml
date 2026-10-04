@@ -63,6 +63,7 @@ jobs:
 
   full:
     name: G-CASM-017 full confirmatory measurement
+    needs: smoke
     if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(toJSON(github.event.commits), '[run-graph-casm-evidence-index-017-full]'))
     runs-on: ubuntu-latest
     timeout-minutes: 180
