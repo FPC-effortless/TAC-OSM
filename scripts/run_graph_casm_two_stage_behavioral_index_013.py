@@ -303,11 +303,7 @@ def summarize_arm(raw_arm, seeds: Sequence[int], m_levels: Sequence[int]):
                     if eligible else
                     {"eligible": False, "reason": "no_budget_reached_capability_floor"}
                 )
-        out[str(m)] = {
-            str(k): out[str(m)][str(k)]
-            for k in SUPPORT_SIZES
-            if str(k) in out[str(m)]
-        }
+            out[str(m)][str(support_size)] = row
     return out
 
 def main(smoke: bool = False):
