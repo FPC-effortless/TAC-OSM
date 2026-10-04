@@ -260,9 +260,7 @@ def main(smoke: bool = False):
         cache, cache_info = g15.build_cache(library)
         index = build_index(cache, len(library))
         cache_meta[str(seed)] = cache_info["candidate_cache_trace_work_units"]
-        index_meta[str(seed)] = (
-            index.build_prediction_units + index.build_posting_writes
-        )
+        index_meta[str(seed)] = index.build_posting_writes
 
         for m in m_levels:
             for task_i in range(tasks_per_m):
@@ -272,8 +270,7 @@ def main(smoke: bool = False):
                     / REGISTERED_TASKS_PER_SEED
                 )
                 index_build_amortized = (
-                    index.build_prediction_units
-                    + index.build_posting_writes
+                    index.build_posting_writes
                 ) / REGISTERED_TASKS_PER_SEED
                 result = evaluate(
                     cache,
