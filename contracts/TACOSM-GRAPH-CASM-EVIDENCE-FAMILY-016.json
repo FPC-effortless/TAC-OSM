@@ -1,0 +1,110 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-EVIDENCE-FAMILY-016",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "title": "Externally observable structured evidence families for hypothesis reduction",
+  "question": "Which fixed-cost action-conditioned evidence family provides the highest verified hypothesis-disambiguation efficiency without access to target identity or evaluator-only information?",
+  "hypothesis": "Structured externally observable evidence can provide greater downstream-disambiguation utility per environment execution cost than independent scalar probes; an instrumented activation trace is retained only as an explicit non-deployable information ceiling.",
+  "arms": [
+    {"name":"scalar_output","intervention":"one input row -> one binary output","acts_on":"observation channel"},
+    {"name":"paired_output","intervention":"one input row plus one fixed single-bit counterfactual perturbation -> ordered pair of binary outputs","acts_on":"observation channel"},
+    {"name":"quad_output","intervention":"four fixed input rows forming a predetermined one-bit neighborhood -> four binary outputs","acts_on":"observation channel"},
+    {"name":"activation_trace_ceiling","intervention":"one input row -> ordered internal activation vector in the instrumented sandbox","acts_on":"observation channel ceiling"}
+  ],
+  "endpoints": [
+    {"name":"information_gain_per_environment_work","role":"primary — deterministic mutual information in bits divided by expected environment execution/read cost","primary":true},
+    {"name":"expected_remaining_candidates","role":"secondary — expected compatible hypothesis-set size after the action","primary":false},
+    {"name":"effective_information_bits","role":"secondary — log2(population/expected remaining candidate count)","primary":false},
+    {"name":"verified_candidate_budget_success","role":"secondary — downstream exact-verifier success at fixed B=8 where defined","primary":false},
+    {"name":"amortized_total_work","role":"secondary — environment work plus explicit candidate cache and selector work","primary":false}
+  ],
+  "h_levels":[32,64,128,256,512],
+  "seeds":[0,1,2,3,4],
+  "steps":1,
+  "eval_steps":32,
+  "action_levels":["scalar_output","paired_output","quad_output","activation_trace_ceiling"],
+  "held_constant":[
+    "same pinned G-CASM generator commit",
+    "same 512-program static evaluation library per seed",
+    "same train/evaluation structure and truth disjointness",
+    "same target selection",
+    "same exact CASM semantics"
+  ],
+  "data_protocol":{
+    "train_eval_structure_disjoint":true,
+    "train_eval_truth_disjoint":true,
+    "evaluation_library_static_per_seed":true,
+    "nested_population_prefixes":true,
+    "target_identity_available_to_selector":false,
+    "target_index_available_to_selector":false,
+    "future_target_evidence_available_to_selector":false,
+    "verifier_labels_available_to_selector":false
+  },
+  "fixed_counterfactual":{
+    "delta":[1,0,0,0],
+    "rule":"for each legal base row x, x xor delta is paired with x; no delta selection occurs at evaluation"
+  },
+  "cost_model":{
+    "scalar_output":"1 exact execution",
+    "paired_output":"2 exact executions",
+    "quad_output":"4 exact executions",
+    "activation_trace_ceiling":"1 exact execution + 6 trace-read units",
+    "candidate_cache_and_selector_cost":"reported separately and amortized; never omitted from secondary total-cost accounting"
+  },
+  "leakage_rules":[
+    "The action selector may use only candidate-predicted evidence for legal actions and the current candidate set.",
+    "Target identity/index is never an input to selection.",
+    "Target observations are revealed only after action selection.",
+    "No held-out verifier labels are supplied to the selector.",
+    "The fixed perturbation is determined before measurement and is identical across arms.",
+    "No confirmatory result is used to choose an evidence family."
+  ],
+  "interpretation_order":[
+    "protocol and leakage integrity",
+    "information gain",
+    "information gain per environment work",
+    "verified downstream utility",
+    "amortized computational cost",
+    "scope"
+  ],
+  "decision_rule":[
+    {
+      "condition":"A deployable external channel exceeds scalar_output on the primary endpoint with a seed-level interval excluding zero.",
+      "licenses":"evidence that the registered structured external evidence family is more information-efficient on this finite workload.",
+      "does_not_license":"learned autonomous probe selection or general multimodal reasoning."
+    },
+    {
+      "condition":"activation_trace_ceiling wins but all external channels do not.",
+      "licenses":"internal structured evidence is informative but deployable external evidence remains limiting.",
+      "does_not_license":"access to internal state in arbitrary environments."
+    },
+    {
+      "condition":"raw information gain improves but downstream verification does not.",
+      "licenses":"the evidence is informative but not aligned with useful computation.",
+      "does_not_license":"architectural success."
+    }
+  ],
+  "scope":{
+    "finite_domain_observation_ceiling":true,
+    "learned_probe_policy_claim":false,
+    "optimal_sequential_policy_claim":false,
+    "asymptotic_claim":false,
+    "language_image_audio_claim":false,
+    "hardware_speedup_claim":false
+  },
+  "provenance":{
+    "parent_experiment":"TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015",
+    "parent_commit":"387a053b1477ea69bc2db624fa35b04c999e6805",
+    "generator_commit":"c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "freeze_rule":{
+    "post_measurement_protocol_changes":"require new experiment identifier",
+    "smoke_runs":"must not enter confirmatory evidence",
+    "result_artifact":"immutable after scientific disposition"
+  },
+  "schedule":{
+    "training_steps":0,
+    "contract_steps_placeholder":1,
+    "note":"Exact one-step channel characterization; no learned optimization."
+  }
+}
