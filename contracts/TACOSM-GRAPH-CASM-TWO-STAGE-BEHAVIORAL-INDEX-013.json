@@ -1,0 +1,228 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "base_commit": "79494f07649cdb0cbb014f1bc940713528ab2a92",
+  "title": "Two-stage exact behavioral retrieval with cached late-interaction reranking",
+  "question": "Can a cheap behavioral retrieval stage remove the O(M*k) candidate-search bottleneck before cached learned compatibility reranking, while preserving capability on the registered G-CASM workload?",
+  "hypothesis": "An exact public-behavior retrieval ceiling should remove candidates inconsistent with observed support at negligible logical query depth, after which cached 012 compatibility reranking can operate on a smaller candidate set without requiring per-query candidate encoding.",
+  "arms": [
+    {
+      "name": "exhaustive_behavioral",
+      "intervention": "cached 012 behavioral compatibility scorer over the complete M-sized prefix",
+      "acts_on": "none; routing reference"
+    },
+    {
+      "name": "indexed_behavioral",
+      "intervention": "exact support-behavior bitmap retrieval followed by cached 012 reranking of the retrieved set",
+      "acts_on": "retrieval boundary plus cached late interaction"
+    },
+    {
+      "name": "index_only",
+      "intervention": "exact support-behavior bitmap retrieval followed by deterministic candidate order",
+      "acts_on": "retrieval-only ceiling"
+    },
+    {
+      "name": "random",
+      "intervention": "seeded random candidate order without learned routing",
+      "acts_on": "negative control"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "minimum_adaptive_execution_work_fraction_at_capability",
+      "role": "primary — minimum adaptive exact-execution work fraction at support_size=4 among budgets retaining >=0.80 exhaustive exact capability",
+      "primary": true
+    },
+    {
+      "name": "verified_selective_success",
+      "role": "secondary — fixed-budget exact verifier success",
+      "primary": false
+    },
+    {
+      "name": "adaptive_verified_success",
+      "role": "secondary — adaptive exact verifier success",
+      "primary": false
+    },
+    {
+      "name": "target_routing_recall",
+      "role": "secondary — target admission within execution budget",
+      "primary": false
+    },
+    {
+      "name": "target_rank",
+      "role": "secondary — target rank under the learned cached scorer",
+      "primary": false
+    },
+    {
+      "name": "support_consistent_candidate_count",
+      "role": "secondary — exact ambiguity diagnostic",
+      "primary": false
+    },
+    {
+      "name": "candidates_scored",
+      "role": "secondary — learned reranker population actually scored",
+      "primary": false
+    },
+    {
+      "name": "query_macs",
+      "role": "secondary — learned reranker arithmetic before exact execution",
+      "primary": false
+    },
+    {
+      "name": "index_query_operations",
+      "role": "secondary — posting lookups and bitmap-word operations",
+      "primary": false
+    }
+  ],
+  "h_levels": [32, 64, 128, 256, 512],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 1200,
+  "eval_steps": 32,
+  "k_levels": [4, 8, 12],
+  "held_constant": [
+    "G-CASM-010 generator and pinned external generator commit",
+    "G-CASM-012 behavioral compatibility training objective and 256-program training pool",
+    "five seeds and 1200 training steps",
+    "nested M prefixes of one fixed 512-program evaluation library per seed",
+    "four binary input variables and 16-row truth-table domain",
+    "support rows 4/8/12 with complementary verifier rows",
+    "exact graph executor and verifier",
+    "budgets 1/2/4/8",
+    "seed-level bootstrap and raw per-seed trial data"
+  ],
+  "router": {
+    "source_experiment": "TACOSM-GRAPH-CASM-BEHAVIORAL-COMPATIBILITY-012",
+    "candidate_encoder_cached": true,
+    "late_interaction": true,
+    "candidate_dimension": 290,
+    "candidate_hidden_dimension": 64,
+    "candidate_latent_dimension": 32,
+    "row_dimension": 5,
+    "row_hidden_dimension": 64,
+    "pair_hidden_dimension": 64,
+    "aggregate_temperature": 0.25
+  },
+  "index": {
+    "type": "exact behavioral inverted index",
+    "metadata": "public candidate truth tables",
+    "bitmap_representation": "Python integer bitmaps",
+    "built_once_per_seed": true,
+    "population_masking": "nested prefix M"
+  },
+  "data_protocol": {
+    "train_programs": 256,
+    "evaluation_library_size": 512,
+    "evaluation_tasks_per_seed_M": 32,
+    "candidate_truth_tables_unique": true,
+    "candidate_structures_unique": true,
+    "train_eval_exact_structure_disjoint": true,
+    "train_eval_truth_disjoint": true,
+    "target_identity_available_to_router": false,
+    "verifier_only_rows_available_to_router": false,
+    "index_target_identity_access": false
+  },
+  "leakage_rules": [
+    "The learned reranker sees only candidate public features and observed support rows.",
+    "The exact index sees only public candidate truth-table metadata and the observed support rows.",
+    "Target identity is used only after ranking for evaluation metrics.",
+    "Verifier-only rows are never used in retrieval or reranking.",
+    "A single evaluation library and a single index are built before query evaluation within each seed.",
+    "No per-query index rebuilding, target-specific index construction, or post-measurement selection is permitted."
+  ],
+  "instrument_controls": [
+    "exhaustive exact verification over the full M population",
+    "exact index equivalence against exhaustive support consistency",
+    "fixed-budget row-count invariant rows_evaluated = selected_candidate_count * verifier_rows",
+    "cached reranker score equivalence against uncached 012 scorer",
+    "candidate-order invariance",
+    "train/evaluation structure and truth-table split assertions",
+    "candidate cache and behavioral index built once per seed"
+  ],
+  "primary_endpoint": {
+    "population_levels": [32, 64, 128, 256, 512],
+    "support_size": 4,
+    "budgets": [1, 2, 4, 8],
+    "capability_floor": 0.80,
+    "criterion": "At each M, report the minimum adaptive exact-execution work fraction among registered budgets whose fixed-budget exact success is at least 0.80."
+  },
+  "cost_model": {
+    "candidate_encoder_macs_per_candidate": 20608,
+    "row_encoder_macs_per_support_row": 2368,
+    "pair_head_macs_per_candidate_row": 8256,
+    "cached_query_formula": "S*2368 + R*S*8256",
+    "uncached_012_query_formula": "N*20608 + S*2368 + N*S*8256",
+    "index_units": "posting lookups plus bitmap-word operations",
+    "candidate_cache_build": "one-time per seed",
+    "index_build": "one-time per seed",
+    "units_must_not_be_combined": true
+  },
+  "statistical_contract": {
+    "primary_estimate": "seed-level mean of the minimum-budget primary endpoint",
+    "uncertainty": "seed bootstrap 95 percent confidence interval",
+    "bootstrap_rounds": 4000,
+    "raw_per_seed_trial_data_required": true,
+    "no_task_level_iid_assumption": true
+  },
+  "interpretation_order": [
+    "contract and split integrity",
+    "exact executor success",
+    "behavioral ambiguity ceiling",
+    "index exactness",
+    "candidate cache equivalence",
+    "learned ranking after exhaustive scoring",
+    "learned ranking after exact retrieval",
+    "verified success and adaptive success",
+    "execution work",
+    "routing MAC reduction",
+    "index logical cost",
+    "scope limits"
+  ],
+  "decision_rule": [
+    {
+      "condition": "All benchmark, leakage, protocol, implementation, instrument, statistical and provenance gates pass.",
+      "licenses": "the completed run is scientifically interpretable under the registered scope.",
+      "does_not_license": "general semantic search, asymptotic sublinear scaling, or hardware speedup."
+    },
+    {
+      "condition": "indexed_behavioral retains >=0.80 exhaustive exact capability with lower adaptive execution work than exhaustive_behavioral.",
+      "licenses": "bounded evidence that a two-stage behavioral retrieval boundary improves selective execution on this finite-domain workload.",
+      "does_not_license": "universal routing superiority or asymptotic C5."
+    },
+    {
+      "condition": "exact retrieval is capability-preserving but learned reranking remains unstable.",
+      "licenses": "the routing bottleneck lies downstream of exact behavioral retrieval, motivating a separate learned late-interaction study.",
+      "does_not_license": "learned routing success."
+    },
+    {
+      "condition": "indexed_behavioral is exact but the combined index-plus-reranker arithmetic is not lower than exhaustive cached scoring.",
+      "licenses": "the retrieval ceiling is semantically effective but not computationally decisive under the registered cost units.",
+      "does_not_license": "compute advantage."
+    },
+    {
+      "condition": "no budget reaches the capability floor.",
+      "licenses": "the registered selective-execution criterion is not reached at that M.",
+      "does_not_license": "an impossibility claim."
+    }
+  ],
+  "scope": {
+    "exact_index_is_finite_domain_ceiling": true,
+    "input_width": 4,
+    "input_domain_rows": 16,
+    "asymptotic_claim": false,
+    "hardware_speedup_claim": false,
+    "general_semantic_retrieval_claim": false,
+    "language_semantics": false
+  },
+  "provenance": {
+    "parent_experiment": "TACOSM-GRAPH-CASM-BEHAVIORAL-COMPATIBILITY-012",
+    "parent_commit": "79494f07649cdb0cbb014f1bc940713528ab2a92",
+    "generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "amendment_history": [],
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require a new experiment identifier",
+    "smoke_runs": "must not enter confirmatory evidence",
+    "result_artifact": "immutable after scientific disposition"
+  }
+}

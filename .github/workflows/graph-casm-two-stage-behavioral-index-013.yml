@@ -1,0 +1,116 @@
+name: Research G-CASM two-stage behavioral index 013
+
+on:
+  push:
+    branches:
+      - research/graph-casm-two-stage-behavioral-index-013
+    paths:
+      - contracts/TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013.json
+      - docs/AUDIT-TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013.md
+      - scripts/run_graph_casm_two_stage_behavioral_index_013.py
+      - scripts/run_graph_casm_behavioral_compatibility_012.py
+      - scripts/run_graph_casm_selective_010.py
+      - src/tac_osm/behavioral_inverted_index.py
+      - src/tac_osm/indexed_behavioral_reranker.py
+      - src/tac_osm/behavioral_compatibility_router.py
+      - tests/test_behavioral_inverted_index.py
+      - tests/test_indexed_behavioral_reranker.py
+      - tests/test_behavioral_compatibility_router.py
+      - .github/workflows/graph-casm-two-stage-behavioral-index-013.yml
+  pull_request:
+    branches:
+      - research/graph-casm-behavioral-compatibility-012
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: G-CASM-013 smoke/preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest torch
+      - name: Contract validation
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013")
+          assert c.check_consistency() == []
+          print(c.primary_endpoint())
+          PY
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: 013 focused tests
+        run: python -m pytest tests/test_behavioral_inverted_index.py tests/test_indexed_behavioral_reranker.py tests/test_behavioral_compatibility_router.py -q
+      - name: Smoke measurement
+        run: python scripts/run_graph_casm_two_stage_behavioral_index_013.py --smoke
+      - name: Upload smoke artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013-smoke
+          path: artifacts/TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013.json
+          if-no-files-found: ignore
+
+  full:
+    name: G-CASM-013 full confirmatory measurement
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[run-graph-casm-two-stage-behavioral-index-013-full]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest torch
+      - name: Contract validation
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013")
+          assert c.check_consistency() == []
+          c.require_levels((32,64,128,256,512))
+          c.require_seeds((0,1,2,3,4))
+          c.require_steps(1200)
+          c.require_eval_steps(32)
+          c.require_k_levels((4,8,12))
+          c.require_arms(["exhaustive_behavioral","indexed_behavioral","index_only","random"])
+          PY
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: 013 focused tests
+        run: python -m pytest tests/test_behavioral_inverted_index.py tests/test_indexed_behavioral_reranker.py tests/test_behavioral_compatibility_router.py -q
+      - name: Full measurement
+        run: python scripts/run_graph_casm_two_stage_behavioral_index_013.py
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013
+          path: artifacts/TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013.json
+          if-no-files-found: error
+
+# Operational trigger only; the full scientific grid lives in the contract.
+# [run-graph-casm-two-stage-behavioral-index-013-full]
