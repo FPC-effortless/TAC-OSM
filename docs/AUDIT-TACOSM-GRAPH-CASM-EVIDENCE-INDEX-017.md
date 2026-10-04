@@ -79,3 +79,6 @@ longer be a pure computational replacement.
 
 No learned probe policy, asymptotic scaling, hardware speedup, language,
 vision, audio, or generic active-learning claim is licensed.
+
+
+Confirmatory trigger record: [run-graph-casm-evidence-index-017-full] after successful same-run smoke.
