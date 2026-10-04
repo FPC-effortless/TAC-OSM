@@ -98,6 +98,34 @@ def test_candidate_order_preserves_behavioral_scores_by_candidate_identity():
     assert ranked_keys1 == ranked_keys2
 
 
+def test_target_index_metadata_cannot_change_router_scores():
+    from dataclasses import replace
+    from tac_osm.behavioral_compatibility_router import (
+        BehavioralCompatibilityRouter,
+        BehavioralRouterConfig,
+    )
+
+    model = BehavioralCompatibilityRouter(
+        BehavioralRouterConfig(seed=6)
+    )
+    training = MODULE.g010.generate(9016, MODULE.TRAIN_PROGRAMS)
+    train_s = {MODULE.g010.structure_key(ep) for ep in training}
+    train_t = {MODULE.g010.truth_signature(ep) for ep in training}
+    target = MODULE.g010.build_manifest(
+        9017, (32,), 1, exclude_structures=train_s, exclude_truths=train_t
+    )[(32, 0)]
+    task, candidates = MODULE.build_task(
+        9018, 32, target, train_s, train_t, 0, 4, heldout=True
+    )
+    altered = replace(
+        task,
+        target_index=(task.target_index + 1) % len(candidates),
+    )
+    _, scores_a, _ = MODULE.rank_candidates(model, candidates, task.support, "graph")
+    _, scores_b, _ = MODULE.rank_candidates(model, candidates, altered.support, "graph")
+    assert scores_a == scores_b
+
+
 def test_support_label_permutation_changes_the_query_representation():
     from tac_osm.behavioral_compatibility_router import (
         BehavioralCompatibilityRouter,
