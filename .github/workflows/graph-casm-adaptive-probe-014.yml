@@ -63,7 +63,7 @@ jobs:
 
   full:
     name: G-CASM-014 full confirmatory measurement
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.commits.*.message, '[run-graph-casm-adaptive-probe-014-full]'))
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(toJSON(github.event.commits), '[run-graph-casm-adaptive-probe-014-full]'))
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
