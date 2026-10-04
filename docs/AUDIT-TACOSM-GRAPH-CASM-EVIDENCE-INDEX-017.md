@@ -82,3 +82,6 @@ vision, audio, or generic active-learning claim is licensed.
 
 
 Confirmatory trigger record: [run-graph-casm-evidence-index-017-full] after successful same-run smoke.
+
+
+Final confirmatory trigger record: [run-graph-casm-evidence-index-017-full] on synchronized test-count head.
