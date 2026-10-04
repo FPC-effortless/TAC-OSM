@@ -45,20 +45,14 @@ def load_registered_contract():
 
 def build_index(cache, library_size: int):
     evidence_by_action = {}
-    costs = {}
     for row in ACTIONS:
         evidence_by_action[row] = tuple(
             cache.trace[(idx, row)][0] for idx in range(library_size)
         )
-        costs[row] = statistics.fmean(
-            cache.trace[(idx, row)][1] + TRACE_WIDTH
-            for idx in range(library_size)
-        )
-    index = ExactEvidenceIndex.build(
+    return ExactEvidenceIndex.build(
         evidence_by_action,
         evidence_width=TRACE_WIDTH,
     )
-    return index, costs
 
 
 def exhaustive_select(cache, m: int):
@@ -67,21 +61,25 @@ def exhaustive_select(cache, m: int):
     return chosen, m * len(INPUT_ROWS) * TRACE_WIDTH
 
 
-def indexed_select(index, costs, m: int):
+def indexed_select(index, cache, m: int):
+    expected_cost_by_action = {
+        row: statistics.fmean(
+            cache.trace[(idx, row)][1] + TRACE_WIDTH
+            for idx in range(m)
+        )
+        for row in ACTIONS
+    }
     chosen, query_units = index.choose_best(
         index.full_bitmap(m),
         population_size=m,
-        expected_cost_by_action={
-            row: costs[row]
-            for row in ACTIONS
-        },
+        expected_cost_by_action=expected_cost_by_action,
     )
     return chosen, query_units
 
 
-def evaluate(cache, index, costs, m: int, task, cache_amortized: float, index_build_amortized: float):
+def evaluate(cache, index, m: int, task, cache_amortized: float, index_build_amortized: float):
     exhaustive, exhaustive_units = exhaustive_select(cache, m)
-    indexed, indexed_units = indexed_select(index, costs, m)
+    indexed, indexed_units = indexed_select(index, cache, m)
 
     if int(indexed.action.parameters[0]) != int(exhaustive.action.parameters[0]):
         raise RuntimeError(
@@ -260,7 +258,7 @@ def main(smoke: bool = False):
             raise RuntimeError("train/eval disjointness gate failed")
 
         cache, cache_info = g15.build_cache(library)
-        index, costs = build_index(cache, len(library))
+        index = build_index(cache, len(library))
         cache_meta[str(seed)] = cache_info["candidate_cache_trace_work_units"]
         index_meta[str(seed)] = (
             index.build_prediction_units + index.build_posting_writes
@@ -280,7 +278,6 @@ def main(smoke: bool = False):
                 result = evaluate(
                     cache,
                     index,
-                    costs,
                     m,
                     task,
                     cache_amortized,
