@@ -119,3 +119,25 @@ The architectural mapping is:
 
 This sequence keeps observation acquisition causally separate from terminal
 execution and verification.
+
+
+## Pre-confirmatory cost-accounting amendment
+
+The primary endpoint intentionally remains **environment-facing information
+efficiency**:
+
+    I(H;E) / E[environment acquisition work].
+
+To prevent hidden computational cost from being interpreted as a system-level
+efficiency result, every result artifact must also report:
+
+1. candidate-cache construction work, separately for each observation channel;
+2. deterministic selector prediction-scan work, using one unit per scalar
+   evidence bit and six units per activation-trace evaluation;
+3. amortized total work per registered task, with the cache amortized over the
+   full 5 M-level × 32-task seed grid;
+4. information gain divided by that amortized total work.
+
+This is an accounting amendment made before confirmatory measurement. It does
+not change the channel definitions, task grid, endpoint decision rule, or
+leakage boundary.
