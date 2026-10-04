@@ -85,3 +85,33 @@ The next intervention should therefore change the **observation channel**, not m
 - cost-aware evidence selection.
 
 G-CASM-015 has been preregistered separately for the first of these: an instrumented activation-trace channel versus scalar output observation. Its measurement is intentionally independent of the 014 confirmatory result.
+
+
+## Derived information-to-execution bound (post-measurement analysis)
+
+For a deterministic K-bit probe transcript there are at most q = 2^K distinct
+evidence leaves. If the target prior is uniform over M unique hypotheses and a
+terminal verifier can test at most B candidates per leaf, at most qB targets can
+be assigned a successful terminal test in expectation. Hence the population
+success ceiling is bounded by:
+
+    E[success] <= min(1, 2^K * B / M).
+
+This is an information-budget bound, not a finite-sample guarantee. A measured
+sample proportion can lie above it by finite-sample variation.
+
+For 014's K=4, B=8, M=512 regime:
+
+    2^4 * 8 / 512 = 0.25.
+
+The measured 23.125% success is therefore close to the 25% channel-and-budget
+ceiling. This strengthens the conclusion that the remaining large-M deficit is
+primarily information bandwidth relative to terminal execution budget.
+
+The corresponding K=6 trace channel in G-CASM-015 has:
+
+    2^6 * 8 / 512 = 1.0,
+
+so the information budget is no longer the binding necessary condition for
+full eight-candidate terminal resolution. Whether the residual trace
+partitions are sufficiently balanced remains an empirical question.
