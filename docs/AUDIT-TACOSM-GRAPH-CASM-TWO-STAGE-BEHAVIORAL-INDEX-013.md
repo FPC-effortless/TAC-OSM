@@ -1,6 +1,8 @@
 # AUDIT — TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013
 
-**Status: PREREGISTERED / IMPLEMENTATION UNDER AUDIT / NO CONFIRMATORY RESULT.**
+**Status: PREREGISTERED / IMPLEMENTATION UNDER AUDIT
+
+Confirmatory trigger: [run-graph-casm-two-stage-behavioral-index-013-full] / NO CONFIRMATORY RESULT.**
 
 ## Scientific purpose
 
