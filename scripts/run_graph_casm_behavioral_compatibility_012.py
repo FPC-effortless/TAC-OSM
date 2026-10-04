@@ -436,6 +436,31 @@ def seed_bootstrap(values: Sequence[float], seed: int, rounds: int = 4000):
     ]
 
 
+def seed_primary_value(trials):
+    """Return one seed's primary value under the registered eligibility rule."""
+    if not trials:
+        return None
+    exhaustive = statistics.fmean(
+        t["exhaustive"]["semantic_success"] for t in trials
+    )
+    if exhaustive < 0.80:
+        return None
+    eligible = []
+    for b in BUDGETS:
+        semantic = statistics.fmean(
+            t["budgets"][str(b)]["semantic_success"] for t in trials
+        )
+        retention = semantic / exhaustive if exhaustive > 0 else None
+        if retention is not None and retention >= 0.80:
+            eligible.append(
+                statistics.fmean(
+                    t["budgets"][str(b)]["adaptive_execution_work_fraction"]
+                    for t in trials
+                )
+            )
+    return min(eligible) if eligible else None
+
+
 def summarize_rep(seed_rows):
     summary = {}
     for support_size in SUPPORT_SIZES:
@@ -519,37 +544,40 @@ def summarize_rep(seed_rows):
                     ),
                 }
 
-            eligible = [
-                (b, v)
-                for b, v in row["budgets"].items()
-                if (
-                    row["exhaustive_success"] >= 0.80
-                    and v["capability_retention"] is not None
-                    and v["capability_retention"] >= 0.80
+            if support_size == PRIMARY_SUPPORT_SIZE:
+                seed_values = []
+                seed_valid = True
+                for block in blocks:
+                    value = seed_primary_value(block["trials"])
+                    if value is None:
+                        seed_valid = False
+                        break
+                    seed_values.append(value)
+                row["primary_endpoint"] = (
+                    {
+                        "eligible": True,
+                        "seed_values": seed_values,
+                        "mean_min_adaptive_execution_work_fraction": statistics.fmean(
+                            seed_values
+                        ),
+                    }
+                    if seed_valid and seed_values
+                    else {
+                        "eligible": False,
+                        "reason": "at_least_one_seed_failed_capability_floor_or_had_no_eligible_budget",
+                    }
                 )
-            ]
-            row["primary_endpoint"] = (
-                {
-                    "eligible": True,
-                    "min_adaptive_execution_work_fraction": min(
-                        v["adaptive_execution_work_fraction"] for _, v in eligible
-                    ),
-                }
-                if support_size == PRIMARY_SUPPORT_SIZE and eligible
-                else {
+            else:
+                row["primary_endpoint"] = {
                     "eligible": False,
-                    "reason": (
-                        "exhaustive_ceiling_below_0.80"
-                        if row["exhaustive_success"] < 0.80
-                        else "no_budget_reached_capability_floor"
-                    ),
+                    "reason": "primary_endpoint_defined_only_at_support_size_4",
                 }
-            )
             summary[str(support_size)][str(m)] = row
     return summary
 
 
 def primary_bootstrap(seed_rows, m: int, rounds: int = 4000):
+    """Bootstrap the seed-level minimum-over-budgets primary-selection rule."""
     available = [
         str(s)
         for s in SEEDS
@@ -558,32 +586,24 @@ def primary_bootstrap(seed_rows, m: int, rounds: int = 4000):
     ]
     if len(available) <= 1:
         return {"ci95": None, "valid_fraction": 0.0}
+
     rng = random.Random(90000 + m)
     selected = []
     for _ in range(rounds):
         sampled = [rng.choice(available) for _ in available]
-        trials = []
+        seed_values = []
+        valid = True
         for sid in sampled:
-            trials.extend(
+            value = seed_primary_value(
                 seed_rows[sid][str(m)][str(PRIMARY_SUPPORT_SIZE)]["trials"]
             )
-        ex = statistics.fmean(
-            t["exhaustive"]["semantic_success"] for t in trials
-        )
-        eligible = []
-        for b in BUDGETS:
-            sem = statistics.fmean(
-                t["budgets"][str(b)]["semantic_success"] for t in trials
-            )
-            work = statistics.fmean(
-                t["budgets"][str(b)]["adaptive_execution_work_fraction"]
-                for t in trials
-            )
-            retention = sem / ex if ex > 0 else None
-            if ex >= 0.80 and retention is not None and retention >= 0.80:
-                eligible.append(work)
-        if eligible:
-            selected.append(min(eligible))
+            if value is None:
+                valid = False
+                break
+            seed_values.append(value)
+        if valid and seed_values:
+            selected.append(statistics.fmean(seed_values))
+
     if not selected:
         return {"ci95": None, "valid_fraction": 0.0}
     selected.sort()
@@ -594,7 +614,6 @@ def primary_bootstrap(seed_rows, m: int, rounds: int = 4000):
         ],
         "valid_fraction": float(len(selected) / rounds),
     }
-
 
 def run(smoke: bool = False):
     contract = load_contract()
