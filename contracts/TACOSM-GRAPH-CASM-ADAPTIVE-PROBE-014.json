@@ -1,0 +1,174 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "title": "Adaptive evidence acquisition for behavioral hypothesis elimination",
+  "question": "Can adaptive selection of the next observable behavior row reduce candidate ambiguity and exact verification work at a fixed evidence budget, compared with the frozen non-adaptive support order?",
+  "hypothesis": "A target-identity-blind minimax probe selector should reduce the remaining behavior-compatible candidate set faster than the frozen random support order, especially at large M, improving capability at the same number of observed rows.",
+  "arms": [
+    {
+      "name": "adaptive_minimax",
+      "intervention": "greedily choose the unseen row minimizing the worst-case remaining compatible-candidate count using public candidate truth tables and observations acquired so far",
+      "acts_on": "evidence-acquisition policy"
+    },
+    {
+      "name": "fixed_random",
+      "intervention": "use the deterministic support-row permutation already registered in G-CASM-013 without adaptation",
+      "acts_on": "evidence-acquisition policy"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "paired_fixed_success_delta_k4_b8",
+      "role": "primary — seed-level paired difference in fixed-budget exact capability at K=4 and B=8",
+      "primary": true
+    },
+    {
+      "name": "support_consistent_candidate_count",
+      "role": "secondary — remaining behavioral ambiguity after each probe budget",
+      "primary": false
+    },
+    {
+      "name": "unique_candidate_fraction",
+      "role": "secondary — fraction of queries with exactly one compatible candidate",
+      "primary": false
+    },
+    {
+      "name": "fixed_execution_success",
+      "role": "secondary — exact verifier success for B=1/2/4/8",
+      "primary": false
+    },
+    {
+      "name": "adaptive_execution_success",
+      "role": "secondary — exact verifier success with early stopping",
+      "primary": false
+    },
+    {
+      "name": "adaptive_execution_work_fraction",
+      "role": "secondary — exact execution work normalized by exhaustive verification",
+      "primary": false
+    },
+    {
+      "name": "target_rank_index_only",
+      "role": "secondary — target rank in deterministic compatible-set order",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "contract and split integrity",
+    "target-identity-blind probe selection",
+    "behavioral ambiguity",
+    "exact verifier success",
+    "execution work",
+    "scope limits"
+  ],
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 0,
+  "eval_steps": 32,
+  "k_levels": [
+    1,
+    2,
+    4,
+    6,
+    8
+  ],
+  "held_constant": [
+    "G-CASM-010 generator and pinned external generator commit",
+    "G-CASM-013 static evaluation-library construction and train/eval split rules",
+    "same five seeds, M levels and 32 tasks per seed/M",
+    "same deterministic task target selection and support-order hash as G-CASM-013",
+    "same exact graph executor and verifier",
+    "same candidate execution budgets 1/2/4/8"
+  ],
+  "data_protocol": {
+    "train_eval_structure_disjoint": true,
+    "train_eval_truth_disjoint": true,
+    "evaluation_library_static_per_seed": true,
+    "nested_population_prefixes": true,
+    "target_identity_available_to_selector": false,
+    "target_index_available_to_selector": false,
+    "future_target_outputs_available_to_selector": false,
+    "verifier_only_rows_used_for_probe_selection": false
+  },
+  "leakage_rules": [
+    "Adaptive selection receives only the current compatible candidate indices, public candidate truth tables, and unobserved row indices.",
+    "Target identity and target index are not passed to the selector.",
+    "The target output for a row is exposed only after the selector commits to that row.",
+    "Rows not yet observed are unavailable as labels.",
+    "Final verifier rows are disjoint from probe rows.",
+    "No measured result is used to tune the selector or choose M, K or B."
+  ],
+  "primary_endpoint": {
+    "probe_budget": 4,
+    "candidate_budget": 8,
+    "success_definition": "fixed-budget exact verifier finds at least one candidate matching all remaining verifier rows",
+    "estimate": "mean across tasks within each seed, then paired adaptive_minus_fixed difference across five seeds",
+    "uncertainty": "seed bootstrap 95 percent confidence interval",
+    "bootstrap_rounds": 4000
+  },
+  "selector_definition": {
+    "criterion": "minimize max(count(output=0), count(output=1))",
+    "tie_break": "maximize min(count(output=0), count(output=1)), then lowest row index",
+    "state_update": "intersect compatible candidates with the newly observed row output"
+  },
+  "execution_accounting": {
+    "fixed_rows_evaluated": "selected_candidates * verifier_rows",
+    "adaptive_execution": "may stop after first mismatch and after first passing candidate",
+    "probe_observations": "reported separately and never merged numerically with executor work"
+  },
+  "controls": [
+    "exhaustive exact verification success is 1.0 for every query",
+    "target remains in the compatible set after every observation",
+    "probe decision cannot depend on target index",
+    "probe and verifier rows are disjoint",
+    "fixed-budget row-count invariant holds exactly",
+    "raw per-seed task data is retained"
+  ],
+  "decision_rule": [
+    {
+      "condition": "Primary paired delta is positive with a seed-bootstrap interval not crossing zero.",
+      "licenses": "evidence that adaptive target-identity-blind evidence acquisition improves fixed-evidence selective capability on the registered finite-domain workload.",
+      "does_not_license": "learned probe selection, generic active-learning superiority, asymptotic retrieval, or multimodal capability."
+    },
+    {
+      "condition": "Adaptive ambiguity falls but capability does not improve.",
+      "licenses": "candidate elimination is real but downstream candidate ordering or execution remains limiting.",
+      "does_not_license": "failure of information acquisition as a mechanism."
+    },
+    {
+      "condition": "Adaptive ceiling fails to beat the frozen support order.",
+      "licenses": "the registered finite-domain upper-bound strategy does not improve this workload at the fixed evidence budget.",
+      "does_not_license": "impossibility of learned or representation-aware probing elsewhere."
+    }
+  ],
+  "scope": {
+    "finite_domain_exact_ceiling": true,
+    "asymptotic_claim": false,
+    "semantic_generalization_claim": false,
+    "language_image_audio_claim": false,
+    "hardware_speedup_claim": false
+  },
+  "provenance": {
+    "parent_experiment": "TACOSM-GRAPH-CASM-TWO-STAGE-BEHAVIORAL-INDEX-013",
+    "parent_commit": "3a69020b44aeead8135800b4e3524f9c89452130",
+    "generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require a new experiment identifier",
+    "smoke_runs": "must not enter confirmatory evidence",
+    "result_artifact": "immutable after scientific disposition"
+  }
+}\n
