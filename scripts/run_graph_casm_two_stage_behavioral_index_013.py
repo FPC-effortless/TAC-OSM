@@ -201,7 +201,7 @@ def evaluate_arm(
         selected = tuple(order[:b])
         fixed = verify_selected(prefix, selected, verify, adaptive=False)
         adaptive = verify_selected(prefix, selected, verify, adaptive=True)
-        expected_rows = b * len(verify)
+        expected_rows = len(selected) * len(verify)
         if fixed["rows_evaluated"] != expected_rows:
             raise RuntimeError("fixed-budget verification-row invariant failed")
         budgets[str(b)] = {
