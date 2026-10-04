@@ -65,6 +65,17 @@ from . import (
 from .executor import program_from_descriptor, relevance_program
 from .environment import parse_query as parse_query_text
 from .router import LearnedRelationalRouter
+from .active_evidence import (
+    ActiveEvidenceConfig,
+    AlwaysSufficient,
+    EvidenceCompiler,
+    EvidencePacket,
+    EvidenceSufficiency,
+    IdentityEvidenceCompiler,
+    NoProbePolicy,
+    ProbeEnvironment,
+    ProbePolicy,
+)
 
 __all__ = ["ModelConfig", "TacOsmModel", "Episode", "run_episode",
            "RewardContext", "RewardFn", "baseline_reward"]
@@ -204,6 +215,11 @@ class TacOsmModel:
         repair: RepairController | None,
         environment: Environment,
         config: ModelConfig | None = None,
+        active_evidence: ActiveEvidenceConfig | None = None,
+        probe_policy: ProbePolicy | None = None,
+        probe_environment: ProbeEnvironment | None = None,
+        evidence_sufficiency: EvidenceSufficiency | None = None,
+        evidence_compiler: EvidenceCompiler | None = None,
     ) -> None:
         self.state = state
         self.router = router
@@ -212,6 +228,33 @@ class TacOsmModel:
         self.repair = repair
         self.environment = environment
         self.config = config if config is not None else ModelConfig()
+        self.active_evidence = (
+            active_evidence
+            if active_evidence is not None
+            else ActiveEvidenceConfig()
+        )
+        self.probe_policy = probe_policy if probe_policy is not None else NoProbePolicy()
+        self.probe_environment = probe_environment
+        self.evidence_sufficiency = (
+            evidence_sufficiency
+            if evidence_sufficiency is not None
+            else AlwaysSufficient()
+        )
+        self.evidence_compiler = (
+            evidence_compiler
+            if evidence_compiler is not None
+            else IdentityEvidenceCompiler()
+        )
+        if self.active_evidence.enabled and self.probe_environment is None:
+            raise ValueError(
+                "active evidence is enabled but no probe_environment was provided"
+            )
+        if self.active_evidence.enabled and not isinstance(
+            self.probe_policy, NoProbePolicy
+        ) and self.active_evidence.max_probes < 1:
+            raise ValueError(
+                "active evidence requires max_probes >= 1 when a probe policy is active"
+            )
         self._rng = random.Random(self.config.seed)
         self.episodes: list[Episode] = []
         self._last_query: Query | None = None
@@ -231,8 +274,37 @@ class TacOsmModel:
         # S_t: read the candidate structures addressable by this query.
         read = self.state.read(query)
 
-        # R_t: select one candidate. Routing sees only query, state, and
-        # candidates — never the target action or the outcome.
+        # Optional active-evidence stage: information-seeking computation occurs
+        # before terminal routing. Probe evidence is carried on this Step and
+        # compiled into the public query representation; it is not persisted
+        # until a later verified-commit mechanism explicitly accepts it.
+        evidence: list[EvidencePacket] = []
+        if self.active_evidence.enabled:
+            for _ in range(self.active_evidence.max_probes):
+                if self.evidence_sufficiency.sufficient(
+                    query, self.state, tuple(evidence)
+                ):
+                    break
+                action = self.probe_policy.choose(
+                    query, self.state, task.candidates, tuple(evidence)
+                )
+                if action is None:
+                    break
+                assert self.probe_environment is not None
+                packet = self.probe_environment.probe(self.state, action)
+                if not isinstance(packet, EvidencePacket):
+                    raise TypeError(
+                        "probe_environment.probe must return EvidencePacket"
+                    )
+                evidence.append(packet)
+                query = self.evidence_compiler.compile(
+                    query, self.state, tuple(evidence)
+                )
+        self._last_query = query
+        self._last_context = query.context
+
+        # R_t: select one candidate. Routing sees only the compiled public query,
+        # state and candidates — never the target action or terminal outcome.
         #
         # The oracle arm is the exception the interface boundary permits: it
         # reads ``target_action`` and therefore has to be *bound* here, at the
@@ -312,6 +384,7 @@ class TacOsmModel:
             verification=verification,
             write=write,
             repair=repair_result,
+            evidence=tuple(evidence),
             provenance={
                 "family": task.family,
                 "router": decision.provenance,
@@ -319,6 +392,8 @@ class TacOsmModel:
                 "success": bool(outcome.success),
                 "wrote": bool(write and write.committed),
                 "repaired": repair_result is not None,
+                "probe_count": len(evidence),
+                "probe_cost_units": sum(p.cost_units for p in evidence),
             },
         )
 
