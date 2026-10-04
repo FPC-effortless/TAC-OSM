@@ -6,21 +6,74 @@
   "question": "At matched environment-compute cost, can a structured execution trace carry more information about the unknown program hypothesis than scalar output probes, without exposing target identity?",
   "hypothesis": "A single target-identity-blind activation-trace action will provide higher empirical model information gain per unit environment execution work than a single scalar output-row action on the registered finite-domain workload.",
   "arms": [
-    {"name": "scalar_row", "intervention": "execute one selected input row and observe only the binary program output", "acts_on": "observation channel"},
-    {"name": "activation_trace", "intervention": "execute one selected input row and observe the ordered non-input node activation bits from the instrumented CASM sandbox", "acts_on": "observation channel"}
+    {
+      "name": "scalar_row",
+      "intervention": "execute one selected input row and observe only the binary program output",
+      "acts_on": "observation channel"
+    },
+    {
+      "name": "activation_trace",
+      "intervention": "execute one selected input row and observe the ordered non-input node activation bits from the instrumented CASM sandbox",
+      "acts_on": "observation channel"
+    }
   ],
   "endpoints": [
-    {"name": "best_one_step_information_gain_per_work", "role": "primary — maximum deterministic model-information gain in bits per expected environment work unit, averaged across tasks within seed and then across seeds", "primary": true},
-    {"name": "best_one_step_information_gain_bits", "role": "secondary — maximum deterministic information gain before cost normalization", "primary": false},
-    {"name": "expected_remaining_candidate_count", "role": "secondary — expected compatible hypothesis-set size after the selected one-step action", "primary": false},
-    {"name": "signature_support_size", "role": "secondary — number of distinct evidence signatures induced by the candidate set for the selected action", "primary": false},
-    {"name": "candidate_pool_reduction_fraction", "role": "secondary — normalized reduction in expected compatible candidate count", "primary": false}
+    {
+      "name": "best_one_step_information_gain_per_work",
+      "role": "primary — maximum deterministic model-information gain in bits per expected environment work unit, averaged across tasks within seed and then across seeds",
+      "primary": true
+    },
+    {
+      "name": "best_one_step_information_gain_bits",
+      "role": "secondary — maximum deterministic information gain before cost normalization",
+      "primary": false
+    },
+    {
+      "name": "expected_remaining_candidate_count",
+      "role": "secondary — expected compatible hypothesis-set size after the selected one-step action",
+      "primary": false
+    },
+    {
+      "name": "signature_support_size",
+      "role": "secondary — number of distinct evidence signatures induced by the candidate set for the selected action",
+      "primary": false
+    },
+    {
+      "name": "candidate_pool_reduction_fraction",
+      "role": "secondary — normalized reduction in expected compatible candidate count",
+      "primary": false
+    },
+    {
+      "name": "amortized_total_work_units",
+      "role": "secondary — environment work plus candidate-cache amortization over the full registered seed task grid plus deterministic selector prediction scan",
+      "primary": false
+    },
+    {
+      "name": "amortized_total_information_per_work",
+      "role": "secondary — information gain divided by the explicit amortized total cost",
+      "primary": false
+    }
   ],
-  "h_levels": [32, 64, 128, 256, 512],
-  "seeds": [0, 1, 2, 3, 4],
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "steps": 1,
   "eval_steps": 32,
-  "action_levels": ["scalar_row", "activation_trace"],
+  "action_levels": [
+    "scalar_row",
+    "activation_trace"
+  ],
   "held_constant": [
     "G-CASM-010 generator and pinned external generator commit",
     "G-CASM-013 static 512-program library construction",
@@ -53,8 +106,17 @@
     "per_work_utility": "I(H_t;E_a) / E[cost(a)]"
   },
   "observation_channels": {
-    "scalar_row": {"evidence": "one binary external output", "signature_alphabet_ceiling": 2, "environment_work": "one exact graph execution"},
-    "activation_trace": {"evidence": "ordered binary activation vector for all non-input active nodes", "signature_alphabet_ceiling": 64, "environment_work": "one exact graph execution plus one trace-read unit per returned activation bit", "scope_note": "instrumented-sandbox channel only"}
+    "scalar_row": {
+      "evidence": "one binary external output",
+      "signature_alphabet_ceiling": 2,
+      "environment_work": "one exact graph execution"
+    },
+    "activation_trace": {
+      "evidence": "ordered binary activation vector for all non-input active nodes",
+      "signature_alphabet_ceiling": 64,
+      "environment_work": "one exact graph execution plus one trace-read unit per returned activation bit",
+      "scope_note": "instrumented-sandbox channel only"
+    }
   },
   "interpretation_order": [
     "split and leakage integrity",
@@ -73,9 +135,21 @@
     "hardware_speedup_claim": false
   },
   "decision_rule": [
-    {"condition": "Activation-trace primary utility exceeds scalar utility with a seed-level interval excluding zero.", "licenses": "higher information efficiency of the registered structured observation channel on this finite workload.", "does_not_license": "learned autonomous probe selection, arbitrary-environment internal-state access, or multimodal capability."},
-    {"condition": "Activation-trace has higher raw information but no utility advantage after work normalization.", "licenses": "the channel carries more entropy but its observation cost offsets the gain.", "does_not_license": "cost-efficient structured probing."},
-    {"condition": "No trace advantage.", "licenses": "the registered activation channel does not improve information efficiency on this workload.", "does_not_license": "impossibility of other structured evidence channels."}
+    {
+      "condition": "Activation-trace primary utility exceeds scalar utility with a seed-level interval excluding zero.",
+      "licenses": "higher information efficiency of the registered structured observation channel on this finite workload.",
+      "does_not_license": "learned autonomous probe selection, arbitrary-environment internal-state access, or multimodal capability."
+    },
+    {
+      "condition": "Activation-trace has higher raw information but no utility advantage after work normalization.",
+      "licenses": "the channel carries more entropy but its observation cost offsets the gain.",
+      "does_not_license": "cost-efficient structured probing."
+    },
+    {
+      "condition": "No trace advantage.",
+      "licenses": "the registered activation channel does not improve information efficiency on this workload.",
+      "does_not_license": "impossibility of other structured evidence channels."
+    }
   ],
   "freeze_rule": {
     "post_measurement_protocol_changes": "require a new experiment identifier",
@@ -91,5 +165,10 @@
     "training_steps": 0,
     "contract_steps_placeholder": 1,
     "note": "015 is an exact finite-domain observation-channel ceiling; no learned optimization occurs."
+  },
+  "cost_accounting": {
+    "primary": "I(H;E)/expected environment acquisition work; this isolates environmental information efficiency",
+    "secondary": "candidate cache work is amortized across 160 registered tasks per seed; deterministic selector prediction scan is counted explicitly as M*16*1 scalar units or M*16*6 trace units",
+    "rationale": "The primary isolates the environment-facing channel. Secondary accounting prevents a trace channel from appearing computationally cheap by hiding candidate-side preparation or selection work."
   }
 }
