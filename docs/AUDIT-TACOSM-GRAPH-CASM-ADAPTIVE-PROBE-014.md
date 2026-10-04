@@ -89,3 +89,8 @@ This experiment does not establish:
 - asymptotic sublinear retrieval;
 - hardware speedup;
 - language, image or audio capability.
+
+
+## Premeasurement infrastructure note
+
+The branch-local repository test count was synchronized to 880 after the five 014 regression tests were added. The frozen baseline value remains unchanged.
