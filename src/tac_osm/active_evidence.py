@@ -93,6 +93,52 @@ class EvidenceSufficiency(Protocol):
         ...
 
 
+@dataclass(frozen=True)
+class ActiveEvidenceConfig:
+    """Traversal controls for the optional pre-routing probe stage."""
+
+    enabled: bool = False
+    max_probes: int = 0
+
+    def __post_init__(self) -> None:
+        if self.max_probes < 0:
+            raise ValueError("max_probes must be non-negative")
+        if not self.enabled and self.max_probes != 0:
+            raise ValueError(
+                "disabled active evidence must use max_probes=0"
+            )
+
+
+@runtime_checkable
+class EvidenceCompiler(Protocol):
+    """Compile public evidence into a router-visible query representation.
+
+    Compilation is deliberately separate from probing. The compiler must not
+    introduce target identity, evaluator labels, or future target evidence.
+    """
+
+    def compile(
+        self,
+        query: Query,
+        state: PersistentState,
+        evidence: Sequence[EvidencePacket],
+    ) -> Query:
+        """Return a public query representation after evidence acquisition."""
+        ...
+
+
+class IdentityEvidenceCompiler:
+    """Control compiler: leave the public query unchanged."""
+
+    def compile(
+        self,
+        query: Query,
+        state: PersistentState,
+        evidence: Sequence[EvidencePacket],
+    ) -> Query:
+        return query
+
+
 class NoProbePolicy:
     """Backward-compatible inactive probe policy."""
 
@@ -132,10 +178,13 @@ class AlwaysSufficient:
 
 __all__ = [
     "ProbeAction",
+    "ActiveEvidenceConfig",
     "EvidencePacket",
     "ProbePolicy",
     "ProbeEnvironment",
     "EvidenceSufficiency",
+    "EvidenceCompiler",
+    "IdentityEvidenceCompiler",
     "NoProbePolicy",
     "NeverSufficient",
     "AlwaysSufficient",
