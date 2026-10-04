@@ -100,3 +100,8 @@ Confirmatory trigger record: [run-graph-casm-adaptive-probe-014-full]
 
 
 Confirmatory trigger record 2: [run-graph-casm-adaptive-probe-014-full]; current measurement head includes the corrected smoke summarization grid and tuple-key interface.
+
+
+## Confirmatory infrastructure repair
+
+Before confirmatory measurement, the full job was repaired to pin the same external CASM generator commit used by the smoke job and G-CASM-013, and the explicit full-run marker was made robust to push-event payload shape. This changes CI execution only; the preregistered scientific grid and endpoint remain frozen.
