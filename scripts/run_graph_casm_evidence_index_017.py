@@ -197,10 +197,10 @@ def summarize(raw, cache_meta, index_meta, seeds, m_levels):
     for seed in seeds:
         rows = raw[str(seed)][str(PRIMARY_M)]
         ex = statistics.fmean(
-            r["exhaustive_information_per_work"] for r in rows
+            r["exhaustive_information_per_total_work"] for r in rows
         )
         ix = statistics.fmean(
-            r["indexed_information_per_work"] for r in rows
+            r["indexed_information_per_total_work"] for r in rows
         )
         primary_seed_deltas.append(ix - ex)
 
