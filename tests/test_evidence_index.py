@@ -13,6 +13,7 @@ def test_index_matches_balanced_partition():
         0,
         idx.full_bitmap(4),
         population_size=4,
+        expected_cost=1.0,
     )
     assert score.information_gain_bits == 1.0
     assert score.expected_remaining_candidates == 2.0
@@ -43,7 +44,11 @@ def test_choose_best_is_deterministic():
         },
         evidence_width=1,
     )
-    score, _ = idx.choose_best(idx.full_bitmap(4), population_size=4)
+    score, _ = idx.choose_best(
+        idx.full_bitmap(4),
+        population_size=4,
+        expected_cost_by_action={0: 1.0, 1: 1.0},
+    )
     assert score.action == 0
 
 
