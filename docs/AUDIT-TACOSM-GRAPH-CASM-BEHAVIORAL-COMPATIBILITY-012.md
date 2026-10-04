@@ -2,7 +2,9 @@
 
 ## Scientific status
 
-PREREGISTERED — implementation under audit; no confirmatory result exists.
+PREREGISTERED — implementation under audit
+
+Confirmatory trigger: [run-graph-casm-behavioral-compatibility-012-full]; no confirmatory result exists.
 
 This experiment is a new boundary after G-CASM-010 and G-CASM-011. It does not
 modify either experiment or reuse their results as tunable outcomes.
