@@ -97,8 +97,8 @@
     "cache_work": "same G-CASM-015 trace candidate-cache work and charged once per seed",
     "cache_amortization": "divide per-seed cache work by 160 registered tasks",
     "exhaustive_selector": "M * 16 * 6 prediction units",
-    "indexed_index_build": "512 * 16 * 6 prediction units plus 512 * 16 posting writes",
-    "indexed_selector": "for each of 16 actions, number of indexed signature buckets times ceil(M/64) bitmap-word units",
+    "indexed_index_build": "512 * 16 posting writes; prediction cost is zero because the exact activation traces are already in the shared G-CASM-015 cache",
+    "indexed_selector": "for each of 16 actions, number of indexed signature buckets times ceil(M/64) bitmap-word units; all 16 action scans are charged",
     "environment": "same expected trace acquisition cost as G-CASM-015",
     "full_total": "cache amortization + index build amortization + selector work + environment work"
   },
