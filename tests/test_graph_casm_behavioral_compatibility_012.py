@@ -150,3 +150,20 @@ def test_support_label_permutation_changes_the_query_representation():
         model, candidates, permuted_support, "graph"
     )
     assert any(a != b for a, b in zip(scores1, scores2))
+
+
+
+def test_legacy_evaluate_emits_support_set_diagnostics():
+    candidates = MODULE.g010.generate(9020, 8)
+    target = candidates[0]
+    task = MODULE.g010.Task(
+        "legacy-diagnostic",
+        tuple((tuple(k), int(target.truth_table[k])) for k in MODULE.INPUT_ROWS[:4]),
+        tuple((tuple(k), int(target.truth_table[k])) for k in MODULE.INPUT_ROWS[4:]),
+        0,
+    )
+    router = MODULE.g010.Router(9021)
+    result = MODULE.legacy_evaluate(router, task, candidates)
+    for budget in MODULE.BUDGETS:
+        assert "support_set_recall" in result["budgets"][str(budget)]
+        assert "support_set_hit" in result["budgets"][str(budget)]
