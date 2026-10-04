@@ -1,0 +1,144 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "title": "Structured action probes for higher-entropy hypothesis disambiguation",
+  "question": "At matched environment-compute cost, can a structured execution trace carry more information about the unknown program hypothesis than scalar output probes, without exposing target identity?",
+  "hypothesis": "A single target-identity-blind activation-trace action will provide higher empirical model information gain per unit environment execution work than a single scalar output-row action on the registered finite-domain workload.",
+  "arms": [
+    {
+      "name": "scalar_row",
+      "intervention": "execute one selected input row and observe only the binary program output",
+      "acts_on": "observation channel"
+    },
+    {
+      "name": "activation_trace",
+      "intervention": "execute one selected input row and observe the vector of non-input node activation bits from the instrumented CASM sandbox",
+      "acts_on": "observation channel"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "best_one_step_information_gain_per_work",
+      "role": "primary — maximum deterministic model-information gain in bits per expected environment work unit, averaged across tasks within seed and then across seeds",
+      "primary": true
+    },
+    {
+      "name": "best_one_step_information_gain_bits",
+      "role": "secondary — maximum deterministic information gain before cost normalization",
+      "primary": false
+    },
+    {
+      "name": "expected_remaining_candidate_count",
+      "role": "secondary — expected compatible hypothesis-set size after the selected one-step action",
+      "primary": false
+    },
+    {
+      "name": "signature_support_size",
+      "role": "secondary — number of distinct evidence signatures induced by the candidate set for the selected action",
+      "primary": false
+    },
+    {
+      "name": "candidate_pool_reduction_fraction",
+      "role": "secondary — normalized reduction in expected compatible candidate count",
+      "primary": false
+    }
+  ],
+  "h_levels": [32, 64, 128, 256, 512],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 1,
+  "eval_steps": 32,
+  "action_levels": ["scalar_row", "activation_trace"],
+  "held_constant": [
+    "G-CASM-010 generator and pinned external generator commit",
+    "G-CASM-013 static 512-program library construction",
+    "same five seeds, M levels and 32 tasks per seed/M",
+    "same deterministic target selection and row-action domain",
+    "same train/evaluation structure and truth disjointness rules",
+    "same exact CASM execution semantics"
+  ],
+  "data_protocol": {
+    "train_eval_structure_disjoint": true,
+    "train_eval_truth_disjoint": true,
+    "evaluation_library_static_per_seed": true,
+    "nested_population_prefixes": true,
+    "target_identity_available_to_selector": false,
+    "target_index_available_to_selector": false,
+    "future_target_evidence_available_to_selector": false,
+    "verifier_labels_available_to_selector": false
+  },
+  "leakage_rules": [
+    "The action selector may use only the current compatible hypothesis set and public predicted evidence for each candidate/action pair.",
+    "The target identity and target index are not supplied to the selector.",
+    "The target's realized evidence is exposed only after the action is selected.",
+    "No held-out verifier rows are supplied as probe-selection labels.",
+    "No confirmatory result is used to tune the channel definitions, action set, or endpoint."
+  ],
+  "information_definition": {
+    "prior": "uniform over the current compatible candidate set",
+    "deterministic_mutual_information_bits": "H(E_a | H_t) in bits because each candidate deterministically predicts the action evidence",
+    "expected_remaining_candidates": "sum_e |H_e|^2 / |H_t|",
+    "per_work_utility": "I(H_t;E_a) / E[cost(a)]"
+  },
+  "observation_channels": {
+    "scalar_row": {
+      "evidence": "one binary external output",
+      "signature_alphabet_ceiling": 2,
+      "environment_work": "one exact graph execution"
+    },
+    "activation_trace": {
+      "evidence": "ordered binary activation vector for all non-input active nodes",
+      "signature_alphabet_ceiling": 64,
+      "environment_work": "one exact graph execution plus one trace-read unit per returned activation bit",
+      "scope_note": "This is an instrumented-sandbox channel measurement, not a claim that arbitrary black-box environments expose internal activations."
+    }
+  },
+  "interpretation_order": [
+    "split and leakage integrity",
+    "information gain",
+    "information gain per environment work",
+    "remaining candidate ambiguity",
+    "scope limits"
+  ],
+  "scope": {
+    "finite_domain_observation_channel_ceiling": true,
+    "learned_probe_policy_claim": false,
+    "global_optimal_decision_tree_claim": false,
+    "asymptotic_claim": false,
+    "semantic_generalization_claim": false,
+    "language_image_audio_claim": false,
+    "hardware_speedup_claim": false
+  },
+  "decision_rule": [
+    {
+      "condition": "Activation-trace primary utility exceeds scalar utility with a seed-level interval excluding zero.",
+      "licenses": "evidence that the richer instrumented observation channel is more information-efficient than scalar observation on the registered workload.",
+      "does_not_license": "learned autonomous probe selection, arbitrary-environment internal-state access, or multimodal capability."
+    },
+    {
+      "condition": "Activation-trace has higher raw information but no utility advantage after work normalization.",
+      "licenses": "the channel carries more entropy but its observation cost offsets the gain.",
+      "does_not_license": "cost-efficient structured probing."
+    },
+    {
+      "condition": "No trace advantage.",
+      "licenses": "the registered activation channel does not improve information efficiency on this workload.",
+      "does_not_license": "impossibility of other structured evidence channels such as relational or counterfactual probes."
+    }
+  ],
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require a new experiment identifier",
+    "smoke_runs": "must not enter confirmatory evidence",
+    "result_artifact": "immutable after scientific disposition"
+  },
+  "provenance": {
+    "parent_experiment": "TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014",
+    "parent_commit": "44a2ccaef73e4a02caea83c35e7d04c22dacab39",
+    "generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "schedule": {
+    "training_steps": 0,
+    "contract_steps_placeholder": 1,
+    "note": "015 is an exact finite-domain observation-channel ceiling; no learned optimization occurs in this experiment."
+  }
+}
