@@ -63,7 +63,7 @@ jobs:
 
   full:
     name: G-CASM-015 full confirmatory measurement
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(toJSON(github.event.commits), '[run-graph-casm-structured-action-probe-015-full]'))
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
@@ -106,4 +106,5 @@ jobs:
           path: artifacts/TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015.json
           if-no-files-found: error
 
-# Full measurement is manually dispatched only, after implementation audit.
+# Full measurement is explicitly triggered only by workflow_dispatch or a marker commit after implementation audit.
+# [run-graph-casm-structured-action-probe-015-full]
