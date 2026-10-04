@@ -76,7 +76,7 @@
     3,
     4
   ],
-  "steps": 0,
+  "steps": 1,
   "eval_steps": 32,
   "k_levels": [
     1,
@@ -170,5 +170,10 @@
     "post_measurement_protocol_changes": "require a new experiment identifier",
     "smoke_runs": "must not enter confirmatory evidence",
     "result_artifact": "immutable after scientific disposition"
+  },
+  "schedule": {
+    "training_steps": 0,
+    "contract_steps_placeholder": 1,
+    "note": "The shared contract schema requires a positive schedule length; 014 has no learned optimization schedule. The run gate therefore pins one deterministic evaluation schedule without implying parameter training."
   }
-}\n
+}
