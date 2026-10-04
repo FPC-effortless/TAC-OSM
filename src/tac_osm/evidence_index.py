@@ -168,7 +168,7 @@ class ExactEvidenceIndex:
                 -score.information_per_work,
                 -score.information_gain_bits,
                 score.expected_remaining_candidates,
-                str(score.action),
+                score.action if isinstance(score.action, (int, float, str)) else repr(score.action),
             )
             if best is None or key < best[0]:
                 best = (key, score, total_work)
