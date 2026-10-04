@@ -355,7 +355,7 @@ def main(smoke: bool = False):
         tasks_per_m = TASKS_PER_M
         contract.require_levels(M_LEVELS)
         contract.require_seeds(SEEDS)
-        contract.require_steps(0)
+        contract.require_steps(1)
         contract.require_eval_steps(TASKS_PER_M)
         contract.require_k_levels(PROBE_BUDGETS)
         contract.require_arms(["adaptive_minimax", "fixed_random"])
