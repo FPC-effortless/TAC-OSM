@@ -41,6 +41,8 @@ INPUT_COUNT = g010.INPUT_COUNT
 INPUT_ROWS = tuple(itertools.product((0, 1), repeat=INPUT_COUNT))
 MAX_NODES = g010.MAX_NODES
 TRACE_READ_UNITS = MAX_NODES - INPUT_COUNT
+REGISTERED_TASKS_PER_SEED = len(M_LEVELS) * TASKS_PER_M
+CHANNELS = ("scalar_row", "activation_trace")
 GENERATOR_COMMIT = "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
 
 
@@ -168,7 +170,7 @@ def evaluate_task(cache: ProbeCache, task: QueryTask, m: int) -> dict:
         "target_index": task.target_index,
         "channels": {},
     }
-    for channel in ("scalar_row", "activation_trace"):
+    for channel in CHANNELS:
         best = choose_best_action(action_scores(cache, indices, channel))
         selected_row = int(best.action.parameters[0])
         if channel == "scalar_row":
@@ -185,6 +187,11 @@ def evaluate_task(cache: ProbeCache, task: QueryTask, m: int) -> dict:
             "target_evidence_signature": list(target_evidence),
             "information_alphabet_ceiling": (
                 2 if channel == "scalar_row" else 2 ** TRACE_READ_UNITS
+            ),
+            "selector_prediction_units": int(
+                m * len(INPUT_ROWS) * (
+                    1 if channel == "scalar_row" else TRACE_READ_UNITS
+                )
             ),
         }
     return out
@@ -237,6 +244,33 @@ def summarize(raw, cache_meta, seeds: Sequence[int], m_levels: Sequence[int]):
                 ),
                 "information_per_work_mean": statistics.fmean(
                     v["information_per_work"] for v in trials
+                ),
+                "amortized_total_work_units_mean": statistics.fmean(
+                    r["expected_environment_work_units"]
+                    + r["selector_prediction_units"]
+                    + cache_meta[str(seed)][
+                        "candidate_cache_scalar_work_units"
+                        if channel == "scalar_row"
+                        else "candidate_cache_trace_work_units"
+                    ] / REGISTERED_TASKS_PER_SEED
+                    for seed in seeds
+                    for row in raw[str(seed)][str(m)]
+                    for r in (row["channels"][channel],)
+                ),
+                "amortized_total_information_per_work_mean": statistics.fmean(
+                    r["information_gain_bits"] / max(
+                        1.0,
+                        r["expected_environment_work_units"]
+                        + r["selector_prediction_units"]
+                        + cache_meta[str(seed)][
+                            "candidate_cache_scalar_work_units"
+                            if channel == "scalar_row"
+                            else "candidate_cache_trace_work_units"
+                        ] / REGISTERED_TASKS_PER_SEED,
+                    )
+                    for seed in seeds
+                    for row in raw[str(seed)][str(m)]
+                    for r in (row["channels"][channel],)
                 ),
                 "seed_information_per_work_means": seed_means,
             }
@@ -349,6 +383,10 @@ def main(smoke: bool = False):
             "train_programs": TRAIN_PROGRAMS,
             "activation_trace_bits": TRACE_READ_UNITS,
             "trace_read_units_per_bit": 1,
+            "registered_tasks_per_seed_for_cache_amortization": REGISTERED_TASKS_PER_SEED,
+            "selector_prediction_units": "M * 16 * 1 for scalar_row; M * 16 * 6 for activation_trace",
+            "primary_cost_scope": "environment acquisition only",
+            "secondary_cost_scope": "candidate cache amortized over full registered seed grid plus selector prediction scan",
         },
         "checks": checks,
         "summary": summarize(raw, cache_meta, seeds, m_levels),
