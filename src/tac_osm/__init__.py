@@ -210,6 +210,7 @@ class Step:
     verification: VerificationResult
     write: StateWrite | None = None
     repair: RepairResult | None = None
+    evidence: tuple[Any, ...] = ()
     provenance: dict[str, Any] = field(default_factory=dict)
 
 
