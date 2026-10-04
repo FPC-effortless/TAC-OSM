@@ -1,7 +1,7 @@
 """Query-conditioned behavioral compatibility router for G-CASM-012.
 
 The router learns a candidate/query compatibility relation rather than an
-exact candidate identity.  Training labels are derived only from public
+exact candidate identity. Training labels are derived only from public
 training-program truth tables and support rows; evaluation targets and
 verifier-only rows never enter the learner.
 """
@@ -67,24 +67,39 @@ class BehavioralCompatibilityRouter(nn.Module):
         candidate_features: torch.Tensor,
         rows: torch.Tensor,
     ) -> torch.Tensor:
-        """Return [num_candidates, num_rows] compatibility logits."""
-        if candidate_features.ndim != 2:
-            raise ValueError("candidate_features must be rank-2")
-        if rows.ndim != 2:
-            raise ValueError("rows must be rank-2")
-        if rows.shape[1] != self.config.row_dim:
+        """Return [M, S] for one query or [B, M, S] for a training batch."""
+        if candidate_features.ndim not in (2, 3):
+            raise ValueError("candidate_features must be rank-2 or rank-3")
+        if rows.ndim not in (2, 3):
+            raise ValueError("rows must be rank-2 or rank-3")
+        if rows.shape[-1] != self.config.row_dim:
             raise ValueError(
-                f"rows width {rows.shape[1]} != configured {self.config.row_dim}"
+                f"rows width {rows.shape[-1]} != configured {self.config.row_dim}"
             )
+        if candidate_features.ndim != rows.ndim:
+            raise ValueError("candidate and row tensors must have matching batch rank")
 
         candidates = self.encode_candidates(candidate_features)
         row_latent = self.encode_rows(rows)
-        c = candidates[:, None, :]
-        r = row_latent[None, :, :]
-        pair = torch.cat((c.expand(-1, rows.shape[0], -1),
-                          r.expand(candidates.shape[0], -1, -1),
-                          c * r,
-                          torch.abs(c - r)), dim=-1)
+
+        if candidates.ndim == 2:
+            c = candidates[:, None, :]
+            r = row_latent[None, :, :]
+        else:
+            c = candidates[:, :, None, :]
+            r = row_latent[:, None, :, :]
+
+        if candidates.ndim == 2:
+            c_full = c.expand(-1, rows.shape[0], -1)
+            r_full = r.expand(candidates.shape[0], -1, -1)
+        else:
+            c_full = c.expand(-1, -1, rows.shape[1], -1)
+            r_full = r.expand(-1, candidates.shape[1], -1, -1)
+
+        pair = torch.cat(
+            (c_full, r_full, c_full * r_full, torch.abs(c_full - r_full)),
+            dim=-1,
+        )
         return self.pair_head(pair).squeeze(-1)
 
     def compatibility_scores(
@@ -92,11 +107,11 @@ class BehavioralCompatibilityRouter(nn.Module):
         candidate_features: torch.Tensor,
         rows: torch.Tensor,
     ) -> torch.Tensor:
-        """Aggregate row-level compatibility into one score per candidate."""
+        """Aggregate row compatibility into one score per candidate."""
         logits = self.pair_logits(candidate_features, rows)
         tau = self.config.aggregate_temperature
-        # Differentiable soft-min: a candidate must score well on its weakest
-        # support row rather than merely accumulating a few strong matches.
+        # Soft-min aggregation makes the weakest support row influential:
+        # exact behavioral compatibility requires all observed rows to fit.
         return -tau * torch.logsumexp(-logits / tau, dim=-1)
 
     def rank(
@@ -106,6 +121,7 @@ class BehavioralCompatibilityRouter(nn.Module):
     ) -> torch.Tensor:
         return torch.argsort(
             self.compatibility_scores(candidate_features, rows),
+            dim=-1,
             descending=True,
         )
 
@@ -116,7 +132,7 @@ class BehavioralCompatibilityRouter(nn.Module):
         pair_labels: torch.Tensor,
         target_index: torch.Tensor,
     ) -> torch.Tensor:
-        """Pairwise compatibility supervision + target-set ranking."""
+        """Pairwise compatibility supervision plus target-ranking loss."""
         pair_logits = self.pair_logits(candidate_features, rows)
         labels = pair_labels.to(dtype=pair_logits.dtype)
         pair_loss = nn.functional.binary_cross_entropy_with_logits(
@@ -125,8 +141,8 @@ class BehavioralCompatibilityRouter(nn.Module):
 
         scores = self.compatibility_scores(candidate_features, rows)
         rank_loss = nn.functional.cross_entropy(
-            scores.unsqueeze(0) / self.config.temperature,
-            target_index.reshape(1),
+            scores / self.config.temperature,
+            target_index,
         )
         return (
             self.config.pair_loss_weight * pair_loss
