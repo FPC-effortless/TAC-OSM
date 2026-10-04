@@ -1,0 +1,100 @@
+name: Research G-CASM adaptive evidence acquisition 014
+
+on:
+  push:
+    branches:
+      - research/graph-casm-adaptive-probe-014
+    paths:
+      - contracts/TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014.json
+      - docs/AUDIT-TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014.md
+      - scripts/run_graph_casm_adaptive_probe_014.py
+      - scripts/run_graph_casm_selective_010.py
+      - src/tac_osm/adaptive_behavioral_probe.py
+      - tests/test_adaptive_behavioral_probe.py
+      - .github/workflows/graph-casm-adaptive-probe-014.yml
+  pull_request:
+    branches:
+      - research/graph-casm-two-stage-behavioral-index-013
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: G-CASM-014 smoke/preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest torch
+      - name: Contract validation
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014")
+          assert c.check_consistency() == []
+          print(c.primary_endpoint())
+          PY
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: 014 focused tests
+        run: python -m pytest tests/test_adaptive_behavioral_probe.py -q
+      - name: Smoke measurement
+        run: python scripts/run_graph_casm_adaptive_probe_014.py --smoke
+      - name: Upload smoke artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014-smoke
+          path: artifacts/TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014.json
+          if-no-files-found: ignore
+
+  full:
+    name: G-CASM-014 full confirmatory measurement
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[run-graph-casm-adaptive-probe-014-full]')
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest torch
+      - name: Contract validation
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014")
+          assert c.check_consistency() == []
+          c.require_levels((32,64,128,256,512))
+          c.require_seeds((0,1,2,3,4))
+          c.require_steps(0)
+          c.require_eval_steps(32)
+          c.require_k_levels((1,2,4,6,8))
+          c.require_arms(["adaptive_minimax","fixed_random"])
+          PY
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: 014 focused tests
+        run: python -m pytest tests/test_adaptive_behavioral_probe.py -q
+      - name: Full measurement
+        run: python scripts/run_graph_casm_adaptive_probe_014.py
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014
+          path: artifacts/TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014.json
+          if-no-files-found: error
+
+# [run-graph-casm-adaptive-probe-014-full]
