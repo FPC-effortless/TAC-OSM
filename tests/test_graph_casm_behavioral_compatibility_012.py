@@ -86,15 +86,15 @@ def test_candidate_order_preserves_behavioral_scores_by_candidate_identity():
     order2, scores2, _ = MODULE.rank_candidates(model, permuted, support, "graph")
 
     original_by_key = {
-        candidates[i].key: scores1[i] for i in range(len(candidates))
+        MODULE.g010.structure_key(candidates[i]): scores1[i] for i in range(len(candidates))
     }
     permuted_by_key = {
-        permuted[i].key: scores2[i] for i in range(len(permuted))
+        MODULE.g010.structure_key(permuted[i]): scores2[i] for i in range(len(permuted))
     }
     assert original_by_key == permuted_by_key
 
-    ranked_keys1 = [candidates[i].key for i in order1]
-    ranked_keys2 = [permuted[i].key for i in order2]
+    ranked_keys1 = [MODULE.g010.structure_key(candidates[i]) for i in order1]
+    ranked_keys2 = [MODULE.g010.structure_key(permuted[i]) for i in order2]
     assert ranked_keys1 == ranked_keys2
 
 
