@@ -136,3 +136,6 @@ Those require new benchmark domains and separately preregistered experiments.
   compatibility ranking.
 
 If 013 fails, it does not erase 010–012. It narrows the failure boundary.
+
+
+Implementation repair trigger: [run-graph-casm-two-stage-behavioral-index-013-full]
