@@ -1,0 +1,250 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-BEHAVIORAL-COMPATIBILITY-012",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "base_commit": "06c36f4cda96b8b0ae4411013c7fdf8939b1d8f8",
+  "title": "Query-conditioned behavioral compatibility routing for selective graph execution",
+  "question": "Can a router trained to predict candidate/query behavioral compatibility recover the relevant executable candidates more reliably than the G-CASM-010 exact-identity router, while preserving capability-constrained selective execution?",
+  "hypothesis": "Training on candidate/support compatibility rather than exact target identity should improve recovery of the support-consistent candidate set and therefore improve verified selective execution on held-out executable programs, without requiring evaluator-only target labels or verifier-only rows at routing time.",
+  "arms": [
+    {
+      "name": "behavioral_graph",
+      "intervention": "query-conditioned candidate/support cross-encoder using complete public executable graph features and compatibility supervision",
+      "acts_on": "routing objective and interaction architecture"
+    },
+    {
+      "name": "legacy_graph",
+      "intervention": "G-CASM-010 matched dual-encoder exact-identity router with complete public executable graph features",
+      "acts_on": "routing baseline"
+    },
+    {
+      "name": "behavioral_summary",
+      "intervention": "same behavioral compatibility objective with the 200-bit executable wiring field removed",
+      "acts_on": "candidate representation"
+    },
+    {
+      "name": "constant",
+      "intervention": "constant-score candidate ranking with deterministic candidate-order tie break",
+      "acts_on": "negative control"
+    },
+    {
+      "name": "random",
+      "intervention": "seeded random candidate ranking",
+      "acts_on": "negative control"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "minimum_adaptive_execution_work_fraction_at_capability",
+      "role": "primary — minimum adaptive exact-execution work fraction at support_size=4 among budgets retaining >=0.80 exhaustive capability",
+      "primary": true,
+      "description": "At each M, use only the registered support_size=4 condition and select the minimum adaptive execution-work fraction among budgets whose verified semantic success is at least 0.80 of exhaustive exact execution."
+    },
+    {
+      "name": "verified_selective_success",
+      "role": "secondary — exact verifier success after executing the selected candidate budget",
+      "primary": false
+    },
+    {
+      "name": "target_routing_recall",
+      "role": "secondary — probability the target candidate is admitted within budget",
+      "primary": false
+    },
+    {
+      "name": "support_set_recall",
+      "role": "secondary — fraction of exact support-consistent candidates recovered within budget",
+      "primary": false
+    },
+    {
+      "name": "support_consistent_candidate_count",
+      "role": "secondary — exact public-support ambiguity diagnostic",
+      "primary": false
+    },
+    {
+      "name": "target_rank",
+      "role": "secondary — exact target rank under the learned scorer",
+      "primary": false
+    },
+    {
+      "name": "exhaustive_exact_graph_success",
+      "role": "secondary — capability ceiling and eligibility gate",
+      "primary": false
+    },
+    {
+      "name": "routing_execution_work",
+      "role": "secondary — actual graph execution work after routing",
+      "primary": false
+    }
+  ],
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 1200,
+  "eval_steps": 32,
+  "k_levels": [
+    4,
+    8,
+    12
+  ],
+  "held_constant": [
+    "G-CASM-010 candidate generator and pinned external CASM generator commit",
+    "train/evaluation exact structure and complete truth-table disjointness",
+    "4-input Boolean program family and M levels",
+    "4 support rows for training and primary evaluation",
+    "additional evaluation-only support sizes 8 and 12",
+    "exact graph executor and verifier rows are identical across learned arms",
+    "candidate feature width 290 with graph arm retaining the public 200-bit wiring field",
+    "five seeds, 1200 routing steps, 32 evaluation tasks per seed/M, budgets 1/2/4/8",
+    "primary endpoint selection rule and seed-level bootstrap are fixed before measurement"
+  ],
+  "router": {
+    "candidate_feature_dimension": 290,
+    "row_dimension": 5,
+    "hidden_dimension": 64,
+    "latent_dimension": 32,
+    "pair_hidden_dimension": 64,
+    "learning_rate": 0.001,
+    "aggregate_temperature": 0.25,
+    "training_support_size": 4,
+    "training_candidates_per_task": 8,
+    "objective": "row-level compatibility BCE plus support-set compatibility BCE",
+    "target_identity_training": false
+  },
+  "data_protocol": {
+    "train_programs": 256,
+    "evaluation_tasks_per_seed_M": 32,
+    "support_sizes": [
+      4,
+      8,
+      12
+    ],
+    "verifier_rows": "all non-support rows, so 12/8/4 rows respectively",
+    "candidate_truth_tables_unique": true,
+    "candidate_structures_unique": true,
+    "train_eval_exact_structure_disjoint": true,
+    "train_eval_truth_disjoint": true,
+    "target_identity_available_to_router": false,
+    "verifier_only_rows_available_to_router": false,
+    "target_index_used_in_training_loss": false
+  },
+  "leakage_rules": [
+    "Router inputs contain only public candidate features and observed support input/output rows.",
+    "Training labels are derived from each training candidate's public truth table against the observed support rows; evaluator target identity is never passed as a feature or loss target.",
+    "Evaluation verifier-only rows are never passed to routing.",
+    "Evaluation target structure and complete truth table are disjoint from router training.",
+    "Candidate ordering is shuffled independently of target placement and cannot affect model features.",
+    "Support-size conditions reuse a representation-independent row permutation and do not use verifier outcomes."
+  ],
+  "instrument_controls": [
+    "exact exhaustive graph execution over the full candidate pool",
+    "constant-score ranking control",
+    "seeded random ranking control",
+    "candidate-order invariance test",
+    "support-label permutation negative control",
+    "target-index independence test",
+    "training/evaluation structure and truth-table split assertions"
+  ],
+  "primary_endpoint": {
+    "population_levels": [
+      32,
+      64,
+      128,
+      256,
+      512
+    ],
+    "support_size": 4,
+    "budgets": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "capability_floor": 0.8,
+    "criterion": "At each M, report the minimum adaptive execution-work fraction among budgets retaining at least 0.80 of exhaustive exact-graph semantic success."
+  },
+  "statistical_contract": {
+    "primary_estimate": "seed-level mean of the minimum-budget primary endpoint after applying the registered capability rule",
+    "uncertainty": "seed bootstrap 95 percent confidence interval with the complete budget-selection rule repeated inside each resample",
+    "bootstrap_rounds": 4000,
+    "raw_per_seed_trial_data_required": true,
+    "no_task_level_iid_assumption": true
+  },
+  "decision_rule": [
+    {
+      "condition": "All benchmark, leakage, protocol, implementation, instrument, statistical and provenance gates pass.",
+      "licenses": "the completed run is scientifically interpretable under the registered scope.",
+      "does_not_license": "general intelligence, hidden-wiring inference, asymptotic sublinear scaling, or hardware speedup."
+    },
+    {
+      "condition": "behavioral_graph achieves a lower primary execution-work fraction than legacy_graph at matched capability, with the registered support_size=4 endpoint eligible.",
+      "licenses": "bounded evidence that compatibility-conditioned routing improves selective graph execution on the registered workload.",
+      "does_not_license": "universal routing superiority or asymptotic scaling."
+    },
+    {
+      "condition": "behavioral_graph improves support-set recall but does not meet the capability-constrained work criterion.",
+      "licenses": "evidence that the compatibility objective changes relevant-set recovery without establishing selective-execution capability.",
+      "does_not_license": "C5."
+    },
+    {
+      "condition": "No primary budget reaches the capability floor.",
+      "licenses": "the registered router does not meet the capability-constrained criterion at that M.",
+      "does_not_license": "an impossibility claim."
+    }
+  ],
+  "interpretation_order": [
+    "contract and split integrity",
+    "exact executor ceiling",
+    "public-support ambiguity",
+    "learned support-set recall",
+    "target routing recall and target rank",
+    "verified semantic success",
+    "actual fixed and adaptive execution work",
+    "comparison with legacy graph router",
+    "summary-representation control",
+    "negative controls",
+    "scope limits"
+  ],
+  "provenance": {
+    "parent_experiment": "TACOSM-GRAPH-CASM-SELECTIVE-010",
+    "parent_commit": "06c36f4cda96b8b0ae4411013c7fdf8939b1d8f8",
+    "external_generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require a new experiment identifier",
+    "smoke_runs": "must not enter confirmatory evidence",
+    "result_artifact": "immutable after scientific disposition"
+  },
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "legacy_graph support_set_recall serialization",
+      "old_definition": "legacy_graph trial budgets emitted routing and execution fields but did not emit the support_set_recall diagnostic consumed by the common 012 summarizer",
+      "new_definition": "legacy_graph trial budgets emit support_set_recall and support_set_hit computed from the observed support rows and the legacy router's exact candidate ordering",
+      "rationale": "The confirmatory run completed repository and experiment gates but terminated during final summarization with KeyError('support_set_recall'). The missing field is an instrument/recording defect; adding it does not change the intervention, training, evaluation tasks, or primary decision rule.",
+      "discovered": "G-CASM-012 full confirmatory run 37209451643, during summary serialization before scientific result completion.",
+      "affected": "legacy diagnostic serialization only; no scientific parameter, arm, benchmark, or endpoint decision rule changed.",
+      "no_result_under_previous_version": "The run produced a checkpoint artifact containing raw trials but no completed scientific summary; no confirmatory result was reported under the faulty writer."
+    },
+    {
+      "id": "A2",
+      "applies_to": "primary endpoint aggregation",
+      "old_definition": "minimum eligible adaptive execution-work fraction was selected after pooling trials across seeds, despite the statistical contract defining the seed as the independent resampling unit",
+      "new_definition": "each seed independently applies the exhaustive/capability eligibility rule and selects its minimum eligible budget; the primary estimate is the mean of those seed-level minima and the bootstrap repeats that seed-level selection inside each resample",
+      "rationale": "The contract explicitly specifies seed-level aggregation and no task-level IID assumption. The pooled selection could produce an eligible primary value even when one or more seeds failed the capability floor.",
+      "discovered": "Pre-rerun audit of G-CASM-012 after the summary-field instrumentation failure, before any valid result was accepted.",
+      "affected": "primary endpoint aggregation and bootstrap implementation only; no training schedule, arm, benchmark, or decision threshold changed",
+      "no_result_under_previous_version": "No completed scientific result existed because the same run terminated during final summarization with a KeyError before the final artifact was emitted."
+    }
+  ]
+}
