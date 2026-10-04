@@ -161,3 +161,24 @@ to:
     computationally efficient structured evidence
 
 and then, only after that, to a learned CDL probe policy.
+
+
+## Derived information-to-execution bound (post-measurement analysis)
+
+A deterministic structured observation channel with q possible evidence leaves
+can support at most qB distinct successful terminal candidates when the
+terminal budget is B. Under a uniform M-hypothesis prior:
+
+    E[success] <= min(1, qB/M).
+
+This is a population expectation bound and is not used as the preregistered
+primary endpoint.
+
+The scalar K=4 / B=8 / M=512 regime has qB/M = 0.25. G-CASM-014 measured
+23.125% at this point.
+
+The six-bit activation-trace channel has q = 64, giving qB/M = 1 at M=512
+with B=8. Thus the richer channel moves the necessary information-budget
+condition from a four-fold deficit to parity with the terminal execution
+budget. The remaining issue is how balanced the 64 evidence leaves actually
+are and how cheaply their candidate-side prediction can be indexed.
