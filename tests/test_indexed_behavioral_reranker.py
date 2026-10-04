@@ -27,7 +27,7 @@ from tac_osm.indexed_behavioral_reranker import CachedBehavioralReranker
 def _rows(ep, n=4):
     return tuple(
         (tuple(k), int(ep.truth_table[k]))
-        for k in g010.INPUT_ROWS[:n]
+        for k in tuple(__import__('itertools').product((0, 1), repeat=g010.INPUT_COUNT))[:n]
     )
 
 
