@@ -94,3 +94,6 @@ This experiment does not establish:
 ## Premeasurement infrastructure note
 
 The branch-local repository test count was synchronized to 880 after the five 014 regression tests were added. The frozen baseline value remains unchanged.
+
+
+Confirmatory trigger record: [run-graph-casm-adaptive-probe-014-full]
