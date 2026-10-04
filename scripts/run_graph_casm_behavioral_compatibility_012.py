@@ -423,7 +423,8 @@ def summarize_rep(seed_rows):
                     t["support_consistent_count"] for t in trials
                 ),
                 "target_unique_fraction": statistics.fmean(
-                    t["target_unique"] for t in trials
+                    t.get("target_unique", t["support_consistent_count"] == 1)
+                    for t in trials
                 ),
                 "exhaustive_success": statistics.fmean(
                     t["exhaustive"]["semantic_success"] for t in trials
