@@ -66,3 +66,20 @@ def test_invalid_inputs_fail_closed():
         pass
     else:
         raise AssertionError("zero evidence width must fail")
+
+
+def test_choose_best_reports_work_for_all_actions():
+    idx = ExactEvidenceIndex.build(
+        {
+            0: ("a", "a", "b", "b", "c", "c", "d", "d"),
+            1: ("x", "y", "x", "y", "x", "y", "x", "y"),
+        },
+        evidence_width=1,
+    )
+    score, work = idx.choose_best(
+        idx.full_bitmap(8),
+        population_size=8,
+        expected_cost_by_action={0: 1.0, 1: 1.0},
+    )
+    assert score.action == 0
+    assert work == 2 * 64 // 64
