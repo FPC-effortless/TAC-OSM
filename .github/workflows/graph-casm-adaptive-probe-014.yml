@@ -63,13 +63,18 @@ jobs:
 
   full:
     name: G-CASM-014 full confirmatory measurement
-    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[run-graph-casm-adaptive-probe-014-full]')
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.commits.*.message, '[run-graph-casm-adaptive-probe-014-full]'))
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -102,4 +107,5 @@ jobs:
           path: artifacts/TACOSM-GRAPH-CASM-ADAPTIVE-PROBE-014.json
           if-no-files-found: error
 
+# Operational trigger only; confirmatory full runs require an explicit marker commit.
 # [run-graph-casm-adaptive-probe-014-full]
