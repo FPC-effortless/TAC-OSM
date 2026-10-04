@@ -1,0 +1,91 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-LEARNED-PROBE-POLICY-018",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "title": "Learned target-identity-blind probe selection over indexed structured evidence",
+  "question": "Can a learned CDL probe policy select information-bearing structured probes from compact indexed hypothesis summaries and approach the exact probe-selection ceiling on held-out programs?",
+  "hypothesis": "A learned policy trained only on training-program behavior can recover a substantial fraction of the exact indexed probe-selection utility without target identity or evaluation truth-table access.",
+  "arms": [
+    {"name":"learned_probe_policy","intervention":"small deterministic policy network scores legal probes from indexed evidence-partition summaries, trained only on training-program trajectories","acts_on":"probe-selection policy"},
+    {"name":"exact_indexed_ceiling","intervention":"exact information-per-cost selector over the same indexed evidence summaries","acts_on":"probe-selection policy ceiling"},
+    {"name":"fixed_random","intervention":"registered deterministic non-adaptive row order from G-CASM-013/014","acts_on":"probe-selection policy control"}
+  ],
+  "endpoints": [
+    {"name":"verified_success_gap_to_exact","role":"primary — held-out K=4/B=8 exact-verifier success difference between learned policy and exact indexed ceiling at M=512","primary":true},
+    {"name":"probe_policy_utility_ratio","role":"secondary — learned cumulative information-per-cost divided by exact indexed ceiling","primary":false},
+    {"name":"action_agreement","role":"secondary — agreement with exact ceiling action; diagnostic only, never capability","primary":false},
+    {"name":"expected_remaining_candidates","role":"secondary — residual ambiguity after each probe budget","primary":false},
+    {"name":"verified_execution_work_fraction","role":"secondary — downstream exact verification work relative to exhaustive","primary":false},
+    {"name":"training_to_evaluation_regime_gap","role":"secondary — performance difference under held-out generators/program structures","primary":false}
+  ],
+  "h_levels":[32,64,128,256,512],
+  "seeds":[0,1,2,3,4],
+  "steps":1200,
+  "eval_steps":32,
+  "k_levels":[1,2,4,6,8],
+  "candidate_budgets":[1,2,4,8],
+  "arms_required":["learned_probe_policy","exact_indexed_ceiling","fixed_random"],
+  "held_constant":[
+    "G-CASM-015 six-bit activation-trace channel",
+    "G-CASM-017 exact evidence index representation",
+    "same pinned generator commit",
+    "same candidate library and task construction for each held-out seed/M",
+    "same exact executor and verifier"
+  ],
+  "learning_protocol":{
+    "training_sources":"independent training-program libraries generated from seeds reserved exclusively for policy fitting",
+    "teacher_signal":"exact indexed information-per-cost action computed only on training libraries",
+    "policy_inputs":"per-action normalized evidence-bucket histogram from the exact index, expected action cost, probe budget used, and compact current-state statistics",
+    "target_identity_available_to_policy":false,
+    "evaluation_truth_table_available_to_policy":false,
+    "future_target_evidence_available_to_policy":false,
+    "held_out_results_used_for_training":false,
+    "hyperparameter_selection":"fixed before held-out measurement; no evaluation-seed model selection"
+  },
+  "data_protocol":{
+    "train_eval_structure_disjoint":true,
+    "train_eval_truth_disjoint":true,
+    "evaluation_library_static_per_seed":true,
+    "target_identity_available_to_selector":false,
+    "target_index_available_to_selector":false,
+    "future_target_evidence_available_to_selector":false,
+    "verifier_labels_available_to_selector":false
+  },
+  "cost_model":{
+    "index_query":"exact indexed bucket/bitmap work from 017",
+    "policy_inference":"explicit neural MAC count per legal action and shared state summary",
+    "environment":"same activation-trace acquisition cost from 015",
+    "terminal":"same exact verifier work accounting from 014/015",
+    "total_cost":"sum index query + policy inference + environment + terminal work"
+  },
+  "decision_rule":[
+    {"condition":"learned probe policy retains >=0.80 of exact ceiling verified success at M=512/K=4/B=8 and primary interval excludes a negative gap to the ceiling beyond the preregistered tolerance","licenses":"evidence of learned target-identity-blind probe selection on the held-out workload.","does_not_license":"generic active-learning superiority, asymptotic scaling, or autonomous AGI."},
+    {"condition":"policy has high action agreement but fails verified success","licenses":"teacher imitation without downstream capability; action agreement is not sufficient evidence."},
+    {"condition":"policy materially trails exact ceiling","licenses":"remaining learned-credit-assignment or representation gap in probe selection.","does_not_license":"failure of structured evidence or failure of the PLM architecture."}
+  ],
+  "leakage_rules":[
+    "training teacher targets may use training-library truth tables only",
+    "no evaluation candidate truth table is used to fit, tune or select the learned policy",
+    "at evaluation the policy receives only public indexed partition summaries, costs, prior probe evidence and public action descriptors",
+    "target identity and realized target evidence are unavailable before action selection",
+    "exact ceiling is a comparator and cannot be used to alter evaluation hyperparameters"
+  ],
+  "scope":{
+    "learned_probe_selection_claim":true,
+    "exact_finite_domain_comparator":true,
+    "asymptotic_claim":false,
+    "general_active_learning_claim":false,
+    "language_image_audio_claim":false,
+    "hardware_speedup_claim":false
+  },
+  "freeze_rule":{
+    "post_measurement_protocol_changes":"require new experiment identifier",
+    "smoke_runs":"must not enter confirmatory evidence",
+    "result_artifact":"immutable after scientific disposition"
+  },
+  "provenance":{
+    "parent_experiment":"TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017",
+    "parent_commit":"9d24df5104962d60e7fd113c1d733f1d33fe2d34",
+    "generator_commit":"c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  }
+}
