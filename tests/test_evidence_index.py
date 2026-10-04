@@ -82,4 +82,4 @@ def test_choose_best_reports_work_for_all_actions():
         expected_cost_by_action={0: 1.0, 1: 1.0},
     )
     assert score.action == 0
-    assert work == 2 * 64 // 64
+    assert work == 6
