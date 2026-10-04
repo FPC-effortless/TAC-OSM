@@ -19,6 +19,8 @@ class IndexedProbeScore:
     information_gain_bits: float
     expected_remaining_candidates: float
     signature_count: int
+    expected_cost: float
+    information_per_work: float
 
 
 class ExactEvidenceIndex:
@@ -115,7 +117,10 @@ class ExactEvidenceIndex:
         compatible_bitmap: int,
         *,
         population_size: int,
+        expected_cost: float,
     ) -> tuple[IndexedProbeScore, int]:
+        if expected_cost <= 0.0:
+            raise ValueError("expected_cost must be positive")
         counts, work = self.partition_counts(
             action, compatible_bitmap, population_size=population_size
         )
@@ -134,6 +139,8 @@ class ExactEvidenceIndex:
                 information_gain_bits=float(information),
                 expected_remaining_candidates=float(remaining),
                 signature_count=sum(bool(c) for c in counts.values()),
+                expected_cost=float(expected_cost),
+                information_per_work=float(information / expected_cost),
             ),
             work,
         )
@@ -143,15 +150,22 @@ class ExactEvidenceIndex:
         compatible_bitmap: int,
         *,
         population_size: int,
+        expected_cost_by_action: Mapping[Hashable, float],
     ) -> tuple[IndexedProbeScore, int]:
         best: tuple[tuple, IndexedProbeScore, int] | None = None
         total_work = 0
         for action in self.actions:
+            if action not in expected_cost_by_action:
+                raise KeyError(f"missing expected cost for action {action!r}")
             score, work = self.score_action(
-                action, compatible_bitmap, population_size=population_size
+                action,
+                compatible_bitmap,
+                population_size=population_size,
+                expected_cost=float(expected_cost_by_action[action]),
             )
             total_work += work
             key = (
+                -score.information_per_work,
                 -score.information_gain_bits,
                 score.expected_remaining_candidates,
                 str(score.action),
