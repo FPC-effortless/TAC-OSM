@@ -152,7 +152,7 @@ class ExactEvidenceIndex:
         population_size: int,
         expected_cost_by_action: Mapping[Hashable, float],
     ) -> tuple[IndexedProbeScore, int]:
-        best: tuple[tuple, IndexedProbeScore, int] | None = None
+        best: tuple[tuple, IndexedProbeScore] | None = None
         total_work = 0
         for action in self.actions:
             if action not in expected_cost_by_action:
@@ -171,7 +171,7 @@ class ExactEvidenceIndex:
                 score.action if isinstance(score.action, (int, float, str)) else repr(score.action),
             )
             if best is None or key < best[0]:
-                best = (key, score, total_work)
+                best = (key, score)
         if best is None:
             raise ValueError("index has no actions")
         return best[1], total_work
