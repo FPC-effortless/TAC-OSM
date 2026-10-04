@@ -170,12 +170,10 @@ def training_batch(
     for _ in range(batch_size):
         target_idx = rng.randrange(len(training))
         target = training[target_idx]
-        other_indices = [
-            i for i in rng.sample(
-                [i for i in range(len(training)) if i != target_idx],
-                g010.ROUTER_BATCH if False else 7,
-            )
-        ]
+        other_indices = rng.sample(
+            [i for i in range(len(training)) if i != target_idx],
+            7,
+        )
         candidate_indices = other_indices + [target_idx]
         rng.shuffle(candidate_indices)
         candidates = [training[i] for i in candidate_indices]
@@ -567,7 +565,6 @@ def primary_bootstrap(seed_rows, m: int, rounds: int = 4000):
 
 def run(smoke: bool = False):
     contract = load_contract()
-    full = contract
     if smoke:
         seeds = (0,)
         m_levels = SMOKE_M_LEVELS
@@ -577,17 +574,20 @@ def run(smoke: bool = False):
         m_levels = M_LEVELS
         tasks_per_m = TASKS_PER_M
 
-    # The contract is checked against the registered full grid before a run.
-    contract.require_levels(M_LEVELS if not smoke else SMOKE_M_LEVELS, strict=not smoke)
-    contract.require_seeds(SEEDS if not smoke else (0,), strict=not smoke)
-    contract.require_steps(ROUTER_STEPS)
-    contract.require_eval_steps(TASKS_PER_M if not smoke else SMOKE_TASKS_PER_M)
+    # Confirmatory runs are checked against the full registration before
+    # measurement. Smoke runs are explicitly non-confirmatory and use a fixed
+    # subset solely for implementation/preflight.
+    if not smoke:
+        contract.require_levels(M_LEVELS)
+        contract.require_seeds(SEEDS)
+        contract.require_eval_steps(TASKS_PER_M)
+    if ROUTER_STEPS != int(contract.steps):
+        raise RuntimeError("router schedule disagrees with contract")
     contract.require_k_levels(SUPPORT_SIZES)
     contract.require_arms(
         ["behavioral_graph", "legacy_graph", "behavioral_summary", "constant", "random"]
     )
 
-    by_arm = {arm: {} for arm in contract.to_dict()["arms"][0:0]}  # never used
     results = {
         "behavioral_graph": {},
         "behavioral_summary": {},
