@@ -353,7 +353,41 @@ def evaluate_behavioral(model, representation, task, candidates):
 def legacy_evaluate(router, task, candidates):
     memory = g010.Memory()
     memory.write(task.task_id, task.support)
-    return g010.evaluate(router, "graph", task, candidates, memory)
+    result = g010.evaluate(router, "graph", task, candidates, memory)
+
+    # G-CASM-010's legacy evaluator predates the 012 support-set diagnostic.
+    # Reconstruct the exact legacy ranking using its own public feature/query
+    # path, then attach support-set recall from the observed support rows only.
+    features = torch.tensor(
+        [g010.features(ep, True) for ep in candidates],
+        dtype=torch.float32,
+    )
+    q = torch.tensor(
+        [g010.query_vector(task.support)],
+        dtype=torch.float32,
+    )
+    with torch.no_grad():
+        scores = router(q, features, "graph")[0].tolist()
+    bonus_keys = memory.keys(task.task_id)
+    order = sorted(
+        range(len(candidates)),
+        key=lambda i: (
+            -(scores[i] + (
+                5.0 if g010.structure_key(candidates[i]) in bonus_keys else 0.0
+            )),
+            i,
+        ),
+    )
+    relevant = set(exact_support_consistent(candidates, task.support))
+    for budget in BUDGETS:
+        selected = order[:budget]
+        result["budgets"][str(budget)]["support_set_recall"] = (
+            len(set(selected) & relevant) / max(1, len(relevant))
+        )
+        result["budgets"][str(budget)]["support_set_hit"] = float(
+            bool(set(selected) & relevant)
+        )
+    return result
 
 
 def deterministic_control(candidates, task, kind: str, seed: int):
