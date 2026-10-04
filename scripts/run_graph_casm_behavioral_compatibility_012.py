@@ -347,8 +347,6 @@ def evaluate_behavioral(model, representation, task, candidates):
             "execution_ms": exhaustive_ms,
         },
         "budgets": budgets,
-        "scores": scores,
-        "pair_logits": pair_logits,
     }
 
 
