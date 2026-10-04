@@ -22,10 +22,9 @@ class BehavioralRouterConfig:
     latent_dim: int = 32
     pair_hidden_dim: int = 64
     learning_rate: float = 1e-3
-    temperature: float = 0.10
     aggregate_temperature: float = 0.25
     pair_loss_weight: float = 1.0
-    ranking_loss_weight: float = 1.0
+    set_loss_weight: float = 1.0
     steps: int = 1200
     batch_size: int = 32
     candidates_per_task: int = 8
@@ -85,14 +84,11 @@ class BehavioralCompatibilityRouter(nn.Module):
         if candidates.ndim == 2:
             c = candidates[:, None, :]
             r = row_latent[None, :, :]
-        else:
-            c = candidates[:, :, None, :]
-            r = row_latent[:, None, :, :]
-
-        if candidates.ndim == 2:
             c_full = c.expand(-1, rows.shape[0], -1)
             r_full = r.expand(candidates.shape[0], -1, -1)
         else:
+            c = candidates[:, :, None, :]
+            r = row_latent[:, None, :, :]
             c_full = c.expand(-1, -1, rows.shape[1], -1)
             r_full = r.expand(-1, candidates.shape[1], -1, -1)
 
@@ -111,7 +107,7 @@ class BehavioralCompatibilityRouter(nn.Module):
         logits = self.pair_logits(candidate_features, rows)
         tau = self.config.aggregate_temperature
         # Soft-min aggregation makes the weakest support row influential:
-        # exact behavioral compatibility requires all observed rows to fit.
+        # exact behavioral compatibility requires every observed row to fit.
         return -tau * torch.logsumexp(-logits / tau, dim=-1)
 
     def rank(
@@ -130,23 +126,24 @@ class BehavioralCompatibilityRouter(nn.Module):
         candidate_features: torch.Tensor,
         rows: torch.Tensor,
         pair_labels: torch.Tensor,
-        target_index: torch.Tensor,
     ) -> torch.Tensor:
-        """Pairwise compatibility supervision plus target-ranking loss."""
+        """Train only on compatibility, never on target candidate identity."""
         pair_logits = self.pair_logits(candidate_features, rows)
         labels = pair_labels.to(dtype=pair_logits.dtype)
         pair_loss = nn.functional.binary_cross_entropy_with_logits(
             pair_logits, labels
         )
 
-        scores = self.compatibility_scores(candidate_features, rows)
-        rank_loss = nn.functional.cross_entropy(
-            scores / self.config.temperature,
-            target_index,
+        # A set-level label is positive iff the candidate agrees with every
+        # observed support row. This trains the actual deployment relation.
+        set_labels = pair_labels.all(dim=-1).to(dtype=pair_logits.dtype)
+        set_scores = self.compatibility_scores(candidate_features, rows)
+        set_loss = nn.functional.binary_cross_entropy_with_logits(
+            set_scores, set_labels
         )
         return (
             self.config.pair_loss_weight * pair_loss
-            + self.config.ranking_loss_weight * rank_loss
+            + self.config.set_loss_weight * set_loss
         )
 
 
