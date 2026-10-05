@@ -140,7 +140,9 @@
     "future_target_evidence_available_to_selector": false,
     "verifier_labels_available_to_selector": false,
     "target_evidence_available_before_action": false,
-    "teacher_action_labels_test_hidden": true
+    "teacher_action_labels_test_hidden": true,
+    "cross_split_structure_disjoint": true,
+    "cross_split_truth_disjoint": true
   },
   "teacher_definition": {
     "uniform_target_prior": true,
@@ -180,7 +182,8 @@
     "The learned policy never receives target identity, target index, realized target evidence, or verifier-only rows before action selection.",
     "The learned policy never receives exact U_B or exact Shannon entropy as an input feature.",
     "Test-seed teacher actions are computed only after the checkpoint and test protocol are frozen.",
-    "The external CodeARC evaluation, when added, will have an independent frozen split and will not train this policy."
+    "The external CodeARC evaluation, when added, will have an independent frozen split and will not train this policy.",
+    "No exact evaluation structure or truth-table signature may occur in more than one train, validation, or test library across any seeds."
   ],
   "decision_rule": [
     {
