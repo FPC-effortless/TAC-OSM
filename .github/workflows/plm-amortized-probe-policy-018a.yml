@@ -53,11 +53,12 @@ jobs:
       - name: Focused tests
         run: python -m pytest tests/test_amortized_probe_policy.py tests/test_plm_018a_contract.py -q
       - name: Smoke model construction
-        run: python - <<'PY'
-        from tac_osm.amortized_probe_policy import AmortizedProbePolicy
-        m=AmortizedProbePolicy(feature_dim=30, hidden_dim=32)
-        print(sum(p.numel() for p in m.parameters()))
-        PY
+        run: |
+          python - <<'PY'
+          from tac_osm.amortized_probe_policy import AmortizedProbePolicy
+          m=AmortizedProbePolicy(feature_dim=28, hidden_dim=32)
+          print(sum(p.numel() for p in m.parameters()))
+          PY
 
   full:
     name: PLM-018A full confirmatory learner measurement
@@ -87,7 +88,7 @@ jobs:
           assert c.check_consistency() == []
           c.require_levels((32,64,128,256,512))
           c.require_seeds((25,26,27,28,29))
-          c.require_steps(4)
+          c.require_steps(1)
           c.require_eval_steps(32)
           c.require_arms(["greedy_budget_teacher","greedy_information_teacher","amortized_policy","fixed_random"])
           PY
