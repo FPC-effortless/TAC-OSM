@@ -33,3 +33,16 @@ A non-positive result is equally useful: it would locate a remaining bottleneck 
 ## Scope
 
 016C does not establish learned probing, sequential optimality, asymptotic scaling, multimodal capability, or general access to internal state.
+
+## Registered prediction and cost interpretation
+
+The exact 015-derived M=512/B=8 partition utilities are preregistered before the
+016C result: scalar U_8 = 0.03125 and activation-trace U_8 = 0.848046875.
+These are expectation ceilings under the uniform target prior, not observed
+016C success rates.
+
+The report separates two axes. Both arms acquire one graph execution per probe,
+which isolates evidence-channel capacity. The activation trace additionally
+incurs six trace-read units, so explicit total-work accounting is reported as a
+secondary cost view. The primary endpoint remains verified capability at the
+same one-probe terminal budget.
