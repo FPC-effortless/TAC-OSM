@@ -16,7 +16,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "src"))
 
 import run_graph_casm_structured_action_probe_015 as g15
-from tac_osm.trace_capability import compatible_bucket, shortlist
+from tac_osm.trace_capability import budget_capped_utility, compatible_bucket, shortlist
 
 EXPERIMENT_ID = "TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C"
 SEEDS = (0, 1, 2, 3, 4)
@@ -87,7 +87,7 @@ def channel_trial(cache, task, candidates, channel):
         "shortlist_size": len(selected),
         "target_in_shortlist": float(task.target_index in selected),
         "verified_success": float(success),
-        "budget_capped_utility": sum(min(BUDGET, n) for n in __import__("collections").Counter(evidence).values()) / max(1, len(evidence)),
+        "budget_capped_utility": budget_capped_utility(evidence, BUDGET),
         "probe_environment_work_units": float(best.expected_cost),
         "verifier_work_units": int(verifier_work),
         "exhaustive_reference_work_units": int(exhaustive_work),
@@ -137,15 +137,18 @@ def summarize(raw, seeds, m_levels):
 
     # Bootstrap the paired five-seed effect.
     import random
-    rng = random.Random(16063)
-    draws = sorted(
-        statistics.fmean(deltas[rng.randrange(len(deltas))] for _ in deltas)
-        for _ in range(4000)
-    )
-    ci = [
-        float(draws[int(.025 * (len(draws)-1))]),
-        float(draws[int(.975 * (len(draws)-1))]),
-    ] if deltas else None
+    if deltas:
+        rng = random.Random(16063)
+        draws = sorted(
+            statistics.fmean(deltas[rng.randrange(len(deltas))] for _ in deltas)
+            for _ in range(4000)
+        )
+        ci = [
+            float(draws[int(.025 * (len(draws)-1))]),
+            float(draws[int(.975 * (len(draws)-1))]),
+        ]
+    else:
+        ci = None
     return {
         "by_m": by_m,
         "primary": ({
