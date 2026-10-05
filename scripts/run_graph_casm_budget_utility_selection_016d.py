@@ -95,14 +95,25 @@ def main(smoke=False):
                 ti,_=task(s,m,i)
                 raw[str(s)][str(m)].append({"information_per_work":trial(cache,cand,ti,"information_per_work"),"budget_utility_per_work":trial(cache,cand,ti,"budget_utility_per_work")})
     seed_rows=[]
-    for s in seeds:
-        vals=raw[str(s)][str(PRIMARY_M)]
-        seed_rows.append({
-          "information_per_work":statistics.fmean(x["information_per_work"]["budget_capped_utility"] for x in vals),
-          "budget_utility_per_work":statistics.fmean(x["budget_utility_per_work"]["budget_capped_utility"] for x in vals)
+    deltas=[]
+    if str(PRIMARY_M) in raw[str(seeds[0])]:
+        for s in seeds:
+            vals=raw[str(s)][str(PRIMARY_M)]
+            seed_rows.append({
+              "information_per_work":statistics.fmean(x["information_per_work"]["budget_capped_utility"] for x in vals),
+              "budget_utility_per_work":statistics.fmean(x["budget_utility_per_work"]["budget_capped_utility"] for x in vals)
+            })
+        deltas=[x["budget_utility_per_work"]-x["information_per_work"] for x in seed_rows]
+    primary = {"M":PRIMARY_M,"B":BUDGET,"available":bool(deltas)}
+    if deltas:
+        primary.update({
+          "seed_level_deltas":deltas,
+          "mean_delta":statistics.fmean(deltas),
+          "seed_bootstrap_95ci":bootstrap(deltas)
         })
-    deltas=[x["budget_utility_per_work"]-x["information_per_work"] for x in seed_rows]
-    result={"experiment_id":EXPERIMENT_ID,"status":"measured","provenance":{"tacosm_commit":os.environ.get("GITHUB_SHA","local"),"run_id":os.environ.get("GITHUB_RUN_ID","local"),"generator_commit":GENERATOR_COMMIT},"protocol":{"seeds":list(seeds),"M_levels":list(levels),"tasks_per_seed_M":tasks,"B":BUDGET},"checks":checks,"results":raw,"summary":{"primary":{"M":PRIMARY_M,"B":BUDGET,"seed_level_deltas":deltas,"mean_delta":statistics.fmean(deltas) if deltas else None,"seed_bootstrap_95ci":bootstrap(deltas) if deltas else None},"by_M":{}},"scope":{"finite_domain_objective_comparison":True,"learned_probe_policy_claim":False,"submodularity_claim":False}}
+    else:
+        primary["reason"]="smoke omitted primary M; no confirmatory inference"
+    result={"experiment_id":EXPERIMENT_ID,"status":"measured","provenance":{"tacosm_commit":os.environ.get("GITHUB_SHA","local"),"run_id":os.environ.get("GITHUB_RUN_ID","local"),"generator_commit":GENERATOR_COMMIT},"protocol":{"seeds":list(seeds),"M_levels":list(levels),"tasks_per_seed_M":tasks,"B":BUDGET},"checks":checks,"results":raw,"summary":{"primary":primary,"by_M":{}},"scope":{"finite_domain_objective_comparison":True,"learned_probe_policy_claim":False,"submodularity_claim":False}}
     for m in levels:
         result["summary"]["by_M"][str(m)]={}
         for ch in ("information_per_work","budget_utility_per_work"):
