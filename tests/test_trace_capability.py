@@ -322,16 +322,25 @@ def test_r2_runner_reports_operation_counters():
 
 
 @needs_generator
-def test_r2_trace_arm_matches_its_preregistered_budget_capped_ceiling():
-    """The trace arm's success is bounded by its own partition ceiling.
+def test_r2_trace_arm_respects_the_shortlist_bucket_structure():
+    """The structural properties R1's trace arm actually exhibited.
 
-    R1's trace arm was valid descriptive evidence on its own terms: at M=512 it
-    reached 0.8313 against a preregistered ``budget_capped_utility`` ceiling of
-    0.84805, i.e. it approached but did not exceed its information ceiling. R2
-    must preserve that property while fixing the scalar arm.
+    `budget_capped_utility` is an expectation over a *uniform target prior*:
+    `U_B = sum_e min(B, |H_e|) / M`. A single trial is not bounded by its own
+    `U_B` — when the target lands in a bucket of size `|H_e| <= B` the
+    shortlist retains the whole bucket and success is exactly 1.0, while
+    `U_B` for that trial is `|H_e| / M < 1`. The bound holds in the mean over a
+    uniform target, not per trial, so the two structurally guaranteed
+    properties are the ones worth pinning:
+
+    - bucket <= B implies the whole bucket is retained, so the target is in the
+      shortlist and exact verification succeeds;
+    - bucket > B implies the shortlist is exactly B, so verification may fail.
+
+    R1 measured this shape (bucket <= 8 -> 70/70 = 1.000, bucket > 8 -> 0.700).
     """
-    ceiling = load_contract(R2_ID).sections["predicted_budget_capped_ceiling"]
-    m = ceiling["M"]
+    budget = load_contract(R2_ID).sections["terminal_protocol"]["budget"]
+    m = load_contract(R2_ID).sections["predicted_budget_capped_ceiling"]["M"]
     training = r2.g15.g010.generate(100, r2.g15.TRAIN_PROGRAMS)
     train_s = {r2.g15.g010.structure_key(ep) for ep in training}
     train_t = {r2.g15.g010.truth_signature(ep) for ep in training}
@@ -339,14 +348,23 @@ def test_r2_trace_arm_matches_its_preregistered_budget_capped_ceiling():
         5000, r2.g15.LIBRARY_SIZE, exclude_structures=train_s, exclude_truths=train_t
     )
     cache, _ = r2.g15.build_cache(library)
-    indices = tuple(range(m))
-    utilities = []
-    for task_i in range(8):
+
+    small = []
+    large = []
+    for task_i in range(16):
         task = r2.g15.build_query_task(0, m, task_i)
         trial = r2.channel_trial(cache, task, library[:m], "activation_trace")
-        utilities.append(trial["budget_capped_utility"])
-        # Verified success cannot exceed the partition-implied ceiling.
-        assert trial["verified_success"] <= trial["budget_capped_utility"] + 1e-12, (
-            "verified success exceeded the budget-capped utility ceiling"
-        )
-    assert all(u > 0.0 for u in utilities)
+        assert trial["shortlist_size"] == min(budget, trial["target_bucket_size"])
+        if trial["target_bucket_size"] <= budget:
+            assert trial["shortlist_size"] == trial["target_bucket_size"]
+            assert trial["verified_success"] == 1.0, (
+                "a bucket fully retained must verify the target exactly"
+            )
+            small.append(trial)
+        else:
+            assert trial["shortlist_size"] == budget
+            large.append(trial)
+
+    # The shortlist cannot exceed the budget in either regime.
+    assert all(t["shortlist_size"] <= budget for t in small + large)
+    assert small, "expected at least one bucket fully inside the budget"
