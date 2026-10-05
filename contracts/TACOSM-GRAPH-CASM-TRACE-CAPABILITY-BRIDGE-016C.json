@@ -1,0 +1,211 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "title": "Structured execution evidence to verified selective-computation bridge",
+  "question": "At fixed terminal candidate budget B=8, does a target-blind activation-trace probe convert its measured information advantage into higher exact downstream verification success than the best scalar-output probe?",
+  "hypothesis": "The activation-trace channel will produce substantially higher verified selective-computation success at M=512/B=8 than scalar output because its one-step evidence partitions leave far fewer compatible hypotheses.",
+  "arms": [
+    {
+      "name": "scalar_row",
+      "intervention": "choose one input row by deterministic maximum-information-per-environment-work selection; observe only the binary output",
+      "acts_on": "observation channel"
+    },
+    {
+      "name": "activation_trace",
+      "intervention": "choose one input row by the same deterministic selector over ordered non-input activation bits; observe the full six-bit activation trace",
+      "acts_on": "observation channel"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "verified_success_delta_m512_b8",
+      "role": "primary — seed-level activation_trace minus scalar_row exact-verifier success difference at M=512/B=8",
+      "primary": true
+    },
+    {
+      "name": "verified_success",
+      "role": "secondary — exact verifier success across B=1/2/4/8 and all registered M levels",
+      "primary": false
+    },
+    {
+      "name": "target_bucket_size",
+      "role": "secondary — compatible candidates after the selected probe",
+      "primary": false
+    },
+    {
+      "name": "information_gain_bits",
+      "role": "secondary — one-step deterministic information under the selected channel",
+      "primary": false
+    },
+    {
+      "name": "expected_remaining_candidates",
+      "role": "secondary — collision expectation after the selected probe",
+      "primary": false
+    },
+    {
+      "name": "execution_work_fraction",
+      "role": "secondary — terminal verification work divided by exhaustive exact verification work",
+      "primary": false
+    },
+    {
+      "name": "budget_capped_utility",
+      "role": "secondary — partition-implied expected terminal success U_B for the selected evidence channel under a uniform target prior",
+      "primary": false
+    },
+    {
+      "name": "probe_environment_work_units",
+      "role": "secondary — expected probe acquisition work",
+      "primary": false
+    },
+    {
+      "name": "accounted_total_work_units",
+      "role": "secondary — probe plus terminal verification work",
+      "primary": false
+    },
+    {
+      "name": "success_per_accounted_work",
+      "role": "secondary — verified success divided by explicitly accounted total work",
+      "primary": false
+    }
+  ],
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 1,
+  "eval_steps": 32,
+  "action_levels": [
+    "scalar_row",
+    "activation_trace"
+  ],
+  "held_constant": [
+    "same pinned generator commit",
+    "same static 512-program evaluation library per seed",
+    "same target-selection procedure",
+    "same exact CASM semantics",
+    "same deterministic candidate order",
+    "same input-row action domain",
+    "same terminal candidate budget"
+  ],
+  "data_protocol": {
+    "train_eval_structure_disjoint": true,
+    "train_eval_truth_disjoint": true,
+    "evaluation_library_static_per_seed": true,
+    "nested_population_prefixes": true,
+    "target_identity_available_to_selector": false,
+    "target_index_available_to_selector": false,
+    "future_target_evidence_available_to_selector": false,
+    "verifier_labels_available_to_selector": false,
+    "target_evidence_revealed_only_after_action": true
+  },
+  "terminal_protocol": {
+    "budget": 8,
+    "procedure": "After selecting one probe without target identity, form the exact compatible evidence bucket from the realized target evidence, retain the first min(8,bucket_size) candidates in deterministic public library order, and run exact CASM verification against all 16 input rows.",
+    "oracle_not_used": true,
+    "candidate_order_fixed_before_measurement": true
+  },
+  "cost_model": {
+    "probe_environment": "same G-CASM-015 exact graph execution plus trace read units",
+    "terminal_verification": "sum of exact executor work over shortlisted candidates and all 16 rows",
+    "exhaustive_reference": "same exact executor work over all M candidates and all 16 rows",
+    "comparison_axes": {
+      "equal_environment_execution_count": "Both arms acquire exactly one graph execution before observation; activation_trace additionally incurs six trace-read units.",
+      "explicit_work": "Report graph execution work, trace-read work, terminal verifier work, and their sum in the repository's discrete work units.",
+      "interpretation": "Primary capability comparison fixes one probe action per task; total-work metrics are secondary because trace reads and graph execution use different primitive accounting."
+    }
+  },
+  "statistical_rule": {
+    "primary_unit": "seed",
+    "primary_population": "32 tasks per seed at M=512",
+    "per_seed_estimate": "mean verified_success across the 32 tasks",
+    "effect": "activation_trace mean minus scalar_row mean",
+    "uncertainty": "4000-resample seed bootstrap 95% CI",
+    "no_task_level_iid_assumption": true
+  },
+  "leakage_rules": [
+    "Probe selection uses only public candidate-predicted evidence and public action descriptors.",
+    "Target identity and target index are never supplied to selection.",
+    "Realized target evidence is unavailable until after the action is selected.",
+    "Exact verifier rows are not available to the selector.",
+    "No result from 016C is used to alter probe definitions or the terminal budget."
+  ],
+  "decision_rule": [
+    {
+      "condition": "Primary activation_trace minus scalar_row CI is positive and excludes zero at M=512/B=8.",
+      "licenses": "evidence that structured execution evidence translates into higher verified selective-computation capability on the finite registered workload.",
+      "does_not_license": "learned probe policy, asymptotic scaling, arbitrary internal-state access, or multimodal competence."
+    },
+    {
+      "condition": "Trace increases information but not verified success.",
+      "licenses": "the observation channel is informative but downstream evidence-to-action translation remains limiting.",
+      "does_not_license": "architectural success."
+    },
+    {
+      "condition": "Trace and scalar verified success are similar.",
+      "licenses": "the measured information advantage does not automatically translate into terminal capability under B=8.",
+      "does_not_license": "failure of other structured evidence channels."
+    }
+  ],
+  "scope": {
+    "finite_domain_capability_bridge": true,
+    "learned_probe_policy_claim": false,
+    "global_optimal_sequential_policy_claim": false,
+    "asymptotic_claim": false,
+    "language_image_audio_claim": false,
+    "hardware_speedup_claim": false
+  },
+  "provenance": {
+    "parent_experiment": "TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015",
+    "parent_commit": "e2b58fcfa68146dd2bd95a189ef7d7b2c7b08bae",
+    "generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require new experiment identifier",
+    "smoke_runs": "must not enter confirmatory evidence",
+    "result_artifact": "immutable after scientific disposition"
+  },
+  "interpretation_order": [
+    "protocol and leakage integrity",
+    "verified downstream capability",
+    "remaining candidate ambiguity",
+    "information gain",
+    "verification work",
+    "scope"
+  ],
+  "predicted_budget_capped_ceiling": {
+    "source_experiment": "TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015",
+    "source_run": 37251294919,
+    "source_artifact": 11320684685,
+    "M": 512,
+    "B": 8,
+    "definition": "U_B = sum_e min(B, |H_e|) / M for the selected activation-trace partition, averaged over the five registered seeds",
+    "seed_values": [
+      0.8515625,
+      0.83984375,
+      0.853515625,
+      0.845703125,
+      0.849609375
+    ],
+    "mean": 0.848046875,
+    "seed_bootstrap_95ci": [
+      0.843359375,
+      0.851953125
+    ],
+    "interpretation": "This is the exact partition-implied ceiling for the registered target-uniform terminal shortlist procedure on the frozen 015 libraries, not a measured 016C outcome.",
+    "preregistered_before_016C_result": true,
+    "scalar_row": 0.03125,
+    "trace_row": 0.848046875,
+    "note": "Equal one-probe-count comparison and explicit-work accounting are both reported; the primary endpoint is capability at a fixed one-probe budget, not a claim that the trace is equal-cost."
+  }
+}
