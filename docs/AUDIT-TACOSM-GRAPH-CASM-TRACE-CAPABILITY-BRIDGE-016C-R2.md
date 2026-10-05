@@ -158,6 +158,59 @@ dominant O(M) term cannot support it.
 No protocol parameter changes: same seeds, M levels, B=8, channels, frozen
 generator commit and primary endpoint.
 
+## Smoke verification
+
+The smoke/preflight job passed on run `37354913663` (3m21s, peak RSS 524.6 MB,
+status `measured`, tacosm commit `78f93b7`). It is 4 trials per arm at
+M ∈ {32, 128}, so it establishes that the instrument is fixed — it is **not**
+the confirmatory measurement.
+
+The type defect is gone. Distinct scalar `target_bucket_size` values are
+`{16}` at M=32 and `{63, 65}` at M=128. R1 recorded `{0}` for all 800 trials;
+R2 records no zero anywhere.
+
+| M | scalar bucket | scalar `budget_capped_utility` | scalar success | trace bucket | trace success |
+|---|---|---|---|---|---|
+| 32 | 16.0 | 0.50000 | 0.2500 | 1.0 | 1.0000 |
+| 128 | 63/65 | 0.12500 | 0.0000 | 1/3 | 1.0000 |
+
+The scalar arm is now doing real work: success 0.25 at M=32 and 0.0 at M=128,
+against an analytic partition ceiling of `2·min(8, M/2)/M` = 0.5 and 0.125
+respectively. The `budget_capped_utility` endpoint still matches that ceiling
+exactly, as it did in R1 — confirming again that the partition was never the
+broken part.
+
+The accounting fix is visible too. Scalar `probe_environment_work_units` now
+scales with M (550.0 → 2153.0) instead of sitting flat at ≈16.9, while the
+per-candidate mean is retained (17.19 → 16.82). Per-trial operation counters
+at M=32 / M=128, both arms:
+
+| counter | scalar 32 | scalar 128 | trace 32 | trace 128 |
+|---|---|---|---|---|
+| signature construction | 512 | 2048 | 512 | 2048 |
+| candidate scan | 512 | 2048 | 512 | 2048 |
+| probe selection | 1 | 1 | 1 | 1 |
+| execution / verification | 481.75 | 340.0 | 276.0 | 305.75 |
+| total | 1506.75 | 4437.0 | 1301.0 | 4402.75 |
+| `verified_candidates` | 7.0 | 8.0 | 1.0 | 1.75 |
+
+The acquisition scan (signature construction + candidate scan) is now the
+dominant accounted term at 2·M per trial, exactly the O(M) cost R1 omitted.
+Probe selection is O(1) — one decision per probe row, independent of M — which
+is the C6/C8 structure. `verified_candidates` tracks the bucket: scalar reaches
+the B=8 cap at M=128, trace stays near 1–2. That contrast is the intended
+selective-execution signal.
+
+`verified_execution_work_fraction` is 0.0547 → 0.0099 for scalar as M goes
+32 → 128, consistent with the R1 direction (0.032 → 0.0028) but now backed by
+a total-work denominator that includes the scan.
+
+Two caveats that keep this from being a result. Four trials cannot resolve the
+primary endpoint `verified_success_delta_m512_b8`, which needs M=512. And
+scalar success 0.0 at M=128 is a floor on 4 trials, not an estimate. The
+full confirmatory job (`[run-graph-casm-trace-capability-bridge-016C-R2-full]`)
+runs the preregistered seed grid and is the only run that can move a claim.
+
 ## Status of claims
 
 C5 remains **UNTESTED**. R2 is a correction to the instrument, not a claim
