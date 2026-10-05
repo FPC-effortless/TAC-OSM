@@ -51,3 +51,28 @@ def test_binary_signature_ceiling():
 def test_invalid_inputs_fail_closed(fn, args):
     with pytest.raises(ValueError):
         fn(*args)
+
+def test_budget_utility_has_complementarity_counterexample():
+    # Four hypotheses; three binary probes. Feature 0 is constant, while
+    # feature 1 splits {0,1}|{2,3} and feature 2 splits {0,2}|{1,3}.
+    # With B=1, U({2})-U({}) = 1/4, but
+    # U({1,2})-U({1}) = 1/2. Marginal value increases after observing
+    # another probe, violating submodularity.
+    hypotheses = range(4)
+    feature = {
+        0: (0, 0, 0, 0),
+        1: (1, 1, 0, 0),
+        2: (1, 0, 1, 0),
+    }
+
+    def u(selected):
+        buckets = {}
+        for h in hypotheses:
+            signature = tuple(feature[i][h] for i in selected)
+            buckets[signature] = buckets.get(signature, 0) + 1
+        return sum(min(1, n) for n in buckets.values()) / 4
+
+    assert u(()) == 0.25
+    assert u((2,)) - u(()) == 0.25
+    assert u((1, 2)) - u((1,)) == 0.50
+    assert u((2,)) - u(()) < u((1, 2)) - u((1,))
