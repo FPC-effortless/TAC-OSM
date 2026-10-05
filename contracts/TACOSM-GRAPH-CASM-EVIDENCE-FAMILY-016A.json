@@ -6,17 +6,27 @@
   "question": "At M=512, does any predefined externally observable structured evidence channel provide higher one-step hypothesis information efficiency than a scalar output channel, without target identity or evaluator-only information?",
   "hypothesis": "At least one externally observable structured evidence family can improve one-step deterministic hypothesis information per environment execution cost over a single scalar output, while preserving target-blind probe selection.",
   "arms": [
-    {"name":"scalar_output","intervention":"one input row -> one binary output","acts_on":"observation channel"},
-    {"name":"paired_output","intervention":"one input row plus one fixed single-bit counterfactual perturbation -> ordered pair of binary outputs","acts_on":"observation channel"},
-    {"name":"quad_output","intervention":"four fixed one-bit-neighborhood input rows -> four binary outputs","acts_on":"observation channel"},
-    {"name":"activation_trace_ceiling","intervention":"one input row -> ordered six-bit non-input activation trace from an instrumented sandbox","acts_on":"observation channel ceiling"}
+    {
+      "name": "scalar_output",
+      "intervention": "one input row -> one binary output",
+      "acts_on": "observation channel"
+    },
+    {
+      "name": "paired_output",
+      "intervention": "one input row plus one fixed single-bit counterfactual perturbation -> ordered pair of binary outputs",
+      "acts_on": "observation channel"
+    },
+    {
+      "name": "quad_output",
+      "intervention": "four fixed one-bit-neighborhood input rows -> four binary outputs",
+      "acts_on": "observation channel"
+    },
+    {
+      "name": "activation_trace_ceiling",
+      "intervention": "one input row -> ordered six-bit non-input activation trace from an instrumented sandbox",
+      "acts_on": "observation channel ceiling"
+    }
   ],
-  "primary_endpoint": {
-    "name": "max_external_minus_scalar_information_per_environment_work_m512",
-    "definition": "max over the three predefined external channels of the five-seed mean of [channel task-mean information_per_work minus scalar task-mean information_per_work] at M=512",
-    "uncertainty": "seed-bootstrap 95% CI, recomputing the max-over-arm statistic inside every bootstrap resample",
-    "bootstrap_rounds": 4000
-  },
   "secondary_endpoints": [
     "information_gain_bits",
     "expected_remaining_candidates",
@@ -26,11 +36,21 @@
     "amortized_total_information_per_work",
     "activation_trace_ceiling_comparison"
   ],
-  "diagnostic_m_levels": [32,64,128,256,512],
-  "seeds": [0,1,2,3,4],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "steps": 1,
   "eval_steps": 32,
-  "action_levels": ["scalar_output","paired_output","quad_output","activation_trace_ceiling"],
+  "action_levels": [
+    "scalar_output",
+    "paired_output",
+    "quad_output",
+    "activation_trace_ceiling"
+  ],
   "held_constant": [
     "same pinned G-CASM generator commit",
     "same 512-program static evaluation library per seed",
@@ -51,7 +71,12 @@
     "post_probe_target_evidence_used_only_for_verification": true
   },
   "fixed_counterfactual": {
-    "delta": [1,0,0,0],
+    "delta": [
+      1,
+      0,
+      0,
+      0
+    ],
     "paired_rule": "base row x and x xor delta",
     "quad_rule": "x xor e0, x xor e1, x xor e2, x xor e3; fixed before measurement"
   },
@@ -129,5 +154,61 @@
     "training_steps": 0,
     "contract_steps_placeholder": 1,
     "note": "Exact one-step channel comparison; no learned optimization."
+  },
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "endpoints": [
+    {
+      "name": "max_external_minus_scalar_information_per_work_m512",
+      "role": "primary — maximum over predefined external channels of seed-level information-per-environment-work difference versus scalar at M=512; max-statistic bootstrap",
+      "primary": true
+    },
+    {
+      "name": "information_gain_bits",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "expected_remaining_candidates",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "effective_information_bits",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "verified_candidate_budget_success_at_B8",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "amortized_total_work_units",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "amortized_total_information_per_work",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "activation_trace_ceiling_comparison",
+      "role": "secondary",
+      "primary": false
+    }
+  ],
+  "primary_analysis": {
+    "name": "max_external_minus_scalar_information_per_environment_work_m512",
+    "definition": "max over the three predefined external channels of the five-seed mean of [channel task-mean information_per_work minus scalar task-mean information_per_work] at M=512",
+    "uncertainty": "seed-bootstrap 95% CI, recomputing the max-over-arm statistic inside every bootstrap resample",
+    "bootstrap_rounds": 4000,
+    "endpoint_name": "max_external_minus_scalar_information_per_work_m512"
   }
 }
