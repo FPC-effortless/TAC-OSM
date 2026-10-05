@@ -1,30 +1,87 @@
 {
-  "experiment_id":"TACOSM-PLM-AMORTIZED-PROBE-POLICY-018A",
-  "version":"0.1-preregistered",
-  "status":"pre-registered",
-  "title":"Amortized target-blind probe policy over compact persistent belief sketches",
-  "question":"Can a learned CDL probe policy approximate the exact one-step budget-aware teacher on held-out hypothesis populations while using a fixed-size belief sketch rather than recomputing all candidate partitions?",
-  "hypothesis":"A compact amortized policy trained only on training-seed teacher actions will achieve low budget-utility regret on untouched test seeds while reducing per-decision belief-scoring work relative to the exact teacher.",
-  "arms":[
-    {"name":"greedy_budget_teacher","intervention":"exact target-blind maximization of one-step U_B gain per acquisition work over the current candidate belief","acts_on":"teacher oracle"},
-    {"name":"greedy_information_teacher","intervention":"exact target-blind maximization of Shannon information gain per acquisition work","acts_on":"classical information baseline"},
-    {"name":"amortized_policy","intervention":"fixed neural policy over compact per-action belief sketches maintained incrementally","acts_on":"learned CDL"},
-    {"name":"fixed_random","intervention":"deterministic seeded random action among legal unobserved probes","acts_on":"control"}
+  "experiment_id": "TACOSM-PLM-AMORTIZED-PROBE-POLICY-018A",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "title": "Amortized target-blind probe policy over compact persistent belief sketches",
+  "question": "Can a learned CDL probe policy approximate the exact one-step budget-aware teacher on held-out hypothesis populations while using a fixed-size belief sketch rather than recomputing all candidate partitions?",
+  "hypothesis": "A compact amortized policy trained only on training-seed teacher actions will achieve low budget-utility regret on untouched test seeds while reducing per-decision belief-scoring work relative to the exact teacher.",
+  "arms": [
+    {
+      "name": "greedy_budget_teacher",
+      "intervention": "exact target-blind maximization of one-step U_B gain per acquisition work over the current candidate belief",
+      "acts_on": "teacher oracle"
+    },
+    {
+      "name": "greedy_information_teacher",
+      "intervention": "exact target-blind maximization of Shannon information gain per acquisition work",
+      "acts_on": "classical information baseline"
+    },
+    {
+      "name": "amortized_policy",
+      "intervention": "fixed neural policy over compact per-action belief sketches maintained incrementally",
+      "acts_on": "learned CDL"
+    },
+    {
+      "name": "fixed_random",
+      "intervention": "deterministic seeded random action among legal unobserved probes",
+      "acts_on": "control"
+    }
   ],
-  "endpoints":[
-    {"name":"normalized_budget_utility_regret_m512_b8","role":"primary — test-set U_8 regret of amortized_policy relative to exact greedy_budget_teacher at M=512/B=8, normalized by available teacher gain over the no-probe baseline","primary":true},
-    {"name":"budget_capped_utility_m512_b8","role":"secondary — seed-level selected-action U_8","primary":false},
-    {"name":"verified_success_m512_b8","role":"secondary — exact verifier success after one selected probe and B=8 shortlist","primary":false},
-    {"name":"teacher_action_agreement_m512","role":"secondary — exact action agreement with the U_B teacher","primary":false},
-    {"name":"teacher_utility_per_work_regret_m512","role":"secondary — gap in U_B gain per acquisition work","primary":false},
-    {"name":"policy_inference_work","role":"secondary — neural forward-pass work and sketch-update work","primary":false}
+  "endpoints": [
+    {
+      "name": "normalized_budget_utility_regret_m512_b8",
+      "role": "primary — test-set U_8 regret of amortized_policy relative to exact greedy_budget_teacher at M=512/B=8, normalized by available teacher gain over the no-probe baseline",
+      "primary": true
+    },
+    {
+      "name": "budget_capped_utility_m512_b8",
+      "role": "secondary — seed-level selected-action U_8",
+      "primary": false
+    },
+    {
+      "name": "verified_success_m512_b8",
+      "role": "secondary — exact verifier success after one selected probe and B=8 shortlist",
+      "primary": false
+    },
+    {
+      "name": "teacher_action_agreement_m512",
+      "role": "secondary — exact action agreement with the U_B teacher",
+      "primary": false
+    },
+    {
+      "name": "teacher_utility_per_work_regret_m512",
+      "role": "secondary — gap in U_B gain per acquisition work",
+      "primary": false
+    },
+    {
+      "name": "policy_inference_work",
+      "role": "secondary — neural forward-pass work and sketch-update work",
+      "primary": false
+    }
   ],
-  "h_levels":[32,64,128,256,512],
-  "seeds":[25,26,27,28,29],
-  "steps":4,
-  "eval_steps":32,
-  "action_levels":["greedy_budget_teacher","greedy_information_teacher","amortized_policy","fixed_random"],
-  "held_constant":[
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    25,
+    26,
+    27,
+    28,
+    29
+  ],
+  "steps": 1,
+  "eval_steps": 32,
+  "action_levels": [
+    "greedy_budget_teacher",
+    "greedy_information_teacher",
+    "amortized_policy",
+    "fixed_random"
+  ],
+  "held_constant": [
     "same pinned G-CASM-015 generator",
     "same activation-trace evidence family",
     "same exact CASM semantics",
@@ -32,59 +89,92 @@
     "same legal input-row actions",
     "same target-selection distribution on held-out evaluation tasks"
   ],
-  "data_split":{
-    "training_seeds":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-    "validation_seeds":[20,21,22,23,24],
-    "test_seeds":[25,26,27,28,29],
-    "test_seed_labels_used_for_training":false,
-    "test_seed_teacher_outputs_used_for_training":false,
-    "checkpoint_selected_without_test_data":true
+  "data_split": {
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "validation_seeds": [
+      20,
+      21,
+      22,
+      23,
+      24
+    ],
+    "test_seeds": [
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "test_seed_labels_used_for_training": false,
+    "test_seed_teacher_outputs_used_for_training": false,
+    "checkpoint_selected_without_test_data": true
   },
-  "data_protocol":{
-    "train_eval_structure_disjoint":true,
-    "train_eval_truth_disjoint":true,
-    "evaluation_library_static_per_seed":true,
-    "nested_population_prefixes":true,
-    "target_identity_available_to_selector":false,
-    "target_index_available_to_selector":false,
-    "future_target_evidence_available_to_selector":false,
-    "verifier_labels_available_to_selector":false,
-    "target_evidence_available_before_action":false,
-    "teacher_action_labels_test_hidden":true
+  "data_protocol": {
+    "train_eval_structure_disjoint": true,
+    "train_eval_truth_disjoint": true,
+    "evaluation_library_static_per_seed": true,
+    "nested_population_prefixes": true,
+    "target_identity_available_to_selector": false,
+    "target_index_available_to_selector": false,
+    "future_target_evidence_available_to_selector": false,
+    "verifier_labels_available_to_selector": false,
+    "target_evidence_available_before_action": false,
+    "teacher_action_labels_test_hidden": true
   },
-  "teacher_definition":{
-    "uniform_target_prior":true,
-    "budget":8,
-    "objective":"maximize expected U_B gain divided by expected acquisition work",
-    "input":"current compatible candidate belief plus unobserved action rows",
-    "target_identity_blind":true
+  "teacher_definition": {
+    "uniform_target_prior": true,
+    "budget": 8,
+    "objective": "maximize expected U_B gain divided by expected acquisition work",
+    "input": "current compatible candidate belief plus unobserved action rows",
+    "target_identity_blind": true
   },
-  "learned_input_definition":{
-    "representation":"fixed-size per-action first- and second-order statistics of six-bit candidate-predicted trace signatures plus row descriptor, candidate-count term, budget fraction, and acquisition-cost term",
-    "exact_entropy_feature":false,
-    "exact_U_B_feature":false,
-    "target_identity_feature":false,
-    "incremental_update":true
+  "learned_input_definition": {
+    "representation": "fixed-size per-action first- and second-order statistics of six-bit candidate-predicted trace signatures plus row descriptor, candidate-count term, budget fraction, and acquisition-cost term",
+    "exact_entropy_feature": false,
+    "exact_U_B_feature": false,
+    "target_identity_feature": false,
+    "incremental_update": true
   },
-  "terminal_protocol":{
-    "budget":8,
-    "procedure":"Select one probe, reveal realized target evidence, form the exact compatible bucket, retain at most B candidates in fixed public library order, then exact-verify against all 16 truth-table rows.",
-    "oracle_not_used_for_selection":true
+  "terminal_protocol": {
+    "budget": 8,
+    "procedure": "Select one probe, reveal realized target evidence, form the exact compatible bucket, retain at most B candidates in fixed public library order, then exact-verify against all 16 truth-table rows.",
+    "oracle_not_used_for_selection": true
   },
-  "cost_model":{
-    "teacher":"explicit candidate-evidence partition evaluation",
-    "learner":"cached candidate-feature encoding plus fixed-size sketch updates plus one neural forward pass over legal actions",
-    "environment":"same activation-trace probe acquisition for teacher and learner",
-    "hardware_speedup_claim":false
+  "cost_model": {
+    "teacher": "explicit candidate-evidence partition evaluation",
+    "learner": "cached candidate-feature encoding plus fixed-size sketch updates plus one neural forward pass over legal actions",
+    "environment": "same activation-trace probe acquisition for teacher and learner",
+    "hardware_speedup_claim": false
   },
-  "statistical_rule":{
-    "primary_unit":"test seed",
-    "primary_population":"32 held-out tasks per seed at M=512/B=8",
-    "per_seed_estimate":"mean normalized U_B regret across the 32 tasks",
-    "uncertainty":"4000-resample test-seed bootstrap 95% CI",
-    "no_task_level_iid_assumption":true
+  "statistical_rule": {
+    "primary_unit": "test seed",
+    "primary_population": "32 held-out tasks per seed at M=512/B=8",
+    "per_seed_estimate": "mean normalized U_B regret across the 32 tasks",
+    "uncertainty": "4000-resample test-seed bootstrap 95% CI",
+    "no_task_level_iid_assumption": true
   },
-  "leakage_rules":[
+  "leakage_rules": [
     "Training labels are generated only on training seeds.",
     "Validation seeds may select the frozen checkpoint; test seeds may not.",
     "The learned policy never receives target identity, target index, realized target evidence, or verifier-only rows before action selection.",
@@ -92,43 +182,43 @@
     "Test-seed teacher actions are computed only after the checkpoint and test protocol are frozen.",
     "The external CodeARC evaluation, when added, will have an independent frozen split and will not train this policy."
   ],
-  "decision_rule":[
+  "decision_rule": [
     {
-      "condition":"Primary normalized regret CI is near zero and learner uses lower per-decision belief-scoring work than the exact teacher.",
-      "licenses":"evidence of successful amortization of target-blind one-step probe selection on held-out synthetic populations.",
-      "does_not_license":"general active-learning superiority or semantic generalization."
+      "condition": "Primary normalized regret CI is near zero and learner uses lower per-decision belief-scoring work than the exact teacher.",
+      "licenses": "evidence of successful amortization of target-blind one-step probe selection on held-out synthetic populations.",
+      "does_not_license": "general active-learning superiority or semantic generalization."
     },
     {
-      "condition":"Teacher agreement is high but U_B regret is not low.",
-      "licenses":"agreement is not sufficient; the representation or scoring calibration is failing.",
-      "does_not_license":"learned-policy success."
+      "condition": "Teacher agreement is high but U_B regret is not low.",
+      "licenses": "agreement is not sufficient; the representation or scoring calibration is failing.",
+      "does_not_license": "learned-policy success."
     },
     {
-      "condition":"Synthetic test succeeds but external CodeARC evaluation fails.",
-      "licenses":"the learned policy is generator-specific; do not generalize to real program synthesis."
+      "condition": "Synthetic test succeeds but external CodeARC evaluation fails.",
+      "licenses": "the learned policy is generator-specific; do not generalize to real program synthesis."
     }
   ],
-  "scope":{
-    "finite_domain_amortized_policy":true,
-    "learned_probe_policy_claim":true,
-    "general_active_learning_claim":false,
-    "submodularity_claim":false,
-    "global_optimal_sequential_policy_claim":false,
-    "asymptotic_claim":false,
-    "language_image_audio_claim":false,
-    "hardware_speedup_claim":false
+  "scope": {
+    "finite_domain_amortized_policy": true,
+    "learned_probe_policy_claim": true,
+    "general_active_learning_claim": false,
+    "submodularity_claim": false,
+    "global_optimal_sequential_policy_claim": false,
+    "asymptotic_claim": false,
+    "language_image_audio_claim": false,
+    "hardware_speedup_claim": false
   },
-  "provenance":{
-    "parent_experiment":"TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015",
-    "parent_commit":"e2b58fcfa68146dd2bd95a189ef7d7b2c7b08bae",
-    "generator_commit":"c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  "provenance": {
+    "parent_experiment": "TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015",
+    "parent_commit": "e2b58fcfa68146dd2bd95a189ef7d7b2c7b08bae",
+    "generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
   },
-  "freeze_rule":{
-    "post_measurement_protocol_changes":"require new experiment identifier",
-    "smoke_runs":"must not enter confirmatory evidence",
-    "result_artifact":"immutable after scientific disposition"
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require new experiment identifier",
+    "smoke_runs": "must not enter confirmatory evidence",
+    "result_artifact": "immutable after scientific disposition"
   },
-  "interpretation_order":[
+  "interpretation_order": [
     "protocol and leakage integrity",
     "test-set U_B regret",
     "verified downstream capability",
