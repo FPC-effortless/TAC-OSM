@@ -83,3 +83,19 @@ Confirmatory trigger record: [run-graph-casm-evidence-index-017-full] after succ
 
 
 Final confirmatory trigger record: [run-graph-casm-evidence-index-017-full] on synchronized test-count head.
+
+## Scientific disposition
+
+No confirmatory measurement is authorized under the current cost endpoint. The
+implementation is exact-equivalent in selected action, information score, and
+expected residual candidate count, but the registered total-work metric mixes
+non-commensurate primitive units: exhaustive candidate-signature scans,
+indexed posting writes, and bitmap-word popcounts are not interchangeable
+computational units. Therefore a positive or negative difference in the
+registered total_information_per_work_m512 would not have a defensible
+hardware-independent interpretation.
+
+The exact index implementation is retained as infrastructure. A future
+experiment must either define one common cost algebra for both implementations
+or use paired measured runtime with an explicit hardware-bound scope. Until
+then, no 017A efficiency result is claimed.
