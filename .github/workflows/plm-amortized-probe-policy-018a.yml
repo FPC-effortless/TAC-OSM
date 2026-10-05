@@ -1,0 +1,108 @@
+name: Research PLM amortized probe policy 018A
+
+on:
+  push:
+    branches:
+      - research/plm-amortized-probe-policy-018a
+    paths:
+      - contracts/TACOSM-PLM-AMORTIZED-PROBE-POLICY-018A.json
+      - docs/PLM-018A-AMORTIZED-PROBE-POLICY.md
+      - src/tac_osm/amortized_probe_policy.py
+      - tests/test_amortized_probe_policy.py
+      - tests/test_plm_018a_contract.py
+      - docs/TACOSM-BASELINE-001.md
+      - tests/test_integrity.py
+      - .github/workflows/plm-amortized-probe-policy-018a.yml
+  pull_request:
+    branches:
+      - research/graph-casm-structured-action-probe-015
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: PLM-018A smoke/preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest torch
+      - name: Contract validation
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c=load_contract("TACOSM-PLM-AMORTIZED-PROBE-POLICY-018A")
+          assert c.check_consistency() == []
+          assert c.primary_endpoint() == "normalized_budget_utility_regret_m512_b8"
+          PY
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: Focused tests
+        run: python -m pytest tests/test_amortized_probe_policy.py tests/test_plm_018a_contract.py -q
+      - name: Smoke model construction
+        run: python - <<'PY'
+        from tac_osm.amortized_probe_policy import AmortizedProbePolicy
+        m=AmortizedProbePolicy(feature_dim=30, hidden_dim=32)
+        print(sum(p.numel() for p in m.parameters()))
+        PY
+
+  full:
+    name: PLM-018A full confirmatory learner measurement
+    needs: smoke
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(toJSON(github.event.commits), '[run-plm-amortized-probe-policy-018A-full]'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest torch
+      - name: Contract validation
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c=load_contract("TACOSM-PLM-AMORTIZED-PROBE-POLICY-018A")
+          assert c.check_consistency() == []
+          c.require_levels((32,64,128,256,512))
+          c.require_seeds((25,26,27,28,29))
+          c.require_steps(4)
+          c.require_eval_steps(32)
+          c.require_arms(["greedy_budget_teacher","greedy_information_teacher","amortized_policy","fixed_random"])
+          PY
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: Focused tests
+        run: python -m pytest tests/test_amortized_probe_policy.py tests/test_plm_018a_contract.py -q
+      - name: Full learner measurement
+        run: python scripts/run_plm_amortized_probe_policy_018a.py
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-AMORTIZED-PROBE-POLICY-018A
+          path: artifacts/TACOSM-PLM-AMORTIZED-PROBE-POLICY-018A.json
+          if-no-files-found: error
+
+# [run-plm-amortized-probe-policy-018A-full]
