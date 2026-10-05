@@ -1,0 +1,133 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-EVIDENCE-FAMILY-016A",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "title": "Externally observable structured evidence families for hypothesis reduction",
+  "question": "At M=512, does any predefined externally observable structured evidence channel provide higher one-step hypothesis information efficiency than a scalar output channel, without target identity or evaluator-only information?",
+  "hypothesis": "At least one externally observable structured evidence family can improve one-step deterministic hypothesis information per environment execution cost over a single scalar output, while preserving target-blind probe selection.",
+  "arms": [
+    {"name":"scalar_output","intervention":"one input row -> one binary output","acts_on":"observation channel"},
+    {"name":"paired_output","intervention":"one input row plus one fixed single-bit counterfactual perturbation -> ordered pair of binary outputs","acts_on":"observation channel"},
+    {"name":"quad_output","intervention":"four fixed one-bit-neighborhood input rows -> four binary outputs","acts_on":"observation channel"},
+    {"name":"activation_trace_ceiling","intervention":"one input row -> ordered six-bit non-input activation trace from an instrumented sandbox","acts_on":"observation channel ceiling"}
+  ],
+  "primary_endpoint": {
+    "name": "max_external_minus_scalar_information_per_environment_work_m512",
+    "definition": "max over the three predefined external channels of the five-seed mean of [channel task-mean information_per_work minus scalar task-mean information_per_work] at M=512",
+    "uncertainty": "seed-bootstrap 95% CI, recomputing the max-over-arm statistic inside every bootstrap resample",
+    "bootstrap_rounds": 4000
+  },
+  "secondary_endpoints": [
+    "information_gain_bits",
+    "expected_remaining_candidates",
+    "effective_information_bits",
+    "verified_candidate_budget_success_at_B8",
+    "amortized_total_work_units",
+    "amortized_total_information_per_work",
+    "activation_trace_ceiling_comparison"
+  ],
+  "diagnostic_m_levels": [32,64,128,256,512],
+  "seeds": [0,1,2,3,4],
+  "steps": 1,
+  "eval_steps": 32,
+  "action_levels": ["scalar_output","paired_output","quad_output","activation_trace_ceiling"],
+  "held_constant": [
+    "same pinned G-CASM generator commit",
+    "same 512-program static evaluation library per seed",
+    "same target-selection procedure",
+    "same train/evaluation structure and truth-table disjointness",
+    "same exact CASM semantics",
+    "same 16 legal base input rows"
+  ],
+  "data_protocol": {
+    "train_eval_structure_disjoint": true,
+    "train_eval_truth_disjoint": true,
+    "evaluation_library_static_per_seed": true,
+    "nested_population_prefixes": true,
+    "target_identity_available_to_selector": false,
+    "target_index_available_to_selector": false,
+    "future_target_evidence_available_to_selector": false,
+    "verifier_labels_available_to_selector": false,
+    "post_probe_target_evidence_used_only_for_verification": true
+  },
+  "fixed_counterfactual": {
+    "delta": [1,0,0,0],
+    "paired_rule": "base row x and x xor delta",
+    "quad_rule": "x xor e0, x xor e1, x xor e2, x xor e3; fixed before measurement"
+  },
+  "cost_model": {
+    "scalar_output": "1 exact environment execution",
+    "paired_output": "2 exact environment executions",
+    "quad_output": "4 exact environment executions",
+    "activation_trace_ceiling": "1 exact environment execution + 6 trace-read units",
+    "candidate_side_work": "reported separately and amortized over the registered 160 tasks per seed"
+  },
+  "information_definition": {
+    "prior": "uniform over the current candidate set",
+    "mutual_information": "H(E_a) because evidence is deterministic conditional on candidate",
+    "expected_remaining_candidates": "sum_e |H_e|^2 / |H|",
+    "effective_information_bits": "log2(|H| / expected_remaining_candidates)",
+    "information_per_work": "mutual information bits / environment acquisition work"
+  },
+  "verified_utility_definition": {
+    "budget": 8,
+    "procedure": "After a target-blind action is selected and realized target evidence is revealed, retain candidates whose predicted evidence exactly matches the target evidence, take the first min(8,bucket_size) under deterministic candidate order, and run exact CASM verification against all verifier rows.",
+    "target_evidence_not_used_before_selection": true
+  },
+  "leakage_rules": [
+    "Probe selection receives candidate-predicted evidence and public candidate structure only.",
+    "Target identity and target index are never selector inputs.",
+    "Realized target evidence is unavailable until after action selection.",
+    "Verifier-only rows and verifier labels are unavailable to selection.",
+    "No confirmatory result determines channel definitions, delta, M, or B.",
+    "The activation-trace arm is an explicit sandbox ceiling and is not treated as externally deployable."
+  ],
+  "statistical_rule": {
+    "primary_unit": "seed",
+    "per_seed": "mean across 32 tasks at M=512 for each arm, then form arm-minus-scalar differences",
+    "primary_statistic": "maximum across the three external arm differences",
+    "bootstrap": "resample five seeds with replacement and recompute the maximum statistic",
+    "no_task_level_iid_assumption": true
+  },
+  "decision_rule": [
+    {
+      "condition": "Primary max-statistic CI excludes zero on the positive side and the winning arm is externally observable.",
+      "licenses": "bounded evidence that a predefined external structured channel is more information-efficient than scalar output on the registered finite workload.",
+      "does_not_license": "learned autonomous probe selection, general active learning superiority, asymptotic scaling, or multimodal competence."
+    },
+    {
+      "condition": "Only activation_trace_ceiling exceeds scalar.",
+      "licenses": "instrumented internal computational evidence is informative, while external evidence remains limiting.",
+      "does_not_license": "arbitrary access to internal state."
+    },
+    {
+      "condition": "Raw information increases but verified B=8 utility does not.",
+      "licenses": "the channel is informative but not sufficient for downstream selective computation under the registered budget.",
+      "does_not_license": "architectural success."
+    }
+  ],
+  "scope": {
+    "finite_domain_observation_channel_ceiling": true,
+    "learned_probe_policy_claim": false,
+    "global_optimal_sequential_policy_claim": false,
+    "asymptotic_claim": false,
+    "semantic_generalization_claim": false,
+    "language_image_audio_claim": false,
+    "hardware_speedup_claim": false
+  },
+  "provenance": {
+    "parent_experiment": "TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015",
+    "parent_commit": "1acb838fd0854e928896e01bb40090805a1bdc80",
+    "generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require new experiment identifier",
+    "smoke_runs": "must not enter confirmatory evidence",
+    "result_artifact": "immutable after scientific disposition"
+  },
+  "schedule": {
+    "training_steps": 0,
+    "contract_steps_placeholder": 1,
+    "note": "Exact one-step channel comparison; no learned optimization."
+  }
+}
