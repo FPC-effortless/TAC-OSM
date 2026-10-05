@@ -1,0 +1,123 @@
+{
+  "experiment_id":"TACOSM-GRAPH-CASM-BUDGET-UTILITY-SELECTION-016D",
+  "version":"0.1-preregistered",
+  "status":"pre-registered",
+  "title":"Budget-capped utility versus information-gain probe selection",
+  "question":"Does selecting probes by expected budget-capped posterior utility per acquisition work improve downstream hypothesis resolution over Shannon-information-per-work selection on the registered finite graph workload?",
+  "hypothesis":"The budget-capped utility selector will weakly improve the expected probability that the target falls inside an eight-candidate terminal shortlist, but the magnitude may be small when the six-bit trace already nearly reaches its partition ceiling.",
+  "arms":[
+    {"name":"information_per_work","intervention":"select the input row maximizing deterministic Shannon information gain per acquisition work","acts_on":"probe objective"},
+    {"name":"budget_utility_per_work","intervention":"select the input row maximizing expected budget-capped posterior utility gain per acquisition work","acts_on":"probe objective"}
+  ],
+  "endpoints":[
+    {"name":"budget_capped_utility_delta_m512_b8","role":"primary — seed-level mean U_8 difference budget_utility_per_work minus information_per_work at M=512/B=8","primary":true},
+    {"name":"verified_success_delta_m512_b8","role":"secondary — seed-level exact-verifier success difference at M=512/B=8","primary":false},
+    {"name":"information_gain_delta_m512","role":"secondary — selected-action information gain difference","primary":false},
+    {"name":"probe_work_delta_m512","role":"secondary — selected-action expected acquisition work difference","primary":false},
+    {"name":"selected_row_agreement","role":"secondary — fraction of paired tasks choosing the same probe row","primary":false},
+    {"name":"budget_utility","role":"secondary — U_B for each selected action","primary":false}
+  ],
+  "h_levels":[32,64,128,256,512],
+  "seeds":[0,1,2,3,4],
+  "steps":1,
+  "eval_steps":32,
+  "action_levels":["information_per_work","budget_utility_per_work"],
+  "held_constant":[
+    "same G-CASM-015 activation-trace channel",
+    "same pinned generator commit",
+    "same static 512-program evaluation library per seed",
+    "same target-selection procedure",
+    "same terminal candidate budget B=8",
+    "same exact CASM semantics",
+    "same 16 legal input-row actions"
+  ],
+  "data_protocol":{
+    "train_eval_structure_disjoint":true,
+    "train_eval_truth_disjoint":true,
+    "evaluation_library_static_per_seed":true,
+    "nested_population_prefixes":true,
+    "target_identity_available_to_selector":false,
+    "target_index_available_to_selector":false,
+    "future_target_evidence_available_to_selector":false,
+    "verifier_labels_available_to_selector":false,
+    "target_evidence_revealed_only_after_action":true
+  },
+  "utility_definition":{
+    "uniform_target_prior":true,
+    "budget":8,
+    "current_terminal_utility":"min(B,M)/M",
+    "post_probe_utility":"sum_e min(B,|H_e|)/M",
+    "utility_gain":"post_probe_utility - current_terminal_utility",
+    "selection_objective":"utility_gain / expected acquisition work"
+  },
+  "terminal_protocol":{
+    "budget":8,
+    "procedure":"After the selected row is chosen without target identity, reveal the target evidence, form the exact compatible bucket, retain the first min(8,bucket_size) candidates in deterministic public order, and exact-verify those candidates against all 16 rows.",
+    "oracle_not_used":true,
+    "candidate_order_fixed_before_measurement":true
+  },
+  "cost_model":{
+    "acquisition_work":"G-CASM graph execution work plus six activation-trace read units",
+    "terminal_work":"exact executor work over shortlisted candidates and all 16 rows",
+    "equal_probe_count":"both arms execute exactly one probe action; total acquisition work is separately reported"
+  },
+  "statistical_rule":{
+    "primary_unit":"seed",
+    "primary_population":"32 tasks per seed at M=512",
+    "per_seed_estimate":"mean selected-action U_8 across the 32 paired tasks",
+    "effect":"budget_utility_per_work U_8 minus information_per_work U_8",
+    "uncertainty":"4000-resample paired seed bootstrap 95% CI",
+    "no_task_level_iid_assumption":true
+  },
+  "leakage_rules":[
+    "Both selectors see only candidate-predicted public activation traces and action descriptors.",
+    "Target identity and target index are never inputs to probe selection.",
+    "Realized target evidence is unavailable before action selection.",
+    "Verifier-only rows and labels are unavailable to probe selection.",
+    "No confirmatory result selects the utility definition, budget, or action space."
+  ],
+  "decision_rule":[
+    {
+      "condition":"Primary U_8 difference CI is positive at M=512/B=8.",
+      "licenses":"Evidence that terminal-budget-aware utility is a better probe objective than Shannon information-per-work on the finite registered workload.",
+      "does_not_license":"A general submodularity guarantee, learned probe-policy superiority, or asymptotic optimality."
+    },
+    {
+      "condition":"Primary difference is near zero.",
+      "licenses":"Shannon information and terminal-budget utility are effectively aligned on this trace workload; replacing the selector objective is not the immediate bottleneck.",
+      "does_not_license":"U_B is universally inferior."
+    },
+    {
+      "condition":"U_B selector is worse.",
+      "licenses":"On this finite workload, naive one-step U_B optimization does not improve the established information selector; multi-step lookahead or a different belief representation may be required.",
+      "does_not_license":"A rejection of budget-aware objectives in general."
+    }
+  ],
+  "scope":{
+    "finite_domain_objective_comparison":true,
+    "learned_probe_policy_claim":false,
+    "submodularity_claim":false,
+    "global_optimal_sequential_policy_claim":false,
+    "asymptotic_claim":false,
+    "language_image_audio_claim":false,
+    "hardware_speedup_claim":false
+  },
+  "provenance":{
+    "parent_experiment":"TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015",
+    "parent_commit":"e2b58fcfa68146dd2bd95a189ef7d7b2c7b08bae",
+    "generator_commit":"c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "freeze_rule":{
+    "post_measurement_protocol_changes":"require new experiment identifier",
+    "smoke_runs":"must not enter confirmatory evidence",
+    "result_artifact":"immutable after scientific disposition"
+  },
+  "interpretation_order":[
+    "protocol and leakage integrity",
+    "selected action exactness",
+    "budget-capped utility",
+    "verified downstream capability",
+    "information and acquisition cost",
+    "scope"
+  ]
+}
