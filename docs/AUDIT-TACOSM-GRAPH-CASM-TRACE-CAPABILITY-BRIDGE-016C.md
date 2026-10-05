@@ -49,3 +49,21 @@ same one-probe terminal budget.
 
 ## Confirmatory trigger
 [run-graph-casm-trace-capability-bridge-016C-full]
+
+## Scientific invalidation of run 37292504100
+
+The full run passed CI and produced artifact 11336854358, but raw-artifact audit
+found a control-implementation defect: scalar evidence is represented as a
+one-element tuple for candidate signatures, while the target scalar evidence was
+correctly (but inconsistently) handled as a tuple in the current source. The
+artifact nevertheless contains zero scalar compatible-bucket matches at M=512,
+which is impossible for a binary partition and contradicts the mathematical
+B=8 ceiling of 0.03125. Consequently the reported scalar verified-success
+control and the primary +0.83125 trace delta are invalid.
+
+The activation-trace arm's raw partition values remain consistent with G-CASM-015,
+but no 016C capability claim is retained from this run.
+
+A corrected repeat is registered under a new experiment identifier
+TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1 with an explicit regression test
+for scalar target-evidence type consistency.
