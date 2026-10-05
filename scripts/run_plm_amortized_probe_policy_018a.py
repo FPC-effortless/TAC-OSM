@@ -36,6 +36,23 @@ def split_library(seed:int)->LibraryBundle:
     cache,_=g15.build_cache(library)
     return LibraryBundle(tuple(library),cache)
 
+def library_signatures(seed: int):
+    training = g15.g010.generate(seed + 100, g15.TRAIN_PROGRAMS)
+    train_structures = {g15.g010.structure_key(ep) for ep in training}
+    train_truths = {g15.g010.truth_signature(ep) for ep in training}
+    library = g15.g010.generate(
+        seed + 5000,
+        g15.LIBRARY_SIZE,
+        exclude_structures=train_structures,
+        exclude_truths=train_truths,
+    )
+    if len(library) != g15.LIBRARY_SIZE:
+        raise RuntimeError('evaluation library construction failed')
+    library_structures = {g15.g010.structure_key(ep) for ep in library}
+    library_truths = {g15.g010.truth_signature(ep) for ep in library}
+    if train_structures & library_structures or train_truths & library_truths:
+        raise RuntimeError('within-seed train/evaluation leakage')
+    return library_structures, library_truths
 def teacher_state(bundle:LibraryBundle, indices:Sequence[int]):
     evidence={}; costs={}
     for row in ACTIONS:
