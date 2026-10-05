@@ -52,3 +52,7 @@ If an external structured channel wins, the next PLM layer is an EvidenceCompile
 probe -> structured evidence -> sufficient evidence state -> selective execution -> verification.
 
 If no external channel wins, the next step is not another dense router. It is a search over richer task/environment interfaces whose evidence is more discriminative per unit cost.
+
+## Scientific disposition
+
+016A is retained as a preregistered analytical-null design but is not a confirmatory experiment. For deterministic B-bit evidence, mutual information is bounded by B bits, while the registered environment acquisition cost is at least B scalar executions for the paired and quad arms. Therefore their information-per-environment-work cannot exceed the scalar one-bit ceiling of 1 bit per execution. Running a full confirmatory measurement would not test a non-dominated hypothesis; the informative next intervention is a richer single-execution structured channel, which is tested by 015/016C rather than 016A.
