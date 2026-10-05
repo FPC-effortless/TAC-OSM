@@ -87,9 +87,13 @@ def channel_trial(cache, task, candidates, channel):
         "shortlist_size": len(selected),
         "target_in_shortlist": float(task.target_index in selected),
         "verified_success": float(success),
+        "budget_capped_utility": sum(min(BUDGET, n) for n in __import__("collections").Counter(evidence).values()) / max(1, len(evidence)),
+        "probe_environment_work_units": float(best.expected_cost),
         "verifier_work_units": int(verifier_work),
         "exhaustive_reference_work_units": int(exhaustive_work),
         "verified_execution_work_fraction": verifier_work / max(1, exhaustive_work),
+        "accounted_total_work_units": float(best.expected_cost) + verifier_work,
+        "success_per_accounted_work": float(success) / max(1.0, float(best.expected_cost) + verifier_work),
     }
 
 
@@ -111,6 +115,10 @@ def summarize(raw, seeds, m_levels):
             vals = trials_by_channel[c]
             by_m[str(m)]["channels"][c] = {
                 "verified_success_mean": statistics.fmean(v["verified_success"] for v in vals),
+                "budget_capped_utility_mean": statistics.fmean(v["budget_capped_utility"] for v in vals),
+                "probe_environment_work_units_mean": statistics.fmean(v["probe_environment_work_units"] for v in vals),
+                "accounted_total_work_units_mean": statistics.fmean(v["accounted_total_work_units"] for v in vals),
+                "success_per_accounted_work_mean": statistics.fmean(v["success_per_accounted_work"] for v in vals),
                 "target_bucket_size_mean": statistics.fmean(v["target_bucket_size"] for v in vals),
                 "information_gain_bits_mean": statistics.fmean(v["information_gain_bits"] for v in vals),
                 "expected_remaining_candidates_mean": statistics.fmean(v["expected_remaining_candidates"] for v in vals),
@@ -120,10 +128,12 @@ def summarize(raw, seeds, m_levels):
             }
 
     deltas = []
-    for seed in seeds:
-        trace = statistics.fmean(v["activation_trace"]["verified_success"] for v in raw[str(seed)][str(PRIMARY_M)])
-        scalar = statistics.fmean(v["scalar_row"]["verified_success"] for v in raw[str(seed)][str(PRIMARY_M)])
-        deltas.append(trace - scalar)
+    primary_available = str(PRIMARY_M) in raw[str(seeds[0])]
+    if primary_available:
+        for seed in seeds:
+            trace = statistics.fmean(v["activation_trace"]["verified_success"] for v in raw[str(seed)][str(PRIMARY_M)])
+            scalar = statistics.fmean(v["scalar_row"]["verified_success"] for v in raw[str(seed)][str(PRIMARY_M)])
+            deltas.append(trace - scalar)
 
     # Bootstrap the paired five-seed effect.
     import random
@@ -135,16 +145,21 @@ def summarize(raw, seeds, m_levels):
     ci = [
         float(draws[int(.025 * (len(draws)-1))]),
         float(draws[int(.975 * (len(draws)-1))]),
-    ]
+    ] if deltas else None
     return {
         "by_m": by_m,
-        "primary": {
+        "primary": ({
             "M": PRIMARY_M,
             "B": BUDGET,
             "seed_level_paired_delta": deltas,
             "mean_paired_delta": statistics.fmean(deltas),
             "seed_bootstrap_95ci": ci,
-        },
+        } if deltas else {
+            "M": PRIMARY_M,
+            "B": BUDGET,
+            "available": False,
+            "reason": "smoke omitted primary M; no confirmatory inference",
+        }),
     }
 
 
