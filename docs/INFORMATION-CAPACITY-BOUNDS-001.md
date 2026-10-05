@@ -34,3 +34,19 @@ performance.
 The functions are intended to be reused by future experiment contracts and
 audits so that a result can be compared against the mathematical ceiling
 before a new router intervention is introduced.
+## Important non-property: U_B is not generally submodular
+
+The budget-capped utility should not be assumed to satisfy diminishing returns.
+A four-hypothesis binary counterexample exists for B=1:
+
+- no probes: U_1 = 1/4;
+- probe 2 alone increases U_1 by 1/4;
+- after probe 1, adding probe 2 increases U_1 by 1/2.
+
+Thus the marginal value of a probe can increase after additional evidence
+creates complementary partitions. The usual adaptive-submodular greedy guarantee
+therefore cannot be imported into TAC-OSM without additional structural assumptions.
+
+The immediate implication is methodological: exact greedy probing remains a useful
+teacher, but its approximation ratio must be established for the actual objective
+and observation family rather than inherited from generic submodularity theory.
