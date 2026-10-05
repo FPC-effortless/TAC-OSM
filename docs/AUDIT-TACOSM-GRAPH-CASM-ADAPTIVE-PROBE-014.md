@@ -105,3 +105,20 @@ Confirmatory trigger record 2: [run-graph-casm-adaptive-probe-014-full]; current
 ## Confirmatory infrastructure repair
 
 Before confirmatory measurement, the full job was repaired to pin the same external CASM generator commit used by the smoke job and G-CASM-013, and the explicit full-run marker was made robust to push-event payload shape. This changes CI execution only; the preregistered scientific grid and endpoint remain frozen.
+
+## Scientific disposition — invalid confirmatory run
+
+The originally reported 23.125% primary figure is not a confirmatory result.
+The smoke/preflight run passed, but the full confirmatory job 111480370746 in
+workflow 37217322463 failed the repository integrity suite because the frozen
+baseline provenance row reported the wrong current test count (859 tests were
+collected). No full measurement artifact was produced.
+
+Accordingly:
+- the 23.125% figure is excluded from the scientific evidence ledger;
+- the run cannot be used as empirical confirmation of the qB/M ceiling;
+- 014 remains useful only as an implementation/design precursor to 015;
+- any future adaptive-probe result requires a fresh confirmatory identifier or
+  a new valid run under its own frozen contract.
+
+The qB/M ceiling itself is mathematical and independent of the invalid 014 run.
