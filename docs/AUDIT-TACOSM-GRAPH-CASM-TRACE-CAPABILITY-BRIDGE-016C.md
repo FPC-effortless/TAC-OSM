@@ -46,3 +46,6 @@ which isolates evidence-channel capacity. The activation trace additionally
 incurs six trace-read units, so explicit total-work accounting is reported as a
 secondary cost view. The primary endpoint remains verified capability at the
 same one-probe terminal budget.
+
+## Confirmatory trigger
+[run-graph-casm-trace-capability-bridge-016C-full]
