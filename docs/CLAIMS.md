@@ -338,6 +338,41 @@ confirmatory run is what would produce it. Until that run exists the claim
 must not appear in any report or figure as though measured, however clearly
 `|R|` is now defined.
 
+**G-CASM-016C and G-CASM-016C-R1 are both invalidated, and neither moves C5.**
+The two confirmatory attempts at the trace-to-capability bridge failed on the
+same implementation defect: the scalar arm compared `int` candidate evidence
+against a 1-tuple target, so `int == (int,)` was always `False` and every
+scalar compatible bucket was empty by construction (`target_bucket_size = 0`
+in all 800 scalar trials of the R1 artifact). R1's primary endpoint,
+`mean_paired_delta = 0.83125`, is therefore a comparison against a structurally
+absent arm, not a measured channel difference. R1 was registered as a
+"corrected repeat" whose contract stated the required regression in full, but
+the diff between the two runners is an identifier rename — the correction was
+never written. Its regression test asserted type identity on hand-written
+literals, which passed while the runner was broken.
+
+A second, independent defect further limits what the bridge can support:
+`accounted_total_work_units` summed verifier work with a *per-candidate mean*
+probe cost, omitting the O(M) candidate scan that `action_scores` actually
+performs. The recorded `verified_execution_work_fraction` is evidence for
+selective *execution* scaling, not for total-computation scaling, which is
+what C5 asserts.
+
+The trace arm alone was valid descriptive evidence — 0.8313 success at M=512
+against its own preregistered `budget_capped_utility` ceiling of 0.84805 — but
+that supports "trace partitions effectively and approaches its information
+ceiling", not "trace outperforms scalar", which was never measured.
+
+`TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R2` is the registered
+correction: one typed evidence-extraction path per channel, a runner-level
+invariant (`type(e_i) == type(e_t)` **and** a non-empty compatible bucket)
+enforced on every generated trial and pinned as a negative test against the
+R1 failure mode, and probe work recorded as a total with per-trial operation
+counters. See
+`docs/AUDIT-TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R2.md`. **C5
+remains UNTESTED** until that corrected control actually runs and passes its
+own invariant; a registered correction is not a result.
+
 ---
 
 ## C6 — Large-H routing failure is a routing problem
