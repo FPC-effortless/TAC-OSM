@@ -21,3 +21,6 @@ effect.
 
 No submodularity claim is made here. Adaptive submodularity is a separate
 property requiring proof under the exact observation model.
+
+## Confirmatory trigger
+[run-graph-casm-budget-utility-selection-016D-full]
