@@ -200,13 +200,17 @@ def post_selection_verify(scalar, target, candidates, kind, selected_row, target
     return None
 
 
-def exact_verify_shortlist(target, candidates, shortlist):
-    target_truth = truth_signature(target)
+def exact_verify_shortlist(target, candidates, shortlist, kind, selected_row):
+    # This verifier is causally downstream of probe selection.
+    # It sees realized target truth only through the post-selection verifier rows.
+    observed_rows = set(action_rows(kind, selected_row))
+    verifier_rows = [
+        bits for idx, bits in enumerate(INPUT_ROWS)
+        if idx not in observed_rows
+    ]
     for idx in shortlist:
         candidate = candidates[idx]
-        if truth_signature(candidate) == target_truth:
-            return 1.0
-        for bits in INPUT_ROWS:
+        for bits in verifier_rows:
             got, _ = g010.execute_exact(candidate, bits)
             if got != int(target.truth_table[bits]):
                 break
