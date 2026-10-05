@@ -13,3 +13,8 @@ def test_test_teacher_hidden():
     c=json.loads(Path("contracts/TACOSM-PLM-AMORTIZED-PROBE-POLICY-018A.json").read_text())
     assert c["data_split"]["test_seed_teacher_outputs_used_for_training"] is False
     assert c["data_split"]["checkpoint_selected_without_test_data"] is True
+
+def test_cross_split_population_disjointness_required():
+    c=json.loads(Path("contracts/TACOSM-PLM-AMORTIZED-PROBE-POLICY-018A.json").read_text())
+    assert c["data_protocol"]["cross_split_structure_disjoint"] is True
+    assert c["data_protocol"]["cross_split_truth_disjoint"] is True
