@@ -47,6 +47,26 @@
       "name": "execution_work_fraction",
       "role": "secondary — terminal verification work divided by exhaustive exact verification work",
       "primary": false
+    },
+    {
+      "name": "budget_capped_utility",
+      "role": "secondary — partition-implied expected terminal success U_B for the selected evidence channel under a uniform target prior",
+      "primary": false
+    },
+    {
+      "name": "probe_environment_work_units",
+      "role": "secondary — expected probe acquisition work",
+      "primary": false
+    },
+    {
+      "name": "accounted_total_work_units",
+      "role": "secondary — probe plus terminal verification work",
+      "primary": false
+    },
+    {
+      "name": "success_per_accounted_work",
+      "role": "secondary — verified success divided by explicitly accounted total work",
+      "primary": false
     }
   ],
   "h_levels": [
@@ -98,7 +118,12 @@
   "cost_model": {
     "probe_environment": "same G-CASM-015 exact graph execution plus trace read units",
     "terminal_verification": "sum of exact executor work over shortlisted candidates and all 16 rows",
-    "exhaustive_reference": "same exact executor work over all M candidates and all 16 rows"
+    "exhaustive_reference": "same exact executor work over all M candidates and all 16 rows",
+    "comparison_axes": {
+      "equal_environment_execution_count": "Both arms acquire exactly one graph execution before observation; activation_trace additionally incurs six trace-read units.",
+      "explicit_work": "Report graph execution work, trace-read work, terminal verifier work, and their sum in the repository's discrete work units.",
+      "interpretation": "Primary capability comparison fixes one probe action per task; total-work metrics are secondary because trace reads and graph execution use different primitive accounting."
+    }
   },
   "statistical_rule": {
     "primary_unit": "seed",
@@ -178,6 +203,9 @@
       0.851953125
     ],
     "interpretation": "This is the exact partition-implied ceiling for the registered target-uniform terminal shortlist procedure on the frozen 015 libraries, not a measured 016C outcome.",
-    "preregistered_before_016C_result": true
+    "preregistered_before_016C_result": true,
+    "scalar_row": 0.03125,
+    "trace_row": 0.848046875,
+    "note": "Equal one-probe-count comparison and explicit-work accounting are both reported; the primary endpoint is capability at a fixed one-probe budget, not a claim that the trace is equal-cost."
   }
 }
