@@ -68,7 +68,7 @@ jobs:
   full:
     name: E2E-005 confirmatory functional measurement
     needs: smoke
-    if: \${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(toJSON(github.event.commits), '[run-plm-integrated-e2e-005-full]')) }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-plm-integrated-e2e-005-full]')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
