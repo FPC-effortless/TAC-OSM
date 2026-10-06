@@ -1,0 +1,71 @@
+{
+  "experiment_id": "TACOSM-PLM-TDBU-ADAPTIVE-TIMESCALE-001",
+  "title": "Top-down PLM assembly with trainable temporal dynamics and bottom-up adaptive-state ablation",
+  "question": "Does allowing three persistent temporal decay constants to adapt end-to-end on training histories improve held-out temporal-filter transfer over the matched fixed three-timescale state?",
+  "hypothesis": "The null from broader fixed temporal coverage indicates that raw state-bank width is not the primary bottleneck; learning the temporal decay constants from training histories should improve transfer if fixed scale placement is the limiting mechanism.",
+  "arms": [
+    {"name":"no_state","intervention":"persistent_state_disabled","acts_on":"state"},
+    {"name":"one_fixed","intervention":"one_fixed_exponential_trace_padded_to_three_state_slots","acts_on":"state","value":"alpha=0.90"},
+    {"name":"three_fixed","intervention":"parent_fixed_three_exponential_traces","acts_on":"state","value":"alpha=0.50,0.90,0.98"},
+    {"name":"three_adaptive","intervention":"three_trainable_exponential_decay_parameters_initialized_at_parent_scales","acts_on":"state","value":"initial_alpha=0.50,0.90,0.98"}
+  ],
+  "endpoints": [
+    {"name":"heldout_temporal_success","role":"primary","primary":true,"description":"Exact class-balanced success on a new held-out temporal-filter set disjoint from every filter constant used in training and from prior transfer-lane test constants; primary decision at H=256."},
+    {"name":"history_conditioned_action_gap","role":"secondary","primary":false,"description":"Fraction of exact negation pairs for which the policy selects opposite actions despite identical current observation."},
+    {"name":"learned_decay_constants","role":"secondary","primary":false,"description":"Final three adaptive decay constants after training; descriptive only."},
+    {"name":"state_intervention","role":"secondary","primary":false,"description":"Frozen adaptive-checkpoint success after zeroing or cross-episode shuffling persistent state."},
+    {"name":"computation_work","role":"secondary","primary":false,"description":"Explicit evaluation work including persistent-state update, policy computation, executor and verifier."}
+  ],
+  "decision_rule": [
+    {
+      "condition":"At H=256, three_adaptive exceeds three_fixed in heldout_temporal_success by more than 0.10, the registered seed-bootstrap 95% confidence interval for the paired seed-level difference excludes zero, and three_adaptive exceeds no_state.",
+      "licenses":"bounded evidence that trainable temporal decay parameters improve held-out temporal-filter transfer under the registered persistent-state loop and matched policy parameter count.",
+      "does_not_license":"global temporal optimality, power-law or scale-free memory, biological equivalence, natural multimodal competence, asymptotic scaling, or hardware speedup."
+    },
+    {
+      "condition":"three_adaptive does not beat three_fixed materially, but both stateful arms retain a history-conditioned action gap and outperform no_state.",
+      "licenses":"persistent temporal state is useful but trainable decay placement is not established as a sufficient improvement on this transfer benchmark.",
+      "does_not_license":"failure of adaptive temporal memory generally or optimality of the fixed scales."
+    },
+    {
+      "condition":"three_adaptive loses to no_state or cannot preserve a history-conditioned action gap.",
+      "licenses":"the registered adaptive temporal-memory mechanism is not established on this benchmark.",
+      "does_not_license":"failure of persistent state generally."
+    }
+  ],
+  "interpretation_order":[
+    "protocol and security integrity",
+    "leakage and supervision boundary",
+    "train/test temporal-filter separation",
+    "paired-history benchmark validity",
+    "parameter matching",
+    "model-state integrity",
+    "degeneracy and policy discrimination",
+    "exact held-out transfer capability",
+    "history-paired intervention",
+    "learned decay behavior",
+    "compute",
+    "statistics",
+    "scope"
+  ],
+  "h_levels":[64,256,512],
+  "seeds":[0,1,2,3,4],
+  "steps":500,
+  "eval_steps":200,
+  "k_levels":[1,3],
+  "held_constant":[
+    "training temporal-filter alphas are exactly 0.30,0.50,0.68,0.82,0.90,0.96,0.985",
+    "adaptive-lane test temporal-filter alphas are exactly 0.41,0.57,0.76,0.875,0.925,0.991,0.994",
+    "the adaptive-lane test set is disjoint from training constants and from prior transfer-lane test constants",
+    "current observation at decision is exactly 0.0",
+    "paired histories are exact negations with opposite gold actions",
+    "policy parameter count is exactly 86 for every registered arm",
+    "adaptive decay initialization is exactly 0.50,0.90,0.98",
+    "adaptive decay parameterization is alpha=sigmoid(logit(alpha_initial))",
+    "policy learning rate is exactly 0.05 and decay learning rate is exactly 0.02",
+    "optimizer family, training steps, evaluation sample count, executor, verifier, state-update recurrence, and work-accounting definition",
+    "no test temporal-filter constant is used for training, decay initialization, checkpoint selection, or hyperparameter selection"
+  ],
+  "status":"pre-registered",
+  "layer":"L3"
+}
