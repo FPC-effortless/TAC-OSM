@@ -20,3 +20,11 @@ def test_state_derivative_is_finite():
     s=TemporalState("three_adaptive",PARENT_ALPHAS)
     values,deriv=s.process_with_derivatives(np.array([1.0,-.5,.25],dtype=float))
     assert np.all(np.isfinite(values)) and np.all(np.isfinite(deriv))
+
+
+def test_zero_padded_fixed_state_slots_are_actually_zero():
+    history=np.array([1.0,-2.0,3.0])
+    no_state=TemporalState("no_state",PARENT_ALPHAS).process(history)
+    one=TemporalState("one_fixed",PARENT_ALPHAS).process(history)
+    assert np.array_equal(no_state,np.zeros(3))
+    assert one[1] == 0.0 and one[2] == 0.0
