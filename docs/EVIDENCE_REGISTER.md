@@ -256,3 +256,38 @@ Primary explicit-both q2 = **0.5200**; seed-bootstrap 95% interval
 
 Next diagnostic: explicitly align state content representation with CASM rather
 than changing addressing again.
+
+
+## Retrospective Audit 001 additions
+
+The earlier register concentrated on the M1/C5 evidence spine. The following
+rows are now authoritative so later lanes cannot consume historical results
+without their boundaries.
+
+| Evidence | Layer | Disposition | What may be inherited | What must not be inherited |
+|---|---|---|---|---|
+| TACOSM-REP-006 | L2 | LEGACY-AUDITED / LEGACY-BOUND | bounded learned semantic addressing at M=8 | scalability, sublinear cost, autonomous semantics |
+| TACOSM-REP-007 | L2 | LEGACY-AUDITED / LEGACY-BOUND | above-control addressing through M=32 | scale invariance; exhaustive O(M) result as efficient retrieval |
+| TACOSM-REP-008 | L1/L2 | LEGACY-BOUND | exact lookup as a ceiling/control | learned capability; comparison against trained full scan |
+| TACOSM-REP-009 | L2 | LEGACY-BOUND | noisy approximate pruning can retain target state on this workload | preregistered primary success; universal semantic retrieval |
+| TACOSM-C5-EXEC-001 | L2/L3 | LEGACY-AUDITED / LEGACY-BOUND | retained-set execution work is fixed in synthetic executor | actual CASM execution; broad C5 |
+| TACOSM-C5-END-TO-END-001 | L3 | LEGACY-AUDITED / LEGACY-BOUND | end-to-end retained-subset control in exact synthetic path | learned semantic addressing; broad scaling |
+| TACOSM-C5-COVERAGE-FRONTIER-004 | L3 | LEGACY-BOUND | count-conserving synthetic state-admission frontier | actual CASM execution, asymptotic C5, hardware speedup |
+| TACOSM-C5-PERSISTENT-RELATIONAL-LOOP-001 | L3 | LEGACY-AUDITED / LEGACY-BOUND | state-dependent information survives reset and composition is a measured bottleneck | finite-range gamma as complexity law; universal persistent routing |
+| TACOSM-AXON/StructMeans/SECA historical results | L3 | LEGACY-BOUND | execution-feedback and operator-consolidation infrastructure | autonomous target-blind operator discovery; labels/after-state are not neutral evidence |
+| TACOSM-VRS-001 | L1/L2 | PREREGISTERED / UNVERIFIED | registration and gate design | dynamic-representation capability result |
+| TACOSM-E2E-001 | L3 | INVALIDATED | provenance of the failed artifact only | q2=0.5200 as scientific evidence |
+| TACOSM-E2E-003 | L3 | LEGACY-AUDITED / LEGACY-BOUND | corrected synthetic negative at q2=0.5200 | PLM impossibility; general multimodal conclusions |
+| TACOSM-E2E-004 | L3 | PREREGISTERED / UNVERIFIED | design only | any result before a valid artifact |
+| G-CASM-015 | L2 | LEGACY-AUDITED / LEGACY-BOUND | finite observation-channel information advantage | downstream verified capability; asymptotic claim |
+| G-CASM-016C / R1 | L3 | INVALIDATED | failure mechanism and artifact provenance | scalar-vs-trace capability delta |
+| G-CASM-016C-R2 | L3 | CORRECTIVE / UNVERIFIED | typed/nonempty evidence invariant and corrected work accounting | capability result before confirmatory run |
+| G-CASM-016D | L2/L3 | LEGACY-AUDITED / LEGACY-BOUND | bounded null result for one-step U_B selection | global optimality of Shannon selector or U_B replacement |
+
+### Historical-invalid-result rule
+
+The invalid rows above remain visible and citable only as **failure records**.
+They are never valid comparison baselines for a successor unless the successor
+contract explicitly identifies the historical number as a non-evidentiary
+control, such as a regression fixture. A successor inherits the *question and
+failure diagnosis*, not the invalid measurement.
