@@ -55,7 +55,7 @@ def main() -> int:
     for H in H_LEVELS:
         for seed in SEEDS:
             examples = make_balanced_pairs(
-                (10_000 if "train" == "train" else 20_000) + seed * 1009 + H * 17,
+                20_000 + seed * 1009 + H * 17,
                 H,
                 100,
             )
