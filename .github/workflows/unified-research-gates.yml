@@ -16,6 +16,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          # Research gates must validate the exact branch head on PR events,
+          # not GitHub's ephemeral merge ref, whose contents can lag the head.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
