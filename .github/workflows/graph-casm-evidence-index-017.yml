@@ -1,0 +1,22 @@
+name: Legacy invalidated G-CASM evidence index 017A
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["research/graph-casm-evidence-index-017b-corrected"]
+
+permissions:
+  contents: read
+
+jobs:
+  audit-only:
+    name: 017A invalidation check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Assert predecessor remains invalidated
+        run: |
+          grep -q "No confirmatory measurement is authorized under the current cost endpoint" docs/AUDIT-TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017A.md
+          echo "017A remains provenance-only; no predecessor measurement is executed."

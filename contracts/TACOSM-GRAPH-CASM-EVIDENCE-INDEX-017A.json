@@ -1,0 +1,164 @@
+{
+  "experiment_id": "TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017A",
+  "version": "0.1-preregistered",
+  "status": "pre-registered",
+  "title": "Exact evidence indexing for computationally efficient structured probing",
+  "question": "Can an exact inverted evidence index retain the activation-trace information advantage while reducing candidate-side probe-selection work at large M?",
+  "hypothesis": "Indexing candidate-predicted structured evidence will materially improve total information gained per accounted computational work at M=512 while producing exactly the same selected probe and information score as exhaustive scanning.",
+  "arms": [
+    {
+      "name": "trace_exhaustive",
+      "intervention": "G-CASM-015 activation-trace selector scans all M candidates for every legal input-row action",
+      "acts_on": "candidate-side probe selection computation"
+    },
+    {
+      "name": "trace_indexed",
+      "intervention": "exact inverted evidence index uses candidate-signature bitmaps to evaluate each action without scanning all candidates",
+      "acts_on": "candidate-side probe selection computation"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "total_information_per_work_m512",
+      "role": "primary — seed-level paired difference in activation-trace information gain per explicit amortized total work at M=512",
+      "primary": true
+    },
+    {
+      "name": "selector_exact_action_agreement",
+      "role": "secondary — fraction of paired trials where indexed and exhaustive selectors choose the identical row",
+      "primary": false
+    },
+    {
+      "name": "information_score_agreement",
+      "role": "secondary — numerical agreement of indexed and exhaustive information gain and expected residual candidate count",
+      "primary": false
+    },
+    {
+      "name": "expected_remaining_candidates",
+      "role": "secondary — residual hypothesis ambiguity after the selected one-step trace probe",
+      "primary": false
+    },
+    {
+      "name": "selector_work_units",
+      "role": "secondary — explicit candidate-side selector work for exhaustive versus indexed evaluation",
+      "primary": false
+    },
+    {
+      "name": "amortized_total_work_units",
+      "role": "secondary — cache plus index-build amortization plus selector and environment work",
+      "primary": false
+    }
+  ],
+  "h_levels": [
+    32,
+    64,
+    128,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 1,
+  "eval_steps": 32,
+  "action_levels": [
+    "trace_exhaustive",
+    "trace_indexed"
+  ],
+  "held_constant": [
+    "same G-CASM-015 activation-trace channel",
+    "same pinned generator commit",
+    "same 512-program static library per seed",
+    "same target-selection procedure",
+    "same train/evaluation disjointness",
+    "same environment acquisition cost"
+  ],
+  "data_protocol": {
+    "train_eval_structure_disjoint": true,
+    "train_eval_truth_disjoint": true,
+    "evaluation_library_static_per_seed": true,
+    "nested_population_prefixes": true,
+    "target_identity_available_to_selector": false,
+    "target_index_available_to_selector": false,
+    "future_target_evidence_available_to_selector": false,
+    "verifier_labels_available_to_selector": false
+  },
+  "exactness_requirements": [
+    "indexed selector must reproduce exhaustive selected action exactly",
+    "indexed information gain must equal exhaustive information gain within floating tolerance",
+    "indexed expected remaining candidate count must equal exhaustive value within floating tolerance",
+    "target evidence is never used before action selection"
+  ],
+  "cost_model": {
+    "cache_work": "same G-CASM-015 trace candidate-cache work and charged once per seed",
+    "cache_amortization": "divide per-seed cache work by 160 registered tasks",
+    "exhaustive_selector": "M * 16 * 6 prediction units",
+    "indexed_index_build": "512 * 16 posting writes; prediction cost is zero because the exact activation traces are already in the shared G-CASM-015 cache",
+    "indexed_selector": "for each of 16 actions, number of indexed signature buckets times ceil(M/64) bitmap-word units; all 16 action scans are charged",
+    "environment": "same expected trace acquisition cost as G-CASM-015",
+    "full_total": "cache amortization + index build amortization + selector work + environment work"
+  },
+  "primary_endpoint": {
+    "M": 512,
+    "seed_aggregation": "mean across 32 tasks per seed, then paired indexed_minus_exhaustive difference across five seeds",
+    "uncertainty": "seed bootstrap 95 percent confidence interval",
+    "bootstrap_rounds": 4000
+  },
+  "leakage_rules": [
+    "the index is built only from public candidate-predicted evidence",
+    "the target identity and target index never enter the index query or selector",
+    "the realized target trace is exposed only after the row action is selected",
+    "no result from 017 is used to tune the index structure or M",
+    "the exact activation-trace semantics are unchanged"
+  ],
+  "scope": {
+    "finite_domain_exact_computation_claim": true,
+    "learned_probe_policy_claim": false,
+    "asymptotic_scaling_claim": false,
+    "semantic_generalization_claim": false,
+    "language_image_audio_claim": false,
+    "hardware_speedup_claim": false
+  },
+  "decision_rule": [
+    {
+      "condition": "indexed selector is exactly action-equivalent and primary total-cost interval is positive at M=512",
+      "licenses": "evidence that exact evidence indexing makes structured probing more computationally efficient on the registered finite workload.",
+      "does_not_license": "learned autonomous probing or asymptotic complexity."
+    },
+    {
+      "condition": "indexed selector is exact but total-cost interval is not positive",
+      "licenses": "candidate-side indexing does not recover a total-cost advantage at M=512 under this accounting.",
+      "does_not_license": "failure of structured evidence itself."
+    },
+    {
+      "condition": "indexed selector is not exactly equivalent to exhaustive",
+      "licenses": "infrastructure failure; no scientific efficiency claim is made until repaired or a new experiment is preregistered."
+    }
+  ],
+  "freeze_rule": {
+    "post_measurement_protocol_changes": "require new experiment identifier",
+    "smoke_runs": "must not enter confirmatory evidence",
+    "result_artifact": "immutable after scientific disposition"
+  },
+  "provenance": {
+    "parent_experiment": "TACOSM-GRAPH-CASM-STRUCTURED-ACTION-PROBE-015",
+    "parent_commit": "e2b58fcfa68146dd2bd95a189ef7d7b2c7b08bae",
+    "generator_commit": "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "schedule": {
+    "training_steps": 0,
+    "contract_steps_placeholder": 1,
+    "note": "Exact indexed selector comparison; no parameter learning."
+  },
+  "interpretation_order": [
+    "protocol and leakage integrity",
+    "selector exactness",
+    "information gain",
+    "total computational cost",
+    "scope"
+  ]
+}
