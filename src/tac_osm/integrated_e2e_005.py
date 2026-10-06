@@ -141,7 +141,13 @@ class FixedCASM(nn.Module):
             dim=-1,
         )
         action = values.gather(1, op.view(-1, 1)).squeeze(1)
-        logits = torch.stack((-action, action), dim=-1)
+        # action is a probability in [0, 1], not a classification logit.
+        # CrossEntropyLoss expects unnormalized class logits. Convert the
+        # probability back to a bounded logit so argmax corresponds exactly
+        # to action < 0.5 / >= 0.5.
+        eps = torch.finfo(action.dtype).eps
+        action_logit = torch.logit(action.clamp(eps, 1.0 - eps))
+        logits = torch.stack((-action_logit, action_logit), dim=-1)
         return action, logits, bits
 
 
