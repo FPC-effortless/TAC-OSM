@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import argparse
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -349,10 +350,14 @@ def main(smoke: bool = False) -> None:
     for seed, model in seed_models:
         rng = random.Random(100000 + seed)
         eval_episodes = []
-        for episode_id in range(400):
+        for _ in range(contract.eval_steps):
             combo1, combo2 = rng.sample(HELDOUT, 2)
             episode = sample_episode(rng, combo1=combo1, combo2=combo2)
             assert episode[1][0] != episode[2][0]
+            assert (episode[1][3], episode[1][1], episode[1][2]) in HELDOUT
+            assert (episode[2][3], episode[2][1], episode[2][2]) in HELDOUT
+            assert episode[1][0] == episode[0][0][0]
+            assert episode[2][0] == episode[0][1][0]
             eval_episodes.append(episode)
 
         episode_hash = episode_fingerprint(eval_episodes)
