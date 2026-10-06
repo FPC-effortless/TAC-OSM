@@ -6,7 +6,7 @@ import pytest
 torch = pytest.importorskip("torch")
 import torch as th
 
-from tac_osm.integrated_e2e_005 import FunctionalMultimodalPLM
+from tac_osm.integrated_e2e_005 import FunctionalConfig, FunctionalMultimodalPLM
 from tac_osm.integrated_e2e_005_benchmark import (
     ALL_COMBOS,
     HELDOUT,
@@ -262,3 +262,7 @@ def test_fixed_casm_logits_do_not_force_positive_class_for_zero_action():
     action, logits, _ = model.casm(state, i, j, op)
     assert action.item() < 1e-5
     assert logits.argmax(-1).item() == 0
+
+
+def test_legacy_default_capacity_remains_40_for_e2e_005_reproducibility():
+    assert FunctionalConfig().hidden_dim == 40
