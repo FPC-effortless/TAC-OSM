@@ -1,0 +1,125 @@
+name: Research G-CASM exact evidence index 017B
+
+on:
+  push:
+    branches:
+      - research/graph-casm-evidence-index-017b-corrected
+    paths:
+      - contracts/TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B.json
+      - docs/AUDIT-TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B.md
+      - scripts/run_graph_casm_evidence_index_017b.py
+      - scripts/run_graph_casm_structured_action_probe_015.py
+      - src/tac_osm/evidence_index.py
+      - tests/test_evidence_index.py
+      - .github/workflows/graph-casm-evidence-index-017b.yml
+      - docs/TACOSM-BASELINE-001.md
+      - tests/test_integrity.py
+      - scripts/sync_test_count.py
+  pull_request:
+    branches:
+      - research/graph-casm-structured-action-probe-015
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: G-CASM-017B smoke/preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest torch "ruff==0.13.0"
+      - name: Static undefined-name gate
+        run: ruff check --select F821 scripts/run_graph_casm_evidence_index_017b.py scripts/run_graph_casm_structured_action_probe_015.py src/tac_osm/evidence_index.py
+      - name: Syntax/bytecode gate
+        run: python -m compileall -q src scripts
+      - name: Contract validation
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B")
+          assert c.check_consistency() == []
+          print(c.primary_endpoint())
+          PY
+      - name: Unified research preflight
+        run: python scripts/research_gate.py
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: 017B focused tests
+        run: python -m pytest tests/test_evidence_index.py -q
+      - name: Smoke measurement
+        run: python scripts/run_graph_casm_evidence_index_017b.py --smoke
+      - name: Upload smoke artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B-smoke
+          path: artifacts/TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B.json
+          if-no-files-found: ignore
+
+  full:
+    name: G-CASM-017B full confirmatory measurement
+    needs: smoke
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(toJSON(github.event.commits), '[run-graph-casm-evidence-index-017B-full]')) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/cdl-attention-experiment
+          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
+          path: third_party/cdl-attention-experiment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: python -m pip install --quiet -e . pytest torch "ruff==0.13.0"
+      - name: Static undefined-name gate
+        run: ruff check --select F821 scripts/run_graph_casm_evidence_index_017b.py scripts/run_graph_casm_structured_action_probe_015.py src/tac_osm/evidence_index.py
+      - name: Syntax/bytecode gate
+        run: python -m compileall -q src scripts
+      - name: Contract validation
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B")
+          assert c.check_consistency() == []
+          c.require_levels((32,64,128,256,512))
+          c.require_seeds((0,1,2,3,4))
+          c.require_steps(1)
+          c.require_eval_steps(32)
+          c.require_arms(["trace_exhaustive","trace_indexed"])
+          PY
+      - name: Unified research preflight
+        run: python scripts/research_gate.py
+      - name: Repository suite
+        run: python -m pytest tests/ -q
+      - name: 017B focused tests
+        run: python -m pytest tests/test_evidence_index.py -q
+      - name: Full measurement
+        run: python scripts/run_graph_casm_evidence_index_017b.py
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B
+          path: artifacts/TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B.json
+          if-no-files-found: error
+
+# [run-graph-casm-evidence-index-017B-full]
