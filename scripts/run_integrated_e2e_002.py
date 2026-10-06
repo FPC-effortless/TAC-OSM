@@ -128,8 +128,6 @@ def sample_episode(
 
     combo1 = combo1 or rng.choice(TRAIN_COMBOS)
     combo2 = combo2 or rng.choice(TRAIN_COMBOS)
-    if combo1 in HELDOUT or combo2 in HELDOUT:
-        raise RuntimeError("evaluation composition leaked into training sampler")
     obs = []
     for entity in entities:
         obs.append((entity, *make_modalities(entity, payload[entity], rng)))
@@ -188,6 +186,11 @@ def train_seed(seed: int) -> IntegratedE2EModel:
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.002, weight_decay=1e-4)
     for _ in range(STEPS):
         episodes = [sample_episode(rng) for _ in range(BATCH_SIZE)]
+        assert all(
+            ep[1][3:4] and (ep[1][3], ep[1][1], ep[1][2]) in TRAIN_COMBOS
+            and ep[2][3:4] and (ep[2][3], ep[2][1], ep[2][2]) in TRAIN_COMBOS
+            for ep in episodes
+        ), "training sampler produced a held-out composition"
         batch = batchify(episodes)
         optimizer.zero_grad(set_to_none=True)
         out = model.forward_episode(
