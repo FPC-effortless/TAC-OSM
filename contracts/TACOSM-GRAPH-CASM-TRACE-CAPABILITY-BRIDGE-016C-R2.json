@@ -151,7 +151,8 @@
       "probe_selection_operations": "deterministic argmax over scored actions",
       "execution_operations": "exact graph execution work inside terminal verification",
       "verification_operations": "terminal exact verification work over the shortlist",
-      "total_operations": "sum of the above"
+      "target_evidence_read_operations": "one target-evidence read after the probe action is selected",
+      "total_operations": "signature-construction candidate reads + selected-row candidate reads + probe selection + target-evidence read + terminal verification work; the selected-row read is distinct from the selector scan and no scan is double-counted"
     }
   },
   "statistical_rule": {
