@@ -736,6 +736,48 @@ asymptotic sublinear complexity, hardware speedup, or the broad C5 claim.
 a new publication-quality confirmation must pass the universal G0-G10/P0-P7
 gates.
 
+
+## C17 — Multiple distinct temporal timescales improve finite history-conditioned capability
+
+> In the preregistered top-down PLM scaffold, a three-slot multi-timescale state
+> representation improves exact held-out history-conditioned decision capability
+> over a matched single-timescale state on the registered synthetic benchmark.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** mechanism · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-TDBU-MTSK-001`, exact branch-head commit
+`f916a43f4cc50834c897d1ae94cf27608a67551c`, workflow run
+`37410382061`, artifact `11389330236`.
+
+At H=256, MTSK success was 0.85, 0.89, 0.87, 0.82, 0.85 across the five
+registered seeds, mean **0.856**. Single-timescale success was 0.76, 0.76,
+0.72, 0.63, 0.76, mean **0.726**. The registered mean difference was
+**0.130**, with the registered 20,000-resample seed-bootstrap 95% interval
+**[0.098, 0.162]**. MTSK exceeded the no-state control by **0.356** mean.
+
+The frozen-checkpoint interventions provide causal localization of state use:
+MTSK reset-to-zero success averaged **0.500**, and state-shuffle success
+averaged **0.144**, versus normal MTSK **0.856**. The normal history-paired
+action gap was 1.0, while the no-state control was 0.0.
+
+**BOTTOM-UP BOUNDARY:** the two-timescale reduction also averaged **0.856** at
+H=256 (seed values 0.87, 0.88, 0.87, 0.82, 0.84), with MTSK-minus-two mean
+**0.000**. Therefore the result does **not** support a three-timescale
+necessity claim, an optimality claim for the specific MTSK decay placement, or
+a claim that more timescales are automatically better.
+
+**NOT INHERITED:** biological equivalence to bacterial adaptation, scale-free or
+power-law memory, language/image/audio competence, general intelligence,
+asymptotic scaling, hardware speedup, or superiority to other architecture
+families. Evaluation work was higher for state arms than no-state, so this is
+not an efficiency claim.
+
+**NEXT BLOCKER:** determine whether the observed multi-timescale benefit
+transfers to unseen temporal constants and whether a smaller/two-scale state
+bank remains sufficient under that transfer condition.
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
