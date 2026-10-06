@@ -271,5 +271,17 @@
     3
   ],
   "steps": 300,
-  "eval_steps": 400
+  "eval_steps": 400,
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "model/harness information boundary",
+      "old_definition": "the initial prototype exposed training targets inside an episode-level model forward method while query() itself remained label-free",
+      "new_definition": "the model has no label-bearing episode-level forward method; the harness computes action loss outside the model and derives synthetic environment outcome only after action",
+      "rationale": "Reduce the attack surface for target leakage and make the pre-action model boundary structurally auditable.",
+      "discovered": "Pre-measurement anti-leakage audit.",
+      "affected": "implementation boundary only; benchmark, seeds, training steps, evaluation set, threshold and registered controls unchanged",
+      "scientific_status": "No admissible E2E-005 result existed under the previous implementation."
+    }
+  ]
 }
