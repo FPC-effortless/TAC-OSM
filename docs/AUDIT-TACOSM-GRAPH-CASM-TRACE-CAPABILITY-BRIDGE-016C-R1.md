@@ -1,14 +1,22 @@
-# G-CASM-016C-R1 — Corrected trace-to-capability bridge
+# G-CASM-016C-R1 — INVALID / PROVENANCE ONLY
 
-Status: PREREGISTERED / CORRECTED REPEAT.
+Status: INVALIDATED. R2 is the authoritative corrected repeat.
 
-The original 016C confirmatory artifact is invalidated because its scalar control
-used an older target-evidence representation inconsistent with candidate scalar
-signatures, yielding zero compatible scalar candidates. R1 repeats the same
-scientific protocol with the corrected implementation.
+The R1 artifact was registered as a corrected repeat, but the required scalar
+evidence extraction correction was not actually applied. The scalar arm compared
+bare integer candidate evidence against a one-tuple target representation, so
+the compatible scalar bucket was structurally empty rather than empirically
+small.
 
-Primary endpoint remains the seed-level activation-trace minus scalar-row exact
-verification success difference at M=512/B=8.
+The reported R1 capability delta is therefore not a measured arm difference.
+No R1 confirmatory result may be used for scientific inference, tuning, model
+selection, benchmark selection, or baseline selection.
 
-A regression test explicitly checks the scalar evidence signature type and a
-non-empty compatible bucket. No protocol parameter is changed.
+The authoritative successor is:
+TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R2.
+
+R1 remains in the repository only to preserve the failure provenance and to make
+it impossible to silently erase the methodological history.
+
+Required CI behavior: audit the invalidation only; never execute the R1
+measurement runner.
