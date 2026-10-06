@@ -44,7 +44,7 @@ jobs:
           c.require_seeds((0,1,2,3,4))
           c.require_steps(300)
           c.require_eval_steps(400)
-          c.require_arms(["integrated","no_memory","shuffle_image"])
+          c.require_arms(["integrated","no_memory","shuffle_image","text_only","image_only","audio_only"])
           print("E2E-002 contract PASS")
           PY
       - name: Focused leakage and benchmark tests
@@ -87,7 +87,7 @@ jobs:
           c.require_seeds((0,1,2,3,4))
           c.require_steps(300)
           c.require_eval_steps(400)
-          c.require_arms(["integrated","no_memory","shuffle_image"])
+          c.require_arms(["integrated","no_memory","shuffle_image","text_only","image_only","audio_only"])
           PY
       - name: Full repository tests
         run: PYTHONPATH=src python -m pytest tests/ -q
