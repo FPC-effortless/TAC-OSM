@@ -61,7 +61,7 @@ S_t → R_t → C_t → A_t → O_t → V_t → S_{t+1}
 | `A_t` | `StructuralExecutor.execute` | imported |
 | `O_t` | `Environment` | new — written here |
 | `V_t` | `Verifier` | imported — loop shape only, claims downgraded |
-| `S_{t+1}` | `PersistentState.write` | **new — not implemented anywhere** |
+| `S_{t+1}` | `PersistentState.write` | implemented in the hardened runtime; verified commit semantics are bounded synthetic infrastructure |
 
 ---
 
@@ -81,8 +81,7 @@ Adapted from `tac_sie/types.py::IdentityState` — the deliberately minimal
 forces role separation, and an ablation surface with 60 config knobs is
 uninterpretable.
 
-`write` is **new**: no source repository implements a persistent write. It
-is the research target, not an import.
+`write` is TAC-OSM runtime machinery rather than imported source behavior. The temporal experiment establishes only bounded explicit state persistence; learned state formation and semantic write policy remain research targets.
 
 ### 4.2 `RelevanceRouter`
 
@@ -150,9 +149,9 @@ that claim.
 | verify/repair loop shape | direct import | `E3` shape, downgraded claims |
 | **cheap CDL-derived routing** | experimental | Stage B `INCONCLUSIVE`, `p ≈ 0.275` |
 | **learned structural routing** | experimental | L2 0/18; `O`-masked successor |
-| **persistent write** | research target | no result exists |
-| **temporal state transition** | research target | Stage 4W pre-registered only |
-| **verified state commit** | research target | no result exists |
+| **persistent write** | implemented/runtime-tested | verified commit path exists; learned semantic write policy remains unresolved |
+| **temporal state transition** | bounded measured mechanism | TACOSM-TEMPORAL-001 supports explicit state reuse through enforced boundaries; not semantic memory |
+| **verified state commit** | implemented infrastructure | verifier-gated commit path is present; capability contribution not independently established |
 
 The model is not pretending everything is validated. It is a machine with
 three working imported mechanisms, three explicitly unresolved ones, and
@@ -233,7 +232,7 @@ Building the model licenses no new claims. The honest accounting:
 | Relevance routing | bounded supported |
 | Structural execution | bounded / partial |
 | Verification | provisional in the integrated setting |
-| Persistent update | under test |
+| Persistent update | implemented for bounded synthetic state path; learned update semantics under test |
 | Efficient routing | unresolved |
 | **System-level claim** | **not yet established** |
 
