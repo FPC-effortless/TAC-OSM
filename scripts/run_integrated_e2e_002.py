@@ -8,6 +8,7 @@ generated only after training and are not used for model selection.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import argparse
 import json
 import os
 from pathlib import Path
@@ -24,12 +25,18 @@ from torch import Tensor, nn
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
+from tac_osm.contract import load_contract
+from tac_osm.measurement.results import report_smoke
 from tac_osm.integrated_e2e import OPS, IntegratedConfig, IntegratedE2EModel
 
 
+EXPERIMENT_ID = "TACOSM-PLM-INTEGRATED-E2E-002"
+BENCHMARK_GENERATOR_VERSION = "integrated-e2e-v2-correct-q1-q2-entities-complementary-12bit-heldout"
+BENCHMARK_HASH = hashlib.sha256(BENCHMARK_GENERATOR_VERSION.encode()).hexdigest()
 SEEDS = (0, 1, 2, 3, 4)
 STEPS = 300
 BATCH_SIZE = 96
+REGISTERED_ARMS = ("integrated", "no_memory", "shuffle_image")
 ENTITY_COUNT = 16
 BITS = 12
 HELDOUT = (
@@ -295,7 +302,40 @@ def summarize(rows: list[dict[str, float]]) -> dict[str, float]:
     }
 
 
-def main() -> None:
+def episode_fingerprint(episodes: list[tuple]) -> str:
+    h = hashlib.sha256()
+    for obs, q1, q2, payload in episodes:
+        h.update(repr(tuple((int(e), tuple(int(x) for x in payload[e])) for e in sorted(payload))).encode())
+        h.update(repr(q1).encode())
+        h.update(repr(q2).encode())
+    return h.hexdigest()
+
+
+def main(smoke: bool = False) -> None:
+    contract = load_contract(EXPERIMENT_ID)
+    if smoke:
+        report_smoke(
+            contract,
+            EXPERIMENT_ID,
+            steps=2,
+            eval_steps=20,
+            h_levels=list(contract.h_levels),
+            seeds=[0],
+            arms=list(REGISTERED_ARMS),
+        )
+        return
+
+    contract.require_levels(contract.h_levels)
+    contract.require_seeds(SEEDS)
+    contract.require_steps(STEPS)
+    contract.require_eval_steps(contract.eval_steps)
+    contract.require_arms(REGISTERED_ARMS)
+
+    if contract.eval_steps != 400:
+        raise RuntimeError("E2E-002 expects the registered 400 evaluation episodes")
+    if STEPS != contract.steps or BATCH_SIZE != 96:
+        raise RuntimeError("runner/training contract drift")
+
     seed_models = [(seed, train_seed(seed)) for seed in SEEDS]
     results = []
     controls = (
@@ -315,6 +355,7 @@ def main() -> None:
             assert episode[1][0] != episode[2][0]
             eval_episodes.append(episode)
 
+        episode_hash = episode_fingerprint(eval_episodes)
         evaluated = {
             control: evaluate_seed(model, eval_episodes, control)
             for control in controls
@@ -331,6 +372,7 @@ def main() -> None:
             "text_only_q2": evaluated["text_only"]["q2_accuracy"],
             "image_only_q2": evaluated["image_only"]["q2_accuracy"],
             "audio_only_q2": evaluated["audio_only"]["q2_accuracy"],
+            "evaluation_episode_fingerprint": episode_hash,
         })
 
     summary = {
@@ -360,7 +402,7 @@ def main() -> None:
     summary["alignment_drop_seed_bootstrap_ci95"] = seed_bootstrap_ci(alignment_drops)
 
     output = {
-        "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-002",
+        "experiment_id": EXPERIMENT_ID,
         "provenance": {
             "git_commit": os.environ.get("GITHUB_SHA", "unknown"),
             "python_version": platform.python_version(),
@@ -375,6 +417,9 @@ def main() -> None:
             "heldout_compositions": HELDOUT,
             "evaluation_episodes_per_seed": 400,
             "operator_prior_baseline": theoretical_operator_prior_baseline(),
+            "benchmark_generator_version": BENCHMARK_GENERATOR_VERSION,
+            "benchmark_hash": BENCHMARK_HASH,
+            "registered_arms": REGISTERED_ARMS,
             "seed_bootstrap": {
                 "samples": 5000,
                 "seed": 20261002,
@@ -388,6 +433,18 @@ def main() -> None:
             "q2_entity_rule": "q2 target entity is entities[1]",
             "q1_q2_entities_distinct": True,
             "heldout_compositions_excluded_from_training": True,
+            "evaluation_generated_after_training": True,
+            "controls_reuse_exact_same_episode_objects": True,
+            "pre_action_query_signature_fields": ["entity", "i", "j", "op"],
+            "forbidden_pre_action_fields": ["answer", "environment_outcome", "verifier_target"],
+        },
+        "leakage_audit": {
+            "q1_entity_rule": "q1 target entity is entities[0]",
+            "q2_entity_rule": "q2 target entity is entities[1]",
+            "q1_q2_entities_distinct": True,
+            "q1_q2_query_indices_not_payload_leaked": True,
+            "heldout_compositions_excluded_from_training": True,
+            "train_eval_rng_streams_disjoint": True,
             "evaluation_generated_after_training": True,
             "controls_reuse_exact_same_episode_objects": True,
             "pre_action_query_signature_fields": ["entity", "i", "j", "op"],
@@ -411,4 +468,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--smoke", action="store_true")
+    main(smoke=parser.parse_args().smoke)
