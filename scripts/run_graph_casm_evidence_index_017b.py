@@ -212,6 +212,29 @@ def main(smoke: bool = False):
             raw[str(seed)][str(m)] = task_rows
             timings[str(seed)][str(m)] = timed(cache, index, m)
 
+    if smoke:
+        print(json.dumps({
+            "experiment_id": EXPERIMENT_ID,
+            "status": "smoke",
+            "seeds": list(seeds),
+            "M_levels": list(m_levels),
+            "tasks_per_seed_M": tasks_per_m,
+            "exact_equivalence": all(
+                r["selector_exact_match"]
+                for seed in seeds
+                for m in m_levels
+                for r in raw[str(seed)][str(m)]
+            ),
+            "train_eval_disjoint": all(
+                result["train_eval_structure_disjoint"] and result["train_eval_truth_disjoint"]
+                for result in (
+                    checks[str(seed)]
+                    for seed in seeds
+                )
+            ),
+        }, indent=2, sort_keys=True))
+        return
+
     primary_deltas = []
     query_slopes_exhaustive = []
     query_slopes_indexed = []
