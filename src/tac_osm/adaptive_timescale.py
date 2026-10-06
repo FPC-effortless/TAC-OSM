@@ -132,13 +132,19 @@ class AdaptiveTemporalPolicy:
 
     def fit(self,examples:list[EpisodeExample],steps:int,policy_lr:float,alpha_lr:float)->int:
         y=np.asarray([e.label for e in examples],dtype=np.int64)
+        histories=np.stack([e.history for e in examples],axis=0).astype(np.float64)
+        current=np.asarray([e.current_observation for e in examples],dtype=np.float64)
         for _ in range(steps):
-            X=np.zeros((len(examples),4),dtype=np.float64)
-            dstate=np.zeros((len(examples),3),dtype=np.float64)
-            state=TemporalState("three_adaptive",self.alphas)
-            for i,e in enumerate(examples):
-                X[i,0]=e.current_observation
-                X[i,1:],dstate[i]=state.process_with_derivatives(e.history)
+            state=np.zeros((len(examples),3),dtype=np.float64)
+            deriv=np.zeros((len(examples),3),dtype=np.float64)
+            alphas=self.alphas.copy()
+            for t in range(histories.shape[1]):
+                x=histories[:,t,None]
+                prev=state.copy()
+                state=alphas[None,:]*state+(1.0-alphas[None,:])*x
+                deriv=prev+alphas[None,:]*deriv-x
+            X=np.concatenate((current[:,None],state),axis=1)
+            dstate=deriv
             h,_logits,probs=self._forward(X)
             yoh=np.eye(2,dtype=np.float64)[y]
             dlogits=(probs-yoh)/len(X)
