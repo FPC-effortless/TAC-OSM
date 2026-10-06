@@ -230,7 +230,7 @@ def evaluate_seed(
             z = model.encode(
                 text.unsqueeze(0),
                 image.unsqueeze(0),
-                audio.unsqueeze(0),
+                audio.unsqueeze(0).unsqueeze(0),
             )
             memory, _ = model.state.write(
                 memory,
