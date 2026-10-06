@@ -105,7 +105,7 @@ At H=256, exact class-balanced held-out success was:
 |---|---|---|
 | no state | 0.50, 0.50, 0.50, 0.50, 0.50 | 0.500 |
 | single timescale | 0.76, 0.76, 0.72, 0.63, 0.76 | 0.726 |
-| two timescales | 0.84, 0.90, 0.87, 0.82, 0.85 | 0.856 |
+| two timescales | 0.87, 0.88, 0.87, 0.82, 0.84 | 0.856 |
 | MTSK | 0.85, 0.89, 0.87, 0.82, 0.85 | 0.856 |
 
 The registered primary comparison therefore fired: MTSK minus single-timescale
