@@ -33,6 +33,17 @@ contract_path = ROOT / "contracts" / f"{EXPERIMENT_ID}.json"
 contract_raw = json.loads(contract_path.read_text(encoding="utf-8"))
 c = load_contract(EXPERIMENT_ID)
 
+
+def registered_primary_threshold() -> float:
+    primaries = [e for e in contract_raw["endpoints"] if e["primary"]]
+    assert len(primaries) == 1
+    endpoint = contract_raw["primary_endpoint"]
+    assert endpoint["name"] == primaries[0]["name"]
+    threshold = float(endpoint["threshold"])
+    assert 0.0 < threshold < 1.0
+    return threshold
+
+
 assert x["experiment_id"] == EXPERIMENT_ID
 assert x["status"] == "measured"
 assert c.status == "pre-registered"
@@ -105,10 +116,11 @@ assert "q1" not in post_source and "q2" not in post_source
 
 normal = [r["normal_q2_accuracy"] for r in rows]
 mean_q2 = sum(normal) / len(normal)
+threshold = registered_primary_threshold()
 assert abs(x["summary"]["primary_q2_mean"] - mean_q2) < 1e-12
 assert abs(x["summary"]["all_seed_min_q2"] - min(normal)) < 1e-12
 assert x["summary"]["primary_pass"] == bool(
-    mean_q2 >= c.primary_endpoint.threshold and min(normal) >= 0.40
+    mean_q2 >= threshold and min(normal) >= 0.40
 )
 
 print("PASS: E2E-005 independent contract, fingerprint, leakage, label-free API, and result validation")
