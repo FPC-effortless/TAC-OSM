@@ -68,7 +68,7 @@ def _bootstrap_seed_difference(a: list[float], b: list[float], seed: int, rounds
     return float(np.mean(diffs)), float(np.quantile(draws, 0.025)), float(np.quantile(draws, 0.975))
 
 
-def run(args: argparse.Namespace) -> dict:
+def run(args: argparse.Namespace) -> MeasurementRecord:
     contract = load_contract(EXPERIMENT_ID)
     if tuple(args.h_levels) != contract.h_levels:
         contract.require_levels(args.h_levels)
