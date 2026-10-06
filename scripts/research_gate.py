@@ -50,6 +50,26 @@ def main() -> int:
             name = p.name
             if name not in {Path(x).name for x in contracted | exempt}:
                 errors.append(f'measurement script is not registered/exempted: {rel}')
+
+        # Scientific run_* scripts are a second execution surface. Every such
+        # module must either bind to a machine-readable contract with all five
+        # protocol dimensions, or declare itself provenance-only. This catches
+        # the class of runner that the old measure_* partition could never see.
+        for p in sorted((ROOT / 'scripts').glob('run_*.py')):
+            rel = p.relative_to(ROOT).as_posix()
+            source = p.read_text(encoding='utf-8')
+            if 'PROVENANCE_ONLY = True' in source:
+                continue
+            required = (
+                'load_contract(', 'require_steps(', 'require_eval_steps(',
+                'require_levels(', 'require_seeds(', 'require_arms(',
+            )
+            missing = [token for token in required if token not in source]
+            if missing:
+                errors.append(
+                    f'research run script is not contract-bound: {rel}; missing '
+                    + ', '.join(missing)
+                )
     if errors:
         for error in errors:
             print('[FAIL]', error)
