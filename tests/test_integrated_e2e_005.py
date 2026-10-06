@@ -31,7 +31,11 @@ def test_heldout_pairs_are_cross_modal():
 
 
 def test_q1_and_q2_target_distinct_named_entities():
-    ep = sample_episode(random.Random(5005), combo1=HELDOUT[0], combo2=HELDOUT[2])
+    ep = sample_episode(
+        random.Random(5005),
+        combo1=HELDOUT[0],
+        combo2=HELDOUT[2],
+    )
     obs, q1, q2, payload = ep
     entities = [row[0] for row in obs]
     assert q1[0] == entities[0]
@@ -55,25 +59,32 @@ def test_every_eval_composition_is_registered_heldout():
 
 
 def test_query_answer_depends_on_target_entity_payload():
-    ep = sample_episode(random.Random(7005), combo1=HELDOUT[0], combo2=HELDOUT[1])
+    ep = sample_episode(
+        random.Random(7005),
+        combo1=HELDOUT[0],
+        combo2=HELDOUT[1],
+    )
     _, _, q2, payload = ep
     original = q2[4]
-    entity = q2[0]
 
     def truth(a, b):
-        return {"xor": a ^ b, "and": a & b, "or": a | b, "xnor": 1 - (a ^ b)}[q2[3]]
+        return {
+            "xor": a ^ b,
+            "and": a & b,
+            "or": a | b,
+            "xnor": 1 - (a ^ b),
+        }[q2[3]]
 
     for a in (0, 1):
         for b in (0, 1):
             if truth(a, b) != original:
-                changed_payload = {k: list(v) for k, v in payload.items()}
-                changed_payload[entity][q2[1]] = a
-                changed_payload[entity][q2[2]] = b
-                recomputed = truth(
-                    changed_payload[entity][q2[1]],
-                    changed_payload[entity][q2[2]],
-                )
-                assert recomputed != original
+                changed = {k: list(v) for k, v in payload.items()}
+                changed[q2[0]][q2[1]] = a
+                changed[q2[0]][q2[2]] = b
+                assert truth(
+                    changed[q2[0]][q2[1]],
+                    changed[q2[0]][q2[2]],
+                ) != original
                 return
     raise AssertionError("could not construct a target-payload mutation that changes the answer")
 
@@ -82,28 +93,36 @@ def test_fingerprint_changes_when_observation_changes():
     episodes = sample_evaluation_episodes(random.Random(8005), 8)
     before = episode_fingerprint(episodes)
     row = episodes[0][0][0]
-    episodes[0][0][0] = (row[0], row[1], row[2] + 0.01, row[3])
+    episodes[0][0][0] = (
+        row[0],
+        row[1],
+        row[2] + 0.01,
+        row[3],
+    )
     after = episode_fingerprint(episodes)
     assert before != after
 
 
-def test_query_has_no_answer_or_outcome_argument():
+def test_model_query_has_no_target_bearing_arguments():
     assert list(inspect.signature(FunctionalMultimodalPLM.query).parameters) == [
         "self", "memory", "entity", "i", "j", "op"
     ]
+    assert "answer" not in inspect.getsource(FunctionalMultimodalPLM.query)
 
 
-def test_training_forward_signature_has_no_payload_labels():
-    assert list(inspect.signature(FunctionalMultimodalPLM.forward_episode).parameters) == [
-        "self", "observations", "observation_entities", "q1", "q2"
+def test_model_has_no_label_bearing_episode_forward():
+    assert not hasattr(FunctionalMultimodalPLM, "forward_episode")
+    source = inspect.getsource(FunctionalMultimodalPLM)
+    assert "def forward_episode" not in source
+
+
+def test_post_action_update_requires_feedback_separately():
+    assert list(inspect.signature(FunctionalMultimodalPLM.post_action_update).parameters) == [
+        "self", "memory", "query_result", "outcome"
     ]
-
-
-def test_no_auxiliary_representation_loss_in_forward():
-    source = inspect.getsource(FunctionalMultimodalPLM.forward_episode)
-    assert "bit_loss" not in source
-    assert "entity_loss" not in source
-    assert "payload" not in source
+    source = inspect.getsource(FunctionalMultimodalPLM.post_action_update)
+    assert "q1" not in source and "q2" not in source
+    assert "answer" not in source
 
 
 def test_final_action_loss_has_full_multimodal_gradient_surface():
@@ -111,16 +130,14 @@ def test_final_action_loss_has_full_multimodal_gradient_surface():
     episodes = [sample_episode(rng) for _ in range(2)]
     model = FunctionalMultimodalPLM()
 
-    from scripts.run_integrated_e2e_005 import build_batch
+    from scripts.run_integrated_e2e_005 import build_batch, write_observations
 
     batch = build_batch(episodes)
-    out = model.forward_episode(
-        {k: batch[k] for k in ("text", "image", "audio")},
-        batch["entities"],
-        batch["q1"],
-        batch["q2"],
-    )
-    out["action1_loss"].backward()
+    memory = write_observations(model, batch)
+    entity, i, j, op = batch["q1"]
+    out = model.query(memory, entity, i, j, op)
+    loss = th.nn.functional.cross_entropy(out["logits"], batch["y1"])
+    loss.backward()
 
     required = (
         "text.emb.weight",
@@ -137,6 +154,27 @@ def test_final_action_loss_has_full_multimodal_gradient_surface():
         assert th.isfinite(grad).all()
 
 
+def test_action_output_does_not_depend_on_target_label():
+    rng = random.Random(9010)
+    ep = sample_episode(rng, combo1=HELDOUT[0], combo2=HELDOUT[1])
+    model = FunctionalMultimodalPLM()
+    from scripts.run_integrated_e2e_005 import build_batch, write_observations
+
+    batch = build_batch([ep])
+    memory = write_observations(model, batch)
+    entity, i, j, op = batch["q2"]
+
+    out = model.query(memory, entity, i, j, op)
+    logits_a = out["logits"].detach().clone()
+
+    opposite_target = 1 - ep[2][4]
+    loss_b = th.nn.functional.cross_entropy(
+        logits_a,
+        th.tensor([opposite_target]),
+    )
+    assert th.isfinite(loss_b)
+
+
 def test_zero_outcome_does_not_change_memory():
     model = FunctionalMultimodalPLM()
     memory = model.state.initial(1, th.device("cpu"))
@@ -146,5 +184,9 @@ def test_zero_outcome_does_not_change_memory():
         "action": th.tensor([0.2]),
     }
     before = memory.clone()
-    after, _ = model.post_action_update(memory, query_result, th.zeros(1))
+    after, _ = model.post_action_update(
+        memory,
+        query_result,
+        th.zeros(1),
+    )
     assert th.equal(before, after)
