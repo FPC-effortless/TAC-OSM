@@ -10,8 +10,16 @@ from pathlib import Path
 import numpy as np
 
 from tac_osm.contract import load_contract
-from tac_osm.integrity import parameter_hash
-
+from tac_osm.measurement.results import (
+    Design,
+    Gate,
+    MeasurementRecord,
+    Provenance,
+    contract_fingerprint,
+    now,
+    results_dir_for,
+    write_record,
+)
 from tac_osm.mtsk_topdown import (
     BENCHMARK_HASH,
     dependency_lock_hash,
@@ -115,41 +123,100 @@ def run(args: argparse.Namespace) -> dict:
     reset = [r["reset_success"] for r in records if r["H"] == 256 and r["arm"] == "mtsk"]
     shuffle = [r["shuffle_success"] for r in records if r["H"] == 256 and r["arm"] == "mtsk"]
 
-    result = {
-        "experiment_id": EXPERIMENT_ID,
-        "status": "measured-local-confirmatory",
-        "contract": contract.to_dict(),
-        "provenance": {
-            "repository": "FPC-effortless/TAC-OSM",
-            "commit": args.commit,
-            "benchmark_version": "tdbu-mtsk-v1",
+    return MeasurementRecord(
+        provenance=Provenance(
+            experiment_id=EXPERIMENT_ID,
+            contract_source=f"contracts/{EXPERIMENT_ID}.json",
+            contract_sha256=contract_fingerprint(Path(__file__).resolve().parent.parent / "contracts" / f"{EXPERIMENT_ID}.json"),
+            git_commit=args.commit,
+            script=Path(__file__).name,
+            python=platform.python_version(),
+            recorded_at=now(),
+        ),
+        design=Design(
+            steps=contract.steps,
+            eval_steps=contract.eval_steps,
+            seeds=tuple(contract.seeds),
+            h_levels=tuple(contract.h_levels),
+            k_levels=(),
+            arms=tuple(a.name for a in contract.arms),
+            smoke=False,
+            contract_checked=True,
+        ),
+        gate=Gate(
+            name="TDBU-MTSK-001-preconditions",
+            tolerance="exact contract/benchmark/invariant checks",
+            passed=True,
+            cells=(),
+        ),
+        endpoints={
+            "primary": {
+                "H": 256,
+                "mtsk_success_by_seed": primary_mtsk,
+                "single_timescale_success_by_seed": primary_single,
+                "no_state_success_by_seed": primary_no,
+                "mtsk_minus_single_mean": delta,
+                "seed_bootstrap_95ci": [lo, hi],
+                "mtsk_minus_no_state_mean": no_delta,
+                "materiality_threshold": MATERIALITY,
+            },
+            "interventions": {
+                "mtsk_reset_success_by_seed": reset,
+                "mtsk_shuffle_success_by_seed": shuffle,
+                "reset_mean": float(np.mean(reset)),
+                "shuffle_mean": float(np.mean(shuffle)),
+            },
+            "parameter_counts": sorted({r["parameter_count"] for r in records}),
+            "state_alphas": STATE_ALPHAS,
             "generator_hash": BENCHMARK_HASH,
             "dependency_lock_hash": dependency_lock_hash(),
-            "python": platform.python_version(),
-            "numpy": np.__version__,
+            "state_work_rule": "9 arithmetic ops per state-slot update; 3 slots per observation",
         },
-        "primary": {
-            "H": 256,
-            "mtsk_success_by_seed": primary_mtsk,
-            "single_timescale_success_by_seed": primary_single,
-            "no_state_success_by_seed": primary_no,
-            "mtsk_minus_single_mean": delta,
-            "seed_bootstrap_95ci": [lo, hi],
-            "mtsk_minus_no_state_mean": no_delta,
-            "materiality_threshold": MATERIALITY,
+        decision_rule=tuple(
+            {
+                "condition": b.condition,
+                "licenses": b.licenses,
+                "does_not_license": b.does_not_license,
+            }
+            for b in contract.decision_rule
+        ),
+        audit={
+            "benchmark": {
+                "version": "tdbu-mtsk-v1",
+                "generator_hash": BENCHMARK_HASH,
+                "paired_histories": True,
+                "current_observation_constant": True,
+                "train_test_seed_streams_disjoint": True,
+                "hidden_pair_type_in_router_features": False,
+                "class_balanced_evaluation": True,
+            },
+            "model_state": {
+                "initial_checkpoint_hashes": {
+                    f"{H}:{seed}:{arm}": value
+                    for (H, seed, arm), value in initial_hashes.items()
+                },
+                "all_parameter_counts": sorted({r["parameter_count"] for r in records}),
+                "trained_arms": list(TRAINED_ARMS),
+            },
         },
-        "interventions": {
-            "mtsk_reset_success_by_seed": reset,
-            "mtsk_shuffle_success_by_seed": shuffle,
-            "reset_mean": float(np.mean(reset)),
-            "shuffle_mean": float(np.mean(shuffle)),
+        per_seed={
+            "rows": records,
+            "primary_seed_values": {
+                "mtsk": primary_mtsk,
+                "single_timescale": primary_single,
+                "no_state": primary_no,
+            },
+            "intervention_seed_values": {
+                "reset": reset,
+                "shuffle": shuffle,
+            },
+            "bootstrap": {
+                "seed": 991,
+                "rounds": 20000,
+                "mtsk_minus_single": [delta, lo, hi],
+            },
         },
-        "rows": records,
-        "initial_checkpoint_hashes": {f"{H}:{seed}:{arm}": value for (H, seed, arm), value in initial_hashes.items()},
-        "parameter_counts": sorted({r["parameter_count"] for r in records}),
-        "state_alphas": STATE_ALPHAS,
-    }
-    return result
+    )
 
 
 def main() -> int:
@@ -161,12 +228,14 @@ def main() -> int:
     parser.add_argument("--commit", default="UNKNOWN")
     parser.add_argument("--output", default="results/TACOSM-PLM-TDBU-MTSK-001.json")
     args = parser.parse_args()
-    result = run(args)
+    record = run(args)
     path = Path(args.output)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(result, indent=2, sort_keys=True), encoding="utf-8")
-    print(json.dumps(result["primary"], indent=2, sort_keys=True))
-    print(json.dumps(result["interventions"], indent=2, sort_keys=True))
+    if path == Path("results/TACOSM-PLM-TDBU-MTSK-001.json"):
+        path = results_dir_for(__file__) / path.name
+    write_record(record, path)
+    payload = record.to_dict()
+    print(json.dumps(payload["endpoints"]["primary"], indent=2, sort_keys=True))
+    print(json.dumps(payload["endpoints"]["interventions"], indent=2, sort_keys=True))
     return 0
 
 
