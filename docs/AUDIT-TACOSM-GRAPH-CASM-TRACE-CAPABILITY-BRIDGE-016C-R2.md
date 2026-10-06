@@ -428,3 +428,6 @@ success than the scalar channel under the same M=512/B=8 protocol.
 | runner | `scripts/run_graph_casm_trace_capability_bridge_016c_r2.py` |
 | invariant | `src/tac_osm/trace_capability.py::assert_evidence_invariant` |
 | tests | `tests/test_trace_capability.py` |
+
+
+<!-- Confirmatory rerun trigger: [run-graph-casm-trace-capability-bridge-016C-R2-full] -->
