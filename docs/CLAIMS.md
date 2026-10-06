@@ -813,7 +813,7 @@ Operator-selection accuracy was **1.0000**, but the operator identity was
 provided explicitly by the query and supervised, so this does not establish
 autonomous operator discovery or routing.
 
-The numeric result is retained only as a provenance record. It does not support
+The q2 generator ignored the query entity argument, so q2 did not provide the registered q1/q2 entity separation. The numeric result is retained only as a provenance record. It does not support
 any conclusion about persistent-state addressing, multimodal fusion, or the PLM
 hypothesis because the task generator violated the registered q1/q2 entity
 separation.
