@@ -107,8 +107,11 @@ def channel_trial(cache, task, candidates, channel):
     # probe row, so the real acquisition scan is O(M * rows). Count it rather
     # than charging only the selected row's per-candidate mean.
     scores = g15.action_scores(cache, indices, channel)
-    candidate_scan_operations = len(indices) * len(INPUT_ROWS)
-    signature_construction_operations = candidate_scan_operations
+    signature_construction_operations = len(indices) * len(INPUT_ROWS)
+    # The selected-row evidence extraction is a second, distinct candidate
+    # read after the selector has chosen the probe. Do not double-count the
+    # same selector scan under two names.
+    candidate_scan_operations = len(indices)
 
     best = min(
         scores,
@@ -152,6 +155,7 @@ def channel_trial(cache, task, candidates, channel):
         "target_bucket_size": len(bucket),
         "shortlist_size": len(selected),
         "target_in_shortlist": float(task.target_index in selected),
+        "target_evidence_read_operations": 1,
         "verified_success": float(success),
         "budget_capped_utility": budget_capped_utility(evidence, BUDGET),
         "probe_environment_work_units_per_candidate": float(best.expected_cost),
@@ -172,6 +176,7 @@ def channel_trial(cache, task, candidates, channel):
             + candidate_scan_operations
             + probe_selection_operations
             + verifier_work
+            + 1
         ),
     }
 
