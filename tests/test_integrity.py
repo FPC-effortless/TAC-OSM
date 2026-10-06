@@ -421,8 +421,6 @@ def test_the_frozen_baseline_reports_the_current_test_count():
         cwd=repo_root, capture_output=True, text=True,
     )
     assert r.returncode == 0, (
-        "the canonical test-count gate failed:
-"
-        f"{r.stdout}
-{r.stderr}"
+        "the canonical test-count gate failed:\n"
+        f"{r.stdout}\n{r.stderr}"
     )
