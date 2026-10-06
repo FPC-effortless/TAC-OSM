@@ -169,9 +169,13 @@ class AddressDiagnosisModel(IntegratedE2EModel):
             )
 
         out1, action1, op1 = run_query(q1, memory)
-        memory, verifier1 = self.post_action_update(memory, out1, q1[-1])
+        action1_hard = out1["logits"].argmax(dim=-1)
+        outcome1 = (action1_hard == q1[-1]).to(out1["logits"].dtype)
+        memory, verifier1 = self.post_action_update(memory, out1, outcome1)
         out2, action2, op2 = run_query(q2, memory)
-        _, verifier2 = self.post_action_update(memory, out2, q2[-1])
+        action2_hard = out2["logits"].argmax(dim=-1)
+        outcome2 = (action2_hard == q2[-1]).to(out2["logits"].dtype)
+        _, verifier2 = self.post_action_update(memory, out2, outcome2)
 
         verifier_loss = F.binary_cross_entropy_with_logits(
             verifier1[:, :1], verifier1[:, 1:]
