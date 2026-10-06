@@ -30,7 +30,7 @@ jobs:
       - name: Unified governance preflight
         run: python scripts/research_gate.py
       - name: Repository tests
-        run: python -m pytest tests/ -q
+        run: PYTHONPATH=src python -m pytest tests/ -q
       - name: Syntax and interface checks
         run: |
           PYTHONPATH=src python -m compileall -q src scripts
