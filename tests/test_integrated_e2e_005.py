@@ -59,16 +59,23 @@ def test_query_answer_depends_on_target_entity_payload():
     _, _, q2, payload = ep
     original = q2[4]
     entity = q2[0]
+
+    def truth(a, b):
+        return {"xor": a ^ b, "and": a & b, "or": a | b, "xnor": 1 - (a ^ b)}[q2[3]]
+
     for a in (0, 1):
         for b in (0, 1):
-            value = {"xor": a ^ b, "and": a & b, "or": a | b, "xnor": 1 - (a ^ b)}[q2[3]]
-            if value != original:
+            if truth(a, b) != original:
                 changed_payload = {k: list(v) for k, v in payload.items()}
                 changed_payload[entity][q2[1]] = a
                 changed_payload[entity][q2[2]] = b
-                assert changed_payload[entity] != payload[entity]
+                recomputed = truth(
+                    changed_payload[entity][q2[1]],
+                    changed_payload[entity][q2[2]],
+                )
+                assert recomputed != original
                 return
-    raise AssertionError("could not construct a target-payload mutation")
+    raise AssertionError("could not construct a target-payload mutation that changes the answer")
 
 
 def test_fingerprint_changes_when_observation_changes():
