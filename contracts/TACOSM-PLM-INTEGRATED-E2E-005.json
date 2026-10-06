@@ -8,10 +8,16 @@
   "primary_endpoint": {
     "name": "heldout_q2_accuracy_all_modalities",
     "unit": "episode",
-    "threshold": 0.80,
+    "threshold": 0.8,
     "selection": "none"
   },
-  "seeds": [0, 1, 2, 3, 4],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "protocol": {
     "train_steps": 300,
     "batch_size": 96,
@@ -26,49 +32,176 @@
     "weight_decay": 0.0001,
     "query_count": 2,
     "heldout_compositions": [
-      ["xor", 0, 4],
-      ["xor", 5, 8],
-      ["and", 1, 9],
-      ["and", 2, 6],
-      ["or", 7, 10],
-      ["or", 3, 11],
-      ["xnor", 4, 9],
-      ["xnor", 6, 11]
+      [
+        "xor",
+        0,
+        4
+      ],
+      [
+        "xor",
+        5,
+        8
+      ],
+      [
+        "and",
+        1,
+        9
+      ],
+      [
+        "and",
+        2,
+        6
+      ],
+      [
+        "or",
+        7,
+        10
+      ],
+      [
+        "or",
+        3,
+        11
+      ],
+      [
+        "xnor",
+        4,
+        9
+      ],
+      [
+        "xnor",
+        6,
+        11
+      ]
     ],
     "complementary_modalities": {
-      "text_bits": [0, 1, 2, 3],
-      "image_bits": [4, 5, 6, 7],
-      "audio_bits": [8, 9, 10, 11]
+      "text_bits": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "image_bits": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "audio_bits": [
+        8,
+        9,
+        10,
+        11
+      ]
     },
-    "controls": ["normal", "no_memory", "shuffle_image", "text_only", "image_only", "audio_only"],
+    "controls": [
+      "normal",
+      "no_memory",
+      "shuffle_image",
+      "text_only",
+      "image_only",
+      "audio_only"
+    ],
     "operator_dispatch": "fixed_query_conditioned",
     "representation_auxiliary_supervision": false
   },
   "arms": [
-    {"name": "normal", "intervention": "full multimodal observation and persistent state", "acts_on": "integrated path"},
-    {"name": "no_memory", "intervention": "zero persistent state immediately before q1", "acts_on": "persistent information"},
-    {"name": "shuffle_image", "intervention": "permute image observations across the three observed entities", "acts_on": "cross-modal alignment"},
-    {"name": "text_only", "intervention": "replace image and audio observations with constants", "acts_on": "modality"},
-    {"name": "image_only", "intervention": "replace text and audio observations with constants", "acts_on": "modality"},
-    {"name": "audio_only", "intervention": "replace text and image observations with constants", "acts_on": "modality"}
+    {
+      "name": "normal",
+      "intervention": "full multimodal observation and persistent state",
+      "acts_on": "integrated path"
+    },
+    {
+      "name": "no_memory",
+      "intervention": "zero persistent state immediately before q1",
+      "acts_on": "persistent information"
+    },
+    {
+      "name": "shuffle_image",
+      "intervention": "permute image observations across the three observed entities",
+      "acts_on": "cross-modal alignment"
+    },
+    {
+      "name": "text_only",
+      "intervention": "replace image and audio observations with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "image_only",
+      "intervention": "replace text and audio observations with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "audio_only",
+      "intervention": "replace text and image observations with constants",
+      "acts_on": "modality"
+    }
   ],
   "endpoints": [
-    {"name": "heldout_q2_accuracy_all_modalities", "role": "primary", "primary": true},
-    {"name": "heldout_q1_accuracy_all_modalities", "role": "secondary", "primary": false},
-    {"name": "memory_drop", "role": "secondary diagnostic", "primary": false},
-    {"name": "alignment_drop", "role": "secondary diagnostic", "primary": false},
-    {"name": "text_only_q2_accuracy", "role": "secondary diagnostic", "primary": false},
-    {"name": "image_only_q2_accuracy", "role": "secondary diagnostic", "primary": false},
-    {"name": "audio_only_q2_accuracy", "role": "secondary diagnostic", "primary": false},
-    {"name": "verifier_q1_q2_accuracy", "role": "secondary diagnostic", "primary": false},
-    {"name": "gradient_surface_coverage", "role": "integrity gate", "primary": false},
-    {"name": "oracle_q2_accuracy", "role": "benchmark validity gate", "primary": false}
+    {
+      "name": "heldout_q2_accuracy_all_modalities",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "heldout_q1_accuracy_all_modalities",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "memory_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "alignment_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "text_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "image_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "audio_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verifier_q1_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "gradient_surface_coverage",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "oracle_q2_accuracy",
+      "role": "benchmark validity gate",
+      "primary": false
+    }
   ],
   "information_flow": {
     "pre_action": "text/image/audio observations -> encoders -> shared representation -> explicit persistent entity write -> explicit entity read -> fixed query-conditioned CASM -> action",
     "post_action": "predicted action -> environment outcome -> verifier -> outcome-gated state update",
-    "forbidden_before_action": ["answer", "environment_outcome", "verifier_target", "payload_labels", "evaluation_correctness"],
-    "allowed_after_action": ["environment_outcome", "verifier_supervision"],
+    "forbidden_before_action": [
+      "answer",
+      "environment_outcome",
+      "verifier_target",
+      "payload_labels",
+      "evaluation_correctness"
+    ],
+    "allowed_after_action": [
+      "environment_outcome",
+      "verifier_supervision"
+    ],
     "operator_identity": "public query metadata; operator discovery is explicitly out of scope for this integration lane"
   },
   "held_constant": [
@@ -133,5 +266,10 @@
       "TACOSM-PLM-INTEGRATED-E2E-004"
     ],
     "predecessor_use": "historical diagnosis only; no measured outcome is used to select the current threshold, seed, hyperparameters, or held-out set"
-  }
+  },
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 400
 }
