@@ -16,6 +16,7 @@ ALPHA_LR=0.02
 MATERIALITY=0.10
 STEPS_DEFAULT=500
 EVAL_STEPS_DEFAULT=200
+ARMS=("no_state","one_fixed","three_fixed","three_adaptive")
 TRAINED_ARMS=ARMS
 
 def _seed_examples(seed:int,H:int,split:str):
