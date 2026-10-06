@@ -778,6 +778,39 @@ not an efficiency claim.
 transfers to unseen temporal constants and whether a smaller/two-scale state
 bank remains sufficient under that transfer condition.
 
+
+## C18 — Persistent temporal state transfers to unseen temporal-filter constants
+
+> On the registered synthetic transfer benchmark, stateful temporal representations retained substantial history-conditioned exact decision capability when the test temporal-filter constants were disjoint from the training constants.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** transfer · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-TDBU-TIMESCALE-TRANSFER-001`, exact branch-head commit
+`2e8092ecfc16bdc557f6a53ef7c411eb2c3e2913`, workflow run
+`37411440322`, artifact `11389521777`.
+
+At H=256, no_state achieved **0.500** mean exact success. The stateful arms
+achieved means **0.7017** (one), **0.8483** (two), **0.8450** (three), and
+**0.8533** (distributed eight). All stateful arms produced a history-conditioned
+action gap of **1.0** on every seed, while no_state was **0.0**.
+
+For distributed_eight, reset-to-zero success was **0.500** and cross-episode
+state shuffle was **0.1467**, versus normal **0.8533**, localizing dependence on
+the episode-specific persistent state.
+
+**BOUNDARY:** The preregistered hypothesis that eight distributed fixed temporal
+traces would materially outperform the three-timescale state on transfer was
+**not supported**: mean difference **+0.0083**, seed-bootstrap 95% CI
+**[-0.0017, 0.0183]**, below the **0.10** materiality threshold.
+
+The result does not establish power-law or scale-free memory, biological
+equivalence, optimal scale placement, asymptotic scaling, multimodal competence,
+general intelligence, or efficiency gains. The distributed eight-state arm had
+substantially higher evaluation work than the three-state arm.
+
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
