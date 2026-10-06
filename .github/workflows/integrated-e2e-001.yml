@@ -19,6 +19,6 @@ jobs:
       - name: Assert predecessor remains invalidated
         run: |
           grep -q "Status: INVALIDATED" docs/AUDIT-TACOSM-PLM-INTEGRATED-E2E-001.md
-          grep -q "query-entity" docs/AUDIT-TACOSM-PLM-INTEGRATED-E2E-001.md
-          grep -q "corrected successor" docs/AUDIT-TACOSM-PLM-INTEGRATED-E2E-001.md
+          grep -q "q2 ground-truth answer" docs/AUDIT-TACOSM-PLM-INTEGRATED-E2E-001.md
+          grep -q "TACOSM-PLM-INTEGRATED-E2E-002" docs/AUDIT-TACOSM-PLM-INTEGRATED-E2E-001.md
           echo "E2E-001 remains provenance-only; no predecessor measurement is executed."
