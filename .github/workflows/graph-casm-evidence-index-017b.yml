@@ -58,7 +58,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install dependencies
-        run: python -m pip install --quiet -e . pytest torch "ruff==0.13.0"
+        run: python -m pip install --quiet -e . pytest torch numpy==2.3.3 "ruff==0.13.0"
       - name: Static undefined-name gate
         run: ruff check --select F821 scripts/run_graph_casm_evidence_index_017b.py scripts/validate_graph_casm_evidence_index_017b.py scripts/run_graph_casm_structured_action_probe_015.py src/tac_osm/evidence_index.py
       - name: Syntax/bytecode gate
