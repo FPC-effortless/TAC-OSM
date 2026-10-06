@@ -39,7 +39,7 @@ LR_DEFAULT = 0.05
 MATERIALITY = 0.10
 STEPS_DEFAULT = 500
 EVAL_STEPS_DEFAULT = 200
-REGISTERED_ARMS = ARMS
+REGISTERED_ARMS = ("no_state", "single_timescale", "two_timescale", "mtsk")
 
 
 def seed_examples(seed: int, history_length: int, split: str, n_pairs: int):
