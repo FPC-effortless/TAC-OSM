@@ -49,3 +49,8 @@ independent validator pass. A primary-threshold failure is a finding about
 this fixed functional configuration, not a proof that the architecture is
 impossible. Optimisation and learned routing/addressing changes remain a
 separate later lane.
+## Pre-measurement correction: structural target separation
+
+The first implementation allowed the outer training target to exist inside the model's episode-level forward method, even though query() did not accept it. That was rejected as unnecessarily permissive. The model no longer has a label-bearing episode-level forward method. The experiment harness now computes action loss outside the model, and computes the synthetic environment outcome only after the action has been produced. The model API contains no answer/target field.
+
+This is an integrity correction made before any admissible E2E-005 measurement; no result is retained from the earlier implementation.
