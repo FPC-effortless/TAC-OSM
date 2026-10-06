@@ -18,7 +18,11 @@ import torch
 from torch import nn
 import torch.nn.functional as F
 
-from scripts.run_integrated_e2e_005 import (
+ROOT = Path(__file__).resolve().parents[1]
+import sys
+sys.path.insert(0, str(ROOT / "scripts"))
+
+from run_integrated_e2e_005 import (
     accuracy,
     build_batch,
     write_observations,
