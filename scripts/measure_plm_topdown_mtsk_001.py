@@ -17,6 +17,7 @@ from tac_osm.measurement.results import (
     Provenance,
     contract_fingerprint,
     now,
+    report_smoke,
     results_dir_for,
     write_record,
 )
@@ -206,7 +207,6 @@ def run(args: argparse.Namespace) -> dict:
                 "shared_map_family_sign_agreement": representability,
                 "minimum_required": 0.90,
             },
-            },
             "model_state": {
                 "initial_checkpoint_hashes": {
                     f"{H}:{seed}:{arm}": value
@@ -244,7 +244,20 @@ def main() -> int:
     parser.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2, 3, 4])
     parser.add_argument("--commit", default="UNKNOWN")
     parser.add_argument("--output", default="results/TACOSM-PLM-TDBU-MTSK-001.json")
+    parser.add_argument("--smoke", action="store_true")
     args = parser.parse_args()
+    contract = load_contract(EXPERIMENT_ID)
+    if args.smoke:
+        report_smoke(
+            contract,
+            EXPERIMENT_ID,
+            steps=args.steps,
+            eval_steps=args.eval_steps,
+            h_levels=args.h_levels,
+            seeds=args.seeds,
+            arms=[a.name for a in contract.arms],
+        )
+        return 0
     record = run(args)
     path = Path(args.output)
     if path == Path("results/TACOSM-PLM-TDBU-MTSK-001.json"):
