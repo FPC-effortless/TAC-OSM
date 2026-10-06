@@ -123,6 +123,9 @@ class AdaptiveTemporalPolicy:
         probs=e/e.sum(axis=1,keepdims=True)
         return h,logits,probs
 
+    def predict(self,X:np.ndarray)->np.ndarray:
+        return np.argmax(self._forward(X)[2],axis=1)
+
     def fit(self,examples:list[EpisodeExample],steps:int,policy_lr:float,alpha_lr:float)->int:
         y=np.asarray([e.label for e in examples],dtype=np.int64)
         for _ in range(steps):
@@ -171,6 +174,8 @@ class FixedTemporalPolicy(AdaptiveTemporalPolicy):
         return steps
 
 def make_policy(seed:int,arm:Arm)->AdaptiveTemporalPolicy:
+    if arm != "three_adaptive":
+        raise ValueError("make_policy is only for the adaptive arm")
     return AdaptiveTemporalPolicy(seed=seed)
 
 def _features(examples:list[EpisodeExample],arm:Arm,intervention:str="normal",alpha_values:np.ndarray|None=None)->np.ndarray:
@@ -197,8 +202,6 @@ def evaluate(policy:AdaptiveTemporalPolicy,examples:list[EpisodeExample],arm:Arm
     for e,p in zip(examples,pred): pair_predictions.setdefault(e.pair_id,[]).append(int(p))
     return {"success":float(np.mean(verified)),"action_gap":float(np.mean([len(v)==2 and v[0]!=v[1] for v in pair_predictions.values()]))}
 
-def _predict(self,X): return np.argmax(self._forward(X)[2],axis=1)
-AdaptiveTemporalPolicy.predict=_predict
 
 def parameter_count()->int: return 86
 def benchmark_hash()->str: return BENCHMARK_HASH
