@@ -205,7 +205,9 @@ Tests: `tests/test_integrity.py`, including
 > `C_executed ≈ f(|R|)`, so executed computation depends on the relevant
 > subset rather than on the size of the history.
 
-**STATUS: UNTESTED**
+**STATUS: NOT SUPPORTED** — in its original end-to-end formulation; measured
+and honest negative. See `TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R2`
+below.
 
 **TYPE:** core claim · **LAYER:** L4 — see `docs/EVIDENCE_REGISTER.md`
 
@@ -369,9 +371,71 @@ invariant (`type(e_i) == type(e_t)` **and** a non-empty compatible bucket)
 enforced on every generated trial and pinned as a negative test against the
 R1 failure mode, and probe work recorded as a total with per-trial operation
 counters. See
-`docs/AUDIT-TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R2.md`. **C5
-remains UNTESTED** until that corrected control actually runs and passes its
-own invariant; a registered correction is not a result.
+`docs/AUDIT-TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R2.md`.
+
+**R2 RAN, AND C5 FAILS AS AN END-TO-END COMPLEXITY CLAIM.** Run
+`37382071406`, artifact
+`TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R2`, the full preregistered
+grid (5 seeds × 5 M levels × 32 tasks × 2 arms = 800 trials). All six validity
+gates passed, including the one that R1 failed structurally: no
+`target_bucket_size` is zero anywhere in the 1600 channel records.
+
+The instrument correction worked, and it is what turns C5 from unstatable into
+measurable — and therefore into a negative. The decomposition, log-log slope
+against M, means over 160 trials per cell:
+
+| term | scalar | trace |
+|---|---|---|
+| `C_acquisition` (signature + scan) | `O(M)` exactly, slope 1.000 | `O(M)` exactly, slope 1.000 |
+| probe selection | `O(1)`, constant 1 | `O(1)`, constant 1 |
+| `C_execution` / `C_verification` | flat, slope −0.073 | flat, slope +0.114 |
+| `C_total` | slope 0.894 | slope 0.924 |
+
+Execution is genuinely selective — flat or negative while M grows 16× — but
+total measured computation stays acquisition-dominated and near-linear. The
+original C5 hypothesis was explicitly about *total* computation, so the
+correct status is a negative on that formulation, not "partially supported".
+What R2 does provide is the decomposition showing exactly where the hypothesis
+fails, which is a sharper result than partial confirmation would have been.
+
+The negative is scoped, not universal. Three limits are recorded in the audit
+document and travel with it: execution flatness is partly by construction,
+because `shortlist()` truncates to `bucket[:B]` and caps the term at B=8;
+acquisition is scan-based, each candidate's 16-row truth table recomputed and
+charged to the query, so the claim this *implementation* makes is that
+scan-based acquisition is `O(M)` — indexed or learned sublinear acquisition
+was not tested; and a fixed 64-class trace channel has a counting ceiling of
+`64·B/M`, so it does not scale as configured.
+
+Two audit findings accompany the result and do not invalidate it. `U_B` is a
+uniform-prior utility, not a first-B success probability, because the
+execution rule depends on ordered target rank within the compatible bucket —
+observed deviations flip sign in both arms, indicating a generator/order
+interaction rather than a scalar-arm defect. And `execution_operations` and
+`verification_operations` record the same `verifier_work` value, so the
+recorded total counts it once; the headline exponent is sensitive to that
+convention (0.894/0.924 under the runner's convention, 0.814/0.863 under a
+five-term reading) while the qualitative conclusion is not. The artifact is
+left immutable and the accounting cleanup is a separate PR.
+
+The capability result is separate from C5 and is not affected by it. Trace
+reaches `verified_success = 0.8313` at M=512 where scalar reaches 0.0000,
+every seed positive, at approximately comparable **recorded**
+`total_operations` — the work-normalized reading stays provisional because
+`probe_environment_work_units` is outside the accounting boundary. That is a
+capability statement, not a computation-scaling statement, and it is the second
+link of a chain now complete on both: 015 established activation trace → more
+informative observation channel; R2 established more informative structured
+evidence → higher verified selective capability.
+
+**The next experiment is acquisition, not another attempt to reinterpret C5.**
+The open question is narrow and causal: can acquisition be made sublinear
+without sacrificing the 016C-R2 capability advantage? 017A is the registered
+test of structured/indexed acquisition against that criterion, and only after
+it is independently validated does active or learned acquisition become the
+right move — the progression is 015 → 016C-R2 → 017A → learned acquisition, so
+that a demonstrated information/capability mechanism is not jumped past in
+favour of an unvalidated learned-routing solution.
 
 ---
 

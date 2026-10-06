@@ -1,6 +1,6 @@
 # G-CASM-016C-R2 — Corrected evidence-type bridge
 
-Status: PREREGISTERED / CORRECTED REPEAT 2.
+Status: MEASURED — confirmatory artifact accepted; see audit findings below.
 
 R2 supersedes 016C-R1, which is **invalidated**. R1 is the second consecutive
 failure of this bridge experiment, and both failures have the same root cause:
@@ -211,11 +211,208 @@ scalar success 0.0 at M=128 is a floor on 4 trials, not an estimate. The
 full confirmatory job (`[run-graph-casm-trace-capability-bridge-016C-R2-full]`)
 runs the preregistered seed grid and is the only run that can move a claim.
 
+## Confirmatory result
+
+Run `37382071406`, artifact `TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R2`
+(tacosm commit `ccc32b9`, generator `c315544`, status `measured`). This is the
+preregistered grid: 5 seeds × 5 M levels × 32 tasks per M × 2 arms = **800
+trials**. The smoke artifact is a separate upload and is not pooled into any of
+these statistics.
+
+### Validity gates
+
+All gates are fail-closed and were checked over every one of the 1600 channel
+records.
+
+| gate | result |
+|---|---|
+| G1 — `target_bucket_size ≥ 1` every trial/channel | **PASS**. No zero anywhere. Distinct scalar bucket values at M=512 are `{255, 256, 257}` |
+| G2 — evidence-type invariant, asserted per trial | **PASS**. Runner asserts uniform typing and target presence; leakage flags clean across all 5 seeds |
+| G3 — `shortlist_size == min(8, target_bucket_size)` | **PASS**, 1600/1600 |
+| G4 — accounting identity | **PASS** under the runner's own convention, with a finding (below) |
+| G5 — protocol fidelity | **PASS**. M, seeds, B, eval_steps, channels and generator identical to the contract and to parent 015 |
+| G6 — acquisition included in the total | **PASS**. Acquisition is 72–98% of `total_operations` |
+
+The R1 failure mode is definitively absent. R1 recorded `target_bucket_size`
+of `{0}` across all 800 scalar trials; R2 records no zero in any of the 1600
+records.
+
+### Primary endpoint
+
+`verified_success_delta_m512_b8` — seed-level paired delta, M=512, B=8:
+
+| seed | scalar | trace | delta |
+|---|---|---|---|
+| 0 | 0.0000 | 0.7812 | +0.7812 |
+| 1 | 0.0000 | 0.7812 | +0.7812 |
+| 2 | 0.0000 | 0.8750 | +0.8750 |
+| 3 | 0.0000 | 0.7812 | +0.7812 |
+| 4 | 0.0000 | 0.9375 | +0.9375 |
+| **mean** | **0.0000** | **0.8313** | **+0.8313** |
+
+Every seed is positive. This is the number R1 reported (0.83125) but here, for
+the first time, **both arms are real**.
+
+Verified success by M:
+
+| M | scalar | trace | delta |
+|---|---|---|---|
+| 32 | 0.4938 | 1.0000 | 0.5062 |
+| 64 | 0.2500 | 1.0000 | 0.7500 |
+| 128 | 0.1125 | 1.0000 | 0.8875 |
+| 256 | 0.0875 | 0.9938 | 0.9062 |
+| 512 | 0.0000 | 0.8313 | 0.8313 |
+
+The scalar arm is no longer broken: it recovers the expected finite-information
+behaviour, succeeding 49.4% at M=32 and decaying monotonically to 0 at M=512.
+R1's 0.0 at every M was the defect; R2's 0.0 at M=512 is the real information
+limit of a single binary observation.
+
+### Computation decomposition
+
+C_total = C_acquisition + C_probe_selection + C_execution + C_verification,
+with each term's mean over 160 trials per cell:
+
+| term | scalar 32→512 | slope | trace 32→512 | slope |
+|---|---|---|---|---|
+| acquisition (`signature_construction` + `candidate_scan`) | 1024 → 16384 | **1.000** | 1024 → 16384 | **1.000** |
+| probe selection | 1 → 1 | 0.000 | 1 → 1 | 0.000 |
+| execution | 397 → 313 | −0.073 | 279 → 385 | 0.114 |
+| verification | 397 → 313 | −0.073 | 279 → 385 | 0.114 |
+| **total** | 1422 → 16698 | **0.894** | 1304 → 16770 | **0.924** |
+| `verified_candidates` | 6.34 → 8.00 | 0.078 | 1.17 → 4.95 | 0.510 |
+
+`C_acquisition ~ O(M)` exactly, both arms. Selection is exactly `O(1)`.
+Execution is flat or negative — genuinely selective, not scanning history.
+But `C_total ~ O(M^0.89)` / `O(M^0.92)` because acquisition dominates.
+
+**This is the decision-relevant contrast and it resolves C5.**
+
+### What R2 establishes
+
+The clean causal chain from G-CASM-015 is now complete on its first two links:
+
+- 015: activation trace → more informative observation channel
+- R2: more informative structured evidence → higher verified selective capability
+
+Trace reaches 0.8313 verified success at M=512 where scalar reaches 0, at
+approximately comparable **recorded** `total_operations` (16770 vs 16698).
+
+**The work-normalized interpretation is provisional.** `probe_environment_work_units`
+is recorded but is *outside* `total_operations`, and the two arms have identical
+acquisition counts. The correct current wording is "approximately comparable
+recorded total_operations", not "comparable total work", because environment-side
+acquisition/probe work is not yet inside the accounting boundary. If that work
+later differs between channels it could change the ratio. See the G4 finding
+below.
+
+### Audit finding: `U_B` is not a first-B success probability
+
+The information-theoretic ceiling remains a valid upper bound, but `U_B` is not
+an exact predictor of first-B verified-success probability because the execution
+rule depends on ordered target rank within the compatible bucket. Observed
+deviations occur in both scalar and trace arms, indicating generator/order
+interaction rather than a scalar-specific implementation defect.
+
+Concretely, `verified_success` requires the target to sit among the **first B**
+entries of the bucket — `shortlist()` returns `bucket[:budget]` — whereas
+`budget_capped_utility` is the uniform-prior utility
+`sum_e min(B, |H_e|) / M`. The first is an order-dependent realization; the
+second is a prior expectation. They should not be equated:
+
+- **counting ceiling:** `P(success) ≤ min(1, qB / M)` where q is the number of
+  distinguishable evidence classes;
+- **uniform-prior utility:** `U_B = sum_e min(B, |H_e|) / M`.
+
+Deviations of `verified_success` from `min(B, bucket)/bucket`, both arms:
+
+| M | scalar bucket | `min(B,b)/b` | scalar success | deviation | trace deviation |
+|---|---|---|---|---|---|
+| 32 | 16.0 | 0.500 | 0.4938 | −0.006 | 0.000 |
+| 64 | 32.1 | 0.250 | 0.2500 | 0.000 | 0.000 |
+| 128 | 64.0 | 0.125 | 0.1125 | −0.013 | 0.000 |
+| 256 | 128.0 | 0.0625 | 0.0875 | **+0.025** | −0.003 |
+| 512 | 256.0 | 0.0312 | 0.0000 | **−0.031** | −0.017 |
+
+The deviations **flip sign** and grow with bucket size. Under a uniform target
+rank they would be ≈0, so the target's rank within the compatible bucket is not
+uniform. At M=512 the scalar target ranks consistently late — 0 successes
+against 5 expected (p ≈ 0.006); at M=256 it ranks consistently early.
+
+The trace arm shows the same effect, so this is a property of the generator's
+candidate ordering interacting with first-B truncation, not a scalar-arm defect.
+It does not weaken the capability result — the delta is 0.8313 either way — but
+the scalar control is at or below its information ceiling, not exactly at it.
+
+### Audit finding: G4 accounting convention
+
+The runner records `execution_operations` and `verification_operations` as the
+**same** `verifier_work` value (lines 168–169), because `verify_shortlist`
+performs both in a single pass and returns on the first exact match. The
+recorded `total_operations` therefore counts that work once:
+
+```
+total = signature_construction + candidate_scan + probe_selection + verifier_work
+```
+
+This identity holds exactly on all 1600 records (G4 passes under this
+convention). The two fields are not independently measured cost terms, and the
+five-term sum is not what the artifact records.
+
+The headline exponent is sensitive to this choice:
+
+| channel | convention A (runner, 1× verifier) | convention B (five-term, 2×) |
+|---|---|---|
+| scalar_row | 0.894 | 0.814 |
+| activation_trace | 0.924 | 0.863 |
+
+The qualitative conclusion is invariant — both are sublinear in the total but
+acquisition-dominated, and `C_acquisition ~ O(M)` exactly in both. The
+**exponent is not final**. Any quantitative complexity statement must settle
+the convention first, or report both side by side.
+
+**Disposition: audit finding only.** The R2 artifact is left immutable and is
+not amended retroactively. Accounting cleanup — genuinely distinct cost terms
+or an explicit nesting definition, a corrected identity, and regression tests —
+is a separate PR, and a fresh confirmatory artifact is required if corrected
+accounting is later used as quantitative evidence. This finding does not
+explain the scalar/trace capability difference and does not affect the primary
+endpoint.
+
+### Interpretation limits
+
+Three limits bound what R2 may be read as establishing.
+
+1. **Execution flatness is partly by construction.** `shortlist()` truncates to
+   `bucket[:B]`, so execution and verification are capped at B=8 by G3 itself.
+   The measured flat/negative execution slopes are therefore not an independent
+   asymptotic scaling law. The finding is *capability under cap*: trace reaches
+   0.8313 while execution+verification stays flat at ≈279–385 units.
+2. **Acquisition is scan-based, not necessary.** Each candidate's 16-row truth
+   table is recomputed on every trial and charged to the query; the runner
+   defines `candidate_scan_operations = M · len(INPUT_ROWS)` with
+   `signature_construction_operations` identical. Indexed acquisition is
+   untested. "Acquisition scales with the full candidate set" is a statement
+   about this implementation, not about all possible designs.
+3. **A fixed 64-class trace channel does not scale as configured.** Its counting
+   ceiling is `64·B/M`, i.e. 12.5% at M=4096. Holding B fixed likely requires
+   roughly `log2(M/B)` bits of evidence. An equal-evidence-bits arm — scalar
+   with 6 rows — is not in this artifact.
+
 ## Status of claims
 
-C5 remains **UNTESTED**. R2 is a correction to the instrument, not a claim
-result, and no claim moves until a corrected control actually runs and passes
-its own invariant.
+**C5 — NOT SUPPORTED in its original end-to-end formulation.** The experiment
+demonstrates a B-capped selective execution/verification regime, but scan-based
+acquisition remains `O(M)` under the current accounting convention and dominates
+total measured operations. Indexed or learned sublinear acquisition was not
+tested. This is cleaner than "partially supported", because the original C5
+hypothesis was explicitly about *total* computation. R2 provides a decomposition
+showing *where* the hypothesis fails — execution is genuinely selective, the
+total is not sublinear — rather than partial confirmation of the original claim.
+
+The capability result is separate from C5 and is not affected by it: structured
+activation-trace evidence produces substantially higher exact verified selective
+success than the scalar channel under the same M=512/B=8 protocol.
 
 ## Provenance
 
