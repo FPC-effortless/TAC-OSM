@@ -106,3 +106,6 @@ acquisition/selection component can be amortized and made independent of M at
 query time under a fixed finite evidence alphabet.
 
 Even a positive 017B result would therefore not overturn the C5 result.
+
+
+Confirmatory trigger: [run-graph-casm-evidence-index-017B-full]
