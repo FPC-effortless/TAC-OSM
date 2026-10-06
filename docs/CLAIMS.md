@@ -692,6 +692,50 @@ re-queues on this top-K evidence alone, recorded as "top-K signal intact" and
 
 ---
 
+
+## C15 — Retained-subset execution work is bounded in the synthetic control
+
+> When a fixed relevant subset R is executed, downstream execution work can
+> remain approximately fixed while the candidate population H grows.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** mechanism · **LAYER:** L2/L3
+
+**REQUIRED EVIDENCE:** `TACOSM-C5-EXEC-001`, run 36666872579.
+
+At H={64,128,256} with R=4, exhaustive execution work/query was
+576/1152/2304 while selective work/query remained 36, with both arms at
+1.0000 capability. This is a valid synthetic retained-subset execution
+observation.
+
+**NOT INHERITED:** semantic retrieval quality, actual CASM execution,
+hardware speedup, total system complexity, or the broad C5 economic-scaling
+claim. The index and executor are synthetic controls.
+
+---
+
+## C16 — A bounded synthetic end-to-end persistent-state selective path can preserve capability while reducing executed work
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** integration · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-C5-END-TO-END-001`, run 36667352698.
+
+Across H={64,128,256}, the registered exhaustive and selective arms both
+achieved 1.0000 success while work/query was 768/1536/3072 for exhaustive and
+48 for selective. The state index retained the target and the candidate index
+retained the four relevant programs in every registered cell.
+
+This supports the existence of a bounded synthetic end-to-end selective path.
+It does **not** establish learned semantic retrieval, actual CASM capability,
+asymptotic sublinear complexity, hardware speedup, or the broad C5 claim.
+
+**RETROSPECTIVE BOUND:** this evidence remains LEGACY-AUDITED/LEGACY-BOUND;
+a new publication-quality confirmation must pass the universal G0-G10/P0-P7
+gates.
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
