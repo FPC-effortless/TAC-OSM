@@ -331,3 +331,21 @@ five more temporal traces, and near-complete analytical representability shifts
 the next causal question toward scale placement/readout rather than raw state
 width.
 
+## TACOSM-PLM-TDBU-ADAPTIVE-TIMESCALE-001 post-confirmatory evidence
+
+| Evidence | Layer | Disposition | What may be inherited | What must not be inherited |
+|---|---|---|---|---|
+| Trainable three-decay versus fixed three-decay | L3 | **NULL / BOUNDED** | H=256 means 0.862 vs 0.860; Δ=+0.002; seed-bootstrap 95% CI [-0.010, 0.012] | learned temporal dynamics as a proven capability improvement |
+| Adaptive state interventions | L3 | **CAUSAL DIAGNOSTIC** | reset 0.500 and shuffle 0.138 versus normal 0.862, consistent with episode-specific state use | universal persistent-memory causality |
+| Learned decay movement | L3 | **DESCRIPTIVE** | fast decay converged below initial 0.50 on all five seeds while slower decays remained near 0.90/0.98 | biological or optimal-timescale interpretation |
+| No-state reduction | L3 | **MEASURED / BOUNDED** | no-state 0.500 and action gap 0.0 versus stateful action gap 1.0 | a universal state necessity claim |
+
+**Provenance:** workflow `37412279742`, artifact `11389722597`, exact branch-head
+commit `20622cf36d03fc7dc14fde781b6d67595eaa37de`, artifact digest
+`sha256:5bc9d5a31069596b7a32f75b43d8764bc80213c7da99179905a33fd1f8e0fe0f`.
+
+The adaptive-timescale hypothesis is not established. Combined with the prior
+distributed-bank null, the current evidence frontier favors investigating the
+state-to-action interface and persistent multi-decision continuation rather than
+further increasing or learning temporal basis scales.
+
