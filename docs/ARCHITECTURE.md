@@ -55,7 +55,7 @@ S_t → R_t → C_t → A_t → O_t → V_t → S_{t+1}
 
 | Symbol | Interface | Current status |
 |---|---|---|
-| `S_t` | `PersistentState` | imported — read-only evidence |
+| `S_t` | `PersistentState` | imported state-container shape; read/write exercised in hardened runtime |
 | `R_t` | `RelevanceRouter` | imported — conditional router, `E2` |
 | `C_t` | `StructuralExecutor` | imported — substrate, learned routing failed |
 | `A_t` | `StructuralExecutor.execute` | imported |
@@ -153,9 +153,10 @@ that claim.
 | **temporal state transition** | bounded measured mechanism | TACOSM-TEMPORAL-001 supports explicit state reuse through enforced boundaries; not semantic memory |
 | **verified state commit** | implemented infrastructure | verifier-gated commit path is present; capability contribution not independently established |
 
-The model is not pretending everything is validated. It is a machine with
-three working imported mechanisms, three explicitly unresolved ones, and
-two that are open research targets.
+The model is not pretending everything is validated. It combines imported
+state/router/executor/verifier interfaces with TAC-OSM runtime machinery; the
+measured evidence remains bounded to the experiments named in the claims and
+retrospective audit ledgers.
 
 ---
 
