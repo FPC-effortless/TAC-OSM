@@ -57,3 +57,15 @@ This is an integrity correction made before any admissible E2E-005 measurement; 
 ## Scientific scope correction discovered during measurement (no run modification)
 
 The registered q1/q2 protocol deliberately targets `entities[0]` and `entities[1]`, which prevents q1's post-action verifier/update from causally affecting q2. Therefore E2E-005 tests multimodal encoding into persistent entity-addressed storage and later retrieval, but it does **not** test action-conditioned persistence across a feedback boundary. This limitation was discovered after the confirmatory run was authorized and does not modify the registered run. Any result must not be described as evidence for full PNDS feedback persistence. A subsequent functional lane will use the same target entity with disjoint query content so q1 feedback can affect q2 state without making q2's answer a copy of q1's answer.
+## Post-measurement instrumentation correction
+
+The first confirmatory measurement completed its full computation, but the independent
+validator stopped on a stale access to the pre-registration threshold API. The
+measurement artifact itself contains the complete result and all integrity fields.
+The validator was corrected to read the registered threshold from the machine-readable
+contract, with an explicit primary-endpoint name consistency check. This correction
+does not alter the model, benchmark generator, contract, seeds, training schedule,
+controls, or statistical rule. A second confirmatory run is authorized solely to
+re-execute the fixed validator and reproduce the registered measurement under the
+unchanged scientific design.
+
