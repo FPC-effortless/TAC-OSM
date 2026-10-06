@@ -46,7 +46,7 @@ Training filters are:
 
 Test filters are:
 
-`0.40, 0.58, 0.74, 0.86, 0.93, 0.975, 0.992`.
+`0.40, 0.58, 0.74, 0.86, 0.93, 0.989, 0.993`.
 
 The test set is unseen at the temporal-constant level. The final two constants
 also extend beyond the maximum training alpha and therefore form the registered
