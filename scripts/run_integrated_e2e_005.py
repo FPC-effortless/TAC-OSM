@@ -409,6 +409,7 @@ def run(smoke: bool) -> dict:
             not smoke
             and statistics.fmean(normal_q2) >= primary_threshold()
             and min(normal_q2) >= 0.40
+            and all(r["normal_q2_decision_mismatches"] == 0 for r in seed_results)
         ),
         "mean_memory_drop": statistics.fmean(
             r["memory_drop"] for r in seed_results
