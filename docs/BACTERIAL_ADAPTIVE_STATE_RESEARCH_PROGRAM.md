@@ -174,8 +174,8 @@ No result from this phase is a capability claim.
 
 ### Phase 2 — pre-run gates
 
-Every confirmatory run must pass the repository-wide run-gate protocol in
-docs/RESEARCH_RUN_GATES_V2.md.
+Every confirmatory run must pass the repository-wide governance and run-gate protocol in
+docs/RESEARCH_GOVERNANCE.md and docs/RESEARCH_RUN_GATES_V2.md.
 
 ### Phase 3 — minimal causal experiment
 
