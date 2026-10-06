@@ -55,6 +55,11 @@ def test_no_state_is_current_input_only_on_decision():
     assert result.action_gap == 0.0
 
 
+def test_mtsk_representability_witness_passes():
+    witness = representability_witness(seed=12345, pairs_per_family=100)
+    assert min(witness.values()) >= 0.90
+
+
 def test_mtsk_features_contain_multiple_temporal_coordinates():
     examples = make_balanced_pairs(99, 256, 12)
     X = featurize(examples, "mtsk")
