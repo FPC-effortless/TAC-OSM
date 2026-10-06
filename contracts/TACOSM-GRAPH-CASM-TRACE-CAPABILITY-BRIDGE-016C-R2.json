@@ -20,72 +20,72 @@
   "endpoints": [
     {
       "name": "verified_success_delta_m512_b8",
-      "role": "primary \u2014 seed-level activation_trace minus scalar_row exact-verifier success difference at M=512/B=8",
+      "role": "primary — seed-level activation_trace minus scalar_row exact-verifier success difference at M=512/B=8",
       "primary": true
     },
     {
       "name": "verified_success",
-      "role": "secondary \u2014 exact verifier success across B=1/2/4/8 and all registered M levels",
+      "role": "secondary — exact verifier success across B=1/2/4/8 and all registered M levels",
       "primary": false
     },
     {
       "name": "target_bucket_size",
-      "role": "secondary \u2014 compatible candidates after the selected probe",
+      "role": "secondary — compatible candidates after the selected probe",
       "primary": false
     },
     {
       "name": "information_gain_bits",
-      "role": "secondary \u2014 one-step deterministic information under the selected channel",
+      "role": "secondary — one-step deterministic information under the selected channel",
       "primary": false
     },
     {
       "name": "expected_remaining_candidates",
-      "role": "secondary \u2014 collision expectation after the selected probe",
+      "role": "secondary — collision expectation after the selected probe",
       "primary": false
     },
     {
       "name": "execution_work_fraction",
-      "role": "secondary \u2014 terminal verification work divided by exhaustive exact verification work",
+      "role": "secondary — terminal verification work divided by exhaustive exact verification work",
       "primary": false
     },
     {
       "name": "budget_capped_utility",
-      "role": "secondary \u2014 partition-implied expected terminal success U_B for the selected evidence channel under a uniform target prior",
+      "role": "secondary — partition-implied expected terminal success U_B for the selected evidence channel under a uniform target prior",
       "primary": false
     },
     {
       "name": "probe_environment_work_units",
-      "role": "secondary \u2014 expected probe acquisition work",
+      "role": "secondary — expected probe acquisition work",
       "primary": false
     },
     {
       "name": "accounted_total_work_units",
-      "role": "secondary \u2014 probe plus terminal verification work",
+      "role": "secondary — probe plus terminal verification work",
       "primary": false
     },
     {
       "name": "success_per_accounted_work",
-      "role": "secondary \u2014 verified success divided by explicitly accounted total work",
+      "role": "secondary — verified success divided by explicitly accounted total work",
       "primary": false
     },
     {
       "name": "total_operations",
-      "role": "secondary \u2014 sum of signature construction, candidate scan, probe selection and terminal verification operations; the full computational cost of one selective pass",
+      "role": "secondary — sum of signature construction, candidate scan, probe selection and terminal verification operations; the full computational cost of one selective pass",
       "primary": false
     },
     {
       "name": "verified_success_per_total_operations",
-      "role": "secondary \u2014 verified success divided by total operations; capability per unit of total computation, not per unit of execution work alone",
+      "role": "secondary — verified success divided by total operations; capability per unit of total computation, not per unit of execution work alone",
       "primary": false
     },
     {
       "name": "candidate_scan_operations",
-      "role": "secondary \u2014 candidate evidence reads required to build the probe-selection signatures, O(M x rows), which the prior accounting omitted",
+      "role": "secondary — candidate evidence reads required to build the probe-selection signatures, O(M x rows), which the prior accounting omitted",
       "primary": false
     },
     {
       "name": "verifier_work_units",
-      "role": "secondary \u2014 terminal exact verification work over the shortlist only",
+      "role": "secondary — terminal exact verification work over the shortlist only",
       "primary": false
     }
   ],
@@ -247,7 +247,8 @@
     "protocol_changes": [
       "Candidate and target evidence are now extracted through one typed function per channel, so the two arms cannot diverge in shape.",
       "A runner-level invariant is enforced on every generated trial: candidate and target evidence must have identical type, and the compatible bucket must be non-empty because the target is itself a candidate. This replaces R1's regression, which asserted type identity only on a hand-written literal and so passed while the runner was broken.",
-      "Probe work is recorded as a total over candidates rather than a per-candidate mean, and per-trial operation counters are added for signature construction, candidate scan, probe selection, execution and verification."
+      "Probe work is recorded as a total over candidates rather than a per-candidate mean, and per-trial operation counters are added for signature construction, candidate scan, probe selection, execution and verification.",
+      "Selector accounting was corrected before the confirmatory rerun: signature-construction reads are M×16, the post-selection candidate evidence extraction is a distinct M-read, and target evidence is one post-selection read; the same candidate scan is no longer double-counted."
     ],
     "required_regression": "For every generated trial and both channels: type(candidate_evidence[i]) == type(target_evidence) and |{i : candidate_evidence[i] == target_evidence}| >= 1. Checked by the runner, which fails closed; also asserted by an offline test against the real generator.",
     "invalidates": [
@@ -266,6 +267,14 @@
         "status": "INVALID",
         "reason": "identical type mismatch; R1 diff to 016C was an identifier rename only"
       }
-    ]
+    ],
+    "accounting_amendment": {
+      "id": "016C-R2-AM1",
+      "status": "pre_confirmatory",
+      "reason": "The initial R2 runner labeled the M×16 selector scan and the same quantity as two independent counters, then omitted the distinct post-selection M-read from the named accounting. This could misstate secondary total-operation counts even though the primary capability endpoint was unaffected.",
+      "new_accounting": "signature_construction_operations=M×16; candidate_scan_operations=M; target_evidence_read_operations=1; probe_selection_operations=1; verification_operations=terminal verifier work; total_operations=sum of these distinct quantities.",
+      "result_under_old_accounting": "not admitted",
+      "discovered": "source audit before clean confirmatory rerun"
+    }
   }
 }
