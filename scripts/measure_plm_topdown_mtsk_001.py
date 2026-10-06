@@ -70,7 +70,7 @@ def run(args: argparse.Namespace) -> dict:
     contract.require_seeds(args.seeds)
     contract.require_steps(args.steps)
     contract.require_eval_steps(args.eval_steps)
-    contract.require_arms(contract.arms)
+    contract.require_arms([a.name for a in contract.arms])
     assert HIDDEN == 12 and LEARNING_RATE == 0.05
 
     records = []
@@ -91,6 +91,9 @@ def run(args: argparse.Namespace) -> dict:
                 updates = policy.fit(X, train_labels, contract.steps, LEARNING_RATE)
                 assert updates == contract.steps
                 eval_result = evaluate(policy, test, arm)
+                train_state_work = 0 if arm == "no_state" else len(train[0].history) * len(train) * 9
+                optimizer_forward_backward_work = contract.steps * len(train) * 4 * (4 * HIDDEN + 2 * HIDDEN)
+                train_work = float(train_state_work + optimizer_forward_backward_work)
                 reset_result = evaluate(policy, test, "mtsk", intervention="reset") if arm == "mtsk" else None
                 shuffle_result = evaluate(policy, test, "mtsk", intervention="shuffle") if arm == "mtsk" else None
                 if policy.parameter_hash() == initial_hashes[(H, seed, arm)]:
@@ -106,6 +109,7 @@ def run(args: argparse.Namespace) -> dict:
                     "action_gap": eval_result.action_gap,
                     "state_footprint": eval_result.state_footprint,
                     "evaluation_work_per_episode": eval_result.evaluation_work_per_episode,
+                    "train_compute_work_proxy": train_work,
                     "parameter_count": policy.parameter_count,
                     "checkpoint_hash": policy.parameter_hash(),
                     "reset_success": reset_result.success if reset_result else None,
@@ -171,6 +175,7 @@ def run(args: argparse.Namespace) -> dict:
             "generator_hash": BENCHMARK_HASH,
             "dependency_lock_hash": dependency_lock_hash(),
             "state_work_rule": "9 arithmetic ops per state-slot update; 3 slots per observation",
+            "training_work_rule": "state-feature work plus four matrix-operation passes per optimizer step; reported only as a matched proxy",
         },
         decision_rule=tuple(
             {
