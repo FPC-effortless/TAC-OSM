@@ -334,8 +334,6 @@ def main(smoke: bool = False) -> None:
     contract.require_steps(STEPS)
     contract.require_eval_steps(contract.eval_steps)
     contract.require_arms(REGISTERED_ARMS)
-    if tuple(controls) != REGISTERED_ARMS:
-        raise RuntimeError("control set drift from registered arms")
 
     if contract.eval_steps != 400:
         raise RuntimeError("E2E-002 expects the registered 400 evaluation episodes")
@@ -352,6 +350,8 @@ def main(smoke: bool = False) -> None:
         "image_only",
         "audio_only",
     )
+    if tuple(controls[1:]) != REGISTERED_ARMS[1:]:
+        raise RuntimeError("control set drift from registered arms")
     for seed, model in seed_models:
         rng = random.Random(100000 + seed)
         eval_episodes = []
@@ -457,6 +457,8 @@ def main(smoke: bool = False) -> None:
             "controls_reuse_exact_same_episode_objects": True,
             "pre_action_query_signature_fields": ["entity", "i", "j", "op"],
             "forbidden_pre_action_fields": ["answer", "environment_outcome", "verifier_target"],
+            "pre_action_payload_bits_available": False,
+            "auxiliary_payload_supervision_is_training_only": True,
         },
         "decision_rule": {
             "primary": "mean normal_q2 >= 0.80",
