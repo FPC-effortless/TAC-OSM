@@ -115,3 +115,6 @@ Clean rerun authorization marker [run-graph-casm-evidence-index-017B-full]
 
 
 Final smoke authorization after test repair: [run-graph-casm-evidence-index-017B-full]
+
+
+Authorization retained in recent history: [run-graph-casm-evidence-index-017B-full]
