@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0,str(ROOT))
 sys.path.insert(0,str(ROOT/"src"))
 
-from tac_osm.integrated_e2e_005 import FunctionalMultimodalPLM
+from tac_osm.integrated_e2e_005 import FunctionalConfig, FunctionalMultimodalPLM
 from tac_osm.integrated_e2e_006_benchmark import (
     GENERATOR_VERSION, HELDOUT, SEEDS, TRAIN_COMBOS, BITS, ENTITY_COUNT,
     benchmark_manifest, episode_fingerprint, episode_key, sample_episode,
@@ -51,7 +51,7 @@ def gradient_surface_probe():
     torch.manual_seed(20261006)
     rng=random.Random(86006)
     eps=[sample_episode(rng) for _ in range(4)]
-    model=FunctionalMultimodalPLM()
+    model=FunctionalMultimodalPLM(config=FunctionalConfig(hidden_dim=64))
     loss=train_batch(model,build_batch(eps)); loss.backward()
     required=("text.emb.weight","text.rnn.weight_ih_l0","image.net.0.weight",
               "audio.net.0.weight","rep.fuse.0.weight","state.write_value.weight",
@@ -66,7 +66,7 @@ def gradient_surface_probe():
 def train_seed(seed):
     torch.manual_seed(seed)
     rng=random.Random(seed+910000)
-    model=FunctionalMultimodalPLM().cpu()
+    model=FunctionalMultimodalPLM(config=FunctionalConfig(hidden_dim=64)).cpu()
     opt=torch.optim.AdamW(model.parameters(),lr=0.002,weight_decay=0.0001)
     keys=set()
     for _ in range(STEPS):
