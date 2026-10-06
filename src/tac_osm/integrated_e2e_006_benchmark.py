@@ -25,6 +25,8 @@ from .integrated_e2e_005_benchmark import (
     make_modalities,
 )
 
+SEEDS = (0, 1, 2, 3, 4)
+
 SEALED_E2E005 = (
     ("xor", 0, 4), ("xor", 5, 8),
     ("and", 1, 9), ("and", 2, 6),
