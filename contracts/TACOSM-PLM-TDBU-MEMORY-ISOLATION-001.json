@@ -1,0 +1,43 @@
+{
+  "experiment_id":"TACOSM-PLM-TDBU-MEMORY-ISOLATION-001",
+  "title":"Top-down PLM assembly with single-relation temporal-memory isolation",
+  "question":"Can a persistent multi-timescale state solve a fixed history-dependent temporal decision when hidden relation-family variation is removed?",
+  "hypothesis":"If the persistent state mechanism is sufficient for temporal memory, a fixed single temporal contrast should be solved substantially better than no-state and should expose whether the earlier multi-family benchmark imposed an additional hidden-context bottleneck.",
+  "arms":[
+    {"name":"no_state","intervention":"persistent_state_disabled","acts_on":"state"},
+    {"name":"single_timescale","intervention":"one_exponential_trace_padded_to_three_state_slots","acts_on":"state","value":"alpha=0.90"},
+    {"name":"two_timescale","intervention":"two_distinct_exponential_traces_padded_to_three_state_slots","acts_on":"state","value":"alpha=0.50,0.98"},
+    {"name":"mtsk","intervention":"three_log_spaced_exponential_traces","acts_on":"state","value":"alpha=0.50,0.90,0.98"}
+  ],
+  "endpoints":[
+    {"name":"exact_class_balanced_success","role":"primary","primary":true,"description":"Exact held-out action success on one fixed temporal contrast with exact-negation history pairs; primary decision at H=256."},
+    {"name":"history_conditioned_action_gap","role":"secondary","primary":false,"description":"Fraction of paired histories with identical current observation and opposite correct actions for which the model chooses opposite actions."},
+    {"name":"state_intervention_effect","role":"secondary","primary":false,"description":"Frozen MTSK checkpoint success after state reset or cross-episode shuffle."},
+    {"name":"representation_sign_accuracy","role":"secondary","primary":false,"description":"Analytical sign agreement between MTSK fast/slow state coordinates and the fixed temporal contrast."},
+    {"name":"evaluation_work","role":"secondary","primary":false,"description":"Explicit evaluation work under the common state/update accounting."}
+  ],
+  "decision_rule":[
+    {"condition":"At H=256, MTSK exceeds single_timescale by more than 0.10 and the seed-bootstrap 95% interval excludes zero, while MTSK also exceeds no_state.","licenses":"bounded evidence that multiple persistent temporal scales improve the isolated fixed-relation memory task.","does_not_license":"multi-family relation inference, general intelligence, biological equivalence, multimodal competence, asymptotic scaling, or hardware speedup."},
+    {"condition":"All stateful arms materially outperform no_state but MTSK does not materially exceed single_timescale.","licenses":"the isolated task establishes persistent-state usefulness but not a multi-timescale advantage.","does_not_license":"failure of multi-timescale memory generally."},
+    {"condition":"MTSK fails to outperform no_state.","licenses":"the registered memory-isolation hypothesis is not established.","does_not_license":"failure of persistent state generally."}
+  ],
+  "interpretation_order":["protocol and security integrity","leakage and supervision boundary","fixed single-relation benchmark validity","paired-history validity","representability","model-state integrity","degeneracy","exact capability","interventions","compute","statistics","scope"],
+  "h_levels":[64,256,1024],
+  "seeds":[0,1,2,3,4],
+  "steps":500,
+  "eval_steps":200,
+  "k_levels":[1,2,3],
+  "held_constant":[
+    "ground-truth temporal contrast is exactly alpha=0.45 versus alpha=0.985",
+    "current decision observation is exactly 0.0",
+    "no pair-type or relation-family identifier is present because the relation family is fixed by the benchmark",
+    "train/test RNG streams are disjoint",
+    "test histories are generated only by the registered test seed stream",
+    "paired histories are exact negations with opposite labels",
+    "policy architecture and parameter count are identical across arms",
+    "optimizer family, learning rate, step count, evaluation size, executor, verifier, and state-work accounting",
+    "MTSK state alphas are exactly 0.50,0.90,0.98"
+  ],
+  "status":"pre-registered",
+  "layer":"L3"
+}
