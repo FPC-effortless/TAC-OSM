@@ -6,7 +6,15 @@ import numpy as np
 from tac_osm.contract import load_contract
 from tac_osm.measurement.results import Design,Gate,MeasurementRecord,Provenance,contract_fingerprint,now,report_smoke,results_dir_for,write_record
 from tac_osm.mtsk_topdown import MLPPolicy
-from tac_osm.memory_isolation import ARMS,BENCHMARK_HASH,benchmark_hash,dependency_hash,evaluate,featurize,make_pairs,representability_sign_accuracy
+from tac_osm.memory_isolation import (
+    BENCHMARK_HASH,
+    benchmark_hash,
+    dependency_hash,
+    evaluate,
+    featurize,
+    make_pairs,
+    representability_sign_accuracy,
+)
 
 EXPERIMENT_ID="TACOSM-PLM-TDBU-MEMORY-ISOLATION-001"
 TRAIN_PAIRS=300
@@ -43,7 +51,12 @@ def boot(a,b,seed=3991,rounds=20000):
 
 def run(args):
     c=load_contract(EXPERIMENT_ID)
-    c.require_levels(args.h_levels); c.require_seeds(args.seeds); c.require_steps(args.steps); c.require_eval_steps(args.eval_steps); c.require_arms(list(ARMS)); c.require_k_levels(c.k_levels)
+    c.require_levels(args.h_levels)
+    c.require_seeds(args.seeds)
+    c.require_steps(args.steps)
+    c.require_eval_steps(args.eval_steps)
+    c.require_arms(ARMS)
+    c.require_k_levels(c.k_levels)
     assert benchmark_hash()==BENCHMARK_HASH
     representation=representability_sign_accuracy()
     if representation<0.90:
