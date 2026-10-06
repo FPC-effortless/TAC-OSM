@@ -1,0 +1,66 @@
+{
+  "experiment_id":"TACOSM-PLM-TDBU-MEMORY-ISOLATION-001",
+  "title":"Top-down PLM assembly with single-relation temporal-memory isolation",
+  "question":"Can an explicitly sequential persistent multi-timescale state solve a fixed history-dependent temporal decision when hidden relation-family variation is removed?",
+  "hypothesis":"If the persistent state mechanism is sufficient for this temporal decision, the MTSK state arm should outperform no-state, and the three-timescale state should outperform the single-timescale state by the registered materiality margin on unseen histories.",
+  "arms":[
+    {"name":"no_state","intervention":"persistent_state_disabled","acts_on":"state"},
+    {"name":"single_timescale","intervention":"one_exponential_trace_padded_to_three_state_slots","acts_on":"state","value":"alpha=0.90"},
+    {"name":"two_timescale","intervention":"two_distinct_exponential_traces_padded_to_three_state_slots","acts_on":"state","value":"alpha=0.50,0.98"},
+    {"name":"mtsk","intervention":"three_log_spaced_exponential_traces","acts_on":"state","value":"alpha=0.50,0.90,0.98"}
+  ],
+  "endpoints":[
+    {"name":"exact_class_balanced_success","role":"primary","primary":true,"description":"Exact held-out verified action success on 200 fresh evaluation examples (100 exact-negation pairs) at each H/seed; primary decision at H=256."},
+    {"name":"history_conditioned_action_gap","role":"secondary","primary":false,"description":"Fraction of exact-negation pairs for which the model chooses opposite actions with identical current observation."},
+    {"name":"state_intervention_effect","role":"secondary","primary":false,"description":"Frozen MTSK checkpoint success after terminal-state reset or cross-episode state shuffle."},
+    {"name":"representation_sign_accuracy","role":"secondary","primary":false,"description":"Independent analytical sign agreement on a separate benchmark seed stream."},
+    {"name":"evaluation_work","role":"secondary","primary":false,"description":"Explicit sequential state-update, policy, executor and verifier work under the common accounting."}
+  ],
+  "decision_rule":[
+    {"condition":"At H=256, MTSK exceeds single_timescale by more than 0.10 and the seed-bootstrap 95% interval excludes zero, while MTSK also exceeds no_state.","licenses":"bounded evidence that multiple persistent temporal scales improve the isolated fixed-relation temporal-memory task.","does_not_license":"multi-family relation inference, general intelligence, biological equivalence, multimodal competence, asymptotic scaling, or hardware speedup."},
+    {"condition":"All stateful arms materially outperform no_state but MTSK does not materially exceed single_timescale.","licenses":"the isolated task establishes persistent-state usefulness but not a multi-timescale advantage.","does_not_license":"failure of multi-timescale memory generally."},
+    {"condition":"MTSK fails to outperform no_state.","licenses":"the registered memory-isolation hypothesis is not established.","does_not_license":"failure of persistent state generally."}
+  ],
+  "interpretation_order":["protocol and security integrity","leakage and supervision boundary","fixed single-relation benchmark validity","paired-history validity","representability","model-state integrity","degeneracy","exact capability","interventions","compute","statistics","scope"],
+  "h_levels":[64,256,1024],
+  "seeds":[0,1,2,3,4],
+  "steps":500,
+  "eval_steps":200,
+  "held_constant":[
+    "ground-truth temporal contrast is exactly alpha=0.45 versus alpha=0.985",
+    "current decision observation is exactly 0.0",
+    "no pair-type or relation-family identifier is present because the relation family is fixed by the benchmark",
+    "train and test seed streams use disjoint deterministic namespaces",
+    "test histories are generated only by the dedicated test stream and are not reused from prior MTSK lanes",
+    "each test history is paired with its exact negation and opposite label",
+    "policy architecture, optimizer, learning rate, hidden width and parameter count are identical across arms",
+    "the state recurrence executes sequentially observation-by-observation before the terminal decision",
+    "evaluation length is exactly 200 examples = 100 exact-negation pairs per H/seed/arm",
+    "MTSK state alphas are exactly 0.50,0.90,0.98",
+    "the independent representability witness uses a separate seed stream and never supplies training or test data"
+  ],
+  "amendments":[
+    {
+      "id":"MEM-ISO-001-AM1",
+      "applies_to":"TACOSM-PLM-TDBU-MEMORY-ISOLATION-001",
+      "old_definition":"The preregistered evaluator reported eval_steps=200 but the runner generated a hard-coded 100 test pairs, and the implementation computed terminal exponential filters directly.",
+      "new_definition":"eval_steps=200 is enforced and used to generate exactly 100 test pairs; state features are produced by an explicit PersistentTemporalState.update() recurrence over the history.",
+      "rationale":"The original implementation left a registered dimension only nominally enforced and obscured whether the intended intervention was an actual sequential state mechanism. No confirmatory scientific result was measured under the pre-amendment implementation.",
+      "discovered":"CI source audit before confirmatory measurement",
+      "affected":"measurement implementation and benchmark auditability",
+      "no_result_under_previous_version":"true"
+    },
+    {
+      "id":"MEM-ISO-001-AM2",
+      "applies_to":"TACOSM-PLM-TDBU-MEMORY-ISOLATION-001",
+      "old_definition":"The contract carried k_levels=[1,2,3] even though the experiment had no K/delay factor.",
+      "new_definition":"The irrelevant k_levels field is removed; the lane is governed only by its registered H, seed, step, evaluation and arm dimensions.",
+      "rationale":"An unused registered dimension creates false assurance and invites accidental protocol drift.",
+      "discovered":"CI source audit before confirmatory measurement",
+      "affected":"contract schema usage",
+      "no_result_under_previous_version":"true"
+    }
+  ],
+  "status":"pre-registered",
+  "layer":"L3"
+}

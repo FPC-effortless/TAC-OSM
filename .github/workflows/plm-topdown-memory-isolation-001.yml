@@ -1,0 +1,81 @@
+name: PLM top-down memory isolation 001
+
+on:
+  pull_request:
+  push:
+    branches: ["research/plm-topdown-memory-isolation-001"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  confirmatory:
+    name: confirmatory
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pinned measurement dependencies
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet "numpy==2.3.3" pytest "ruff==0.13.0"
+
+      - name: Static undefined-name gate
+        run: |
+          ruff check --select F821 scripts/measure_*.py src/tac_osm
+
+      - name: Syntax/bytecode gate
+        run: |
+          PYTHONPATH=src python -m compileall -q src scripts
+
+      - name: Contract validation
+        run: |
+          PYTHONPATH=src python - <<'PY'
+          from tac_osm.contract import validate
+          problems = validate()
+          if problems:
+              print("\n".join(problems))
+              raise SystemExit(1)
+          print("all experiment contracts valid")
+          PY
+
+      - name: Unified research preflight
+        run: python scripts/research_gate.py
+
+      - name: Focused tests
+        run: |
+          PYTHONPATH=src python -m pytest             tests/test_plm_topdown_memory_isolation_001.py             tests/test_research_governance.py -q
+
+      - name: Full repository tests
+        run: PYTHONPATH=src python -m pytest tests/ -q
+
+      - name: Measurement
+        run: |
+          mkdir -p /tmp/memory-isolation-results
+          PYTHONPATH=src python scripts/measure_plm_topdown_memory_isolation_001.py             --commit "$(git rev-parse HEAD)"             --output /tmp/memory-isolation-results/result.json
+
+      - name: Post-run invariant validation
+        run: |
+          PYTHONPATH=src python scripts/validate_plm_topdown_memory_isolation_001.py             /tmp/memory-isolation-results/result.json
+
+      - name: Independent recomputation
+        run: |
+          PYTHONPATH=src python scripts/analyze_plm_topdown_memory_isolation_001.py             /tmp/memory-isolation-results/result.json
+
+      - name: Upload measurement artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-TDBU-MEMORY-ISOLATION-001
+          path: /tmp/memory-isolation-results/result.json
+          if-no-files-found: error

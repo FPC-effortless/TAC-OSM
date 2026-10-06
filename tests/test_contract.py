@@ -761,6 +761,10 @@ def test_matched_contract_matches_its_script():
     # the arm set is one name, and the comparison is across the matrix rather
     # than against a control arm.
     arms = got.get("REGISTERED_ARMS", got.get("ARMS"))
+    assert arms is not None, (
+        f"{script} declares no literal REGISTERED_ARMS/ARMS tuple; "
+        "the registered arm set must be statically visible to CI"
+    )
     assert tuple(arms) == tuple(a.name for a in c.arms), (
         "the MATCHED-001 contract's arm drifted from the script's registered "
         "tuple"
@@ -918,6 +922,7 @@ _WITH_CONTRACT = (
     ("measure_plm_topdown_mtsk_001.py", "TACOSM-PLM-TDBU-MTSK-001"),
     ("measure_plm_topdown_timescale_transfer_001.py", "TACOSM-PLM-TDBU-TIMESCALE-TRANSFER-001"),
     ("measure_plm_topdown_adaptive_timescale_001.py", "TACOSM-PLM-TDBU-ADAPTIVE-TIMESCALE-001"),
+    ("measure_plm_topdown_memory_isolation_001.py", "TACOSM-PLM-TDBU-MEMORY-ISOLATION-001"),
 )
 
 
