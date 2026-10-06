@@ -311,3 +311,23 @@ distinguishes multiple timescales from one timescale, but does not distinguish
 three timescales from two. The next experiment therefore tests scale
 transfer/placement rather than simply increasing the number of slots.
 
+## TACOSM-PLM-TDBU-TIMESCALE-TRANSFER-001 post-confirmatory evidence
+
+| Evidence | Layer | Disposition | What may be inherited | What must not be inherited |
+|---|---|---|---|---|
+| Distributed eight vs three timescales on held-out temporal constants | L3 | **NULL / BOUNDED** | H=256 means 0.8533 vs 0.8450; mean Δ=+0.0083; seed-bootstrap 95% CI [-0.0017, 0.0183] | broader temporal coverage as a causal capability improvement; optimal scale placement |
+| Stateful transfer versus no-state | L3 | **MEASURED / BOUNDED** | no-state 0.500 versus stateful means 0.7017–0.8533 at H=256; all stateful arms retain paired-history action gap 1.0 | a confirmatory multi-timescale-over-single claim on this transfer lane, because that comparison was not the registered primary decision |
+| Distributed-state intervention | L3 | **CAUSAL DIAGNOSTIC** | reset 0.500 and shuffle 0.1467 versus normal 0.8533 | real-world semantic memory or transfer outside the registered benchmark |
+| Representability of held-out filters | L3 | **PRECONDITION PASSED** | all seven held-out kernels represented by distributed bank at R² >= 0.99819 | learned readout optimality or general temporal basis sufficiency |
+
+**Provenance:** workflow `37411440322`, artifact `11389521777`, exact branch-head
+commit `2e8092ecfc16bdc557f6a53ef7c411eb2c3e2913`, contract fingerprint
+`e3de9da51c1a5a65`, artifact digest
+`sha256:7ad3974e4e86c3aca74486e350602bbe8a528448c10ca63dc98b3909c2fdf5f5`.
+
+The primary distributed-versus-three-timescale hypothesis is not supported.
+The combination of strong persistent-state transfer, a null effect from adding
+five more temporal traces, and near-complete analytical representability shifts
+the next causal question toward scale placement/readout rather than raw state
+width.
+
