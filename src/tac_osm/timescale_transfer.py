@@ -64,7 +64,7 @@ EXTRAPOLATION_TEST_INDICES = (5, 6)
 POLICY_HIDDEN = {
     "no_state": 12,
     "one_timescale": 12,
-    "two_timescale": 14,
+    "two_timescale": 12,
     "three_timescale": 12,
     "distributed_eight": 7,
 }
