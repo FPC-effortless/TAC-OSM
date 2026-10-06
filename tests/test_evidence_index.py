@@ -102,9 +102,9 @@ def test_prefix_histogram_index_matches_exhaustive_partition_score():
     expected_remaining = sum(n * n for n in counts.values()) / 6
     expected_cost = sum(costs) / 6
 
-    assert np.isclose(score.information_gain_bits, entropy)
-    assert np.isclose(score.expected_remaining_candidates, expected_remaining)
-    assert np.isclose(score.expected_cost, expected_cost)
+    assert math.isclose(score.information_gain_bits, entropy, rel_tol=0.0, abs_tol=1e-12)
+    assert math.isclose(score.expected_remaining_candidates, expected_remaining, rel_tol=0.0, abs_tol=1e-12)
+    assert math.isclose(score.expected_cost, expected_cost, rel_tol=0.0, abs_tol=1e-12)
     assert reads == 2
 
 
