@@ -73,3 +73,11 @@ Any new research branch, experiment script, benchmark, contract, measurement out
 A new measurement script with neither a contract/lane registration nor an explicit named exemption is a test failure.
 
 All TAC-OSM, PLM, G-CASM, CASM, CDL, C5, active-evidence, multimodal, bacterial-inspired, and future lanes follow the same policy.
+## Default architecture research method
+
+New architectural mechanisms follow `docs/TOP_DOWN_BOTTOM_UP_RESEARCH_METHOD.md`:
+assemble the complete decision loop around one novel block with standard
+surrounding primitives, then isolate the block with preregistered bottom-up
+ablations and causal interventions. A new mechanism cannot be promoted from an
+isolated component metric or from an integrated run whose surrounding controls
+are absent.
