@@ -291,3 +291,23 @@ They are never valid comparison baselines for a successor unless the successor
 contract explicitly identifies the historical number as a non-evidentiary
 control, such as a regression fixture. A successor inherits the *question and
 failure diagnosis*, not the invalid measurement.
+
+## TACOSM-PLM-TDBU-MTSK-001 post-confirmatory evidence
+
+| Evidence | Layer | Disposition | What may be inherited | What must not be inherited |
+|---|---|---|---|---|
+| MTSK versus single-timescale at H=256 | L3 | **MEASURED / BOUNDED SUPPORT** | mean exact success 0.856 vs 0.726; mean difference 0.130; seed-bootstrap 95% CI [0.098, 0.162] under the registered benchmark and matched policy | general temporal-memory superiority, cross-domain competence, asymptotic scaling, or efficiency |
+| Frozen MTSK reset intervention | L3 | **MEASURED / CAUSAL DIAGNOSTIC** | reset success 0.500 versus normal 0.856, consistent with state information being used by the trained policy | proof that persistent state is universally load-bearing |
+| Frozen MTSK state-shuffle intervention | L3 | **MEASURED / CAUSAL DIAGNOSTIC** | shuffle success 0.144 versus normal 0.856, showing sensitivity to correct episode-specific state | semantic memory or real-world transfer |
+| Bottom-up two-timescale reduction | L3 | **MEASURED / BOUNDARY** | two-timescale mean 0.856 at H=256, matching MTSK on the primary endpoint | three-timescale necessity, specific scale-spacing optimality, or monotonic benefit from more scales |
+
+**Provenance:** workflow `37410382061`, artifact `11389330236`, exact branch-head
+commit `f916a43f4cc50834c897d1ae94cf27608a67551c`, contract fingerprint
+`7f958854fbed7d06`.
+
+The result establishes a bounded finite temporal-mechanism finding. The
+bottom-up control is essential to interpretation: the primary endpoint
+distinguishes multiple timescales from one timescale, but does not distinguish
+three timescales from two. The next experiment therefore tests scale
+transfer/placement rather than simply increasing the number of slots.
+
