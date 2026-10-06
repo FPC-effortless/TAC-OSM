@@ -1,0 +1,106 @@
+{
+  "experiment_id": "TACOSM-BACTERIAL-ADAPTIVE-STATE-001",
+  "title": "Multi-timescale adaptive state for history-conditioned decision making",
+  "question": "Does a compact multi-timescale persistent state improve exact task capability on history-dependent environments compared with no state and matched single-timescale state, at matched or explicitly accounted compute?",
+  "hypothesis": "A multi-timescale adaptive state kernel will preserve decision-relevant temporal information across short, medium, and long regimes, improving held-out history-conditioned decisions while using bounded state/read/write computation.",
+  "arms": [
+    {
+      "name": "no_state",
+      "intervention": "disable_persistent_state",
+      "acts_on": "state"
+    },
+    {
+      "name": "single_timescale",
+      "intervention": "single_exponential_state",
+      "acts_on": "state"
+    },
+    {
+      "name": "mtsk",
+      "intervention": "multi_timescale_adaptive_state",
+      "acts_on": "state"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "exact_class_balanced_success",
+      "role": "primary",
+      "primary": true,
+      "description": "Exact generated task success, class-balanced, evaluated on untouched test episodes."
+    },
+    {
+      "name": "history_conditioned_action_gap",
+      "role": "secondary",
+      "primary": false,
+      "description": "Absolute difference in action selection on paired histories with identical current observations but different optimal actions."
+    },
+    {
+      "name": "adaptation_regret",
+      "role": "secondary",
+      "primary": false,
+      "description": "Cumulative regret after registered regime transitions."
+    },
+    {
+      "name": "total_computation_work",
+      "role": "secondary",
+      "primary": false,
+      "description": "Total measured work including state read/write, routing, execution and verification; no dominant term may be omitted."
+    },
+    {
+      "name": "persistent_state_footprint",
+      "role": "secondary",
+      "primary": false,
+      "description": "Number of active state elements attributable to persistent state."
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "The primary endpoint improves materially for mtsk over both no_state and single_timescale, with the registered seed-level confidence interval excluding zero for the MTSK-vs-single-timescale contrast.",
+      "licenses": "evidence that the registered multi-timescale state mechanism improves exact history-conditioned capability on the finite benchmark under the registered compute accounting.",
+      "does_not_license": "general intelligence, biological equivalence, asymptotic scaling, or cross-domain competence."
+    },
+    {
+      "condition": "MTSK improves history-conditioned action gap diagnostics but not exact class-balanced success.",
+      "licenses": "the state changes history-dependent behavior but has not been shown to improve the registered capability endpoint.",
+      "does_not_license": "system-level capability improvement."
+    },
+    {
+      "condition": "MTSK matches or loses to the matched single-timescale state.",
+      "licenses": "the registered multi-timescale advantage is not supported on this benchmark.",
+      "does_not_license": "failure of persistent state generally, failure of scale-free memory generally, or failure on other environments."
+    }
+  ],
+  "interpretation_order": [
+    "protocol and security integrity",
+    "leakage and supervision boundary",
+    "benchmark validity",
+    "representability",
+    "model-state integrity",
+    "degeneracy and discrimination",
+    "exact capability",
+    "history-conditioned intervention",
+    "total computation",
+    "statistics",
+    "scope"
+  ],
+  "h_levels": [8, 64, 256],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 500,
+  "eval_steps": 200,
+  "held_constant": [
+    "benchmark generator commit",
+    "train/validation/test split identities",
+    "optimizer family and hyperparameter schedule",
+    "training step count",
+    "candidate generation protocol",
+    "router interface",
+    "structural executor",
+    "verifier",
+    "repair controller",
+    "evaluation seeds",
+    "parameter budget within preregistered matching tolerance",
+    "compute accounting definition"
+  ],
+  "status": "pre-registered",
+  "layer": "L3",
+  "amendments": []
+}

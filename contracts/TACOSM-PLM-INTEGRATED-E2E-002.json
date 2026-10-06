@@ -1,0 +1,323 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-002",
+  "version": 1,
+  "status": "superseded",
+  "title": "Corrected jointly trained multimodal persistent computation with explicit q1/q2 entity semantics",
+  "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute an operator choice, verify post-action outcome, and remain capable on held-out modality/operator/query compositions when q1 and q2 target entities are generated and represented consistently?",
+  "primary_endpoint": {
+    "name": "heldout_q2_accuracy_all_modalities",
+    "unit": "episode",
+    "threshold": 0.8,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "hidden_dim": 40,
+    "entity_count": 16,
+    "latent_bits": 12,
+    "observation_entities_per_episode": 3,
+    "memory_slots": 16,
+    "query_count": 2,
+    "query_pairs_train_excluded_from_test": [
+      [
+        "xor",
+        0,
+        4
+      ],
+      [
+        "xor",
+        5,
+        8
+      ],
+      [
+        "and",
+        1,
+        9
+      ],
+      [
+        "and",
+        2,
+        6
+      ],
+      [
+        "or",
+        7,
+        10
+      ],
+      [
+        "or",
+        3,
+        11
+      ],
+      [
+        "xnor",
+        4,
+        9
+      ],
+      [
+        "xnor",
+        6,
+        11
+      ]
+    ],
+    "observation_noise": 0.03,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "complementary_modalities": {
+      "text_bits": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "image_bits": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "audio_bits": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "registered_arms": [
+      "integrated",
+      "no_memory",
+      "shuffle_image",
+      "text_only",
+      "image_only",
+      "audio_only"
+    ]
+  },
+  "arms": [
+    {
+      "name": "integrated",
+      "intervention": "jointly trained full chain",
+      "acts_on": "integrated architecture"
+    },
+    {
+      "name": "no_memory",
+      "intervention": "zero persistent state immediately before q1",
+      "acts_on": "persistent state",
+      "knob": "memory",
+      "value": "zero"
+    },
+    {
+      "name": "shuffle_image",
+      "intervention": "permute image observations across entities while retaining the same episode payloads and query answers",
+      "acts_on": "multimodal alignment",
+      "knob": "image alignment",
+      "value": "shuffled"
+    },
+    {
+      "name": "text_only",
+      "intervention": "zero image and audio observations while retaining text observations",
+      "acts_on": "modality",
+      "knob": "image+audio",
+      "value": "zero"
+    },
+    {
+      "name": "image_only",
+      "intervention": "replace text and audio observations with neutral constants while retaining image observations",
+      "acts_on": "modality",
+      "knob": "text+audio",
+      "value": "neutral"
+    },
+    {
+      "name": "audio_only",
+      "intervention": "replace text and image observations with neutral constants while retaining audio observations",
+      "acts_on": "modality",
+      "knob": "text+image",
+      "value": "neutral"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_all_modalities",
+      "role": "primary — held-out q2 verified action accuracy with all modalities and persistent state",
+      "primary": true
+    },
+    {
+      "name": "heldout_q1_accuracy_all_modalities",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "heldout_q2_accuracy_no_memory",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "heldout_q2_accuracy_shuffled_one_modality",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "heldout_q2_accuracy_text_only",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "heldout_q2_accuracy_image_only",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "heldout_q2_accuracy_audio_only",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "operator_selection_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "target_memory_attention",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "theoretical_operator_prior_accuracy",
+      "role": "audit baseline",
+      "primary": false
+    },
+    {
+      "name": "primary_q2_seed_bootstrap_ci",
+      "role": "uncertainty",
+      "primary": false
+    },
+    {
+      "name": "memory_drop_seed_bootstrap_ci",
+      "role": "uncertainty",
+      "primary": false
+    },
+    {
+      "name": "alignment_drop_seed_bootstrap_ci",
+      "role": "uncertainty",
+      "primary": false
+    }
+  ],
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "k_levels": [],
+  "held_constant": [
+    "entity_count=16",
+    "latent_bits=12",
+    "three observed entities per episode",
+    "text bits 0-3, image bits 4-7, audio bits 8-11",
+    "q1 always targets entities[0] and q2 always targets entities[1], which are distinct",
+    "q1/q2 operator and bit-index composition is represented exactly by the pre-action query tuple",
+    "held-out compositions are absent from TRAIN_COMBOS including commutative reverse-index forms",
+    "training RNG namespace and evaluation RNG namespace are disjoint",
+    "evaluation episodes are generated only after all training steps",
+    "controls are evaluated on the exact same episode objects within each seed",
+    "environment outcome enters only after the action",
+    "target answer is not an argument to model.query",
+    "entity-addressed successful post-action writes are preserved",
+    "no test outcomes or verifier targets are used for model selection",
+    "no auxiliary inference-time supervision"
+  ],
+  "information_flow": {
+    "pre_action": "three complementary modality observations -> encoders -> shared representation -> persistent write -> query-conditioned read -> CASM -> action",
+    "post_action": "environment outcome -> verifier/update",
+    "forbidden_before_action": [
+      "answer",
+      "environment_outcome",
+      "verifier_target"
+    ],
+    "allowed_after_action": [
+      "environment outcome",
+      "verifier supervision"
+    ],
+    "auxiliary_training_only": "payload latent bits supervise representation during training only; they are not available to the pre-action query path"
+  },
+  "decision_rule": [
+    {
+      "condition": "all integrity and information-flow checks pass, mean integrated held-out q2 accuracy >=0.80, and every seed q2 accuracy >=0.40",
+      "licenses": "bounded evidence that the corrected synthetic multimodal persistent-computation chain meets the registered primary capability criterion",
+      "does_not_license": "real-world multimodal understanding, scaling laws, AGI, or autonomous operator discovery"
+    },
+    {
+      "condition": "integrity passes but primary threshold fails",
+      "licenses": "the corrected integrated architecture does not meet the primary synthetic criterion",
+      "does_not_license": "impossibility of PLM or any component"
+    },
+    {
+      "condition": "q1/q2 entity consistency fails, held-out composition leaks into training, or pre-action answer/outcome is accessible",
+      "licenses": "instrument invalid; no capability interpretation",
+      "does_not_license": "negative scientific conclusion"
+    },
+    {
+      "condition": "normal q2 > no_memory q2 on paired episodes",
+      "licenses": "bounded evidence that persistent state contributes to this benchmark",
+      "does_not_license": "lifelong or semantic memory"
+    },
+    {
+      "condition": "normal q2 > shuffle_image q2 on paired episodes",
+      "licenses": "bounded evidence that image alignment contributes",
+      "does_not_license": "individual modality necessity without unimodal diagnostics"
+    }
+  ],
+  "leakage_rules": [
+    "sample_episode returns q1 entity=entities[0] and q2 entity=entities[1]; the answer for each query is computed only from that query entity's payload",
+    "TRAIN_COMBOS excludes HELDOUT before any training sampling occurs",
+    "evaluation q1/q2 tuples are drawn only from HELDOUT after training",
+    "controls receive the same generated episode list and the same answer labels; only the registered intervention changes",
+    "model.query accepts only memory, entity, i, j and op; outcome is passed separately after action",
+    "no evaluation metric is used to tune architecture, seeds, heldout tuples, or training hyperparameters",
+    "payload bits are used only as training-time auxiliary representation targets for bit_head; payload values are never supplied to query() or used as an inference-time input"
+  ],
+  "generator": {
+    "version": "integrated-e2e-v2-correct-q1-q2-entities-complementary-12bit-heldout",
+    "sha256": "d74e131192c6a8d05588a4a4b31e83a477e10d7c7038bd27ed32f4f983fcc993"
+  },
+  "provenance": {
+    "predecessor": "TACOSM-PLM-INTEGRATED-E2E-001",
+    "predecessor_status": "invalidated",
+    "predecessor_failure": "q2 answer was generated from entities[1] while the query tuple advertised entities[0]; the model therefore answered one entity while being graded on another",
+    "result_under_predecessor": "void"
+  },
+  "scope": [
+    "synthetic mechanism benchmark only",
+    "within-episode persistent state only",
+    "entity-slot addressing rather than semantic memory search",
+    "exact differentiable Boolean CASM scaffold",
+    "no natural language/image/audio competence claim",
+    "no asymptotic scaling claim"
+  ],
+  "hypothesis": "A correctly generated q2 query must address the same entity whose payload defines its answer; after this correction, the integrated chain should meet the registered held-out capability criterion without pre-action target leakage.",
+  "interpretation_order": [
+    "benchmark_integrity",
+    "information_flow",
+    "leakage",
+    "primary_endpoint",
+    "memory_control",
+    "alignment_control",
+    "unimodal_controls",
+    "operator_selection",
+    "state_addressing",
+    "uncertainty",
+    "scope"
+  ],
+  "supersession": {
+    "reason": "The repository already contains the stronger E2E-003 address-diagnosis benchmark. E2E-002 was used only as a development lane for the q1/q2 entity and post-action feedback audits and has no admissible scientific result.",
+    "successor": "TACOSM-PLM-INTEGRATED-E2E-003",
+    "confirmatory_result_admissible": false
+  }
+}

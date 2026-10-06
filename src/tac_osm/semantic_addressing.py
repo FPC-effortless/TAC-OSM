@@ -151,7 +151,7 @@ class RepresentationAddressIndex:
         self,
         query: Query,
         *,
-        state: PersistentState | None = None,
+        state: object | None = None,
         k: int | None = None,
         relation: str | None = None,
     ) -> SemanticAddressHit:
