@@ -107,7 +107,8 @@ def run(args: argparse.Namespace) -> dict:
                 optimizer_forward_backward_work = contract.steps * len(train) * 4 * (4 * HIDDEN + 2 * HIDDEN)
                 train_work = float(train_state_work + optimizer_forward_backward_work)
                 reset_result = evaluate(policy, test, "mtsk", intervention="reset") if arm == "mtsk" else None
-                shuffle_result = evaluate(policy, test, "mtsk", intervention="shuffle") if arm == "mtsk" else None                if arm != "no_state" and policy.parameter_hash() == initial_hashes[(H, seed, arm)]:
+                shuffle_result = evaluate(policy, test, "mtsk", intervention="shuffle") if arm == "mtsk" else None
+                if arm != "no_state" and policy.parameter_hash() == initial_hashes[(H, seed, arm)]:
                     raise RuntimeError("learned evaluation checkpoint is identical to initialization")
                 if arm == "mtsk":
                     if reset_result is None or shuffle_result is None:
