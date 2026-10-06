@@ -761,6 +761,10 @@ def test_matched_contract_matches_its_script():
     # the arm set is one name, and the comparison is across the matrix rather
     # than against a control arm.
     arms = got.get("REGISTERED_ARMS", got.get("ARMS"))
+    assert arms is not None, (
+        f"{script} declares no literal REGISTERED_ARMS/ARMS tuple; "
+        "the registered arm set must be statically visible to CI"
+    )
     assert tuple(arms) == tuple(a.name for a in c.arms), (
         "the MATCHED-001 contract's arm drifted from the script's registered "
         "tuple"
