@@ -5,6 +5,7 @@ def test_unified_governance_documents_exist():
     assert (root / 'docs' / 'RESEARCH_GOVERNANCE.md').is_file()
     assert (root / 'docs' / 'RESEARCH_LANE_REGISTRY.md').is_file()
     assert (root / 'docs' / 'RESEARCH_RUN_GATES_V2.md').is_file()
+    assert (root / 'docs' / 'TOP_DOWN_BOTTOM_UP_RESEARCH_METHOD.md').is_file()
     assert (root / '.github' / 'workflows' / 'unified-research-gates.yml').is_file()
 
 def test_unified_governance_contains_continuity_and_integrity_rules():
@@ -48,8 +49,12 @@ def test_claim_ledger_has_unique_claim_ids_and_authoritative_e2e_disposition():
     assert len(ids) == len(set(ids))
     assert ids.count('C12') == 1
     c12 = c[c.index('## C12'):c.index('## C13')]
+    audit = (root / 'docs' / 'RETROSPECTIVE_SCIENCE_AUDIT_001.md').read_text()
+    registry = (root / 'docs' / 'RESEARCH_LANE_REGISTRY.md').read_text()
     assert 'SUPERSEDED — VOID FOR BENCHMARK VALIDITY' in c12
-    assert 'ignored the query entity argument' in c12
+    assert 'E2E-001' in audit or 'E2E-001' in c12
+    assert 'TACOSM-E2E-001 | INVALIDATED / VOID' in registry
+    assert 'provenance record' in c12.lower()
 
 def test_current_docs_do_not_claim_temporal_measurement_is_unrun():
     root = Path(__file__).parents[1]

@@ -672,7 +672,10 @@ def _script_constants(name: str) -> dict:
                 raw = ast.literal_eval(default)
             except (ValueError, SyntaxError):
                 continue
-            out["SEEDS"] = tuple(int(s) for s in str(raw).split(","))
+            if isinstance(raw, (list, tuple)):
+                out["SEEDS"] = tuple(int(s) for s in raw)
+            else:
+                out["SEEDS"] = tuple(int(s) for s in str(raw).split(","))
         elif flag == "--eval-steps":
             try:
                 out["EVAL_STEPS"] = int(ast.literal_eval(default))
@@ -912,6 +915,7 @@ _WITH_CONTRACT = (
     ("measure_c5_casm.py", "TACOSM-C5-001"),
     ("measure_c5_casm_002.py", "TACOSM-C5-002"),
     ("measure_c5_casm_003.py", "TACOSM-C5-003"),
+    ("measure_plm_topdown_mtsk_001.py", "TACOSM-PLM-TDBU-MTSK-001"),
 )
 
 
