@@ -53,7 +53,7 @@ jobs:
       - name: Measurement
         run: |
           mkdir -p results
-          PYTHONPATH=src python scripts/measure_plm_topdown_mtsk_001.py --commit "$GITHUB_SHA"
+          PYTHONPATH=src python scripts/measure_plm_topdown_mtsk_001.py --commit "$(git rev-parse HEAD)"
 
       - name: Post-run P0-P2 invariants
         run: PYTHONPATH=src python scripts/validate_plm_topdown_mtsk_001.py results/TACOSM-PLM-TDBU-MTSK-001.json
