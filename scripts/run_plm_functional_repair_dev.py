@@ -106,7 +106,7 @@ def gradient_surface_probe() -> dict:
     return {"pass": not failures, "missing_or_nonfinite": failures}
 
 
-def train_seed(seed: int):
+def train_seed(seed: int, steps: int = STEPS):
     torch.manual_seed(seed)
     rng = random.Random(seed + 50000)
     model = FunctionalRepairPLM().cpu()
@@ -116,7 +116,7 @@ def train_seed(seed: int):
         weight_decay=0.0001,
     )
     training_keys: set[tuple] = set()
-    for _ in range(STEPS):
+    for _ in range(steps):
         episodes = sample_dev_episodes(rng, BATCH_SIZE)
         training_keys.update(episode_key(ep) for ep in episodes)
         batch = build_batch(episodes)
@@ -188,14 +188,14 @@ def evaluate_dev(model: FunctionalRepairPLM, episodes: list[tuple]) -> dict:
     }
 
 
-def run() -> dict:
+def run(steps: int = STEPS, *, artifact_name: str = "PLM-FUNCTIONAL-REPAIR-SIGNED-CASM.json") -> dict:
     gradient = gradient_surface_probe()
     if not gradient["pass"]:
         raise AssertionError(f"gradient-surface failure: {gradient}")
 
     rows = []
     for seed in SEEDS:
-        model, training_keys = train_seed(seed)
+        model, training_keys = train_seed(seed, steps)
         rng = random.Random(seed + 250000)
         episodes = sample_dev_episodes(rng, EVAL_COUNT)
         eval_keys = {episode_key(ep) for ep in episodes}
@@ -222,7 +222,7 @@ def run() -> dict:
         "not_scientific_evidence": True,
         "retired_e2e005_holdout_used": False,
         "evaluation_distribution": "registered E2E-005 TRAIN_COMBOS only",
-        "steps": STEPS,
+        "steps": steps,
         "batch_size": BATCH_SIZE,
         "evaluation_episodes_per_seed": EVAL_COUNT,
         "seeds": list(SEEDS),
@@ -234,7 +234,7 @@ def run() -> dict:
     }
     out = (
         Path("artifacts/development")
-        / "PLM-FUNCTIONAL-REPAIR-SIGNED-CASM.json"
+        / artifact_name
     )
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")
