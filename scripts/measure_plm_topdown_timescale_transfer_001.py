@@ -22,7 +22,6 @@ from tac_osm.measurement.results import (
     write_record,
 )
 from tac_osm.timescale_transfer import (
-    ARMS,
     GENERATOR_VERSION,
     BENCHMARK_HASH,
     EXTRAPOLATION_TEST_INDICES,
@@ -49,6 +48,13 @@ LEARNING_RATE = 0.05
 MATERIALITY = 0.10
 STEPS_DEFAULT = 500
 EVAL_STEPS_DEFAULT = 200
+ARMS = (
+    "no_state",
+    "one_timescale",
+    "two_timescale",
+    "three_timescale",
+    "distributed_eight",
+)
 TRAINED_ARMS = ARMS
 
 
