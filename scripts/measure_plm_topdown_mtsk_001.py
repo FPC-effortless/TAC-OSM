@@ -202,6 +202,11 @@ def run(args: argparse.Namespace) -> dict:
                 "hidden_pair_type_in_router_features": False,
                 "class_balanced_evaluation": True,
             },
+            "representability": {
+                "shared_map_family_sign_agreement": representability,
+                "minimum_required": 0.90,
+            },
+            },
             "model_state": {
                 "initial_checkpoint_hashes": {
                     f"{H}:{seed}:{arm}": value
