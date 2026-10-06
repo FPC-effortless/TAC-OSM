@@ -38,6 +38,8 @@ assert x["leakage_audit"]["heldout_compositions_excluded_from_training"] is True
 assert x["leakage_audit"]["train_eval_rng_streams_disjoint"] is True
 assert x["leakage_audit"]["evaluation_generated_after_training"] is True
 assert x["leakage_audit"]["controls_reuse_exact_same_episode_objects"] is True
+assert x["leakage_audit"]["pre_action_payload_bits_available"] is False
+assert x["leakage_audit"]["auxiliary_payload_supervision_is_training_only"] is True
 assert set(x["leakage_audit"]["forbidden_pre_action_fields"]) == {"answer","environment_outcome","verifier_target"}
 assert x["summary"]["primary_pass"] == bool(x["summary"]["normal_q2"] >= c.primary_endpoint.threshold)
 assert x["summary"]["all_seed_min_q2"] == min(r["normal_q2"] for r in rows)
