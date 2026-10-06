@@ -148,6 +148,19 @@ class MLPPolicy:
 
 
 
+
+def representability_witness(seed: int = 12345, pairs_per_family: int = 1000) -> dict[str, float]:
+    """Analytical shared-map witness: MTSK coordinates retain each registered temporal contrast."""
+    examples = make_balanced_pairs(seed, 64, pairs_per_family * len(PAIR_TYPES))
+    features = featurize(examples, "mtsk")
+    scores: dict[str, float] = {}
+    for family_idx, pair_type in enumerate(PAIR_TYPES):
+        indices = [j for j, ex in enumerate(examples) if ex.pair_id % len(PAIR_TYPES) == family_idx]
+        predicted = (features[indices, 1 + pair_type[0]] >= features[indices, 1 + pair_type[1]]).astype(int)
+        labels = np.asarray([examples[j].label for j in indices], dtype=np.int64)
+        scores[f"family_{pair_type[0]}_vs_{pair_type[1]}"] = float(np.mean(predicted == labels))
+    return scores
+
 class FixedBinaryExecutor:
     """Standard action executor; semantics are deliberately trivial and fixed."""
     def execute(self, action: int) -> int:
