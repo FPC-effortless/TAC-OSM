@@ -266,9 +266,7 @@ Before RUN:
 - declare the decision rule;
 - declare what each branch licenses and does not license.
 
-The default unit for the bacterial-state track is the seed-level estimate, with
-paired evaluation tasks across arms. Use bootstrap CIs over seeds unless a
-different method is preregistered.
+The default statistical unit is lane-specific and must be frozen before confirmation. For small-seed research lanes, the seed-level estimate with paired evaluation tasks and bootstrap over seeds is the default unless a different valid method is preregistered.
 
 No threshold may be selected after seeing the confirmatory result.
 
