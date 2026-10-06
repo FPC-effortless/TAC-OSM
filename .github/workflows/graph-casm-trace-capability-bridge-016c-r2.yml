@@ -105,7 +105,11 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install dependencies
-        run: python -m pip install --quiet -e . pytest torch
+        run: python -m pip install --quiet -e . pytest torch "ruff==0.13.0"
+      - name: Static undefined-name gate
+        run: ruff check --select F821 scripts/run_graph_casm_trace_capability_bridge_016c_r2.py scripts/validate_graph_casm_trace_capability_bridge_016c_r2.py scripts/run_graph_casm_structured_action_probe_015.py src/tac_osm/trace_capability.py
+      - name: Syntax/bytecode gate
+        run: python -m compileall -q src scripts
       - name: Contract validation
         run: |
           python - <<'PY'
