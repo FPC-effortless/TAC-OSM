@@ -147,6 +147,19 @@ class MLPPolicy:
         return h.hexdigest()
 
 
+
+class FixedBinaryExecutor:
+    """Standard action executor; semantics are deliberately trivial and fixed."""
+    def execute(self, action: int) -> int:
+        if int(action) not in (0, 1):
+            raise ValueError(f"invalid binary action: {action!r}")
+        return int(action)
+
+
+class IndependentVerifier:
+    """Post-action verifier that checks the executed action against the outcome."""
+    def verify(self, executed_action: int, expected_action: int) -> bool:
+        return int(executed_action) == int(expected_action)
 @dataclass(frozen=True)
 class Evaluation:
     success: float
@@ -176,11 +189,20 @@ def evaluate(policy: MLPPolicy, examples: list[EpisodeExample], arm: Arm, interv
 
     predictions = policy.predict(features)
     labels = np.asarray([x.label for x in examples], dtype=np.int64)
+    executor = FixedBinaryExecutor()
+    verifier = IndependentVerifier()
+    executed = np.asarray([executor.execute(int(action)) for action in predictions], dtype=np.int64)
     outcomes = np.asarray(
-        [environment_outcome(int(action), int(label)) for action, label in zip(predictions, labels)],
+        [environment_outcome(int(action), int(label)) for action, label in zip(executed, labels)],
         dtype=np.float64,
     )
-    success = float(np.mean(outcomes))
+    verified = np.asarray(
+        [verifier.verify(int(action), int(label)) for action, label in zip(executed, labels)],
+        dtype=np.float64,
+    )
+    if not np.array_equal(outcomes, verified):
+        raise RuntimeError("environment outcome and independent verifier disagree")
+    success = float(np.mean(verified))
 
     pair_predictions: dict[int, list[int]] = {}
     for example, prediction in zip(examples, predictions):
