@@ -32,7 +32,13 @@ def test_q2_cannot_silently_refer_to_q1_entity():
     original = q2[4]
     mutated = dict(payload)
     mutated[q2[0]] = list(mutated[q2[0]])
-    mutated[q2[0]][q2[1]] ^= 1
+    original_a = mutated[q2[0]][q2[1]]
+    original_b = mutated[q2[0]][q2[2]]
+    # Force the named entity's answer to change for every Boolean operator.
+    # For AND, setting both operands to the opposite constant guarantees a flip.
+    replacement = 1 if not (original_a == 1 and original_b == 1) else 0
+    mutated[q2[0]][q2[1]] = replacement
+    mutated[q2[0]][q2[2]] = replacement
     a, b = mutated[q2[0]][q2[1]], mutated[q2[0]][q2[2]]
     changed = {"xor": a ^ b, "and": a & b, "or": a | b, "xnor": 1 - (a ^ b)}[q2[3]]
     assert changed != original
