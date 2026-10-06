@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Training-only functionality gate for the post-E2E-005 CASM repair.
+This file is on the repair CI trigger surface so integrity-only changes cannot silently skip validation.
 
 This script never evaluates E2E-005's retired held-out compositions. It samples
 fresh episodes only from the registered training-composition distribution.
