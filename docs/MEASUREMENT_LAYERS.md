@@ -407,8 +407,11 @@ A capability-vs-computation curve needs, at minimum:
 - the full ablation matrix (`M1.3`), because a cost claim about an integrated
   system is not separable from which mechanisms are switched on.
 
-None of these exist in v0.1. Until they do, no figure in this repository may
-present `C_executed` as though it had been measured against `|R|`.
+Those conditions did not exist in v0.1, but later bounded synthetic controls
+now measure retained-set size and execution work. They do not yet satisfy the
+full L3/L4 burden for C5 because learned semantic admission, realistic
+execution, and total end-to-end accounting are not jointly established under
+the current universal protocol.
 
 ---
 
@@ -466,3 +469,14 @@ Layer 0 is the name for the discipline that was being applied by hand. The
 difference between consuming an inherited row and re-establishing it is the
 difference between a gate and an experiment, and the register is what keeps
 them apart.
+
+
+## Retrospective Audit 001 amendment
+
+The layer definitions remain standing, but historical "empty gap" prose must
+be read against the corrected portfolio state. Explicit temporal persistence,
+retained-subset execution, and synthetic end-to-end selective controls now
+exist as bounded L2/L3 evidence. The universal audit therefore treats this
+file as the measurement-layer framework, while `docs/CLAIMS.md` and
+`docs/RETROSPECTIVE_SCIENCE_AUDIT_001.md` are authoritative for current
+scientific disposition.
