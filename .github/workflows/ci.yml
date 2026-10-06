@@ -33,8 +33,10 @@ jobs:
       - name: Pre-model gates
         run: |
           python -m pip install --quiet --upgrade pip
-          python -m pip install --quiet pytest
-          python -m pytest tests/ -q
+          python -m pip install --quiet -e . pytest "ruff==0.13.0"
+          ruff check --select F821 src scripts
+          python -m compileall -q src scripts
+          PYTHONPATH=src python -m pytest tests/ -q
 
       - name: Interface importability
         run: |
@@ -52,4 +54,4 @@ jobs:
       # runner is where the suite's real size lives, so the check runs here
       # rather than relying on a developer remembering to run the script.
       - name: Baseline provenance is current
-        run: python scripts/sync_test_count.py --check
+        run: PYTHONPATH=src python scripts/sync_test_count.py --check
