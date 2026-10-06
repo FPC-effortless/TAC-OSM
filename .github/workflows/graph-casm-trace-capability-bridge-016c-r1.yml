@@ -1,0 +1,23 @@
+name: Legacy invalidated G-CASM trace capability bridge 016C-R1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["research/graph-casm-trace-capability-bridge-016c-r2"]
+
+permissions:
+  contents: read
+
+jobs:
+  audit-only:
+    name: 016C-R1 invalidation check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Assert predecessor remains invalidated
+        run: |
+          grep -q "Status: INVALIDATED" docs/AUDIT-TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1.md
+          grep -q "never execute the R1" docs/AUDIT-TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1.md
+          echo "016C-R1 remains provenance-only; no predecessor measurement is executed."
