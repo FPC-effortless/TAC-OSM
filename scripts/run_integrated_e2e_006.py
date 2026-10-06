@@ -183,7 +183,7 @@ def run(smoke=False):
             "python_version":platform.python_version(),"torch_version":torch.__version__,
             "contract_sha256":contract_hash(),"benchmark_sha256":benchmark_manifest()["generator_sha256"],
             "base_benchmark_sha256":benchmark_manifest()["base_generator_sha256"]},
-         "protocol":{"seeds":list(seeds),"steps":steps,"batch_size":BATCH_SIZE,
+         "protocol":{"seeds":list(seeds),"steps":STEPS,"batch_size":BATCH_SIZE,
             "evaluation_episodes_per_seed":EVAL_EPISODES,"hidden_dim":64,
             "registered_heldout":[list(x) for x in HELDOUT],"train_combos_count":len(TRAIN_COMBOS),
             "benchmark_generator_version":GENERATOR_VERSION,"model_selection":"none",
