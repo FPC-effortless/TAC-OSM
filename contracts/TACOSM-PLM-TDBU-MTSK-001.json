@@ -4,12 +4,26 @@
   "question": "Does a compact multi-timescale persistent state improve history-conditioned exact decision capability when embedded in a complete persistent-state -> router -> executor -> verifier loop, compared with matched no-state, single-timescale, and reduced-timescale controls?",
   "hypothesis": "A fixed multi-timescale adaptive state bank provides decision-useful temporal contrasts that a matched single-timescale state cannot represent efficiently, improving held-out exact history-conditioned capability while using the same learned policy capacity and explicitly accounted state computation.",
   "arms": [
-    {"name": "no_state", "intervention": "persistent_state_disabled", "acts_on": "state"},
-    {"name": "single_timescale", "intervention": "three_state_slots_share_one_decay", "acts_on": "state"},
-    {"name": "two_timescale", "intervention": "two_distinct_decays_with_one_repeated_slot", "acts_on": "state"},
-    {"name": "mtsk", "intervention": "three_log_spaced_decays", "acts_on": "state"},
-    {"name": "mtsk_reset", "intervention": "freeze_trained_mtsk_policy_but_reset_state_before_decision", "acts_on": "evaluation_state_intervention"},
-    {"name": "mtsk_shuffle", "intervention": "freeze_trained_mtsk_policy_but_swap_final_state_between_episodes", "acts_on": "evaluation_state_intervention"}
+    {
+      "name": "no_state",
+      "intervention": "persistent_state_disabled",
+      "acts_on": "state"
+    },
+    {
+      "name": "single_timescale",
+      "intervention": "three_state_slots_share_one_decay",
+      "acts_on": "state"
+    },
+    {
+      "name": "two_timescale",
+      "intervention": "two_distinct_decays_with_one_repeated_slot",
+      "acts_on": "state"
+    },
+    {
+      "name": "mtsk",
+      "intervention": "three_log_spaced_decays",
+      "acts_on": "state"
+    }
   ],
   "endpoints": [
     {
@@ -79,8 +93,18 @@
     "statistics",
     "scope"
   ],
-  "h_levels": [8, 64, 256],
-  "seeds": [0, 1, 2, 3, 4],
+  "h_levels": [
+    8,
+    64,
+    256
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "steps": 500,
   "eval_steps": 200,
   "held_constant": [
@@ -97,5 +121,16 @@
   ],
   "status": "pre-registered",
   "layer": "L3",
-  "amendments": []
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "registered arm set and intervention definition",
+      "old_definition": "mstk_reset and mtsk_shuffle are listed as arms alongside trained ablation arms",
+      "new_definition": "mtsk_reset and mtsk_shuffle are frozen-checkpoint evaluation interventions, while the trained arm set is no_state, single_timescale, two_timescale, mtsk",
+      "rationale": "reset and shuffle do not train separate models; treating them as arms would make the ablation grid incomplete even though the causal intervention is intentionally post-training",
+      "discovered": "during pre-confirmation integration audit, before any registered confirmatory result",
+      "affected": "contract arm set and result-envelope arm enumeration",
+      "no_result_under_previous_version": "no confirmatory run was executed under the previous arm classification"
+    }
+  ]
 }
