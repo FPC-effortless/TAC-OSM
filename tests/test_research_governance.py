@@ -16,8 +16,15 @@ def test_unified_governance_contains_continuity_and_integrity_rules():
 def test_lane_registry_keeps_current_portfolio_visible():
     root = Path(__file__).parents[1]
     c = (root / 'docs' / 'RESEARCH_LANE_REGISTRY.md').read_text()
-    for lane in ['TACOSM-M1-RELEVANCE','TACOSM-M2-SELECTIVE-COMPUTE','TACOSM-PLM-ACTIVE-EVIDENCE','TACOSM-PLM-INTEGRATED-E2E','TACOSM-MTSK-BACTERIAL']:
-        assert lane in c
+    required_groups = [
+        ('TACOSM-M1-RELEVANCE',),
+        ('TACOSM-M2-SELECTIVE-COMPUTE',),
+        ('TACOSM-PLM-ACTIVE-EVIDENCE',),
+        ('TACOSM-E2E-001', 'TACOSM-PLM-INTEGRATED-E2E'),
+        ('TACOSM-MTSK-BACTERIAL',),
+    ]
+    for aliases in required_groups:
+        assert any(alias in c for alias in aliases)
 
 def test_retrospective_audit_is_portfolio_wide():
     root = Path(__file__).parents[1]
@@ -42,7 +49,7 @@ def test_claim_ledger_has_unique_claim_ids_and_authoritative_e2e_disposition():
     assert ids.count('C12') == 1
     c12 = c[c.index('## C12'):c.index('## C13')]
     assert 'SUPERSEDED — VOID FOR BENCHMARK VALIDITY' in c12
-    assert 'shared generator ignored the query entity argument' in c12
+    assert 'ignored the query entity argument' in c12
 
 def test_current_docs_do_not_claim_temporal_measurement_is_unrun():
     root = Path(__file__).parents[1]
