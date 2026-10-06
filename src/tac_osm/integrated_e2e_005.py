@@ -17,7 +17,7 @@ from .integrated_e2e_005_benchmark import OPS
 
 @dataclass(frozen=True)
 class FunctionalConfig:
-    hidden_dim: int = 40
+    hidden_dim: int = 64
     entity_count: int = 16
     latent_bits: int = 12
 
