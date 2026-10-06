@@ -672,7 +672,10 @@ def _script_constants(name: str) -> dict:
                 raw = ast.literal_eval(default)
             except (ValueError, SyntaxError):
                 continue
-            out["SEEDS"] = tuple(int(s) for s in str(raw).split(","))
+            if isinstance(raw, (list, tuple)):
+                out["SEEDS"] = tuple(int(s) for s in raw)
+            else:
+                out["SEEDS"] = tuple(int(s) for s in str(raw).split(","))
         elif flag == "--eval-steps":
             try:
                 out["EVAL_STEPS"] = int(ast.literal_eval(default))
