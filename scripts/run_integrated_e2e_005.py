@@ -41,6 +41,20 @@ EXPERIMENT_ID = "TACOSM-PLM-INTEGRATED-E2E-005"
 CONTRACT_PATH = ROOT / "contracts" / f"{EXPERIMENT_ID}.json"
 
 
+def primary_threshold() -> float:
+    raw = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+    primaries = [e for e in raw["endpoints"] if e["primary"]]
+    if len(primaries) != 1:
+        raise AssertionError(f"expected one primary endpoint, found {primaries}")
+    endpoint = raw["primary_endpoint"]
+    if endpoint["name"] != primaries[0]["name"]:
+        raise AssertionError("primary endpoint name/endpoint table mismatch")
+    threshold = float(endpoint["threshold"])
+    if not 0.0 < threshold < 1.0:
+        raise AssertionError(f"invalid primary threshold {threshold}")
+    return threshold
+
+
 def contract_hash() -> str:
     return hashlib.sha256(CONTRACT_PATH.read_bytes()).hexdigest()
 
@@ -383,7 +397,7 @@ def run(smoke: bool) -> dict:
         "all_seed_min_q2": min(normal_q2),
         "primary_pass": bool(
             not smoke
-            and statistics.fmean(normal_q2) >= contract.primary_endpoint.threshold
+            and statistics.fmean(normal_q2) >= primary_threshold()
             and min(normal_q2) >= 0.40
         ),
         "mean_memory_drop": statistics.fmean(
