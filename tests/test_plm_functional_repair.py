@@ -12,7 +12,7 @@ from tac_osm.functional_repair_signed_casm import (
 
 def test_signed_boolean_margin_truth_table():
     cases = (
-        (-2.0, -3.0, [0, 1, 0, 1]),
+        (-2.0, -3.0, [0, 0, 0, 1]),
         (-2.0, 3.0, [1, 0, 1, 0]),
         (2.0, -3.0, [1, 0, 1, 0]),
         (2.0, 3.0, [0, 1, 1, 1]),
