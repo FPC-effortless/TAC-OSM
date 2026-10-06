@@ -1,7 +1,7 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-001",
   "version": 10,
-  "status": "pre-registered",
+  "status": "invalidated",
   "question": "Can a jointly trained multimodal persistent computational chain carry cross-modal information into later queries, selectively address persistent state, execute a learned operator choice, verify the post-action outcome, and remain capable on held-out modality/operator/query compositions?",
   "primary_endpoint": {
     "name": "heldout_q2_accuracy_all_modalities",
@@ -394,5 +394,12 @@
     2,
     3,
     4
-  ]
+  ],
+  "invalidation": {
+    "reason": "q2 ground-truth answer was generated from entities[1] while the q2 query tuple advertised entities[0], so query identity and target answer referred to different entities",
+    "discovered": "pre-measurement benchmark audit",
+    "confirmatory_result_admissible": false,
+    "successor": "TACOSM-PLM-INTEGRATED-E2E-003",
+    "runner_allowed_in_confirmatory_ci": false
+  }
 }
