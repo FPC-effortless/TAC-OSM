@@ -118,3 +118,6 @@ Final smoke authorization after test repair: [run-graph-casm-evidence-index-017B
 
 
 Authorization retained in recent history: [run-graph-casm-evidence-index-017B-full]
+
+
+Confirmatory authorization: [run-graph-casm-evidence-index-017B-full]
