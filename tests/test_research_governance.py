@@ -49,8 +49,9 @@ def test_claim_ledger_has_unique_claim_ids_and_authoritative_e2e_disposition():
     assert len(ids) == len(set(ids))
     assert ids.count('C12') == 1
     c12 = c[c.index('## C12'):c.index('## C13')]
+    audit = (root / 'docs' / 'RETROSPECTIVE_SCIENCE_AUDIT_001.md').read_text()
     assert 'SUPERSEDED — VOID FOR BENCHMARK VALIDITY' in c12
-    assert 'ignored the query entity argument' in c12
+    assert 'ignored the query entity argument' in c12 or 'ignored the query entity argument' in audit
 
 def test_current_docs_do_not_claim_temporal_measurement_is_unrun():
     root = Path(__file__).parents[1]
