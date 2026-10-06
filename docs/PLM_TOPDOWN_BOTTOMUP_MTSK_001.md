@@ -1,6 +1,6 @@
 # PLM Top-Down Assembly / Bottom-Up Ablation — MTSK-001
 
-Status: preregistered. No confirmatory result was present when this protocol was registered.
+Status: measured / bounded support. The confirmatory artifact was produced on the registered design and passed the dedicated workflow, including full repository tests, post-run invariants, independent recomputation, and exact branch-head provenance.
 
 ## Scientific method
 
