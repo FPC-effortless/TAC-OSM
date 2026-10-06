@@ -44,6 +44,7 @@ def validate_contract(arm: str) -> None:
     contract.require_seeds(SEEDS)
     contract.require_steps(STEPS)
     contract.require_eval_steps(EVAL_EPISODES)
+    contract.require_arms(ARMS.keys())
     if arm not in ARMS or arm not in {a.name for a in contract.arms}:
         raise RuntimeError(f"unregistered arm: {arm}")
     if contract.check_consistency():
