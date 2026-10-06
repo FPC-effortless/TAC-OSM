@@ -27,7 +27,7 @@ TRAIN_FILTER_ALPHAS = np.array(
     dtype=np.float64,
 )
 TEST_FILTER_ALPHAS = np.array(
-    (0.40, 0.58, 0.74, 0.86, 0.93, 0.975, 0.992),
+    (0.40, 0.58, 0.74, 0.86, 0.93, 0.989, 0.993),
     dtype=np.float64,
 )
 DISTRIBUTED_EIGHT_ALPHAS = np.array(
