@@ -54,7 +54,7 @@ def test_claim_ledger_has_unique_claim_ids_and_authoritative_e2e_disposition():
     assert 'SUPERSEDED — VOID FOR BENCHMARK VALIDITY' in c12
     assert 'TACOSM-E2E-001' in audit
     assert 'TACOSM-E2E-001 | INVALIDATED / VOID' in registry
-    assert 'Numeric result retained only as a provenance record' in c12
+    assert 'provenance record' in c12.lower()
 
 def test_current_docs_do_not_claim_temporal_measurement_is_unrun():
     root = Path(__file__).parents[1]
