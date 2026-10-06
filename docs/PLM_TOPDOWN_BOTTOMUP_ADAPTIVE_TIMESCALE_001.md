@@ -93,6 +93,57 @@ no_state.
 A null primary result leaves the persistent-state finding intact but does not
 establish that learned temporal dynamics improve transfer.
 
+## Confirmatory result and disposition
+
+The registered exact-head run completed successfully at commit
+`20622cf36d03fc7dc14fde781b6d67595eaa37de`. Workflow run
+`37412279742` passed contract validation, unified research preflight, focused
+tests, the full **844-test** repository suite, measurement, post-run invariant
+validation, independent recomputation, and artifact upload. Artifact
+`11389722597` has digest
+`sha256:5bc9d5a31069596b7a32f75b43d8764bc80213c7da99179905a33fd1f8e0fe0f`.
+
+At H=256, three_adaptive success was 0.85, 0.87, 0.81, 0.88, 0.90 across
+the five seeds, mean **0.862**. Three_fixed success was 0.87, 0.87, 0.81,
+0.87, 0.88, mean **0.860**. The preregistered paired difference was
+**+0.002**, with seed-bootstrap 95% CI **[-0.010, 0.012]**. The +0.10 primary
+materiality criterion therefore failed and the interval includes zero.
+
+The no-state control remained at **0.500** mean with action gap 0.0. Both
+stateful arms had action gap **1.0** on every seed. For the frozen adaptive
+checkpoint, reset-to-zero success averaged **0.500** and cross-episode state
+shuffle averaged **0.138**, versus normal adaptive success **0.862**.
+
+The final adaptive decay constants at H=256 were:
+
+| seed | fast | medium | slow |
+|---|---:|---:|---:|
+| 0 | 0.4424 | 0.8988 | 0.9793 |
+| 1 | 0.4286 | 0.9037 | 0.9802 |
+| 2 | 0.4485 | 0.9045 | 0.9800 |
+| 3 | 0.4322 | 0.9039 | 0.9800 |
+| 4 | 0.4153 | 0.8949 | 0.9805 |
+
+The learned representation therefore moved the fastest timescale away from its
+initial 0.50 in a consistent direction while leaving the slower two scales near
+0.90 and 0.98. This is a descriptive optimization outcome, not a capability
+improvement claim.
+
+## Scientific boundaries
+
+The experiment establishes only that, on this finite new transfer benchmark,
+end-to-end learning of three decay parameters did not materially improve over
+the parent fixed three-timescale representation. It does not prove that the
+fixed scales are globally optimal, nor that adaptive temporal dynamics cannot
+help on other temporal distributions.
+
+The broader TDBU evidence now has a narrower interpretation: persistent temporal
+state is repeatedly useful, while adding more fixed scales or learning the three
+decays has not yet produced a capability gain. The remaining bottleneck is more
+likely to be the mapping from persistent representation to decision or the
+statistics/noise of the finite benchmark than raw temporal-state coverage.
+
+
 ## Scientific boundaries
 
 This experiment cannot establish scale-free or power-law memory, biological
