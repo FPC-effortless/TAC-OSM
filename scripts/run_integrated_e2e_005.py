@@ -13,9 +13,9 @@ from pathlib import Path
 
 import torch
 from torch import nn
+import torch.nn.functional as F
 
 ROOT = Path(__file__).resolve().parents[1]
-
 import sys
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -49,13 +49,12 @@ def accuracy(logits: torch.Tensor, target: int) -> int:
     return int(logits.argmax(-1).item() == int(target))
 
 
-def to_query(q: tuple):
+def query_parts(q: tuple):
     return (
         torch.tensor([q[0]], dtype=torch.long),
         torch.tensor([q[1]], dtype=torch.long),
         torch.tensor([q[2]], dtype=torch.long),
         torch.tensor([OPS.index(q[3])], dtype=torch.long),
-        torch.tensor([q[4]], dtype=torch.long),
     )
 
 
@@ -76,22 +75,77 @@ def build_batch(episodes: list[tuple]) -> dict:
 
     def make_qbatch(index: int):
         qs = [ep[index] for ep in episodes]
-        return (
+        meta = (
             torch.tensor([q[0] for q in qs], dtype=torch.long),
             torch.tensor([q[1] for q in qs], dtype=torch.long),
             torch.tensor([q[2] for q in qs], dtype=torch.long),
             torch.tensor([OPS.index(q[3]) for q in qs], dtype=torch.long),
-            torch.tensor([q[4] for q in qs], dtype=torch.long),
         )
+        targets = torch.tensor([q[4] for q in qs], dtype=torch.long)
+        return meta, targets
 
+    q1, y1 = make_qbatch(1)
+    q2, y2 = make_qbatch(2)
     return {
         "text": torch.stack(texts, 0),
         "image": torch.stack(images, 0),
         "audio": torch.stack(audios, 0),
         "entities": torch.stack(entities, 0),
-        "q1": make_qbatch(1),
-        "q2": make_qbatch(2),
+        "q1": q1,
+        "q2": q2,
+        "y1": y1,
+        "y2": y2,
     }
+
+
+def write_observations(model: FunctionalMultimodalPLM, batch: dict) -> torch.Tensor:
+    memory = model.state.initial(
+        batch["text"].shape[1],
+        batch["text"].device,
+    )
+    for t in range(batch["text"].shape[0]):
+        z = model.encode(
+            batch["text"][t],
+            batch["image"][t],
+            batch["audio"][t],
+        )
+        memory, _ = model.state.write(
+            memory,
+            z,
+            batch["entities"][t],
+        )
+    return memory
+
+
+def environment_outcome(action: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+    """Synthetic environment: success is determined only after the action."""
+    return ((action >= 0.5).long() == target).float().detach()
+
+
+def train_batch(model: FunctionalMultimodalPLM, batch: dict) -> torch.Tensor:
+    memory = write_observations(model, batch)
+
+    e1, i1, j1, op1 = batch["q1"]
+    out1 = model.query(memory, e1, i1, j1, op1)
+    action1_loss = F.cross_entropy(out1["logits"], batch["y1"])
+    outcome1 = environment_outcome(out1["action"], batch["y1"])
+    memory, verifier1 = model.post_action_update(memory, out1, outcome1)
+
+    e2, i2, j2, op2 = batch["q2"]
+    out2 = model.query(memory, e2, i2, j2, op2)
+    action2_loss = F.cross_entropy(out2["logits"], batch["y2"])
+    outcome2 = environment_outcome(out2["action"], batch["y2"])
+    _, verifier2 = model.post_action_update(memory, out2, outcome2)
+
+    verifier_loss = F.binary_cross_entropy_with_logits(
+        verifier1[:, :1],
+        verifier1[:, 1:],
+    ) + F.binary_cross_entropy_with_logits(
+        verifier2[:, :1],
+        verifier2[:, 1:],
+    )
+
+    return action1_loss + action2_loss + 0.10 * verifier_loss / 2
 
 
 def gradient_surface_probe() -> dict:
@@ -100,13 +154,8 @@ def gradient_surface_probe() -> dict:
     episodes = [sample_episode(rng) for _ in range(4)]
     batch = build_batch(episodes)
     model = FunctionalMultimodalPLM()
-    out = model.forward_episode(
-        {k: batch[k] for k in ("text", "image", "audio")},
-        batch["entities"],
-        batch["q1"],
-        batch["q2"],
-    )
-    out["loss"].backward()
+    loss = train_batch(model, batch)
+    loss.backward()
     required = (
         "text.emb.weight",
         "text.rnn.weight_ih_l0",
@@ -130,7 +179,11 @@ def train_seed(seed: int, steps: int, batch_size: int):
     torch.manual_seed(seed)
     rng = random.Random(seed + 50000)
     model = FunctionalMultimodalPLM().cpu()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=0.002, weight_decay=0.0001)
+    optimizer = torch.optim.AdamW(
+        model.parameters(),
+        lr=0.002,
+        weight_decay=0.0001,
+    )
     training_keys: set[tuple] = set()
 
     for _ in range(steps):
@@ -139,13 +192,8 @@ def train_seed(seed: int, steps: int, batch_size: int):
         batch = build_batch(episodes)
         model.train()
         optimizer.zero_grad(set_to_none=True)
-        out = model.forward_episode(
-            {k: batch[k] for k in ("text", "image", "audio")},
-            batch["entities"],
-            batch["q1"],
-            batch["q2"],
-        )
-        out["loss"].backward()
+        loss = train_batch(model, batch)
+        loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
 
@@ -153,7 +201,11 @@ def train_seed(seed: int, steps: int, batch_size: int):
 
 
 @torch.no_grad()
-def evaluate_seed(model: FunctionalMultimodalPLM, episodes: list[tuple], control: str):
+def evaluate_seed(
+    model: FunctionalMultimodalPLM,
+    episodes: list[tuple],
+    control: str,
+):
     model.eval()
     q1_correct = q2_correct = verifier_correct = 0
 
@@ -181,29 +233,33 @@ def evaluate_seed(model: FunctionalMultimodalPLM, episodes: list[tuple], control
                 audio.unsqueeze(0),
             )
             memory, _ = model.state.write(
-                memory, z, torch.tensor([entity], dtype=torch.long)
+                memory,
+                z,
+                torch.tensor([entity], dtype=torch.long),
             )
 
         if control == "no_memory":
             memory = torch.zeros_like(memory)
 
-        q1 = to_query(episode[1])
-        out1 = model.query(memory, q1[0], q1[1], q1[2], q1[3])
-        success1 = ((out1["action"] >= 0.5).long() == q1[4]).float()
-        updated, verifier1 = model.post_action_update(memory, out1, success1)
+        e1, i1, j1, op1 = query_parts(episode[1])
+        out1 = model.query(memory, e1, i1, j1, op1)
+        target1 = torch.tensor([episode[1][4]], dtype=torch.long)
+        outcome1 = environment_outcome(out1["action"], target1)
+        updated, verifier1 = model.post_action_update(memory, out1, outcome1)
 
-        q2 = to_query(episode[2])
-        out2 = model.query(updated, q2[0], q2[1], q2[2], q2[3])
-        success2 = ((out2["action"] >= 0.5).long() == q2[4]).float()
-        _, verifier2 = model.post_action_update(updated, out2, success2)
+        e2, i2, j2, op2 = query_parts(episode[2])
+        out2 = model.query(updated, e2, i2, j2, op2)
+        target2 = torch.tensor([episode[2][4]], dtype=torch.long)
+        outcome2 = environment_outcome(out2["action"], target2)
+        _, verifier2 = model.post_action_update(updated, out2, outcome2)
 
-        q1_correct += accuracy(out1["logits"], int(q1[4].item()))
-        q2_correct += accuracy(out2["logits"], int(q2[4].item()))
+        q1_correct += accuracy(out1["logits"], episode[1][4])
+        q2_correct += accuracy(out2["logits"], episode[2][4])
         verifier_correct += int(
-            ((verifier1[:, :1].sigmoid() >= 0.5).long() == success1.long()).item()
+            ((verifier1[:, :1].sigmoid() >= 0.5).long() == outcome1.long()).item()
         )
         verifier_correct += int(
-            ((verifier2[:, :1].sigmoid() >= 0.5).long() == success2.long()).item()
+            ((verifier2[:, :1].sigmoid() >= 0.5).long() == outcome2.long()).item()
         )
 
     n = len(episodes)
@@ -214,11 +270,21 @@ def evaluate_seed(model: FunctionalMultimodalPLM, episodes: list[tuple], control
     }
 
 
-def bootstrap_ci(values: list[float], rounds: int = 5000, seed: int = 20261006):
+def bootstrap_ci(
+    values: list[float],
+    rounds: int = 5000,
+    seed: int = 20261006,
+):
     rng = random.Random(seed)
-    means = [statistics.fmean(rng.choices(values, k=len(values))) for _ in range(rounds)]
+    means = [
+        statistics.fmean(rng.choices(values, k=len(values)))
+        for _ in range(rounds)
+    ]
     means.sort()
-    return [means[int(0.025 * rounds)], means[int(0.975 * rounds)]]
+    return [
+        means[int(0.025 * rounds)],
+        means[int(0.975 * rounds)],
+    ]
 
 
 def run(smoke: bool) -> dict:
@@ -237,20 +303,35 @@ def run(smoke: bool) -> dict:
         seeds, steps, batch_size, eval_n = SEEDS, STEPS, BATCH_SIZE, EVAL_EPISODES
 
     seed_results = []
-    controls = ("normal", "no_memory", "shuffle_image", "text_only", "image_only", "audio_only")
+    controls = (
+        "normal",
+        "no_memory",
+        "shuffle_image",
+        "text_only",
+        "image_only",
+        "audio_only",
+    )
 
     for seed in seeds:
         model, training_keys = train_seed(seed, steps, batch_size)
+
         eval_rng = random.Random(seed + 100000)
         episodes = sample_evaluation_episodes(eval_rng, eval_n)
         eval_keys = {episode_key(ep) for ep in episodes}
         overlap = training_keys & eval_keys
         if overlap:
-            raise AssertionError(f"training/evaluation semantic overlap for seed {seed}")
+            raise AssertionError(
+                f"training/evaluation semantic overlap for seed {seed}"
+            )
 
-        fingerprints = {control: episode_fingerprint(episodes) for control in controls}
+        fingerprints = {
+            control: episode_fingerprint(episodes)
+            for control in controls
+        }
         if len(set(fingerprints.values())) != 1:
-            raise AssertionError("controls did not reuse the exact same evaluation episodes")
+            raise AssertionError(
+                "controls did not reuse the exact same evaluation episodes"
+            )
 
         metrics = {
             control: evaluate_seed(model, episodes, control)
@@ -280,8 +361,14 @@ def run(smoke: bool) -> dict:
             "text_only_q2_accuracy": metrics["text_only"]["q2_accuracy"],
             "image_only_q2_accuracy": metrics["image_only"]["q2_accuracy"],
             "audio_only_q2_accuracy": metrics["audio_only"]["q2_accuracy"],
-            "memory_drop": metrics["normal"]["q2_accuracy"] - metrics["no_memory"]["q2_accuracy"],
-            "alignment_drop": metrics["normal"]["q2_accuracy"] - metrics["shuffle_image"]["q2_accuracy"],
+            "memory_drop": (
+                metrics["normal"]["q2_accuracy"]
+                - metrics["no_memory"]["q2_accuracy"]
+            ),
+            "alignment_drop": (
+                metrics["normal"]["q2_accuracy"]
+                - metrics["shuffle_image"]["q2_accuracy"]
+            ),
             "evaluation_episode_fingerprint": fingerprints["normal"],
             "training_evaluation_semantic_overlap": len(overlap),
             "oracle_q2_accuracy": oracle_correct / eval_n,
@@ -290,16 +377,24 @@ def run(smoke: bool) -> dict:
     normal_q2 = [r["normal_q2_accuracy"] for r in seed_results]
     summary = {
         "primary_q2_mean": statistics.fmean(normal_q2),
-        "primary_q2_seed_bootstrap_ci95": bootstrap_ci(normal_q2) if not smoke else [None, None],
+        "primary_q2_seed_bootstrap_ci95": (
+            bootstrap_ci(normal_q2) if not smoke else [None, None]
+        ),
         "all_seed_min_q2": min(normal_q2),
         "primary_pass": bool(
             not smoke
             and statistics.fmean(normal_q2) >= contract.primary_endpoint.threshold
             and min(normal_q2) >= 0.40
         ),
-        "mean_memory_drop": statistics.fmean(r["memory_drop"] for r in seed_results),
-        "mean_alignment_drop": statistics.fmean(r["alignment_drop"] for r in seed_results),
-        "oracle_q2_accuracy": statistics.fmean(r["oracle_q2_accuracy"] for r in seed_results),
+        "mean_memory_drop": statistics.fmean(
+            r["memory_drop"] for r in seed_results
+        ),
+        "mean_alignment_drop": statistics.fmean(
+            r["alignment_drop"] for r in seed_results
+        ),
+        "oracle_q2_accuracy": statistics.fmean(
+            r["oracle_q2_accuracy"] for r in seed_results
+        ),
         "gradient_surface_pass": gradient_gate["pass"],
     }
 
@@ -337,10 +432,18 @@ def run(smoke: bool) -> dict:
             "heldout_compositions_excluded_from_training": True,
             "evaluation_generated_after_training": True,
             "training_evaluation_semantic_overlap_zero": all(
-                r["training_evaluation_semantic_overlap"] == 0 for r in seed_results
+                r["training_evaluation_semantic_overlap"] == 0
+                for r in seed_results
             ),
             "controls_reuse_exact_same_episode_objects": True,
-            "pre_action_query_signature": ["self", "memory", "entity", "i", "j", "op"],
+            "pre_action_query_signature": [
+                "self",
+                "memory",
+                "entity",
+                "i",
+                "j",
+                "op",
+            ],
             "forbidden_pre_action_fields": [
                 "answer",
                 "environment_outcome",
@@ -363,7 +466,10 @@ def run(smoke: bool) -> dict:
 
     out = ROOT / "artifacts" / f"{EXPERIMENT_ID}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    out.write_text(
+        json.dumps(output, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     print(json.dumps(output, indent=2, sort_keys=True))
     return output
 
