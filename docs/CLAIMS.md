@@ -811,6 +811,44 @@ general intelligence, or efficiency gains. The distributed eight-state arm had
 substantially higher evaluation work than the three-state arm.
 
 
+
+## C19 — Trainable temporal decay did not improve held-out transfer
+
+> On a new held-out temporal-filter benchmark, end-to-end learning of three temporal decay parameters did not materially improve exact history-conditioned capability over the parent fixed three-timescale state.
+
+**STATUS: NOT ESTABLISHED**
+
+**TYPE:** mechanism · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-TDBU-ADAPTIVE-TIMESCALE-001`, exact branch-head commit
+`20622cf36d03fc7dc14fde781b6d67595eaa37de`, workflow run
+`37412279742`, artifact `11389722597`.
+
+At H=256, three_adaptive mean exact success was **0.862** versus
+**0.860** for three_fixed. The paired mean difference was **+0.002** with
+seed-bootstrap 95% CI **[-0.010, 0.012]**, far below the preregistered
+materiality threshold of **0.10**. The no-state control remained at **0.500**.
+
+The frozen adaptive checkpoint retained the expected history dependence:
+reset success averaged **0.500**, state-shuffle success **0.138**, and normal
+adaptive success **0.862**.
+
+The learned fast decay moved consistently below its initial 0.50, ending
+between **0.4153 and 0.4485** across the five seeds, while the other two decays
+remained near 0.90 and 0.98. This is evidence of parameter adaptation, not
+evidence of capability improvement.
+
+**BOUNDARY:** The null does not establish that fixed temporal scales are
+globally optimal, that trainable temporal kernels are useless on other
+distributions, or that persistent temporal state is unnecessary. It specifically
+rules out the registered material adaptive-timescale advantage on this finite
+held-out benchmark.
+
+The sequence of null results from wider fixed state and trainable decay shifts
+the next research focus toward the **persistent-state-to-action computation
+interface** and longer multi-decision persistence rather than increasing or
+optimizing temporal basis width.
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
