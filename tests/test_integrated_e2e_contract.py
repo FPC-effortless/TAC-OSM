@@ -26,8 +26,11 @@ def test_e2e003_contract_matches_corrected_benchmark():
     assert contract.seeds == (0, 1, 2, 3, 4)
     assert contract.steps == 300
     assert contract.eval_steps == EVAL_EPISODES_BENCHMARK == 400
-    assert contract.primary_endpoint.name == "heldout_q2_accuracy_all_modalities"
-    assert contract.primary_endpoint.threshold == 0.80
+    assert contract.primary_endpoint() == "heldout_q2_accuracy_all_modalities"
+    raw = json.loads((ROOT / "contracts" / "TACOSM-PLM-INTEGRATED-E2E-003.json").read_text())
+    primary = next(e for e in raw["endpoints"] if e["primary"])
+    assert primary["name"] == "heldout_q2_accuracy_all_modalities"
+    assert raw["primary_endpoint"]["threshold"] == 0.80
     assert BITS == 12
     assert BATCH_SIZE == 96
 
