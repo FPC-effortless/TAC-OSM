@@ -1,0 +1,297 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-005",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Functional end-to-end multimodal persistent computation without auxiliary representation supervision",
+  "question": "Can the integrated PLM chain learn a held-out cross-modal task from multimodal observations alone, carrying information through persistent state into a later query and executing the requested Boolean computation end to end?",
+  "hypothesis": "A jointly trained multimodal encoder, explicit persistent entity-addressed state, and fixed query-conditioned CASM dispatcher should solve the registered held-out cross-modal benchmark when trained only with final action supervision plus post-action verifier supervision; no payload-bit or entity auxiliary labels are provided to the model.",
+  "primary_endpoint": {
+    "name": "heldout_q2_accuracy_all_modalities",
+    "unit": "episode",
+    "threshold": 0.8,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "hidden_dim": 40,
+    "entity_count": 16,
+    "latent_bits": 12,
+    "observation_entities_per_episode": 3,
+    "evaluation_episodes_per_seed": 400,
+    "observation_noise": 0.03,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "query_count": 2,
+    "heldout_compositions": [
+      [
+        "xor",
+        0,
+        4
+      ],
+      [
+        "xor",
+        5,
+        8
+      ],
+      [
+        "and",
+        1,
+        9
+      ],
+      [
+        "and",
+        2,
+        6
+      ],
+      [
+        "or",
+        7,
+        10
+      ],
+      [
+        "or",
+        3,
+        11
+      ],
+      [
+        "xnor",
+        4,
+        9
+      ],
+      [
+        "xnor",
+        6,
+        11
+      ]
+    ],
+    "complementary_modalities": {
+      "text_bits": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "image_bits": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "audio_bits": [
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "controls": [
+      "normal",
+      "no_memory",
+      "shuffle_image",
+      "text_only",
+      "image_only",
+      "audio_only"
+    ],
+    "operator_dispatch": "fixed_query_conditioned",
+    "representation_auxiliary_supervision": false
+  },
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "full multimodal observation and persistent state",
+      "acts_on": "integrated path"
+    },
+    {
+      "name": "no_memory",
+      "intervention": "zero persistent state immediately before q1",
+      "acts_on": "persistent information"
+    },
+    {
+      "name": "shuffle_image",
+      "intervention": "permute image observations across the three observed entities",
+      "acts_on": "cross-modal alignment"
+    },
+    {
+      "name": "text_only",
+      "intervention": "replace image and audio observations with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "image_only",
+      "intervention": "replace text and audio observations with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "audio_only",
+      "intervention": "replace text and image observations with constants",
+      "acts_on": "modality"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_all_modalities",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "heldout_q1_accuracy_all_modalities",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "memory_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "alignment_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "text_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "image_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "audio_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verifier_q1_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "gradient_surface_coverage",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "oracle_q2_accuracy",
+      "role": "benchmark validity gate",
+      "primary": false
+    }
+  ],
+  "information_flow": {
+    "pre_action": "text/image/audio observations -> encoders -> shared representation -> explicit persistent entity write -> explicit entity read -> fixed query-conditioned CASM -> action",
+    "post_action": "predicted action -> environment outcome -> verifier -> outcome-gated state update",
+    "forbidden_before_action": [
+      "answer",
+      "environment_outcome",
+      "verifier_target",
+      "payload_labels",
+      "evaluation_correctness"
+    ],
+    "allowed_after_action": [
+      "environment_outcome",
+      "verifier_supervision"
+    ],
+    "operator_identity": "public query metadata; operator discovery is explicitly out of scope for this integration lane"
+  },
+  "held_constant": [
+    "same synthetic multimodal generator across training and evaluation",
+    "same entity_count=16, hidden_dim=40 and latent_bits=12",
+    "same eight cross-modal held-out compositions",
+    "same five seeds and 300-step schedule",
+    "same optimizer and learning-rate schedule",
+    "evaluation is generated only after training",
+    "no evaluation outcome is used for early stopping or model selection",
+    "controls reuse the exact same generated evaluation episode objects within each seed",
+    "E2E-001 and E2E-002 are invalidated/superseded provenance only",
+    "E2E-003 and E2E-004 are diagnostic historical comparators only and are not used for tuning"
+  ],
+  "leakage_rules": [
+    "q1 targets entities[0] and q2 targets entities[1], which are distinct",
+    "each query answer is computed from the named target entity payload only",
+    "training compositions are disjoint from registered held-out compositions",
+    "evaluation episodes are generated after all training steps using a separate RNG namespace",
+    "evaluation semantic keys are asserted not to overlap training episode keys",
+    "the model query interface contains no answer, target, outcome, reward, or verifier target argument",
+    "the training model receives final action labels only through the loss target; labels are never passed into query()",
+    "payload-bit and entity auxiliary representation supervision is disabled",
+    "post-action verifier feedback is computed only after the action and cannot affect that same action"
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass, mean normal heldout q2 accuracy >= 0.80, and every seed >= 0.40",
+      "licenses": "bounded evidence that the registered synthetic multimodal persistent-computation chain can function end to end without auxiliary representation supervision",
+      "does_not_license": "real-world multimodal understanding, semantic memory, learned operator discovery, scaling laws, AGI, or hardware claims"
+    },
+    {
+      "condition": "integrity passes but the primary threshold fails",
+      "licenses": "the current fixed functional configuration does not meet the registered synthetic capability criterion",
+      "does_not_license": "architecture impossibility; optimisation changes are a separate later research phase"
+    },
+    {
+      "condition": "any leakage, split, oracle, or gradient-surface gate fails",
+      "licenses": "instrument invalid; no capability interpretation",
+      "does_not_license": "a negative scientific conclusion"
+    }
+  ],
+  "statistics": {
+    "seed_bootstrap_samples": 5000,
+    "seed_bootstrap_seed": 20261006,
+    "confidence_level": 0.95,
+    "primary_aggregation": "mean q2 per seed followed by seed-level bootstrap"
+  },
+  "scope": [
+    "synthetic mechanism benchmark only",
+    "multimodal input from scratch; no pretrained external encoders",
+    "explicit entity addressing is a functional scaffold, not evidence for learned semantic addressing",
+    "fixed public operator dispatch is a functional scaffold, not evidence for autonomous operator discovery",
+    "no auxiliary representation labels at train or evaluation time",
+    "no optimisation/sweeps based on test outcomes"
+  ],
+  "provenance": {
+    "predecessors": [
+      "TACOSM-PLM-INTEGRATED-E2E-001",
+      "TACOSM-PLM-INTEGRATED-E2E-002",
+      "TACOSM-PLM-INTEGRATED-E2E-003",
+      "TACOSM-PLM-INTEGRATED-E2E-004"
+    ],
+    "predecessor_use": "historical diagnosis only; no measured outcome is used to select the current threshold, seed, hyperparameters, or held-out set"
+  },
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "model/harness information boundary",
+      "old_definition": "the initial prototype exposed training targets inside an episode-level model forward method while query() itself remained label-free",
+      "new_definition": "the model has no label-bearing episode-level forward method; the harness computes action loss outside the model and derives synthetic environment outcome only after action",
+      "rationale": "Reduce the attack surface for target leakage and make the pre-action model boundary structurally auditable.",
+      "discovered": "Pre-measurement anti-leakage audit.",
+      "affected": "implementation boundary only; benchmark, seeds, training steps, evaluation set, threshold and registered controls unchanged",
+      "scientific_status": "No admissible E2E-005 result existed under the previous implementation."
+    }
+  ],
+  "interpretation_order": [
+    "benchmark integrity and oracle validity",
+    "information-flow and target-leakage audit",
+    "train/evaluation disjointness and provenance fingerprints",
+    "gradient-surface integrity",
+    "primary held-out q2 accuracy",
+    "memory and modality controls",
+    "verifier behavior",
+    "claim boundary"
+  ]
+}
