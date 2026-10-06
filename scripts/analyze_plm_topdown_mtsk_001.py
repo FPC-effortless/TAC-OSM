@@ -14,11 +14,11 @@ def main() -> int:
     parser.add_argument("path", nargs="?", default="results/TACOSM-PLM-TDBU-MTSK-001.json")
     args = parser.parse_args()
     raw = json.loads(Path(args.path).read_text(encoding="utf-8"))
-    rows = raw["rows"]
+    rows = raw["per_seed"]["rows"]
 
     required_arms = {"no_state", "single_timescale", "two_timescale", "mtsk"}
     assert {r["arm"] for r in rows} == required_arms
-    assert sorted(set(raw["parameter_counts"])) == [86]
+    assert sorted(set(raw["endpoints"]["parameter_counts"])) == [86]
 
     def cell(arm: str, H: int) -> np.ndarray:
         values = [r["success"] for r in rows if r["arm"] == arm and r["H"] == H]
@@ -37,7 +37,7 @@ def main() -> int:
     assert all(r["checkpoint_hash"] != r["initial_checkpoint_hash"] for r in [
         {
             "checkpoint_hash": row["checkpoint_hash"],
-            "initial_checkpoint_hash": raw["initial_checkpoint_hashes"][f'256:{row["seed"]}:{row["arm"]}']
+            "initial_checkpoint_hash": raw["audit"]["model_state"]["initial_checkpoint_hashes"][f'256:{row["seed"]}:{row["arm"]}']
         } for row in rows if row["H"] == 256
     ])
 
