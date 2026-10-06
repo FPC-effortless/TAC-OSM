@@ -282,6 +282,16 @@
       "discovered": "Pre-measurement anti-leakage audit.",
       "affected": "implementation boundary only; benchmark, seeds, training steps, evaluation set, threshold and registered controls unchanged",
       "scientific_status": "No admissible E2E-005 result existed under the previous implementation."
+    },
+    {
+      "id": "A2",
+      "applies_to": "action classification output interface",
+      "old_definition": "CASM action probability was supplied to CrossEntropyLoss through logits=[-action,+action].",
+      "new_definition": "CASM action probability is converted with the numerically clamped logit transform and supplied as logits=[-logit(action),+logit(action)], preserving the registered action threshold decision.",
+      "rationale": "The previous interface structurally forced argmax class 1 for every positive action and therefore invalidated E2E-003/E2E-005 capability interpretation. Correct the instrumentation boundary without changing the task, data split, seeds, optimization budget, threshold, held-out compositions, or registered controls.",
+      "discovered": "Premeasurement code audit after the historical 0.5200 base-rate fingerprint.",
+      "affected": "loss/evaluation interface only; no benchmark generator, contract endpoint, seed, training step count, held-out set, or control definition changed",
+      "scientific_status": "Premeasurement correction. Historical E2E-003/E2E-005 artifacts remain invalid for capability inference."
     }
   ],
   "interpretation_order": [
