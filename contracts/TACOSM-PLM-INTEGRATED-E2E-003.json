@@ -249,8 +249,23 @@
       "discovered": "Full repository gate run 37069563300",
       "affected": "test assertions only; no benchmark generator, training/evaluation data, arm, or decision rule changed",
       "no_result_under_previous_version": "No E2E-003 scientific arm executed with the failing regression tests."
+    },
+    {
+      "id": "A8",
+      "applies_to": "post-action state feedback",
+      "old_definition": "forward_episode passed q1/q2 target labels directly to post_action_update as though they were realized environment outcomes",
+      "new_definition": "post_action_update receives a binary outcome computed after the model action as (executed_action == target_action); target labels are never passed as environment outcome directly",
+      "rationale": "The prior implementation could write the ground-truth q1 answer into persistent state even when the q1 action was wrong, leaking target information into q2 memory and invalidating causal memory interpretation.",
+      "discovered": "Pre-measurement deep information-flow audit on 2026-10-06",
+      "affected": "information-flow and post-action state semantics",
+      "no_result_under_previous_version": "true"
     }
   ],
   "diagnostic_materiality_threshold": 0.05,
-  "title": "Corrected temporal persistent-state address-path diagnosis for the integrated multimodal PLM chain"
+  "title": "Corrected temporal persistent-state address-path diagnosis for the integrated multimodal PLM chain",
+  "invalidation_of_prior_implementation": {
+    "status": "void",
+    "reason": "Any E2E-003 measurement produced before A8 is not admissible because the pre-amendment post-action path could inject ground-truth target labels into persistent state.",
+    "confirmatory_rerun_required": true
+  }
 }

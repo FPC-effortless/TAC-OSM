@@ -151,14 +151,24 @@ empty, and they are the ones the thesis actually needs:
 
 > **`V_t` → `S_{t+1}`: whether verification gates a state update.**
 
-No repository has run path-level verification, verified-only commit, or a
-persistent write across a temporal boundary. Stage 4W is pre-registered but
-unexecuted. This is where the program's claim actually lives, and it is
-where the integrated model earns its keep: those transitions become testable
-in situ rather than in isolation.
+The original evidence map is stale at this point. The hardened runtime now
+contains a verifier-gated commit path, and TACOSM-TEMPORAL-001 measured an
+enforced write-at-t/read-at-t+k persistence mechanism. The surviving claim is
+bounded: explicit synthetic state can influence a later decision through
+tested temporal boundaries. Learned semantic state formation and learned write
+policy remain unresolved, so the broader PLM claim still lives here.
 
-The second gap is narrower but more immediate: **a retrieval boundary.** Until
-one exists, `|R|` is not a defined quantity, C5 is untestable rather than
-merely untested, and every top-K result in this repository is a statement
-about a scorer with no index in front of it. `M2.1` is the experiment that
-closes that gap, and F3 is what gave it a reason to.
+The second gap is now decomposed. A retrieval boundary exists and bounded
+selective-execution experiments have measured `|R|` and downstream work.
+However, the broad C5 claim remains untested because the strongest surviving
+frontier still uses synthetic/descriptor-equality downstream execution and
+the learned semantic admission problem remains unresolved at large M.
+
+
+## Retrospective Audit 001 status
+
+This map is an historical dependency map, not a current claim ledger. The
+current authoritative disposition is `docs/RETROSPECTIVE_SCIENCE_AUDIT_001.md`,
+which distinguishes bounded L2/L3 evidence from the still-unestablished L4 C5
+claim. Historical rows above remain useful as provenance, but their original
+"gap" statements must not override the corrected claim and evidence ledgers.

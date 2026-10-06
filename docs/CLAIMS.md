@@ -45,6 +45,16 @@ be quietly upgraded from "measured once" to "established":
 
 ---
 
+## Retrospective Audit 001 disposition rule
+
+The claims below are preserved as the scientific ledger, but all historical
+results are additionally classified by `docs/RETROSPECTIVE_SCIENCE_AUDIT_001.md`.
+A `SUPPORTED` or `NOT ESTABLISHED` historical entry means the evidence is
+valid at its stated scope; it does **not** mean the old run passed the current
+G0-G10/P0-P7 governance. Invalidated or superseded numbers cannot be used as
+tuning baselines. New confirmatory claims require the universal research gates.
+
+
 ## C1 — Persistence
 
 > Information written at step `t` can be used at step `t + k` to change a
@@ -209,6 +219,8 @@ Tests: `tests/test_integrity.py`, including
 
 **TYPE:** core claim · **LAYER:** L4 — see `docs/EVIDENCE_REGISTER.md`
 
+**RETROSPECTIVE AUDIT 001:** bounded synthetic C5-adjacent evidence survives, but none of the historical C5 frontier results establishes this broad claim. Frontier-004 is limited to synthetic state-admission/counting with descriptor-equality execution; later noisy and persistent loops are bounded diagnoses. Historical numbers are not current-gate confirmations.
+
 **PRIOR ART:** none. This is the program's thesis, not a finding, and it has
 no antecedent in the portfolio.
 
@@ -330,11 +342,12 @@ column there means the architecture has *no room* to scale, not that scaling
 has been demonstrated. `C_router` is the only cost term that genuinely varies,
 and it grows linearly with H.
 
-The claim becomes *measurable* at `M2.1` (`docs/ROADMAP.md`), where an index
-inserts a retrieval boundary between routing and execution — and M2.1 has
-built the boundary. What it has not done is run it: the capability-versus-
-computation curve is the registered evidence this claim needs, and a
-confirmatory run is what would produce it. Until that run exists the claim
+The claim is now partially decomposed into bounded control evidence, but the
+broad L4 claim remains untested. The repository has measured exact/hand-designed
+retention and execution-subset controls and has measured learned semantic
+retrieval under bounded synthetic workloads. It has not yet produced a
+current-gate-confirmed capability-versus-total-compute curve with a realistic
+semantic retriever and actual CASM execution. Until that run exists the claim
 must not appear in any report or figure as though measured, however clearly
 `|R|` is now defined.
 
@@ -679,6 +692,50 @@ re-queues on this top-K evidence alone, recorded as "top-K signal intact" and
 
 ---
 
+
+## C15 — Retained-subset execution work is bounded in the synthetic control
+
+> When a fixed relevant subset R is executed, downstream execution work can
+> remain approximately fixed while the candidate population H grows.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** mechanism · **LAYER:** L2/L3
+
+**REQUIRED EVIDENCE:** `TACOSM-C5-EXEC-001`, run 36666872579.
+
+At H={64,128,256} with R=4, exhaustive execution work/query was
+576/1152/2304 while selective work/query remained 36, with both arms at
+1.0000 capability. This is a valid synthetic retained-subset execution
+observation.
+
+**NOT INHERITED:** semantic retrieval quality, actual CASM execution,
+hardware speedup, total system complexity, or the broad C5 economic-scaling
+claim. The index and executor are synthetic controls.
+
+---
+
+## C16 — A bounded synthetic end-to-end persistent-state selective path can preserve capability while reducing executed work
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** integration · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-C5-END-TO-END-001`, run 36667352698.
+
+Across H={64,128,256}, the registered exhaustive and selective arms both
+achieved 1.0000 success while work/query was 768/1536/3072 for exhaustive and
+48 for selective. The state index retained the target and the candidate index
+retained the four relevant programs in every registered cell.
+
+This supports the existence of a bounded synthetic end-to-end selective path.
+It does **not** establish learned semantic retrieval, actual CASM capability,
+asymptotic sublinear complexity, hardware speedup, or the broad C5 claim.
+
+**RETROSPECTIVE BOUND:** this evidence remains LEGACY-AUDITED/LEGACY-BOUND;
+a new publication-quality confirmation must pass the universal G0-G10/P0-P7
+gates.
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
@@ -727,47 +784,6 @@ SUPPORTED` entry waiting to be discovered.
 
 > Under the registered synthetic benchmark, the first jointly trained text/image/audio persistent-computation chain did not reach the capability threshold and showed no measurable contribution from persistent state or image alignment.
 
-**STATUS: NOT ESTABLISHED**
-
-**TYPE:** negative · **LAYER:** L3
-
-**PRIOR ART:** none for this exact integrated claim.
-
-**NOT INHERITED:** the negative does not establish that PLM, multimodal fusion,
-persistent state, or CASM is impossible. It does not concern real-world
-language, vision or audio competence, arbitrary learned operator synthesis, or
-scaling.
-
-**REQUIRED EVIDENCE:** TACOSM-PLM-INTEGRATED-E2E-001, workflow run
-37062142549, experiment head ca74399b713931abe6393de3b76bd859585635b26,
-artifact 11251182171.
-
-The five registered seed q2 accuracies were 0.5475, 0.4925, 0.5075, 0.5425,
-and 0.5100. Mean = **0.5200**; deterministic seed-bootstrap 95% interval
-= **[0.5020, 0.5385]**. The preregistered threshold was 0.80.
-
-No-memory, image-shuffle, text-only, image-only, and audio-only controls all
-also averaged **0.5200**, with memory and alignment drops exactly zero.
-
-Target-slot attention averaged **0.060937** against the uniform 16-slot
-reference of **0.0625**.
-
-Operator-selection accuracy was **1.0000**, but the operator identity was
-provided explicitly by the query and supervised, so this does not establish
-autonomous operator discovery or routing.
-
-The result therefore localizes the current implementation failure toward
-representation/state addressing rather than providing evidence against the
-PLM hypothesis itself.
-
-**BLOCKER:** persistent-state write/read addressing and the shared multimodal
-representation remain unresolved. The next experiment should diagnose the
-write path, read path, and shared address space with preregistered controls
-rather than tune the failed model toward the primary threshold.
-## C12 — Integrated multimodal E2E-001 fails the registered capability criterion
-
-> Under the registered synthetic benchmark, the first jointly trained text/image/audio persistent-computation chain did not reach the capability threshold and showed no measurable contribution from persistent state or image alignment.
-
 **STATUS: SUPERSEDED — VOID FOR BENCHMARK VALIDITY**
 
 **TYPE:** negative · **LAYER:** L3
@@ -797,7 +813,7 @@ Operator-selection accuracy was **1.0000**, but the operator identity was
 provided explicitly by the query and supervised, so this does not establish
 autonomous operator discovery or routing.
 
-The numeric result is retained only as a provenance record. It does not support
+The q2 generator ignored the query entity argument, so q2 did not provide the registered q1/q2 entity separation. The numeric result is retained only as a provenance record. It does not support
 any conclusion about persistent-state addressing, multimodal fusion, or the PLM
 hypothesis because the task generator violated the registered q1/q2 entity
 separation.

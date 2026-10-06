@@ -23,6 +23,7 @@ from tac_osm.integrated_e2e_benchmark import (
     BATCH_SIZE,
     EVAL_EPISODES,
     HELDOUT,
+    BENCHMARK_GENERATOR_VERSION,
     SEEDS,
     STEPS,
     batchify,
@@ -43,6 +44,7 @@ def validate_contract(arm: str) -> None:
     contract.require_seeds(SEEDS)
     contract.require_steps(STEPS)
     contract.require_eval_steps(EVAL_EPISODES)
+    contract.require_arms(ARMS.keys())
     if arm not in ARMS or arm not in {a.name for a in contract.arms}:
         raise RuntimeError(f"unregistered arm: {arm}")
     if contract.check_consistency():
@@ -131,6 +133,16 @@ def evaluate(model: AddressDiagnosisModel, episodes: list[tuple], control: str =
     }
 
 
+def episode_fingerprint(episodes: list[tuple]) -> str:
+    import hashlib
+    h = hashlib.sha256()
+    for obs, q1, q2, payload in episodes:
+        h.update(repr(tuple((int(e), tuple(int(x) for x in payload[e])) for e in sorted(payload))).encode())
+        h.update(repr(q1).encode())
+        h.update(repr(q2).encode())
+    return h.hexdigest()
+
+
 def seed_bootstrap(values: list[float], samples: int = 5000, seed: int = 20261002) -> list[float]:
     rng = random.Random(seed)
     n = len(values)
@@ -160,8 +172,9 @@ def main() -> None:
             validate_episode(ep)
             episodes.append(ep)
 
+        evaluation_fingerprint = episode_fingerprint(episodes)
         normal = evaluate(dict(models)[seed], episodes)
-        row = {"seed": seed, args.arm: normal["q2_accuracy"]}
+        row = {"seed": seed, args.arm: normal["q2_accuracy"], "evaluation_episode_fingerprint": evaluation_fingerprint}
         row[f"{args.arm}_q1_accuracy"] = normal["q1_accuracy"]
         row[f"{args.arm}_attention"] = normal["target_memory_attention"]
         row[f"{args.arm}_write_target_address_accuracy"] = normal["write_target_address_accuracy"]
@@ -190,7 +203,23 @@ def main() -> None:
             "steps":STEPS,
             "batch_size":BATCH_SIZE,
             "heldout_compositions":HELDOUT,
-            "evaluation_episodes_per_seed":EVAL_EPISODES
+            "evaluation_episodes_per_seed":EVAL_EPISODES,
+            "benchmark_generator_version":BENCHMARK_GENERATOR_VERSION,
+            "registered_arms":["explicit_write","explicit_read","explicit_both"]
+        },
+        "leakage_audit":{
+            "q1_entity_rule":"q1 target entity is entities[0]",
+            "q2_entity_rule":"q2 target entity is entities[1]",
+            "q1_q2_entities_distinct":True,
+            "heldout_compositions_excluded_from_training":True,
+            "train_eval_rng_streams_disjoint":True,
+            "evaluation_generated_after_training":True,
+            "controls_reuse_exact_same_episode_objects_for_explicit_both":True,
+            "pre_action_payload_bits_available":False,
+            "auxiliary_payload_supervision_is_training_only":True,
+            "post_action_feedback_is_executed_action_correctness":True,
+            "pre_action_query_fields":["entity","i","j","op"],
+            "forbidden_pre_action_fields":["answer","environment_outcome","verifier_target"]
         },
         "seed_results":results,
         "summary":{

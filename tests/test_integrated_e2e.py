@@ -61,7 +61,7 @@ def test_modality_encoders_preserve_expected_shapes():
 
 
 def test_preregistered_compositions_are_strictly_disjoint():
-    from scripts.run_integrated_e2e_001 import HELDOUT, TRAIN_COMBOS
+    from tac_osm.integrated_e2e_benchmark import HELDOUT, TRAIN_COMBOS
 
     assert set(HELDOUT).isdisjoint(TRAIN_COMBOS)
 
@@ -80,14 +80,14 @@ def test_latent_state_is_complementary_12_bit():
 
 
 def test_all_registered_query_pairs_are_canonical():
-    from scripts.run_integrated_e2e_001 import TRAIN_COMBOS, HELDOUT
+    from tac_osm.integrated_e2e_benchmark import TRAIN_COMBOS, HELDOUT
     assert all(i < j for _, i, j in TRAIN_COMBOS)
     assert all(i < j for _, i, j in HELDOUT)
     assert all((op, j, i) not in TRAIN_COMBOS for op, i, j in HELDOUT)
 
 
 def test_heldout_queries_cross_modal():
-    from scripts.run_integrated_e2e_001 import HELDOUT
+    from tac_osm.integrated_e2e_benchmark import HELDOUT
     assert all(
         (i < 4) != (j < 4)
         or (4 <= i < 8) != (4 <= j < 8)

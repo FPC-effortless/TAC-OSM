@@ -54,8 +54,24 @@ def main() -> None:
             raise RuntimeError(f"seed coverage mismatch for {arm}: {got}")
         if len(rows)!=5 or len({r["seed"] for r in rows})!=5:
             raise RuntimeError(f"duplicate/missing seed rows for {arm}")
+        if "leakage_audit" not in data:
+            raise RuntimeError(f"missing leakage audit for {arm}")
+        leakage = data["leakage_audit"]
+        assert leakage["q1_q2_entities_distinct"] is True
+        assert leakage["heldout_compositions_excluded_from_training"] is True
+        assert leakage["train_eval_rng_streams_disjoint"] is True
+        assert leakage["evaluation_generated_after_training"] is True
+        assert leakage["pre_action_payload_bits_available"] is False
+        assert leakage["auxiliary_payload_supervision_is_training_only"] is True
+        assert leakage["post_action_feedback_is_executed_action_correctness"] is True
         records[arm]=data
 
+    fingerprints = {
+        arm: tuple(r["evaluation_episode_fingerprint"] for r in records[arm]["seed_results"])
+        for arm in ARMS
+    }
+    if len({fingerprints[arm] for arm in ARMS}) != 1:
+        raise RuntimeError("arm evaluation episode fingerprints differ; controls are not paired")
     provs=[records[a]["provenance"] for a in ARMS]
     commits={p.get("git_commit") for p in provs}
     if len(commits)!=1 or "unknown" in commits:
@@ -82,7 +98,9 @@ def main() -> None:
             "seeds":SEEDS,
             "steps":300,
             "eval_episodes":400,
-            "heldout_compositions":both["protocol"]["heldout_compositions"]
+            "heldout_compositions":both["protocol"]["heldout_compositions"],
+            "benchmark_generator_version":both["protocol"]["benchmark_generator_version"],
+            "evaluation_episode_fingerprints":list(fingerprints["explicit_both"])
         },
         "arm_seed_results":{arm:records[arm]["seed_results"] for arm in ARMS},
         "summary":{

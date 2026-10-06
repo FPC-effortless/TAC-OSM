@@ -35,3 +35,21 @@ def test_corrected_generator_handles_each_registered_heldout_pair():
             assert (ep[1][3], ep[1][1], ep[1][2]) == combo1
             assert (ep[2][3], ep[2][1], ep[2][2]) == combo2
             assert ep[1][0] != ep[2][0]
+
+def test_query_answer_is_derived_from_named_entity_only():
+    rng = random.Random(20261006)
+    ep = sample_episode(rng, combo1=("xor", 0, 4), combo2=("and", 1, 9))
+    payload = ep[3]
+    for q in (ep[1], ep[2]):
+        entity, i, j, op, answer = q
+        a, b = payload[entity][i], payload[entity][j]
+        expected = {"xor": a ^ b, "and": a & b, "or": a | b, "xnor": 1 - (a ^ b)}[op]
+        assert answer == expected
+
+def test_post_action_feedback_is_not_the_target_answer():
+    from pathlib import Path
+    source = (Path(__file__).resolve().parents[1] / "src" / "tac_osm" / "integrated_e2e.py").read_text()
+    assert 'action1_hard = out1["logits"].argmax(dim=-1)' in source
+    assert 'outcome1 = (action1_hard == q1[-1]).to(out1["logits"].dtype)' in source
+    assert 'post_action_update(memory, out1, outcome1)' in source
+    assert 'post_action_update(memory, out1, q1[-1])' not in source

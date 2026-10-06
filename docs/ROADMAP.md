@@ -52,16 +52,16 @@ architecture. Capability is then increased *inside* that controlled system.
   checks it by running, and a run that drifts from its registered design now
   fails to complete instead of publishing a number it is not entitled to
 
-## The research-integrity problem to fix first
+## The research-integrity problem already corrected in the current branch
 
-Documentation and implementation have drifted apart. Statements equivalent to
-"persistent write: not implemented" coexist with an implemented
-verifier-gated commit and tests that exercise it, including the distinction
-between an unconditional `state.write` and a verified commit.
+The earlier documentation/implementation drift has now been corrected in the
+architecture record: the hardened runtime contains a verifier-gated commit
+path, while learned semantic write policy remains unresolved.
 
-Mature research infrastructure tries to eliminate exactly this. **The first
-improvement is therefore a single machine-verifiable source of experimental
-truth**, not another algorithm.
+The next priority is not another documentation-only repair. It is maintaining
+the universal research contract so every historical, active, and future lane
+is evaluated with the same security, leakage, benchmark, verification,
+ablation, provenance, and statistical rules.
 
 ## The architectural correction
 
@@ -118,8 +118,8 @@ older document or a git log resolves to `M1.3`, and nothing is lost:
 | Stage F3 — reward density | `M1.8` | **done** — `TACOSM-SURROGATE-001` |
 | Stage F1 — efficient retrieval | `M2.1` | legacy retrieval path superseded for C5; exact runtime control moved to TACOSM-SELECTIVE-001 |
 | Stage F4 — measurement layers | `M1.4` | the standing contract |
-| Stage G — state formation | `M2.2` | temporal runtime implemented; TACOSM-TEMPORAL-001 preregistered, no result |
-| Stage H — repair | `M2.3` | structured verifier + bounded executable repair implemented; capability evaluation not run |
+| Stage G — state formation | `M2.2` | temporal runtime implemented and TACOSM-TEMPORAL-001 measured; semantic/learned state formation remains unresolved |
+| Stage H — repair | `M2.3` | structured verifier + bounded executable repair implemented; capability contribution remains unevaluated |
 | Stage I — language integration | `M3.2` | not started |
 | — *(the curve, was nameless)* | `M3.1` | not started; this is the milestone the thesis needs |
 
