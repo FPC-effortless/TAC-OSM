@@ -1,0 +1,58 @@
+name: PLM top-down bottom-up MTSK-001
+
+on:
+  push:
+    branches:
+      - research/plm-topdown-mtsk-001
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  confirmatory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install pinned measurement dependencies
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet "numpy==2.3.3" pytest
+
+      - name: Contract validation
+        run: |
+          PYTHONPATH=src python -c "from tac_osm.contract import validate; p=validate(); print('all experiment contracts valid') if not p else (print('\n'.join(p)), exit(1))"
+
+      - name: Unified research preflight
+        run: python scripts/research_gate.py
+
+      - name: Top-down benchmark smoke tests
+        run: PYTHONPATH=src python -m pytest tests/test_plm_topdown_mtsk_001.py tests/test_research_governance.py -q
+
+      - name: Full repository tests
+        run: PYTHONPATH=src python -m pytest tests/ -q
+
+      - name: Measurement
+        run: |
+          mkdir -p results
+          PYTHONPATH=src python scripts/measure_plm_topdown_mtsk_001.py --commit "$GITHUB_SHA"
+
+      - name: Independent recomputation
+        run: PYTHONPATH=src python scripts/analyze_plm_topdown_mtsk_001.py results/TACOSM-PLM-TDBU-MTSK-001.json
+
+      - name: Upload measurement artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-TDBU-MTSK-001
+          path: results/TACOSM-PLM-TDBU-MTSK-001.json
+          if-no-files-found: error
