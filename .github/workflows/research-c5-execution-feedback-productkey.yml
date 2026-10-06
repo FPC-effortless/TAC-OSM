@@ -1,4 +1,4 @@
-name: Research C5 execution-feedback product-key bridge
+name: Legacy invalidated C5 execution-feedback product-key bridge
 
 on:
   pull_request:
@@ -9,27 +9,16 @@ permissions:
   contents: read
 
 jobs:
-  research:
+  audit-only:
+    name: legacy C5 product-key workflow audit
     runs-on: ubuntu-latest
-    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
-      - name: Install pinned research dependencies
-        run: python -m pip install --quiet -e . pytest numpy==2.3.3 "ruff==0.13.0"
-      - name: Static undefined-name gate
-        run: ruff check --select F821 src scripts
-      - name: Syntax/bytecode gate
-        run: python -m compileall -q src scripts
-      - name: Full repository suite
-        run: PYTHONPATH=src python -m pytest tests/ -q
-      - name: Run C5 execution-feedback product-key study
-        run: python scripts/run_c5_execution_feedback_productkey_001.py
-      - name: Upload C5 bridge artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: TACOSM-C5-EXECUTION-FEEDBACK-PRODUCTKEY-001
-          path: artifacts/TACOSM-C5-EXECUTION-FEEDBACK-PRODUCTKEY-001.json
-          if-no-files-found: error
+          fetch-depth: 1
+      - name: Verify supersession
+        run: |
+          test -f scripts/measure_c5_casm_003.py
+          test -f .github/workflows/tacosm-c5-003.yml
+          echo "The stale product-key bridge workflow is provenance-only. No obsolete runner is executed."
+          echo "Current C5 scientific conclusion is established by G-CASM-016C-R2, not this legacy workflow."
