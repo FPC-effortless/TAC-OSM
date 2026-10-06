@@ -16,6 +16,19 @@ from torch import Tensor, nn
 from .integrated_e2e_005 import FunctionalConfig, FunctionalMultimodalPLM
 
 
+def signed_boolean_margins(a: Tensor, b: Tensor) -> Tensor:
+    """Return signed margins for XOR, AND, OR, XNOR."""
+    return torch.stack(
+        (
+            -a * b,
+            torch.minimum(a, b),
+            torch.maximum(a, b),
+            a * b,
+        ),
+        dim=-1,
+    )
+
+
 class SignedBooleanCASM(nn.Module):
     """Exact Boolean decisions with a differentiable signed-logit margin.
 
@@ -50,15 +63,7 @@ class SignedBooleanCASM(nn.Module):
         bit_logits = self.decoder(state_read)
         a = bit_logits.gather(1, i.view(-1, 1)).squeeze(1)
         b = bit_logits.gather(1, j.view(-1, 1)).squeeze(1)
-        margins = torch.stack(
-            (
-                -a * b,
-                torch.minimum(a, b),
-                torch.maximum(a, b),
-                a * b,
-            ),
-            dim=-1,
-        )
+        margins = signed_boolean_margins(a, b)
         margin = margins.gather(1, op.view(-1, 1)).squeeze(1)
         action = torch.sigmoid(margin)
         logits = torch.stack((-margin, margin), dim=-1)
