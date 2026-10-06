@@ -7,7 +7,6 @@ verifier are conventional scaffolding reused from the MTSK lane.
 from __future__ import annotations
 
 import hashlib
-import math
 from dataclasses import dataclass
 from typing import Literal, Sequence
 
@@ -16,7 +15,6 @@ import numpy as np
 from tac_osm.mtsk_topdown import (
     FixedBinaryExecutor,
     IndependentVerifier,
-    MLPPolicy,
     environment_outcome,
 )
 
@@ -168,6 +166,58 @@ class FixedTemporalState:
         return self.values.copy()
 
 
+class TransferMLPPolicy:
+    """Conventional tanh MLP; dimensions are chosen so every arm has 86 parameters."""
+
+    def __init__(self, seed: int, input_dim: int, hidden: int):
+        if input_dim < 1 or hidden < 1:
+            raise ValueError("input_dim and hidden must be positive")
+        rng = np.random.default_rng(seed)
+        self.W1 = rng.normal(0.0, 0.5, size=(input_dim, hidden))
+        self.b1 = np.zeros(hidden, dtype=np.float64)
+        self.W2 = rng.normal(0.0, 0.5, size=(hidden, 2))
+        self.b2 = np.zeros(2, dtype=np.float64)
+        self.input_dim = int(input_dim)
+        self.hidden = int(hidden)
+
+    @property
+    def parameter_count(self) -> int:
+        return int(self.W1.size + self.b1.size + self.W2.size + self.b2.size)
+
+    def _forward(self, X: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        if X.ndim != 2 or X.shape[1] != self.input_dim:
+            raise ValueError(f"expected [N,{self.input_dim}] input, got {X.shape}")
+        z = X @ self.W1 + self.b1
+        h = np.tanh(z)
+        logits = h @ self.W2 + self.b2
+        shifted = logits - logits.max(axis=1, keepdims=True)
+        e = np.exp(shifted)
+        probs = e / e.sum(axis=1, keepdims=True)
+        return h, logits, probs
+
+    def fit(self, X: np.ndarray, y: np.ndarray, steps: int, learning_rate: float) -> int:
+        if len(X) != len(y):
+            raise ValueError("X/y length mismatch")
+        y_onehot = np.eye(2, dtype=np.float64)[y]
+        for _ in range(steps):
+            h, _logits, probs = self._forward(X)
+            dlogits = (probs - y_onehot) / len(X)
+            dW2 = h.T @ dlogits
+            db2 = dlogits.sum(axis=0)
+            dh = dlogits @ self.W2.T
+            dz = dh * (1.0 - h * h)
+            dW1 = X.T @ dz
+            db1 = dz.sum(axis=0)
+            self.W2 -= learning_rate * dW2
+            self.b2 -= learning_rate * db2
+            self.W1 -= learning_rate * dW1
+            self.b1 -= learning_rate * db1
+        return int(steps)
+
+    def predict(self, X: np.ndarray) -> np.ndarray:
+        return np.argmax(self._forward(X)[2], axis=1)
+
+
 def _features_for_state(
     examples: list[EpisodeExample],
     arm: Arm,
@@ -178,6 +228,8 @@ def _features_for_state(
     rows: list[np.ndarray] = []
     for example in examples:
         final = state.process(example.history)
+        if len(final) < 3:
+            final = np.pad(final, (0, 3 - len(final)))
         rows.append(np.concatenate(([example.current_observation], final)))
     features = np.asarray(rows, dtype=np.float64)
     if intervention == "reset":
@@ -194,7 +246,7 @@ def make_policy(seed: int, arm: Arm) -> MLPPolicy:
 
 
 def parameter_count(arm: Arm) -> int:
-    d = 1 + len(ARM_ALPHAS[arm])
+    d = 4 if len(ARM_ALPHAS[arm]) <= 3 else 9
     h = POLICY_HIDDEN[arm]
     return int(d * h + h + h * 2 + 2)
 
@@ -202,7 +254,8 @@ def parameter_count(arm: Arm) -> int:
 def evaluation_work(arm: Arm, history_length: int) -> float:
     k = len(ARM_ALPHAS[arm])
     state_update = history_length * 3 * k
-    router_macs = (1 + k) * POLICY_HIDDEN[arm] + 2 * POLICY_HIDDEN[arm]
+    input_dim = 4 if k <= 3 else 9
+    router_macs = input_dim * POLICY_HIDDEN[arm] + 2 * POLICY_HIDDEN[arm]
     verifier = 1
     return float(state_update + router_macs + verifier)
 
@@ -216,7 +269,7 @@ class Evaluation:
 
 
 def evaluate(
-    policy: MLPPolicy,
+    policy: TransferMLPPolicy,
     examples: list[EpisodeExample],
     arm: Arm,
     *,
