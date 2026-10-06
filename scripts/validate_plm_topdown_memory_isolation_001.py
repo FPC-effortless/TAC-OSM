@@ -7,7 +7,8 @@ from pathlib import Path
 
 import numpy as np
 
-from tac_osm.contract import contract_fingerprint, load_contract
+from tac_osm.contract import load_contract
+from tac_osm.measurement.results import contract_fingerprint
 from tac_osm.memory_isolation import ARMS, BENCHMARK_HASH, GROUND_TRUTH_ALPHAS
 
 EXPERIMENT_ID = "TACOSM-PLM-TDBU-MEMORY-ISOLATION-001"
