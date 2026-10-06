@@ -1,0 +1,284 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-006",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Functional multimodal action-conditioned persistence across a hidden feedback boundary",
+  "question": "Can the integrated multimodal PLM carry an unobserved environment feedback bit from a post-q1 action boundary into a later q2 computation, while retaining complementary multimodal state?",
+  "hypothesis": "With fixed entity addressing and fixed Boolean operator dispatch, a label-free multimodal persistent state can solve a q2 task that is XOR-masked by a hidden post-q1 environment feedback bit; removing or flipping that feedback write should materially reduce q2 accuracy toward chance.",
+  "primary_endpoint": {
+    "name": "feedback_conditioned_q2_accuracy_all_modalities",
+    "unit": "episode",
+    "threshold": 0.8,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "hidden_dim": 40,
+    "entity_count": 16,
+    "latent_bits": 12,
+    "observation_entities_per_episode": 3,
+    "evaluation_episodes_per_seed": 400,
+    "observation_noise": 0.03,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "query_count": 2,
+    "q1_compositions": [
+      [
+        "xor",
+        0,
+        4
+      ],
+      [
+        "and",
+        1,
+        5
+      ],
+      [
+        "or",
+        2,
+        6
+      ],
+      [
+        "xnor",
+        3,
+        7
+      ]
+    ],
+    "q2_compositions": [
+      [
+        "xor",
+        8,
+        4
+      ],
+      [
+        "and",
+        9,
+        5
+      ],
+      [
+        "or",
+        10,
+        6
+      ],
+      [
+        "xnor",
+        11,
+        7
+      ]
+    ],
+    "q1_q2_same_entity": true,
+    "q1_q2_bit_pairs_disjoint": true,
+    "q2_feedback_mask": "xor",
+    "hidden_feedback_bit": true,
+    "controls": [
+      "normal",
+      "no_feedback_write",
+      "flip_feedback_write",
+      "no_memory",
+      "shuffle_image",
+      "text_only",
+      "image_only",
+      "audio_only"
+    ],
+    "operator_dispatch": "fixed_query_conditioned",
+    "representation_auxiliary_supervision": false
+  },
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "full multimodal state plus true post-q1 feedback write",
+      "acts_on": "integrated temporal path"
+    },
+    {
+      "name": "no_feedback_write",
+      "intervention": "post-q1 feedback replaced by zero before the state update; q2 target still uses true feedback",
+      "acts_on": "causal feedback memory"
+    },
+    {
+      "name": "flip_feedback_write",
+      "intervention": "post-q1 feedback replaced by one-minus-true feedback before state update; q2 target still uses true feedback",
+      "acts_on": "feedback content causality"
+    },
+    {
+      "name": "no_memory",
+      "intervention": "zero persistent state immediately before q1",
+      "acts_on": "state storage"
+    },
+    {
+      "name": "shuffle_image",
+      "intervention": "permute image observations across observed entities",
+      "acts_on": "cross-modal alignment"
+    },
+    {
+      "name": "text_only",
+      "intervention": "replace image and audio with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "image_only",
+      "intervention": "replace text and audio with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "audio_only",
+      "intervention": "replace text and image with constants",
+      "acts_on": "modality"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "feedback_conditioned_q2_accuracy_all_modalities",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "q1_accuracy_all_modalities",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "no_feedback_write_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "flip_feedback_write_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "feedback_write_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "feedback_flip_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verifier_q1_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "gradient_surface_coverage",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "oracle_q2_accuracy",
+      "role": "benchmark validity gate",
+      "primary": false
+    }
+  ],
+  "information_flow": {
+    "pre_q1": "text/image/audio observations -> encoders -> shared representation -> explicit persistent entity write -> q1 read -> fixed CASM -> q1 action",
+    "feedback_boundary": "q1 action -> environment emits hidden feedback bit -> verifier/update -> persistent entity state",
+    "q2": "updated persistent state -> q2 read -> fixed CASM -> q2 action",
+    "forbidden_before_q1": [
+      "q1_answer",
+      "q2_answer",
+      "environment_feedback",
+      "verifier_target",
+      "payload_labels",
+      "evaluation_correctness"
+    ],
+    "forbidden_between_q1_and_feedback": [
+      "q2_answer",
+      "evaluation_correctness"
+    ],
+    "allowed_after_action": [
+      "environment_feedback",
+      "verifier_supervision",
+      "q2_target_for_outer_loss"
+    ],
+    "operator_identity": "public query metadata; learned operator discovery is out of scope for this functional lane"
+  },
+  "held_constant": [
+    "same multimodal generator surfaces and entity count as E2E-005",
+    "same hidden_dim, optimizer, learning rate, weight decay, five seeds and 300-step schedule",
+    "same fixed entity addressing and public operator dispatch",
+    "no auxiliary payload-bit or entity-label supervision",
+    "evaluation episodes generated after all training steps",
+    "no evaluation-driven early stopping or selection",
+    "all controls reuse the exact same evaluation episode objects and hidden feedback bits",
+    "previous E2E results are provenance only and do not determine hyperparameters or thresholds"
+  ],
+  "leakage_rules": [
+    "q1 and q2 target the same entity, but query bit pairs are disjoint",
+    "the hidden feedback bit is not encoded in any observation modality",
+    "the hidden feedback bit is generated only at the environment boundary after q1 action",
+    "q2 target is derived from true hidden feedback and q2 payload bits only",
+    "feedback write controls alter only the state update input, never the registered q2 target",
+    "model query API exposes only memory, entity, bit indices and public operator",
+    "model update API receives feedback only after q1 action",
+    "training and evaluation semantic keys include payload, query compositions, entities and hidden feedback",
+    "training/evaluation semantic overlap must be zero",
+    "all evaluation control arms use identical episode objects",
+    "action loss is computed by the outer harness; model API never receives action targets"
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass, primary mean q2 >= 0.80, every seed >= 0.40, and normal - no_feedback_write >= 0.20",
+      "licenses": "bounded evidence for action-conditioned hidden-feedback persistence in the registered synthetic multimodal mechanism",
+      "does_not_license": "real-world multimodal reasoning, lifelong memory, learned addressing/operator discovery, scaling or AGI"
+    },
+    {
+      "condition": "integrity passes but primary threshold fails",
+      "licenses": "the registered fixed configuration does not establish the capability",
+      "does_not_license": "architecture impossibility or permission to tune on this evaluation"
+    },
+    {
+      "condition": "integrity passes, primary succeeds but feedback-write ablations do not materially degrade",
+      "licenses": "capability may be obtainable without causal feedback storage; the persistence mechanism is not identified by this benchmark",
+      "does_not_license": "action-conditioned persistent computation claim"
+    },
+    {
+      "condition": "any leakage, oracle, split, or gradient gate fails",
+      "licenses": "instrument invalid; no capability interpretation",
+      "does_not_license": "negative scientific conclusion"
+    }
+  ],
+  "statistics": {
+    "seed_bootstrap_samples": 5000,
+    "seed_bootstrap_seed": 20261006,
+    "confidence_level": 0.95,
+    "primary_aggregation": "mean q2 per seed followed by seed-level bootstrap"
+  },
+  "scope": [
+    "synthetic mechanism benchmark only",
+    "explicit entity addressing is a functional scaffold",
+    "fixed public Boolean operator dispatch is a functional scaffold",
+    "hidden feedback bit is exogenous and intentionally not present in any modality",
+    "no optimization sweep is part of this experiment"
+  ],
+  "provenance": {
+    "predecessor": "TACOSM-PLM-INTEGRATED-E2E-005",
+    "predecessor_use": "only the independently discovered causal-scope limitation is used to motivate this protocol; no E2E-005 outcome is used for tuning"
+  },
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "interpretation_order": [
+    "benchmark integrity and oracle validity",
+    "hidden-feedback non-observability and target leakage",
+    "train/evaluation disjointness and fingerprints",
+    "gradient-surface integrity",
+    "primary q2 accuracy",
+    "feedback-write ablations",
+    "multimodal controls",
+    "claim boundary"
+  ]
+}
