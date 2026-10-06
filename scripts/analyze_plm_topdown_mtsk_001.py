@@ -28,7 +28,10 @@ def main() -> int:
     mtsk = cell("mtsk", 256)
     single = cell("single_timescale", 256)
     no_state = cell("no_state", 256)
+    two = cell("two_timescale", 256)
     diff = mtsk - single
+    assert np.all(np.isfinite(np.concatenate([mtsk, single, two, no_state])))
+    assert float(np.max(np.abs(mtsk - two))) <= 0.25
 
     rng = np.random.default_rng(991)
     draws = rng.choice(diff, size=(20_000, len(diff)), replace=True).mean(axis=1)
@@ -41,6 +44,12 @@ def main() -> int:
 
     reset = np.asarray([r["reset_success"] for r in rows if r["H"] == 256 and r["arm"] == "mtsk"], dtype=np.float64)
     shuffle = np.asarray([r["shuffle_success"] for r in rows if r["H"] == 256 and r["arm"] == "mtsk"], dtype=np.float64)
+
+    work_by_arm = {
+        arm: [r["evaluation_work_per_episode"] for r in rows if r["H"] == 256 and r["arm"] == arm]
+        for arm in ("single_timescale", "two_timescale", "mtsk")
+    }
+    assert len({tuple(v) for v in work_by_arm.values()}) == 1
 
     recomputed = {
         "H": 256,
