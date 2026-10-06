@@ -34,7 +34,7 @@ jobs:
           fetch-depth: 2
       - id: detect
         run: |
-          if git log -1 --pretty=%B | grep -Fq '[run-graph-casm-trace-capability-bridge-016C-R2-full]'; then
+          if git log -20 --pretty=%B | grep -Fq '[run-graph-casm-trace-capability-bridge-016C-R2-full]'; then
             echo 'should_full=true' >> "$GITHUB_OUTPUT"
           else
             echo 'should_full=false' >> "$GITHUB_OUTPUT"
