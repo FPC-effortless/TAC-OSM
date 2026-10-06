@@ -18,8 +18,6 @@ from tac_osm.integrated_e2e_006_benchmark import (
     benchmark_manifest, episode_fingerprint, episode_key, sample_episode,
     sample_evaluation_episodes,
 )
-from tac_osm.contract import load_contract
-
 EXPERIMENT_ID="TACOSM-PLM-INTEGRATED-E2E-006"
 CONTRACT_PATH=ROOT/"contracts"/f"{EXPERIMENT_ID}.json"
 BATCH_SIZE=96
@@ -122,13 +120,15 @@ def bootstrap_ci(values,rounds=5000,seed=20261006):
     return [means[int(0.025*rounds)],means[int(0.975*rounds)]]
 
 def run(smoke=False):
-    c=load_contract(EXPERIMENT_ID)
-    err=c.check_consistency()
-    if err: raise AssertionError(err)
+    contract=json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+    assert contract["status"] == "pre-registered"
+    assert contract["primary_endpoint"]["name"] == "heldout_q2_accuracy_all_modalities"
+    assert float(contract["primary_endpoint"]["threshold"]) == 0.80
+    assert contract["protocol"]["hidden_dim"] == 64
+    assert contract["seeds"] == list(SEEDS)
     gate=gradient_surface_probe()
     if not gate["pass"]: raise AssertionError(gate)
     seeds=(0,) if smoke else SEEDS
-    steps=25 if smoke else STEPS
     if smoke:
         global BATCH_SIZE,EVAL_EPISODES
         BATCH_SIZE=8; EVAL_EPISODES=16
