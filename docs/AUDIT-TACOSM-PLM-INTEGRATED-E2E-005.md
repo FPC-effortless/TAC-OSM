@@ -1,0 +1,51 @@
+# TACOSM-PLM-INTEGRATED-E2E-005 audit
+
+## Purpose
+
+This is the first post-017B multimodal integration lane. It is a functional
+integration experiment rather than an optimisation sweep.
+
+The chain is:
+multimodal observation -> shared representation -> persistent entity state ->
+query-conditioned read -> CASM -> action -> environment outcome -> verifier ->
+post-action state update.
+
+## Deliberate constraints
+
+Entity addressing is explicit and deterministic. Operator dispatch is fixed by
+the public query operator. These remove two known diagnosis bottlenecks from
+the first integration test. They do not establish learned semantic addressing
+or learned operator discovery.
+
+There is no payload-bit auxiliary loss and no entity-classification auxiliary
+loss. The pre-action learning signal is final action supervision only. The
+verifier receives the environment outcome after action and has its own
+post-action training signal.
+
+## Integrity gates
+
+The benchmark generator is independent of the runner and is fingerprinted by
+SHA-256. The contract is also fingerprinted. The result validator recomputes
+both hashes from the checked-out source.
+
+Held-out compositions are excluded from training. Every evaluation query is
+cross-modal and q1/q2 target distinct entities. Training and evaluation use
+separate RNG namespaces, and semantic episode keys must have zero overlap.
+
+All control arms reuse the exact same generated evaluation episode objects.
+The query interface exposes only memory, entity, bit indices, and the public
+operator; the answer and outcome cannot enter the pre-action call.
+
+A gradient-surface probe verifies that the action path reaches the text,
+image, and audio encoders, shared fusion, persistent write path, and CASM
+decoder. A repository-wide regression test checks directly invoked local
+scripts in GitHub Actions workflows so the missing-script failure seen in
+017B cannot silently recur.
+
+## Interpretation
+
+A result is scientifically readable only after every integrity gate and the
+independent validator pass. A primary-threshold failure is a finding about
+this fixed functional configuration, not a proof that the architecture is
+impossible. Optimisation and learned routing/addressing changes remain a
+separate later lane.
