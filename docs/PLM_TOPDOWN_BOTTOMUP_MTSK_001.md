@@ -113,3 +113,7 @@ Regardless of the result, the next experiment must remain registered:
 3. if reset/shuffle does not damage capability: inspect for current-input or benchmark leakage before interpreting any MTSK gain.
 
 The universal G0-G10/P0-P7 protocol remains mandatory.
+
+## Validation note
+
+The confirmatory workflow is fail-closed. Earlier CI failures were implementation/gating defects detected before measurement and do not constitute MTSK results. The current revision includes the corrected contract smoke path, canonical M0 arm/default exposure, explicit executor/verifier, representability witness, and post-run P0-P2 validator.
