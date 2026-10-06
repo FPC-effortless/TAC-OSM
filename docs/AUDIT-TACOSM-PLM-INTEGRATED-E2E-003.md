@@ -53,3 +53,6 @@ no scientific effect.
 
 
 <!-- Non-scientific retrigger marker after base-branch workflow installation; protocol unchanged. -->
+
+
+Clean E2E-003 rerun after A8 causal feedback correction
