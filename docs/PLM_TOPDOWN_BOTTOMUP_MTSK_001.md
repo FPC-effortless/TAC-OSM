@@ -91,6 +91,48 @@ The router uses the same fixed matrix dimensions for every trained arm. Verifica
 
 Training compute is reported independently from evaluation compute. No claim is made from evaluation work while silently excluding training or state construction.
 
+## Confirmatory result and disposition
+
+The registered confirmatory run was executed on branch-head commit
+`f916a43f4cc50834c897d1ae94cf27608a67551c`. The machine-readable artifact was
+uploaded by workflow run `37410382061` (artifact `11389330236`). The workflow
+passed contract validation, unified research preflight, the full repository
+suite, post-run P0-P2 invariants, and independent metric recomputation.
+
+At H=256, exact class-balanced held-out success was:
+
+| arm | seed values | mean |
+|---|---|---|
+| no state | 0.50, 0.50, 0.50, 0.50, 0.50 | 0.500 |
+| single timescale | 0.76, 0.76, 0.72, 0.63, 0.76 | 0.726 |
+| two timescales | 0.84, 0.90, 0.87, 0.82, 0.85 | 0.856 |
+| MTSK | 0.85, 0.89, 0.87, 0.82, 0.85 | 0.856 |
+
+The registered primary comparison therefore fired: MTSK minus single-timescale
+mean = **0.130** with the registered 20,000-draw seed bootstrap 95% interval
+**[0.098, 0.162]**, exceeding the preregistered mean materiality threshold of
+0.10 and also exceeding no-state by 0.356 mean.
+
+The causal interventions support state dependence. For the frozen MTSK
+checkpoint at H=256, reset-to-zero success was **0.500** and state-shuffle
+success was **0.144**, versus normal MTSK success **0.856**. Normal paired-history
+action gap was 1.0, while no-state was 0.0.
+
+The bottom-up result is equally important: the two-timescale reduction matched
+the full MTSK mean at H=256, with seed differences
+**[-0.02, 0.01, 0.00, 0.00, 0.01]** and mean difference 0.000. Therefore this
+experiment supports a narrower statement — **multiple distinct temporal
+timescales improve finite history-conditioned decision capability over one
+timescale on this benchmark** — but it does **not** establish that three
+timescales are necessary, that the registered MTSK spacing is optimal, or that
+additional scales improve capability.
+
+Evaluation work is not an efficiency result: at H=256, every trained state arm
+uses the same counted evaluation work (**2377** units/episode) while no-state
+uses **73**, and the state footprint is three scalars. The measured benefit is
+therefore a capability result under matched policy capacity and explicit state
+computation accounting, not a speedup claim.
+
 ## Scientific boundaries
 
 The primary hypothesis is a finite mechanism question. A positive result would not establish:
