@@ -1,8 +1,7 @@
 
-# TAC-OSM / PLM Research Run-Gates V2
+# TAC-OSM Unified Research Run-Gates V2
 
-Status: standing protocol for new experiments on the bacterial adaptive-state
-track and any successor experiment that reuses its infrastructure.
+Status: standing repository-wide protocol for every historical, active, corrective, proposed, and future research lane.
 
 ## 1. Non-negotiable rule
 
@@ -413,7 +412,7 @@ Only after P0-P6:
 
 Every claim must retain its exclusions.
 
-## 23. Special rules for bacterial-inspired memory
+## 23. Special rules for any mechanism that uses memory, persistence, or adaptation
 
 Do not use biological terminology as hidden target labels.
 
@@ -482,4 +481,9 @@ Any future research script must be either:
 
 A new measurement script with neither is a test failure.
 
-The same rule applies to the bacterial research track itself.
+The same rule applies to every research track.
+
+
+## 27. Portfolio continuity
+
+Before a new lane is implemented, consult docs/RESEARCH_GOVERNANCE.md and docs/RESEARCH_LANE_REGISTRY.md. New ideas may add or branch research, but may not silently close unfinished lanes. Historical results remain visible and carry an explicit legacy-audit state until checked against the current governance.
