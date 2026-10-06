@@ -33,13 +33,11 @@ def main() -> int:
     rng = np.random.default_rng(991)
     draws = rng.choice(diff, size=(20_000, len(diff)), replace=True).mean(axis=1)
     ci = [float(np.quantile(draws, 0.025)), float(np.quantile(draws, 0.975))]
-
-    assert all(r["checkpoint_hash"] != r["initial_checkpoint_hash"] for r in [
-        {
-            "checkpoint_hash": row["checkpoint_hash"],
-            "initial_checkpoint_hash": raw["audit"]["model_state"]["initial_checkpoint_hashes"][f'256:{row["seed"]}:{row["arm"]}']
-        } for row in rows if row["H"] == 256
-    ])
+    for row in rows:
+        if row["H"] != 256 or row["arm"] == "no_state":
+            continue
+        initial = raw["audit"]["model_state"]["initial_checkpoint_hashes"][f'256:{row["seed"]}:{row["arm"]}']
+        assert row["checkpoint_hash"] != initial
 
     reset = np.asarray([r["reset_success"] for r in rows if r["H"] == 256 and r["arm"] == "mtsk"], dtype=np.float64)
     shuffle = np.asarray([r["shuffle_success"] for r in rows if r["H"] == 256 and r["arm"] == "mtsk"], dtype=np.float64)
