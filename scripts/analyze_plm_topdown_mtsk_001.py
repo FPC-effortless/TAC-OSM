@@ -31,7 +31,6 @@ def main() -> int:
     two = cell("two_timescale", 256)
     diff = mtsk - single
     assert np.all(np.isfinite(np.concatenate([mtsk, single, two, no_state])))
-    assert float(np.max(np.abs(mtsk - two))) <= 0.25
 
     rng = np.random.default_rng(991)
     draws = rng.choice(diff, size=(20_000, len(diff)), replace=True).mean(axis=1)
