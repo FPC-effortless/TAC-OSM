@@ -259,9 +259,9 @@ def evaluate_seed(
         )
 
         if control != "no_memory":
-            memory, _ = model.post_action_update(
-                memory, out1, q1[-1]
-            )
+            executed = out1["logits"].argmax(-1)
+            outcome = (executed == q1[-1]).to(out1["logits"].dtype)
+            memory, _ = model.post_action_update(memory, out1, outcome)
 
         out2 = model.query(memory, *q2[:-1])
         total2 += int(
