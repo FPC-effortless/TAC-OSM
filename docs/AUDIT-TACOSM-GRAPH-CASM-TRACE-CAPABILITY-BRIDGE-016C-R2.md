@@ -440,3 +440,6 @@ Clean confirmatory rerun trigger: [run-graph-casm-trace-capability-bridge-016C-R
 
 
 Clean rerun authorization marker [run-graph-casm-trace-capability-bridge-016C-R2-full]
+
+
+Authorization retained in recent history: [run-graph-casm-trace-capability-bridge-016C-R2-full]
