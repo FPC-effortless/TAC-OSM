@@ -1,0 +1,101 @@
+{
+  "experiment_id": "TACOSM-PLM-TDBU-MTSK-001",
+  "title": "Top-down PLM assembly with multi-timescale adaptive state and bottom-up causal ablation",
+  "question": "Does a compact multi-timescale persistent state improve history-conditioned exact decision capability when embedded in a complete persistent-state -> router -> executor -> verifier loop, compared with matched no-state, single-timescale, and reduced-timescale controls?",
+  "hypothesis": "A fixed multi-timescale adaptive state bank provides decision-useful temporal contrasts that a matched single-timescale state cannot represent efficiently, improving held-out exact history-conditioned capability while using the same learned policy capacity and explicitly accounted state computation.",
+  "arms": [
+    {"name": "no_state", "intervention": "persistent_state_disabled", "acts_on": "state"},
+    {"name": "single_timescale", "intervention": "three_state_slots_share_one_decay", "acts_on": "state"},
+    {"name": "two_timescale", "intervention": "two_distinct_decays_with_one_repeated_slot", "acts_on": "state"},
+    {"name": "mtsk", "intervention": "three_log_spaced_decays", "acts_on": "state"},
+    {"name": "mtsk_reset", "intervention": "freeze_trained_mtsk_policy_but_reset_state_before_decision", "acts_on": "evaluation_state_intervention"},
+    {"name": "mtsk_shuffle", "intervention": "freeze_trained_mtsk_policy_but_swap_final_state_between_episodes", "acts_on": "evaluation_state_intervention"}
+  ],
+  "endpoints": [
+    {
+      "name": "exact_class_balanced_success",
+      "role": "primary",
+      "primary": true,
+      "description": "Exact generated action success on balanced held-out paired-history episodes; primary decision is evaluated at H=256."
+    },
+    {
+      "name": "history_conditioned_action_gap",
+      "role": "secondary",
+      "primary": false,
+      "description": "Fraction of paired histories with identical current observation and opposite correct actions for which the model selects different actions."
+    },
+    {
+      "name": "state_intervention_effect",
+      "role": "secondary",
+      "primary": false,
+      "description": "Change in exact success and paired action gap when a frozen trained MTSK policy receives reset or swapped persistent state."
+    },
+    {
+      "name": "total_computation_work",
+      "role": "secondary",
+      "primary": false,
+      "description": "Explicit evaluation work including state updates, router arithmetic and verification; state work may not be omitted."
+    },
+    {
+      "name": "persistent_state_footprint",
+      "role": "secondary",
+      "primary": false,
+      "description": "Number of persistent state scalars carried to the decision."
+    },
+    {
+      "name": "train_compute_work",
+      "role": "secondary",
+      "primary": false,
+      "description": "Measured training arithmetic proxy for the identical policy optimizer schedule across trained arms."
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "At H=256, MTSK improves exact_class_balanced_success over single_timescale by more than the preregistered materiality threshold and the seed-bootstrap 95% confidence interval for the paired seed-level difference excludes zero; MTSK must also exceed no_state.",
+      "licenses": "bounded evidence that the registered multi-timescale state representation improves exact history-conditioned capability on the finite synthetic benchmark under matched policy capacity and explicit state-computation accounting.",
+      "does_not_license": "biological equivalence, general intelligence, asymptotic scaling, real-world multimodal competence, or hardware speedup."
+    },
+    {
+      "condition": "MTSK produces a material history-conditioned action gap but does not improve exact_class_balanced_success over single_timescale.",
+      "licenses": "the multi-timescale state changes history-dependent behavior but the registered capability advantage is not established.",
+      "does_not_license": "system-level capability improvement."
+    },
+    {
+      "condition": "MTSK matches or loses to single_timescale within the preregistered materiality threshold.",
+      "licenses": "the registered multi-timescale advantage is not supported on this benchmark.",
+      "does_not_license": "failure of persistent state generally, failure of multi-timescale memory generally, or failure on other environments."
+    }
+  ],
+  "interpretation_order": [
+    "protocol and security integrity",
+    "leakage and supervision boundary",
+    "benchmark validity",
+    "representability of temporal relation through state map",
+    "model-state integrity",
+    "degeneracy and discrimination",
+    "exact capability",
+    "history-paired intervention",
+    "compute and state footprint",
+    "statistics",
+    "scope"
+  ],
+  "h_levels": [8, 64, 256],
+  "seeds": [0, 1, 2, 3, 4],
+  "steps": 500,
+  "eval_steps": 200,
+  "held_constant": [
+    "benchmark generator version and disjoint train/test seed streams",
+    "current observation at decision",
+    "policy architecture and hidden width",
+    "optimizer family, learning rate and training step count",
+    "action semantics",
+    "verifier semantics",
+    "parameter count",
+    "state footprint of three scalar slots",
+    "evaluation sample count and paired-history construction",
+    "work-accounting definition"
+  ],
+  "status": "pre-registered",
+  "layer": "L3",
+  "amendments": []
+}
