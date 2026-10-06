@@ -1,0 +1,150 @@
+{
+  "experiment_id":"TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B",
+  "status":"pre-registered",
+  "title":"Corrected exact evidence indexing with explicit build/query cost boundaries",
+  "question":"Can an exact prefix evidence histogram preserve the G-CASM-015 activation-trace selector while removing the O(M) candidate scan from repeated one-step selection queries?",
+  "hypothesis":"An exact prefix histogram built once from public candidate-predicted activation traces should reproduce exhaustive action choice and information scores exactly, while its repeated query work is bounded by the fixed activation-trace alphabet rather than the candidate population M.",
+  "arms":[
+    {
+      "name":"trace_exhaustive",
+      "intervention":"G-CASM-015 activation-trace selector scans all M cached candidates for every legal input-row action",
+      "acts_on":"candidate-side selector query"
+    },
+    {
+      "name":"trace_indexed",
+      "intervention":"exact prefix histogram lookup reads precomputed per-action evidence counts and cumulative costs without scanning candidate records",
+      "acts_on":"candidate-side selector query"
+    }
+  ],
+  "endpoints":[
+    {
+      "name":"primary_query_latency_advantage_m512",
+      "role":"primary — paired seed difference in measured selector query latency at M=512",
+      "primary":true
+    },
+    {
+      "name":"selector_exact_action_agreement",
+      "role":"secondary — exact action equality across all registered seed/M/task cells",
+      "primary":false
+    },
+    {
+      "name":"information_score_agreement",
+      "role":"secondary — exact information gain, expected residual candidates and expected environment cost agreement",
+      "primary":false
+    },
+    {
+      "name":"query_complexity_descriptor",
+      "role":"secondary — exhaustive candidate-record reads versus indexed histogram-bin reads",
+      "primary":false
+    },
+    {
+      "name":"loglog_query_slope",
+      "role":"secondary — per-seed measured query-time scaling across M levels",
+      "primary":false
+    },
+    {
+      "name":"one_time_index_build",
+      "role":"secondary — explicit one-time construction work per static candidate library",
+      "primary":false
+    }
+  ],
+  "h_levels":[32,64,128,256,512],
+  "seeds":[0,1,2,3,4],
+  "steps":1,
+  "eval_steps":32,
+  "held_constant":[
+    "same G-CASM-015 activation-trace channel and pinned generator commit",
+    "same 512-program static evaluation library per seed",
+    "same 16 legal input-row actions",
+    "same 32 query tasks per seed and M",
+    "same target-selection procedure",
+    "same train/evaluation structure and truth disjointness gates",
+    "same exhaustive selector scoring rule and deterministic tie-break order",
+    "same candidate execution-cost values",
+    "index is built once from public candidate-side evidence and reused for all registered queries per seed"
+  ],
+  "data_protocol":{
+    "train_eval_structure_disjoint":true,
+    "train_eval_truth_disjoint":true,
+    "evaluation_library_static_per_seed":true,
+    "nested_population_prefixes":true,
+    "target_identity_available_to_selector":false,
+    "target_index_available_to_selector":false,
+    "future_target_evidence_available_to_selector":false,
+    "verifier_labels_available_to_selector":false,
+    "target_evidence_access_after_choice_only":true
+  },
+  "exactness_requirements":[
+    "indexed selected action must equal exhaustive selected action",
+    "indexed information gain must equal exhaustive information gain within 1e-12",
+    "indexed expected remaining candidates must equal exhaustive value within 1e-12",
+    "indexed expected environment cost must equal exhaustive value within 1e-12",
+    "target evidence is never accessed before selector choice"
+  ],
+  "cost_model":{
+    "exhaustive_query":"candidate records read for 16 actions: 16*M; expected cost is obtained from the same cached records",
+    "indexed_build":"one-time construction from the 512-candidate cache; explicit candidate-record reads are 16*512",
+    "indexed_query":"reads one cumulative histogram series per non-empty evidence signature per action; maximum is 16*2^TRACE_WIDTH and is independent of M for fixed trace width",
+    "wall_clock_query":"median CPU latency measured on the same GitHub Actions runner for both arms after warm-up; hardware-dependent and reported as such",
+    "amortized_lifecycle":"index_build wall-clock plus registered query workload wall-clock, reported separately from query-only latency"
+  },
+  "primary_endpoint":{
+    "M":512,
+    "seed_aggregation":"mean query latency across deterministic repeats within each seed, then paired trace_exhaustive minus trace_indexed across five seeds",
+    "uncertainty":"seed bootstrap 95 percent confidence interval",
+    "bootstrap_rounds":4000,
+    "timing_repeats":30
+  },
+  "decision_rule":[
+    {
+      "condition":"indexed selector is exact-equivalent and the seed-bootstrap 95% interval for exhaustive_minus_indexed query latency at M=512 is entirely positive",
+      "licenses":"bounded evidence that exact candidate-side indexing reduces repeated selector-query latency on the pinned CI workload while preserving selector behavior",
+      "does_not_license":"sublinear total history acquisition, asymptotic hardware-independent speedup, learned probing, or general intelligence."
+    },
+    {
+      "condition":"indexed selector is exact-equivalent but the latency interval includes zero",
+      "licenses":"exact indexing preserves the selector but does not establish a reliable latency advantage on the pinned workload",
+      "does_not_license":"failure of all exact indexing schemes."
+    },
+    {
+      "condition":"indexed selector is not exact-equivalent",
+      "licenses":"implementation invalid; no efficiency result is admitted",
+      "does_not_license":"any scientific efficiency claim from the run."
+    }
+  ],
+  "leakage_rules":[
+    "the index uses only candidate-predicted activation traces and candidate execution costs already present in the public cache",
+    "target identity, target index, realized target evidence and verifier labels never affect index construction or query scoring",
+    "no result from 017A or 017B is used to select M, evidence width, or timing parameters",
+    "the index is not tuned against test outcomes"
+  ],
+  "scope":{
+    "exact_finite_domain_query_transformation":true,
+    "fixed-alphabet_query_complexity_claim":true,
+    "query_time_is_hardware_bound":true,
+    "index_build_remains_linear_in_library_size":true,
+    "no_claim_of_C5_total_history_sublinearity":true,
+    "learned_probe_policy_claim":false,
+    "language_image_audio_claim":false
+  },
+  "provenance":{
+    "parent_experiment":"TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017A",
+    "parent_status":"invalidated before confirmatory measurement",
+    "parent_failure":"non-commensurate work units and hidden O(M) expected-cost scan in indexed query",
+    "generator_commit":"c31554413301e3c9d3e6b3f8c8c6be572a74a748"
+  },
+  "freeze_rule":{
+    "post_measurement_protocol_changes":"require new experiment identifier",
+    "smoke_runs":"must not enter confirmatory evidence",
+    "result_artifact":"immutable after scientific disposition"
+  },
+  "interpretation_order":[
+    "protocol and leakage integrity",
+    "selector exactness",
+    "query-cost accounting",
+    "measured query latency",
+    "index-build cost",
+    "scaling descriptor",
+    "scope"
+  ]
+}
