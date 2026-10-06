@@ -91,7 +91,15 @@
         10,
         11
       ]
-    }
+    },
+    "registered_arms": [
+      "integrated",
+      "no_memory",
+      "shuffle_image",
+      "text_only",
+      "image_only",
+      "audio_only"
+    ]
   },
   "arms": [
     {
@@ -112,6 +120,27 @@
       "acts_on": "multimodal alignment",
       "knob": "image alignment",
       "value": "shuffled"
+    },
+    {
+      "name": "text_only",
+      "intervention": "zero image and audio observations while retaining text observations",
+      "acts_on": "modality",
+      "knob": "image+audio",
+      "value": "zero"
+    },
+    {
+      "name": "image_only",
+      "intervention": "replace text and audio observations with neutral constants while retaining image observations",
+      "acts_on": "modality",
+      "knob": "text+audio",
+      "value": "neutral"
+    },
+    {
+      "name": "audio_only",
+      "intervention": "replace text and image observations with neutral constants while retaining audio observations",
+      "acts_on": "modality",
+      "knob": "text+image",
+      "value": "neutral"
     }
   ],
   "endpoints": [
@@ -215,7 +244,8 @@
     "allowed_after_action": [
       "environment outcome",
       "verifier supervision"
-    ]
+    ],
+    "auxiliary_training_only": "payload latent bits supervise representation during training only; they are not available to the pre-action query path"
   },
   "decision_rule": [
     {
@@ -250,7 +280,8 @@
     "evaluation q1/q2 tuples are drawn only from HELDOUT after training",
     "controls receive the same generated episode list and the same answer labels; only the registered intervention changes",
     "model.query accepts only memory, entity, i, j and op; outcome is passed separately after action",
-    "no evaluation metric is used to tune architecture, seeds, heldout tuples, or training hyperparameters"
+    "no evaluation metric is used to tune architecture, seeds, heldout tuples, or training hyperparameters",
+    "payload bits are used only as training-time auxiliary representation targets for bit_head; payload values are never supplied to query() or used as an inference-time input"
   ],
   "generator": {
     "version": "integrated-e2e-v2-correct-q1-q2-entities-complementary-12bit-heldout",
