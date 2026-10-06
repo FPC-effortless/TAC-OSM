@@ -6,6 +6,7 @@ import numpy as np
 from tac_osm.contract import load_contract
 from tac_osm.measurement.results import Design,Gate,MeasurementRecord,Provenance,contract_fingerprint,now,report_smoke,results_dir_for,write_record
 from tac_osm.adaptive_timescale import ARMS,BENCHMARK_HASH,PAIR_TYPES_TEST,PAIR_TYPES_TRAIN,TRAIN_FILTER_ALPHAS,TEST_FILTER_ALPHAS,make_pairs,make_policy,_features,evaluate,parameter_count,benchmark_hash
+from tac_osm.timescale_transfer import TransferMLPPolicy
 
 EXPERIMENT_ID="TACOSM-PLM-TDBU-ADAPTIVE-TIMESCALE-001"
 TRAIN_PAIRS=300
@@ -33,7 +34,10 @@ def _pairs_ok(examples):
 
 def _hash(policy):
     h=hashlib.sha256()
-    for a in (policy.W1,policy.b1,policy.W2,policy.b2,policy.alpha_logits): h.update(np.ascontiguousarray(a).tobytes())
+    for name in ("W1","b1","W2","b2"):
+        h.update(np.ascontiguousarray(getattr(policy,name)).tobytes())
+    if hasattr(policy,"alpha_logits"):
+        h.update(np.ascontiguousarray(policy.alpha_logits).tobytes())
     return h.hexdigest()
 
 def _bootstrap(a,b,seed=2991,rounds=20000):
@@ -44,7 +48,7 @@ def _bootstrap(a,b,seed=2991,rounds=20000):
 
 def run(args):
     contract=load_contract(EXPERIMENT_ID)
-    contract.require_levels(args.h_levels); contract.require_seeds(args.seeds); contract.require_steps(args.steps); contract.require_eval_steps(args.eval_steps); contract.require_arms([{"name":a.name} for a in contract.arms])
+    contract.require_levels(args.h_levels); contract.require_seeds(args.seeds); contract.require_steps(args.steps); contract.require_eval_steps(args.eval_steps); contract.require_arms([a.name for a in contract.arms])
     assert benchmark_hash()==BENCHMARK_HASH and len(set(np.round(TRAIN_FILTER_ALPHAS,12))&set(np.round(TEST_FILTER_ALPHAS,12)))==0
     rows=[]; initials={}
     for H in contract.h_levels:
@@ -52,18 +56,16 @@ def run(args):
             train=_seed_examples(seed,H,"train"); test=_seed_examples(seed,H,"test"); _pairs_ok(train); _pairs_ok(test)
             y=np.asarray([e.label for e in train],dtype=np.int64)
             for arm in TRAINED_ARMS:
-                policy=make_policy(seed+7,arm); initials[(H,seed,arm)]=_hash(policy)
-                if arm=="no_state":
-                    X=_features(train,arm); 
-                    policy.fit(train,contract.steps,POLICY_LR,ALPHA_LR)
-                elif arm=="one_fixed":
-                    state=_features(train,arm)
-                    policy.fit(train,contract.steps,POLICY_LR,ALPHA_LR)
-                elif arm=="three_fixed":
-                    policy=__import__("tac_osm.adaptive_timescale",fromlist=["FixedTemporalPolicy"]).FixedTemporalPolicy(seed+7)
+                if arm=="three_adaptive":
+                    policy=make_policy(seed+7,arm)
+                    initials[(H,seed,arm)]=_hash(policy)
                     policy.fit(train,contract.steps,POLICY_LR,ALPHA_LR)
                 else:
-                    policy.fit(train,contract.steps,POLICY_LR,ALPHA_LR)
+                    policy=TransferMLPPolicy(seed=seed+7,input_dim=4,hidden=12)
+                    initials[(H,seed,arm)]=_hash(policy)
+                    X=_features(train,arm)
+                    y=np.asarray([e.label for e in train],dtype=np.int64)
+                    policy.fit(X,y,contract.steps,POLICY_LR)
                 base_eval=evaluate(policy,test,arm)
                 reset=evaluate(policy,test,"three_adaptive",intervention="reset") if arm=="three_adaptive" else None
                 shuffle=evaluate(policy,test,"three_adaptive",intervention="shuffle") if arm=="three_adaptive" else None
