@@ -44,7 +44,7 @@ jobs:
         run: PYTHONPATH=src python -m pytest tests/test_plm_topdown_mtsk_001.py tests/test_research_governance.py -q
 
       - name: Full repository tests
-        run: PYTHONPATH=src python -m pytest tests/ -q
+        run: PYTHONPATH=src PYTHONPATH=src python -m pytest tests/ -q
 
       - name: Measurement
         run: |
