@@ -508,7 +508,29 @@ written, a new workflow run for that exact head was not yet visible through the
 available workflow-run query. No scientific result is inferred from either
 state.
 
-## 9. Audit completion boundary
+## 9. Live preflight correction: canonical M0 partition
+
+The corrected workflow then exposed a second governance implementation defect.
+`scripts/research_gate.py` checked whether a measurement script name appeared
+as raw text anywhere in `tests/test_contract.py`. That was not equivalent to
+checking membership in the canonical `_WITH_CONTRACT` /
+`_WITHOUT_CONTRACT` partitions and rejected nine legitimately contracted
+scripts.
+
+Disposition: **IMPLEMENTATION_INVALID** for the governance preflight.
+
+Correction: `research_gate.py` now parses the canonical partition assignments
+from `tests/test_contract.py` with Python's AST/literal parser, verifies that
+both partitions exist and are disjoint, and compares the actual
+`measure_*.py` directory against those partitions. The gate therefore fails
+closed on an unregistered script without inventing a second registration
+source.
+
+The two governance defects found during validation reinforce the retrospective
+method: the gates themselves are research code and must be tested for
+correctness, not merely installed and trusted.
+
+## 10. Audit completion boundary
 
 This retrospective audit is complete as a **portfolio disposition pass** over
 the repository's historical claims, evidence records, contracts, PR research
