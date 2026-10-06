@@ -23,6 +23,7 @@ from tac_osm.measurement.results import (
 )
 from tac_osm.timescale_transfer import (
     ARMS,
+    GENERATOR_VERSION,
     BENCHMARK_HASH,
     EXTRAPOLATION_TEST_INDICES,
     INTERPOLATION_TEST_INDICES,
