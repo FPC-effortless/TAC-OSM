@@ -28,6 +28,7 @@ from tac_osm.mtsk_topdown import (
     make_balanced_pairs,
     MLPPolicy,
     STATE_ALPHAS,
+    representability_witness,
 )
 
 EXPERIMENT_ID = "TACOSM-PLM-TDBU-MTSK-001"
