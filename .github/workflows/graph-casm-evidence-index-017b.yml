@@ -24,6 +24,23 @@ permissions:
   contents: read
 
 jobs:
+  prepare:
+    name: detect confirmatory trigger
+    runs-on: ubuntu-latest
+    outputs:
+      should_full: ${{ steps.detect.outputs.should_full }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - id: detect
+        run: |
+          if git log -1 --pretty=%B | grep -Fq '[run-graph-casm-evidence-index-017B-full]'; then
+            echo 'should_full=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'should_full=false' >> "$GITHUB_OUTPUT"
+          fi
+
   smoke:
     name: G-CASM-017B smoke/preflight
     runs-on: ubuntu-latest
@@ -70,8 +87,8 @@ jobs:
 
   full:
     name: G-CASM-017B full confirmatory measurement
-    needs: smoke
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(toJSON(github.event.commits), '[run-graph-casm-evidence-index-017B-full]')) }}
+    needs: [prepare, smoke]
+    if: ${{ needs.smoke.result == 'success' && (github.event_name == 'workflow_dispatch' || needs.prepare.outputs.should_full == 'true') }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
