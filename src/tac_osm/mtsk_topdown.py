@@ -176,7 +176,11 @@ def evaluate(policy: MLPPolicy, examples: list[EpisodeExample], arm: Arm, interv
 
     predictions = policy.predict(features)
     labels = np.asarray([x.label for x in examples], dtype=np.int64)
-    success = float(np.mean(predictions == labels))
+    outcomes = np.asarray(
+        [environment_outcome(int(action), int(label)) for action, label in zip(predictions, labels)],
+        dtype=np.float64,
+    )
+    success = float(np.mean(outcomes))
 
     pair_predictions: dict[int, list[int]] = {}
     for example, prediction in zip(examples, predictions):
