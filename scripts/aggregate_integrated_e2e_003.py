@@ -54,7 +54,7 @@ def main() -> None:
             raise RuntimeError(f"seed coverage mismatch for {arm}: {got}")
         if len(rows)!=5 or len({r["seed"] for r in rows})!=5:
             raise RuntimeError(f"duplicate/missing seed rows for {arm}")
-            if "leakage_audit" not in data:
+        if "leakage_audit" not in data:
             raise RuntimeError(f"missing leakage audit for {arm}")
         leakage = data["leakage_audit"]
         assert leakage["q1_q2_entities_distinct"] is True
