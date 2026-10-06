@@ -13,6 +13,7 @@ from tac_osm.mtsk_topdown import (  # noqa: E402
     MLPPolicy,
     PersistentTemporalState,
     evaluate,
+    representability_witness,
     featurize,
     make_balanced_pairs,
     target_action,
