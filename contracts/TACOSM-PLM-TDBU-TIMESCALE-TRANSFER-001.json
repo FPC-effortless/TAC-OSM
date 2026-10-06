@@ -127,11 +127,12 @@
     "training and test temporal-filter constant sets are committed before confirmation and are disjoint",
     "current observation at decision is exactly 0.0",
     "paired test histories are exact negations with opposite gold actions",
-    "policy parameter count is 86 for no_state, two_timescale, three_timescale and distributed_eight; one_timescale is explicitly a lower-capacity 82-parameter control",
+    "policy parameter count is exactly 86 for all five registered arms; one/two/three use a four-feature policy input with zero padding, while distributed_eight uses nine inputs and a matched narrower hidden layer",
     "optimizer family, learning rate, training step count and evaluation sample count",
     "executor and independent verifier semantics",
     "state-update recurrence and work-accounting definition",
-    "distributed_eight trace alphas are fixed before confirmation"
+    "distributed_eight trace alphas are fixed before confirmation",
+    "train filter alphas are exactly 0.30,0.50,0.68,0.82,0.90,0.96,0.985 and test filter alphas are exactly 0.40,0.58,0.74,0.86,0.93,0.989,0.993"
   ],
   "status": "pre-registered",
   "layer": "L3"
