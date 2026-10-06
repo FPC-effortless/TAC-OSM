@@ -87,8 +87,6 @@ def test_choose_best_reports_work_for_all_actions():
 
 
 def test_prefix_histogram_index_matches_exhaustive_partition_score():
-    from tac_osm.structured_action_probe import score_action
-
     evidence = (0, 0, 1, 1, 1, 0)
     costs = (2.0, 2.0, 4.0, 4.0, 4.0, 4.0)
     idx = PrefixEvidenceHistogramIndex.build(
@@ -97,10 +95,15 @@ def test_prefix_histogram_index_matches_exhaustive_partition_score():
         evidence_width=1,
     )
     score, reads = idx.score_action(0, population_size=6)
-    expected = score_action(type("A", (), {})(), evidence, sum(costs) / len(costs))
-    assert score.information_gain_bits == expected.information_gain_bits
-    assert score.expected_remaining_candidates == expected.expected_remaining_candidates
-    assert score.expected_cost == expected.expected_cost
+
+    counts = {0: 3, 1: 3}
+    entropy = -sum((n / 6) * np.log2(n / 6) for n in counts.values())
+    expected_remaining = sum(n * n for n in counts.values()) / 6
+    expected_cost = sum(costs) / 6
+
+    assert np.isclose(score.information_gain_bits, entropy)
+    assert np.isclose(score.expected_remaining_candidates, expected_remaining)
+    assert np.isclose(score.expected_cost, expected_cost)
     assert reads == 2
 
 
