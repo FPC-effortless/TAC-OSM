@@ -112,3 +112,6 @@ Confirmatory trigger: [run-graph-casm-evidence-index-017B-full]
 
 
 Clean rerun authorization marker [run-graph-casm-evidence-index-017B-full]
+
+
+Final smoke authorization after test repair: [run-graph-casm-evidence-index-017B-full]
