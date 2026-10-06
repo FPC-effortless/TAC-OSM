@@ -175,6 +175,32 @@ def test_action_output_does_not_depend_on_target_label():
     assert th.isfinite(loss_b)
 
 
+def test_post_action_feedback_cannot_modify_another_entity_slot():
+    model = FunctionalMultimodalPLM()
+    memory = model.state.initial(1, th.device("cpu"))
+    entity_a = th.tensor([2])
+    entity_b = th.tensor([3])
+    z = th.randn(1, 40)
+    memory, _ = model.state.write(memory, z, entity_a)
+    before_b, _ = model.state.read(memory, entity_b)
+    query_result = {
+        "entity": entity_a,
+        "read": th.randn(1, 40),
+        "action": th.tensor([0.9]),
+    }
+    updated, _ = model.post_action_update(memory, query_result, th.ones(1))
+    after_b, _ = model.state.read(updated, entity_b)
+    assert th.equal(before_b, after_b)
+
+
+def test_training_harness_derives_environment_outcome_after_query():
+    from scripts.run_integrated_e2e_005 import train_batch
+    source = inspect.getsource(train_batch)
+    first_query = source.index("model.query")
+    first_outcome = source.index("environment_outcome")
+    assert first_query < first_outcome
+
+
 def test_zero_outcome_does_not_change_memory():
     model = FunctionalMultimodalPLM()
     memory = model.state.initial(1, th.device("cpu"))
