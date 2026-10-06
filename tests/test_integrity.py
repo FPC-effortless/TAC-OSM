@@ -417,17 +417,10 @@ def test_the_frozen_baseline_reports_the_current_test_count():
     )
 
     r = subprocess.run(
-        [sys.executable, "-m", "pytest", "--collect-only", "-q"],
+        [sys.executable, "scripts/sync_test_count.py", "--check"],
         cwd=repo_root, capture_output=True, text=True,
     )
-    live = next(
-        (int(l.split()[0]) for l in r.stdout.splitlines()
-         if "tests collected" in l),
-        None,
-    )
-    assert live is not None, "could not read the live test count"
-    assert f"current count in `tests/`: {live}" in text, (
-        f"the doc's current count is stale; the suite collects {live} tests "
-        "and the row does not say so. Run "
-        "`python scripts/sync_test_count.py` before committing."
+    assert r.returncode == 0, (
+        "the canonical test-count gate failed:\n"
+        f"{r.stdout}\n{r.stderr}"
     )
