@@ -77,10 +77,14 @@ class TemporalState:
 
     def process(self,history:np.ndarray)->np.ndarray:
         self.reset()
+        if self.arm == "no_state":
+            return self.values.copy()
+        active = 1 if self.arm == "one_fixed" else 3
         for x in history:
-            self.values[0]=self.alphas[0]*self.values[0]+(1.0-self.alphas[0])*float(x)
-            self.values[1]=self.alphas[1]*self.values[1]+(1.0-self.alphas[1])*float(x)
-            self.values[2]=self.alphas[2]*self.values[2]+(1.0-self.alphas[2])*float(x)
+            x=float(x)
+            for i in range(active):
+                alpha=float(self.alphas[i])
+                self.values[i]=alpha*self.values[i]+(1.0-alpha)*x
         return self.values.copy()
 
     def process_with_derivatives(self,history:np.ndarray)->tuple[np.ndarray,np.ndarray]:
