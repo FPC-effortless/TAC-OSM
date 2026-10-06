@@ -74,6 +74,7 @@ retrospective scientific status.
 | TACOSM-M2-SELECTIVE-COMPUTE | CORRECTIVE / ACTIVE | REP/C5 | Bounded execution-subset evidence exists, but semantic/actual-CASM bridge unresolved | 016C-R2 + learned semantic retrieval + actual CASM |
 | TACOSM-M3-ECONOMIC-SCALING | ON_HOLD | C5 broad thesis | No valid general capability-vs-total-compute curve | Unblock M2 first |
 
+| TACOSM-PLM-TDBU-MTSK-001 | PREREGISTERED | Top-down complete PLM scaffold with one novel multi-timescale state mechanism and bottom-up causal ablations | Synthetic paired-history benchmark; no confirmatory result yet | Execute G0-G10/P0-P7; then follow result-dependent successor without closing other lanes |
 ## Mandatory continuity rules
 
 1. **No silent closure.** New ideas add a lane or a named successor; they do not
