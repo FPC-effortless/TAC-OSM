@@ -70,10 +70,7 @@ The primary comparison is distributed_eight versus three_timescale on the
 held-out test-filter endpoint. The two-timescale arm is retained because MTSK-001
 showed that two scales already matched three in-domain.
 
-The one-timescale arm is a minimal structural control but has a lower-capacity
-policy because exact parameter matching is impossible for a single visible
-state coordinate. Its result is therefore descriptive rather than a primary
-capacity-matched comparison.
+All policy arms use exactly 86 trainable parameters. For one/two/three timescales, the policy input is padded to four features; distributed_eight uses eight state features plus the current observation and therefore a narrower hidden layer. The primary distributed_eight versus three_timescale comparison is exactly parameter matched.
 
 ## Capacity and state accounting
 
