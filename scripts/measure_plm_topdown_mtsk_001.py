@@ -38,8 +38,11 @@ TEST_PAIRS = 100
 LEARNING_RATE = 0.05
 HIDDEN = 12
 MATERIALITY = 0.10
+STEPS_DEFAULT = 500
+EVAL_STEPS_DEFAULT = 200
 
-TRAINED_ARMS = ("no_state", "single_timescale", "two_timescale", "mtsk")
+ARMS = ("no_state", "single_timescale", "two_timescale", "mtsk")
+TRAINED_ARMS = ARMS
 
 
 def _seed_examples(seed: int, H: int, split: str) -> list:
@@ -238,8 +241,8 @@ def run(args: argparse.Namespace) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--steps", type=int, default=500)
-    parser.add_argument("--eval-steps", type=int, default=200)
+    parser.add_argument("--steps", type=int, default=STEPS_DEFAULT)
+    parser.add_argument("--eval-steps", type=int, default=EVAL_STEPS_DEFAULT)
     parser.add_argument("--h-levels", type=int, nargs="+", default=[8, 64, 256])
     parser.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2, 3, 4])
     parser.add_argument("--commit", default="UNKNOWN")
