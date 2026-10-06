@@ -229,3 +229,36 @@ def test_zero_outcome_does_not_change_memory():
         th.zeros(1),
     )
     assert th.equal(before, after)
+
+
+def test_fixed_casm_probability_to_logit_interface_preserves_binary_decision():
+    model = FunctionalMultimodalPLM()
+    state = th.zeros(2, 40)
+    i = th.tensor([0, 0])
+    j = th.tensor([1, 1])
+    op = th.tensor([1, 1])  # AND
+    # Force decoder to produce confidently different latent states.
+    with th.no_grad():
+        for p in model.casm.decoder.parameters():
+            p.zero_()
+        model.casm.decoder[-1].bias[0] = 8.0
+        model.casm.decoder[-1].bias[1] = 8.0
+    action, logits, _ = model.casm(state, i, j, op)
+    assert th.all(action > 0.99)
+    assert th.equal(logits.argmax(-1), th.ones(2, dtype=th.long))
+
+
+def test_fixed_casm_logits_do_not_force_positive_class_for_zero_action():
+    model = FunctionalMultimodalPLM()
+    state = th.zeros(1, 40)
+    i = th.tensor([0])
+    j = th.tensor([1])
+    op = th.tensor([1])  # AND
+    with th.no_grad():
+        for p in model.casm.decoder.parameters():
+            p.zero_()
+        model.casm.decoder[-1].bias[0] = -8.0
+        model.casm.decoder[-1].bias[1] = -8.0
+    action, logits, _ = model.casm(state, i, j, op)
+    assert action.item() < 1e-5
+    assert logits.argmax(-1).item() == 0
