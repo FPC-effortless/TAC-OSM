@@ -431,3 +431,6 @@ success than the scalar channel under the same M=512/B=8 protocol.
 
 
 <!-- Confirmatory rerun trigger: [run-graph-casm-trace-capability-bridge-016C-R2-full] -->
+
+
+Confirmatory trigger: [run-graph-casm-trace-capability-bridge-016C-R2-full]
