@@ -45,3 +45,11 @@ def test_query_answer_is_derived_from_named_entity_only():
         a, b = payload[entity][i], payload[entity][j]
         expected = {"xor": a ^ b, "and": a & b, "or": a | b, "xnor": 1 - (a ^ b)}[op]
         assert answer == expected
+
+def test_post_action_feedback_is_not_the_target_answer():
+    from pathlib import Path
+    source = (Path(__file__).resolve().parents[1] / "src" / "tac_osm" / "integrated_e2e.py").read_text()
+    assert 'action1_hard = out1["logits"].argmax(dim=-1)' in source
+    assert 'outcome1 = (action1_hard == q1[-1]).to(out1["logits"].dtype)' in source
+    assert 'post_action_update(memory, out1, outcome1)' in source
+    assert 'post_action_update(memory, out1, q1[-1])' not in source
