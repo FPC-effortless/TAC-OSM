@@ -121,3 +121,6 @@ Authorization retained in recent history: [run-graph-casm-evidence-index-017B-fu
 
 
 Confirmatory authorization: [run-graph-casm-evidence-index-017B-full]
+
+
+Final confirmatory authorization: [run-graph-casm-evidence-index-017B-full]
