@@ -917,6 +917,7 @@ _WITH_CONTRACT = (
     ("measure_c5_casm_003.py", "TACOSM-C5-003"),
     ("measure_plm_topdown_mtsk_001.py", "TACOSM-PLM-TDBU-MTSK-001"),
     ("measure_plm_topdown_timescale_transfer_001.py", "TACOSM-PLM-TDBU-TIMESCALE-TRANSFER-001"),
+    ("measure_plm_topdown_adaptive_timescale_001.py", "TACOSM-PLM-TDBU-ADAPTIVE-TIMESCALE-001"),
 )
 
 
