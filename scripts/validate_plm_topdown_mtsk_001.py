@@ -31,7 +31,7 @@ def main() -> int:
     contract_path = Path("contracts") / f"{EXPERIMENT_ID}.json"
     expected_hash = __import__("hashlib").sha256(contract_path.read_bytes()).hexdigest()[:16]
     assert p["contract_sha256"] == expected_hash
-    assert p["generator_hash"] == BENCHMARK_HASH
+    assert raw["endpoints"]["generator_hash"] == BENCHMARK_HASH
     assert "status" not in raw
 
     design = raw["design"]
