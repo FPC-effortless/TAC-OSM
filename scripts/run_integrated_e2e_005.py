@@ -222,6 +222,8 @@ def evaluate_seed(
 ):
     model.eval()
     q1_correct = q2_correct = verifier_correct = 0
+    q2_positive = 0
+    q2_decision_mismatches = 0
 
     for episode in episodes:
         rows = episode[0]
@@ -268,6 +270,10 @@ def evaluate_seed(
         _, verifier2 = model.post_action_update(updated, out2, outcome2)
 
         q1_correct += accuracy(out1["logits"], episode[1][4])
+        q2_pred = out2["logits"].argmax(-1)
+        q2_threshold_pred = (out2["action"] >= 0.5).long()
+        q2_decision_mismatches += int((q2_pred != q2_threshold_pred).item())
+        q2_positive += int(q2_pred.item() == 1)
         q2_correct += accuracy(out2["logits"], episode[2][4])
         verifier_correct += int(
             ((verifier1[:, :1].sigmoid() >= 0.5).long() == outcome1.long()).item()
@@ -281,6 +287,8 @@ def evaluate_seed(
         "q1_accuracy": q1_correct / n,
         "q2_accuracy": q2_correct / n,
         "verifier_q1_q2_accuracy": verifier_correct / (2 * n),
+        "q2_positive_fraction": q2_positive / n,
+        "q2_decision_mismatches": q2_decision_mismatches,
     }
 
 
@@ -370,6 +378,8 @@ def run(smoke: bool) -> dict:
             "normal_q1_accuracy": metrics["normal"]["q1_accuracy"],
             "normal_q2_accuracy": metrics["normal"]["q2_accuracy"],
             "normal_verifier_accuracy": metrics["normal"]["verifier_q1_q2_accuracy"],
+            "normal_q2_positive_fraction": metrics["normal"]["q2_positive_fraction"],
+            "normal_q2_decision_mismatches": metrics["normal"]["q2_decision_mismatches"],
             "no_memory_q2_accuracy": metrics["no_memory"]["q2_accuracy"],
             "shuffle_image_q2_accuracy": metrics["shuffle_image"]["q2_accuracy"],
             "text_only_q2_accuracy": metrics["text_only"]["q2_accuracy"],
@@ -410,6 +420,9 @@ def run(smoke: bool) -> dict:
             r["oracle_q2_accuracy"] for r in seed_results
         ),
         "gradient_surface_pass": gradient_gate["pass"],
+        "classifier_decision_integrity_pass": all(
+            r["normal_q2_decision_mismatches"] == 0 for r in seed_results
+        ),
     }
 
     output = {
