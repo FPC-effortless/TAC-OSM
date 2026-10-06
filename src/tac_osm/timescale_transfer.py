@@ -63,7 +63,7 @@ INTERPOLATION_TEST_INDICES = tuple(range(5))
 EXTRAPOLATION_TEST_INDICES = (5, 6)
 POLICY_HIDDEN = {
     "no_state": 12,
-    "one_timescale": 16,
+    "one_timescale": 12,
     "two_timescale": 14,
     "three_timescale": 12,
     "distributed_eight": 7,
