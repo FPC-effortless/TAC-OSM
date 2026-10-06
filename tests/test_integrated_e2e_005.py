@@ -209,6 +209,11 @@ def test_single_episode_audio_has_explicit_channel_dimension():
     assert encoded.shape == (1, 20)
 
 
+def test_registered_primary_threshold_is_read_from_contract():
+    from scripts.run_integrated_e2e_005 import primary_threshold
+    assert primary_threshold() == 0.80
+
+
 def test_zero_outcome_does_not_change_memory():
     model = FunctionalMultimodalPLM()
     memory = model.state.initial(1, th.device("cpu"))
