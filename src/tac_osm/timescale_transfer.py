@@ -241,8 +241,13 @@ def _features_for_state(
     return features
 
 
-def make_policy(seed: int, arm: Arm) -> MLPPolicy:
-    return MLPPolicy(seed=seed, hidden=POLICY_HIDDEN[arm])
+def make_policy(seed: int, arm: Arm) -> TransferMLPPolicy:
+    input_dim = 4 if len(ARM_ALPHAS[arm]) <= 3 else 9
+    return TransferMLPPolicy(
+        seed=seed,
+        input_dim=input_dim,
+        hidden=POLICY_HIDDEN[arm],
+    )
 
 
 def parameter_count(arm: Arm) -> int:
