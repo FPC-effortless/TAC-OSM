@@ -27,7 +27,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 import run_graph_casm_structured_action_probe_015 as g15
 from tac_osm.evidence_index import PrefixEvidenceHistogramIndex
-from tac_osm.structured_action_probe import choose_best_action
+from tac_osm.structured_action_probe import ProbeAction, choose_best_action
 
 
 EXPERIMENT_ID = "TACOSM-GRAPH-CASM-EVIDENCE-INDEX-017B"
@@ -50,11 +50,13 @@ def contract():
 
 def build_prefix_index(cache):
     evidence_by_action = {
-        row: tuple(cache.trace[(idx, row)][0] for idx in range(g15.LIBRARY_SIZE))
+        ProbeAction("activation_trace", (row,)): tuple(
+            cache.trace[(idx, row)][0] for idx in range(g15.LIBRARY_SIZE)
+        )
         for row in ACTIONS
     }
     cost_by_action = {
-        row: tuple(
+        ProbeAction("activation_trace", (row,)): tuple(
             cache.trace[(idx, row)][1] + TRACE_WIDTH
             for idx in range(g15.LIBRARY_SIZE)
         )
