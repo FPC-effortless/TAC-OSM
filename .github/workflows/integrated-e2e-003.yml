@@ -92,6 +92,8 @@ jobs:
           done
       - name: Aggregate result
         run: python scripts/aggregate_integrated_e2e_003.py
+      - name: Independent aggregate validation
+        run: python scripts/validate_integrated_e2e_003.py artifacts/TACOSM-PLM-INTEGRATED-E2E-003-COMBINED.json
       - name: Upload combined result
         uses: actions/upload-artifact@v4
         with:
