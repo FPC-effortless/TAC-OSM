@@ -132,6 +132,52 @@ are not exposed to training.
 No test run may be used as a validation run. Any smoke run is explicitly labeled
 non-evidentiary.
 
+## Confirmatory result and disposition
+
+The registered exact-head confirmatory run completed successfully on commit
+`2e8092ecfc16bdc557f6a53ef7c411eb2c3e2913`. Workflow run
+`37411440322` passed contract validation, unified research preflight, focused
+tests, the full 832-test repository suite, measurement, post-run invariant
+validation, independent recomputation, and artifact upload. Artifact
+`11389521777` has digest
+`sha256:7ad3974e4e86c3aca74486e350602bbe8a528448c10ca63dc98b3909c2fdf5f5`.
+
+At H=256, distributed_eight exact success was **0.8533** mean versus
+**0.8450** for three_timescale. The preregistered difference was **+0.0083**,
+with seed-bootstrap 95% CI **[-0.0017, 0.0183]**. The registered +0.10 materiality
+criterion therefore failed and the interval includes zero.
+
+The state mechanism itself remained active: distributed_eight had action gap
+1.0 on all five H=256 seeds, while no_state had 0.0. Distributed_eight reset
+success averaged **0.500** and shuffle success **0.1467**, versus normal success
+0.8533. No_state averaged 0.500.
+
+The transfer decomposition is informative. At H=256, interpolation success was
+0.8712 for distributed_eight versus 0.8644 for three_timescale; extrapolation
+success was 0.8361 versus 0.8262. These are secondary descriptive results, not
+new decision criteria.
+
+The distributed eight-trace bank passed the pre-run representability gate for
+all seven held-out temporal filters, with minimum impulse-kernel R²
+**0.99819** against the registered 0.99 threshold.
+
+## Scientific interpretation
+
+The preregistered claim that broader fixed distributed temporal coverage would
+materially improve transfer over a three-timescale state is **not supported**.
+
+The evidence instead supports the narrower result that persistent temporal state
+can remain useful on this held-out temporal-filter benchmark: all stateful arms
+formed a history-conditioned action gap, and the stateful arms substantially
+outperformed no_state. Because the primary experiment did not preregister paired
+stateful-versus-stateful hypothesis tests beyond distributed_eight vs
+three_timescale, descriptive differences among one/two/three/eight scales are
+not promoted as separate confirmatory claims.
+
+The combination of near-perfect representability and the null primary effect
+also shifts the research bottleneck away from raw temporal-basis coverage and
+toward **scale placement and learned readout/credit assignment**.
+
 ## Successor rule
 
 If distributed_eight wins, the next question is whether the improvement survives
