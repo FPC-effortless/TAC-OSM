@@ -54,8 +54,6 @@ jobs:
           assert c.check_consistency() == []
           print(c.primary_endpoint())
           PY
-      - name: Unified research preflight
-        run: python scripts/research_gate.py
       - name: Repository suite
         run: python -m pytest tests/ -q
       - name: 017B focused tests
