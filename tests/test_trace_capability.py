@@ -316,7 +316,16 @@ def test_r2_runner_reports_operation_counters():
     for name in counter_names:
         assert name in trial, f"trial dict missing {name}"
         assert trial[name] >= 0
-    assert trial["total_operations"] >= trial["candidate_scan_operations"]
+    assert trial["signature_construction_operations"] == 64 * len(r2.INPUT_ROWS)
+    assert trial["candidate_scan_operations"] == 64
+    assert trial["target_evidence_read_operations"] == 1
+    assert trial["total_operations"] == (
+        trial["signature_construction_operations"]
+        + trial["candidate_scan_operations"]
+        + trial["probe_selection_operations"]
+        + trial["verification_operations"]
+        + trial["target_evidence_read_operations"]
+    )
     assert trial["probe_environment_work_units"] > trial["probe_environment_work_units_per_candidate"]
     assert trial["target_bucket_size"] >= 1, "scalar bucket must be non-empty in R2"
 
