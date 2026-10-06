@@ -40,4 +40,4 @@ jobs:
           PYTHONPATH=src python -m compileall -q src scripts
           PYTHONPATH=src python -c "import tac_osm; print('interface symbols:', len(tac_osm.__all__))"
       - name: Frozen baseline provenance
-        run: python scripts/sync_test_count.py --check
+        run: PYTHONPATH=src python scripts/sync_test_count.py --check
