@@ -75,6 +75,7 @@ retrospective scientific status.
 | TACOSM-M3-ECONOMIC-SCALING | ON_HOLD | C5 broad thesis | No valid general capability-vs-total-compute curve | Unblock M2 first |
 
 | TACOSM-PLM-TDBU-MTSK-001 | MEASURED / LEGACY-BOUND | Top-down complete PLM scaffold with one novel multi-timescale state mechanism and bottom-up causal ablations | H=256 MTSK 0.856 vs single-timescale 0.726; mean Δ=0.130, seed-bootstrap 95% CI [0.098, 0.162]; reset=0.500, shuffle=0.144 | Three-scale necessity is unresolved: two-timescale also averages 0.856 at H=256. Next action: preregister scale-placement/transfer successor on held-out temporal constants; do not infer biological, asymptotic, multimodal, or efficiency claims |
+| TACOSM-PLM-TDBU-TIMESCALE-TRANSFER-001 | PREREGISTERED | Top-down same persistent-state -> policy -> executor -> verifier scaffold with one novel distributed fixed-timescale state bank; bottom-up K ablation 1/2/3/8 | Held-out temporal-filter constants are disjoint from training; primary distributed_eight vs three_timescale at H=256; no result | Run G0-G10/P0-P7 and do not change filter sets, bank alphas, or primary threshold after measurement begins |
 ## Mandatory continuity rules
 
 1. **No silent closure.** New ideas add a lane or a named successor; they do not
