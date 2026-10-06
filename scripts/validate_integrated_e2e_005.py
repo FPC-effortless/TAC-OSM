@@ -15,7 +15,13 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from tac_osm.contract import load_contract
 from tac_osm.integrated_e2e_005 import FunctionalMultimodalPLM
-from tac_osm.integrated_e2e_005_benchmark import GENERATOR_VERSION, HELDOUT, SEEDS, STEPS, generator_hash
+from tac_osm.integrated_e2e_005_benchmark import (
+    GENERATOR_VERSION,
+    HELDOUT,
+    SEEDS,
+    STEPS,
+    generator_hash,
+)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("result")
@@ -34,8 +40,10 @@ assert x["protocol"]["seeds"] == list(SEEDS) == contract_raw["seeds"]
 assert x["protocol"]["steps"] == STEPS == contract_raw["protocol"]["train_steps"]
 assert x["protocol"]["batch_size"] == contract_raw["protocol"]["batch_size"]
 assert x["protocol"]["evaluation_episodes_per_seed"] == contract_raw["protocol"]["evaluation_episodes_per_seed"]
-assert x["protocol"]["registered_heldout"] == [list(x) for x in HELDOUT]
-assert [a["name"] for a in contract_raw["arms"]] == x["protocol"]["registered_controls"]
+assert x["protocol"]["registered_heldout"] == [list(item) for item in HELDOUT]
+assert x["protocol"]["registered_controls"] == [
+    item["name"] for item in contract_raw["arms"]
+]
 assert x["protocol"]["benchmark_generator_version"] == GENERATOR_VERSION
 assert x["protocol"]["representation_auxiliary_supervision"] is False
 assert x["protocol"]["operator_dispatch"] == "fixed_query_conditioned"
@@ -63,6 +71,8 @@ for row in rows:
         assert 0.0 <= row[key] <= 1.0
     assert row["training_evaluation_semantic_overlap"] == 0
     assert row["oracle_q2_accuracy"] == 1.0
+    assert isinstance(row["evaluation_episode_fingerprint"], str)
+    assert len(row["evaluation_episode_fingerprint"]) == 64
 
 assert x["summary"]["oracle_q2_accuracy"] == 1.0
 assert x["summary"]["gradient_surface_pass"] is True
@@ -78,14 +88,20 @@ assert x["leakage_audit"]["pre_action_query_signature"] == [
     "self", "memory", "entity", "i", "j", "op"
 ]
 
-forward_source = inspect.getsource(FunctionalMultimodalPLM.forward_episode)
-assert "bit_loss" not in forward_source
-assert "entity_loss" not in forward_source
-assert "payload" not in forward_source
+query_sig = list(inspect.signature(FunctionalMultimodalPLM.query).parameters)
+assert query_sig == ["self", "memory", "entity", "i", "j", "op"]
+query_source = inspect.getsource(FunctionalMultimodalPLM.query)
+assert "answer" not in query_source
 
-assert list(inspect.signature(FunctionalMultimodalPLM.query).parameters) == [
-    "self", "memory", "entity", "i", "j", "op"
-]
+assert not hasattr(FunctionalMultimodalPLM, "forward_episode")
+assert "def forward_episode" not in inspect.getsource(FunctionalMultimodalPLM)
+
+post_source = inspect.getsource(FunctionalMultimodalPLM.post_action_update)
+assert list(inspect.signature(
+    FunctionalMultimodalPLM.post_action_update
+).parameters) == ["self", "memory", "query_result", "outcome"]
+assert "answer" not in post_source
+assert "q1" not in post_source and "q2" not in post_source
 
 normal = [r["normal_q2_accuracy"] for r in rows]
 mean_q2 = sum(normal) / len(normal)
@@ -95,4 +111,4 @@ assert x["summary"]["primary_pass"] == bool(
     mean_q2 >= c.primary_endpoint.threshold and min(normal) >= 0.40
 )
 
-print("PASS: E2E-005 independent contract, fingerprint, leakage, and result validation")
+print("PASS: E2E-005 independent contract, fingerprint, leakage, label-free API, and result validation")
