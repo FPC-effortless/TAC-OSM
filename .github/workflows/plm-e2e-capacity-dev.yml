@@ -33,7 +33,7 @@ jobs:
           python -m pip install --quiet -e . pytest numpy==2.3.3 torch
           python -m pip install --quiet "ruff==0.13.0"
       - name: Static gate
-        run: ruff check --select F821 src/tac_osm scripts/run_plm_e2e_capacity_dev.py
+        run: ruff check --select F821 src/tac_osm/integrated_e2e_005.py scripts/run_integrated_e2e_005.py scripts/run_plm_e2e_capacity_dev.py
       - name: Integrity tests
         run: python -m pytest tests/test_integrated_e2e_005.py -q
       - name: Development benchmark
