@@ -19,7 +19,7 @@ from tac_osm.mtsk_topdown import (
 )
 
 EXPERIMENT_ID = "TACOSM-PLM-TDBU-TIMESCALE-TRANSFER-001"
-GENERATOR_VERSION = "timescale-transfer-v1-train-test-disjoint-0.30-0.992"
+GENERATOR_VERSION = "timescale-transfer-v1-train-test-disjoint-0.30-0.993"
 BENCHMARK_HASH = hashlib.sha256(GENERATOR_VERSION.encode()).hexdigest()
 
 TRAIN_FILTER_ALPHAS = np.array(
