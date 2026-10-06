@@ -57,6 +57,7 @@ def main() -> int:
         "no_state_mean": float(no_state.mean()),
         "mtsk_minus_single_mean": float(diff.mean()),
         "mtsk_minus_single_seed_values": diff.tolist(),
+        "mtsk_minus_two_mean": float(mtsk.mean() - two.mean()),
         "seed_bootstrap_95ci": ci,
         "mtsk_minus_no_state_mean": float(mtsk.mean() - no_state.mean()),
         "reset_mean": float(reset.mean()),
