@@ -1,8 +1,8 @@
 """Functional multimodal PLM core for E2E-005.
 
-Entity addressing and operator dispatch are deliberately fixed in this lane.
-The purpose is to establish the end-to-end multimodal information path before
-optimising learned addressing, learned operator selection, or scaling.
+The model API is deliberately label-free. Training targets and environment
+outcomes are supplied by the outer experiment harness only after the model has
+produced an action. This makes pre-action target leakage structurally harder.
 """
 from __future__ import annotations
 
@@ -105,7 +105,8 @@ class ExplicitEntityState(nn.Module):
 
     def read(self, memory: Tensor, entity: Tensor) -> tuple[Tensor, Tensor]:
         probs = F.one_hot(
-            entity.long(), num_classes=self.entity_count
+            entity.long(),
+            num_classes=self.entity_count,
         ).to(memory.dtype)
         read = torch.einsum("bn,bnd->bd", probs, memory)
         return read, probs
@@ -145,6 +146,8 @@ class FixedCASM(nn.Module):
 
 
 class FunctionalMultimodalPLM(nn.Module):
+    """Multimodal input -> state -> query -> CASM -> action -> verifier."""
+
     def __init__(
         self,
         config: FunctionalConfig = FunctionalConfig(),
@@ -202,6 +205,7 @@ class FunctionalMultimodalPLM(nn.Module):
         query_result: dict[str, Tensor],
         outcome: Tensor,
     ) -> tuple[Tensor, Tensor]:
+        """Apply only post-action environment feedback."""
         feedback = outcome.float().view(-1, 1)
         verifier_logit = self.verifier(
             torch.cat(
@@ -230,65 +234,3 @@ class FunctionalMultimodalPLM(nn.Module):
             strength=strength,
         )
         return updated, torch.cat([verifier_logit, feedback], dim=-1)
-
-    def forward_episode(
-        self,
-        observations: dict[str, Tensor],
-        observation_entities: Tensor,
-        q1: tuple[Tensor, Tensor, Tensor, Tensor, Tensor],
-        q2: tuple[Tensor, Tensor, Tensor, Tensor, Tensor],
-    ) -> dict[str, Tensor]:
-        memory = self.state.initial(
-            observations["text"].shape[1],
-            observations["text"].device,
-        )
-        for t in range(observations["text"].shape[0]):
-            z = self.encode(
-                observations["text"][t],
-                observations["image"][t],
-                observations["audio"][t],
-            )
-            memory, _ = self.state.write(
-                memory,
-                z,
-                observation_entities[t],
-            )
-
-        def run_query(q, mem):
-            entity, i, j, op, answer = q
-            out = self.query(mem, entity, i, j, op)
-            loss = F.cross_entropy(out["logits"], answer)
-            return out, loss
-
-        out1, action1_loss = run_query(q1, memory)
-        outcome1 = (
-            (out1["action"] >= 0.5).long() == q1[-1]
-        ).float().detach()
-        memory, verifier1 = self.post_action_update(
-            memory, out1, outcome1
-        )
-
-        out2, action2_loss = run_query(q2, memory)
-        outcome2 = (
-            (out2["action"] >= 0.5).long() == q2[-1]
-        ).float().detach()
-        _, verifier2 = self.post_action_update(
-            memory, out2, outcome2
-        )
-
-        verifier_loss = F.binary_cross_entropy_with_logits(
-            verifier1[:, :1], verifier1[:, 1:]
-        ) + F.binary_cross_entropy_with_logits(
-            verifier2[:, :1], verifier2[:, 1:]
-        )
-
-        return {
-            "q1": out1["logits"],
-            "q2": out2["logits"],
-            "q1_attention": out1["attention"],
-            "q2_attention": out2["attention"],
-            "action1_loss": action1_loss,
-            "action2_loss": action2_loss,
-            "verifier_loss": verifier_loss / 2,
-            "loss": action1_loss + action2_loss + 0.10 * verifier_loss / 2,
-        }
