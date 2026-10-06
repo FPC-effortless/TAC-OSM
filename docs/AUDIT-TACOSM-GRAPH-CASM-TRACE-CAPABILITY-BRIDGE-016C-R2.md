@@ -443,3 +443,6 @@ Clean rerun authorization marker [run-graph-casm-trace-capability-bridge-016C-R2
 
 
 Authorization retained in recent history: [run-graph-casm-trace-capability-bridge-016C-R2-full]
+
+
+Confirmatory authorization: [run-graph-casm-trace-capability-bridge-016C-R2-full]
