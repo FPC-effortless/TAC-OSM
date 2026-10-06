@@ -180,7 +180,7 @@ def test_post_action_feedback_cannot_modify_another_entity_slot():
     memory = model.state.initial(1, th.device("cpu"))
     entity_a = th.tensor([2])
     entity_b = th.tensor([3])
-    z = th.randn(1, 40)
+    z = th.randn(1, model.config.hidden_dim)
     memory, _ = model.state.write(memory, z, entity_a)
     before_b, _ = model.state.read(memory, entity_b)
     query_result = {
@@ -206,7 +206,7 @@ def test_single_episode_audio_has_explicit_channel_dimension():
     _, _, _, audio = ep[0][0]
     model = FunctionalMultimodalPLM()
     encoded = model.audio(audio.unsqueeze(0).unsqueeze(0))
-    assert encoded.shape == (1, 20)
+    assert encoded.shape == (1, model.config.hidden_dim // 2)
 
 
 def test_registered_primary_threshold_is_read_from_contract():
@@ -233,7 +233,7 @@ def test_zero_outcome_does_not_change_memory():
 
 def test_fixed_casm_probability_to_logit_interface_preserves_binary_decision():
     model = FunctionalMultimodalPLM()
-    state = th.zeros(2, 40)
+    state = th.zeros(2, model.config.hidden_dim)
     i = th.tensor([0, 0])
     j = th.tensor([1, 1])
     op = th.tensor([1, 1])  # AND
@@ -250,7 +250,7 @@ def test_fixed_casm_probability_to_logit_interface_preserves_binary_decision():
 
 def test_fixed_casm_logits_do_not_force_positive_class_for_zero_action():
     model = FunctionalMultimodalPLM()
-    state = th.zeros(1, 40)
+    state = th.zeros(1, model.config.hidden_dim)
     i = th.tensor([0])
     j = th.tensor([1])
     op = th.tensor([1])  # AND
