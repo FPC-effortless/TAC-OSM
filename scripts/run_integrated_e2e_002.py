@@ -380,10 +380,20 @@ def main(smoke: bool = False) -> None:
             "evaluation_episode_fingerprint": episode_hash,
         })
 
+    numeric_keys = (
+        "normal_q1",
+        "normal_q2",
+        "normal_operator_selection",
+        "normal_target_memory_attention",
+        "no_memory_q2",
+        "shuffle_image_q2",
+        "text_only_q2",
+        "image_only_q2",
+        "audio_only_q2",
+    )
     summary = {
         key: statistics.fmean(row[key] for row in results)
-        for key in results[0]
-        if key != "seed"
+        for key in numeric_keys
     }
     summary["alignment_drop"] = (
         summary["normal_q2"] - summary["shuffle_image_q2"]
@@ -392,7 +402,7 @@ def main(smoke: bool = False) -> None:
     summary["text_only_gap"] = summary["normal_q2"] - summary["text_only_q2"]
     summary["image_only_gap"] = summary["normal_q2"] - summary["image_only_q2"]
     summary["audio_only_gap"] = summary["normal_q2"] - summary["audio_only_q2"]
-    summary["primary_pass"] = bool(summary["normal_q2"] >= 0.80)
+    summary["primary_pass"] = bool(summary["normal_q2"] >= contract.primary_endpoint.threshold)
     summary["all_seed_min_q2"] = min(r["normal_q2"] for r in results)
     summary["seed_failure_threshold_pass"] = bool(
         summary["all_seed_min_q2"] >= 0.40
@@ -438,18 +448,6 @@ def main(smoke: bool = False) -> None:
             "q2_entity_rule": "q2 target entity is entities[1]",
             "q1_q2_entities_distinct": True,
             "heldout_compositions_excluded_from_training": True,
-            "evaluation_generated_after_training": True,
-            "controls_reuse_exact_same_episode_objects": True,
-            "pre_action_query_signature_fields": ["entity", "i", "j", "op"],
-            "forbidden_pre_action_fields": ["answer", "environment_outcome", "verifier_target"],
-        },
-        "leakage_audit": {
-            "q1_entity_rule": "q1 target entity is entities[0]",
-            "q2_entity_rule": "q2 target entity is entities[1]",
-            "q1_q2_entities_distinct": True,
-            "q1_q2_query_indices_not_payload_leaked": True,
-            "heldout_compositions_excluded_from_training": True,
-            "train_eval_rng_streams_disjoint": True,
             "evaluation_generated_after_training": True,
             "controls_reuse_exact_same_episode_objects": True,
             "pre_action_query_signature_fields": ["entity", "i", "j", "op"],
