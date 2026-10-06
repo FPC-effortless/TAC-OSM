@@ -58,7 +58,7 @@ jobs:
       - name: Static gate
         run: ruff check --select F821 src/tac_osm/integrated_e2e_005.py src/tac_osm/integrated_e2e_006_benchmark.py scripts/run_integrated_e2e_005.py scripts/run_integrated_e2e_006.py scripts/validate_integrated_e2e_006.py
       - name: Full test suite
-        run: python -m pytest tests/test_integrated_e2e_005.py -q
+        run: python -m pytest tests/test_integrated_e2e_005.py tests/test_integrated_e2e_006.py -q
       - name: Contract gate
         run: |
           python - <<'PY'
