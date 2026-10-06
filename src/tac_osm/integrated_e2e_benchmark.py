@@ -16,6 +16,7 @@ BATCH_SIZE = 96
 ENTITY_COUNT = 16
 BITS = 12
 EVAL_EPISODES = 400
+BENCHMARK_GENERATOR_VERSION = "integrated-e2e-benchmark-v3-entity-corrected-heldout"
 
 HELDOUT = (
     ("xor", 0, 4),
