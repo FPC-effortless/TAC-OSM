@@ -185,7 +185,7 @@ def test_post_action_feedback_cannot_modify_another_entity_slot():
     before_b, _ = model.state.read(memory, entity_b)
     query_result = {
         "entity": entity_a,
-        "read": th.randn(1, 40),
+        "read": th.randn(1, model.config.hidden_dim),
         "action": th.tensor([0.9]),
     }
     updated, _ = model.post_action_update(memory, query_result, th.ones(1))
@@ -219,7 +219,7 @@ def test_zero_outcome_does_not_change_memory():
     memory = model.state.initial(1, th.device("cpu"))
     query_result = {
         "entity": th.tensor([2]),
-        "read": th.randn(1, 40),
+        "read": th.randn(1, model.config.hidden_dim),
         "action": th.tensor([0.2]),
     }
     before = memory.clone()
