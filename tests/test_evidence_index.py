@@ -1,4 +1,4 @@
-from tac_osm.evidence_index import ExactEvidenceIndex
+from tac_osm.evidence_index import ExactEvidenceIndex, PrefixEvidenceHistogramIndex
 
 
 def test_index_matches_balanced_partition():
