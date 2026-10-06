@@ -79,7 +79,7 @@ def main() -> int:
         assert complexity["exhaustive_candidate_record_reads"][str(m)] == 16 * m
     assert complexity["indexed_query_upper_bound_bin_reads"] == 16 * (2 ** 6)
 
-    assert result["scope"]["index_build_is_one_time_per_seed"] if "index_build_is_one_time_per_seed" in result["scope"] else True
+    assert complexity["index_build_is_one_time_per_seed"] is True
     assert result["scope"]["index_build_remains_O_M"] is True
     assert result["scope"]["no_claim_of_C5_total_history_sublinearity"] is True
 
