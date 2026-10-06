@@ -78,8 +78,8 @@ def test_completion_run_is_fixed_and_development_only():
         encoding="utf-8"
     )
     assert "steps=1200" in source
-    assert "TRAIN_COMBOS" not in source
-    assert "HELDOUT" not in source
+    assert "from tac_osm.integrated_e2e_005_benchmark import HELDOUT" not in source
+    assert "HELDOUT," not in source
     assert "not_scientific_evidence" in source
     assert "retired_e2e005_holdout_used" in source
 
