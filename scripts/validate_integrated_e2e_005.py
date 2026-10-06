@@ -72,6 +72,8 @@ for row in rows:
         "normal_q1_accuracy",
         "normal_q2_accuracy",
         "normal_verifier_accuracy",
+        "normal_q2_positive_fraction",
+        "normal_q2_decision_mismatches",
         "no_memory_q2_accuracy",
         "shuffle_image_q2_accuracy",
         "text_only_q2_accuracy",
@@ -81,12 +83,15 @@ for row in rows:
     ):
         assert 0.0 <= row[key] <= 1.0
     assert row["training_evaluation_semantic_overlap"] == 0
+    assert 0.0 <= row["normal_q2_positive_fraction"] <= 1.0
+    assert row["normal_q2_decision_mismatches"] == 0
     assert row["oracle_q2_accuracy"] == 1.0
     assert isinstance(row["evaluation_episode_fingerprint"], str)
     assert len(row["evaluation_episode_fingerprint"]) == 64
 
 assert x["summary"]["oracle_q2_accuracy"] == 1.0
 assert x["summary"]["gradient_surface_pass"] is True
+assert x["summary"]["classifier_decision_integrity_pass"] is True
 assert x["leakage_audit"]["q1_q2_entities_distinct"] is True
 assert x["leakage_audit"]["heldout_compositions_excluded_from_training"] is True
 assert x["leakage_audit"]["evaluation_generated_after_training"] is True
