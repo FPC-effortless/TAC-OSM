@@ -201,6 +201,14 @@ def test_training_harness_derives_environment_outcome_after_query():
     assert first_query < first_outcome
 
 
+def test_single_episode_audio_has_explicit_channel_dimension():
+    ep = sample_episode(random.Random(10005), combo1=HELDOUT[0], combo2=HELDOUT[1])
+    _, _, _, audio = ep[0][0]
+    model = FunctionalMultimodalPLM()
+    encoded = model.audio(audio.unsqueeze(0).unsqueeze(0))
+    assert encoded.shape == (1, 20)
+
+
 def test_zero_outcome_does_not_change_memory():
     model = FunctionalMultimodalPLM()
     memory = model.state.initial(1, th.device("cpu"))
