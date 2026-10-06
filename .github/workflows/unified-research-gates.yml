@@ -1,0 +1,39 @@
+name: Unified Research Gates
+on:
+  pull_request:
+  push:
+    branches: ["research/**"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  unified-gates:
+    name: Repository-wide research integrity gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install test tooling
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet pytest
+      - name: Contract validation
+        run: |
+          PYTHONPATH=src python -c "from tac_osm.contract import validate; p=validate(); raise SystemExit('\\n'.join(p)) if p else print('all experiment contracts valid')"
+      - name: Unified governance preflight
+        run: python scripts/research_gate.py
+      - name: Repository tests
+        run: python -m pytest tests/ -q
+      - name: Syntax and interface checks
+        run: |
+          PYTHONPATH=src python -m compileall -q src scripts
+          PYTHONPATH=src python -c "import tac_osm; print('interface symbols:', len(tac_osm.__all__))"
+      - name: Frozen baseline provenance
+        run: python scripts/sync_test_count.py --check
