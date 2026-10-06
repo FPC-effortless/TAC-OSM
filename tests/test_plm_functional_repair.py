@@ -71,3 +71,19 @@ def test_development_sampling_uses_only_training_compositions():
     for episode in episodes:
         for q in episode[1:3]:
             assert (q[3], q[1], q[2]) in TRAIN_COMBOS
+
+def test_completion_run_is_fixed_and_development_only():
+    from pathlib import Path
+    source = (Path(__file__).resolve().parent.parent / "scripts" / "run_plm_functional_completion_dev.py").read_text(
+        encoding="utf-8"
+    )
+    assert "steps=1200" in source
+    assert "TRAIN_COMBOS" not in source
+    assert "HELDOUT" not in source
+    assert "not_scientific_evidence" in source
+    assert "retired_e2e005_holdout_used" in source
+
+
+def test_functional_runner_default_horizon_remains_300():
+    import scripts.run_plm_functional_repair_dev as dev
+    assert dev.STEPS == 300
