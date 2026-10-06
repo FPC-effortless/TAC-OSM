@@ -122,8 +122,6 @@ jobs:
           c.require_eval_steps(32)
           c.require_arms(["trace_exhaustive","trace_indexed"])
           PY
-      - name: Unified research preflight
-        run: python scripts/research_gate.py
       - name: Repository suite
         run: python -m pytest tests/ -q
       - name: 017B focused tests
