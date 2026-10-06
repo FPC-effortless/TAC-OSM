@@ -1,0 +1,138 @@
+{
+  "experiment_id": "TACOSM-PLM-TDBU-TIMESCALE-TRANSFER-001",
+  "title": "Top-down PLM assembly with temporal-scale transfer and distributed state ablation",
+  "question": "Does a distributed bank of fixed exponential memory traces transfer history-conditioned decision capability to unseen temporal filter constants better than a compact three-timescale state, when the policy capacity is matched?",
+  "hypothesis": "A temporally distributed state bank spanning a broader range of decay constants should represent unseen temporal filters more faithfully than a compact three-timescale bank, improving held-out history-conditioned exact decision capability without changing the visible current-observation interface or learned policy parameter count.",
+  "arms": [
+    {
+      "name": "no_state",
+      "intervention": "persistent_state_disabled",
+      "acts_on": "state"
+    },
+    {
+      "name": "one_timescale",
+      "intervention": "one_fixed_exponential_trace",
+      "acts_on": "state",
+      "value": "alpha=0.90"
+    },
+    {
+      "name": "two_timescale",
+      "intervention": "two_fixed_exponential_traces",
+      "acts_on": "state",
+      "value": "alpha=0.50,0.98"
+    },
+    {
+      "name": "three_timescale",
+      "intervention": "three_fixed_exponential_traces",
+      "acts_on": "state",
+      "value": "alpha=0.50,0.90,0.98"
+    },
+    {
+      "name": "distributed_eight",
+      "intervention": "eight_fixed_exponential_traces",
+      "acts_on": "state",
+      "value": "alpha=0.33,0.47,0.62,0.78,0.875,0.935,0.98,0.995"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_temporal_success",
+      "role": "primary",
+      "primary": true,
+      "description": "Exact class-balanced success on test histories generated from temporal filter constants that are not present in the training filter set; primary decision at H=256."
+    },
+    {
+      "name": "interpolation_success",
+      "role": "secondary",
+      "primary": false,
+      "description": "Exact success on held-out temporal constants lying inside the training alpha range."
+    },
+    {
+      "name": "extrapolation_success",
+      "role": "secondary",
+      "primary": false,
+      "description": "Exact success on held-out temporal constants slower than the largest training alpha."
+    },
+    {
+      "name": "history_conditioned_action_gap",
+      "role": "secondary",
+      "primary": false,
+      "description": "Fraction of exact negation pairs with identical current observation but opposite correct actions for which the policy selects opposite actions."
+    },
+    {
+      "name": "state_reset_shuffle",
+      "role": "secondary",
+      "primary": false,
+      "description": "Frozen-checkpoint reduction in distributed_eight performance after state reset or cross-episode state shuffle."
+    },
+    {
+      "name": "computation_work",
+      "role": "secondary",
+      "primary": false,
+      "description": "Explicit evaluation work including state updates, state readout, router arithmetic and independent verification."
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "At H=256, distributed_eight exceeds three_timescale in heldout_temporal_success by more than the preregistered materiality threshold 0.10, the registered seed-bootstrap 95% confidence interval for the paired seed-level difference excludes zero, and distributed_eight exceeds no_state.",
+      "licenses": "bounded evidence that a broader distributed exponential memory bank improves temporal-filter transfer on the registered synthetic benchmark under matched learned-policy parameter count.",
+      "does_not_license": "power-law or scale-free memory, biological equivalence, general temporal optimality, natural-language/vision/audio capability, asymptotic scaling, or hardware speedup."
+    },
+    {
+      "condition": "distributed_eight does not beat three_timescale materially, but the state arms retain a measurable history-conditioned action gap and outperform no_state.",
+      "licenses": "persistent multi-timescale state is useful on the transfer benchmark, but broader scale coverage is not established as necessary.",
+      "does_not_license": "three-timescale optimality or failure of distributed memory generally."
+    },
+    {
+      "condition": "distributed_eight fails to outperform no_state and three_timescale on the held-out transfer endpoint.",
+      "licenses": "the registered distributed-timescale transfer hypothesis is not established on this benchmark.",
+      "does_not_license": "failure of temporal memory generally, failure on other temporal distributions, or failure of PLM."
+    }
+  ],
+  "interpretation_order": [
+    "protocol and security integrity",
+    "leakage and supervision boundary",
+    "train/test temporal-filter identity separation",
+    "benchmark paired-history validity",
+    "representability of held-out temporal filters through the state map",
+    "model-state integrity",
+    "degeneracy and policy discrimination",
+    "exact held-out transfer capability",
+    "history-paired intervention",
+    "compute and state footprint",
+    "statistics",
+    "scope"
+  ],
+  "h_levels": [
+    64,
+    256,
+    512
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 500,
+  "eval_steps": 200,
+  "k_levels": [
+    1,
+    2,
+    3,
+    8
+  ],
+  "held_constant": [
+    "training and test temporal-filter constant sets are committed before confirmation and are disjoint",
+    "current observation at decision is exactly 0.0",
+    "paired test histories are exact negations with opposite gold actions",
+    "policy parameter count is 86 for no_state, two_timescale, three_timescale and distributed_eight; one_timescale is explicitly a lower-capacity 82-parameter control",
+    "optimizer family, learning rate, training step count and evaluation sample count",
+    "executor and independent verifier semantics",
+    "state-update recurrence and work-accounting definition",
+    "distributed_eight trace alphas are fixed before confirmation"
+  ],
+  "status": "pre-registered",
+  "layer": "L3"
+}
