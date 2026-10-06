@@ -74,6 +74,13 @@ def run(args: argparse.Namespace) -> dict:
     contract.require_arms([a.name for a in contract.arms])
     assert HIDDEN == 12 and LEARNING_RATE == 0.05
 
+    representability = representability_witness()
+    if min(representability.values()) < 0.90:
+        raise RuntimeError(
+            "MTSK representability gate failed: "
+            + json.dumps(representability, sort_keys=True)
+        )
+
     records = []
     initial_hashes = {}
     for H in contract.h_levels:
