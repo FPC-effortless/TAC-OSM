@@ -480,3 +480,47 @@ The strongest defensible statement today is:
 
 That is the baseline every future lane must inherit. Novel ideas add
 experiments; they do not erase these blockers.
+
+
+## 8. Live-gate validation finding during this audit
+
+The first execution of the new `Unified Research Gates` workflow failed before
+any scientific test because its contract-validation shell expression used:
+
+`raise SystemExit(...) if p else print(...)`
+
+When `p` was empty (valid contracts), the conditional expression evaluated to
+`print(...)`, and the surrounding `raise` attempted to raise its `None`
+return value. The log therefore printed `all experiment contracts valid` and
+then failed with `TypeError: exceptions must derive from BaseException`.
+
+Disposition: **IMPLEMENTATION_INVALID**, not scientific negative.
+
+Correction: the workflow now prints success and exits 0 when no contract errors
+exist, and exits 1 only when validation returns errors. This is an important
+example of the universal rule being applied to the governance machinery itself:
+the gate must be independently tested and fail for the right reason.
+
+The workflow failure occurred on run `37407348289` at job
+`112087725998`. The corrected branch head is
+`ffb3efa247be29cd1fd720612cae76e1b0e9eca7`. At the time this record was
+written, a new workflow run for that exact head was not yet visible through the
+available workflow-run query. No scientific result is inferred from either
+state.
+
+## 9. Audit completion boundary
+
+This retrospective audit is complete as a **portfolio disposition pass** over
+the repository's historical claims, evidence records, contracts, PR research
+history, and visible research branches. It is not a substitute for rerunning
+every historical experiment under the current gates.
+
+The correct research state is therefore:
+
+- historical artifacts are preserved;
+- invalid experiments are explicitly void/superseded and cannot become
+  baselines by accident;
+- valid historical mechanisms are retained with narrow exclusions;
+- unresolved lanes remain registered with named blockers;
+- every future confirmatory run is governed by G0-G10/P0-P7;
+- current-gate eligibility still requires an actual clean run.
