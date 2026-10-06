@@ -5,6 +5,7 @@ def test_unified_governance_documents_exist():
     assert (root / 'docs' / 'RESEARCH_GOVERNANCE.md').is_file()
     assert (root / 'docs' / 'RESEARCH_LANE_REGISTRY.md').is_file()
     assert (root / 'docs' / 'RESEARCH_RUN_GATES_V2.md').is_file()
+    assert (root / 'docs' / 'TOP_DOWN_BOTTOM_UP_RESEARCH_METHOD.md').is_file()
     assert (root / '.github' / 'workflows' / 'unified-research-gates.yml').is_file()
 
 def test_unified_governance_contains_continuity_and_integrity_rules():
