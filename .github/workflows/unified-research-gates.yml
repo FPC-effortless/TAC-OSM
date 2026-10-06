@@ -26,7 +26,7 @@ jobs:
           python -m pip install --quiet pytest
       - name: Contract validation
         run: |
-          PYTHONPATH=src python -c "from tac_osm.contract import validate; p=validate(); raise SystemExit('\\n'.join(p)) if p else print('all experiment contracts valid')"
+          PYTHONPATH=src python -c "from tac_osm.contract import validate; p=validate(); print('all experiment contracts valid') if not p else (print('\\n'.join(p)), exit(1))"
       - name: Unified governance preflight
         run: python scripts/research_gate.py
       - name: Repository tests
