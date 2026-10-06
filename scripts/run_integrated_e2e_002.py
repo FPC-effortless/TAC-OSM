@@ -37,7 +37,7 @@ BENCHMARK_HASH = hashlib.sha256(BENCHMARK_GENERATOR_VERSION.encode()).hexdigest(
 SEEDS = (0, 1, 2, 3, 4)
 STEPS = 300
 BATCH_SIZE = 96
-REGISTERED_ARMS = ("integrated", "no_memory", "shuffle_image")
+REGISTERED_ARMS = ("integrated", "no_memory", "shuffle_image", "text_only", "image_only", "audio_only")
 ENTITY_COUNT = 16
 BITS = 12
 HELDOUT = (
@@ -334,6 +334,8 @@ def main(smoke: bool = False) -> None:
     contract.require_steps(STEPS)
     contract.require_eval_steps(contract.eval_steps)
     contract.require_arms(REGISTERED_ARMS)
+    if tuple(controls) != REGISTERED_ARMS:
+        raise RuntimeError("control set drift from registered arms")
 
     if contract.eval_steps != 400:
         raise RuntimeError("E2E-002 expects the registered 400 evaluation episodes")
