@@ -1,114 +1,23 @@
-name: Research G-CASM trace capability bridge 016C-R1
+name: Legacy invalidated G-CASM trace capability bridge 016C-R1
 
 on:
-  push:
-    branches:
-      - research/graph-casm-trace-capability-bridge-016c-r1
-    paths:
-      - contracts/TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1.json
-      - docs/AUDIT-TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1.md
-      - scripts/run_graph_casm_trace_capability_bridge_016c_r1.py
-      - scripts/run_graph_casm_structured_action_probe_015.py
-      - src/tac_osm/trace_capability.py
-      - tests/test_trace_capability.py
-      - docs/TACOSM-BASELINE-001.md
-      - tests/test_integrity.py
-      - .github/workflows/graph-casm-trace-capability-bridge-016c-r1.yml
-  pull_request:
-    branches:
-      - research/graph-casm-structured-action-probe-015
   workflow_dispatch:
+  push:
+    branches: ["research/graph-casm-trace-capability-bridge-016c-r2"]
 
 permissions:
   contents: read
 
 jobs:
-  smoke:
-    name: G-CASM-016C-R1 smoke/preflight
+  audit-only:
+    name: 016C-R1 invalidation check
     runs-on: ubuntu-latest
-    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-      - uses: actions/checkout@v4
-        with:
-          repository: FPC-effortless/cdl-attention-experiment
-          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
-          path: third_party/cdl-attention-experiment
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install dependencies
-        run: python -m pip install --quiet -e . pytest torch
-      - name: Contract validation
+          fetch-depth: 1
+      - name: Assert predecessor remains invalidated
         run: |
-          python - <<'PY'
-          from tac_osm.contract import load_contract
-          c = load_contract("TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1")
-          assert c.check_consistency() == []
-          assert c.primary_endpoint() == "verified_success_delta_m512_b8"
-          PY
-      - name: Repository suite
-        run: python -m pytest tests/ -q
-      - name: Focused tests
-        run: python -m pytest tests/test_trace_capability.py -q
-      - name: Smoke measurement
-        run: python scripts/run_graph_casm_trace_capability_bridge_016c_r1.py --smoke
-      - name: Upload smoke artifact
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1-smoke
-          path: artifacts/TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1.json
-          if-no-files-found: ignore
-
-  full:
-    name: G-CASM-016C-R1 full confirmatory measurement
-    needs: smoke
-    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(toJSON(github.event.commits), '[run-graph-casm-trace-capability-bridge-016C-R1-full]'))
-    runs-on: ubuntu-latest
-    timeout-minutes: 120
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/checkout@v4
-        with:
-          repository: FPC-effortless/cdl-attention-experiment
-          ref: c31554413301e3c9d3e6b3f8c8c6be572a74a748
-          path: third_party/cdl-attention-experiment
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install dependencies
-        run: python -m pip install --quiet -e . pytest torch
-      - name: Contract validation
-        run: |
-          python - <<'PY'
-          from tac_osm.contract import load_contract
-          c = load_contract("TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1")
-          assert c.check_consistency() == []
-          c.require_levels((32,64,128,256,512))
-          c.require_seeds((0,1,2,3,4))
-          c.require_steps(1)
-          c.require_eval_steps(32)
-          c.require_arms(["scalar_row","activation_trace"])
-          PY
-      - name: Repository suite
-        run: python -m pytest tests/ -q
-      - name: Focused tests
-        run: python -m pytest tests/test_trace_capability.py -q
-      - name: Full measurement
-        run: python scripts/run_graph_casm_trace_capability_bridge_016c_r1.py
-      - name: Upload result
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1
-          path: artifacts/TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1.json
-          if-no-files-found: error
-
-# [run-graph-casm-trace-capability-bridge-016C-R1-full]
-
-# Registered confirmatory dispatch; no scientific protocol change.
+          grep -q "Status: INVALIDATED" docs/AUDIT-TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1.md
+          grep -q "never execute the R1" docs/AUDIT-TACOSM-GRAPH-CASM-TRACE-CAPABILITY-BRIDGE-016C-R1.md
+          echo "016C-R1 remains provenance-only; no predecessor measurement is executed."
