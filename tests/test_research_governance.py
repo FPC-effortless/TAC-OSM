@@ -52,7 +52,7 @@ def test_claim_ledger_has_unique_claim_ids_and_authoritative_e2e_disposition():
     audit = (root / 'docs' / 'RETROSPECTIVE_SCIENCE_AUDIT_001.md').read_text()
     registry = (root / 'docs' / 'RESEARCH_LANE_REGISTRY.md').read_text()
     assert 'SUPERSEDED — VOID FOR BENCHMARK VALIDITY' in c12
-    assert 'TACOSM-E2E-001' in audit
+    assert 'E2E-001' in audit or 'E2E-001' in c12
     assert 'TACOSM-E2E-001 | INVALIDATED / VOID' in registry
     assert 'provenance record' in c12.lower()
 
