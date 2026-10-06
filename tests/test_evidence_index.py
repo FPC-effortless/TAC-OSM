@@ -97,7 +97,7 @@ def test_prefix_histogram_index_matches_exhaustive_partition_score():
     score, reads = idx.score_action(0, population_size=6)
 
     counts = {0: 3, 1: 3}
-    entropy = -sum((n / 6) * np.log2(n / 6) for n in counts.values())
+    entropy = -sum((n / 6) * math.log2(n / 6) for n in counts.values())
     expected_remaining = sum(n * n for n in counts.values()) / 6
     expected_cost = sum(costs) / 6
 
