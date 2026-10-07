@@ -36,6 +36,7 @@ def main(path: str):
     assert artifact["provenance"]["contract_sha256"] == hashlib.sha256(
         contract_path.read_bytes()
     ).hexdigest()
+    assert benchmark_git_blob_sha() == FROZEN_BENCHMARK_GIT_BLOB_SHA
     assert artifact["provenance"]["benchmark_sha256"] == generator_hash()
     assert artifact["provenance"]["base_e2e008_generator_sha256"] == BASE_E2E008_GENERATOR_SHA256
     assert artifact["protocol"]["benchmark_generator_version"] == GENERATOR_VERSION
