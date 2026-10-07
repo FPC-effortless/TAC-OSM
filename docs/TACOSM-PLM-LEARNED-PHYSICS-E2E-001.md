@@ -1,6 +1,6 @@
 # TACOSM-PLM-LEARNED-PHYSICS-E2E-001
 
-Status: PRE-REGISTERED — NOT YET MEASURED
+Status: MEASURED — VALID NEGATIVE; PRIMARY END-TO-END GATE FAILED
 
 ## Objective
 
@@ -20,13 +20,10 @@ learned action head. It has no explicit entity IDs and no fixed executor.
 
 Only the following privileged structure is allowed:
 
-1. linear momentum conservation on collision-free observation intervals;
-2. kinetic-energy conservation on collision-free observation intervals;
-3. kinematic consistency between displacement and average velocity.
+1. Hamilton's canonical equations dq/dt = dH/dp and dp/dt = -dH/dq.
+2. Conservation of the learned Hamiltonian H on passive observation intervals.
 
-The prior is applied only to the model's own predicted physical-state trajectory.
-No state ground truth, future reward, target action, or test outcome enters the
-prior loss.
+The prior is applied only to the model's own predicted generic canonical latent trajectory. No state ground truth, future reward, target action, or test outcome enters the prior loss.
 
 Two arms are measured:
 data-only learning and the same learned model with the registered physics prior.
@@ -90,3 +87,8 @@ The benchmark generator is therefore amended to make deterministic audio permuta
 A final causal-boundary audit found that the generic canonical latent was still auxiliary to the action head. A4 binds the final canonical latent directly into learned action selection and adds a focused gradient-dependency gate. No benchmark, prior law, seed, optimizer, budget, endpoint, or decision rule changes.
 
 Superseded runs 37645169621, 37645649621, 37646974646, and 37647273293 are instrument-invalid and must not be interpreted.
+
+
+## Follow-up disposition
+
+E2E-001 is retained as valid negative capability evidence. The next experiment should address the information bottleneck in the generic learned sensor encoders and preserve the same benchmark/leakage boundary. No result from this run may be used for checkpoint or hyperparameter selection.
