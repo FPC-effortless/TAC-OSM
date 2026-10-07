@@ -37,13 +37,15 @@
   "arms": [
     {
       "name": "single_timescale",
-      "state": "SingleAdaptiveTimescaleState",
+      "intervention": "three state banks share one effective learned decay and one effective input write gate",
+      "acts_on": "state mechanism",
       "timescales": "one effective shared decay and write gate",
       "state_banks": 3
     },
     {
       "name": "mtsk",
-      "state": "MTSKEntityState",
+      "intervention": "three state banks have independently gated writes and ordered learned retention coefficients fast <= medium <= slow",
+      "acts_on": "state mechanism",
       "timescales": 3,
       "decay_order": "fast <= medium <= slow",
       "state_banks": 3
