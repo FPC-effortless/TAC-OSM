@@ -49,6 +49,7 @@ class FullPLMConfig:
     slow_experts: int = 2
     cdl_top_k: int = 2
     casm_operators: int = 4
+    casm_top_k: int = 1
     casm_depth: int = 3
     action_count: int = 5
     temporal_prior: float = 0.35
@@ -62,6 +63,8 @@ class FullPLMConfig:
             raise ValueError("timescale expert counts must sum to num_experts")
         if self.cdl_top_k < 1 or self.cdl_top_k > self.num_experts:
             raise ValueError("invalid cdl_top_k")
+        if self.casm_top_k < 1 or self.casm_top_k > self.casm_operators:
+            raise ValueError("invalid casm_top_k")
         if self.casm_depth < 1:
             raise ValueError("casm_depth must be >= 1")
 
@@ -356,7 +359,7 @@ class LearnedCDL(nn.Module):
         q = query.unsqueeze(1).expand(-1, j, -1)
         logits = self.score(torch.cat([q, expert_views], dim=-1)).squeeze(-1)
         k = min(self.config.cdl_top_k, j)
-        top_values, top_indices = torch.topk(logits, k=k, dim=1)
+        _, top_indices = torch.topk(logits, k=k, dim=1)
         soft_weights = F.softmax(logits, dim=1)
         hard_mask = torch.zeros_like(soft_weights).scatter_(1, top_indices, 1.0)
         hard_weights = hard_mask * soft_weights
@@ -468,10 +471,25 @@ class LearnedCASM(nn.Module):
             joint = torch.cat([current, query], dim=-1)
             logits = self.selector(joint)
             probs = F.softmax(logits, dim=-1)
-            updates = torch.stack(
-                [operator(joint) for operator in self.operators], dim=1
+            top_k = min(self.config.casm_top_k, len(self.operators))
+            _, op_indices = torch.topk(probs, k=top_k, dim=-1)
+            sparse_probs = torch.zeros_like(probs).scatter(
+                1, op_indices, torch.gather(probs, 1, op_indices)
             )
-            delta = (probs.unsqueeze(-1) * updates).sum(dim=1)
+            sparse_probs = sparse_probs / sparse_probs.sum(dim=-1, keepdim=True).clamp_min(1e-8)
+
+            # Execute only operators selected by at least one sample in this
+            # batch. This preserves sparse operator work instead of evaluating
+            # the complete bank for every token.
+            delta = torch.zeros_like(current)
+            for op_index, operator in enumerate(self.operators):
+                sample_mask = sparse_probs[:, op_index] > 0
+                if sample_mask.any():
+                    delta[sample_mask] = (
+                        delta[sample_mask]
+                        + sparse_probs[sample_mask, op_index].unsqueeze(-1)
+                        * operator(joint[sample_mask])
+                    )
             halt_prob = torch.sigmoid(self.halt(joint)).squeeze(-1)
             current = current + (1.0 - halt_prob).unsqueeze(-1) * delta
             traces.append(current)
