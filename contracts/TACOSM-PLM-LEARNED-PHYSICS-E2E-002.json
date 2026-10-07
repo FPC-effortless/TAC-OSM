@@ -1,1 +1,127 @@
-{"experiment_id":"probe"}
+{
+  "experiment_id": "TACOSM-PLM-LEARNED-PHYSICS-E2E-002",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Fully learned multimodal physical control with information-preserving generic sensor encoders",
+  "question": "Can a fully learned multimodal recurrent controller infer hidden motion from history and select the correct control action when generic learned sensor encoders preserve spatial and temporal sensor information?",
+  "rationale": "E2E-001 was integrity-valid but failed the matched-history endpoint while achieving 0.7217 mean accuracy. The successor targets the diagnosed generic sensor-encoding bottleneck without encoding physical state, object identity, addressing rules, or task-specific computation.",
+  "primary_endpoint": {
+    "name": "learned_data_only_action_accuracy",
+    "unit": "episode",
+    "threshold": 0.7,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_pool_per_action": 100,
+    "train_steps": 400,
+    "batch_size": 64,
+    "hidden_dim": 64,
+    "action_count": 5,
+    "history_length": 6,
+    "horizon": 6,
+    "dt": 0.08,
+    "physics_loss_weight": 0.05,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "model_selection": "none",
+    "device": "cpu",
+    "benchmark_generator_version": "learned-physics-e2e-v3-no-object-order-audio-manifest-corrected"
+  },
+  "arms": [
+    {
+      "name": "learned_data_only",
+      "intervention": "same fully learned multimodal recurrent controller with generic information-preserving encoders, trained only with action cross-entropy",
+      "acts_on": "architecture only; no privileged physical prior"
+    },
+    {
+      "name": "learned_physics_prior",
+      "intervention": "same controller and encoder with the preregistered Hamiltonian-law regularizer",
+      "acts_on": "learning objective"
+    }
+  ],
+  "held_constant": [
+    "same synthetic environment and action space",
+    "same five seeds",
+    "same training pool and held-out evaluation generation rules",
+    "same train/evaluation disjointness rule",
+    "same history-pair diagnostic",
+    "same hidden dimension and training budget as E2E-001",
+    "no entity identifiers",
+    "no fixed operator table",
+    "no hand-coded address or retrieval function",
+    "no physical-state supervision",
+    "no checkpoint, seed, hyperparameter, or metric selection"
+  ],
+  "architecture_change": [
+    "replace global-average-pooled image encoder with learned convolutional encoder retaining a spatial feature map before projection",
+    "replace global-average-pooled audio encoder with learned convolutional encoder retaining local temporal/frequency features before projection",
+    "retain generic text encoder, multimodal fusion, recurrent temporal state, canonical latent, and direct action path",
+    "no physical state representation or object slots are introduced"
+  ],
+  "physics_prior": {
+    "allowed_information": [
+      "Hamilton canonical equations dq/dt=dH/dp and dp/dt=-dH/dq",
+      "conservation of the learned Hamiltonian H on passive observation intervals"
+    ],
+    "forbidden_information": [
+      "particle count or object slots",
+      "masses, positions, velocities, or other physical-state labels",
+      "optimal action or target action index",
+      "future reward",
+      "entity identifier",
+      "episode identity",
+      "test outcomes"
+    ]
+  },
+  "leakage_rules": [
+    "training and evaluation episode keys are disjoint for every seed and arm",
+    "evaluation fingerprints are distinct across seeds",
+    "both arms receive identical evaluation episodes within a seed",
+    "current image contains positions only",
+    "current audio contains speed magnitude only",
+    "goal text contains no action labels or physical-state labels",
+    "history-pair current multimodal observations are identical while correct actions differ",
+    "physics loss is computed only from model-predicted generic canonical latent trajectories"
+  ],
+  "primary_end_to_end_gate": {
+    "mean_accuracy_minimum": 0.7,
+    "seed_accuracy_minimum": 0.55,
+    "history_pair_exact_accuracy_minimum": 0.7,
+    "description": "A positive fully learned result requires the no-prior learned model to solve held-out action selection and discriminate matched-history pairs with identical current multimodal observations."
+  },
+  "physics_prior_benefit_endpoint": {
+    "name": "physics_prior_minus_data_only_accuracy",
+    "materiality_threshold": 0.05,
+    "hierarchical_paired_bootstrap_lower_bound": 0
+  },
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; learned_data_only mean accuracy >= 0.70; every learned_data_only seed >= 0.55; learned_data_only history-pair exact accuracy >= 0.70",
+      "licenses": "bounded evidence of a fully learned end-to-end multimodal physical-control capability on the registered benchmark",
+      "does_not_license": "real-world multimodal competence, general physical reasoning, general memory, learned semantic addressing, or scaling"
+    },
+    {
+      "condition": "all integrity gates pass and physics-prior-minus-data-only delta >= 0.05 with bootstrap lower bound > 0",
+      "licenses": "bounded evidence that the registered physical-law prior improves the successor model on this benchmark",
+      "does_not_license": "a universal benefit from physics priors"
+    },
+    {
+      "condition": "integrity passes but end-to-end gate fails",
+      "licenses": "the successor model is not yet a demonstrated end-to-end solution on this benchmark",
+      "does_not_license": "architecture impossibility"
+    },
+    {
+      "condition": "any integrity or provenance gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "architectural inference"
+    }
+  ]
+}
