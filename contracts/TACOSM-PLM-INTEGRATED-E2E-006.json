@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-006",
-  "version": 1,
+  "version": 2,
   "status": "pre-registered",
   "title": "Fresh confirmatory end-to-end multimodal persistent computation with selected capacity",
   "question": "Can the selected integrated PLM configuration learn a fresh held-out cross-modal Boolean task from multimodal observations alone, carrying information through explicit persistent entity-addressed state into a later query and executing the requested computation end to end?",
@@ -340,5 +340,131 @@
       "TACOSM-PLM-INTEGRATED-E2E-CAPACITY-DEV-001"
     ],
     "test_set_use": "E2E-005 heldout outcomes are excluded from all E2E-006 training and selection; capacity choice was made on registered development data only."
-  }
+  },
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "full multimodal observation and persistent state",
+      "acts_on": "integrated path"
+    },
+    {
+      "name": "no_memory",
+      "intervention": "zero persistent state immediately before q1",
+      "acts_on": "persistent information"
+    },
+    {
+      "name": "shuffle_image",
+      "intervention": "permute image observations across the three observed entities",
+      "acts_on": "cross-modal alignment"
+    },
+    {
+      "name": "text_only",
+      "intervention": "replace image and audio observations with constants",
+      "acts_on": "text modality sufficiency control"
+    },
+    {
+      "name": "image_only",
+      "intervention": "replace text and audio observations with constants",
+      "acts_on": "image modality sufficiency control"
+    },
+    {
+      "name": "audio_only",
+      "intervention": "replace text and image observations with constants",
+      "acts_on": "audio modality sufficiency control"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_all_modalities",
+      "role": "primary",
+      "primary": true,
+      "description": "Mean q2 accuracy on fresh held-out cross-modal compositions."
+    },
+    {
+      "name": "heldout_q1_accuracy_all_modalities",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "memory_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "alignment_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "text_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "image_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "audio_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verifier_q1_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "gradient_surface_coverage",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "oracle_q2_accuracy",
+      "role": "benchmark validity gate",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "benchmark integrity and oracle validity",
+    "information-flow and target-leakage audit",
+    "train/evaluation disjointness and provenance fingerprints",
+    "gradient-surface and classifier-decision integrity",
+    "primary heldout q2 accuracy",
+    "memory and modality controls",
+    "verifier behavior",
+    "claim boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "held_constant": [
+    "same selected hidden_dim=64 configuration across all seeds",
+    "same five seeds and 300-step schedule",
+    "same optimizer, learning rate and weight decay",
+    "same fresh E2E-006 held-out composition set",
+    "sealed E2E-005 held-out compositions excluded from training",
+    "registered development compositions excluded from training",
+    "evaluation generated only after training",
+    "no evaluation outcome used for model selection",
+    "controls reuse exact same evaluation episode objects",
+    "no payload-bit or entity auxiliary representation supervision",
+    "fixed public query-conditioned operator dispatch",
+    "explicit deterministic entity addressing is unchanged"
+  ],
+  "amendments": [
+    {
+      "id": "A1-schema",
+      "applies_to": "machine-readable contract schema",
+      "old_definition": "The initial pre-registration omitted schema fields required by the repository contract validator: arms, endpoints, interpretation_order, h_levels, steps and eval_steps.",
+      "new_definition": "The contract explicitly serializes the already-fixed arms, endpoints, interpretation order, H level, training steps and evaluation steps.",
+      "rationale": "Make the existing pre-registered design machine-checkable without changing the scientific question, threshold, data split, seeds, model, or measurement procedure.",
+      "discovered": "Repository contract validation after the successful E2E-006 measurement.",
+      "affected": "serialization/schema only; this amendment does not authorize any change to the measured benchmark or its outcome",
+      "no_result_under_previous_version": "The measured E2E-006 run was performed against the semantically complete but schema-incomplete contract; a post-amendment replication is required before treating the corrected contract as the final result record."
+    }
+  ]
 }
