@@ -42,10 +42,11 @@ def test_reset_recompute_uses_observations_only():
     signature = inspect.signature(write_memory)
     assert list(signature.parameters) == ["model", "rows"]
     source = inspect.getsource(write_memory)
-    assert "outcome" not in source
-    assert "target" not in source
-    assert "verifier" not in source
-    assert "correct" not in source
+    import ast
+    tree = ast.parse(source)
+    names = {n.id for n in ast.walk(tree) if isinstance(n, ast.Name)}
+    assert not ({"outcome", "target", "verifier", "correct"} & names)
+    assert names <= {"model", "rows", "memory", "entity", "text", "image", "audio", "z", "torch", "encode", "state", "write", "tensor", "long"}
 
 
 def test_recomputed_state_is_identical_before_the_action_boundary():
