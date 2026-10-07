@@ -339,3 +339,20 @@ than changing addressing again.
 | Shuffle-support q2 mean = 0.6793 versus normal = 0.9293 | L3 | context-use diagnostic | performance depends materially on the supplied support context | causal generality of the support mechanism | shuffle is a diagnostic intervention, not a new capability benchmark |
 | Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | about 2.6 percentage points of q2 accuracy are lost even with operator selection supplied; seed-3 weakness is therefore substantially selection-related | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
 | No-memory q2 mean = 0.6250 | L3 | mechanism diagnostic | the multimodal state representation remains functionally important | temporal persistence necessity | temporal carry was separately ruled out as necessary on E2E-008 |
+
+
+## Random-key addressing baseline 001
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| `TACOSM-ADDRESS-BASELINE-001`, run 37625321076, artifact 11484519604 | L3 | valid mechanism baseline | raw-dot retrieval reference across d, M and isotropic Gaussian query noise | learned addressing or semantic/content addressing | raw dot is the Bayes/ML ranking rule under the registered isotropic Gaussian model |
+| d=16 capacity/noise grid, five seeds × 100,000 trials/condition | L3 | quantitative baseline | retrieval degradation as M and noise increase | PLM efficiency or learned routing claims | random-key associative retrieval only |
+| d=16, sigma=0.8 drops from 0.6976 at M=3 to 0.0544 at M=256 | L3 | capacity diagnostic | the registered random-key channel has a sharp memory/noise interaction | universal memory limit or semantic retrieval scaling | specific to the registered Gaussian key model |
+| Commit 3ced0b2646340f35383fb0eb3ab9ad79f69a692b; contract SHA 0822928b35a6855bd43f7b693e79208b1d88544b02b3ba978d88835bf5098002 | L3 | provenance | exact rerun lineage is recorded | immunity to future implementation changes | branch/commit must remain pinned for reproduction |
+
+## Pure temporal-persistence follow-up — preregistered, not yet measured
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| `TACOSM-PLM-TEMPORAL-PERSISTENCE-002` | L3 | preregistration | a cleaner causal test in which q1 targets entity 0 and the q2 secret is stored in entity 1 | any persistence claim before measurement | q1 secret-interference and masked-post-boundary gates are mandatory |
+| Carry retains entity-1 state; fresh rebuilds entity 1 only from masked post observation | L3 | intervention design | isolates information persistence from q1 action/outcome access to the secret | general memory or long-horizon memory | synthetic, task-bounded attribution only |
