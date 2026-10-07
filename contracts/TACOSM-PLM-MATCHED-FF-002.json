@@ -1,0 +1,165 @@
+{
+  "experiment_id": "TACOSM-PLM-MATCHED-FF-002",
+  "status": "pre-registered",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "batch_size": 96,
+  "evaluation_episodes_per_seed": 600,
+  "heldout": [
+    [
+      "xor",
+      2,
+      4
+    ],
+    [
+      "xor",
+      4,
+      8
+    ],
+    [
+      "xor",
+      1,
+      9
+    ],
+    [
+      "and",
+      3,
+      5
+    ],
+    [
+      "and",
+      6,
+      10
+    ],
+    [
+      "and",
+      2,
+      11
+    ],
+    [
+      "or",
+      2,
+      4
+    ],
+    [
+      "or",
+      4,
+      8
+    ],
+    [
+      "or",
+      1,
+      9
+    ],
+    [
+      "xnor",
+      3,
+      5
+    ],
+    [
+      "xnor",
+      6,
+      10
+    ],
+    [
+      "xnor",
+      2,
+      11
+    ]
+  ],
+  "benchmark_generator_version": "integrated-e2e-v7-collision-free-payload-only",
+  "plm_parameter_count": 74126,
+  "parameter_tolerance_relative": 0.01,
+  "baseline": "same clean multimodal encoders; no persistent state, CASM, verifier, or state write; q2 directly receives q1 representation, q2 representation, q2 query indices/operator, and detached q1 environment outcome.",
+  "primary_endpoint": "heldout_q2_accuracy",
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; PLM exceeds FF-002 mean heldout q2 accuracy by >=0.05; the composition-bootstrap 95% intervals do not overlap",
+      "licenses": "bounded evidence of a PLM advantage over FF-002 on the registered clean synthetic multimodal task",
+      "does_not_license": "66559497"
+    },
+    {
+      "condition": "integrity gates pass but the registered advantage criterion fails",
+      "licenses": "no FF-002-relative advantage is supported under the preregistered decision rule",
+      "does_not_license": "architecture impossibility or negative evidence about PLM outside this task"
+    }
+  ],
+  "leakage_gates": [
+    "heldout disjoint from training",
+    "evaluation generated after training",
+    "distinct seed evaluation fingerprints",
+    "benchmark generator version bound",
+    "contract hash recorded",
+    "parameter relative difference <=1%",
+    "q1 outcome detached before q2 prediction"
+  ],
+  "title": "Matched feed-forward control with detached q1 outcome",
+  "question": "Does the integrated PLM outperform a parameter-matched feed-forward control that receives the same q1/q2 representations, query, and detached q1 environment outcome?",
+  "hypothesis": "On this task it does not isolate temporal carry from the PLM's CASM/state-representation machinery; it also does not establish learned addressing, operator discovery, semantic multimodal understanding, or scaling.",
+  "arms": [
+    {
+      "name": "PLM",
+      "intervention": "full integrated E2E-008 persistent multimodal computation",
+      "acts_on": "integrated path"
+    },
+    {
+      "name": "FF-002",
+      "intervention": "same clean multimodal encoders; no persistent state, CASM, verifier, or state write; q2 receives q1 representation, q2 representation, q2 query indices/operator, and detached q1 environment outcome",
+      "acts_on": "cross-boundary feed-forward control"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "per_composition_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "benchmark identity and held-out split integrity",
+    "matched parameter count and registered information surface",
+    "train/evaluation disjointness and byte-identical evaluation fingerprints",
+    "primary heldout q2 accuracy and preregistered gap",
+    "composition-bootstrap interval rule",
+    "per-composition diagnostics",
+    "claim boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "eval_steps": 600,
+  "held_constant": [
+    "five registered seeds {0,1,2,3,4}",
+    "300 training steps and batch size 96",
+    "600 evaluation episodes per seed",
+    "same E2E-008 clean benchmark generator and 12 held-out compositions",
+    "integrated-e2e-v7-collision-free-payload-only benchmark generator",
+    "PLM reference parameter count 74126 with relative parameter tolerance <=1%",
+    "no post-run model selection or benchmark modification"
+  ],
+  "amendments": [
+    {
+      "id": "A-schema-migration-001",
+      "applies_to": "TACOSM-PLM-MATCHED-FF-002",
+      "old_definition": "Legacy flat-schema contract used for the measured run; historical artifact records the legacy contract SHA-256 with prefix 66559497.",
+      "new_definition": "Typed master contract schema is now populated from the existing registered protocol: title/question/hypothesis, ArmSpec, EndpointSpec, DecisionBranch, interpretation_order, h_levels=[3], and eval_steps=600. No experimental parameter or decision threshold is changed.",
+      "rationale": "Post-measurement bookkeeping migration required because the master contract validator became schema-enforcing. This changes representation of the preregistration, not the measured protocol or outcome.",
+      "discovered": "PR #130 schema validation after the confirmatory run",
+      "affected": "schema/bookkeeping only; no benchmark, model, training schedule, endpoint values, or decision threshold",
+      "no_result_under_previous_version": "The measurement remains attached to the legacy contract hash recorded in the artifact; this migration is not a rerun and does not re-estimate the result."
+    }
+  ],
+  "legacy_contract_schema": "flat-v0",
+  "schema_migration_note": "Bookkeeping-only migration after measurement; historical artifact retains the legacy contract hash."
+}
