@@ -58,7 +58,11 @@ def test_support_context_is_a_permuted_truth_table_without_hidden_opcode():
             (a, b, {"xor": a ^ b, "and": a & b, "or": a | b, "xnor": 1 - (a ^ b)}[op])
             for a, b in SUPPORT_PAIRS
         )
-        assert support != tuple((a, b, {"xor": a ^ b, "and": a & b, "or": 1 - (a ^ b), "xnor": 1 - (a ^ b)}[op]) for a, b in SUPPORT_PAIRS) or True
+    samples = {
+        make_support_context("xor", random.Random(seed))
+        for seed in range(20)
+    }
+    assert len(samples) > 1
 
 
 def test_operator_inducer_is_permutation_invariant():
