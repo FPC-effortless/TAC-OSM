@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
-  "version": 3,
+  "version": 4,
   "status": "pre-registered",
   "title": "Fully learned multimodal physical control with optional physics-law prior",
   "question": "Can a fully learned multimodal persistent controller infer hidden motion from history and choose the correct control action, and does adding only physical-law priors improve that capability?",
@@ -32,7 +32,8 @@
     "learning_rate": 0.002,
     "weight_decay": 0.0001,
     "model_selection": "none",
-    "device": "cpu"
+    "device": "cpu",
+    "benchmark_generator_version": "learned-physics-e2e-v2-no-object-order-audio"
   },
   "arms": [
     {
@@ -198,6 +199,26 @@
         "37645649621"
       ],
       "scientific_status": "instrument-invalid before a valid confirmatory artifact; no result from either run may be interpreted or cited"
+    },
+    {
+      "id": "A3",
+      "stage": "pre-measurement benchmark integrity correction",
+      "reason": "Deterministic audio used a fixed particle-index phase offset, creating an unnecessary object-order sensor channel.",
+      "change": "Deterministic audio is now permutation-invariant to particle order; the benchmark generator version is pinned to learned-physics-e2e-v2-no-object-order-audio.",
+      "unchanged": [
+        "model architecture",
+        "Hamiltonian-only physics prior",
+        "held-out evaluation protocol",
+        "seeds",
+        "optimizer and training budget",
+        "decision rules"
+      ],
+      "invalidated_runs": [
+        "37645169621",
+        "37645649621",
+        "37646974646"
+      ],
+      "scientific_status": "instrument correction before admissible measurement"
     }
   ]
 }
