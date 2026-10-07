@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
-  "version": 1,
+  "version": 2,
   "status": "pre-registered",
   "title": "Fully learned multimodal physical control with optional physics-law prior",
   "question": "Can a fully learned multimodal persistent controller infer hidden motion from history and choose the correct control action, and does adding only physical-law priors improve that capability?",
@@ -8,10 +8,16 @@
   "primary_endpoint": {
     "name": "physics_prior_action_accuracy",
     "unit": "episode",
-    "threshold": 0.70,
+    "threshold": 0.7,
     "selection": "none"
   },
-  "seeds": [0, 1, 2, 3, 4],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "protocol": {
     "train_pool_per_action": 100,
     "train_steps": 400,
@@ -78,15 +84,15 @@
     "physics loss is computed only from the model's own predicted state trajectory"
   ],
   "primary_end_to_end_gate": {
-    "mean_accuracy_minimum": 0.70,
+    "mean_accuracy_minimum": 0.7,
     "seed_accuracy_minimum": 0.55,
-    "history_pair_exact_accuracy_minimum": 0.70,
+    "history_pair_exact_accuracy_minimum": 0.7,
     "description": "A positive fully learned result requires the model to solve held-out action selection and discriminate matched-history pairs with identical current multimodal observations."
   },
   "physics_prior_benefit_endpoint": {
     "name": "physics_prior_minus_data_only_accuracy",
     "materiality_threshold": 0.05,
-    "hierarchical_paired_bootstrap_lower_bound": 0.0
+    "hierarchical_paired_bootstrap_lower_bound": 0
   },
   "decision_rule": [
     {
@@ -152,7 +158,27 @@
     "physics-prior effect",
     "claim boundary"
   ],
-  "h_levels": [6],
+  "h_levels": [
+    6
+  ],
   "steps": 400,
-  "eval_steps": 600
+  "eval_steps": 600,
+  "amendments": [
+    {
+      "id": "A1",
+      "stage": "pre-measurement",
+      "reason": "Construct audit found that the first implementation allowed the action head to bypass the predicted physical-state pathway, so the physics-law prior was not guaranteed to regularize the representation used for action selection.",
+      "change": "The learned action head now consumes the final predicted physical state directly, and a focused gradient gate verifies nonzero action dependence on that state.",
+      "unchanged": [
+        "benchmark generator and held-out evaluation protocol",
+        "train/evaluation split rules",
+        "seeds",
+        "optimizer and training budget",
+        "physics-law prior definition",
+        "primary and attribution decision rules"
+      ],
+      "invalidated_run": "37645169621",
+      "scientific_status": "instrument-invalid before measurement; no result or artifact from this run may be interpreted or cited"
+    }
+  ]
 }
