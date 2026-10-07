@@ -8,6 +8,8 @@ on:
   push:
     branches:
       - research/plm-full-learned-swila-001-2026-10-07
+  pull_request:
+    types: [opened, synchronize]
   workflow_dispatch:
     inputs:
       run_full:
@@ -35,7 +37,7 @@ jobs:
         run: python -m pytest -q tests/test_plm_full_learned_swila.py
 
   measurement:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.run_full == true)
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.run_full == true)
     needs: integrity
     runs-on: ubuntu-latest
     timeout-minutes: 240
