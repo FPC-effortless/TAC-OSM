@@ -1,0 +1,82 @@
+{
+  "experiment_id": "TACOSM-PLM-XOR-DIAG-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Development diagnosis of state-content recovery versus CASM execution",
+  "question": "When the selected integrated PLM configuration makes XOR the hardest operation, is the error concentrated in recovering queried latent bits from persistent state or in the fixed CASM computation over recovered bits?",
+  "hypothesis": "The diagnostic will quantify the fraction of XOR errors occurring despite both queried state bits being correctly recovered, separating state-content loss from downstream Boolean execution error.",
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "selected hidden_dim=64 integrated PLM",
+      "acts_on": "integrated state-to-CASM path"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "xor_q2_accuracy",
+      "role": "primary diagnostic",
+      "primary": true
+    },
+    {
+      "name": "queried_bit_joint_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "xor_execution_error_given_correct_bits",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "xor_state_error_rate",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "classifier_decision_integrity",
+      "role": "integrity gate",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "if XOR execution error given both queried bits correct is substantial",
+      "licenses": "downstream CASM/Boolean execution is a diagnosed contributor to XOR weakness on the development split",
+      "does_not_license": "CASM is generally inadequate or that the same mechanism will fail on fresh held-out data"
+    },
+    {
+      "condition": "if XOR state error rate dominates",
+      "licenses": "state-content recovery is a diagnosed contributor to XOR weakness on the development split",
+      "does_not_license": "persistent state is generally inadequate"
+    }
+  ],
+  "interpretation_order": [
+    "development split integrity",
+    "training/evaluation semantic disjointness",
+    "classifier decision integrity",
+    "queried bit recovery",
+    "XOR execution conditional on correct bits",
+    "operator-level diagnosis"
+  ],
+  "h_levels": [
+    3
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 200,
+  "held_constant": [
+    "same registered 32-composition development set used for capacity selection",
+    "same hidden_dim=64 selected configuration",
+    "same five seeds and 300-step budget",
+    "same optimizer and learning rate",
+    "sealed E2E-005 and E2E-006 held-out outcomes are not used",
+    "no auxiliary payload supervision is used during training"
+  ]
+}
