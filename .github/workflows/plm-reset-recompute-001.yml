@@ -1,0 +1,81 @@
+name: Research PLM temporal carry reset-recompute 001
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001.json"
+      - "scripts/run_plm_reset_recompute_001.py"
+      - "scripts/validate_plm_reset_recompute_001.py"
+      - "tests/test_plm_reset_recompute_001.py"
+      - ".github/workflows/plm-reset-recompute-001.yml"
+  push:
+    branches:
+      - research/plm-reset-recompute-001-2026-10-07
+    paths:
+      - "contracts/TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001.json"
+      - "scripts/run_plm_reset_recompute_001.py"
+      - "scripts/validate_plm_reset_recompute_001.py"
+      - "tests/test_plm_reset_recompute_001.py"
+      - ".github/workflows/plm-reset-recompute-001.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  confirmatory:
+    name: Reset-recompute attribution measurement
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+
+      - name: Static gate
+        run: |
+          ruff check --select F821             scripts/run_plm_reset_recompute_001.py             scripts/validate_plm_reset_recompute_001.py             tests/test_plm_reset_recompute_001.py
+
+      - name: Contract and intervention tests
+        run: |
+          python -m pytest             tests/test_contract.py             tests/test_plm_reset_recompute_001.py             tests/test_integrated_e2e_008.py -q
+
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001")
+          assert c.check_consistency() == []
+          assert c.h_levels == (3,)
+          assert c.seeds == (0,1,2,3,4)
+          assert c.steps == 300
+          assert c.eval_steps == 600
+          assert [a.name for a in c.arms] == ["normal","reset_recompute"]
+          assert c.primary_endpoint() == "heldout_q2_accuracy"
+          print("PASS: reset-recompute contract")
+          PY
+
+      - name: Smoke
+        run: python scripts/run_plm_reset_recompute_001.py --smoke
+
+      - name: Confirmatory measurement
+        run: python scripts/run_plm_reset_recompute_001.py
+
+      - name: Independent result validation
+        run: |
+          python scripts/validate_plm_reset_recompute_001.py             artifacts/TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001.json
+
+      - name: Upload scientific artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001
+          path: artifacts/TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001.json
+          if-no-files-found: error
