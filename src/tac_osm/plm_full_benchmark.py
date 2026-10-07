@@ -308,9 +308,8 @@ def episode_fingerprint(episodes: Iterable[Episode]) -> str:
 
 
 def generator_hash() -> str:
-    import inspect
-    source = inspect.getsource(__import__(__name__))
-    return hashlib.sha256(source.encode()).hexdigest()
+    with open(__file__, "rb") as handle:
+        return hashlib.sha256(handle.read()).hexdigest()
 
 
 def make_history_pair(rng: random.Random) -> tuple[Episode, Episode]:
