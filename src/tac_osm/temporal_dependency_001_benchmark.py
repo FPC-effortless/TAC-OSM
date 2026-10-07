@@ -121,7 +121,8 @@ def validate_episode(ep) -> None:
     assert int(post[0][1][4].item()) == 20
     assert torch.equal(pre[0][2], post[0][2])
     assert torch.equal(pre[0][3], post[0][3])
-    assert payload[SECRET_BIT] not in (q2[4],) or True
+    assert torch.equal(pre[0][1][:4], post[0][1][:4])
+    assert torch.equal(pre[0][1][5:], post[0][1][5:])
 
 
 def episode_key(ep) -> tuple:
