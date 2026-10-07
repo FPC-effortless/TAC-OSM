@@ -360,11 +360,13 @@ than changing addressing again.
 | All information-flow and leakage gates passed | L3 | integrity | q1 cannot read the q2 secret, the secret is masked after the boundary, carry/fresh receive the same q2 query and post observation, and train/evaluation semantic overlap is zero | absence of every conceivable implementation flaw | artifact gates independently passed |
 | State mechanism was `ExplicitEntityState` with residual-linear writes | L3 | architectural boundary | persistence evidence belongs to the current single-scale state path | MTSK validation | MTSK remains a separate unmeasured mechanism |
 
-## MTSK status — explicitly unmeasured
+## MTSK status — preregistered, not yet measured
 
 | Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
 |---|---|---|---|---|---|
-| Current PLM E2E state implementation is `ExplicitEntityState`; no MTSK module or MTSK experiment exists in the measured commit | L3 | architectural audit | MTSK should not be credited to the current persistence result | that MTSK is unnecessary or ineffective | MTSK needs its own preregistered comparison against a single-timescale control |
+| `TACOSM-PLM-MTSK-001`, contract and benchmark committed on `a980baf95fe7835807c7930c352bcdc2782794b7` | L3 | preregistration | a dedicated MTSK state-mechanism comparison now exists | any MTSK capability claim before measurement | primary endpoint and integrity gates are frozen in the contract |
+| Current MTSK implementation adds `SingleAdaptiveTimescaleState` and `MTSKEntityState` beneath the existing multimodal PLM shell | L3 | architecture | isolates the temporal-state mechanism without changing the multimodal encoder/CASM path | evidence that either mechanism is superior | hidden width is 60 because three matched banks require divisibility by 3 |
+| MTSK is compared against a parameter-matched single effective timescale with the same three-bank state shape | L3 | control design | controls for parameter count and state width while testing distinct learned retention rates | universal MTSK value | three banks are shared by both arms; only the temporal dynamics differ |
 
 ## C19 20-seed robustness extension — valid measurement
 
