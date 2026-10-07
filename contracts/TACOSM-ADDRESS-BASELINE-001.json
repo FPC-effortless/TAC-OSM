@@ -61,5 +61,33 @@
     "no content or semantic addressing claim",
     "no multimodal understanding claim",
     "no PLM capability claim"
+  ],
+  "hypothesis": "Raw dot-product argmax will provide the reference retrieval curve for random unit keys under isotropic Gaussian query noise, with performance determined by address dimension, memory size, and noise.",
+  "arms": [
+    {
+      "name": "raw_dot_baseline",
+      "intervention": "argmax q·k over stored unit keys",
+      "acts_on": "random-key retrieval"
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 0,
+  "eval_steps": 100000,
+  "h_levels": [
+    0
+  ],
+  "interpretation_order": [
+    "contract and parameter freeze",
+    "raw-dot rule identity",
+    "d=16 M-capacity curve",
+    "dimension curve",
+    "noise curve",
+    "claim boundary"
   ]
 }
