@@ -21,7 +21,7 @@ FROZEN_BENCHMARK_GIT_BLOB_SHA = "9ca0c6ae13d02054230babe3fb594731e106cb31"
 
 def benchmark_git_blob_sha() -> str:
     data = (ROOT / "src" / "tac_osm" / "learned_address_001_benchmark.py").read_bytes()
-    header = f"blob {len(data)}\\0".encode("ascii")
+    header = f"blob {len(data)}\0".encode("ascii")
     return hashlib.sha1(header + data).hexdigest()
 
 
