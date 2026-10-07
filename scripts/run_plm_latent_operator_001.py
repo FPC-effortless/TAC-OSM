@@ -83,15 +83,68 @@ def rotate_support_labels(support):
     return tuple((row[0], row[1], rotated[k]) for k, row in enumerate(support))
 
 
-def query_target(model, memory, q2, support, operator_override=None):
-    entity, i, j, _answer = q2
+def build_batch(episodes):
+    texts, images, audios, entities = [], [], [], []
+    for slot in range(3):
+        t, im, au, en = [], [], [], []
+        for ep in episodes:
+            entity, text, image, audio = ep[0][slot]
+            t.append(text)
+            im.append(image)
+            au.append(audio)
+            en.append(entity)
+        texts.append(torch.stack(t))
+        images.append(torch.stack(im))
+        audios.append(torch.stack(au).unsqueeze(1))
+        entities.append(torch.tensor(en, dtype=torch.long))
+
+    q_entities = torch.tensor([ep[1][0] for ep in episodes], dtype=torch.long)
+    q_i = torch.tensor([ep[1][1] for ep in episodes], dtype=torch.long)
+    q_j = torch.tensor([ep[1][2] for ep in episodes], dtype=torch.long)
+    q_targets = torch.tensor([ep[1][3] for ep in episodes], dtype=torch.long)
+    support = torch.tensor(
+        [ep[2] for ep in episodes],
+        dtype=torch.float32,
+    )
+    return {
+        "text": torch.stack(texts, 0),
+        "image": torch.stack(images, 0),
+        "audio": torch.stack(audios, 0),
+        "entities": torch.stack(entities, 0),
+        "q_entity": q_entities,
+        "q_i": q_i,
+        "q_j": q_j,
+        "q_target": q_targets,
+        "support": support,
+    }
+
+
+def write_observations_batch(model: LatentOperatorPLM, batch):
+    memory = model.state.initial(
+        batch["text"].shape[1],
+        batch["text"].device,
+    )
+    for slot in range(batch["text"].shape[0]):
+        z = model.encode(
+            batch["text"][slot],
+            batch["image"][slot],
+            batch["audio"][slot],
+        )
+        memory, _ = model.state.write(
+            memory,
+            z,
+            batch["entities"][slot],
+        )
+    return memory
+
+
+def query_target_batch(model, memory, batch):
     return model.latent_query(
         memory,
-        torch.tensor([entity], dtype=torch.long),
-        torch.tensor([i], dtype=torch.long),
-        torch.tensor([j], dtype=torch.long),
-        support_tensor(support),
-        operator_override=operator_override,
+        batch["q_entity"],
+        batch["q_i"],
+        batch["q_j"],
+        batch["support"],
     )
 
 
@@ -161,19 +214,12 @@ def train_seed(seed: int):
             for _ in range(BATCH_SIZE)
         ]
         training_keys.update(episode_key(ep) for ep in episodes)
+        batch = build_batch(episodes)
         model.train()
         optimizer.zero_grad(set_to_none=True)
-        loss = torch.zeros((), dtype=torch.float32)
-
-        for ep in episodes:
-            memory = write_observations(model, ep[0])
-            out = query_target(model, memory, ep[1], ep[2])
-            loss = loss + F.cross_entropy(
-                out["logits"],
-                torch.tensor([ep[1][3]], dtype=torch.long),
-            )
-
-        loss = loss / len(episodes)
+        memory = write_observations_batch(model, batch)
+        out = query_target_batch(model, memory, batch)
+        loss = F.cross_entropy(out["logits"], batch["q_target"])
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         optimizer.step()
@@ -445,9 +491,7 @@ def run(smoke: bool = False):
             "operator_inducer_gradient_gate_pass": True,
             "fixed_primitives_remain_the_execution_library": True,
             "entity_addressing_explicit_by_design": True,
-            "no_operator_discovery_claim_beyond_closed_primitive_library": False
-            if summary["operator_induction_supported"]
-            else True,
+            "operator_synthesis_not_claimed": True,
         },
         "claim_boundary": [
             "synthetic latent-operator induction only",
