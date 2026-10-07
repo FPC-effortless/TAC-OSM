@@ -213,6 +213,23 @@ checked by running rather than by reading:
 
 ---
 
+## E2E-006 fresh confirmatory integration evidence
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| E2E-006 mean q2 = 0.8665 on a fresh held-out composition set | L3 | integration | the selected hidden_dim=64 integrated multimodal chain crosses the preregistered 0.80 synthetic capability threshold | real-world multimodal understanding, semantic memory, learned addressing, learned operator discovery, scaling or efficiency | fixed public operator dispatch and deterministic entity addressing remain scaffolds; independent validation must pass |
+| No-memory/control drops | L3 | localization | persistent state, image alignment, and all three modalities contribute under the registered intervention protocol | causal generality outside this synthetic benchmark | controls reuse identical evaluation episode objects; diagnostic endpoints are not primary |
+| Fresh held-out split excludes sealed E2E-005 and development compositions | L3 | protocol | the E2E-006 result was not selected on the same test compositions | universal generalization | E2E-006 tests only the registered fresh held-out compositions |
+| Classifier-decision consistency and zero train/eval semantic overlap | L3 | gate | the measured number is not explained by the previously discovered probability-to-logit evaluator defect or obvious episode-key leakage | absence of all possible implementation leakage | the integrity gate constrains known attack surfaces; it is not a proof of arbitrary absence of leakage |
+
+The C15 result is therefore a bounded Layer 3 integration result. It moves the
+immediate blocker from “can the integrated chain function at all?” to “can the
+same chain function when explicit addressing and operator scaffolds are
+relaxed?” The next lane should attack those scaffolds without reusing the
+E2E-006 held-out outcomes for selection.
+
+---
+
 ## E2E-001 post-measurement evidence disposition
 
 | Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
