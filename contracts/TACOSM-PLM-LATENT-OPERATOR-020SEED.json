@@ -92,10 +92,21 @@
     "Results are descriptive robustness evidence only and cannot overturn C19."
   ],
   "decision_rule": [
-    "Estimate robustness of the C19 operator-selection behavior across 20 seeds.",
-    "Report the full truth-operator by predicted-operator confusion matrix.",
-    "Report per-operator q2 and operator-selection accuracy with 150 evaluation episodes per operator per seed.",
-    "Treat XNOR/XOR symmetry-breaking as a conjecture unless the larger panel supports it."
+    {
+      "condition": "all integrity gates pass; 20-seed robustness panel is complete with zero train/evaluation overlap and valid fingerprints",
+      "licenses": "descriptive robustness evidence about C19's latent-operator behavior across the registered seed panel",
+      "does_not_license": "replacement or upgrade of C19; operator synthesis outside the fixed primitive library; semantic addressing; real-world multimodal competence"
+    },
+    {
+      "condition": "integrity gates pass but the 20-seed panel shows instability or fails to support the planned robustness interpretation",
+      "licenses": "the instability pattern is measured evidence and C19 remains at its original bounded status",
+      "does_not_license": "intrinsic difficulty of any Boolean operator; architecture impossibility; post-hoc threshold changes"
+    },
+    {
+      "condition": "any frozen-lineage, leakage, or artifact gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "any scientific conclusion from the extension"
+    }
   ],
   "hypothesis": "The larger seed panel will quantify whether C19's observed operator-selection instability is recurrent and identify any operator-specific confusion pattern without changing the original C19 decision.",
   "seeds": [
