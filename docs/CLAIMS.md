@@ -1012,3 +1012,10 @@ Across 20 seeds, operator-selection accuracy is **0.9375 mean**, with **5/20 see
 Held-out q2 accuracy is **0.93275 mean** and **0.71167 minimum**. The mean lift over the registered no-memory reference 0.625 is **+0.30775**. Oracle-operator q2 is **0.98233**, leaving a mean **0.04958** oracle gap. No-memory q2 is **0.62692**.
 
 These observations establish recurrent seed-dependent **XOR/XNOR symmetry instability** in this fixed primitive library. They do not establish intrinsic difficulty of XNOR, intrinsic difficulty of XOR, or open-ended operator synthesis.
+
+
+## Temporal-dependency pilot 001 — no scientific result
+
+The v1 temporal-dependency lane is currently **instrument-invalid**. Confirmatory run **37633578402** passed contract and focused tests but aborted during measurement because the generated training and evaluation episode keys overlapped. This is an integrity failure, not a negative capability result. Earlier v1 attempts also failed on harness defects. The lane is therefore not used to infer whether temporal carry is useful.
+
+The admissible persistence attribution experiment is `TACOSM-PLM-TEMPORAL-PERSISTENCE-002`, which separates the q1 and q2 entities so the q1 action cannot access the q2 secret.
