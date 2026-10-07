@@ -63,3 +63,20 @@ prior, or decision rules.
 Workflow run 37645169621 corresponds to the pre-amendment implementation and
 is instrument-invalid before measurement. No result from that run is
 scientific evidence.
+
+## Preregistration amendment A2
+
+A second construct audit found that the A1 implementation still encoded an
+explicit two-particle, eight-dimensional physical-state ontology. That violates
+the experiment's stricter rule that only physical laws, rather than task-specific
+physical object structure, may be privileged.
+
+A2 replaces that ontology with a generic learned canonical latent and a learned
+scalar Hamiltonian. The physics arm is regularized only by Hamilton's canonical
+equations and conservation of the learned Hamiltonian on passive intervals.
+
+The benchmark, held-out split, seeds, optimizer, training budget, end-to-end
+thresholds, and attribution decision rules remain unchanged.
+
+Runs 37645169621 and 37645649621 are instrument-invalid and must not contribute
+scientific evidence.
