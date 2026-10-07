@@ -793,6 +793,18 @@ This establishes a **partial scaffold-removal result**, not robust learned opera
 
 ---
 
+## Learned-address v1 — instrument-invalid
+
+> The learned-address v1 lane was intended to replace explicit entity IDs with episode-local 16-D random address keys. It did not produce a valid measured result.
+
+**STATUS: INVALID INSTRUMENT**
+
+The initial runs **37595700976** and **37595722815** failed in the smoke stage with `TypeError: unhashable type: 'list'` before confirmatory measurement. The repaired duplicate PR run **37623028125** passed all integrity, contract, and smoke gates, then failed during the full measurement because the implementation's post-shuffle q2 target-slot counts were not exactly `200/200/200`, contradicting its own registered balance assertion.
+
+Run **37623028125** is the sole full confirmatory attempt after the harness repair. It is not a scientific measurement. Its uploaded artifact (**11482723366**) is the earlier successful smoke output and must not be treated as a measured artifact. The prior runs **37595700976** and **37595722815** are instrument failures.
+
+The deeper construct problem is also recorded: exact matching of identical random query/storage keys is largely predictable and does not demonstrate semantic or content-derived addressing. The next addressing experiment therefore requires an explicit raw-dot reference and a corruption/capacity protocol.
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
