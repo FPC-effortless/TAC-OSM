@@ -1,0 +1,118 @@
+{
+  "experiment_id": "TACOSM-PLM-FULL-LEARNED-SWILA-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Full learned multimodal PLM with SwiLA-derived multi-timescale persistent state",
+  "question": "Can the full PLM computational loop learn multimodal representation, persistent multi-timescale state, relevance routing, structural computation, action, verification, repair, and verified state update end to end?",
+  "primary_endpoint": {
+    "name": "full_plm_gate",
+    "unit": "episode",
+    "thresholds": {
+      "mean_action_accuracy": 0.70,
+      "minimum_seed_action_accuracy": 0.55,
+      "mean_history_pair_exact": 0.70
+    },
+    "selection": "none"
+  },
+  "seeds": [0, 1, 2, 3, 4],
+  "protocol": {
+    "train_per_action": 72,
+    "eval_per_action": 36,
+    "history_pairs": 80,
+    "train_steps": 220,
+    "batch_size": 8,
+    "history_length": 8,
+    "action_count": 5,
+    "d_model": 96,
+    "num_heads": 4,
+    "num_experts": 6,
+    "timescale_partition": {
+      "fast": 2,
+      "medium": 2,
+      "slow": 2
+    },
+    "cdl_top_k": 2,
+    "casm_operators": 4,
+    "casm_depth": 3,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "model_selection": "none"
+  },
+  "architecture": {
+    "representation": "learned text convolutional encoder + learned spatial image encoder + learned temporal-frequency audio encoder + multimodal fusion",
+    "persistent_state": "SwiLA-derived mixture of linear regressors with fast, medium, and slow retention bands and temporal responsibilities",
+    "cdl": "learned sparse routing over persistent expert views",
+    "casm": "learned operator bank with learned operator mixture and adaptive halting; no fixed semantic operators",
+    "osm": "learned action-conditioned latent transition predictor and learned Hamiltonian energy",
+    "action": "learned policy/planner combining CASM state with action-conditioned OSM predictions",
+    "verifier": "learned post-action evidence verifier",
+    "repair": "learned post-verification recomputation/action proposal",
+    "state_update": "persistent write gated by verifier; hard gate at inference, differentiable verifier probability during training"
+  },
+  "swiLA_boundary": {
+    "source": "arXiv:2609.39034, Switching Linear Attention",
+    "use": "candidate recurrent state kernel and MTSK mechanism",
+    "adaptation": [
+      "fixed recurrent mixture state",
+      "prediction-error responsibility weighting",
+      "online delta-style state update",
+      "query-side expert blending",
+      "temporal/sticky responsibilities",
+      "multi-timescale decay and update bands"
+    ],
+    "not_claimed": [
+      "PLM is SwiLA",
+      "SwiLA evidence transfers as PLM evidence",
+      "the MTSK mapping is established without a PLM experiment"
+    ]
+  },
+  "physics_prior": {
+    "allowed_information": [
+      "Hamilton canonical equations dq/dt=dH/dp and dp/dt=-dH/dq",
+      "conservation of a learned Hamiltonian on passive intervals"
+    ],
+    "forbidden_information": [
+      "particle count",
+      "object or entity identifiers",
+      "hand-coded physical state variables",
+      "target action as model input",
+      "optimal action lookup",
+      "fixed operator semantics",
+      "hard-coded retrieval/addressing",
+      "future reward or test outcome"
+    ]
+  },
+  "benchmark_integrity": {
+    "hidden_state": "used only by environment generator and outcome computation",
+    "image": "positions only",
+    "audio": "permutation-invariant speed-dependent signal",
+    "text": "goal coordinates only",
+    "history_pairs": "same current multimodal observation but different preceding histories and different optimal action",
+    "train_eval_overlap": 0,
+    "evaluation_reuse_between_arms": "not applicable; this is a single integrated construction run",
+    "post_run_selection": "forbidden"
+  },
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass and full_plm_gate is true",
+      "licenses": "bounded evidence that the integrated full learned PLM is functional on the registered multimodal physical-control benchmark",
+      "does_not_license": "ablation causality, real-world competence, general intelligence, or asymptotic scaling"
+    },
+    {
+      "condition": "integrity passes but full_plm_gate is false",
+      "licenses": "the integrated PLM construction is not yet demonstrated on the registered benchmark",
+      "does_not_license": "architectural impossibility"
+    },
+    {
+      "condition": "any integrity/provenance gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "architectural inference"
+    }
+  ],
+  "ablation_policy": {
+    "run_only_after": "full_plm_gate=true with all integrity gates passing",
+    "method": "one architecture with controlled mechanism switches",
+    "primary_question": "causal responsibility of persistence, CDL, CASM, OSM, verifier, repair, and plasticity within the integrated model"
+  }
+}
