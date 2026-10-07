@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-FULL-LEARNED-SWILA-001",
-  "version": 3,
+  "version": 4,
   "status": "pre-registered",
   "title": "Full learned multimodal PLM with SwiLA-derived multi-timescale persistent state",
   "question": "Can the full PLM computational loop learn multimodal representation, persistent multi-timescale state, relevance routing, structural computation, action, verification, repair, and verified state update end to end?",
@@ -44,13 +44,15 @@
     "optimizer": "AdamW",
     "learning_rate": 0.001,
     "weight_decay": 0.0001,
-    "model_selection": "none"
+    "model_selection": "none",
+    "casm_top_k": 1,
+    "mtsk_input_dependent_decay": true
   },
   "architecture": {
     "representation": "learned text convolutional encoder + learned spatial image encoder + learned temporal-frequency audio encoder + multimodal fusion",
-    "persistent_state": "SwiLA-derived mixture of linear regressors with fast, medium, and slow retention bands and temporal responsibilities",
+    "persistent_state": "SwiLA-derived mixture of linear regressors with fast/medium/slow retention bands, temporal responsibilities, learned input-dependent decay, and verified experience writes",
     "cdl": "learned sparse routing over persistent expert views",
-    "casm": "learned operator bank with learned operator mixture and adaptive halting; no fixed semantic operators",
+    "casm": "learned structural workspace plus learned operator bank with top-k sparse operator routing and adaptive halting; no fixed semantic operators",
     "osm": "learned action-conditioned latent transition predictor and learned Hamiltonian energy",
     "action": "learned policy/planner combining CASM state with action-conditioned OSM predictions",
     "verifier": "learned verifier of pre/post learned state plus continuous post-action outcome evidence; binary success is not an input",
@@ -141,6 +143,11 @@
       "id": "A3",
       "before_measurement": true,
       "change": "Benchmark generator hash is computed directly from its source file bytes; the generator provenance test asserts this identity."
+    },
+    {
+      "id": "A4",
+      "before_measurement": true,
+      "change": "CASM execution is top-k sparse at runtime (casm_top_k=1) rather than evaluating the complete learned operator bank; MTSK retention combines learned fast/medium/slow base decay with an input-dependent retention gate."
     }
   ]
 }
