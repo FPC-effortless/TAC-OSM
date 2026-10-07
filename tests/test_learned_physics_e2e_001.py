@@ -11,6 +11,7 @@ from tac_osm.learned_physics_e2e import (
 from tac_osm.learned_physics_e2e_benchmark import (
     ACTION_COUNT,
     HISTORY,
+    episode_key,
     sample_episode,
     sample_history_pairs,
 )
@@ -27,6 +28,18 @@ def test_history_pair_has_identical_current_multimodal_surface():
     for first, second in zip(left["observations"][-1], right["observations"][-1]):
         assert torch.equal(first, second)
     assert left["action"] != right["action"]
+
+
+def test_episode_key_covers_all_modalities():
+    episode = sample_episode(random.Random(12345))
+    altered = {
+        **episode,
+        "observations": [
+            (text, image, audio + 0.001)
+            for text, image, audio in episode["observations"]
+        ],
+    }
+    assert episode_key(episode) != episode_key(altered)
 
 
 def test_model_has_no_task_specific_physical_ontology():

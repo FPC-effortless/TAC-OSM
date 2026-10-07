@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
-  "version": 5,
+  "version": 6,
   "status": "pre-registered",
   "title": "Fully learned multimodal physical control with optional physics-law prior",
   "question": "Can a fully learned multimodal persistent controller infer hidden motion from history and choose the correct control action, and does adding only physical-law priors improve that capability?",
@@ -33,7 +33,8 @@
     "weight_decay": 0.0001,
     "model_selection": "none",
     "device": "cpu",
-    "benchmark_generator_version": "learned-physics-e2e-v2-no-object-order-audio"
+    "benchmark_generator_version": "learned-physics-e2e-v2-no-object-order-audio",
+    "benchmark_generator_sha256": "f60e20fbd3f590a4e196e1b62e5e42af4ada45b035495d0057fbe69e591f85b0"
   },
   "arms": [
     {
@@ -82,7 +83,8 @@
     "current audio contains speed magnitude only",
     "goal text contains no action label",
     "no physical state ground truth is passed to the model",
-    "physics loss is computed only from the model's own predicted state trajectory"
+    "physics loss is computed only from the model's own predicted state trajectory",
+    "episode identity keys include every model-visible modality, goal, and target action"
   ],
   "primary_end_to_end_gate": {
     "mean_accuracy_minimum": 0.7,
@@ -240,6 +242,23 @@
         "37647273293"
       ],
       "scientific_status": "instrument correction before admissible measurement"
+    },
+    {
+      "id": "A5",
+      "stage": "pre-measurement integrity hardening",
+      "reason": "The training/evaluation overlap key omitted audio even though audio is model-visible. The benchmark manifest also described the superseded pre-Hamiltonian prior.",
+      "change": "Episode keys now cover text, image, audio, goal, and target action; the benchmark manifest is aligned exactly with the registered Hamiltonian prior.",
+      "unchanged": [
+        "generated episode distributions",
+        "model architecture",
+        "held-out protocol",
+        "seeds",
+        "optimizer and training budget",
+        "decision rules"
+      ],
+      "invalidated_runs": [],
+      "scientific_status": "Integrity hardening for future admissible measurements; the already-running version-5 workflow remains governed by its checked-out contract."
     }
-  ]
+  ],
+  "notes": "Version 6 is a future-measurement integrity hardening. It does not alter the already-running version-5 workflow."
 }

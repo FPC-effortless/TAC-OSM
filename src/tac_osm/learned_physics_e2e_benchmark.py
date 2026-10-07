@@ -201,11 +201,13 @@ def sample_balanced_episodes(rng: random.Random, per_action: int) -> list[dict]:
 
 
 def episode_key(episode: dict) -> tuple:
+    """Canonical identity key covering every model-visible input and target."""
     return (
         tuple(tuple(int(x) for x in row[0].tolist()) for row in episode["observations"]),
+        tuple(tuple(float(x) for x in row[1].flatten().tolist()) for row in episode["observations"]),
+        tuple(tuple(float(x) for x in row[2].flatten().tolist()) for row in episode["observations"]),
         tuple(float(x) for x in episode["goal"]),
         int(episode["action"]),
-        tuple(tuple(float(x) for x in row[1].flatten().tolist()) for row in episode["observations"]),
     )
 
 
@@ -312,8 +314,7 @@ def benchmark_manifest() -> dict:
             "text": "goal coordinates only; no action labels or state labels",
         },
         "physics_prior": [
-            "linear momentum conservation",
-            "kinetic energy conservation",
-            "kinematic displacement/velocity consistency",
+            "Hamilton's canonical equations dq/dt = dH/dp and dp/dt = -dH/dq",
+            "conservation of the learned Hamiltonian H on passive observation intervals",
         ],
     }

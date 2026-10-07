@@ -90,3 +90,11 @@ The benchmark generator is therefore amended to make deterministic audio permuta
 A final causal-boundary audit found that the generic canonical latent was still auxiliary to the action head. A4 binds the final canonical latent directly into learned action selection and adds a focused gradient-dependency gate. No benchmark, prior law, seed, optimizer, budget, endpoint, or decision rule changes.
 
 Superseded runs 37645169621, 37645649621, 37646974646, and 37647273293 are instrument-invalid and must not be interpreted.
+
+## Preregistration amendment A5
+
+A provenance audit found that the training/evaluation identity key omitted audio even though audio is model-visible. The benchmark manifest also retained the superseded pre-Hamiltonian description of the physics prior.
+
+Version 6 hardening makes the episode identity key cover text, image, audio, goal, and target action; aligns the benchmark manifest exactly with the Hamiltonian prior; strengthens the independent artifact validator; and pins the hardened benchmark SHA in the future CI contract gate.
+
+This is a future-measurement integrity correction. It does not alter or reinterpret the already-running version-5 confirmatory workflow.
