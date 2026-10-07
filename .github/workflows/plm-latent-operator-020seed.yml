@@ -58,6 +58,11 @@ jobs:
           assert a["status"]=="measured"
           assert len(a["seed_results"])==20
           assert all(r["training_evaluation_semantic_overlap"]==0 for r in a["seed_results"])
+          for r in a["seed_results"]:
+              counts = r["training_operator_counts_combo2"]
+              assert set(counts) == {"xor","and","or","xnor"}
+              assert sum(counts.values()) == 300 * 96
+              assert all(v > 0 for v in counts.values())
           assert set(a["summary"]["aggregate_operator_confusion_matrix"])=={"xor","and","or","xnor"}
           print("PASS: 20-seed extension")
           PY
