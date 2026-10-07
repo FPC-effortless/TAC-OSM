@@ -1,0 +1,78 @@
+{
+  "experiment_id": "TACOSM-PLM-LEARNED-ADDRESS-002",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Learned addressing under predictable-key and structured-channel controls",
+  "question": "Can a learned address scorer provide value beyond trivial exact-key matching, while remaining calibrated to the Bayes-optimal raw-dot baseline?",
+  "relation_to_prior": "Supersedes learned-address v1 as the intended next test; v1 is retained as instrument-invalid and is not remeasured.",
+  "design": {
+    "exact_key_condition": "diagnostic only; raw dot and learned scorer are expected to saturate and this condition carries no capability claim.",
+    "isotropic_gaussian_condition": "query = unit target key + sigma*epsilon with epsilon isotropic Gaussian. Raw dot is the registered Bayes reference.",
+    "structured_channel_condition": "query = normalize(D*k + sigma*epsilon), where D=diag([2]*8+[0.5]*8) is fixed across training/evaluation and unknown to the raw-dot baseline. The learned query scorer is trained on this channel.",
+    "address_independence": "address keys independent of payload and answer.",
+    "semantic_scope": "opaque associative addressing only; no semantic/content-derived address inference."
+  },
+  "protocol": {
+    "address_dimension": 16,
+    "memory_sizes": [
+      3,
+      8,
+      16,
+      32,
+      64,
+      128,
+      256
+    ],
+    "isotropic_sigmas": [
+      0,
+      0.05,
+      0.1,
+      0.2,
+      0.4,
+      0.8
+    ],
+    "structured_sigmas": [
+      0,
+      0.05,
+      0.1,
+      0.2,
+      0.4
+    ],
+    "model_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "evaluation_trials_per_condition": 10000,
+    "no_model_selection": true
+  },
+  "required_controls": [
+    "raw-dot Bayes reference on every corruption condition",
+    "oracle target-key control",
+    "random wrong-key corruption control",
+    "address-order permutation invariance",
+    "held-out evaluation keys and payloads",
+    "frozen benchmark and contract hashes"
+  ],
+  "decision_rule": [
+    "Exact-key success does not license a learned-address claim.",
+    "On isotropic Gaussian corruption, learned addressing must be non-inferior to raw dot within 0.02 absolute accuracy; beating raw dot is not required and would not by itself be evidence of a better addressing rule.",
+    "On the registered structured diagonal channel, learned scoring must exceed raw dot by at least 0.05 mean accuracy over the predefined sigma grid at M=3.",
+    "Capacity curves at d=16 must be reported for M={3,8,16,32,64,128,256}; no M may be selected after inspection.",
+    "Failure of the learned scorer does not imply learned addressing impossibility."
+  ],
+  "claim_boundary": [
+    "robust associative key addressing only",
+    "no semantic entity resolution claim",
+    "no content-derived addressing claim",
+    "no real-world multimodal claim",
+    "no PLM general capability claim"
+  ]
+}
