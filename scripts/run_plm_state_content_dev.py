@@ -113,6 +113,6 @@ def run():
         "mean_xor_state_error_rate":statistics.fmean(r["modes"][mode]["xor_state_error_rate"] for r in rows),
         "all_decision_mismatches_zero":all(r["modes"][mode]["classifier_decision_mismatches"]==0 for r in rows)
       } for mode in MODES},
-      "selection_is_dev_only":True}}
+      "selection_is_dev_only":True}
     p=ROOT/"artifacts"/f"{EXPERIMENT_ID}.json";p.parent.mkdir(exist_ok=True);p.write_text(json.dumps(out,indent=2,sort_keys=True)+"\n");print(json.dumps(out,indent=2,sort_keys=True))
 if __name__=="__main__":run()
