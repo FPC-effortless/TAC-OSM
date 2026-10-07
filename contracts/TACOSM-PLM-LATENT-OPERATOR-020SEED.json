@@ -72,5 +72,54 @@
     "Report the full truth-operator by predicted-operator confusion matrix.",
     "Report per-operator q2 and operator-selection accuracy with 150 evaluation episodes per operator per seed.",
     "Treat XNOR/XOR symmetry-breaking as a conjecture unless the larger panel supports it."
+  ],
+  "hypothesis": "The larger seed panel will quantify whether C19's observed operator-selection instability is recurrent and identify any operator-specific confusion pattern without changing the original C19 decision.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "steps": 300,
+  "eval_steps": 600,
+  "h_levels": [
+    3
+  ],
+  "arms": [
+    {
+      "name": "normal_latent_operator_020seed",
+      "intervention": "same latent-operator model and training protocol as C19, repeated for the 20 registered seeds",
+      "acts_on": "robustness extension"
+    },
+    {
+      "name": "oracle_operator_diagnostic",
+      "intervention": "same trained model with hidden operator supplied only for q2 diagnostic scoring",
+      "acts_on": "operator-selection localization"
+    }
+  ],
+  "interpretation_order": [
+    "frozen C19 benchmark identity",
+    "20-seed train/evaluation disjointness and evaluation fingerprints",
+    "training operator counts",
+    "operator confusion matrix",
+    "operator-selection and q2 accuracy",
+    "oracle and no-memory diagnostics",
+    "robustness interpretation without modifying C19"
   ]
 }
