@@ -45,6 +45,13 @@ ADDRESS_MEAN_THRESHOLD = 0.90
 ADDRESS_MIN_THRESHOLD = 0.80
 ORACLE_GAP_THRESHOLD = 0.10
 BASE_E2E008_GENERATOR_SHA256 = "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e"
+FROZEN_BENCHMARK_GIT_BLOB_SHA = "9ca0c6ae13d02054230babe3fb594731e106cb31"
+
+
+def benchmark_git_blob_sha() -> str:
+    data = (ROOT / "src" / "tac_osm" / "learned_address_001_benchmark.py").read_bytes()
+    header = f"blob {len(data)}\\0".encode("ascii")
+    return hashlib.sha1(header + data).hexdigest()
 
 
 def contract_hash() -> str:
