@@ -80,3 +80,8 @@ thresholds, and attribution decision rules remain unchanged.
 
 Runs 37645169621 and 37645649621 are instrument-invalid and must not contribute
 scientific evidence.
+## Preregistration amendment A3
+
+A benchmark audit found that deterministic audio contained a fixed phase offset based on particle order. This was unnecessary and could create an implicit object-order channel.
+
+The benchmark generator is therefore amended to make deterministic audio permutation-invariant to particle order. The generator version is now `learned-physics-e2e-v2-no-object-order-audio` and is pinned before the next measurement. No model, physics prior, endpoint, seed, or decision rule changes.
