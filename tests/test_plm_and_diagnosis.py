@@ -23,8 +23,8 @@ def test_contract_is_preregistered_and_fixed():
     assert contract["seeds"] == [0, 1, 2, 3, 4]
     assert contract["steps"] == 300
     assert contract["eval_steps"] == 200
-    assert contract["protocol"]["hidden_dim"] == 64
-    assert contract["protocol"]["state_write_mode"] == "residual_linear"
+    assert contract["title"].startswith("Development diagnosis of AND")
+    assert contract["held_constant"][1] == "same hidden_dim=64 residual-linear configuration"
 
 
 def test_diagnostic_training_excludes_all_prior_confirmatory_sets():
