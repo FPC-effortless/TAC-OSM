@@ -241,10 +241,23 @@ def sample_balanced_episodes(rng: random.Random, per_action: int) -> list[Episod
 
 def step_environment(
     episode: Episode, action: int
-) -> tuple[PhysicalState, tuple[torch.Tensor, torch.Tensor, torch.Tensor], bool, int | None]:
+) -> tuple[
+    PhysicalState,
+    tuple[torch.Tensor, torch.Tensor, torch.Tensor],
+    float,
+    bool,
+    int | None,
+]:
     if not 0 <= int(action) < ACTION_COUNT:
         raise ValueError("invalid action")
     next_state = step_physics(episode.hidden_state, ACTION_IMPULSES[int(action)])
+    distance = float(
+        torch.linalg.vector_norm(next_state.position.mean(dim=0) - episode.goal)
+    )
+    # Continuous post-action outcome evidence. The binary success label stays
+    # outside the model and is used only as an external training/evaluation
+    # target.
+    outcome_evidence = -distance
     reward = bool(int(action) == int(episode.action))
     target_after = optimal_action(next_state, episode.goal)
     observation = (
@@ -252,7 +265,7 @@ def step_environment(
         _render_image(next_state),
         _render_audio(next_state),
     )
-    return next_state, observation, reward, target_after
+    return next_state, observation, outcome_evidence, reward, target_after
 
 
 def episode_key(episode: Episode) -> tuple:
@@ -360,7 +373,8 @@ def benchmark_manifest() -> dict:
             "audio": "permutation-invariant sum of speed-dependent tones; no object index",
         },
         "hidden_state_use": "benchmark environment only; never model input",
-        "training_supervision": "action label and post-action environment outcome",
+        "model_outcome_input": "continuous post-action distance-to-goal evidence; binary success is never an input",
+        "training_supervision": "action label plus external post-action success label; model receives only post-action outcome evidence",
         "physics_prior_boundary": [
             "Hamilton canonical equations on a learned canonical latent",
             "conservation of learned Hamiltonian on passive intervals",
