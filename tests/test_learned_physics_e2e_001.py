@@ -4,6 +4,7 @@ import random
 import torch
 
 from tac_osm.learned_physics_e2e import (
+    LearnedActionHead,
     LearnedPhysicsConfig,
     LearnedPhysicsE2E,
     physics_prior_loss,
@@ -36,6 +37,17 @@ def test_model_is_generic_learned_computation():
     assert not hasattr(model, "entity_ids")
     assert not hasattr(model, "operator_table")
     assert not hasattr(model, "fixed_executor")
+
+
+def test_action_path_consumes_physical_state():
+    head = LearnedActionHead(64, ACTION_COUNT)
+    temporal = torch.randn(2, 64, requires_grad=True)
+    physical = torch.randn(2, 8, requires_grad=True)
+    goal = torch.randn(2, 2)
+    logits = head(temporal, physical, goal)
+    gradient = torch.autograd.grad(logits.sum(), physical)[0]
+    assert torch.isfinite(gradient).all()
+    assert float(gradient.abs().sum()) > 0.0
 
 
 def test_physics_prior_uses_only_model_predictions():

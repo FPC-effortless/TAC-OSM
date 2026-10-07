@@ -103,21 +103,30 @@ class PhysicalStateHead(nn.Module):
 
 
 class LearnedActionHead(nn.Module):
+    """Action computation explicitly consumes the learned physical state."""
+
     def __init__(self, hidden: int, action_count: int) -> None:
         super().__init__()
         self.goal = nn.Sequential(nn.Linear(2, hidden), nn.GELU())
         self.net = nn.Sequential(
-            nn.Linear(hidden * 2, hidden),
+            nn.Linear(hidden * 2 + 8, hidden),
             nn.GELU(),
             nn.Linear(hidden, action_count),
         )
 
-    def forward(self, state: Tensor, goal: Tensor) -> Tensor:
-        return self.net(torch.cat((state, self.goal(goal)), dim=-1))
+    def forward(
+        self,
+        temporal_state: Tensor,
+        physical_state: Tensor,
+        goal: Tensor,
+    ) -> Tensor:
+        return self.net(
+            torch.cat((temporal_state, physical_state, self.goal(goal)), dim=-1)
+        )
 
 
 class LearnedPhysicsE2E(nn.Module):
-    """Multimodal history -> learned persistent state -> learned action."""
+    """Multimodal history -> learned state -> physics state -> learned action."""
 
     def __init__(self, config: LearnedPhysicsConfig = LearnedPhysicsConfig()) -> None:
         super().__init__()
@@ -147,7 +156,11 @@ class LearnedPhysicsE2E(nn.Module):
         fused = torch.stack(step_representations, dim=1)
         hidden_states = self.temporal(fused)
         physical_states = self.physical_state(hidden_states)
-        logits = self.action(hidden_states[:, -1], goal)
+        logits = self.action(
+            hidden_states[:, -1],
+            physical_states[:, -1],
+            goal,
+        )
         return logits, physical_states
 
 
