@@ -44,7 +44,7 @@ def train_seed_with_counts(seed: int):
             for _ in range(BATCH_SIZE)
         ]
         for ep in episodes:
-            counts[ep[2][0]] += 1
+            counts[ep[3]] += 1
         training_keys.update(episode_key(ep) for ep in episodes)
         batch = build_batch(episodes)
         model.train()
