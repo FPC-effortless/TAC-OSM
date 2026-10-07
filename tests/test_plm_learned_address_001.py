@@ -62,8 +62,8 @@ def test_episode_key_is_hashable_for_integrity_overlap_check():
         combo1=("xor", 0, 5),
         combo2=HELDOUT[0],
     )
-    from scripts.run_plm_learned_address_001 import episode_key
-    key = episode_key(ep)
+    from scripts.run_plm_learned_address_001 import hashable_episode_key
+    key = hashable_episode_key(ep)
     assert hash(key) is not None
     assert key in {key}
 
