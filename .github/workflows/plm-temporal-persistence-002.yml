@@ -1,0 +1,71 @@
+name: Research PLM temporal persistence 002
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/TACOSM-PLM-TEMPORAL-PERSISTENCE-002.json"
+      - "scripts/run_plm_temporal_persistence_002.py"
+      - "src/tac_osm/temporal_persistence_002_benchmark.py"
+      - "tests/test_plm_temporal_persistence_002.py"
+      - ".github/workflows/plm-temporal-persistence-002.yml"
+      - "src/tac_osm/integrated_e2e_005.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Static gate
+        run: ruff check --select F821 scripts/run_plm_temporal_persistence_002.py
+      - name: Contract and benchmark gate
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-PLM-TEMPORAL-PERSISTENCE-002")
+          assert c.check_consistency() == []
+          assert c.steps == 300 and c.eval_steps == 600 and tuple(c.seeds) == (0,1,2,3,4)
+          p = Path("src/tac_osm/temporal_persistence_002_benchmark.py")
+          print("benchmark_sha256", hashlib.sha256(p.read_bytes()).hexdigest())
+          print("PASS")
+          PY
+      - name: Focused tests
+        run: python -m pytest tests/test_plm_temporal_persistence_002.py -q
+      - name: Measurement
+        run: python scripts/run_plm_temporal_persistence_002.py
+      - name: Independent artifact gates
+        run: |
+          python - <<'PY'
+          import json
+          a = json.load(open("artifacts/TACOSM-PLM-TEMPORAL-PERSISTENCE-002.json"))
+          assert a["status"] == "measured"
+          assert len(a["seed_results"]) == 5
+          assert all(r["training_evaluation_semantic_overlap"] == 0 for r in a["seed_results"])
+          assert all(r["q1_action_decision_mismatches"] == 0 for r in a["seed_results"])
+          assert all(r["q1_secret_interference_mismatches"] == 0 for r in a["seed_results"])
+          assert a["summary"]["paired_bootstrap_ci95"][0] is not None
+          print("PASS: pure persistence artifact")
+          PY
+      - name: Upload scientific artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-TEMPORAL-PERSISTENCE-002
+          path: artifacts/TACOSM-PLM-TEMPORAL-PERSISTENCE-002.json
+          if-no-files-found: error
