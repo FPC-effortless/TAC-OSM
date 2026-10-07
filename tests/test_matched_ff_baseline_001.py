@@ -1,4 +1,7 @@
 import json,inspect
+import pytest
+
+torch = pytest.importorskip("torch")
 from tac_osm.integrated_e2e_ff_baseline import FeedForwardMultimodal
 def test_parameter_match():
     m=FeedForwardMultimodal();assert abs(m.parameter_count()-74126)/74126<=.01
