@@ -51,7 +51,7 @@ def sample_eval(seed):
 def evaluate(m,episodes):
     m.eval();total=correct=0;img_ok=aud_ok=joint_ok=state_err=exec_err=decision_mismatch=dispatch_mismatch=0
     img_n=aud_n=joint_n=correct_joint_cases=0;positive=0
-    pair_stats={pair:[0,0,0,0] for pair in IA_HELDOUT}
+    pair_stats={pair:[0,0,0,0,0] for pair in IA_HELDOUT}
     for ep in episodes:
         mem=m.state.initial(1,torch.device("cpu"))
         for entity,text,image,audio in ep[0]:
@@ -70,7 +70,7 @@ def evaluate(m,episodes):
             correct_joint_cases+=1;exec_err+=int(pred!=target)
         expected_action=out["bits"].squeeze(0)[i]*out["bits"].squeeze(0)[j]
         dispatch_mismatch+=int(not torch.allclose(out["action"].squeeze(0),expected_action,atol=1e-7,rtol=1e-6))
-        key=(op,i,j); pair_stats[key][0]+=int(pred==target);pair_stats[key][1]+=io;pair_stats[key][2]+=ao;pair_stats[key][3]+=int(jo)
+        key=(op,i,j); pair_stats[key][0]+=int(pred==target);pair_stats[key][1]+=io;pair_stats[key][2]+=ao;pair_stats[key][3]+=int(jo);pair_stats[key][4]+=1
     return {
       "image_audio_and_q2_accuracy":correct/total,
       "image_queried_bit_accuracy":img_ok/img_n,
@@ -82,10 +82,10 @@ def evaluate(m,episodes):
       "classifier_decision_mismatches":decision_mismatch,
       "and_dispatch_mismatches":dispatch_mismatch,
       "per_composition":{str(k):{
-          "q2_accuracy":v[0]/200 if v[1]==200 else v[0]/max(1,v[1]),
-          "image_bit_accuracy":v[1]/max(1,v[1]),
-          "audio_bit_accuracy":v[2]/max(1,v[2]),
-          "joint_bit_accuracy":v[3]/max(1,v[3])} for k,v in pair_stats.items()}
+          "q2_accuracy":v[0]/max(1,v[4]),
+          "image_bit_accuracy":v[1]/max(1,v[4]),
+          "audio_bit_accuracy":v[2]/max(1,v[4]),
+          "joint_bit_accuracy":v[3]/max(1,v[4])} for k,v in pair_stats.items()}
     }
 
 def run():
