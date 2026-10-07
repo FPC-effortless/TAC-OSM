@@ -1,0 +1,203 @@
+{
+  "experiment_id": "TACOSM-PLM-LEARNED-ADDRESS-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Learned content-addressed retrieval without explicit entity IDs",
+  "question": "Can the multimodal state retrieve the correct observed entity from an episode-local random address key when observation order and target slot are randomized, without receiving an explicit entity ID?",
+  "hypothesis": "The learned-address PLM will recover the target observation and solve the held-out q2 task without explicit entity IDs.",
+  "primary_endpoint": {
+    "name": "heldout_q2_accuracy",
+    "unit": "episode",
+    "threshold": 0.8,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "hidden_dim": 64,
+    "state_write_mode": "linear",
+    "address_dim": 16,
+    "observation_slots": 3,
+    "evaluation_episodes_per_seed": 600,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "operator_dispatch": "fixed query-conditioned oracle",
+    "temporal_carry": "disabled for causal isolation; C18 showed it is not load-bearing on E2E-008",
+    "model_selection": "none"
+  },
+  "heldout": [
+    [
+      "xor",
+      2,
+      4
+    ],
+    [
+      "xor",
+      4,
+      8
+    ],
+    [
+      "xor",
+      1,
+      9
+    ],
+    [
+      "and",
+      3,
+      5
+    ],
+    [
+      "and",
+      6,
+      10
+    ],
+    [
+      "and",
+      2,
+      11
+    ],
+    [
+      "or",
+      2,
+      4
+    ],
+    [
+      "or",
+      4,
+      8
+    ],
+    [
+      "or",
+      1,
+      9
+    ],
+    [
+      "xnor",
+      3,
+      5
+    ],
+    [
+      "xnor",
+      6,
+      10
+    ],
+    [
+      "xnor",
+      2,
+      11
+    ]
+  ],
+  "held_constant": [
+    "same collision-free text/image/audio payload generator family as E2E-008",
+    "same five seeds, optimizer, learning rate, weight decay and 300-step budget",
+    "same hidden_dim=64 multimodal encoders and fixed Boolean execution library",
+    "operator ID remains explicit so this lane tests addressing only",
+    "each episode has exactly three observations, each with an independent random address key",
+    "address keys are independent of payload bits and modality encodings",
+    "observation order is shuffled per episode",
+    "q2 target slot is exactly balanced across the three storage slots over the 600 evaluation episodes",
+    "q1 and q2 target entities are distinct",
+    "no post-run model selection or tuning"
+  ],
+  "leakage_rules": [
+    "entity ID is absent from all model inputs",
+    "query contains only the target address key, bit indices, operator and answer-free fields",
+    "address key is independent of payload, operator and answer",
+    "evaluation address keys are regenerated after training from a separate RNG namespace",
+    "training/evaluation semantic overlap must be zero including address keys and payloads",
+    "fixed observation position cannot identify q2 target; q2 target slot is balanced and observation order randomized",
+    "all evaluation fingerprints are distinct",
+    "oracle address is evaluation-only and is not used for training",
+    "no answer, correctness flag, verifier target or entity ID enters the addressing module",
+    "the benchmark generator hash is pinned to this contract and the E2E-008 generator lineage"
+  ],
+  "arms": [
+    {
+      "name": "learned_address",
+      "intervention": "retrieve by learned similarity between query address key and stored episode-local keys",
+      "acts_on": "state addressing"
+    },
+    {
+      "name": "oracle_address",
+      "intervention": "retrieve the known target slot directly using hidden benchmark slot identity",
+      "acts_on": "addressing upper bound"
+    },
+    {
+      "name": "corrupted_address",
+      "intervention": "replace q2 address with another observed entity's key while preserving q2 payload target and label",
+      "acts_on": "address-use diagnostic"
+    },
+    {
+      "name": "shuffle_observation_order",
+      "intervention": "permute the storage order while preserving all keys and payloads",
+      "acts_on": "position-shortcut diagnostic"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "address_selection_accuracy",
+      "role": "mechanism gate",
+      "primary": false
+    },
+    {
+      "name": "oracle_address_q2_accuracy",
+      "role": "validity upper bound",
+      "primary": false
+    },
+    {
+      "name": "corrupted_address_q2_accuracy",
+      "role": "address-use diagnostic",
+      "primary": false
+    },
+    {
+      "name": "shuffle_observation_order_q2_accuracy",
+      "role": "position-shortcut diagnostic",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; learned-address q2 mean >=0.80; every seed >=0.40; address-selection mean >=0.90; every seed >=0.80; oracle-address q2 mean >=0.80; learned-versus-oracle mean gap <=0.10",
+      "licenses": "bounded evidence that learned content addressing can replace explicit entity IDs on the registered synthetic multimodal task",
+      "does_not_license": "semantic addressing, open-world retrieval, learned operator discovery, temporal memory necessity, real-world multimodal understanding, scaling"
+    },
+    {
+      "condition": "integrity passes but any registered primary/mechanism threshold fails",
+      "licenses": "the learned-address capability criterion is not established on this benchmark",
+      "does_not_license": "general impossibility of learned addressing or PLM"
+    }
+  ],
+  "interpretation_order": [
+    "benchmark identity and target-slot randomization",
+    "entity-ID absence and address-key independence",
+    "train/evaluation disjointness and fingerprints",
+    "oracle upper bound and action-decision consistency",
+    "primary learned-address q2 accuracy",
+    "address-selection accuracy",
+    "corrupted-address diagnostic",
+    "shuffle-order diagnostic",
+    "claim boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 600,
+  "base_lineage": {
+    "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-008",
+    "benchmark_sha256": "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e"
+  }
+}
