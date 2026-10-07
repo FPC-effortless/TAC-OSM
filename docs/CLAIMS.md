@@ -75,8 +75,30 @@ The result supports the bounded mechanism claim: an explicitly written state
 value remained usable after up to 32 enforced intervening decision boundaries
 and causally changed the later decision in this synthetic control.
 
-It does **not** establish semantic persistent memory, learned persistent
-representation, or the broader PLM intelligence claim.
+A stronger PLM-specific follow-up was then measured as
+`TACOSM-PLM-TEMPORAL-PERSISTENCE-002`, run `37637018951`, on commit
+`a5129dc4f8e241de44902fba9e1edcb817856f57`. The experiment uses the same
+multimodal encoders/CASM path in carry and fresh arms, but puts the q2 secret in
+an entity that q1 cannot address. After the boundary the secret is masked;
+carry retains the secret-bearing entity while fresh reconstructs q2 only from
+the masked observation. All registered information-flow, masking,
+train/evaluation-overlap, fingerprint, and artifact gates passed.
+
+Across five seeds, carry q2 accuracy was `1.0000` for every seed and fresh
+q2 accuracy was `0.5000` for every seed. The paired effect was `+0.5000`,
+with hierarchical paired bootstrap 95% CI `[0.48167, 0.51800]`, above the
+registered `+0.10` materiality threshold. This is bounded evidence that the
+retained state itself carried load-bearing q2 information on the registered
+synthetic multimodal task.
+
+The important architectural boundary is explicit: this result used the
+existing `ExplicitEntityState` with residual-linear writes. It did **not**
+use a multi-timescale adaptive state kernel. Therefore the result strengthens
+C1 persistence evidence but is **not evidence for MTSK**.
+
+It does **not** establish semantic persistent memory, learned long-horizon
+memory, MTSK, learned addressing, operator discovery, scaling, or the broader
+PLM intelligence claim.
 
 The prior v0 C1 result is retired as temporal evidence because its task
 construction did not enforce the write/read delay.
