@@ -74,5 +74,43 @@
     "no content-derived addressing claim",
     "no real-world multimodal claim",
     "no PLM general capability claim"
+  ],
+  "hypothesis": "A learned query/key scorer will match the raw-dot Bayes reference on isotropic Gaussian corruption and can exceed raw dot under the registered structured diagonal channel.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "steps": 300,
+  "eval_steps": 10000,
+  "h_levels": [
+    3
+  ],
+  "arms": [
+    {
+      "name": "learned_scorer",
+      "intervention": "learned shared query/key scoring model trained on registered channel conditions",
+      "acts_on": "address matching"
+    },
+    {
+      "name": "raw_dot",
+      "intervention": "argmax raw dot product over stored unit keys",
+      "acts_on": "baseline addressing"
+    }
+  ],
+  "interpretation_order": [
+    "raw-dot baseline identity",
+    "held-out keys and corruption identity",
+    "isotropic non-inferiority",
+    "structured-channel learned-vs-raw comparison",
+    "capacity curve at d=16",
+    "claim boundary"
   ]
 }
