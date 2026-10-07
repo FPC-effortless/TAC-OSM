@@ -14,7 +14,7 @@ from tac_osm.latent_operator_001_benchmark import (
     benchmark_manifest, episode_fingerprint, episode_key,
     sample_evaluation_episodes, sample_episode,
 )
-from scripts.run_plm_latent_operator_001 import (
+from run_plm_latent_operator_001 import (
     build_batch, query_target, support_tensor, write_observations,
     build_gradient_probe, parameter_count, write_observations_batch,
     query_target_batch,
