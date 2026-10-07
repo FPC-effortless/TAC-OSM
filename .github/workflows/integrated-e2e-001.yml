@@ -50,3 +50,34 @@ jobs:
           name: TACOSM-PLM-INTEGRATED-E2E-001
           path: artifacts/TACOSM-PLM-INTEGRATED-E2E-001.json
           if-no-files-found: error
+
+  matched_ff_baseline_001:
+    name: Matched feed-forward persistence baseline 001
+    if: contains(github.event.pull_request.title, 'matched feed-forward') || contains(github.event.pull_request.head.ref, 'matched-ff-baseline-001')
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --quiet -e . pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet numpy==2.3.3 ruff==0.13.0
+      - name: Integrity
+        run: |
+          ruff check --select F821 src/tac_osm/integrated_e2e_ff_baseline.py scripts/run_matched_ff_baseline_001.py tests/test_matched_ff_baseline_001.py
+          python -m pytest tests/test_matched_ff_baseline_001.py -q
+      - name: Smoke
+        run: python scripts/run_matched_ff_baseline_001.py --smoke
+      - name: Confirmatory measurement
+        run: python scripts/run_matched_ff_baseline_001.py
+      - name: Upload scientific artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-MATCHED-FF-001
+          path: artifacts/TACOSM-PLM-MATCHED-FF-001.json
+          if-no-files-found: error
