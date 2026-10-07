@@ -46,10 +46,26 @@
   },
   "mathematical_status": "For fixed unit-norm stored keys and isotropic Gaussian query noise, maximizing q·k is the maximum-likelihood/Bayes ranking rule under the registered generative model. The baseline is therefore an optimal reference, not an opponent the learned scorer should be expected to beat.",
   "endpoints": [
-    "raw_dot_top1_accuracy",
-    "capacity_curve_at_d16",
-    "dimension_curve",
-    "accuracy_vs_noise"
+    {
+      "name": "raw_dot_top1_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "capacity_curve_at_d16",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "dimension_curve",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "accuracy_vs_noise",
+      "role": "secondary",
+      "primary": false
+    }
   ],
   "decision_rule": [
     "This is a baseline characterization, not a PLM capability result.",
