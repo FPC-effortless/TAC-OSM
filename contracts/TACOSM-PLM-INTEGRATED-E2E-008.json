@@ -5,8 +5,19 @@
   "title": "Fresh confirmatory integrated multimodal PLM with collision-free modality encoding",
   "question": "Can the selected hidden_dim=64 residual-linear integrated PLM solve a fresh held-out cross-modal Boolean benchmark when modality encodings contain payload bits but no entity-ID side channel or payload/ID spatial collision?",
   "hypothesis": "The selected configuration will meet the registered 0.80 held-out q2 criterion on a fresh benchmark after removing the identified image payload/entity-ID collision without changing the model architecture or optimization budget.",
-  "primary_endpoint": {"name": "heldout_q2_accuracy_all_modalities", "unit": "episode", "threshold": 0.8, "selection": "none"},
-  "seeds": [0,1,2,3,4],
+  "primary_endpoint": {
+    "name": "heldout_q2_accuracy_all_modalities",
+    "unit": "episode",
+    "threshold": 0.8,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
   "protocol": {
     "train_steps": 300,
     "batch_size": 96,
@@ -27,10 +38,66 @@
     "entity_side_channel": false
   },
   "heldout": [
-    ["xor",2,4],["xor",4,8],["xor",1,9],
-    ["and",3,5],["and",6,10],["and",2,11],
-    ["or",2,4],["or",4,8],["or",1,9],
-    ["xnor",3,5],["xnor",6,10],["xnor",2,11]
+    [
+      "xor",
+      2,
+      4
+    ],
+    [
+      "xor",
+      4,
+      8
+    ],
+    [
+      "xor",
+      1,
+      9
+    ],
+    [
+      "and",
+      3,
+      5
+    ],
+    [
+      "and",
+      6,
+      10
+    ],
+    [
+      "and",
+      2,
+      11
+    ],
+    [
+      "or",
+      2,
+      4
+    ],
+    [
+      "or",
+      4,
+      8
+    ],
+    [
+      "or",
+      1,
+      9
+    ],
+    [
+      "xnor",
+      3,
+      5
+    ],
+    [
+      "xnor",
+      6,
+      10
+    ],
+    [
+      "xnor",
+      2,
+      11
+    ]
   ],
   "held_constant": [
     "same hidden_dim=64 residual-linear model as E2E-007",
@@ -63,5 +130,114 @@
       "licenses": "the selected configuration does not meet the registered clean-benchmark capability criterion",
       "does_not_license": "architecture impossibility"
     }
-  ]
+  ],
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "full clean text/image/audio observation, persistent state, residual-linear write",
+      "acts_on": "integrated path"
+    },
+    {
+      "name": "no_memory",
+      "intervention": "zero persistent state immediately before q1",
+      "acts_on": "persistent information"
+    },
+    {
+      "name": "shuffle_image",
+      "intervention": "permute image observations across observed entities",
+      "acts_on": "cross-modal alignment"
+    },
+    {
+      "name": "text_only",
+      "intervention": "replace image and audio with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "image_only",
+      "intervention": "replace text and audio with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "audio_only",
+      "intervention": "replace text and image with constants",
+      "acts_on": "modality"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_all_modalities",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "heldout_q1_accuracy_all_modalities",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "memory_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "alignment_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "text_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "image_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "audio_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "per_composition_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "empirical_prior_baseline",
+      "role": "benchmark diagnostic",
+      "primary": false
+    },
+    {
+      "name": "gradient_surface_coverage",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "oracle_q2_accuracy",
+      "role": "benchmark validity gate",
+      "primary": false
+    },
+    {
+      "name": "classifier_decision_integrity",
+      "role": "integrity gate",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "benchmark integrity and oracle validity",
+    "entity-side-channel absence and encoding collision audit",
+    "train/evaluation disjointness and provenance fingerprints",
+    "gradient and classifier-decision integrity",
+    "primary heldout q2 accuracy",
+    "per-composition and empirical-prior diagnostics",
+    "memory and modality controls",
+    "claim boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 600
 }
