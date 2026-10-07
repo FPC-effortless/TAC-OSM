@@ -1,0 +1,70 @@
+name: Research PLM latent operator 020-seed extension
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/TACOSM-PLM-LATENT-OPERATOR-020SEED.json"
+      - "scripts/run_plm_latent_operator_020seed.py"
+      - "src/tac_osm/latent_operator_001.py"
+      - "src/tac_osm/latent_operator_001_benchmark.py"
+      - "scripts/run_plm_latent_operator_001.py"
+      - "tests/test_plm_latent_operator_020seed.py"
+      - ".github/workflows/plm-latent-operator-020seed.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Static gate
+        run: ruff check --select F821 scripts/run_plm_latent_operator_020seed.py
+      - name: Contract and frozen-generator gate
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          from tac_osm.contract import load_contract
+          p=Path("src/tac_osm/latent_operator_001_benchmark.py")
+          data=p.read_bytes()
+          frozen=hashlib.sha1(f"blob {len(data)}\0".encode("ascii")+data).hexdigest()
+          assert frozen=="a16f73a81f57fc58fae20fc643003ff225d4f181", frozen
+          assert load_contract("TACOSM-PLM-LATENT-OPERATOR-020SEED").check_consistency()==[]
+          print("PASS")
+          PY
+      - name: Focused tests
+        run: python -m pytest tests/test_plm_latent_operator_020seed.py tests/test_plm_latent_operator_001.py -q
+      - name: Measurement
+        run: python scripts/run_plm_latent_operator_020seed.py
+      - name: Independent artifact gates
+        run: |
+          python - <<'PY'
+          import json
+          a=json.load(open("artifacts/TACOSM-PLM-LATENT-OPERATOR-020SEED.json"))
+          assert a["status"]=="measured"
+          assert len(a["seed_results"])==20
+          assert all(r["training_evaluation_semantic_overlap"]==0 for r in a["seed_results"])
+          assert set(a["summary"]["aggregate_operator_confusion_matrix"])=={"xor","and","or","xnor"}
+          print("PASS: 20-seed extension")
+          PY
+      - name: Upload scientific artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-LATENT-OPERATOR-020SEED
+          path: artifacts/TACOSM-PLM-LATENT-OPERATOR-020SEED.json
+          if-no-files-found: error
