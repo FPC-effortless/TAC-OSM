@@ -17,6 +17,14 @@ from tac_osm.learned_address_001_benchmark import (
 from scripts.run_plm_learned_address_001 import gradient_probe
 
 
+def test_frozen_benchmark_generator_matches_pre_measurement_freeze():
+    from scripts.run_plm_learned_address_001 import (
+        FROZEN_BENCHMARK_GIT_BLOB_SHA,
+        benchmark_git_blob_sha,
+    )
+    assert benchmark_git_blob_sha() == FROZEN_BENCHMARK_GIT_BLOB_SHA
+
+
 def test_learned_address_contract_is_registered_and_consistent():
     c = load_contract("TACOSM-PLM-LEARNED-ADDRESS-001")
     assert c.check_consistency() == []
