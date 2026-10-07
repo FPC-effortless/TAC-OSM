@@ -11,7 +11,7 @@ s = x["summary"]
 assert s["gradient_surface_pass"]
 assert s["classifier_decision_integrity_pass"]
 assert s["oracle_q2_accuracy"] == 1.0
-assert s["primary_q2_seed_bootstrap_ci95"] if "primary_q2_seed_bootstrap_ci95" in s else True
+assert len(s["primary_q2_composition_bootstrap_ci95"]) == 2
 assert x["leakage_audit"]["training_evaluation_semantic_overlap_zero"]
 assert x["leakage_audit"]["heldout_compositions_excluded_from_training"]
 assert x["leakage_audit"]["evaluation_generated_after_training"]
