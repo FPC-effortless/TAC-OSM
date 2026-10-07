@@ -799,7 +799,7 @@ This establishes a **partial scaffold-removal result**, not robust learned opera
 > entity addressing, fixed operator execution, or answer-bearing modality
 > channels.
 
-**STATUS: UNTESTED**
+**STATUS: NOT ESTABLISHED**
 
 **TYPE:** core integration mechanism · **LAYER:** L3
 
@@ -815,14 +815,31 @@ general semantic memory, learned semantic addressing, scaling, or AGI.
 train/evaluation disjointness, paired-history, parameter-match, provenance, and
 artifact gates passing.
 
-The experiment has two parameter-matched arms. Both learn perception, temporal
-state and action selection from the same data. The only privileged information
-allowed to the physics-prior arm is linear-momentum conservation, kinetic-energy
-conservation, and the kinematic displacement/velocity relation on collision-free
-observation intervals. No physical-state ground truth enters the model.
+The valid five-seed measurement completed on workflow 37647363330, scientific
+commit 83bcbc854b6a5d6ad19cb23bbe5a3376339ebf48, with artifact 11497103253.
+Integrity and independent artifact gates passed. Physics-prior mean accuracy
+was 0.7217 (minimum seed 0.6917) versus data-only mean accuracy 0.6907.
 
-**BLOCKER:** a valid confirmatory measurement and independent artifact
-validation are required before this claim can move above UNTESTED.
+The primary end-to-end gate nevertheless failed because matched-history exact
+accuracy was only 0.0020 versus the registered minimum 0.70. The physics-prior
+delta was +0.0310 with paired bootstrap 95% CI [0.0157, 0.0440], below the
+registered +0.05 materiality threshold.
+
+The measured result therefore does **not** establish the fully learned
+end-to-end capability. It localizes the present bottleneck to learned use of
+temporal history: the model generally selects actions without reliably
+distinguishing matched histories whose current multimodal surfaces are
+identical.
+
+The registered physics prior was limited to Hamilton's canonical equations and
+conservation of the learned Hamiltonian. No physical-state ground truth,
+particle/object ontology, target action, entity identifier, or test outcome was
+provided.
+
+**BLOCKER:** a successor measurement must demonstrate the registered
+matched-history capability while preserving the same leakage and provenance
+boundary. The first successor should target generic sensor/temporal
+representation capacity rather than tune the physical-prior effect.
 
 ## Claims this repository does not make
 
