@@ -59,5 +59,37 @@
     "does not establish semantic memory",
     "does not establish learned addressing or operator discovery",
     "does not establish scaling"
+  ],
+  "arms": [
+    {
+      "name": "carry",
+      "intervention": "retain q1-time state and traverse the action boundary",
+      "acts_on": "temporal information flow"
+    },
+    {
+      "name": "fresh_post_boundary",
+      "intervention": "discard all q1-time state and initialize only from q2-time observations",
+      "acts_on": "temporal information flow"
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 600,
+  "h_levels": [
+    3
+  ],
+  "interpretation_order": [
+    "temporal information-source identity",
+    "same q2 inputs across arms",
+    "fresh-arm q1-information exclusion",
+    "train/evaluation disjointness",
+    "paired q2 difference",
+    "claim boundary"
   ]
 }
