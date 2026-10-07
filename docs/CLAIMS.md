@@ -792,6 +792,38 @@ This establishes a **partial scaffold-removal result**, not robust learned opera
 
 ---
 
+## F1 — Fully learned multimodal physical-control capability
+
+> A fully learned multimodal recurrent controller can use temporal history to
+> select the correct control action in a physical environment without explicit
+> entity addressing, fixed operator execution, or answer-bearing modality
+> channels.
+
+**STATUS: UNTESTED**
+
+**TYPE:** core integration mechanism · **LAYER:** L3
+
+**PRIOR ART:** the repository's multimodal E2E scaffold provides the benchmark
+discipline and encoder interfaces, but its earlier E2E-008 result uses explicit
+entity addressing and fixed Boolean/CASM execution. This experiment removes
+those task-specific computational scaffolds.
+
+**NOT INHERITED:** real-world physical reasoning, general multimodal competence,
+general semantic memory, learned semantic addressing, scaling, or AGI.
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-LEARNED-PHYSICS-E2E-001` with all leakage,
+train/evaluation disjointness, paired-history, parameter-match, provenance, and
+artifact gates passing.
+
+The experiment has two parameter-matched arms. Both learn perception, temporal
+state and action selection from the same data. The only privileged information
+allowed to the physics-prior arm is linear-momentum conservation, kinetic-energy
+conservation, and the kinematic displacement/velocity relation on collision-free
+observation intervals. No physical-state ground truth enters the model.
+
+**BLOCKER:** a valid confirmatory measurement and independent artifact
+validation are required before this claim can move above UNTESTED.
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
