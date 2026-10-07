@@ -45,3 +45,21 @@ capability. It does not establish general physical reasoning, real-world
 multimodal competence, semantic memory, learned semantic addressing, or scaling.
 
 Earlier E2E-008 Boolean results are not used for model selection.
+
+## Preregistration amendment A1
+
+Before the confirmatory measurement, a construct audit found that the initial
+implementation allowed the action head to bypass the predicted physical-state
+pathway. That would have made a physics-prior result difficult to interpret:
+the prior could regularize an auxiliary state head without necessarily
+regularizing the representation used by action selection.
+
+A1 therefore binds the predicted physical state directly into the learned
+action head and adds a focused gradient-dependency gate. This amendment was
+made before any valid measurement artifact existed and does not alter the
+benchmark, held-out split, seeds, optimizer, training budget, physical-law
+prior, or decision rules.
+
+Workflow run 37645169621 corresponds to the pre-amendment implementation and
+is instrument-invalid before measurement. No result from that run is
+scientific evidence.
