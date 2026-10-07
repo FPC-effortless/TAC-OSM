@@ -749,26 +749,27 @@ This supports a bounded **integrated-architecture advantage** over the registere
 
 ---
 
-## C18 — Temporal carry across the q1→q2 action boundary is not load-bearing on E2E-008
+## C18 — Reset/recompute at the E2E-008 ceiling is uninformative about temporal carry
 
-> Removing the post-q1 outcome-gated state update and recomputing the state from the original observations reproduces the normal PLM's q2 performance on the registered E2E-008 held-out benchmark.
+> The registered reset/recompute intervention produced the same saturated q2 accuracy as the normal arm, but the benchmark ceiling prevents this result from measuring whether temporal carry contributes when recomputation retains the original information.
 
-**STATUS: SUPPORTED, bounded negative attribution**
+**STATUS: UNINFORMATIVE, bounded design null**
 
 **TYPE:** causal ablation · **LAYER:** L3
 
 **REQUIRED EVIDENCE:** `TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001`, workflow run **37593010244**, artifact **11469064681**.
 
-Normal PLM q2 mean = **1.0000** and reset/recompute q2 mean = **1.0000** across all five seeds. The normal-minus-reset gap is **0.0000**; the paired composition-bootstrap 95% interval is **[0.0000, 0.0000]**. The preregistered materiality threshold was **0.05**, so the temporal-carry support criterion failed.
+Normal PLM q2 mean = **1.0000** and reset/recompute q2 mean = **1.0000** across all five seeds. The normal-minus-reset gap is **0.0000** with paired composition-bootstrap 95% interval **[0.0000, 0.0000]**. The benchmark is saturated at 1.0000, so a zero gap cannot distinguish equivalence caused by lack of temporal dependence from equivalence caused by lack of headroom.
 
-All intervention integrity checks passed: q1 prediction/action/outcome pair equality held; the recomputed pre-q1 state was byte-identical to the original pre-q1 state; train/evaluation semantic overlap was zero; the benchmark SHA-256 and all five E2E-008 evaluation fingerprints matched exactly; and the independent artifact validator passed.
+The reset arm also reconstructs its state from the complete original observations. It therefore does not withhold the information available before q1; it removes the post-q1 outcome-gated update while retaining the original state inputs. Consequently this run is not a clean test of whether q1-time information must be carried across the action boundary.
 
-The bounded interpretation is that **temporal carry across the action boundary is not necessary for this E2E-008 task**. In combination with C17, the measured PLM advantage is therefore better localized to the integrated state representation/CASM computation than to temporal carry itself.
+The integrity evidence remains strong: q1 prediction/action/outcome pair equality held, recomputed pre-q1 state was byte-identical, training/evaluation overlap was zero, and the registered E2E-008 evaluation fingerprints and benchmark identity matched exactly.
 
-This does not establish that persistent memory is useless in general, nor does it address longer horizons, tasks in which the relevant information is only available after the action, learned semantic addressing, operator discovery, or real-world multimodal memory.
+C18 therefore **does not establish a definitive memory-versus-compute conclusion**. At most, within this saturated benchmark, it shows that the specific post-q1 outcome-gated update is not required to reach the ceiling.
 
-**NEXT TEST:** remove the fixed Boolean/CASM and explicit addressing scaffolds while preserving the same strict split, provenance, and causal-control discipline.
+Combined with C17, the result localizes the remaining PLM-vs-FF difference to mechanisms still present in the reset arm—principally the state representation/read and CASM execution path—but does not isolate those components individually.
 
+**NEXT TEST:** construct a genuinely temporal task in which q2 depends on information available only at q1 time, then compare normal carry against a fresh post-q1 state that is explicitly prevented from receiving q1-time inputs.
 
 ## C19 — Removing explicit operator-ID dispatch yields partial latent operator induction on E2E-008
 
