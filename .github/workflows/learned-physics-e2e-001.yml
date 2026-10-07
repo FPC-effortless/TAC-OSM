@@ -58,8 +58,9 @@ jobs:
           assert len(x["seeds"])==5
           assert x["protocol"]["benchmark_generator_version"]=="learned-physics-e2e-v2-no-object-order-audio"
           import subprocess
-          sha=subprocess.check_output(["git","hash-object","src/tac_osm/learned_physics_e2e_benchmark.py"],text=True).strip()
-          assert sha=="5b09c9fc1541fe2273bc6bbdeadca56728c316bd", sha
+          import hashlib
+          digest=hashlib.sha256(open("src/tac_osm/learned_physics_e2e_benchmark.py","rb").read()).hexdigest()
+          assert digest==x["protocol"]["benchmark_generator_sha256"], digest
           print("contract gate: PASS")
           PY
       - name: Smoke
