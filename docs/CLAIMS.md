@@ -707,7 +707,36 @@ The capacity choice was made only on a registered development split: hidden_dim=
 
 This claim establishes a **working synthetic integrated mechanism**, not general multimodal intelligence. Entity addressing is deterministic and operator dispatch is fixed by the public query, so neither learned semantic addressing nor learned operator discovery is demonstrated. The weakest registered operator remains XOR, at approximately 0.69–0.77 across seeds, so the result does not establish uniform operator competence.
 
+
+
+The same bounded integrated capability was subsequently reproduced with a development-selected residual-linear state-write interface in `TACOSM-PLM-INTEGRATED-E2E-007`: five-seed q2 values 0.9350, 0.9325, 0.9375, 0.9425 and 0.9275; mean **0.9350** with seed-bootstrap 95% interval **[0.9305, 0.9395]** and minimum **0.9275**. This second result used a new eight-composition held-out set and excluded the sealed E2E-005 set, the E2E-006 set and the development set from training. All integrity gates again passed.
+
 **BLOCKER:** the next boundary is to remove or progressively relax the explicit addressing/operator scaffolds and test whether the integrated chain remains functional under learned addressing and learned operator discovery, while preserving the same leakage and split discipline.
+
+
+
+---
+
+## C16 — Residual state writing improves state-content recovery on the registered development split
+
+> In a preregistered paired development comparison, residual-linear persistent-state writing improved queried state-content recovery and development task accuracy relative to the existing linear write interface.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** mechanism · **LAYER:** L2 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** residual connections and MLP state transforms are standard architectural primitives; the result is about their use at this TAC-OSM persistent-state boundary.
+
+**NOT INHERITED:** superiority outside the registered development distribution, general state-memory superiority, or any conclusion about the sealed confirmatory test sets.
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-STATE-CONTENT-DEV-001`, workflow run 37563125986, with paired evaluation episodes, zero train/evaluation overlap, and classifier decision integrity passing.
+
+On the same five seeds and development episodes, mean q2 was **0.8470** for the linear write, **0.9080** for residual-linear, and **0.9020** for residual-MLP. Mean XOR q2 was **0.8320**, **0.8920**, and **0.8760**, respectively. All three arms had zero classifier-decision mismatches. The development run therefore selected residual-linear before E2E-007.
+
+The result identifies the persistent-state write transformation as a practical optimization bottleneck in the current synthetic implementation. It does not prove that residual-linear is universally superior, and it does not use E2E-006 or E2E-007 held-out outcomes for selection.
+
+**BLOCKER:** determine whether the same gain survives a preregistered paired comparison against the linear write on a new held-out set, rather than inferring superiority from separate confirmatory runs.
+
 
 ## Claims this repository does not make
 
