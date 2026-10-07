@@ -769,7 +769,7 @@ C18 therefore **does not establish a definitive memory-versus-compute conclusion
 
 Combined with C17, the result localizes the remaining PLM-vs-FF difference to mechanisms still present in the reset arm—principally the state representation/read and CASM execution path—but does not isolate those components individually.
 
-**NEXT TEST:** construct a genuinely temporal task in which q2 depends on information available only at q1 time, then compare normal carry against a fresh post-q1 state that is explicitly prevented from receiving q1-time inputs.
+**NEXT TESTS:** the first temporal-dependency pilot is `TACOSM-PLM-TEMPORAL-DEPENDENCY-001`; it is instrument-valid only after all CI gates pass and its q1/q2 information-flow confounds are accounted for. The stricter follow-up, now preregistered as `TACOSM-PLM-TEMPORAL-PERSISTENCE-002`, separates the q1 entity from the q2 secret entity so the q1 action cannot inspect or encode the secret.
 
 ## C19 — Removing explicit operator-ID dispatch yields partial latent operator induction on E2E-008
 
@@ -978,3 +978,18 @@ Immediate blocker:
 the representation-to-executable-state content interface remains unresolved.
 The representation bit projection and the CASM state bit projection are
 separate learned maps.
+
+
+## Random-key addressing baseline — valid mechanism baseline, not a PLM capability result
+
+> Raw-dot addressing has been characterized under the exact registered random-key generative model before interpreting a learned-address result.
+
+**STATUS: VALID BASELINE / NOT A PLM CAPABILITY CLAIM**
+
+**REQUIRED EVIDENCE:** `TACOSM-ADDRESS-BASELINE-001`, workflow run **37625321076**, artifact **11484519604**, commit **3ced0b2646340f35383fb0eb3ab9ad79f69a692b**.
+
+The protocol uses independent unit-norm Gaussian keys, memory sizes 3–256, dimensions 4/8/16/32, isotropic query-noise sigma 0–0.8, 100,000 trials per condition, and five seeds. Under the registered isotropic Gaussian model, raw-dot argmax is the maximum-likelihood/Bayes ranking reference; a learned scorer therefore must be non-inferior to it rather than being required to beat it.
+
+At d=16 and sigma=0.8, measured mean retrieval accuracy is 0.697558, 0.454918, 0.319596, 0.215862, 0.140910, 0.088952 and 0.054438 for M = 3, 8, 16, 32, 64, 128 and 256 respectively.
+
+This establishes the reference channel-capacity/robustness curve for random-key associative retrieval. It does **not** establish semantic addressing, learned content addressing, multimodal understanding, or any PLM capability result.
