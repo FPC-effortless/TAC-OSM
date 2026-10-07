@@ -43,7 +43,7 @@ jobs:
           assert c.steps == 300 and c.eval_steps == 600 and tuple(c.seeds) == (0,1,2,3,4)
           p = Path("src/tac_osm/temporal_persistence_002_benchmark.py")
           data = p.read_bytes()
-          blob_sha = hashlib.sha1(f"blob {len(data)}\\0".encode("ascii") + data).hexdigest()
+          blob_sha = hashlib.sha1(f"blob {len(data)}\0".encode("ascii") + data).hexdigest()
           expected_blob_sha = "6030089e515de7f732309d52ddd497268c9b433d"
           assert blob_sha == expected_blob_sha, (blob_sha, expected_blob_sha)
           print("benchmark_git_blob_sha", blob_sha)
