@@ -350,13 +350,21 @@ than changing addressing again.
 | d=16, sigma=0.8 drops from 0.6976 at M=3 to 0.0544 at M=256 | L3 | capacity diagnostic | the registered random-key channel has a sharp memory/noise interaction | universal memory limit or semantic retrieval scaling | specific to the registered Gaussian key model |
 | Commit 3ced0b2646340f35383fb0eb3ab9ad79f69a692b; contract SHA 0822928b35a6855bd43f7b693e79208b1d88544b02b3ba978d88835bf5098002 | L3 | provenance | exact rerun lineage is recorded | immunity to future implementation changes | branch/commit must remain pinned for reproduction |
 
-## Pure temporal-persistence follow-up — preregistered, not yet measured
+## Pure temporal-persistence follow-up — valid measurement
 
 | Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
 |---|---|---|---|---|---|
-| `TACOSM-PLM-TEMPORAL-PERSISTENCE-002` | L3 | preregistration | a cleaner causal test in which q1 targets entity 0 and the q2 secret is stored in entity 1 | any persistence claim before measurement | q1 secret-interference and masked-post-boundary gates are mandatory |
-| Carry retains entity-1 state; fresh rebuilds entity 1 only from masked post observation | L3 | intervention design | isolates information persistence from q1 action/outcome access to the secret | general memory or long-horizon memory | synthetic, task-bounded attribution only |
+| `TACOSM-PLM-TEMPORAL-PERSISTENCE-002`, run **37637018951**, artifact **11490971609**, measured commit `a5129dc4f8e241de44902fba9e1edcb817856f57` | L3 | valid measurement | PLM-specific load-bearing persistence on the registered synthetic multimodal task | general memory, semantic memory, MTSK, addressing, operator discovery, scaling, real-world multimodal competence | explicit entity addressing and fixed XOR remain in force |
+| Carry q2 mean **1.0000**; fresh q2 mean **0.5000**; delta **+0.5000** | L3 | primary mechanism result | retaining the q1-time q2 entity materially changes later q2 correctness | universality of persistence | all five seeds show the same arm-level result |
+| Hierarchical paired bootstrap 95% CI **[0.48167, 0.51800]** | L3 | uncertainty | the paired effect remains positive under seed-and-episode resampling | population-wide effect size | five preregistered seeds; synthetic episodes |
+| All information-flow and leakage gates passed | L3 | integrity | q1 cannot read the q2 secret, the secret is masked after the boundary, carry/fresh receive the same q2 query and post observation, and train/evaluation semantic overlap is zero | absence of every conceivable implementation flaw | artifact gates independently passed |
+| State mechanism was `ExplicitEntityState` with residual-linear writes | L3 | architectural boundary | persistence evidence belongs to the current single-scale state path | MTSK validation | MTSK remains a separate unmeasured mechanism |
 
+## MTSK status — explicitly unmeasured
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Current PLM E2E state implementation is `ExplicitEntityState`; no MTSK module or MTSK experiment exists in the measured commit | L3 | architectural audit | MTSK should not be credited to the current persistence result | that MTSK is unnecessary or ineffective | MTSK needs its own preregistered comparison against a single-timescale control |
 
 ## C19 20-seed robustness extension — valid measurement
 
