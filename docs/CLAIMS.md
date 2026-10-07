@@ -102,6 +102,36 @@ PLM intelligence claim.
 
 The prior v0 C1 result is retired as temporal evidence because its task
 construction did not enforce the write/read delay.
+## MTSK-001 — Multi-timescale adaptive persistence
+
+> Distinct learned temporal persistence rates improve retention of information
+> whose relevance persists longer than the information required for current
+> computation, without materially harming current-information responsiveness.
+
+**STATUS: UNTESTED**
+
+**TYPE:** mechanism · **LAYER:** L3 — preregistered mechanism lane
+
+**PRIOR ART:** the repo's existing persistent state and temporal intervention
+vocabulary; no current TAC-OSM result establishes multi-timescale adaptive
+state.
+
+**NOT INHERITED:** general memory, semantic memory, long-horizon memory,
+world-model persistence, or PLM intelligence.
+
+**REQUIRED EVIDENCE:** TACOSM-PLM-MTSK-001 with all masking, paired-evaluation,
+train/evaluation-disjointness, parameter-match, target-balance, decay-order,
+and artifact gates passing.
+
+The experiment is preregistered in contract TACOSM-PLM-MTSK-001 and document
+docs/MTSK-001.md. Its primary endpoint is MTSK minus the parameter-matched
+single-timescale control on slow-fact accuracy at delay 32, with a registered
+materiality threshold of +0.15 and a hierarchical paired-bootstrap lower bound
+above zero. A fast-information accuracy guardrail must remain at least -0.05.
+
+Until a valid measurement exists, MTSK is a hypothesis and must not be cited as
+part of the demonstrated PLM mechanism.
+
 ## C2 — Relational routing
 
 > A cheap linear scorer over a hand-designed basis can learn the relevance
