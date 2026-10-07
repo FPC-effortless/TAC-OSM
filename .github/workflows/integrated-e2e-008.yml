@@ -38,6 +38,9 @@ jobs:
       - name: Integrity tests
         run: |
           python -m pytest tests/test_integrated_e2e_008.py tests/test_integrated_e2e_006.py -q
+      - name: Contract and repository integrity gates
+        run: |
+          python -m pytest tests/test_contract.py tests/test_integrity.py -q
       - name: Contract gate
         run: |
           python - <<'PY'
