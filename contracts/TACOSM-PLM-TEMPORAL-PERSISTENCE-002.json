@@ -8,7 +8,13 @@
   "protocol": {
     "train_steps": 300,
     "batch_size": 96,
-    "seeds": [0,1,2,3,4],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
     "evaluation_episodes_per_seed": 600,
     "hidden_dim": 64,
     "entity_count": 3,
@@ -17,8 +23,18 @@
     "q1_entity": 0,
     "q2_entity": 1,
     "scratch_entity": 2,
-    "q1_query": [0,0,1,"xor"],
-    "q2_query": [1,2,3,"xor"],
+    "q1_query": [
+      0,
+      0,
+      1,
+      "xor"
+    ],
+    "q2_query": [
+      1,
+      2,
+      3,
+      "xor"
+    ],
     "operator_dispatch": "fixed xor",
     "model_selection": "none",
     "optimizer": "AdamW",
@@ -38,7 +54,7 @@
   "primary_endpoint": {
     "name": "carry_minus_fresh_post_boundary_q2_accuracy",
     "unit": "episode",
-    "threshold": 0.10,
+    "threshold": 0.1,
     "selection": "none"
   },
   "held_constant": [
@@ -89,10 +105,26 @@
     }
   ],
   "endpoints": [
-    {"name":"carry_minus_fresh_post_boundary_q2_accuracy","role":"primary","primary":true},
-    {"name":"carry_q2_accuracy","role":"secondary","primary":false},
-    {"name":"fresh_q2_accuracy","role":"secondary","primary":false},
-    {"name":"paired_bootstrap_ci95","role":"uncertainty","primary":false}
+    {
+      "name": "carry_minus_fresh_post_boundary_q2_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "carry_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "fresh_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "paired_bootstrap_ci95",
+      "role": "uncertainty",
+      "primary": false
+    }
   ],
   "interpretation_order": [
     "benchmark generator identity",
@@ -103,12 +135,21 @@
     "paired q2 difference and hierarchical uncertainty interval",
     "claim boundary"
   ],
-  "h_levels": [3],
+  "h_levels": [
+    3
+  ],
   "steps": 300,
   "eval_steps": 600,
   "base_e2e008": {
     "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-008",
     "benchmark_generator_version": "integrated-e2e-v7-collision-free-payload-only",
     "benchmark_sha256": "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e"
-  }
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ]
 }
