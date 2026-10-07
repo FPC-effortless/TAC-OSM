@@ -728,10 +728,13 @@ class FullLearnedPLM(nn.Module):
         repair_logits = self.repair(
             post_z, action_prob, outcome
         )
+        action_encoded = F.one_hot(
+            action.long(), num_classes=self.config.action_count
+        ).to(post_z.dtype)
         next_state = self.mtsk.commit_verified(
             forward_output["memory_state"],
             post_z,
-            action_binary,
+            action_encoded,
             outcome,
             verifier_prob,
         )
