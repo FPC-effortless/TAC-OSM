@@ -186,7 +186,7 @@ class SwiLAMTSK(nn.Module):
         self.key_prior = nn.Linear(config.d_model, h * j * d)
         self.query_prior = nn.Linear(config.d_model, h * j * d)
         self.out_proj = nn.Linear(config.d_model, config.d_model)
-        self.write_proj = nn.Linear(config.d_model + 2 + 1, config.d_model)
+        self.write_proj = nn.Linear(config.d_model + config.action_count + 1, config.d_model)
 
         # Fast, medium, slow retention priors. These are the MTSK architecture,
         # not benchmark-specific physical facts.
@@ -317,17 +317,19 @@ class SwiLAMTSK(nn.Module):
     ) -> Tensor:
         """Verified experience write; failed verification gets zero gate."""
         if action.ndim == 1:
-            action = F.one_hot(action.long(), num_classes=2).to(context.dtype)
+            action = F.one_hot(action.long(), num_classes=self.config.action_count).to(context.dtype)
         else:
             action = action.to(context.dtype)
-        if action.shape[-1] != 2:
-            raise ValueError("binary action encoding expected by the state writer")
+        if action.shape[-1] != self.config.action_count:
+            raise ValueError("action encoding width mismatch")
         x = torch.cat(
             [context, action, outcome.float().view(-1, 1)], dim=-1
         )
         write_input = self.write_proj(x)
-        gate = (verifier_probability >= self.config.verifier_threshold).to(
-            context.dtype
+        gate = (
+            verifier_probability
+            if self.training
+            else (verifier_probability >= self.config.verifier_threshold).to(context.dtype)
         )
         _read, new_state, _experts, _resp = self._step(
             write_input,
@@ -355,10 +357,15 @@ class LearnedCDL(nn.Module):
         logits = self.score(torch.cat([q, expert_views], dim=-1)).squeeze(-1)
         k = min(self.config.cdl_top_k, j)
         top_values, top_indices = torch.topk(logits, k=k, dim=1)
-        weights = F.softmax(top_values, dim=1)
+        soft_weights = F.softmax(logits, dim=1)
+        hard_mask = torch.zeros_like(soft_weights).scatter_(1, top_indices, 1.0)
+        hard_weights = hard_mask * soft_weights
+        hard_weights = hard_weights / hard_weights.sum(dim=1, keepdim=True).clamp_min(1e-8)
+        weights_all = hard_weights + soft_weights - soft_weights.detach()
         selected = torch.gather(
             expert_views, 1, top_indices.unsqueeze(-1).expand(-1, -1, d)
         )
+        weights = torch.gather(weights_all, 1, top_indices)
         return selected, weights, logits
 
 
@@ -466,7 +473,7 @@ class LearnedVerifier(nn.Module):
         super().__init__()
         d = config.d_model
         self.net = nn.Sequential(
-            nn.Linear(2 * d + 2, 2 * d),
+            nn.Linear(2 * d + config.action_count + 1, 2 * d),
             nn.GELU(),
             nn.Linear(2 * d, d),
             nn.GELU(),
@@ -497,7 +504,7 @@ class LearnedRepair(nn.Module):
         super().__init__()
         d = config.d_model
         self.net = nn.Sequential(
-            nn.Linear(d + 2, d),
+            nn.Linear(d + config.action_count + 1, d),
             nn.GELU(),
             nn.Linear(d, config.action_count),
         )
@@ -552,6 +559,11 @@ class FullLearnedPLM(nn.Module):
             nn.GELU(),
             nn.Linear(2 * d, config.action_count),
         )
+        self.plan_head = nn.Sequential(
+            nn.Linear(3 * d, 2 * d),
+            nn.GELU(),
+            nn.Linear(2 * d, 1),
+        )
         self.physics_latent = nn.Sequential(
             nn.Linear(d, d),
             nn.Tanh(),
@@ -590,9 +602,27 @@ class FullLearnedPLM(nn.Module):
         casm_state, halt_probs, operator_probs, traces = self.casm(
             query, selected, weights
         )
-        action_logits = self.action_head(
+        base_action_logits = self.action_head(
             torch.cat([casm_state, query], dim=-1)
         )
+        action_ids = torch.arange(
+            self.config.action_count, device=query.device, dtype=torch.long
+        )
+        plan_state = query.unsqueeze(1).expand(-1, self.config.action_count, -1).reshape(-1, query.shape[-1])
+        plan_actions = action_ids.unsqueeze(0).expand(query.shape[0], -1).reshape(-1)
+        zero_outcome = torch.zeros(plan_actions.shape[0], device=query.device)
+        predicted_next = self.osm.predict(plan_state, plan_actions, zero_outcome).view(
+            query.shape[0], self.config.action_count, -1
+        )
+        goal_vec = self.goal(query)
+        goal_expand = goal_vec.unsqueeze(1).expand(-1, self.config.action_count, -1)
+        planner_input = torch.cat([
+            casm_state.unsqueeze(1).expand(-1, self.config.action_count, -1),
+            predicted_next,
+            goal_expand,
+        ], dim=-1)
+        planning_logits = self.plan_head(planner_input).squeeze(-1)
+        action_logits = base_action_logits + planning_logits
         action_prob = F.softmax(action_logits, dim=-1)
         return {
             "z_seq": z_seq,
@@ -630,16 +660,12 @@ class FullLearnedPLM(nn.Module):
         action_prob = F.softmax(forward_output["action_logits"], dim=-1)
         # The verifier receives only post-action evidence and the proposed
         # action. It does not receive the benchmark target.
-        action_binary = torch.stack(
-            [1.0 - action_prob.max(dim=-1).values, action_prob.max(dim=-1).values],
-            dim=-1,
-        )
         verifier_logit = self.verifier(
-            forward_output["query"], post_z, action_binary, outcome
+            forward_output["query"], post_z, action_prob, outcome
         )
         verifier_prob = verifier_logit.sigmoid()
         repair_logits = self.repair(
-            post_z, action_binary, outcome
+            post_z, action_prob, outcome
         )
         next_state = self.mtsk.commit_verified(
             forward_output["memory_state"],
