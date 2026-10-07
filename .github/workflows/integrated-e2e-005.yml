@@ -1,0 +1,120 @@
+name: Research PLM integrated multimodal E2E 005
+
+on:
+  push:
+    branches:
+      - research/plm-integrated-e2e-005-functional
+      - research/plm-e2e-005-confirmatory-2026-10-06
+    paths:
+      - contracts/TACOSM-PLM-INTEGRATED-E2E-005.json
+      - src/tac_osm/integrated_e2e_005.py
+      - src/tac_osm/integrated_e2e_005_benchmark.py
+      - scripts/run_integrated_e2e_005.py
+      - scripts/validate_integrated_e2e_005.py
+      - tests/test_integrated_e2e_005.py
+      - tests/test_workflow_local_script_references.py
+      - docs/AUDIT-TACOSM-PLM-INTEGRATED-E2E-005.md
+      - docs/TACOSM-BASELINE-001.md
+      - docs/BENCHMARK_INTEGRITY.md
+      - .github/workflows/integrated-e2e-005.yml
+  pull_request:
+    branches:
+      - master
+    paths:
+      - contracts/TACOSM-PLM-INTEGRATED-E2E-005.json
+      - src/tac_osm/integrated_e2e_005.py
+      - src/tac_osm/integrated_e2e_005_benchmark.py
+      - scripts/run_integrated_e2e_005.py
+      - scripts/validate_integrated_e2e_005.py
+      - tests/test_integrated_e2e_005.py
+      - tests/test_workflow_local_script_references.py
+      - docs/AUDIT-TACOSM-PLM-INTEGRATED-E2E-005.md
+      - .github/workflows/integrated-e2e-005.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: E2E-005 smoke and integrity preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest numpy==2.3.3 torch
+          python -m pip install --quiet "ruff==0.13.0"
+      - name: Static gate
+        run: ruff check --select F821 src/tac_osm/integrated_e2e_005.py src/tac_osm/integrated_e2e_005_benchmark.py scripts/run_integrated_e2e_005.py scripts/validate_integrated_e2e_005.py
+      - name: Workflow reference gate
+        run: python -m pytest tests/test_workflow_local_script_references.py -q
+      - name: Repository test suite
+        run: python -m pytest tests/ -q
+      - name: E2E-005 smoke
+        run: python scripts/run_integrated_e2e_005.py --smoke
+      - name: Upload smoke
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-INTEGRATED-E2E-005-smoke
+          path: artifacts/TACOSM-PLM-INTEGRATED-E2E-005.json
+          if-no-files-found: ignore
+
+  full:
+    name: E2E-005 confirmatory functional measurement
+    needs: smoke
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-plm-integrated-e2e-005-full]')) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest numpy==2.3.3 torch
+          python -m pip install --quiet "ruff==0.13.0"
+      - name: Static gate
+        run: ruff check --select F821 src/tac_osm/integrated_e2e_005.py src/tac_osm/integrated_e2e_005_benchmark.py scripts/run_integrated_e2e_005.py scripts/validate_integrated_e2e_005.py
+      - name: Workflow reference gate
+        run: python -m pytest tests/test_workflow_local_script_references.py -q
+      - name: Repository test suite
+        run: python -m pytest tests/ -q
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-PLM-INTEGRATED-E2E-005")
+          assert c.check_consistency() == []
+          c.require_levels((3,))
+          c.require_seeds((0,1,2,3,4))
+          c.require_steps(300)
+          c.require_eval_steps(400)
+          c.require_arms(["normal","no_memory","shuffle_image","text_only","image_only","audio_only"])
+          PY
+      - name: Full measurement
+        run: python scripts/run_integrated_e2e_005.py
+      - name: Independent result validation
+        run: python scripts/validate_integrated_e2e_005.py artifacts/TACOSM-PLM-INTEGRATED-E2E-005.json
+      - name: Upload result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-INTEGRATED-E2E-005
+          path: artifacts/TACOSM-PLM-INTEGRATED-E2E-005.json
+          if-no-files-found: error
+
+# Legacy workflow lanes with deleted runners are quarantined by the repository integrity test.
+# Authorization recorded only after premeasurement integrity corrections, contract amendment A1, and passing smoke gates.
+# Final confirmatory authorization: [run-plm-integrated-e2e-005-full]
+# confirmatory authorization: A2 recorded before measurement; code/data/contract protocol otherwise unchanged
+# [run-plm-integrated-e2e-005-final-marker]
+# [run-plm-integrated-e2e-005-full]

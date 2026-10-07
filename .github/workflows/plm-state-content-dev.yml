@@ -1,0 +1,50 @@
+name: Research PLM state-content write development
+
+on:
+  push:
+    branches:
+      - research/plm-state-content-dev-2026-10-07
+    paths:
+      - contracts/TACOSM-PLM-STATE-CONTENT-DEV-001.json
+      - src/tac_osm/integrated_e2e_005.py
+      - src/tac_osm/integrated_e2e_006_benchmark.py
+      - scripts/run_integrated_e2e_005.py
+      - scripts/run_plm_state_content_dev.py
+      - tests/test_integrated_e2e_005.py
+      - tests/test_integrated_e2e_006.py
+      - .github/workflows/plm-state-content-dev.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  development:
+    name: Paired state-content write development benchmark
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest numpy==2.3.3 torch
+          python -m pip install --quiet "ruff==0.13.0"
+      - name: Static gate
+        run: |
+          ruff check --select F821 src/tac_osm/integrated_e2e_005.py             src/tac_osm/integrated_e2e_006_benchmark.py             scripts/run_integrated_e2e_005.py             scripts/run_plm_state_content_dev.py
+      - name: Focused integrity tests
+        run: |
+          python -m pytest tests/test_integrated_e2e_005.py tests/test_integrated_e2e_006.py -q
+      - name: State-content development benchmark
+        run: python scripts/run_plm_state_content_dev.py
+      - name: Upload development artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-STATE-CONTENT-DEV-001
+          path: artifacts/TACOSM-PLM-STATE-CONTENT-DEV-001.json
+          if-no-files-found: error

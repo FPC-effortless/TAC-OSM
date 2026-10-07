@@ -1,0 +1,307 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-CAPACITY-DEV-001",
+  "version": 1,
+  "status": "development",
+  "title": "Paired development test of integrated PLM capacity expansion",
+  "purpose": "Select a working-capacity configuration using only a held-in development split. The sealed E2E-005 held-out compositions remain permanently excluded from training and development evaluation.",
+  "selection_rule": "Candidate capacity may be selected using mean held-in development q2 accuracy; no E2E-005 result, held-out episode, or future confirmatory result may be used.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "eval_episodes_per_seed": 200,
+    "baseline_hidden_dim": 40,
+    "candidate_hidden_dim": 64,
+    "entity_count": 16,
+    "latent_bits": 12
+  },
+  "sealed_exclusions": [
+    [
+      "xor",
+      0,
+      4
+    ],
+    [
+      "xor",
+      5,
+      8
+    ],
+    [
+      "and",
+      1,
+      9
+    ],
+    [
+      "and",
+      2,
+      6
+    ],
+    [
+      "or",
+      7,
+      10
+    ],
+    [
+      "or",
+      3,
+      11
+    ],
+    [
+      "xnor",
+      4,
+      9
+    ],
+    [
+      "xnor",
+      6,
+      11
+    ]
+  ],
+  "dev_compositions": [
+    [
+      "xor",
+      0,
+      5
+    ],
+    [
+      "xor",
+      0,
+      6
+    ],
+    [
+      "xor",
+      0,
+      7
+    ],
+    [
+      "xor",
+      0,
+      8
+    ],
+    [
+      "xor",
+      0,
+      9
+    ],
+    [
+      "xor",
+      0,
+      10
+    ],
+    [
+      "xor",
+      0,
+      11
+    ],
+    [
+      "xor",
+      1,
+      4
+    ],
+    [
+      "and",
+      0,
+      4
+    ],
+    [
+      "and",
+      0,
+      5
+    ],
+    [
+      "and",
+      0,
+      6
+    ],
+    [
+      "and",
+      0,
+      7
+    ],
+    [
+      "and",
+      0,
+      8
+    ],
+    [
+      "and",
+      0,
+      9
+    ],
+    [
+      "and",
+      0,
+      10
+    ],
+    [
+      "and",
+      0,
+      11
+    ],
+    [
+      "or",
+      0,
+      4
+    ],
+    [
+      "or",
+      0,
+      5
+    ],
+    [
+      "or",
+      0,
+      6
+    ],
+    [
+      "or",
+      0,
+      7
+    ],
+    [
+      "or",
+      0,
+      8
+    ],
+    [
+      "or",
+      0,
+      9
+    ],
+    [
+      "or",
+      0,
+      10
+    ],
+    [
+      "or",
+      0,
+      11
+    ],
+    [
+      "xnor",
+      0,
+      4
+    ],
+    [
+      "xnor",
+      0,
+      5
+    ],
+    [
+      "xnor",
+      0,
+      6
+    ],
+    [
+      "xnor",
+      0,
+      7
+    ],
+    [
+      "xnor",
+      0,
+      8
+    ],
+    [
+      "xnor",
+      0,
+      9
+    ],
+    [
+      "xnor",
+      0,
+      10
+    ],
+    [
+      "xnor",
+      0,
+      11
+    ]
+  ],
+  "integrity": "All development evaluation episodes are generated after training from a separate RNG namespace; exact episode keys must have zero overlap with training; action labels are outside model.query; no auxiliary payload-bit labels are supplied.",
+  "question": "Does hidden_dim=64 improve the selected integrated PLM configuration on a fixed development split relative to hidden_dim=40 under the same training episodes, optimizer and evaluation episodes?",
+  "hypothesis": "A capacity-increased hidden_dim=64 model will improve development q2 accuracy relative to hidden_dim=40 without using the sealed E2E-005 held-out compositions.",
+  "arms": [
+    {
+      "name": "hidden40",
+      "intervention": "FunctionalConfig(hidden_dim=40)",
+      "acts_on": "model capacity"
+    },
+    {
+      "name": "hidden64",
+      "intervention": "FunctionalConfig(hidden_dim=64)",
+      "acts_on": "model capacity"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "development_q2_accuracy",
+      "role": "primary",
+      "primary": true,
+      "description": "Mean q2 accuracy on the registered development composition set."
+    },
+    {
+      "name": "capacity_gain",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "per_operator_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "classifier_decision_integrity",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "training_development_overlap",
+      "role": "leakage gate",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "hidden64 mean development q2 accuracy >= 0.80 and hidden64 mean exceeds hidden40 mean",
+      "licenses": "hidden_dim=64 is the selected capacity for a subsequent confirmatory experiment",
+      "does_not_license": "any claim on the sealed E2E-005 test set, real-world multimodal competence, or architecture superiority in general"
+    },
+    {
+      "condition": "hidden64 does not improve the primary endpoint",
+      "licenses": "do not select hidden_dim=64 on this development criterion",
+      "does_not_license": "architecture impossibility"
+    }
+  ],
+  "interpretation_order": [
+    "split integrity and sealed-test exclusion",
+    "training/development overlap",
+    "classifier decision integrity",
+    "primary development q2 accuracy",
+    "paired capacity gain",
+    "per-operator diagnostics",
+    "selection boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 200,
+  "held_constant": [
+    "same registered development composition set",
+    "same five seeds",
+    "same 300-step training budget",
+    "same batch size and optimizer",
+    "same learning rate and weight decay",
+    "same evaluation episodes within each seed for both capacity arms",
+    "sealed E2E-005 held-out compositions never used for training or selection",
+    "no E2E-005 measured outcome used for selection"
+  ]
+}

@@ -1,0 +1,67 @@
+name: Research PLM integrated multimodal E2E 008
+
+on:
+  push:
+    branches:
+      - research/plm-e2e-008-clean-multimodal-2026-10-07
+    paths:
+      - contracts/TACOSM-PLM-INTEGRATED-E2E-008.json
+      - src/tac_osm/integrated_e2e_005.py
+      - src/tac_osm/integrated_e2e_008_benchmark.py
+      - scripts/run_integrated_e2e_008.py
+      - scripts/validate_integrated_e2e_008.py
+      - tests/test_integrated_e2e_008.py
+      - .github/workflows/integrated-e2e-008.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  confirmatory:
+    name: E2E-008 clean multimodal confirmatory measurement
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install dependencies
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest numpy==2.3.3 torch
+          python -m pip install --quiet "ruff==0.13.0"
+      - name: Static gate
+        run: |
+          ruff check --select F821             src/tac_osm/integrated_e2e_005.py             src/tac_osm/integrated_e2e_008_benchmark.py             scripts/run_integrated_e2e_008.py             scripts/validate_integrated_e2e_008.py             tests/test_integrated_e2e_008.py
+      - name: Integrity tests
+        run: |
+          python -m pytest tests/test_integrated_e2e_008.py tests/test_integrated_e2e_006.py -q
+      - name: Contract and repository integrity gates
+        run: |
+          python -m pytest tests/test_contract.py tests/test_integrity.py -q
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open("contracts/TACOSM-PLM-INTEGRATED-E2E-008.json"))
+          assert x["status"]=="pre-registered"
+          assert x["protocol"]["hidden_dim"]==64
+          assert x["protocol"]["state_write_mode"]=="residual_linear"
+          assert x["protocol"]["entity_side_channel"] is False
+          assert len(x["heldout"])==12
+          PY
+      - name: Smoke
+        run: python scripts/run_integrated_e2e_008.py --smoke
+      - name: Confirmatory measurement
+        run: python scripts/run_integrated_e2e_008.py
+      - name: Independent result validation
+        run: python scripts/validate_integrated_e2e_008.py artifacts/TACOSM-PLM-INTEGRATED-E2E-008.json
+      - name: Upload scientific artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-INTEGRATED-E2E-008
+          path: artifacts/TACOSM-PLM-INTEGRATED-E2E-008.json
+          if-no-files-found: error

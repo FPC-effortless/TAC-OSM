@@ -1,0 +1,470 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-006",
+  "version": 2,
+  "status": "pre-registered",
+  "title": "Fresh confirmatory end-to-end multimodal persistent computation with selected capacity",
+  "question": "Can the selected integrated PLM configuration learn a fresh held-out cross-modal Boolean task from multimodal observations alone, carrying information through explicit persistent entity-addressed state into a later query and executing the requested computation end to end?",
+  "hypothesis": "The capacity-selected integrated PLM configuration (hidden_dim=64) will solve a fresh held-out multimodal persistent-computation benchmark above the registered 0.80 q2 threshold without auxiliary payload or entity supervision.",
+  "primary_endpoint": {
+    "name": "heldout_q2_accuracy_all_modalities",
+    "unit": "episode",
+    "threshold": 0.8,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "hidden_dim": 64,
+    "entity_count": 16,
+    "latent_bits": 12,
+    "observation_entities_per_episode": 3,
+    "evaluation_episodes_per_seed": 400,
+    "observation_noise": 0.03,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "query_count": 2,
+    "operator_dispatch": "fixed_query_conditioned",
+    "representation_auxiliary_supervision": false,
+    "model_selection": "none"
+  },
+  "frozen_training_exclusions": {
+    "sealed_e2e005": [
+      [
+        "xor",
+        0,
+        4
+      ],
+      [
+        "xor",
+        5,
+        8
+      ],
+      [
+        "and",
+        1,
+        9
+      ],
+      [
+        "and",
+        2,
+        6
+      ],
+      [
+        "or",
+        7,
+        10
+      ],
+      [
+        "or",
+        3,
+        11
+      ],
+      [
+        "xnor",
+        4,
+        9
+      ],
+      [
+        "xnor",
+        6,
+        11
+      ]
+    ],
+    "development": [
+      [
+        "xor",
+        0,
+        5
+      ],
+      [
+        "xor",
+        0,
+        6
+      ],
+      [
+        "xor",
+        0,
+        7
+      ],
+      [
+        "xor",
+        0,
+        8
+      ],
+      [
+        "xor",
+        0,
+        9
+      ],
+      [
+        "xor",
+        0,
+        10
+      ],
+      [
+        "xor",
+        0,
+        11
+      ],
+      [
+        "xor",
+        1,
+        4
+      ],
+      [
+        "and",
+        0,
+        4
+      ],
+      [
+        "and",
+        0,
+        5
+      ],
+      [
+        "and",
+        0,
+        6
+      ],
+      [
+        "and",
+        0,
+        7
+      ],
+      [
+        "and",
+        0,
+        8
+      ],
+      [
+        "and",
+        0,
+        9
+      ],
+      [
+        "and",
+        0,
+        10
+      ],
+      [
+        "and",
+        0,
+        11
+      ],
+      [
+        "or",
+        0,
+        4
+      ],
+      [
+        "or",
+        0,
+        5
+      ],
+      [
+        "or",
+        0,
+        6
+      ],
+      [
+        "or",
+        0,
+        7
+      ],
+      [
+        "or",
+        0,
+        8
+      ],
+      [
+        "or",
+        0,
+        9
+      ],
+      [
+        "or",
+        0,
+        10
+      ],
+      [
+        "or",
+        0,
+        11
+      ],
+      [
+        "xnor",
+        0,
+        4
+      ],
+      [
+        "xnor",
+        0,
+        5
+      ],
+      [
+        "xnor",
+        0,
+        6
+      ],
+      [
+        "xnor",
+        0,
+        7
+      ],
+      [
+        "xnor",
+        0,
+        8
+      ],
+      [
+        "xnor",
+        0,
+        9
+      ],
+      [
+        "xnor",
+        0,
+        10
+      ],
+      [
+        "xnor",
+        0,
+        11
+      ]
+    ]
+  },
+  "heldout": [
+    [
+      "xor",
+      1,
+      5
+    ],
+    [
+      "xor",
+      2,
+      9
+    ],
+    [
+      "and",
+      4,
+      10
+    ],
+    [
+      "and",
+      3,
+      8
+    ],
+    [
+      "or",
+      1,
+      7
+    ],
+    [
+      "or",
+      5,
+      10
+    ],
+    [
+      "xnor",
+      2,
+      7
+    ],
+    [
+      "xnor",
+      6,
+      9
+    ]
+  ],
+  "controls": [
+    "normal",
+    "no_memory",
+    "shuffle_image",
+    "text_only",
+    "image_only",
+    "audio_only"
+  ],
+  "information_flow": {
+    "pre_action": "text/image/audio observations -> encoders -> shared representation -> explicit persistent entity write -> explicit entity read -> fixed query-conditioned CASM -> action",
+    "post_action": "predicted action -> synthetic environment outcome -> verifier -> outcome-gated state update",
+    "forbidden_before_action": [
+      "answer",
+      "environment_outcome",
+      "verifier_target",
+      "payload_labels",
+      "evaluation_correctness"
+    ],
+    "allowed_after_action": [
+      "environment_outcome",
+      "verifier_supervision"
+    ]
+  },
+  "leakage_rules": [
+    "E2E-005 heldout compositions and development compositions are permanently excluded from E2E-006 training.",
+    "E2E-006 training compositions are disjoint from E2E-006 heldout compositions.",
+    "Evaluation is generated after all training steps using a separate RNG namespace.",
+    "Training/evaluation semantic episode keys must have zero overlap for every seed.",
+    "Query API contains no answer, target, outcome, reward, payload labels, or verifier targets.",
+    "No payload-bit or entity auxiliary representation supervision is supplied.",
+    "Controls reuse the exact same evaluation episode objects within each seed.",
+    "Classifier logits must preserve the action >= 0.5 decision exactly."
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass, mean normal heldout q2 accuracy >= 0.80, and every seed >= 0.40",
+      "licenses": "bounded confirmatory evidence that the selected synthetic multimodal persistent-computation chain functions end to end on a fresh heldout composition set",
+      "does_not_license": "real-world multimodal understanding, semantic memory, learned operator discovery, scaling laws, AGI, or hardware claims"
+    },
+    {
+      "condition": "integrity passes but primary threshold fails",
+      "licenses": "selected configuration does not meet the registered synthetic capability criterion",
+      "does_not_license": "architecture impossibility"
+    }
+  ],
+  "statistics": {
+    "seed_bootstrap_samples": 5000,
+    "seed_bootstrap_seed": 20261006,
+    "confidence_level": 0.95,
+    "primary_aggregation": "mean q2 per seed followed by seed-level bootstrap"
+  },
+  "provenance": {
+    "predecessors": [
+      "TACOSM-PLM-INTEGRATED-E2E-005",
+      "TACOSM-PLM-INTEGRATED-E2E-CAPACITY-DEV-001"
+    ],
+    "test_set_use": "E2E-005 heldout outcomes are excluded from all E2E-006 training and selection; capacity choice was made on registered development data only."
+  },
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "full multimodal observation and persistent state",
+      "acts_on": "integrated path"
+    },
+    {
+      "name": "no_memory",
+      "intervention": "zero persistent state immediately before q1",
+      "acts_on": "persistent information"
+    },
+    {
+      "name": "shuffle_image",
+      "intervention": "permute image observations across the three observed entities",
+      "acts_on": "cross-modal alignment"
+    },
+    {
+      "name": "text_only",
+      "intervention": "replace image and audio observations with constants",
+      "acts_on": "text modality sufficiency control"
+    },
+    {
+      "name": "image_only",
+      "intervention": "replace text and audio observations with constants",
+      "acts_on": "image modality sufficiency control"
+    },
+    {
+      "name": "audio_only",
+      "intervention": "replace text and image observations with constants",
+      "acts_on": "audio modality sufficiency control"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_all_modalities",
+      "role": "primary",
+      "primary": true,
+      "description": "Mean q2 accuracy on fresh held-out cross-modal compositions."
+    },
+    {
+      "name": "heldout_q1_accuracy_all_modalities",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "memory_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "alignment_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "text_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "image_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "audio_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verifier_q1_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "gradient_surface_coverage",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "oracle_q2_accuracy",
+      "role": "benchmark validity gate",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "benchmark integrity and oracle validity",
+    "information-flow and target-leakage audit",
+    "train/evaluation disjointness and provenance fingerprints",
+    "gradient-surface and classifier-decision integrity",
+    "primary heldout q2 accuracy",
+    "memory and modality controls",
+    "verifier behavior",
+    "claim boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "held_constant": [
+    "same selected hidden_dim=64 configuration across all seeds",
+    "same five seeds and 300-step schedule",
+    "same optimizer, learning rate and weight decay",
+    "same fresh E2E-006 held-out composition set",
+    "sealed E2E-005 held-out compositions excluded from training",
+    "registered development compositions excluded from training",
+    "evaluation generated only after training",
+    "no evaluation outcome used for model selection",
+    "controls reuse exact same evaluation episode objects",
+    "no payload-bit or entity auxiliary representation supervision",
+    "fixed public query-conditioned operator dispatch",
+    "explicit deterministic entity addressing is unchanged"
+  ],
+  "amendments": [
+    {
+      "id": "A1-schema",
+      "applies_to": "machine-readable contract schema",
+      "old_definition": "The initial pre-registration omitted schema fields required by the repository contract validator: arms, endpoints, interpretation_order, h_levels, steps and eval_steps.",
+      "new_definition": "The contract explicitly serializes the already-fixed arms, endpoints, interpretation order, H level, training steps and evaluation steps.",
+      "rationale": "Make the existing pre-registered design machine-checkable without changing the scientific question, threshold, data split, seeds, model, or measurement procedure.",
+      "discovered": "Repository contract validation after the successful E2E-006 measurement.",
+      "affected": "serialization/schema only; this amendment does not authorize any change to the measured benchmark or its outcome",
+      "no_result_under_previous_version": "The measured E2E-006 run was performed against the semantically complete but schema-incomplete contract; a post-amendment replication is required before treating the corrected contract as the final result record."
+    }
+  ]
+}

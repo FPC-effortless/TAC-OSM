@@ -1,0 +1,508 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-007",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Fresh confirmatory integrated multimodal PLM with selected residual state write",
+  "question": "Can the selected hidden_dim=64 integrated PLM with the residual-linear persistent-state write interface solve a fresh held-out cross-modal Boolean benchmark end to end without auxiliary payload or entity supervision?",
+  "hypothesis": "The residual-linear state-write configuration selected on the registered development split will meet or exceed the 0.80 held-out q2 criterion on a fresh composition set.",
+  "primary_endpoint": {
+    "name": "heldout_q2_accuracy_all_modalities",
+    "unit": "episode",
+    "threshold": 0.8,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "hidden_dim": 64,
+    "state_write_mode": "residual_linear",
+    "entity_count": 16,
+    "latent_bits": 12,
+    "observation_entities_per_episode": 3,
+    "evaluation_episodes_per_seed": 400,
+    "observation_noise": 0.03,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "query_count": 2,
+    "operator_dispatch": "fixed_query_conditioned",
+    "representation_auxiliary_supervision": false,
+    "model_selection": "none"
+  },
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "full multimodal observation, persistent state, and selected residual-linear state write",
+      "acts_on": "integrated path"
+    },
+    {
+      "name": "no_memory",
+      "intervention": "zero persistent state immediately before q1",
+      "acts_on": "persistent information"
+    },
+    {
+      "name": "shuffle_image",
+      "intervention": "permute image observations across observed entities",
+      "acts_on": "cross-modal alignment"
+    },
+    {
+      "name": "text_only",
+      "intervention": "replace image and audio with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "image_only",
+      "intervention": "replace text and audio with constants",
+      "acts_on": "modality"
+    },
+    {
+      "name": "audio_only",
+      "intervention": "replace text and image with constants",
+      "acts_on": "modality"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy_all_modalities",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "heldout_q1_accuracy_all_modalities",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "memory_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "alignment_drop",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "text_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "image_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "audio_only_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verifier_q1_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "gradient_surface_coverage",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "oracle_q2_accuracy",
+      "role": "benchmark validity gate",
+      "primary": false
+    },
+    {
+      "name": "classifier_decision_integrity",
+      "role": "integrity gate",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass, mean normal heldout q2 accuracy >= 0.80, and every seed >= 0.40",
+      "licenses": "bounded confirmatory evidence that the selected residual-linear integrated PLM functions end to end on the fresh synthetic benchmark",
+      "does_not_license": "real-world multimodal understanding, semantic memory, learned addressing, learned operator discovery, scaling or efficiency"
+    },
+    {
+      "condition": "integrity passes but the primary threshold fails",
+      "licenses": "the selected residual-linear configuration does not meet the registered synthetic capability criterion",
+      "does_not_license": "architecture impossibility"
+    }
+  ],
+  "interpretation_order": [
+    "benchmark integrity and oracle validity",
+    "information-flow and target-leakage audit",
+    "train/evaluation disjointness and provenance fingerprints",
+    "gradient and classifier-decision integrity",
+    "primary heldout q2 accuracy",
+    "memory and modality controls",
+    "verifier behavior",
+    "claim boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 400,
+  "held_constant": [
+    "same five seeds and 300-step budget",
+    "same optimizer and learning rate",
+    "hidden_dim=64 selected before the E2E-007 test",
+    "residual-linear state write selected only from the registered development split",
+    "sealed E2E-005, E2E-006, and E2E-007 heldout compositions excluded from training",
+    "registered development compositions excluded from training",
+    "no evaluation outcome used for model selection",
+    "no payload-bit or entity auxiliary supervision",
+    "controls reuse exact same evaluation episode objects",
+    "fixed public operator dispatch and deterministic entity IDs remain scaffolds"
+  ],
+  "frozen_exclusions": {
+    "sealed_e2e005": [
+      [
+        "xor",
+        0,
+        4
+      ],
+      [
+        "xor",
+        5,
+        8
+      ],
+      [
+        "and",
+        1,
+        9
+      ],
+      [
+        "and",
+        2,
+        6
+      ],
+      [
+        "or",
+        7,
+        10
+      ],
+      [
+        "or",
+        3,
+        11
+      ],
+      [
+        "xnor",
+        4,
+        9
+      ],
+      [
+        "xnor",
+        6,
+        11
+      ]
+    ],
+    "development": [
+      [
+        "xor",
+        0,
+        5
+      ],
+      [
+        "xor",
+        0,
+        6
+      ],
+      [
+        "xor",
+        0,
+        7
+      ],
+      [
+        "xor",
+        0,
+        8
+      ],
+      [
+        "xor",
+        0,
+        9
+      ],
+      [
+        "xor",
+        0,
+        10
+      ],
+      [
+        "xor",
+        0,
+        11
+      ],
+      [
+        "xor",
+        1,
+        4
+      ],
+      [
+        "and",
+        0,
+        4
+      ],
+      [
+        "and",
+        0,
+        5
+      ],
+      [
+        "and",
+        0,
+        6
+      ],
+      [
+        "and",
+        0,
+        7
+      ],
+      [
+        "and",
+        0,
+        8
+      ],
+      [
+        "and",
+        0,
+        9
+      ],
+      [
+        "and",
+        0,
+        10
+      ],
+      [
+        "and",
+        0,
+        11
+      ],
+      [
+        "or",
+        0,
+        4
+      ],
+      [
+        "or",
+        0,
+        5
+      ],
+      [
+        "or",
+        0,
+        6
+      ],
+      [
+        "or",
+        0,
+        7
+      ],
+      [
+        "or",
+        0,
+        8
+      ],
+      [
+        "or",
+        0,
+        9
+      ],
+      [
+        "or",
+        0,
+        10
+      ],
+      [
+        "or",
+        0,
+        11
+      ],
+      [
+        "xnor",
+        0,
+        4
+      ],
+      [
+        "xnor",
+        0,
+        5
+      ],
+      [
+        "xnor",
+        0,
+        6
+      ],
+      [
+        "xnor",
+        0,
+        7
+      ],
+      [
+        "xnor",
+        0,
+        8
+      ],
+      [
+        "xnor",
+        0,
+        9
+      ],
+      [
+        "xnor",
+        0,
+        10
+      ],
+      [
+        "xnor",
+        0,
+        11
+      ]
+    ],
+    "e2e006": [
+      [
+        "xor",
+        1,
+        5
+      ],
+      [
+        "xor",
+        2,
+        9
+      ],
+      [
+        "and",
+        4,
+        10
+      ],
+      [
+        "and",
+        3,
+        8
+      ],
+      [
+        "or",
+        1,
+        7
+      ],
+      [
+        "or",
+        5,
+        10
+      ],
+      [
+        "xnor",
+        2,
+        7
+      ],
+      [
+        "xnor",
+        6,
+        9
+      ]
+    ],
+    "e2e007": [
+      [
+        "xor",
+        1,
+        6
+      ],
+      [
+        "xor",
+        2,
+        10
+      ],
+      [
+        "and",
+        4,
+        11
+      ],
+      [
+        "and",
+        5,
+        9
+      ],
+      [
+        "or",
+        2,
+        8
+      ],
+      [
+        "or",
+        6,
+        10
+      ],
+      [
+        "xnor",
+        1,
+        10
+      ],
+      [
+        "xnor",
+        3,
+        9
+      ]
+    ]
+  },
+  "leakage_rules": [
+    "all prior sealed and development compositions are excluded from E2E-007 training",
+    "E2E-007 training and heldout compositions are disjoint",
+    "evaluation episodes are generated only after training from a separate RNG namespace",
+    "training/evaluation semantic episode-key overlap must be zero",
+    "query API contains no answer, outcome, reward, or payload labels",
+    "no auxiliary payload or entity supervision",
+    "classifier argmax must exactly agree with action >= 0.5"
+  ],
+  "heldout": [
+    [
+      "xor",
+      1,
+      6
+    ],
+    [
+      "xor",
+      2,
+      10
+    ],
+    [
+      "and",
+      4,
+      11
+    ],
+    [
+      "and",
+      5,
+      9
+    ],
+    [
+      "or",
+      2,
+      8
+    ],
+    [
+      "or",
+      6,
+      10
+    ],
+    [
+      "xnor",
+      1,
+      10
+    ],
+    [
+      "xnor",
+      3,
+      9
+    ]
+  ]
+}
