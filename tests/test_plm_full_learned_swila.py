@@ -77,3 +77,15 @@ def test_history_pair_has_identical_current_surface_but_different_target():
     assert torch.equal(left.image[-1], right.image[-1])
     assert torch.equal(left.audio[-1], right.audio[-1])
     assert left.action != right.action
+
+
+
+def test_verifier_contract_uses_continuous_outcome_not_binary_success():
+    from tac_osm.plm_full_learned import FullPLMConfig, LearnedVerifier
+
+    cfg = FullPLMConfig(d_model=48, num_heads=4, action_count=5)
+    verifier = LearnedVerifier(cfg)
+    expected_in = 2 * cfg.d_model + cfg.action_count + 1
+    first = verifier.net[0]
+    assert first.in_features == expected_in
+    assert first.in_features != 2 * cfg.d_model + 2
