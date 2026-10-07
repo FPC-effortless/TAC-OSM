@@ -770,6 +770,28 @@ This does not establish that persistent memory is useless in general, nor does i
 **NEXT TEST:** remove the fixed Boolean/CASM and explicit addressing scaffolds while preserving the same strict split, provenance, and causal-control discipline.
 
 
+## C19 — Removing explicit operator-ID dispatch yields partial latent operator induction on E2E-008
+
+> The PLM can infer a hidden Boolean operator from an order-randomized four-row truth table and apply it to the held-out target without receiving an operator ID in the query, but the preregistered all-seed robustness criterion is not met.
+
+**STATUS: PARTIALLY SUPPORTED, bounded**
+
+**TYPE:** mechanism · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-LATENT-OPERATOR-001`, workflow run **37594557416**, artifact **11470476991**.
+
+The hidden operator was never supplied to the model. Held-out q2 accuracy was **0.9293 mean** with composition-bootstrap 95% interval **[0.8817, 0.9747]**. Operator-selection accuracy was **0.9500 mean** with composition-bootstrap interval **[0.9000, 1.0000]**.
+
+The preregistered criterion required operator-selection accuracy of at least **0.90 mean and 0.80 on every seed**. The criterion therefore failed because seed 3 reached **0.75** operator selection and **0.7117** q2 accuracy. Seed 3 selected the wrong operator on all three XNOR held-out compositions, while seeds 0, 1, 2 and 4 each reached 1.00 operator selection.
+
+The diagnostic structure is informative: oracle-operator q2 was **0.9740**, shuffled-support q2 was **0.6793**, and no-memory q2 was **0.6250**. This indicates that the support context is functionally used and that the seed-3 loss is primarily an operator-selection failure rather than a wholesale failure of state/content computation.
+
+This establishes a **partial scaffold-removal result**, not robust learned operator discovery. The execution library is still a fixed Boolean primitive set, and explicit entity addressing remains in place.
+
+**BLOCKER:** establish operator-induction robustness without changing the preregistered outcome after inspection of seed 3. A new contract must define any added demonstrations, losses, or training changes before measurement.
+
+---
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather

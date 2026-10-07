@@ -325,3 +325,16 @@ than changing addressing again.
 | q1 prediction/action/outcome equality and recomputed-state identity both pass | L3 | intervention gate | the reset intervention changed the carry variable without changing the q1 path or the pre-q1 state | complete causal isolation of every implementation detail | the experiment isolates the outcome-gated cross-boundary carry within this architecture |
 | Independent validator passes; artifact 11469064681; run 37593010244 | L3 | provenance/validity | the reported negative attribution is a measured, inspectable result | new generalization evidence | the branch was scientifically file-equivalent to the clean master-lineage PR; no model selection was performed |
 
+
+
+---
+
+## Latent operator induction evidence
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Hidden operator removed from model input; q2 mean = 0.9293 | L3 | scaffold-removal | the integrated state/CASM path can operate without explicit operator-ID dispatch on the registered synthetic task | robust learned operator discovery | seed 3 q2 = 0.7117 and operator selection = 0.75 |
+| Operator-selection mean = 0.9500; composition-bootstrap 95% CI [0.9000, 1.0000] | L3 | mechanism | the support truth-table context is sufficient for strong operator inference in most seeds | uniform all-seed robustness | preregistered minimum was 0.80; seed 3 failed |
+| Shuffle-support q2 mean = 0.6793 versus normal = 0.9293 | L3 | context-use diagnostic | performance depends materially on the supplied support context | causal generality of the support mechanism | shuffle is a diagnostic intervention, not a new capability benchmark |
+| Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | seed-3 weakness is largely operator selection rather than the underlying state/content path | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
+| No-memory q2 mean = 0.6250 | L3 | mechanism diagnostic | the multimodal state representation remains functionally important | temporal persistence necessity | temporal carry was separately ruled out as necessary on E2E-008 |
