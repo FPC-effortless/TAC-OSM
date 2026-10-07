@@ -9,8 +9,21 @@
     "train_steps": 200,
     "batch_size": 64,
     "train_delay": 8,
-    "seeds": [0, 1, 2, 3, 4],
-    "evaluation_delays": [1, 2, 4, 8, 16, 32],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "evaluation_delays": [
+      1,
+      2,
+      4,
+      8,
+      16,
+      32
+    ],
     "evaluation_episodes_per_delay": 200,
     "cells_per_delay": 50,
     "hidden_dim": 60,
@@ -38,7 +51,11 @@
   ],
   "matched_control": {
     "hidden_width": 60,
-    "state_tensor_shape": [1, 3, 20],
+    "state_tensor_shape": [
+      1,
+      3,
+      20
+    ],
     "parameter_count_equal": true,
     "same_write_projection_shape": true,
     "same_write_gate_parameter_shape": true,
@@ -51,7 +68,10 @@
     "fast_source": "text_only",
     "image_audio_are_nuisance": true,
     "query": "fixed XOR of selected bit and always-zero anchor bit",
-    "final_queries": ["slow_bit XOR anchor", "fast_bit XOR anchor"]
+    "final_queries": [
+      "slow_bit XOR anchor",
+      "fast_bit XOR anchor"
+    ]
   },
   "leakage_boundary": [
     "slow target is present only at t0; every post-t0 text surface replaces it with MASK_TOKEN=39",
@@ -65,7 +85,7 @@
     "name": "slow_accuracy_delta_delay_32",
     "definition": "MTSK slow-query accuracy minus single-timescale slow-query accuracy at evaluation delay 32",
     "materiality_threshold": 0.15,
-    "hierarchical_paired_bootstrap_lower_bound": 0.0,
+    "hierarchical_paired_bootstrap_lower_bound": 0,
     "selection": "none"
   },
   "guardrail_endpoint": {
@@ -106,5 +126,48 @@
     "state-mechanism comparison only",
     "not a general memory claim",
     "not a scaling experiment"
+  ],
+  "endpoints": [
+    {
+      "name": "slow_accuracy_delta_delay_32",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "fast_accuracy_delta_delay_32",
+      "role": "guardrail",
+      "primary": false
+    },
+    {
+      "name": "hierarchical_paired_bootstrap_ci95",
+      "role": "uncertainty",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "benchmark generator identity",
+    "slow-target masking and multimodal exclusion",
+    "paired evaluation identity and train/evaluation disjointness",
+    "parameter-count equality and MTSK decay order",
+    "slow and fast endpoint differences by delay",
+    "paired hierarchical bootstrap at delay 32",
+    "claim boundary"
+  ],
+  "h_levels": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "steps": 200,
+  "eval_steps": 200,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
   ]
 }
