@@ -152,7 +152,7 @@
     {
       "id": "A-schema-migration-001",
       "applies_to": "TACOSM-PLM-MATCHED-FF-002",
-      "old_definition": "Legacy flat-schema contract used for the measured run; historical artifact preserves the exact pre-migration contract SHA-256.",
+      "old_definition": "Legacy flat-schema contract used for the measured run; historical artifact records the legacy contract SHA-256 with prefix 66559497.",
       "new_definition": "Typed master contract schema is now populated from the existing registered protocol: title/question/hypothesis, ArmSpec, EndpointSpec, DecisionBranch, interpretation_order, h_levels=[3], and eval_steps=600. No experimental parameter or decision threshold is changed.",
       "rationale": "Post-measurement bookkeeping migration required because the master contract validator became schema-enforcing. This changes representation of the preregistration, not the measured protocol or outcome.",
       "discovered": "PR #130 schema validation after the confirmatory run",
