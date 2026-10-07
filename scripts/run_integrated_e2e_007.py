@@ -26,10 +26,15 @@ def gradient_surface_probe():
     m=FunctionalMultimodalPLM(config=FunctionalConfig(hidden_dim=64,state_write_mode="residual_linear"))
     loss=train_batch(m,build_batch(eps));loss.backward()
     required=("text.emb.weight","text.rnn.weight_ih_l0","image.net.0.weight","audio.net.0.weight",
-              "rep.fuse.0.weight","state.write_value.0.weight","casm.decoder.0.weight",
-              "verifier.0.weight","write_gate.0.weight")
+              "rep.fuse.0.weight","casm.decoder.0.weight","verifier.0.weight","write_gate.0.weight")
     p=dict(m.named_parameters());bad=[]
     for n in required:
+        g=p[n].grad
+        if g is None or not torch.isfinite(g).all():bad.append(n)
+    state_write_names=[n for n in p if n.startswith("state.write_value.")]
+    if not state_write_names:
+        bad.append("state.write_value.* (no parameters found)")
+    for n in state_write_names:
         g=p[n].grad
         if g is None or not torch.isfinite(g).all():bad.append(n)
     return {"pass":not bad,"missing_or_nonfinite":bad}
