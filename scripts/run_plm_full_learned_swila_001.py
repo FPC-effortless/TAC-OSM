@@ -1,16 +1,13 @@
 #!/usr/bin/env python3
 """TACOSM-PLM-FULL-LEARNED-SWILA-001.
 
-The primary full-PLM measurement:
-    multimodal perception -> MTSK persistence -> CDL -> learned CASM
-    -> action -> environment -> verifier -> repair -> verified write.
+Primary construction run for the full learned PLM.  The model itself contains
+learned representation, persistent MTSK, CDL, structural CASM, OSM, verifier,
+repair, and verifier-gated state update.  The benchmark's binary success label
+is never passed to the verifier; only continuous post-action outcome evidence
+is supplied to the model.
 
-No fixed operator table, entity IDs, task-specific state vectors, or oracle
-retrieval path is used by the model.
-
-This is a capability run, not an ablation run.  Ablation is intentionally
-deferred until the integrated model either passes or yields a clean bounded
-negative.
+This is a capability run, not an ablation.
 """
 
 from __future__ import annotations
@@ -40,6 +37,7 @@ from tac_osm.plm_full_benchmark import (  # noqa: E402
     sample_balanced_episodes,
     sample_history_pairs,
     step_environment,
+    step_environment_from_state,
 )
 from tac_osm.plm_full_learned import (  # noqa: E402
     FullLearnedPLM,
@@ -60,6 +58,7 @@ PHYSICS_WEIGHT = 0.03
 WORLD_WEIGHT = 0.20
 VERIFIER_WEIGHT = 0.50
 REPAIR_WEIGHT = 0.15
+SECOND_VERIFIER_WEIGHT = 0.25
 LOAD_WEIGHT = 0.01
 
 
@@ -76,49 +75,20 @@ def _batch(episodes: Iterable[Episode]) -> dict[str, torch.Tensor]:
     }
 
 
-def _post_batch(
+def _post_observation(
     model: FullLearnedPLM,
-    forward: dict[str, torch.Tensor],
-    episodes: list[Episode],
-) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
-    actions = forward["action_logits"].argmax(dim=-1)
-    outcomes = []
-    targets_after = []
-    valid_repair = []
-    post_text = []
-    post_image = []
-    post_audio = []
-
-    for episode, action in zip(episodes, actions.tolist()):
-        _next_state, obs, reward, target_after = step_environment(episode, int(action))
-        post_text.append(obs[0])
-        post_image.append(obs[1])
-        post_audio.append(obs[2])
-        outcomes.append(float(reward))
-        if target_after is None:
-            targets_after.append(0)
-            valid_repair.append(0.0)
-        else:
-            targets_after.append(int(target_after))
-            valid_repair.append(1.0)
-
-    outcome = torch.tensor(outcomes, dtype=forward["action_logits"].dtype)
-    target_after = torch.tensor(targets_after, dtype=torch.long)
-    valid_repair = torch.tensor(
-        valid_repair, dtype=forward["action_logits"].dtype
+    observation: list[tuple[torch.Tensor, torch.Tensor, torch.Tensor]],
+) -> torch.Tensor:
+    return model.representation(
+        torch.stack([x[0] for x in observation]),
+        torch.stack([x[1] for x in observation]),
+        torch.stack([x[2] for x in observation]),
     )
-    post_z = model.representation(
-        torch.stack(post_text, dim=0),
-        torch.stack(post_image, dim=0),
-        torch.stack(post_audio, dim=0),
-    )
-    return outcome, target_after, valid_repair, post_z
 
 
 def train_seed(seed: int) -> tuple[FullLearnedPLM, dict]:
     random.seed(seed)
     torch.manual_seed(seed)
-
     cfg = FullPLMConfig(
         vocab_size=VOCAB_SIZE,
         action_count=ACTION_COUNT,
@@ -134,9 +104,7 @@ def train_seed(seed: int) -> tuple[FullLearnedPLM, dict]:
     )
     model = FullLearnedPLM(cfg)
     optimizer = torch.optim.AdamW(
-        model.parameters(),
-        lr=LR,
-        weight_decay=WEIGHT_DECAY,
+        model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY
     )
 
     pool_rng = random.Random(seed * 100003 + 17)
@@ -150,81 +118,143 @@ def train_seed(seed: int) -> tuple[FullLearnedPLM, dict]:
         ]
         batch = _batch(batch_eps)
         output = model(**batch)
-
-        targets = torch.tensor(
-            [e.action for e in batch_eps], dtype=torch.long
-        )
+        targets = torch.tensor([e.action for e in batch_eps], dtype=torch.long)
         action_loss = F.cross_entropy(output["action_logits"], targets)
 
-        actions = output["action_logits"].argmax(dim=-1)
-        outcomes = []
-        post_text = []
-        post_image = []
-        post_audio = []
-        post_targets = []
-        repair_valid = []
-        for episode, action in zip(batch_eps, actions.detach().tolist()):
-            _next_state, obs, reward, target_after = step_environment(
+        first_states = []
+        first_observations = []
+        first_evidence = []
+        first_rewards = []
+        repair_targets = []
+        repair_masks = []
+
+        for episode, action in zip(
+            batch_eps, output["action_logits"].argmax(dim=-1).detach().tolist()
+        ):
+            next_state, obs, evidence, reward, target_after = step_environment(
                 episode, int(action)
             )
-            outcomes.append(float(reward))
-            post_text.append(obs[0])
-            post_image.append(obs[1])
-            post_audio.append(obs[2])
-            if target_after is None:
-                post_targets.append(0)
-                repair_valid.append(0.0)
-            else:
-                post_targets.append(int(target_after))
-                repair_valid.append(1.0)
+            first_states.append(next_state)
+            first_observations.append(obs)
+            first_evidence.append(evidence)
+            first_rewards.append(float(reward))
+            repair_targets.append(0 if target_after is None else int(target_after))
+            repair_masks.append(
+                float((not reward) and target_after is not None)
+            )
 
-        outcome = torch.tensor(
-            outcomes, dtype=output["action_logits"].dtype
+        evidence = torch.tensor(
+            first_evidence, dtype=output["action_logits"].dtype
         )
-        post_z = model.representation(
-            torch.stack(post_text),
-            torch.stack(post_image),
-            torch.stack(post_audio),
+        reward_label = torch.tensor(
+            first_rewards, dtype=output["action_logits"].dtype
         )
+        post_z = _post_observation(model, first_observations)
         predicted_next = model.osm.predict(
             output["query"],
-            actions,
-            outcome,
+            output["action_logits"].argmax(dim=-1).detach(),
+            evidence,
         )
         world_loss = F.mse_loss(predicted_next, post_z.detach())
 
-        step_result = model.verify_and_update(
+        first_step = model.verify_and_update(
             output,
-            action=actions,
-            outcome=outcome,
-            post_text=torch.stack(post_text),
-            post_image=torch.stack(post_image),
-            post_audio=torch.stack(post_audio),
+            action=output["action_logits"].argmax(dim=-1).detach(),
+            outcome=evidence,
+            post_text=torch.stack([x[0] for x in first_observations]),
+            post_image=torch.stack([x[1] for x in first_observations]),
+            post_audio=torch.stack([x[2] for x in first_observations]),
         )
         verifier_loss = F.binary_cross_entropy_with_logits(
-            step_result.verifier_logit,
-            outcome,
+            first_step.verifier_logit, reward_label
         )
-        repair_target = torch.tensor(post_targets, dtype=torch.long)
+
+        repair_target = torch.tensor(repair_targets, dtype=torch.long)
         repair_mask = torch.tensor(
-            repair_valid, dtype=output["action_logits"].dtype
+            repair_masks, dtype=output["action_logits"].dtype
         )
         repair_loss_all = F.cross_entropy(
-            step_result.repair_logits,
-            repair_target,
-            reduction="none",
+            first_step.repair_logits, repair_target, reduction="none"
         )
-        repair_loss = (repair_loss_all * repair_mask).sum() / repair_mask.sum().clamp_min(1.0)
+        repair_loss = (
+            (repair_loss_all * repair_mask).sum()
+            / repair_mask.sum().clamp_min(1.0)
+        )
 
-        canonical_physics = model.physics_prior_loss(
-            output["z_seq"],
-            dt=0.08,
+        # Execute the learned repair after a failed first action.  The repair
+        # action is selected without access to the hidden target.
+        repair_actions = first_step.repair_logits.argmax(dim=-1).detach()
+        second_evidence = []
+        second_rewards = []
+        second_states = []
+        second_obs = []
+        second_masks = []
+        for i, (episode, action, failed) in enumerate(
+            zip(batch_eps, repair_actions.tolist(), [not bool(x) for x in first_rewards])
+        ):
+            if not failed:
+                second_evidence.append(0.0)
+                second_rewards.append(0.0)
+                second_states.append(None)
+                second_obs.append(None)
+                second_masks.append(0.0)
+                continue
+            state2, obs2, ev2, reward2, _target2 = step_environment_from_state(
+                first_states[i], episode.goal, int(action)
+            )
+            second_states.append(state2)
+            second_obs.append(obs2)
+            second_evidence.append(ev2)
+            second_rewards.append(float(reward2))
+            second_masks.append(1.0)
+
+        second_mask = torch.tensor(
+            second_masks, dtype=output["action_logits"].dtype
         )
+        if second_mask.sum() > 0:
+            valid_obs = [x for x in second_obs if x is not None]
+            post2_z = _post_observation(model, valid_obs)
+            valid_pre = first_step.memory_read[
+                second_mask.bool()
+            ]
+            valid_actions = repair_actions[second_mask.bool()]
+            valid_action_prob = F.one_hot(
+                valid_actions, num_classes=ACTION_COUNT
+            ).to(output["action_logits"].dtype)
+            valid_ev = torch.tensor(
+                [x for x, m in zip(second_evidence, second_masks) if m],
+                dtype=output["action_logits"].dtype,
+            )
+            second_reward_label = torch.tensor(
+                [x for x, m in zip(second_rewards, second_masks) if m],
+                dtype=output["action_logits"].dtype,
+            )
+            second_verifier_logit = model.verifier(
+                valid_pre, post2_z, valid_action_prob, valid_ev
+            )
+            second_verifier_loss = F.binary_cross_entropy_with_logits(
+                second_verifier_logit, second_reward_label
+            )
+            second_gate = second_verifier_logit.sigmoid()
+            model.mtsk.commit_verified(
+                first_step.next_memory_state[second_mask.bool()],
+                post2_z,
+                valid_actions,
+                valid_ev,
+                second_gate,
+            )
+        else:
+            second_verifier_loss = torch.zeros(
+                (), dtype=output["action_logits"].dtype
+            )
+
+        canonical_physics = model.physics_prior_loss(output["z_seq"], dt=0.08)
         total = (
             action_loss
             + WORLD_WEIGHT * world_loss
             + VERIFIER_WEIGHT * verifier_loss
             + REPAIR_WEIGHT * repair_loss
+            + SECOND_VERIFIER_WEIGHT * second_verifier_loss
             + PHYSICS_WEIGHT * canonical_physics
             + LOAD_WEIGHT * output["load_loss"]
         )
@@ -242,10 +272,7 @@ def train_seed(seed: int) -> tuple[FullLearnedPLM, dict]:
     }
 
 
-def evaluate_seed(
-    model: FullLearnedPLM,
-    seed: int,
-) -> dict:
+def evaluate_seed(model: FullLearnedPLM, seed: int) -> dict:
     random.seed(seed + 50000)
     torch.manual_seed(seed + 50000)
     model.eval()
@@ -255,72 +282,101 @@ def evaluate_seed(
     pair_rng = random.Random(seed * 400009 + 43)
     pairs = sample_history_pairs(pair_rng, HISTORY_PAIRS)
 
+    batch = _batch(eval_pool)
     with torch.no_grad():
-        batch = _batch(eval_pool)
         output = model(**batch)
         pred = output["action_logits"].argmax(dim=-1)
         targets = torch.tensor([e.action for e in eval_pool], dtype=torch.long)
         accuracy = float((pred == targets).float().mean())
 
-        outcome = []
-        post_text = []
-        post_image = []
-        post_audio = []
-        repair_targets = []
-        first_success = []
-        repair_success = []
+    first_success: list[float] = []
+    repair_success: list[float] = []
+    closed_loop_success: list[float] = []
+    verifier_probs: list[float] = []
 
-        for episode, action in zip(eval_pool, pred.tolist()):
-            _next_state, obs, reward, target_after = step_environment(
-                episode, int(action)
-            )
-            outcome.append(float(reward))
-            first_success.append(float(reward))
-            post_text.append(obs[0])
-            post_image.append(obs[1])
-            post_audio.append(obs[2])
-            repair_targets.append(-1 if target_after is None else target_after)
-
-        outcome_t = torch.tensor(outcome, dtype=torch.float32)
-        post_result = model.verify_and_update(
-            output,
-            action=pred,
-            outcome=outcome_t,
-            post_text=torch.stack(post_text),
-            post_image=torch.stack(post_image),
-            post_audio=torch.stack(post_audio),
+    for index, (episode, action) in enumerate(zip(eval_pool, pred.tolist())):
+        next_state, obs, evidence, reward, _target_after = step_environment(
+            episode, int(action)
         )
-        for idx, target in enumerate(repair_targets):
-            if target >= 0:
-                repaired = int(post_result.repair_logits[idx].argmax().item())
-                repair_success.append(float(repaired == target))
-
-        pair_correct = []
-        pair_disagreement = []
-        for left, right in pairs:
-            pair_out_left = model(**left.batch)
-            pair_out_right = model(**right.batch)
-            pred_left = int(pair_out_left["action_logits"].argmax().item())
-            pred_right = int(pair_out_right["action_logits"].argmax().item())
-            pair_correct.append(
-                float(pred_left == left.action and pred_right == right.action)
+        post_z = _post_observation(model, [obs])
+        with torch.no_grad():
+            action_onehot = F.one_hot(
+                torch.tensor([action]), num_classes=ACTION_COUNT
+            ).float()
+            verifier_logit = model.verifier(
+                output["query"][index:index + 1],
+                post_z,
+                F.one_hot(
+                    torch.tensor([action]), num_classes=ACTION_COUNT
+                ).float(),
+                torch.tensor([evidence], dtype=torch.float32),
             )
-            pair_disagreement.append(float(pred_left != pred_right))
+            verifier_prob = float(verifier_logit.sigmoid().item())
+            repair_logits = model.repair(
+                post_z,
+                action_onehot,
+                torch.tensor([evidence], dtype=torch.float32),
+            )
+            verifier_probs.append(verifier_prob)
+
+        first_success.append(float(reward))
+        if reward:
+            closed_loop_success.append(1.0)
+            continue
+
+        repair_action = int(repair_logits.argmax(dim=-1).item())
+        next2, obs2, evidence2, reward2, _target2 = step_environment_from_state(
+            next_state, episode.goal, repair_action
+        )
+        repair_success.append(float(reward2))
+        closed_loop_success.append(float(reward2))
+
+        post2_z = _post_observation(model, [obs2])
+        with torch.no_grad():
+            repair_prob = F.one_hot(
+                torch.tensor([repair_action]), num_classes=ACTION_COUNT
+            ).float()
+            second_verifier_logit = model.verifier(
+                post_z,
+                post2_z,
+                repair_prob,
+                torch.tensor([evidence2], dtype=torch.float32),
+            )
+            second_prob = second_verifier_logit.sigmoid()
+            model.mtsk.commit_verified(
+                output["memory_state"][index:index + 1],
+                post2_z,
+                torch.tensor([repair_action]),
+                torch.tensor([evidence2], dtype=torch.float32),
+                second_prob,
+            )
+
+    pair_correct = []
+    pair_disagreement = []
+    with torch.no_grad():
+        for left, right in pairs:
+            left_out = model(**left.batch)
+            right_out = model(**right.batch)
+            left_pred = int(left_out["action_logits"].argmax().item())
+            right_pred = int(right_out["action_logits"].argmax().item())
+            pair_correct.append(
+                float(left_pred == left.action and right_pred == right.action)
+            )
+            pair_disagreement.append(float(left_pred != right_pred))
 
     return {
         "seed": seed,
         "eval_size": len(eval_pool),
         "accuracy": accuracy,
-        "minimum_class_count": EVAL_PER_ACTION,
         "first_action_success": statistics.fmean(first_success),
+        "repair_attempt_rate": statistics.fmean(
+            [1.0 - x for x in first_success]
+        ),
         "repair_success_conditional": (
             statistics.fmean(repair_success) if repair_success else 0.0
         ),
-        "verified_write_rate": float(
-            (post_result.verifier_logit.sigmoid() >= model.config.verifier_threshold)
-            .float()
-            .mean()
-        ),
+        "closed_loop_success": statistics.fmean(closed_loop_success),
+        "mean_first_verifier_probability": statistics.fmean(verifier_probs),
         "history_pair_exact": statistics.fmean(pair_correct),
         "history_pair_disagreement": statistics.fmean(pair_disagreement),
         "eval_fingerprint": episode_fingerprint(eval_pool),
@@ -329,54 +385,40 @@ def evaluate_seed(
 
 
 def main() -> None:
-    seeds = []
-    models = {}
-    train_meta = {}
     eval_meta = []
+    train_meta = {}
+    models = {}
 
     for seed in SEEDS:
         model, train_info = train_seed(seed)
         models[seed] = model
-        train_meta[seed] = train_info
+        train_meta[str(seed)] = train_info
         eval_meta.append(evaluate_seed(model, seed))
 
-    # Cross-seed benchmark integrity: no train/eval overlap within seed and
-    # no duplicated evaluation fingerprint across seeds.
     integrity = {"train_eval_overlap": {}, "distinct_eval_fingerprints": True}
     for seed in SEEDS:
-        rng = random.Random(seed * 100003 + 17)
-        train_pool = sample_balanced_episodes(rng, TRAIN_PER_ACTION)
+        train_rng = random.Random(seed * 100003 + 17)
+        train_pool = sample_balanced_episodes(train_rng, TRAIN_PER_ACTION)
         train_keys = {episode_key(e) for e in train_pool}
-        eval_keys = set(eval_meta[seed]["eval_keys"])
+        eval_keys = set(eval_meta[SEEDS.index(seed)]["eval_keys"])
         integrity["train_eval_overlap"][str(seed)] = len(train_keys & eval_keys)
 
     fps = [row["eval_fingerprint"] for row in eval_meta]
     integrity["distinct_eval_fingerprints"] = len(fps) == len(set(fps))
 
-    manifest = __import__(
+    benchmark = __import__(
         "tac_osm.plm_full_benchmark",
         fromlist=["benchmark_manifest"],
     ).benchmark_manifest()
-    contract_path = ROOT / "contracts" / "TACOSM-PLM-FULL-LEARNED-SWILA-001.json"
-
+    contract_path = ROOT / "contracts" / f"{EXPERIMENT_ID}.json"
     accuracies = [r["accuracy"] for r in eval_meta]
     pairs = [r["history_pair_exact"] for r in eval_meta]
+    closed = [r["closed_loop_success"] for r in eval_meta]
+
     result = {
         "experiment_id": EXPERIMENT_ID,
         "status": "measured",
         "science_commit": os.environ.get("GITHUB_SHA", "local"),
-        "protocol": {
-            "seeds": list(SEEDS),
-            "train_per_action": TRAIN_PER_ACTION,
-            "eval_per_action": EVAL_PER_ACTION,
-            "history_pairs": HISTORY_PAIRS,
-            "train_steps": TRAIN_STEPS,
-            "batch_size": BATCH_SIZE,
-            "learning_rate": LR,
-            "weight_decay": WEIGHT_DECAY,
-            "history_length": HISTORY,
-            "model_selection": "none",
-        },
         "model": {
             "config": vars(FullPLMConfig()),
             "parameter_count": full_plm_parameter_count(models[SEEDS[0]]),
@@ -390,13 +432,14 @@ def main() -> None:
                 "gold action input",
                 "physical-state supervision",
                 "hard-coded retrieval",
+                "binary success input to verifier",
             ],
         },
-        "benchmark": manifest,
+        "benchmark": benchmark,
         "benchmark_hash": _sha256_file(
             ROOT / "src" / "tac_osm" / "plm_full_benchmark.py"
         ),
-        "contract_hash": _sha256_file(contract_path) if contract_path.exists() else None,
+        "contract_hash": _sha256_file(contract_path),
         "integrity": integrity,
         "train": train_meta,
         "evaluation": eval_meta,
@@ -405,14 +448,23 @@ def main() -> None:
             "min_seed_accuracy": min(accuracies),
             "mean_history_pair_exact": statistics.fmean(pairs),
             "min_seed_history_pair_exact": min(pairs),
+            "mean_closed_loop_success": statistics.fmean(closed),
+            "min_seed_closed_loop_success": min(closed),
             "full_plm_gate_pass": (
                 statistics.fmean(accuracies) >= 0.70
                 and min(accuracies) >= 0.55
                 and statistics.fmean(pairs) >= 0.70
-                and all(v == 0 for v in integrity["train_eval_overlap"].values())
+                and statistics.fmean(closed) >= 0.70
+                and all(
+                    v == 0 for v in integrity["train_eval_overlap"].values()
+                )
                 and integrity["distinct_eval_fingerprints"]
             ),
         },
+        "scientific_note": (
+            "Capability measurement only. Ablation is prohibited until this "
+            "integrated gate passes with intact provenance and integrity."
+        ),
     }
 
     out = ROOT / "artifacts" / f"{EXPERIMENT_ID}.json"
