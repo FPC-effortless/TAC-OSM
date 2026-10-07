@@ -683,39 +683,30 @@ re-queues on this top-K evidence alone, recorded as "top-K signal intact" and
 
 ---
 
-## C15 — Integrated multimodal persistent computation works end to end on a fresh held-out composition set
+## C15 — Clean integrated multimodal PLM works end to end on the collision-free E2E-008 benchmark
 
-> The selected integrated PLM configuration can carry synthetic information from text, image, and audio observations through explicit persistent entity-addressed state into fixed query-conditioned computation and achieve the registered capability criterion on a fresh held-out cross-modal benchmark.
+> On the independently validated collision-free E2E-008 synthetic multimodal benchmark, the integrated PLM achieves perfect q2 accuracy on all registered held-out compositions and all four fixed Boolean operators across five seeds.
 
 **STATUS: SUPPORTED, bounded**
 
-**TYPE:** core claim · **LAYER:** L3 — see `docs/EVIDENCE_REGISTER.md`
+**TYPE:** core integration result · **LAYER:** L3 — see `docs/EVIDENCE_REGISTER.md`
 
 **PRIOR ART:** none for this exact integrated claim.
 
 **NOT INHERITED:** real-world multimodal understanding; semantic or learned long-horizon memory; learned semantic addressing; learned operator discovery; scaling laws; compute efficiency; AGI.
 
-**REQUIRED EVIDENCE:** `TACOSM-PLM-INTEGRATED-E2E-006`, with all integrity gates passing, the fresh held-out split disjoint from prior sealed/development sets, and an independently validated artifact.
+**REQUIRED EVIDENCE:** `TACOSM-PLM-INTEGRATED-E2E-008`, workflow run **37569324347**, artifact **11459479033**, benchmark generator `integrated-e2e-v7-collision-free-payload-only`.
 
-E2E-006 reports q2 accuracies of 0.8725, 0.8775, 0.8500, 0.8600 and 0.8725 over seeds 0–4. Mean = **0.8665**; seed-level bootstrap 95% interval = **[0.8575, 0.8745]**; minimum seed = **0.8500**, against the preregistered threshold of **0.80** and per-seed floor of **0.40**.
+Across five seeds and 12 registered held-out compositions, q2 accuracy was **1.0000 for every seed** and **1.0000 for every composition/operator**. The composition-bootstrap 95% interval was **[1.0000, 1.0000]**.
 
-The result is not a base-rate artifact: the normal arm averaged 0.8665 while no-memory, image-shuffle, text-only, image-only and audio-only controls averaged 0.6200, 0.7330, 0.6180, 0.6180 and 0.5900 respectively. Mean memory drop = **0.2465** and image-alignment drop = **0.1335**. Oracle q2 accuracy = **1.0000**.
+The benchmark identity was SHA-256 **3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e**. All five evaluation fingerprints were independently pinned and later reproduced exactly by the reset/recompute attribution run. Training/evaluation semantic overlap was zero, held-out composition exclusion passed, evaluation was generated after training, and the known image/entity side-channel collision was absent.
 
-Integrity gates passed: classifier decision consistency had zero mismatches; gradient-surface coverage passed; training/evaluation semantic episode overlap was zero; held-out composition exclusion passed; evaluation was generated after training; control arms reused the same evaluation episode objects; payload/entity auxiliary supervision was disabled; and q1/q2 target entities were distinct.
+This establishes that the integrated multimodal PLM implementation can solve this **specific synthetic task end to end**. It does **not** establish that temporal persistence is necessary: the subsequent reset/recompute control reproduced the same 1.0000 q2 result without carrying the q1 outcome-gated state update across the action boundary.
 
-The capacity choice was made only on a registered development split: hidden_dim=40 achieved mean q2 **0.6950**, while hidden_dim=64 achieved **0.8650** with a paired mean gain of **+0.1700**. The sealed E2E-005 held-out set was excluded from that selection and from E2E-006 training.
+The current implementation remains scaffolded: entity addressing is explicit, operator identity is provided by the public query, and the Boolean operators are executed by fixed closed-form CASM logic. The saturated 1.0000 score therefore has no headroom for fine-grained comparison, and it does not support claims of learned addressing, learned operator discovery, semantic multimodal competence, or scaling.
 
-This claim establishes a **working synthetic integrated mechanism**, not general multimodal intelligence. Entity addressing is deterministic and operator dispatch is fixed by the public query, so neither learned semantic addressing nor learned operator discovery is demonstrated. The weakest registered operator remains XOR, at approximately 0.69–0.77 across seeds, so the result does not establish uniform operator competence.
+**BLOCKER:** relax explicit addressing and fixed operator dispatch, then test whether the same integrated performance survives under learned representational routing and operator discovery without reusing E2E-008 held-out outcomes for selection.
 
-
-
-The same bounded integrated capability was subsequently reproduced with a development-selected residual-linear state-write interface in `TACOSM-PLM-INTEGRATED-E2E-007`: five-seed q2 values 0.9350, 0.9325, 0.9375, 0.9425 and 0.9275; mean **0.9350** with seed-bootstrap 95% interval **[0.9305, 0.9395]** and minimum **0.9275**. This second result used a new eight-composition held-out set and excluded the sealed E2E-005 set, the E2E-006 set and the development set from training. All integrity gates again passed.
-
-**BLOCKER:** the next boundary is to remove or progressively relax the explicit addressing/operator scaffolds and test whether the integrated chain remains functional under learned addressing and learned operator discovery, while preserving the same leakage and split discipline.
-
-
-
----
 
 ## C16 — Residual state writing improves state-content recovery on the registered development split
 
@@ -736,6 +727,47 @@ On the same five seeds and development episodes, mean q2 was **0.8470** for the 
 The result identifies the persistent-state write transformation as a practical optimization bottleneck in the current synthetic implementation. It does not prove that residual-linear is universally superior, and it does not use E2E-006 or E2E-007 held-out outcomes for selection.
 
 **BLOCKER:** determine whether the same gain survives a preregistered paired comparison against the linear write on a new held-out set, rather than inferring superiority from separate confirmatory runs.
+
+
+## C17 — The integrated PLM outperforms a parameter-matched feed-forward control on E2E-008
+
+> On the clean E2E-008 synthetic benchmark, the integrated PLM materially outperforms a feed-forward baseline matched to 74,124 versus 74,126 parameters and given direct q1/q2 representations plus detached q1 environment outcome.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** architectural attribution · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-MATCHED-FF-002`, workflow run **37573976369**, artifact **11461179857**.
+
+PLM q2 mean was **1.0000** versus **0.6287** for FF-002, a gap of **0.3713**. The composition-bootstrap 95% intervals were **[1.0000, 1.0000]** for PLM and **[0.5560, 0.7007]** for FF-002, satisfying the preregistered materiality and non-overlap rule.
+
+The FF-002 control received the q1 representation, q2 representation, q2 query indices/operator, and detached q1 environment outcome. Giving the feed-forward model this cross-boundary outcome information did not close the gap. FF-001 showed the same qualitative result, with mean q2 **0.6317**.
+
+This supports a bounded **integrated-architecture advantage** over the registered feed-forward controls on this synthetic task. It does not isolate temporal carry from the PLM state representation/CASM/verifier machinery; the subsequent reset/recompute result provides that separate attribution test.
+
+**BLOCKER:** replace fixed operator execution and explicit addressing with learned mechanisms before treating the architectural advantage as evidence for a more general PLM capability.
+
+---
+
+## C18 — Temporal carry across the q1→q2 action boundary is not load-bearing on E2E-008
+
+> Removing the post-q1 outcome-gated state update and recomputing the state from the original observations reproduces the normal PLM's q2 performance on the registered E2E-008 held-out benchmark.
+
+**STATUS: SUPPORTED, bounded negative attribution**
+
+**TYPE:** causal ablation · **LAYER:** L3
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001`, workflow run **37593010244**, artifact **11469064681**.
+
+Normal PLM q2 mean = **1.0000** and reset/recompute q2 mean = **1.0000** across all five seeds. The normal-minus-reset gap is **0.0000**; the paired composition-bootstrap 95% interval is **[0.0000, 0.0000]**. The preregistered materiality threshold was **0.05**, so the temporal-carry support criterion failed.
+
+All intervention integrity checks passed: q1 prediction/action/outcome pair equality held; the recomputed pre-q1 state was byte-identical to the original pre-q1 state; train/evaluation semantic overlap was zero; the benchmark SHA-256 and all five E2E-008 evaluation fingerprints matched exactly; and the independent artifact validator passed.
+
+The bounded interpretation is that **temporal carry across the action boundary is not necessary for this E2E-008 task**. In combination with C17, the measured PLM advantage is therefore better localized to the integrated state representation/CASM computation than to temporal carry itself.
+
+This does not establish that persistent memory is useless in general, nor does it address longer horizons, tasks in which the relevant information is only available after the action, learned semantic addressing, operator discovery, or real-world multimodal memory.
+
+**NEXT TEST:** remove the fixed Boolean/CASM and explicit addressing scaffolds while preserving the same strict split, provenance, and causal-control discipline.
 
 
 ## Claims this repository does not make

@@ -154,7 +154,7 @@ Layer 2 and Layer 3 rows, and each one has a standing blocker.
 | Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
 |---|---|---|---|---|---|---|
 | Runtime retrieval boundary can preserve capability while bounding router input in an exact synthetic control | L3 | integration | deterministic lookup is an L0 control mechanism | semantic retrieval, learned addressing, and end-to-end compute scaling are not inherited | TACOSM-SELECTIVE-001 run 36509506303: indexed success=1.0 across H={8,64,256}, K={2,4}; actual router input bounded by K | **does not establish C5** |
-| Persistent state makes useful computation reusable across time | L4 | — | — | no temporal capability evidence yet | the hardened write-at-t/read-at-t+k benchmark plus carry/reset/shuffle/corrupt controls | **temporal persistence measurement not run** |
+| Persistent state makes useful computation reusable across time | L4 | — | — | no general temporal-persistence claim is inherited from the current E2E-008 result | E2E-008 plus a task where post-action information is necessary, with carry/reset/shuffle/corrupt controls | **E2E-008 reset/recompute found no temporal-carry advantage; longer-horizon/post-action-necessary measurement remains required** |
 | The integrated system is more economical than full-context at capability parity | L4 | — | — | everything — this is the program's thesis, not a result | the curve in `ROADMAP.md` §"M3.1", measured | all of the above |
 
 ---
@@ -290,3 +290,38 @@ Primary explicit-both q2 = **0.5200**; seed-bootstrap 95% interval
 
 Next diagnostic: explicitly align state content representation with CASM rather
 than changing addressing again.
+
+
+---
+
+## E2E-008 clean collision-free integrated evidence
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| E2E-008 q2 = 1.0000 across five seeds and 12 held-out compositions | L3 | integration | the integrated PLM executes the registered synthetic multimodal task end to end | real-world multimodal understanding; learned memory; general scaling | benchmark is synthetic and scaffolded; score is saturated |
+| All four fixed operators reach 1.0000 | L3 | mechanism diagnostic | the integrated execution path handles the registered AND/OR/XOR/XNOR compositions on this benchmark | learned operator discovery or open-ended program synthesis | operator identity is public/query-conditioned and Boolean execution is closed-form CASM |
+| Benchmark identity and leakage gates pass | L3 | validity gate | the E2E-008 result is tied to the collision-free generator and clean held-out split | arbitrary absence of all possible leakage | known image/entity side-channel collision was removed; train/eval semantic overlap was zero |
+| Five exact evaluation fingerprints and benchmark SHA-256 are later reproduced by the reset/recompute run | L3 | provenance | attribution uses the same evaluation objects as E2E-008 | new generalization evidence | reset/recompute is an attribution follow-up, not a fresh capability test |
+
+---
+
+## Matched feed-forward architectural controls
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| FF-002 mean q2 = 0.6287 versus PLM 1.0000 with disjoint composition-bootstrap intervals | L3 | architectural attribution | a bounded integrated-PLM advantage over the registered feed-forward control | temporal persistence as the unique cause | FF-002 removes persistent state/CASM/verifier/state update machinery as well as temporal carry |
+| FF-002 receives detached q1 environment outcome | L3 | confound control | giving the baseline the same cross-boundary outcome information does not close the gap | equality of mechanisms | q1 outcome is detached; the control remains feed-forward |
+| Parameter count 74,124 vs 74,126 | L3 | matched-control gate | the comparison is effectively parameter matched | compute/runtime equivalence | parameter match is not architecture equivalence |
+| FF-001 mean q2 = 0.6317 and FF-002 = 0.6287 | L3 | replication/diagnostic | direct q1 feedback does not rescue the feed-forward family | causal attribution of persistence | FF-001 is diagnostic; FF-002 is the stronger registered control |
+
+---
+
+## Reset/recompute temporal-carry attribution
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Normal and reset/recompute q2 = 1.0000 across all five seeds | L3 | causal ablation | temporal carry across q1→q2 is not necessary for E2E-008 | persistence is useless generally | reset/recompute still reconstructs the state from all original observations |
+| Normal-minus-reset = 0.0000; paired composition-bootstrap 95% CI = [0.0000, 0.0000] | L3 | decision endpoint | preregistered temporal-carry materiality criterion is not met | absence of temporal effects on other tasks | threshold was 0.05 and the decision rule was registered before measurement |
+| q1 prediction/action/outcome equality and recomputed-state identity both pass | L3 | intervention gate | the reset intervention changed the carry variable without changing the q1 path or the pre-q1 state | complete causal isolation of every implementation detail | the experiment isolates the outcome-gated cross-boundary carry within this architecture |
+| Independent validator passes; artifact 11469064681; run 37593010244 | L3 | provenance/validity | the reported negative attribution is a measured, inspectable result | new generalization evidence | the branch was scientifically file-equivalent to the clean master-lineage PR; no model selection was performed |
+
