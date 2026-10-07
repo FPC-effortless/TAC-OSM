@@ -61,3 +61,15 @@ def test_contract_prior_boundary_is_explicit():
     assert contract["status"] == "pre-registered"
     assert contract["physics_prior"]["allowed_information"]
     assert contract["physics_prior"]["forbidden_information"]
+
+
+def test_audio_rendering_is_invariant_to_particle_order():
+    from tac_osm.learned_physics_e2e_benchmark import PhysicalState, _render_audio
+    state = PhysicalState(
+        position=torch.tensor([[0.30, 0.35], [0.70, 0.65]]),
+        velocity=torch.tensor([[0.12, 0.04], [-0.18, -0.07]]),
+    )
+    swapped = PhysicalState(state.position.flip(0), state.velocity.flip(0))
+    first = _render_audio(state, random.Random(5), deterministic=True)
+    second = _render_audio(swapped, random.Random(5), deterministic=True)
+    assert torch.equal(first, second)
