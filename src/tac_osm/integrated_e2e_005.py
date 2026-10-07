@@ -20,6 +20,7 @@ class FunctionalConfig:
     hidden_dim: int = 40
     entity_count: int = 16
     latent_bits: int = 12
+    state_write_mode: str = "linear"
 
 
 class TextEncoder(nn.Module):
@@ -77,11 +78,21 @@ class SharedRepresentation(nn.Module):
 
 
 class ExplicitEntityState(nn.Module):
-    def __init__(self, hidden: int, entity_count: int) -> None:
+    def __init__(self, hidden: int, entity_count: int, write_mode: str = "linear") -> None:
         super().__init__()
+        if write_mode not in {"linear", "residual_linear", "residual_mlp"}:
+            raise ValueError(f"unsupported state_write_mode: {write_mode}")
         self.entity_count = entity_count
         self.hidden = hidden
-        self.write_value = nn.Linear(hidden, hidden)
+        self.write_mode = write_mode
+        if write_mode == "residual_mlp":
+            self.write_value = nn.Sequential(
+                nn.Linear(hidden, hidden),
+                nn.GELU(),
+                nn.Linear(hidden, hidden),
+            )
+        else:
+            self.write_value = nn.Linear(hidden, hidden)
 
     def initial(self, batch: int, device: torch.device) -> Tensor:
         return torch.zeros(batch, self.entity_count, self.hidden, device=device)
@@ -96,7 +107,10 @@ class ExplicitEntityState(nn.Module):
         probs = F.one_hot(entity.long(), num_classes=self.entity_count).to(z.dtype)
         if strength is not None:
             probs = probs * strength.view(-1, 1)
-        value = self.write_value(z).unsqueeze(1)
+        value = self.write_value(z)
+        if self.write_mode.startswith("residual_"):
+            value = value + z
+        value = value.unsqueeze(1)
         updated = (
             (1.0 - probs.unsqueeze(-1)) * memory
             + probs.unsqueeze(-1) * value
@@ -165,7 +179,9 @@ class FunctionalMultimodalPLM(nn.Module):
         self.image = ImageEncoder(config.hidden_dim)
         self.audio = AudioEncoder(config.hidden_dim)
         self.rep = SharedRepresentation(config.hidden_dim)
-        self.state = ExplicitEntityState(config.hidden_dim, config.entity_count)
+        self.state = ExplicitEntityState(
+            config.hidden_dim, config.entity_count, config.state_write_mode
+        )
         self.casm = FixedCASM(config.hidden_dim, config.latent_bits)
         self.verifier = nn.Sequential(
             nn.Linear(config.hidden_dim + 1, config.hidden_dim),
