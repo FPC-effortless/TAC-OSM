@@ -10,7 +10,8 @@ import sys
 sys.path.insert(0,str(ROOT)); sys.path.insert(0,str(ROOT/"src"))
 
 from tac_osm.integrated_e2e_005 import FunctionalConfig, FunctionalMultimodalPLM
-from tac_osm.integrated_e2e_005_benchmark import ALL_COMBOS, HELDOUT, episode_fingerprint, episode_key, sample_episode
+from tac_osm.integrated_e2e_005_benchmark import ALL_COMBOS, HELDOUT as SEALED_E2E005, episode_fingerprint, episode_key, sample_episode
+from tac_osm.integrated_e2e_006_benchmark import HELDOUT as E2E006_HELDOUT
 
 EXPERIMENT_ID="TACOSM-PLM-XOR-DIAG-001"
 CONTRACT_PATH=ROOT/"contracts"/f"{EXPERIMENT_ID}.json"
@@ -24,7 +25,7 @@ DEV_COMBOS=(
  ("or",0,4),("or",0,5),("or",0,6),("or",0,7),("or",0,8),("or",0,9),("or",0,10),("or",0,11),
  ("xnor",0,4),("xnor",0,5),("xnor",0,6),("xnor",0,7),("xnor",0,8),("xnor",0,9),("xnor",0,10),("xnor",0,11),
 )
-EXCLUDED=set(HELDOUT)|set(DEV_COMBOS)
+EXCLUDED=set(SEALED_E2E005)|set(E2E006_HELDOUT)|set(DEV_COMBOS)
 TRAIN_COMBOS=tuple(c for c in ALL_COMBOS if c not in EXCLUDED)
 
 def build_batch(eps):
