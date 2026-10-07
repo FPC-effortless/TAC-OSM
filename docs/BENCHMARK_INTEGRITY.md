@@ -194,3 +194,20 @@ stably across seeds.
 4. Assert the trace length equals the active node count.
 5. Assert `success` and `verification.passed` agree on the oracle arm.
 6. Only then read a learned-arm number.
+
+
+---
+
+## The eighth finding: modality payload / metadata collision
+
+**Symptom.** An image modality encoded both payload bits and an entity-ID stripe in the same spatial rows. Image bits 4–5 were placed in rows 1–3 while the entity-ID stripe occupied rows 0–3; image bits 6–7 were placed elsewhere and remained clean.
+
+**Consequence.** The benchmark created an unintended shortcut/collision in which some queried payload bits were entangled with metadata. The resulting operator-specific error pattern was initially liable to be misread as a state-content or CASM weakness.
+
+**Found by.** The AND state-versus-CASM diagnostic and inspection of the actual generator geometry. Image bits 4–5 had materially degraded recovery while bits 6–7 were recovered perfectly; conditional AND execution error after correct bit recovery was only ~2.3%.
+
+**Safeguard.** Every multimodal benchmark must explicitly declare which fields are encoded in each modality and must test that payload support does not overlap metadata support. For spatial modalities, the audit must inspect the actual masks/regions rather than relying on comments or intended layout.
+
+> **Rule.** A modality may not silently carry task metadata in the same support as the payload. Metadata channels must be explicit scaffolds or absent; unintended payload/metadata overlap invalidates mechanistic interpretation of affected results.
+
+The clean E2E-008 successor removes the image entity stripe, removes entity dependence from text/audio encodings, and separates image payload regions from the former metadata support.
