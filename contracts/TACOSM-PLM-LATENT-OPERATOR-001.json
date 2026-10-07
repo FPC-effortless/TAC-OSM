@@ -1,0 +1,209 @@
+{
+  "experiment_id": "TACOSM-PLM-LATENT-OPERATOR-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Latent operator induction without operator-ID query dispatch",
+  "question": "Can the multimodal PLM infer which fixed Boolean primitive to execute from unlabeled truth-table demonstrations, when the operator ID is absent from the query?",
+  "hypothesis": "The integrated PLM will infer the hidden operator from the registered demonstration context and achieve the registered q2 threshold on the held-out compositions without receiving the operator ID.",
+  "primary_endpoint": {
+    "name": "heldout_q2_accuracy",
+    "unit": "episode",
+    "threshold": 0.8,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "hidden_dim": 64,
+    "state_write_mode": "residual_linear",
+    "entity_count": 16,
+    "latent_bits": 12,
+    "evaluation_episodes_per_seed": 600,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "support_rows": 4,
+    "operator_induction_loss": "none; q2 task loss only",
+    "operator_id_in_model_input": false,
+    "entity_addressing": "explicit",
+    "model_selection": "none"
+  },
+  "heldout": [
+    [
+      "xor",
+      2,
+      4
+    ],
+    [
+      "xor",
+      4,
+      8
+    ],
+    [
+      "xor",
+      1,
+      9
+    ],
+    [
+      "and",
+      3,
+      5
+    ],
+    [
+      "and",
+      6,
+      10
+    ],
+    [
+      "and",
+      2,
+      11
+    ],
+    [
+      "or",
+      2,
+      4
+    ],
+    [
+      "or",
+      4,
+      8
+    ],
+    [
+      "or",
+      1,
+      9
+    ],
+    [
+      "xnor",
+      3,
+      5
+    ],
+    [
+      "xnor",
+      6,
+      10
+    ],
+    [
+      "xnor",
+      2,
+      11
+    ]
+  ],
+  "held_constant": [
+    "same text/image/audio payload encoder and residual-linear persistent-state write as E2E-008",
+    "same five seeds, optimizer, learning rate, weight decay, 300 training steps and batch size 96",
+    "same explicit entity IDs and target bit indices; entity addressing is intentionally not tested here",
+    "same collision-free payload-only modality generator as E2E-008",
+    "fixed Boolean primitives remain the execution library; only the operator-ID selection scaffold is removed",
+    "support truth table contains four rows for the hidden operator and row order is randomized",
+    "the hidden operator label is never supplied to the model or used as an auxiliary training target",
+    "no post-run model selection or tuning"
+  ],
+  "leakage_rules": [
+    "held-out target compositions are excluded from training",
+    "evaluation is generated after training from a separate RNG namespace",
+    "training/evaluation semantic overlap must be zero",
+    "operator ID is absent from the model's query and operator-induction inputs",
+    "support context exposes only (input_a,input_b,observed_output) rows",
+    "operator labels are used only for benchmark generation and post-hoc diagnostic scoring, never as model training targets",
+    "support row order is randomized independently per episode",
+    "operator induction module must receive gradient from q2 task loss",
+    "benchmark generator hash and base E2E-008 generator hash are pinned",
+    "all evaluation seeds have distinct fingerprints"
+  ],
+  "arms": [
+    {
+      "name": "normal_latent_operator",
+      "intervention": "infer operator weights from support truth-table context; no operator ID is passed to query",
+      "acts_on": "operator selection"
+    },
+    {
+      "name": "oracle_operator",
+      "intervention": "same model and state read but override inferred operator with the hidden operator ID",
+      "acts_on": "operator selection upper bound"
+    },
+    {
+      "name": "shuffle_support_labels",
+      "intervention": "rotate support labels across demonstration rows while preserving input pairs and label marginals",
+      "acts_on": "operator-context integrity diagnostic"
+    },
+    {
+      "name": "no_memory",
+      "intervention": "zero persistent state before q2 while retaining the same support context",
+      "acts_on": "multimodal state contribution diagnostic"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "operator_selection_accuracy",
+      "role": "mechanism diagnostic",
+      "primary": false
+    },
+    {
+      "name": "oracle_operator_q2_accuracy",
+      "role": "validity upper bound",
+      "primary": false
+    },
+    {
+      "name": "shuffle_support_q2_accuracy",
+      "role": "leakage/context diagnostic",
+      "primary": false
+    },
+    {
+      "name": "no_memory_q2_accuracy",
+      "role": "mechanism diagnostic",
+      "primary": false
+    },
+    {
+      "name": "operator_inducer_gradient_gate",
+      "role": "integrity gate",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; normal mean heldout q2 accuracy >=0.80; every seed q2 >=0.40; normal operator-selection accuracy mean >=0.90 and every seed >=0.80",
+      "licenses": "bounded evidence that the model can infer and apply the hidden operator on the registered synthetic multimodal task without an operator-ID query channel",
+      "does_not_license": "operator synthesis outside the fixed primitive library; learned semantic addressing; real-world multimodal competence; scaling"
+    },
+    {
+      "condition": "integrity passes but q2 or operator-selection thresholds fail",
+      "licenses": "the latent-operator capability criterion is not established on this benchmark",
+      "does_not_license": "architecture impossibility or general operator-induction impossibility"
+    }
+  ],
+  "interpretation_order": [
+    "benchmark identity and held-out composition exclusion",
+    "operator-ID absence and support-context integrity",
+    "training/evaluation disjointness and evaluation fingerprints",
+    "operator-inducer gradient coverage",
+    "oracle upper bound and action-decision consistency",
+    "primary q2 accuracy",
+    "operator-selection accuracy",
+    "support-shuffle and no-memory diagnostics",
+    "claim boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 600,
+  "base_e2e008": {
+    "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-008",
+    "benchmark_generator_version": "integrated-e2e-v7-collision-free-payload-only",
+    "benchmark_sha256": "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e"
+  }
+}
