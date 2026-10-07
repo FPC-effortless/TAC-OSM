@@ -89,3 +89,13 @@ def test_verifier_contract_uses_continuous_outcome_not_binary_success():
     first = verifier.net[0]
     assert first.in_features == expected_in
     assert first.in_features != 2 * cfg.d_model + 2
+
+
+def test_benchmark_generator_hash_matches_file():
+    import hashlib
+    from tac_osm import plm_full_benchmark
+
+    expected = hashlib.sha256(
+        open(plm_full_benchmark.__file__, "rb").read()
+    ).hexdigest()
+    assert plm_full_benchmark.generator_hash() == expected
