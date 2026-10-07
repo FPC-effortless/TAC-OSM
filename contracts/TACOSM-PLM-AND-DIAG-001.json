@@ -1,0 +1,95 @@
+{
+  "experiment_id": "TACOSM-PLM-AND-DIAG-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Development diagnosis of AND state-content recovery versus CASM execution",
+  "question": "When the residual-linear integrated PLM remains weaker on AND than on XOR, is the error concentrated in queried persistent-state content recovery or in downstream AND execution?",
+  "hypothesis": "The diagnostic will quantify queried-bit recovery and AND execution conditional on correctly recovered bits, separating state-content errors from downstream execution errors without using any confirmatory held-out outcome.",
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "hidden_dim=64 integrated PLM with residual-linear state write",
+      "acts_on": "integrated state-to-CASM path"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "development_and_q2_accuracy",
+      "role": "primary diagnostic",
+      "primary": true
+    },
+    {
+      "name": "queried_bit_joint_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "and_state_error_rate",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "and_execution_error_given_correct_bits",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "classifier_decision_integrity",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "and_dispatch_integrity",
+      "role": "integrity gate",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "if AND execution error given both queried bits correct is substantial",
+      "licenses": "downstream AND/CASM execution is a diagnosed contributor on the development split",
+      "does_not_license": "general CASM inadequacy"
+    },
+    {
+      "condition": "if AND state error rate dominates AND failures",
+      "licenses": "persistent-state content recovery is a diagnosed contributor on the development split",
+      "does_not_license": "general persistence inadequacy"
+    }
+  ],
+  "interpretation_order": [
+    "development split integrity",
+    "prior confirmatory-set exclusion",
+    "training/evaluation semantic disjointness",
+    "classifier-decision integrity",
+    "AND operator dispatch integrity",
+    "queried bit recovery",
+    "AND execution conditional on correct bits",
+    "operator-level diagnosis"
+  ],
+  "h_levels": [
+    3
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 200,
+  "held_constant": [
+    "same registered 32-composition development set used for state-write selection",
+    "same hidden_dim=64 residual-linear configuration",
+    "same five seeds and 300-step training budget",
+    "same optimizer, learning rate and weight decay",
+    "sealed E2E-005, E2E-006 and E2E-007 heldout outcomes excluded",
+    "no auxiliary payload-bit or entity supervision",
+    "same evaluation episode objects across seeds and diagnostic calculations"
+  ],
+  "provenance": {
+    "predecessor": "TACOSM-PLM-XOR-DIAG-001",
+    "current_confirmatory_weak_operator": "AND on E2E-007",
+    "selection_rule": "diagnosis only; no parameter or test-set selection from E2E-007 outcomes"
+  }
+}
