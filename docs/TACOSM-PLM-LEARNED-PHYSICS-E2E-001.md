@@ -85,3 +85,8 @@ scientific evidence.
 A benchmark audit found that deterministic audio contained a fixed phase offset based on particle order. This was unnecessary and could create an implicit object-order channel.
 
 The benchmark generator is therefore amended to make deterministic audio permutation-invariant to particle order. The generator version is now `learned-physics-e2e-v2-no-object-order-audio` and is pinned before the next measurement. No model, physics prior, endpoint, seed, or decision rule changes.
+## Preregistration amendment A4
+
+A final causal-boundary audit found that the generic canonical latent was still auxiliary to the action head. A4 binds the final canonical latent directly into learned action selection and adds a focused gradient-dependency gate. No benchmark, prior law, seed, optimizer, budget, endpoint, or decision rule changes.
+
+Superseded runs 37645169621, 37645649621, 37646974646, and 37647273293 are instrument-invalid and must not be interpreted.
