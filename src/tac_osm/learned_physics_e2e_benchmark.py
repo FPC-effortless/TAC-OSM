@@ -26,7 +26,7 @@ RADIUS = 0.045
 IMAGE_SIZE = 32
 AUDIO_SIZE = 96
 VOCAB_SIZE = 32
-GENERATOR_VERSION = "learned-physics-e2e-v2-no-object-order-audio"
+GENERATOR_VERSION = "learned-physics-e2e-v3-no-object-order-audio-manifest-corrected"
 NOISE = 0.025
 
 
@@ -312,8 +312,7 @@ def benchmark_manifest() -> dict:
             "text": "goal coordinates only; no action labels or state labels",
         },
         "physics_prior": [
-            "linear momentum conservation",
-            "kinetic energy conservation",
-            "kinematic displacement/velocity consistency",
+            "Hamilton canonical equations dq/dt=dH/dp and dp/dt=-dH/dq",
+            "conservation of the learned Hamiltonian H on passive observation intervals",
         ],
     }
