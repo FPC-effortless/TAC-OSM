@@ -26,7 +26,7 @@ RADIUS = 0.045
 IMAGE_SIZE = 32
 AUDIO_SIZE = 96
 VOCAB_SIZE = 32
-GENERATOR_VERSION = "learned-physics-e2e-v1"
+GENERATOR_VERSION = "learned-physics-e2e-v2-no-object-order-audio"
 NOISE = 0.025
 
 
@@ -128,7 +128,7 @@ def _render_audio(
         speed = float(torch.linalg.vector_norm(velocity))
         normalized_speed = min(speed / 0.42, 1.0)
         frequency = 2.0 + 12.0 * normalized_speed
-        phase = 0.55 * index if deterministic else rng.random() * 2.0 * math.pi
+        phase = 0.0 if deterministic else rng.random() * 2.0 * math.pi
         audio = audio + (
             0.25 + 0.35 * normalized_speed
         ) * torch.sin(2.0 * math.pi * frequency * t + phase)
@@ -308,7 +308,7 @@ def benchmark_manifest() -> dict:
         "action_names": list(ACTION_NAMES),
         "modality_policy": {
             "image": "positions only; no velocity direction or entity IDs",
-            "audio": "speed magnitude only; no velocity direction or entity IDs",
+            "audio": "speed magnitude only; no velocity direction or entity/object-order channel",
             "text": "goal coordinates only; no action labels or state labels",
         },
         "physics_prior": [
