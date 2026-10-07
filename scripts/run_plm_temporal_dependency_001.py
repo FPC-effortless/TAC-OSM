@@ -216,7 +216,7 @@ def hierarchical_paired_bootstrap(seed_rows, rounds=10000):
     return [samples[int(0.025 * rounds)], samples[int(0.975 * rounds)]]
 
 
-def evaluate_seed(model, episodes):
+@torch.no_grad()\ndef evaluate_seed(model, episodes):
     model.eval()
     carry_correct = 0
     fresh_correct = 0
@@ -225,8 +225,7 @@ def evaluate_seed(model, episodes):
     secret_mismatch_errors = 0
 
     for ep in episodes:
-        pre, post, q1, q2, payload = ep
-        assert q2_observation_fingerprint([ep]) == q2_observation_fingerprint([ep])
+        pre, post, q1, q2, _payload = ep
         carry_q1, carry_q2 = run_carry_path(model, pre, post, q1, q2)
         fresh_q2 = run_fresh_path(model, post, q2)
 
@@ -242,7 +241,12 @@ def evaluate_seed(model, episodes):
             int(carry_q1["logits"].argmax(-1).item())
             != int((carry_q1["action"] >= 0.5).long().item())
         )
-        if int(payload[2]) != int(payload[2]):
+        expected_mask = 20 + int(payload[2])
+        if int(pre[0][1][4].item()) != expected_mask or int(post[0][1][4].item()) != 20:
+            secret_mismatch_errors += 1
+        if not torch.equal(pre[0][1][:4], post[0][1][:4]) or not torch.equal(pre[0][1][5:], post[0][1][5:]):
+            secret_mismatch_errors += 1
+        if not torch.equal(pre[0][2], post[0][2]) or not torch.equal(pre[0][3], post[0][3]):
             secret_mismatch_errors += 1
 
     n = len(episodes)
@@ -274,9 +278,12 @@ def run(smoke=False):
 
     for seed in seeds:
         model, train_keys = train_seed(seed)
-        evaluation = sample_evaluation_episodes(
-            random.Random(seed + 186000), eval_n
-        )
+        evaluation = (sample_evaluation_episodes(random.Random(seed + 186000), EVAL_EPISODES)
+                      if not smoke else [sample_episode(random.Random(seed + 186000 + n)) for n in range(eval_n)])
+        if smoke:
+            for ep in evaluation:
+                from tac_osm.temporal_dependency_001_benchmark import validate_episode
+                validate_episode(ep)
         eval_keys = {episode_key(ep) for ep in evaluation}
         overlap = train_keys & eval_keys
         assert not overlap
@@ -298,6 +305,7 @@ def run(smoke=False):
 
     assert len({r["evaluation_episode_fingerprint"] for r in seed_rows}) == len(seed_rows)
     assert len({r["q2_observation_fingerprint"] for r in seed_rows}) == len(seed_rows)
+    assert all(r["q2_observation_fingerprint"] for r in seed_rows)
     assert all(r["training_evaluation_semantic_overlap"] == 0 for r in seed_rows)
     assert all(r["secret_integrity_errors"] == 0 for r in seed_rows)
 
