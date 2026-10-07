@@ -134,7 +134,7 @@ def batch_from_episodes(episodes):
     q1_targets = []
     q2_targets = []
     for ep in episodes:
-        pre, post, q1, q2, payload = ep
+        pre, post, q1, q2, _payload = ep
         _ = post
         texts.append(pre[0][1])
         images.append(pre[0][2])
@@ -226,7 +226,7 @@ def evaluate_seed(model, episodes):
     secret_mismatch_errors = 0
 
     for ep in episodes:
-        pre, post, q1, q2, _payload = ep
+        pre, post, q1, q2, payload = ep
         carry_q1, carry_q2 = run_carry_path(model, pre, post, q1, q2)
         fresh_q2 = run_fresh_path(model, post, q2)
 
