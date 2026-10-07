@@ -347,6 +347,7 @@ def run(smoke: bool = False):
 
     manifest = benchmark_manifest()
     assert manifest["base_e2e008_generator_sha256"] == BASE_E2E008_GENERATOR_SHA256
+    assert benchmark_git_blob_sha() == FROZEN_BENCHMARK_GIT_BLOB_SHA
     gradient = gradient_probe()
     assert gradient["pass"], gradient
 
