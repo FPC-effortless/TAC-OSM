@@ -369,18 +369,69 @@ class LearnedCDL(nn.Module):
         return selected, weights, logits
 
 
-class LearnedCASM(nn.Module):
-    """Learned structural computation bank with adaptive halting.
 
-    There is no Boolean/operator table.  Each operator is an independently
-    learned neural program primitive; the selector and composition depth are
-    also learned.
+class LearnedStructuralWorkspace(nn.Module):
+    """Learn a graph over the routed persistent structures.
+
+    Nodes are the sparse CDL outputs plus one query node. Edge weights and node
+    updates are learned from content; no fixed topology or relation labels are
+    supplied. This is the structural substrate consumed by CASM.
+    """
+
+    def __init__(self, config: FullPLMConfig) -> None:
+        super().__init__()
+        d = config.d_model
+        self.edge = nn.Sequential(
+            nn.Linear(3 * d, d),
+            nn.GELU(),
+            nn.Linear(d, 1),
+        )
+        self.message = nn.Sequential(
+            nn.Linear(2 * d, d),
+            nn.GELU(),
+            nn.Linear(d, d),
+        )
+        self.norm = nn.LayerNorm(d)
+
+    def forward(
+        self, query: Tensor, selected: Tensor, weights: Tensor
+    ) -> tuple[Tensor, Tensor, Tensor]:
+        nodes = torch.cat([selected, query.unsqueeze(1)], dim=1)
+        b, n, d = nodes.shape
+        left = nodes.unsqueeze(2).expand(-1, -1, n, -1)
+        right = nodes.unsqueeze(1).expand(-1, n, -1, -1)
+        q = query.unsqueeze(1).unsqueeze(1).expand(-1, n, n, -1)
+        edge_logits = self.edge(torch.cat([left, right, q], dim=-1)).squeeze(-1)
+        eye = torch.eye(n, device=nodes.device, dtype=nodes.dtype).unsqueeze(0)
+        edge_logits = edge_logits.masked_fill(eye.bool(), -1e4)
+        adjacency = edge_logits.softmax(dim=-1)
+        message_input = torch.cat(
+            [
+                nodes.unsqueeze(2).expand(-1, -1, n, -1),
+                nodes.unsqueeze(1).expand(-1, n, -1, -1),
+            ],
+            dim=-1,
+        )
+        messages = self.message(message_input)
+        updated = nodes + (adjacency.unsqueeze(-1) * messages).sum(dim=2)
+        updated = self.norm(updated)
+        graph_state = updated[:, :-1]
+        query_state = updated[:, -1]
+        return graph_state, query_state, adjacency
+
+
+class LearnedCASM(nn.Module):
+    """Learned structural computation with routing, composition, and halting.
+
+    The operator bank contains generic learned program primitives. Their
+    semantics are learned rather than hard-coded as Boolean functions.
     """
 
     def __init__(self, config: FullPLMConfig) -> None:
         super().__init__()
         self.config = config
         d = config.d_model
+        self.workspace = LearnedStructuralWorkspace(config)
         self.operators = nn.ModuleList(
             [
                 nn.Sequential(
@@ -405,12 +456,13 @@ class LearnedCASM(nn.Module):
 
     def forward(
         self, query: Tensor, selected: Tensor, weights: Tensor
-    ) -> tuple[Tensor, Tensor, Tensor, Tensor]:
-        current = (selected * weights.unsqueeze(-1)).sum(dim=1)
+    ) -> tuple[Tensor, Tensor, Tensor, Tensor, Tensor, Tensor]:
+        graph, graph_query, adjacency = self.workspace(query, selected, weights)
+        current = (graph * weights.unsqueeze(-1)).sum(dim=1) + graph_query
         traces = []
         halt_probs = []
         op_probs = []
-        executed = 0.0
+        executed = []
 
         for _ in range(self.config.casm_depth):
             joint = torch.cat([current, query], dim=-1)
@@ -425,13 +477,15 @@ class LearnedCASM(nn.Module):
             traces.append(current)
             halt_probs.append(halt_prob)
             op_probs.append(probs)
-            executed = executed + (1.0 - halt_prob).mean()
+            executed.append(1.0 - halt_prob)
 
         return (
             current,
             torch.stack(halt_probs, dim=1),
             torch.stack(op_probs, dim=1),
             torch.stack(traces, dim=1),
+            adjacency,
+            torch.stack(executed, dim=1),
         )
 
 
@@ -599,9 +653,14 @@ class FullLearnedPLM(nn.Module):
         )
         query = mem_seq[:, -1]
         selected, weights, cdl_logits = self.cdl(query, expert_seq[:, -1])
-        casm_state, halt_probs, operator_probs, traces = self.casm(
-            query, selected, weights
-        )
+        (
+            casm_state,
+            halt_probs,
+            operator_probs,
+            traces,
+            adjacency,
+            execution_activity,
+        ) = self.casm(query, selected, weights)
         base_action_logits = self.action_head(
             torch.cat([casm_state, query], dim=-1)
         )
@@ -637,6 +696,8 @@ class FullLearnedPLM(nn.Module):
             "casm_traces": traces,
             "halt_probs": halt_probs,
             "operator_probs": operator_probs,
+            "casm_adjacency": adjacency,
+            "casm_execution_activity": execution_activity,
             "action_logits": action_logits,
             "action_prob": action_prob,
             "load_loss": load_loss,
@@ -734,6 +795,7 @@ __all__ = [
     "MultimodalRepresentation",
     "SwiLAMTSK",
     "LearnedCDL",
+    "LearnedStructuralWorkspace",
     "LearnedCASM",
     "LearnedOSM",
     "LearnedVerifier",
