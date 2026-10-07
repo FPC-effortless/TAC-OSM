@@ -1,0 +1,92 @@
+{
+  "experiment_id": "TACOSM-PLM-MATCHED-FF-001",
+  "status": "pre-registered",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "batch_size": 96,
+  "evaluation_episodes_per_seed": 600,
+  "heldout": [
+    [
+      "xor",
+      2,
+      4
+    ],
+    [
+      "xor",
+      4,
+      8
+    ],
+    [
+      "xor",
+      1,
+      9
+    ],
+    [
+      "and",
+      3,
+      5
+    ],
+    [
+      "and",
+      6,
+      10
+    ],
+    [
+      "and",
+      2,
+      11
+    ],
+    [
+      "or",
+      2,
+      4
+    ],
+    [
+      "or",
+      4,
+      8
+    ],
+    [
+      "or",
+      1,
+      9
+    ],
+    [
+      "xnor",
+      3,
+      5
+    ],
+    [
+      "xnor",
+      6,
+      10
+    ],
+    [
+      "xnor",
+      2,
+      11
+    ]
+  ],
+  "benchmark_generator_version": "integrated-e2e-v7-collision-free-payload-only",
+  "plm_parameter_count": 74126,
+  "parameter_tolerance_relative": 0.01,
+  "baseline": "same clean multimodal encoders and shared representation; no persistent state, CASM, verifier, outcome update, or state write; query receives the explicitly addressed entity representation directly plus i/j/operator indices.",
+  "primary_endpoint": "heldout_q2_accuracy",
+  "decision_rule": "Report both models without model selection. Persistence is supported only if PLM exceeds the feed-forward mean by >=0.05 and the composition-bootstrap 95% intervals do not overlap; otherwise report no persistence advantage on this task.",
+  "leakage_gates": [
+    "heldout disjoint from training",
+    "evaluation generated after training",
+    "distinct seed evaluation fingerprints",
+    "benchmark generator version bound",
+    "contract hash recorded",
+    "parameter relative difference <=1%",
+    "no target outcome supplied before prediction"
+  ],
+  "interpretation_boundary": "This isolates persistence only on the clean synthetic E2E-008 task. It does not test learned addressing, operator discovery, semantic multimodal understanding, or long-horizon memory."
+}\n
