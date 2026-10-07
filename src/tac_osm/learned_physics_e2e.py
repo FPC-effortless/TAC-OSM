@@ -124,13 +124,13 @@ class LearnedActionHead(nn.Module):
         super().__init__()
         self.goal = nn.Sequential(nn.Linear(2, hidden), nn.GELU())
         self.net = nn.Sequential(
-            nn.Linear(hidden * 2, hidden),
+            nn.Linear(hidden * 3, hidden),
             nn.GELU(),
             nn.Linear(hidden, action_count),
         )
 
-    def forward(self, state: Tensor, goal: Tensor) -> Tensor:
-        return self.net(torch.cat((state, self.goal(goal)), dim=-1))
+    def forward(self, state: Tensor, canonical: Tensor, goal: Tensor) -> Tensor:
+        return self.net(torch.cat((state, canonical, self.goal(goal)), dim=-1))
 
 
 class LearnedPhysicsE2E(nn.Module):
@@ -165,7 +165,7 @@ class LearnedPhysicsE2E(nn.Module):
         hidden_states = self.temporal(fused)
         canonical = self.canonical(hidden_states)
         energy = self.hamiltonian(canonical)
-        logits = self.action(hidden_states[:, -1], goal)
+        logits = self.action(hidden_states[:, -1], canonical[:, -1], goal)
         return logits, canonical, energy
 
 
