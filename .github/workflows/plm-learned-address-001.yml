@@ -1,0 +1,112 @@
+name: Research PLM learned addressing 001
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/TACOSM-PLM-LEARNED-ADDRESS-001.json"
+      - "src/tac_osm/learned_address_001.py"
+      - "src/tac_osm/learned_address_001_benchmark.py"
+      - "scripts/run_plm_learned_address_001.py"
+      - "scripts/validate_plm_learned_address_001.py"
+      - "tests/test_plm_learned_address_001.py"
+      - ".github/workflows/plm-learned-address-001.yml"
+  push:
+    branches:
+      - research/plm-learned-address-001-2026-10-07
+    paths:
+      - "contracts/TACOSM-PLM-LEARNED-ADDRESS-001.json"
+      - "src/tac_osm/learned_address_001.py"
+      - "src/tac_osm/learned_address_001_benchmark.py"
+      - "scripts/run_plm_learned_address_001.py"
+      - "scripts/validate_plm_learned_address_001.py"
+      - "tests/test_plm_learned_address_001.py"
+      - ".github/workflows/plm-learned-address-001.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pr_integrity:
+    name: Learned addressing PR integrity smoke
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Static gate
+        run: |
+          ruff check --select F821             src/tac_osm/learned_address_001.py             src/tac_osm/learned_address_001_benchmark.py             scripts/run_plm_learned_address_001.py             scripts/validate_plm_learned_address_001.py             tests/test_plm_learned_address_001.py
+      - name: Focused tests
+        run: |
+          python -m pytest             tests/test_contract.py             tests/test_plm_learned_address_001.py             tests/test_integrated_e2e_008.py -q
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-PLM-LEARNED-ADDRESS-001")
+          assert c.check_consistency() == []
+          assert c.h_levels == (3,)
+          assert c.seeds == (0,1,2,3,4)
+          assert c.steps == 300
+          assert c.eval_steps == 600
+          assert [a.name for a in c.arms] == [
+              "learned_address","oracle_address",
+              "corrupted_address","shuffle_observation_order"
+          ]
+          assert c.primary_endpoint() == "heldout_q2_accuracy"
+          print("PASS: learned-address contract")
+          PY
+      - name: Smoke
+        run: python scripts/run_plm_learned_address_001.py --smoke
+
+  confirmatory:
+    name: Learned addressing confirmatory measurement
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Static gate
+        run: |
+          ruff check --select F821             src/tac_osm/learned_address_001.py             src/tac_osm/learned_address_001_benchmark.py             scripts/run_plm_learned_address_001.py             scripts/validate_plm_learned_address_001.py             tests/test_plm_learned_address_001.py
+      - name: Focused tests
+        run: |
+          python -m pytest             tests/test_contract.py             tests/test_plm_learned_address_001.py             tests/test_integrated_e2e_008.py -q
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-PLM-LEARNED-ADDRESS-001")
+          assert c.check_consistency() == []
+          print("PASS: learned-address contract")
+          PY
+      - name: Smoke
+        run: python scripts/run_plm_learned_address_001.py --smoke
+      - name: Confirmatory measurement
+        run: python scripts/run_plm_learned_address_001.py
+      - name: Independent result validation
+        run: |
+          python scripts/validate_plm_learned_address_001.py             artifacts/TACOSM-PLM-LEARNED-ADDRESS-001.json
+      - name: Upload scientific artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-LEARNED-ADDRESS-001
+          path: artifacts/TACOSM-PLM-LEARNED-ADDRESS-001.json
+          if-no-files-found: error
