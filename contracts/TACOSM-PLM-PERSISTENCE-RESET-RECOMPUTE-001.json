@@ -1,0 +1,119 @@
+{
+  "experiment_id": "TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001",
+  "title": "Temporal carry attribution via reset/recompute control",
+  "question": "Does q1→q2 performance depend on carrying post-q1 persistent state across the action boundary, rather than recomputing state from the original observations?",
+  "hypothesis": "If temporal carry is load-bearing on the registered E2E-008 task, the normal PLM will exceed the reset/recompute control by at least 0.05 in held-out q2 accuracy and the paired composition-bootstrap 95% interval for normal-minus-reset will exclude zero.",
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "Use the trained residual-linear PLM exactly as E2E-008: carry the post-q1 outcome-gated state update into q2.",
+      "acts_on": "temporal carry across q1→q2 action boundary"
+    },
+    {
+      "name": "reset_recompute",
+      "intervention": "After q1 and its environment outcome/update are computed, discard the updated state and recompute state solely from the original observations with the same frozen model weights before q2.",
+      "acts_on": "temporal carry; recomputation is forbidden from receiving q1 outcome, verifier signal, action, or label"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "heldout_q2_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "paired_q2_difference_normal_minus_reset_recompute",
+      "role": "decision diagnostic",
+      "primary": false
+    },
+    {
+      "name": "per_composition_q2_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "q1_accuracy",
+      "role": "intervention integrity diagnostic",
+      "primary": false
+    },
+    {
+      "name": "recomputed_state_identity",
+      "role": "intervention integrity gate",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; normal mean held-out q2 accuracy exceeds reset_recompute mean by >=0.05; paired composition-bootstrap 95% CI for normal-minus-reset excludes zero with lower bound > 0",
+      "licenses": "bounded causal evidence that temporal carry across the q1→q2 action boundary contributes to performance on the registered E2E-008 synthetic task",
+      "does_not_license": "learned semantic memory, learned addressing, learned operator discovery, real-world multimodal understanding, general scaling, or a claim that temporal carry is necessary outside this task"
+    },
+    {
+      "condition": "all integrity gates pass; normal-minus-reset gap is <0.05 or the paired composition-bootstrap interval includes zero",
+      "licenses": "the registered experiment does not support a load-bearing temporal-carry contribution under the preregistered materiality rule",
+      "does_not_license": "a conclusion that persistence is useless generally; the result remains bounded to this synthetic E2E-008 task"
+    },
+    {
+      "condition": "reset/recompute is not inferentially clean, including any use of q1 outcome/label/verifier information in recomputation or failure of paired intervention invariants",
+      "licenses": "no temporal-carry inference; measurement is instrument-invalid",
+      "does_not_license": "any architectural conclusion"
+    }
+  ],
+  "interpretation_order": [
+    "E2E-008 benchmark identity and reference-stream equality",
+    "model/configuration identity and frozen-weight parameter count",
+    "paired evaluation reuse and zero training/evaluation overlap",
+    "intervention invariants: q1 equality and pre-q1/recomputed state identity",
+    "primary normal versus reset_recompute q2 accuracy",
+    "paired composition-bootstrap gap and decision rule",
+    "claim boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 600,
+  "held_constant": [
+    "E2E-008 benchmark generator and 12 held-out compositions",
+    "exact E2E-008 hidden_dim=64 residual-linear model architecture",
+    "same five training seeds, optimizer, learning rate, weight decay, 300 training steps and batch size 96",
+    "same trained weights are used for normal and reset_recompute within each seed",
+    "same evaluation episode objects are used by both arms within each seed",
+    "no post-run model selection, no benchmark modification, and no hyperparameter tuning",
+    "the reset recomputation receives only the original observations and frozen model weights"
+  ],
+  "status": "pre-registered",
+  "layer": "L3 causal attribution follow-up on the registered E2E-008 mechanism",
+  "legacy_reference": {
+    "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-008",
+    "benchmark_generator_version": "integrated-e2e-v7-collision-free-payload-only",
+    "benchmark_sha256": "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e",
+    "parameter_count": 74126,
+    "evaluation_fingerprints": {
+      "0": "1ddec9fce4808e697c615a4934a0650d763ad2a3d87b0d8b059546a414b21f51",
+      "1": "ada3f705647de795a930dda2439ae6456662ebda498cca5458e704ea338cc2eb",
+      "2": "bbe54208c823d659b729b49b28f05c76b4fd5008d26e1183d8030dea06ae2fd8",
+      "3": "980b8b97f9a5cc816d2bee9092dac27fbf2e233aabf81a809e5392bc1c8d860a",
+      "4": "4984f06784cd176f2a2d517ab04fa1fa82f288f12c68c783caad9b838398259c"
+    }
+  },
+  "leakage_rules": [
+    "evaluation compositions are exactly the E2E-008 held-out set and are not used for training",
+    "evaluation is generated after training from the registered per-seed evaluation RNG namespace",
+    "within each seed, normal and reset_recompute use the same Python episode objects",
+    "each observed evaluation fingerprint must exactly equal the registered E2E-008 fingerprint for that seed",
+    "training/evaluation semantic overlap must be zero for every seed",
+    "the recomputation function may access only original observation rows and frozen model parameters; no q1 outcome, q1 target, verifier target, action, or correctness flag may enter it",
+    "q1 prediction must be identical between arms within each episode",
+    "the recomputed state before q2 must be byte-identical to the state immediately before q1 under deterministic evaluation",
+    "no model selection or hyperparameter tuning is performed from the paired results",
+    "this experiment is an attribution follow-up on an existing held-out benchmark, not a fresh generalization test"
+  ]
+}
