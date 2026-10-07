@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
-  "version": 2,
+  "version": 3,
   "status": "pre-registered",
   "title": "Fully learned multimodal physical control with optional physics-law prior",
   "question": "Can a fully learned multimodal persistent controller infer hidden motion from history and choose the correct control action, and does adding only physical-law priors improve that capability?",
@@ -60,13 +60,13 @@
   ],
   "physics_prior": {
     "allowed_information": [
-      "linear momentum conservation on collision-free observed intervals",
-      "kinetic energy conservation on collision-free observed intervals",
-      "kinematic displacement equals average velocity times dt"
+      "Hamilton's canonical equations dq/dt = dH/dp and dp/dt = -dH/dq",
+      "conservation of the learned Hamiltonian H on passive observation intervals"
     ],
     "forbidden_information": [
-      "optimal action",
-      "target action index",
+      "particle count or object slots",
+      "masses, positions, velocities, or other physical-state labels",
+      "optimal action or target action index",
       "future reward",
       "entity identifier",
       "episode identity",
@@ -179,6 +179,25 @@
       ],
       "invalidated_run": "37645169621",
       "scientific_status": "instrument-invalid before measurement; no result or artifact from this run may be interpreted or cited"
+    },
+    {
+      "id": "A2",
+      "stage": "pre-measurement construct correction",
+      "reason": "The first corrected model encoded an 8-dimensional two-particle physical-state head, which is a task-specific physical ontology rather than only a physical-law prior.",
+      "change": "Replace the explicit two-particle state head with a generic learned canonical latent and a learned scalar Hamiltonian; regularize that latent only with Hamilton's equations and Hamiltonian conservation.",
+      "unchanged": [
+        "benchmark generator and held-out evaluation protocol",
+        "train/evaluation split rules",
+        "seeds",
+        "optimizer and training budget",
+        "end-to-end and physics-prior benefit thresholds",
+        "no entity/operator/addressing scaffolds"
+      ],
+      "invalidated_runs": [
+        "37645169621",
+        "37645649621"
+      ],
+      "scientific_status": "instrument-invalid before a valid confirmatory artifact; no result from either run may be interpreted or cited"
     }
   ]
 }
