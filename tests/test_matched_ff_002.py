@@ -26,7 +26,7 @@ def test_migrated_contract_schema_and_bound_history():
         assert c.eval_steps == 600
         assert [a.name for a in c.arms] == ["PLM", expected_arm]
         assert c.primary_endpoint() == "heldout_q2_accuracy"
-        assert "schema-migration-001" in {a.id for a in c.amendments}
+        assert "A-schema-migration-001" in {a.id for a in c.amendments}
 
     ff2 = json.load(open("contracts/TACOSM-PLM-MATCHED-FF-002.json"))
     amendment = ff2["amendments"][0]
