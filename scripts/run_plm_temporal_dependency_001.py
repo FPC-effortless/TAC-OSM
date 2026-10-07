@@ -134,7 +134,7 @@ def batch_from_episodes(episodes):
     q1_targets = []
     q2_targets = []
     for ep in episodes:
-        pre, post, q1, q2, _payload = ep
+        pre, post, q1, q2, payload = ep
         _ = post
         texts.append(pre[0][1])
         images.append(pre[0][2])
