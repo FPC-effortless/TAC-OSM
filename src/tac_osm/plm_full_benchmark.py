@@ -239,8 +239,10 @@ def sample_balanced_episodes(rng: random.Random, per_action: int) -> list[Episod
     return episodes
 
 
-def step_environment(
-    episode: Episode, action: int
+def step_environment_from_state(
+    state: PhysicalState,
+    goal: torch.Tensor,
+    action: int,
 ) -> tuple[
     PhysicalState,
     tuple[torch.Tensor, torch.Tensor, torch.Tensor],
@@ -250,22 +252,35 @@ def step_environment(
 ]:
     if not 0 <= int(action) < ACTION_COUNT:
         raise ValueError("invalid action")
-    next_state = step_physics(episode.hidden_state, ACTION_IMPULSES[int(action)])
+    next_state = step_physics(state, ACTION_IMPULSES[int(action)])
     distance = float(
-        torch.linalg.vector_norm(next_state.position.mean(dim=0) - episode.goal)
+        torch.linalg.vector_norm(next_state.position.mean(dim=0) - goal)
     )
-    # Continuous post-action outcome evidence. The binary success label stays
-    # outside the model and is used only as an external training/evaluation
-    # target.
+    # Continuous post-action outcome evidence is observable consequence only.
+    # The binary success label is retained outside the model as a supervision
+    # and evaluation variable; it is never supplied as model input.
     outcome_evidence = -distance
-    reward = bool(int(action) == int(episode.action))
-    target_after = optimal_action(next_state, episode.goal)
+    target = optimal_action(state, goal)
+    reward = bool(target is not None and int(action) == int(target))
+    target_after = optimal_action(next_state, goal)
     observation = (
-        _render_text(episode.goal),
+        _render_text(goal),
         _render_image(next_state),
         _render_audio(next_state),
     )
     return next_state, observation, outcome_evidence, reward, target_after
+
+
+def step_environment(
+    episode: Episode, action: int
+) -> tuple[
+    PhysicalState,
+    tuple[torch.Tensor, torch.Tensor, torch.Tensor],
+    float,
+    bool,
+    int | None,
+]:
+    return step_environment_from_state(episode.hidden_state, episode.goal, action)
 
 
 def episode_key(episode: Episode) -> tuple:
@@ -385,7 +400,7 @@ def benchmark_manifest() -> dict:
 __all__ = [
     "ACTION_IMPULSES", "ACTION_NAMES", "ACTION_COUNT", "HISTORY", "HORIZON",
     "DT", "VOCAB_SIZE", "Episode", "PhysicalState", "sample_episode",
-    "sample_balanced_episodes", "step_environment", "episode_key",
+    "sample_balanced_episodes", "step_environment_from_state", "step_environment", "episode_key",
     "episode_fingerprint", "generator_hash", "make_history_pair",
     "sample_history_pairs", "benchmark_manifest", "optimal_action",
 ]
