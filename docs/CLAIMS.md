@@ -789,7 +789,11 @@ The diagnostic structure is informative: oracle-operator q2 was **0.9740**, shuf
 
 This establishes a **partial scaffold-removal result**, not robust learned operator discovery. The execution library is still a fixed Boolean primitive set, and explicit entity addressing remains in place.
 
-**BLOCKER:** establish operator-induction robustness without changing the preregistered outcome after inspection of seed 3. A new contract must define any added demonstrations, losses, or training changes before measurement.
+**RESOLVED BY ROBUSTNESS EXTENSION:** the registered 20-seed extension completed with zero train/evaluation semantic overlap, exact 28,800 sampled q2 episodes per seed, distinct evaluation fingerprints, and frozen C19 benchmark lineage. Operator-selection mean = **0.9375**, seed minimum = **0.75**, q2 mean = **0.93275**, q2 minimum = **0.7117**. Five of 20 seeds (25%; exact 95% binomial interval approximately **[8.7%, 43.7%]**) showed operator-selection failure. All observed selection errors were confined to an XOR/XNOR confusion pair: aggregate XNOR selection = **0.90**, XOR = **0.85**, AND = **1.00**, OR = **1.00**. No AND/OR confusion was observed.
+
+This confirms that the C19 seed-3 failure pattern is **recurrent**, but it does not establish that XNOR or XOR is intrinsically harder. The failure mechanism is consistent with a seed-dependent XOR/XNOR symmetry-breaking mode: failed seeds selected one of that pair for all 150 episodes of the affected operator. The correct claim is therefore bounded latent operator induction with recurrent pairwise symmetry instability, not intrinsic operator difficulty or robust operator synthesis.
+
+The extension also found mean no-memory q2 = **0.6269**, mean oracle-operator q2 = **0.9823**, and mean oracle-minus-normal q2 = **0.0496**. The mean lift over the registered 0.625 no-memory reference is **+0.30775**. These are diagnostics, not replacements for C19's original decision rule.
 
 ---
 
@@ -993,3 +997,18 @@ The protocol uses independent unit-norm Gaussian keys, memory sizes 3–256, dim
 At d=16 and sigma=0.8, measured mean retrieval accuracy is 0.697558, 0.454918, 0.319596, 0.215862, 0.140910, 0.088952 and 0.054438 for M = 3, 8, 16, 32, 64, 128 and 256 respectively.
 
 This establishes the reference channel-capacity/robustness curve for random-key associative retrieval. It does **not** establish semantic addressing, learned content addressing, multimodal understanding, or any PLM capability result.
+
+
+## C19 20-seed robustness extension — recurrent XOR/XNOR symmetry instability
+
+**STATUS: VALID ROBUSTNESS EXTENSION; C19 ORIGINAL DECISION UNCHANGED**
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-LATENT-OPERATOR-020SEED`, workflow runs **37633578443** and **37633319520**, latest artifact **11489055422**, measured commit **9142e9e3e0e15bfa0d346cf52b830efddf20f19a**.
+
+The latest successful artifact reproduces the robustness pattern under the hardened training-count gate: every seed records exactly 28,800 q2 training samples; train/evaluation semantic overlap is zero for all 20 seeds; all 20 evaluation fingerprints are distinct; and the frozen C19 benchmark Git blob is `a16f73...`.
+
+Across 20 seeds, operator-selection accuracy is **0.9375 mean**, with **5/20 seeds** below perfect selection. The affected seeds are **3, 7, 14, 17, 18**. Seeds 3 and 17 fail on XNOR; seeds 7, 14 and 18 fail on XOR. The aggregate confusion matrix contains only two off-diagonal classes: **300 XNOR→XOR** and **450 XOR→XNOR** over 3,000 episodes per operator. AND and OR remain at 100% selection.
+
+Held-out q2 accuracy is **0.93275 mean** and **0.71167 minimum**. The mean lift over the registered no-memory reference 0.625 is **+0.30775**. Oracle-operator q2 is **0.98233**, leaving a mean **0.04958** oracle gap. No-memory q2 is **0.62692**.
+
+These observations establish recurrent seed-dependent **XOR/XNOR symmetry instability** in this fixed primitive library. They do not establish intrinsic difficulty of XNOR, intrinsic difficulty of XOR, or open-ended operator synthesis.
