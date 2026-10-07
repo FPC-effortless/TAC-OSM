@@ -1,0 +1,67 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-008",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Fresh confirmatory integrated multimodal PLM with collision-free modality encoding",
+  "question": "Can the selected hidden_dim=64 residual-linear integrated PLM solve a fresh held-out cross-modal Boolean benchmark when modality encodings contain payload bits but no entity-ID side channel or payload/ID spatial collision?",
+  "hypothesis": "The selected configuration will meet the registered 0.80 held-out q2 criterion on a fresh benchmark after removing the identified image payload/entity-ID collision without changing the model architecture or optimization budget.",
+  "primary_endpoint": {"name": "heldout_q2_accuracy_all_modalities", "unit": "episode", "threshold": 0.8, "selection": "none"},
+  "seeds": [0,1,2,3,4],
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "hidden_dim": 64,
+    "state_write_mode": "residual_linear",
+    "entity_count": 16,
+    "latent_bits": 12,
+    "observation_entities_per_episode": 3,
+    "evaluation_episodes_per_seed": 600,
+    "observation_noise": 0.03,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "query_count": 2,
+    "operator_dispatch": "fixed_query_conditioned",
+    "representation_auxiliary_supervision": false,
+    "model_selection": "none",
+    "entity_side_channel": false
+  },
+  "heldout": [
+    ["xor",2,4],["xor",4,8],["xor",1,9],
+    ["and",3,5],["and",6,10],["and",2,11],
+    ["or",2,4],["or",4,8],["or",1,9],
+    ["xnor",3,5],["xnor",6,10],["xnor",2,11]
+  ],
+  "held_constant": [
+    "same hidden_dim=64 residual-linear model as E2E-007",
+    "same five seeds and 300-step training budget",
+    "same optimizer and learning rate",
+    "fresh heldout compositions excluded from all prior development/confirmatory sets",
+    "no payload-bit or entity auxiliary supervision",
+    "fixed public operator dispatch and deterministic entity IDs remain scaffolds",
+    "identified E2E-007 image entity-ID/payload collision is removed in the benchmark generator only; model architecture is unchanged"
+  ],
+  "leakage_rules": [
+    "all prior sealed and development compositions are excluded from training",
+    "E2E-008 training and heldout compositions are disjoint",
+    "evaluation episodes are generated after training from a separate RNG namespace",
+    "training/evaluation semantic episode-key overlap must be zero",
+    "modality encoders contain payload bits only and no entity-ID side channel",
+    "query API contains no answer, outcome, reward, or payload labels",
+    "no auxiliary payload or entity supervision",
+    "classifier argmax must exactly agree with action >= 0.5"
+  ],
+  "antecedent_defect": "E2E-007 AND diagnosis identified image bits 4-5 as contaminated by an entity-ID stripe occupying rows 0-3 while bit patches for those bits occupy rows 1-3; E2E-008 removes that overlap and removes the entity-ID image stripe entirely.",
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass, mean normal heldout q2 accuracy >= 0.80, and every seed >= 0.40",
+      "licenses": "bounded confirmatory evidence that the selected residual-linear integrated PLM functions end to end on the corrected fresh synthetic benchmark",
+      "does_not_license": "real-world multimodal understanding, semantic memory, learned addressing, learned operator discovery, scaling or efficiency"
+    },
+    {
+      "condition": "integrity passes but the primary threshold fails",
+      "licenses": "the selected configuration does not meet the registered clean-benchmark capability criterion",
+      "does_not_license": "architecture impossibility"
+    }
+  ]
+}
