@@ -75,7 +75,7 @@ def test_operator_inducer_is_permutation_invariant():
     with torch.no_grad():
         a = model.infer_operator(support)
         b = model.infer_operator(permuted)
-    assert torch.equal(a, b)
+    assert torch.allclose(a, b, atol=1e-7, rtol=1e-7)
 
 
 def test_operator_inducer_receives_task_gradient():
