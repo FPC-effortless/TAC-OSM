@@ -216,7 +216,8 @@ def hierarchical_paired_bootstrap(seed_rows, rounds=10000):
     return [samples[int(0.025 * rounds)], samples[int(0.975 * rounds)]]
 
 
-@torch.no_grad()\ndef evaluate_seed(model, episodes):
+@torch.no_grad()
+def evaluate_seed(model, episodes):
     model.eval()
     carry_correct = 0
     fresh_correct = 0
