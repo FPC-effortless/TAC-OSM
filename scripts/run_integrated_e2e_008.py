@@ -227,6 +227,11 @@ def run(smoke=False):
     assert contract["protocol"]["state_write_mode"] == "residual_linear"
     assert contract["protocol"]["entity_side_channel"] is False
     assert len(contract["heldout"]) == len(HELDOUT) == 12
+    assert [tuple(x) for x in contract["heldout"]] == list(HELDOUT)
+    assert contract["steps"] == STEPS
+    assert contract["eval_steps"] == EVAL_EPISODES
+    assert contract["h_levels"] == [3]
+    assert [arm["name"] for arm in contract["arms"]] == list(controls)
 
     gradient_gate = gradient_surface_probe()
     assert gradient_gate["pass"], gradient_gate
@@ -278,6 +283,7 @@ def run(smoke=False):
             }
         )
 
+    assert len({row["evaluation_episode_fingerprint"] for row in rows}) == len(rows), "seed evaluation streams must be distinct"
     primary_values = [row["normal_q2_accuracy"] for row in rows]
     composition_mean = (
         {
