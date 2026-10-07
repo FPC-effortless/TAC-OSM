@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
-  "version": 4,
+  "version": 5,
   "status": "pre-registered",
   "title": "Fully learned multimodal physical control with optional physics-law prior",
   "question": "Can a fully learned multimodal persistent controller infer hidden motion from history and choose the correct control action, and does adding only physical-law priors improve that capability?",
@@ -217,6 +217,27 @@
         "37645169621",
         "37645649621",
         "37646974646"
+      ],
+      "scientific_status": "instrument correction before admissible measurement"
+    },
+    {
+      "id": "A4",
+      "stage": "pre-measurement causal-boundary correction",
+      "reason": "The generic canonical latent was still auxiliary to the action head, so a physics-prior update could in principle affect only a side branch.",
+      "change": "The action head now consumes the final generic canonical latent directly; a focused gradient test verifies nonzero action dependence.",
+      "unchanged": [
+        "benchmark generator",
+        "Hamiltonian-only prior",
+        "held-out protocol",
+        "seeds",
+        "optimizer and training budget",
+        "decision rules"
+      ],
+      "invalidated_runs": [
+        "37645169621",
+        "37645649621",
+        "37646974646",
+        "37647273293"
       ],
       "scientific_status": "instrument correction before admissible measurement"
     }
