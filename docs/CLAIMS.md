@@ -679,6 +679,36 @@ re-queues on this top-K evidence alone, recorded as "top-K signal intact" and
 
 ---
 
+
+
+---
+
+## C15 — Integrated multimodal persistent computation works end to end on a fresh held-out composition set
+
+> The selected integrated PLM configuration can carry synthetic information from text, image, and audio observations through explicit persistent entity-addressed state into fixed query-conditioned computation and achieve the registered capability criterion on a fresh held-out cross-modal benchmark.
+
+**STATUS: SUPPORTED, bounded**
+
+**TYPE:** core claim · **LAYER:** L3 — see `docs/EVIDENCE_REGISTER.md`
+
+**PRIOR ART:** none for this exact integrated claim.
+
+**NOT INHERITED:** real-world multimodal understanding; semantic or learned long-horizon memory; learned semantic addressing; learned operator discovery; scaling laws; compute efficiency; AGI.
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-INTEGRATED-E2E-006`, with all integrity gates passing, the fresh held-out split disjoint from prior sealed/development sets, and an independently validated artifact.
+
+E2E-006 reports q2 accuracies of 0.8725, 0.8775, 0.8500, 0.8600 and 0.8725 over seeds 0–4. Mean = **0.8665**; seed-level bootstrap 95% interval = **[0.8575, 0.8745]**; minimum seed = **0.8500**, against the preregistered threshold of **0.80** and per-seed floor of **0.40**.
+
+The result is not a base-rate artifact: the normal arm averaged 0.8665 while no-memory, image-shuffle, text-only, image-only and audio-only controls averaged 0.6200, 0.7330, 0.6180, 0.6180 and 0.5900 respectively. Mean memory drop = **0.2465** and image-alignment drop = **0.1335**. Oracle q2 accuracy = **1.0000**.
+
+Integrity gates passed: classifier decision consistency had zero mismatches; gradient-surface coverage passed; training/evaluation semantic episode overlap was zero; held-out composition exclusion passed; evaluation was generated after training; control arms reused the same evaluation episode objects; payload/entity auxiliary supervision was disabled; and q1/q2 target entities were distinct.
+
+The capacity choice was made only on a registered development split: hidden_dim=40 achieved mean q2 **0.6950**, while hidden_dim=64 achieved **0.8650** with a paired mean gain of **+0.1700**. The sealed E2E-005 held-out set was excluded from that selection and from E2E-006 training.
+
+This claim establishes a **working synthetic integrated mechanism**, not general multimodal intelligence. Entity addressing is deterministic and operator dispatch is fixed by the public query, so neither learned semantic addressing nor learned operator discovery is demonstrated. The weakest registered operator remains XOR, at approximately 0.69–0.77 across seeds, so the result does not establish uniform operator competence.
+
+**BLOCKER:** the next boundary is to remove or progressively relax the explicit addressing/operator scaffolds and test whether the integrated chain remains functional under learned addressing and learned operator discovery, while preserving the same leakage and split discipline.
+
 ## Claims this repository does not make
 
 Deliberately excluded, and recorded so their absence is a position rather
