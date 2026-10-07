@@ -1,0 +1,169 @@
+{
+  "experiment_id": "TACOSM-PLM-AND-IMAGE-AUDIO-DIAG-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Development diagnosis of image-audio persistent-state content recovery",
+  "question": "Is the remaining AND weakness on E2E-007 concentrated in persistent recovery of image/audio latent bits when the queried AND pair is image-audio?",
+  "hypothesis": "The diagnostic will determine whether joint recovery of image/audio queried bits is the dominant source of AND errors, without modifying CASM or using any prior confirmatory outcomes.",
+  "arms": [
+    {
+      "name": "normal",
+      "intervention": "hidden_dim=64 residual-linear integrated PLM",
+      "acts_on": "image/audio encoding and persistent state content"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "image_audio_and_q2_accuracy",
+      "role": "primary diagnostic",
+      "primary": true
+    },
+    {
+      "name": "joint_bit_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "image_bit_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "audio_bit_accuracy",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "and_execution_error_given_correct_bits",
+      "role": "secondary diagnostic",
+      "primary": false
+    },
+    {
+      "name": "classifier_decision_integrity",
+      "role": "integrity gate",
+      "primary": false
+    },
+    {
+      "name": "training_evaluation_overlap",
+      "role": "integrity gate",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "if image/audio queried-bit error materially exceeds conditional AND execution error",
+      "licenses": "image/audio state-content recovery is the dominant diagnosed bottleneck for this AND subset",
+      "does_not_license": "a general modality-encoder failure"
+    },
+    {
+      "condition": "if conditional AND execution error is comparable to or larger than state-content error",
+      "licenses": "AND execution is also a material bottleneck on image-audio queries",
+      "does_not_license": "general CASM inadequacy"
+    }
+  ],
+  "interpretation_order": [
+    "heldout composition separation",
+    "training/evaluation overlap",
+    "classifier decision integrity",
+    "queried image/audio bit recovery",
+    "AND execution conditional on correct bits",
+    "diagnosis boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 200,
+  "held_constant": [
+    "same hidden_dim=64 residual-linear configuration",
+    "same optimizer, learning rate, weight decay and 300-step budget",
+    "no CASM code changes",
+    "sealed E2E-005, E2E-006 and E2E-007 compositions excluded from training",
+    "previous development composition sets excluded from training",
+    "evaluation generated after training with separate RNG namespace",
+    "no auxiliary payload/entity supervision"
+  ],
+  "heldout": [
+    [
+      "and",
+      4,
+      8
+    ],
+    [
+      "and",
+      4,
+      9
+    ],
+    [
+      "and",
+      4,
+      10
+    ],
+    [
+      "and",
+      5,
+      8
+    ],
+    [
+      "and",
+      5,
+      10
+    ],
+    [
+      "and",
+      5,
+      11
+    ],
+    [
+      "and",
+      6,
+      8
+    ],
+    [
+      "and",
+      6,
+      9
+    ],
+    [
+      "and",
+      6,
+      10
+    ],
+    [
+      "and",
+      6,
+      11
+    ],
+    [
+      "and",
+      7,
+      8
+    ],
+    [
+      "and",
+      7,
+      9
+    ],
+    [
+      "and",
+      7,
+      10
+    ],
+    [
+      "and",
+      7,
+      11
+    ]
+  ],
+  "provenance": {
+    "predecessor": "TACOSM-PLM-AND-DIAG-001",
+    "purpose": "follow-up modality-specific localization; no confirmatory claim"
+  }
+}
