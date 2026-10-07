@@ -141,24 +141,12 @@ def validate_episode(ep):
     assert slots["q1_slot"] != slots["q2_slot"]
 
 
-def _freeze(value):
-    if isinstance(value, list):
-        return tuple(_freeze(x) for x in value)
-    if isinstance(value, tuple):
-        return tuple(_freeze(x) for x in value)
-    return value
-
-
 def episode_key(ep):
     observations, q1, q2, payload, slots = ep
     return (
         tuple(tuple(float(x) for x in row[0]) for row in observations),
         tuple(
-            (
-                _freeze(row[1].tolist()),
-                _freeze(row[2].tolist()),
-                _freeze(row[3].tolist()),
-            )
+            (row[1].tolist(), row[2].tolist(), row[3].tolist())
             for row in observations
         ),
         tuple(q1[:-1]),
