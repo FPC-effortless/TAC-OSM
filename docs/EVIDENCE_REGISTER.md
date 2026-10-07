@@ -230,6 +230,23 @@ E2E-006 held-out outcomes for selection.
 
 ---
 
+
+
+## E2E-007 residual-state integration evidence
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| E2E-007 mean q2 = 0.9350 on a new held-out composition set | L3 | integration | the development-selected residual-linear state-write configuration works end to end on a second fresh synthetic benchmark | real-world multimodal understanding, semantic memory, learned addressing, learned operator discovery, scaling or efficiency | operator dispatch and entity addressing remain explicit scaffolds |
+| Mean memory drop = 0.3135 with all modal controls below normal | L3 | localization | persistent state and multimodal observations materially contribute under the registered interventions | causal generality outside the synthetic benchmark | controls are diagnostic, not independent primary endpoints |
+| XOR reaches 1.00 across every seed while AND remains 0.71–0.77 | L3 | mechanism diagnostic | the prior XOR state-content bottleneck was substantially repaired; the current residual failure moved toward AND | general Boolean-computation superiority | per-operator endpoints are secondary and not separately preregistered primaries |
+| Residual-linear development selection: mean q2 0.9080 vs linear 0.8470 | L2 | mechanism | state-write transformation is a measurable optimization lever in this synthetic implementation | universal superiority | selection occurred on the registered development split only |
+
+The evidence frontier has therefore moved from “make the integrated chain work”
+to “remove its remaining explicit scaffolds and diagnose operator-specific
+failure without reusing confirmatory outcomes.”
+
+---
+
 ## E2E-001 post-measurement evidence disposition
 
 | Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
