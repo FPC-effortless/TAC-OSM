@@ -320,21 +320,22 @@ than changing addressing again.
 
 | Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
 |---|---|---|---|---|---|
-| Normal and reset/recompute q2 = 1.0000 across all five seeds | L3 | causal ablation | temporal carry across q1→q2 is not necessary for E2E-008 | persistence is useless generally | reset/recompute still reconstructs the state from all original observations |
-| Normal-minus-reset = 0.0000; paired composition-bootstrap 95% CI = [0.0000, 0.0000] | L3 | decision endpoint | preregistered temporal-carry materiality criterion is not met | absence of temporal effects on other tasks | threshold was 0.05 and the decision rule was registered before measurement |
-| q1 prediction/action/outcome equality and recomputed-state identity both pass | L3 | intervention gate | the reset intervention changed the carry variable without changing the q1 path or the pre-q1 state | complete causal isolation of every implementation detail | the experiment isolates the outcome-gated cross-boundary carry within this architecture |
-| Independent validator passes; artifact 11469064681; run 37593010244 | L3 | provenance/validity | the reported negative attribution is a measured, inspectable result | new generalization evidence | the branch was scientifically file-equivalent to the clean master-lineage PR; no model selection was performed |
+| Normal and reset/recompute q2 = 1.0000 across all five seeds | L3 | **uninformative design null** | the specific post-q1 outcome-gated update is not required to reach the saturated E2E-008 ceiling | temporal carry is not load-bearing in an unsaturated task; persistence is useless generally | the reset arm retains all original observations and q2 is at ceiling |
+| Normal-minus-reset = 0.0000; paired composition-bootstrap 95% CI = [0.0000, 0.0000] | L3 | **uninformative endpoint** | no measurable gap at a saturated ceiling | evidence that temporal carry is unnecessary under a task with headroom | threshold was 0.05, but the ceiling makes the comparison non-discriminating |
+| q1 prediction/action/outcome equality and recomputed-state identity both pass | L3 | intervention gate | the reset intervention removes the post-q1 outcome-gated update without changing the q1 path or pre-q1 state | a clean test of whether q1-time information itself must be carried | the reset arm still reconstructs from all original observations |
+| Independent validator passes; artifact 11469064681; run 37593010244 | L3 | provenance/validity | the measured intervention was executed and reproduced cleanly | a definitive memory-versus-compute conclusion | the run is retained as an instrument-valid but non-discriminating ceiling result |
 
 
 
+| Learned-address v1 full confirmatory attempt run 37623028125 | L3 | **instrument failure** | the lane reached smoke successfully but the full measurement aborted on the post-shuffle target-slot balance assertion | any learned-address capability conclusion | the run uploaded only a smoke artifact after the measurement failed; the smoke artifact must not be treated as a measured result |
 ---
 
 ## Latent operator induction evidence
 
 | Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
 |---|---|---|---|---|---|
-| Hidden operator removed from model input; q2 mean = 0.9293 | L3 | scaffold-removal | the integrated state/CASM path can operate without explicit operator-ID dispatch on the registered synthetic task | robust learned operator discovery | seed 3 q2 = 0.7117 and operator selection = 0.75 |
+| Hidden operator removed from model input; q2 mean = 0.9293 | L3 | scaffold-removal | the integrated state/CASM path can operate without explicit operator-ID dispatch on the registered synthetic task | robust learned operator discovery or an intrinsic XNOR-difficulty claim | seed 3 q2 = 0.7117 and operator selection = 0.75; only five seeds were preregistered |
 | Operator-selection mean = 0.9500; composition-bootstrap 95% CI [0.9000, 1.0000] | L3 | mechanism | the support truth-table context is sufficient for strong operator inference in most seeds | uniform all-seed robustness | preregistered minimum was 0.80; seed 3 failed |
 | Shuffle-support q2 mean = 0.6793 versus normal = 0.9293 | L3 | context-use diagnostic | performance depends materially on the supplied support context | causal generality of the support mechanism | shuffle is a diagnostic intervention, not a new capability benchmark |
-| Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | seed-3 weakness is largely operator selection rather than the underlying state/content path | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
+| Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | about 2.6 percentage points of q2 accuracy are lost even with operator selection supplied; seed-3 weakness is therefore substantially selection-related | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
 | No-memory q2 mean = 0.6250 | L3 | mechanism diagnostic | the multimodal state representation remains functionally important | temporal persistence necessity | temporal carry was separately ruled out as necessary on E2E-008 |
