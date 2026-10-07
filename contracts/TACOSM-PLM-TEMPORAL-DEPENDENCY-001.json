@@ -1,0 +1,63 @@
+{
+  "experiment_id": "TACOSM-PLM-TEMPORAL-DEPENDENCY-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Temporal dependency test with q1-only information withheld from the reset arm",
+  "question": "Does preserving q1-time information across the action boundary improve q2 when the q2 target depends on information that is unavailable after the boundary?",
+  "hypothesis": "A carry-enabled PLM will solve the registered temporal-dependency task better than a fresh post-boundary state that receives only q2-time observations.",
+  "protocol": {
+    "layer": "L3",
+    "train_steps": 300,
+    "batch_size": 96,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "evaluation_episodes_per_seed": 600,
+    "hidden_dim": 64,
+    "state_write_mode": "residual_linear",
+    "entity_addressing": "explicit",
+    "operator_dispatch": "fixed Boolean primitive",
+    "model_selection": "none",
+    "interventions": {
+      "carry": "retain the pre-q1 state and traverse the q1 boundary normally",
+      "fresh_post_boundary": "discard all q1-time state and initialize a fresh state from q2-time observations only"
+    }
+  },
+  "temporal_design": {
+    "q1_time_information_is_unavailable_to_fresh_post_boundary_arm": true,
+    "q2_query_is_identical_between_arms": true,
+    "q1_answer_is_not_directly_supplied_to_q2_query": true,
+    "q2_target_is_functionally_dependent_on_q1_time_information": true,
+    "post_boundary_stream_is_independent_of_q1_time_information_except_through_registered_dependency": true,
+    "no_recompute_of_q1_time_observations_in_fresh_arm": true
+  },
+  "primary_endpoint": {
+    "name": "carry_minus_fresh_post_boundary_q2_accuracy",
+    "materiality_threshold": 0.1
+  },
+  "integrity_gates": [
+    "same q2 query and q2-time observations across arms",
+    "fresh arm receives no q1-time observation, state, action, outcome, label, or verifier signal",
+    "carry arm receives no future q2 information before q2",
+    "evaluation fingerprints are frozen before training",
+    "training/evaluation semantic overlap is zero",
+    "q1-time information is provably absent from the fresh arm input surface",
+    "no post-run model selection"
+  ],
+  "decision_rule": [
+    "If all integrity gates pass and carry-minus-fresh q2 >= 0.10 with a paired 95% interval lower bound > 0, temporal dependency is demonstrated on this task.",
+    "If all integrity gates pass but the criterion fails, the task does not show a load-bearing benefit from carry.",
+    "An invalid fresh-arm information boundary licenses no architectural inference."
+  ],
+  "claim_boundary": [
+    "task-bounded temporal information-flow evidence only",
+    "does not establish general long-horizon memory",
+    "does not establish semantic memory",
+    "does not establish learned addressing or operator discovery",
+    "does not establish scaling"
+  ]
+}
