@@ -49,12 +49,36 @@
     "base_e2e008_generator_sha256": "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e"
   },
   "endpoints": [
-    "operator_selection_accuracy",
-    "heldout_q2_accuracy",
-    "operator_confusion_matrix",
-    "training_operator_counts",
-    "no_memory_q2_accuracy",
-    "oracle_operator_q2_accuracy"
+    {
+      "name": "operator_selection_accuracy",
+      "role": "primary descriptive robustness endpoint",
+      "primary": true
+    },
+    {
+      "name": "heldout_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "operator_confusion_matrix",
+      "role": "diagnostic",
+      "primary": false
+    },
+    {
+      "name": "training_operator_counts",
+      "role": "diagnostic",
+      "primary": false
+    },
+    {
+      "name": "no_memory_q2_accuracy",
+      "role": "reference diagnostic",
+      "primary": false
+    },
+    {
+      "name": "oracle_operator_q2_accuracy",
+      "role": "upper-bound diagnostic",
+      "primary": false
+    }
   ],
   "rules": [
     "No change to the C19 contract, outcome, or threshold is permitted from this extension.",
