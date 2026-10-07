@@ -51,6 +51,18 @@ def contract_hash() -> str:
     return hashlib.sha256(CONTRACT_PATH.read_bytes()).hexdigest()
 
 
+def _freeze_for_set(value):
+    if isinstance(value, list):
+        return tuple(_freeze_for_set(x) for x in value)
+    if isinstance(value, tuple):
+        return tuple(_freeze_for_set(x) for x in value)
+    return value
+
+
+def hashable_episode_key(ep):
+    return _freeze_for_set(episode_key(ep))
+
+
 def parameter_count(model: nn.Module) -> int:
     return sum(p.numel() for p in model.parameters())
 
@@ -199,7 +211,7 @@ def train_seed(seed: int):
             )
             for _ in range(BATCH_SIZE)
         ]
-        training_keys.update(episode_key(ep) for ep in episodes)
+        training_keys.update(hashable_episode_key(ep) for ep in episodes)
         batch = build_batch(episodes)
 
         model.train()
@@ -344,7 +356,7 @@ def run(smoke: bool = False):
             random.Random(seed + 188000),
             eval_n,
         )
-        eval_keys = {episode_key(ep) for ep in evaluation}
+        eval_keys = {hashable_episode_key(ep) for ep in evaluation}
         overlap = training_keys & eval_keys
         assert not overlap, f"training/evaluation overlap for seed {seed}"
 
