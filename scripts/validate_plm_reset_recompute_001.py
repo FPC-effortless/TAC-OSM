@@ -21,7 +21,9 @@ assert artifact["provenance"]["benchmark_sha256"] == generator_hash()
 assert artifact["reference"]["benchmark_generator_version"] == GENERATOR_VERSION
 assert artifact["reference"]["heldout"] == [list(x) for x in HELDOUT]
 assert artifact["protocol"]["reference_experiment_id"] == "TACOSM-PLM-INTEGRATED-E2E-008"
-for row in artifact["seed_results"]:\n    expected = contract["legacy_reference"]["evaluation_fingerprints"][str(row["seed"])]\n    assert row["evaluation_episode_fingerprint"] == expected\nassert len(artifact["seed_results"]) == 5
+for row in artifact["seed_results"]:
+    expected = contract["legacy_reference"]["evaluation_fingerprints"][str(row["seed"])]
+    assert row["evaluation_episode_fingerprint"] == expected
 assert len({r["evaluation_episode_fingerprint"] for r in artifact["seed_results"]}) == 5
 assert all(r["training_evaluation_semantic_overlap"] == 0 for r in artifact["seed_results"])
 assert all(r["q1_intervention_mismatches"] == 0 for r in artifact["seed_results"])
