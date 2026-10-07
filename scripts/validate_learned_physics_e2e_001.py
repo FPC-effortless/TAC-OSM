@@ -18,6 +18,9 @@ assert data["status"] == "measured"
 assert data["experiment_id"] == EXPERIMENT_ID
 assert data["provenance"]["contract_sha256"] == hashlib.sha256(contract.read_bytes()).hexdigest()
 assert data["provenance"]["benchmark_sha256"] == hashlib.sha256(benchmark.read_bytes()).hexdigest()
+contract_data = json.loads(contract.read_text(encoding="utf-8"))
+assert data["benchmark_manifest"]["generator_version"] == contract_data["protocol"]["benchmark_generator_version"]
+assert data["benchmark_manifest"]["physics_prior"] == contract_data["physics_prior"]["allowed_information"]
 
 rows = data["seed_results"]
 assert set(rows) == {"learned_data_only", "learned_physics_prior"}
