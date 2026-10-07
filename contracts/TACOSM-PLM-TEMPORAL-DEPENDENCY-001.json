@@ -25,33 +25,67 @@
     "interventions": {
       "carry": "retain the pre-q1 state and traverse the q1 boundary normally",
       "fresh_post_boundary": "discard all q1-time state and initialize a fresh state from q2-time observations only"
-    }
+    },
+    "latent_bits": 12,
+    "q1_query": [
+      0,
+      0,
+      1,
+      "xor"
+    ],
+    "q2_query": [
+      0,
+      2,
+      3,
+      "xor"
+    ],
+    "entity_count": 2
   },
   "temporal_design": {
-    "q1_time_information_is_unavailable_to_fresh_post_boundary_arm": true,
-    "q2_query_is_identical_between_arms": true,
-    "q1_answer_is_not_directly_supplied_to_q2_query": true,
-    "q2_target_is_functionally_dependent_on_q1_time_information": true,
-    "post_boundary_stream_is_independent_of_q1_time_information_except_through_registered_dependency": true,
-    "no_recompute_of_q1_time_observations_in_fresh_arm": true
+    "q1_time_secret_bit": 2,
+    "q2_visible_bit": 3,
+    "post_boundary_secret_is_masked": true,
+    "q1_outcome_uses_only_bits_0_and_1": true,
+    "q2_target_is_xor_of_hidden_bit_and_q2_visible_bit": true,
+    "post_boundary_observation_is_present_in_both_arms": true,
+    "carry_arm_routes_post_boundary_observation_to_scratch_entity": true,
+    "fresh_arm_routes_post_boundary_observation_to_q2_entity": true,
+    "fresh_arm_has_no_q1_time_state_action_outcome_or_verifier_signal": true,
+    "no_future_q2_information_before_q2": true
   },
   "primary_endpoint": {
     "name": "carry_minus_fresh_post_boundary_q2_accuracy",
-    "materiality_threshold": 0.1
+    "unit": "episode",
+    "threshold": 0.1,
+    "selection": "none"
   },
   "integrity_gates": [
-    "same q2 query and q2-time observations across arms",
-    "fresh arm receives no q1-time observation, state, action, outcome, label, or verifier signal",
-    "carry arm receives no future q2 information before q2",
-    "evaluation fingerprints are frozen before training",
+    "same q2 query across arms",
+    "same post-boundary q2 observation across arms",
+    "fresh arm receives no q1-time state, action, outcome, or verifier signal",
+    "q1 outcome is generated only from independent bits 0 and 1",
+    "q2 target is independent of the fresh arm's masked secret surface",
+    "evaluation secret/visible combinations are exactly balanced",
     "training/evaluation semantic overlap is zero",
-    "q1-time information is provably absent from the fresh arm input surface",
+    "distinct evaluation fingerprints per seed",
     "no post-run model selection"
   ],
   "decision_rule": [
-    "If all integrity gates pass and carry-minus-fresh q2 >= 0.10 with a paired 95% interval lower bound > 0, temporal dependency is demonstrated on this task.",
-    "If all integrity gates pass but the criterion fails, the task does not show a load-bearing benefit from carry.",
-    "An invalid fresh-arm information boundary licenses no architectural inference."
+    {
+      "condition": "all integrity gates pass; carry-minus-fresh q2 >= 0.10; paired hierarchical bootstrap 95% lower bound > 0",
+      "licenses": "bounded evidence that preserving q1-time information improves q2 on the registered temporal-dependency task",
+      "does_not_license": "general long-horizon memory, semantic memory, learned addressing, operator discovery, scaling, or real-world multimodal competence"
+    },
+    {
+      "condition": "all integrity gates pass but the materiality or lower-bound criterion fails",
+      "licenses": "the registered task does not demonstrate a load-bearing q1-to-q2 carry benefit",
+      "does_not_license": "memory impossibility or general PLM failure"
+    },
+    {
+      "condition": "any information-flow or leakage gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "any architectural inference from the run"
+    }
   ],
   "claim_boundary": [
     "task-bounded temporal information-flow evidence only",
@@ -82,14 +116,15 @@
   "steps": 300,
   "eval_steps": 600,
   "h_levels": [
-    3
+    2
   ],
   "interpretation_order": [
-    "temporal information-source identity",
-    "same q2 inputs across arms",
+    "benchmark generator identity",
+    "same q2 query and post-boundary observation",
     "fresh-arm q1-information exclusion",
-    "train/evaluation disjointness",
-    "paired q2 difference",
+    "q1/q2 dependency construction and exact evaluation balance",
+    "train/evaluation disjointness and evaluation fingerprints",
+    "paired q2 difference and hierarchical uncertainty interval",
     "claim boundary"
   ],
   "endpoints": [
@@ -97,6 +132,21 @@
       "name": "carry_minus_fresh_post_boundary_q2_accuracy",
       "role": "primary",
       "primary": true
+    },
+    {
+      "name": "carry_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "fresh_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "paired_bootstrap_ci95",
+      "role": "uncertainty",
+      "primary": false
     }
   ]
 }
