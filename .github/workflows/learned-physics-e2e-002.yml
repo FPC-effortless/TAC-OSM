@@ -1,0 +1,74 @@
+name: Learned Physics E2E 002
+
+on:
+  push:
+    branches:
+      - research/e2e-002-generic-history-2026-10-07
+    paths:
+      - contracts/TACOSM-PLM-LEARNED-PHYSICS-E2E-002.json
+      - src/tac_osm/learned_physics_e2e_002.py
+      - src/tac_osm/learned_physics_e2e_benchmark.py
+      - scripts/run_learned_physics_e2e_002.py
+      - scripts/validate_learned_physics_e2e_002.py
+      - tests/test_learned_physics_e2e_002.py
+      - docs/TACOSM-PLM-LEARNED-PHYSICS-E2E-002.md
+      - .github/workflows/learned-physics-e2e-002.yml
+  workflow_dispatch:
+
+concurrency:
+  group: learned-physics-e2e-002
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Static gate
+        run: |
+          ruff check --select F821             src/tac_osm/learned_physics_e2e_002.py             src/tac_osm/learned_physics_e2e_benchmark.py             scripts/run_learned_physics_e2e_002.py             scripts/validate_learned_physics_e2e_002.py             tests/test_learned_physics_e2e_002.py
+      - name: Focused tests
+        run: python -m pytest tests/test_learned_physics_e2e_002.py -q
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          import json, subprocess
+          x=json.load(open("contracts/TACOSM-PLM-LEARNED-PHYSICS-E2E-002.json"))
+          assert x["status"]=="pre-registered"
+          assert x["protocol"]["hidden_dim"]==64
+          assert x["protocol"]["history_length"]==6
+          assert len(x["seeds"])==5
+          assert x["protocol"]["benchmark_generator_version"]=="learned-physics-e2e-v3-no-object-order-audio-manifest-corrected"
+          sha=subprocess.check_output(["git","hash-object","src/tac_osm/learned_physics_e2e_benchmark.py"],text=True).strip()
+          assert sha=="0e11974354745ee3fd60115faaed4f017a8e4715", sha
+          assert x["physics_prior"]["allowed_information"] == [
+            "Hamilton canonical equations dq/dt=dH/dp and dp/dt=-dH/dq",
+            "conservation of the learned Hamiltonian H on passive observation intervals",
+          ]
+          print("contract gate: PASS")
+          PY
+      - name: Smoke
+        run: python scripts/run_learned_physics_e2e_002.py --smoke
+      - name: Measurement
+        run: python scripts/run_learned_physics_e2e_002.py
+      - name: Independent artifact gate
+        run: |
+          python scripts/validate_learned_physics_e2e_002.py             artifacts/TACOSM-PLM-LEARNED-PHYSICS-E2E-002.json
+      - name: Upload scientific artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-LEARNED-PHYSICS-E2E-002
+          path: artifacts/TACOSM-PLM-LEARNED-PHYSICS-E2E-002.json
+          if-no-files-found: error
