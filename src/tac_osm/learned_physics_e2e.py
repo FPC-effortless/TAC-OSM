@@ -1,4 +1,9 @@
-"""Fully learned multimodal control model with an optional physics-law prior."""
+"""Fully learned multimodal controller with a generic Hamiltonian prior.
+
+No particle count, entity IDs, operator table, retrieval rule, or task-specific
+physical state is encoded. The physics arm regularizes a generic latent canonical
+coordinate pair (q, p) only through Hamilton's equations and energy conservation.
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -86,47 +91,50 @@ class LearnedTemporalCore(nn.Module):
         return torch.stack(states, dim=1)
 
 
-class PhysicalStateHead(nn.Module):
+class CanonicalLatent(nn.Module):
+    """Generic latent chart used only to state the Hamiltonian prior."""
+
+    def __init__(self, hidden: int) -> None:
+        super().__init__()
+        self.projection = nn.Sequential(
+            nn.Linear(hidden, hidden),
+            nn.Tanh(),
+            nn.LayerNorm(hidden),
+        )
+
+    def forward(self, hidden_states: Tensor) -> Tensor:
+        return self.projection(hidden_states)
+
+
+class LearnedHamiltonian(nn.Module):
     def __init__(self, hidden: int) -> None:
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(hidden, hidden),
-            nn.GELU(),
-            nn.Linear(hidden, 8),
+            nn.Tanh(),
+            nn.Linear(hidden, 1),
         )
 
-    def forward(self, state: Tensor) -> Tensor:
-        raw = self.net(state)
-        position = torch.sigmoid(raw[..., :4])
-        velocity = 0.5 * torch.tanh(raw[..., 4:])
-        return torch.cat((position, velocity), dim=-1)
+    def forward(self, canonical: Tensor) -> Tensor:
+        return self.net(canonical).squeeze(-1)
 
 
 class LearnedActionHead(nn.Module):
-    """Action computation explicitly consumes the learned physical state."""
-
     def __init__(self, hidden: int, action_count: int) -> None:
         super().__init__()
         self.goal = nn.Sequential(nn.Linear(2, hidden), nn.GELU())
         self.net = nn.Sequential(
-            nn.Linear(hidden * 2 + 8, hidden),
+            nn.Linear(hidden * 2, hidden),
             nn.GELU(),
             nn.Linear(hidden, action_count),
         )
 
-    def forward(
-        self,
-        temporal_state: Tensor,
-        physical_state: Tensor,
-        goal: Tensor,
-    ) -> Tensor:
-        return self.net(
-            torch.cat((temporal_state, physical_state, self.goal(goal)), dim=-1)
-        )
+    def forward(self, state: Tensor, goal: Tensor) -> Tensor:
+        return self.net(torch.cat((state, self.goal(goal)), dim=-1))
 
 
 class LearnedPhysicsE2E(nn.Module):
-    """Multimodal history -> learned state -> physics state -> learned action."""
+    """Multimodal history -> learned persistent state -> learned action."""
 
     def __init__(self, config: LearnedPhysicsConfig = LearnedPhysicsConfig()) -> None:
         super().__init__()
@@ -136,7 +144,8 @@ class LearnedPhysicsE2E(nn.Module):
         self.audio = AudioEncoder(config.hidden_dim)
         self.fusion = MultimodalFusion(config.hidden_dim)
         self.temporal = LearnedTemporalCore(config.hidden_dim)
-        self.physical_state = PhysicalStateHead(config.hidden_dim)
+        self.canonical = CanonicalLatent(config.hidden_dim)
+        self.hamiltonian = LearnedHamiltonian(config.hidden_dim)
         self.action = LearnedActionHead(config.hidden_dim, config.action_count)
 
     def encode_step(self, text: Tensor, image: Tensor, audio: Tensor) -> Tensor:
@@ -148,40 +157,47 @@ class LearnedPhysicsE2E(nn.Module):
         image: Tensor,
         audio: Tensor,
         goal: Tensor,
-    ) -> tuple[Tensor, Tensor]:
-        step_representations = [
-            self.encode_step(text[:, t], image[:, t], audio[:, t])
-            for t in range(text.shape[1])
-        ]
-        fused = torch.stack(step_representations, dim=1)
-        hidden_states = self.temporal(fused)
-        physical_states = self.physical_state(hidden_states)
-        logits = self.action(
-            hidden_states[:, -1],
-            physical_states[:, -1],
-            goal,
+    ) -> tuple[Tensor, Tensor, Tensor]:
+        fused = torch.stack(
+            [self.encode_step(text[:, t], image[:, t], audio[:, t]) for t in range(text.shape[1])],
+            dim=1,
         )
-        return logits, physical_states
+        hidden_states = self.temporal(fused)
+        canonical = self.canonical(hidden_states)
+        energy = self.hamiltonian(canonical)
+        logits = self.action(hidden_states[:, -1], goal)
+        return logits, canonical, energy
 
 
-def physics_prior_loss(predicted_state: Tensor, dt: float) -> dict[str, Tensor]:
-    """Only conservation/kinematic laws are privileged."""
-    position = predicted_state[..., :4].reshape(-1, predicted_state.shape[1], 2, 2)
-    velocity = predicted_state[..., 4:].reshape(-1, predicted_state.shape[1], 2, 2)
-    momentum = velocity.sum(dim=2)
-    kinetic_energy = 0.5 * velocity.pow(2).sum(dim=-1).sum(dim=-1)
+def hamiltonian_prior_loss(
+    canonical: Tensor,
+    energy: Tensor,
+    dt: float,
+) -> dict[str, Tensor]:
+    """Hamilton's equations + energy conservation; no state/action labels."""
+    half = canonical.shape[-1] // 2
+    q = canonical[..., :half]
+    p = canonical[..., half:]
 
-    momentum_residual = (momentum[:, 1:] - momentum[:, :-1]).pow(2).mean()
-    energy_residual = (kinetic_energy[:, 1:] - kinetic_energy[:, :-1]).pow(2).mean()
+    d_energy = torch.autograd.grad(
+        energy.sum(),
+        canonical,
+        create_graph=True,
+        retain_graph=True,
+    )[0]
+    dH_dq = d_energy[..., :half]
+    dH_dp = d_energy[..., half:]
 
-    average_velocity = 0.5 * (velocity[:, 1:] + velocity[:, :-1]) * dt
-    displacement = position[:, 1:] - position[:, :-1]
-    kinematic_residual = (displacement - average_velocity).pow(2).mean()
+    qdot = (q[:, 1:] - q[:, :-1]) / dt
+    pdot = (p[:, 1:] - p[:, :-1]) / dt
+    hamilton_q_residual = (qdot - dH_dp[:, :-1]).pow(2).mean()
+    hamilton_p_residual = (pdot + dH_dq[:, :-1]).pow(2).mean()
+    energy_residual = (energy[:, 1:] - energy[:, :-1]).pow(2).mean()
 
-    total = momentum_residual + energy_residual + kinematic_residual
+    total = hamilton_q_residual + hamilton_p_residual + energy_residual
     return {
         "total": total,
-        "momentum": momentum_residual,
+        "hamilton_q": hamilton_q_residual,
+        "hamilton_p": hamilton_p_residual,
         "energy": energy_residual,
-        "kinematic": kinematic_residual,
     }

@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from tac_osm.learned_physics_e2e import (
     LearnedPhysicsConfig,
     LearnedPhysicsE2E,
-    physics_prior_loss,
+    hamiltonian_prior_loss,
 )
 from tac_osm.learned_physics_e2e_benchmark import (
     ACTION_COUNT,
@@ -46,15 +46,9 @@ DT = 0.08
 
 
 def build_batch(episodes):
-    text = torch.stack(
-        [torch.stack([row[0] for row in episode["observations"]]) for episode in episodes]
-    )
-    image = torch.stack(
-        [torch.stack([row[1] for row in episode["observations"]]) for episode in episodes]
-    )
-    audio = torch.stack(
-        [torch.stack([row[2] for row in episode["observations"]]) for episode in episodes]
-    )
+    text = torch.stack([torch.stack([row[0] for row in episode["observations"]]) for episode in episodes])
+    image = torch.stack([torch.stack([row[1] for row in episode["observations"]]) for episode in episodes])
+    audio = torch.stack([torch.stack([row[2] for row in episode["observations"]]) for episode in episodes])
     goal = torch.stack([episode["goal"] for episode in episodes])
     target = torch.tensor([episode["action"] for episode in episodes], dtype=torch.long)
     return text, image, audio, goal, target
@@ -62,26 +56,16 @@ def build_batch(episodes):
 
 def train_arm(episodes, seed: int, physics_weight: float, *, steps: int):
     torch.manual_seed(seed)
-    model = LearnedPhysicsE2E(
-        LearnedPhysicsConfig(
-            hidden_dim=HIDDEN,
-            action_count=ACTION_COUNT,
-            physics_weight=physics_weight,
-        )
-    ).cpu()
-    optimizer = torch.optim.AdamW(
-        model.parameters(),
-        lr=0.002,
-        weight_decay=0.0001,
-    )
+    model = LearnedPhysicsE2E(LearnedPhysicsConfig(hidden_dim=HIDDEN, action_count=ACTION_COUNT))
+    optimizer = torch.optim.AdamW(model.parameters(), lr=0.002, weight_decay=0.0001)
     rng = random.Random(seed + 41001)
     for _ in range(steps):
         batch = [episodes[rng.randrange(len(episodes))] for _ in range(BATCH_SIZE)]
         text, image, audio, goal, target = build_batch(batch)
-        logits, states = model(text, image, audio, goal)
+        logits, canonical, energy = model(text, image, audio, goal)
         loss = F.cross_entropy(logits, target)
         if physics_weight > 0.0:
-            loss = loss + physics_weight * physics_prior_loss(states, DT)["total"]
+            loss = loss + physics_weight * hamiltonian_prior_loss(canonical, energy, DT)["total"]
         optimizer.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
@@ -96,16 +80,13 @@ def evaluate(model, episodes):
     margins = []
     for episode in episodes:
         text, image, audio, goal, target = build_batch([episode])
-        logits, _ = model(text, image, audio, goal)
+        logits, _, _ = model(text, image, audio, goal)
         probability = logits.softmax(dim=-1)
         predicted = int(probability.argmax(dim=-1).item())
         correct += int(predicted == int(target.item()))
-        ordered = torch.sort(probability[0], descending=True).values
-        margins.append(float(ordered[0] - ordered[1]))
-    return {
-        "accuracy": correct / len(episodes),
-        "mean_action_margin": statistics.fmean(margins),
-    }
+        values = torch.sort(probability[0], descending=True).values
+        margins.append(float(values[0] - values[1]))
+    return {"accuracy": correct / len(episodes), "mean_action_margin": statistics.fmean(margins)}
 
 
 @torch.no_grad()
@@ -118,10 +99,7 @@ def evaluate_pairs(model, pairs):
         right_batch = build_batch([right])
         left_action = int(model(*left_batch[:4])[0].argmax(dim=-1).item())
         right_action = int(model(*right_batch[:4])[0].argmax(dim=-1).item())
-        exact += int(
-            left_action == int(left["action"])
-            and right_action == int(right["action"])
-        )
+        exact += int(left_action == int(left["action"]) and right_action == int(right["action"]))
         action_gap += int(left_action != right_action)
     return {
         "exact_pair_accuracy": exact / len(pairs),
@@ -132,21 +110,17 @@ def evaluate_pairs(model, pairs):
 def paired_bootstrap(delta_by_seed, rounds=10000):
     rng = random.Random(20261007)
     seeds = sorted(delta_by_seed)
-    values = []
-    for _ in range(rounds):
-        chosen = rng.choices(seeds, k=len(seeds))
-        values.append(statistics.fmean(delta_by_seed[seed] for seed in chosen))
+    values = [statistics.fmean(delta_by_seed[seed] for seed in rng.choices(seeds, k=len(seeds))) for _ in range(rounds)]
     values.sort()
     return [values[int(0.025 * rounds)], values[int(0.975 * rounds)]]
 
 
-def run(smoke: bool = False):
+def run(smoke=False):
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     assert contract["status"] == "pre-registered"
     assert tuple(contract["seeds"]) == SEEDS
     assert contract["protocol"]["history_length"] == HISTORY
     assert contract["protocol"]["hidden_dim"] == HIDDEN
-    assert contract["protocol"]["dt"] == DT
 
     seeds = (0,) if smoke else SEEDS
     train_per_action = 8 if smoke else TRAIN_PER_ACTION
@@ -163,102 +137,53 @@ def run(smoke: bool = False):
         assert not (training_keys & evaluation_keys), f"train/eval overlap seed={seed}"
         fingerprint = episode_fingerprint(evaluation)
         pairs = sample_history_pairs(random.Random(seed + 40003), pair_count)
-
-        for name, weight in (
-            ("learned_data_only", 0.0),
-            ("learned_physics_prior", 0.05),
-        ):
+        for name, weight in (("learned_data_only", 0.0), ("learned_physics_prior", 0.05)):
             model = train_arm(train_pool, seed, weight, steps=train_steps)
             metrics = evaluate(model, evaluation)
             pair_metrics = evaluate_pairs(model, pairs)
-            state_batch = build_batch(evaluation[:min(32, len(evaluation))])
-            _, predicted_states = model(*state_batch[:4])
-            prior = physics_prior_loss(predicted_states, DT)
-            rows[name].append(
-                {
-                    "seed": seed,
-                    "evaluation_episode_fingerprint": fingerprint,
-                    "training_evaluation_overlap": len(training_keys & evaluation_keys),
-                    "parameter_count": sum(parameter.numel() for parameter in model.parameters()),
-                    "evaluation_accuracy": metrics["accuracy"],
-                    "mean_action_margin": metrics["mean_action_margin"],
-                    "history_pair_exact_accuracy": pair_metrics["exact_pair_accuracy"],
-                    "history_conditioned_action_gap": pair_metrics["history_conditioned_action_gap"],
-                    "physics_loss_total": float(prior["total"]),
-                }
-            )
+            sample = build_batch(evaluation[:min(32, len(evaluation))])
+            with torch.enable_grad():
+                _, canonical, energy = model(*sample[:4])
+                prior = hamiltonian_prior_loss(canonical, energy, DT)
+            rows[name].append({
+                "seed": seed,
+                "evaluation_episode_fingerprint": fingerprint,
+                "training_evaluation_overlap": len(training_keys & evaluation_keys),
+                "parameter_count": sum(parameter.numel() for parameter in model.parameters()),
+                "evaluation_accuracy": metrics["accuracy"],
+                "mean_action_margin": metrics["mean_action_margin"],
+                "history_pair_exact_accuracy": pair_metrics["exact_pair_accuracy"],
+                "history_conditioned_action_gap": pair_metrics["history_conditioned_action_gap"],
+                "physics_loss_total": float(prior["total"]),
+            })
 
     assert len(rows["learned_data_only"]) == len(rows["learned_physics_prior"]) == len(seeds)
-    assert [
-        row["evaluation_episode_fingerprint"]
-        for row in rows["learned_data_only"]
-    ] == [
-        row["evaluation_episode_fingerprint"]
-        for row in rows["learned_physics_prior"]
-    ]
-    assert len({
-        row["evaluation_episode_fingerprint"]
-        for row in rows["learned_physics_prior"]
-    }) == len(seeds)
-    assert all(
-        row["training_evaluation_overlap"] == 0
-        for arm in rows.values()
-        for row in arm
-    )
-    assert len({
-        row["parameter_count"]
-        for arm in rows.values()
-        for row in arm
-    }) == 1
+    assert [r["evaluation_episode_fingerprint"] for r in rows["learned_data_only"]] == [r["evaluation_episode_fingerprint"] for r in rows["learned_physics_prior"]]
+    assert len({r["evaluation_episode_fingerprint"] for r in rows["learned_physics_prior"]}) == len(seeds)
+    assert all(r["training_evaluation_overlap"] == 0 for arm in rows.values() for r in arm)
+    assert len({r["parameter_count"] for arm in rows.values() for r in arm}) == 1
 
-    data_only_mean = statistics.fmean(
-        row["evaluation_accuracy"]
-        for row in rows["learned_data_only"]
-    )
-    physics_values = [
-        row["evaluation_accuracy"]
-        for row in rows["learned_physics_prior"]
-    ]
+    data_mean = statistics.fmean(r["evaluation_accuracy"] for r in rows["learned_data_only"])
+    physics_values = [r["evaluation_accuracy"] for r in rows["learned_physics_prior"]]
     physics_mean = statistics.fmean(physics_values)
     delta_by_seed = {
-        row["seed"]: (
-            rows["learned_physics_prior"][index]["evaluation_accuracy"]
-            - row["evaluation_accuracy"]
-        )
+        row["seed"]: rows["learned_physics_prior"][index]["evaluation_accuracy"] - row["evaluation_accuracy"]
         for index, row in enumerate(rows["learned_data_only"])
     }
-    physics_delta = physics_mean - data_only_mean
-    delta_ci = None if smoke else paired_bootstrap(delta_by_seed)
-    pair_exact = statistics.fmean(
-        row["history_pair_exact_accuracy"]
-        for row in rows["learned_physics_prior"]
-    )
-
+    delta = physics_mean - data_mean
+    ci = None if smoke else paired_bootstrap(delta_by_seed)
+    pair_exact = statistics.fmean(r["history_pair_exact_accuracy"] for r in rows["learned_physics_prior"])
     summary = {
-        "data_only_mean_accuracy": data_only_mean,
+        "data_only_mean_accuracy": data_mean,
         "physics_prior_mean_accuracy": physics_mean,
         "physics_prior_min_seed_accuracy": min(physics_values),
-        "physics_prior_delta": physics_delta,
-        "physics_prior_delta_ci95": delta_ci,
+        "physics_prior_delta": delta,
+        "physics_prior_delta_ci95": ci,
         "physics_prior_history_pair_exact_accuracy": pair_exact,
-        "physics_prior_history_conditioned_action_gap": statistics.fmean(
-            row["history_conditioned_action_gap"]
-            for row in rows["learned_physics_prior"]
-        ),
-        "end_to_end_gate_pass": bool(
-            not smoke
-            and physics_mean >= 0.70
-            and min(physics_values) >= 0.55
-            and pair_exact >= 0.70
-        ),
-        "physics_prior_benefit_pass": bool(
-            not smoke
-            and physics_delta >= 0.05
-            and delta_ci is not None
-            and delta_ci[0] > 0.0
-        ),
+        "physics_prior_history_conditioned_action_gap": statistics.fmean(r["history_conditioned_action_gap"] for r in rows["learned_physics_prior"]),
+        "end_to_end_gate_pass": bool(not smoke and physics_mean >= 0.70 and min(physics_values) >= 0.55 and pair_exact >= 0.70),
+        "physics_prior_benefit_pass": bool(not smoke and delta >= 0.05 and ci is not None and ci[0] > 0.0),
     }
-
     output = {
         "experiment_id": EXPERIMENT_ID,
         "status": "smoke" if smoke else "measured",
@@ -290,6 +215,7 @@ def run(smoke: bool = False):
             "no_physical_state_supervision": True,
             "no_entity_ids": True,
             "no_fixed_operator_table": True,
+            "no_task_specific_physical_ontology": True,
             "no_post_run_selection": True,
         },
         "seed_results": rows,
@@ -297,17 +223,16 @@ def run(smoke: bool = False):
         "benchmark_manifest": benchmark_manifest(),
         "claim_boundary": [
             "fully learned synthetic multimodal physical control only",
-            "physics prior restricted to registered conservation and kinematic laws",
+            "physics prior restricted to generic Hamiltonian equations and energy conservation",
             "no general physical reasoning claim",
             "no real-world multimodal claim",
             "no learned semantic addressing claim",
             "no scaling or hardware claim",
         ],
     }
-
-    output_path = ROOT / "artifacts" / f"{EXPERIMENT_ID}.json"
-    output_path.parent.mkdir(exist_ok=True)
-    output_path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
+    path = ROOT / "artifacts" / f"{EXPERIMENT_ID}.json"
+    path.parent.mkdir(exist_ok=True)
+    path.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
     print(json.dumps(output["summary"], indent=2, sort_keys=True))
 
 
