@@ -190,6 +190,7 @@ class SwiLAMTSK(nn.Module):
         self.query_prior = nn.Linear(config.d_model, h * j * d)
         self.out_proj = nn.Linear(config.d_model, config.d_model)
         self.write_proj = nn.Linear(config.d_model + config.action_count + 1, config.d_model)
+        self.input_decay = nn.Linear(config.d_model, h * j * d)
 
         # Fast, medium, slow retention priors. These are the MTSK architecture,
         # not benchmark-specific physical facts.
@@ -254,7 +255,9 @@ class SwiLAMTSK(nn.Module):
             )
             responsibilities = responsibilities / responsibilities.sum(dim=2, keepdim=True).clamp_min(1e-8)
 
-        decay = torch.sigmoid(self.decay_logits).view(1, 1, j, 1, 1)
+        base_decay = torch.sigmoid(self.decay_logits).view(1, 1, j, 1, 1)
+        input_decay = self.input_decay(x_t).view(b, h, j, d, 1).sigmoid()
+        decay = (0.5 * base_decay + 0.5 * input_decay).clamp(1e-4, 0.9999)
         beta = F.softplus(self.beta_logits).view(1, 1, j, 1, 1)
 
         if update_gate is None:
