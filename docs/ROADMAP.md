@@ -667,10 +667,11 @@ through the q1 boundary and reached 1.0000 q2 accuracy versus 0.5000 for fresh
 reconstruction across five seeds. This validates the current single-scale PLM
 state pathway on the registered synthetic multimodal task.
 
-It does **not** validate MTSK. The measured PLM state is still
-`ExplicitEntityState`. MTSK remains a separate architectural hypothesis and
-must be tested against a single-timescale adaptive control before being
-integrated into the main PLM evidence ledger.
+It does **not** validate MTSK. The measured persistence result still
+uses ExplicitEntityState. MTSK has now been separated into its own preregistered
+mechanism lane, TACOSM-PLM-MTSK-001, using a parameter-matched single effective
+timescale control. Until that run passes all integrity gates and its primary
+endpoint, MTSK remains an untested hypothesis.
 
 ## Post-hardening next measurements
 
