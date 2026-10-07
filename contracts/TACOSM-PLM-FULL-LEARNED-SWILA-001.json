@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-FULL-LEARNED-SWILA-001",
-  "version": 2,
+  "version": 3,
   "status": "pre-registered",
   "title": "Full learned multimodal PLM with SwiLA-derived multi-timescale persistent state",
   "question": "Can the full PLM computational loop learn multimodal representation, persistent multi-timescale state, relevance routing, structural computation, action, verification, repair, and verified state update end to end?",
@@ -101,7 +101,8 @@
     "post_run_selection": "forbidden",
     "model_outcome_input": "continuous post-action distance-to-goal evidence; binary success never enters model",
     "repair_execution": "failed first action may trigger one learned repair action applied to the resulting environment state",
-    "benchmark_git_blob_sha": "1c6838ccc88456594a2cab6c3bae1d9134ba80df"
+    "benchmark_git_blob_sha": "41f327f40e5b2fee98b2a6831e36aea055515efa",
+    "generator_hash_rule": "SHA-256 of benchmark generator file bytes"
   },
   "decision_rule": [
     {
@@ -135,6 +136,11 @@
       "id": "A2",
       "before_measurement": true,
       "change": "Learned repair is executed as a second environment action after a failed first action; closed-loop success is added to the primary full-PLM gate."
+    },
+    {
+      "id": "A3",
+      "before_measurement": true,
+      "change": "Benchmark generator hash is computed directly from its source file bytes; the generator provenance test asserts this identity."
     }
   ]
 }
