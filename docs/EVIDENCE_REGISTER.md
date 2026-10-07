@@ -368,3 +368,11 @@ than changing addressing again.
 | Q2 mean 0.93275; min 0.71167 | L3 | primary robustness descriptor | latent-operator task remains strong on average but has meaningful seed variance | robust all-seed success criterion | descriptive extension, not a new capability threshold |
 | Mean no-memory 0.62692; oracle q2 0.98233; oracle gap 0.04958 | L3 | localization | state/content computation remains useful and operator selection is not the only source of error | causal separation of all model components | diagnostics only |
 | Training operator counts sum to exactly 28,800 per seed | L3 | integrity gate | training exposure accounting is now directly verified | absence of every possible bias | counts cover sampled combo2 stream only |
+
+
+## Temporal-dependency pilot 001 — instrument failure
+
+| Evidence | Layer | Disposition | Reason | Scientific consequence |
+|---|---|---|---|---|
+| `TACOSM-PLM-TEMPORAL-DEPENDENCY-001`, run **37633578402** | L3 | **INSTRUMENT FAILURE** | The measurement aborted on the preregistered train/evaluation semantic-overlap gate before producing an artifact | No temporal-dependency result may be inferred from this run; the stricter persistence experiment remains the admissible test |
+| Earlier v1 runs with syntax/variable-bound failures | L3 | **INSTRUMENT FAILURE** | Static or runtime harness defects prevented a valid measurement | No scientific interpretation |
