@@ -1,0 +1,91 @@
+{
+  "experiment_id": "TACOSM-PLM-MATCHED-FF-002",
+  "status": "pre-registered",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "batch_size": 96,
+  "evaluation_episodes_per_seed": 600,
+  "heldout": [
+    [
+      "xor",
+      2,
+      4
+    ],
+    [
+      "xor",
+      4,
+      8
+    ],
+    [
+      "xor",
+      1,
+      9
+    ],
+    [
+      "and",
+      3,
+      5
+    ],
+    [
+      "and",
+      6,
+      10
+    ],
+    [
+      "and",
+      2,
+      11
+    ],
+    [
+      "or",
+      2,
+      4
+    ],
+    [
+      "or",
+      4,
+      8
+    ],
+    [
+      "or",
+      1,
+      9
+    ],
+    [
+      "xnor",
+      3,
+      5
+    ],
+    [
+      "xnor",
+      6,
+      10
+    ],
+    [
+      "xnor",
+      2,
+      11
+    ]
+  ],
+  "benchmark_generator_version": "integrated-e2e-v7-collision-free-payload-only",
+  "plm_parameter_count": 74126,
+  "parameter_tolerance_relative": 0.01,
+  "baseline": "same clean multimodal encoders; no persistent state, CASM, verifier, or state write; q2 directly receives q1 representation, q2 representation, q2 query indices/operator, and detached q1 environment outcome.",
+  "primary_endpoint": "heldout_q2_accuracy",
+  "decision_rule": "Report both models without model selection. Persistence is supported only if PLM exceeds FF-002 by >=0.05 and composition-bootstrap 95% intervals do not overlap; otherwise report no persistence advantage.",
+  "leakage_gates": [
+    "heldout disjoint from training",
+    "evaluation generated after training",
+    "distinct seed evaluation fingerprints",
+    "benchmark generator version bound",
+    "contract hash recorded",
+    "parameter relative difference <=1%",
+    "q1 outcome detached before q2 prediction"
+  ]
+}
