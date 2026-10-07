@@ -1,0 +1,89 @@
+name: PLM MTSK 001
+
+on:
+  push:
+    branches:
+      - research/mtsk-001-2026-10-07
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Static gate
+        run: |
+          ruff check --select F821 scripts/run_plm_mtsk_001.py src/tac_osm/mtsk.py src/tac_osm/mtsk_001_benchmark.py
+      - name: Contract and benchmark gate
+        run: |
+          python - <<'PY'
+          import subprocess
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-PLM-MTSK-001")
+          assert c.check_consistency() == []
+          assert c.steps == 200
+          assert c.eval_steps == 200
+          assert tuple(c.seeds) == (0, 1, 2, 3, 4)
+          sha = subprocess.check_output(["git", "hash-object", "src/tac_osm/mtsk_001_benchmark.py"], text=True).strip()
+          assert sha == "92669da38b482a1000414739846f22abefc20651", sha
+          print("benchmark_git_blob_sha", sha)
+          print("PASS")
+          PY
+      - name: Focused tests
+        run: python -m pytest tests/test_plm_mtsk_001.py -q
+      - name: Smoke measurement
+        run: python scripts/run_plm_mtsk_001.py --smoke
+      - name: Measurement
+        run: python scripts/run_plm_mtsk_001.py
+      - name: Independent artifact gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from statistics import fmean
+          p = Path("artifacts/TACOSM-PLM-MTSK-001.json")
+          d = json.loads(p.read_text())
+          assert d["status"] == "measured"
+          assert d["protocol"]["seeds"] == [0,1,2,3,4]
+          assert d["protocol"]["evaluation_delays"] == [1,2,4,8,16,32]
+          assert d["integrity"]["training_evaluation_overlap_zero"] is True
+          assert d["integrity"]["same_evaluation_fingerprint_across_arms"] is True
+          assert d["integrity"]["parameter_counts_equal"] is True
+          assert d["integrity"]["evaluation_target_balance_exact_50_each_cell"] is True
+          m = d["seed_results"]["mtsk"]
+          s = d["seed_results"]["single_timescale"]
+          assert len(m) == len(s) == 5
+          assert [x["evaluation_episode_fingerprint"] for x in m] == [x["evaluation_episode_fingerprint"] for x in s]
+          assert all(x["training_evaluation_overlap"] == 0 for x in m+s)
+          assert len({x["evaluation_episode_fingerprint"] for x in m}) == 5
+          assert len({x["parameter_count"] for x in m+s}) == 1
+          for arm in (m, s):
+              for row in arm:
+                  assert all(v == 50 for cells in row["target_balance"].values() for v in cells.values())
+                  assert all(row["metrics"][str(delay)]["episodes"] == 200 for delay in (1,2,4,8,16,32))
+          primary = fmean(row["metrics"]["32"]["slow_accuracy"] for row in m) - fmean(row["metrics"]["32"]["slow_accuracy"] for row in s)
+          fast = fmean(row["metrics"]["32"]["fast_accuracy"] for row in m) - fmean(row["metrics"]["32"]["fast_accuracy"] for row in s)
+          assert abs(primary - d["summary"]["primary_slow_delta"]) < 1e-12
+          assert abs(fast - d["summary"]["fast_delta_delay_32"]) < 1e-12
+          assert d["summary"]["primary_materiality_threshold"] == 0.15
+          assert d["summary"]["fast_maximum_allowed_harm"] == -0.05
+          print("independent artifact gate: PASS")
+          print(json.dumps(d["summary"], indent=2, sort_keys=True))
+          PY
+      - name: Upload scientific artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-MTSK-001
+          path: artifacts/TACOSM-PLM-MTSK-001.json
+          if-no-files-found: error

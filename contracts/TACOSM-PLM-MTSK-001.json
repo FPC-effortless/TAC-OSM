@@ -1,0 +1,110 @@
+{
+  "experiment_id": "TACOSM-PLM-MTSK-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Multi-timescale adaptive state attribution under repeated overwrites",
+  "question": "Does a three-timescale adaptive state mechanism improve retention of an early slow fact over repeated overwriting observations while preserving responsiveness to a current fast fact, compared with a parameter-matched single effective timescale?",
+  "hypothesis": "MTSK will improve slow-fact accuracy at long held-out delays while not materially harming current fast-fact accuracy.",
+  "protocol": {
+    "train_steps": 200,
+    "batch_size": 64,
+    "train_delay": 8,
+    "seeds": [0, 1, 2, 3, 4],
+    "evaluation_delays": [1, 2, 4, 8, 16, 32],
+    "evaluation_episodes_per_delay": 200,
+    "cells_per_delay": 50,
+    "hidden_dim": 60,
+    "entity_count": 1,
+    "latent_bits": 12,
+    "banks": 3,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001
+  },
+  "arms": [
+    {
+      "name": "single_timescale",
+      "state": "SingleAdaptiveTimescaleState",
+      "timescales": "one effective shared decay and write gate",
+      "state_banks": 3
+    },
+    {
+      "name": "mtsk",
+      "state": "MTSKEntityState",
+      "timescales": 3,
+      "decay_order": "fast <= medium <= slow",
+      "state_banks": 3
+    }
+  ],
+  "matched_control": {
+    "hidden_width": 60,
+    "state_tensor_shape": [1, 3, 20],
+    "parameter_count_equal": true,
+    "same_write_projection_shape": true,
+    "same_write_gate_parameter_shape": true,
+    "same_decay_parameter_count": 3
+  },
+  "task": {
+    "t0_contains": "slow_bit plus fast_bit",
+    "post_t0": "slow bit replaced with MASK_TOKEN while fast bit remains observable in text",
+    "slow_source": "text_only",
+    "fast_source": "text_only",
+    "image_audio_are_nuisance": true,
+    "query": "fixed XOR of selected bit and always-zero anchor bit",
+    "final_queries": ["slow_bit XOR anchor", "fast_bit XOR anchor"]
+  },
+  "leakage_boundary": [
+    "slow target is present only at t0; every post-t0 text surface replaces it with MASK_TOKEN=39",
+    "image and audio do not encode slow or fast target bits",
+    "evaluation sequences are generated with an independent RNG stream and exact sequence-key overlap must be zero",
+    "the same frozen evaluation sequence list is used by both arms within each seed",
+    "targets are passed to loss only after both queries have been produced",
+    "no post-run checkpoint, seed, hyperparameter, metric, or model selection"
+  ],
+  "primary_endpoint": {
+    "name": "slow_accuracy_delta_delay_32",
+    "definition": "MTSK slow-query accuracy minus single-timescale slow-query accuracy at evaluation delay 32",
+    "materiality_threshold": 0.15,
+    "hierarchical_paired_bootstrap_lower_bound": 0.0,
+    "selection": "none"
+  },
+  "guardrail_endpoint": {
+    "name": "fast_accuracy_delta_delay_32",
+    "definition": "MTSK fast-query accuracy minus single-timescale fast-query accuracy at evaluation delay 32",
+    "maximum_allowed_harm": -0.05
+  },
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; primary delta >= 0.15; 95% hierarchical paired bootstrap lower bound > 0; fast delta >= -0.05",
+      "licenses": "bounded evidence that distinct learned timescales improve long-delay temporal retention on the registered synthetic multimodal task",
+      "does_not_license": "general memory, semantic memory, general PLM intelligence, learned addressing, operator discovery, causal world modelling, scaling, or real-world multimodal competence"
+    },
+    {
+      "condition": "all integrity gates pass but the criterion fails",
+      "licenses": "the registered task does not demonstrate a material MTSK advantage over the parameter-matched single-timescale control",
+      "does_not_license": "MTSK impossibility or general PLM failure"
+    },
+    {
+      "condition": "any masking, overlap, fingerprint, parameter, balance, or artifact gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "architectural inference"
+    }
+  ],
+  "integrity_gates": [
+    "three registered MTSK timescales have monotonic retention order",
+    "single-timescale and MTSK state mechanisms have equal parameter counts",
+    "identical multimodal backbone and FixedCASM",
+    "identical paired evaluation sequences within each seed",
+    "zero training/evaluation sequence-key overlap per seed and arm",
+    "distinct evaluation fingerprints across seeds",
+    "slow target absent from t>0 text, image, and audio surfaces",
+    "evaluation slow/fast combinations are exactly balanced 50 per cell at every delay",
+    "no post-run selection"
+  ],
+  "claim_boundary": [
+    "synthetic multimodal temporal retention only",
+    "state-mechanism comparison only",
+    "not a general memory claim",
+    "not a scaling experiment"
+  ]
+}
