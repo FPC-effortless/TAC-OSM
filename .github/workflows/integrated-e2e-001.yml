@@ -68,16 +68,31 @@ jobs:
           python -m pip install --quiet numpy==2.3.3 ruff==0.13.0
       - name: Integrity
         run: |
-          ruff check --select F821 src/tac_osm/integrated_e2e_ff_baseline.py scripts/run_matched_ff_baseline_001.py tests/test_matched_ff_baseline_001.py
-          python -m pytest tests/test_matched_ff_baseline_001.py -q
+          if [[ "${{ github.event.pull_request.head.ref }}" == *"plm-matched-ff-002"* ]]; then
+            ruff check --select F821 src/tac_osm/integrated_e2e_ff_feedback_baseline.py scripts/run_matched_ff_002.py tests/test_matched_ff_002.py
+            python -m pytest tests/test_matched_ff_002.py -q
+          else
+            ruff check --select F821 src/tac_osm/integrated_e2e_ff_baseline.py scripts/run_matched_ff_baseline_001.py tests/test_matched_ff_baseline_001.py
+            python -m pytest tests/test_matched_ff_baseline_001.py -q
+          fi
       - name: Smoke
-        run: python scripts/run_matched_ff_baseline_001.py --smoke
+        run: |
+          if [[ "${{ github.event.pull_request.head.ref }}" == *"plm-matched-ff-002"* ]]; then
+            python scripts/run_matched_ff_002.py --smoke
+          else
+            python scripts/run_matched_ff_baseline_001.py --smoke
+          fi
       - name: Confirmatory measurement
-        run: python scripts/run_matched_ff_baseline_001.py
+        run: |
+          if [[ "${{ github.event.pull_request.head.ref }}" == *"plm-matched-ff-002"* ]]; then
+            python scripts/run_matched_ff_002.py
+          else
+            python scripts/run_matched_ff_baseline_001.py
+          fi
       - name: Upload scientific artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: TACOSM-PLM-MATCHED-FF-001
-          path: artifacts/TACOSM-PLM-MATCHED-FF-001.json
+          name: matched-feed-forward-result
+          path: artifacts/TACOSM-PLM-MATCHED-FF-*.json
           if-no-files-found: error
