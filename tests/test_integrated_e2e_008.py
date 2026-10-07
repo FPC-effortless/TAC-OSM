@@ -47,7 +47,7 @@ def test_clean_modalities_have_no_entity_side_channel():
 def test_contract_records_collision_correction():
     x = json.loads((ROOT / "contracts/TACOSM-PLM-INTEGRATED-E2E-008.json").read_text())
     assert x["protocol"]["entity_side_channel"] is False
-    assert "collision" in x["antecedent_defect"]
+    assert "overlap" in x["antecedent_defect"]
 
 
 def test_runner_uses_registered_model_and_no_selection():
