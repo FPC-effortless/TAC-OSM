@@ -1,0 +1,71 @@
+name: Research PLM temporal dependency 001
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/TACOSM-PLM-TEMPORAL-DEPENDENCY-001.json"
+      - "scripts/run_plm_temporal_dependency_001.py"
+      - "src/tac_osm/temporal_dependency_001_benchmark.py"
+      - "tests/test_plm_temporal_dependency_001.py"
+      - ".github/workflows/plm-temporal-dependency-001.yml"
+      - "src/tac_osm/integrated_e2e_005.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Static gate
+        run: ruff check --select F821 scripts/run_plm_temporal_dependency_001.py
+      - name: Contract and benchmark gate
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          from tac_osm.contract import load_contract
+          c=load_contract("TACOSM-PLM-TEMPORAL-DEPENDENCY-001")
+          assert c.check_consistency()==[]
+          assert c.steps==300 and c.eval_steps==600 and tuple(c.seeds)==(0,1,2,3,4)
+          p=Path("src/tac_osm/temporal_dependency_001_benchmark.py")
+          print("benchmark_sha256", hashlib.sha256(p.read_bytes()).hexdigest())
+          print("PASS")
+          PY
+      - name: Focused tests
+        run: python -m pytest tests/test_plm_temporal_dependency_001.py -q
+      - name: Measurement
+        run: python scripts/run_plm_temporal_dependency_001.py
+      - name: Independent artifact gates
+        run: |
+          python - <<'PY'
+          import json
+          a=json.load(open("artifacts/TACOSM-PLM-TEMPORAL-DEPENDENCY-001.json"))
+          assert a["status"]=="measured"
+          assert len(a["seed_results"])==5
+          assert all(r["training_evaluation_semantic_overlap"]==0 for r in a["seed_results"])
+          assert all(r["secret_integrity_errors"]==0 for r in a["seed_results"])
+          assert a["leakage_audit"]["q1_outcome_derived_from_independent_bits"] is True
+          assert a["summary"]["paired_bootstrap_ci95"][0] is not None
+          print("PASS: temporal dependency artifact")
+          PY
+      - name: Upload scientific artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-TEMPORAL-DEPENDENCY-001
+          path: artifacts/TACOSM-PLM-TEMPORAL-DEPENDENCY-001.json
+          if-no-files-found: error
