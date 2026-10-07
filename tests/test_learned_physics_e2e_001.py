@@ -73,3 +73,15 @@ def test_audio_rendering_is_invariant_to_particle_order():
     first = _render_audio(state, random.Random(5), deterministic=True)
     second = _render_audio(swapped, random.Random(5), deterministic=True)
     assert torch.equal(first, second)
+
+
+def test_action_path_consumes_canonical_latent():
+    from tac_osm.learned_physics_e2e import LearnedActionHead
+    head = LearnedActionHead(64, ACTION_COUNT)
+    state = torch.randn(2, 64, requires_grad=True)
+    canonical = torch.randn(2, 64, requires_grad=True)
+    goal = torch.randn(2, 2)
+    logits = head(state, canonical, goal)
+    grad = torch.autograd.grad(logits.sum(), canonical)[0]
+    assert torch.isfinite(grad).all()
+    assert float(grad.abs().sum()) > 0.0
