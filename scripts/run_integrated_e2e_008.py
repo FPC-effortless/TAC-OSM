@@ -220,6 +220,7 @@ def bootstrap_compositions(seed_rows, rounds=5000):
 
 
 def run(smoke=False):
+    controls = ("normal", "no_memory", "shuffle_image", "text_only", "image_only", "audio_only")
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     assert contract["status"] == "pre-registered"
     assert contract["seeds"] == list(SEEDS)
@@ -238,7 +239,6 @@ def run(smoke=False):
 
     seeds = (0,) if smoke else SEEDS
     eval_n = 16 if smoke else EVAL_EPISODES
-    controls = ("normal", "no_memory", "shuffle_image", "text_only", "image_only", "audio_only")
     rows = []
 
     for seed in seeds:
