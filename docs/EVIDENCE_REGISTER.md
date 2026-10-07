@@ -356,3 +356,15 @@ than changing addressing again.
 |---|---|---|---|---|---|
 | `TACOSM-PLM-TEMPORAL-PERSISTENCE-002` | L3 | preregistration | a cleaner causal test in which q1 targets entity 0 and the q2 secret is stored in entity 1 | any persistence claim before measurement | q1 secret-interference and masked-post-boundary gates are mandatory |
 | Carry retains entity-1 state; fresh rebuilds entity 1 only from masked post observation | L3 | intervention design | isolates information persistence from q1 action/outcome access to the secret | general memory or long-horizon memory | synthetic, task-bounded attribution only |
+
+
+## C19 20-seed robustness extension — valid measurement
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| 20-seed extension, latest run 37633578443, artifact 11489055422 | L3 | valid robustness | recurrent latent-operator behavior across a larger pre-specified seed panel | operator synthesis; semantic addressing; real-world multimodal competence | C19's original decision remains unchanged |
+| Operator-selection mean 0.9375; min 0.75 | L3 | robustness | C19 seed instability is recurrent rather than isolated to one seed | intrinsic operator difficulty | all failures are XOR/XNOR pair confusion |
+| Aggregate selection: AND 1.00, OR 1.00, XNOR 0.90, XOR 0.85 | L3 | mechanism diagnostic | operator selection failures are concentrated in the XOR/XNOR pair | generalized XNOR difficulty | 3,000 evaluation episodes per operator across 20 seeds |
+| Q2 mean 0.93275; min 0.71167 | L3 | primary robustness descriptor | latent-operator task remains strong on average but has meaningful seed variance | robust all-seed success criterion | descriptive extension, not a new capability threshold |
+| Mean no-memory 0.62692; oracle q2 0.98233; oracle gap 0.04958 | L3 | localization | state/content computation remains useful and operator selection is not the only source of error | causal separation of all model components | diagnostics only |
+| Training operator counts sum to exactly 28,800 per seed | L3 | integrity gate | training exposure accounting is now directly verified | absence of every possible bias | counts cover sampled combo2 stream only |
