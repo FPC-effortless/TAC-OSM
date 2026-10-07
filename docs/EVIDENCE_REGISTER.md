@@ -338,3 +338,10 @@ than changing addressing again.
 | Shuffle-support q2 mean = 0.6793 versus normal = 0.9293 | L3 | context-use diagnostic | performance depends materially on the supplied support context | causal generality of the support mechanism | shuffle is a diagnostic intervention, not a new capability benchmark |
 | Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | seed-3 weakness is largely operator selection rather than the underlying state/content path | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
 | No-memory q2 mean = 0.6250 | L3 | mechanism diagnostic | the multimodal state representation remains functionally important | temporal persistence necessity | temporal carry was separately ruled out as necessary on E2E-008 |
+
+## Layer 3 — fully learned physical multimodal lane
+
+| Row | LAYER | TYPE | PRIOR ART | NOT INHERITED | REQUIRED EVIDENCE | BLOCKER |
+|---|---|---|---|---|---|---|
+| Fully learned multimodal physical-control capability with no task-specific addressing/executor | L3 | protocol/mechanism | earlier TAC-OSM multimodal benchmark infrastructure | explicit entity IDs, fixed Boolean/CASM execution, semantic addressing, real-world physical reasoning | `TACOSM-PLM-LEARNED-PHYSICS-E2E-001`, five seeds, balanced held-out action evaluation, matched-history intervention, independent artifact validator | measurement not yet run |
+| Physics-law prior restricted to conservation and kinematics | L3 | protocol | physics-informed ML / mechanics priors | no simulator oracle, no target-action leakage, no physical-state labels | same experiment with identical architecture/data between data-only and physics-prior arms | effect unmeasured |
