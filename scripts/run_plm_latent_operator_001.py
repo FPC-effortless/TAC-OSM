@@ -148,6 +148,18 @@ def query_target_batch(model, memory, batch):
     )
 
 
+def query_target(model, memory, q2, support, operator_override=None):
+    entity, i, j, _answer = q2
+    return model.latent_query(
+        memory,
+        torch.tensor([entity], dtype=torch.long),
+        torch.tensor([i], dtype=torch.long),
+        torch.tensor([j], dtype=torch.long),
+        support_tensor(support),
+        operator_override=operator_override,
+    )
+
+
 def build_gradient_probe(seed: int = 20261009):
     torch.manual_seed(seed)
     rng = random.Random(91009)
