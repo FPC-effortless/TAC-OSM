@@ -77,7 +77,7 @@ class MultimodalFusion(nn.Module):
     def __init__(self, hidden: int) -> None:
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(3 * hidden, hidden),
+            nn.Linear(hidden // 2 + 2 * hidden, hidden),
             nn.GELU(),
             nn.LayerNorm(hidden),
         )
