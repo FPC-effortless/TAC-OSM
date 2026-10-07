@@ -101,9 +101,8 @@ def sample_dev(seed: int):
     episodes = []
     for i in range(EVAL_EPISODES):
         combo1 = DEV_COMBOS[(i * 5) % len(DEV_COMBOS)]
-        combo2 = DEV_COMBOS[(i * 11 + 3) % len(DEV_COMBOS)]
-        if combo1 == combo2:
-            combo2 = DEV_COMBOS[(i * 11 + 4) % len(DEV_COMBOS)]
+        and_combos = tuple(c for c in DEV_COMBOS if c[0] == "and")
+        combo2 = and_combos[i % len(and_combos)]
         episodes.append(sample_episode(rng, combo1=combo1, combo2=combo2))
     return episodes
 
