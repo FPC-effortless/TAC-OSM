@@ -1,0 +1,76 @@
+{
+  "experiment_id": "TACOSM-PLM-LATENT-OPERATOR-020SEED",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "20-seed robustness extension for latent operator induction",
+  "question": "Is the C19 latent-operator selection behavior robust across a larger pre-specified seed panel, and what is the observed operator-confusion pattern?",
+  "relation_to_prior": "Post-C19 robustness extension. It cannot replace, upgrade, or rewrite the original five-seed C19 decision.",
+  "protocol": {
+    "parent_experiment_id": "TACOSM-PLM-LATENT-OPERATOR-001",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "train_steps": 300,
+    "batch_size": 96,
+    "evaluation_episodes_per_seed": 600,
+    "evaluation_episodes_per_operator": 150,
+    "hidden_dim": 64,
+    "state_write_mode": "residual_linear",
+    "operator_induction_loss": "q2 task loss only",
+    "operator_id_in_model_input": false,
+    "entity_addressing": "explicit",
+    "model_selection": "none",
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001
+  },
+  "frozen_lineage": {
+    "c19_benchmark_generator_version": "integrated-e2e-v8-latent-operator-truth-table",
+    "c19_benchmark_generator_git_blob_sha": "a16f73a81f57fc58fae20fc643003ff225d4f181",
+    "base_e2e008_generator_sha256": "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e"
+  },
+  "endpoints": [
+    "operator_selection_accuracy",
+    "heldout_q2_accuracy",
+    "operator_confusion_matrix",
+    "training_operator_counts",
+    "no_memory_q2_accuracy",
+    "oracle_operator_q2_accuracy"
+  ],
+  "rules": [
+    "No change to the C19 contract, outcome, or threshold is permitted from this extension.",
+    "The frozen C19 benchmark generator blob must match before training.",
+    "Held-out compositions remain exactly the C19 12-composition set.",
+    "Evaluation is generated after training from the registered per-seed evaluation RNG namespace.",
+    "Training/evaluation semantic overlap must be zero.",
+    "Operator confusion is computed from argmax operator prediction before oracle override.",
+    "Training operator counts are recorded from the actual sampled combo2 stream.",
+    "No hyperparameter, checkpoint, seed, or metric selection is permitted.",
+    "Results are descriptive robustness evidence only and cannot overturn C19."
+  ],
+  "decision_rule": [
+    "Estimate robustness of the C19 operator-selection behavior across 20 seeds.",
+    "Report the full truth-operator by predicted-operator confusion matrix.",
+    "Report per-operator q2 and operator-selection accuracy with 150 evaluation episodes per operator per seed.",
+    "Treat XNOR/XOR symmetry-breaking as a conjecture unless the larger panel supports it."
+  ]
+}
