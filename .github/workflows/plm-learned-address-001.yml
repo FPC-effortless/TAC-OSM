@@ -35,6 +35,8 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -72,7 +74,7 @@ jobs:
     # Push-triggered confirmatory path is infrastructure-only; the registered
     # contract, benchmark generator, model, and measurement command are frozen.
     name: Learned addressing confirmatory measurement
-    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 240
     steps:
@@ -101,6 +103,8 @@ jobs:
       - name: Smoke
         run: python scripts/run_plm_learned_address_001.py --smoke
       - name: Confirmatory measurement
+        env:
+          GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: python scripts/run_plm_learned_address_001.py
       - name: Independent result validation
         run: |
