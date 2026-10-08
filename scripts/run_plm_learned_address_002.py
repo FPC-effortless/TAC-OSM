@@ -10,13 +10,11 @@ from pathlib import Path
 import platform
 import random
 import statistics
-import sys
 
 import torch
 import torch.nn.functional as F
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / "src"))
 
 from tac_osm.contract import load_contract
 from tac_osm.learned_address_002 import LearnedAddressMetric002
