@@ -54,8 +54,46 @@ def test_end_to_end_gradient_reaches_all_major_subsystems():
     episode = sample_episode(__import__("random").Random(7))
     output = model(**episode.batch)
     target = torch.tensor([episode.action])
-    loss = torch.nn.functional.cross_entropy(output["action_logits"], target)
-    loss = loss + 0.01 * output["load_loss"]
+    action_loss = torch.nn.functional.cross_entropy(output["action_logits"], target)
+
+    next_state, obs, evidence, reward, _ = __import__(
+        "tac_osm.plm_full_benchmark", fromlist=["step_environment"]
+    ).step_environment(episode, episode.action)
+    post_z = model.representation(
+        obs[0].unsqueeze(0), obs[1].unsqueeze(0), obs[2].unsqueeze(0)
+    )
+    predicted_next = model.osm.predict(
+        output["query"],
+        target,
+        torch.tensor([evidence], dtype=output["action_logits"].dtype),
+    )
+    world_loss = torch.nn.functional.mse_loss(predicted_next, post_z.detach())
+
+    step = model.verify_and_update(
+        output,
+        action=target,
+        outcome=torch.tensor([evidence], dtype=output["action_logits"].dtype),
+        post_text=obs[0].unsqueeze(0),
+        post_image=obs[1].unsqueeze(0),
+        post_audio=obs[2].unsqueeze(0),
+    )
+    verifier_target = torch.tensor([float(reward)], dtype=step.verifier_logit.dtype)
+    verifier_loss = torch.nn.functional.binary_cross_entropy_with_logits(
+        step.verifier_logit, verifier_target
+    )
+    repair_loss = torch.nn.functional.cross_entropy(step.repair_logits, target)
+
+    # The production training objective supplies separate losses for the
+    # action, OSM, verifier, and repair paths; this test verifies that each
+    # registered subsystem is actually reachable under that integrated graph.
+    loss = (
+        action_loss
+        + 0.10 * output["load_loss"]
+        + 0.10 * world_loss
+        + 0.10 * verifier_loss
+        + 0.10 * repair_loss
+        + 0.01 * step.next_memory_state.square().mean()
+    )
     loss.backward()
 
     required = [
@@ -67,6 +105,7 @@ def test_end_to_end_gradient_reaches_all_major_subsystems():
         model.verifier.net[0].weight,
         model.repair.net[0].weight,
         model.action_head[0].weight,
+        model.mtsk.write_proj.weight,
     ]
     assert all(p.grad is not None and torch.isfinite(p.grad).all() for p in required)
 
