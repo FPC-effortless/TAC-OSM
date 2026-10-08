@@ -1,0 +1,117 @@
+name: Research PLM learned addressing 002
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/TACOSM-PLM-LEARNED-ADDRESS-002.json"
+      - "src/tac_osm/learned_address_002.py"
+      - "src/tac_osm/learned_address_002_benchmark.py"
+      - "scripts/run_plm_learned_address_002.py"
+      - "tests/test_learned_address_002.py"
+      - "tests/test_learned_address_002_benchmark.py"
+      - ".github/workflows/plm-learned-address-002.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integrity:
+    name: Learned addressing 002 integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-PLM-LEARNED-ADDRESS-002")
+          errors = c.check_consistency()
+          assert errors == [], errors
+          assert c.seeds == tuple(range(10))
+          assert c.steps == 750
+          assert c.eval_steps == 10000
+          assert c.h_levels == (3, 8, 16, 32, 64, 128, 256)
+          print("PASS: contract")
+          PY
+      - name: Focused tests
+        run: |
+          python -m pytest -q \
+            tests/test_learned_address_002.py \
+            tests/test_learned_address_002_benchmark.py
+      - name: Static lint
+        run: |
+          python -m ruff check \
+            src/tac_osm/learned_address_002.py \
+            src/tac_osm/learned_address_002_benchmark.py \
+            scripts/run_plm_learned_address_002.py \
+            tests/test_learned_address_002.py \
+            tests/test_learned_address_002_benchmark.py
+
+  measurement:
+    needs: integrity
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . torch numpy==2.3.3
+      - name: Confirmatory measurement
+        env:
+          PYTHONHASHSEED: "0"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+          GITHUB_SHA: \${{ github.event.pull_request.head.sha || github.sha }}
+          GITHUB_RUN_ID: \${{ github.run_id }}
+        run: python scripts/run_plm_learned_address_002.py
+      - name: Independent artifact validation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("artifacts/TACOSM-PLM-LEARNED-ADDRESS-002.json")
+          r = json.loads(p.read_text())
+          assert r["status"] == "measured"
+          assert len(r["seed_results"]) == 10
+          assert all(len(x["isotropic"]) == 42 for x in r["seed_results"])
+          assert all(len(x["structured"]) == 35 for x in r["seed_results"])
+          fps = [
+              y["evaluation_fingerprint"]
+              for x in r["seed_results"]
+              for family in ("isotropic", "structured")
+              for y in x[family]
+          ]
+          assert len(fps) == len(set(fps))
+          assert r["integrity"]["evaluation_condition_fingerprints_unique"]
+          assert r["integrity"]["payload_not_in_scorer"]
+          assert r["integrity"]["raw_dot_reference_on_every_condition"]
+          assert isinstance(r["summary"]["isotropic_noninferiority_pass"], bool)
+          assert isinstance(r["summary"]["structured_high_noise_gain_pass"], bool)
+          print("PASS: artifact integrity")
+          PY
+      - name: Upload scientific artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-LEARNED-ADDRESS-002
+          path: artifacts/TACOSM-PLM-LEARNED-ADDRESS-002.json
+          if-no-files-found: error
