@@ -10,13 +10,12 @@ from pathlib import Path
 import platform
 import random
 import statistics
+import sys
 
 import torch
-from torch import Tensor
 import torch.nn.functional as F
 
 ROOT = Path(__file__).resolve().parents[1]
-import sys
 sys.path.insert(0, str(ROOT / "src"))
 
 from tac_osm.contract import load_contract
@@ -32,7 +31,6 @@ from tac_osm.learned_address_002_benchmark import (
     benchmark_manifest,
     fingerprint_batch,
     make_trial_batch,
-    generator_sha256,
 )
 
 EXPERIMENT_ID = "TACOSM-PLM-LEARNED-ADDRESS-002"
@@ -271,14 +269,6 @@ def main() -> None:
         for seed_row in seed_results
         for row in seed_row["isotropic"]
     ]
-    high_noise_rows = [
-        row
-        for seed_row in seed_results
-        for row in seed_row["structured"]
-        if row["M"] == STRUCTURED_HIGH_NOISE_M
-        and row["sigma"] in STRUCTURED_HIGH_NOISE_SIGMAS
-    ]
-
     iso_gaps = [row["learned_minus_raw"] for row in isotropic_rows]
     isotropic_mean_gap = statistics.fmean(iso_gaps)
     isotropic_min_gap = min(iso_gaps)
