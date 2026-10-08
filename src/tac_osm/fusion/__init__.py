@@ -1,17 +1,8 @@
-"""Bio-inspired TAC-OSM fusion: distributed local computation + multi-timescale memory.
+"""Bio-inspired TAC-OSM fusion package.
 
-The fusion package is a parallel experimental surface. It does not replace the
-existing TAC-OSM loop; it supplies a compositional model in which every major
-mechanism is an injected module with an inspectable trace and a switchable
-implementation.
-
-Research synthesis:
-- fly nervous-system evidence -> local feedback modules + sparse long-range
-  coordination;
-- bacterial memory evidence -> multi-timescale internal state + experience
-  dependent priming;
-- TAC-OSM -> persistent state, selective computation, verification, repair,
-  provenance, and strict temporal leakage boundary.
+This package is parallel to the existing TAC-OSM core. It provides one fused
+execution loop with independently replaceable modules, explicit traces,
+ablation configs, and benchmark tooling.
 """
 
 from .interfaces import (
@@ -29,27 +20,17 @@ from .operators import OperatorConfig, SpecialistPool
 from .verifier import FusionVerifierConfig, FusionVerifier, RepairPolicy
 from .model import FusionModelConfig, FusedTacOsmModel
 from .ablation import FusionAblationConfig, all_fusion_matrices
+from .builder import BuiltFusionModel, build_fused_model
+from .benchmark import FusionMetrics, run_arm, run_suite, write_results
+from .gates import GateResult, all_gates
 
 __all__ = [
-    "CandidateScore",
-    "CoordinatorDecision",
-    "FusionStep",
-    "MemoryContext",
-    "ModuleExecution",
-    "RegimeContext",
-    "MemoryConfig",
-    "MultiScaleMemory",
-    "RegimeConfig",
-    "RegimeState",
-    "CoordinatorConfig",
-    "SparseCoordinator",
-    "OperatorConfig",
-    "SpecialistPool",
-    "FusionVerifierConfig",
-    "FusionVerifier",
-    "RepairPolicy",
-    "FusionModelConfig",
-    "FusedTacOsmModel",
-    "FusionAblationConfig",
-    "all_fusion_matrices",
+    "CandidateScore", "CoordinatorDecision", "FusionStep", "MemoryContext",
+    "ModuleExecution", "RegimeContext", "MemoryConfig", "MultiScaleMemory",
+    "RegimeConfig", "RegimeState", "CoordinatorConfig", "SparseCoordinator",
+    "OperatorConfig", "SpecialistPool", "FusionVerifierConfig",
+    "FusionVerifier", "RepairPolicy", "FusionModelConfig", "FusedTacOsmModel",
+    "FusionAblationConfig", "all_fusion_matrices", "BuiltFusionModel",
+    "build_fused_model", "FusionMetrics", "run_arm", "run_suite",
+    "write_results", "GateResult", "all_gates",
 ]
