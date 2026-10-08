@@ -129,5 +129,37 @@
     "no general PLM capability claim",
     "no real-world multimodal claim",
     "no scaling claim"
-  ]
+  ],
+  "arms": [
+    {
+      "name": "untrained",
+      "intervention": "zero optimizer updates on the exact full-learned architecture",
+      "acts_on": "model-state integrity / evaluation floor"
+    },
+    {
+      "name": "trained_full",
+      "intervention": "registered full-learned training protocol including physics prior",
+      "acts_on": "optimization of integrated model"
+    },
+    {
+      "name": "trained_physics_off",
+      "intervention": "registered full-learned training protocol with only physics prior weight set to zero",
+      "acts_on": "physics-prior optimization constraint"
+    }
+  ],
+  "interpretation_order": [
+    "contract and benchmark provenance",
+    "untrained-weight integrity floor",
+    "parameter-change and loss trajectory",
+    "trained-vs-untrained action accuracy",
+    "physics-prior-on vs off",
+    "history-pair discrimination",
+    "closed-loop outcome",
+    "claim boundary"
+  ],
+  "h_levels": [
+    8
+  ],
+  "steps": 220,
+  "eval_steps": 180
 }
