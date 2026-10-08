@@ -351,6 +351,7 @@ class LearnedCDL(nn.Module):
 
     def __init__(self, config: FullPLMConfig) -> None:
         super().__init__()
+        self.config = config
         self.score = nn.Sequential(
             nn.Linear(2 * config.d_model, config.d_model),
             nn.GELU(),
