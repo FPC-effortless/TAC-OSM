@@ -788,13 +788,14 @@ class FullLearnedPLM(nn.Module):
         q, p = canonical.chunk(2, dim=-1)
         energy = self.osm.energy(canonical)
 
-        grad_q, grad_p = torch.autograd.grad(
+        grad_canonical = torch.autograd.grad(
             energy.sum(),
-            (q, p),
+            canonical,
             create_graph=True,
             retain_graph=True,
             allow_unused=False,
-        )
+        )[0]
+        grad_q, grad_p = grad_canonical.chunk(2, dim=-1)
         # Approximate latent derivatives with a finite difference in the
         # learned representation trajectory when at least two frames exist.
         dq = (q[:, 1:] - q[:, :-1]) / dt
