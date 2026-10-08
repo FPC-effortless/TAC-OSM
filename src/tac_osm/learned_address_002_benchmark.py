@@ -8,8 +8,6 @@ registered corruption model, not a task-specific semantic label.
 from __future__ import annotations
 
 import hashlib
-import json
-from typing import Iterator
 
 import torch
 import torch.nn.functional as F
