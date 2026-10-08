@@ -137,5 +137,38 @@
     6
   ],
   "steps": 400,
-  "eval_steps": 600
+  "eval_steps": 600,
+  "hypothesis": "Generic information-preserving learned sensor encoders should improve the learned recurrent controller's ability to infer hidden motion from history; adding the preregistered Hamiltonian-law prior may provide an additional benefit without task-specific physical-state or addressing scaffolds.",
+  "endpoints": [
+    {
+      "name": "learned_data_only_action_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "learned_physics_prior_action_accuracy",
+      "role": "treatment/control endpoint",
+      "primary": false
+    },
+    {
+      "name": "history_pair_exact_accuracy",
+      "role": "history-use diagnostic",
+      "primary": false
+    },
+    {
+      "name": "physics_prior_minus_data_only_accuracy",
+      "role": "primary attribution",
+      "primary": false
+    },
+    {
+      "name": "heldout_action_margin",
+      "role": "difficulty diagnostic",
+      "primary": false
+    },
+    {
+      "name": "physics_loss",
+      "role": "prior adherence diagnostic",
+      "primary": false
+    }
+  ]
 }
