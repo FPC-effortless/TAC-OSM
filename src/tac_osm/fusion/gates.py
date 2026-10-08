@@ -64,7 +64,42 @@ def task_uniqueness_gate(*, seeds: Sequence[int] = (11, 17, 23)) -> GateResult:
             if task.family == "relational":
                 reference = bits
             else:
-                reference = tuple(getattr(task.detail, "written_bits", ()))
+                # Stateful families must be validated against the value actually
+                # addressable from the public query, not only against Task.detail.
+                read = store.read(task.public())
+                if not address:
+                    failures.append({
+                        "seed": seed,
+                        "family": task.family,
+                        "error": "missing_address",
+                    })
+                    continue
+                if not read.keys or read.keys[0] != address or not read.values:
+                    failures.append({
+                        "seed": seed,
+                        "family": task.family,
+                        "error": "address_not_resolved",
+                        "address": address,
+                        "resolved_keys": list(read.keys),
+                    })
+                    continue
+                reference = tuple(read.values[0])
+                expected = tuple(getattr(task.detail, "written_bits", ()))
+                if not expected:
+                    failures.append({
+                        "seed": seed,
+                        "family": task.family,
+                        "error": "missing_reference",
+                    })
+                    continue
+                if reference != expected:
+                    failures.append({
+                        "seed": seed,
+                        "family": task.family,
+                        "error": "state_reference_mismatch",
+                    })
+                    continue
+
             if not reference:
                 failures.append({
                     "seed": seed,
@@ -72,13 +107,14 @@ def task_uniqueness_gate(*, seeds: Sequence[int] = (11, 17, 23)) -> GateResult:
                     "error": "missing_reference",
                 })
                 continue
+
+            # The relation is evaluated against the target-defining reference.
+            # For replay this is the value retrieved by the public address; the
+            # public query remains an input to the generator but is not the gold
+            # vector for the relation.
             winners = [
                 i for i, candidate in enumerate(task.candidates)
-                if satisfies_relation(bits or reference, task.query.context, candidate.descriptor)
-                and (
-                    task.family != "replay"
-                    or bool(address)
-                )
+                if satisfies_relation(reference, task.query.context, candidate.descriptor)
             ]
             if len(winners) != 1 or winners[0] != task.target_action:
                 failures.append({
