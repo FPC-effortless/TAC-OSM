@@ -217,6 +217,8 @@ def main() -> None:
     benchmark_hash = sha256_file(
         ROOT / "src" / "tac_osm" / "learned_address_002_benchmark.py"
     )
+    contract_spec = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+    assert benchmark_hash == contract_spec["benchmark_generator_sha256"]
 
     seed_results: list[dict] = []
     training_meta: dict[str, dict] = {}
