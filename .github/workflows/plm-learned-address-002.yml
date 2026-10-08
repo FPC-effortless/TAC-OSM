@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
@@ -80,8 +80,8 @@ jobs:
           PYTHONHASHSEED: "0"
           OMP_NUM_THREADS: "2"
           MKL_NUM_THREADS: "2"
-          GITHUB_SHA: \${{ github.event.pull_request.head.sha || github.sha }}
-          GITHUB_RUN_ID: \${{ github.run_id }}
+          GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
         run: python scripts/run_plm_learned_address_002.py
       - name: Independent artifact validation
         run: |
