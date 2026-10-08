@@ -200,6 +200,7 @@ class FusedTacOsmModel:
 
     def inspect(self) -> dict[str, Any]:
         return {
+            "model": "tacosm_fused_bioinspired_2026-10-08",
             "config": _dataclass_tree(self.config),
             "memory": self.memory.inspect(),
             "regime": self.regime.inspect(),
