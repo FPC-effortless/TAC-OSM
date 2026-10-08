@@ -295,7 +295,12 @@ def _candidate_features(
         )
 
     global_summary = _summary(memory.global_states)
-    local_summary = _summary([state for _mid, state in memory.local_states])
+    local_rows = [
+        row
+        for _module_id, module_states in memory.local_states
+        for row in module_states
+    ]
+    local_summary = _summary(local_rows)
     for j in range(dim):
         features.append(global_summary[j] if j < len(global_summary) else 0.0)
     for j in range(dim):
