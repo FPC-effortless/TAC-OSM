@@ -19,7 +19,6 @@ from tac_osm.contract import load_contract
 from tac_osm.persistence_001 import PersistencePLM001
 from tac_osm.persistence_001_benchmark import (
     DELAYS,
-    PersistenceEpisode,
     collision_fingerprint,
     make_collision_pair,
     make_episode,
