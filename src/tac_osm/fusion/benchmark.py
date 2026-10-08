@@ -15,6 +15,10 @@ from typing import Any, Iterable, Sequence
 
 from .ablation import FusionAblationConfig, all_fusion_matrices, full_config
 from .builder import build_fused_model
+from .interfaces import MemoryContext
+from .model import _observable_features
+from .regime import RegimeContext
+from .. import Outcome
 
 
 @dataclass(frozen=True)
@@ -196,6 +200,165 @@ def summarize_metrics(metrics: Sequence[FusionMetrics]) -> list[dict[str, Any]]:
             "false_commit_count_total": sum(m.false_commit_count for m in group),
         })
     return summary
+
+
+@dataclass(frozen=True)
+class HistoryContrastMetrics:
+    """Mechanistic same-present/different-past contrast.
+
+    This is a controlled dynamic-memory experiment, not a claim of end-to-end
+    environmental learning. The two agents start with identical parameters and
+    receive the same current task; only the prior internal outcome history
+    differs.
+    """
+
+    seed: int
+    history_steps: int
+    same_present: bool
+    route_identical: bool
+    selected_candidate_identical: bool
+    current_outcome_identical: bool
+    module_score_l1: float
+    regime_prediction_delta: float
+    memory_norm_delta: float
+
+    def to_dict(self) -> dict[str, Any]:
+        return asdict(self)
+
+
+def run_history_contrast(
+    *,
+    seed: int = 0,
+    history_steps: int = 8,
+) -> HistoryContrastMetrics:
+    if history_steps < 1:
+        raise ValueError("history_steps must be >= 1")
+
+    from ..environment import WorldEnvironment, build_relational_task
+    from ..state import PersistentStore, StateConfig
+    from ..environment import WorldConfig
+
+    task = build_relational_task(
+        seed + 9000, dim=8, n_candidates=8, step=history_steps
+    )
+    config = full_config(seed)
+    stable = build_fused_model(config, n_steps=1).model
+    volatile = build_fused_model(config, n_steps=1).model
+
+    read_stable = stable.state.read(task.public())
+    read_volatile = volatile.state.read(task.public())
+    features_stable = _observable_features(task.public(), read_stable)
+    features_volatile = _observable_features(task.public(), read_volatile)
+
+    for i in range(history_steps):
+        stable.memory.observe(
+            module_ids=(0, 1),
+            signal=features_stable,
+            reward=1.0,
+            surprise=0.0,
+            success=True,
+        )
+        stable.regime.update(
+            features=features_stable,
+            outcome=Outcome(True),
+            reward=1.0,
+        )
+        volatile_success = (i % 2) == 0
+        volatile.memory.observe(
+            module_ids=(0, 1),
+            signal=features_volatile,
+            reward=1.0 if volatile_success else 0.0,
+            surprise=0.0 if volatile_success else 1.0,
+            success=volatile_success,
+        )
+        volatile.regime.update(
+            features=features_volatile,
+            outcome=Outcome(volatile_success),
+            reward=1.0 if volatile_success else 0.0,
+        )
+
+    stable_step = stable.step_with_task(task, history_steps)
+    volatile_step = volatile.step_with_task(task, history_steps)
+
+    stable_scores = {
+        e.module_id: e.candidate_scores
+        for e in stable_step.module_executions
+    }
+    volatile_scores = {
+        e.module_id: e.candidate_scores
+        for e in volatile_step.module_executions
+    }
+    common_modules = sorted(set(stable_scores) & set(volatile_scores))
+    score_l1 = sum(
+        abs(a - b)
+        for module_id in common_modules
+        for a, b in zip(stable_scores[module_id], volatile_scores[module_id])
+    )
+    stable_mem = stable_step.memory.global_states
+    volatile_mem = volatile_step.memory.global_states
+    stable_norm = sum(v * v for row in stable_mem for v in row) ** 0.5
+    volatile_norm = sum(v * v for row in volatile_mem for v in row) ** 0.5
+
+    return HistoryContrastMetrics(
+        seed=seed,
+        history_steps=history_steps,
+        same_present=stable_step.query == volatile_step.query,
+        route_identical=stable_step.coordination.selected_modules == volatile_step.coordination.selected_modules,
+        selected_candidate_identical=stable_step.selected_candidate == volatile_step.selected_candidate,
+        current_outcome_identical=stable_step.outcome.success == volatile_step.outcome.success,
+        module_score_l1=score_l1,
+        regime_prediction_delta=abs(
+            stable_step.regime.predicted_success
+            - volatile_step.regime.predicted_success
+        ),
+        memory_norm_delta=abs(stable_norm - volatile_norm),
+    )
+
+
+def memory_decay_profile(
+    *,
+    dim: int = 8,
+    n_timescales: int = 4,
+    horizons: Sequence[int] = (1, 2, 4, 8, 16),
+) -> dict[str, Any]:
+    from .memory import MemoryConfig, MultiScaleMemory
+
+    memory = MultiScaleMemory(
+        MemoryConfig(
+            dim=dim,
+            n_timescales=n_timescales,
+            decays=(0.20, 0.60, 0.90, 0.985)[:n_timescales],
+            n_modules=8,
+        )
+    )
+    signal = (1.0,) * dim
+    memory.observe(
+        module_ids=(0,),
+        signal=signal,
+        reward=1.0,
+        surprise=0.0,
+        success=True,
+    )
+    snapshots = [{"horizon": 0, "global_norms": memory.inspect()["global_norms"]}]
+    target_horizons = set(int(h) for h in horizons if h >= 1)
+    for step in range(1, max(target_horizons, default=0) + 1):
+        memory.observe(
+            module_ids=(),
+            signal=(0.0,) * dim,
+            reward=0.0,
+            surprise=0.0,
+            success=False,
+        )
+        if step in target_horizons:
+            snapshots.append({
+                "horizon": step,
+                "global_norms": memory.inspect()["global_norms"],
+            })
+    return {
+        "n_timescales": n_timescales,
+        "horizons": snapshots,
+        "interpretation": "fast traces should decay more rapidly than slow traces",
+    }
 
 
 def write_results(metrics: Sequence[FusionMetrics], path: str | Path) -> Path:
