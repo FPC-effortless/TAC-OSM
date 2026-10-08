@@ -1,10 +1,9 @@
 """Independent local computational modules.
 
 Each specialist is a complete swappable computation unit. The default
-implementation is deliberately small and inspectable: a linear scorer over
-public relation features, addressed persistent-state features, and dynamic
-memory context. Modules have independent parameters unless the ablation
-requests parameter sharing.
+implementation is a small outcome-trained linear operator with an optional
+deterministic refinement loop. Every module owns its parameters and cached
+feature trace, so training, inspection, replacement, and lesions remain local.
 """
 
 from __future__ import annotations
@@ -21,35 +20,49 @@ from .interfaces import MemoryContext, ModuleExecution, RegimeContext
 @dataclass(frozen=True)
 class OperatorConfig:
     n_modules: int = 8
-    feature_dim: int = 0
+    dim: int = 8
     lr: float = 0.04
     adaptive_halting: bool = True
     max_steps: int = 3
     shared_parameters: bool = False
     seed: int = 0
     computation_mode: str = "linear"
+    temperature: float = 0.5
 
     def __post_init__(self) -> None:
         if self.n_modules < 1:
             raise ValueError("n_modules must be >= 1")
+        if self.dim < 1:
+            raise ValueError("dim must be >= 1")
         if self.lr <= 0.0:
             raise ValueError("lr must be positive")
         if self.max_steps < 1:
             raise ValueError("max_steps must be >= 1")
         if self.computation_mode not in {"linear", "nonlinear"}:
             raise ValueError("computation_mode must be linear or nonlinear")
+        if self.temperature <= 0.0:
+            raise ValueError("temperature must be positive")
 
 
 class _Specialist:
-    def __init__(self, module_id: int, dim: int, config: OperatorConfig, rng: random.Random, shared: list[float] | None) -> None:
+    def __init__(
+        self,
+        module_id: int,
+        feature_dim: int,
+        config: OperatorConfig,
+        rng: random.Random,
+        shared: list[float] | None,
+    ) -> None:
         self.module_id = module_id
         self.config = config
-        self.weights = shared if shared is not None else [
-            rng.uniform(-0.02, 0.02) for _ in range(dim)
-        ]
+        self.weights = (
+            shared if shared is not None
+            else [rng.uniform(-0.02, 0.02) for _ in range(feature_dim)]
+        )
         self.bias = 0.0
         self.updates = 0
         self.score_count = 0
+        self._last_features: tuple[tuple[float, ...], ...] = ()
 
     def score_candidates(
         self,
@@ -62,45 +75,32 @@ class _Specialist:
         adaptive: bool,
     ) -> ModuleExecution:
         scores: list[float] = []
-        traces: list[float] = []
-        chosen_steps = 1
-        best_candidate = 0
-        best_value = float("-inf")
+        cached: list[tuple[float, ...]] = []
 
-        for idx, candidate in enumerate(candidates):
-            feats = _candidate_features(query, state_read, memory, regime, candidate)
+        for candidate in candidates:
+            feats = _fit(
+                _candidate_features(query, state_read, memory, regime, candidate),
+                len(self.weights),
+            )
+            cached.append(feats)
             raw = self.bias + sum(w * f for w, f in zip(self.weights, feats))
-            if self.config.computation_mode == "nonlinear":
-                raw = math.tanh(raw)
-            # Tiny iterative refinement. It is intentionally deterministic for
-            # a given state, making the halting statistic attributable to the
-            # adaptive-compute mechanism rather than RNG.
-            current = raw
+            current = math.tanh(raw) if self.config.computation_mode == "nonlinear" else raw
             steps = 1
-            if adaptive:
-                margin_hint = abs(current)
-                while (
-                    steps < self.config.max_steps
-                    and margin_hint < 0.55
-                ):
-                    current = 0.7 * current + 0.3 * math.tanh(current)
-                    margin_hint = abs(current)
-                    steps += 1
+            while adaptive and steps < self.config.max_steps and abs(current) < 0.55:
+                current = 0.7 * current + 0.3 * math.tanh(current)
+                steps += 1
             scores.append(current)
             self.score_count += 1
-            if current > best_value:
-                best_value = current
-                best_candidate = idx
-                chosen_steps = steps
 
-        probs = _softmax(scores, 0.5)
-        trace = tuple([best_value, *probs])
+        self._last_features = tuple(cached)
+        best_candidate = max(range(len(scores)), key=lambda i: (scores[i], -i))
+        probs = _softmax(scores, self.config.temperature)
         return ModuleExecution(
             module_id=self.module_id,
             candidate_scores=tuple(scores),
             selected_candidate_score=scores[best_candidate],
-            trace=trace,
-            halting_steps=chosen_steps,
+            trace=tuple([scores[best_candidate], *probs]),
+            halting_steps=_halting_steps(scores, adaptive, self.config.max_steps),
             provenance=f"specialist:{self.module_id}",
         )
 
@@ -112,49 +112,42 @@ class _Specialist:
         selected: int,
         reward: float,
     ) -> None:
-        if not execution.candidate_scores:
+        if not self._last_features or not candidates:
             return
-        probs = _softmax(list(execution.candidate_scores), 0.5)
+        if not 0 <= selected < len(self._last_features):
+            return
+        probs = _softmax(list(execution.candidate_scores), self.config.temperature)
         p = max(1e-6, probs[selected])
         centred = float(reward) - (1.0 / len(candidates))
-        # REINFORCE-style update over the full feature basis would require the
-        # per-candidate features again. Reconstructing them is done by the pool
-        # before forwarding to this object; the weight update below is a small
-        # outcome-scaled direction using the selected score. This keeps the
-        # operator independent and the trace cheap. The full benchmark reports
-        # operator update count separately from capability.
         direction = (1.0 - p) * centred
-        for i in range(len(self.weights)):
-            self.weights[i] += self.config.lr * direction * (1.0 if i % 2 == 0 else -1.0)
+        for i, feature in enumerate(self._last_features[selected]):
+            self.weights[i] += self.config.lr * direction * feature
         self.bias += self.config.lr * direction
         self.updates += 1
 
     def inspect(self) -> dict[str, object]:
-        norm = sum(w * w for w in self.weights) ** 0.5
         return {
             "module_id": self.module_id,
             "parameter_count": len(self.weights) + 1,
-            "weight_norm": norm,
+            "weight_norm": sum(w * w for w in self.weights) ** 0.5,
             "bias": self.bias,
             "updates": self.updates,
             "score_count": self.score_count,
+            "feature_dimension": len(self.weights),
+            "last_trace_length": len(self._last_features),
         }
 
 
 class SpecialistPool:
-    """Pool facade; changing the implementation need not change the model."""
+    """Pool facade; module implementations can be replaced independently."""
 
     def __init__(self, config: OperatorConfig | None = None) -> None:
         self.config = config if config is not None else OperatorConfig()
-        dim = 1 + 6 * 8 + 2 * self.config.n_modules
-        shared = (
-            [0.0 for _ in range(dim)]
-            if self.config.shared_parameters
-            else None
-        )
+        feature_dim = _feature_dimension(self.config.dim)
+        shared = [0.0] * feature_dim if self.config.shared_parameters else None
         rng = random.Random(self.config.seed)
         self._modules = [
-            _Specialist(m, dim, self.config, rng, shared)
+            _Specialist(m, feature_dim, self.config, rng, shared)
             for m in range(self.config.n_modules)
         ]
 
@@ -173,7 +166,7 @@ class SpecialistPool:
         candidates: Sequence[Candidate],
     ) -> tuple[ModuleExecution, ...]:
         return tuple(
-            self._modules[m].score_candidates(
+            self._modules[int(m)].score_candidates(
                 query=query,
                 state_read=state_read,
                 memory=memory,
@@ -190,14 +183,17 @@ class SpecialistPool:
         executions: Sequence[ModuleExecution],
         n_candidates: int,
     ) -> int:
-        if not executions:
+        if not executions or n_candidates < 1:
             return 0
-        aggregate = [0.0 for _ in range(n_candidates)]
+        aggregate = [0.0] * n_candidates
+        counts = [0] * n_candidates
         for execution in executions:
-            for i, score in enumerate(execution.candidate_scores):
+            for i, score in enumerate(execution.candidate_scores[:n_candidates]):
                 aggregate[i] += score
-        denom = max(1, len(executions))
-        aggregate = [v / denom for v in aggregate]
+                counts[i] += 1
+        aggregate = [
+            aggregate[i] / max(1, counts[i]) for i in range(n_candidates)
+        ]
         return max(range(n_candidates), key=lambda i: (aggregate[i], -i))
 
     def update(
@@ -209,13 +205,22 @@ class SpecialistPool:
         reward: float,
     ) -> None:
         for execution in executions:
-            if 0 <= execution.module_id < len(self._modules):
-                self._modules[execution.module_id].update(
+            module_id = int(execution.module_id)
+            if 0 <= module_id < len(self._modules):
+                self._modules[module_id].update(
                     execution=execution,
                     candidates=candidates,
                     selected=selected,
                     reward=reward,
                 )
+
+    def disable(self, module_id: int) -> None:
+        """Hard lesion; parameters remain inspectable after the lesion."""
+        if not 0 <= module_id < len(self._modules):
+            raise IndexError(module_id)
+        module = self._modules[module_id]
+        module.weights[:] = [0.0] * len(module.weights)
+        module.bias = -1e9
 
     def inspect(self) -> dict[str, object]:
         return {
@@ -228,6 +233,10 @@ class SpecialistPool:
         }
 
 
+def _feature_dimension(dim: int) -> int:
+    return 1 + 7 * dim + 7
+
+
 def _candidate_features(
     query: Query,
     state_read: StateRead,
@@ -235,52 +244,54 @@ def _candidate_features(
     regime: RegimeContext,
     candidate: Candidate,
 ) -> tuple[float, ...]:
-    dim = max(1, len(candidate.descriptor))
+    dim = len(candidate.descriptor)
     q = tuple(
         int(b) for b in query.text.partition("\t")[0].split()
         if b in {"0", "1"}
     )
     features: list[float] = [1.0]
+
     for j in range(dim):
-        qv = float(q[j]) if j < len(q) else 0.0
-        cv = float(candidate.descriptor[j])
-        features.append(1.0 if qv == cv else -1.0)
-    for j in range(dim):
-        gate = float(query.context[j]) if j < len(query.context) else 0.0
-        features.append(gate * (1.0 if cv if False else 0.0))
-    # Rebuild context-candidate block without relying on a transient variable.
-    features = features[: 1 + dim]
+        qj = q[j] if j < len(q) else 0
+        features.append(1.0 if qj == candidate.descriptor[j] else -1.0)
+
     for j in range(dim):
         gate = float(query.context[j]) if j < len(query.context) else 0.0
-        features.append(gate * (1.0 if candidate.descriptor[j] == (q[j] if j < len(q) else 0) else -1.0))
-    # State rows: addressed row first in the existing state implementation.
+        qj = q[j] if j < len(q) else 0
+        features.append(gate * (1.0 if candidate.descriptor[j] == qj else -1.0))
+
     address = query.text.partition("\t")[2]
-    addressed = None
+    addressed: Sequence[int] = ()
     for i, key in enumerate(state_read.keys):
         if key == address and i < len(state_read.values):
             addressed = state_read.values[i]
             break
+
     for j in range(dim):
-        if addressed and j < len(addressed):
-            features.append(float(query.context[j]) * (1.0 if addressed[j] == candidate.descriptor[j] else -1.0))
+        if j < len(addressed):
+            gate = float(query.context[j]) if j < len(query.context) else 0.0
+            features.append(gate * (1.0 if addressed[j] == candidate.descriptor[j] else -1.0))
         else:
             features.append(0.0)
-    # A second state block is intentionally ungated so the hypothesis class can
-    # be tested for the failure mode observed in the original CDL integration.
+
+    # Ungated address match is retained deliberately as a testable hypothesis
+    # class; the representability gate can expose whether it harms composition.
     for j in range(dim):
-        if addressed and j < len(addressed):
-            features.append(1.0 if addressed[j] == candidate.descriptor[j] else -1.0)
-        else:
-            features.append(0.0)
+        features.append(
+            1.0 if j < len(addressed) and addressed[j] == candidate.descriptor[j]
+            else 0.0
+        )
+
     global_summary = _summary(memory.global_states)
-    local_summary = _summary(
-        state for _mid, state in memory.local_states
-    )
-    features.extend(global_summary[:dim])
-    features.extend(local_summary[:dim])
-    features.extend(regime.embedding)
+    local_summary = _summary([state for _mid, state in memory.local_states])
+    for j in range(dim):
+        features.append(global_summary[j] if j < len(global_summary) else 0.0)
+    for j in range(dim):
+        features.append(local_summary[j] if j < len(local_summary) else 0.0)
+
+    for j in range(4):
+        features.append(regime.embedding[j] if j < len(regime.embedding) else 0.0)
     features.extend([memory.volatility, memory.surprise, regime.predicted_success])
-    # Fixed dimension is padded/truncated by the module's zip semantics.
     return tuple(features)
 
 
@@ -288,10 +299,13 @@ def _summary(states: Sequence[Sequence[float]]) -> tuple[float, ...]:
     if not states:
         return ()
     width = len(states[0])
-    return tuple(
-        sum(row[j] for row in states) / len(states)
-        for j in range(width)
-    )
+    return tuple(sum(row[j] for row in states) / len(states) for j in range(width))
+
+
+def _fit(values: Sequence[float], dim: int) -> tuple[float, ...]:
+    if len(values) >= dim:
+        return tuple(float(v) for v in values[:dim])
+    return tuple(float(v) for v in values) + (0.0,) * (dim - len(values))
 
 
 def _softmax(values: Sequence[float], temperature: float) -> list[float]:
@@ -300,5 +314,15 @@ def _softmax(values: Sequence[float], temperature: float) -> list[float]:
     t = max(1e-6, float(temperature))
     m = max(values)
     exps = [math.exp((v - m) / t) for v in values]
-    total = sum(exps)
+    total = sum(exps) or 1.0
     return [v / total for v in exps]
+
+
+def _halting_steps(scores: Sequence[float], adaptive: bool, max_steps: int) -> int:
+    if not adaptive or not scores:
+        return 1
+    if len(scores) == 1:
+        return 1 if abs(scores[0]) >= 0.55 else min(max_steps, 2)
+    ordered = sorted(scores, reverse=True)
+    margin = ordered[0] - ordered[1]
+    return 1 if margin >= 0.55 else min(max_steps, 2)
