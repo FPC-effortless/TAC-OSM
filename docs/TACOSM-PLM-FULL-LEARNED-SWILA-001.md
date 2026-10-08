@@ -97,6 +97,14 @@ Forbidden model inputs include physical-state labels, entity IDs, fixed
 operator semantics, oracle retrieval, target action, future reward, and test
 outcomes.
 
+## Data-integrity gate
+
+Before any capability result is accepted, the measurement must show zero
+exact episode-key overlap within every train/eval split, across all seed train
+pools and eval pools, and between the held-out history-pair set and every
+train/eval pool. History-pair episodes must also be unique across seeds.
+The artifact records each of these checks explicitly.
+
 ## Scientific sequence
 
 1. Verify architecture and leakage gates.
