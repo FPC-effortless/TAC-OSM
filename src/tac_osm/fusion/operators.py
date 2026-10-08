@@ -223,12 +223,24 @@ class SpecialistPool:
         module.bias = -1e9
 
     def inspect(self) -> dict[str, object]:
+        pairwise = []
+        for i, left in enumerate(self._modules):
+            for right in self._modules[i + 1:]:
+                pairwise.append(
+                    sum((a - b) ** 2 for a, b in zip(left.weights, right.weights)) ** 0.5
+                )
+        logical_parameter_count = (
+            len(self._modules[0].weights) + 1
+            if self.config.shared_parameters else
+            sum(int(m.inspect()["parameter_count"]) for m in self._modules)
+        )
         return {
             "shared_parameters": self.config.shared_parameters,
             "adaptive_halting": self.config.adaptive_halting,
             "modules": [m.inspect() for m in self._modules],
-            "parameter_count": sum(
-                int(m.inspect()["parameter_count"]) for m in self._modules
+            "parameter_count": logical_parameter_count,
+            "mean_pairwise_parameter_distance": (
+                sum(pairwise) / len(pairwise) if pairwise else 0.0
             ),
         }
 
