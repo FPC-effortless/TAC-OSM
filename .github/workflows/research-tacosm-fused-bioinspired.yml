@@ -4,6 +4,35 @@ on:
   pull_request:
     branches: [main, master]
   workflow_dispatch:
+    inputs:
+      suite:
+        description: "Ablation suite"
+        required: true
+        default: "component"
+        type: choice
+        options:
+          - smoke
+          - component
+          - memory
+          - coordination
+          - priming
+          - specialization
+          - halting
+          - verification
+          - fact_state
+          - integrity
+          - lesion
+          - all
+      steps:
+        description: "Steps per arm"
+        required: true
+        default: "24"
+        type: string
+      seeds:
+        description: "Comma-separated seeds"
+        required: true
+        default: "0,1,2,3,4"
+        type: string
 
 permissions:
   contents: read
@@ -29,13 +58,16 @@ jobs:
         run: |
           SUITE=$(jq -r '.inputs.suite // "smoke"' "$GITHUB_EVENT_PATH")
           STEPS=$(jq -r '.inputs.steps // "24"' "$GITHUB_EVENT_PATH")
+          SEEDS=$(jq -r '.inputs.seeds // "0,1,2,3,4"' "$GITHUB_EVENT_PATH")
           echo "suite=$SUITE" >> "$GITHUB_OUTPUT"
           echo "steps=$STEPS" >> "$GITHUB_OUTPUT"
+          echo "seeds=$SEEDS" >> "$GITHUB_OUTPUT"
       - name: Run fused research
         run: |
           PYTHONPATH=src python scripts/run_fused_research.py \
             --suite "${{ steps.inputs.outputs.suite }}" \
             --steps "${{ steps.inputs.outputs.steps }}" \
+            --seeds "${{ steps.inputs.outputs.seeds }}" \
             --output "fused-${{ steps.inputs.outputs.suite }}.json"
       - name: Upload results
         uses: actions/upload-artifact@v4
