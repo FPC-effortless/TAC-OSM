@@ -91,6 +91,35 @@ def test_verifier_contract_uses_continuous_outcome_not_binary_success():
     assert first.in_features != 2 * cfg.d_model + 2
 
 
+def test_verified_write_is_gated_and_state_persists():
+    torch.manual_seed(3)
+    model = _small_model()
+    state = model.mtsk.initial_state(1, torch.device("cpu"), torch.float32)
+    context = torch.randn(1, 48)
+    action = torch.tensor([1])
+    outcome = torch.tensor([-0.25])
+
+    blocked = model.mtsk.commit_verified(
+        state, context, action, outcome, torch.zeros(1)
+    )
+    admitted = model.mtsk.commit_verified(
+        state, context, action, outcome, torch.ones(1)
+    )
+
+    assert torch.equal(blocked, state)
+    assert not torch.equal(admitted, state)
+
+    episode = sample_episode(__import__("random").Random(23))
+    baseline = model(**episode.batch)
+    carried = model(
+        episode.batch["text"],
+        episode.batch["image"],
+        episode.batch["audio"],
+        memory_state=admitted,
+    )
+    assert not torch.allclose(baseline["memory_state"], carried["memory_state"])
+
+
 def test_benchmark_generator_hash_matches_file():
     import hashlib
     from tac_osm import plm_full_benchmark
