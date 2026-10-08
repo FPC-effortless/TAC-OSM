@@ -201,7 +201,18 @@
       "discovered": "pre-measurement",
       "affected": "benchmark provenance only",
       "no_result_under_previous_version": "No learned-address-002 model measurement has been run."
+    },
+    {
+      "id": "A3",
+      "before_measurement": true,
+      "change": "Refresh the byte-level SHA-256 pin after the non-semantic benchmark provenance implementation cleanup.",
+      "old_definition": "The contract hash pin corresponded to the prior source bytes before cleanup.",
+      "new_definition": "The contract pins the exact current benchmark source bytes and the measurement asserts the runtime hash equals this pin.",
+      "rationale": "Keep byte-level provenance exact after a pre-measurement implementation-only edit.",
+      "discovered": "pre-measurement",
+      "affected": "benchmark provenance only",
+      "no_result_under_previous_version": "No learned-address-002 model measurement has run."
     }
   ],
-  "benchmark_generator_sha256": "4ae2897c3e3d7f8eb1325cb368012567fd9caaf81da63b4f9b36be34f7f90815"
+  "benchmark_generator_sha256": "89a052b91ef462e3a7e79e9e391f7a8ed0f1cb384b497fcf3e4b9fa67954022c"
 }
