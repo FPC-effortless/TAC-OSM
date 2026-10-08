@@ -396,15 +396,70 @@ def main() -> None:
         eval_meta.append(evaluate_seed(model, seed))
 
     integrity = {"train_eval_overlap": {}, "distinct_eval_fingerprints": True}
+    all_train_sets: dict[int, set[tuple]] = {}
+    all_eval_sets: dict[int, set[tuple]] = {}
+    all_pair_sets: dict[int, set[tuple]] = {}
+
     for seed in SEEDS:
         train_rng = random.Random(seed * 100003 + 17)
         train_pool = sample_balanced_episodes(train_rng, TRAIN_PER_ACTION)
         train_keys = {episode_key(e) for e in train_pool}
         eval_keys = set(eval_meta[SEEDS.index(seed)]["eval_keys"])
+        all_train_sets[seed] = train_keys
+        all_eval_sets[seed] = eval_keys
         integrity["train_eval_overlap"][str(seed)] = len(train_keys & eval_keys)
+
+        pair_rng = random.Random(seed * 400009 + 43)
+        pairs_for_integrity = sample_history_pairs(pair_rng, HISTORY_PAIRS)
+        pair_keys = {
+            episode_key(episode)
+            for pair in pairs_for_integrity
+            for episode in pair
+        }
+        all_pair_sets[seed] = pair_keys
+
+    integrity["cross_seed_train_overlap"] = {
+        f"{a}:{b}": len(all_train_sets[a] & all_train_sets[b])
+        for i, a in enumerate(SEEDS)
+        for b in SEEDS[i + 1:]
+    }
+    integrity["cross_seed_eval_overlap"] = {
+        f"{a}:{b}": len(all_eval_sets[a] & all_eval_sets[b])
+        for i, a in enumerate(SEEDS)
+        for b in SEEDS[i + 1:]
+    }
+    integrity["history_pair_train_overlap"] = {
+        str(seed): len(
+            all_pair_sets[seed]
+            & set().union(*(all_train_sets[s] for s in SEEDS))
+        )
+        for seed in SEEDS
+    }
+    integrity["history_pair_eval_overlap"] = {
+        str(seed): len(
+            all_pair_sets[seed]
+            & set().union(*(all_eval_sets[s] for s in SEEDS))
+        )
+        for seed in SEEDS
+    }
+    integrity["cross_seed_pair_overlap"] = {
+        f"{a}:{b}": len(all_pair_sets[a] & all_pair_sets[b])
+        for i, a in enumerate(SEEDS)
+        for b in SEEDS[i + 1:]
+    }
 
     fps = [row["eval_fingerprint"] for row in eval_meta]
     integrity["distinct_eval_fingerprints"] = len(fps) == len(set(fps))
+
+    all_integrity_zero = (
+        all(v == 0 for v in integrity["train_eval_overlap"].values())
+        and all(v == 0 for v in integrity["cross_seed_train_overlap"].values())
+        and all(v == 0 for v in integrity["cross_seed_eval_overlap"].values())
+        and all(v == 0 for v in integrity["history_pair_train_overlap"].values())
+        and all(v == 0 for v in integrity["history_pair_eval_overlap"].values())
+        and all(v == 0 for v in integrity["cross_seed_pair_overlap"].values())
+        and integrity["distinct_eval_fingerprints"]
+    )
 
     benchmark = __import__(
         "tac_osm.plm_full_benchmark",
@@ -455,10 +510,7 @@ def main() -> None:
                 and min(accuracies) >= 0.55
                 and statistics.fmean(pairs) >= 0.70
                 and statistics.fmean(closed) >= 0.70
-                and all(
-                    v == 0 for v in integrity["train_eval_overlap"].values()
-                )
-                and integrity["distinct_eval_fingerprints"]
+                and all_integrity_zero
             ),
         },
         "scientific_note": (
