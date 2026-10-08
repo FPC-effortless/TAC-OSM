@@ -78,3 +78,18 @@ def test_public_task_does_not_expose_hidden_target():
     assert "target_action" not in public.__dict__
     assert task.target_action>=0
     assert len(task.candidates)==8
+
+
+def test_history_contrast_holds_present_task_fixed_but_changes_internal_history():
+    from tac_osm.fusion.benchmark import run_history_contrast
+    result = run_history_contrast(seed=5, history_steps=6)
+    assert result.same_present is True
+    assert result.module_score_l1 > 0.0 or result.regime_prediction_delta > 0.0
+
+
+def test_memory_decay_profile_exposes_multiple_timescales():
+    from tac_osm.fusion.benchmark import memory_decay_profile
+    result = memory_decay_profile(horizons=(0, 1, 2, 8))
+    assert len(result["horizons"]) == 4
+    initial = result["horizons"][0]["global_norms"]
+    assert initial[0] > initial[-1]
