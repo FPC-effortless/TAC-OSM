@@ -4,7 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-from tac_osm.fusion.benchmark import run_multi_seed_suite, summarize_metrics, write_results
+from tac_osm.fusion.benchmark import memory_decay_profile, run_history_contrast, run_multi_seed_suite, summarize_metrics, write_results
 from tac_osm.fusion.gates import all_gates
 
 def _seeds(value: str) -> tuple[int, ...]:
@@ -39,6 +39,8 @@ def main() -> int:
         "steps":args.steps,
         "gates":[{"name":g.name,"passed":g.passed} for g in gates],
         "summary":summarize_metrics(metrics),
+        "history_contrast": [run_history_contrast(seed=seed) .__dict__ for seed in args.seeds],
+        "memory_decay": memory_decay_profile(),
         "results":[m.to_dict() for m in metrics],
     }
     if args.output:
