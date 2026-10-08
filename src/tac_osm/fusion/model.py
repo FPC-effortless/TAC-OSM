@@ -68,6 +68,23 @@ class FusedTacOsmModel:
 
     def step(self, step_index: int) -> FusionStep:
         task = self.environment.next_task(self.state)
+        return self._execute_task(task, step_index)
+
+    def step_with_task(self, task: Any, step_index: int) -> FusionStep:
+        """Execute one externally supplied task without changing its identity.
+
+        This diagnostic hook pins the concrete environment to the supplied task
+        so the outcome remains coupled to that exact present-time observation.
+        """
+        issue = getattr(self.environment, "issue", None)
+        if not callable(issue):
+            raise TypeError(
+                "step_with_task requires an environment exposing issue(task)"
+            )
+        issue(task)
+        return self._execute_task(task, step_index)
+
+    def _execute_task(self, task: Any, step_index: int) -> FusionStep:
         query = task.public()
         read = self.state.read(query)
 
@@ -168,6 +185,7 @@ class FusedTacOsmModel:
                 "model": "tacosm_fused_bioinspired_2026-10-08",
                 "router_sees_target": False,
                 "environment_transition_after_route": True,
+                "outcome_created_after_route": True,
                 "experience_write_requires_verified_success": (
                     self.verifier.config.mode != "none"
                 ),
