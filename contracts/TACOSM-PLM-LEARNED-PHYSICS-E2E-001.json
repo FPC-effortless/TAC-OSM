@@ -167,79 +167,43 @@
   "amendments": [
     {
       "id": "A1",
-      "stage": "pre-measurement",
-      "reason": "Construct audit found that the first implementation allowed the action head to bypass the predicted physical-state pathway, so the physics-law prior was not guaranteed to regularize the representation used for action selection.",
-      "change": "The learned action head now consumes the final predicted physical state directly, and a focused gradient gate verifies nonzero action dependence on that state.",
-      "unchanged": [
-        "benchmark generator and held-out evaluation protocol",
-        "train/evaluation split rules",
-        "seeds",
-        "optimizer and training budget",
-        "physics-law prior definition",
-        "primary and attribution decision rules"
-      ],
-      "invalidated_run": "37645169621",
-      "scientific_status": "instrument-invalid before measurement; no result or artifact from this run may be interpreted or cited"
+      "applies_to": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
+      "old_definition": "Before this amendment: Construct audit found that the first implementation allowed the action head to bypass the predicted physical-state pathway, so the physics-law prior was not guaranteed to regularize the representation used for action selection.",
+      "new_definition": "The learned action head now consumes the final predicted physical state directly, and a focused gradient gate verifies nonzero action dependence on that state.",
+      "rationale": "Construct audit found that the first implementation allowed the action head to bypass the predicted physical-state pathway, so the physics-law prior was not guaranteed to regularize the representation used for action selection.",
+      "discovered": "pre-measurement",
+      "affected": "benchmark generator and held-out evaluation protocol; train/evaluation split rules; seeds; optimizer and training budget; physics-law prior definition; primary and attribution decision rules",
+      "no_result_under_previous_version": "instrument-invalid before measurement; no result or artifact from this run may be interpreted or cited"
     },
     {
       "id": "A2",
-      "stage": "pre-measurement construct correction",
-      "reason": "The first corrected model encoded an 8-dimensional two-particle physical-state head, which is a task-specific physical ontology rather than only a physical-law prior.",
-      "change": "Replace the explicit two-particle state head with a generic learned canonical latent and a learned scalar Hamiltonian; regularize that latent only with Hamilton's equations and Hamiltonian conservation.",
-      "unchanged": [
-        "benchmark generator and held-out evaluation protocol",
-        "train/evaluation split rules",
-        "seeds",
-        "optimizer and training budget",
-        "end-to-end and physics-prior benefit thresholds",
-        "no entity/operator/addressing scaffolds"
-      ],
-      "invalidated_runs": [
-        "37645169621",
-        "37645649621"
-      ],
-      "scientific_status": "instrument-invalid before a valid confirmatory artifact; no result from either run may be interpreted or cited"
+      "applies_to": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
+      "old_definition": "Before this amendment: The first corrected model encoded an 8-dimensional two-particle physical-state head, which is a task-specific physical ontology rather than only a physical-law prior.",
+      "new_definition": "Replace the explicit two-particle state head with a generic learned canonical latent and a learned scalar Hamiltonian; regularize that latent only with Hamilton's equations and Hamiltonian conservation.",
+      "rationale": "The first corrected model encoded an 8-dimensional two-particle physical-state head, which is a task-specific physical ontology rather than only a physical-law prior.",
+      "discovered": "pre-measurement construct correction",
+      "affected": "benchmark generator and held-out evaluation protocol; train/evaluation split rules; seeds; optimizer and training budget; end-to-end and physics-prior benefit thresholds; no entity/operator/addressing scaffolds",
+      "no_result_under_previous_version": "instrument-invalid before a valid confirmatory artifact; no result from either run may be interpreted or cited"
     },
     {
       "id": "A3",
-      "stage": "pre-measurement benchmark integrity correction",
-      "reason": "Deterministic audio used a fixed particle-index phase offset, creating an unnecessary object-order sensor channel.",
-      "change": "Deterministic audio is now permutation-invariant to particle order; the benchmark generator version is pinned to learned-physics-e2e-v2-no-object-order-audio.",
-      "unchanged": [
-        "model architecture",
-        "Hamiltonian-only physics prior",
-        "held-out evaluation protocol",
-        "seeds",
-        "optimizer and training budget",
-        "decision rules"
-      ],
-      "invalidated_runs": [
-        "37645169621",
-        "37645649621",
-        "37646974646"
-      ],
-      "scientific_status": "instrument correction before admissible measurement"
+      "applies_to": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
+      "old_definition": "Before this amendment: Deterministic audio used a fixed particle-index phase offset, creating an unnecessary object-order sensor channel.",
+      "new_definition": "Deterministic audio is now permutation-invariant to particle order; the benchmark generator version is pinned to learned-physics-e2e-v2-no-object-order-audio.",
+      "rationale": "Deterministic audio used a fixed particle-index phase offset, creating an unnecessary object-order sensor channel.",
+      "discovered": "pre-measurement benchmark integrity correction",
+      "affected": "model architecture; Hamiltonian-only physics prior; held-out evaluation protocol; seeds; optimizer and training budget; decision rules",
+      "no_result_under_previous_version": "instrument correction before admissible measurement"
     },
     {
       "id": "A4",
-      "stage": "pre-measurement causal-boundary correction",
-      "reason": "The generic canonical latent was still auxiliary to the action head, so a physics-prior update could in principle affect only a side branch.",
-      "change": "The action head now consumes the final generic canonical latent directly; a focused gradient test verifies nonzero action dependence.",
-      "unchanged": [
-        "benchmark generator",
-        "Hamiltonian-only prior",
-        "held-out protocol",
-        "seeds",
-        "optimizer and training budget",
-        "decision rules"
-      ],
-      "invalidated_runs": [
-        "37645169621",
-        "37645649621",
-        "37646974646",
-        "37647273293"
-      ],
-      "scientific_status": "instrument correction before admissible measurement"
+      "applies_to": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
+      "old_definition": "Before this amendment: The generic canonical latent was still auxiliary to the action head, so a physics-prior update could in principle affect only a side branch.",
+      "new_definition": "The action head now consumes the final generic canonical latent directly; a focused gradient test verifies nonzero action dependence.",
+      "rationale": "The generic canonical latent was still auxiliary to the action head, so a physics-prior update could in principle affect only a side branch.",
+      "discovered": "pre-measurement causal-boundary correction",
+      "affected": "benchmark generator; Hamiltonian-only prior; held-out protocol; seeds; optimizer and training budget; decision rules",
+      "no_result_under_previous_version": "instrument correction before admissible measurement"
     }
   ]
 }
