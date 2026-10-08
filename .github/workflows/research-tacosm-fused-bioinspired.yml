@@ -50,6 +50,15 @@ jobs:
         run: |
           python -m pip install --quiet --upgrade pip
           python -m pip install --quiet pytest
+      - name: Cheap preflight
+        run: |
+          PYTHONPATH=src python -m compileall -q src tests scripts
+          PYTHONPATH=src python - <<'PY'
+          from tac_osm.fusion.ablation import full_config
+          from tac_osm.fusion.builder import build_fused_model
+          build_fused_model(full_config(0), n_steps=1)
+          print("fused builder smoke: PASS")
+          PY
       - name: Unit and integrity gates
         run: PYTHONPATH=src python -m pytest tests/test_fusion.py -q
       - name: Select suite
