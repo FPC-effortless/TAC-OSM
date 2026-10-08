@@ -153,12 +153,71 @@
       "id": "A4",
       "before_measurement": true,
       "change": "CASM execution is top-k sparse at runtime (casm_top_k=1) rather than evaluating the complete learned operator bank; MTSK retention combines learned fast/medium/slow base decay with an input-dependent retention gate."
-    }
-    ,
+    },
     {
       "id": "A5",
       "before_measurement": true,
       "change": "Integrity is extended from within-seed train/eval overlap to pairwise cross-seed train/eval overlap and contamination checks between the held-out history-pair set and all train/eval pools, plus cross-seed history-pair overlap."
     }
-  ]
+  ],
+  "hypothesis": "A single fully learned multimodal PLM with persistent multi-timescale state, learned relevance routing, learned structural computation, action-conditioned OSM planning, learned verification, learned repair, and verifier-gated state update should learn the registered held-out physical-control task without task-specific operator, addressing, or state-ontology scaffolds.",
+  "arms": [
+    {
+      "name": "full_plm",
+      "intervention": "full integrated learned PLM path with all preregistered components enabled",
+      "acts_on": "integrated architecture"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "full_plm_gate",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "action_accuracy",
+      "role": "primary capability component",
+      "primary": false
+    },
+    {
+      "name": "history_pair_exact",
+      "role": "persistence/history diagnostic",
+      "primary": false
+    },
+    {
+      "name": "closed_loop_success",
+      "role": "verification/repair diagnostic",
+      "primary": false
+    },
+    {
+      "name": "first_action_success",
+      "role": "environment-action diagnostic",
+      "primary": false
+    },
+    {
+      "name": "repair_success_conditional",
+      "role": "repair diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verifier_probability",
+      "role": "verification diagnostic",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "benchmark identity and generator provenance",
+    "modality leakage and privileged-information audit",
+    "train/evaluation and cross-seed disjointness",
+    "multimodal held-out action accuracy",
+    "matched-history action discrimination",
+    "closed-loop action-verification-repair outcome",
+    "persistent verified state-update path",
+    "claim boundary"
+  ],
+  "h_levels": [
+    8
+  ],
+  "steps": 220,
+  "eval_steps": 180
 }
