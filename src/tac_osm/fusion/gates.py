@@ -5,8 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Sequence
 
-from .. import Candidate, Query, StateRead
-from ..environment import build_relational_task, build_lookup_task, build_replay_task
+from .. import Candidate, Query
+from ..environment import (
+    build_lookup_task,
+    build_relational_task,
+    build_replay_task,
+    parse_query,
+    satisfies_relation,
+)
 from ..state import PersistentStore, StateConfig
 
 
@@ -18,17 +24,12 @@ class GateResult:
 
 
 FORBIDDEN_ROUTER_FIELDS = frozenset({
-    "target_action",
-    "gold_index",
-    "outcome",
-    "reward",
-    "success",
-    "answer",
+    "target_action", "gold_index", "outcome", "reward", "success", "answer",
 })
 
 
 def router_observation_gate() -> GateResult:
-    """Static schema gate: forbidden target-bearing fields are not in Query."""
+    """Static schema gate: target-bearing fields are absent from router inputs."""
     query_fields = set(Query.__dataclass_fields__)
     candidate_fields = set(Candidate.__dataclass_fields__)
     forbidden_present = sorted(
@@ -45,29 +46,43 @@ def router_observation_gate() -> GateResult:
     )
 
 
-def task_uniqueness_gate(
-    *,
-    seeds: Sequence[int] = (11, 17, 23),
-) -> GateResult:
-    """Verify each emitted task has exactly one relation satisfier."""
+def task_uniqueness_gate(*, seeds: Sequence[int] = (11, 17, 23)) -> GateResult:
+    """Verify the intended public relation has exactly one satisfier."""
     failures: list[dict[str, object]] = []
     for seed in seeds:
         store = PersistentStore(StateConfig(seed=seed, n_slots=64))
-        tasks = [
+        tasks = (
             build_relational_task(seed, dim=8, n_candidates=8),
             build_lookup_task(seed + 101, store, dim=8, n_candidates=8),
             build_replay_task(seed + 202, store, dim=8, n_candidates=8),
-        ]
+        )
         for task in tasks:
+            bits, address = parse_query(task.public())
+            if task.family == "relational":
+                reference = bits
+            else:
+                reference = tuple(getattr(task.detail, "written_bits", ()))
+            if not reference:
+                failures.append({
+                    "seed": seed,
+                    "family": task.family,
+                    "error": "missing_reference",
+                })
+                continue
             winners = [
                 i for i, candidate in enumerate(task.candidates)
-                if task.target_action == i
+                if satisfies_relation(bits or reference, task.query.context, candidate.descriptor)
+                and (
+                    task.family != "replay"
+                    or bool(address)
+                )
             ]
-            if len(winners) != 1:
+            if len(winners) != 1 or winners[0] != task.target_action:
                 failures.append({
                     "seed": seed,
                     "family": task.family,
                     "winners": winners,
+                    "target_action_hidden_diagnostic": task.target_action,
                 })
     return GateResult(
         passed=not failures,
@@ -80,10 +95,9 @@ def same_present_task_signature(seed: int = 31) -> dict[str, object]:
     """Return a target-free signature for same-present/different-past tests."""
     store = PersistentStore(StateConfig(seed=seed, n_slots=64))
     task = build_relational_task(seed, dim=8, n_candidates=8)
-    query = task.public()
-    read = store.read(query)
+    read = store.read(task.public())
     return {
-        "query": query,
+        "query": task.public(),
         "candidate_descriptors": tuple(c.descriptor for c in task.candidates),
         "state_keys": read.keys,
         "state_values": read.values,
