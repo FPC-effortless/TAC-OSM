@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from statistics import mean, stdev
 from typing import Any, Iterable, Sequence
 
 from .ablation import FusionAblationConfig, all_fusion_matrices, full_config
@@ -154,6 +155,47 @@ def run_suite(
         unique.append(config)
 
     return [run_arm(config, n_steps=n_steps) for config in unique]
+
+
+def run_multi_seed_suite(
+    suite: str = "component",
+    *,
+    seeds: Sequence[int] = (0, 1, 2, 3, 4),
+    n_steps: int = 24,
+) -> list[FusionMetrics]:
+    """Run the exact same suite for independently seeded matched arms."""
+    if not seeds:
+        raise ValueError("seeds must contain at least one seed")
+    results: list[FusionMetrics] = []
+    for seed in seeds:
+        results.extend(run_suite(suite, seed=seed, n_steps=n_steps))
+    return results
+
+
+def summarize_metrics(metrics: Sequence[FusionMetrics]) -> list[dict[str, Any]]:
+    """Aggregate per-arm accuracy and mechanism metrics across seeds."""
+    grouped: dict[str, list[FusionMetrics]] = {}
+    for metric in metrics:
+        grouped.setdefault(metric.name, []).append(metric)
+    summary: list[dict[str, Any]] = []
+    for name, group in sorted(grouped.items()):
+        accuracies = [m.accuracy for m in group]
+        mean_accuracy = mean(accuracies)
+        sd = stdev(accuracies) if len(accuracies) > 1 else 0.0
+        ci95 = 1.96 * sd / (len(accuracies) ** 0.5) if len(accuracies) > 1 else 0.0
+        summary.append({
+            "name": name,
+            "n_seeds": len(group),
+            "accuracy_mean": mean_accuracy,
+            "accuracy_sd": sd,
+            "accuracy_ci95_halfwidth": ci95,
+            "mean_modules_selected": mean(m.mean_modules_selected for m in group),
+            "mean_module_candidates": mean(m.mean_module_candidates for m in group),
+            "mean_routing_work": mean(m.mean_routing_work for m in group),
+            "mean_halting_steps": mean(m.mean_halting_steps for m in group),
+            "false_commit_count_total": sum(m.false_commit_count for m in group),
+        })
+    return summary
 
 
 def write_results(metrics: Sequence[FusionMetrics], path: str | Path) -> Path:
