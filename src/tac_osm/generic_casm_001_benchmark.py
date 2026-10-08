@@ -44,7 +44,8 @@ def _apply_family(
 
 
 def _sample_params(g: torch.Generator, family: int):
-    n = lambda *shape: 0.45 * torch.randn(*shape, generator=g)
+    def n(*shape: int) -> torch.Tensor:
+        return 0.45 * torch.randn(*shape, generator=g)
     if family == 0:
         return n(OUTPUT_DIM, INPUT_DIM), n(OUTPUT_DIM)
     if family == 1:
