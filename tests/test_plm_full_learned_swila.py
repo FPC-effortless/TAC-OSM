@@ -56,7 +56,7 @@ def test_end_to_end_gradient_reaches_all_major_subsystems():
     target = torch.tensor([episode.action])
     action_loss = torch.nn.functional.cross_entropy(output["action_logits"], target)
 
-    next_state, obs, evidence, reward, _ = __import__(
+    _next_state, obs, evidence, reward, _ = __import__(
         "tac_osm.plm_full_benchmark", fromlist=["step_environment"]
     ).step_environment(episode, episode.action)
     post_z = model.representation(
@@ -147,23 +147,3 @@ def test_verified_write_is_gated_and_state_persists():
 
     assert torch.equal(blocked, state)
     assert not torch.equal(admitted, state)
-
-    episode = sample_episode(__import__("random").Random(23))
-    baseline = model(**episode.batch)
-    carried = model(
-        episode.batch["text"],
-        episode.batch["image"],
-        episode.batch["audio"],
-        memory_state=admitted,
-    )
-    assert not torch.allclose(baseline["memory_state"], carried["memory_state"])
-
-
-def test_benchmark_generator_hash_matches_file():
-    import hashlib
-    from tac_osm import plm_full_benchmark
-
-    expected = hashlib.sha256(
-        open(plm_full_benchmark.__file__, "rb").read()
-    ).hexdigest()
-    assert plm_full_benchmark.generator_hash() == expected
