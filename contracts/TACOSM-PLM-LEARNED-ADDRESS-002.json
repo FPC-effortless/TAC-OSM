@@ -212,7 +212,18 @@
       "discovered": "pre-measurement",
       "affected": "benchmark provenance only",
       "no_result_under_previous_version": "No learned-address-002 model measurement has run."
+    },
+    {
+      "id": "A4",
+      "before_measurement": true,
+      "change": "Refresh the benchmark byte pin after replacing the open() provenance call with Path.read_bytes(); generator semantics are unchanged.",
+      "old_definition": "The byte pin corresponded to the immediately prior source bytes.",
+      "new_definition": "The contract pins the exact current benchmark source bytes and runtime checks the file hash.",
+      "rationale": "Maintain exact byte-level provenance after a non-semantic implementation cleanup.",
+      "discovered": "pre-measurement",
+      "affected": "benchmark provenance only",
+      "no_result_under_previous_version": "No learned-address-002 measurement has run."
     }
   ],
-  "benchmark_generator_sha256": "89a052b91ef462e3a7e79e9e391f7a8ed0f1cb384b497fcf3e4b9fa67954022c"
+  "benchmark_generator_sha256": "1fc19c2efb32cdaaf88d904e01809ea4fb491ca3e5ca33e0d0762cbc7f8dd7fb"
 }
