@@ -338,3 +338,9 @@ def _halting_steps(scores: Sequence[float], adaptive: bool, max_steps: int) -> i
     ordered = sorted(scores, reverse=True)
     margin = ordered[0] - ordered[1]
     return 1 if margin >= 0.55 else min(max_steps, 2)
+
+
+# Public inspection hook for the representability gate. It delegates to the
+# exact feature map used by SpecialistPool, rather than a reimplemented probe.
+def candidate_features(query, state_read, memory, regime, candidate):
+    return _candidate_features(query, state_read, memory, regime, candidate)
