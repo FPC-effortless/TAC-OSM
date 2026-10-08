@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import math
 import os
 from pathlib import Path
 import random
@@ -202,7 +201,6 @@ def train_seed(seed: int, physics_weight: float) -> tuple[FullLearnedPLM, dict]:
         repair_actions = first_step.repair_logits.argmax(dim=-1).detach()
         second_evidence = []
         second_rewards = []
-        second_states = []
         second_obs = []
         second_masks = []
         for i, (episode, action, failed) in enumerate(
@@ -215,14 +213,12 @@ def train_seed(seed: int, physics_weight: float) -> tuple[FullLearnedPLM, dict]:
             if not failed:
                 second_evidence.append(0.0)
                 second_rewards.append(0.0)
-                second_states.append(None)
-                second_obs.append(None)
+                    second_obs.append(None)
                 second_masks.append(0.0)
                 continue
             state2, obs2, ev2, reward2, _target2 = step_environment_from_state(
                 first_states[i], episode.goal, int(action)
             )
-            second_states.append(state2)
             second_obs.append(obs2)
             second_evidence.append(float(ev2))
             second_rewards.append(float(reward2))
@@ -377,7 +373,7 @@ def evaluate_unmodified(model: FullLearnedPLM, seed: int) -> dict:
             continue
 
         repair_action = int(repair_logits.argmax(dim=-1).item())
-        next2, obs2, evidence2, reward2, _target2 = step_environment_from_state(
+        _next2, obs2, evidence2, reward2, _target2 = step_environment_from_state(
             next_state, episode.goal, repair_action
         )
         repair_success.append(float(reward2))
