@@ -1,0 +1,92 @@
+name: Research generic CASM 001
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/TACOSM-PLM-GENERIC-CASM-001.json"
+      - "src/tac_osm/generic_casm_001.py"
+      - "src/tac_osm/generic_casm_001_benchmark.py"
+      - "scripts/run_generic_casm_001.py"
+      - "tests/test_generic_casm_001.py"
+      - ".github/workflows/generic-casm-001.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c = load_contract("TACOSM-PLM-GENERIC-CASM-001")
+          errors = c.check_consistency()
+          assert errors == [], errors
+          assert c.seeds == (0,1,2,3,4)
+          assert c.steps == 2000
+          assert c.eval_steps == 1000
+          print("PASS: generic CASM contract")
+          PY
+      - name: Focused tests
+        run: python -m pytest -q tests/test_generic_casm_001.py
+      - name: Static lint
+        run: |
+          python -m ruff check \
+            src/tac_osm/generic_casm_001.py \
+            src/tac_osm/generic_casm_001_benchmark.py \
+            scripts/run_generic_casm_001.py \
+            tests/test_generic_casm_001.py
+
+  measurement:
+    needs: integrity
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: \${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: python -m pip install --quiet -e . torch numpy==2.3.3
+      - name: Measurement
+        env:
+          GITHUB_SHA: \${{ github.event.pull_request.head.sha || github.sha }}
+          GITHUB_RUN_ID: \${{ github.run_id }}
+        run: python scripts/run_generic_casm_001.py
+      - name: Independent validation
+        run: |
+          python - <<'PY'
+          import json
+          p="artifacts/TACOSM-PLM-GENERIC-CASM-001.json"
+          r=json.load(open(p))
+          assert r["status"] == "measured"
+          assert len(r["seed_results"]) == 5
+          assert r["integrity"]["all_gradient_gates_pass"]
+          assert r["integrity"]["train_eval_parameter_overlap_zero"]
+          print("PASS: generic CASM artifact integrity")
+          PY
+      - name: Upload scientific artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-GENERIC-CASM-001
+          path: artifacts/TACOSM-PLM-GENERIC-CASM-001.json
+          if-no-files-found: error
