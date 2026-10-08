@@ -1,0 +1,77 @@
+name: PLM full learned optimization diagnosis 002
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      run_full:
+        description: "Run the five-seed optimization diagnosis"
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Contract validation
+        run: python -m pytest -q tests/test_contract.py
+      - name: Diagnostic-specific integrity tests
+        run: python -m pytest -q tests/test_plm_full_learned_swila_opt_002.py
+      - name: Static lint
+        run: python -m ruff check scripts/run_plm_full_learned_swila_opt_002.py tests/test_plm_full_learned_swila_opt_002.py
+
+  measurement:
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.run_full == true)
+    needs: integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e . torch numpy==2.3.3
+      - name: Five-seed optimization diagnosis
+        env:
+          PYTHONHASHSEED: "0"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+        run: python scripts/run_plm_full_learned_swila_opt_002.py
+      - name: Independent artifact checks
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path("artifacts/TACOSM-PLM-FULL-LEARNED-SWILA-OPT-002.json")
+          r = json.loads(p.read_text())
+          assert r["experiment_id"] == "TACOSM-PLM-FULL-LEARNED-SWILA-OPT-002"
+          assert r["integrity"]["within_seed_eval_identity_across_arms"]
+          assert r["integrity"]["distinct_eval_fingerprints_by_seed"]
+          assert r["integrity"]["generator_matches_registered"]
+          for k in ("untrained", "trained_full", "trained_physics_off"):
+              assert len(r["arms"][k]) == 5
+          assert all(not row["parameter_changed"] for row in r["arms"]["untrained"])
+          assert all(row["parameter_changed"] for row in r["arms"]["trained_full"])
+          assert all(row["parameter_changed"] for row in r["arms"]["trained_physics_off"])
+          assert r["diagnostic"]["training_signal_criterion"] in (True, False)
+          print("independent diagnosis checks passed")
+          PY
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-PLM-FULL-LEARNED-SWILA-OPT-002
+          path: artifacts/TACOSM-PLM-FULL-LEARNED-SWILA-OPT-002.json
