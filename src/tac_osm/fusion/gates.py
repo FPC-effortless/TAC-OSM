@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Sequence
 
-from .. import Candidate, Query
+from .. import Candidate, Query, StateUpdate
 from ..environment import (
     build_lookup_task,
     build_relational_task,
@@ -13,7 +13,10 @@ from ..environment import (
     parse_query,
     satisfies_relation,
 )
+from ..representability import representable
 from ..state import PersistentStore, StateConfig
+from .interfaces import MemoryContext, RegimeContext
+from .operators import candidate_features
 
 
 @dataclass(frozen=True)
@@ -91,6 +94,71 @@ def task_uniqueness_gate(*, seeds: Sequence[int] = (11, 17, 23)) -> GateResult:
     )
 
 
+
+def operator_representability_gate(*, n_episodes: int = 12) -> GateResult:
+    """Run a shared-weight gate against the fused operator feature map."""
+    if n_episodes < 3:
+        raise ValueError("n_episodes must be >= 3")
+
+    dim = 8
+    feature_dim = 1 + 7 * dim + 7
+    weights = [0.0] * feature_dim
+    for j in range(dim):
+        weights[1 + dim + j] = 1.0
+        weights[1 + 2 * dim + j] = 16.0
+
+    neutral_memory = MemoryContext((), (), (), 0.0, 0.0)
+    neutral_regime = RegimeContext((0.0, 0.0, 0.0, 0.0), 0.5, 0.0, 0.0, 0.0)
+    episodes = []
+    reads = {}
+
+    for family_offset, family in enumerate(("relational", "state_lookup", "replay")):
+        for i in range(n_episodes):
+            if family == "relational":
+                store = PersistentStore(StateConfig(seed=20000 + i, n_slots=64))
+                task = build_relational_task(
+                    10000 + family_offset * 1000 + i, dim=dim, n_candidates=8
+                )
+            else:
+                store = PersistentStore(
+                    StateConfig(seed=20000 + family_offset * 100 + i, n_slots=64)
+                )
+                builder = build_lookup_task if family == "state_lookup" else build_replay_task
+                task = builder(
+                    11000 + family_offset * 1000 + i, store,
+                    dim=dim, n_candidates=8
+                )
+            episodes.append(task)
+            reads[id(task)] = store.read(task.public())
+
+    def feature_fn(episode):
+        read = reads[id(episode)]
+        rows = [
+            candidate_features(
+                episode.public(), read, neutral_memory, neutral_regime, candidate
+            )
+            for candidate in episode.candidates
+        ]
+        return [
+            tuple(row) + (0.0,) * max(0, feature_dim - len(row))
+            if len(row) < feature_dim else tuple(row[:feature_dim])
+            for row in rows
+        ]
+
+    result = representable(
+        score_fn=lambda w, row: sum(a * b for a, b in zip(w, row)),
+        feature_fn=feature_fn,
+        gold_fn=lambda episode: episode.target_action,
+        episodes=episodes,
+        min_margin=1e-6,
+        shared_weights=weights,
+    )
+    return GateResult(
+        passed=bool(result["pass"]),
+        name="operator_representability",
+        detail=result,
+    )
+
 def same_present_task_signature(seed: int = 31) -> dict[str, object]:
     """Return a target-free signature for same-present/different-past tests."""
     store = PersistentStore(StateConfig(seed=seed, n_slots=64))
@@ -105,4 +173,4 @@ def same_present_task_signature(seed: int = 31) -> dict[str, object]:
 
 
 def all_gates() -> tuple[GateResult, ...]:
-    return (router_observation_gate(), task_uniqueness_gate())
+    return (router_observation_gate(), task_uniqueness_gate(), operator_representability_gate())
