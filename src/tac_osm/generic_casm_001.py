@@ -37,6 +37,8 @@ class GenericCASM001(nn.Module):
         self.u_proj = nn.Parameter(torch.randn(basis_count, rank, input_dim) * 0.08)
         self.v_proj = nn.Parameter(torch.randn(basis_count, rank, input_dim) * 0.08)
         self.out_proj = nn.Parameter(torch.randn(basis_count, output_dim, rank) * 0.08)
+        self.u_linear = nn.Parameter(torch.randn(basis_count, output_dim, input_dim) * 0.04)
+        self.v_linear = nn.Parameter(torch.randn(basis_count, output_dim, input_dim) * 0.04)
         self.bias = nn.Parameter(torch.zeros(basis_count, output_dim))
 
     def infer_code(self, support_u: Tensor, support_v: Tensor, support_y: Tensor) -> Tensor:
@@ -48,8 +50,15 @@ class GenericCASM001(nn.Module):
         u_lat = torch.einsum("bqd,krd->bkqr", u, self.u_proj)
         v_lat = torch.einsum("bqd,krd->bkqr", v, self.v_proj)
         fused = u_lat * v_lat
-        basis_out = torch.einsum("bkqr,kor->bkqo", fused, self.out_proj)
-        basis_out = basis_out + self.bias.unsqueeze(0).unsqueeze(2)
+        bilinear = torch.einsum("bkqr,kor->bkqo", fused, self.out_proj)
+        linear_u = torch.einsum("bqd,kod->bkqo", u, self.u_linear)
+        linear_v = torch.einsum("bqd,kod->bkqo", v, self.v_linear)
+        basis_out = (
+            bilinear
+            + linear_u
+            + linear_v
+            + self.bias.unsqueeze(0).unsqueeze(2)
+        )
         return torch.einsum("bk,bkqo->bqo", weights, basis_out)
 
     def forward(
