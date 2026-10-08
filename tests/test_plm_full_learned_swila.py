@@ -147,3 +147,47 @@ def test_verified_write_is_gated_and_state_persists():
 
     assert torch.equal(blocked, state)
     assert not torch.equal(admitted, state)
+
+def test_physics_prior_loss_is_finite_and_differentiable():
+    torch.manual_seed(11)
+    model = _small_model()
+    episode = sample_episode(__import__("random").Random(31))
+    output = model(**episode.batch)
+    loss = model.physics_prior_loss(output["z_seq"], dt=0.08)
+    assert torch.isfinite(loss)
+    loss.backward()
+    assert model.physics_latent[0].weight.grad is not None
+    assert torch.isfinite(model.physics_latent[0].weight.grad).all()
+
+
+def test_verified_write_persists_into_later_forward():
+    torch.manual_seed(13)
+    model = _small_model()
+    state = model.mtsk.initial_state(1, torch.device("cpu"), torch.float32)
+    context = torch.randn(1, 48)
+    action = torch.tensor([1])
+    outcome = torch.tensor([-0.25])
+    admitted = model.mtsk.commit_verified(
+        state, context, action, outcome, torch.ones(1)
+    )
+    episode = sample_episode(__import__("random").Random(23))
+    baseline = model(**episode.batch)
+    carried = model(
+        episode.batch["text"],
+        episode.batch["image"],
+        episode.batch["audio"],
+        memory_state=admitted,
+    )
+    assert not torch.allclose(
+        baseline["memory_state"], carried["memory_state"]
+    )
+
+
+def test_benchmark_generator_hash_matches_file():
+    import hashlib
+    from tac_osm import plm_full_benchmark
+
+    expected = hashlib.sha256(
+        open(plm_full_benchmark.__file__, "rb").read()
+    ).hexdigest()
+    assert plm_full_benchmark.generator_hash() == expected
