@@ -66,6 +66,11 @@ jobs:
           assert r["experiment_id"] == "TACOSM-PLM-FULL-LEARNED-SWILA-001"
           assert len(r["evaluation"]) == 5
           assert all(v == 0 for v in r["integrity"]["train_eval_overlap"].values())
+          assert all(v == 0 for v in r["integrity"]["cross_seed_train_overlap"].values())
+          assert all(v == 0 for v in r["integrity"]["cross_seed_eval_overlap"].values())
+          assert all(v == 0 for v in r["integrity"]["history_pair_train_overlap"].values())
+          assert all(v == 0 for v in r["integrity"]["history_pair_eval_overlap"].values())
+          assert all(v == 0 for v in r["integrity"]["cross_seed_pair_overlap"].values())
           assert r["integrity"]["distinct_eval_fingerprints"]
           assert r["model"]["parameter_count"] > 0
           print("independent checks passed")
