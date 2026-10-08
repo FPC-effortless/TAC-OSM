@@ -14,6 +14,7 @@ class FusionAblationConfig:
     fact_enabled: bool = True
     fact_write: bool = True
     fact_intervention: str = "persistent"
+    fact_corruption_rate: float = 0.0
 
     memory_enabled: bool = True
     memory_timescales: int = 4
@@ -21,6 +22,7 @@ class FusionAblationConfig:
     global_memory: bool = True
     priming: bool = True
     memory_intervention: str = "persistent"
+    memory_corruption_rate: float = 0.0
 
     coordinator_mode: str = "sparse"
     top_k_modules: int = 2
@@ -91,7 +93,7 @@ def memory_matrix(seed: int = 0) -> list[FusionAblationConfig]:
         replace(f, name="memory_reset", memory_intervention="reset"),
         replace(f, name="memory_shuffle", memory_intervention="shuffled"),
         replace(f, name="memory_random", memory_intervention="random"),
-        replace(f, name="memory_corrupt_50", memory_intervention="corrupted", memory_timescales=4),
+        replace(f, name="memory_corrupt_50", memory_intervention="corrupted", memory_corruption_rate=0.5),
         replace(f, name="memory_wrong_module", memory_intervention="wrong_key"),
     ]
 
@@ -153,7 +155,7 @@ def fact_state_matrix(seed: int = 0) -> list[FusionAblationConfig]:
         replace(f, name="facts_reset", fact_intervention="reset"),
         replace(f, name="facts_shuffled", fact_intervention="shuffled"),
         replace(f, name="facts_random", fact_intervention="random"),
-        replace(f, name="facts_corrupt_50", fact_intervention="corrupted"),
+        replace(f, name="facts_corrupt_50", fact_intervention="corrupted", fact_corruption_rate=0.5),
         replace(f, name="facts_wrong_key", fact_intervention="wrong_key"),
         replace(f, name="facts_no_write", fact_write=False),
         replace(f, name="facts_disabled", fact_enabled=False, fact_write=False),
