@@ -27,3 +27,5 @@ A positive result is bounded evidence for generic learned compositional
 computation on these registered continuous synthetic families. It does not
 establish open-ended operator synthesis, multimodal capability, persistence,
 or scaling.
+
+Pre-measurement note: workflow trigger refreshed after initial PR creation.
