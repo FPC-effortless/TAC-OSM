@@ -213,7 +213,7 @@ def train_seed(seed: int, physics_weight: float) -> tuple[FullLearnedPLM, dict]:
             if not failed:
                 second_evidence.append(0.0)
                 second_rewards.append(0.0)
-                    second_obs.append(None)
+                second_obs.append(None)
                 second_masks.append(0.0)
                 continue
             state2, obs2, ev2, reward2, _target2 = step_environment_from_state(
