@@ -72,7 +72,7 @@ def fingerprint_batch(
 
 
 def generator_sha256() -> str:
-    return hashlib.sha256(__file__.encode("utf-8")).hexdigest()
+    return hashlib.sha256(open(__file__, "rb").read()).hexdigest()
 
 
 def benchmark_manifest() -> dict:
