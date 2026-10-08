@@ -68,9 +68,21 @@
     }
   ],
   "decision_rule": [
-    "This is a baseline characterization, not a PLM capability result.",
-    "A later learned scorer must be non-inferior to raw dot on the isotropic Gaussian grid within a preregistered tolerance before being considered useful.",
-    "Any requirement that a learned scorer beat raw dot on this isotropic grid is invalid under the registered generative assumptions."
+    {
+      "condition": "baseline characterization only",
+      "licenses": "Descriptive raw-dot reference for the registered random-key retrieval distribution.",
+      "does_not_license": "Any PLM capability, semantic addressing, or learned-address claim."
+    },
+    {
+      "condition": "a later learned scorer is non-inferior to raw dot within 0.02 on the isotropic Gaussian grid",
+      "licenses": "The later scorer passes the preregistered isotropic non-inferiority criterion.",
+      "does_not_license": "Evidence that the learned scorer is superior to Bayes-optimal raw-dot ranking under the isotropic model."
+    },
+    {
+      "condition": "a learned scorer is required to beat raw dot on the isotropic grid",
+      "licenses": "Nothing; such a requirement contradicts the registered Bayes reference.",
+      "does_not_license": "Any claim that raw-dot non-inferiority is insufficient under the registered isotropic generative assumptions."
+    }
   ],
   "claim_boundary": [
     "random-key associative addressing only",
