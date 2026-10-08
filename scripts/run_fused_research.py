@@ -3,8 +3,9 @@
 from __future__ import annotations
 import argparse
 import json
+import os
 from pathlib import Path
-from tac_osm.fusion.benchmark import memory_decay_profile, run_history_contrast, run_multi_seed_suite, summarize_metrics, write_results
+from tac_osm.fusion.benchmark import memory_decay_profile, run_history_contrast, run_multi_seed_suite, summarize_metrics
 from tac_osm.fusion.gates import all_gates
 
 def _seeds(value: str) -> tuple[int, ...]:
@@ -35,6 +36,13 @@ def main() -> int:
     payload={
         "status":"ok",
         "suite":args.suite,
+        "provenance":{
+            "repository":os.environ.get("GITHUB_REPOSITORY"),
+            "branch":os.environ.get("GITHUB_HEAD_REF") or os.environ.get("GITHUB_REF_NAME"),
+            "commit":os.environ.get("GITHUB_SHA"),
+            "workflow_run_id":os.environ.get("GITHUB_RUN_ID"),
+            "benchmark":"tacosm-fused-bioinspired-2026-10-08",
+        },
         "seeds":list(args.seeds),
         "steps":args.steps,
         "gates":[{"name":g.name,"passed":g.passed} for g in gates],
@@ -43,10 +51,15 @@ def main() -> int:
         "memory_decay": memory_decay_profile(),
         "results":[m.to_dict() for m in metrics],
     }
+    rendered=json.dumps(payload,indent=2,sort_keys=True)
     if args.output:
-        write_results(metrics,args.output)
-        payload["output"]=str(Path(args.output))
-    print(json.dumps(payload,indent=2,sort_keys=True))
+        destination=Path(args.output)
+        destination.parent.mkdir(parents=True,exist_ok=True)
+        destination.write_text(rendered+"\n",encoding="utf-8")
+        payload["output"]=str(destination)
+        rendered=json.dumps(payload,indent=2,sort_keys=True)
+        destination.write_text(rendered+"\n",encoding="utf-8")
+    print(rendered)
     return 0
 
 if __name__ == "__main__":
