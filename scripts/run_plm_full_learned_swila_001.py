@@ -29,7 +29,6 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from tac_osm.plm_full_benchmark import (  # noqa: E402
     ACTION_COUNT,
-    HISTORY,
     VOCAB_SIZE,
     Episode,
     episode_fingerprint,
