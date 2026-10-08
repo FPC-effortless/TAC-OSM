@@ -190,6 +190,18 @@
       "discovered": "pre-measurement",
       "affected": "decision criterion only; no model, data generator, or evaluation grid removal",
       "no_result_under_previous_version": "No learned-address-002 model measurement has been run under the previous criterion."
+    },
+    {
+      "id": "A2",
+      "before_measurement": true,
+      "change": "The benchmark generator is a dedicated learned-address-002 generator, byte-hashed and pinned in the contract; it replaces reuse of the v1 benchmark source in the measurement implementation.",
+      "old_definition": "The learned-address-002 implementation had not yet pinned a dedicated benchmark generator source.",
+      "new_definition": "The measurement imports the dedicated learned-address-002 benchmark generator and records its exact SHA-256.",
+      "rationale": "Ensure the measured corruption process, key generation, payload independence, and condition grids have independent byte-level provenance rather than inheriting an unrelated v1 runner source.",
+      "discovered": "pre-measurement",
+      "affected": "benchmark provenance only",
+      "no_result_under_previous_version": "No learned-address-002 model measurement has been run."
     }
-  ]
+  ],
+  "benchmark_generator_sha256": "4ae2897c3e3d7f8eb1325cb368012567fd9caaf81da63b4f9b36be34f7f90815"
 }
