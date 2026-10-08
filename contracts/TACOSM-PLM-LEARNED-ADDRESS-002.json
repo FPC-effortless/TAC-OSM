@@ -189,7 +189,8 @@
       "rationale": "A preregistration feasibility audit of the fixed generator showed raw-dot structured accuracy at M=3 is already near the 1.0 ceiling across the registered sigma range, so a +0.05 mean improvement is mathematically incompatible with the accuracy ceiling. M=32 and the high-noise subset preserve the same structured channel while providing measurable headroom.",
       "discovered": "pre-measurement",
       "affected": "decision criterion only; no model, data generator, or evaluation grid removal",
-      "no_result_under_previous_version": "No learned-address-002 model measurement has been run under the previous criterion."
+      "no_result_under_previous_version": "No learned-address-002 model measurement has been run under the previous criterion.",
+      "applies_to": "decision_criterion_and_benchmark_provenance"
     },
     {
       "id": "A2",
@@ -200,7 +201,8 @@
       "rationale": "Ensure the measured corruption process, key generation, payload independence, and condition grids have independent byte-level provenance rather than inheriting an unrelated v1 runner source.",
       "discovered": "pre-measurement",
       "affected": "benchmark provenance only",
-      "no_result_under_previous_version": "No learned-address-002 model measurement has been run."
+      "no_result_under_previous_version": "No learned-address-002 model measurement has been run.",
+      "applies_to": "decision_criterion_and_benchmark_provenance"
     },
     {
       "id": "A3",
@@ -211,7 +213,8 @@
       "rationale": "Keep byte-level provenance exact after a pre-measurement implementation-only edit.",
       "discovered": "pre-measurement",
       "affected": "benchmark provenance only",
-      "no_result_under_previous_version": "No learned-address-002 model measurement has run."
+      "no_result_under_previous_version": "No learned-address-002 model measurement has run.",
+      "applies_to": "decision_criterion_and_benchmark_provenance"
     },
     {
       "id": "A4",
@@ -222,7 +225,8 @@
       "rationale": "Maintain exact byte-level provenance after a non-semantic implementation cleanup.",
       "discovered": "pre-measurement",
       "affected": "benchmark provenance only",
-      "no_result_under_previous_version": "No learned-address-002 measurement has run."
+      "no_result_under_previous_version": "No learned-address-002 measurement has run.",
+      "applies_to": "decision_criterion_and_benchmark_provenance"
     }
   ],
   "benchmark_generator_sha256": "1fc19c2efb32cdaaf88d904e01809ea4fb491ca3e5ca33e0d0762cbc7f8dd7fb"
