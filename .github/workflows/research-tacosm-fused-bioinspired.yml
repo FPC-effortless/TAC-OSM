@@ -65,7 +65,7 @@ jobs:
         id: inputs
         shell: bash
         run: |
-          SUITE=$(jq -r '.inputs.suite // "smoke"' "$GITHUB_EVENT_PATH")
+          SUITE=$(jq -r '.inputs.suite // "all"' "$GITHUB_EVENT_PATH")
           STEPS=$(jq -r '.inputs.steps // "24"' "$GITHUB_EVENT_PATH")
           SEEDS=$(jq -r '.inputs.seeds // "0,1,2,3,4"' "$GITHUB_EVENT_PATH")
           echo "suite=$SUITE" >> "$GITHUB_OUTPUT"
