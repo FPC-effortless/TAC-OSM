@@ -21,7 +21,7 @@ from .verifier import FusionVerifierConfig, FusionVerifier, RepairPolicy
 from .model import FusionModelConfig, FusedTacOsmModel
 from .ablation import FusionAblationConfig, all_fusion_matrices
 from .builder import BuiltFusionModel, build_fused_model
-from .benchmark import FusionMetrics, run_arm, run_suite, run_multi_seed_suite, summarize_metrics, write_results
+from .benchmark import FusionMetrics, HistoryContrastMetrics, run_arm, run_suite, run_multi_seed_suite, summarize_metrics, run_history_contrast, memory_decay_profile, write_results
 from .gates import GateResult, all_gates
 
 __all__ = [
@@ -31,6 +31,6 @@ __all__ = [
     "OperatorConfig", "SpecialistPool", "FusionVerifierConfig",
     "FusionVerifier", "RepairPolicy", "FusionModelConfig", "FusedTacOsmModel",
     "FusionAblationConfig", "all_fusion_matrices", "BuiltFusionModel",
-    "build_fused_model", "FusionMetrics", "run_arm", "run_suite", "run_multi_seed_suite",
-    "summarize_metrics", "write_results", "GateResult", "all_gates",
+    "build_fused_model", "FusionMetrics", "HistoryContrastMetrics", "run_arm", "run_suite", "run_multi_seed_suite",
+    "summarize_metrics", "run_history_contrast", "memory_decay_profile", "write_results", "GateResult", "all_gates",
 ]
