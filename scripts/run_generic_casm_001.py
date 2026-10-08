@@ -6,13 +6,12 @@ import json
 import os
 from pathlib import Path
 import statistics
+import sys
 
 import torch
 import torch.nn.functional as F
 
 ROOT = Path(__file__).resolve().parents[1]
-import sys
-sys.path.insert(0, str(ROOT / "src"))
 
 from tac_osm.contract import load_contract
 from tac_osm.generic_casm_001 import GenericCASM001
