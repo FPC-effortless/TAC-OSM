@@ -8,6 +8,7 @@ registered corruption model, not a task-specific semantic label.
 from __future__ import annotations
 
 import hashlib
+from pathlib import Path
 
 import torch
 import torch.nn.functional as F
@@ -70,7 +71,7 @@ def fingerprint_batch(
 
 
 def generator_sha256() -> str:
-    return hashlib.sha256(open(__file__, "rb").read()).hexdigest()
+    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 
 
 def benchmark_manifest() -> dict:
