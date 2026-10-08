@@ -536,17 +536,16 @@ def main() -> None:
             all_pair_sets[seed] & set().union(*all_eval_sets.values())
         )
 
-    fingerprints = [
-        row["eval_fingerprint"]
-        for arm in arm_results.values()
-        for row in arm
+    seed_fingerprints = [
+        arm_results["untrained"][i]["eval_fingerprint"]
+        for i in range(len(SEEDS))
     ]
-    integrity["distinct_eval_fingerprints"] = (
-        len(fingerprints) == len(set(fingerprints)) // 1
+    integrity["distinct_eval_fingerprints_by_seed"] = (
+        len(seed_fingerprints) == len(set(seed_fingerprints))
     )
 
     # A deterministic eval pool must be the same across arms, not unique per
-    # arm. The first seed/arm fingerprints are used as within-seed references.
+    # arm. The untrained fingerprints are also required to differ across seeds.
     within_seed_same_eval = all(
         arm_results["untrained"][i]["eval_fingerprint"]
         == arm_results["trained_full"][i]["eval_fingerprint"]
