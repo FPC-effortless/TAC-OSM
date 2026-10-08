@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-FULL-LEARNED-SWILA-001",
-  "version": 5,
+  "version": 6,
   "status": "pre-registered",
   "title": "Full learned multimodal PLM with SwiLA-derived multi-timescale persistent state",
   "question": "Can the full PLM computational loop learn multimodal representation, persistent multi-timescale state, relevance routing, structural computation, action, verification, repair, and verified state update end to end?",
@@ -137,27 +137,67 @@
     {
       "id": "A1",
       "before_measurement": true,
-      "change": "Verifier receives continuous post-action outcome evidence plus learned pre/post representations; binary success is external supervision only and never a model input."
+      "change": "Verifier receives continuous post-action outcome evidence plus learned pre/post representations; binary success is external supervision only and never a model input.",
+      "old_definition": "Verifier originally received a simpler signal definition that did not explicitly bind it to continuous post-action consequence evidence.",
+      "new_definition": "Verifier receives continuous post-action distance-to-goal outcome evidence plus learned pre/post representations; binary success remains external supervision only and never enters the model.",
+      "rationale": "Close the verifier information boundary so the model can use observable consequence without receiving the benchmark's binary answer label.",
+      "discovered": "pre-measurement",
+      "affected": "verifier input schema and training target boundary",
+      "no_result_under_previous_version": "instrument correction before admissible measurement"
     },
     {
       "id": "A2",
       "before_measurement": true,
-      "change": "Learned repair is executed as a second environment action after a failed first action; closed-loop success is added to the primary full-PLM gate."
+      "change": "Learned repair is executed as a second environment action after a failed first action; closed-loop success is added to the primary full-PLM gate.",
+      "old_definition": "Repair was initially specified as a learned proposal but was not yet required to be executed in the environment after a failed first action.",
+      "new_definition": "A failed first action may trigger one learned repair action, which is executed from the resulting environment state; closed-loop success is a primary capability gate component.",
+      "rationale": "The full PLM claim includes action, outcome, verification, and repair, so repair must be executable rather than a non-operative prediction head.",
+      "discovered": "pre-measurement",
+      "affected": "training/evaluation loop and primary gate",
+      "no_result_under_previous_version": "instrument correction before admissible measurement"
     },
     {
       "id": "A3",
       "before_measurement": true,
-      "change": "Benchmark generator hash is computed directly from its source file bytes; the generator provenance test asserts this identity."
+      "change": "Benchmark generator hash is computed directly from its source file bytes; the generator provenance test asserts this identity.",
+      "old_definition": "Benchmark generator provenance was represented by a source hash rule that was not yet regression-tested against the actual file bytes.",
+      "new_definition": "Benchmark generator provenance is the SHA-256 of the benchmark generator file bytes, with a focused regression test asserting the identity.",
+      "rationale": "Prevent silent benchmark-generator drift between the pinned experiment design and the executed benchmark.",
+      "discovered": "pre-measurement",
+      "affected": "benchmark provenance check only; no semantic benchmark rule change",
+      "no_result_under_previous_version": "instrument correction before admissible measurement"
     },
     {
       "id": "A4",
       "before_measurement": true,
-      "change": "CASM execution is top-k sparse at runtime (casm_top_k=1) rather than evaluating the complete learned operator bank; MTSK retention combines learned fast/medium/slow base decay with an input-dependent retention gate."
+      "change": "CASM execution is top-k sparse at runtime (casm_top_k=1) rather than evaluating the complete learned operator bank; MTSK retention combines learned fast/medium/slow base decay with an input-dependent retention gate.",
+      "old_definition": "CASM could evaluate the complete learned operator bank and MTSK decay was not yet explicitly input-dependent.",
+      "new_definition": "CASM executes only the registered top-k=1 routed operators at runtime, and MTSK combines fixed fast/medium/slow base retention with a learned input-dependent retention gate.",
+      "rationale": "Make selective computation and adaptive persistence part of the actual executable model rather than descriptive intent.",
+      "discovered": "pre-measurement",
+      "affected": "CASM runtime sparsity and MTSK dynamics",
+      "no_result_under_previous_version": "instrument correction before admissible measurement"
     },
     {
       "id": "A5",
       "before_measurement": true,
-      "change": "Integrity is extended from within-seed train/eval overlap to pairwise cross-seed train/eval overlap and contamination checks between the held-out history-pair set and all train/eval pools, plus cross-seed history-pair overlap."
+      "change": "Integrity is extended from within-seed train/eval overlap to pairwise cross-seed train/eval overlap and contamination checks between the held-out history-pair set and all train/eval pools, plus cross-seed history-pair overlap.",
+      "old_definition": "Integrity initially checked only within-seed train/evaluation disjointness.",
+      "new_definition": "Integrity also requires zero cross-seed train overlap, cross-seed evaluation overlap, history-pair contamination with all train/evaluation pools, and cross-seed history-pair overlap.",
+      "rationale": "Prevent repeated benchmark instances across independent seeds or leakage of held-out history-pair examples into training/evaluation pools.",
+      "discovered": "pre-measurement",
+      "affected": "integrity gate and artifact schema",
+      "no_result_under_previous_version": "instrument correction before admissible measurement"
+    },
+    {
+      "id": "A6",
+      "applies_to": "TACOSM-PLM-FULL-LEARNED-SWILA-001",
+      "old_definition": "The benchmark Git blob pin referenced the generator before a lint-only unused-import removal.",
+      "new_definition": "The benchmark Git blob pin is refreshed to the exact post-lint generator blob 42cd765194492a06bc2180bf2c9462c973ab73d6; generator semantics and episode construction are unchanged.",
+      "rationale": "A provenance pin must identify the exact bytes that the measured run imports, even for a non-semantic source edit.",
+      "discovered": "pre-measurement",
+      "affected": "benchmark provenance pin only",
+      "no_result_under_previous_version": "no measurement was run under the stale byte-level provenance pin"
     }
   ],
   "hypothesis": "A single fully learned multimodal PLM with persistent multi-timescale state, learned relevance routing, learned structural computation, action-conditioned OSM planning, learned verification, learned repair, and verifier-gated state update should learn the registered held-out physical-control task without task-specific operator, addressing, or state-ontology scaffolds.",
