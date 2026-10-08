@@ -1,0 +1,133 @@
+{
+  "experiment_id": "TACOSM-PLM-FULL-LEARNED-SWILA-OPT-002",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Optimization and physics-prior diagnosis for the full learned SwiLA PLM",
+  "question": "Did the failed full-learned PLM attempt actually optimize, and is the registered Hamiltonian prior materially constraining optimization?",
+  "purpose": "Diagnose the failure of TACOSM-PLM-FULL-LEARNED-SWILA-001 without changing its benchmark, architecture, seeds, data pools, or training schedule.",
+  "protocol": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "train_per_action": 72,
+    "eval_per_action": 36,
+    "history_pairs": 80,
+    "train_steps": 220,
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "d_model": 96,
+    "num_heads": 4,
+    "num_experts": 6,
+    "cdl_top_k": 2,
+    "casm_operators": 4,
+    "casm_depth": 3,
+    "casm_top_k": 1,
+    "arms": [
+      "untrained",
+      "trained_full",
+      "trained_physics_off"
+    ]
+  },
+  "interventions": [
+    {
+      "name": "untrained",
+      "description": "Instantiate the exact full-learned model at the registered seed and run the registered evaluation with zero optimizer updates."
+    },
+    {
+      "name": "trained_full",
+      "description": "Repeat the registered full-learned training protocol exactly, including PHYSICS_WEIGHT=0.03."
+    },
+    {
+      "name": "trained_physics_off",
+      "description": "Repeat the registered full-learned training protocol exactly with only PHYSICS_WEIGHT set to 0.0; all other settings remain fixed."
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "trained_minus_untrained_action_accuracy",
+      "role": "diagnostic primary",
+      "primary": true
+    },
+    {
+      "name": "trained_training_loss_reduction",
+      "role": "diagnostic primary",
+      "primary": false
+    },
+    {
+      "name": "trained_parameter_change",
+      "role": "diagnostic integrity",
+      "primary": false
+    },
+    {
+      "name": "physics_off_minus_full_action_accuracy",
+      "role": "diagnostic secondary",
+      "primary": false
+    },
+    {
+      "name": "physics_off_training_loss_reduction",
+      "role": "diagnostic secondary",
+      "primary": false
+    },
+    {
+      "name": "history_pair_exact",
+      "role": "downstream diagnostic",
+      "primary": false
+    },
+    {
+      "name": "closed_loop_success",
+      "role": "downstream diagnostic",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "Untrained control matches the registered model/evaluation interface and is evaluated without optimizer updates",
+      "licenses": "The chance/floor behavior of the exact architecture and benchmark can be characterized.",
+      "does_not_license": "Any architectural capability claim."
+    },
+    {
+      "condition": "A trained arm shows >=10% reduction from mean loss over steps 1-20 to mean loss over steps 201-220 and changes its parameters",
+      "licenses": "Evidence that optimization occurred rather than a no-update or frozen-weight harness failure.",
+      "does_not_license": "Evidence that optimization reached useful capability."
+    },
+    {
+      "condition": "trained action accuracy exceeds untrained accuracy by >=0.05 absolute",
+      "licenses": "Evidence that training moved the model beyond its exact untrained evaluation floor on this benchmark.",
+      "does_not_license": "Evidence of architectural superiority or successful PLM capability."
+    },
+    {
+      "condition": "trained_physics_off exceeds trained_full action accuracy by >=0.05 absolute with the same integrity conditions",
+      "licenses": "Evidence that the registered Hamiltonian prior is a material optimization/capability constraint under this protocol.",
+      "does_not_license": "A claim that the physics prior is intrinsically harmful in other tasks or architectures."
+    },
+    {
+      "condition": "No registered diagnostic criterion is met",
+      "licenses": "A bounded optimization diagnosis only.",
+      "does_not_license": "Architectural impossibility."
+    }
+  ],
+  "benchmark_integrity": {
+    "requirement": "Reproduce the exact deterministic evaluation pools implied by the registered seed formulas; report train/eval and cross-seed overlap exactly as the original run; no post-run selection.",
+    "benchmark_generator_sha256": "42cd765194492a06bc2180bf2c9462c973ab73d6"
+  },
+  "held_constant": [
+    "registered multimodal benchmark and generator",
+    "five seeds 0-4",
+    "220 training steps, batch size 8",
+    "learning rate 0.001 and weight decay 0.0001",
+    "model width, head count, expert count, CDL/CASM settings and action count",
+    "optimizer and training loss terms other than the preregistered physics-weight intervention",
+    "no checkpoint, seed, hyperparameter, or metric selection after observing results"
+  ],
+  "claim_boundary": [
+    "optimization diagnosis for the registered full-learned benchmark only",
+    "no general PLM capability claim",
+    "no real-world multimodal claim",
+    "no scaling claim"
+  ]
+}
