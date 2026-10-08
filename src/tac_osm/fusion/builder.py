@@ -41,6 +41,7 @@ def build_fused_model(
             enabled=config.fact_enabled,
             write=config.fact_write,
             intervention=config.fact_intervention,
+            corruption_rate=config.fact_corruption_rate,
             seed=config.seed,
         )
     )
@@ -64,9 +65,10 @@ def build_fused_model(
         global_enabled=config.global_memory,
         priming_enabled=config.priming,
         intervention=config.memory_intervention,
+        corruption_rate=config.memory_corruption_rate,
         seed=config.seed,
     )
-    regime_cfg = RegimeConfig(enabled=True, feature_dim=18, seed=config.seed)
+    regime_cfg = RegimeConfig(enabled=True, feature_dim=19, seed=config.seed)
     coordinator_cfg = CoordinatorConfig(
         n_modules=8,
         top_k=min(config.top_k_modules, 8),
