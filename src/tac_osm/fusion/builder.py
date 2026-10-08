@@ -95,8 +95,6 @@ def build_fused_model(
         seed=config.seed,
         learning=True,
         experience_write=True,
-        dim=world_cfg.dim,
-        n_modules=8,
         memory=memory_cfg,
         regime=regime_cfg,
         coordinator=coordinator_cfg,
