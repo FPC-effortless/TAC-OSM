@@ -1,6 +1,6 @@
 {
   "experiment_id": "TACOSM-PLM-FULL-LEARNED-SWILA-001",
-  "version": 4,
+  "version": 5,
   "status": "pre-registered",
   "title": "Full learned multimodal PLM with SwiLA-derived multi-timescale persistent state",
   "question": "Can the full PLM computational loop learn multimodal representation, persistent multi-timescale state, relevance routing, structural computation, action, verification, repair, and verified state update end to end?",
@@ -99,6 +99,11 @@
     "text": "goal coordinates only",
     "history_pairs": "same current multimodal observation but different preceding histories and different optimal action",
     "train_eval_overlap": 0,
+    "cross_seed_train_overlap": 0,
+    "cross_seed_eval_overlap": 0,
+    "history_pair_train_overlap": 0,
+    "history_pair_eval_overlap": 0,
+    "cross_seed_pair_overlap": 0,
     "evaluation_reuse_between_arms": "not applicable; this is a single integrated construction run",
     "post_run_selection": "forbidden",
     "model_outcome_input": "continuous post-action distance-to-goal evidence; binary success never enters model",
@@ -148,6 +153,12 @@
       "id": "A4",
       "before_measurement": true,
       "change": "CASM execution is top-k sparse at runtime (casm_top_k=1) rather than evaluating the complete learned operator bank; MTSK retention combines learned fast/medium/slow base decay with an input-dependent retention gate."
+    }
+    ,
+    {
+      "id": "A5",
+      "before_measurement": true,
+      "change": "Integrity is extended from within-seed train/eval overlap to pairwise cross-seed train/eval overlap and contamination checks between the held-out history-pair set and all train/eval pools, plus cross-seed history-pair overlap."
     }
   ]
 }
