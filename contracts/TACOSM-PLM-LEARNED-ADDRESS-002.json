@@ -62,11 +62,31 @@
     "frozen benchmark and contract hashes"
   ],
   "decision_rule": [
-    "Exact-key success does not license a learned-address claim.",
-    "On isotropic Gaussian corruption, learned addressing must be non-inferior to raw dot within 0.02 absolute accuracy; beating raw dot is not required and would not by itself be evidence of a better addressing rule.",
-    "On the registered structured diagonal channel, learned scoring must exceed raw dot by at least 0.05 mean accuracy over the predefined sigma grid at M=3.",
-    "Capacity curves at d=16 must be reported for M={3,8,16,32,64,128,256}; no M may be selected after inspection.",
-    "Failure of the learned scorer does not imply learned addressing impossibility."
+    {
+      "condition": "Exact-key condition only",
+      "licenses": "Diagnostic characterization of address matching.",
+      "does_not_license": "A learned-address claim from exact-key saturation alone."
+    },
+    {
+      "condition": "On isotropic Gaussian corruption, learned addressing is non-inferior to raw dot within 0.02 absolute accuracy",
+      "licenses": "Bounded evidence of learned scorer calibration to the registered Bayes reference.",
+      "does_not_license": "Superiority to the Bayes-optimal raw-dot reference or semantic addressing."
+    },
+    {
+      "condition": "On the registered structured diagonal channel, learned scoring exceeds raw dot by at least 0.05 mean accuracy over the predefined sigma grid at M=3",
+      "licenses": "Bounded evidence that the learned scorer exploits the registered structured channel beyond the raw-dot reference.",
+      "does_not_license": "Semantic entity resolution, content-derived addressing, multimodal capability, or PLM general capability."
+    },
+    {
+      "condition": "Capacity curves are reported at d=16 for M={3,8,16,32,64,128,256} with no post-run M selection",
+      "licenses": "A complete registered capacity characterization over the predefined population sizes.",
+      "does_not_license": "Scale invariance or sublinear addressing."
+    },
+    {
+      "condition": "The learned scorer fails a registered criterion",
+      "licenses": "A bounded negative diagnosis for this addressing protocol.",
+      "does_not_license": "Learned-address impossibility."
+    }
   ],
   "claim_boundary": [
     "robust associative key addressing only",
