@@ -1,0 +1,155 @@
+{
+  "experiment_id": "TACOSM-PLM-PERSISTENCE-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Causally necessary persistent state under history-collision control",
+  "question": "Can a learned stateful model retain earlier information that is unavailable from the current observation, and does that persistent state causally improve q2 prediction above the no-memory ceiling?",
+  "hypothesis": "A residual state-writing PLM will learn to retain a prior latent bit across delayed observations and use it with a current bit to predict q2, while an exact reset/no-memory arm will remain at the 0.5 ceiling because paired histories share identical current observations.",
+  "primary_endpoint": {
+    "name": "persistent_q2_accuracy_at_delay_4",
+    "unit": "episode",
+    "threshold": 0.9,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_steps": 1500,
+    "batch_size": 128,
+    "hidden_dim": 64,
+    "memory_dim": 64,
+    "delays": [
+      0,
+      1,
+      4,
+      8
+    ],
+    "evaluation_episodes_per_seed": 2000,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "state_write": "residual gated update",
+    "query": "memory plus current representation",
+    "operator": "xor",
+    "memory_bit_balanced": true,
+    "model_selection": "none"
+  },
+  "benchmark": {
+    "t0_observation": "encodes memory bit m in text, image and audio",
+    "delayed_observations": "carry no information about m",
+    "current_observation": "encodes independent current bit c identically across paired histories",
+    "target": "m XOR c",
+    "history_collision": "for every current observation c there are paired histories with m=0 and m=1, so current observation alone leaves target probability exactly 0.5",
+    "q1_action": "not a function of m and is excluded from target generation"
+  },
+  "arms": [
+    {
+      "name": "persistent_state",
+      "intervention": "learned residual state write at t0, state retained through delay, current observation used at q2",
+      "acts_on": "persistent computation"
+    },
+    {
+      "name": "reset_before_q2",
+      "intervention": "discard learned state immediately before q2; use current observation only",
+      "acts_on": "persistence necessity"
+    },
+    {
+      "name": "shuffled_history",
+      "intervention": "pair current observations with mismatched prior states across episodes",
+      "acts_on": "state-history integrity"
+    },
+    {
+      "name": "oracle_memory",
+      "intervention": "supply benchmark memory bit to the q2 computation as an evaluation-only upper bound",
+      "acts_on": "representability upper bound"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "persistent_q2_accuracy_at_delay_4",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "reset_q2_accuracy_at_delay_4",
+      "role": "causal null",
+      "primary": false
+    },
+    {
+      "name": "persistent_minus_reset_gap_at_delay_4",
+      "role": "causal attribution",
+      "primary": false
+    },
+    {
+      "name": "delay_curve",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "history_collision_rate",
+      "role": "integrity",
+      "primary": false
+    },
+    {
+      "name": "state_write_gradient_gate",
+      "role": "integrity",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; delay-4 persistent accuracy >=0.90 in aggregate and every seed >=0.75; reset delay-4 accuracy <=0.60; paired persistent-minus-reset gap >=0.30 with bootstrap lower bound >0",
+      "licenses": "bounded causal evidence that learned persistent state is required for the registered delayed task",
+      "does_not_license": "general long-horizon memory, AGI, real-world persistence, or scaling"
+    },
+    {
+      "condition": "integrity passes but persistent criterion fails",
+      "licenses": "persistent capability not established on this benchmark",
+      "does_not_license": "persistence impossibility"
+    },
+    {
+      "condition": "reset exceeds 0.60 or history-collision gate fails",
+      "licenses": "benchmark is not isolating persistence and must not support a causal persistence claim",
+      "does_not_license": "any persistence conclusion"
+    }
+  ],
+  "interpretation_order": [
+    "generator identity and history-collision construction",
+    "current-observation conditional ceiling",
+    "state-write gradient coverage",
+    "oracle memory upper bound",
+    "reset/no-memory arm",
+    "persistent delay curve",
+    "paired causal gap",
+    "claim boundary"
+  ],
+  "held_constant": [
+    "same multimodal representation and residual state-write mechanism across arms",
+    "same five seeds, optimizer and training schedule",
+    "same current observations across paired histories",
+    "no q1 target or outcome information used to construct q2 target",
+    "memory bit independent of current bit",
+    "no post-run model selection or threshold tuning"
+  ],
+  "leakage_rules": [
+    "q2 target is generated from benchmark-side m and c only",
+    "current observation contains c but not m",
+    "delayed observations contain neither m nor target",
+    "paired histories share byte-identical current observations and differ only in m",
+    "oracle memory is evaluation-only",
+    "all evaluation pools are generated from a distinct RNG namespace"
+  ],
+  "h_levels": [
+    0,
+    1,
+    4,
+    8
+  ],
+  "steps": 1500,
+  "eval_steps": 2000
+}
