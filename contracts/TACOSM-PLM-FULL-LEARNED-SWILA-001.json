@@ -274,5 +274,15 @@
     8
   ],
   "steps": 220,
-  "eval_steps": 180
+  "eval_steps": 180,
+  "held_constant": [
+    "same multimodal observation schema and synthetic environment",
+    "same five registered seeds",
+    "same training/evaluation pool sizes and 220 training steps",
+    "same model width, head count, expert count, CDL top-k, CASM operator count/depth, and sparse CASM top-k",
+    "same AdamW optimizer, learning rate, and weight decay",
+    "no post-run checkpoint, seed, hyperparameter, or metric selection",
+    "no entity identifiers, target action input, physical-state labels, fixed operator semantics, or hard-coded retrieval/addressing",
+    "only Hamilton canonical equations and learned-Hamiltonian conservation are privileged physical-law priors"
+  ]
 }
