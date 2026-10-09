@@ -1,0 +1,168 @@
+{
+  "experiment_id": "TACOSM-PLM-LATENT-OPERATOR-020SEED",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "20-seed robustness extension for latent operator induction",
+  "question": "Is the C19 latent-operator selection behavior robust across a larger pre-specified seed panel, and what is the observed operator-confusion pattern?",
+  "relation_to_prior": "Post-C19 robustness extension. It cannot replace, upgrade, or rewrite the original five-seed C19 decision.",
+  "protocol": {
+    "parent_experiment_id": "TACOSM-PLM-LATENT-OPERATOR-001",
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "train_steps": 300,
+    "batch_size": 96,
+    "evaluation_episodes_per_seed": 600,
+    "evaluation_episodes_per_operator": 150,
+    "hidden_dim": 64,
+    "state_write_mode": "residual_linear",
+    "operator_induction_loss": "q2 task loss only",
+    "operator_id_in_model_input": false,
+    "entity_addressing": "explicit",
+    "model_selection": "none",
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001
+  },
+  "frozen_lineage": {
+    "c19_benchmark_generator_version": "integrated-e2e-v8-latent-operator-truth-table",
+    "c19_benchmark_generator_git_blob_sha": "a16f73a81f57fc58fae20fc643003ff225d4f181",
+    "base_e2e008_generator_sha256": "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e"
+  },
+  "endpoints": [
+    {
+      "name": "operator_selection_accuracy",
+      "role": "primary descriptive robustness endpoint",
+      "primary": true
+    },
+    {
+      "name": "heldout_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "operator_confusion_matrix",
+      "role": "diagnostic",
+      "primary": false
+    },
+    {
+      "name": "training_operator_counts",
+      "role": "diagnostic",
+      "primary": false
+    },
+    {
+      "name": "no_memory_q2_accuracy",
+      "role": "reference diagnostic",
+      "primary": false
+    },
+    {
+      "name": "oracle_operator_q2_accuracy",
+      "role": "upper-bound diagnostic",
+      "primary": false
+    }
+  ],
+  "rules": [
+    "No change to the C19 contract, outcome, or threshold is permitted from this extension.",
+    "The frozen C19 benchmark generator blob must match before training.",
+    "Held-out compositions remain exactly the C19 12-composition set.",
+    "Evaluation is generated after training from the registered per-seed evaluation RNG namespace.",
+    "Training/evaluation semantic overlap must be zero.",
+    "Operator confusion is computed from argmax operator prediction before oracle override.",
+    "Training operator counts are recorded from the actual sampled combo2 stream.",
+    "No hyperparameter, checkpoint, seed, or metric selection is permitted.",
+    "Results are descriptive robustness evidence only and cannot overturn C19."
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; 20-seed robustness panel is complete with zero train/evaluation overlap and valid fingerprints",
+      "licenses": "descriptive robustness evidence about C19's latent-operator behavior across the registered seed panel",
+      "does_not_license": "replacement or upgrade of C19; operator synthesis outside the fixed primitive library; semantic addressing; real-world multimodal competence"
+    },
+    {
+      "condition": "integrity gates pass but the 20-seed panel shows instability or fails to support the planned robustness interpretation",
+      "licenses": "the instability pattern is measured evidence and C19 remains at its original bounded status",
+      "does_not_license": "intrinsic difficulty of any Boolean operator; architecture impossibility; post-hoc threshold changes"
+    },
+    {
+      "condition": "any frozen-lineage, leakage, or artifact gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "any scientific conclusion from the extension"
+    }
+  ],
+  "hypothesis": "The larger seed panel will quantify whether C19's observed operator-selection instability is recurrent and identify any operator-specific confusion pattern without changing the original C19 decision.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "steps": 300,
+  "eval_steps": 600,
+  "h_levels": [
+    3
+  ],
+  "arms": [
+    {
+      "name": "normal_latent_operator_020seed",
+      "intervention": "same latent-operator model and training protocol as C19, repeated for the 20 registered seeds",
+      "acts_on": "robustness extension"
+    },
+    {
+      "name": "oracle_operator_diagnostic",
+      "intervention": "same trained model with hidden operator supplied only for q2 diagnostic scoring",
+      "acts_on": "operator-selection localization"
+    }
+  ],
+  "interpretation_order": [
+    "frozen C19 benchmark identity",
+    "20-seed train/evaluation disjointness and evaluation fingerprints",
+    "training operator counts",
+    "operator confusion matrix",
+    "operator-selection and q2 accuracy",
+    "oracle and no-memory diagnostics",
+    "robustness interpretation without modifying C19"
+  ],
+  "held_constant": [
+    "C19 benchmark generator, held-out 12-composition set, and fixed Boolean primitive execution library",
+    "five original C19 training hyperparameters: 300 steps, batch size 96, hidden dimension 64, residual-linear state write, AdamW learning rate 0.002 and weight decay 0.0001",
+    "explicit entity addressing and collision-free payload-only multimodal encoders",
+    "operator induction remains trained only through q2 task loss; no operator-ID auxiliary target",
+    "no post-run model, checkpoint, seed, hyperparameter, or metric selection",
+    "C19's original five-seed result, threshold, and claim status are not altered by this extension"
+  ]
+}

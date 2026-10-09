@@ -320,21 +320,59 @@ than changing addressing again.
 
 | Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
 |---|---|---|---|---|---|
-| Normal and reset/recompute q2 = 1.0000 across all five seeds | L3 | causal ablation | temporal carry across q1→q2 is not necessary for E2E-008 | persistence is useless generally | reset/recompute still reconstructs the state from all original observations |
-| Normal-minus-reset = 0.0000; paired composition-bootstrap 95% CI = [0.0000, 0.0000] | L3 | decision endpoint | preregistered temporal-carry materiality criterion is not met | absence of temporal effects on other tasks | threshold was 0.05 and the decision rule was registered before measurement |
-| q1 prediction/action/outcome equality and recomputed-state identity both pass | L3 | intervention gate | the reset intervention changed the carry variable without changing the q1 path or the pre-q1 state | complete causal isolation of every implementation detail | the experiment isolates the outcome-gated cross-boundary carry within this architecture |
-| Independent validator passes; artifact 11469064681; run 37593010244 | L3 | provenance/validity | the reported negative attribution is a measured, inspectable result | new generalization evidence | the branch was scientifically file-equivalent to the clean master-lineage PR; no model selection was performed |
+| Normal and reset/recompute q2 = 1.0000 across all five seeds | L3 | **uninformative design null** | the specific post-q1 outcome-gated update is not required to reach the saturated E2E-008 ceiling | temporal carry is not load-bearing in an unsaturated task; persistence is useless generally | the reset arm retains all original observations and q2 is at ceiling |
+| Normal-minus-reset = 0.0000; paired composition-bootstrap 95% CI = [0.0000, 0.0000] | L3 | **uninformative endpoint** | no measurable gap at a saturated ceiling | evidence that temporal carry is unnecessary under a task with headroom | threshold was 0.05, but the ceiling makes the comparison non-discriminating |
+| q1 prediction/action/outcome equality and recomputed-state identity both pass | L3 | intervention gate | the reset intervention removes the post-q1 outcome-gated update without changing the q1 path or pre-q1 state | a clean test of whether q1-time information itself must be carried | the reset arm still reconstructs from all original observations |
+| Independent validator passes; artifact 11469064681; run 37593010244 | L3 | provenance/validity | the measured intervention was executed and reproduced cleanly | a definitive memory-versus-compute conclusion | the run is retained as an instrument-valid but non-discriminating ceiling result |
 
 
 
+| Learned-address v1 full confirmatory attempt run 37623028125 | L3 | **instrument failure** | the lane reached smoke successfully but the full measurement aborted on the post-shuffle target-slot balance assertion | any learned-address capability conclusion | the run uploaded only a smoke artifact after the measurement failed; the smoke artifact must not be treated as a measured result |
 ---
 
 ## Latent operator induction evidence
 
 | Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
 |---|---|---|---|---|---|
-| Hidden operator removed from model input; q2 mean = 0.9293 | L3 | scaffold-removal | the integrated state/CASM path can operate without explicit operator-ID dispatch on the registered synthetic task | robust learned operator discovery | seed 3 q2 = 0.7117 and operator selection = 0.75 |
+| Hidden operator removed from model input; q2 mean = 0.9293 | L3 | scaffold-removal | the integrated state/CASM path can operate without explicit operator-ID dispatch on the registered synthetic task | robust learned operator discovery or an intrinsic XNOR-difficulty claim | seed 3 q2 = 0.7117 and operator selection = 0.75; only five seeds were preregistered |
 | Operator-selection mean = 0.9500; composition-bootstrap 95% CI [0.9000, 1.0000] | L3 | mechanism | the support truth-table context is sufficient for strong operator inference in most seeds | uniform all-seed robustness | preregistered minimum was 0.80; seed 3 failed |
 | Shuffle-support q2 mean = 0.6793 versus normal = 0.9293 | L3 | context-use diagnostic | performance depends materially on the supplied support context | causal generality of the support mechanism | shuffle is a diagnostic intervention, not a new capability benchmark |
-| Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | seed-3 weakness is largely operator selection rather than the underlying state/content path | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
+| Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | about 2.6 percentage points of q2 accuracy are lost even with operator selection supplied; seed-3 weakness is therefore substantially selection-related | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
 | No-memory q2 mean = 0.6250 | L3 | mechanism diagnostic | the multimodal state representation remains functionally important | temporal persistence necessity | temporal carry was separately ruled out as necessary on E2E-008 |
+
+
+## Random-key addressing baseline 001
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| `TACOSM-ADDRESS-BASELINE-001`, run 37625321076, artifact 11484519604 | L3 | valid mechanism baseline | raw-dot retrieval reference across d, M and isotropic Gaussian query noise | learned addressing or semantic/content addressing | raw dot is the Bayes/ML ranking rule under the registered isotropic Gaussian model |
+| d=16 capacity/noise grid, five seeds × 100,000 trials/condition | L3 | quantitative baseline | retrieval degradation as M and noise increase | PLM efficiency or learned routing claims | random-key associative retrieval only |
+| d=16, sigma=0.8 drops from 0.6976 at M=3 to 0.0544 at M=256 | L3 | capacity diagnostic | the registered random-key channel has a sharp memory/noise interaction | universal memory limit or semantic retrieval scaling | specific to the registered Gaussian key model |
+| Commit 3ced0b2646340f35383fb0eb3ab9ad79f69a692b; contract SHA 0822928b35a6855bd43f7b693e79208b1d88544b02b3ba978d88835bf5098002 | L3 | provenance | exact rerun lineage is recorded | immunity to future implementation changes | branch/commit must remain pinned for reproduction |
+
+## Pure temporal-persistence follow-up — preregistered, not yet measured
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| `TACOSM-PLM-TEMPORAL-PERSISTENCE-002` | L3 | preregistration | a cleaner causal test in which q1 targets entity 0 and the q2 secret is stored in entity 1 | any persistence claim before measurement | q1 secret-interference and masked-post-boundary gates are mandatory |
+| Carry retains entity-1 state; fresh rebuilds entity 1 only from masked post observation | L3 | intervention design | isolates information persistence from q1 action/outcome access to the secret | general memory or long-horizon memory | synthetic, task-bounded attribution only |
+
+
+## C19 20-seed robustness extension — valid measurement
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| 20-seed extension, latest run 37633578443, artifact 11489055422 | L3 | valid robustness | recurrent latent-operator behavior across a larger pre-specified seed panel | operator synthesis; semantic addressing; real-world multimodal competence | C19's original decision remains unchanged |
+| Operator-selection mean 0.9375; min 0.75 | L3 | robustness | C19 seed instability is recurrent rather than isolated to one seed | intrinsic operator difficulty | all failures are XOR/XNOR pair confusion |
+| Aggregate selection: AND 1.00, OR 1.00, XNOR 0.90, XOR 0.85 | L3 | mechanism diagnostic | operator selection failures are concentrated in the XOR/XNOR pair | generalized XNOR difficulty | 3,000 evaluation episodes per operator across 20 seeds |
+| Q2 mean 0.93275; min 0.71167 | L3 | primary robustness descriptor | latent-operator task remains strong on average but has meaningful seed variance | robust all-seed success criterion | descriptive extension, not a new capability threshold |
+| Mean no-memory 0.62692; oracle q2 0.98233; oracle gap 0.04958 | L3 | localization | state/content computation remains useful and operator selection is not the only source of error | causal separation of all model components | diagnostics only |
+| Training operator counts sum to exactly 28,800 per seed | L3 | integrity gate | training exposure accounting is now directly verified | absence of every possible bias | counts cover sampled combo2 stream only |
+
+
+## Temporal-dependency pilot 001 — instrument failure
+
+| Evidence | Layer | Disposition | Reason | Scientific consequence |
+|---|---|---|---|---|
+| `TACOSM-PLM-TEMPORAL-DEPENDENCY-001`, run **37633578402** | L3 | **INSTRUMENT FAILURE** | The measurement aborted on the preregistered train/evaluation semantic-overlap gate before producing an artifact | No temporal-dependency result may be inferred from this run; the stricter persistence experiment remains the admissible test |
+| Earlier v1 runs with syntax/variable-bound failures | L3 | **INSTRUMENT FAILURE** | Static or runtime harness defects prevented a valid measurement | No scientific interpretation |

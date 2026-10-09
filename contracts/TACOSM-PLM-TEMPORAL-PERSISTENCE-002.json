@@ -1,0 +1,155 @@
+{
+  "experiment_id": "TACOSM-PLM-TEMPORAL-PERSISTENCE-002",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Pure persistence attribution with a q1-independent secret entity",
+  "question": "Does retaining a q1-independent q2 entity across the action boundary improve q2 when its secret is masked from the post-boundary observation?",
+  "hypothesis": "Carry will outperform fresh post-boundary reconstruction because only carry retains the q1-time secret state needed by q2.",
+  "protocol": {
+    "train_steps": 300,
+    "batch_size": 96,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "evaluation_episodes_per_seed": 600,
+    "hidden_dim": 64,
+    "entity_count": 3,
+    "latent_bits": 12,
+    "state_write_mode": "residual_linear",
+    "q1_entity": 0,
+    "q2_entity": 1,
+    "scratch_entity": 2,
+    "q1_query": [
+      0,
+      0,
+      1,
+      "xor"
+    ],
+    "q2_query": [
+      1,
+      2,
+      3,
+      "xor"
+    ],
+    "operator_dispatch": "fixed xor",
+    "model_selection": "none",
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001
+  },
+  "temporal_design": {
+    "q1_entity_distinct_from_q2_entity": true,
+    "q1_cannot_read_q2_secret_entity": true,
+    "q1_outcome_uses_only_q1_entity_bits": true,
+    "post_boundary_secret_is_masked": true,
+    "carry_retains_q2_secret_entity": true,
+    "fresh_rebuilds_q2_entity_only_from_masked_post_observation": true,
+    "same_q2_query_across_arms": true,
+    "same_post_q2_observation_across_arms": true
+  },
+  "primary_endpoint": {
+    "name": "carry_minus_fresh_post_boundary_q2_accuracy",
+    "unit": "episode",
+    "threshold": 0.1,
+    "selection": "none"
+  },
+  "held_constant": [
+    "same multimodal encoders, residual-linear state write, optimizer, learning rate, weight decay, 300 steps, batch size 96, five seeds",
+    "fixed XOR execution; no operator discovery is tested",
+    "explicit entity addressing is retained; learned semantic addressing is not tested",
+    "no post-run model, checkpoint, seed, hyperparameter, or metric selection"
+  ],
+  "integrity_gates": [
+    "q1 and q2 target different explicit entity slots",
+    "q1 outcome depends only on q1-entity bits 0 and 1",
+    "q1 secret-interference test is exactly zero",
+    "post-boundary q2 observation is identical between arms and masks the secret",
+    "carry writes the post observation only to a scratch slot",
+    "fresh initializes q2 state only from the masked post observation",
+    "training/evaluation semantic overlap is zero",
+    "evaluation secret/visible combinations are exactly balanced",
+    "distinct evaluation fingerprints per seed",
+    "no post-run model selection"
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; carry-minus-fresh q2 >= 0.10; hierarchical paired bootstrap 95% lower bound > 0",
+      "licenses": "bounded evidence that retaining q1-time q2 state provides a load-bearing persistence benefit on the registered synthetic task",
+      "does_not_license": "general long-horizon memory, semantic memory, learned addressing, operator discovery, scaling, or real-world multimodal competence"
+    },
+    {
+      "condition": "all integrity gates pass but the criterion fails",
+      "licenses": "the registered task does not demonstrate a load-bearing persistence benefit",
+      "does_not_license": "memory impossibility or general PLM failure"
+    },
+    {
+      "condition": "any information-flow, secret-interference, leakage, or artifact gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "architectural inference from the run"
+    }
+  ],
+  "arms": [
+    {
+      "name": "carry",
+      "intervention": "retain q2 entity state through q1 action/outcome and route the masked post-boundary observation to a scratch slot",
+      "acts_on": "persistence"
+    },
+    {
+      "name": "fresh_post_boundary",
+      "intervention": "discard all state and initialize q2 entity only from the masked post-boundary observation",
+      "acts_on": "persistence"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "carry_minus_fresh_post_boundary_q2_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "carry_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "fresh_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "paired_bootstrap_ci95",
+      "role": "uncertainty",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "benchmark generator identity",
+    "q1/q2 entity separation",
+    "secret masking and q1 secret-interference gate",
+    "same q2 query and post-boundary observation",
+    "train/evaluation disjointness and evaluation fingerprints",
+    "paired q2 difference and hierarchical uncertainty interval",
+    "claim boundary"
+  ],
+  "h_levels": [
+    3
+  ],
+  "steps": 300,
+  "eval_steps": 600,
+  "base_e2e008": {
+    "experiment_id": "TACOSM-PLM-INTEGRATED-E2E-008",
+    "benchmark_generator_version": "integrated-e2e-v7-collision-free-payload-only",
+    "benchmark_sha256": "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032e6b7c60082949f3e"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ]
+}

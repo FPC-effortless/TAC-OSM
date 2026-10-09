@@ -1,0 +1,159 @@
+{
+  "experiment_id": "TACOSM-PLM-TEMPORAL-DEPENDENCY-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Temporal dependency test with q1-only information withheld from the reset arm",
+  "question": "Does preserving q1-time information across the action boundary improve q2 when the q2 target depends on information that is unavailable after the boundary?",
+  "hypothesis": "A carry-enabled PLM will solve the registered temporal-dependency task better than a fresh post-boundary state that receives only q2-time observations.",
+  "protocol": {
+    "layer": "L3",
+    "train_steps": 300,
+    "batch_size": 96,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "evaluation_episodes_per_seed": 600,
+    "hidden_dim": 64,
+    "state_write_mode": "residual_linear",
+    "entity_addressing": "explicit",
+    "operator_dispatch": "fixed Boolean primitive",
+    "model_selection": "none",
+    "interventions": {
+      "carry": "retain the pre-q1 state and traverse the q1 boundary normally",
+      "fresh_post_boundary": "discard all q1-time state and initialize a fresh state from q2-time observations only"
+    },
+    "latent_bits": 12,
+    "q1_query": [
+      0,
+      0,
+      1,
+      "xor"
+    ],
+    "q2_query": [
+      0,
+      2,
+      3,
+      "xor"
+    ],
+    "entity_count": 2
+  },
+  "temporal_design": {
+    "q1_time_secret_bit": 2,
+    "q2_visible_bit": 3,
+    "post_boundary_secret_is_masked": true,
+    "q1_outcome_uses_only_bits_0_and_1": true,
+    "q2_target_is_xor_of_hidden_bit_and_q2_visible_bit": true,
+    "post_boundary_observation_is_present_in_both_arms": true,
+    "carry_arm_routes_post_boundary_observation_to_scratch_entity": true,
+    "fresh_arm_routes_post_boundary_observation_to_q2_entity": true,
+    "fresh_arm_has_no_q1_time_state_action_outcome_or_verifier_signal": true,
+    "no_future_q2_information_before_q2": true
+  },
+  "primary_endpoint": {
+    "name": "carry_minus_fresh_post_boundary_q2_accuracy",
+    "unit": "episode",
+    "threshold": 0.1,
+    "selection": "none"
+  },
+  "integrity_gates": [
+    "same q2 query across arms",
+    "same post-boundary q2 observation across arms",
+    "fresh arm receives no q1-time state, action, outcome, or verifier signal",
+    "q1 outcome is generated only from independent bits 0 and 1",
+    "q2 target is independent of the fresh arm's masked secret surface",
+    "evaluation secret/visible combinations are exactly balanced",
+    "training/evaluation semantic overlap is zero",
+    "distinct evaluation fingerprints per seed",
+    "no post-run model selection"
+  ],
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; carry-minus-fresh q2 >= 0.10; paired hierarchical bootstrap 95% lower bound > 0",
+      "licenses": "bounded evidence that preserving q1-time information improves q2 on the registered temporal-dependency task",
+      "does_not_license": "general long-horizon memory, semantic memory, learned addressing, operator discovery, scaling, or real-world multimodal competence"
+    },
+    {
+      "condition": "all integrity gates pass but the materiality or lower-bound criterion fails",
+      "licenses": "the registered task does not demonstrate a load-bearing q1-to-q2 carry benefit",
+      "does_not_license": "memory impossibility or general PLM failure"
+    },
+    {
+      "condition": "any information-flow or leakage gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "any architectural inference from the run"
+    }
+  ],
+  "claim_boundary": [
+    "task-bounded temporal information-flow evidence only",
+    "does not establish general long-horizon memory",
+    "does not establish semantic memory",
+    "does not establish learned addressing or operator discovery",
+    "does not establish scaling"
+  ],
+  "arms": [
+    {
+      "name": "carry",
+      "intervention": "retain q1-time state and traverse the action boundary",
+      "acts_on": "temporal information flow"
+    },
+    {
+      "name": "fresh_post_boundary",
+      "intervention": "discard all q1-time state and initialize only from q2-time observations",
+      "acts_on": "temporal information flow"
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 300,
+  "eval_steps": 600,
+  "h_levels": [
+    2
+  ],
+  "interpretation_order": [
+    "benchmark generator identity",
+    "same q2 query and post-boundary observation",
+    "fresh-arm q1-information exclusion",
+    "q1/q2 dependency construction and exact evaluation balance",
+    "train/evaluation disjointness and evaluation fingerprints",
+    "paired q2 difference and hierarchical uncertainty interval",
+    "claim boundary"
+  ],
+  "endpoints": [
+    {
+      "name": "carry_minus_fresh_post_boundary_q2_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "carry_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "fresh_q2_accuracy",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "paired_bootstrap_ci95",
+      "role": "uncertainty",
+      "primary": false
+    }
+  ],
+  "held_constant": [
+    "same multimodal encoders, residual-linear state write, optimizer, learning rate, weight decay, 300 steps, batch size 96, and five seeds",
+    "same fixed XOR primitive and explicit entity addressing",
+    "q1 query, q2 query, and q2 evaluation composition are fixed by the preregistered benchmark",
+    "no post-run model, checkpoint, seed, hyperparameter, or metric selection",
+    "this experiment does not alter the original C18 outcome or decision"
+  ]
+}

@@ -749,26 +749,27 @@ This supports a bounded **integrated-architecture advantage** over the registere
 
 ---
 
-## C18 — Temporal carry across the q1→q2 action boundary is not load-bearing on E2E-008
+## C18 — Reset/recompute at the E2E-008 ceiling is uninformative about temporal carry
 
-> Removing the post-q1 outcome-gated state update and recomputing the state from the original observations reproduces the normal PLM's q2 performance on the registered E2E-008 held-out benchmark.
+> The registered reset/recompute intervention produced the same saturated q2 accuracy as the normal arm, but the benchmark ceiling prevents this result from measuring whether temporal carry contributes when recomputation retains the original information.
 
-**STATUS: SUPPORTED, bounded negative attribution**
+**STATUS: UNINFORMATIVE, bounded design null**
 
 **TYPE:** causal ablation · **LAYER:** L3
 
 **REQUIRED EVIDENCE:** `TACOSM-PLM-PERSISTENCE-RESET-RECOMPUTE-001`, workflow run **37593010244**, artifact **11469064681**.
 
-Normal PLM q2 mean = **1.0000** and reset/recompute q2 mean = **1.0000** across all five seeds. The normal-minus-reset gap is **0.0000**; the paired composition-bootstrap 95% interval is **[0.0000, 0.0000]**. The preregistered materiality threshold was **0.05**, so the temporal-carry support criterion failed.
+Normal PLM q2 mean = **1.0000** and reset/recompute q2 mean = **1.0000** across all five seeds. The normal-minus-reset gap is **0.0000** with paired composition-bootstrap 95% interval **[0.0000, 0.0000]**. The benchmark is saturated at 1.0000, so a zero gap cannot distinguish equivalence caused by lack of temporal dependence from equivalence caused by lack of headroom.
 
-All intervention integrity checks passed: q1 prediction/action/outcome pair equality held; the recomputed pre-q1 state was byte-identical to the original pre-q1 state; train/evaluation semantic overlap was zero; the benchmark SHA-256 and all five E2E-008 evaluation fingerprints matched exactly; and the independent artifact validator passed.
+The reset arm also reconstructs its state from the complete original observations. It therefore does not withhold the information available before q1; it removes the post-q1 outcome-gated update while retaining the original state inputs. Consequently this run is not a clean test of whether q1-time information must be carried across the action boundary.
 
-The bounded interpretation is that **temporal carry across the action boundary is not necessary for this E2E-008 task**. In combination with C17, the measured PLM advantage is therefore better localized to the integrated state representation/CASM computation than to temporal carry itself.
+The integrity evidence remains strong: q1 prediction/action/outcome pair equality held, recomputed pre-q1 state was byte-identical, training/evaluation overlap was zero, and the registered E2E-008 evaluation fingerprints and benchmark identity matched exactly.
 
-This does not establish that persistent memory is useless in general, nor does it address longer horizons, tasks in which the relevant information is only available after the action, learned semantic addressing, operator discovery, or real-world multimodal memory.
+C18 therefore **does not establish a definitive memory-versus-compute conclusion**. At most, within this saturated benchmark, it shows that the specific post-q1 outcome-gated update is not required to reach the ceiling.
 
-**NEXT TEST:** remove the fixed Boolean/CASM and explicit addressing scaffolds while preserving the same strict split, provenance, and causal-control discipline.
+Combined with C17, the result localizes the remaining PLM-vs-FF difference to mechanisms still present in the reset arm—principally the state representation/read and CASM execution path—but does not isolate those components individually.
 
+**NEXT TESTS:** the first temporal-dependency pilot is `TACOSM-PLM-TEMPORAL-DEPENDENCY-001`; it is instrument-valid only after all CI gates pass and its q1/q2 information-flow confounds are accounted for. The stricter follow-up, now preregistered as `TACOSM-PLM-TEMPORAL-PERSISTENCE-002`, separates the q1 entity from the q2 secret entity so the q1 action cannot inspect or encode the secret.
 
 ## C19 — Removing explicit operator-ID dispatch yields partial latent operator induction on E2E-008
 
@@ -788,9 +789,25 @@ The diagnostic structure is informative: oracle-operator q2 was **0.9740**, shuf
 
 This establishes a **partial scaffold-removal result**, not robust learned operator discovery. The execution library is still a fixed Boolean primitive set, and explicit entity addressing remains in place.
 
-**BLOCKER:** establish operator-induction robustness without changing the preregistered outcome after inspection of seed 3. A new contract must define any added demonstrations, losses, or training changes before measurement.
+**RESOLVED BY ROBUSTNESS EXTENSION:** the registered 20-seed extension completed with zero train/evaluation semantic overlap, exact 28,800 sampled q2 episodes per seed, distinct evaluation fingerprints, and frozen C19 benchmark lineage. Operator-selection mean = **0.9375**, seed minimum = **0.75**, q2 mean = **0.93275**, q2 minimum = **0.7117**. Five of 20 seeds (25%; exact 95% binomial interval approximately **[8.7%, 43.7%]**) showed operator-selection failure. All observed selection errors were confined to an XOR/XNOR confusion pair: aggregate XNOR selection = **0.90**, XOR = **0.85**, AND = **1.00**, OR = **1.00**. No AND/OR confusion was observed.
+
+This confirms that the C19 seed-3 failure pattern is **recurrent**, but it does not establish that XNOR or XOR is intrinsically harder. The failure mechanism is consistent with a seed-dependent XOR/XNOR symmetry-breaking mode: failed seeds selected one of that pair for all 150 episodes of the affected operator. The correct claim is therefore bounded latent operator induction with recurrent pairwise symmetry instability, not intrinsic operator difficulty or robust operator synthesis.
+
+The extension also found mean no-memory q2 = **0.6269**, mean oracle-operator q2 = **0.9823**, and mean oracle-minus-normal q2 = **0.0496**. The mean lift over the registered 0.625 no-memory reference is **+0.30775**. These are diagnostics, not replacements for C19's original decision rule.
 
 ---
+
+## Learned-address v1 — instrument-invalid
+
+> The learned-address v1 lane was intended to replace explicit entity IDs with episode-local 16-D random address keys. It did not produce a valid measured result.
+
+**STATUS: INVALID INSTRUMENT**
+
+The initial runs **37595700976** and **37595722815** failed in the smoke stage with `TypeError: unhashable type: 'list'` before confirmatory measurement. The repaired duplicate PR run **37623028125** passed all integrity, contract, and smoke gates, then failed during the full measurement because the implementation's post-shuffle q2 target-slot counts were not exactly `200/200/200`, contradicting its own registered balance assertion.
+
+Run **37623028125** is the sole full confirmatory attempt after the harness repair. It is not a scientific measurement. Its uploaded artifact (**11482723366**) is the earlier successful smoke output and must not be treated as a measured artifact. The prior runs **37595700976** and **37595722815** are instrument failures.
+
+The deeper construct problem is also recorded: exact matching of identical random query/storage keys is largely predictable and does not demonstrate semantic or content-derived addressing. The next addressing experiment therefore requires an explicit raw-dot reference and a corruption/capacity protocol.
 
 ## Claims this repository does not make
 
@@ -965,3 +982,40 @@ Immediate blocker:
 the representation-to-executable-state content interface remains unresolved.
 The representation bit projection and the CASM state bit projection are
 separate learned maps.
+
+
+## Random-key addressing baseline — valid mechanism baseline, not a PLM capability result
+
+> Raw-dot addressing has been characterized under the exact registered random-key generative model before interpreting a learned-address result.
+
+**STATUS: VALID BASELINE / NOT A PLM CAPABILITY CLAIM**
+
+**REQUIRED EVIDENCE:** `TACOSM-ADDRESS-BASELINE-001`, workflow run **37625321076**, artifact **11484519604**, commit **3ced0b2646340f35383fb0eb3ab9ad79f69a692b**.
+
+The protocol uses independent unit-norm Gaussian keys, memory sizes 3–256, dimensions 4/8/16/32, isotropic query-noise sigma 0–0.8, 100,000 trials per condition, and five seeds. Under the registered isotropic Gaussian model, raw-dot argmax is the maximum-likelihood/Bayes ranking reference; a learned scorer therefore must be non-inferior to it rather than being required to beat it.
+
+At d=16 and sigma=0.8, measured mean retrieval accuracy is 0.697558, 0.454918, 0.319596, 0.215862, 0.140910, 0.088952 and 0.054438 for M = 3, 8, 16, 32, 64, 128 and 256 respectively.
+
+This establishes the reference channel-capacity/robustness curve for random-key associative retrieval. It does **not** establish semantic addressing, learned content addressing, multimodal understanding, or any PLM capability result.
+
+
+## C19 20-seed robustness extension — recurrent XOR/XNOR symmetry instability
+
+**STATUS: VALID ROBUSTNESS EXTENSION; C19 ORIGINAL DECISION UNCHANGED**
+
+**REQUIRED EVIDENCE:** `TACOSM-PLM-LATENT-OPERATOR-020SEED`, workflow runs **37633578443** and **37633319520**, latest artifact **11489055422**, measured commit **9142e9e3e0e15bfa0d346cf52b830efddf20f19a**.
+
+The latest successful artifact reproduces the robustness pattern under the hardened training-count gate: every seed records exactly 28,800 q2 training samples; train/evaluation semantic overlap is zero for all 20 seeds; all 20 evaluation fingerprints are distinct; and the frozen C19 benchmark Git blob is `a16f73...`.
+
+Across 20 seeds, operator-selection accuracy is **0.9375 mean**, with **5/20 seeds** below perfect selection. The affected seeds are **3, 7, 14, 17, 18**. Seeds 3 and 17 fail on XNOR; seeds 7, 14 and 18 fail on XOR. The aggregate confusion matrix contains only two off-diagonal classes: **300 XNOR→XOR** and **450 XOR→XNOR** over 3,000 episodes per operator. AND and OR remain at 100% selection.
+
+Held-out q2 accuracy is **0.93275 mean** and **0.71167 minimum**. The mean lift over the registered no-memory reference 0.625 is **+0.30775**. Oracle-operator q2 is **0.98233**, leaving a mean **0.04958** oracle gap. No-memory q2 is **0.62692**.
+
+These observations establish recurrent seed-dependent **XOR/XNOR symmetry instability** in this fixed primitive library. They do not establish intrinsic difficulty of XNOR, intrinsic difficulty of XOR, or open-ended operator synthesis.
+
+
+## Temporal-dependency pilot 001 — no scientific result
+
+The v1 temporal-dependency lane is currently **instrument-invalid**. Confirmatory run **37633578402** passed contract and focused tests but aborted during measurement because the generated training and evaluation episode keys overlapped. This is an integrity failure, not a negative capability result. Earlier v1 attempts also failed on harness defects. The lane is therefore not used to infer whether temporal carry is useful.
+
+The admissible persistence attribution experiment is `TACOSM-PLM-TEMPORAL-PERSISTENCE-002`, which separates the q1 and q2 entities so the q1 action cannot access the q2 secret.
