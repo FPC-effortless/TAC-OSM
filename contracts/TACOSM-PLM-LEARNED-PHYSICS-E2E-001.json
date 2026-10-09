@@ -1,0 +1,209 @@
+{
+  "experiment_id": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
+  "version": 5,
+  "status": "pre-registered",
+  "title": "Fully learned multimodal physical control with optional physics-law prior",
+  "question": "Can a fully learned multimodal persistent controller infer hidden motion from history and choose the correct control action, and does adding only physical-law priors improve that capability?",
+  "hypothesis": "A learned temporal state should infer history-dependent motion and solve the control task. A conservation/kinematics prior may improve generalization without encoding task-specific addressing or operator logic.",
+  "primary_endpoint": {
+    "name": "physics_prior_action_accuracy",
+    "unit": "episode",
+    "threshold": 0.7,
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_pool_per_action": 100,
+    "train_steps": 400,
+    "batch_size": 64,
+    "hidden_dim": 64,
+    "action_count": 5,
+    "history_length": 6,
+    "horizon": 6,
+    "dt": 0.08,
+    "physics_loss_weight": 0.05,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "model_selection": "none",
+    "device": "cpu",
+    "benchmark_generator_version": "learned-physics-e2e-v2-no-object-order-audio"
+  },
+  "arms": [
+    {
+      "name": "learned_data_only",
+      "intervention": "fully learned multimodal recurrent controller trained only with action cross-entropy",
+      "acts_on": "learning objective"
+    },
+    {
+      "name": "learned_physics_prior",
+      "intervention": "same fully learned controller with a preregistered physical-law regularizer",
+      "acts_on": "learning objective"
+    }
+  ],
+  "held_constant": [
+    "same architecture and parameter count",
+    "same seeds and training episode pools",
+    "same optimizer and training steps",
+    "same evaluation episodes within each seed",
+    "same action interface and environment",
+    "no explicit entity identifiers",
+    "no fixed Boolean or operator table",
+    "no hand-coded address or retrieval function",
+    "no state or action labels in modalities",
+    "no post-run checkpoint, seed, hyperparameter, or metric selection"
+  ],
+  "physics_prior": {
+    "allowed_information": [
+      "Hamilton's canonical equations dq/dt = dH/dp and dp/dt = -dH/dq",
+      "conservation of the learned Hamiltonian H on passive observation intervals"
+    ],
+    "forbidden_information": [
+      "particle count or object slots",
+      "masses, positions, velocities, or other physical-state labels",
+      "optimal action or target action index",
+      "future reward",
+      "entity identifier",
+      "episode identity",
+      "test outcomes"
+    ]
+  },
+  "leakage_rules": [
+    "training and evaluation episode keys are disjoint for every seed and arm",
+    "evaluation fingerprints are distinct across seeds",
+    "both arms receive identical evaluation episodes within a seed",
+    "current image contains positions only",
+    "current audio contains speed magnitude only",
+    "goal text contains no action label",
+    "no physical state ground truth is passed to the model",
+    "physics loss is computed only from the model's own predicted state trajectory"
+  ],
+  "primary_end_to_end_gate": {
+    "mean_accuracy_minimum": 0.7,
+    "seed_accuracy_minimum": 0.55,
+    "history_pair_exact_accuracy_minimum": 0.7,
+    "description": "A positive fully learned result requires the model to solve held-out action selection and discriminate matched-history pairs with identical current multimodal observations."
+  },
+  "physics_prior_benefit_endpoint": {
+    "name": "physics_prior_minus_data_only_accuracy",
+    "materiality_threshold": 0.05,
+    "hierarchical_paired_bootstrap_lower_bound": 0
+  },
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass; physics-prior mean accuracy >= 0.70; every seed >= 0.55; history-pair exact accuracy >= 0.70",
+      "licenses": "bounded evidence of a fully learned end-to-end multimodal physical-control capability on the registered benchmark",
+      "does_not_license": "real-world multimodal competence, general physical reasoning, general memory, learned semantic addressing, or scaling"
+    },
+    {
+      "condition": "all integrity gates pass and physics-prior-minus-data-only delta >= 0.05 with bootstrap lower bound > 0",
+      "licenses": "bounded evidence that the registered physical-law prior improves this learned end-to-end task",
+      "does_not_license": "a universal benefit from physics priors"
+    },
+    {
+      "condition": "integrity passes but end-to-end gate fails",
+      "licenses": "the current fully learned model is not yet a demonstrated end-to-end solution on this benchmark",
+      "does_not_license": "architecture impossibility"
+    },
+    {
+      "condition": "any integrity or provenance gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "architectural inference"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "physics_prior_action_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "data_only_action_accuracy",
+      "role": "control",
+      "primary": false
+    },
+    {
+      "name": "physics_prior_delta",
+      "role": "primary attribution",
+      "primary": false
+    },
+    {
+      "name": "history_pair_exact_accuracy",
+      "role": "history-use diagnostic",
+      "primary": false
+    },
+    {
+      "name": "heldout_action_margin",
+      "role": "difficulty diagnostic",
+      "primary": false
+    },
+    {
+      "name": "physics_loss",
+      "role": "prior adherence diagnostic",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "benchmark identity",
+    "modality leakage and answer exclusion",
+    "train/evaluation disjointness and fingerprints",
+    "model parameter equality",
+    "fully learned action accuracy",
+    "matched-history action discrimination",
+    "physics-prior effect",
+    "claim boundary"
+  ],
+  "h_levels": [
+    6
+  ],
+  "steps": 400,
+  "eval_steps": 600,
+  "amendments": [
+    {
+      "id": "A1",
+      "applies_to": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
+      "old_definition": "Before this amendment: Construct audit found that the first implementation allowed the action head to bypass the predicted physical-state pathway, so the physics-law prior was not guaranteed to regularize the representation used for action selection.",
+      "new_definition": "The learned action head now consumes the final predicted physical state directly, and a focused gradient gate verifies nonzero action dependence on that state.",
+      "rationale": "Construct audit found that the first implementation allowed the action head to bypass the predicted physical-state pathway, so the physics-law prior was not guaranteed to regularize the representation used for action selection.",
+      "discovered": "pre-measurement",
+      "affected": "benchmark generator and held-out evaluation protocol; train/evaluation split rules; seeds; optimizer and training budget; physics-law prior definition; primary and attribution decision rules",
+      "no_result_under_previous_version": "instrument-invalid before measurement; no result or artifact from this run may be interpreted or cited"
+    },
+    {
+      "id": "A2",
+      "applies_to": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
+      "old_definition": "Before this amendment: The first corrected model encoded an 8-dimensional two-particle physical-state head, which is a task-specific physical ontology rather than only a physical-law prior.",
+      "new_definition": "Replace the explicit two-particle state head with a generic learned canonical latent and a learned scalar Hamiltonian; regularize that latent only with Hamilton's equations and Hamiltonian conservation.",
+      "rationale": "The first corrected model encoded an 8-dimensional two-particle physical-state head, which is a task-specific physical ontology rather than only a physical-law prior.",
+      "discovered": "pre-measurement construct correction",
+      "affected": "benchmark generator and held-out evaluation protocol; train/evaluation split rules; seeds; optimizer and training budget; end-to-end and physics-prior benefit thresholds; no entity/operator/addressing scaffolds",
+      "no_result_under_previous_version": "instrument-invalid before a valid confirmatory artifact; no result from either run may be interpreted or cited"
+    },
+    {
+      "id": "A3",
+      "applies_to": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
+      "old_definition": "Before this amendment: Deterministic audio used a fixed particle-index phase offset, creating an unnecessary object-order sensor channel.",
+      "new_definition": "Deterministic audio is now permutation-invariant to particle order; the benchmark generator version is pinned to learned-physics-e2e-v2-no-object-order-audio.",
+      "rationale": "Deterministic audio used a fixed particle-index phase offset, creating an unnecessary object-order sensor channel.",
+      "discovered": "pre-measurement benchmark integrity correction",
+      "affected": "model architecture; Hamiltonian-only physics prior; held-out evaluation protocol; seeds; optimizer and training budget; decision rules",
+      "no_result_under_previous_version": "instrument correction before admissible measurement"
+    },
+    {
+      "id": "A4",
+      "applies_to": "TACOSM-PLM-LEARNED-PHYSICS-E2E-001",
+      "old_definition": "Before this amendment: The generic canonical latent was still auxiliary to the action head, so a physics-prior update could in principle affect only a side branch.",
+      "new_definition": "The action head now consumes the final generic canonical latent directly; a focused gradient test verifies nonzero action dependence.",
+      "rationale": "The generic canonical latent was still auxiliary to the action head, so a physics-prior update could in principle affect only a side branch.",
+      "discovered": "pre-measurement causal-boundary correction",
+      "affected": "benchmark generator; Hamiltonian-only prior; held-out protocol; seeds; optimizer and training budget; decision rules",
+      "no_result_under_previous_version": "instrument correction before admissible measurement"
+    }
+  ]
+}

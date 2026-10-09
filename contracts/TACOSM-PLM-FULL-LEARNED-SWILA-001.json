@@ -1,0 +1,288 @@
+{
+  "experiment_id": "TACOSM-PLM-FULL-LEARNED-SWILA-001",
+  "version": 7,
+  "status": "pre-registered",
+  "title": "Full learned multimodal PLM with SwiLA-derived multi-timescale persistent state",
+  "question": "Can the full PLM computational loop learn multimodal representation, persistent multi-timescale state, relevance routing, structural computation, action, verification, repair, and verified state update end to end?",
+  "primary_endpoint": {
+    "name": "full_plm_gate",
+    "unit": "episode",
+    "thresholds": {
+      "mean_action_accuracy": 0.7,
+      "minimum_seed_action_accuracy": 0.55,
+      "mean_history_pair_exact": 0.7,
+      "mean_closed_loop_success": 0.7
+    },
+    "selection": "none"
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "protocol": {
+    "train_per_action": 72,
+    "eval_per_action": 36,
+    "history_pairs": 80,
+    "train_steps": 220,
+    "batch_size": 8,
+    "history_length": 8,
+    "action_count": 5,
+    "d_model": 96,
+    "num_heads": 4,
+    "num_experts": 6,
+    "timescale_partition": {
+      "fast": 2,
+      "medium": 2,
+      "slow": 2
+    },
+    "cdl_top_k": 2,
+    "casm_operators": 4,
+    "casm_depth": 3,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "model_selection": "none",
+    "casm_top_k": 1,
+    "mtsk_input_dependent_decay": true
+  },
+  "architecture": {
+    "representation": "learned text convolutional encoder + learned spatial image encoder + learned temporal-frequency audio encoder + multimodal fusion",
+    "persistent_state": "SwiLA-derived mixture of linear regressors with fast/medium/slow retention bands, temporal responsibilities, learned input-dependent decay, and verified experience writes",
+    "cdl": "learned sparse routing over persistent expert views",
+    "casm": "learned structural workspace plus learned operator bank with top-k sparse operator routing and adaptive halting; no fixed semantic operators",
+    "osm": "learned action-conditioned latent transition predictor and learned Hamiltonian energy",
+    "action": "learned policy/planner combining CASM state with action-conditioned OSM predictions",
+    "verifier": "learned verifier of pre/post learned state plus continuous post-action outcome evidence; binary success is not an input",
+    "repair": "learned repair action proposal executed after verifier rejection",
+    "state_update": "persistent write gated by verifier; hard gate at inference, differentiable verifier probability during training"
+  },
+  "swiLA_boundary": {
+    "source": "arXiv:2609.39034, Switching Linear Attention",
+    "use": "candidate recurrent state kernel and MTSK mechanism",
+    "adaptation": [
+      "fixed recurrent mixture state",
+      "prediction-error responsibility weighting",
+      "online delta-style state update",
+      "query-side expert blending",
+      "temporal/sticky responsibilities",
+      "multi-timescale decay and update bands"
+    ],
+    "not_claimed": [
+      "PLM is SwiLA",
+      "SwiLA evidence transfers as PLM evidence",
+      "the MTSK mapping is established without a PLM experiment"
+    ]
+  },
+  "physics_prior": {
+    "allowed_information": [
+      "Hamilton canonical equations dq/dt=dH/dp and dp/dt=-dH/dq",
+      "conservation of a learned Hamiltonian on passive intervals"
+    ],
+    "forbidden_information": [
+      "particle count",
+      "object or entity identifiers",
+      "hand-coded physical state variables",
+      "target action as model input",
+      "optimal action lookup",
+      "fixed operator semantics",
+      "hard-coded retrieval/addressing",
+      "future reward or test outcome"
+    ]
+  },
+  "benchmark_integrity": {
+    "hidden_state": "used only by environment generator and outcome computation",
+    "image": "positions only",
+    "audio": "permutation-invariant speed-dependent signal",
+    "text": "goal coordinates only",
+    "history_pairs": "same current multimodal observation but different preceding histories and different optimal action",
+    "train_eval_overlap": 0,
+    "cross_seed_train_overlap": 0,
+    "cross_seed_eval_overlap": 0,
+    "history_pair_train_overlap": 0,
+    "history_pair_eval_overlap": 0,
+    "cross_seed_pair_overlap": 0,
+    "evaluation_reuse_between_arms": "not applicable; this is a single integrated construction run",
+    "post_run_selection": "forbidden",
+    "model_outcome_input": "continuous post-action distance-to-goal evidence; binary success never enters model",
+    "repair_execution": "failed first action may trigger one learned repair action applied to the resulting environment state",
+    "benchmark_git_blob_sha": "42cd765194492a06bc2180bf2c9462c973ab73d6",
+    "generator_hash_rule": "SHA-256 of benchmark generator file bytes"
+  },
+  "decision_rule": [
+    {
+      "condition": "all integrity gates pass and mean action accuracy >= 0.70; every seed >= 0.55; mean history-pair exact >= 0.70; mean closed-loop success >= 0.70",
+      "licenses": "bounded evidence that the integrated full learned PLM is functional, including executable verification/repair/state-update behavior, on the registered multimodal physical-control benchmark",
+      "does_not_license": "ablation causality, real-world competence, general intelligence, or asymptotic scaling"
+    },
+    {
+      "condition": "integrity passes but one or more full-PLM capability thresholds fails",
+      "licenses": "the integrated PLM construction is not yet demonstrated on the registered benchmark",
+      "does_not_license": "architectural impossibility"
+    },
+    {
+      "condition": "any integrity/provenance gate fails",
+      "licenses": "instrument diagnosis only",
+      "does_not_license": "architectural inference"
+    }
+  ],
+  "ablation_policy": {
+    "run_only_after": "full_plm_gate=true with all integrity gates passing",
+    "method": "one architecture with controlled mechanism switches",
+    "primary_question": "causal responsibility of persistence, CDL, CASM, OSM, verifier, repair, and plasticity within the integrated model"
+  },
+  "amendments": [
+    {
+      "id": "A1",
+      "before_measurement": true,
+      "change": "Verifier receives continuous post-action outcome evidence plus learned pre/post representations; binary success is external supervision only and never a model input.",
+      "old_definition": "Verifier originally received a simpler signal definition that did not explicitly bind it to continuous post-action consequence evidence.",
+      "new_definition": "Verifier receives continuous post-action distance-to-goal outcome evidence plus learned pre/post representations; binary success remains external supervision only and never enters the model.",
+      "rationale": "Close the verifier information boundary so the model can use observable consequence without receiving the benchmark's binary answer label.",
+      "discovered": "pre-measurement",
+      "affected": "verifier input schema and training target boundary",
+      "no_result_under_previous_version": "instrument correction before admissible measurement",
+      "applies_to": "TACOSM-PLM-FULL-LEARNED-SWILA-001"
+    },
+    {
+      "id": "A2",
+      "before_measurement": true,
+      "change": "Learned repair is executed as a second environment action after a failed first action; closed-loop success is added to the primary full-PLM gate.",
+      "old_definition": "Repair was initially specified as a learned proposal but was not yet required to be executed in the environment after a failed first action.",
+      "new_definition": "A failed first action may trigger one learned repair action, which is executed from the resulting environment state; closed-loop success is a primary capability gate component.",
+      "rationale": "The full PLM claim includes action, outcome, verification, and repair, so repair must be executable rather than a non-operative prediction head.",
+      "discovered": "pre-measurement",
+      "affected": "training/evaluation loop and primary gate",
+      "no_result_under_previous_version": "instrument correction before admissible measurement",
+      "applies_to": "TACOSM-PLM-FULL-LEARNED-SWILA-001"
+    },
+    {
+      "id": "A3",
+      "before_measurement": true,
+      "change": "Benchmark generator hash is computed directly from its source file bytes; the generator provenance test asserts this identity.",
+      "old_definition": "Benchmark generator provenance was represented by a source hash rule that was not yet regression-tested against the actual file bytes.",
+      "new_definition": "Benchmark generator provenance is the SHA-256 of the benchmark generator file bytes, with a focused regression test asserting the identity.",
+      "rationale": "Prevent silent benchmark-generator drift between the pinned experiment design and the executed benchmark.",
+      "discovered": "pre-measurement",
+      "affected": "benchmark provenance check only; no semantic benchmark rule change",
+      "no_result_under_previous_version": "instrument correction before admissible measurement",
+      "applies_to": "TACOSM-PLM-FULL-LEARNED-SWILA-001"
+    },
+    {
+      "id": "A4",
+      "before_measurement": true,
+      "change": "CASM execution is top-k sparse at runtime (casm_top_k=1) rather than evaluating the complete learned operator bank; MTSK retention combines learned fast/medium/slow base decay with an input-dependent retention gate.",
+      "old_definition": "CASM could evaluate the complete learned operator bank and MTSK decay was not yet explicitly input-dependent.",
+      "new_definition": "CASM executes only the registered top-k=1 routed operators at runtime, and MTSK combines fixed fast/medium/slow base retention with a learned input-dependent retention gate.",
+      "rationale": "Make selective computation and adaptive persistence part of the actual executable model rather than descriptive intent.",
+      "discovered": "pre-measurement",
+      "affected": "CASM runtime sparsity and MTSK dynamics",
+      "no_result_under_previous_version": "instrument correction before admissible measurement",
+      "applies_to": "TACOSM-PLM-FULL-LEARNED-SWILA-001"
+    },
+    {
+      "id": "A5",
+      "before_measurement": true,
+      "change": "Integrity is extended from within-seed train/eval overlap to pairwise cross-seed train/eval overlap and contamination checks between the held-out history-pair set and all train/eval pools, plus cross-seed history-pair overlap.",
+      "old_definition": "Integrity initially checked only within-seed train/evaluation disjointness.",
+      "new_definition": "Integrity also requires zero cross-seed train overlap, cross-seed evaluation overlap, history-pair contamination with all train/evaluation pools, and cross-seed history-pair overlap.",
+      "rationale": "Prevent repeated benchmark instances across independent seeds or leakage of held-out history-pair examples into training/evaluation pools.",
+      "discovered": "pre-measurement",
+      "affected": "integrity gate and artifact schema",
+      "no_result_under_previous_version": "instrument correction before admissible measurement",
+      "applies_to": "TACOSM-PLM-FULL-LEARNED-SWILA-001"
+    },
+    {
+      "id": "A6",
+      "applies_to": "TACOSM-PLM-FULL-LEARNED-SWILA-001",
+      "old_definition": "The benchmark Git blob pin referenced the generator before a lint-only unused-import removal.",
+      "new_definition": "The benchmark Git blob pin is refreshed to the exact post-lint generator blob 42cd765194492a06bc2180bf2c9462c973ab73d6; generator semantics and episode construction are unchanged.",
+      "rationale": "A provenance pin must identify the exact bytes that the measured run imports, even for a non-semantic source edit.",
+      "discovered": "pre-measurement",
+      "affected": "benchmark provenance pin only",
+      "no_result_under_previous_version": "no measurement was run under the stale byte-level provenance pin"
+    },
+    {
+      "id": "A7",
+      "applies_to": "TACOSM-PLM-FULL-LEARNED-SWILA-001",
+      "old_definition": "The physics-prior implementation requested autograd derivatives with respect to q and p view tensors produced by chunking the canonical latent, which PyTorch rejected as unused graph inputs during the first attempted full measurement.",
+      "new_definition": "The physics-prior implementation differentiates the learned Hamiltonian with respect to the full canonical latent and then splits that gradient into q and p components.",
+      "rationale": "Correct the executable implementation of the preregistered Hamiltonian prior without changing the allowed information, benchmark, training schedule, optimizer, or decision rule.",
+      "discovered": "during first attempted full measurement; before any valid result artifact",
+      "affected": "physics-prior loss implementation only",
+      "no_result_under_previous_version": "the failed run terminated before any result artifact and is invalid for scientific interpretation"
+    }
+  ],
+  "hypothesis": "A single fully learned multimodal PLM with persistent multi-timescale state, learned relevance routing, learned structural computation, action-conditioned OSM planning, learned verification, learned repair, and verifier-gated state update should learn the registered held-out physical-control task without task-specific operator, addressing, or state-ontology scaffolds.",
+  "arms": [
+    {
+      "name": "full_plm",
+      "intervention": "full integrated learned PLM path with all preregistered components enabled",
+      "acts_on": "integrated architecture"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "full_plm_gate",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "action_accuracy",
+      "role": "primary capability component",
+      "primary": false
+    },
+    {
+      "name": "history_pair_exact",
+      "role": "persistence/history diagnostic",
+      "primary": false
+    },
+    {
+      "name": "closed_loop_success",
+      "role": "verification/repair diagnostic",
+      "primary": false
+    },
+    {
+      "name": "first_action_success",
+      "role": "environment-action diagnostic",
+      "primary": false
+    },
+    {
+      "name": "repair_success_conditional",
+      "role": "repair diagnostic",
+      "primary": false
+    },
+    {
+      "name": "verifier_probability",
+      "role": "verification diagnostic",
+      "primary": false
+    }
+  ],
+  "interpretation_order": [
+    "benchmark identity and generator provenance",
+    "modality leakage and privileged-information audit",
+    "train/evaluation and cross-seed disjointness",
+    "multimodal held-out action accuracy",
+    "matched-history action discrimination",
+    "closed-loop action-verification-repair outcome",
+    "persistent verified state-update path",
+    "claim boundary"
+  ],
+  "h_levels": [
+    8
+  ],
+  "steps": 220,
+  "eval_steps": 180,
+  "held_constant": [
+    "same multimodal observation schema and synthetic environment",
+    "same five registered seeds",
+    "same training/evaluation pool sizes and 220 training steps",
+    "same model width, head count, expert count, CDL top-k, CASM operator count/depth, and sparse CASM top-k",
+    "same AdamW optimizer, learning rate, and weight decay",
+    "no post-run checkpoint, seed, hyperparameter, or metric selection",
+    "no entity identifiers, target action input, physical-state labels, fixed operator semantics, or hard-coded retrieval/addressing",
+    "only Hamilton canonical equations and learned-Hamiltonian conservation are privileged physical-law priors"
+  ]
+}
