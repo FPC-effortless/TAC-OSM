@@ -1,0 +1,83 @@
+name: Research PLM learned addressing 003
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/TACOSM-PLM-LEARNED-ADDRESS-003.json"
+      - "scripts/run_plm_learned_address_003.py"
+      - "scripts/validate_plm_learned_address_003.py"
+      - "tests/test_learned_address_003.py"
+      - "docs/TACOSM-PLM-LEARNED-ADDRESS-003.md"
+      - ".github/workflows/plm-learned-address-003.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: |
+          python -m pip install --quiet --upgrade pip
+          python -m pip install --quiet -e . pytest torch numpy==2.3.3 ruff==0.13.0
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          from tac_osm.contract import load_contract
+          c=load_contract("TACOSM-PLM-LEARNED-ADDRESS-003")
+          assert c.check_consistency()==[], c.check_consistency()
+          assert c.status=="pre-registered"
+          assert c.seeds==tuple(range(10))
+          assert c.steps==750 and c.eval_steps==10000
+          assert c.h_levels==(3,8,16,32,64,128,256)
+          assert len(c.arms)==6
+          print("PASS: pre-registered contract")
+          PY
+      - name: Focused tests
+        run: python -m pytest -q tests/test_learned_address_003.py
+      - name: Static lint
+        run: |
+          python -m ruff check \
+            scripts/run_plm_learned_address_003.py \
+            scripts/validate_plm_learned_address_003.py \
+            tests/test_learned_address_003.py
+
+  measurement:
+    needs: integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: python -m pip install --quiet -e . torch numpy==2.3.3
+      - name: Mixed-channel confirmatory measurement
+        env:
+          GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          PYTHONHASHSEED: "0"
+          OMP_NUM_THREADS: "2"
+          MKL_NUM_THREADS: "2"
+        run: python scripts/run_plm_learned_address_003.py
+      - name: Independent artifact validator
+        run: python scripts/validate_plm_learned_address_003.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: TACOSM-PLM-LEARNED-ADDRESS-003
+          path: artifacts/TACOSM-PLM-LEARNED-ADDRESS-003.json
+          if-no-files-found: warn
