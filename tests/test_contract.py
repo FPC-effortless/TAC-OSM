@@ -138,7 +138,10 @@ def test_every_contract_pins_its_levels_and_seeds():
             f"{experiment_id}: fewer than 3 seeds cannot estimate the spread "
             "the materiality threshold is built from"
         )
-        assert contract.steps > 0 and contract.eval_steps > 0, experiment_id
+        assert contract.eval_steps > 0, experiment_id
+        assert contract.steps > 0 or (
+            contract.steps == 0 and contract.h_levels == (0,)
+        ), experiment_id
 
 
 def test_each_decision_branch_commits_a_consequence():

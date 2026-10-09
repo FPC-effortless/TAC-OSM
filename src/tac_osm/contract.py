@@ -599,8 +599,9 @@ class ExperimentContract:
             problems.append(
                 f"{self.experiment_id}: h_levels is not strictly increasing"
             )
-        if self.steps <= 0:
-            problems.append(f"{self.experiment_id}: steps must be positive")
+        eval_only_zero_step = self.steps == 0 and self.h_levels == (0,) and self.eval_steps > 0
+        if self.steps < 0 or (self.steps == 0 and not eval_only_zero_step):
+            problems.append(f"{self.experiment_id}: steps must be positive unless this is an evaluation-only h=0 characterization")
         if self.eval_steps <= 0:
             problems.append(f"{self.experiment_id}: eval_steps must be positive")
 

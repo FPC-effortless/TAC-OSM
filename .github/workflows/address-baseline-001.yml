@@ -1,0 +1,55 @@
+name: Research random-key addressing baseline 001
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "contracts/TACOSM-ADDRESS-BASELINE-001.json"
+      - "scripts/run_address_baseline_001.py"
+      - ".github/workflows/address-baseline-001.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install
+        run: python -m pip install --quiet --upgrade pip numpy==2.3.3
+      - name: Contract gate
+        run: |
+          python - <<'PY'
+          import json
+          c=json.load(open("contracts/TACOSM-ADDRESS-BASELINE-001.json"))
+          assert c["status"]=="pre-registered"
+          assert c["protocol"]["primary_dimension"]==16
+          print("PASS")
+          PY
+      - name: Measurement
+        run: python scripts/run_address_baseline_001.py
+      - name: Validate
+        run: |
+          python - <<'PY'
+          import json
+          a=json.load(open("artifacts/TACOSM-ADDRESS-BASELINE-001.json"))
+          assert a["status"]=="measured"
+          assert len(a["rows"])==4*7*6
+          assert len(a["primary_d16_capacity"])==7*6
+          print("PASS: baseline")
+          PY
+      - name: Upload artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: TACOSM-ADDRESS-BASELINE-001
+          path: artifacts/TACOSM-ADDRESS-BASELINE-001.json
+          if-no-files-found: error

@@ -1,0 +1,128 @@
+{
+  "experiment_id": "TACOSM-ADDRESS-BASELINE-001",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Random-key addressing Bayes and capacity baseline",
+  "question": "How does exact and corrupted random-key retrieval behave as address dimension, memory size, and query noise vary?",
+  "purpose": "Mechanism-level baseline required before interpreting a learned-address PLM result.",
+  "protocol": {
+    "address_dimensions": [
+      4,
+      8,
+      16,
+      32
+    ],
+    "primary_dimension": 16,
+    "memory_sizes": [
+      3,
+      8,
+      16,
+      32,
+      64,
+      128,
+      256
+    ],
+    "gaussian_query_noise_sigmas": [
+      0,
+      0.05,
+      0.1,
+      0.2,
+      0.4,
+      0.8
+    ],
+    "trials_per_condition": 100000,
+    "key_distribution": "independent standard Gaussian vectors normalized to unit norm",
+    "query": "target unit key plus isotropic Gaussian noise",
+    "scorer": "argmax raw dot product between query and stored unit keys",
+    "target_sampling": "uniform over memory slots",
+    "random_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "model_selection": "none"
+  },
+  "mathematical_status": "For fixed unit-norm stored keys and isotropic Gaussian query noise, maximizing q·k is the maximum-likelihood/Bayes ranking rule under the registered generative model. The baseline is therefore an optimal reference, not an opponent the learned scorer should be expected to beat.",
+  "endpoints": [
+    {
+      "name": "raw_dot_top1_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "capacity_curve_at_d16",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "dimension_curve",
+      "role": "secondary",
+      "primary": false
+    },
+    {
+      "name": "accuracy_vs_noise",
+      "role": "secondary",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "baseline characterization only",
+      "licenses": "Descriptive raw-dot reference for the registered random-key retrieval distribution.",
+      "does_not_license": "Any PLM capability, semantic addressing, or learned-address claim."
+    },
+    {
+      "condition": "a later learned scorer is non-inferior to raw dot within 0.02 on the isotropic Gaussian grid",
+      "licenses": "The later scorer passes the preregistered isotropic non-inferiority criterion.",
+      "does_not_license": "Evidence that the learned scorer is superior to Bayes-optimal raw-dot ranking under the isotropic model."
+    },
+    {
+      "condition": "a learned scorer is required to beat raw dot on the isotropic grid",
+      "licenses": "Nothing; such a requirement contradicts the registered Bayes reference.",
+      "does_not_license": "Any claim that raw-dot non-inferiority is insufficient under the registered isotropic generative assumptions."
+    }
+  ],
+  "claim_boundary": [
+    "random-key associative addressing only",
+    "no content or semantic addressing claim",
+    "no multimodal understanding claim",
+    "no PLM capability claim"
+  ],
+  "hypothesis": "Raw dot-product argmax will provide the reference retrieval curve for random unit keys under isotropic Gaussian query noise, with performance determined by address dimension, memory size, and noise.",
+  "arms": [
+    {
+      "name": "raw_dot_baseline",
+      "intervention": "argmax q·k over stored unit keys",
+      "acts_on": "random-key retrieval"
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 0,
+  "eval_steps": 100000,
+  "h_levels": [
+    0
+  ],
+  "interpretation_order": [
+    "contract and parameter freeze",
+    "raw-dot rule identity",
+    "d=16 M-capacity curve",
+    "dimension curve",
+    "noise curve",
+    "claim boundary"
+  ],
+  "held_constant": [
+    "registered key distribution and isotropic Gaussian query model",
+    "address dimensions, memory sizes, noise grid, and trial count",
+    "uniform target-slot sampling",
+    "raw-dot scoring rule and no model selection",
+    "five registered random seeds"
+  ]
+}
