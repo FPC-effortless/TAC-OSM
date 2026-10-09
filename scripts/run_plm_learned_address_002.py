@@ -16,9 +16,9 @@ import torch.nn.functional as F
 
 ROOT = Path(__file__).resolve().parents[1]
 
-from tac_osm.contract import load_contract
-from tac_osm.learned_address_002 import LearnedAddressMetric002
-from tac_osm.learned_address_002_benchmark import (
+from tac_osm.contract import load_contract  # noqa: E402
+from tac_osm.learned_address_002 import LearnedAddressMetric002  # noqa: E402
+from tac_osm.learned_address_002_benchmark import (  # noqa: E402
     ADDRESS_DIM,
     ISOTROPIC_SIGMAS,
     MEMORY_SIZES,
