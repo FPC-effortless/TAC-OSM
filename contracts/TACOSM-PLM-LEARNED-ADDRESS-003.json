@@ -1,0 +1,227 @@
+{
+  "experiment_id": "TACOSM-PLM-LEARNED-ADDRESS-003",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Condition-blind mixed-channel learned addressing without isotropic collapse",
+  "question": "Can a condition-blind learned associative key scorer regain isotropic raw-dot calibration and retain positive structured-channel gain when trained on a fixed mixed-corruption stream?",
+  "hypothesis": "A fixed 50:50 isotropic/structured training mixture can keep mean isotropic learned-minus-raw accuracy >=-0.02 and structured high-noise M32 gain >=+0.03 without an inference-time channel identifier.",
+  "relation_to_prior": "New follow-up to TACOSM-PLM-LEARNED-ADDRESS-002, whose measured structured-only scorer failed isotropic noninferiority; no changes to earlier contract or result.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "steps": 750,
+  "eval_steps": 10000,
+  "h_levels": [
+    3,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256
+  ],
+  "protocol": {
+    "address_dim": 16,
+    "memory_sizes": [
+      3,
+      8,
+      16,
+      32,
+      64,
+      128,
+      256
+    ],
+    "isotropic_sigmas": [
+      0,
+      0.05,
+      0.1,
+      0.2,
+      0.4,
+      0.8
+    ],
+    "structured_sigmas": [
+      0,
+      0.05,
+      0.1,
+      0.2,
+      0.4
+    ],
+    "high_noise_M": 32,
+    "high_noise_sigmas": [
+      0.2,
+      0.4
+    ],
+    "train_steps_per_learned_arm": 750,
+    "train_batch": 512,
+    "train_memory": 32,
+    "train_sigmas": [
+      0.2,
+      0.4
+    ],
+    "training_channel_schedule": "structured-only arm structured every step; mixed arm alternates structured (even steps) and isotropic (odd steps); sigma=.2 for steps%4 in [0,1] else .4",
+    "initialization": "both learned scorers independently initialized identically via the same torch seed: 16D bilinear identity query/key and zero-output candidate-key bias",
+    "architecture": "frozen LearnedAddressMetric002, no model changes, no channel label, no raw-dot bypass",
+    "optimizer": "AdamW",
+    "lr": 0.01,
+    "weight_decay": 0.0001,
+    "gradient_clip": 5,
+    "training_rng_namespace": 1900000,
+    "evaluation_rng_namespace": 8300000,
+    "seed_stride": 10007,
+    "eval_seed_stride": 1000003,
+    "evaluation_batch": 2000,
+    "evaluation_trials_per_condition": 10000,
+    "evaluation_conditions_per_seed": 77,
+    "condition_blind_model_inputs": [
+      "query",
+      "keys"
+    ],
+    "model_selection": "none",
+    "raw_dot_reference": "rank cosine-normalized query versus unit keys with dot product",
+    "evaluation_dataset_shared_across_arms": true,
+    "structured_diagonal": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "benchmark": {
+    "base_generator": "src/tac_osm/learned_address_002_benchmark.py",
+    "generator_semantics": "unchanged from 002; held-out RNG namespace differs from 002",
+    "opaque_independent_payload": true,
+    "target_slot_balanced": true,
+    "model_receives_channel_label": false
+  },
+  "thresholds": {
+    "mixed_isotropic_learned_minus_raw_mean_min": -0.02,
+    "mixed_structured_M32_high_noise_gain_mean_min": 0.03,
+    "bootstrap_rounds": 4000
+  },
+  "arms": [
+    {
+      "name": "structured_only",
+      "intervention": "original 002 architecture, 750 training steps on structured channel at sigma=.2,.4 only; retrained for each seed",
+      "acts_on": "single-channel training distribution reference"
+    },
+    {
+      "name": "mixed_unlabeled",
+      "intervention": "identical architecture, seed, steps, optimizer, batch budget, 50:50 structured/isotropic training with no channel indicator to scorer",
+      "acts_on": "unlabeled mixed-channel training distribution"
+    },
+    {
+      "name": "raw_dot",
+      "intervention": "untrained dot-product Bayes reference evaluated on identical keys/queries for each condition",
+      "acts_on": "registered isotropic reference"
+    },
+    {
+      "name": "oracle_target_key",
+      "intervention": "evaluate the correctly selected key as an exact query for both learned models; no oracle during training",
+      "acts_on": "key-scoring representability"
+    },
+    {
+      "name": "wrong_key_query",
+      "intervention": "query equals a non-target stored key, evaluation-only corrupted-query control for both models",
+      "acts_on": "leakage and wrong-key discrimination"
+    },
+    {
+      "name": "slot_permutation",
+      "intervention": "permute stored key positions and corresponding labels, evaluate both learned scorers",
+      "acts_on": "slot-order invariance"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "mixed_isotropic_noninferiority",
+      "role": "joint primary",
+      "primary": true
+    },
+    {
+      "name": "mixed_structured_high_noise_M32_gain",
+      "role": "joint primary complementary",
+      "primary": false
+    },
+    {
+      "name": "structured_only_isotropic_and_structured_curves",
+      "role": "reference reproduction",
+      "primary": false
+    },
+    {
+      "name": "capacity_curve_d16_all_M",
+      "role": "secondary all arms and sigma",
+      "primary": false
+    },
+    {
+      "name": "oracle_wrong_key_permutation",
+      "role": "integrity controls",
+      "primary": false
+    },
+    {
+      "name": "evaluation_fingerprint_shared_across_arms",
+      "role": "integrity",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "All integrity gates hold; mixed_unlabeled mean isotropic learned-minus-raw accuracy across full registered grid >= -0.02 AND structured-channel high noise mean learned-minus-raw at M32 over sigma .2,.4 >=+0.03",
+      "licenses": "Bounded positive evidence that this fixed condition-blind scorer can trade a single fixed mixed training stream for calibration on isotropic and better-than-raw addressing on the registered structured channel.",
+      "does_not_license": "Bayes optimality, semantic addressing, dynamic channel recognition, generalization to arbitrary corruption, semantic PLM persistence or sublinear retrieval."
+    },
+    {
+      "condition": "Integrity passes but either mixed-unlabeled primary criterion fails",
+      "licenses": "The registered mixed-training hypothesis is not established. Report the negative arm without post-run tuning.",
+      "does_not_license": "Universal impossibility of condition-blind calibration."
+    },
+    {
+      "condition": "Any missing arm, benchmark hash/contract mismatch, channel leakage, evaluation fingerprint mismatch, missing control, or parameter-change gate fails",
+      "licenses": "Instrument-invalid; no positive or negative learned-address conclusion from that artifact.",
+      "does_not_license": "Any capability conclusion."
+    }
+  ],
+  "held_constant": [
+    "Same frozen 002 scorer class for structured-only and mixed; no additional parameters",
+    "Exact same held-out evaluation keys/query/target/payload per seed/condition across all arms",
+    "Every seed uses equal 750-step, 512-example AdamW training budget",
+    "Fixed chronological alternating training channel mixture; no label at prediction",
+    "Ten seeds and full 7-M by 6-isotropic/5-structured sigma grid; 10000 evaluation trials per cell",
+    "No checkpoint selection, threshold changes or evaluation-informed tuning",
+    "Uniform random targets, independent payload, 002 structured diagonal unchanged"
+  ],
+  "interpretation_order": [
+    "Baseline and model identity, premeasurement contract provenance",
+    "Identical held-out evaluation fingerprints between both learned arms and raw",
+    "Trained parameter change, absence of corruption label, capacity/slot controls",
+    "Raw-dot isotropic Bayes baseline",
+    "Mixed-model isotropic noninferiority",
+    "Mixed-model M32 structured high-noise gain",
+    "Full conditioned curves and structured-only comparator",
+    "Joint preregistered criterion and claim boundary"
+  ],
+  "claim_boundary": [
+    "Synthetic 16D associative key addressing only",
+    "No semantic retrieval, multimodal reasoning, real-world memory or C5 claim",
+    "Failure in any joint primary criterion is a failed registered mechanism gate"
+  ]
+}
