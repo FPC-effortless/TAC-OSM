@@ -1,0 +1,190 @@
+{
+  "experiment_id": "TACOSM-PLM-PERSISTENCE-002",
+  "version": 1,
+  "status": "pre-registered",
+  "title": "Learned causal persistence through measured intervening multimodal state writes",
+  "question": "Can a learned stateful model preserve an earlier latent bit through actual intervening distracting writes and outperform a reset/no-memory control on same-present opposite-past histories?",
+  "hypothesis": "The learned recurrent state update preserves the t0 bit across k intervening independent distractor writes, supporting q2 XOR prediction while identical-current reset predictions remain at exactly one correct per opposite-past pair.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 600,
+  "eval_steps": 300,
+  "h_levels": [
+    1,
+    2,
+    4,
+    8,
+    16
+  ],
+  "protocol": {
+    "train_steps": 600,
+    "batch_size": 64,
+    "eval_pairs_per_delay_per_seed": 300,
+    "hidden_dim": 64,
+    "embedding_dim": 8,
+    "model": "learned multimodal observation encoder -> GRUCell state write at t0 AND every intervening distractor -> learned q2 read head",
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "train_delay_schedule": "cycle 1,2,4,8,16 every step",
+    "train_seed_namespace": 1000000,
+    "eval_seed_namespace": 7000000,
+    "gradient_norm_clip": 1,
+    "paired_eval": true,
+    "train_and_test_same_generator_family": true,
+    "model_selection": "none",
+    "device": "cpu",
+    "target_rule": "m XOR c",
+    "current_and_distractor_shared_exactly_within_pair": true,
+    "state_write_calls_per_episode": "1+k",
+    "t0_and_distractors_both_write": true,
+    "no_memory_expected_accuracy_on_paired_evaluation": 0.5
+  },
+  "primary_endpoint": {
+    "name": "persistent_q2_accuracy_at_delay_4",
+    "threshold": 0.9,
+    "unit": "episode"
+  },
+  "arms": [
+    {
+      "name": "persistent_state",
+      "intervention": "learned GRU state written at t0 then every intervening distractor; q2 consumes state plus current observation",
+      "acts_on": "learning and actual state persistence"
+    },
+    {
+      "name": "reset_before_q2",
+      "intervention": "use same learned weights but zero state before q2, preserving identical current per pair",
+      "acts_on": "causal memory necessity"
+    },
+    {
+      "name": "swapped_history",
+      "intervention": "exchange final states of opposite-m histories inside each exact paired evaluation",
+      "acts_on": "state-history causal identity"
+    },
+    {
+      "name": "oracle_memory",
+      "intervention": "evaluation-only target m XOR c from held-out generator labels; never provided to model",
+      "acts_on": "task representability upper bound"
+    },
+    {
+      "name": "no_intervening_write",
+      "intervention": "diagnostic model with t0 state fed directly to q2, bypassing distractor updates, same trained weights",
+      "acts_on": "effect of intervening writes"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "persistent_q2_accuracy_at_delay_4",
+      "role": "primary capability",
+      "primary": true
+    },
+    {
+      "name": "min_seed_delay4_accuracy",
+      "role": "robustness",
+      "primary": false
+    },
+    {
+      "name": "reset_accuracy_at_delay4",
+      "role": "causal null",
+      "primary": false
+    },
+    {
+      "name": "paired_gap_delay4",
+      "role": "causal attribution",
+      "primary": false
+    },
+    {
+      "name": "same_present_opposite_past_disagreement",
+      "role": "exact collision check",
+      "primary": false
+    },
+    {
+      "name": "oracle_accuracy",
+      "role": "upper bound",
+      "primary": false
+    },
+    {
+      "name": "swapped_history_accuracy",
+      "role": "history intervention",
+      "primary": false
+    },
+    {
+      "name": "no_intervening_write_accuracy",
+      "role": "write effect diagnostic",
+      "primary": false
+    },
+    {
+      "name": "intervening_write_count_and_magnitude",
+      "role": "integrity and work",
+      "primary": false
+    },
+    {
+      "name": "delay_curve_and_state_work",
+      "role": "mechanism and resource use",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "All mandatory identity, distinct split, actual write, trained gradient, model input, fingerprint, oracle and reset integrity gates pass; persistent_state mean accuracy at delay4 >=0.90, each seed >=0.75, reset_before_q2 exactly 0.5 on paired episodes, mean paired gap >=0.30 and seed-bootstrap lower 95% bound >0, and opposite-past pair disagreement >=0.90",
+      "licenses": "Bounded causal learned state retention through actual intervening distractor writes on the registered synthetic paired task.",
+      "does_not_license": "Semantic memory, arbitrary real-world persistence, adaptation to unseen task families, or C5/sublinear scaling."
+    },
+    {
+      "condition": "All integrity gates pass but any registered capability or robustness threshold fails",
+      "licenses": "The registered causal persistence success criterion is not established for this protocol.",
+      "does_not_license": "A universal impossibility or adjusted threshold."
+    },
+    {
+      "condition": "Any mandatory identity, gradient, state change, arm completeness, oracle, reset ceiling, or provenance gate fails",
+      "licenses": "The instrument is invalid for capability inference and must report INSTRUMENT_INVALID without capability interpretation.",
+      "does_not_license": "A positive or negative mechanism result."
+    }
+  ],
+  "thresholds": {
+    "delay4_mean": 0.9,
+    "delay4_min_seed": 0.75,
+    "delay4_gap_mean": 0.3,
+    "delay4_gap_ci_lower_strict": 0,
+    "delay4_pair_disagreement": 0.9,
+    "reset_exact_accuracy": 0.5,
+    "oracle_exact_accuracy": 1,
+    "minimum_mean_distractor_state_change": 0.0001
+  },
+  "held_constant": [
+    "Same paired histories and learned weights for persistent, reset, swapped and no-write evaluation arms",
+    "Paired histories at every k have byte-identical current and distractor observations and different t0 bits",
+    "m and c independent fair Bernoulli, q2 target m XOR c",
+    "Training and evaluation use distinct independent RNG namespaces and fixed random seed list",
+    "No model selection or tuning using held-out results",
+    "All arms evaluated and emitted even if capability threshold fails",
+    "Benchmark-only labels excluded from model inputs"
+  ],
+  "interpretation_order": [
+    "Contract and hash provenance",
+    "Generator and paired collision across each nonzero delay",
+    "Actual intervening writes and gradients",
+    "Oracle and exact reset ceilings",
+    "Persistent and swapped-history performance",
+    "No-intervening-write diagnostic",
+    "Delay-4 paired gap with seed uncertainty",
+    "Work accounting and bounded claim"
+  ],
+  "integrity_contract": {
+    "fail_closed": true,
+    "distinct_train_eval_namespaces": true,
+    "all_arms_required": true,
+    "pair_collision_each_delay": true,
+    "actual_state_updates_required": true,
+    "gradient_gate_required": true,
+    "oracle_required": true,
+    "reset_exact_half_per_seed_delay": true,
+    "artifact_has_all_seeds_delays": true,
+    "pending_results_never_marked_supported": true
+  }
+}
