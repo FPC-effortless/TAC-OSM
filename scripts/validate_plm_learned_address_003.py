@@ -84,7 +84,7 @@ def validate(path: Path) -> dict:
             else:
                 assert counts == {
                     "structured_0.2": 188, "structured_0.4": 187,
-                    "isotropic_0.2": 187, "isotropic_0.4": 188,
+                    "isotropic_0.2": 188, "isotropic_0.4": 187,
                 }
         assert len(init_hashes) == 1, "initialization not shared"
         assert len(seed_row["isotropic"]) == len(MS) * len(ISOS)
