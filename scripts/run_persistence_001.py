@@ -15,9 +15,9 @@ import torch.nn.functional as F
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from tac_osm.contract import load_contract
-from tac_osm.persistence_001 import PersistencePLM001
-from tac_osm.persistence_001_benchmark import (
+from tac_osm.contract import load_contract  # noqa: E402
+from tac_osm.persistence_001 import PersistencePLM001  # noqa: E402
+from tac_osm.persistence_001_benchmark import (  # noqa: E402
     DELAYS,
     collision_fingerprint,
     make_collision_pair,
