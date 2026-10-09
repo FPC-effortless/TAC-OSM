@@ -158,6 +158,44 @@ def train(seed: int, arm: str, steps: int = STEPS):
     return model, result
 
 
+def require_slot_permutation_identity(
+    scores: torch.Tensor, permuted_scores: torch.Tensor,
+    permutation: torch.Tensor, *,
+    seed: int, memory: int, sigma: float, structured: bool, arm: str,
+) -> None:
+    """Preserve the strict identity gate while diagnosing any mismatches.
+
+    This is a diagnostic only: no epsilon/tie exclusion is applied, and even
+    a one-example mismatch still makes the research instrument fail closed.
+    """
+    inverse = torch.empty_like(permutation)
+    inverse[permutation] = torch.arange(memory)
+    original = scores.argmax(dim=1)
+    permuted = permuted_scores.argmax(dim=1)
+    failures = torch.nonzero(
+        permuted != inverse[original], as_tuple=False
+    ).flatten()
+    if failures.numel() == 0:
+        return
+    index = int(failures[0])
+    original_top = scores[index].topk(2).values
+    original_margin = float(original_top[0] - original_top[1])
+    aligned = permuted_scores[index, inverse]
+    candidate_drift = float((scores[index] - aligned).abs().max())
+    old_key_slot = int(original[index])
+    new_key_slot = int(permutation[permuted[index]])
+    raise AssertionError(
+        "slot permutation identity control failed; "
+        f"seed={seed} arm={arm} structured={structured} "
+        f"M={memory} sigma={sigma} examples_mismatched={failures.numel()} "
+        f"first_example_index={index} original_winner={old_key_slot} "
+        f"permuted_winner_original_slot={new_key_slot} "
+        f"original_top2_margin={original_margin:.12g} "
+        f"max_aligned_candidate_logit_drift={candidate_drift:.12g}; "
+        "no near-tie exception has been applied"
+    )
+
+
 @torch.no_grad()
 def evaluate_condition(
     learned: dict[str, LearnedAddressMetric002],
@@ -199,7 +237,12 @@ def evaluate_condition(
         for arm, model in learned.items():
             logits = model(query, keys)
             prediction = logits.argmax(dim=1)
-            permuted_prediction = model(query, permuted).argmax(dim=1)
+            permuted_logits = model(query, permuted)
+            require_slot_permutation_identity(
+                logits, permuted_logits, perm, seed=seed, memory=memory,
+                sigma=sigma, structured=structured, arm=arm,
+            )
+            permuted_prediction = permuted_logits.argmax(dim=1)
             counters = counts[arm]
             counters["correct"] += int((prediction == target).sum())
             counters["oracle_correct"] += int(
@@ -234,7 +277,7 @@ def evaluate_condition(
             ),
         }
         if count["permutation_identity_correct"] != TRIALS:
-            raise AssertionError("slot permutation identity control failed")
+            raise AssertionError("slot permutation diagnostic accounting mismatch")
     return result
 
 
