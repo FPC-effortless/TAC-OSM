@@ -100,3 +100,25 @@ def test_previous_experiment_generator_remains_unmodified():
     assert runner.MODEL_PATH.name == "learned_address_002.py"
     assert runner.EVAL_NAMESPACE == 8_300_000
     assert runner.TRAIN_NAMESPACE == 1_900_000
+
+
+def test_permutation_control_matches_relabelled_unique_winner():
+    scores = torch.tensor([[0.1, 0.4, 0.9], [0.8, 0.1, 0.4]])
+    permutation = torch.tensor([2, 0, 1])
+    runner.require_slot_permutation_identity(
+        scores, scores[:, permutation], permutation,
+        seed=0, memory=3, sigma=0.2, structured=True, arm="mixed_unlabeled",
+    )
+
+
+def test_permutation_control_fails_closed_even_on_exact_logit_ties():
+    scores = torch.tensor([[0.4, 0.4, 0.1]])
+    permutation = torch.tensor([1, 0, 2])
+    with pytest.raises(
+        AssertionError, match="original_top2_margin=0"
+    ):
+        runner.require_slot_permutation_identity(
+            scores, scores[:, permutation], permutation,
+            seed=0, memory=3, sigma=0.4, structured=True,
+            arm="structured_only",
+        )
