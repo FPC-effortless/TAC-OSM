@@ -1,0 +1,204 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATION-001",
+  "version": 1,
+  "status": "pre-registered",
+  "registration_date": "2026-10-09",
+  "title": "Causal memory × blind learned addressing × selective execution integration",
+  "question": "Can a model preserve a target fact amid competing writes, retrieve it without privileged addresses, and solve an exact held-out task with end-to-end work below exhaustive full-history execution?",
+  "prior_evidence": [
+    "ADDRESS-003 37869867957 bounded pooled pass, condition-level deficits remain",
+    "PERSISTENCE-002 37865476305 bounded pass, no-write arm equally accurate",
+    "GENERIC-CASM-001 invalid and excluded",
+    "E2E-008 persistence attribution remains unresolved"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "steps": 600,
+  "eval_steps": 300,
+  "h_levels": [
+    32,
+    128,
+    512
+  ],
+  "protocol": {
+    "paired_histories": true,
+    "history_sizes": [
+      32,
+      128,
+      512
+    ],
+    "delay_writes": [
+      1,
+      4,
+      16,
+      32
+    ],
+    "retrieval_k": [
+      4,
+      8,
+      16
+    ],
+    "primary_cell": {
+      "history": 512,
+      "delay": 16,
+      "k": 8
+    },
+    "train_batch": 64,
+    "eval_pairs_per_seed_cell": 300,
+    "training_seed_namespace": 3100000,
+    "evaluation_seed_namespace": 9100000,
+    "model_selection": "none",
+    "task": "Each episode stores multiple independently addressed same-format facts. A final query identifies one earlier target identity without revealing its slot; output is target value XOR a new current query bit. Each paired history has byte-identical current/distractor observations, but opposite target fact values.",
+    "controls_for_target": "Randomize target position, keys and payload independently; balance paired targets; hold current/distractor observations and query fixed within pair; make target-independent distractor writes hard and potentially confusable.",
+    "corruption": "held-out structured and isotropic channels; no channel identifier in model inputs; per-condition results mandatory",
+    "split": "disjoint train and evaluation seeds/namespaces, episode fingerprints and item keys; no hidden selection by evaluation",
+    "executor": "non-oracle fixed validated exact operation control; not the unvalidated Generic CASM-001 learned operator",
+    "accounting": "Measured routing, retrieval, retained write, execution, verification; report indexing/build/update separately and account amortized total query cost; report dense similarity scans as O(H), not sublinear",
+    "timing": "execution wall-time and CPU-time reported as diagnostics, never used alone to assert complexity",
+    "independence": "Oracle arm may use targets only inside benchmark-side evaluator, not learned model, address scorer, or execution inputs"
+  },
+  "arms": [
+    {
+      "name": "retained_learned_topk",
+      "purpose": "integrated test"
+    },
+    {
+      "name": "reset_learned_topk",
+      "purpose": "causal memory control"
+    },
+    {
+      "name": "swapped_history_learned_topk",
+      "purpose": "history content control"
+    },
+    {
+      "name": "retained_raw_dot_topk",
+      "purpose": "addressing baseline"
+    },
+    {
+      "name": "retained_random_topk",
+      "purpose": "addressing chance"
+    },
+    {
+      "name": "retained_oracle_topk",
+      "purpose": "upper bound, evaluation only"
+    },
+    {
+      "name": "retained_learned_full",
+      "purpose": "full-context execution baseline"
+    },
+    {
+      "name": "retained_learned_no_intervening",
+      "purpose": "distractor-write ablation"
+    }
+  ],
+  "integrity_gates": [
+    "every evaluated input and output schema audited for answer/slot/target/phase/channel leakage",
+    "target position uniform and payload independent",
+    "same-format competing writes and actual GRU writes counted; gradients nonzero and state updates measured",
+    "every pair has identical current, distractors and query with complementary target label",
+    "reset within paired histories is exactly 0.5 and oracle upper bound is validated",
+    "disjoint key/episode pools and unique held-out fingerprints",
+    "learned scorer genuinely parameter-updated, permutation equivariant, no inference-time condition labels",
+    "target satisfier unique and actual pipeline can realize target",
+    "fresh benchmark/runner/contract/source hashes and artifact provenance",
+    "raw per-episode outcomes sufficient for independent validator to rederive every success metric and work counter",
+    "model has no access to control-arm oracle values",
+    "all eight arms, seeds, levels and primary cells present"
+  ],
+  "thresholds": {
+    "primary_exact_accuracy_min": 0.85,
+    "primary_reset_gap_min": 0.25,
+    "primary_indexed_to_full_accuracy_gap_min": -0.05,
+    "primary_recall_at_k_min": 0.9,
+    "primary_measured_total_work_ratio_max": 0.7,
+    "primary_bootstrap_gap_ci95_lower_strict": 0.1,
+    "per_condition_accuracy_floor": 0.7,
+    "work_slope_ratio_max": 0.85,
+    "bootstrap_rounds": 4000,
+    "work_cost_units": "count measured primitive multiply-add, comparator and memory read/write operations; both arms use identical counting rules",
+    "memory_interference_min_drop_vs_nowrite": 0,
+    "note": "The memory-interference drop is diagnostic only, not a success criterion; a zero drop must not be represented as useful write processing."
+  },
+  "endpoints": [
+    {
+      "name": "primary_cell_task_accuracy",
+      "primary": true
+    },
+    {
+      "name": "primary_cell_retained_minus_reset",
+      "primary": true
+    },
+    {
+      "name": "primary_cell_vs_full_context_parity",
+      "primary": true
+    },
+    {
+      "name": "primary_cell_recall_at_k",
+      "primary": true
+    },
+    {
+      "name": "primary_cell_total_work_ratio",
+      "primary": true
+    },
+    {
+      "name": "growth_slope_work_ratio",
+      "primary": true
+    },
+    {
+      "name": "per_condition_accuracy",
+      "primary": true
+    },
+    {
+      "name": "paired_disagreement_and_swapped_history",
+      "primary": false
+    },
+    {
+      "name": "memory_interference_vs_nowrite",
+      "primary": false
+    },
+    {
+      "name": "index_build_refresh_and_amortized_cost",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "Every integrity gate passes and all 7 named joint primary thresholds pass on frozen evaluated cells and seed bootstrap",
+      "licenses": "Bounded positive integrated synthetic causal memory + retrieval + selective execution evidence with stated work accounting",
+      "does_not_license": "General AGI, semantic long-term memory, arbitrary computation, or sublinear total complexity if address stage still scans H"
+    },
+    {
+      "condition": "Integrity passes but at least one joint primary threshold fails",
+      "licenses": "Measured partial/negative result with all arms and cells reported",
+      "does_not_license": "Any combined efficiency-capability claim"
+    },
+    {
+      "condition": "Any leakage, representability, provenance, benchmark, missing arm, metric, or raw-validator gate fails",
+      "licenses": "INSTRUMENT_INVALID; retain diagnostic logs only",
+      "does_not_license": "Capability or efficiency conclusions"
+    }
+  ],
+  "dependencies": {
+    "addressing": "PR #141 then #152, do not cherry-pick unreviewed frozen results",
+    "persistence": "PR #151",
+    "generic_casm": "issue #153 unresolved; exclude Generic CASM-001",
+    "integration_issue": 154
+  },
+  "interpretation_order": [
+    "pre-registration and provenance",
+    "paired history and state-write gates",
+    "absence of privileged inputs",
+    "trained model and evaluator validity",
+    "all frozen primary cells and per-condition floors",
+    "causal controls",
+    "accuracy and retrieval recall",
+    "work decomposition and H scaling",
+    "decision rule, claim boundaries"
+  ],
+  "registration_note": "This file is committed before any INTEGRATION-001 implementation or measurement. Thresholds may not be adapted to measured outcomes; implementation must validate this machine-readable contract."
+}
