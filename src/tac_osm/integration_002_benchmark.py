@@ -86,6 +86,8 @@ def make_pair(seed: int, history: int, delay: int, hard_fraction: float,
         )
         writes.append(Observation(_perturb(rng, latent_write, noise),
                                   rng.randrange(2)))
+    # Hide the order of hard negatives; it must not be a position/phase cue.
+    rng.shuffle(writes)
     writes = tuple(writes)
     left = Episode(vis_history, writes, query, current_bit, target_slot,
                    vis_history[target_slot].value ^ current_bit)
