@@ -1,0 +1,407 @@
+{
+  "experiment_id": "TACOSM-PLM-INTEGRATION-001",
+  "status": "pre-registered",
+  "registered_utc": "2026-10-09",
+  "type": "confirmatory-design-no-results",
+  "hypothesis": "Learned condition-blind addressing plus persistent causal memory permits parity-accuracy sparse execution with lower end-to-end work than exhaustive history scanning at scale.",
+  "dependencies": [
+    "PERSISTENCE-002 (#151) validated bounded memory evidence",
+    "ADDRESS-003 (#152) validated bounded addressing evidence",
+    "GENERIC-CASM-001 not validated: use exact control executor, never label learned execution"
+  ],
+  "evaluation": {
+    "seeds": [
+      101,
+      211,
+      307,
+      401,
+      503
+    ],
+    "train_seed_namespace": 11000000,
+    "eval_seed_namespace": 29000000,
+    "history_lengths": [
+      32,
+      128,
+      512
+    ],
+    "intervening_writes": [
+      1,
+      4,
+      16,
+      32
+    ],
+    "retrieval_budgets": [
+      4,
+      8,
+      16
+    ],
+    "interference_strengths": [
+      0,
+      0.25,
+      0.5,
+      1
+    ],
+    "pairs_per_cell_per_seed": 200,
+    "train_eval_disjoint": "independent namespaces and key families",
+    "unit": "paired histories with identical current observation and query, differing required earlier bit",
+    "reporting": "all cells and paired seeds, no cherry-picking"
+  },
+  "arms": [
+    {
+      "name": "persistent_learned_condition_blind_sparse_k",
+      "intervention": "persistent memory; learned_condition_blind selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "persistent_learned_condition_blind_exhaustive_exact",
+      "intervention": "persistent memory; learned_condition_blind selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "persistent_raw_dot_sparse_k",
+      "intervention": "persistent memory; raw_dot selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "persistent_raw_dot_exhaustive_exact",
+      "intervention": "persistent memory; raw_dot selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "persistent_random_sparse_k",
+      "intervention": "persistent memory; random selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "persistent_random_exhaustive_exact",
+      "intervention": "persistent memory; random selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "persistent_oracle_sparse_k",
+      "intervention": "persistent memory; oracle selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "persistent_oracle_exhaustive_exact",
+      "intervention": "persistent memory; oracle selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "reset_learned_condition_blind_sparse_k",
+      "intervention": "reset memory; learned_condition_blind selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "reset_learned_condition_blind_exhaustive_exact",
+      "intervention": "reset memory; learned_condition_blind selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "reset_raw_dot_sparse_k",
+      "intervention": "reset memory; raw_dot selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "reset_raw_dot_exhaustive_exact",
+      "intervention": "reset memory; raw_dot selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "reset_random_sparse_k",
+      "intervention": "reset memory; random selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "reset_random_exhaustive_exact",
+      "intervention": "reset memory; random selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "reset_oracle_sparse_k",
+      "intervention": "reset memory; oracle selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "reset_oracle_exhaustive_exact",
+      "intervention": "reset memory; oracle selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "paired_swap_learned_condition_blind_sparse_k",
+      "intervention": "paired_swap memory; learned_condition_blind selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "paired_swap_learned_condition_blind_exhaustive_exact",
+      "intervention": "paired_swap memory; learned_condition_blind selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "paired_swap_raw_dot_sparse_k",
+      "intervention": "paired_swap memory; raw_dot selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "paired_swap_raw_dot_exhaustive_exact",
+      "intervention": "paired_swap memory; raw_dot selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "paired_swap_random_sparse_k",
+      "intervention": "paired_swap memory; random selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "paired_swap_random_exhaustive_exact",
+      "intervention": "paired_swap memory; random selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "paired_swap_oracle_sparse_k",
+      "intervention": "paired_swap memory; oracle selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "paired_swap_oracle_exhaustive_exact",
+      "intervention": "paired_swap memory; oracle selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "no_write_learned_condition_blind_sparse_k",
+      "intervention": "no_write memory; learned_condition_blind selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "no_write_learned_condition_blind_exhaustive_exact",
+      "intervention": "no_write memory; learned_condition_blind selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "no_write_raw_dot_sparse_k",
+      "intervention": "no_write memory; raw_dot selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "no_write_raw_dot_exhaustive_exact",
+      "intervention": "no_write memory; raw_dot selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "no_write_random_sparse_k",
+      "intervention": "no_write memory; random selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "no_write_random_exhaustive_exact",
+      "intervention": "no_write memory; random selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "no_write_oracle_sparse_k",
+      "intervention": "no_write memory; oracle selection; sparse_k exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    },
+    {
+      "name": "no_write_oracle_exhaustive_exact",
+      "intervention": "no_write memory; oracle selection; exhaustive_exact exact control execution",
+      "acts_on": "factorial memory/address/execution intervention"
+    }
+  ],
+  "generation": {
+    "label_balance": "exactly 50/50 per paired cell",
+    "query_evidence": "earlier event only",
+    "same_format_writes": true,
+    "distinct_target_identities": true,
+    "target_position": "uniform randomized per pair",
+    "distractor_payloads": "independent of target bit",
+    "key_family_split": "held-out evaluation key families",
+    "current_input_pair_identity": "byte identical",
+    "phase_role_tags": "none",
+    "unique_satisfier": "exactly one target by identity",
+    "online_index": "must be counted for all history changes"
+  },
+  "gates": {
+    "void_if": [
+      "artifact schema invalid or missing episodes",
+      "pair current/query not exactly equal",
+      "target leakage into query/address/context",
+      "model saw target slot, labels, role marker, or oracle signal",
+      "train/eval key overlap",
+      "unregistered hyperparameter, checkpoint, or threshold adjustment",
+      "invalid unique satisfier",
+      "non-verified execution counts",
+      "missing model train gradients or missing parameter change",
+      "insufficient seeds, episodes, or cells",
+      "end-to-end cost omits index/build/update/retrieval/verification/writes",
+      "sparse implementation scans full history outside amortized index updates"
+    ],
+    "independent_validation": true
+  },
+  "thresholds": {
+    "minimum_persistent_accuracy": 0.9,
+    "minimum_seed_cell_accuracy": 0.8,
+    "maximum_parity_gap_vs_exhaustive": 0.03,
+    "minimum_gain_over_reset": 0.3,
+    "minimum_gain_over_swapped": 0.3,
+    "minimum_paired_history_disagreement": 0.9,
+    "minimum_recall_at_k": 0.9,
+    "maximum_avg_total_work_ratio_at_h512_k8": 0.75,
+    "maximum_log2_h_work_slope": 0.75,
+    "minimum_positive_seeds": 4,
+    "ci_level": 0.95
+  },
+  "cost": {
+    "unit": "instrumented primitive operation counts",
+    "include": [
+      "index_build",
+      "index_refresh",
+      "memory_writes",
+      "query_address",
+      "candidate_retrieval",
+      "execution",
+      "verification"
+    ],
+    "separate": [
+      "initial_build_amortized",
+      "steady_state_per_query"
+    ],
+    "time": "wall and CPU as supporting diagnostics",
+    "full_scan_in_query": "prohibited for sparse scaling claim",
+    "scaling_fixed_k": 8
+  },
+  "decision": "PASS only if every gate, seed-cell floor, pooled accuracy and control gap, recall, parity, cost and scaling endpoint passes; FAIL if valid run misses any threshold; VOID on integrity failure. Do not reinterpret thresholds after seeing outcome.",
+  "source_issue": "https://github.com/FPC-effortless/TAC-OSM/issues/154",
+  "factorial_arms": {
+    "memory": [
+      "persistent",
+      "reset",
+      "paired_swap",
+      "no_write"
+    ],
+    "address": [
+      "learned_condition_blind",
+      "raw_dot",
+      "random",
+      "oracle"
+    ],
+    "execution": [
+      "sparse_k",
+      "exhaustive_exact"
+    ]
+  },
+  "title": "Causal memory × condition-blind learned addressing × measured sparse computation",
+  "question": "Can opposite-past paired histories yield accurate retrieval and execution despite intervening confusable writes, with counted selective work lower than exhaustive scanning?",
+  "h_levels": [
+    32,
+    128,
+    512
+  ],
+  "k_levels": [
+    4,
+    8,
+    16
+  ],
+  "seeds": [
+    101,
+    211,
+    307,
+    401,
+    503
+  ],
+  "steps": 600,
+  "eval_steps": 200,
+  "held_constant": [
+    "five preregistered seeds; 3 history levels, 4 write-count levels, 3 K budgets, 4 interference strengths",
+    "same-present opposite-past matched histories with identical current observations and independent distractors",
+    "original 2026-10-09 thresholds and evaluation grid unchanged",
+    "selective path cannot silently scan history; total measured work includes index maintenance",
+    "no generic learned CASM executor is claimed validated"
+  ],
+  "endpoints": [
+    {
+      "name": "joint_integrated_capability_and_work",
+      "role": "primary joint decision",
+      "primary": true,
+      "description": "All original threshold checks in thresholds object are jointly required; no single mean can mask a condition failure"
+    },
+    {
+      "name": "per_seed_cell_accuracy",
+      "role": "mandatory floor",
+      "primary": false
+    },
+    {
+      "name": "memory_causal_gap",
+      "role": "mandatory controls",
+      "primary": false
+    },
+    {
+      "name": "paired_history_disagreement",
+      "role": "mandatory causal control",
+      "primary": false
+    },
+    {
+      "name": "recall_at_k",
+      "role": "mandatory routing control",
+      "primary": false
+    },
+    {
+      "name": "capability_parity_vs_exhaustive",
+      "role": "mandatory capability control",
+      "primary": false
+    },
+    {
+      "name": "counted_total_work_ratio",
+      "role": "mandatory work control",
+      "primary": false
+    },
+    {
+      "name": "log2_work_slope",
+      "role": "mandatory scaling control",
+      "primary": false
+    },
+    {
+      "name": "state_write_and_gradient_integrity",
+      "role": "benchmark integrity",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "All integrity checks pass and every registered threshold in thresholds passes",
+      "licenses": "Bounded positive synthetic joint memory, retrieval and work evidence",
+      "does_not_license": "General computation, arbitrary capabilities, AGI or sublinear total work if the index scans history"
+    },
+    {
+      "condition": "Integrity checks pass but one or more registered thresholds fail",
+      "licenses": "Measured negative or partial integration outcome with full cell breakdown",
+      "does_not_license": "Combined capability-efficiency claim"
+    },
+    {
+      "condition": "Any data leakage, missing episode, instrumentation defect, or provenance failure",
+      "licenses": "VOID/INSTRUMENT_INVALID with diagnostic-only logs",
+      "does_not_license": "Capability or efficiency evidence"
+    }
+  ],
+  "interpretation_order": [
+    "verify immutable preregistration, training/eval namespace separation and source hashes",
+    "verify matched past/current and distinct confusable target writes",
+    "verify all model-visible inputs and no label/slot/channel leaks",
+    "verify train parameter/gradient and state-write integrity",
+    "verify exact memory, address, and execution arm coverage",
+    "verify per-seed per-condition capability and paired causal controls",
+    "verify recall and oracle/exhaustive parity",
+    "verify complete index-refresh/write/routing/retrieval/execution/verification cost",
+    "apply all frozen decision thresholds and claim boundaries"
+  ],
+  "schema_adaptation": {
+    "date": "2026-10-10",
+    "purpose": "Make previously committed 2026-10-09 contract readable by repository ExperimentContract schema, before any INTEGRATION-001 measurements",
+    "semantic_status": "schema normalization, not a scientific threshold amendment",
+    "unmodified_original_thresholds_sha256": "documented by original Git commit fc70f0598b4411ce087e462f84fe1af0a689e4f4",
+    "original_register_commit": "fc70f0598b4411ce087e462f84fe1af0a689e4f4",
+    "original_factorial_arms_field": "arms -> factorial_arms, flattened to registered arm-spec entries",
+    "new_steps_not_in_original_156": "600 steps adopted from preregistered PR #155 before confirmatory measurement, requires full implementation preflight and separate audited freeze",
+    "alternate_draft": "PR #155 contains a different seed/grid/threshold protocol and is not pooled with or substituted for this one"
+  }
+}
