@@ -63,5 +63,5 @@ def test_registered_grid_and_controls_frozen():
     assert contract["evaluation"]["history_lengths"] == [32, 128, 512]
     assert contract["evaluation"]["intervening_writes"] == [1, 4, 16, 32]
     assert contract["evaluation"]["retrieval_budgets"] == [4, 8, 16]
-    assert "paired_swap" in contract["arms"]["memory"]
-    assert "exhaustive_exact" in contract["arms"]["execution"]
+    assert "paired_swap" in contract["factorial_arms"]["memory"]
+    assert "exhaustive_exact" in contract["factorial_arms"]["execution"]
