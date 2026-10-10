@@ -56,7 +56,7 @@ def state_hash(model: nn.Module) -> str:
     h = hashlib.sha256()
     for key,value in model.state_dict().items():
         h.update(key.encode())
-        h.update(value.detach().cpu().contiguous().numpy().tobytes())
+        h.update(bytes(value.detach().cpu().contiguous().view(torch.uint8).flatten().tolist()))
     return h.hexdigest()
 
 
