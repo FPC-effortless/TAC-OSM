@@ -6,6 +6,9 @@ This successor investigates these failures without changing its checkpoints.
 
 The machine-readable protocol is committed before diagnostic measurement.
 This is a fixed **development** design, not confirmatory preregistration.
+The design lives under `development_protocols/` because it deliberately does
+not use the repository's confirmatory experiment-contract schema. Moving that
+unchanged document out of `contracts/` preserves its contents and freeze history.
 
 ## Questions
 
