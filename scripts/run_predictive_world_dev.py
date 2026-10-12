@@ -36,12 +36,14 @@ def train(seed: int, *, smoke: bool = False):
     records = {arm:{'initial_hash':initial_hashes[arm],'loss':[],'writer_grad':False}
                for arm in ARMS}
     batch_hashes=[]
+    training_fingerprints=[]
     for step in range(2 if smoke else 120):
         batch = make_world_batch(seed,step,smoke=smoke)
         # Same exact model-visible training observations for every arm.
         batch_hashes.append(hashlib.sha256(batch.addresses.numpy().tobytes()+
                            batch.values.numpy().tobytes()+batch.query.numpy().tobytes()+
                            batch.current.numpy().tobytes()+batch.action.numpy().tobytes()).hexdigest())
+        training_fingerprints.extend(batch.fingerprints)
         a,v,q,c,action = batch.inference()
         for arm,model in models.items():
             model.train()
@@ -62,7 +64,8 @@ def train(seed: int, *, smoke: bool = False):
         records[arm]['parameters']=sum(p.numel() for p in model.parameters())
         if records[arm]['initial_hash']==records[arm]['final_hash'] or not records[arm]['writer_grad']:
             raise AssertionError(f'failed model training integrity: {arm}')
-    return models, {'training_seed':seed,'training_batch_hashes':batch_hashes,'arms':records}
+    return models, {'training_seed':seed,'training_batch_hashes':batch_hashes,
+                    'training_fingerprints':training_fingerprints,'arms':records}
 
 
 @torch.no_grad()
@@ -143,6 +146,11 @@ def run(smoke: bool = False):
         rows={arm:evaluate(model,eval_seed,smoke=smoke) for arm,model in models.items()}
         report={'seed':seed,'eval_seed':eval_seed,'training':training,'rows':rows,
                 'summaries':{arm:summarize(r) for arm,r in rows.items()}}
+        # No identical model-visible episode is allowed in training and evaluation.
+        train_set=set(training['training_fingerprints'])
+        eval_set={fp for row in rows[ARMS[0]] for fp in row['visible_fingerprints']}
+        if train_set & eval_set:
+            raise AssertionError('training/evaluation example overlap')
         # Identical evaluation inputs (not predictions) across objective arms.
         fingerprints=[[r['visible_fingerprints'] for r in rows[arm]] for arm in ARMS]
         if any(x != fingerprints[0] for x in fingerprints[1:]):
