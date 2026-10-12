@@ -7,6 +7,7 @@ on:
     paths:
       - "src/tac_osm/development/predictive_world.py"
       - "scripts/run_predictive_world_dev.py"
+      - "scripts/validate_predictive_world_dev.py"
       - "tests/test_predictive_world_development.py"
       - ".github/workflows/predictive-world-development.yml"
       - "docs/PREDICTIVE-WORLD-DEV-006.md"
@@ -40,13 +41,15 @@ jobs:
           python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
       - name: Python syntax and focused model checks
         run: |
-          python -m py_compile src/tac_osm/development/predictive_world.py scripts/run_predictive_world_dev.py tests/test_predictive_world_development.py
+          python -m py_compile src/tac_osm/development/predictive_world.py scripts/run_predictive_world_dev.py scripts/validate_predictive_world_dev.py tests/test_predictive_world_development.py
           ruff check --select F src/tac_osm/development/predictive_world.py scripts/run_predictive_world_dev.py tests/test_predictive_world_development.py
           python -m pytest tests/test_predictive_world_development.py -q
       - name: Baseline test-count integrity
         run: python scripts/sync_test_count.py --check
       - name: Matched-arm smoke and reset ceiling
-        run: python scripts/run_predictive_world_dev.py --smoke --output artifacts/PREDICTIVE-WORLD-DEV-006-SMOKE
+        run: |
+          python scripts/run_predictive_world_dev.py --smoke --output artifacts/PREDICTIVE-WORLD-DEV-006-SMOKE
+          python scripts/validate_predictive_world_dev.py artifacts/PREDICTIVE-WORLD-DEV-006-SMOKE
       - name: Preserve smoke evidence (never used for capability claims)
         if: always()
         uses: actions/upload-artifact@v4
@@ -56,7 +59,7 @@ jobs:
           if-no-files-found: warn
 
   development-full:
-    if: github.event_name == 'workflow_dispatch' && inputs.run_full
+    if: (github.event_name == 'push' && github.ref_name == 'research/predictive-objectives-dev-006-2026-10-12') || (github.event_name == 'workflow_dispatch' && inputs.run_full)
     needs: gates-and-smoke
     runs-on: ubuntu-latest
     timeout-minutes: 180
@@ -70,7 +73,9 @@ jobs:
           python -m pip install --quiet -e . pytest==9.1.1 numpy==2.3.3
           python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
       - name: Frozen development grid, three paired seeds
-        run: python scripts/run_predictive_world_dev.py --output artifacts/PREDICTIVE-WORLD-DEV-006
+        run: |
+          python scripts/run_predictive_world_dev.py --output artifacts/PREDICTIVE-WORLD-DEV-006
+          python scripts/validate_predictive_world_dev.py artifacts/PREDICTIVE-WORLD-DEV-006
       - name: Preserve all raw episodes and checkpoints
         if: always()
         uses: actions/upload-artifact@v4
