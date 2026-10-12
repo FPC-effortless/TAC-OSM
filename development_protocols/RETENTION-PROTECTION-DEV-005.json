@@ -6,7 +6,7 @@
   "parent_head": "d1148922431428c99c9279759343f5ece61eeeea",
   "model_seeds": [43, 59, 71],
   "evaluation_seeds": [281, 293, 311],
-  "arms": ["learned_protection", "always_update"],
+  "arms": ["learned_protection", "always_update", "fixed_protection"],
   "training": {
     "steps": 240,
     "batch_size": 8,
@@ -37,14 +37,16 @@
     "inputs": "current visible address/value, expert read and read norm, expert identity; no query, target slot, task role, phase, future evidence or labels",
     "initial_gate_bias": 2.0,
     "hidden_dim": 32,
-    "always_update": "same initialized parent weights and architecture, gate forced to one and gate parameters frozen"
+    "always_update": "same initialized parent weights and architecture, gate forced to one and gate parameters frozen",
+    "fixed_protection": "same initialized parent weights and architecture, constant sigmoid(2) gate and gate parameters frozen"
   },
   "controls": ["reset", "no_intervening_writes_oracle", "swapped_history", "dense_euclidean", "paired_state_contrast", "actual_gate_trace"],
   "endpoints": ["balanced overall answer accuracy", "retention accuracy", "acquisition accuracy", "paired seed learned-minus-always gaps with exploratory 95% t intervals"],
   "rules": [
     "Freeze this local development protocol before any new training or measurement; not a scientific preregistration.",
-    "Both arms start with identical parameter tensors and receive exactly the same batches, labels, optimizer hyperparameters and number of steps.",
+    "All arms start with identical parameter tensors and receive exactly the same batches, labels, optimizer hyperparameters and number of steps.",
     "Only protection-gate activation differs; the always-update gate parameters are unused and frozen. Active parameter counts differ and must be reported.",
+    "The fixed sigmoid(2) protection control separates learned adaptive protection from simply slowing every update; it was added before any DEV-005 training or measurement.",
     "No checkpoint/hyperparameter/threshold selection from evaluation results.",
     "Current queries occur only after the full history and intervening writes. Gate decisions cannot observe queries or target role.",
     "Retention queries a hidden latent address in earlier history; acquisition queries a hidden latent address in a new write. All addresses and queries are independently noisy views.",

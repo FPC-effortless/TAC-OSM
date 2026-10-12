@@ -20,6 +20,10 @@ latent identity, label or future outcome. Recurrent state remains 768 scalars.
 The always-update arm uses the same architecture and identical initial tensors,
 but forces the transition gate to one and freezes its unused gate parameters.
 All remaining parameters receive the same training batches and hyperparameters.
+A third arm uses a constant sigmoid(2) gate, equal to the learned arm's initial
+gate strength, with unused gate parameters frozen. This control was added before
+any DEV-005 training or measurement to separate adaptive learning from uniform
+slowing of updates. All three arms begin with identical parameter tensors.
 The protection arm therefore has more actively trained parameters and extra
 gate computation; this is not a parameter-count or FLOP-matched SOTA comparison.
 The verifier is unused/frozen in this mechanism experiment. It does not inherit
@@ -47,7 +51,7 @@ control uses the evaluator's history boundary; it is not a learned runtime arm.
 Three paired model seeds, 240 steps each, batch size eight. Training histories
 are 32/128 with 4/16 intervening writes. Evaluation includes H=512 and D=32
 length extrapolation, both task roles, two noise levels and unrelated/near-address
-competitors. Both arms receive exactly the same data and fixed training budget.
+competitors. All arms receive exactly the same data and fixed training budget.
 
 Raw evidence includes all per-pair predictions and controls, latent-free input
 fingerprints, target age/role only on the evaluator side, actual per-write gate
