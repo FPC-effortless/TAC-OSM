@@ -59,7 +59,7 @@ jobs:
           if-no-files-found: warn
 
   development-full:
-    if: (github.event_name == 'push' && github.ref_name == 'research/predictive-objectives-dev-006-2026-10-12') || (github.event_name == 'workflow_dispatch' && inputs.run_full)
+    if: github.event_name == 'workflow_dispatch' && inputs.run_full
     needs: gates-and-smoke
     runs-on: ubuntu-latest
     timeout-minutes: 180
