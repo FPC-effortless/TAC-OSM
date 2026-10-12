@@ -95,15 +95,15 @@ def validate(directory: Path) -> dict:
             if parameter_hash(model)!=entry['final_hash']:
                 raise ValueError('final checkpoint integrity')
             rows=record['rows'][arm]
-            expected_count=4 if smoke else 3*3*2*2*2*2
+            expected_count=4 if smoke else 3*3*2*2*2*2*2
             if len(rows)!=expected_count:
                 raise ValueError('incomplete evaluation grid')
             for row in rows:
                 c=row['condition']
                 eval_row=measure_pair(model,seed_for('predworld-eval',
                     eval_seed,c['H'],c['D'],c['hard_fraction'],c['noise'],
-                    c['task'],c['action']),c['H'],c['D'],c['hard_fraction'],
-                    c['noise'],c['task'],c['action'])
+                    c['task'],c['action'],c['replicate']),c['H'],c['D'],c['hard_fraction'],
+                    c['noise'],c['task'],c['action'],c['replicate'])
                 _equal(eval_row,row)
                 eval_fingerprints.update(row['visible_fingerprints'])
             _equal(summarize(rows),record['summaries'][arm])
@@ -118,7 +118,7 @@ def validate(directory: Path) -> dict:
             _equal(base,[row['visible_fingerprints'] for row in record['rows'][arm]])
     return {'status':'REPLAY_VALIDATED_DEVELOPMENT_ONLY',
             'seed_count':len(report['records']),
-            'rows_per_arm_per_seed':4 if smoke else 144,
+            'rows_per_arm_per_seed':4 if smoke else 288,
             'warning':'Replays evaluation from checkpoints; does not retrain models.'}
 
 
