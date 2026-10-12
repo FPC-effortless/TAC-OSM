@@ -13,7 +13,7 @@ import torch.nn.functional as F
 
 from tac_osm.development.conditional_compute import selected_weights
 from tac_osm.development.protected_memory import ProtectionModel
-from tac_osm.development.protection_benchmark import Episode, make_pair, seed_for, tensors
+from tac_osm.development.protection_benchmark import Episode, fingerprint, make_pair, seed_for, tensors
 
 
 ARMS = ("task_only", "future_only", "joint", "joint_shuffled")
@@ -40,6 +40,7 @@ class WorldBatch:
     answer: Tensor       # evaluator only
     next_latent: Tensor  # evaluator only
     tasks: tuple[str, ...]
+    fingerprints: tuple[str, ...]  # model-invisible evaluator provenance
 
     def inference(self) -> tuple[Tensor, Tensor, Tensor, Tensor, Tensor]:
         """The *only* fields allowed to enter the model forward method."""
@@ -70,7 +71,8 @@ def make_world_batch(seed: int, step: int, *, smoke: bool = False) -> WorldBatch
     past = answer ^ current   # Evaluator-only historical bit. Never a model input.
     action = torch.tensor(actions,dtype=torch.long)
     return WorldBatch(addresses,values,query,current,action,answer,
-                      future_target(past,current,action),tuple(tasks))
+                      future_target(past,current,action),tuple(tasks),
+                      tuple(fingerprint(ep) for ep in episodes))
 
 
 class PredictiveWorldModel(ProtectionModel):
