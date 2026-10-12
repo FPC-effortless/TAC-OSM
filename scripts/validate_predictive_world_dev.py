@@ -57,6 +57,14 @@ def validate(directory: Path) -> dict:
     if report.get('experiment_id')!='PREDICTIVE-WORLD-DEV-006' or \
        report.get('status')!='DEVELOPMENT_ONLY_NOT_CONFIRMATORY':
         raise ValueError('wrong experiment/status')
+    source_hashes=report.get('source_hashes')
+    if not isinstance(source_hashes,dict) or not source_hashes:
+        raise ValueError('missing source provenance manifest')
+    for path, expected in source_hashes.items():
+        if not isinstance(path,str) or path.startswith('/') or '..' in Path(path).parts:
+            raise ValueError('invalid provenance path')
+        if not isinstance(expected,str) or hashlib.sha256((ROOT/path).read_bytes()).hexdigest()!=expected:
+            raise ValueError(f'source provenance changed: {path}')
     smoke=report.get('smoke')
     if type(smoke) is not bool:
         raise ValueError('smoke declaration absent')
