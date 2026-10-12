@@ -139,8 +139,19 @@ def summarize(rows):
 
 def run(smoke: bool = False):
     torch.set_num_threads(2)
+    provenance_paths = (
+        'src/tac_osm/development/predictive_world.py',
+        'src/tac_osm/development/noisy_memory.py',
+        'src/tac_osm/development/protection_benchmark.py',
+        'scripts/run_predictive_world_dev.py',
+        'scripts/validate_predictive_world_dev.py',
+        'docs/PREDICTIVE-WORLD-DEV-006.md',
+    )
+    source_hashes = {
+        p:hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in provenance_paths
+    }
     output={'experiment_id':'PREDICTIVE-WORLD-DEV-006','status':'DEVELOPMENT_ONLY_NOT_CONFIRMATORY',
-            'smoke':smoke,'records':[]}
+            'smoke':smoke,'source_hashes':source_hashes,'records':[]}
     for seed,eval_seed in zip(TRAIN_SEEDS[:1] if smoke else TRAIN_SEEDS,
                               EVAL_SEEDS[:1] if smoke else EVAL_SEEDS):
         models,training=train(seed,smoke=smoke)
