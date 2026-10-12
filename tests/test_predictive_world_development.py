@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+import json
+import subprocess
 import sys
 
 import pytest
@@ -80,3 +82,49 @@ def test_auxiliary_corruption_changes_training_target():
     corrupted,_,_ = arm_loss('joint_shuffled',task_logits,pred,batch.answer,batch.next_latent)
     assert matched.item()==0.0
     assert corrupted.item()>torch.log(torch.tensor(2.)).item()
+
+
+def test_actions_cross_both_retention_and_acquisition():
+    for step in (0,1,2,3,4,11):
+        batch=make_world_batch(43,step,smoke=True)
+        for role in ("retention","acquisition"):
+            role_actions={int(batch.action[i]) for i in range(0,8,2) if batch.tasks[i]==role}
+            assert role_actions=={0,1}, f"{role} action confounded at step {step}"
+
+
+@pytest.fixture(scope="module")
+def saved_predictive_smoke(tmp_path_factory):
+    out=tmp_path_factory.mktemp("predictive-world-replay")
+    subprocess.run([sys.executable,str(ROOT/"scripts/run_predictive_world_dev.py"),
+                    "--smoke","--output",str(out)],check=True,capture_output=True,text=True)
+    return out
+
+
+def test_saved_checkpoints_reproduce_every_smoke_episode(saved_predictive_smoke):
+    sys.path.insert(0,str(ROOT/"scripts"))
+    from validate_predictive_world_dev import validate
+    evidence=validate(saved_predictive_smoke)
+    assert evidence["status"]=="REPLAY_VALIDATED_DEVELOPMENT_ONLY"
+    assert evidence["seed_count"]==1 and evidence["rows_per_arm_per_seed"]==4
+
+
+@pytest.mark.parametrize("corruption",("prediction","training_fingerprint","checkpoint_identity"))
+def test_replay_detects_tampering(saved_predictive_smoke,corruption):
+    sys.path.insert(0,str(ROOT/"scripts"))
+    from validate_predictive_world_dev import validate
+    path=saved_predictive_smoke/"report.json"
+    original=path.read_text()
+    report=json.loads(original)
+    record=report["records"][0]
+    if corruption=="prediction":
+        record["rows"]["joint"][0]["task_prediction"][0] ^= 1
+    elif corruption=="training_fingerprint":
+        record["training"]["training_fingerprints"][0] = "tampered"
+    else:
+        record["training"]["arms"]["joint"]["final_hash"] = "tampered"
+    path.write_text(json.dumps(report))
+    try:
+        with pytest.raises(ValueError):
+            validate(saved_predictive_smoke)
+    finally:
+        path.write_text(original)
