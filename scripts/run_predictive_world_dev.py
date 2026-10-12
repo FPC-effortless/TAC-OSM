@@ -70,7 +70,7 @@ def train(seed: int, *, smoke: bool = False):
 
 @torch.no_grad()
 def measure_pair(model, seed: int, h: int, d: int, f: float,
-                 noise: float, task: str, action: int):
+                 noise: float, task: str, action: int, replicate: int = 0):
     pair=make_pair(seed,h,d,f,noise,task)
     episodes=[pair.left,pair.right]
     a,v,q,c=tensors(episodes)
@@ -86,7 +86,7 @@ def measure_pair(model, seed: int, h: int, d: int, f: float,
     reset_task,reset_world=model.predict_both(torch.zeros_like(state),q,c,acts)
     _,action_flip=model.predict_both(state,q,c,1-acts)
     return {
-      'condition':{'H':h,'D':d,'hard_fraction':f,'noise':noise,'task':task,'action':action},
+      'condition':{'H':h,'D':d,'hard_fraction':f,'noise':noise,'task':task,'action':action,'replicate':replicate},
       'visible_fingerprints':[fingerprint(ep) for ep in episodes],
       'target':targets.tolist(), 'future_target':z.tolist(),
       'task_prediction':pred_task.argmax(-1).tolist(),
@@ -117,8 +117,9 @@ def evaluate(model, seed: int, *, smoke: bool = False):
                 for noise in noises:
                     for task in tasks:
                         for action in (0,1):
-                            seed_i=seed_for('predworld-eval',seed,h,d,f,noise,task,action)
-                            rows.append(measure_pair(model,seed_i,h,d,f,noise,task,action))
+                            for replicate in range(1 if smoke else 2):
+                                seed_i=seed_for('predworld-eval',seed,h,d,f,noise,task,action,replicate)
+                                rows.append(measure_pair(model,seed_i,h,d,f,noise,task,action,replicate))
     return rows
 
 
