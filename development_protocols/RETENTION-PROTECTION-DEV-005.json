@@ -1,0 +1,62 @@
+{
+  "experiment_id": "RETENTION-PROTECTION-DEV-005",
+  "status": "FROZEN_DEVELOPMENT_DESIGN_NOT_CONFIRMATORY",
+  "date": "2026-10-12",
+  "parent_pr": 160,
+  "parent_head": "d1148922431428c99c9279759343f5ece61eeeea",
+  "model_seeds": [43, 59, 71],
+  "evaluation_seeds": [281, 293, 311],
+  "arms": ["learned_protection", "always_update", "fixed_protection"],
+  "training": {
+    "steps": 240,
+    "batch_size": 8,
+    "history_lengths": [32, 128],
+    "intervening_writes": [4, 16],
+    "hard_fractions": [0.0, 1.0],
+    "noise_levels": [0.08, 0.25],
+    "task_balance": "two retention pairs and two acquisition pairs per batch",
+    "optimizer": "AdamW",
+    "lr": 0.003,
+    "weight_decay": 0.0001,
+    "gradient_clip": 1.0,
+    "namespace": "protection-training",
+    "checkpoint_selection": "final fixed step only"
+  },
+  "evaluation": {
+    "history_lengths": [32, 128, 512],
+    "intervening_writes": [4, 16, 32],
+    "hard_fractions": [0.0, 1.0],
+    "noise_levels": [0.08, 0.25],
+    "tasks": ["retention", "acquisition"],
+    "pairs_per_cell": 2,
+    "namespace": "protection-evaluation"
+  },
+  "mechanism": {
+    "recurrent_state_scalars": 768,
+    "gate": "per-expert learned scalar gates the complete proposed transition, including decay",
+    "inputs": "current visible address/value, expert read and read norm, expert identity; no query, target slot, task role, phase, future evidence or labels",
+    "initial_gate_bias": 2.0,
+    "hidden_dim": 32,
+    "always_update": "same initialized parent weights and architecture, gate forced to one and gate parameters frozen",
+    "fixed_protection": "same initialized parent weights and architecture, constant sigmoid(2) gate and gate parameters frozen"
+  },
+  "controls": ["reset", "no_intervening_writes_oracle", "swapped_history", "dense_euclidean", "paired_state_contrast", "actual_gate_trace"],
+  "endpoints": ["balanced overall answer accuracy", "retention accuracy", "acquisition accuracy", "paired seed learned-minus-always gaps with exploratory 95% t intervals"],
+  "rules": [
+    "Freeze this local development protocol before any new training or measurement; not a scientific preregistration.",
+    "All arms start with identical parameter tensors and receive exactly the same batches, labels, optimizer hyperparameters and number of steps.",
+    "Only protection-gate activation differs; the always-update gate parameters are unused and frozen. Active parameter counts differ and must be reported.",
+    "The fixed sigmoid(2) protection control separates learned adaptive protection from simply slowing every update; it was added before any DEV-005 training or measurement.",
+    "No checkpoint/hyperparameter/threshold selection from evaluation results.",
+    "Current queries occur only after the full history and intervening writes. Gate decisions cannot observe queries or target role.",
+    "Retention queries a hidden latent address in earlier history; acquisition queries a hidden latent address in a new write. All addresses and queries are independently noisy views.",
+    "Paired histories differ in one target payload only; current query/bit and every other event are identical. Targets are balanced and opposite.",
+    "The no-intervening-write control uses evaluator knowledge of the history boundary and is not a runtime architecture or deployment policy.",
+    "Reset must have exact 50% accuracy for both tasks; no-intervening-write must have exact 50% on acquisition pairs.",
+    "Retain every seed and cell, all checkpoints, training gradients/losses, predictions, dataset fingerprints and gate/write traces; reload and replay all evaluation.",
+    "A gain on retention with loss on acquisition is a tradeoff, not unqualified architectural improvement.",
+    "This uses a new development implementation of the existing noisy-latent family, not an untouched confirmatory family, modern-baseline parity, or a general memory result.",
+    "The synthetic query may be ambiguous under near collisions; score matched classical baselines and do not claim perfect observability from oracle identity.",
+    "No SOTA, sublinear total work, hardware speedup or full multimodal/verifier claim."
+  ]
+}
