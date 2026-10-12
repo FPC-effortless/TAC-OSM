@@ -128,3 +128,19 @@ def test_replay_detects_tampering(saved_predictive_smoke,corruption):
             validate(saved_predictive_smoke)
     finally:
         path.write_text(original)
+
+
+def test_full_eval_grid_uses_two_pairs_per_condition(monkeypatch):
+    sys.path.insert(0,str(ROOT/"scripts"))
+    import run_predictive_world_dev as runner
+    def fake_measure(model,seed,h,d,f,noise,task,action,replicate=0):
+        return (h,d,f,noise,task,action,replicate,seed)
+    monkeypatch.setattr(runner,"measure_pair",fake_measure)
+    rows=runner.evaluate(None,241)
+    assert len(rows)==288
+    counts={}
+    for h,d,f,noise,task,action,replicate,_ in rows:
+        key=(h,d,f,noise,task,action)
+        counts.setdefault(key,set()).add(replicate)
+    assert len(counts)==144
+    assert all(v=={0,1} for v in counts.values())
