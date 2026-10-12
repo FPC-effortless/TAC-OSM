@@ -61,7 +61,9 @@ def make_world_batch(seed: int, step: int, *, smoke: bool = False) -> WorldBatch
         role = ('retention','acquisition')[j%2]
         pair = make_pair(seed_for('predworld-train',seed,step,j),hs,ds,fraction,noise,role)
         episodes.extend((pair.left,pair.right))
-        actions.extend(((step+j)%2,)*2)
+        # Cross actions with both task roles within EVERY batch. The original
+        # (step+j)%2 was confounded with j%2 (retention vs acquisition).
+        actions.extend(((step+j//2)%2,)*2)
         tasks.extend((role,)*2)
     addresses,values,query,current = tensors(episodes)
     answer = torch.tensor([e.target for e in episodes],dtype=torch.long)
