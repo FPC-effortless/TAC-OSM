@@ -172,8 +172,8 @@ def summarize(rows):
     counts={}
     for role in ("retention","acquisition"):
         cells=[r for r in rows if r["condition"]["role"]==role]
-        counts[role]=sum(sum(int(x==y) for x,y in zip(r["target"],r["task_prediction"]))
-                         for r in cells)/(2*len(cells))
+        counts[role]=(sum(sum(int(x==y) for x,y in zip(r["target"],r["task_prediction"]))
+                         for r in cells)/(2*len(cells)) if cells else None)
     return {"episodes":total,"accuracy":success/total,
             "reset_accuracy":reset/total,"both_pair_correct_rate":both/len(rows),
             "role_accuracy":counts,
