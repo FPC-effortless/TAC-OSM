@@ -18,7 +18,6 @@ from torch import nn
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from tac_osm import Query  # noqa: E402
 from tac_osm.benchmark_v1 import generate_task  # noqa: E402
 from tac_osm.hardened import HardenedLoop, TemporalBenchmark  # noqa: E402
 from tac_osm.development.ced_hardened_router import (  # noqa: E402
