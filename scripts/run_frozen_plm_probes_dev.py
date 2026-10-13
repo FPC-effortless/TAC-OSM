@@ -228,7 +228,6 @@ def evaluate_probe(model: DecoderProbe, features: dict[str,Tensor],
     swapped=model(flipped).argmax(-1).tolist()
     raw=[]
     for i,row in enumerate(rows):
-        target=row["target"]
         raw.append({**row,"prediction":pred[2*i:2*i+2],
                     "swapped_prediction":swapped[2*i:2*i+2]})
     total=2*len(raw)
