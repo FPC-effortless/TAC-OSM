@@ -14,7 +14,7 @@ from tac_osm.development.rehearsal_writer import (  # noqa: E402
 )
 from tac_osm.development.protection_benchmark import make_pair, tensors  # noqa: E402
 from run_rehearsal_writer_dev import (  # noqa: E402
-    ARMS, train_case, sample_rehearsal_inputs, summarize, evaluate, conditions,
+    ARMS, train_case, sample_rehearsal_inputs, conditions,
 )
 
 
