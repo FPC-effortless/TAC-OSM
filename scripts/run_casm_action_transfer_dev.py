@@ -19,7 +19,6 @@ import sys
 import zipfile
 
 import torch
-from torch import Tensor
 import torch.nn.functional as F
 
 ROOT=Path(__file__).resolve().parents[1]
