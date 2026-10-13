@@ -1,13 +1,5 @@
 name: CED hardened router DEV-008 (NOT confirmatory)
 on:
-  push:
-    branches:
-      - research/ced-hardened-integration-dev-008-2026-10-13
-    paths:
-      - "src/tac_osm/development/ced_hardened_router.py"
-      - "tests/test_ced_hardened_development.py"
-      - "scripts/run_ced_hardened_dev.py"
-      - ".github/workflows/ced-hardened-development.yml"
   pull_request:
     paths:
       - "src/tac_osm/development/ced_hardened_router.py"
@@ -51,7 +43,6 @@ jobs:
           if-no-files-found: warn
 
   development-grid:
-    if: github.event_name == 'push'
     needs: mechanism-and-hardened-loop
     runs-on: ubuntu-latest
     timeout-minutes: 90
