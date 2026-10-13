@@ -13,8 +13,8 @@ from tac_osm.development.casm_readout_alignment import (  # noqa: E402
     ARMS,CASMAlignedModel,matching_models,
 )
 from tac_osm.development.rehearsal_writer import RehearsalWriterModel  # noqa: E402
-from tac_osm.development.protection_benchmark import make_pair,tensors  # noqa: E402
-from run_casm_alignment_dev import conditions,evaluate,summarize  # noqa: E402
+from tac_osm.development.protection_benchmark import make_pair,tensors,seed_for  # noqa: E402
+from run_casm_alignment_dev import conditions,evaluate  # noqa: E402
 
 
 def _batch(seed=43):
@@ -60,12 +60,8 @@ def test_auxiliary_aligned_gradient_reaches_memory_and_actual_casm_selector():
     loss.backward()
     for grad in (model.memory.write.weight.grad,
                  model.read_selector[-1].weight.grad,
-                 model.compute.selector[-1].weight.grad,
-                 model.compute.operators[0][0].weight.grad):
-        # Not every operator is activated, so test the selector and memory
-        # regardless, and skip inactive operator-specific assertion below.
-        if grad is not model.compute.operators[0][0].weight.grad:
-            assert grad is not None and torch.isfinite(grad).all() and grad.abs().sum()>0
+                 model.compute.selector[-1].weight.grad):
+        assert grad is not None and torch.isfinite(grad).all() and grad.abs().sum()>0
     assert model.shared_head.weight.grad is not None
     assert model.shared_head.weight.grad.abs().sum()>0
 
@@ -104,11 +100,11 @@ def test_diagnostic_xor_is_not_actual_casm_answer():
     rows=evaluate(model,241,"aligned_aux",smoke=True)
     assert len(rows)==1
     row=rows[0]
-    assert row["diagnostic_xor_pred"]==[b^c for b,c in
-            zip(row["bit_pred"],tensors(list((
-                make_pair(1,32,4,0.0,.08,"retention").left,
-                make_pair(1,32,4,0.0,.08,"retention").right)))[3].tolist())] or (
-                len(row["diagnostic_xor_pred"])==2)
+    pair=make_pair(seed_for("dev013-eval",241,32,4,0.0,.08,
+                            "retention",0),32,4,0.0,.08,"retention")
+    current=tensors([pair.left,pair.right])[3].tolist()
+    assert row["diagnostic_xor_pred"]==[int(b)^int(c)
+                                         for b,c in zip(row["bit_pred"],current)]
     # The original task decision is separately computed via predict and
     # not replaced with the diagnostic XOR shortcut.
     assert "task_pred" in row
