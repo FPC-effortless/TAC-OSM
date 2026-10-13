@@ -27,8 +27,8 @@ class CASMActionAdapter(nn.Module):
         if top_k not in (1,4):
             raise ValueError("top_k must be 1 or 4")
         d=parent.config.dim
-        self.bit_to_query=nn.Sequential(nn.Linear(4,d),nn.GELU())
-        self.bit_to_routed=nn.Sequential(nn.Linear(4,d),nn.GELU())
+        self.bit_to_query=nn.Linear(4,d)
+        self.bit_to_routed=nn.Linear(4,d)
         self.compute=ConditionalExecutor(d,parent.config.operators,top_k,
                                          parent.config.depth,
                                          parent.config.halt_threshold)
@@ -38,7 +38,7 @@ class CASMActionAdapter(nn.Module):
         self.top_k=top_k
         self.last_operator_sample_calls=0
 
-    def forward(self, bit_distribution: Tensor, current: Tensor) -> Tensor:
+    def forward(self, bit_distribution: Tensor, current: Tensor, *,\n                ablate_compute: bool=False) -> Tensor:
         if (bit_distribution.ndim!=2 or bit_distribution.shape[1]!=2
                 or current.shape!=(bit_distribution.shape[0],)):
             raise ValueError("bit probability must be [B,2] and current [B]")
@@ -52,9 +52,15 @@ class CASMActionAdapter(nn.Module):
         visible=torch.cat((bit_distribution,F.one_hot(current.long(),2).float()),dim=-1)
         q=self.bit_to_query(visible)
         routed=self.bit_to_routed(visible)
-        computed,_=self.compute(routed,q)
-        self.last_operator_sample_calls=sum(
-            t.operator_sample_calls for t in self.compute.last_trace)
+        if ablate_compute:
+            # Only linear input projections and linear answer remain. With
+            # balanced XOR labels this pathway cannot implement the rule.
+            computed=routed
+            self.last_operator_sample_calls=0
+        else:
+            computed,_=self.compute(routed,q)
+            self.last_operator_sample_calls=sum(
+                t.operator_sample_calls for t in self.compute.last_trace)
         return self.answer(torch.cat((computed,q),dim=-1))
 
 
