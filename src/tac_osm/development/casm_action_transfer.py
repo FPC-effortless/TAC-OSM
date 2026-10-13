@@ -38,7 +38,8 @@ class CASMActionAdapter(nn.Module):
         self.top_k=top_k
         self.last_operator_sample_calls=0
 
-    def forward(self, bit_distribution: Tensor, current: Tensor, *,\n                ablate_compute: bool=False) -> Tensor:
+    def forward(self, bit_distribution: Tensor, current: Tensor, *,
+                ablate_compute: bool=False) -> Tensor:
         if (bit_distribution.ndim!=2 or bit_distribution.shape[1]!=2
                 or current.shape!=(bit_distribution.shape[0],)):
             raise ValueError("bit probability must be [B,2] and current [B]")
