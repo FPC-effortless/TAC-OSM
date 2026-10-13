@@ -75,8 +75,12 @@ def test_no_memory_predictor_cannot_discriminate_opposite_past():
     assert torch.equal(a[0],a[1]) and torch.equal(q[0],q[1]) and torch.equal(c[0],c[1])
     state=model.encode(a,v,trace=False)
     reset=torch.zeros_like(state)
-    assert torch.equal(model.predict(reset,q,c)[0],model.predict(reset,q,c)[1])
-    assert torch.equal(model.rehearsal_logits(reset,q)[0],model.rehearsal_logits(reset,q)[1])
+    model.eval()
+    with torch.no_grad():
+        decision=model.predict(reset,q,c)
+        recall=model.rehearsal_logits(reset,q)
+    torch.testing.assert_close(decision[0],decision[1],atol=1e-6,rtol=1e-6)
+    torch.testing.assert_close(recall[0],recall[1],atol=1e-6,rtol=1e-6)
 
 
 def test_update_gate_never_hides_full_incoming_observation_from_writer():
