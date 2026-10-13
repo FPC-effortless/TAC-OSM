@@ -105,6 +105,9 @@ class QueryOnlyCED(nn.Module):
             for _ in range(2 if mode == "dense" else 1)
         ])
         self.decoder = nn.ModuleList([_QueryDecoder(width, heads) for _ in range(2)])
+        # DEV-009: differentiable pre-topk logits for training index supervision.
+        # Diagnostic only. Never fed gold or labels during model inference.
+        self.last_first_index_scores: Tensor | None = None
 
     def forward(self, reference: Tensor, mask: Tensor, descriptors: Tensor
                 ) -> tuple[Tensor, CEDRoutingCost]:
@@ -139,6 +142,7 @@ class QueryOnlyCED(nn.Module):
             keyvalues = kv[index if self.mode == "dense" else 0]
             query, scores = layer(query, keyvalues, selected if index else None)
             if index == 0:
+                self.last_first_index_scores = scores
                 first += self.heads * n
                 if self.mode == "sparse":
                     selected = scores.topk(min(n, self.topk)).indices
