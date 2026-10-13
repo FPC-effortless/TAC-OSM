@@ -13,7 +13,6 @@ from typing import Sequence
 
 import torch
 from torch import Tensor, nn
-import torch.nn.functional as F
 
 from tac_osm import Candidate, Query, RoutingDecision, PersistentState
 
