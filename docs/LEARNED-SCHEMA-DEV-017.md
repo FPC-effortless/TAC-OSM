@@ -1,6 +1,10 @@
 # DEV-017 — Learned schema state, pending dynamics, causal memory and decision cost
 
-**Status: frozen pre-training ADAPTIVE DEVELOPMENT protocol; no outcome claimed.**
+**Status: CPU experiment and neural/raw-evidence replay completed; all full reliability/cost gates failed.**
+
+See [results and exact evidence](LEARNED-SCHEMA-DEV-017-RESULTS.md). The original
+training contract and scientific source remain unchanged; this document records
+the pre-training design below.
 Parent: DEV-016 PR #172, commit `1083d7ad615ccc1758e68d929f67eeafccb2388e`.
 The contract is committed with this implementation before automatic CPU training.
 This is a development protocol, not external preregistration or confirmation.

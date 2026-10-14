@@ -44,6 +44,9 @@ jobs:
           if-no-files-found: warn
   three-seed:
     needs: gates-and-smoke
+    # Pin the completed development result; documentation commits need gates
+    # and smoke, not another full SGD run. Explicit dispatch permits replication.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == 'f3ae98365e45c23b5888216b4a126e3af1137c78'
     runs-on: ubuntu-latest
     timeout-minutes: 180
     strategy:
