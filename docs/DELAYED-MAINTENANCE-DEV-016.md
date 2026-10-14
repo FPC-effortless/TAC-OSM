@@ -1,6 +1,9 @@
 # DEV-016 — Delayed maintenance benchmark and validity audit
 
-**Status: benchmark locally audited; learned CPU workflow implemented and awaiting GitHub execution.**
+**Status: full CPU GitHub training and neural/raw-evidence replay completed; preset predictive gate failed.**
+
+See [measured results and exact evidence](DELAYED-MAINTENANCE-DEV-016-RESULTS.md).
+The sections below record the protocol and its pre-training amendment.
 
 Parent: DEV-015 commit `2433f494a717518170d35ea71ab4a36d03e530dd`, PR #171.
 This is a new development instrument, not evidence that TAC-OSM memory works.

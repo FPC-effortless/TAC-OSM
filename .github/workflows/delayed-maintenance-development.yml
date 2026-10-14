@@ -72,6 +72,10 @@ jobs:
           if-no-files-found: warn
   learned-three-seed:
     needs: learned-smoke
+    # The completed, audited full run is pinned to this training commit.
+    # Later documentation/audit commits need regression and smoke, not another
+    # full SGD run. Explicit workflow_dispatch can rerun the fixed experiment.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == '1b62d49db358d1e703256cfc0ab8524d3b73d118'
     runs-on: ubuntu-latest
     timeout-minutes: 120
     strategy:
