@@ -1,0 +1,37 @@
+{
+  "study": "DEV-016",
+  "status": "DEVELOPMENT_BENCHMARK_VALIDITY_ONLY",
+  "parent_commit": "2433f494a717518170d35ea71ab4a36d03e530dd",
+  "environment": "delayed_maintenance_v1",
+  "audit_seeds": [43, 59, 71],
+  "histories": [32, 128, 512],
+  "delays": [4, 16, 32],
+  "entities": 8,
+  "pairs_per_cell": 16,
+  "memory_scalar_limit": 768,
+  "primary_endpoint": "pre_action_future_state_accuracy",
+  "validity_gates": {
+    "schema_reference_accuracy": 1.0,
+    "balanced_reset_accuracy": 0.5,
+    "opposite_past_future_difference": 1.0,
+    "replay_exact": true
+  },
+  "learned_phase": {
+    "status": "NOT_RUN",
+    "arms": ["frozen_writer", "joint_task", "joint_predictive", "joint_shuffled"],
+    "train_seeds": [43, 59, 71],
+    "training_histories": [32, 128],
+    "training_delays": [4, 16],
+    "steps": 256,
+    "batch_size": 8,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "auxiliary_weight": 1.0,
+    "primary_contrast": "joint_predictive_minus_frozen_writer",
+    "minimum_mean_gain": 0.05,
+    "required_seed_interval_lower_bound": 0.0,
+    "required_H512_accuracy": 0.65,
+    "require_gain_over_joint_task_and_joint_shuffled": true
+  },
+  "claims_excluded": ["learned_memory_improvement", "full_hardened_loop", "SOTA", "sublinear_total_work"]
+}

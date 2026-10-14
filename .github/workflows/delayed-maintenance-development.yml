@@ -1,0 +1,32 @@
+name: DEV-016 delayed maintenance validity (no learned capability claim)
+on:
+  pull_request:
+    paths:
+      - "src/tac_osm/development/delayed_maintenance.py"
+      - "scripts/run_delayed_maintenance_dev.py"
+      - "tests/test_delayed_maintenance_development.py"
+      - "contracts/DEV-016.json"
+      - ".github/workflows/delayed-maintenance-development.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Mechanism and boundary gates
+        run: python -m unittest discover -s tests -p 'test_delayed_maintenance_development.py' -v
+      - name: Full validity grid and exact replay
+        run: |
+          python scripts/run_delayed_maintenance_dev.py
+          python scripts/run_delayed_maintenance_dev.py --replay
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DEV-016-BENCHMARK-VALIDITY-NOT-LEARNED
+          path: artifacts/DEV-016-validity/
+          if-no-files-found: error
