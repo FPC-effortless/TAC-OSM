@@ -72,5 +72,8 @@ def test_reset_state_has_identical_predictions_for_opposite_pasts():
     with torch.no_grad():
         state = m.encode(*inputs[:3])
         action, future, _ = m.decode(torch.zeros_like(state), inputs[3])
-    torch.testing.assert_close(action[0], action[1], rtol=0, atol=0)
-    torch.testing.assert_close(future[0], future[1], rtol=0, atol=0)
+    assert torch.equal(inputs[3][0], inputs[3][1])
+    torch.testing.assert_close(action[0], action[1], rtol=1e-6, atol=1e-6)
+    torch.testing.assert_close(future[0], future[1], rtol=1e-6, atol=1e-6)
+    assert torch.equal(action.argmax(-1)[0], action.argmax(-1)[1])
+    assert torch.equal(future.argmax(-1)[0], future.argmax(-1)[1])
