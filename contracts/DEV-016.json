@@ -1,11 +1,23 @@
 {
   "study": "DEV-016",
-  "status": "DEVELOPMENT_BENCHMARK_VALIDITY_ONLY",
+  "status": "DEVELOPMENT_LEARNED_PHASE_READY_FOR_GITHUB",
   "parent_commit": "2433f494a717518170d35ea71ab4a36d03e530dd",
-  "environment": "delayed_maintenance_v1",
-  "audit_seeds": [43, 59, 71],
-  "histories": [32, 128, 512],
-  "delays": [4, 16, 32],
+  "environment": "delayed_maintenance_v2_pending_cancel",
+  "audit_seeds": [
+    43,
+    59,
+    71
+  ],
+  "histories": [
+    32,
+    128,
+    512
+  ],
+  "delays": [
+    4,
+    16,
+    32
+  ],
   "entities": 8,
   "pairs_per_cell": 16,
   "memory_scalar_limit": 768,
@@ -17,11 +29,26 @@
     "replay_exact": true
   },
   "learned_phase": {
-    "status": "NOT_RUN",
-    "arms": ["frozen_writer", "joint_task", "joint_predictive", "joint_shuffled"],
-    "train_seeds": [43, 59, 71],
-    "training_histories": [32, 128],
-    "training_delays": [4, 16],
+    "status": "READY_FOR_GITHUB_ACTIONS",
+    "arms": [
+      "frozen_writer",
+      "joint_task",
+      "joint_predictive",
+      "joint_shuffled"
+    ],
+    "train_seeds": [
+      43,
+      59,
+      71
+    ],
+    "training_histories": [
+      32,
+      128
+    ],
+    "training_delays": [
+      4,
+      16
+    ],
     "steps": 256,
     "batch_size": 8,
     "optimizer": "AdamW",
@@ -31,7 +58,101 @@
     "minimum_mean_gain": 0.05,
     "required_seed_interval_lower_bound": 0.0,
     "required_H512_accuracy": 0.65,
-    "require_gain_over_joint_task_and_joint_shuffled": true
+    "require_gain_over_joint_task_and_joint_shuffled": true,
+    "common_readout_supervision": "True future outcomes train the evaluated future head with detached CASM features in every arm.",
+    "predictive_intervention": "A separate matched head supplies true or independently random future-label gradients to PLM/CASM features."
   },
-  "claims_excluded": ["learned_memory_improvement", "full_hardened_loop", "SOTA", "sublinear_total_work"]
+  "claims_excluded": [
+    "learned_memory_improvement",
+    "full_hardened_loop",
+    "SOTA",
+    "sublinear_total_work"
+  ],
+  "experiment_id": "DEV-016",
+  "title": "Delayed maintenance development",
+  "question": "Can finite learned state predict delayed maintenance outcomes?",
+  "hypothesis": "Predictive supervision improves pre-action future state accuracy beyond a frozen writer.",
+  "arms": [
+    {
+      "name": "frozen_writer",
+      "intervention": "frozen_writer",
+      "acts_on": "writer training and predictive loss"
+    },
+    {
+      "name": "joint_task",
+      "intervention": "joint_task",
+      "acts_on": "writer training and predictive loss"
+    },
+    {
+      "name": "joint_predictive",
+      "intervention": "joint_predictive",
+      "acts_on": "writer training and predictive loss"
+    },
+    {
+      "name": "joint_shuffled",
+      "intervention": "joint_shuffled",
+      "acts_on": "writer training and predictive loss"
+    }
+  ],
+  "endpoints": [
+    {
+      "name": "pre_action_future_state_accuracy",
+      "role": "primary",
+      "primary": true
+    },
+    {
+      "name": "H512_accuracy",
+      "role": "retention stress",
+      "primary": false
+    }
+  ],
+  "decision_rule": [
+    {
+      "condition": "joint_predictive gain >= .05 with three-seed interval lower bound > 0, H512 >= .65 and gain over joint_task and joint_shuffled",
+      "licenses": "Tentative development evidence for this temporal task only"
+    },
+    {
+      "condition": "Otherwise",
+      "licenses": "Negative or inconclusive writer/predictive-supervision evidence"
+    }
+  ],
+  "interpretation_order": [
+    "Validate observation boundary and balanced controls",
+    "Evaluate pre-action future-state contrast",
+    "Inspect H512 and role failures before action/verification outcomes"
+  ],
+  "h_levels": [
+    32,
+    128,
+    512
+  ],
+  "seeds": [
+    43,
+    59,
+    71
+  ],
+  "steps": 256,
+  "eval_steps": 16,
+  "held_constant": [
+    "Parent weights per seed",
+    "768-scalar recurrent policy state",
+    "Public input features",
+    "Optimizer schedule",
+    "Evaluation observations across arms"
+  ],
+  "roles": [
+    "retention",
+    "acquisition",
+    "cancelled_service",
+    "pending_cancel"
+  ],
+  "development_amendment": {
+    "parent": "ad5729cf82ee8607874fda0bf6b3a9217010b360",
+    "before_learned_training": true,
+    "reason": "The first validity schedule did not require forecasting a still-pending intervention. Add generation-dependent pending cancellation, publicly expose scheduled due ticks, and keep evaluator state out of model inputs. Repair canonical contract schema and suite count.",
+    "original_validity_episodes": 2592,
+    "revised_validity_episodes": 3456,
+    "original_schema_scalars": 16,
+    "revised_schema_scalars": 41
+  }
 }

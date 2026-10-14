@@ -19,6 +19,7 @@ class PublicObservation:
     entity: int
     kind: str
     value: int
+    due: int = -1
 
 
 @dataclass(frozen=True)
@@ -86,7 +87,8 @@ class MaintenanceWorld:
         if action.kind == "service":
             self._pending.append(Intervention(self.tick + action.delay, action.entity,
                                              self._generation[action.entity], action.value))
-            return PublicObservation(self.tick, action.entity, "scheduled", action.value)
+            return PublicObservation(self.tick, action.entity, "scheduled", action.value,
+                                     self.tick + action.delay)
         return PublicObservation(self.tick, action.entity, "wait", -1)
 
     def advance(self, changes: tuple[tuple[int, int], ...] = ()) -> tuple[PublicObservation, ...]:
@@ -109,30 +111,55 @@ class MaintenanceWorld:
 
 
 class SchemaReference:
-    """Fixed schema-indexed sufficient statistic, no historical event cache."""
+    """Bounded reference for schedules with one pending service per entity."""
 
     def __init__(self, entities: int):
-        if entities < 1 or entities * 2 > 768:
+        if entities < 1 or entities * 5 + 1 > 768:
             raise ValueError("schema exceeds scalar budget")
         self.bits = [-1] * entities
         self.generation = [0] * entities
+        self.pending_due = [-1] * entities
+        self.pending_value = [-1] * entities
+        self.pending_generation = [-1] * entities
+        self.tick = 0
 
     @property
     def state_scalars(self) -> int:
-        return len(self.bits) + len(self.generation)
+        return 5 * len(self.bits) + 1
+
+    def _mature(self, tick: int):
+        for e in range(len(self.bits)):
+            if 0 <= self.pending_due[e] <= tick:
+                if self.pending_generation[e] == self.generation[e]:
+                    self.bits[e] = self.pending_value[e]
+                self.pending_due[e] = -1
+        self.tick = tick
 
     def observe(self, obs: PublicObservation):
+        if obs.tick < self.tick:
+            raise ValueError("observations must be chronological")
+        if obs.tick > self.tick:
+            self._mature(obs.tick - 1)
         if obs.kind in ("inspect", "change"):
             self.bits[obs.entity] = obs.value
         if obs.kind == "change":
             self.generation[obs.entity] += 1
+        self._mature(obs.tick)
+        if obs.kind == "scheduled":
+            if self.pending_due[obs.entity] >= 0:
+                raise ValueError("reference requires one pending service per entity")
+            self.pending_due[obs.entity] = obs.due
+            self.pending_value[obs.entity] = obs.value
+            self.pending_generation[obs.entity] = self.generation[obs.entity]
 
     def predict(self, entity: int, action: Action) -> int:
         if self.bits[entity] not in (0, 1):
             raise ValueError("unobserved state")
         # The benchmark query asks about the selected intervention at its
         # maturity time, with an explicit no-future-exogenous-change horizon.
-        return action.value if action.kind == "service" else self.bits[entity]
+        future = copy.deepcopy(self)
+        future._mature(self.tick + action.delay)
+        return action.value if action.kind == "service" else future.bits[entity]
 
 
 @dataclass(frozen=True)
@@ -149,7 +176,7 @@ def make_pair(seed: int, history: int, delay: int, entities: int = 8,
               *, domain: str = "audit", role: str = "retention") -> tuple[Case, Case]:
     if history < entities or entities < 2 or delay < 1:
         raise ValueError("invalid task dimensions")
-    if role not in ("retention", "acquisition", "cancelled_service"):
+    if role not in ("retention", "acquisition", "cancelled_service", "pending_cancel"):
         raise ValueError("unknown role")
     rng = random.Random(f"dev016:{domain}:{role}:{seed}:{history}:{delay}:{entities}")
     target = rng.randrange(entities)
@@ -161,9 +188,17 @@ def make_pair(seed: int, history: int, delay: int, entities: int = 8,
     pair = []
     for bit in (0, 1):
         bits = initial.copy()
-        bits[target] = bit
+        bits[target] = 1 if role == "pending_cancel" else bit
         world = MaintenanceWorld(tuple(bits))
         observations = [world.act(Action("inspect", e)) for e in order]
+        if role == "pending_cancel":
+            # Both partners visibly start failed and receive the same service.
+            # Only a historical reset determines whether it can mature. A
+            # latest-value lookup cannot distinguish future outcomes here.
+            observations.append(world.act(Action("service", target, 0,
+                                                       history - entities + 3 + delay)))
+            changed_entity = target if bit else others[-1]
+            observations.extend(world.advance(((changed_entity, 1),)))
         if role == "cancelled_service":
             observations.append(world.act(Action("service", target, 1, 2)))
             observations.extend(world.advance(((target, bit),)))
@@ -179,6 +214,7 @@ def make_pair(seed: int, history: int, delay: int, entities: int = 8,
         observations.append(world.act(Action("inspect", competitor)))
         if role == "acquisition":
             observations.extend(world.advance(((target, bit),)))
+        observations.append(world.act(Action("wait", target)))
         # Binary decision: predict target at horizon if we wait. A selected
         # service is evaluated separately as a counterfactual diagnostic.
         candidate = Action("wait", target, 0, delay)

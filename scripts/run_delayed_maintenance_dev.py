@@ -32,7 +32,7 @@ def run():
     for seed in contract["audit_seeds"]:
         for history in contract["histories"]:
             for delay in contract["delays"]:
-                for role in ("retention", "acquisition", "cancelled_service"):
+                for role in ("retention", "acquisition", "cancelled_service", "pending_cancel"):
                     for repetition in range(contract["pairs_per_cell"]):
                         pair = make_pair(seed * 10000 + repetition, history, delay,
                                          contract["entities"], role=role)
@@ -79,7 +79,7 @@ def run():
                "by_role": {role: sum(r["reference_prediction"] == r["target"]
                                       for r in rows if r["role"] == role) /
                            sum(r["role"] == role for r in rows)
-                           for role in ("retention", "acquisition", "cancelled_service")}}
+                           for role in ("retention", "acquisition", "cancelled_service", "pending_cancel")}}
     if summary["schema_accuracy"] != 1 or summary["reset_accuracy"] != .5:
         raise AssertionError("validity gates failed")
     if summary["state_scalars"] > contract["memory_scalar_limit"]:

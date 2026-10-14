@@ -43,10 +43,10 @@ class DelayedMaintenanceTests(unittest.TestCase):
 
     def test_public_interface_excludes_target_and_generations(self):
         self.assertEqual({f.name for f in fields(PublicObservation)},
-                         {"tick", "entity", "kind", "value"})
+                         {"tick", "entity", "kind", "value", "due"})
 
     def test_all_roles_have_opposite_answers_and_identical_current_query(self):
-        for role in ("retention", "acquisition", "cancelled_service"):
+        for role in ("retention", "acquisition", "cancelled_service", "pending_cancel"):
             left, right = make_pair(43, 32, 4, role=role)
             self.assertNotEqual(left.expected, right.expected)
             self.assertEqual(left.candidate, right.candidate)
@@ -56,7 +56,7 @@ class DelayedMaintenanceTests(unittest.TestCase):
                 for obs in case.observations:
                     reference.observe(obs)
                 self.assertEqual(reference.predict(case.query_entity, case.candidate), case.expected)
-                self.assertEqual(reference.state_scalars, 16)
+                self.assertEqual(reference.state_scalars, 41)
                 self.assertEqual(case.service_expected, 0)
 
     def test_generation_effect_is_visible_in_process(self):
