@@ -104,8 +104,6 @@ def pairs(entries):
 def physical(rows):
     costs = defaultdict(list)
     for row in rows:
-        if row["condition"]["history"] != 512:
-            continue
         for mode in ("none", "selected", "matched_random"):
             c = row["controls"][mode]
             expected = 4 * c["failures"] + len(c["services"]) + .1 * c["inspections"]
@@ -113,7 +111,8 @@ def physical(rows):
                 raise AssertionError("physical cost arithmetic mismatch")
             if not math.isclose(c["cost_per_entity"], expected / 8, abs_tol=1e-8):
                 raise AssertionError("normalized cost mismatch")
-            costs[mode].append(c["cost_per_entity"])
+            if row["condition"]["history"] == 512:
+                costs[mode].append(c["cost_per_entity"])
     return {mode + "_H512_cost_per_entity": mean(values) for mode, values in costs.items()}
 
 
