@@ -42,6 +42,8 @@ jobs:
           if-no-files-found: warn
   seed-regime:
     needs: gates-and-smoke
+    # Preserve the frozen training run; later evidence/docs commits do not retrain.
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.sha == '6b319dee36291021bc486c51cd40136af4b08d4e'
     runs-on: ubuntu-latest
     timeout-minutes: 180
     strategy:
