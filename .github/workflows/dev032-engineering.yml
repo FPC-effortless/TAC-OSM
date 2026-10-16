@@ -24,7 +24,10 @@ jobs:
           python scripts/sync_test_count.py --check
           python -m pytest tests/ -q
           python scripts/run_test6_preflight_dev032.py --output /tmp/dev032-engineering.json
+          python scripts/audit_test6_preflight_dev032.py --report /tmp/dev032-engineering.json --output /tmp/dev032-physical-audit.json
       - uses: actions/upload-artifact@v4
         with:
           name: DEV-032-ENGINEERING-NOT-CAPABILITY
-          path: /tmp/dev032-engineering.json
+          path: |
+            /tmp/dev032-engineering.json
+            /tmp/dev032-physical-audit.json

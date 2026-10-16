@@ -45,6 +45,19 @@ Implementation boundaries remain explicit:
 The [scientific integration plan](TEST6-SCIENTIFIC-PROTOCOL-PROPOSAL.md) is
 separate. No scientific test set is accessed by this work.
 
+## Recorded engineering results
+
+At frozen source `4b9da75cf318271bb00e062e3c90469058ff370a`, all56 ordinary
+rollouts completed,40 executed repair, and the two explicit branch fixtures
+passed. The [raw report](DEV-032-TEST6-ENGINEERING.json) retains every action,
+receipt and cost. A separate policy-independent physical simulator replay
+verified99 actions including the fixtures, with exact receipt and cost
+agreement: [physical audit](DEV-032-TEST6-PHYSICAL-AUDIT.json). Deliberately
+changing a reported cost caused audit rejection. This audit does not rerun
+neural predictions and does not establish a scientific performance benefit.
+The complete local suite passed:1143 tests. No training or scientific test
+evaluation occurred in this engineering preflight.
+
 The account owner explicitly authorized transient reuse of the existing
 Kaggle credential after a rotation request. Authentication stays outside the
 repository and notebook package. Revocation has not been verified, and this
