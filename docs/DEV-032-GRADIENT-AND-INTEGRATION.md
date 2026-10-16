@@ -58,6 +58,28 @@ neural predictions and does not establish a scientific performance benefit.
 The complete local suite passed:1143 tests. No training or scientific test
 evaluation occurred in this engineering preflight.
 
+## Frozen GRU diagnostic
+
+Kaggle notebook version2 completed the diagnostic at source
+`de2e56d8f30849bbe67c4845badf77ba31cd2a87`. Resuming the original216 checkpoint
+with the original source and exact recorded runtime reproduced the clipping
+exception at attempted update286. The forward loss was finite,0.56964409,
+and every pre-update parameter was finite, but1,802,668 gradient elements
+were non-finite. This is not solely overflow of a norm applied to otherwise
+finite gradients. The [raw gradient report](DEV-032-GRU-GRADIENT-HEALTH.json),
+[diagnostic status](DEV-032-GRU-DIAGNOSTIC-STATUS.json) and
+[snapshot inspection](DEV-032-GRU-SNAPSHOT-AUDIT.json) retain the evidence.
+The snapshot hash and non-finite counts were independently checked on CPU.
+Raw gradient/parameter/optimizer/RNG tensors remain in the private Kaggle
+version2 output; no trained checkpoint is added to Git.
+
+The original trial remains failed. This observation does not establish that
+the GPU backend caused the problem, or that the architecture cannot learn.
+An additional registered single-batch comparison will recompute the captured
+pre-update model and identical fingerprinted training batch on CPU, CUDA
+cuDNN, and CUDA unfused execution in the same runtime. It performs no
+optimizer steps and does not evaluate validation or test accuracy.
+
 The account owner explicitly authorized transient reuse of the existing
 Kaggle credential after a rotation request. Authentication stays outside the
 repository and notebook package. Revocation has not been verified, and this
