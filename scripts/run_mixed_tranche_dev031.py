@@ -21,6 +21,9 @@ def commands(spec,output):
 
 def run(output):
     spec_path=ROOT/'research/dev031/protocol.json';spec=json.loads(spec_path.read_text())
+    import torch
+    if not torch.cuda.is_available() or str(torch.__version__)!=spec['required_runtime']['torch_version'] or torch.cuda.get_device_name(0)!=spec['required_runtime']['gpu_name']:
+        raise RuntimeError('requires the preflight-validated Kaggle runtime and GPU; no silent substitution')
     output=Path(output)
     if output.exists():raise ValueError('preserve evidence; use fresh output')
     output.mkdir(parents=True)

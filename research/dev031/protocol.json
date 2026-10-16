@@ -2,19 +2,46 @@
   "experiment": "DEV-031 bounded mixed-device development tranche",
   "scientific_parent": "DEV-029 registered tuning matrix; criteria unchanged",
   "compute_basis": "DEV-030 frozen preflight failed all-CUDA aggregate but showed GRU-specific acceleration; placement selected from timing only before training outcomes",
-  "arms": ["native", "masked_local", "schema41", "gru768", "delta768", "event_table"],
-  "devices": {"native":"cpu", "masked_local":"cpu", "schema41":"cpu", "gru768":"cuda:0", "delta768":"cpu", "event_table":"cpu"},
+  "arms": [
+    "native",
+    "masked_local",
+    "schema41",
+    "gru768",
+    "delta768",
+    "event_table"
+  ],
+  "devices": {
+    "native": "cpu",
+    "masked_local": "cpu",
+    "schema41": "cpu",
+    "gru768": "cuda:0",
+    "delta768": "cpu",
+    "event_table": "cpu"
+  },
   "seed": 311,
   "learning_rate": 0.002,
   "curriculum": "fixed512",
   "until": 648,
-  "saved_update_budgets": [216,648],
+  "saved_update_budgets": [
+    216,
+    648
+  ],
   "cpu_workers_maximum": 3,
   "gpu_workers": 1,
   "overall_wall_budget_seconds": 1800,
-  "cpu_dispatch_order": ["masked_local","native","delta768","schema41","event_table"],
+  "cpu_dispatch_order": [
+    "masked_local",
+    "native",
+    "delta768",
+    "schema41",
+    "event_table"
+  ],
   "placement_and_order": "Engineering timing only; no validation outcomes used. All six arms retained even on failures; timeout leaves incomplete evidence and never promotes a recipe.",
   "runtime": "Same Kaggle image/torch build across all arms, explicit CPU/CUDA placement; separate cohort from earlier CPU experiments. One-step preflight parity is not evidence of identical long training trajectories.",
   "replay": "Separate process on the recorded device; verify checkpoint hash, source, protocol and state, reconstruct validation and compare full records; replay failure retains raw outcomes without acceptance.",
-  "limitations": "One seed, one recipe, six of 72 tuning trial slots and only two of three checkpoint budgets. Independent full-matrix audit, recipe selection, untouched test and twenty-seed confirmation remain blocked. No architecture superiority or complete-system capability is claimed."
+  "limitations": "One seed, one recipe, six of 72 tuning trial slots and only two of three checkpoint budgets. Independent full-matrix audit, recipe selection, untouched test and twenty-seed confirmation remain blocked. No architecture superiority or complete-system capability is claimed.",
+  "required_runtime": {
+    "torch_version": "2.11.0+cu128",
+    "gpu_name": "Tesla T4"
+  }
 }
