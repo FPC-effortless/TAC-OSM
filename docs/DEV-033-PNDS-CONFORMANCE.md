@@ -101,3 +101,18 @@ Kaggle created it at
 [`tac-osm-registered-gru-128-then512`](https://www.kaggle.com/code/eweewee2/tac-osm-registered-gru-128-then512).
 No changed optimizer, clipping, pruning, recipe selection or scientific test access.
 One additional recipe does not complete fair tuning or demonstrate convergence.
+
+## Recorded conformance evidence
+
+The [trace report](DEV-033-PNDS-TRACE-REPORT.json), frozen at source
+`ac8f73094ca82171c66e72132e08a1a64b23f5c7`, inspected56 ordinary rollouts and96
+actions (the three fixture actions are excluded). All96 public receipts were
+accepted, but zero semantic correctness labels were available. False-admission
+and contamination rates are therefore unavailable; all four gate measurements
+are unknown and the shadow policy does not admit. This does not change actual
+DEV-032 commits. The [backend tensor audit](DEV-033-BACKEND-TENSOR-AUDIT.json)
+verified all three retained gradient files and per-parameter counts.
+
+Validation:1151 local tests passed, including eight new contract tests. No
+scientific test generation, learned relevance evaluation, online admission
+enforcement or formal implementation proof occurred.
