@@ -128,3 +128,11 @@ convergence nor GRU incapacity follows. The complete72-slot grid, selection,
 fresh-seed uncertainty, larger independent evaluation and scientific Test6
 remain unfinished. No scientific test set was accessed; no architecture ranking
 or confidence interval over initialization is claimed from one seed.
+
+
+Latest [status snapshot](DEV-032-STATUS-SUMMARY.json): the version3 backend
+comparison was still RUNNING at18:55:33 UTC. No live diagnostic output was
+available, so its stage and outcome remain unknown; elapsed wall time alone
+cannot be attributed to CPU or GPU computation. Version2's completed frozen
+failure diagnosis and the separate completed lower-rate trial are preserved.
+No further GPU jobs are launched in this bounded batch.
