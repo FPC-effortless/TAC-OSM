@@ -22,6 +22,7 @@ from tac_osm.development.optimization_program import ARMS, LEARNING_RATES, CURRI
 from tac_osm.development.schema_maintenance import make_pair, ROLES, DEADLINES
 from tac_osm.development.delayed_maintenance import Action
 from tac_osm.development.noisy_memory import parameter_hash
+from tac_osm.development.compute_runtime import DeviceBoundary
 from run_learned_schema_dev import public_stream_tensors, public_queries, labels
 from run_optimization_pilot_dev029 import build, validate
 
@@ -33,15 +34,18 @@ def run(args):
         raise ValueError('commit the study before executing outcomes')
     protocol=hashlib.sha256((ROOT/'research/dev029/protocol.json').read_bytes()).hexdigest()
     identity=dict(arm=args.arm,learning_rate=args.learning_rate,curriculum=args.curriculum,seed=args.seed)
-    model=build(args.arm,29000+args.seed)
+    model=DeviceBoundary(build(args.arm,29000+args.seed),getattr(args,"device","cpu"))
+    runtime=model.metadata()
     optimizer=torch.optim.AdamW([p for p in model.parameters() if p.requires_grad],lr=args.learning_rate,weight_decay=.0001)
     initial=parameter_hash(model);start=0;fps=[];wall_total=cpu_total=0.;events=0
     if args.resume:
         saved=torch.load(args.resume,map_location='cpu',weights_only=True)
-        if saved.get('kind')!='DEV-029 tuning' or saved['identity']!=identity or saved['source']!=source or saved['protocol_sha256']!=protocol:
+        if saved.get('kind')!='DEV-029 tuning' or saved['identity']!=identity or saved['source']!=source or saved['protocol_sha256']!=protocol or saved.get('runtime')!=runtime:
             raise ValueError('resume requires exact registered trial/source; engineering pilot cannot be promoted')
         model.load_state_dict(saved['model']);optimizer.load_state_dict(saved['optimizer'])
-        torch.set_rng_state(saved['rng']);start=saved['updates'];fps=saved['training_fingerprints']
+        torch.set_rng_state(saved['rng'])
+        if model.device.type=='cuda':torch.cuda.set_rng_state_all(saved['cuda_rng'])
+        start=saved['updates'];fps=saved['training_fingerprints']
         wall_total=saved['training_seconds'];cpu_total=saved['training_cpu_seconds'];events=saved['observed_events']
         initial=saved['initial_hash']
     if not start<args.until:
@@ -49,6 +53,7 @@ def run(args):
     output=Path(args.output);output.mkdir(parents=True,exist_ok=True)
     if any((output/f'{b}.json').exists() or (output/f'{b}.pt').exists() for b in BUDGETS if start<b<=args.until):
         raise ValueError('preserve existing outcomes: choose a fresh output directory')
+    model.synchronize()
     wall=time.monotonic();cpu=time.process_time()
     for step in range(start,args.until):
         history=history_at(args.curriculum,step)
@@ -56,7 +61,7 @@ def run(args):
                         ROLES[step%4],DEADLINES[(step//12)%3],domain=domain('train'))
         fps.extend(c.fingerprint for c in cases);events+=history*2
         inp=public_stream_tensors([c.observations for c in cases])
-        q=public_queries([c.tick for c in cases],[c.horizon for c in cases]);target=labels(cases)
+        q=public_queries([c.tick for c in cases],[c.horizon for c in cases]);target=labels(cases).to(model.device)
         receipts=[(c.world.act(Action('inspect',random.Random(f'dev029:{step}:{b}').randrange(8))),) for b,c in enumerate(cases)]
         obs=public_stream_tensors(receipts)
         model.train();optimizer.zero_grad(set_to_none=True)
@@ -67,16 +72,18 @@ def run(args):
         loss.backward();torch.nn.utils.clip_grad_norm_(model.parameters(),1.,error_if_nonfinite=True);optimizer.step()
         if step%108==0:print(json.dumps(dict(identity,update=step,loss=float(loss.detach()))),flush=True)
         if step+1 in BUDGETS:
+            model.synchronize()
             wall_total+=time.monotonic()-wall;cpu_total+=time.process_time()-cpu
             model.eval();validation=validate(model,False)
             if set(fps)&{r['fingerprint'] for r in validation['rows']}:raise AssertionError('split overlap')
             checkpoint=output/f'{step+1}.pt'
             torch.save(dict(kind='DEV-029 tuning',identity=identity,source=source,protocol_sha256=protocol,
                 updates=step+1,model=model.state_dict(),optimizer=optimizer.state_dict(),rng=torch.get_rng_state(),
+                cuda_rng=torch.cuda.get_rng_state_all() if model.device.type=='cuda' else [],runtime=runtime,
                 training_fingerprints=fps,initial_hash=initial,training_seconds=wall_total,
                 training_cpu_seconds=cpu_total,observed_events=events),checkpoint)
             report=dict(identity,experiment='DEV-029 tuning',source=source,protocol_sha256=protocol,
-                updates=step+1,split='validation',smoke=False,initial_hash=initial,final_hash=parameter_hash(model),
+                updates=step+1,split='validation',smoke=False,runtime=runtime,initial_hash=initial,final_hash=parameter_hash(model),
                 primary_accuracy=validation['primary_accuracy'],cross_entropy=validation['cross_entropy'],
                 validation=validation,training_fingerprints=fps.copy(),observed_events=events,
                 training_receipts=(step+1)*2,training_seconds=wall_total,training_cpu_seconds=cpu_total,
@@ -94,5 +101,6 @@ if __name__=='__main__':
     p.add_argument('--curriculum',choices=CURRICULA,required=True)
     p.add_argument('--seed',type=int,choices=(311,419,557),required=True)
     p.add_argument('--until',type=int,choices=BUDGETS,required=True)
+    p.add_argument('--device',default='cpu',choices=('cpu','cuda:0'))
     p.add_argument('--resume');p.add_argument('--output',required=True)
     run(p.parse_args())
