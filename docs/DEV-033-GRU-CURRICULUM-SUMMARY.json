@@ -1,0 +1,183 @@
+{
+  "experiment": "Bounded DEV-029 grid progress",
+  "source": "4a8728ef3f08e01d9c542374cf1e722bf8701240",
+  "seed": 311,
+  "learning_rate": 0.0005,
+  "curriculum": "128_then512",
+  "training_complete": true,
+  "checkpoints": [
+    {
+      "updates": 216,
+      "all_role_validation_accuracy": 0.5208333333333334,
+      "primary_cases": 96,
+      "cancellation_accuracy": 0.5,
+      "cancellation_cases": 48,
+      "physical_cases": 144,
+      "physical_costs": {
+        "none": {
+          "failures": 8,
+          "services": 1127,
+          "unnecessary_services": 545,
+          "inspections": 0,
+          "total_cost": 1159.0,
+          "mean_cost_per_entity": 1.0060763888888888
+        },
+        "selected": {
+          "failures": 16,
+          "services": 1089,
+          "unnecessary_services": 515,
+          "inspections": 95,
+          "total_cost": 1162.5,
+          "mean_cost_per_entity": 1.0091145833333333
+        },
+        "matched_random": {
+          "failures": 5,
+          "services": 1135,
+          "unnecessary_services": 550,
+          "inspections": 95,
+          "total_cost": 1164.5,
+          "mean_cost_per_entity": 1.0108506944444444
+        }
+      },
+      "selected_minus_none_cost": 0.003038194444444415,
+      "training_seconds": 7.070044521,
+      "parameters": 1831714,
+      "runtime": {
+        "device": "cuda:0",
+        "state_device": "cuda:0",
+        "dtype": "float32",
+        "torch_version": "2.11.0+cu128",
+        "python_version": "3.13.15",
+        "cuda_version": "12.8",
+        "gpu_name": "Tesla T4",
+        "tf32": false,
+        "amp": false,
+        "compilation": false,
+        "batch_size_unchanged": true
+      },
+      "initial_hash": "3e92fa2f13e250c30877eadc98a09b8def17ed10c20cd6c218ed946fb3145c81",
+      "checkpoint_sha256": "b7ebc03924fa1b8a8889ccaff98caa3159fb62970226ae4feffb89f11ac5ea72",
+      "raw_report_sha256": "073505cc3378c3e1b30586ac7af77c57ddcab59d91e7a7ccef8a6e8fdf5f5462",
+      "replay_sha256": "2b06bac0941e369f999253a050325a785737105aec38eff119ee96ebd1f6be98",
+      "strict_same_runtime_replay_passed": true
+    },
+    {
+      "updates": 648,
+      "all_role_validation_accuracy": 0.53125,
+      "primary_cases": 96,
+      "cancellation_accuracy": 0.5,
+      "cancellation_cases": 48,
+      "physical_cases": 144,
+      "physical_costs": {
+        "none": {
+          "failures": 0,
+          "services": 1152,
+          "unnecessary_services": 562,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "mean_cost_per_entity": 1.0
+        },
+        "selected": {
+          "failures": 0,
+          "services": 1152,
+          "unnecessary_services": 562,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "mean_cost_per_entity": 1.0
+        },
+        "matched_random": {
+          "failures": 0,
+          "services": 1152,
+          "unnecessary_services": 562,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "mean_cost_per_entity": 1.0
+        }
+      },
+      "selected_minus_none_cost": 0.0,
+      "training_seconds": 18.588642814000025,
+      "parameters": 1831714,
+      "runtime": {
+        "device": "cuda:0",
+        "state_device": "cuda:0",
+        "dtype": "float32",
+        "torch_version": "2.11.0+cu128",
+        "python_version": "3.13.15",
+        "cuda_version": "12.8",
+        "gpu_name": "Tesla T4",
+        "tf32": false,
+        "amp": false,
+        "compilation": false,
+        "batch_size_unchanged": true
+      },
+      "initial_hash": "3e92fa2f13e250c30877eadc98a09b8def17ed10c20cd6c218ed946fb3145c81",
+      "checkpoint_sha256": "c0be94f3e946e26d921dfe89f430953a2436ecb942602ae01f68ac8a2fd8a601",
+      "raw_report_sha256": "20a9e8b5e008c0984e11a1f3e884f4c1d6232a22e817822294de42fcfee18acd",
+      "replay_sha256": "65034e0c3fe6dfb64b98d1158f59e0fb4c7b80e25a31a6c004eb0ad3e2659369",
+      "strict_same_runtime_replay_passed": true
+    },
+    {
+      "updates": 2160,
+      "all_role_validation_accuracy": 0.5416666666666666,
+      "primary_cases": 96,
+      "cancellation_accuracy": 0.5,
+      "cancellation_cases": 48,
+      "physical_cases": 144,
+      "physical_costs": {
+        "none": {
+          "failures": 0,
+          "services": 1152,
+          "unnecessary_services": 562,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "mean_cost_per_entity": 1.0
+        },
+        "selected": {
+          "failures": 0,
+          "services": 1152,
+          "unnecessary_services": 562,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "mean_cost_per_entity": 1.0
+        },
+        "matched_random": {
+          "failures": 0,
+          "services": 1152,
+          "unnecessary_services": 562,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "mean_cost_per_entity": 1.0
+        }
+      },
+      "selected_minus_none_cost": 0.0,
+      "training_seconds": 121.396880138,
+      "parameters": 1831714,
+      "runtime": {
+        "device": "cuda:0",
+        "state_device": "cuda:0",
+        "dtype": "float32",
+        "torch_version": "2.11.0+cu128",
+        "python_version": "3.13.15",
+        "cuda_version": "12.8",
+        "gpu_name": "Tesla T4",
+        "tf32": false,
+        "amp": false,
+        "compilation": false,
+        "batch_size_unchanged": true
+      },
+      "initial_hash": "3e92fa2f13e250c30877eadc98a09b8def17ed10c20cd6c218ed946fb3145c81",
+      "checkpoint_sha256": "f2c8dbfefc57e8194e22f2985ca9e2dcfe68e04d308733ab97c222bffde5e85d",
+      "raw_report_sha256": "2bbb6ee51020dbbe23f2445f6c211ab427c6c4ba0aa2036c405b9838ef448c84",
+      "replay_sha256": "38f302701e1e0a997eaf486ba11d36383e4589d53d6001017dac303e3883628c",
+      "strict_same_runtime_replay_passed": true
+    }
+  ],
+  "full_matrix_complete": false,
+  "recipe_selected": false,
+  "independent_full_matrix_audit_complete": false,
+  "test_accessed": false,
+  "fresh_seed_confirmation_complete": false,
+  "original_lr002_trial_remains_failed": true,
+  "private_raw_evidence": "https://www.kaggle.com/code/eweewee2/tac-osm-registered-gru-128-then512/versions/1",
+  "limitation": "One initialization, one registered recipe, 96 primary/48 cancellation validation cases; no architecture ranking or convergence claim"
+}
