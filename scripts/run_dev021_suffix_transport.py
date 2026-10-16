@@ -7,7 +7,6 @@ to verify the exact linear difference equation on the identical suffix.
 from __future__ import annotations
 
 import argparse
-from collections import Counter
 import hashlib
 import json
 from pathlib import Path
@@ -193,7 +192,8 @@ def run(seed, regime, frozen, output, smoke=False):
                     if t + 1 in PREFIXES:
                         traces[t + 1] = {
                             "actual": torch.linalg.vector_norm(real.flatten(1), dim=-1).tolist(),
-                            **{key: torch.linalg.vector_norm(arr.flatten(1), dim=-1).tolist()
+                            **{("transport" if key == "actual" else key):
+                               torch.linalg.vector_norm(arr.flatten(1), dim=-1).tolist()
                                for key, arr in transported.items()}}
                 if set(traces) != set(PREFIXES):
                     raise AssertionError("missing checkpoint distances")
