@@ -8,7 +8,6 @@ import pytest
 
 torch = pytest.importorskip("torch")
 from tac_osm.development.noisy_memory import DeltaMemory, MemoryConfig  # noqa: E402
-from tac_osm.development.schema_maintenance import make_pair  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 module = importlib.util.spec_from_file_location("dev021", ROOT / "scripts/run_dev021_suffix_transport.py")
