@@ -38,6 +38,9 @@ def package(output,source,username):
         health=json.loads((output/'gradient-health.json').read_text())
         print(json.dumps(dict(diagnosis_completed=True,scientific_trial_remains_failed=True,
             classification=health['classification'],attempted_update=health['attempted_update'])),flush=True)
+        subprocess.run([sys.executable,str(roots[0]/'scripts/compare_failure_backends_dev032.py'),
+            '--checkout',str(roots[1]),'--evidence',str(output),
+            '--output','/kaggle/working/dev032-backend-comparison'],check=True,timeout=600)
     ''')
     notebook=dict(nbformat=4,nbformat_minor=5,metadata={'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},'accelerator':'GPU'},cells=[dict(cell_type='code',id='frozen-diagnosis',metadata={},execution_count=None,outputs=[],source=code.splitlines(keepends=True))])
     name='dev032_diagnosis.ipynb';(output/name).write_text(json.dumps(notebook,indent=2)+'\n')
