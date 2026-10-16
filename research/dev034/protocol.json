@@ -1,0 +1,78 @@
+{
+  "experiment": "DEV-034",
+  "status": "registered bounded engineering pilot",
+  "arms": [
+    "mtsk_global_tied",
+    "mtsk_global_multi",
+    "mtsk_local_tied",
+    "mtsk_local_multi",
+    "masked_local",
+    "schema41"
+  ],
+  "seed": 311,
+  "initialization_seed": 34311,
+  "updates": 216,
+  "learning_rate": 0.002,
+  "weight_decay": 0.0001,
+  "clip": 1.0,
+  "batch": 2,
+  "training_history": 512,
+  "training_namespace": "dev034-v1-train",
+  "validation_namespace": "dev034-v1-validation",
+  "validation": {
+    "histories": [
+      128,
+      512
+    ],
+    "delays": [
+      32,
+      128,
+      512
+    ],
+    "roles": [
+      "retention",
+      "acquisition",
+      "pending_cancel",
+      "reissued_cancel"
+    ],
+    "deadlines": [
+      "before",
+      "at",
+      "after"
+    ],
+    "repetitions": 2
+  },
+  "kernel": {
+    "entities": 8,
+    "experts": 8,
+    "rank": 3,
+    "memory_scalars": 576,
+    "responsibility_scalars": 192,
+    "total_state_scalars": 768,
+    "reader": "Same supplied entity bank for all factorial corners; not discovered addressing",
+    "writer": "Entire augmented transition local/global",
+    "retention": "Independent decay/beta/input-decay versus functions tied across experts; not a claim of absent effective timescale diversity",
+    "native_mtsk_baseline_included": false
+  },
+  "smoke": {
+    "updates": 2,
+    "history": 32,
+    "delays": [
+      32
+    ],
+    "deadlines": [
+      "at"
+    ],
+    "repetitions": 1
+  },
+  "execution": {
+    "device": "cpu",
+    "torch_threads": 1,
+    "concurrent_training_processes": 2,
+    "overall_wall_seconds": 1500,
+    "failures": "Retain all failures/timeouts; never prune arms; no aggregate audit success unless all six complete",
+    "frozen_checkout_required": true
+  },
+  "audit": "Exact separate-process evaluator replay plus independently reconstructed physical/condition/split checks; no independent learning replication",
+  "claims": "One seed, limited common recipe, adaptive known generator, validation only. No architecture ranking, seed confidence, compute equivalence, learned entity discovery or full-system Test6. New cohort; original studies unchanged."
+}
