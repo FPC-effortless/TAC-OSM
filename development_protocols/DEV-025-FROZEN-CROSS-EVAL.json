@@ -1,0 +1,41 @@
+{
+  "study": "DEV-025",
+  "status": "ADAPTIVE_POST_DEV024_FROZEN_DIAGNOSTIC",
+  "seeds": [
+    43,
+    59,
+    71,
+    89,
+    107
+  ],
+  "regimes": [
+    "short",
+    "long"
+  ],
+  "cohorts": [
+    "DEV023",
+    "DEV024"
+  ],
+  "evaluation_offsets": {
+    "DEV023": 23000,
+    "DEV024": 24000
+  },
+  "history_levels": [
+    512
+  ],
+  "eval_steps": 4,
+  "training_steps": 0,
+  "expected_cells": 40,
+  "primary": "96 balanced H512 mature cancellation predictions per cell, before sensing",
+  "decision": "Report matched-seed cohort effects on both grids and grid effects within both cohorts, with exploratory t(df4) intervals. Meaningful separation >=5pp with interval excluding zero; no equivalence from a failed contrast. Joint per-seed accuracy>=.8 and swap drop>=.1, unchanged physical gates. No retrospective rescue of DEV024 attribution.",
+  "limitations": [
+    "Both diagonal results were known when this diagnostic was registered; off-diagonal predictions had not been opened.",
+    "Model cohort bundles initialization and training histories; it cannot separate them.",
+    "Evaluation grid is sampled cases from the same generator, not a new task distribution.",
+    "Fixed8 synthetic adaptive development; no native TAC success."
+  ],
+  "upstream_runs": {
+    "DEV023": 38839933638,
+    "DEV024": 38890378185
+  }
+}
