@@ -1,5 +1,9 @@
 # DEV-023 proposal: separate address isolation from local aging
 
+Historical proposal, now implemented and audited. See the separately frozen
+[protocol](DEV-023-ENTITY-AGING-PROTOCOL.md) and
+[results](DEV-023-ENTITY-AGING-RESULTS.md); the original proposal below is retained.
+
 **Proposal only; no implementation, execution or findings.** This is not yet a
 complete preregistration. Fix sampling, training seeds, thresholds and code
 before opening any new held-out results.
