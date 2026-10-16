@@ -86,3 +86,5 @@ confirm identical initial parameter hashes within both local/global pairs.
 All1161 local tests passed. The216-update pilot runs separately in a clean
 detached checkout with two CPU processes. Source/model/protocol hashes and
 all failures remain recorded. Training outcomes are not yet claimed.
+
+The execution checkpoint above is historical. The [final results](DEV-034-LOCAL-MTSK-RESULTS.md) preserve one failed original arm, five completed-arm replays and a separately registered numerical continuation. The full pilot did not pass.

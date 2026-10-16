@@ -76,8 +76,45 @@ training. Such large gradients still warrant a dynamics/optimization investigati
 Any continuation using it must be a separately registered cohort, with the same
 numerical policy across controls and the original failure preserved.
 
+### Separately registered numerical continuation
+
+After the original failure was documented, a
+[post-hoc diagnostic protocol](../research/dev034/numerical-continuation.json)
+was committed before continuation outcomes. It resumes the139-completed-update
+snapshot through216, changing only norm accumulation to FP64. This is an
+adaptive numerical diagnostic, **not** a new complete six-arm comparison or a
+replacement for the failed table entry. A future comparative cohort must apply
+the numerical policy across controls.
+
+The77 remaining updates completed in39.88 seconds, with maximum measured gradient
+norm1.2914e25. Exact checkpoint reload replay and a separate-process evaluator/physical replay passed: [continuation replay](DEV-034-CONTINUATION-REPLAY.json). H128 and H512 primary
+accuracy were both62.5%; cancellation was75% at both histories. H512 selected
+decisions produced321 failures,232 unnecessary services,136 inspections and total
+cost1802.6 over144 worlds. Those actions cost more than the service-everything
+controls'1152 on these same worlds. Training completion therefore did not
+establish adequate learning or economically useful decisions.
+
+This distinguishes a repaired norm calculation from stable, effective learning.
+The full six-arm pilot remains incomplete, the original independent-retention
+entry remains unavailable, and the planned factorial interaction stays withheld.
+No independent-seed or architecture-ranking claim follows from the continuation.
+
+## Reproducible evidence
+
+Raw checkpoints, reports, failures, gradients, logs and the bounded execution
+wrapper are packaged in the workspace at `/workspace/dev034-evidence.zip`.
+[The manifest](DEV-034-EVIDENCE-MANIFEST.json) records every payload hash and
+the archive hash. Raw run artifacts stay outside Git in accordance with the
+repository's artifact policy. The separate numerical-continuation package and
+inspection are recorded independently; they do not overwrite original evidence.
+The original smoke-only CI success is not a full trained-pilot success.
+
 The implementation remains a memory/prediction candidate, not a trained full
 TAC/PLM–CDL–CASM–OSM system. Native MTSK is not included, read addressing is supplied,
 and the rank-three reader is a limitation. Retention semantics, independent-seed
 reliability, adequate optimization, larger independent evaluation and complete-system
 contribution remain open. No new model branch is merged.
+
+Continuation raw evidence: `/workspace/dev034-continuation-evidence.zip`, with
+[separate manifest](DEV-034-CONTINUATION-EVIDENCE-MANIFEST.json). All1163 local
+tests passed after adding the two prospective clipping tests.
