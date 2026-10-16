@@ -1,6 +1,9 @@
 # DEV-020 — Where does native TAC lose critical future-state distinctions?
 
-**Status: prospectively fixed post-hoc diagnostic; no results yet.**
+**Status: fixed post-hoc diagnostic; execution and audit completed.**
+See [audited results](DEV-020-FROZEN-STATE-PROBES-RESULTS.md). The recipe and
+interpretation rules below describe the pre-results protocol; TAC diagnostic
+recovery gates did not pass.
 Stacked on draft DEV-019 (#175). Do not merge as a successful world-model capability. DEV-017 and DEV-018 original checkpoints, raw rows, endpoints and prior failed gates remain immutable.
 
 ## Motivation / frozen prior evidence
