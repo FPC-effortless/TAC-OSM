@@ -16,12 +16,24 @@ from tac_osm.development.delayed_maintenance import Action
 from tac_osm.development.noisy_memory import parameter_hash
 
 
-def audit(folder,smoke=False):
+def audit(folder,smoke=False,allow_incomplete=False,source=None):
     torch.set_num_threads(1);folder=Path(folder);summaries={};cohort=None
-    source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    if source is None:source=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    # Post-hoc partial inspection cannot change frozen model/evaluator code.
+    assert not subprocess.check_output(['git','diff','--diff-filter=MD',source,'--','src','scripts/run_local_mtsk_dev034.py'],cwd=ROOT,text=True).strip()
     protocol=hashlib.sha256((ROOT/'research/dev034/protocol.json').read_bytes()).hexdigest()
+    failures=[]
     for arm in ARMS:
-        path=folder/(arm+'.json');r=json.loads(path.read_text());checkpoint=folder/(arm+'.pt')
+        path=folder/(arm+'.json')
+        if allow_incomplete and not path.exists():
+            failure_path=folder/(arm+'.failure.json');failure=json.loads(failure_path.read_text())
+            assert failure['arm']==arm and failure['source']==source and failure['status']=='failed'
+            snapshot=folder/(arm+'.failure.pt');assert snapshot.exists()
+            failures.append(arm)
+            summaries[arm]=dict(status='failed',attempted_update=failure['attempted_update'],error=failure['error'],
+                failure_snapshot_sha256=hashlib.sha256(snapshot.read_bytes()).hexdigest(),primary=None,cancellation=None)
+            continue
+        r=json.loads(path.read_text());checkpoint=folder/(arm+'.pt')
         assert r['arm']==arm and r['source']==source and r['protocol_sha256']==protocol and r['smoke']==smoke
         assert r['updates']==(2 if smoke else 216) and r['scientific_selection_eligible'] is False and r['test_accessed'] is False
         assert hashlib.sha256(checkpoint.read_bytes()).hexdigest()==r['checkpoint_sha256']
@@ -60,15 +72,17 @@ def audit(folder,smoke=False):
         for history in histories:
             group=[r for r in rows if r['history']==history]
             costs[str(history)]=sum(r['selected']['cost_per_entity']-r['none']['cost_per_entity'] for r in group)/len(group)
-        summaries[arm]=dict(primary=expected['primary'],cancellation=expected['cancellation'],parameters=r['parameters'],
+        summaries[arm]=dict(status='complete',strict_replay_passed=True,primary=expected['primary'],cancellation=expected['cancellation'],parameters=r['parameters'],
             state_scalars=r['state_scalars'],training_seconds=r['training_seconds'],training_cpu_seconds=r['training_cpu_seconds'],
             inference_timing_seconds=expected['timing_seconds'],physical_totals=totals,selected_minus_none_cost=costs,
             raw_report_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),checkpoint_sha256=r['checkpoint_sha256'])
     interactions={}
     for h in ((32,) if smoke else (128,512)):
         p=lambda arm:summaries[arm]['primary'][str(h)]
-        interactions[str(h)]=(p('mtsk_local_multi')-p('mtsk_local_tied'))-(p('mtsk_global_multi')-p('mtsk_global_tied'))
-    return dict(experiment='DEV-034',audit_passed=True,source=source,protocol_sha256=protocol,smoke=smoke,
+        interactions[str(h)]=None if failures else (p('mtsk_local_multi')-p('mtsk_local_tied'))-(p('mtsk_global_multi')-p('mtsk_global_tied'))
+    return dict(experiment='DEV-034',audit_passed=not failures,partial_inspection_checks_passed=True,
+        full_six_arm_pilot_complete=not failures,failed_arms=failures,
+        partial_inspection_was_posthoc=allow_incomplete,source=source,protocol_sha256=protocol,smoke=smoke,
         arms=summaries,descriptive_locality_retention_interaction=interactions,paired_evaluation_cases=len(cohort[1]),
         scientific_test_accessed=False,recipe_selected=False,initialization_reliability_established=False,
         architectural_superiority_established=False,full_system_test6=False,
@@ -76,5 +90,5 @@ def audit(folder,smoke=False):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--input',required=True);p.add_argument('--output',required=True);p.add_argument('--smoke',action='store_true');a=p.parse_args()
-    result=audit(a.input,a.smoke);Path(a.output).write_text(json.dumps(result,indent=2,allow_nan=False)+'\n');print(json.dumps(result))
+    p=argparse.ArgumentParser();p.add_argument('--input',required=True);p.add_argument('--output',required=True);p.add_argument('--smoke',action='store_true');p.add_argument('--allow-incomplete',action='store_true');p.add_argument('--source');a=p.parse_args()
+    result=audit(a.input,a.smoke,a.allow_incomplete,a.source);Path(a.output).write_text(json.dumps(result,indent=2,allow_nan=False)+'\n');print(json.dumps(result))
