@@ -116,3 +116,27 @@ verified all three retained gradient files and per-parameter counts.
 Validation:1151 local tests passed, including eight new contract tests. No
 scientific test generation, learned relevance evaluation, online admission
 enforcement or formal implementation proof occurred.
+
+## Completed curriculum slot
+
+The [curriculum summary](DEV-033-GRU-CURRICULUM-SUMMARY.json) and
+[execution manifest](DEV-033-GRU-CURRICULUM-EXECUTION.json) record completion
+through2160 and three original strict same-runtime replays. Initial parameter
+hash and runtime match the earlier LR0.0005 fixed512 slot.
+
+| Updates | All-role primary (96 cases) | Cancellation (48 cases) |
+|---|---|---|
+|216|52.08%|50.00%|
+|648|53.13%|50.00%|
+|2160|54.17%|50.00%|
+
+The final decision policies again service all1152 entity opportunities, with
+zero failures,562 unnecessary services, no inspections and cost1.0 per entity.
+Cumulative training took121.40 seconds; execution including replay176.09 seconds
+(startup excluded). The curriculum did not resolve cancellation tracking for
+this initialization. This does not establish convergence, an architecture limit
+or an architecture ranking. The other registered recipes/seeds remain necessary.
+
+The [next-stage proposal](DEV-034-MASKED-MTSK-AND-DECISION-PROPOSAL.md) preserves
+entity-local MTSK and decision supervision as separate candidates. No fused-model
+training or ActionOPD replication is claimed.
