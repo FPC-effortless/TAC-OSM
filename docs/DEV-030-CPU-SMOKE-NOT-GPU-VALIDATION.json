@@ -1,0 +1,142 @@
+{
+  "experiment": "DEV-030 compute preflight",
+  "source": "75e72c3784f6fc57bd3d569331c296680df2ed3a",
+  "protocol_sha256": "c97a3b5ab0d53e04e358da6e236f4e0a544ec25a3060499ab7d8df2b1c7569a6",
+  "smoke": true,
+  "gpu_validation_completed": false,
+  "test_accessed": false,
+  "scientific_training_run": false,
+  "arms": {
+    "native": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.14.1+cpu",
+          "python_version": "3.12.14",
+          "cuda_version": null,
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.027567462999286363
+        ],
+        "median_seconds_per_update": 0.027567462999286363
+      }
+    },
+    "masked_local": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.14.1+cpu",
+          "python_version": "3.12.14",
+          "cuda_version": null,
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.024764730500464793
+        ],
+        "median_seconds_per_update": 0.024764730500464793
+      }
+    },
+    "schema41": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.14.1+cpu",
+          "python_version": "3.12.14",
+          "cuda_version": null,
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.014230895001674071
+        ],
+        "median_seconds_per_update": 0.014230895001674071
+      }
+    },
+    "gru768": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.14.1+cpu",
+          "python_version": "3.12.14",
+          "cuda_version": null,
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.06457107800088124
+        ],
+        "median_seconds_per_update": 0.06457107800088124
+      }
+    },
+    "delta768": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.14.1+cpu",
+          "python_version": "3.12.14",
+          "cuda_version": null,
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.016518152500793803
+        ],
+        "median_seconds_per_update": 0.016518152500793803
+      }
+    },
+    "event_table": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.14.1+cpu",
+          "python_version": "3.12.14",
+          "cuda_version": null,
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.006323569999949541
+        ],
+        "median_seconds_per_update": 0.006323569999949541
+      }
+    }
+  },
+  "recommendation": {
+    "gpu_validated": false,
+    "prefer_gpu": false,
+    "reason": "Smoke timings cannot choose a study backend"
+  }
+}

@@ -94,3 +94,43 @@ requires complete tuning coverage and independent auditing, a separate committed
 recipe manifest, and only then a separately frozen untouched-test evaluation.
 CASM, CDL, OSM, verification/repair and multi-timescale integration remain on
 the connected integration track; a compute move does not replace them.
+
+## Completed frozen Kaggle result
+
+Private Kaggle notebook version 1 completed successfully at source
+`75e72c3784f6fc57bd3d569331c296680df2ed3a`. Observed accelerator: Tesla T4;
+PyTorch `2.11.0+cu128`. All six initial and one-step parity checks passed;
+maximum observed initial logit discrepancy was below 6e-8 and post-update
+below 9e-8. This does not validate identical long training trajectories.
+
+| Arm | CPU median seconds/update | CUDA median seconds/update | CPU/CUDA speed ratio |
+|---|---:|---:|---:|
+| Native TAC | 0.7642 | 2.0632 | 0.370 |
+| Masked-local TAC | 0.9536 | 2.3612 | 0.404 |
+| Learned schema41 | 0.4533 | 1.4500 | 0.313 |
+| GRU768 | 2.7587 | 0.06379 | 43.247 |
+| Gated delta | 0.4872 | 1.2605 | 0.387 |
+| Classical table + learned head | 0.1347 | 0.1354 | 0.995 |
+
+All-CUDA aggregate CPU/CUDA ratio was **0.75698**, meaning approximately 32.1%
+more update time on GPU. The frozen global GPU-selection criterion therefore
+**failed**. The GRU's fused implementation benefits substantially; the small
+Python-driven recurrences do not benefit in this benchmark. This timing pattern
+is consistent with launch/dispatch overhead, but that mechanism is not proven
+by profiling here. It is not evidence about representational capacity.
+
+Raw returned timing/parity evidence:
+[DEV-030-KAGGLE-PREFLIGHT-RESULT.json](DEV-030-KAGGLE-PREFLIGHT-RESULT.json).
+SHA256 `55462469b538f28fb08f1c41ecd3acf7fdbe331ad2eefaf7f923f84e01f9ecf7`.
+[Structural audit](DEV-030-PREFLIGHT-STRUCTURAL-AUDIT.json) independently checks
+source/protocol provenance, all-arm coverage, three timing samples, medians,
+fixture fingerprints and the recommendation arithmetic. It does not independently
+rerun CUDA parity arithmetic. No scientific test or architecture performance
+result was opened. Local and GitHub CPU regression suites passed **1,137 tests**;
+[CI run #38939209453](https://github.com/FPC-effortless/TAC-OSM/actions/runs/38939209453)
+is CPU integrity evidence, explicitly not GPU validation.
+
+The preflight did not authorize silently switching to a mixed-device scientific
+cohort. That follow-up requires its own prospective execution registration,
+with per-arm backend frozen from these engineering timings before training
+outcomes are opened. Any such run remains separate from the earlier CPU cohort.

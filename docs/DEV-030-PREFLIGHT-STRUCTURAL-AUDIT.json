@@ -1,0 +1,68 @@
+{
+  "experiment": "DEV-030 returned evidence structural audit",
+  "structural_audit_passed": true,
+  "source": "75e72c3784f6fc57bd3d569331c296680df2ed3a",
+  "raw_sha256": "55462469b538f28fb08f1c41ecd3acf7fdbe331ad2eefaf7f923f84e01f9ecf7",
+  "gpu_evidence_present": true,
+  "recommend_gpu": false,
+  "arms": {
+    "native": {
+      "cpu_seconds_per_update": 0.7642126047999909,
+      "cuda_seconds_per_update": 2.0631781144000003,
+      "cpu_over_cuda_speedup": 0.37040554059106723,
+      "gpu_name": "Tesla T4",
+      "torch_version": "2.11.0+cu128",
+      "initial_max_abs_error": 4.470348358154297e-08,
+      "post_update_max_abs_error": 8.940696716308594e-08
+    },
+    "masked_local": {
+      "cpu_seconds_per_update": 0.9535579190000021,
+      "cuda_seconds_per_update": 2.3612497140000075,
+      "cpu_over_cuda_speedup": 0.40383611836829175,
+      "gpu_name": "Tesla T4",
+      "torch_version": "2.11.0+cu128",
+      "initial_max_abs_error": 5.587935447692871e-08,
+      "post_update_max_abs_error": 5.960464477539063e-08
+    },
+    "schema41": {
+      "cpu_seconds_per_update": 0.45330737179999686,
+      "cuda_seconds_per_update": 1.450019126999996,
+      "cpu_over_cuda_speedup": 0.31262164985220786,
+      "gpu_name": "Tesla T4",
+      "torch_version": "2.11.0+cu128",
+      "initial_max_abs_error": 5.960464477539063e-08,
+      "post_update_max_abs_error": 8.940696716308594e-08
+    },
+    "gru768": {
+      "cpu_seconds_per_update": 2.758715263599993,
+      "cuda_seconds_per_update": 0.06378957780000291,
+      "cpu_over_cuda_speedup": 43.24711588857494,
+      "gpu_name": "Tesla T4",
+      "torch_version": "2.11.0+cu128",
+      "initial_max_abs_error": 2.9802322387695312e-08,
+      "post_update_max_abs_error": 5.960464477539063e-08
+    },
+    "delta768": {
+      "cpu_seconds_per_update": 0.48720935379999447,
+      "cuda_seconds_per_update": 1.2604671984000106,
+      "cpu_over_cuda_speedup": 0.38653076765380295,
+      "gpu_name": "Tesla T4",
+      "torch_version": "2.11.0+cu128",
+      "initial_max_abs_error": 2.9802322387695312e-08,
+      "post_update_max_abs_error": 4.470348358154297e-08
+    },
+    "event_table": {
+      "cpu_seconds_per_update": 0.13474435440000435,
+      "cuda_seconds_per_update": 0.13536797379999826,
+      "cpu_over_cuda_speedup": 0.9953931540637869,
+      "gpu_name": "Tesla T4",
+      "torch_version": "2.11.0+cu128",
+      "initial_max_abs_error": 5.960464477539063e-08,
+      "post_update_max_abs_error": 5.960464477539063e-08
+    }
+  },
+  "aggregate_cpu_over_cuda_speedup": 0.756980172870723,
+  "scientific_test_accessed": false,
+  "full_tuning_complete": false,
+  "limitation": "Recomputes provenance, coverage and timing recommendation; CUDA parity assertions are from the frozen execution, not an independent CUDA arithmetic replay"
+}

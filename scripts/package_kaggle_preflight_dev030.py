@@ -61,13 +61,13 @@ def package(output,source,username=None):
     notebook=dict(nbformat=4,nbformat_minor=5,
         metadata={'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},
                   'language_info':{'name':'python'},'accelerator':'GPU'},
-        cells=[dict(cell_type='markdown',metadata={},source=[
+        cells=[dict(cell_type='markdown',id='introduction',metadata={},source=[
             '# TAC-OSM DEV-030: GPU preflight\n',
             'Private engineering preflight for the registered DEV-029 workload. Enable GPU and Internet in Kaggle settings.\n',
             'No secrets are needed inside this notebook. Source is pinned; no tests or full tuning grid are launched.\n',
             'Outputs stay under `/kaggle/working/dev030-evidence`. Save a notebook version with outputs to preserve them.\n',
             'FP32, batch two, unchanged task/optimizer; table state stays CPU and its learned head uses CUDA.\n']),
-            dict(cell_type='code',metadata={},execution_count=None,outputs=[],source=bootstrap.splitlines(keepends=True))])
+            dict(cell_type='code',id='preflight',metadata={},execution_count=None,outputs=[],source=bootstrap.splitlines(keepends=True))])
     notebook_path=output/'tac_osm_dev030_preflight.ipynb'
     notebook_path.write_text(json.dumps(notebook,indent=2)+'\n')
     owner=username or 'YOUR_KAGGLE_USERNAME'
