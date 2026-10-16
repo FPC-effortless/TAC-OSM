@@ -24,7 +24,7 @@ def package(output,source,username):
             subprocess.run(['git','-C',str(root),'checkout','--detach','FETCH_HEAD'],check=True)
             assert subprocess.check_output(['git','-C',str(root),'rev-parse','HEAD'],text=True).strip()==source
             roots.append(root)
-        candidates=[p for p in pathlib.Path('/kaggle/input').rglob('216.json') if p.parent.name=='gru768']
+        candidates=list(pathlib.Path('/kaggle/input').rglob('216.json'))
         assert len(candidates)==1,'Exactly one original private GRU216 report required'
         output=pathlib.Path('/kaggle/working/dev032-gradient-diagnosis')
         command=[sys.executable,str(roots[0]/'scripts/diagnose_frozen_gru_dev032.py'),'--checkout',str(roots[1]),'--report',str(candidates[0]),'--output',str(output)]
@@ -41,7 +41,7 @@ def package(output,source,username):
     ''')
     notebook=dict(nbformat=4,nbformat_minor=5,metadata={'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},'accelerator':'GPU'},cells=[dict(cell_type='code',id='frozen-diagnosis',metadata={},execution_count=None,outputs=[],source=code.splitlines(keepends=True))])
     name='dev032_diagnosis.ipynb';(output/name).write_text(json.dumps(notebook,indent=2)+'\n')
-    metadata=dict(id=username+'/tac-osm-dev032-frozen-gru-diagnosis',title='TAC OSM DEV032 Frozen GRU Diagnosis',code_file=name,language='python',kernel_type='notebook',is_private=True,enable_gpu=True,enable_internet=True,machine_shape='NvidiaTeslaT4',dataset_sources=[],competition_sources=[],kernel_sources=[username+'/tac-osm-dev031-mixed-device-tranche'],model_sources=[])
+    metadata=dict(id=username+'/tac-osm-dev032-frozen-gru-diagnosis',title='TAC OSM DEV032 Frozen GRU Diagnosis',code_file=name,language='python',kernel_type='notebook',is_private=True,enable_gpu=True,enable_internet=True,machine_shape='NvidiaTeslaT4',dataset_sources=[username+'/tac-osm-dev032-frozen-gru216'],competition_sources=[],kernel_sources=[],model_sources=[])
     (output/'kernel-metadata.json').write_text(json.dumps(metadata,indent=2)+'\n')
     print(json.dumps(dict(source=source,private=True,credentials_embedded=False,test_accessed=False)))
 
