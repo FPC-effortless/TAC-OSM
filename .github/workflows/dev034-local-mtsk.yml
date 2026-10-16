@@ -20,7 +20,7 @@ jobs:
           python -m pip install --quiet -e . pytest==9.1.1 numpy==2.3.3 ruff==0.13.0
           python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
       - run: |
-          ruff check --select F src/tac_osm/development/local_mtsk.py scripts/*dev034.py tests/*dev034.py
+          ruff check --select F src/tac_osm/development/local_mtsk.py src/tac_osm/development/finite_clipping.py scripts/*dev034.py tests/*dev034.py
           python scripts/sync_test_count.py --check
           python -m pytest tests/ -q
           for arm in mtsk_global_tied mtsk_global_multi mtsk_local_tied mtsk_local_multi masked_local schema41; do

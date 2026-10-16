@@ -6,5 +6,6 @@
     "attempted_update": 140
   },
   "failure_handling": "Preserve failed status and missing accuracy. Recompute one batch from frozen pre-update snapshot, no optimizer step. Do not replace original trial.",
-  "partial_audit": "Exact replay and physical checks for completed arms. Missing reports must have explicit frozen failure evidence. audit_passed stays false; interaction unavailable; no complete-six-arm success."
+  "partial_audit": "Exact replay and physical checks for completed arms. Missing reports must have explicit frozen failure evidence. audit_passed stays false; interaction unavailable; no complete-six-arm success.",
+  "prospective_clipping_candidate": "Dense CPU FP32 only; reject all nonfinite elements before mutation; accumulate norm in FP64. Synthetic fixtures and one frozen failing batch only; no optimizer steps or resumed training; original pilot remains failed."
 }
