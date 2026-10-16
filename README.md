@@ -9,6 +9,17 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## Current research checkpoint (October 16, 2026)
+
+The [DEV-029 research program](docs/DEV-029-OPTIMIZATION-AND-INTEGRATION-PROGRAM.md)
+connects tuned mechanism comparisons with a separate complete-system integration
+track. [Audited pilot results](docs/DEV-029-PILOT-RESULTS.md) retain both strong
+schema development performance and TAC reliability failures. They do not
+establish architectural superiority, entity discovery, or full-system
+capability. Full optimization and twenty-seed fresh reliability are pending;
+DEV-028 attribution is deferred. CASM, CDL, OSM, multi-timescale memory,
+verification and repair remain explicit research components.
+
 ## The central claim under test
 
 ```

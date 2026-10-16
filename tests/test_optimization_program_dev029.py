@@ -84,3 +84,38 @@ def test_selection_uses_final_validation_only_and_stable_ties():
         if r['arm']=='native' and r['learning_rate']==.002 and r['updates']==2160:
             r['primary_accuracy']=.8
     assert select_recipes(rows)['native']['learning_rate']==.002
+
+
+def test_tuning_resume_preserves_optimizer_and_exact_final_parameters(tmp_path,monkeypatch):
+    # Exercise actual updates and optimizer serialization on short public fixture
+    # histories, never registered validation/test cases. Compare uninterrupted
+    # training with a stopped-and-resumed trial, not expected parameter values.
+    import importlib.util
+    from pathlib import Path
+    from types import SimpleNamespace
+    script=Path(__file__).resolve().parents[1]/'scripts/run_optimization_study_dev029.py'
+    spec=importlib.util.spec_from_file_location('dev029_study_resume_fixture',script)
+    runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
+    monkeypatch.setattr(runner,'BUDGETS',(2,4))
+    monkeypatch.setattr(runner,'history_at',lambda curriculum,step:32)
+    monkeypatch.setattr(runner,'domain',lambda split:'dev029-resume-fixture-'+split)
+    monkeypatch.setattr(runner.subprocess,'check_output',lambda command,**kw:'frozen-fixture-source\n' if command[1]=='rev-parse' else '')
+    def fixture_validation(model,smoke):
+        cases=make_pair(17,32,32,'retention','at',domain='dev029-resume-fixture-validation')
+        state=model.encode(*encode([c.observations for c in cases]))
+        q=torch.zeros(2,8,3,14)
+        return dict(primary_accuracy=.5,cross_entropy=float(model.decode(state,q).square().mean().detach()),
+                    rows=[dict(fingerprint=c.fingerprint) for c in cases])
+    monkeypatch.setattr(runner,'validate',fixture_validation)
+    common=dict(arm='event_table',learning_rate=.002,curriculum='fixed512',seed=311)
+    full=tmp_path/'full';split=tmp_path/'split'
+    runner.run(SimpleNamespace(**common,until=4,resume=None,output=str(full)))
+    runner.run(SimpleNamespace(**common,until=2,resume=None,output=str(split)))
+    runner.run(SimpleNamespace(**common,until=4,resume=str(split/'2.pt'),output=str(split)))
+    a=torch.load(full/'4.pt',weights_only=True);b=torch.load(split/'4.pt',weights_only=True)
+    assert a['training_fingerprints']==b['training_fingerprints']
+    assert a['observed_events']==b['observed_events']
+    assert all(torch.equal(a['model'][name],b['model'][name]) for name in a['model'])
+    assert a['optimizer']['param_groups']==b['optimizer']['param_groups']
+    for index,state in a['optimizer']['state'].items():
+        assert all(torch.equal(value,b['optimizer']['state'][index][name]) for name,value in state.items())

@@ -164,3 +164,41 @@ The broad legacy integrated-memory workflow also matched this PR automatically;
 its redundant run was cancelled before its training stage. Future documentation
 pushes do not retrain that legacy pilot: it now follows the same opening-event
 and explicit-dispatch convention as the newer research workflows.
+
+### Executable tuning continuation (not a completed study)
+
+`run_optimization_study_dev029.py` implements the registered learning-rate,
+curriculum and tuning-seed choices, writes each nested checkpoint and flat
+validation-selection record, and resumes only its own exact-source trial with
+optimizer/RNG state. It refuses to overwrite existing checkpoint outcomes or
+promote engineering-pilot files. A short, separate integrity fixture compares
+stopped/resumed versus uninterrupted training, including final weights,
+optimizer tensors and exposure fingerprints. This checks continuation integrity;
+it is not evidence from the registered full tuning matrix. The complete-matrix
+independent auditor and separate post-freeze test runner are still required
+before test access. The pilot auditor accepts only the bounded pilot.
+
+Example future frozen-source trial (not dispatched in this batch):
+
+```sh
+python scripts/run_optimization_study_dev029.py --arm gru768 \
+  --learning-rate 0.0005 --curriculum 128_then512 --seed 419 \
+  --until 2160 --output /workspace/dev029-tuning/gru768-lr0005-curriculum-419
+```
+
+Keep the source checkout fixed across checkpoint resumes; commit documentation
+in a separate checkout if necessary. A full grid requires 72 trials; its compute
+and archive costs exceed those of the six-arm engineering pilot.
+
+### Selection metric and historical gates
+
+The frozen DEV-029 `primary_accuracy` field is all-role mature target accuracy.
+Historical primary accuracy is mature **cancellation-only** target accuracy.
+Selection and historical gates must not silently exchange these definitions.
+The pilot results report both. Eventual historical gate evaluation retains
+cancellation accuracy >=0.80, paired-swap drop >=0.10, selected failure rate
+<=0.05, unnecessary-service rate <=0.10, mean selected cost/entity <=0.80,
+and mean selected <= mean model-only, with the original aggregation rules.
+A separately frozen full-test protocol must retain those definitions and
+specify test grid/aggregation before generating test cases. The present pilot
+never unlocks that evaluation.
