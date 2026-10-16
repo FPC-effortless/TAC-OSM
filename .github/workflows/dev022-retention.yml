@@ -1,6 +1,9 @@
 name: DEV-022 trained retention prediction and cost (development)
 on:
   pull_request:
+    # Later scientific executions use explicit dispatch; documentation edits
+    # must not silently launch another 60-cell training matrix.
+    types: [opened]
     paths:
       - "src/tac_osm/development/retention_controls.py"
       - "scripts/*dev022*"
