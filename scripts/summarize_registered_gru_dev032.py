@@ -12,16 +12,17 @@ PIN='4a8728ef3f08e01d9c542374cf1e722bf8701240'
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def summarize(directory):
+def summarize(directory,curriculum='fixed512'):
+    if curriculum not in ('fixed512','128_then512'):raise ValueError('unregistered curriculum')
     directory=Path(directory);manifest=json.loads((directory/'execution-manifest.json').read_text())
-    assert manifest['source']==PIN and manifest['learning_rate']==.0005 and manifest['seed']==311
+    assert manifest['source']==PIN and manifest['learning_rate']==.0005 and manifest['seed']==311 and manifest['curriculum']==curriculum
     assert manifest['training_exit_code']==0 and not manifest['timed_out']
     protocol=subprocess.check_output(['git','show',PIN+':research/dev029/protocol.json'],cwd=ROOT)
     summaries=[]
     for budget in (216,648,2160):
         path=directory/'trial'/f'{budget}.json';r=json.loads(path.read_text())
         assert r['source']==PIN and r['protocol_sha256']==hashlib.sha256(protocol).hexdigest()
-        assert r['arm']=='gru768' and r['seed']==311 and r['learning_rate']==.0005 and r['curriculum']=='fixed512'
+        assert r['arm']=='gru768' and r['seed']==311 and r['learning_rate']==.0005 and r['curriculum']==curriculum
         assert r['updates']==budget and r['split']=='validation' and r['test_accessed'] is False
         assert sha(path.with_suffix('.pt'))==r['checkpoint_sha256']
         replay=directory/f'{budget}-replay.json';rr=json.loads(replay.read_text())
@@ -46,15 +47,15 @@ def summarize(directory):
             selected_minus_none_cost=r['validation']['selected_minus_none_cost'],training_seconds=r['training_seconds'],
             parameters=r['parameters'],runtime=r['runtime'],initial_hash=r['initial_hash'],checkpoint_sha256=r['checkpoint_sha256'],
             raw_report_sha256=sha(path),replay_sha256=sha(replay),strict_same_runtime_replay_passed=True))
-    return dict(experiment='DEV-032 bounded DEV-029 grid progress',source=PIN,seed=311,learning_rate=.0005,curriculum='fixed512',
+    return dict(experiment='Bounded DEV-029 grid progress',source=PIN,seed=311,learning_rate=.0005,curriculum=curriculum,
         training_complete=True,checkpoints=summaries,full_matrix_complete=False,recipe_selected=False,
         independent_full_matrix_audit_complete=False,test_accessed=False,fresh_seed_confirmation_complete=False,
         original_lr002_trial_remains_failed=True,
-        private_raw_evidence='https://www.kaggle.com/code/eweewee2/tac-osm-dev032-registered-gru-slot/versions/1',
+        private_raw_evidence='https://www.kaggle.com/code/eweewee2/'+('tac-osm-dev032-registered-gru-slot' if curriculum=='fixed512' else 'tac-osm-registered-gru-128-then512')+'/versions/1',
         limitation='One initialization, one registered recipe, 96 primary/48 cancellation validation cases; no architecture ranking or convergence claim')
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--directory',required=True);p.add_argument('--output',required=True);a=p.parse_args()
-    result=summarize(a.directory);Path(a.output).write_text(json.dumps(result,indent=2)+'\n')
+    p=argparse.ArgumentParser();p.add_argument('--directory',required=True);p.add_argument('--output',required=True);p.add_argument('--curriculum',choices=('fixed512','128_then512'),default='fixed512');a=p.parse_args()
+    result=summarize(a.directory,a.curriculum);Path(a.output).write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps([dict(updates=r['updates'],all_role_accuracy=r['all_role_validation_accuracy'],cancellation_accuracy=r['cancellation_accuracy']) for r in result['checkpoints']]))
