@@ -65,7 +65,7 @@ Kaggle notebook version2 completed the diagnostic at source
 with the original source and exact recorded runtime reproduced the clipping
 exception at attempted update286. The forward loss was finite,0.56964409,
 and every pre-update parameter was finite, but1,802,668 gradient elements
-were non-finite. This is not solely overflow of a norm applied to otherwise
+were non-finite (all NaNs in the saved snapshot). This is not solely overflow of a norm applied to otherwise
 finite gradients. The [raw gradient report](DEV-032-GRU-GRADIENT-HEALTH.json),
 [diagnostic status](DEV-032-GRU-DIAGNOSTIC-STATUS.json) and
 [snapshot inspection](DEV-032-GRU-SNAPSHOT-AUDIT.json) retain the evidence.
@@ -84,3 +84,18 @@ The account owner explicitly authorized transient reuse of the existing
 Kaggle credential after a rotation request. Authentication stays outside the
 repository and notebook package. Revocation has not been verified, and this
 work must not be described as completed credential rotation.
+
+
+## Bounded registered tuning progress
+
+One pre-existing DEV-029 slot is submitted separately: GRU, seed311,
+learning rate0.0005, fixed512, until2160 on CUDA. Training source remains
+`4a8728ef3f08e01d9c542374cf1e722bf8701240`; clipping and optimizer are unchanged.
+The seven-minute training cap preserves partial outcomes, and all saved216,
+648 and2160 checkpoints receive strict original same-runtime replay. This
+is progress on one of72 registered slots, not recipe selection or a replacement
+for the failed LR0.002 trial. Outcome remains pending until checked.
+
+CI [38949805163](https://github.com/FPC-effortless/TAC-OSM/actions/runs/38949805163)
+passed at source `c42c39dfce3980b5716e1a18bcf0f6099076da98`, including the full
+1143-test suite, integration execution and independent physical replay.
