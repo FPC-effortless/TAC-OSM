@@ -140,3 +140,9 @@ or an architecture ranking. The other registered recipes/seeds remain necessary.
 The [next-stage proposal](DEV-034-MASKED-MTSK-AND-DECISION-PROPOSAL.md) preserves
 entity-local MTSK and decision supervision as separate candidates. No fused-model
 training or ActionOPD replication is claimed.
+
+CI [38964662462](https://github.com/FPC-effortless/TAC-OSM/actions/runs/38964662462)
+passed the full suite, count/lint checks and conformance report generation.
+Downloading its artifact returned HTTP403 from the storage endpoint, so no local
+inspection of that CI artifact is claimed. The locally archived frozen report
+and independent backend tensor audit remain available above.
