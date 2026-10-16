@@ -74,3 +74,12 @@ twenty-seed confirmation, scientific test access, generalization to new entities
 architectural superiority, calibrated verifier, or trained complete-system claim
 is supported by this pilot. Scientific validation still requires adequately tuned
 controls, fresh seeds and independently frozen larger evaluation.
+
+## Execution checkpoint
+
+Frozen source: `ec0ff80b058308dad8de57eab7d223ec9a81dcba`. The six-arm smoke
+audit passed: [raw smoke audit](DEV-034-SMOKE-AUDIT.json). Actual smoke records
+confirm identical initial parameter hashes within both local/global pairs.
+All1161 local tests passed. The216-update pilot runs separately in a clean
+detached checkout with two CPU processes. Source/model/protocol hashes and
+all failures remain recorded. Training outcomes are not yet claimed.
