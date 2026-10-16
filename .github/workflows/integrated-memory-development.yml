@@ -3,6 +3,9 @@ name: Integrated memory DEV successor (NOT confirmatory)
 on:
   workflow_dispatch:
   pull_request:
+    # Research training is explicit after the opening checkpoint.
+    # Documentation pushes must not retrain the legacy development pilot.
+    types: [opened]
     paths:
       - "src/tac_osm/development/**"
       - "tests/test_integrated_memory_development.py"

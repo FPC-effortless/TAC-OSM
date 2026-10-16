@@ -1,0 +1,463 @@
+{
+  "experiment": "DEV-029 validation-only pilot",
+  "source": "de7335e84e73e45667148896813e018a91ce14b8",
+  "metric_definitions": {
+    "registered_selection_accuracy": "Target entity wait prediction, H512, all four roles, at/after deadlines (96 episodes)",
+    "legacy_cancellation_accuracy": "Target entity wait prediction, H512, pending_cancel/reissued_cancel, at/after deadlines (48 episodes)",
+    "cost_difference": "Selected minus model-only cost per entity, all 144 validation episodes",
+    "episode_distribution": "Descriptive correlated episode distribution, not seed uncertainty"
+  },
+  "initialization_seeds": 1,
+  "training_recipe_count": 1,
+  "test_accessed": false,
+  "full_tuning_complete": false,
+  "fresh_twenty_seed_reliability_complete": false,
+  "original_reliability_gates_assessed": false,
+  "architectural_advantage_established": false,
+  "arms": {
+    "native": {
+      "registered_selection_accuracy": 0.5208333333333334,
+      "legacy_cancellation_accuracy": 0.5,
+      "registered_n": 96,
+      "legacy_n": 48,
+      "cross_entropy": 0.45590325159653294,
+      "parameters": 8674,
+      "training_seconds": 97.15568419,
+      "training_cpu_seconds": 97.142425617,
+      "state_bytes": 3072,
+      "validation_seconds": 9.473936942999984,
+      "checkpoint_bytes": 126893,
+      "policies": {
+        "none": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 1152,
+          "unnecessary_services": 562,
+          "unnecessary_rate": 0.4878472222222222,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "cost_per_entity_mean": 1.0,
+          "cost_per_entity_median": 1.0,
+          "cost_per_entity_min": 1.0,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "selected": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 1152,
+          "unnecessary_services": 562,
+          "unnecessary_rate": 0.4878472222222222,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "cost_per_entity_mean": 1.0,
+          "cost_per_entity_median": 1.0,
+          "cost_per_entity_min": 1.0,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "matched_random": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 1152,
+          "unnecessary_services": 562,
+          "unnecessary_rate": 0.4878472222222222,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "cost_per_entity_mean": 1.0,
+          "cost_per_entity_median": 1.0,
+          "cost_per_entity_min": 1.0,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "selected_minus_none_cost_mean": 0.0,
+      "selected_minus_none_cost_min": 0.0,
+      "selected_minus_none_cost_max": 0.0,
+      "strict_mean_cost_component_pass": true,
+      "raw_report_sha256": "738e9fca60209217dba257c34df0092caadb03924d1fa906459a9d81b161617a"
+    },
+    "masked_local": {
+      "registered_selection_accuracy": 0.875,
+      "legacy_cancellation_accuracy": 0.75,
+      "registered_n": 96,
+      "legacy_n": 48,
+      "cross_entropy": 0.01809867622648266,
+      "parameters": 8674,
+      "training_seconds": 94.40417708300001,
+      "training_cpu_seconds": 94.392918486,
+      "state_bytes": 3072,
+      "validation_seconds": 7.298818401999995,
+      "checkpoint_bytes": 130553,
+      "policies": {
+        "none": {
+          "total_failures": 4,
+          "failure_rate": 0.003472222222222222,
+          "total_services": 605,
+          "unnecessary_services": 19,
+          "unnecessary_rate": 0.016493055555555556,
+          "inspections": 0,
+          "total_cost": 621.0,
+          "cost_per_entity_mean": 0.5390625,
+          "cost_per_entity_median": 0.5,
+          "cost_per_entity_min": 0.125,
+          "cost_per_entity_max": 1.125,
+          "cost_per_entity_quartiles": [
+            0.375,
+            0.5,
+            0.625
+          ]
+        },
+        "selected": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 614,
+          "unnecessary_services": 24,
+          "unnecessary_rate": 0.020833333333333332,
+          "inspections": 34,
+          "total_cost": 617.4,
+          "cost_per_entity_mean": 0.5359375,
+          "cost_per_entity_median": 0.5,
+          "cost_per_entity_min": 0.125,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            0.3875,
+            0.5,
+            0.625
+          ]
+        },
+        "matched_random": {
+          "total_failures": 4,
+          "failure_rate": 0.003472222222222222,
+          "total_services": 606,
+          "unnecessary_services": 20,
+          "unnecessary_rate": 0.017361111111111112,
+          "inspections": 34,
+          "total_cost": 625.4,
+          "cost_per_entity_mean": 0.5428819444444445,
+          "cost_per_entity_median": 0.5,
+          "cost_per_entity_min": 0.125,
+          "cost_per_entity_max": 1.1375,
+          "cost_per_entity_quartiles": [
+            0.3875,
+            0.5,
+            0.6375
+          ]
+        }
+      },
+      "selected_minus_none_cost_mean": -0.003125000000000008,
+      "selected_minus_none_cost_min": -0.36250000000000004,
+      "selected_minus_none_cost_max": 0.1375,
+      "strict_mean_cost_component_pass": true,
+      "raw_report_sha256": "6c6654545f65b90ffaca28e27fb4361283946256fb7c4099cd5e40880886eca1"
+    },
+    "schema41": {
+      "registered_selection_accuracy": 1.0,
+      "legacy_cancellation_accuracy": 1.0,
+      "registered_n": 96,
+      "legacy_n": 48,
+      "cross_entropy": 0.01526680377930829,
+      "parameters": 5932,
+      "training_seconds": 60.79775716200001,
+      "training_cpu_seconds": 60.790944278,
+      "state_bytes": 164,
+      "validation_seconds": 4.916966893999984,
+      "checkpoint_bytes": 83973,
+      "policies": {
+        "none": {
+          "total_failures": 12,
+          "failure_rate": 0.010416666666666666,
+          "total_services": 578,
+          "unnecessary_services": 0,
+          "unnecessary_rate": 0.0,
+          "inspections": 0,
+          "total_cost": 626.0,
+          "cost_per_entity_mean": 0.5434027777777778,
+          "cost_per_entity_median": 0.5,
+          "cost_per_entity_min": 0.0,
+          "cost_per_entity_max": 1.25,
+          "cost_per_entity_quartiles": [
+            0.375,
+            0.5,
+            0.625
+          ]
+        },
+        "selected": {
+          "total_failures": 12,
+          "failure_rate": 0.010416666666666666,
+          "total_services": 578,
+          "unnecessary_services": 0,
+          "unnecessary_rate": 0.0,
+          "inspections": 1,
+          "total_cost": 626.1,
+          "cost_per_entity_mean": 0.5434895833333333,
+          "cost_per_entity_median": 0.5,
+          "cost_per_entity_min": 0.0,
+          "cost_per_entity_max": 1.25,
+          "cost_per_entity_quartiles": [
+            0.375,
+            0.5,
+            0.625
+          ]
+        },
+        "matched_random": {
+          "total_failures": 12,
+          "failure_rate": 0.010416666666666666,
+          "total_services": 578,
+          "unnecessary_services": 0,
+          "unnecessary_rate": 0.0,
+          "inspections": 1,
+          "total_cost": 626.1,
+          "cost_per_entity_mean": 0.5434895833333333,
+          "cost_per_entity_median": 0.5,
+          "cost_per_entity_min": 0.0,
+          "cost_per_entity_max": 1.25,
+          "cost_per_entity_quartiles": [
+            0.375,
+            0.5,
+            0.625
+          ]
+        }
+      },
+      "selected_minus_none_cost_mean": 8.680555555555525e-05,
+      "selected_minus_none_cost_min": 0.0,
+      "selected_minus_none_cost_max": 0.012499999999999956,
+      "strict_mean_cost_component_pass": false,
+      "raw_report_sha256": "d0f7dd529c3968297b938141c5076c07d0099068198630a1c13de89753433310"
+    },
+    "gru768": {
+      "registered_selection_accuracy": 0.5520833333333334,
+      "legacy_cancellation_accuracy": 0.5,
+      "registered_n": 96,
+      "legacy_n": 48,
+      "cross_entropy": 0.4577724446679688,
+      "parameters": 1831714,
+      "training_seconds": 88.02559011900001,
+      "training_cpu_seconds": 88.016139716,
+      "state_bytes": 3072,
+      "validation_seconds": 7.564447029000007,
+      "checkpoint_bytes": 21987093,
+      "policies": {
+        "none": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 1152,
+          "unnecessary_services": 562,
+          "unnecessary_rate": 0.4878472222222222,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "cost_per_entity_mean": 1.0,
+          "cost_per_entity_median": 1.0,
+          "cost_per_entity_min": 1.0,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "selected": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 1152,
+          "unnecessary_services": 562,
+          "unnecessary_rate": 0.4878472222222222,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "cost_per_entity_mean": 1.0,
+          "cost_per_entity_median": 1.0,
+          "cost_per_entity_min": 1.0,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "matched_random": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 1152,
+          "unnecessary_services": 562,
+          "unnecessary_rate": 0.4878472222222222,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "cost_per_entity_mean": 1.0,
+          "cost_per_entity_median": 1.0,
+          "cost_per_entity_min": 1.0,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "selected_minus_none_cost_mean": 0.0,
+      "selected_minus_none_cost_min": 0.0,
+      "selected_minus_none_cost_max": 0.0,
+      "strict_mean_cost_component_pass": true,
+      "raw_report_sha256": "a12c70a0aee0ad14f6a4e4315438e577331f70945343702c3c7482b9259648f4"
+    },
+    "delta768": {
+      "registered_selection_accuracy": 0.5,
+      "legacy_cancellation_accuracy": 0.5,
+      "registered_n": 96,
+      "legacy_n": 48,
+      "cross_entropy": 0.4673633570860938,
+      "parameters": 7146,
+      "training_seconds": 64.65999160000001,
+      "training_cpu_seconds": 64.652496936,
+      "state_bytes": 3072,
+      "validation_seconds": 6.3561618360000125,
+      "checkpoint_bytes": 106393,
+      "policies": {
+        "none": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 1152,
+          "unnecessary_services": 562,
+          "unnecessary_rate": 0.4878472222222222,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "cost_per_entity_mean": 1.0,
+          "cost_per_entity_median": 1.0,
+          "cost_per_entity_min": 1.0,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "selected": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 1152,
+          "unnecessary_services": 562,
+          "unnecessary_rate": 0.4878472222222222,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "cost_per_entity_mean": 1.0,
+          "cost_per_entity_median": 1.0,
+          "cost_per_entity_min": 1.0,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        },
+        "matched_random": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 1152,
+          "unnecessary_services": 562,
+          "unnecessary_rate": 0.4878472222222222,
+          "inspections": 0,
+          "total_cost": 1152.0,
+          "cost_per_entity_mean": 1.0,
+          "cost_per_entity_median": 1.0,
+          "cost_per_entity_min": 1.0,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            1.0,
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "selected_minus_none_cost_mean": 0.0,
+      "selected_minus_none_cost_min": 0.0,
+      "selected_minus_none_cost_max": 0.0,
+      "strict_mean_cost_component_pass": true,
+      "raw_report_sha256": "9c6e3710d73029d2c7a7d2872fde7a2b067934e1d4793e2f2271578479307079"
+    },
+    "event_table": {
+      "registered_selection_accuracy": 0.75,
+      "legacy_cancellation_accuracy": 0.5,
+      "registered_n": 96,
+      "legacy_n": 48,
+      "cross_entropy": 0.061930957338517154,
+      "parameters": 482,
+      "training_seconds": 9.747334690999999,
+      "training_cpu_seconds": 9.745156827,
+      "state_bytes": 164,
+      "validation_seconds": 3.3074982010000014,
+      "checkpoint_bytes": 11723,
+      "policies": {
+        "none": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 614,
+          "unnecessary_services": 24,
+          "unnecessary_rate": 0.020833333333333332,
+          "inspections": 0,
+          "total_cost": 614.0,
+          "cost_per_entity_mean": 0.5329861111111112,
+          "cost_per_entity_median": 0.5,
+          "cost_per_entity_min": 0.125,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            0.375,
+            0.5,
+            0.625
+          ]
+        },
+        "selected": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 614,
+          "unnecessary_services": 24,
+          "unnecessary_rate": 0.020833333333333332,
+          "inspections": 0,
+          "total_cost": 614.0,
+          "cost_per_entity_mean": 0.5329861111111112,
+          "cost_per_entity_median": 0.5,
+          "cost_per_entity_min": 0.125,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            0.375,
+            0.5,
+            0.625
+          ]
+        },
+        "matched_random": {
+          "total_failures": 0,
+          "failure_rate": 0.0,
+          "total_services": 614,
+          "unnecessary_services": 24,
+          "unnecessary_rate": 0.020833333333333332,
+          "inspections": 0,
+          "total_cost": 614.0,
+          "cost_per_entity_mean": 0.5329861111111112,
+          "cost_per_entity_median": 0.5,
+          "cost_per_entity_min": 0.125,
+          "cost_per_entity_max": 1.0,
+          "cost_per_entity_quartiles": [
+            0.375,
+            0.5,
+            0.625
+          ]
+        }
+      },
+      "selected_minus_none_cost_mean": 0.0,
+      "selected_minus_none_cost_min": 0.0,
+      "selected_minus_none_cost_max": 0.0,
+      "strict_mean_cost_component_pass": true,
+      "raw_report_sha256": "4c1aa533f768ad6f5a24b62657c099d1d5c2d64be6d436eacd1a19587aabe78a"
+    }
+  }
+}

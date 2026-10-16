@@ -1,0 +1,79 @@
+{
+  "experiment": "DEV-029 pinned fusion boundary inventory",
+  "source": "5923ed0bf1aa2b9ae125c98d60dab25ec3cf07aa",
+  "branch_merged": false,
+  "seed": 0,
+  "steps": 24,
+  "calls": {
+    "state.read": 24,
+    "regime.context": 24,
+    "memory.context": 48,
+    "coordinator.route": 24,
+    "operators.execute_modules": 24,
+    "operators.select_candidate": 24,
+    "environment.transition": 24,
+    "verifier.verify": 24,
+    "repair.propose": 24,
+    "memory.observe": 24,
+    "regime.update": 24,
+    "coordinator.update": 24,
+    "operators.update": 24,
+    "verifier.commit_allowed": 24,
+    "state.write": 17
+  },
+  "physical_environment_exercised": true,
+  "environment_scope": "legacy synthetic relational/state-lookup/replay bit tasks; not maintenance prediction benchmark",
+  "prospective_osm_exercised": false,
+  "repair_proposed": true,
+  "repair_executed": false,
+  "original_cdl_teacher_used": false,
+  "component_advantage_validated": false,
+  "capability_validated": false,
+  "manifest": {
+    "model": "tacosm_fused_bioinspired_2026-10-08",
+    "configuration": {
+      "name": "full_fused",
+      "seed": 0,
+      "fact_enabled": true,
+      "fact_write": true,
+      "fact_intervention": "persistent",
+      "fact_corruption_rate": 0.0,
+      "memory_enabled": true,
+      "memory_timescales": 4,
+      "local_memory": true,
+      "global_memory": true,
+      "priming": true,
+      "memory_intervention": "persistent",
+      "memory_corruption_rate": 0.0,
+      "coordinator_mode": "sparse",
+      "top_k_modules": 2,
+      "disabled_modules": [],
+      "shared_operators": false,
+      "adaptive_halting": true,
+      "verifier_mode": "path",
+      "verifier_commit_success_only": true,
+      "repair": true,
+      "provenance": {}
+    },
+    "world": {
+      "dim": 8,
+      "n_candidates": 8,
+      "families": [
+        "relational",
+        "state_lookup",
+        "replay"
+      ],
+      "seed": 0
+    },
+    "modules": {
+      "state": "PersistentStore",
+      "memory": "MultiScaleMemory",
+      "regime": "RegimeState",
+      "coordinator": "SparseCoordinator",
+      "operators": "SpecialistPool",
+      "verifier": "FusionVerifier",
+      "repair": "RepairPolicy"
+    }
+  },
+  "limitation": "Single bounded existing-branch smoke rollout; no new trained capability or component ablation claim"
+}

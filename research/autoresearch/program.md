@@ -23,3 +23,14 @@ variation change training per arm. No generic hyperparameter search, metric
 replacement, cherry-picking, or irreversible resets. The ledger records studies,
 not a leaderboard that erases failed controls. Changes to future protocols get
 new experiment IDs, never retroactive changes to the current acceptance rule.
+
+## Priority correction: DEV-029
+
+The user's 2026-10-16 research review supersedes the earlier next-step proposal.
+Defer DEV-028 module initialization until optimization controls are adequate.
+Use the registered DEV-029 grid for hypothesis-driven tuning; the earlier
+"no generic hyperparameter search" rule does not prohibit this explicitly
+requested, bounded, validation-only optimization study. Keep a connected
+complete-system integration track: memory-only scores are not full-system
+scores. Preserve development successes and fresh replication failures together.
+See `docs/DEV-029-OPTIMIZATION-AND-INTEGRATION-PROGRAM.md`.
