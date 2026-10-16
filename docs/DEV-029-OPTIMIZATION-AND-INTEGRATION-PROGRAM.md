@@ -146,3 +146,21 @@ Memory-only results must never populate these full-system capability fields.
 The two tracks reconnect through a frozen public observation/state/query/action/
 outcome interface. A mechanism enters the integrated checkpoint only after
 compatibility checks and an end-to-end ablation measure its contribution.
+
+### Isolated fusion checkpoint
+
+`check_fusion_branch_dev029.py` requires a clean isolated checkout of the exact
+PR #146 commit above, imports that checkout in its own process and counts its
+real method calls over 24 existing synthetic environment steps. It does not
+merge any fusion code. The checked path calls specialist execution and candidate
+selection before environment transition, followed by verification, a repair
+proposal, dynamic memory/regime updates and gated experience writes. It does
+not call a prospective OSM planner or execute a proposed repair. These are
+integration gaps, not evidence against the value of those components.
+The learned PLM reference and fusion checkpoint therefore exercise different
+parts of the vision; neither is designated the validated complete architecture.
+
+The broad legacy integrated-memory workflow also matched this PR automatically;
+its redundant run was cancelled before its training stage. Future documentation
+pushes do not retrain that legacy pilot: it now follows the same opening-event
+and explicit-dispatch convention as the newer research workflows.
