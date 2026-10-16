@@ -1,5 +1,8 @@
 name: DEV-022 isolated runtime recovery and complete audit
 on:
+  pull_request:
+    paths:
+      - ".github/workflows/dev022-runtime-recovery.yml"
   workflow_dispatch:
 permissions:
   contents: read
