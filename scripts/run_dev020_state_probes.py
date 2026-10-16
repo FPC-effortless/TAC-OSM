@@ -64,7 +64,8 @@ def pair_metrics(y: torch.Tensor, scores: torch.Tensor) -> dict:
     """The label in each opposite-future pair differs; report paired decisions."""
     assert len(y) == len(scores) and len(y) % 2 == 0
     assert torch.equal(y.reshape(-1, 2).sum(1), torch.ones(len(y) // 2))
-    prediction = (scores >= .5).to(y.dtype)
+    # Match PyTorch argmax on equal binary probabilities: ties select class zero.
+    prediction = (scores > .5).to(y.dtype)
     grouped = prediction.reshape(-1, 2)
     return {"accuracy": float((prediction == y).float().mean()),
             "paired_class_disagreement": float((grouped[:, 0] != grouped[:, 1]).float().mean()),
