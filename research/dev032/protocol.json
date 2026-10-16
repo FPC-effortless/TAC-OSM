@@ -54,5 +54,18 @@
     ],
     "runtime": "Same Kaggle PyTorch/Python image, no optimizer steps; preserve original failed trial",
     "outputs": "Loss, gradients, nonfinite counts, FP32/FP64 norms, forward logit deviations; no validation or scientific test evaluation"
+  },
+  "bounded_registered_grid_progress": {
+    "parent": "Unchanged DEV-029 matrix; existing slot, not numerical rescue",
+    "arm": "gru768",
+    "seed": 311,
+    "learning_rate": 0.0005,
+    "curriculum": "fixed512",
+    "until": 2160,
+    "device": "cuda:0",
+    "source": "4a8728ef3f08e01d9c542374cf1e722bf8701240",
+    "training_timeout_seconds": 420,
+    "replay": "Every saved216/648/2160 checkpoint, including partial files after failure; original exact replay",
+    "claims": "One registered slot only. No pruning, winner, convergence guarantee or test access. Original LR.002 trial remains failed."
   }
 }
