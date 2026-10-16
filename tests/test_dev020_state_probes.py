@@ -24,6 +24,16 @@ def test_pair_metrics_reject_unbalanced_and_count_disagreements():
         dev020.pair_metrics(torch.tensor([0., 0.]), torch.tensor([.1, .9]))
 
 
+def test_archived_accuracy_uses_exact_count_ratio():
+    # DEV-018 short seed43 schema41: 91/96 is not exact in float32.
+    y = torch.tensor([0., 1.] * 48)
+    scores = y.clone()
+    scores[:5] = 1 - scores[:5]
+    result = dev020.pair_metrics(y, scores)
+    assert result["accuracy"] == 91 / 96
+    assert result["paired_class_disagreement"] == 47 / 48
+
+
 def test_disjoint_synthetic_domains_and_matched_recent_observation():
     train = dev020.episodes(43, "dev020-probe-train", 1)
     frozen = dev020.episodes(43, "dev018-eval", 1)

@@ -67,8 +67,9 @@ def pair_metrics(y: torch.Tensor, scores: torch.Tensor) -> dict:
     # Match PyTorch argmax on equal binary probabilities: ties select class zero.
     prediction = (scores > .5).to(y.dtype)
     grouped = prediction.reshape(-1, 2)
-    return {"accuracy": float((prediction == y).float().mean()),
-            "paired_class_disagreement": float((grouped[:, 0] != grouped[:, 1]).float().mean()),
+    # Match the archived stdlib integer-count ratios without float32 rounding.
+    return {"accuracy": int((prediction == y).sum()) / len(y),
+            "paired_class_disagreement": int((grouped[:, 0] != grouped[:, 1]).sum()) / len(grouped),
             "paired_mean_probability_gap": float((scores.reshape(-1, 2)[:, 0]
                                                 - scores.reshape(-1, 2)[:, 1]).abs().mean())}
 
