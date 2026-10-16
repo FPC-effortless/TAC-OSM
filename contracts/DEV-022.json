@@ -1,0 +1,19 @@
+{
+  "experiment_id": "DEV-022",
+  "status": "PRE_EXECUTION_ADAPTIVE_DEVELOPMENT_PROTOCOL",
+  "seeds": [43, 59, 71],
+  "regimes": {"short": {"history": 128, "batch_size": 8}, "long": {"history": 512, "batch_size": 2}},
+  "steps": 216,
+  "eval_steps": 4,
+  "h_levels": [32, 128, 512, 1024],
+  "arms": ["native", "no_decay", "no_erase", "neither", "entity", "entity_no_decay", "aligned", "aligned_no_decay", "schema41", "memoryless"],
+  "retention_contrasts": [["no_decay", "native"], ["neither", "no_erase"], ["entity_no_decay", "entity"], ["aligned_no_decay", "aligned"]],
+  "primary_contrast": ["no_decay", "native"],
+  "training_seed_offset": 4000,
+  "evaluation_seed_offset": 22000,
+  "initialization_seed_offset": 22000,
+  "reliability": {"min_seed_accuracy": 0.8, "max_failure_rate": 0.05, "max_unnecessary_service_rate": 0.1, "max_cost_per_entity": 0.8},
+  "retention_gain": {"min_mean_accuracy_gain": 0.05, "min_exploratory_df2_lower_bound": 0.0, "min_seed_swap_drop": 0.1},
+  "overall_TAC_success": false,
+  "limitations": ["fixed eight-entity public interface; no entity-count transfer claim", "same total tensors and scalar state within TAC, but disabled gates and shared keys reduce active parameters", "entity treatment combines public write/read partitioning with entity-local aging", "all seed intervals exploratory; adaptive synthetic study", "recipe matches pre-sensing event count across regimes, not episode or inspection-label counts"]
+}
