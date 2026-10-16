@@ -1,0 +1,56 @@
+{
+  "study": "DEV-027",
+  "status": "FROZEN_ADAPTIVE_MATCHED_FACTORIAL",
+  "question": "Does long-regime variation follow whole-model initialization or public training-stream namespace?",
+  "seeds": [
+    43,
+    59,
+    71,
+    89,
+    107
+  ],
+  "arms": [
+    "A_A",
+    "A_B",
+    "B_A",
+    "B_B"
+  ],
+  "steps": 216,
+  "regime": {
+    "history": 512,
+    "batch_size": 2
+  },
+  "h_levels": [
+    512
+  ],
+  "eval_steps": 4,
+  "initialization_offsets": {
+    "A": 23000,
+    "B": 24000
+  },
+  "training_offsets": {
+    "A": 5000,
+    "B": 6000
+  },
+  "evaluation_offsets": {
+    "DEV023": 23000,
+    "DEV024": 24000
+  },
+  "optimizer": {
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "clip": 1.0
+  },
+  "primary": "H512 pre-sensing mature cancellation accuracy, averaged over the two fixed grids before paired-seed factorial effects",
+  "decision": "Report initialization and training-stream main effects independently. A meaningful effect requires absolute mean>=.05 and paired five-seed exploratory95% t(df4) interval excluding zero. Conditional effects and interaction are secondary; no failed primary can be rescued.",
+  "reliability": "Every seed on each grid: accuracy>=.8, swap drop>=.1, selected failures<=.05, unnecessary<=.10, cost<=.80; mean selected<=mean model-only. Never average away a failed grid.",
+  "runtime_control": "All four corners retrained sequentially within one process/runtime block per seed, in prospective seeded order. No historical trained checkpoint supplies a corner.",
+  "limits": [
+    "Adaptive known namespaces/grids; not confirmatory",
+    "Whole-model initialization changes encoder, writer and reader together",
+    "Training namespace changes public histories and deterministic receipt choices together",
+    "Only long recipe tested; no attribution to episode/receipt exposure or optimizer alone",
+    "CPU differences across seeds remain; all four corners within a seed share runtime",
+    "Fixed8 synthetic structured graph; no native TAC/CASM success"
+  ]
+}
