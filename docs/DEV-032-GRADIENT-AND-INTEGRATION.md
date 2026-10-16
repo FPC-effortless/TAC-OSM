@@ -94,8 +94,37 @@ learning rate0.0005, fixed512, until2160 on CUDA. Training source remains
 The seven-minute training cap preserves partial outcomes, and all saved216,
 648 and2160 checkpoints receive strict original same-runtime replay. This
 is progress on one of72 registered slots, not recipe selection or a replacement
-for the failed LR0.002 trial. Outcome remains pending until checked.
+for the failed LR0.002 trial. All three checkpoints completed and passed strict original same-runtime replay. The source/protocol/checkpoint hashes were checked locally.
 
 CI [38949805163](https://github.com/FPC-effortless/TAC-OSM/actions/runs/38949805163)
 passed at source `c42c39dfce3980b5716e1a18bcf0f6099076da98`, including the full
 1143-test suite, integration execution and independent physical replay.
+
+
+### Lower-rate GRU result (one seed, validation only)
+
+| Updates | Primary all-role (96 cases) | Cancellation (48 cases) |
+|---|---|---|
+|216|53.13%|50.00%|
+|648|55.21%|50.00%|
+|2160|54.17%|50.00%|
+
+The [summary](DEV-032-GRU-LOWER-RATE-SUMMARY.json) records source/checkpoint/raw
+report/replay hashes, all checkpoint metrics and absolute physical costs.
+The [execution manifest](DEV-032-GRU-LOWER-RATE-EXECUTION.json) records successful
+training and all three original separate-process replays. Cumulative measured
+training time was140.16 seconds; execution including checkpoint replay took
+188.73 seconds on Tesla T4 (startup excluded).
+
+At2160 the model-only, selected and matched-random policies each serviced all
+1152 entity opportunities across144 physical cases: zero failures,562
+unnecessary services, zero inspections, total cost1152, mean cost1.0 per entity.
+Selected-minus-model-only cost was exactly0, providing no strict cost reduction.
+Zero failures therefore do not demonstrate useful tracking or economic utility.
+
+This slot completes without the earlier numerical failure, but cancellation
+remains at chance and all-role accuracy does not steadily improve. Neither
+convergence nor GRU incapacity follows. The complete72-slot grid, selection,
+fresh-seed uncertainty, larger independent evaluation and scientific Test6
+remain unfinished. No scientific test set was accessed; no architecture ranking
+or confidence interval over initialization is claimed from one seed.
