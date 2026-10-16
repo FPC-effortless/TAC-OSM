@@ -34,3 +34,22 @@ checkpoints outside the git checkout, and contains no launch credentials. It
 allocates a GPU for the fast GRU path while CPU workers execute the other arms.
 Kaggle quota measures allocation duration, including intervals where that GPU
 is idle. This tranche is capped; it does not automatically launch the full grid.
+
+## Launch checkpoint
+
+The private Kaggle tranche version1 was submitted successfully and reported
+`RUNNING` on 2026-10-16. Frozen execution source:
+`4a8728ef3f08e01d9c542374cf1e722bf8701240`.
+Required runtime is the preflight-observed `torch2.11.0+cu128` and Tesla T4;
+a different runtime fails before training instead of silently substituting.
+The generated notebook code SHA256 is
+`41859e1e24baee7638ffaf09c498ab68532ed2eb3e43ff4c3c24063510ec25f0`.
+It contains no launch credential; source checkout is outside the output archive.
+
+Before launch, command construction was checked for all six arms, fixed648
+budget, registered device placement, no test argument, and valid notebook
+syntax. A separate local CPU event-table checkpoint at216 updates was trained
+and strictly replayed to check the new replay path. That was an integrity
+fixture on the local software build, not a seventh Kaggle arm or evidence
+completing the registered tuning matrix. No DEV-031 Kaggle performance or
+replay result is claimed at this launch checkpoint.
