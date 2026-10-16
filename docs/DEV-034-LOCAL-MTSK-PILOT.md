@@ -25,7 +25,10 @@ the initialized effective retention is not simply0.70/0.92/0.99.
 Both local/global arms of each retention configuration have identical initial
 parameters. Common event encoder, query encoder, prediction head and read adapter
 are byte-identical across the factorial arms. Tied versus independent gates have
-different parameter counts, explicitly reported. State equality is not parameter,
+different parameter counts, explicitly reported. The expert reads are reduced to a rank-three vector per entity before the shared
+32-wide adapter. This reader bottleneck differs from the reference models and
+is another reason a negative baseline comparison cannot isolate storage quality.
+State equality is not parameter,
 FLOP or compute equality: global writing updates eight banks per event; local
 writing updates one. Report actual timing and complete search cost before any
 efficiency claim. Baselines are the existing masked-local TAC and learned schema41.
