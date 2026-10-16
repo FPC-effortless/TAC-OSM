@@ -29,8 +29,9 @@ retention, replacement after cancellation/reissue, responsibilities, per-timesca
 ablation and actual predictive/decision consequences.
 
 Capacity requires a real kernel redesign. With DEV-032's d_model24, four heads
-and six experts, MTSK uses864 recurrent scalars; eight copies use6912, not the
-768-scalar TAC budget. Decouple memory key/value rank from shared encoder and
+and six experts, the MTSK memory tensor alone uses864 scalars; eight copies
+use6912 before auxiliary state, not the768-scalar TAC budget. The streamed
+responsibility tensors add another144 scalars per copy (1152 across eight). Decouple memory key/value rank from shared encoder and
 predictor width, and count responsibility state as well as memory matrices.
 Freeze exact layouts before outcomes. Report parameters, optimizer state,
 measured compute, latency, memory and total tuning cost. If simultaneous state
