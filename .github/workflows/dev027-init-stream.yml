@@ -1,0 +1,82 @@
+name: DEV-027 matched initialization and training streams (development)
+on:
+  pull_request:
+    # Later scientific executions use explicit dispatch; documentation edits
+    # must not silently launch another training matrix.
+    types: [opened]
+    paths:
+      - "scripts/run_dev027_init_stream.py"
+      - "scripts/*dev027*"
+      - "tests/test_dev027_init_stream.py"
+      - "development_protocols/DEV-027-INIT-STREAM.json"
+      - ".github/workflows/dev027-init-stream.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  integrity-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned CPU tests
+        timeout-minutes: 8
+        run: |
+          python -m pip install --quiet --timeout 60 --retries 3 -e . pytest==9.1.1 numpy==2.3.3 ruff==0.13.0
+          python -m pip install --quiet --timeout 60 --retries 3 torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Lint, provenance and regression suite
+        run: |
+          ruff check --select F scripts/*dev027* tests/test_dev027_init_stream.py
+          python scripts/sync_test_count.py --check
+          python -m pytest tests/ -q
+  trained-block:
+    needs: integrity-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        seed: [43, 59, 71, 89, 107]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned CPU research runtime
+        timeout-minutes: 3
+        run: |
+          python -m pip install --quiet --timeout 60 --retries 3 -e . numpy==2.3.3
+          python -m pip install --quiet --timeout 60 --retries 3 torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Retrain all four corners within one runtime block
+        run: python scripts/run_dev027_init_stream.py --seed ${{ matrix.seed }} --output results
+      - name: Separate-process exact checkpoint prediction action and cost replay
+        run: python scripts/run_dev027_init_stream.py --seed ${{ matrix.seed }} --output results --replay
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV-027-RAW-${{ matrix.seed }}-NOT-CONFIRMATORY
+          path: results/
+          if-no-files-found: error
+  independent-audit:
+    needs: trained-block
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: DEV-027-RAW-*
+          path: evidence
+      - run: python scripts/audit_dev027_init_stream.py evidence/*/* --output evidence/summary.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DEV-027-COMPLETE-AUDITED-NOT-CONFIRMATORY
+          path: evidence/
