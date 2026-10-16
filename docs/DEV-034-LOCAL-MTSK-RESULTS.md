@@ -118,3 +118,7 @@ contribution remain open. No new model branch is merged.
 Continuation raw evidence: `/workspace/dev034-continuation-evidence.zip`, with
 [separate manifest](DEV-034-CONTINUATION-EVIDENCE-MANIFEST.json). All1163 local
 tests passed after adding the two prospective clipping tests.
+
+CI [38967409222](https://github.com/FPC-effortless/TAC-OSM/actions/runs/38967409222)
+passed integrity, the full1163-test suite, six-arm smoke and smoke replay.
+It does not turn the failed trained pilot into a success.
