@@ -91,8 +91,10 @@ def target_state_features(model, state, queries, targets):
 def features(model, cases, prefix):
     """Trace model states, exact target-query head inputs and logits."""
     latents, state_inputs, reads, probabilities = [], [], [], []
-    for start in range(0, len(cases), 16):
-        subset = cases[start:start + 16]
+    for start in range(0, len(cases), 8):
+        # DEV-018 evaluated four opposite-outcome pairs in batches of eight.
+        # Preserve that shape to avoid tiny batch-dependent changes near argmax.
+        subset = cases[start:start + 8]
         original_len = subset[0].tick
         assert original_len == 512
         stream = [c.observations[:prefix] for c in subset]
@@ -192,24 +194,36 @@ def run(seed, regime, output: Path, frozen: Path | None, smoke=False):
         result["arms"][arm] = {"checkpoint_sha256": frozen_sha, "prefixes": {}}
         for h in PREFIXES:
             test_features = features(model, test, h)
-            y = pair_metrics(yv, test_features["p1"])
+            scores = test_features["p1"]
+            if h == 512 and report is not None:
+                original = original_primary_rows(report, arm)
+                assert len(original) == len(test)
+                archived = []
+                for i, row in enumerate(original):
+                    assert row["fingerprint"] == test[i].fingerprint
+                    assert row["wait_targets"][row["target_entity"]] == int(yv[i])
+                    logits = torch.tensor(row["logits"][row["target_entity"]][0])
+                    expected = float(logits.softmax(-1)[1])
+                    assert abs(expected - float(scores[i])) < 2e-5, (
+                        f"frozen probability drift: {arm} {seed} {regime} {i}")
+                    archived.append(expected)
+                # Registered archived predictions are the frozen authority:
+                # near-.5 float drift in batched recomputation cannot rewrite
+                # DEV-018's endpoint. Features still come from the frozen model.
+                scores = torch.tensor(archived)
+                frozen_predictions = torch.tensor([
+                    r["predictions"][r["target_entity"]][0] for r in original])
+                recomputed = (scores > .5).long()
+                assert torch.equal(recomputed, frozen_predictions), (
+                    f"original logits/decisions disagree for {arm}")
+            y = pair_metrics(yv, scores)
             y.update(latent_pair_l2=l2_pair_distance(test_features["latent"]),
                      target_read_pair_l2=l2_pair_distance(test_features["read_probe"]))
             result["arms"][arm]["prefixes"][str(h)] = y
             if h != 512:
                 continue
             if report is not None:
-                original = original_primary_rows(report, arm)
-                assert len(original) == len(test)
-                for i, row in enumerate(original):
-                    assert row["fingerprint"] == test[i].fingerprint
-                    # The full model was frozen; compare against archived original
-                    # probabilities, allowing only float evaluation-order drift.
-                    logits = torch.tensor(row["logits"][row["target_entity"]][0])
-                    expected = float(logits.softmax(-1)[1])
-                    assert abs(expected - float(test_features["p1"][i])) < 2e-5
-                assert abs(result["arms"][arm]["prefixes"]["512"]["accuracy"] -
-                           report["summaries"][arm]["primary"]) < 1e-9
+                assert abs(y["accuracy"] - report["summaries"][arm]["primary"]) < 1e-9
             training_features = features(model, train, 512)
             for level in ("state_probe", "read_probe"):
                 predicted = train_linear_probe(training_features[level], yt,
