@@ -51,7 +51,8 @@ def package(output,username,curriculum='fixed512'):
     notebook=dict(nbformat=4,nbformat_minor=5,metadata={'kernelspec':{'display_name':'Python 3','language':'python','name':'python3'},'accelerator':'GPU'},cells=[dict(cell_type='code',id='registered-grid-slot',metadata={},execution_count=None,outputs=[],source=code.splitlines(keepends=True))])
     name='dev032_registered_gru.ipynb';(output/name).write_text(json.dumps(notebook,indent=2)+'\n')
     suffix='registered-gru-slot' if curriculum=='fixed512' else 'curriculum-gru-slot'
-    metadata=dict(id=username+'/tac-osm-dev032-'+suffix,title='TAC OSM Registered GRU '+curriculum,code_file=name,language='python',kernel_type='notebook',is_private=True,enable_gpu=True,enable_internet=True,machine_shape='NvidiaTeslaT4',dataset_sources=[],competition_sources=[],kernel_sources=[],model_sources=[])
+    title='TAC OSM DEV032 Registered GRU Slot' if curriculum=='fixed512' else 'TAC OSM DEV032 Curriculum GRU Slot'
+    metadata=dict(id=username+'/tac-osm-dev032-'+suffix,title=title,code_file=name,language='python',kernel_type='notebook',is_private=True,enable_gpu=True,enable_internet=True,machine_shape='NvidiaTeslaT4',dataset_sources=[],competition_sources=[],kernel_sources=[],model_sources=[])
     (output/'kernel-metadata.json').write_text(json.dumps(metadata,indent=2)+'\n')
     print(json.dumps(dict(private=True,source='4a8728ef3f08e01d9c542374cf1e722bf8701240',credentials_embedded=False,test_accessed=False)))
 
