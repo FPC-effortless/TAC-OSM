@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
 import torch  # noqa: E402
+from tac_osm.contract import load_contract  # noqa: E402
 from tac_osm.development.retention_controls import ARMS, RetentionControl  # noqa: E402
 from tac_osm.development.noisy_memory import parameter_hash  # noqa: E402
 from run_memory_controls_dev import train, evaluate, digest, component_hash, SOURCES as PRIOR_SOURCES  # noqa: E402
@@ -25,6 +26,11 @@ def specification():
     prior = json.loads((ROOT / "contracts/DEV-018.json").read_text())
     spec = json.loads((ROOT / "contracts/DEV-022.json").read_text())
     prior.update({k: spec[k] for k in ("steps", "eval_steps", "h_levels", "seeds", "regimes")})
+    contract = load_contract("DEV-022")
+    contract.require_arms(ARMS)
+    contract.require_steps(prior["steps"])
+    contract.require_levels(prior["h_levels"])
+    contract.require_eval_steps(prior["eval_steps"])
     return prior
 
 

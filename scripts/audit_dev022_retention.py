@@ -23,6 +23,7 @@ def digest(path):
 def spec_and_sources():
     spec = json.loads((ROOT / "contracts/DEV-018.json").read_text())
     spec.update(json.loads((ROOT / "contracts/DEV-022.json").read_text()))
+    spec["arms"] = [a["name"] for a in spec["arms"]]
     return spec
 
 
