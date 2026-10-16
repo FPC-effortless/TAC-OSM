@@ -1,0 +1,17 @@
+{
+  "experiment": "DEV-030 compute preflight",
+  "scientific_parent": "DEV-029 protocol remains unchanged",
+  "purpose": "Determine whether Kaggle GPU accelerates the registered small-batch workload without silently changing task, optimization, dtype or test access",
+  "provider": "Kaggle private kernel, user-selected available quota",
+  "training_authorization": "First submit engineering preflight only; full 72-trial grid and fresh twenty-seed evaluation are not launched by the preflight",
+  "arms": ["native", "masked_local", "schema41", "gru768", "delta768", "event_table"],
+  "fixtures": "dev030-engineering-fixture only; no scientific train/validation/test episodes",
+  "benchmark": {"history": 512, "batch_size": 2, "warmup_updates": 2, "timed_updates": 5, "repetitions": 3, "include_generation_encoding_receipts_optimizer": true},
+  "precision": "FP32; no AMP, TF32, compilation or batch-size changes; deterministic CUDA settings",
+  "parity": {"initial_logits_rtol": 0.00001, "initial_logits_atol": 0.000001, "initial_decisions": "exact", "post_update_logits_rtol": 0.0001, "post_update_logits_atol": 0.00001, "finite_gradients_required": true},
+  "training_trajectories": "CPU and CUDA training are separate runtime cohorts. Initial/one-step parity is not a guarantee of identical long-run optimization. Do not merge runtime cohorts silently.",
+  "event_table": "Public deterministic state updates stay on CPU; learned prediction head on selected device. Hybrid placement explicitly recorded.",
+  "recommendation": "GPU training candidate only if all parity checks pass and sum of per-arm median end-to-end update times is at least 20% faster than CPU. Recommendation is engineering-only, not architecture selection; no scientific outcome is inspected.",
+  "evidence": "Frozen git source, protocol hashes, full per-arm CPU/GPU latency samples, initial/post-update discrepancies, exact decision checks, runtime/device metadata and no-test-access declaration",
+  "limitations": "No GPU validation is claimed from a CPU-only fixture. No quota, speedup, accelerator type or completed remote run may be assumed without observed evidence. GPU quota and API authentication are distinct."
+}

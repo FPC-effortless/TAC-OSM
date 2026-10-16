@@ -1,0 +1,353 @@
+{
+  "experiment": "DEV-030 compute preflight",
+  "source": "75e72c3784f6fc57bd3d569331c296680df2ed3a",
+  "protocol_sha256": "c97a3b5ab0d53e04e358da6e236f4e0a544ec25a3060499ab7d8df2b1c7569a6",
+  "smoke": false,
+  "gpu_validation_completed": true,
+  "test_accessed": false,
+  "scientific_training_run": false,
+  "arms": {
+    "native": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.7642126047999909,
+          0.769369748600002,
+          0.7404466370000022
+        ],
+        "median_seconds_per_update": 0.7642126047999909
+      },
+      "parity": {
+        "passed": true,
+        "initial_max_abs_error": 4.470348358154297e-08,
+        "post_update_max_abs_error": 8.940696716308594e-08,
+        "initial_categorical_predictions_exact": true,
+        "initial_service_choices_exact": true,
+        "fixture_fingerprints": [
+          "46407c37f29314cbae92ac4131ae51fcd18c33e08aef9b2ccbd4338ed757883c",
+          "cf6ffa50d3fa3ae049ff17fc714664dd27f3f4cfd61ee623ab3a36bb9b6cdf07"
+        ],
+        "limitation": "One-step closeness does not imply identical CPU/CUDA training trajectories"
+      },
+      "cuda": {
+        "runtime": {
+          "device": "cuda:0",
+          "state_device": "cuda:0",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": "Tesla T4",
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          2.0906332715999953,
+          2.0589062377999996,
+          2.0631781144000003
+        ],
+        "median_seconds_per_update": 2.0631781144000003
+      }
+    },
+    "masked_local": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.9444012489999978,
+          0.9535579190000021,
+          0.9567724550000094
+        ],
+        "median_seconds_per_update": 0.9535579190000021
+      },
+      "parity": {
+        "passed": true,
+        "initial_max_abs_error": 5.587935447692871e-08,
+        "post_update_max_abs_error": 5.960464477539063e-08,
+        "initial_categorical_predictions_exact": true,
+        "initial_service_choices_exact": true,
+        "fixture_fingerprints": [
+          "46407c37f29314cbae92ac4131ae51fcd18c33e08aef9b2ccbd4338ed757883c",
+          "cf6ffa50d3fa3ae049ff17fc714664dd27f3f4cfd61ee623ab3a36bb9b6cdf07"
+        ],
+        "limitation": "One-step closeness does not imply identical CPU/CUDA training trajectories"
+      },
+      "cuda": {
+        "runtime": {
+          "device": "cuda:0",
+          "state_device": "cuda:0",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": "Tesla T4",
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          2.3612497140000075,
+          2.368182225800001,
+          2.3374241323999967
+        ],
+        "median_seconds_per_update": 2.3612497140000075
+      }
+    },
+    "schema41": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.4604566645999967,
+          0.45330737179999686,
+          0.4467187279999962
+        ],
+        "median_seconds_per_update": 0.45330737179999686
+      },
+      "parity": {
+        "passed": true,
+        "initial_max_abs_error": 5.960464477539063e-08,
+        "post_update_max_abs_error": 8.940696716308594e-08,
+        "initial_categorical_predictions_exact": true,
+        "initial_service_choices_exact": true,
+        "fixture_fingerprints": [
+          "46407c37f29314cbae92ac4131ae51fcd18c33e08aef9b2ccbd4338ed757883c",
+          "cf6ffa50d3fa3ae049ff17fc714664dd27f3f4cfd61ee623ab3a36bb9b6cdf07"
+        ],
+        "limitation": "One-step closeness does not imply identical CPU/CUDA training trajectories"
+      },
+      "cuda": {
+        "runtime": {
+          "device": "cuda:0",
+          "state_device": "cuda:0",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": "Tesla T4",
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          1.450019126999996,
+          1.4510531967999896,
+          1.4320256612000093
+        ],
+        "median_seconds_per_update": 1.450019126999996
+      }
+    },
+    "gru768": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          2.758715263599993,
+          3.7584665222000013,
+          2.678841144599983
+        ],
+        "median_seconds_per_update": 2.758715263599993
+      },
+      "parity": {
+        "passed": true,
+        "initial_max_abs_error": 2.9802322387695312e-08,
+        "post_update_max_abs_error": 5.960464477539063e-08,
+        "initial_categorical_predictions_exact": true,
+        "initial_service_choices_exact": true,
+        "fixture_fingerprints": [
+          "46407c37f29314cbae92ac4131ae51fcd18c33e08aef9b2ccbd4338ed757883c",
+          "cf6ffa50d3fa3ae049ff17fc714664dd27f3f4cfd61ee623ab3a36bb9b6cdf07"
+        ],
+        "limitation": "One-step closeness does not imply identical CPU/CUDA training trajectories"
+      },
+      "cuda": {
+        "runtime": {
+          "device": "cuda:0",
+          "state_device": "cuda:0",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": "Tesla T4",
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.06928087960000084,
+          0.0636227548000079,
+          0.06378957780000291
+        ],
+        "median_seconds_per_update": 0.06378957780000291
+      }
+    },
+    "delta768": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.49006319499999335,
+          0.48720935379999447,
+          0.48329977260000306
+        ],
+        "median_seconds_per_update": 0.48720935379999447
+      },
+      "parity": {
+        "passed": true,
+        "initial_max_abs_error": 2.9802322387695312e-08,
+        "post_update_max_abs_error": 4.470348358154297e-08,
+        "initial_categorical_predictions_exact": true,
+        "initial_service_choices_exact": true,
+        "fixture_fingerprints": [
+          "46407c37f29314cbae92ac4131ae51fcd18c33e08aef9b2ccbd4338ed757883c",
+          "cf6ffa50d3fa3ae049ff17fc714664dd27f3f4cfd61ee623ab3a36bb9b6cdf07"
+        ],
+        "limitation": "One-step closeness does not imply identical CPU/CUDA training trajectories"
+      },
+      "cuda": {
+        "runtime": {
+          "device": "cuda:0",
+          "state_device": "cuda:0",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": "Tesla T4",
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          1.2575784816000124,
+          1.2604671984000106,
+          1.2718625900000007
+        ],
+        "median_seconds_per_update": 1.2604671984000106
+      }
+    },
+    "event_table": {
+      "cpu": {
+        "runtime": {
+          "device": "cpu",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": null,
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.13474435440000435,
+          0.1345027957999946,
+          0.1378060031999894
+        ],
+        "median_seconds_per_update": 0.13474435440000435
+      },
+      "parity": {
+        "passed": true,
+        "initial_max_abs_error": 5.960464477539063e-08,
+        "post_update_max_abs_error": 5.960464477539063e-08,
+        "initial_categorical_predictions_exact": true,
+        "initial_service_choices_exact": true,
+        "fixture_fingerprints": [
+          "46407c37f29314cbae92ac4131ae51fcd18c33e08aef9b2ccbd4338ed757883c",
+          "cf6ffa50d3fa3ae049ff17fc714664dd27f3f4cfd61ee623ab3a36bb9b6cdf07"
+        ],
+        "limitation": "One-step closeness does not imply identical CPU/CUDA training trajectories"
+      },
+      "cuda": {
+        "runtime": {
+          "device": "cuda:0",
+          "state_device": "cpu",
+          "dtype": "float32",
+          "torch_version": "2.11.0+cu128",
+          "python_version": "3.13.15",
+          "cuda_version": "12.8",
+          "gpu_name": "Tesla T4",
+          "tf32": false,
+          "amp": false,
+          "compilation": false,
+          "batch_size_unchanged": true
+        },
+        "seconds_per_update": [
+          0.13536797379999826,
+          0.1533372331999999,
+          0.13514650600000094
+        ],
+        "median_seconds_per_update": 0.13536797379999826
+      }
+    }
+  },
+  "recommendation": {
+    "gpu_validated": true,
+    "prefer_gpu": false,
+    "aggregate_cpu_over_gpu_speedup": 0.756980172870723,
+    "reason": "GPU candidate only when aggregate end-to-end update time falls by at least 20%; no scientific selection"
+  }
+}
