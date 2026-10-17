@@ -7,7 +7,7 @@ import sys
 import time
 import numpy as np
 import torch
-from run_public_memory_dev056 import ROOT,PROTOCOL,write,digest,git,evaluate
+from run_public_memory_dev056 import PROTOCOL,write,digest,git,evaluate
 from audit_learned_stack_dev055 import native_replay,PIN
 from tac_osm.development.public_memory_deadline import DeadlineModel,PublicHazardWorld,HAZARDS,oracle_transitions,collect
 from tac_osm.development.learned_stack import FittedFilter,independent_transitions

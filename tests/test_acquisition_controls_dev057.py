@@ -58,4 +58,5 @@ def test_query_prefixes_and_budget_failures_are_explicit():
     a=benchmark(8571003,1024,8);b=benchmark(8571003,1024,64)
     assert a[0]==b[0] and a[1]==b[1][:8]
     with pytest.raises(ValueError):AcquisitionStore('hash_direct',64).acquire([1]*8)
+    with pytest.raises(ValueError):AcquisitionStore('hash_direct',64).acquire([-1,1,2,3,4,5,6,7])
     with pytest.raises(ValueError):AcquisitionStore('full_scan',64).write(2,65,1)

@@ -84,6 +84,7 @@ class AcquisitionStore:
 
     def acquire(self,keys):
         if len(keys)!=8 or len(set(keys))!=8:raise ValueError('eight distinct public keys required')
+        if any(type(k) is not int or not 0<=k<2**31 for k in keys):raise ValueError('invalid public key')
         result={};w=self.work
         if self.arm=='full_scan':
             wanted=set(keys);w.address_operations+=8

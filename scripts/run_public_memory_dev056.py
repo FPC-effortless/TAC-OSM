@@ -3,7 +3,6 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-import sys
 import time
 import traceback
 from run_learned_stack_dev055 import ROOT,write,digest,git,fit,bootstrap

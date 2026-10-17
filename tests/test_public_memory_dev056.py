@@ -1,4 +1,6 @@
 import inspect
+import importlib.util
+from pathlib import Path
 from unittest.mock import patch
 import numpy as np
 import torch
@@ -81,3 +83,15 @@ def test_public_hazard_replay_and_masked_incremental_restoration():
         torch.testing.assert_close(batch,torch.stack(outputs,1),rtol=1e-5,atol=1e-6)
         restored=DeadlineModel(42,'masked_mtsk').eval();restored.load_state_dict(model.state_dict())
         torch.testing.assert_close(batch,restored(ds[0],ds[1]),rtol=0,atol=0)
+
+
+def test_streaming_boundary_accepts_late_public_ticks_and_rejects_labels():
+    import pytest
+    path=Path(__file__).resolve().parents[1]/'scripts/demo_public_memory_dev056.py'
+    spec=importlib.util.spec_from_file_location('dev056_demo',path)
+    demo=importlib.util.module_from_spec(spec);spec.loader.exec_module(demo)
+    receipt={'action':1,'sensors':[0,1],'exact':[0,0],'tick':23,'hazard':.25}
+    event,hazard=demo.parse_event(receipt)
+    assert event.tick==23 and hazard==.25
+    with pytest.raises(ValueError):demo.parse_event({**receipt,'regime':0})
+    with pytest.raises(ValueError):demo.parse_event({**receipt,'hazard':.1})
