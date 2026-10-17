@@ -32,16 +32,17 @@
     "residual_faults": 2
   },
   "audit_file": "audit.json",
-  "audit_sha256": "0909c7a76cd58805c7afd68d16731e21817976c08504688fb4e7dcefdadca37a",
+  "audit_sha256": "2a5ff6636675375ee44368cb9ed7bd7e481ad69b37b670c9d78b41ebb127ddb5",
   "restored_checkpoints": 2,
   "restored_cells": 102,
   "native_replay_trajectories": 6528,
   "native_replay_actions": 35911,
   "audit_trajectory_scope": "Validation, full test and deliberate lesions; repeated shared worlds, not independent replications. Aggregate failures include lesions.",
   "regression": {
-    "passed": 1354,
-    "seconds": 72.17,
-    "github": "Live status is external; follow the recorded run URLs."
+    "passed": 1355,
+    "seconds": 67.82,
+    "github": "Use draft PR checks for the current revision; original CI runs and failed diagnostic replay are preserved.",
+    "scope": "Complete local suite including audit-portability test"
   },
   "runtime_boundary": "Torch-only agent plus public JSON transport. No teacher/simulator/analytic planner/task-specific policy in export.",
   "training": "Teacher-assisted admission/address pretraining then joint neural task learning; staged, not unsupervised or reward-only discovery.",
@@ -55,7 +56,7 @@
     "src/tac_osm/development/learned_agent.py": "49d5a381979a3ad0ab26d0e4a488b11ff391e01a9473c2e81d2eecaa4b69a07a",
     "src/tac_osm/development/learned_agent_world.py": "3990519e93e37308cf32492daec1818d22264fb77cf49930a1ce0707e0fb6b26",
     "scripts/run_fully_learned_dev058.py": "c175dd8f60dcfb188b3f3dd8939040a9031fd5cceea375e354bd96b1f5c12154",
-    "scripts/audit_fully_learned_dev058.py": "71b65f23b54822df799104ac1c050548f1de03cbfe9a9ad8e3b43e798578fe35",
+    "scripts/audit_fully_learned_dev058.py": "cd7be150132de46f2766e3e5be84c7e57dadecae7480aafb466270fd9a5a4294",
     "scripts/learned_agent_runtime_dev058.py": "d0a1917652a0467a6c277bb9edd647d8a75d04d1bcd0f0ae2bf32427cd1871b1"
   },
   "pull_request": "https://github.com/FPC-effortless/TAC-OSM/pull/217",
@@ -79,5 +80,26 @@
     "exact_decisions_per_seed": 33,
     "requires_simulator": false,
     "requires_tac_osm": false
-  }
+  },
+  "initial_same_host_audit": "audit-initial-same-host.json",
+  "exact_inference_cells": 90,
+  "canonical_zero_dynamics_diagnostic_cells": 12,
+  "portability_correction": "Audit-only canonicalization of checked mathematical ties; complete learned agent, export and checkpoint bytes unchanged. Original main trajectories retained.",
+  "initial_ci_replay_failure": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077254013",
+  "post_outcome_audit_amendment": "audit-portability-amendment.json",
+  "current_collected_test_count": 1355,
+  "post_correction_boundary_tests": {
+    "passed": 10,
+    "seconds": 6.14
+  },
+  "portable_cpu_diagnostic_check": {
+    "ATEN_CPU_CAPABILITY": "default",
+    "MKL_CBWR": "COMPATIBLE",
+    "seeds": [
+      7581,
+      7582
+    ],
+    "passed": true
+  },
+  "verified_prior_full_regression": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077254078"
 }

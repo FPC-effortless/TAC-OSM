@@ -137,3 +137,23 @@ def test_native_replay_preserves_both_success_and_failed_stop():
             assert row['success']==healthy
             assert native_replay(row)==1
     finally:sys.path.remove(str(scripts))
+
+
+def test_portable_tie_rule_is_audit_only_and_rejects_informative_scores(monkeypatch):
+    import pytest
+    scripts=Path(__file__).resolve().parents[1]/'scripts';sys.path.insert(0,str(scripts))
+    try:
+        from audit_fully_learned_dev058 import CanonicalZeroDynamicsDiagnostic
+        original=LearnedAgent(seed=8581014).eval()
+        diagnostic=CanonicalZeroDynamicsDiagnostic(original.config).eval()
+        diagnostic.load_state_dict(original.state_dict())
+        _,public=public_case(8581015);state=original.initial(1)
+        with torch.no_grad():
+            torch.testing.assert_close(original(state,*public)['logits'],diagnostic(state,*public)['logits'],rtol=0,atol=0)
+            result=diagnostic(state,*public,lesion='zero_dynamics')
+            assert result['logits'][public[1]].unique().numel()==1
+        monkeypatch.setattr(LearnedAgent,'forward',lambda self,state,descriptors,valid,*args:
+            {'logits':torch.arange(valid.shape[1],dtype=torch.float32)[None].masked_fill(~valid,-1e9)})
+        with pytest.raises(AssertionError,match='informative'):
+            diagnostic(state,*public,lesion='zero_dynamics')
+    finally:sys.path.remove(str(scripts))

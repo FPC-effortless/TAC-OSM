@@ -176,9 +176,10 @@ physical certificates. The audit records their scope and counts.
 
 ## Restoration, standalone export and native replay
 
-The local development audit restores both checkpoints and reproduces all 102
-recorded trained validation/test/lesion cells exactly. It also reproduces the
-untrained controls. All 6,528 trained rollout trajectories and 35,911 actions
+The portable development audit restores both checkpoints and reproduces 90
+recorded trained validation/test/lesion cells exactly, including every complete-agent
+cell. Twelve deliberately zeroed-dynamics cells use checked canonical ties, as
+described below. It also reproduces the untrained controls. All 6,528 trained rollout trajectories and 35,911 actions
 are reconstructed, including failures. They are repeated evaluations of shared
 worlds, not independent replications.
 
@@ -199,9 +200,34 @@ not be reported as failures of the complete learned agent.
 
 The [evidence index](../research/dev058/evidence-index.json) lists hashes,
 checkpoints, the runnable torch-only package and the saved audit. The full
-local regression passed 1,354 tests. GitHub run URLs are recorded there; their
+local regression passed 1,355 tests, including the portability regression. GitHub run URLs are recorded there; their
 current status is external to this frozen evidence index. [Draft PR #217](https://github.com/FPC-effortless/TAC-OSM/pull/217)
 contains this development checkpoint and remains unmerged.
+
+## CPU tie portability correction after the first CI replay
+
+The original same-host local audit reproduced all 102 cells exactly. GitHub
+run [39077254013](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077254013)
+failed only when it reached the deliberately zeroed-dynamics diagnostic.
+Its action-conditioned latent states are zero, so valid candidates have
+mathematically identical policy inputs. Repeated MLP rows can still differ by
+float32 roundoff across CPU kernels; argmax can then select a different tied
+candidate. The learned agent's own trajectories had already replayed exactly.
+
+The **audit-only** diagnostic now checks that candidate score spread is at most
+1e-6, canonicalizes the mathematical tie, and requires exact decisions and work
+against the original frozen zero-policy arm. On the development host, the
+largest observed spread was 7.15e-7; eight original zero-dynamics world traces
+have different tie choices, without changing the reported aggregate completion
+counts. All original traces still undergo exact physical and native replay.
+The original same-host audit and failed CI links remain in the evidence.
+
+This is a disclosed post-outcome correction to a numerical diagnostic, not
+retraining, a revised acceptance threshold, a new learned policy or a runtime
+fallback. The torch-only model, both checkpoints and the original main archive
+remain byte-identical. The complete agent and every other control retain exact
+action replay requirements. A regression test checks that the audit wrapper
+leaves ordinary inference unchanged and rejects genuinely different scores.
 
 ## Run the exported model or reproduce the research
 

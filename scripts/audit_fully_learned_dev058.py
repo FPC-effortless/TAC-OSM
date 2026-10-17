@@ -20,6 +20,29 @@ from run_learned_stack_dev055 import digest, write
 PIN = 'b21d829b62d3cab2811e746267ca305e110ed004'
 
 
+class CanonicalZeroDynamicsDiagnostic(LearnedAgent):
+    """AUDIT ONLY: canonicalize a mathematically constant diagnostic policy.
+
+    Zeroing both action-conditioned latent states makes every valid candidate's
+    policy input identical. Repeated MLP rows can nevertheless differ by CPU
+    roundoff. Check this premise numerically before using the already-frozen
+    zero-policy control's first-candidate tie convention. Never used for the
+    complete learned agent, its export, or another lesion.
+    """
+    largest_span = 0.
+
+    def forward(self, state, descriptors, valid, queries, query_valid, lesion='none'):
+        result = super().forward(state, descriptors, valid, queries, query_valid, lesion)
+        if lesion == 'zero_dynamics':
+            logits = result['logits']
+            span = logits.masked_fill(~valid, -torch.inf).max(-1).values - logits.masked_fill(~valid, torch.inf).min(-1).values
+            self.largest_span = max(self.largest_span, float(span.max().detach()))
+            if self.largest_span > 1e-6:
+                raise AssertionError('zero-dynamics diagnostic has informative candidate scores')
+            result['logits'] = torch.zeros_like(logits).masked_fill(~valid, -1e9)
+        return result
+
+
 @torch.no_grad()
 def prediction_diagnostics(model, cells):
     """Evaluator-only proper scores on autonomous visited states/actions."""
@@ -206,6 +229,7 @@ def run(directory, output, veritas_root=None, export_root=None):
               'worlds': 0, 'actions': 0, 'native_worlds': 0, 'native_actions': 0,
               'failed_completion_worlds': 0, 'residual_fault_worlds': 0, 'residual_faults': 0,
               'missing_stop_worlds': 0, 'exports': {}, 'runtime_imports': imports,
+              'exact_inference_cells': 0, 'canonical_tie_diagnostic_cells': [],
               'limitation': 'Same author/shared synthetic physics; native effects encode recorded outcomes. No independent replication or real-world verifier.'}
     if veritas_root:
         vr = Path(veritas_root).resolve()
@@ -218,6 +242,8 @@ def run(directory, output, veritas_root=None, export_root=None):
         assert digest(checkpoint) == report['checkpoint_sha256']
         model = LearnedAgent(AgentConfig(**report['config'])).eval()
         model.load_state_dict(torch.load(checkpoint, weights_only=True))
+        diagnostic = CanonicalZeroDynamicsDiagnostic(model.config).eval()
+        diagnostic.load_state_dict(model.state_dict())
         initial_model = LearnedAgent(model.config, report['seed'])
         result.setdefault('parameter_changes_l1', {})[str(report['seed'])] = {
             name: float((value - initial_model.state_dict()[name]).abs().sum())
@@ -234,8 +260,22 @@ def run(directory, output, veritas_root=None, export_root=None):
                 assert evaluate(untrained, cell['seed'], cell['entities'], cell['history'], cell['worlds']) == cell
             result.setdefault('prediction_diagnostics', {})[str(report['seed'])] = prediction_diagnostics(model, testing['cells'])
         for cell in cells:
-            replay = evaluate(model, cell['seed'], cell['entities'], cell['history'], cell['worlds'], cell['lesion'])
-            assert replay == cell, f"restored autonomous mismatch {report['seed']}/{cell['lesion']}"
+            if cell['lesion'] == 'zero_dynamics':
+                # Original zero-dynamics action records are retained and undergo
+                # exact physical/native replay below. For portable model inference
+                # compare canonical numerical ties to the frozen zero-policy arm.
+                reference = next(c for c in testing['lesions']['zero_policy']
+                    if (c['entities'], c['history'], c['seed']) == (cell['entities'], cell['history'], cell['seed']))
+                replay = evaluate(diagnostic, cell['seed'], cell['entities'], cell['history'], cell['worlds'], cell['lesion'])
+                assert replay == dict(reference, lesion='zero_dynamics'), 'canonical diagnostic mismatch'
+                result['canonical_tie_diagnostic_cells'].append({'seed': report['seed'],
+                    'entities': cell['entities'], 'history': cell['history'],
+                    'largest_logit_span': diagnostic.largest_span,
+                    'legacy_rows_differ': sum(a != b for a, b in zip(cell['rows'], replay['rows']))})
+            else:
+                replay = evaluate(model, cell['seed'], cell['entities'], cell['history'], cell['worlds'], cell['lesion'])
+                assert replay == cell, f"restored autonomous mismatch {report['seed']}/{cell['lesion']}"
+                result['exact_inference_cells'] += 1
             result['restored_cells'] += 1
             for row in cell['rows']:
                 w = World(row['seed'], row['index'], row['entities'], row['history'])
