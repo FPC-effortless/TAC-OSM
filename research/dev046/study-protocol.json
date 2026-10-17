@@ -1,0 +1,18 @@
+{
+  "study": "DEV-046B",
+  "status": "PREREGISTERED_BOUNDED_DEVELOPMENT_NOT_CONFIRMATORY",
+  "seeds": [4601, 4602, 4603],
+  "arms": ["forecast_trainable", "decision_trainable", "joint_trainable", "teacher_trainable", "forecast_frozen", "decision_frozen", "joint_frozen", "teacher_frozen"],
+  "model": {"dim": 8, "entities": 8, "memory": "three shared entity-local GRU banks, one timestamp per entity", "event_content": "identity-free, routing addresses only", "retrieval": "all eight slots; hard routing score not trained in this study"},
+  "train": {"updates": 72, "lr": 0.003, "histories": [64, 128], "delays": [32, 128, 512], "batch_worlds": 2, "paired_stream_all_arms": true},
+  "objectives": {"forecast": "BCE", "decision": "expected simulator cost regret", "joint": "BCE + regret + 0.2 cost ranking", "teacher": "joint plus joint supervision at one-step student-encountered service/inspection state"},
+  "teacher_control": "Same base examples and updates, but teacher arm performs additional forward/backward computation and receives extra labeled receipt states. Measure rather than claim equal compute.",
+  "frozen_intervention": "Freeze observation encoder and all memory writers before optimizer; action predictor remains trainable. Same initialization within seed.",
+  "calibration": {"history": 512, "repetitions_per_cell": 1, "domain": "dev046b-calibration"},
+  "evaluation": {"history": 512, "repetitions_per_cell": 2, "domain": "dev046b-evaluation", "roles": ["retention", "acquisition", "pending_cancel", "reissued_cancel"], "deadlines": ["before", "at", "after"], "delays": [32, 128, 512]},
+  "selection": "Per-arm threshold on calibration cost; preserve native expected-cost threshold 0.25 as separate endpoint. No evaluation-based arm selection.",
+  "primary": "paired physical cost versus forecast-only, failures guard; exact public-history reference remains control",
+  "secondary": ["Brier", "ECE", "pair margin", "decision regret", "unnecessary services", "teacher agreement", "training seconds", "inference seconds", "parameters", "stored state scalars"],
+  "audit": ["fresh cohort fingerprints", "checkpoint reconstruction of all calibration and evaluation predictions", "simulator physical replay", "frozen state hashes", "all three seeds before aggregate interpretation"],
+  "limitations": ["three seeds descriptive", "72 updates not convergence", "restricted deterministic simulator", "one-step simulator teaching is inspired by semantic action supervision, not an ActionOPD reproduction", "no optimized reservoir superiority claim", "no retention-loss or SSM superiority claim", "no untouched confirmatory evaluation"]
+}
