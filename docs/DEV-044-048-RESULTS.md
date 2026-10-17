@@ -102,8 +102,8 @@ Development selected `exact_history` in all three seeds before evaluation. Costs
 | route8_exact | 0.651525 | 2 / 8 / 0 | complete |
 | route2_inspect | 0.797173 | 8 / 19 / 0 | complete |
 | route4_inspect | 0.787574 | 8 / 21 / 0 | complete |
-| route2_review | unknown | unresolved | 14.58% mean world coverage; no complete cost claim |
-| route4_review | unknown | unresolved | 29.17% mean world coverage; no complete cost claim |
+| route2_review | unknown | unresolved | 14.58% mean entity coverage per world; no complete cost claim |
+| route4_review | unknown | unresolved | 29.17% mean entity coverage per world; no complete cost claim |
 
 Routing reduces the entity positions entering the first OSM call. Inspection fallback predicts the remainder, restoring full entity prediction count and adding sensing work. History fallback scans history. Runtime includes encoding, routing, fallback, simulated execution and verification; model initialization/worker startup is excluded. Timings were collected on a shared CPU environment and are descriptive, not FLOP-matched performance evidence.
 
@@ -117,3 +117,5 @@ Routing reduces the entity positions entering the first OSM call. Inspection fal
 Interpretation and remaining gates are in [the research discussion](DEV-044-048-INTERPRETATION.md), [reproduction guide](DEV-044-048-REPRODUCTION.md) and [source review](DEV-044-048-RESEARCH-SOURCES.md). No result establishes learned memory-item retention, calibrated uncertainty/value-of-information, original CASM/CDL equivalence, GEPA LLM-reflection effectiveness, industrial twin validity or untouched-domain superiority.
 
 Failure vectors are descriptive seed-level outcomes; individual worlds are not independent training replications. Cryptographic hashes establish evidence identity, not scientific validity.
+
+DEV-049 reporting correction: DEV-048 review coverage is the mean fraction of entity decisions resolved within each world, not the fraction of completely resolved worlds. Numeric values and original evidence are unchanged. The implementation computes `(actions != HUMAN_REVIEW).float().mean()` per world.
