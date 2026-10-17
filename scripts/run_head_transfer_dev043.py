@@ -277,6 +277,30 @@ def run(seed,checkpoint_root,output,smoke=False):
     sha_source=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
     if subprocess.check_output(["git","status","--porcelain","--untracked-files=no"],cwd=ROOT,text=True).strip():
         raise ValueError("frozen git source required")
+    # Smoke checks only a tiny public pair. Full prospective splits are never shrunk.
+    if smoke:
+        smokes=[]
+        for arm in ARMS:
+            prev=Path(checkpoint_root)/f"DEV041-RAW-seed{seed}-development"/(arm+".pt")
+            model=build(arm,seed)
+            ck=torch.load(prev,map_location="cpu",weights_only=True)
+            model.load_state_dict(ck["model"],strict=True)
+            initial={k:v.clone() for k,v in model.state_dict().items()}
+            examples=make_order_pair(430000,32,32,"at",domain="dev043-smoke-v1")
+            x,lo=frozen_features(model,examples)
+            cond=[dict(deadline="at",target_entity=c.target_entity) for c in examples]
+            sample=dict(x=x,y=labels(examples),conditions=cond)
+            head,loss=fit_head(model.head,sample,seed,2,.002)
+            cal=fit_calibrators(head(x).detach(),sample["y"])
+            probs=calibrated(lo,cal["platt_positive"])
+            assert torch.isfinite(probs).all()
+            assert all(torch.equal(initial[k],v) for k,v in model.state_dict().items())
+            smokes.append(dict(arm=arm,head_loss=loss,prediction_shape=list(probs.shape)))
+        output.mkdir(parents=True)
+        (output/"smoke.json").write_text(json.dumps(dict(study="DEV-043",smoke=True,
+                                      source=sha_source,arms=smokes),indent=2)+"\\n")
+        print("DEV-043 SMALL SMOKE PASSED",flush=True)
+        return
     output.mkdir(parents=True)
     saved=json.loads((Path(checkpoint_root)/f"DEV041-RAW-seed{seed}-development"/"report.json").read_text())
     assert saved["source"]==protocol["sources"]["checkpoint_training_sha"]
