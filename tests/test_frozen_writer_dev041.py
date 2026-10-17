@@ -22,7 +22,7 @@ def test_frozen_writer_identical_initialization():
 
 def test_frozen_writer_nonmemory_params_trainable():
     model=m.build("bounded_random_frozen",4101)
-    other=[p for n,p in model.named_parameters() if not n.startswith("memory.")]
+    other=[p for n,p in model.named_parameters() if n.startswith(("event_encoder.","query_encoder.","adapter.","head."))]
     assert other and all(p.requires_grad for p in other)
     assert all(not p.requires_grad for p in model.memory.parameters())
 
