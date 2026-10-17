@@ -11,6 +11,10 @@ The joint recurrent world model runs from public observations through persistent
 * **1,299 tests passed.** Primary evidence was executed locally in the managed CPU environment, not a GitHub Actions research job.
 * [Draft PR #212](https://github.com/FPC-effortless/TAC-OSM/pull/212), [archived evidence release](https://github.com/FPC-effortless/TAC-OSM/releases/tag/dev052b-learned-belief-evidence-2026-10-17). Research remains draft/unmerged.
 
+## Subsequent scope and forecast-dependence review
+
+DEV-052B is a **generic GRU recurrent world model**, not an MTSK/CDL/CASM experiment. Exact actions do not establish exact conditional forecasts or the TAC-OSM thesis. [DEV-053A](DEV-053A-FORECAST-REVIEW.md) verifies active forecast dependence under zero/shuffle interventions, records value margins and proper forecast scores, and adds crossed stream/seed uncertainty. Original source, outcomes, success rule, excluded split and archive remain unchanged. The true-parameter planner's lower cost with more faults is an economic trade-off, not evidence of brittleness. [DEV-053B](DEV-053B-ADAPTATION-RESULTS.md) separately tests the actual MTSK component under changing rates.
+
 ## Audited held-out results
 
 Each table contains **256 distinct worlds / 512 entities**. Neural figures are means over five initializations of the same worlds; brackets give the initialization range of residual faults. Baselines are evaluated once on those same worlds. Lower cost is better; all reported controllers had **zero blocked actions and zero trajectory violations**.

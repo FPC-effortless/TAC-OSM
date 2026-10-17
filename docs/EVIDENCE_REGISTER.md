@@ -350,3 +350,17 @@ than changing addressing again.
 | Fresh namespaces frozen after smoke/test overlap discovered | L1 | evaluation integrity | Accepted endpoint uses untouched evaluation seeds | Independent confirmation | Excluded original complete matrix and all preflight compute archived |
 
 Source and full qualifications: [DEV-052B report](DEV-052B-RESULTS.md).
+
+
+## DEV-053 recurrent adaptation review and MTSK component test
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Zero/shuffled old forecasts raise native costs | L 2 | forecast intervention | Forecast inputs affect the controller | Exact beliefs, temporal-memory necessity, TAC-OSM mechanism | Retrospective 512-world reuse; generic GRU; destructive interventions |
+| Excess expected log loss 0.0114/0.0413; median gaps about 0.26 | L 2 | decision/forecast diagnostic | Exact actions coexist with forecast differences | Absence of relevant task structure or robust state tracking | Scores on intact public-history states; decision positions are not independent samples |
+| Crossed paired world/seed closure 4.26% with interval spanning zero | L 3 | uncertainty correction | Small cost improvement remains inconclusive | Independent 2560-world evidence | Original data unchanged; retrospective, conditional ratio interval |
+|25 MTSK/GRU/control checkpoints reconstructed;39680 probe replays | L 3 | bounded integration | Actual MTSK kernel runs in controlled native adaptation | Full CDL/CASM or central scaling thesis |256 stream clusters reused across levels and seeds; same-author audit |
+| Pooled MTSK gap closure 1.58%[-11.82%,12.83%] | L 3 | registered primary endpoint | Robust MTSK advantage unsupported | General neural/MTSK impossibility | All strict reference/fault guards fail; frozen/reset negatives retained |
+| Drift 32 endpoint has about 45% nonpositive bootstrap headroom | L 1 | denominator integrity | Ratio uncertainty must be explicit | Reliable positive percentage conclusion at that endpoint | Raw costs and all invalid-draw rates retained; generator not revised after results |
+
+Full results and limits: [DEV-053A](DEV-053A-FORECAST-REVIEW.md), [DEV-053B](DEV-053B-ADAPTATION-RESULTS.md).

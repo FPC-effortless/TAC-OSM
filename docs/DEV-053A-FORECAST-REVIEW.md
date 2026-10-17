@@ -36,7 +36,7 @@ No intact recorded decision with two legal alternatives had a gap below 0.01. Ga
 
 Under shift, observed estimated-planner cost was 1.5515625 versus 1.45703125 for the true-parameter reference, a gap of **0.09453125/entity**. Recurrent belief improved average cost by **0.0040234375/entity**, closing **4.2562%** of that gap. The in-regime oracle gap is zero, so its normalized closure is **undefined**, not zero or perfect.
 
-Reanalysis uses 2,000 crossed paired bootstrap replicates. Each replicate resamples whole world clusters (stratified by the four shifted families), then resamples global model-initialization indices; every controller and oracle uses the same world draws. It preserves seed dependence across worlds and never turns five repetitions into 2,560 independent worlds.
+Reanalysis uses 2,000 crossed paired bootstrap replicates. Each replicate resamples whole world clusters (stratified by the four shifted families), then resamples global model-initialization indices; within each comparison, controller, baseline and oracle use identical world draws. It preserves seed dependence across worlds and never turns five repetitions into 2,560 independent worlds.
 
 For recurrent belief under shift:
 

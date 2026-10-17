@@ -1,0 +1,55 @@
+{
+  "study": "DEV-053",
+  "adaptive_matrix": {
+    "source": "f4af2cb8bf20e219f0a62adef78af06c0245d64d",
+    "optimizer_updates_per_matrix": 6400,
+    "optimizer_updates_including_reconstruction": 12800,
+    "native_observation_actions": 65536,
+    "native_probe_actions": 278615,
+    "native_actions_including_reconstruction_and_independent_replay": 1032453,
+    "target_cells_constructed_original_and_reconstruction": 202752,
+    "original_matrix_seconds": 877.0221314519999,
+    "audit_seconds": 920.5380609920003,
+    "summed_fit_seconds_original": 155.32301227199923,
+    "parameter_bytes_by_arm": {
+      "gru32": 15372,
+      "gru128": 208908,
+      "mtsk": 4452,
+      "mtsk_frozen_kernel": 4452,
+      "mtsk_reset": 4452
+    }
+  },
+  "smoke_matrix": {
+    "source": "a7df5059721aeffc4cd82f937ed72d45af2dffee",
+    "optimizer_updates_per_matrix": 15,
+    "optimizer_updates_including_reconstruction": 30,
+    "native_observation_actions": 960,
+    "native_probe_actions": 2435,
+    "native_actions_including_reconstruction_and_independent_replay": 10185,
+    "target_cells_constructed_original_and_reconstruction": 2970,
+    "original_matrix_seconds": 6.711085245000049,
+    "audit_seconds": 9.155810485000075,
+    "summed_fit_seconds_original": 0.3805141999996522,
+    "parameter_bytes_by_arm": {
+      "gru32": 15372,
+      "gru128": 208908,
+      "mtsk": 4452,
+      "mtsk_frozen_kernel": 4452,
+      "mtsk_reset": 4452
+    }
+  },
+  "retrospective_review": {
+    "training_updates": 0,
+    "native_probe_executions": 7680,
+    "native_calls_including_separate_replay": 75300,
+    "original_seconds": 93.59661934699989
+  },
+  "total_research_optimizer_updates": 12830,
+  "total_registered_native_calls": 1117938,
+  "total_constructed_target_cells": 205722,
+  "summed_matrix_and_audit_process_seconds": 1907.0237075210002,
+  "definitions": "Native action counts include collection, original policy evaluation, deterministic reconstruction and separate primitive replay. Privileged target cells count materialized probability labels, including validation/evaluation diagnostics; repeated training batch accesses are not fresh oracle queries. Regressions and interactive engineering smoke checks are separately logged, not model-selection trials. Summed elapsed times are not CPU-seconds. Public observation deployment expense is additionally charged in the total-cost curves even though paired arms reuse one generated observation prefix.",
+  "test_count": 1315,
+  "gpu_used": false,
+  "scope": "MTSK component with explicit planning and addressing; no generic TAC-OSM or compute superiority claim."
+}

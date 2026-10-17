@@ -9,7 +9,21 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
-## DEV-052B runnable research checkpoint (October 17, 2026)
+## DEV-053 reviewed adaptation checkpoint (October 17, 2026)
+
+[DEV-053A](docs/DEV-053A-FORECAST-REVIEW.md) confirms that the generic DEV-052B
+GRU forecasts affect native actions, while proper scores and wide decision gaps
+show why action parity does not prove exact beliefs. The original excluded
+split and evidence commit/archives are preserved with SHA-256 byte digests.
+
+[DEV-053B](docs/DEV-053B-ADAPTATION-RESULTS.md) tests the actual MTSK kernel
+against GRUs and adaptive Bayesian controls at equal public observations.
+Twenty-five checkpoints and all native outcomes reconstructed; 1,315 tests
+pass. Pooled MTSK oracle-gap closure is 1.58% with a descriptive interval
+[-11.82%, +12.83%], and the robust cost/fault guard fails. This is a component
+experiment, with no validated full TAC-OSM, CDL/CASM or scaling claim.
+
+## DEV-052B generic recurrent world-model checkpoint (October 17, 2026)
 
 The [end-to-end learned belief experiment](docs/DEV-052B-RESULTS.md) is trained,
 evaluated, and replay-audited: 35 neural checkpoints, five initialization seeds,
