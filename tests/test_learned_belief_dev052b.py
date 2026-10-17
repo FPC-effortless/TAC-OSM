@@ -23,7 +23,7 @@ def test_execution_protocol_matches_implemented_dimensions_and_matrix():
 
 
 def test_new_world_namespace_is_disjoint_and_public_payload_has_no_rates():
-    ep, params, _ = make_world(5521004, 0)
+    ep, params, _ = make_world(8521004, 0)
     assert params == BASE
     public = ep.public_payload()
     assert "oracle" not in public
@@ -32,14 +32,14 @@ def test_new_world_namespace_is_disjoint_and_public_payload_has_no_rates():
     assert "accuracy" not in str(public)
     assert ep.oracle.required_action_counts == {}
     assert ep.episode_id.startswith("TAC-DEV052B-")
-    assert make_world(5521003, 0)[0].episode_id != ep.episode_id
+    assert make_world(8521003, 0)[0].episode_id != ep.episode_id
 
 
 def test_shift_families_include_uncertain_third_repair_and_native_absorbing_health():
     seen_fail = False
     seen_repaired = False
     for index in range(40):
-        world = NativeWorld(5521005, index, True)
+        world = NativeWorld(8521005, index, True)
         assert world.rates == SHIFTS[index % 4]
         for entity in (0, 1):
             previous = world.fault(entity)
@@ -55,7 +55,7 @@ def test_shift_families_include_uncertain_third_repair_and_native_absorbing_heal
 
 
 def test_constraints_are_enforced_by_native_runtime_and_charged():
-    world = NativeWorld(5521004, 9)
+    world = NativeWorld(8521004, 9)
     assert world.act("service", 0, 1)["accepted"] is False
     assert world.act("isolate", 0)["accepted"]
     assert world.act("isolate", 1)["accepted"] is False
@@ -64,7 +64,7 @@ def test_constraints_are_enforced_by_native_runtime_and_charged():
 
 
 def test_paid_noisy_sensor_is_repeatable_and_bounded():
-    a, b = NativeWorld(5521005, 2, True), NativeWorld(5521005, 2, True)
+    a, b = NativeWorld(8521005, 2, True), NativeWorld(8521005, 2, True)
     left = [a.act("inspect", 0)["fault"] for _ in range(4)]
     right = [b.act("inspect", 0)["fault"] for _ in range(4)]
     assert left == right
@@ -111,8 +111,8 @@ def test_policy_public_boundary_is_invariant_to_uninspected_hidden_outcomes():
 
 def test_training_rejects_evaluation_worlds_and_keeps_data_budget():
     with pytest.raises(ValueError, match="evaluation"):
-        collect({"kind": "in_regime", "seed": 5521004, "worlds": 1})
-    seq, sensors = collect({"kind": "train", "seed": 5521001, "worlds": 2})
+        collect({"kind": "in_regime", "seed": 8521004, "worlds": 1})
+    seq, sensors = collect({"kind": "train", "seed": 8521001, "worlds": 2})
     assert len(seq) == 4 and len(sensors) == 16
     assert all(len(s) == 11 for s in seq)
     params, table = estimate(seq, sensors)
@@ -120,7 +120,7 @@ def test_training_rejects_evaluation_worlds_and_keeps_data_budget():
 
 
 def test_full_bounded_rollouts_have_native_cost_and_no_resource_violations():
-    spec = {"seed": 5521004, "worlds": 1}
+    spec = {"seed": 8521004, "worlds": 1}
     for arm in ARMS:
         model = BeliefModel(7201, arm) if arm in NEURAL else None
         row = rollout(spec, 0, arm, BASE, model)
@@ -147,9 +147,24 @@ def test_recurrent_state_preserves_order_and_last_event_control_forgets_it():
 
 def test_frozen_writer_training_changes_heads_without_changing_writer():
     torch.set_num_threads(1)
-    seq, sensors = collect({"kind": "train", "seed": 5521001, "worlds": 2})
+    seq, sensors = collect({"kind": "train", "seed": 8521001, "worlds": 2})
     model = BeliefModel(7201, "frozen_writer")
     before = {k: v.clone() for k, v in model.state_dict().items()}
     fit(model, tensorize(seq), sum(sensors)/len(sensors), 2, 7201)
     assert all(torch.equal(before[k], v) for k, v in model.state_dict().items() if k.startswith("writer."))
     assert not torch.equal(before["fault_head.weight"], model.fault_head.weight)
+
+
+def test_smoke_and_unit_test_namespaces_cannot_expose_final_evaluation():
+    import importlib.util
+    root = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location("dev052b_runner", root/"scripts/run_learned_belief_dev052b.py")
+    runner = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(runner)
+    protocol = json.loads(runner.PROTOCOL.read_text())
+    full = runner.specifications(protocol)
+    smoke = runner.specifications(protocol, smoke=True)
+    assert {s["seed"] for s in full.values()}.isdisjoint(s["seed"] for s in smoke.values())
+    assert full["in_regime"]["seed"] == 5522004
+    assert full["shifted"]["seed"] == 5522005
+    assert {s["seed"] for s in full.values()}.isdisjoint({8521001, 8521003, 8521004, 8521005})

@@ -19,7 +19,7 @@ from tac_osm.development.learned_belief_world import (
     score_predictions, rollout, summarize,
 )
 
-PROTOCOL = ROOT / "research/dev052b/execution-protocol.json"
+PROTOCOL = ROOT / "research/dev052b/fresh-execution-protocol.json"
 
 
 def digest(path):
@@ -46,7 +46,8 @@ def setup(veritas_root, dirty=False):
 
 def specifications(proto, smoke=False):
     return {name: {**s, "kind": name, "shifted": name == "shifted",
-                   "worlds": min(s["worlds"], 4) if smoke else s["worlds"]}
+                   "worlds": min(s["worlds"], 4) if smoke else s["worlds"],
+                   "seed": s["seed"] + proto.get("smoke_namespace_seed_offset", 0) if smoke else s["seed"]}
             for name, s in proto["splits"].items()}
 
 

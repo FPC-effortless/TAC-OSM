@@ -1,0 +1,214 @@
+{
+  "study": "DEV-052B",
+  "version": 2,
+  "status": "FROZEN_BEFORE_TRAINING",
+  "parent_design": "study-protocol.json",
+  "scope": "End-to-end public-event recurrent state, explicit entity retrieval, learned action forecasts, cost planner, symbolic admissibility, native execution and receipt-gated writes. Not a learned CDL router or learned CASM executor.",
+  "evidence_gate": {
+    "inherited": "DEV-051 action imitation and DEV-052A frozen transfer limitation",
+    "unknown": "Whether matched-capability recurrent predictive state improves decisions",
+    "new_rows": [
+      "L2 learned persistent fault/action forecasting",
+      "L3 native end-to-end cost and reliability"
+    ]
+  },
+  "veritas_commit": "b21d829b62d3cab2811e746267ca305e110ed004",
+  "generator": {
+    "namespace": "tac-dev052b-v1",
+    "prior_fault": 0.5,
+    "record_accuracy": 0.5,
+    "training": {
+      "accuracy": 0.85,
+      "repairs": [
+        0.75,
+        0.8,
+        1.0
+      ]
+    },
+    "shift_families": [
+      {
+        "accuracy": 0.65,
+        "repairs": [
+          0.75,
+          0.8,
+          0.7
+        ]
+      },
+      {
+        "accuracy": 0.85,
+        "repairs": [
+          0.55,
+          0.6,
+          0.7
+        ]
+      },
+      {
+        "accuracy": 0.7,
+        "repairs": [
+          0.6,
+          0.65,
+          0.8
+        ]
+      },
+      {
+        "accuracy": 0.95,
+        "repairs": [
+          0.85,
+          0.9,
+          0.9
+        ]
+      }
+    ],
+    "native_effects": "Sequential absorbing healthy state; independent attempt outcomes. Failed later repair never resurrects a repaired fault. No inherited required-action-count oracle; completion is target-state and resource invariants.",
+    "sensor": "Harness projects only paid inspected bit, independent hash stream per world/entity/read. Native state and trace stay harness-only.",
+    "public_rates": false,
+    "entities": 2,
+    "shared_slots": 1,
+    "max_inspections_per_entity": 4,
+    "max_attempts": 3,
+    "max_native_calls": 24,
+    "max_native_cost": 100,
+    "costs": {
+      "inspect": 0.1,
+      "isolate": 0.2,
+      "service": 1.0,
+      "residual_fault": 4.0
+    }
+  },
+  "splits": {
+    "train": {
+      "seed": 5521001,
+      "worlds": 640
+    },
+    "validation": {
+      "seed": 5521002,
+      "worlds": 160
+    },
+    "calibration": {
+      "seed": 5521003,
+      "worlds": 160
+    },
+    "in_regime": {
+      "seed": 5522004,
+      "worlds": 256
+    },
+    "shifted": {
+      "seed": 5522005,
+      "worlds": 256
+    }
+  },
+  "model_seeds": [
+    7201,
+    7202,
+    7203,
+    7204,
+    7205
+  ],
+  "arms": [
+    "known_bayes",
+    "estimated_bayes",
+    "event_table",
+    "verify_retry",
+    "all_three",
+    "wait",
+    "last_event",
+    "recurrent_belief",
+    "forecast_only",
+    "joint",
+    "frozen_writer",
+    "policy_bc",
+    "policy_dagger"
+  ],
+  "neural_arms": [
+    "last_event",
+    "recurrent_belief",
+    "forecast_only",
+    "joint",
+    "frozen_writer",
+    "policy_bc",
+    "policy_dagger"
+  ],
+  "training": {
+    "device": "cpu",
+    "threads": 1,
+    "deterministic": true,
+    "hidden_dim": 32,
+    "event_dim": 12,
+    "updates_per_arm": 256,
+    "batch_entities": 128,
+    "optimizer": "AdamW",
+    "learning_rate": 0.003,
+    "weight_decay": 0.0001,
+    "gradient_clip": 1.0,
+    "collection": "One exhaustive bounded exploration trajectory per train entity: four inspections interleaved with all three isolate/service attempts, fixed schedule selected by public seeded exploration independent of hidden faults. Common data reused across model seeds.",
+    "targets": "Hidden fault bit at public-event positions, train-only actual paired WAIT/each repair outcomes from native oracle effects; inspection accuracy target from charged training inspections. All oracle queries counted. Estimated Bayes uses same labeled training trajectories.",
+    "forecast_loss": "BCE wait fault + mean BCE three paired repair faults + BCE sensor correctness; recurrent_belief uses wait loss only and estimated transition parameters at deployment",
+    "decision_loss": "Cross entropy against estimated-parameter public Bayesian action at same public histories; weight 1 for joint/frozen writer and policy-only arms",
+    "frozen_writer": "Same seed/init; event GRU frozen, heads trained",
+    "last_event": "Tanh linear encoder of only current public event plus current public attempt/read counters; no recurrent state",
+    "dagger": "128 updates common exploration; collect one student trajectory on each training world with public Bayes labels, no evaluation; 128 updates on combined initial and student data",
+    "validation": "Report final fixed-update predictive scores; no early stopping or model selection"
+  },
+  "calibration": {
+    "fault_temperatures": [
+      0.5,
+      0.75,
+      1.0,
+      1.5,
+      2.0
+    ],
+    "temperature_selection": "Lowest calibration exploration wait NLL, ties first. No model update. Policy-only temperature fixed 1.",
+    "risk_multipliers": [
+      1.0,
+      1.25,
+      1.5,
+      2.0
+    ],
+    "risk_selection": "For predictive arms, lowest actual calibration cost among candidates with no more residual faults or blocked calls than estimated Bayes; if none qualify minimize residual faults then cost. Policy-only fixed multiplier1. No baseline tuning on evaluation.",
+    "uncertainty": "Bernoulli predictive entropy; no rule fallback or OOD detection claim"
+  },
+  "planning": {
+    "bayes": "Finite horizon DP over p(fault), attempt index, read count, paid inspect and isolate+service with four-sense cap. Known Bayes gets true regime externally; all other arms never receive shifted probabilities.",
+    "neural": "Read p(fault), conditional repair-success heads and accuracy head from entity state; same DP with rates fixed during each lookahead, updated after actual receipts. Heads predict paired service risk as p(fault)*(1-success).",
+    "rounding": "Probabilities 8 decimal places for Bellman cache. Cache cleared per learned decision to bound memory.",
+    "table": "Empirical fault frequency keyed by attempt count and ordered public reading bits grouped by repair attempt, with estimated-Bayes smoothing 2 pseudocounts; same estimated transition DP.",
+    "constraints": "Explicit, shared: service requires isolation, max3 attempts, max4 reads, one slot. DONE remains legal. Accepted receipts commit; blocked receipts do not write learned state. Service macro requires both charged native isolate and service; both recorded."
+  },
+  "evaluation": {
+    "primary": [
+      "residual_faults",
+      "completed_worlds",
+      "blocked_actions",
+      "trajectory_violations",
+      "actual_cost_per_entity"
+    ],
+    "secondary": [
+      "Brier",
+      "NLL",
+      "forecast_entropy",
+      "inspections",
+      "services",
+      "recovery_after_failed_attempt",
+      "inference_seconds",
+      "state_bytes",
+      "parameter_bytes"
+    ],
+    "pass_guard": "Per arm and seed, both in-regime and shifted: residual faults <= estimated Bayes, blocked/trajectory violations <= baseline, actual cost strictly less. No pooling repeated worlds as independent trials.",
+    "uncertainty": "Paired bootstrap 2000 resamples over world index, model seeds averaged within each world; shifted bootstrap stratified by four regime families. Descriptive development intervals only.",
+    "confirmation": false
+  },
+  "audit": "Separate process reconstruct checkpoints from deterministic training, calibration choices and every policy trace; independently replay recorded primitive actions through pinned native runtime and separately sum action charges, faults and path constraints. Artifact hashes and disjoint IDs required.",
+  "budget": "Complete 35 neural fits x256 updates, two native passes plus replay; no post-evaluation tuning. Preserve failed runs. Approx30 minutes CPU research budget, report overrun if needed.",
+  "limitations": [
+    "Two known entities and one shared resource only",
+    "Explicit entity addressing and symbolic execution constraints",
+    "Model-based lookahead fixes learned rates within imagined tree",
+    "Training supervision includes synthetic privileged targets shared with fitted baselines",
+    "Five seeds adaptive development, not independent confirmation",
+    "No real-world or complete generic TAC-OSM superiority claim"
+  ],
+  "execution_id": "DEV-052B-FRESH1",
+  "supersedes_execution": "DEV-052B execution-v1; preserve complete original matrix but exclude from scientific endpoint because smoke and tests exposed its evaluation namespace",
+  "amendment_reason": "Integrity correction registered while v1 still running, before inspecting its numerical results. New final evaluation seeds and separate smoke namespace; no training recipe, architecture, calibration, or acceptance-rule change.",
+  "smoke_namespace_seed_offset": 10000000
+}
