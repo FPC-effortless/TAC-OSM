@@ -1,0 +1,34 @@
+{
+  "experiment": "DEV-035 frozen MTSK dynamics",
+  "scope": "Frozen diagnostic only; no optimizer steps or predictions claimed as improved",
+  "core_source": "ec0ff80b058308dad8de57eab7d223ec9a81dcba",
+  "snapshots": [
+    "initial_multi",
+    "failure_multi139",
+    "continued_multi216",
+    "mtsk_local_tied216",
+    "mtsk_global_multi216",
+    "mtsk_global_tied216"
+  ],
+  "training_batch_steps": [
+    0,
+    139,
+    215
+  ],
+  "history": 512,
+  "include_original_inspection_receipt": true,
+  "precision": "Original batched CPU FP32 transitions and derivatives; FP64 diagnostic coefficients and SVD",
+  "row_gain_threshold": 1.000001,
+  "jacobian_positions": [
+    0,
+    255,
+    511,
+    512,
+    "per-history maximum conditional row gain"
+  ],
+  "global_bank_selection": "Largest conditional row gain at the selected position",
+  "valid_perturbations": "Ambient and orthonormal zero-sum responsibility tangent norms",
+  "failure_handling": "Retain all checkpoint/forward failures and incomplete coverage; never drop a snapshot",
+  "audit": "Separate-process hashes, raw conditional-gain census, selected-point census and independent NumPy SVDs. Row algebra verified by contract tests. Not an independent forward rerun or scientific replication.",
+  "claims": "No long-product, parameter-gradient causal explanation, information retention, architectural improvement, independent-seed uncertainty or formal correspondence claim"
+}
