@@ -1,6 +1,4 @@
 """DEV-042 paired history causal, last-event indistinguishability contracts."""
-import pytest
-from tac_osm.development.delayed_maintenance import Action
 from tac_osm.development.order_causal_cases import make_order_pair,last_observations
 from tac_osm.development.schema_maintenance import exact_public_targets,execute
 
