@@ -19,13 +19,13 @@ from tac_osm.development.learned_stack import LearnedStack, PhysicalWorld, COSTS
 PIN = 'b21d829b62d3cab2811e746267ca305e110ed004'
 
 
-def native_replay(row):
+def native_replay(row,world_factory=PhysicalWorld):
     from tac_osm.development.veritas_public_challenge import make_episode
     from investigation_world.operational.models import (
         ActionKind, HiddenActionEffect, PublicActionSpec, StateAssertion, EpisodeSubmission)
     from investigation_world.operational.runtime import OperationalRuntime
     ep = make_episode(row['seed'],row['index'])
-    world = PhysicalWorld(row['seed'],row['index'],row['family'])
+    world = world_factory(row['seed'],row['index'],row['family'])
     initial = {'e0.fault':int(world.bits[0]),'e1.fault':int(world.bits[1]),'world.tick':0}
     effects = []
     faults = 0
@@ -43,14 +43,14 @@ def native_replay(row):
             observable_result={'sensors':list(event.sensors),'exact':list(event.exact),'tick':event.tick}))
     ep.task.available_actions = [PublicActionSpec(name=f'action{a}',kind=ActionKind.EXECUTE,
         system='plant',description=f'DEV-055 action {a}',parameter_names=['tick'],cost=int(round(COSTS[a]*20))) for a in range(5)]
-    ep.task.constraints = ['Exactly twenty public actions; each receipt advances the physical clock.']
+    ep.task.constraints = [f"Exactly {len(row['actions'])} public actions; each receipt advances the physical clock."]
     ep.oracle.initial_state = initial
     ep.oracle.action_effects = effects
     ep.oracle.target_state = [StateAssertion(object_id=f'e{e}',field_name='fault',expected_value=0) for e in range(2)]
     ep.oracle.invariants = []
     ep.oracle.forbidden_actions = []
     ep.oracle.required_action_counts = {}
-    ep.oracle.max_cost = 1000; ep.oracle.max_tool_calls = 20
+    ep.oracle.max_cost = 1000; ep.oracle.max_tool_calls = len(row['actions'])
     runtime = OperationalRuntime(ep)
     for tick, recorded in enumerate(row['actions']):
         receipt = runtime.act(f'action{recorded["action"]}',tick=tick)

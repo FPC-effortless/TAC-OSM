@@ -38,3 +38,7 @@ See `docs/DEV-029-OPTIMIZATION-AND-INTEGRATION-PROGRAM.md`.
 ## DEV-055 outcome and next decision
 
 The learned dynamics/CDL-style/neural-CASM path now trains and restores, but the registered superiority guard fails. Preserve the complete 15-fit matrix and native replay evidence; do not select a checkpoint or tune the same held-out worlds into a positive claim. DEV-056 is the registered memory-novelty deadline, with matched-GRU superiority, reliability and adequate headroom required. Retire the memory-novelty claim if that deadline fails. DEV-057 must test the separate indexed-acquisition, equal-bits scalar and hash controls; fixed-size expert routing is not C5.
+
+## DEV-056 deadline enforced; DEV-057 reference controls completed
+
+DEV-056 did not pass. MTSK-specific superiority pursuit is retired for this lane under the registered deadline; insufficient public-oracle headroom does not reopen the tuning loop. The implemented kernel remains a reference component, without a superiority claim. DEV-057 reproduces the indexed-acquisition/equal-bits scalar/hash reference costs, not a learned C5 result. Future research should target nontrivial learned acquisition and useful conditional computation, using matched total storage and charged build/write/address/verification work. Do not treat public-key lookup success, a correct simulator replay or zero mask skips as evidence for learned architecture novelty. See research/memory-novelty-policy.json.

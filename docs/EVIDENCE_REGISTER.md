@@ -396,3 +396,16 @@ DEV-054 [published evidence index](../research/dev054/evidence-index.json): arch
 | Indexed acquisition / equal-bits / hash controls | L4 | untested here | Separate C5/DEV-057 work; fixed-expert routing cannot answer this |
 
 Provenance and exact evidence: [DEV-055](DEV-055-RESULTS.md), training source `8b07745`, registration `5067a82`.
+
+## DEV-056/057 bounded development decisions
+
+| Row | Layer | Status | Boundary |
+| --- | --- | --- | --- |
+| Write-masked MTSK invariants | L2 | implemented and checked | Trained gates skip zero held-out writes; no learned sparsity/efficiency claim |
+| Exact public-information oracle | L2 | implementation verified | Known-law one-step filter; not a long-horizon optimum; headroom guard fails |
+| MTSK superiority deadline | L3 | acceptance fails; pursuit retired | Both cost/reliability gates and headroom inadequate; program decision, not universal impossibility |
+| Native24-step replay | L3 engineering | 12 checkpoints/138240 actions verified | Shared generator and recorded effect tables limit independence |
+| Indexed acquisition and equal-bits scalar/hash references | L2/L3 | 180 cells reproduced | Hand-coded public-key task; finite controls match each other, not MTSK |
+| Learned acquisition/CASM cost-quality scaling | L4 | still open | Needs nontrivial learned relevance, matched total storage and actual learned execution |
+
+Sources: [DEV-056](DEV-056-RESULTS.md), [DEV-057](DEV-057-RESULTS.md); registration `3f39f8d`, training `5890be4`, acquisition source `cec661e`.

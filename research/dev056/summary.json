@@ -1,0 +1,115 @@
+{
+  "status": "COMPLETE_UNAUDITED",
+  "validation_selected_control": "fitted_hmm",
+  "metrics": {
+    "mtsk": {
+      "cost": 71.40360243055555,
+      "fault_exposure": 16.313368055555557,
+      "final_faults": 0.3237847222222222
+    },
+    "masked_mtsk": {
+      "cost": 71.30486111111111,
+      "fault_exposure": 16.28559027777778,
+      "final_faults": 0.3177083333333333
+    },
+    "gru_matched": {
+      "cost": 70.44921874999999,
+      "fault_exposure": 16.0625,
+      "final_faults": 0.2717013888888889
+    },
+    "mtsk_reset": {
+      "cost": 73.97539062499999,
+      "fault_exposure": 16.854166666666668,
+      "final_faults": 0.4418402777777778
+    },
+    "fitted_hmm": {
+      "cost": 69.91041666666666,
+      "fault_exposure": 16.072916666666668,
+      "final_faults": 0.3020833333333333
+    },
+    "misspecified_independent": {
+      "cost": 69.51822916666667,
+      "fault_exposure": 15.861979166666666,
+      "final_faults": 0.25
+    },
+    "public_oracle": {
+      "cost": 69.95520833333333,
+      "fault_exposure": 16.075520833333332,
+      "final_faults": 0.296875
+    }
+  },
+  "headroom": {
+    "gru_matched": {
+      "mean": 0.24700520833333284,
+      "interval": [
+        -0.2788585069444452,
+        0.7826112196180546
+      ],
+      "reliability_feasible": false,
+      "adequate": false
+    },
+    "fitted_hmm": {
+      "mean": -0.022395833333333236,
+      "interval": [
+        -0.28962890624999965,
+        0.23729166666666635
+      ],
+      "reliability_feasible": false,
+      "adequate": false
+    }
+  },
+  "variants": {
+    "mtsk": {
+      "comparisons": {
+        "gru_matched": {
+          "mean": 0.9543836805555542,
+          "interval": [
+            -0.494969075520835,
+            2.3522786458333327
+          ],
+          "fault_guard": false
+        },
+        "fitted_hmm": {
+          "mean": 1.4931857638888864,
+          "interval": [
+            -0.28139946831597457,
+            3.2486051432291703
+          ],
+          "fault_guard": false
+        }
+      },
+      "accepted": false
+    },
+    "masked_mtsk": {
+      "comparisons": {
+        "gru_matched": {
+          "mean": 0.8556423611111095,
+          "interval": [
+            -0.5226033528645863,
+            2.336405436197918
+          ],
+          "fault_guard": false
+        },
+        "fitted_hmm": {
+          "mean": 1.3944444444444415,
+          "interval": [
+            -0.32905436197917065,
+            3.2537413194444422
+          ],
+          "fault_guard": false
+        }
+      },
+      "accepted": false
+    }
+  },
+  "decision": "RETIRE_MEMORY_NOVELTY_PURSUIT",
+  "accepted_variants": [],
+  "adequate_public_headroom": false,
+  "scope": "Deadline decision for this program, not a universal impossibility claim or retirement of TAC-OSM.",
+  "source": "5890be420e02c22218e24e292e64d75a21fa8f64",
+  "protocol_sha256": "67297adfe9f4f533c48ecd88aee6982ee4c87a1e12e93b3b435f365515d4fb2f",
+  "smoke": false,
+  "elapsed_seconds": 390.3744962520004,
+  "torch_version": "2.14.1+cpu",
+  "numpy_version": "2.5.4"
+}

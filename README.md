@@ -9,6 +9,22 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## DEV-056 / DEV-057 research decision (October 17, 2026)
+
+[DEV-056](docs/DEV-056-RESULTS.md) completed twelve fresh fits, including a
+separately tested write-masked MTSK. Neither MTSK variant passed the registered
+cost/reliability rule. The exact public-information oracle also failed the
+minimum-headroom gate. Per the prior deadline, **MTSK-specific superiority
+pursuit is retired for this program**; this is not a universal impossibility
+claim or retirement of TAC-OSM. The trained mask skipped zero held-out writes.
+All twelve checkpoints restore; 138,240 native replay actions preserve failures.
+
+[DEV-057](docs/DEV-057-RESULTS.md) completed and reproduced all 180 acquisition
+reference cells. Indexed/full-scan controls preserve exact answers; fixed
+768-byte scalar/hash stores lose coverage at scale. Build, storage and query
+costs are recorded. There is no learned challenger, so C5 remains open.
+The DEV-055 Veritas dependency fix is green in GitHub Actions.
+
 ## DEV-055 learned-model checkpoint (October 17, 2026)
 
 [DEV-055](docs/DEV-055-RESULTS.md) trains an integrated public-history MTSK,

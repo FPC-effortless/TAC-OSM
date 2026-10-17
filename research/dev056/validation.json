@@ -1,0 +1,14 @@
+{
+  "full_suite": {
+    "command": "PYTHONPATH=src .venv/bin/python -m pytest tests/ -q",
+    "result": "1345 passed in 64.00s",
+    "tested_behavior_source": "88e06c6",
+    "log_sha256": "8124361627b3ea4a392df8c5fed67c96bbc0f4325180bd8962ae290f92608a5a"
+  },
+  "targeted": "24 passed; exact mask no-op/open parity, task gradients, public-only8-state filter, restoration, input boundaries, collisions, absent keys, capacities, circuit/build/verification accounting",
+  "source_checks": "ruff F on new source/tests, CI fatal-rule check, compileall and git diff --check passed",
+  "dev056_audit": "PASS:12 checkpoints,5760 native worlds,138240 actions;1453 unrepaired final-world outcomes retained",
+  "dev057_audit": "PASS:180 cells reproduced; no learned challenger",
+  "prior_ci_fix": "GitHub run39073461362 green on768d7dd; pinned Veritas installed; legacy pilot explicit-only",
+  "scope": "Same-author shared-code development evidence; no independent laboratory or real-world qualification."
+}
