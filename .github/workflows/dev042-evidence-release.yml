@@ -1,0 +1,88 @@
+name: DEV-041/042 durable audited research evidence release
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '.github/workflows/dev042-evidence-release.yml'
+      - 'scripts/inspect_order_pair_posthoc.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  publish-reviewed-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and cryptographically verify both already-audited scientific archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          mkdir -p artifacts
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12090820964/zip > artifacts/DEV-041-original.zip
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12091065793/zip > artifacts/DEV-042-original.zip
+          printf '%s  %s\n' \
+            b0dc2842537c50e2e76ecf0139b1519a032c2575af9181076897ccce0d5bd7c7 artifacts/DEV-041-original.zip \
+            487ad57ee7247081bae9695102530da5c5c050385328ac6fa4d52ec1fff0c5dc artifacts/DEV-042-original.zip > artifacts/SHA256SUMS
+          sha256sum -c artifacts/SHA256SUMS
+          python - <<'PY'
+          import zipfile, pathlib
+          for name,count in [('DEV-041-original.zip',13),('DEV-042-original.zip',4)]:
+              p=pathlib.Path('artifacts')/name
+              with zipfile.ZipFile(p) as z:
+                  assert z.testzip() is None and len(z.infolist())==count
+              print('VERIFIED',name,p.stat().st_size)
+          PY
+      - name: Independently reproduce inspected-pair ranking diagnostic
+        run: |
+          python scripts/inspect_order_pair_posthoc.py artifacts/DEV-042-original.zip > artifacts/DEV042-posthoc-ranking.json
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/DEV042-posthoc-ranking.json'))
+          for seed, arms in r['by_seed'].items():
+              for name in ('bounded_trainable','bounded_random_frozen'):
+                  assert arms[name]['mature_pairs']==96
+                  assert arms[name]['correct_direction']==96
+                  assert arms[name]['hard_prediction_flips']==0
+              assert arms['memoryless']['ties']==96
+          print('POSTHOC ORDER-RANKING RECOMPUTED: 3 seeds x 96 pairs')
+          PY
+      - name: Deposit checked archives and post-hoc method as an explicit development prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          cat > artifacts/RELEASE-NOTES.md <<'TXT'
+          DEV-041 / DEV-042 checked development research archives, not confirmatory or proof of full TAC-OSM superiority.
+          DEV-041 frozen source: 4ba2ea65cd3d4f3961277d80c49d7fb641f556fc.
+          DEV-042 frozen transfer source: ac085a7127d2ed38be77996fe8aabcacd60b465e.
+          DEV-041 Actions run: https://github.com/FPC-effortless/TAC-OSM/actions/runs/39003550880
+          DEV-042 Actions run: https://github.com/FPC-effortless/TAC-OSM/actions/runs/39005327719
+          DEV-042 scored 50% mature hard target classification for trained and frozen MTSK, with correct pairwise directional ranking in all 96 pairs per seed. See PRs #197 and #198.
+          Each ZIP is preserved unchanged with SHA-256 and ZIP integrity verification. Raw predictions and checkpoint evidence are included.
+          A GitHub research prerelease can still be deleted; it is not an immutable DOI/independent replication.
+          TXT
+          if gh release view dev041-dev042-evidence-2026-10-17 >/dev/null 2>&1; then
+            echo 'Release already exists; do not overwrite evidence'
+            gh release download dev041-dev042-evidence-2026-10-17 --pattern 'DEV-04*-original.zip' --dir artifacts/verify
+            cmp artifacts/DEV-041-original.zip artifacts/verify/DEV-041-original.zip
+            cmp artifacts/DEV-042-original.zip artifacts/verify/DEV-042-original.zip
+          else
+            gh release create dev041-dev042-evidence-2026-10-17 \
+              --target ac085a7127d2ed38be77996fe8aabcacd60b465e \
+              --title 'DEV-041 and DEV-042 audited development research' --prerelease \
+              --notes-file artifacts/RELEASE-NOTES.md \
+              artifacts/DEV-041-original.zip artifacts/DEV-042-original.zip \
+              artifacts/SHA256SUMS artifacts/DEV042-posthoc-ranking.json
+          fi
+          gh release view dev041-dev042-evidence-2026-10-17 --json tagName,url,assets
