@@ -1,6 +1,6 @@
 # DEV-035: frozen MTSK dynamics results
 
-The frozen diagnostic found strong one-step amplification in the independent-retention local MTSK snapshots. Decay below one does not make the complete error-correcting recurrence contractive. This is a mechanistic concern, not evidence that a repaired architecture improves prediction.
+The frozen diagnostic found strong one-step amplification in the independent-retention local MTSK snapshots. Decay below one does not make the complete error-correcting recurrence contractive. This is a mechanistic concern, not evidence that a repaired architecture improves prediction. These measurements concern the DEV-034 MTSK kernel, not the original native TAC writer; they do not replace DEV-021's suffix-transport evidence.
 
 Protocol and implementation were committed at `5a6ac5e` before measurement. The original model and data generator came from frozen DEV-034 source `ec0ff80b058308dad8de57eab7d223ec9a81dcba`. No optimizer steps, validation selection or scientific test access occurred. Six snapshots each received three predetermined training batches of two H512 histories plus the original inspection receipt: 18 batch traces, 18,468 history transitions. These overlapping development histories are not independent statistical samples.
 
@@ -32,3 +32,5 @@ Test a bounded corrective-feedback writer against the unchanged local independen
 First verify the algebra and measure the full augmented-state Jacobian, including responsibility feedback. Then run a small paired stability/learning pilot and strict physical replay. A stable but uninformative memory is a failed intervention. Preserve primary all-role prediction, cancellation diagnostics, failures, unnecessary services and total cost. The existing masked-local TAC and schema baselines remain intact. A full tuning/fresh-seed confirmation is still required before any superiority claim.
 
 This candidate addresses a measured recurrence concern. It does not replace the wider optimization study or the separate TAC/PLM–CDL–CASM–OSM integration track, and it is not an implemented or successful repair yet.
+
+Integrity CI [38992884598](https://github.com/FPC-effortless/TAC-OSM/actions/runs/38992884598) passed all 1,168 tests at `f368b85`. It tests code contracts and regressions, not the locally archived frozen-checkpoint experiment. Subsequent changes are documentation only.
