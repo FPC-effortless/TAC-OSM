@@ -160,7 +160,7 @@ def last_event_rows(fit, original, split, reps):
         for case in worlds:
             row = lookup[case.fingerprint]
             probs = [fit.get(key, [0., 0., 0.]) for key in last_keys(case)]
-            rows.append(dict(**row, probabilities=probs))
+            rows.append({**row, "probabilities": probs})
     return rows
 
 
@@ -252,9 +252,7 @@ def run(seed, output, smoke=False, replay=False):
         else:
             report["arms"][arm]["results"] = info
     anchor = report["arms"]["bounded_trainable"]["results"]
-    ref_fit = last_event_fit(anchor["rows"], "eval", ereps)
-    # Refit only on disjoint calibration cases, not evaluation.
-    calibration_reference = report["arms"]["bounded_trainable"]["results"]["calibration_fingerprints"]
+    # Fit baseline only on disjoint calibration cases; never fit on evaluation.
     calib = predict(models["bounded_trainable"], "calibration", repetitions, 32 if smoke else 512)
     ref_fit = last_event_fit(calib, "calibration", repetitions)
     last_dev = last_event_rows(ref_fit, calib, "calibration", repetitions)
