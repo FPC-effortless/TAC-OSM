@@ -1,7 +1,6 @@
 """DEV-042 frozen-checkpoint evaluation on paired order-sensitive public histories."""
 from __future__ import annotations
 import argparse
-import hashlib
 import json
 from pathlib import Path
 import subprocess
