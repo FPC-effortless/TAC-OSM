@@ -7,7 +7,6 @@ The unoptimized baselines are diagnostic, NOT convergence-matched.
 from __future__ import annotations
 
 import argparse
-import copy
 import hashlib
 import json
 from pathlib import Path
@@ -24,7 +23,7 @@ import torch.nn.functional as F
 from tac_osm.development.bounded_mtsk import build_bounded
 from tac_osm.development.memory_baselines import MemoryBaseline
 from tac_osm.development.finite_clipping import clip_finite_cpu_gradients_
-from tac_osm.development.schema_maintenance import make_pair,ROLES,DEADLINES,exact_public_targets,execute
+from tac_osm.development.schema_maintenance import make_pair,ROLES,DEADLINES,exact_public_targets
 from tac_osm.development.order_causal_cases import make_order_pair
 from tac_osm.development.delayed_maintenance import Action
 from run_learned_schema_dev import public_stream_tensors,public_queries,labels
