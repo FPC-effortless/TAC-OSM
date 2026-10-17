@@ -194,6 +194,11 @@ def report57(source):
             'reads per query. Full scan reads H records per query. These record counts are distinct from address '
             'operations, maintenance writes, circuit operations and verification. All are reported, including '
             'build cost amortized over Q=1,8,64. Query prefixes share data and are not independent replications.','',
+            'The scalar reference performs eight independent scans of its64 records; the full-history reference '
+            'batches the eight requested keys in one scan. A batched scalar implementation could reduce its '
+            'lookup probes from512 to64 per query. Reported costs are for these explicit implementations, '
+            'not optimal scalar lower bounds. Any future learned efficiency claim must include the stronger '
+            'batched scalar control.','',
             'Scalar/direct-hash/two-way-hash state is exactly64 records ×3int32 =768bytes/6144bits per arm, '
             'including key/tick/bit and validity. There is no retained external history or lookup table for '
             'these three arms. Equal-bits means equal among these controls; it is **not** a matched-state '
