@@ -1,0 +1,113 @@
+name: DEV-042 frozen causal-order transfer (development)
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'research/dev042/**'
+      - 'scripts/*dev042.py'
+      - 'src/tac_osm/development/order_causal_cases.py'
+      - 'tests/test_order_causal_dev042.py'
+      - '.github/workflows/dev042-order-causal.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned CPU runtime
+        run: |
+          python -m pip install --quiet -e . pytest==9.1.1 numpy==2.3.3 ruff==0.13.0
+          python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Lint, test ledger and full regression
+        run: |
+          ruff check --select F src/tac_osm/development/order_causal_cases.py scripts/*dev042.py tests/test_order_causal_dev042.py
+          python scripts/sync_test_count.py --check
+          python -m pytest tests/ -q
+      - name: Causal pair public-data preflight
+        run: |
+          python - <<'PY'
+          from tac_osm.development.order_causal_cases import make_order_pair,last_observations
+          n=0
+          for d in (32,128,512):
+              for deadline in ('before','at','after'):
+                  for rep in range(16):
+                      a,b=make_order_pair(420000+rep,512,d,deadline)
+                      assert last_observations(a.observations)==last_observations(b.observations)
+                      n+=2
+          assert n==288
+          print('DEV-042 public causal-order pair preflight PASSED',n)
+          PY
+  transfer:
+    needs: integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 95
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [4101,4102,4103]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: DEV041-COMPLETE-EVIDENCE-NOT-CONFIRMATORY
+          run-id: 39003550880
+          github-token: ${{ github.token }}
+          path: artifacts/dev041
+      - name: Install pinned CPU runtime
+        run: |
+          python -m pip install --quiet -e . numpy==2.3.3
+          python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Run frozen DEV-041 checkpoint on new paired causal-order domain
+        run: |
+          python scripts/run_order_causal_dev042.py --seed ${{ matrix.seed }} --checkpoints artifacts/dev041 --output artifacts/DEV042-seed${{ matrix.seed }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV042-RAW-seed${{ matrix.seed }}-not-confirmatory
+          path: artifacts/DEV042-seed${{ matrix.seed }}/
+          if-no-files-found: warn
+  audit:
+    needs: transfer
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: DEV042-RAW-seed*-not-confirmatory
+          path: artifacts/evidence
+      - name: Install physical replay dependencies
+        run: python -m pip install --quiet -e .
+      - name: Independently audit order, labels, physical outcomes and last-event ceiling
+        run: |
+          python scripts/audit_order_causal_dev042.py \
+            artifacts/evidence/DEV042-RAW-seed4101-not-confirmatory/report.json \
+            artifacts/evidence/DEV042-RAW-seed4102-not-confirmatory/report.json \
+            artifacts/evidence/DEV042-RAW-seed4103-not-confirmatory/report.json \
+            --output artifacts/evidence/analysis
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DEV042-COMPLETE-EVIDENCE-NOT-CONFIRMATORY
+          path: artifacts/evidence/
+          if-no-files-found: error
+      - name: Publish audited summary only after upload success
+        run: cat artifacts/evidence/analysis/analysis.json
