@@ -382,3 +382,5 @@ Source bytes and original exclusions are preserved. Full
 [development replay](../research/dev054/audit.json),
 [compute](../research/dev054/resource-accounting.json), draft
 [PR #214](https://github.com/FPC-effortless/TAC-OSM/pull/214).
+
+DEV-054 [published evidence index](../research/dev054/evidence-index.json): archive downloaded from exact evidence commit and SHA-256 verified; 66 inner files verified. Commit payload/canonical-byte SHA-256 digests and original exclusion-record digest recorded.
