@@ -44,3 +44,26 @@ def test_expected_calibration_checks_probability_quality():
     assert perfect['expected_ece'] == 0
     assert abs(perfect['excess_nll']) < 1e-12
     assert bad['expected_ece'] > .5 and bad['excess_nll'] > 0
+
+
+def test_joint_planner_collapses_to_point_rate_reference():
+    from tac_osm.development.learned_belief_world import bellman
+    rates = [.25,.65,.9]
+    for p in (.1,.5,.9):
+        joint = np.array([[.3*(1-p),.3*p],[.7*(1-p),.7*p]])
+        values = mixture_values(joint,0,0,[rates,rates])
+        point_value, _ = bellman(p,0,0,(.85,tuple(rates)))
+        assert abs(min(values.values())-point_value) < 1e-6
+
+
+def test_hybrid_public_inputs_do_not_depend_on_private_targets():
+    from tac_osm.development.joint_repair import data
+    params={'prior':[.5,.5,.5], 'training_hazard':.08, 'endpoints':[[.25,.35,.45],[.9,.85,.95]]}
+    tokens=[[1.,0.,0.,1.,1.],[0.,1.,0.,0.,1.]]
+    a=[{'tokens':tokens,'targets':[[.25,.35,.45]]*3}]
+    b=[{'tokens':tokens,'targets':[[.9,.85,.95]]*3}]
+    for hybrid in (False,True):
+        xa,ya=data(a,params,.08,hybrid)
+        xb,yb=data(b,params,.08,hybrid)
+        assert torch.equal(xa,xb)
+        assert not torch.equal(ya,yb)
