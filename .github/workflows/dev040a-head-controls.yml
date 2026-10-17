@@ -1,0 +1,96 @@
+name: DEV-040A frozen-head pilot and complete raw evidence
+on:
+  pull_request:
+    types: [opened]
+    paths:
+      - 'research/dev040/pilot-protocol.json'
+      - 'scripts/*dev040a.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  gates-and-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned CPU runtime
+        run: |
+          python -m pip install --quiet -e . pytest==9.1.1 numpy==2.3.3 ruff==0.13.0
+          python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Regression and public-boundary checks
+        run: |
+          ruff check --select F scripts/*dev040a.py tests/*dev040a.py
+          python scripts/sync_test_count.py --check
+          python -m pytest tests/ -q
+      - name: All architectures/heads/probes smoke and exact replay
+        run: |
+          python scripts/run_head_controls_dev040a.py --seed 4001 --smoke --output artifacts/DEV-040A-SMOKE
+          python scripts/run_head_controls_dev040a.py --seed 4001 --smoke --replay --output artifacts/DEV-040A-SMOKE
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV-040A-SMOKE-NOT-CONFIRMATORY
+          path: artifacts/DEV-040A-SMOKE/
+          if-no-files-found: warn
+  three-seed:
+    needs: gates-and-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [4001,4002,4003]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned CPU runtime
+        run: |
+          python -m pip install --quiet -e . numpy==2.3.3
+          python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Fresh matched backbones, frozen heads and controls, independent evaluation
+        run: |
+          python scripts/run_head_controls_dev040a.py --seed ${{ matrix.seed }} --output artifacts/DEV-040A-seed${{ matrix.seed }}
+          python scripts/run_head_controls_dev040a.py --seed ${{ matrix.seed }} --replay --output artifacts/DEV-040A-seed${{ matrix.seed }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV-040A-RAW-seed${{ matrix.seed }}-NOT-CONFIRMATORY
+          path: artifacts/DEV-040A-seed${{ matrix.seed }}/
+          if-no-files-found: warn
+  independent-audit:
+    needs: three-seed
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: DEV-040A-RAW-seed*-NOT-CONFIRMATORY
+          path: artifacts/DEV-040A-evidence
+      - name: Independently reconstruct targets, calibration, actions, costs and primary
+        run: python scripts/audit_head_controls_dev040a.py artifacts/DEV-040A-evidence/DEV-040A-RAW-seed4001-NOT-CONFIRMATORY artifacts/DEV-040A-evidence/DEV-040A-RAW-seed4002-NOT-CONFIRMATORY artifacts/DEV-040A-evidence/DEV-040A-RAW-seed4003-NOT-CONFIRMATORY --output artifacts/DEV-040A-evidence/analysis
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DEV-040A-COMPLETE-AUDITED-EVIDENCE-NOT-CONFIRMATORY
+          path: artifacts/DEV-040A-evidence/
+          if-no-files-found: error
+      - name: Publish compact summary only after successful evidence upload
+        run: |
+          cat artifacts/DEV-040A-evidence/analysis/analysis.json
+          cat artifacts/DEV-040A-evidence/analysis/per-seed-heads.csv
