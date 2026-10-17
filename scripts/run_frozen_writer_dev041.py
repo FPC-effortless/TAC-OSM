@@ -141,9 +141,9 @@ def choose_threshold(rows):
     return best, totals
 
 
-def last_event_fit(rows, split, reps):
+def last_event_fit(rows, split, reps, history=512):
     counts = {}
-    for worlds, conditions in cases_for(split, reps):
+    for worlds, conditions in cases_for(split, reps, history):
         for case, condition in zip(worlds, conditions):
             matching = next(r for r in rows if r["fingerprint"] == condition["fingerprint"])
             for key, target in zip(last_keys(case), matching["labels"]):
@@ -153,10 +153,10 @@ def last_event_fit(rows, split, reps):
     return {k: (v / n).tolist() for k, (v, n) in counts.items()}
 
 
-def last_event_rows(fit, original, split, reps):
+def last_event_rows(fit, original, split, reps, history=512):
     rows = []
     lookup = {r["fingerprint"]: r for r in original}
-    for worlds, _ in cases_for(split, reps):
+    for worlds, _ in cases_for(split, reps, history):
         for case in worlds:
             row = lookup[case.fingerprint]
             probs = [fit.get(key, [0., 0., 0.]) for key in last_keys(case)]
@@ -254,9 +254,9 @@ def run(seed, output, smoke=False, replay=False):
     anchor = report["arms"]["bounded_trainable"]["results"]
     # Fit baseline only on disjoint calibration cases; never fit on evaluation.
     calib = predict(models["bounded_trainable"], "calibration", repetitions, 32 if smoke else 512)
-    ref_fit = last_event_fit(calib, "calibration", repetitions)
-    last_dev = last_event_rows(ref_fit, calib, "calibration", repetitions)
-    last_eval = last_event_rows(ref_fit, anchor["rows"], "eval", ereps)
+    ref_fit = last_event_fit(calib, "calibration", repetitions, 32 if smoke else 512)
+    last_dev = last_event_rows(ref_fit, calib, "calibration", repetitions, 32 if smoke else 512)
+    last_eval = last_event_rows(ref_fit, anchor["rows"], "eval", ereps, 32 if smoke else 512)
     ref_threshold, _ = choose_threshold(last_dev)
     public = sum(sum(int(r["labels"][e][0]) for e in range(8)) for r in anchor["rows"])
     never = sum(4 * sum(int(e[0]) for e in r["labels"]) for r in anchor["rows"])
