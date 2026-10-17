@@ -982,8 +982,31 @@ Evidence: [DEV-052B results](DEV-052B-RESULTS.md), [audited numerical record](..
 
 **DEV-053A supported diagnostic:** frozen DEV-052B generic-GRU forecasts are active inputs: zeroed and shuffled forecasts increase actual native cost. Exact actions do not establish exact beliefs; excess expected log loss is 0.0114/0.0413 nats in-regime/shifted with median top 2 gaps around 0.26. The old experiment has no MTSK/CDL/CASM and does not test the central TAC-OSM thesis. The true-parameter reference's fault/cost trade-off is not evidence of brittleness. Crossed world/seed reanalysis puts shifted recurrent-belief gap closure at 4.26%, with a broad interval spanning zero. Original outcomes and excluded-split evidence remain unchanged; commit payload/canonical-byte SHA 256 and archive hashes are recorded.
 
-**DEV-053B component path supported; robust advantage unsupported:** actual SwiLAMTSK, generic GRU 32/128, frozen/reset kernels and Bayesian controls run at equal public observation histories.25 checkpoints reconstructed and 1315 tests pass. Primary pooled MTSK gap closure 1.58%, descriptive 95% interval [-11.82%,12.83%]; every combined mechanism guard fails. A small carried-state cost contrast versus reset is retained, but the strict per-seed/family fault guard fails and no full architectural claim follows.
+**DEV-053B component path supported; robust advantage unsupported:** actual SwiLAMTSK, generic GRU 32/128, frozen/reset kernels and Bayesian controls run at equal public observation histories.25 checkpoints reconstructed and 1315 tests pass. Primary pooled MTSK gap closure 1.58%, descriptive 95% interval [-11.82%,12.83%]; every combined mechanism guard fails. This is a null on adaptation. The reset contrast spans zero after adjustment for three memory comparisons or four registered guards; reset was retrained. The strict per-seed/family fault guard also fails and no full architectural claim follows. See [the null review](DEV-053-NULL-REVIEW.md) for calibration, per-fit training exposure and acquisition break-even.
 
 No trained CDL routing, CASM program discovery, industrial safety, full TAC-OSM advantage, or complexity-scaling result. Idealized public calibration fixtures, point-rate neural planning, unequal parameter counts, only 256 stream clusters, five initialization seeds, and same-author/shared-code reproduction limit the result.
 
 Evidence: [DEV-053A review](DEV-053A-FORECAST-REVIEW.md), [DEV-053B findings and curves](DEV-053B-ADAPTATION-RESULTS.md), draft [PR #213](https://github.com/FPC-effortless/TAC-OSM/pull/213).
+
+## DEV-054: common joint planner, matched encoders, reliability regression
+
+**Completed development replay; MTSK superiority unsupported.** Fifteen fits
+(three initializations × five encoders), 1,024 updates each, all reconstruct
+exactly. A parameter-matched GRU and GRU-plus-HMM use the same explicit joint
+regime–fault planner as MTSK/HMM. MTSK costs 1.644748/entity versus Beta 1.655469;
+paired difference −0.010720, interval [−0.057141,+0.034075]. Residual faults
+increase 0.192274/world, interval [+0.163628,+0.221788]. All four adjusted
+mechanism guards fail. 256 distinct stream clusters, not 768 independent
+seed-stream samples. All 15 validation plateau diagnostics pass, without
+establishing global convergence. 1,321 tests pass.
+
+The restored component checkpoint executes public observation→persistent
+belief→joint planning→native action→verification. The neural encoder learns
+regime weights; training-fitted endpoints and analytic physics/belief updates,
+addressing and Bellman planning remain explicit. No full TAC-OSM/CDL/CASM,
+selective-computation, commercial-value or parameter-efficiency claim follows.
+The monetary oracle also increases faults versus Beta, so its headroom is not
+a demonstrated reliability-feasible saving. Unstable/below-floor ratios are
+suppressed by the prospective rule. See [results](DEV-054-RESULTS.md),
+[protocol](../research/dev054/protocol.json), [summary](../research/dev054/summary.json)
+and draft [PR #214](https://github.com/FPC-effortless/TAC-OSM/pull/214).

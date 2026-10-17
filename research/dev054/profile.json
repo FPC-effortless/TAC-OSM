@@ -1,0 +1,68 @@
+{
+  "study": "DEV-054",
+  "scope": "Single CPU thread, first model seed, eight validation streams,8 warmup/32 retained timings; includes hybrid filtering but excludes token conversion, planner, native runtime, logging and fixture generation. Timing during other work may be contended. No FLOP, power or production latency inference.",
+  "note": "MTSK inherited write_proj is unused by the step interface but remains in stored parameter count. Matching is stored parameters, not equal active parameters. The fit metadata hybrid8B is theoretical FP32 posterior; actual NumPy float64 posterior is16B, reported here.",
+  "rows": [
+    {
+      "arm": "mtsk",
+      "stored_parameters": 1104,
+      "unused_parameter_tensors": {
+        "kernel.write_proj.weight": 112,
+        "kernel.write_proj.bias": 8
+      },
+      "parameters_with_gradient_path": 984,
+      "median_32_event_encoder_seconds": 0.005703820500002621,
+      "median_hybrid_filter_seconds": 2.629999471537303e-07,
+      "p90_32_event_encoder_seconds": 0.006364579000546655,
+      "ideal_retained_neural_state_bytes": 512,
+      "hybrid_numpy_filter_posterior_bytes": 0
+    },
+    {
+      "arm": "gru_matched",
+      "stored_parameters": 1100,
+      "unused_parameter_tensors": {},
+      "parameters_with_gradient_path": 1100,
+      "median_32_event_encoder_seconds": 0.001241569999820058,
+      "median_hybrid_filter_seconds": 1.5249997886712663e-07,
+      "p90_32_event_encoder_seconds": 0.0026206310003544786,
+      "ideal_retained_neural_state_bytes": 60,
+      "hybrid_numpy_filter_posterior_bytes": 0
+    },
+    {
+      "arm": "gru128",
+      "stored_parameters": 52098,
+      "unused_parameter_tensors": {},
+      "parameters_with_gradient_path": 52098,
+      "median_32_event_encoder_seconds": 0.0010755349994724384,
+      "median_hybrid_filter_seconds": 1.5700061339884996e-07,
+      "p90_32_event_encoder_seconds": 0.001199463999910222,
+      "ideal_retained_neural_state_bytes": 512,
+      "hybrid_numpy_filter_posterior_bytes": 0
+    },
+    {
+      "arm": "gru_hmm",
+      "stored_parameters": 1104,
+      "unused_parameter_tensors": {},
+      "parameters_with_gradient_path": 1104,
+      "median_32_event_encoder_seconds": 0.0016413905000263185,
+      "median_hybrid_filter_seconds": 0.00029547399981311173,
+      "p90_32_event_encoder_seconds": 0.002900418000535865,
+      "ideal_retained_neural_state_bytes": 56,
+      "hybrid_numpy_filter_posterior_bytes": 16
+    },
+    {
+      "arm": "mtsk_reset",
+      "stored_parameters": 1104,
+      "unused_parameter_tensors": {
+        "kernel.write_proj.weight": 112,
+        "kernel.write_proj.bias": 8
+      },
+      "parameters_with_gradient_path": 984,
+      "median_32_event_encoder_seconds": 0.005093283999940468,
+      "median_hybrid_filter_seconds": 2.5000008463393897e-07,
+      "p90_32_event_encoder_seconds": 0.005993153999952483,
+      "ideal_retained_neural_state_bytes": 512,
+      "hybrid_numpy_filter_posterior_bytes": 0
+    }
+  ]
+}

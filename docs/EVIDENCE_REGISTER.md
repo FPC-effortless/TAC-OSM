@@ -364,3 +364,23 @@ Source and full qualifications: [DEV-052B report](DEV-052B-RESULTS.md).
 | Drift 32 endpoint has about 45% nonpositive bootstrap headroom | L 1 | denominator integrity | Ratio uncertainty must be explicit | Reliable positive percentage conclusion at that endpoint | Raw costs and all invalid-draw rates retained; generator not revised after results |
 
 Full results and limits: [DEV-053A](DEV-053A-FORECAST-REVIEW.md), [DEV-053B](DEV-053B-ADAPTATION-RESULTS.md).
+
+## DEV-054 common joint planning and matched recurrent controls
+
+Registration `86b1cbc`, scientific implementation `0940063`; fresh stream
+namespaces 5541001–5541005, disjoint smoke/unit namespaces. 15 fitted checkpoints
+and all native actions reconstructed by a same-author separate-process audit:
+13,824 primitive probe replays,
+62,453 probe actions and
+57,344 fixture actions. Shared generator/model code;
+not independent laboratory replication. 1,321 regression tests pass.
+
+MTSK cost advantage is inconclusive and residual faults increase versus Beta;
+all adjusted mechanism guards fail. No full-system or commercial claim.
+Source bytes and original exclusions are preserved. Full
+[findings](DEV-054-RESULTS.md), [machine-readable summary](../research/dev054/summary.json),
+[development replay](../research/dev054/audit.json),
+[compute](../research/dev054/resource-accounting.json), draft
+[PR #214](https://github.com/FPC-effortless/TAC-OSM/pull/214).
+
+DEV-054 [published evidence index](../research/dev054/evidence-index.json): archive downloaded from exact evidence commit and SHA-256 verified; 66 inner files verified. Commit payload/canonical-byte SHA-256 digests and original exclusion-record digest recorded.

@@ -1,0 +1,27 @@
+{
+  "study": "DEV-054",
+  "accepted_main": {
+    "optimizer_updates": 15360,
+    "probe_executions": 13824,
+    "probe_actions": 62453,
+    "coupon_executions": 28672,
+    "coupon_actions": 57344,
+    "materialized_rate_target_components": 88704
+  },
+  "disjoint_smoke": {
+    "optimizer_updates": 15,
+    "probe_executions": 144,
+    "probe_actions": 546,
+    "coupon_executions": 480,
+    "coupon_actions": 960,
+    "materialized_rate_target_components": 1485
+  },
+  "registered_main_audit_optimizer_updates": 30720,
+  "with_smoke_optimizer_updates": 30750,
+  "native_actions_main_reconstruction_primitive": 359391,
+  "native_actions_with_smoke_demo": 363981,
+  "main_audit_process_seconds": 1735.6752015039992,
+  "main_audit_smoke_process_seconds": 1750.4213972079997,
+  "training_target_component_exposures_main_audit": 64880640,
+  "note": "Process elapsed time, not CPU-seconds. Full pytest, interactive engineering, retrospective bootstrap/reporting, profiling and demo elapsed time additional; their logs/raw records retained. Native action accounting includes all accepted/smoke reconstruction and separate primitive replay, plus demo. No industrial fixture setup cost or power measured."
+}
