@@ -12,3 +12,7 @@ The next experiments have distinct questions and completion criteria:
 6. **Confirmation.** Freeze recipes on validation, then use fresh initialization seeds and untouched test scenarios. Report distributions and paired uncertainty; register capability and economic gates before confirmation. A single 216-update pilot is an engineering result, not a working-model claim.
 
 The next gate is practical: a candidate must both retain cancellation state and improve decisions compared with a sufficiently trained control and schema41. The broader architecture earns its place only if its connected mechanisms lower real decision cost or improve generalization in settings where explicit tables do not supply the answer.
+
+## Current experimental checkpoint
+
+DEV-036 and DEV-037 are now implemented and audited. A bounded local MTSK writer improved DEV-036 overall accuracy and cost over its matched unbounded writer, but reached only62.50% cancellation accuracy and lost to simpler references. With that memory frozen, DEV-037 simulator-taught action policies improved upon an untuned fixed decision threshold, yet a one-parameter threshold fitted on equal training data beat them on fresh worlds. Active case selection saved12 cost units over random within the learned-policy pair, too little to justify a broad claim. The immediate next memory test should address repeated issue/cancel ordering; the action experiment should later be repeated with gradients reaching memory after strong optimization controls.
