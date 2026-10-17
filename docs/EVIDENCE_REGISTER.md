@@ -384,3 +384,15 @@ Source bytes and original exclusions are preserved. Full
 [PR #214](https://github.com/FPC-effortless/TAC-OSM/pull/214).
 
 DEV-054 [published evidence index](../research/dev054/evidence-index.json): archive downloaded from exact evidence commit and SHA-256 verified; 66 inner files verified. Commit payload/canonical-byte SHA-256 digests and original exclusion-record digest recorded.
+
+## DEV-055 development evidence
+
+| Row | Layer | Status | Boundary / blocker |
+| --- | --- | --- | --- |
+| Public-history action-conditioned MTSK/CDL-style/neural-CASM path | L2 | implemented, trained and restored | Task-specific two-entity neural system; no original CDL teacher or symbolic program discovery |
+| Carried versus retrained reset memory | L2 | bounded cost benefit | Does not establish MTSK advantage over matched GRU; reliability acceptance fails |
+| Paid coupled/drifting stream decisions | L3 | measured; superiority unsupported | Cost/reliability guard fails versus registered controls; strongest observed conventional arm is cheaper |
+| Native Veritas trajectory replay | L3 engineering | verified | Recorded synthetic effect tables; same author/shared physics; not independent outcome validation |
+| Indexed acquisition / equal-bits / hash controls | L4 | untested here | Separate C5/DEV-057 work; fixed-expert routing cannot answer this |
+
+Provenance and exact evidence: [DEV-055](DEV-055-RESULTS.md), training source `8b07745`, registration `5067a82`.

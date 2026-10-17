@@ -1010,3 +1010,7 @@ a demonstrated reliability-feasible saving. Unstable/below-floor ratios are
 suppressed by the prospective rule. See [results](DEV-054-RESULTS.md),
 [protocol](../research/dev054/protocol.json), [summary](../research/dev054/summary.json)
 and draft [PR #214](https://github.com/FPC-effortless/TAC-OSM/pull/214).
+
+## DEV-055: learned action outcomes and conditional computation
+
+**Executable development path; superiority unsupported.** Training source `8b07745`, preregistration `5067a82`. Fifteen trained MTSK/GRU/ablated models restore exactly. Task-trained CDL-style relevance, a learned structural workspace and sparse neural CASM operators participate in action-conditioned outcome prediction. The registered cost/reliability superiority rule fails; the strongest conventional control has lower pooled cost and fault exposure. Native replay checks 138,240 synthetic actions, with shared generator/code and unrepaired outcomes preserved. This does not establish original CDL distillation, symbolic CASM-S discovery, C5, learned contingent planning, real-world safety or commercial value. See [DEV-055 findings](DEV-055-RESULTS.md), [protocol](../research/dev055/protocol.json), [audit](../research/dev055/audit.json) and [learning curves](../research/dev055/learning-curves.csv).

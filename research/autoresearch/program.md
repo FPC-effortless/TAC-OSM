@@ -34,3 +34,7 @@ requested, bounded, validation-only optimization study. Keep a connected
 complete-system integration track: memory-only scores are not full-system
 scores. Preserve development successes and fresh replication failures together.
 See `docs/DEV-029-OPTIMIZATION-AND-INTEGRATION-PROGRAM.md`.
+
+## DEV-055 outcome and next decision
+
+The learned dynamics/CDL-style/neural-CASM path now trains and restores, but the registered superiority guard fails. Preserve the complete 15-fit matrix and native replay evidence; do not select a checkpoint or tune the same held-out worlds into a positive claim. DEV-056 is the registered memory-novelty deadline, with matched-GRU superiority, reliability and adequate headroom required. Retire the memory-novelty claim if that deadline fails. DEV-057 must test the separate indexed-acquisition, equal-bits scalar and hash controls; fixed-size expert routing is not C5.

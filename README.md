@@ -9,6 +9,23 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## DEV-055 learned-model checkpoint (October 17, 2026)
+
+[DEV-055](docs/DEV-055-RESULTS.md) trains an integrated public-history MTSK,
+CDL-style relevance router, structural workspace, sparse neural CASM executor
+and action-conditioned fault predictor. Fifteen final checkpoints execute
+paid coupled/drifting maintenance tasks; all restore and replay exactly.
+Native Veritas replay verified 138,240 actions, preserving unrepaired outcomes.
+
+The reliability gate fails. MTSK costs 57.1623/world versus matched GRU
+57.7171 (adjusted difference interval spans zero), fitted HMM 56.8934 and
+the strongest observed conventional control 56.1720. Learned routing and CASM
+do not establish an advantage. This is a working bounded learned-model pilot,
+not original CDL distillation, general CASM-S discovery, C5 scaling or a safe
+product. Per-arm learning curves, the public-event streaming CLI and full
+artifact provenance are in the report. DEV-056 is the registered deadline
+for the memory-novelty claim; DEV-057 returns to the separate C5 controls.
+
 ## DEV-054 joint-planning checkpoint (October 17, 2026)
 
 [DEV-054](docs/DEV-054-RESULTS.md) is completed and development-replay audited.
