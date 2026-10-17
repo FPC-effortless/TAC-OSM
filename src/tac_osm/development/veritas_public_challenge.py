@@ -6,6 +6,7 @@ public payload and the action callback, never HiddenOracle or runtime state.
 from __future__ import annotations
 
 import random
+import hashlib
 
 POLICIES = ("wait", "service_without_isolation", "stale_record", "service_all_once",
             "inspect_once", "inspect_verify_retry")
@@ -19,18 +20,19 @@ def make_episode(seed, index):
     )
 
     rng = random.Random(f"tac-dev050a-public:{seed}:{index}")
-    world_id = f"TAC-PUBLIC-DEV050-{seed}-{index}"
+    identity = hashlib.sha256(f"tac-dev050a-identity:{seed}:{index}".encode()).hexdigest()[:24]
+    world_id = f"TAC-PUBLIC-DEV050-{identity}"
     initial = {"plant.slot": -1, "plant.collateral": 0}
     effects, records, targets, invariants = [], [], [], []
     for entity in range(2):
-        fault = (index % 4 >> entity) & 1
+        fault = rng.randrange(2)
         first_works = rng.random() >= .25
         initial[f"e{entity}.fault"] = fault
         initial[f"e{entity}.attempt"] = 0
         targets.append(StateAssertion(object_id=f"e{entity}", field_name="fault", expected_value=0))
         records.append(OperationalRecord(record_id=f"record-{entity}", system="plant",
             record_type="maintenance", object_id=f"e{entity}",
-            fields={"entity": entity, "reported_fault": fault if index % 2 else 1-fault},
+            fields={"entity": entity, "reported_fault": fault if rng.random() < .5 else 1-fault},
             source_authority="high", confidence=.99, freshness="stale"))
         effects.append(HiddenActionEffect(action_name="inspect", required_parameters={"entity": entity}))
         effects.append(HiddenActionEffect(action_name="isolate", required_parameters={"entity": entity},
