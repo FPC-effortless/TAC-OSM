@@ -1,0 +1,60 @@
+{
+ "study":"DEV-053B", "status":"FROZEN_BEFORE_IMPLEMENTATION_AND_TRAINING", "confirmation":false,
+ "question":"Can meta-trained recurrent state adapt repair-rate forecasts and native decisions under changing dynamics, and does the actual MTSK kernel add value over generic recurrent and Bayesian controls?",
+ "scope":"Bounded system-identification experiment with public calibration coupons and native maintenance probes. MTSK mechanism isolated, not full TAC-OSM/CDL/CASM validation. Hand-coded addressing, action admissibility and finite-horizon planning retained and disclosed.",
+ "veritas_commit":"b21d829b62d3cab2811e746267ca305e110ed004",
+ "generator":{
+  "namespace":"dev053b-v1", "history_length":32,
+  "hard_repair_rates":[0.25,0.35,0.45], "easy_repair_rates":[0.9,0.85,0.95],
+  "training_families":"Equal random mixture: two-state Markov switch probability .08; triangular drift with random phase and period20,28,36. Initial phase/regime randomized independently per world.",
+  "evaluation_families":["fresh matched Markov .08","unseen smooth sinusoidal drift, randomized phase, period12 or20"],
+  "public_observation_episode":"Known-fault calibration fixture staged at one uniformly selected public repair attempt. Native isolate+service, then public final Veritas verification yields success bit. Second fixture entity is publicly certified healthy. Neither hidden rate nor latent regime is public. Every arm receives identical attempt/success observations. Public fixture setup assumed free and disclosed; native isolation and service cost1.2 per observation charged to total-cost curves.",
+  "productive_probe":"Two initially unknown Bernoulli(.5) faults, sensitivity/specificity .85,3 uncertain repairs,4 paid inspections/entity, one shared isolation slot. Probe rates equal next hidden rate vector after n observations; no feedback from probes enters later observation histories. Independent paired native probe randomness per stream/level. Health absorbing.",
+  "levels":[0,4,8,16,32], "all_costs":"Inspect .1, isolate .2, service1, residual fault4; report decision cost/entity and total cost/entity including shared-prefix observation expense. Fixture setup cost excluded identically for all arms.",
+  "no_hidden_inference":"Only public attempt/success tokens and past noisy probe receipts to controllers. True next rate and latent state are train/calibration targets and evaluator diagnostics only. Oracle receives current true rates as privileged reference."
+ },
+ "splits":{
+  "train":{"seed":5531001,"worlds":512},
+  "validation":{"seed":5531002,"worlds":128},
+  "calibration":{"seed":5531003,"worlds":128},
+  "markov":{"seed":5531004,"worlds":128},
+  "drift":{"seed":5531005,"worlds":128}
+ },
+ "smoke_seed_offset":10000000, "unit_test_seed_base":8531000,
+ "model_seeds":[7301,7302,7303,7304,7305],
+ "arms":["oracle","prior","stationary_beta","discounted_beta","hmm_plugin","hmm_mixture_dp","gru32","gru128","mtsk","mtsk_frozen_kernel","mtsk_reset"],
+ "neural_arms":["gru32","gru128","mtsk","mtsk_frozen_kernel","mtsk_reset"],
+ "mechanism":{
+  "mtsk":"Unmodified repository SwiLAMTSK imported from full_plm_reference.py: d_model8, heads2, experts3 with one fast/medium/slow expert. Learned 5->8 tanh public-event encoder. Matrix96 + responsibilities24 + read8 =128 retained FP32 scalars. No multimodal encoder, CDL router, CASM executor or architecture claim imported.",
+  "gru":"Generic GRUCell, hidden32 and hidden128;128 is state-scalar-matched, not parameter-matched. Report parameter bytes and optimizer compute separately.",
+  "frozen":"Same initialization, kernel parameters frozen; encoder and forecast heads train. Not a completely fixed functional reservoir because encoder trains.",
+  "reset":"Same MTSK parameters and exposure, memory and responsibility reset before each new observation, isolating carried-state contribution within this architecture."
+ },
+ "training":{
+  "updates":256,"batch_streams":32,"device":"cpu","threads":1,"deterministic":true,"optimizer":"AdamW","lr":0.001,"weight_decay":0.0001,"gradient_clip":1,
+  "loss":"Mean BCE on three next-repair probabilities at initial state and after every public observation. True simulator next probabilities are soft training targets. Forecast-only; no teacher policy imitation. Full33-position BPTT. Fixed updates, no early stopping. Finite-loss/gradient failures retained and remaining arms/seeds continue; no hidden rescue recipe.",
+  "validation":"Report final proper scores, no model selection or outcome-based stopping.",
+  "information":"Same training trajectories and privileged probability targets available to Bayesian rate/prior fitting. Markov endpoint rates and transition frequency fitted from training-only Markov targets; no current evaluation state labels. Test controllers update state only, weights frozen."
+ },
+ "calibration":{
+  "neural_temperatures":[0.5,1,2],"beta_prior_strengths":[0.5,2,8],"discount_factors":[0.5,0.7,0.85,0.95],"hmm_hazards":[0.02,0.08,0.16,0.32],
+  "selection":"Minimum calibration expected Bernoulli log loss vs next probabilities, averaged over all33 positions and3 rates; ties first. No calibration native policy tuning. Same calibration streams for all arms. Choices saved before final evaluation."
+ },
+ "baselines":{
+  "prior":"Pooled training repair probabilities, no adaptation",
+  "stationary_beta":"Independent stationary repair probabilities, training-mean prior and calibrated strength, public success updates",
+  "discounted_beta":"Same sufficient statistics with calibrated exponential forgetting; strong misspecification control",
+  "hmm_plugin":"Training-fitted two-regime HMM, calibrated hazard, exact public posterior filtering followed by common plug-in-rate DP",
+  "hmm_mixture_dp":"Same posterior HMM, but within each entity plans with full joint belief over two latent regimes and fault status, updating after inspections and uncertain service. Regime posterior carried between entities. Entity-local lookahead, not globally optimal two-entity information planning; no such claim. Drifting continuous rates deliberately misspecify the two-regime class.",
+  "oracle":"True current probabilities, common finite-horizon DP. Privileged reference; irreducible hidden-regime information gap possible."
+ },
+ "primary":{
+  "metric":"Fraction of oracle cost gap closed = (stationary_beta cost - model cost)/(stationary_beta cost - oracle cost). Primary pooled ratio uses equal weights across5 levels and2 families; also report each level/family with cost-vs-observations plots. Undefined if denominator<=1e-9; no clipping or substituting a favorable reference.",
+  "uncertainty":"2000 crossed paired bootstrap replicates: stream/world trajectories clustered over all levels, stratify families; resample model seed indices globally for each replicate, pair baseline/oracle on same world draws. Recompute ratio; report denominator-invalid rate and cost/fault difference intervals. Repeated model seeds never multiply independent world count.",
+  "guard":"No robust mechanism advantage unless MTSK has higher gap closure with positive lower95% paired contrast vs GRU128 and adaptive HMM-mixture, no additional residual faults or blocked/path violations for every model seed in each family, and lower actual cost. Compare frozen/reset controls too. A win over misspecified stationary Beta alone is insufficient. No Poisson-independent fault-count significance shortcut.",
+  "secondary":["expected forecast log loss/excess vs true probabilities","Brier","native residual faults and complete worlds","top2 value margins","policy and native runtime","retained state and parameter bytes","total optimizer/target/native action counts"]
+ },
+ "audit":"Separate process rebuild all data/calibration and every checkpoint tensor, reproduce all selected forecasts/native decisions, and independently replay every saved primitive action with separate sensor and cost accounting. Same author and shared generator code explicitly disclosed. Preserve raw negative controls, failures, plots and source/checkpoint/commit/archive hashes.",
+ "budget":"25 neural fits x256 updates plus one complete deterministic reconstruction; no post-heldout tuning. About30min experimental CPU process budget; account any overrun. Complete matrix or clearly record incomplete cells.",
+ "limitations":["Synthetic public calibration fixtures simplify identification","Known public entity identities and native constraints","Only repair probabilities drift; sensor accuracy fixed","MTSK component test, not generic full TAC-OSM thesis","GRU128 state matched, parameter count differs","Five initialization seeds development, not confirmation"]
+}

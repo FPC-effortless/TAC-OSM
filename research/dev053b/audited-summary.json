@@ -1,0 +1,3399 @@
+{
+  "study": "DEV-053B",
+  "status": "AUDITED_DEVELOPMENT",
+  "source": "f4af2cb8bf20e219f0a62adef78af06c0245d64d",
+  "protocol_sha256": "cc7cc273d2f578683c2854e01fef52f9d3dca8d5634517f2f8c2e9d7fc43eec7",
+  "all_checkpoint_tensors_reconstructed": true,
+  "calibration_choices_reconstructed": true,
+  "primitive_probe_replay_executions": 39680,
+  "primitive_probe_replay_actions": 278615,
+  "primitive_public_coupon_replay_actions": 65536,
+  "statistics": {
+    "families": {
+      "markov": {
+        "oracle": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.5211718749999998,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": -0.19484375,
+            "paired_delta_95pct": [
+              -0.2607832031250002,
+              -0.1295253906249999
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": 1.0,
+            "fraction_95pct": [
+              0.9999999999999983,
+              1.0000000000000018
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.6953125,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": -0.288671875,
+              "paired_delta_95pct": [
+                -0.4523632812499998,
+                -0.11481445312500008
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.999999999999999,
+                1.0000000000000022
+              ],
+              "fraction_invalid_denominator_rate": 0.0005
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.3289062500000002,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": -0.1828125,
+              "paired_delta_95pct": [
+                -0.31759765625000025,
+                -0.05703125000000009
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.9999999999999981,
+                1.0000000000000029
+              ],
+              "fraction_invalid_denominator_rate": 0.0045
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.5125,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": -0.10507812499999998,
+              "paired_delta_95pct": [
+                -0.2281347656249999,
+                0.017197265625000076
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.9999999999999899,
+                1.000000000000004
+              ],
+              "fraction_invalid_denominator_rate": 0.0525
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.5222656250000002,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": -0.06796875,
+              "paired_delta_95pct": [
+                -0.23281249999999987,
+                0.0969335937499995
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.9999999999999903,
+                1.0000000000000113
+              ],
+              "fraction_invalid_denominator_rate": 0.2125
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.546875,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": -0.3296875,
+              "paired_delta_95pct": [
+                -0.4800976562500001,
+                -0.1753613281250003
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.9999999999999989,
+                1.0000000000000013
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.246875,
+            "paired_delta_95pct": [
+              0.203125,
+              0.2953515624999999
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.54375,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "prior": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.7253906250000002,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": 0.009374999999999965,
+            "paired_delta_95pct": [
+              -0.014923828125000187,
+              0.03383007812499987
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": -0.048115477145148175,
+            "fraction_95pct": [
+              -0.20748735105268232,
+              0.07092283517422324
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.9839843750000001,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0005
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.50234375,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": -0.009374999999999994,
+              "paired_delta_95pct": [
+                -0.06562500000000004,
+                0.048828125
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": 0.05128205128205125,
+              "fraction_95pct": [
+                -0.40899346672111075,
+                0.4468073353954956
+              ],
+              "fraction_invalid_denominator_rate": 0.0045
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.6277343750000002,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": 0.010156249999999978,
+              "paired_delta_95pct": [
+                -0.04610351562500026,
+                0.06914062499999973
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": -0.09665427509293661,
+              "fraction_95pct": [
+                -2.469711538461541,
+                0.5862387202625075
+              ],
+              "fraction_invalid_denominator_rate": 0.0525
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.626953125,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.036718749999999994,
+              "paired_delta_95pct": [
+                -0.01836914062500018,
+                0.09453124999999973
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": -0.5402298850574713,
+              "fraction_95pct": [
+                -6.030555555555495,
+                0.265796791443851
+              ],
+              "fraction_invalid_denominator_rate": 0.2125
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.8859375,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": 0.009374999999999988,
+              "paired_delta_95pct": [
+                -0.059785156250000256,
+                0.078125
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": -0.028436018957345932,
+              "fraction_95pct": [
+                -0.31571646684678667,
+                0.17959642283879865
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.03125,
+            "paired_delta_95pct": [
+              0.01714843749999997,
+              0.046875000000000056
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.32812500000000006,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "stationary_beta": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.7160156249999998,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": 0.0,
+            "paired_delta_95pct": [
+              0.0,
+              0.0
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": 0.0,
+            "fraction_95pct": [
+              0.0,
+              0.0
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.9839843750000001,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0005
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.51171875,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0045
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.617578125,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0525
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.590234375,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.2125
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.8765625000000001,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.0,
+            "paired_delta_95pct": [
+              0.0,
+              0.0
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.296875,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "discounted_beta": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.72390625,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": 0.007890625000000005,
+            "paired_delta_95pct": [
+              -0.014613281250000032,
+              0.030787109374999733
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": -0.04049719326383323,
+            "fraction_95pct": [
+              -0.18043135943385302,
+              0.06807818627924475
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.9839843750000001,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0005
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.525,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": 0.013281249999999994,
+              "paired_delta_95pct": [
+                -0.02032226562500017,
+                0.050390624999999696
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": -0.07264957264957263,
+              "fraction_95pct": [
+                -0.45395428271150656,
+                0.11827445858518404
+              ],
+              "fraction_invalid_denominator_rate": 0.0045
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.629296875,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": 0.011718750000000003,
+              "paired_delta_95pct": [
+                -0.02851562499999983,
+                0.051953125000000044
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": -0.11152416356877329,
+              "fraction_95pct": [
+                -2.130000000000093,
+                0.3672368849788193
+              ],
+              "fraction_invalid_denominator_rate": 0.0525
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.6140625000000002,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.023828125000000002,
+              "paired_delta_95pct": [
+                -0.046093750000000044,
+                0.08165039062499986
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": -0.35057471264367823,
+              "fraction_95pct": [
+                -6.248333333333341,
+                0.6911781986934371
+              ],
+              "fraction_invalid_denominator_rate": 0.2125
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.8671875,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": -0.009375000000000001,
+              "paired_delta_95pct": [
+                -0.08437499999999966,
+                0.06875976562499982
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": 0.028436018957345974,
+              "fraction_95pct": [
+                -0.26465473588828003,
+                0.2513123051781004
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": -4.336808689942018e-19,
+            "paired_delta_95pct": [
+              -0.014062499999999978,
+              0.014062499999999978
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.296875,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "hmm_plugin": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.70984375,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": -0.006171874999999976,
+            "paired_delta_95pct": [
+              -0.030003906249999806,
+              0.017658203125000133
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": 0.03167602245388921,
+            "fraction_95pct": [
+              -0.10423298250476622,
+              0.15174641309321835
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.9839843750000001,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0005
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.52421875,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": 0.012499999999999997,
+              "paired_delta_95pct": [
+                -0.042968749999999785,
+                0.07773437499999993
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": -0.06837606837606837,
+              "fraction_95pct": [
+                -0.6907271210857551,
+                0.24213122455371072
+              ],
+              "fraction_invalid_denominator_rate": 0.0045
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.5878906250000002,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": -0.029687500000000002,
+              "paired_delta_95pct": [
+                -0.07383789062499992,
+                0.016015625000000096
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": 0.28252788104089227,
+              "fraction_95pct": [
+                -0.17592462546816476,
+                2.187056451612894
+              ],
+              "fraction_invalid_denominator_rate": 0.0525
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.6183593749999998,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.02812499999999999,
+              "paired_delta_95pct": [
+                -0.03243164062500004,
+                0.08906250000000004
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": -0.41379310344827575,
+              "fraction_95pct": [
+                -5.915151515151536,
+                0.5316821808510641
+              ],
+              "fraction_invalid_denominator_rate": 0.2125
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.8347656250000002,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": -0.04179687500000001,
+              "paired_delta_95pct": [
+                -0.11211914062500017,
+                0.02540039062499995
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": 0.12677725118483416,
+              "fraction_95pct": [
+                -0.08934708245495393,
+                0.3472896019363496
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.0031249999999999997,
+            "paired_delta_95pct": [
+              -0.012499999999999957,
+              0.01874999999999999
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.30000000000000004,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "hmm_mixture_dp": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.679140625,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": -0.036875,
+            "paired_delta_95pct": [
+              -0.08843750000000017,
+              0.01836328125000015
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": 0.18925421010425017,
+            "fraction_95pct": [
+              -0.12749240154340524,
+              0.391674230069349
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.9359375,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": -0.048046874999999975,
+              "paired_delta_95pct": [
+                -0.1664355468750005,
+                0.07502929687499979
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 0.16644113667117716,
+              "fraction_95pct": [
+                -0.47575935480044945,
+                0.46415276373994147
+              ],
+              "fraction_invalid_denominator_rate": 0.0005
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.4242187499999999,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": -0.08750000000000002,
+              "paired_delta_95pct": [
+                -0.1804882812500002,
+                0.006279296874999708
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": 0.47863247863247876,
+              "fraction_95pct": [
+                -0.05810296010295965,
+                0.9881234632946999
+              ],
+              "fraction_invalid_denominator_rate": 0.0045
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.619140625,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": 0.0015625000000000222,
+              "paired_delta_95pct": [
+                -0.09883789062500004,
+                0.10587890624999997
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": -0.014869888475836646,
+              "fraction_95pct": [
+                -5.180952380952389,
+                0.761562473986514
+              ],
+              "fraction_invalid_denominator_rate": 0.0525
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.6671875,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.07695312500000001,
+              "paired_delta_95pct": [
+                -0.06330078125000017,
+                0.21603515624999972
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": -1.1321839080459772,
+              "fraction_95pct": [
+                -20.235000000000152,
+                0.4506008989056807
+              ],
+              "fraction_invalid_denominator_rate": 0.2125
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.7492187500000003,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": -0.12734375,
+              "paired_delta_95pct": [
+                -0.276591796875,
+                0.020703125000000044
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": 0.3862559241706161,
+              "fraction_95pct": [
+                -0.11135812716695091,
+                0.6622706446841514
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.221875,
+            "paired_delta_95pct": [
+              0.184375,
+              0.26093750000000004
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.51875,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "gru32": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.7202343750000004,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": 0.004218750000000007,
+            "paired_delta_95pct": [
+              -0.024328515624999818,
+              0.03188046875000007
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": -0.0216519647153168,
+            "fraction_95pct": [
+              -0.20216451844834568,
+              0.11728275434433906
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.9749218749999997,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": -0.009062500000000005,
+              "paired_delta_95pct": [
+                -0.04430664062500012,
+                0.005400390624999931
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 0.031393775372124635,
+              "fraction_95pct": [
+                -0.024125466507637527,
+                0.1541323722149406
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.5178906249999997,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": 0.006171875000000002,
+              "paired_delta_95pct": [
+                -0.04304882812499993,
+                0.059929687500000085
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": -0.03376068376068371,
+              "fraction_95pct": [
+                -0.506934545128941,
+                0.2873211185026491
+              ],
+              "fraction_invalid_denominator_rate": 0.0025
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.609375,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": -0.008203125000000002,
+              "paired_delta_95pct": [
+                -0.05547656249999973,
+                0.04141601562500004
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": 0.07806691449814121,
+              "fraction_95pct": [
+                -0.7972461538461507,
+                0.9063023565333104
+              ],
+              "fraction_invalid_denominator_rate": 0.0555
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.695390625,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.10515624999999999,
+              "paired_delta_95pct": [
+                0.019908203124999874,
+                0.19008203124999984
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": -1.5471264367816093,
+              "fraction_95pct": [
+                -16.227792022792066,
+                -0.14400932852772863
+              ],
+              "fraction_invalid_denominator_rate": 0.2025
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.8035937499999999,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": -0.07296875,
+              "paired_delta_95pct": [
+                -0.15570507812499984,
+                0.0023574218750000075
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": 0.22132701421800946,
+              "fraction_95pct": [
+                -0.006985949612403343,
+                0.4669059449067847
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": 0.041249999999999995,
+            "paired_delta_95pct": [
+              0.019992187499999967,
+              0.0628125
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.338125,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "gru128": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.71015625,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": -0.00585937499999999,
+            "paired_delta_95pct": [
+              -0.03418828125000003,
+              0.022516406249999815
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": 0.03007217321571765,
+            "fraction_95pct": [
+              -0.12927686973749447,
+              0.1685968373468614
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.983984375,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                4.440892098500626e-16
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                -1.6527884034602477e-15,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.477578125,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": -0.034140624999999994,
+              "paired_delta_95pct": [
+                -0.09945312499999992,
+                0.03445898437499994
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": 0.18675213675213673,
+              "fraction_95pct": [
+                -0.27086557708805453,
+                0.7096654767975482
+              ],
+              "fraction_invalid_denominator_rate": 0.0025
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6014843749999996,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": -0.01609375,
+              "paired_delta_95pct": [
+                -0.06445312499999978,
+                0.029845703125000157
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": 0.15315985130111523,
+              "fraction_95pct": [
+                -0.5048130081300898,
+                1.285515873015848
+              ],
+              "fraction_invalid_denominator_rate": 0.0555
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6809375,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.090703125,
+              "paired_delta_95pct": [
+                0.009218750000000053,
+                0.1757109374999998
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": -1.3344827586206898,
+              "fraction_95pct": [
+                -13.942684210526494,
+                -0.06011737089201989
+              ],
+              "fraction_invalid_denominator_rate": 0.2025
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.8067968749999999,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": -0.06976562500000001,
+              "paired_delta_95pct": [
+                -0.15195507812499992,
+                0.0043828124999999735
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": 0.211611374407583,
+              "fraction_95pct": [
+                -0.017749322551817496,
+                0.45167593507991366
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": 0.0375,
+            "paired_delta_95pct": [
+              0.017500000000000016,
+              0.05843750000000003
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.334375,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "mtsk": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.7145312499999998,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": -0.0014843749999999898,
+            "paired_delta_95pct": [
+              -0.02331562499999985,
+              0.02075078125000004
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": 0.007618283881315189,
+            "fraction_95pct": [
+              -0.1245300909333106,
+              0.11394350444654336
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.9671093749999997,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": -0.01687500000000001,
+              "paired_delta_95pct": [
+                -0.07336523437500031,
+                0.025394531249999974
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 0.05845737483085255,
+              "fraction_95pct": [
+                -0.12900266272503264,
+                0.24692409894675738
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.507265625,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": -0.004453125000000004,
+              "paired_delta_95pct": [
+                -0.03961132812499994,
+                0.031564453124999926
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": 0.02435897435897445,
+              "fraction_95pct": [
+                -0.25598322670824114,
+                0.2771148846728276
+              ],
+              "fraction_invalid_denominator_rate": 0.0025
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.62046875,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": 0.0028906249999999974,
+              "paired_delta_95pct": [
+                -0.03859960937499998,
+                0.04961914062499991
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": -0.027509293680297295,
+              "fraction_95pct": [
+                -1.2587179487179523,
+                0.7812848484848383
+              ],
+              "fraction_invalid_denominator_rate": 0.0555
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6196875,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.029453125000000004,
+              "paired_delta_95pct": [
+                -0.020082031249999948,
+                0.08250585937499998
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": -0.4333333333333334,
+              "fraction_95pct": [
+                -4.656133540372671,
+                0.3095162635529412
+              ],
+              "fraction_invalid_denominator_rate": 0.2025
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.858125,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": -0.018437499999999996,
+              "paired_delta_95pct": [
+                -0.0803124999999998,
+                0.04313281249999982
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": 0.055924170616113766,
+              "fraction_95pct": [
+                -0.16645219622821758,
+                0.24498518518518422
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": -0.005625,
+            "paired_delta_95pct": [
+              -0.019687500000000024,
+              0.009374999999999968
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.29125,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "mtsk_frozen_kernel": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.729734375,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": 0.013718749999999974,
+            "paired_delta_95pct": [
+              -0.009630468750000214,
+              0.03753164062500022
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": -0.07040898155573355,
+            "fraction_95pct": [
+              -0.2309569251429374,
+              0.04711033528313264
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.9842187500000001,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": 0.00023437499999999812,
+              "paired_delta_95pct": [
+                -0.012031249999999726,
+                0.013283203124999898
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": -0.0008119079837617598,
+              "fraction_95pct": [
+                -0.060157276183893105,
+                0.04389595863282944
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.506484375,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": -0.005234375,
+              "paired_delta_95pct": [
+                -0.05742968750000017,
+                0.04617187499999997
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": 0.028632478632478545,
+              "fraction_95pct": [
+                -0.41198693177826157,
+                0.38968050065876014
+              ],
+              "fraction_invalid_denominator_rate": 0.0025
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6422656249999998,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": 0.024687499999999984,
+              "paired_delta_95pct": [
+                -0.035781249999999876,
+                0.08515820312500003
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": -0.23494423791821584,
+              "fraction_95pct": [
+                -3.2357487922705386,
+                0.34947928828282004
+              ],
+              "fraction_invalid_denominator_rate": 0.0555
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6325781249999998,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.04234374999999999,
+              "paired_delta_95pct": [
+                -0.010156250000000089,
+                0.09891406249999993
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": -0.6229885057471269,
+              "fraction_95pct": [
+                -5.85931034482761,
+                0.12322556390977235
+              ],
+              "fraction_invalid_denominator_rate": 0.2025
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.8831250000000002,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": 0.006562499999999987,
+              "paired_delta_95pct": [
+                -0.05390624999999983,
+                0.07258007812500016
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": -0.01990521327014224,
+              "fraction_95pct": [
+                -0.2894387667423048,
+                0.16000172117039518
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": 0.019687500000000004,
+            "paired_delta_95pct": [
+              -0.006882812500000018,
+              0.04531249999999998
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.3165625,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        },
+        "mtsk_reset": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.7244531250000001,
+            "mean_baseline_cost": 1.7160156249999998,
+            "paired_delta": 0.008437500000000004,
+            "paired_delta_95pct": [
+              -0.013609765625000148,
+              0.030922656250000208
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.19484375,
+            "fraction_oracle_gap_closed": -0.04330392943063352,
+            "fraction_95pct": [
+              -0.19694562663936765,
+              0.06357289235916304
+            ],
+            "fraction_invalid_denominator_rate": 0.0
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.976171875,
+              "mean_baseline_cost": 1.9839843750000001,
+              "paired_delta": -0.007812500000000009,
+              "paired_delta_95pct": [
+                -0.05282617187499994,
+                0.022347656250000302
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.288671875,
+              "fraction_oracle_gap_closed": 0.02706359945872808,
+              "fraction_95pct": [
+                -0.11893884481013481,
+                0.17027372610008057
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.511328125,
+              "mean_baseline_cost": 1.51171875,
+              "paired_delta": -0.0003906250000000083,
+              "paired_delta_95pct": [
+                -0.04610351562499983,
+                0.04062499999999992
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.1828125,
+              "fraction_oracle_gap_closed": 0.002136752136752191,
+              "fraction_95pct": [
+                -0.3440288397048965,
+                0.30784245479152333
+              ],
+              "fraction_invalid_denominator_rate": 0.0025
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.649609375,
+              "mean_baseline_cost": 1.617578125,
+              "paired_delta": 0.03203125,
+              "paired_delta_95pct": [
+                -0.013671874999999788,
+                0.08085937499999996
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.10507812499999998,
+              "fraction_oracle_gap_closed": -0.3048327137546469,
+              "fraction_95pct": [
+                -3.2878787878787987,
+                0.12756410256410253
+              ],
+              "fraction_invalid_denominator_rate": 0.0555
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.619921875,
+              "mean_baseline_cost": 1.590234375,
+              "paired_delta": 0.029687500000000006,
+              "paired_delta_95pct": [
+                -0.02304687499999991,
+                0.08476562499999996
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.06796875,
+              "fraction_oracle_gap_closed": -0.4367816091954024,
+              "fraction_95pct": [
+                -4.98318181818183,
+                0.3233414418398932
+              ],
+              "fraction_invalid_denominator_rate": 0.2025
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.865234375,
+              "mean_baseline_cost": 1.8765625000000001,
+              "paired_delta": -0.011328125000000001,
+              "paired_delta_95pct": [
+                -0.06798828124999992,
+                0.050000000000000266
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.3296875,
+              "fraction_oracle_gap_closed": 0.034360189573459717,
+              "fraction_95pct": [
+                -0.18066915067151285,
+                0.20747642756939455
+              ],
+              "fraction_invalid_denominator_rate": 0.0
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": -0.0109375,
+            "paired_delta_95pct": [
+              -0.02718749999999992,
+              0.005320312500000009
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.2859375,
+            "baseline_mean_faults_per_probe": 0.296875
+          }
+        }
+      },
+      "drift": {
+        "oracle": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.6028125000000002,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": -0.07062500000000002,
+            "paired_delta_95pct": [
+              -0.12133593750000002,
+              -0.021402343749999875
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": 1.0,
+            "fraction_95pct": [
+              0.9999999999999921,
+              1.000000000000004
+            ],
+            "fraction_invalid_denominator_rate": 0.0035
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.75390625,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": -0.130078125,
+              "paired_delta_95pct": [
+                -0.26955078125,
+                0.0035156249999996948
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.9999999999999958,
+                1.0000000000000058
+              ],
+              "fraction_invalid_denominator_rate": 0.0285
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.634765625,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": -0.060156249999999994,
+              "paired_delta_95pct": [
+                -0.1820312500000001,
+                0.04882812500000001
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.9999999999999911,
+                1.0000000000000162
+              ],
+              "fraction_invalid_denominator_rate": 0.1575
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.57421875,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": -0.04531250000000001,
+              "paired_delta_95pct": [
+                -0.14921874999999996,
+                0.053124999999999874
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.999999999999981,
+                1.0000000000000142
+              ],
+              "fraction_invalid_denominator_rate": 0.1775
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.547265625,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.11015625,
+              "paired_delta_95pct": [
+                -0.2199316406249998,
+                -0.002714843750000063
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.9999999999999944,
+                1.0000000000000049
+              ],
+              "fraction_invalid_denominator_rate": 0.0215
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.50390625,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": -0.007421875000000022,
+              "paired_delta_95pct": [
+                -0.12113281250000021,
+                0.10820312499999996
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": 1.0,
+              "fraction_95pct": [
+                0.9999999999999741,
+                1.0000000000000309
+              ],
+              "fraction_invalid_denominator_rate": 0.4465
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.134375,
+            "paired_delta_95pct": [
+              0.1015625,
+              0.16566406249999985
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.40937500000000004,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "prior": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.675078125,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": 0.0016406249999999798,
+            "paired_delta_95pct": [
+              -0.020626953125000114,
+              0.02351757812500014
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": -0.023230088495574928,
+            "fraction_95pct": [
+              -0.5912442589426414,
+              0.3024667763798183
+            ],
+            "fraction_invalid_denominator_rate": 0.0035
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.883984375,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0285
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.6945312499999998,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": -0.000390625000000009,
+              "paired_delta_95pct": [
+                -0.05000976562500026,
+                0.04804687499999983
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": 0.006493506493506644,
+              "fraction_95pct": [
+                -2.2064578005115068,
+                1.4453341013824914
+              ],
+              "fraction_invalid_denominator_rate": 0.1575
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.6203125000000003,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": 0.0007812499999999833,
+              "paired_delta_95pct": [
+                -0.056640625,
+                0.060546875000000014
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": -0.017241379310344456,
+              "fraction_95pct": [
+                -3.536282051282047,
+                2.699090909090893
+              ],
+              "fraction_invalid_denominator_rate": 0.1775
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.64609375,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.011328125000000001,
+              "paired_delta_95pct": [
+                -0.08046874999999966,
+                0.05665039062500016
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.10283687943262412,
+              "fraction_95pct": [
+                -1.401666666666669,
+                0.8638094196159912
+              ],
+              "fraction_invalid_denominator_rate": 0.0215
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.5304687500000003,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.019140624999999988,
+              "paired_delta_95pct": [
+                -0.032421875000000044,
+                0.07306640624999985
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": -2.5789473684210433,
+              "fraction_95pct": [
+                -12.993333333333362,
+                1.3849780418496467
+              ],
+              "fraction_invalid_denominator_rate": 0.4465
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.0359375,
+            "paired_delta_95pct": [
+              0.020312499999999956,
+              0.053125000000000006
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.3109375000000001,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "stationary_beta": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.6734375,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": 0.0,
+            "paired_delta_95pct": [
+              0.0,
+              0.0
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": 0.0,
+            "fraction_95pct": [
+              0.0,
+              0.0
+            ],
+            "fraction_invalid_denominator_rate": 0.0035
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.883984375,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0285
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.694921875,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.1575
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.61953125,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.1775
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.6574218749999998,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0215
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.5113281250000001,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.4465
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.0,
+            "paired_delta_95pct": [
+              0.0,
+              0.0
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.275,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "discounted_beta": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.68359375,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": 0.010156250000000009,
+            "paired_delta_95pct": [
+              -0.013048828124999894,
+              0.032189453125000024
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": -0.14380530973451336,
+            "fraction_95pct": [
+              -0.8876540844350785,
+              0.19165362999015054
+            ],
+            "fraction_invalid_denominator_rate": 0.0035
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.883984375,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0285
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.716796875,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": 0.021875,
+              "paired_delta_95pct": [
+                -0.018759765625000258,
+                0.06641601562499995
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": -0.36363636363636365,
+              "fraction_95pct": [
+                -4.148333333333342,
+                0.30981494347250005
+              ],
+              "fraction_invalid_denominator_rate": 0.1575
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.6546875,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": 0.03515625,
+              "paired_delta_95pct": [
+                -0.025400390624999995,
+                0.10000976562500004
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": -0.775862068965517,
+              "fraction_95pct": [
+                -10.791428571428547,
+                0.3855149538598384
+              ],
+              "fraction_invalid_denominator_rate": 0.1775
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.644921875,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.012499999999999992,
+              "paired_delta_95pct": [
+                -0.09843749999999996,
+                0.06956054687499988
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.11347517730496447,
+              "fraction_95pct": [
+                -1.5172939068100404,
+                1.1793233082706762
+              ],
+              "fraction_invalid_denominator_rate": 0.0215
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.517578125,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.006249999999999988,
+              "paired_delta_95pct": [
+                -0.053906250000000044,
+                0.06564453124999994
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": -0.8421052631578906,
+              "fraction_95pct": [
+                -8.715734265734236,
+                2.99999999999997
+              ],
+              "fraction_invalid_denominator_rate": 0.4465
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.0015625,
+            "paired_delta_95pct": [
+              -0.014062500000000033,
+              0.017187500000000022
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.27656250000000004,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "hmm_plugin": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.656171875,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": -0.017265624999999986,
+            "paired_delta_95pct": [
+              -0.042820312499999916,
+              0.007894531250000131
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": 0.24446902654867228,
+            "fraction_95pct": [
+              -0.15896696696697238,
+              0.7016548401754302
+            ],
+            "fraction_invalid_denominator_rate": 0.0035
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.883984375,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                0.0
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                0.0,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0285
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.7125,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": 0.017578125,
+              "paired_delta_95pct": [
+                -0.028134765625000172,
+                0.06172851562499999
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": -0.29220779220779225,
+              "fraction_95pct": [
+                -4.516883116883126,
+                0.4846394984326019
+              ],
+              "fraction_invalid_denominator_rate": 0.1575
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.5835937500000001,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": -0.03593750000000001,
+              "paired_delta_95pct": [
+                -0.09804687499999987,
+                0.03242187499999983
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": 0.7931034482758621,
+              "fraction_95pct": [
+                -0.6585293019783429,
+                6.2949999999999315
+              ],
+              "fraction_invalid_denominator_rate": 0.1775
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.5886718750000002,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.06874999999999999,
+              "paired_delta_95pct": [
+                -0.15625,
+                0.010937500000000044
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.6241134751773049,
+              "fraction_95pct": [
+                -0.09469583048530315,
+                2.9428804347826087
+              ],
+              "fraction_invalid_denominator_rate": 0.0215
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.5121093749999999,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.0007812499999999938,
+              "paired_delta_95pct": [
+                -0.06093750000000009,
+                0.06175781249999983
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": -0.10526315789473568,
+              "fraction_95pct": [
+                -7.4704545454545555,
+                4.380335365853647
+              ],
+              "fraction_invalid_denominator_rate": 0.4465
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": -8.673617379884035e-19,
+            "paired_delta_95pct": [
+              -0.015625000000000056,
+              0.015625
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.275,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "hmm_mixture_dp": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "mean_cost": 1.715625,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": 0.04218749999999999,
+            "paired_delta_95pct": [
+              -0.00845898437499987,
+              0.09297070312500003
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": -0.5973451327433625,
+            "fraction_95pct": [
+              -3.212452107279698,
+              0.09228837177356941
+            ],
+            "fraction_invalid_denominator_rate": 0.0035
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.8765625,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": -0.00742187499999996,
+              "paired_delta_95pct": [
+                -0.10585937499999987,
+                0.09571289062499994
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.05705705705705675,
+              "fraction_95pct": [
+                -2.404619565217409,
+                0.8333148176524723
+              ],
+              "fraction_invalid_denominator_rate": 0.0285
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.7894531249999999,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": 0.09453125000000001,
+              "paired_delta_95pct": [
+                -0.02540039062499979,
+                0.20898437499999958
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": -1.5714285714285718,
+              "fraction_95pct": [
+                -20.8720000000001,
+                0.22340881272949928
+              ],
+              "fraction_invalid_denominator_rate": 0.1575
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.73984375,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": 0.12031250000000002,
+              "paired_delta_95pct": [
+                -0.010556640624999735,
+                0.26093750000000004
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": -2.655172413793103,
+              "fraction_95pct": [
+                -35.766153846153685,
+                0.1726964285714304
+              ],
+              "fraction_invalid_denominator_rate": 0.1775
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.63359375,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.023828125,
+              "paired_delta_95pct": [
+                -0.13204101562500026,
+                0.08868164062500011
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.21631205673758863,
+              "fraction_95pct": [
+                -2.2157012195121966,
+                1.2827692307692236
+              ],
+              "fraction_invalid_denominator_rate": 0.0215
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 1,
+              "mean_cost": 1.5386718750000001,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.02734375,
+              "paired_delta_95pct": [
+                -0.09296874999999984,
+                0.14219726562500007
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": -3.6842105263157783,
+              "fraction_95pct": [
+                -16.84999999999991,
+                3.926862973007853
+              ],
+              "fraction_invalid_denominator_rate": 0.4465
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 1,
+            "paired_delta": 0.265625,
+            "paired_delta_95pct": [
+              0.23124999999999996,
+              0.30156249999999996
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.540625,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "gru32": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.6611718750000002,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": -0.012265624999999997,
+            "paired_delta_95pct": [
+              -0.039704687499999516,
+              0.01589453125000014
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": 0.17367256637168105,
+            "fraction_95pct": [
+              -0.35419479751169886,
+              0.6408989092407567
+            ],
+            "fraction_invalid_denominator_rate": 0.004
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.8727343750000003,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": -0.011249999999999996,
+              "paired_delta_95pct": [
+                -0.049218749999999874,
+                0.0029687499999999645
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.08648648648648667,
+              "fraction_95pct": [
+                -0.031559879235157386,
+                0.6176671408250307
+              ],
+              "fraction_invalid_denominator_rate": 0.0255
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6940625,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": -0.0008593750000000014,
+              "paired_delta_95pct": [
+                -0.046494140625000346,
+                0.041015624999999785
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": 0.014285714285714443,
+              "fraction_95pct": [
+                -2.1106293706293746,
+                1.2263157894736845
+              ],
+              "fraction_invalid_denominator_rate": 0.1535
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.5971875000000002,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": -0.02234375,
+              "paired_delta_95pct": [
+                -0.07532031250000011,
+                0.028994140625000005
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": 0.4931034482758619,
+              "fraction_95pct": [
+                -1.0849999999999964,
+                3.857142857142818
+              ],
+              "fraction_invalid_denominator_rate": 0.1815
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6171093749999996,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.040312499999999994,
+              "paired_delta_95pct": [
+                -0.12445312499999983,
+                0.05156445312499995
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.3659574468085106,
+              "fraction_95pct": [
+                -0.9068711180124196,
+                1.9798045305078444
+              ],
+              "fraction_invalid_denominator_rate": 0.027
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.524765625,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.013437499999999996,
+              "paired_delta_95pct": [
+                -0.06625585937499992,
+                0.09414257812500007
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": -1.8105263157894662,
+              "fraction_95pct": [
+                -12.012500000000017,
+                3.7750892857142375
+              ],
+              "fraction_invalid_denominator_rate": 0.447
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": 0.027812499999999997,
+            "paired_delta_95pct": [
+              0.007492187500000008,
+              0.04813281250000004
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.30281250000000004,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "gru128": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.6693906250000001,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": -0.0040468749999999975,
+            "paired_delta_95pct": [
+              -0.03164570312499965,
+              0.024937890625000063
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": 0.05730088495575227,
+            "fraction_95pct": [
+              -0.6346256331204626,
+              0.4533816292651077
+            ],
+            "fraction_invalid_denominator_rate": 0.004
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.883984375,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": 0.0,
+              "paired_delta_95pct": [
+                0.0,
+                4.440892098500626e-16
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.0,
+              "fraction_95pct": [
+                -4.07789744001449e-15,
+                0.0
+              ],
+              "fraction_invalid_denominator_rate": 0.0255
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.7210156249999997,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": 0.026093750000000006,
+              "paired_delta_95pct": [
+                -0.021025390624999977,
+                0.07078125000000003
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": -0.4337662337662339,
+              "fraction_95pct": [
+                -5.819377990430632,
+                0.2800993952457921
+              ],
+              "fraction_invalid_denominator_rate": 0.1535
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.5993750000000002,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": -0.020156249999999997,
+              "paired_delta_95pct": [
+                -0.06726757812499966,
+                0.03172070312500022
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": 0.4448275862068966,
+              "fraction_95pct": [
+                -1.348599033816424,
+                3.7630909090908964
+              ],
+              "fraction_invalid_denominator_rate": 0.1815
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6150781250000001,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.04234375,
+              "paired_delta_95pct": [
+                -0.12578515624999995,
+                0.048599609374999964
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.38439716312056743,
+              "fraction_95pct": [
+                -0.8812704471101445,
+                2.0260686164229473
+              ],
+              "fraction_invalid_denominator_rate": 0.027
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.5274999999999999,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.016171874999999995,
+              "paired_delta_95pct": [
+                -0.0670312500000001,
+                0.09766601562499973
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": -2.1789473684210448,
+              "fraction_95pct": [
+                -14.079230769230747,
+                3.9710151802656757
+              ],
+              "fraction_invalid_denominator_rate": 0.447
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": 0.03843749999999999,
+            "paired_delta_95pct": [
+              0.017179687499999968,
+              0.06000000000000005
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.31343750000000004,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "mtsk": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.67071875,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": -0.002718749999999998,
+            "paired_delta_95pct": [
+              -0.021953906250000016,
+              0.017235156250000352
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": 0.038495575221238754,
+            "fraction_95pct": [
+              -0.4624324264494228,
+              0.30751417501417233
+            ],
+            "fraction_invalid_denominator_rate": 0.004
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.860703125,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": -0.023281249999999993,
+              "paired_delta_95pct": [
+                -0.07351562499999954,
+                0.01821093750000027
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.1789789789789792,
+              "fraction_95pct": [
+                -0.25812376880841487,
+                1.1669983619983644
+              ],
+              "fraction_invalid_denominator_rate": 0.0255
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.7120312500000001,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": 0.017109375,
+              "paired_delta_95pct": [
+                -0.021796874999999938,
+                0.05429882812500012
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": -0.2844155844155844,
+              "fraction_95pct": [
+                -4.270317073170727,
+                0.3641521160106501
+              ],
+              "fraction_invalid_denominator_rate": 0.1535
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.63359375,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": 0.014062499999999995,
+              "paired_delta_95pct": [
+                -0.031257812499999996,
+                0.06688671874999995
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": -0.31034482758620646,
+              "fraction_95pct": [
+                -7.094583333333322,
+                0.6547307857449488
+              ],
+              "fraction_invalid_denominator_rate": 0.1815
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6260156249999997,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.03140624999999999,
+              "paired_delta_95pct": [
+                -0.09758789062500006,
+                0.028445312500000295
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.2851063829787235,
+              "fraction_95pct": [
+                -0.5003947368420982,
+                1.4105137395459848
+              ],
+              "fraction_invalid_denominator_rate": 0.027
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.5212499999999998,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.00992187499999999,
+              "paired_delta_95pct": [
+                -0.04000390624999982,
+                0.056644531249999984
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": -1.3368421052631527,
+              "fraction_95pct": [
+                -6.077011494252954,
+                3.36928571428573
+              ],
+              "fraction_invalid_denominator_rate": 0.447
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": -0.006562499999999999,
+            "paired_delta_95pct": [
+              -0.02125781249999999,
+              0.008437500000000042
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.2684375,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "mtsk_frozen_kernel": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.676515625,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": 0.0030781249999999893,
+            "paired_delta_95pct": [
+              -0.018391796874999877,
+              0.02284453125000027
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": -0.04358407079646015,
+            "fraction_95pct": [
+              -0.6646548482406764,
+              0.23879831570101853
+            ],
+            "fraction_invalid_denominator_rate": 0.004
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.876171875,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": -0.007812499999999997,
+              "paired_delta_95pct": [
+                -0.029066406249999777,
+                2.220446049250313e-16
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.06006006006006016,
+              "fraction_95pct": [
+                -2.479812826056203e-15,
+                0.47626666666665846
+              ],
+              "fraction_invalid_denominator_rate": 0.0255
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.695390625,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": 0.0004687499999999907,
+              "paired_delta_95pct": [
+                -0.044226562499999976,
+                0.04320703124999977
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": -0.00779220779220842,
+              "fraction_95pct": [
+                -2.7157575757575816,
+                0.9348518896833523
+              ],
+              "fraction_invalid_denominator_rate": 0.1535
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6329687499999999,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": 0.013437499999999986,
+              "paired_delta_95pct": [
+                -0.04103125,
+                0.06953906250000022
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": -0.2965517241379317,
+              "fraction_95pct": [
+                -6.963636363636352,
+                1.1461152882205512
+              ],
+              "fraction_invalid_denominator_rate": 0.1815
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.6452343749999998,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.012187500000000007,
+              "paired_delta_95pct": [
+                -0.07219921875000006,
+                0.05031445312499998
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.1106382978723404,
+              "fraction_95pct": [
+                -1.5279461917392978,
+                0.7333203037748461
+              ],
+              "fraction_invalid_denominator_rate": 0.027
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.5328125,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.02148437499999999,
+              "paired_delta_95pct": [
+                -0.028048828125000026,
+                0.0682089843750001
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": -2.8947368421052593,
+              "fraction_95pct": [
+                -9.462499999999856,
+                1.0449999999999864
+              ],
+              "fraction_invalid_denominator_rate": 0.447
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": 0.0221875,
+            "paired_delta_95pct": [
+              -0.007499999999999953,
+              0.046914062499999895
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.2971875,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        },
+        "mtsk_reset": {
+          "pooled_levels": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "mean_cost": 1.676578125,
+            "mean_baseline_cost": 1.6734375,
+            "paired_delta": 0.0031406249999999998,
+            "paired_delta_95pct": [
+              -0.018141015624999802,
+              0.02475234375000003
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "oracle_gap": 0.07062500000000002,
+            "fraction_oracle_gap_closed": -0.04446902654867271,
+            "fraction_95pct": [
+              -0.7109509875515804,
+              0.24708336837437275
+            ],
+            "fraction_invalid_denominator_rate": 0.004
+          },
+          "by_level": {
+            "0": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.8719531250000003,
+              "mean_baseline_cost": 1.883984375,
+              "paired_delta": -0.012031249999999997,
+              "paired_delta_95pct": [
+                -0.04915039062500015,
+                0.018132812499999904
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.130078125,
+              "fraction_oracle_gap_closed": 0.09249249249249279,
+              "fraction_95pct": [
+                -0.2734568616097289,
+                0.6150168670873493
+              ],
+              "fraction_invalid_denominator_rate": 0.0255
+            },
+            "4": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.70390625,
+              "mean_baseline_cost": 1.694921875,
+              "paired_delta": 0.008984375000000003,
+              "paired_delta_95pct": [
+                -0.038671874999999696,
+                0.055468749999999956
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.060156249999999994,
+              "fraction_oracle_gap_closed": -0.14935064935064943,
+              "fraction_95pct": [
+                -3.879365079365103,
+                0.6615403788634087
+              ],
+              "fraction_invalid_denominator_rate": 0.1535
+            },
+            "8": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.648046875,
+              "mean_baseline_cost": 1.61953125,
+              "paired_delta": 0.028515624999999996,
+              "paired_delta_95pct": [
+                -0.02540039062499999,
+                0.09024414062499982
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.04531250000000001,
+              "fraction_oracle_gap_closed": -0.6293103448275859,
+              "fraction_95pct": [
+                -11.109090909090876,
+                0.4840898424404943
+              ],
+              "fraction_invalid_denominator_rate": 0.1815
+            },
+            "16": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.631640625,
+              "mean_baseline_cost": 1.6574218749999998,
+              "paired_delta": -0.025781249999999995,
+              "paired_delta_95pct": [
+                -0.09140624999999948,
+                0.03205078125000006
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.11015625,
+              "fraction_oracle_gap_closed": 0.2340425531914894,
+              "fraction_95pct": [
+                -0.6454793689320383,
+                1.2960642688679236
+              ],
+              "fraction_invalid_denominator_rate": 0.027
+            },
+            "32": {
+              "world_clusters": 128,
+              "model_seeds": 5,
+              "mean_cost": 1.52734375,
+              "mean_baseline_cost": 1.5113281250000001,
+              "paired_delta": 0.016015624999999995,
+              "paired_delta_95pct": [
+                -0.033222656249999996,
+                0.061337890624999905
+              ],
+              "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+              "oracle_gap": 0.007421875000000022,
+              "fraction_oracle_gap_closed": -2.157894736842098,
+              "fraction_95pct": [
+                -7.798611111111145,
+                2.291666666666672
+              ],
+              "fraction_invalid_denominator_rate": 0.447
+            }
+          },
+          "paired_fault_statistics": {
+            "world_clusters": 128,
+            "model_seeds": 5,
+            "paired_delta": -0.009375,
+            "paired_delta_95pct": [
+              -0.025624999999999953,
+              0.007507812500000018
+            ],
+            "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+            "mean_faults_per_probe": 0.265625,
+            "baseline_mean_faults_per_probe": 0.275
+          }
+        }
+      }
+    },
+    "pooled": {
+      "oracle": {
+        "world_clusters": 256,
+        "model_seeds": 1,
+        "mean_cost": 1.5619921875,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": -0.13273437500000002,
+        "paired_delta_95pct": [
+          -0.17402441406250024,
+          -0.09035058593749977
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": 1.0,
+        "fraction_95pct": [
+          0.9999999999999973,
+          1.000000000000002
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "prior": {
+        "world_clusters": 256,
+        "model_seeds": 1,
+        "mean_cost": 1.700234375,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": 0.005507812499999973,
+        "paired_delta_95pct": [
+          -0.011172851562500263,
+          0.02222656249999999
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": -0.0414949970570922,
+        "fraction_95pct": [
+          -0.20198164080603878,
+          0.07929107717267135
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "stationary_beta": {
+        "world_clusters": 256,
+        "model_seeds": 1,
+        "mean_cost": 1.6947265624999999,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": 0.0,
+        "paired_delta_95pct": [
+          0.0,
+          0.0
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": 0.0,
+        "fraction_95pct": [
+          0.0,
+          0.0
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "discounted_beta": {
+        "world_clusters": 256,
+        "model_seeds": 1,
+        "mean_cost": 1.7037499999999999,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": 0.009023437500000007,
+        "paired_delta_95pct": [
+          -0.006718749999999668,
+          0.02519531249999974
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": -0.06798116539140675,
+        "fraction_95pct": [
+          -0.23350926280529422,
+          0.04795130123255086
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "hmm_plugin": {
+        "world_clusters": 256,
+        "model_seeds": 1,
+        "mean_cost": 1.6830078125,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": -0.011718749999999981,
+        "paired_delta_95pct": [
+          -0.02898535156250028,
+          0.006452148437500096
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": 0.08828722778104751,
+        "fraction_95pct": [
+          -0.06107666588277383,
+          0.21880244396896556
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "hmm_mixture_dp": {
+        "world_clusters": 256,
+        "model_seeds": 1,
+        "mean_cost": 1.6973828125,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": 0.0026562499999999954,
+        "paired_delta_95pct": [
+          -0.03254101562499994,
+          0.04013476562499984
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": -0.02001177163037077,
+        "fraction_95pct": [
+          -0.38215753725378865,
+          0.21469071540745255
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "gru32": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.6907031250000002,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": -0.004023437499999994,
+        "paired_delta_95pct": [
+          -0.02557832031249957,
+          0.01649335937500013
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": 0.030311948204826255,
+        "fraction_95pct": [
+          -0.14159450515384042,
+          0.17919926792037913
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "gru128": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.6897734375,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": -0.004953124999999994,
+        "paired_delta_95pct": [
+          -0.02617285156249995,
+          0.015086718750000085
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": 0.03731606827545612,
+        "fraction_95pct": [
+          -0.1373844105445723,
+          0.1888555450040049
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "mtsk": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.692625,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": -0.002101562499999995,
+        "paired_delta_95pct": [
+          -0.017816601562500006,
+          0.013197656250000142
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": 0.015832842848734527,
+        "fraction_95pct": [
+          -0.11818368877368908,
+          0.1283210801345699
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "mtsk_frozen_kernel": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.703125,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": 0.008398437499999982,
+        "paired_delta_95pct": [
+          -0.007423828125000348,
+          0.024578125000000117
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": -0.06327251324308401,
+        "fraction_95pct": [
+          -0.2121732462811054,
+          0.05191866726304122
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      },
+      "mtsk_reset": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.700515625,
+        "mean_baseline_cost": 1.6947265624999999,
+        "paired_delta": 0.0057890625000000025,
+        "paired_delta_95pct": [
+          -0.010438085937500091,
+          0.021508789062499888
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.13273437500000002,
+        "fraction_oracle_gap_closed": -0.043613890523837594,
+        "fraction_95pct": [
+          -0.1947102923849597,
+          0.07168117991268837
+        ],
+        "fraction_invalid_denominator_rate": 0.0
+      }
+    },
+    "guard": {
+      "gru128": {
+        "passed": false,
+        "mtsk_minus_reference_cost": {
+          "world_clusters": 256,
+          "model_seeds": 5,
+          "mean_cost": 0.002851562499999999,
+          "mean_baseline_cost": 0.0,
+          "paired_delta": 0.002851562499999999,
+          "paired_delta_95pct": [
+            -0.014433007812500011,
+            0.02089921874999996
+          ],
+          "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle"
+        },
+        "per_seed_family": {
+          "markov": {
+            "7301": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7302": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7303": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7304": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7305": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            }
+          },
+          "drift": {
+            "7301": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7302": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7303": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7304": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7305": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            }
+          }
+        }
+      },
+      "hmm_mixture_dp": {
+        "passed": false,
+        "mtsk_minus_reference_cost": {
+          "world_clusters": 256,
+          "model_seeds": 5,
+          "mean_cost": -0.004757812499999997,
+          "mean_baseline_cost": 0.0,
+          "paired_delta": -0.004757812499999997,
+          "paired_delta_95pct": [
+            -0.04074999999999998,
+            0.03216484374999998
+          ],
+          "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle"
+        },
+        "per_seed_family": {
+          "markov": {
+            "7301": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7302": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7303": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7304": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7305": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            }
+          },
+          "drift": {
+            "7301": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7302": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7303": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7304": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7305": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            }
+          }
+        }
+      },
+      "mtsk_frozen_kernel": {
+        "passed": false,
+        "mtsk_minus_reference_cost": {
+          "world_clusters": 256,
+          "model_seeds": 5,
+          "mean_cost": -0.010499999999999975,
+          "mean_baseline_cost": 0.0,
+          "paired_delta": -0.010499999999999975,
+          "paired_delta_95pct": [
+            -0.02523437499999996,
+            0.004618359375000009
+          ],
+          "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle"
+        },
+        "per_seed_family": {
+          "markov": {
+            "7301": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7302": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7303": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7304": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7305": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            }
+          },
+          "drift": {
+            "7301": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7302": {
+              "no_additional_faults": true,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7303": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7304": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7305": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            }
+          }
+        }
+      },
+      "mtsk_reset": {
+        "passed": false,
+        "mtsk_minus_reference_cost": {
+          "world_clusters": 256,
+          "model_seeds": 5,
+          "mean_cost": -0.007890624999999995,
+          "mean_baseline_cost": 0.0,
+          "paired_delta": -0.007890624999999995,
+          "paired_delta_95pct": [
+            -0.017198242187499997,
+            -0.0006867187500000002
+          ],
+          "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle"
+        },
+        "per_seed_family": {
+          "markov": {
+            "7301": {
+              "no_additional_faults": false,
+              "lower_cost": false,
+              "no_additional_blocked_or_path": true
+            },
+            "7302": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7303": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7304": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7305": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            }
+          },
+          "drift": {
+            "7301": {
+              "no_additional_faults": true,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7302": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7303": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7304": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            },
+            "7305": {
+              "no_additional_faults": false,
+              "lower_cost": true,
+              "no_additional_blocked_or_path": true
+            }
+          }
+        }
+      }
+    },
+    "robust_mtsk_advantage": false,
+    "independent_evaluation_streams": 256,
+    "seed_initializations": [
+      7301,
+      7302,
+      7303,
+      7304,
+      7305
+    ]
+  },
+  "original_compute": {
+    "total_seconds": 877.0221314519999,
+    "successful_optimizer_updates": 6400,
+    "fits_attempted": 25,
+    "failed_cell_completed_updates": 0,
+    "native_observation_episodes": 32768,
+    "native_observation_actions": 65536,
+    "privileged_probability_target_cells_constructed": 101376,
+    "evaluation_world_clusters": 256,
+    "note": "Baseline and neural native actions derive from all saved rows; failures and calibration selections retained. Common observation prefixes charged to total-cost curves, reused equally across arms."
+  },
+  "audit_seconds": 920.5380609920003,
+  "audit_independence": "Same author, shared generator/model, separate process and separate primitive action accounting; not external scientific review",
+  "scope": "Actual MTSK kernel component vs generic GRUs. No CDL/CASM/full architecture superiority claim."
+}
