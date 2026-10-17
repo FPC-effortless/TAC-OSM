@@ -113,6 +113,8 @@ Registration commit `86b1cbc` precedes implementation `0940063` and training. Re
     m=r['pooled']['mtsk'];lo,hi=m['delta_95pct'];fs=m['paired_faults_per_world']
     conclusion=f"MTSK's pooled cost difference versus Beta is {m['delta_vs_beta']:+.6f}/entity, with paired95% interval [{lo:+.6f},{hi:+.6f}]. Its residual-fault difference is {fs['difference']:+.6f}/world, interval [{fs['interval_95pct'][0]:+.6f},{fs['interval_95pct'][1]:+.6f}]. Every adjusted mechanism comparison fails. This is a null on MTSK superiority, with a reliability regression against stationary Beta; the positive point estimate of normalized headroom closure is not an advantage claim.\n\n"
     text=text.replace('## Registered result\n\n','## Registered result\n\n'+conclusion)
+    o=r['pooled']['oracle']['paired_faults_per_world']
+    text += f"\nThe privileged monetary oracle also has {o['difference']:+.6f} additional faults/world versus Beta. Its cost headroom is therefore not a demonstrated reliability-feasible saving. The planner optimizes the stated monetary penalty, while the separate acceptance guard requires no additional faults. This objective/guard distinction must remain visible; it does not imply that true parameter knowledge is brittle.\n"
     text += '\nChanging from the earlier study also changed data, exposure and evaluation budgets. Cross-study differences do not isolate the causal effect of joint planning. Here, continuous drift can violate the shared endpoint-mixture representation, and the monetary Bellman objective permits fault/cost trade-offs that fail the separate reliability guard. These are model/objective limitations to test, not post-hoc explanations established by this result.\n'
     (ROOT/'docs/DEV-054-RESULTS.md').write_text(text)
 
