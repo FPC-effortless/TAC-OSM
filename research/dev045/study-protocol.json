@@ -1,0 +1,20 @@
+{
+  "study": "DEV-045B",
+  "status": "PREREGISTERED_BOUNDED_DEVELOPMENT_NOT_CONFIRMATORY",
+  "prerequisite": "All DEV-044A seeds 4401-4403 and independent audit must pass before loading selected representations",
+  "seeds": [4501, 4502, 4503],
+  "parent_seeds": [4401, 4402, 4403],
+  "memories": ["selected_trainable", "selected_frozen", "schema41"],
+  "heads": ["forecast", "decision", "contrastive", "joint", "probability_joint"],
+  "controls": ["original_tuned_threshold", "last_event_table", "exact_public_history"],
+  "inputs": "Frozen pre-head 44-dimensional readout features for WAIT/SERVICE concatenated; probability_joint receives only original WAIT/SERVICE probabilities. No privileged state, role or target ID.",
+  "fit": {"history": 512, "repetitions": 1, "updates": 240, "batch_entities": 128, "lr": 0.003},
+  "calibration": {"history": 512, "repetitions": 1, "thresholds": [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.9, 1]},
+  "evaluation": {"history": 512, "repetitions": 2, "delays": [32, 128, 512], "roles": ["retention", "acquisition", "pending_cancel", "reissued_cancel"], "deadlines": ["before", "at", "after"]},
+  "losses": {"forecast": "BCE on two action-conditioned outcomes", "decision": "softmax(-predicted_cost / 0.25) expected simulator regret", "contrastive": "cost-aware hard-negative margin 0.2", "joint": "BCE + regret + 0.2 ranking", "probability_joint": "same joint objective, probability inputs only"},
+  "selection": "Thresholds selected independently per head using calibration physical cost; tie nearest 0.25 then threshold. No evaluation selection.",
+  "primary": "paired seed difference in physical cost/entity versus tuned original threshold, with failure guard",
+  "secondary": ["unnecessary service", "failures", "Brier score", "fixed-bin ECE", "action regret", "causal-order signed margins", "teacher agreement", "training and inference seconds", "parameter count"],
+  "integrity": ["frozen encoder/memory/readout feature hash", "checkpoint hashes", "disjoint public-history fingerprints across all splits", "independent checkpoint prediction and physical replay", "save every head and negative result"],
+  "limitations": ["three paired seeds descriptive only", "fixed eight known entities", "service is reliable in this simulator", "offline cost supervision is not on-policy ActionOPD", "no INSPECT superiority claim without receipt policy", "equal head updates do not imply equal total compute", "no confirmatory or full-system superiority claim"]
+}
