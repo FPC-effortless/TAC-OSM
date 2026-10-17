@@ -1,0 +1,17 @@
+# DEV-038: reissued cancellation signal survives the trained readout
+
+The frozen DEV-036 bounded-memory model gave the same hard prediction to both histories in every one of48 reissued-cancellation pairs in its first new cohort. DEV-038 asked whether information distinguishing those paired histories was present in the stored state or existing readout. On a **new** reissued-cancellation domain, a separately trained linear probe on the local bank and public query scored100% on96 held-out worlds. A second linear probe on only the original model's three-value readout and the same public query also scored100%. The original prediction head scored50% on those same worlds.
+
+| Frozen representation / predictor | Held-out reissued-cancellation accuracy |
+| --- | ---: |
+| Original trained prediction head | 50% |
+| New linear probe on existing readout + public query | 100% |
+| New linear probe on local bank + public query | 100% |
+
+The original head still assigned a mean0.105 probability difference in the correct paired direction; it simply never placed paired predictions on opposite sides of its decision threshold. All48 held-out pairs shared a hard prediction. The probe result is strong evidence that this particular frozen representation contains a linearly decodable distinction under additional supervision. It does **not** show that the deployed head already makes the right decisions or that the memory retains every causal distinction.
+
+The protocol and source were frozen at `dedf5d3` before evaluating the new `dev038-v1-probe` domain. The task included192 H512 worlds from reissued-cancellation scenarios spanning three delays and two mature deadlines. Repetitions0–7 (96 worlds) trained each probe; repetitions8–15 (96 worlds) formed the holdout. Both probes used the same one-layer logistic recipe, with standardization calculated only on training features. The existing encoder, memory, reader and prediction head received zero new updates. This is a new supervised diagnostic trained on privileged future labels, not an improvement to the original model.
+
+The separate-process audit passed: it re-created all192 frozen features, labels and fingerprints, reproduced both probe fits exactly, and checked held-out predictions. It shares the frozen predictor and probe code, so it is an exact replay rather than an independent implementation. One trained model initialization, a known synthetic generator, 48 held-out pairs and adaptive choice of this failure mode limit generalization claims. The original DEV-036 and DEV-037 results remain valid.
+
+**Next intervention:** freeze a larger multi-role training and evaluation protocol, then repair the predictive decision path before adding a temporal channel. Compare a refitted readout/head against the unchanged head, a capacity-matched simple head, masked-local TAC and schema41 on all four roles and actual physical costs. Preserve cancellation and reissued-cancellation counts separately. If the new head only memorizes this chosen role or worsens other roles, it fails. After that, test temporal event channels and end-to-end action learning where they address a measured residual error. Full PLM–CDL–CASM–OSM integration remains a separate capability test.
