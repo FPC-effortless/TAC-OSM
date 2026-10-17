@@ -1,0 +1,13 @@
+{
+  "full_suite": {
+    "command": "PYTHONPATH=src .venv/bin/python -m pytest tests/ -q",
+    "result": "1333 passed in 62.14s",
+    "tested_behavior_source": "316a4a19520eacd471f0a4c3cb9606df765d5ceb",
+    "log_sha256": "07198ba04751acbef70994f0247b53f0cef68d08d4fc42eab8c69bd50d042a4a"
+  },
+  "targeted": "12 passed; includes restored/batch parity, gradients, public boundary, native unrepaired outcome replay and tamper rejection",
+  "audit": "PASS;15 restored checkpoints;6912 physical/native worlds;138240 actions each",
+  "work_correction": "383 legacy per-world work diagnostics differ from exact trace counts. Original raw bytes preserved; all predictions/actions/costs/faults match exactly.",
+  "static": "git diff --check and compileall passed",
+  "scope": "Development verification, not independent scientific replication or real-world qualification."
+}

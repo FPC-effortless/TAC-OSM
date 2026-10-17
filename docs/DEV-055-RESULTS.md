@@ -29,7 +29,7 @@ The strongest observed conventional control is **misspecified_independent**, cos
 
 The registered HMM oracle headroom is 2.0859/entity, interval [1.5914, 2.5776], with no increase in fault exposure for either family. This clears the registered floor. The oracle sees latent physical state and is a one-step reference, not an attainable public-information Bayes optimum.
 
-Carried memory beats the retrained reset control on cost, with the adjusted interval excluding zero. That is a bounded memory-use result. Uniform routing and bypassing CASM have lower point costs than the full model; neither comparison establishes a benefit from the extra learned mechanism. No architecture or efficiency win follows.
+Carried memory beats the retrained reset control on cost, with the adjusted interval excluding zero. That is a bounded memory-use result. Uniform routing and bypassing CASM have lower point costs than the full model; neither comparison establishes a benefit from the extra learned mechanism. No architecture or efficiency win follows. All seed/family fault-guard cells are preserved in [reliability-cells.json](../research/dev055/reliability-cells.json). The privileged oracle floor does not establish headroom achievable from the allowed public information.
 
 ## What is learned
 
@@ -38,7 +38,7 @@ Carried memory beats the retrained reset control on cost, with the adjusted inte
 - The existing sparse `ConditionalExecutor` operator bank, selector and halt head.
 - Action-conditioned predictions of post-action fault marginals. Simulator-only fault labels supervise training; runtime cannot accept those labels.
 
-The physics generator, two entity addresses, five-action grammar, costs and one-step argmin controller remain programmed. Public events are ten typed scalar features. This is CDL-style task-trained routing, not original CDL teacher distillation; neural conditional operators, not general symbolic CASM-S program discovery. The learned fault predictor is not a safety verifier. The model does not learn a long-horizon contingent planner or the value of inspections. Fixed-expert exhaustive scoring does not test indexed acquisition or C5.
+The physics generator, two entity addresses, five-action grammar, costs and one-step argmin controller remain programmed. Public events are ten typed scalar features. This is CDL-style task-trained routing, not original CDL teacher distillation; neural conditional operators, not general symbolic CASM-S program discovery. The learned fault predictor is not a safety verifier. The model does not learn a long-horizon contingent planner or the value of inspections. Fixed-expert exhaustive scoring does not test indexed acquisition or C5. The fitted HMM additionally uses privileged regime labels during training; neural arms use post-action fault labels. This is a strong fitted control, not a supervision-matched HMM comparison. MTSK versus GRU uses matched supervision.
 
 ## Training evidence
 
@@ -70,7 +70,7 @@ uv pip install --python .venv/bin/python numpy==2.5.4 pytest==9.1.1 matplotlib==
 .venv/bin/python scripts/demo_learned_stack_dev055.py --checkpoint results/dev055-reproduction/7551-mtsk.pt --events research/dev055/example-public-events.jsonl
 ```
 
-Use a clean committed worktree for the registered full run. Check out Veritas `b21d829b62d3cab2811e746267ca305e110ed004` and install it with `uv pip install --python .venv/bin/python -e /path/to/veritas`. The input example and all tests use disjoint development namespaces. The raw evidence manifest covers all fifteen checkpoints, complete reports, controls and fitted filters.
+Use a clean committed worktree for the registered full run. Check out Veritas `b21d829b62d3cab2811e746267ca305e110ed004` and install it with `uv pip install --python .venv/bin/python -e /path/to/veritas`. The input example and all tests use disjoint development namespaces. The raw evidence manifest covers all fifteen checkpoints, complete reports, controls and fitted filters. Download the [complete checkpoint/evidence archive](../research/dev055/evidence.tar.gz) and verify its SHA256 against [evidence-index.json](../research/dev055/evidence-index.json); extract into `results/` to restore `results/dev055-main/` without retraining.
 
 ## Next bounded decisions
 

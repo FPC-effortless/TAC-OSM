@@ -64,6 +64,17 @@ def run(directory):
                     'final_validation_bce':float(np.mean([f['curves'][-1]['validation'] for f in fits])),
                     'gradients':{str(seed):reports[str(seed)][arm]['training']['first_step_gradient_l1'] for seed in p['model_seeds']}}
     write(out/'fit-diagnostics.json',stats)
+    guards=[]
+    for seed in p['model_seeds']:
+        for family in ('coupling','drift'):
+            a=reports[str(seed)]['mtsk']['evaluation'][family]
+            for comparator in ('gru_matched','fitted_hmm'):
+                b=controls[comparator][family] if comparator in controls else reports[str(seed)][comparator]['evaluation'][family]
+                guards.append({'seed':seed,'family':family,'comparator':comparator,
+                               'fault_exposure_difference':a['fault_exposure']-b['fault_exposure'],
+                               'cost_difference':a['cost']-b['cost'],
+                               'fault_guard_pass':a['fault_exposure']<=b['fault_exposure']})
+    write(out/'reliability-cells.json',guards)
     lines=['# DEV-055: learned dynamics, CDL-style routing and neural CASM execute; superiority fails','',
            'The complete public-history learned model trains, restores and drives a paid physical simulation loop. '
            'All 15 fits completed 512 updates. This establishes an executable development path; '
@@ -90,7 +101,9 @@ def run(directory):
               'Carried memory beats the retrained reset control on cost, with the adjusted interval excluding zero. '
               'That is a bounded memory-use result. Uniform routing and bypassing CASM have lower point costs than '
               'the full model; neither comparison establishes a benefit from the extra learned mechanism. '
-              'No architecture or efficiency win follows.','',
+              'No architecture or efficiency win follows. All seed/family fault-guard cells are preserved in '
+              '[reliability-cells.json](../research/dev055/reliability-cells.json). The privileged oracle floor '
+              'does not establish headroom achievable from the allowed public information.','',
               '## What is learned','',
               '- An event encoder and recurrent MTSK state, trained from public noisy sensors and paid inspection receipts.',
               '- The existing `LearnedCDL` scorer over expert views and learned structural-workspace edges/messages.',
@@ -101,7 +114,9 @@ def run(directory):
               'not original CDL teacher distillation; neural conditional operators, not general symbolic CASM-S '
               'program discovery. The learned fault predictor is not a safety verifier. The model does not learn '
               'a long-horizon contingent planner or the value of inspections. Fixed-expert exhaustive scoring does '
-              'not test indexed acquisition or C5.','',
+              'not test indexed acquisition or C5. The fitted HMM additionally uses privileged regime labels '
+              'during training; neural arms use post-action fault labels. This is a strong fitted control, '
+              'not a supervision-matched HMM comparison. MTSK versus GRU uses matched supervision.','',
               '## Training evidence','',
               '![Per-arm learning curves](../research/dev055/learning-curves.png)','',
               'Every arm receives the same 512-update exposure and uses its final checkpoint. Shading is the '
@@ -135,7 +150,10 @@ def run(directory):
               '`b21d829b62d3cab2811e746267ca305e110ed004` and install it with '
               '`uv pip install --python .venv/bin/python -e /path/to/veritas`. The input example and all tests '
               'use disjoint development namespaces. The raw evidence manifest covers all fifteen checkpoints, '
-              'complete reports, controls and fitted filters.','',
+              'complete reports, controls and fitted filters. Download the '
+              '[complete checkpoint/evidence archive](../research/dev055/evidence.tar.gz) and verify its SHA256 '
+              'against [evidence-index.json](../research/dev055/evidence-index.json); extract into `results/` '
+              'to restore `results/dev055-main/` without retraining.','',
               '## Next bounded decisions','',
               'DEV-056 is the registered memory-novelty deadline: matched GRU superiority with reliability and '
               'adequate oracle headroom must be established, or the memory-novelty claim is retired for this program. '
