@@ -53,7 +53,7 @@ def split_cases(split):
 
 
 def assemble(mixed,fraction):
-    assert fraction in FRACTIONS
+    assert fraction in FRACTIONS+(100,)
     cases=[];conditions=[]
     for i,row in enumerate(mixed):
         mode="order" if fraction==100 or i%10<fraction//10 else "original"
@@ -214,10 +214,10 @@ def metrics(rows):
 def reference(data):
     # Public-history evaluator reference; not a neural architecture.
     ref=[]
+    # Materialize exactly one fresh evaluation cohort, never reuse inspected DEV-042 cases.
+    source={c.fingerprint:c for item in split_cases("evaluation") for c in item["order"]}
     for r in data["conditions"]:
-        # Use generator only to validate that exact_public_targets could reconstruct it.
-        rows=split_cases("evaluation")
-        found=next(c for item in rows for c in item["order"] if c.fingerprint==r["fingerprint"])
+        found=source[r["fingerprint"]]
         assert exact_public_targets(found.observations,found.tick,found.horizon)==found.wait_targets
         yy=[[found.wait_targets[e],found.service_targets[e],found.current_targets[e]] for e in range(8)]
         ref.append(dict(**r,labels=yy,probabilities=yy))
@@ -227,7 +227,7 @@ def reference(data):
 def retrospective_pairwise_oracle(rows):
     # Pure hindsight upper bound: chooses a different threshold per PAIR using labels.
     # Invalid for model selection, not a deployable policy.
-    total=failures=unnecessary=0
+    total=0
     for i in range(0,len(rows),2):
         pair=rows[i:i+2]
         scores=[p[0]-p[1] for row in pair for p in row["probabilities"]]
