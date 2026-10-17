@@ -1,0 +1,102 @@
+{
+  "experiment": "DEV-037",
+  "frozen_source": "4032759451b06399602e62fddec6b7a4eff2a61f",
+  "protocol_sha256": "316317c9aea112fe2eb1cb16104b15e6164b15b660f98c2c1975c478895ca76e",
+  "frozen_model_checkpoint_sha256": "74b1b648b427d9382f4bfb8f62842cd87c8847ee0f4883085a1736a0c34c88c1",
+  "audit_passed": true,
+  "pool_worlds": 576,
+  "selected_worlds_per_acquisition": 288,
+  "evaluation_worlds": 576,
+  "active_random_selected_overlap": 142,
+  "policy_parameters": 81,
+  "policy_optimizer_updates": 300,
+  "frozen_memory_optimizer_updates": 0,
+  "tuned_threshold": 0.75,
+  "evaluation_totals": {
+    "fixed_threshold": {
+      "failures": 0,
+      "unnecessary_services": 388,
+      "inspections": 0,
+      "total_cost": 2730.0,
+      "services": 2730,
+      "teacher_agreement": 0.9157986111111112,
+      "mature_cancellation_target_agreement": 0.5
+    },
+    "tuned_threshold": {
+      "failures": 19,
+      "unnecessary_services": 103,
+      "inspections": 0,
+      "total_cost": 2502.0,
+      "services": 2426,
+      "teacher_agreement": 0.9735243055555556,
+      "mature_cancellation_target_agreement": 0.6822916666666666
+    },
+    "random_teacher": {
+      "failures": 13,
+      "unnecessary_services": 166,
+      "inspections": 0,
+      "total_cost": 2547.0,
+      "services": 2495,
+      "teacher_agreement": 0.9611545138888888,
+      "mature_cancellation_target_agreement": 0.6354166666666666
+    },
+    "active_teacher": {
+      "failures": 13,
+      "unnecessary_services": 154,
+      "inspections": 0,
+      "total_cost": 2535.0,
+      "services": 2483,
+      "teacher_agreement": 0.9637586805555556,
+      "mature_cancellation_target_agreement": 0.6458333333333334
+    },
+    "oracle": {
+      "failures": 0,
+      "unnecessary_services": 0,
+      "inspections": 0,
+      "total_cost": 2342.0,
+      "services": 2342,
+      "teacher_agreement": 1.0,
+      "mature_cancellation_target_agreement": 1.0
+    }
+  },
+  "training_seconds": {
+    "random": 0.17753939899557736,
+    "active": 0.1818997989903437
+  },
+  "exploratory_bootstrap": {
+    "active_teacher minus random_teacher": {
+      "total_cost_difference": -12.0,
+      "exploratory_pair_bootstrap_95pct": [
+        -22.0,
+        -4.0
+      ],
+      "paired_groups": 288
+    },
+    "active_teacher minus tuned_threshold": {
+      "total_cost_difference": 33.0,
+      "exploratory_pair_bootstrap_95pct": [
+        10.0,
+        57.0
+      ],
+      "paired_groups": 288
+    },
+    "random_teacher minus tuned_threshold": {
+      "total_cost_difference": 45.0,
+      "exploratory_pair_bootstrap_95pct": [
+        20.0,
+        71.0
+      ],
+      "paired_groups": 288
+    },
+    "tuned_threshold minus fixed_threshold": {
+      "total_cost_difference": -228.0,
+      "exploratory_pair_bootstrap_95pct": [
+        -282.0,
+        -174.0
+      ],
+      "paired_groups": 288
+    }
+  },
+  "full_system_capability_established": false,
+  "architecture_superiority_established": false
+}
