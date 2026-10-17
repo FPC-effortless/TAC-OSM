@@ -5,7 +5,6 @@ frozen interventions, dev-only selection and all reported action costs.
 """
 from __future__ import annotations
 import argparse
-import hashlib
 import json
 from pathlib import Path
 import sys
@@ -16,7 +15,7 @@ sys.path[:0]=[str(ROOT/"src"),str(ROOT/"scripts")]
 import torch
 from tac_osm.development.schema_maintenance import execute,exact_public_targets
 from run_reservoir_scaling_dev044 import (ARM_NAMES,PROFILES,THRESHOLDS,sha,
-    cases_for,physical,select_threshold)
+    cases_for)
 
 
 def all_cases(split,reps):
