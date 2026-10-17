@@ -9,6 +9,19 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## DEV-052B runnable research checkpoint (October 17, 2026)
+
+The [end-to-end learned belief experiment](docs/DEV-052B-RESULTS.md) is trained,
+evaluated, and replay-audited: 35 neural checkpoints, five initialization seeds,
+512 distinct held-out worlds, and 1,299 passing regression tests. The joint
+recurrent model matched the estimated Bayesian planner's actions exactly; no
+neural variant passed the strict cost/reliability guard across every seed and
+both cohorts. Entity retrieval and execution constraints remain explicit.
+Saved checkpoints can be run through native Veritas with
+`scripts/demo_learned_belief_dev052b.py`; source, evidence, limitations, and
+reproduction commands are in the report. This is a bounded experimental loop,
+not validated general TAC-OSM superiority.
+
 ## Current research checkpoint (October 16, 2026)
 
 The [DEV-029 research program](docs/DEV-029-OPTIMIZATION-AND-INTEGRATION-PROGRAM.md)

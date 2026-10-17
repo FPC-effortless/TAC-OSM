@@ -338,3 +338,15 @@ than changing addressing again.
 | Shuffle-support q2 mean = 0.6793 versus normal = 0.9293 | L3 | context-use diagnostic | performance depends materially on the supplied support context | causal generality of the support mechanism | shuffle is a diagnostic intervention, not a new capability benchmark |
 | Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | seed-3 weakness is largely operator selection rather than the underlying state/content path | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
 | No-memory q2 mean = 0.6250 | L3 | mechanism diagnostic | the multimodal state representation remains functionally important | temporal persistence necessity | temporal carry was separately ruled out as necessary on E2E-008 |
+
+
+## DEV-052B end-to-end public predictive belief experiment
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| 35 checkpoints reconstructed; 20,992 policy/world executions replayed | L3 | end-to-end engineering | Public events, recurrent state, forecasts, constrained native actions and receipt writes run reproducibly | Generic learned CDL/CASM or industrial validation | 512 distinct final worlds reused across model seeds; same-author separate-process audit |
+| Joint action parity: cost 1.40234375 in regime, 1.5515625 shifted | L3 | native decision endpoint | Learned predictions support the explicit planner's decisions on these cohorts | Lower cost or superior reliability | 26/46 residual faults respectively; strict cost improvement guard fails on a tie |
+| No neural variant passes both cohorts across all five seeds | L3 | registered falsification | Robust learned advantage is unsupported under this recipe | General impossibility of learned world models | Some seeds improve; all negative runs and seed outcomes retained |
+| Fresh namespaces frozen after smoke/test overlap discovered | L1 | evaluation integrity | Accepted endpoint uses untouched evaluation seeds | Independent confirmation | Excluded original complete matrix and all preflight compute archived |
+
+Source and full qualifications: [DEV-052B report](DEV-052B-RESULTS.md).

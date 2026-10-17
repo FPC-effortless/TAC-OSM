@@ -1,0 +1,1991 @@
+{
+  "study": "DEV-052B",
+  "status": "AUDITED_ADAPTIVE_DEVELOPMENT",
+  "source": "b7a82cf9d122c44657770a70d278f3559f0d9010",
+  "protocol_sha256": "77cd8fe446edc8ebcc544cecafcc06722d59ef0fbe29710686494f1e09818811",
+  "all_checkpoint_tensors_reconstructed": true,
+  "all_calibration_choices_reconstructed": true,
+  "all_policy_actions_receipts_and_verifiers_reproduced": true,
+  "primitive_native_replay_worlds": 20992,
+  "primitive_native_replay_calls": 154024,
+  "public_only_controller_inputs": true,
+  "split_ids_disjoint": true,
+  "review_independence": "Separate process and independently implemented native action accounting; same author, shared generator/model code; not independent third-party scientific review",
+  "seeds": [
+    7201,
+    7202,
+    7203,
+    7204,
+    7205
+  ],
+  "seed_guards": {
+    "7201": {
+      "last_event": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "recurrent_belief": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "forecast_only": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "joint": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "frozen_writer": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "policy_bc": {
+        "in_regime": true,
+        "shifted": true
+      },
+      "policy_dagger": {
+        "in_regime": false,
+        "shifted": false
+      }
+    },
+    "7202": {
+      "last_event": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "recurrent_belief": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "forecast_only": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "joint": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "frozen_writer": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "policy_bc": {
+        "in_regime": true,
+        "shifted": false
+      },
+      "policy_dagger": {
+        "in_regime": true,
+        "shifted": true
+      }
+    },
+    "7203": {
+      "last_event": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "recurrent_belief": {
+        "in_regime": true,
+        "shifted": true
+      },
+      "forecast_only": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "joint": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "frozen_writer": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "policy_bc": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "policy_dagger": {
+        "in_regime": false,
+        "shifted": false
+      }
+    },
+    "7204": {
+      "last_event": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "recurrent_belief": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "forecast_only": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "joint": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "frozen_writer": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "policy_bc": {
+        "in_regime": true,
+        "shifted": false
+      },
+      "policy_dagger": {
+        "in_regime": false,
+        "shifted": false
+      }
+    },
+    "7205": {
+      "last_event": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "recurrent_belief": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "forecast_only": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "joint": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "frozen_writer": {
+        "in_regime": false,
+        "shifted": false
+      },
+      "policy_bc": {
+        "in_regime": true,
+        "shifted": true
+      },
+      "policy_dagger": {
+        "in_regime": false,
+        "shifted": false
+      }
+    }
+  },
+  "passed_both_cohort_all_seed_cost_and_failure_guard": {
+    "last_event": false,
+    "recurrent_belief": false,
+    "forecast_only": false,
+    "joint": false,
+    "frozen_writer": false,
+    "policy_bc": false,
+    "policy_dagger": false
+  },
+  "summary": {
+    "in_regime": {
+      "known_bayes": {
+        "worlds": 256,
+        "cost_per_entity": 1.40234375,
+        "residual_faults": 26,
+        "completed_worlds": 231,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 5.09375,
+        "mean_services": 1.57421875,
+        "forecast_nll": 0.47893697613820857,
+        "forecast_brier": 0.15809290361825798,
+        "forecast_entropy": 0.4658579629798494,
+        "recoveries": 58,
+        "failed_attempts": 81,
+        "inference_seconds": 1.486322052001242
+      },
+      "estimated_bayes": {
+        "worlds": 256,
+        "cost_per_entity": 1.40234375,
+        "residual_faults": 26,
+        "completed_worlds": 231,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 5.09375,
+        "mean_services": 1.57421875,
+        "forecast_nll": 0.4796173551455909,
+        "forecast_brier": 0.15819916063825923,
+        "forecast_entropy": 0.4637710776686501,
+        "recoveries": 58,
+        "failed_attempts": 81,
+        "inference_seconds": 2.82980248699846
+      },
+      "event_table": {
+        "worlds": 256,
+        "cost_per_entity": 1.41484375,
+        "residual_faults": 32,
+        "completed_worlds": 225,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 4.96875,
+        "mean_services": 1.52734375,
+        "forecast_nll": 0.49110012096660377,
+        "forecast_brier": 0.16213710232237183,
+        "forecast_entropy": 0.4515379745466859,
+        "recoveries": 52,
+        "failed_attempts": 78,
+        "inference_seconds": 2.6284519460009506
+      },
+      "verify_retry": {
+        "worlds": 256,
+        "cost_per_entity": 1.5316406249999999,
+        "residual_faults": 59,
+        "completed_worlds": 201,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 3.4140625,
+        "mean_services": 1.5,
+        "forecast_nll": 0.507445506343223,
+        "forecast_brier": 0.1689122035933114,
+        "forecast_entropy": 0.4873261692530554,
+        "recoveries": 55,
+        "failed_attempts": 75,
+        "inference_seconds": 0.003929959997208243
+      },
+      "all_three": {
+        "worlds": 256,
+        "cost_per_entity": 3.6,
+        "residual_faults": 0,
+        "completed_worlds": 256,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 0.0,
+        "mean_services": 6.0,
+        "forecast_nll": 0.304577874109485,
+        "forecast_brier": 0.09916403152899605,
+        "forecast_entropy": 0.30426019253031444,
+        "recoveries": 74,
+        "failed_attempts": 86,
+        "inference_seconds": 0.003650803001391978
+      },
+      "wait": {
+        "worlds": 256,
+        "cost_per_entity": 2.171875,
+        "residual_faults": 278,
+        "completed_worlds": 56,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 0.0,
+        "mean_services": 0.0,
+        "forecast_nll": 0.6931471805599453,
+        "forecast_brier": 0.25,
+        "forecast_entropy": 0.6931471805599453,
+        "recoveries": 0,
+        "failed_attempts": 0,
+        "inference_seconds": 0.0008763920005776527
+      },
+      "last_event": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.5310937500000001,
+          "residual_faults": 38.6,
+          "completed_worlds": 218.4,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.278125,
+          "mean_services": 1.609375,
+          "forecast_nll": 0.5518404628140315,
+          "forecast_brier": 0.17624218936719072,
+          "forecast_entropy": 0.38645862496163913,
+          "recoveries": 39.4,
+          "failed_attempts": 79.4,
+          "inference_seconds": 2.539163373800238
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.5126953125,
+            "residual_faults": 39,
+            "completed_worlds": 218,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.17578125,
+            "mean_services": 1.58203125,
+            "forecast_nll": 0.5716354008523479,
+            "forecast_brier": 0.18136259567779675,
+            "forecast_entropy": 0.3777119591202214,
+            "recoveries": 39,
+            "failed_attempts": 79,
+            "inference_seconds": 2.990155389001643
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.547265625,
+            "residual_faults": 39,
+            "completed_worlds": 218,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.5390625,
+            "mean_services": 1.609375,
+            "forecast_nll": 0.5302411670033815,
+            "forecast_brier": 0.17371062553484254,
+            "forecast_entropy": 0.43048550498192034,
+            "recoveries": 39,
+            "failed_attempts": 79,
+            "inference_seconds": 3.316618432000155
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.5275390625,
+            "residual_faults": 45,
+            "completed_worlds": 212,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 4.86328125,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5963863160722223,
+            "forecast_brier": 0.1883871107447318,
+            "forecast_entropy": 0.3812864365097782,
+            "recoveries": 33,
+            "failed_attempts": 79,
+            "inference_seconds": 3.2805837710000105
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.547265625,
+            "residual_faults": 39,
+            "completed_worlds": 218,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.5390625,
+            "mean_services": 1.609375,
+            "forecast_nll": 0.548999539525638,
+            "forecast_brier": 0.17429003427842288,
+            "forecast_entropy": 0.37151565771932665,
+            "recoveries": 39,
+            "failed_attempts": 79,
+            "inference_seconds": 1.6894723279935988
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.520703125,
+            "residual_faults": 31,
+            "completed_worlds": 226,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.2734375,
+            "mean_services": 1.69140625,
+            "forecast_nll": 0.511939890616568,
+            "forecast_brier": 0.16346058060015964,
+            "forecast_entropy": 0.371293566476949,
+            "recoveries": 47,
+            "failed_attempts": 81,
+            "inference_seconds": 1.4189869490057845
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.12874999999999998,
+          "cost_delta_95pct_descriptive_interval": [
+            0.07046777343749996,
+            0.18453124999999995
+          ],
+          "paired_mean_fault_delta_per_world": 0.049218750000000006,
+          "fault_delta_95pct_descriptive_interval": [
+            0.01328125,
+            0.084375
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "recurrent_belief": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.403125,
+          "residual_faults": 24.8,
+          "completed_worlds": 232.2,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.165625,
+          "mean_services": 1.58515625,
+          "forecast_nll": 0.484859662198356,
+          "forecast_brier": 0.15963615793011113,
+          "forecast_entropy": 0.46175679316922363,
+          "recoveries": 56.8,
+          "failed_attempts": 82.0,
+          "inference_seconds": 2.2340774390009983
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.409375,
+            "residual_faults": 27,
+            "completed_worlds": 230,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.078125,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.49364022253174866,
+            "forecast_brier": 0.16092949987681754,
+            "forecast_entropy": 0.416923802790239,
+            "recoveries": 52,
+            "failed_attempts": 83,
+            "inference_seconds": 2.728119649000405
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 24,
+            "completed_worlds": 233,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.21875,
+            "mean_services": 1.58984375,
+            "forecast_nll": 0.4908118589383691,
+            "forecast_brier": 0.16235348740722322,
+            "forecast_entropy": 0.4605582162134187,
+            "recoveries": 58,
+            "failed_attempts": 82,
+            "inference_seconds": 3.030562448002229
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.39296875,
+            "residual_faults": 21,
+            "completed_worlds": 236,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.21875,
+            "mean_services": 1.61328125,
+            "forecast_nll": 0.476190603791124,
+            "forecast_brier": 0.15669379583686485,
+            "forecast_entropy": 0.48382263024194816,
+            "recoveries": 58,
+            "failed_attempts": 83,
+            "inference_seconds": 2.890335276000087
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.40859375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.21875,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.4816445021701466,
+            "forecast_brier": 0.15901937463095317,
+            "forecast_entropy": 0.4681894041140496,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 1.256255264003812
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.4820111235603919,
+            "forecast_brier": 0.15918463189869683,
+            "forecast_entropy": 0.47928991248646285,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 1.2651145579984586
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.0007812499999999957,
+          "cost_delta_95pct_descriptive_interval": [
+            -0.013990234375000004,
+            0.013673828124999985
+          ],
+          "paired_mean_fault_delta_per_world": -0.0046875,
+          "fault_delta_95pct_descriptive_interval": [
+            -0.01484375,
+            0.00390625
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "forecast_only": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.4051171875,
+          "residual_faults": 25.4,
+          "completed_worlds": 231.4,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.19609375,
+          "mean_services": 1.578125,
+          "forecast_nll": 0.48473853122544697,
+          "forecast_brier": 0.15981710487229223,
+          "forecast_entropy": 0.4530424693642586,
+          "recoveries": 58.6,
+          "failed_attempts": 81.2,
+          "inference_seconds": 2.1615508066016673
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.4855868065822674,
+            "forecast_brier": 0.15933905937085108,
+            "forecast_entropy": 0.4306996296100474,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 2.3952624690031143
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.4162109375,
+            "residual_faults": 23,
+            "completed_worlds": 233,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.60546875,
+            "mean_services": 1.59375,
+            "forecast_nll": 0.4762863093468367,
+            "forecast_brier": 0.15759633259453554,
+            "forecast_entropy": 0.4555886606769264,
+            "recoveries": 61,
+            "failed_attempts": 82,
+            "inference_seconds": 3.906154079006683
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.48776578731841047,
+            "forecast_brier": 0.16024664670287103,
+            "forecast_entropy": 0.4266200348199823,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 1.8966461299955881
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.4880153930504825,
+            "forecast_brier": 0.16132891737904326,
+            "forecast_entropy": 0.47199328078210934,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 1.2601327250004033
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.4860383598292375,
+            "forecast_brier": 0.1605745683141602,
+            "forecast_entropy": 0.4803107409322278,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 1.349558630002548
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.002773437499999999,
+          "cost_delta_95pct_descriptive_interval": [
+            -0.0012890625000000027,
+            0.006171874999999998
+          ],
+          "paired_mean_fault_delta_per_world": -0.0023437500000000003,
+          "fault_delta_95pct_descriptive_interval": [
+            -0.00546875,
+            0.0
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "joint": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.40234375,
+          "residual_faults": 26.0,
+          "completed_worlds": 231.0,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.09375,
+          "mean_services": 1.57421875,
+          "forecast_nll": 0.48116529362131644,
+          "forecast_brier": 0.1587838442297948,
+          "forecast_entropy": 0.47911266512740164,
+          "recoveries": 58.0,
+          "failed_attempts": 81.0,
+          "inference_seconds": 2.1997750357990298
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.48443684786832697,
+            "forecast_brier": 0.159041804345631,
+            "forecast_entropy": 0.4320140941032816,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 3.4513913159998992
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.4804691245501989,
+            "forecast_brier": 0.15905337961659982,
+            "forecast_entropy": 0.4820480422643321,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 3.086398983001118
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.4823159040684291,
+            "forecast_brier": 0.1595538950644206,
+            "forecast_entropy": 0.49469204436639713,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 1.6883300519968998
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.4805645242297063,
+            "forecast_brier": 0.15863610375798165,
+            "forecast_entropy": 0.4982722280520747,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 1.266290734997483
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.4780400673899207,
+            "forecast_brier": 0.15763403836434103,
+            "forecast_entropy": 0.48853691685092243,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 1.5064640929997495
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.0,
+          "cost_delta_95pct_descriptive_interval": [
+            0.0,
+            0.0
+          ],
+          "paired_mean_fault_delta_per_world": 0.0,
+          "fault_delta_95pct_descriptive_interval": [
+            0.0,
+            0.0
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "frozen_writer": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 2.251875,
+          "residual_faults": 278.0,
+          "completed_worlds": 56.0,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 1.6,
+          "mean_services": 0.0,
+          "forecast_nll": 0.8495853925334617,
+          "forecast_brier": 0.31748998259356465,
+          "forecast_entropy": 0.5846737483813744,
+          "recoveries": 0.0,
+          "failed_attempts": 0.0,
+          "inference_seconds": 1.6607862115999523
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 2.371875,
+            "residual_faults": 278,
+            "completed_worlds": 56,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 4.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.9286240265991098,
+            "forecast_brier": 0.34819476707422786,
+            "forecast_entropy": 0.5201109931504231,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 2.876995517997784
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 2.371875,
+            "residual_faults": 278,
+            "completed_worlds": 56,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 4.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.9433251183000945,
+            "forecast_brier": 0.350754001874209,
+            "forecast_entropy": 0.5167121392632634,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 2.936731870000358
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 2.171875,
+            "residual_faults": 278,
+            "completed_worlds": 56,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 0.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.7674325796006778,
+            "forecast_brier": 0.28562520505440636,
+            "forecast_entropy": 0.6466686428678335,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 0.6884356550019675
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 2.171875,
+            "residual_faults": 278,
+            "completed_worlds": 56,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 0.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.7691057626914677,
+            "forecast_brier": 0.2863800004783528,
+            "forecast_entropy": 0.6463339820188605,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 0.9190568180015362
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 2.171875,
+            "residual_faults": 278,
+            "completed_worlds": 56,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 0.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.8394394754759581,
+            "forecast_brier": 0.3164959384866271,
+            "forecast_entropy": 0.5935429846064918,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 0.8827111969981161
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.84953125,
+          "cost_delta_95pct_descriptive_interval": [
+            0.717099609375,
+            0.9796240234374998
+          ],
+          "paired_mean_fault_delta_per_world": 0.984375,
+          "fault_delta_95pct_descriptive_interval": [
+            0.8984375,
+            1.07421875
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "policy_bc": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.40390625,
+          "residual_faults": 26.0,
+          "completed_worlds": 231.0,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.21875,
+          "mean_services": 1.56640625,
+          "forecast_nll": 0.6925950769106809,
+          "forecast_brier": 0.24978086332481042,
+          "forecast_entropy": 0.6835893294485906,
+          "recoveries": 54.0,
+          "failed_attempts": 82.6,
+          "inference_seconds": 0.3572758598021892
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.39296875,
+            "residual_faults": 21,
+            "completed_worlds": 236,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.21875,
+            "mean_services": 1.61328125,
+            "forecast_nll": 0.7252869373351986,
+            "forecast_brier": 0.2659850832189669,
+            "forecast_entropy": 0.6905552249166109,
+            "recoveries": 58,
+            "failed_attempts": 83,
+            "inference_seconds": 0.4512497090023544
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.40078125,
+            "residual_faults": 25,
+            "completed_worlds": 232,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.21875,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.6671122918570871,
+            "forecast_brier": 0.23702345714539969,
+            "forecast_entropy": 0.6904200711592138,
+            "recoveries": 54,
+            "failed_attempts": 83,
+            "inference_seconds": 0.7586250220015245
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.4359375,
+            "residual_faults": 37,
+            "completed_worlds": 220,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.21875,
+            "mean_services": 1.4765625,
+            "forecast_nll": 0.6871260378336937,
+            "forecast_brier": 0.2469952981390762,
+            "forecast_entropy": 0.6912920023793335,
+            "recoveries": 47,
+            "failed_attempts": 81,
+            "inference_seconds": 0.18649871600064216
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.396875,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.21875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.648303457018844,
+            "forecast_brier": 0.2283362290663068,
+            "forecast_entropy": 0.6607687550628998,
+            "recoveries": 53,
+            "failed_attempts": 83,
+            "inference_seconds": 0.18602341400355726
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.39296875,
+            "residual_faults": 21,
+            "completed_worlds": 236,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.21875,
+            "mean_services": 1.61328125,
+            "forecast_nll": 0.7351466605085811,
+            "forecast_brier": 0.27056424905430254,
+            "forecast_entropy": 0.6849105937248954,
+            "recoveries": 58,
+            "failed_attempts": 83,
+            "inference_seconds": 0.20398243800286764
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.0015624999999999992,
+          "cost_delta_95pct_descriptive_interval": [
+            -0.027734374999999995,
+            0.026412109374999968
+          ],
+          "paired_mean_fault_delta_per_world": 0.0,
+          "fault_delta_95pct_descriptive_interval": [
+            -0.018750000000000003,
+            0.015625
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "policy_dagger": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.40046875,
+          "residual_faults": 25.0,
+          "completed_worlds": 232.0,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.11875,
+          "mean_services": 1.58203125,
+          "forecast_nll": 0.6931674187425341,
+          "forecast_brier": 0.2500159406479493,
+          "forecast_entropy": 0.6832490725356903,
+          "recoveries": 58.0,
+          "failed_attempts": 81.4,
+          "inference_seconds": 0.3240439127966283
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.7260608580983084,
+            "forecast_brier": 0.2663661459535433,
+            "forecast_entropy": 0.6904797326789787,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 0.45346166899878426
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.39296875,
+            "residual_faults": 21,
+            "completed_worlds": 236,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.21875,
+            "mean_services": 1.61328125,
+            "forecast_nll": 0.6662921694687114,
+            "forecast_brier": 0.23662969650907104,
+            "forecast_entropy": 0.6897969180621841,
+            "recoveries": 58,
+            "failed_attempts": 83,
+            "inference_seconds": 0.5672125609974046
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.6844675969948747,
+            "forecast_brier": 0.2456638925660606,
+            "forecast_entropy": 0.6916661833738988,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 0.18698748399060605
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.6473586720205879,
+            "forecast_brier": 0.2278273093274858,
+            "forecast_entropy": 0.6622671390269166,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 0.224677359002726
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.40234375,
+            "residual_faults": 26,
+            "completed_worlds": 231,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.09375,
+            "mean_services": 1.57421875,
+            "forecast_nll": 0.7416577971301881,
+            "forecast_brier": 0.2735926588835856,
+            "forecast_entropy": 0.6820353895364737,
+            "recoveries": 58,
+            "failed_attempts": 81,
+            "inference_seconds": 0.1878804909936207
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": -0.001875,
+          "cost_delta_95pct_descriptive_interval": [
+            -0.007617187500000001,
+            0.002890625
+          ],
+          "paired_mean_fault_delta_per_world": -0.00390625,
+          "fault_delta_95pct_descriptive_interval": [
+            -0.0078125,
+            -0.00078125
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      }
+    },
+    "shifted": {
+      "known_bayes": {
+        "worlds": 256,
+        "cost_per_entity": 1.45703125,
+        "residual_faults": 64,
+        "completed_worlds": 199,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 2.3125,
+        "mean_services": 1.40234375,
+        "forecast_nll": 0.48967429224198666,
+        "forecast_brier": 0.1643256781125914,
+        "forecast_entropy": 0.5118316526148933,
+        "recoveries": 26,
+        "failed_attempts": 73,
+        "inference_seconds": 3.2163065420030534
+      },
+      "estimated_bayes": {
+        "worlds": 256,
+        "cost_per_entity": 1.5515625,
+        "residual_faults": 46,
+        "completed_worlds": 211,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 5.1875,
+        "mean_services": 1.5546875,
+        "forecast_nll": 0.5405823546282487,
+        "forecast_brier": 0.17818516567523662,
+        "forecast_entropy": 0.46860276513868754,
+        "recoveries": 47,
+        "failed_attempts": 86,
+        "inference_seconds": 2.8262712569966197
+      },
+      "event_table": {
+        "worlds": 256,
+        "cost_per_entity": 1.5427734375,
+        "residual_faults": 51,
+        "completed_worlds": 207,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 5.02734375,
+        "mean_services": 1.48828125,
+        "forecast_nll": 0.5574391977832039,
+        "forecast_brier": 0.18165554543868784,
+        "forecast_entropy": 0.45473693537017174,
+        "recoveries": 42,
+        "failed_attempts": 85,
+        "inference_seconds": 2.4317937939966896
+      },
+      "verify_retry": {
+        "worlds": 256,
+        "cost_per_entity": 1.5890625,
+        "residual_faults": 71,
+        "completed_worlds": 191,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 3.34375,
+        "mean_services": 1.4453125,
+        "forecast_nll": 0.5534990402914917,
+        "forecast_brier": 0.18228800539428489,
+        "forecast_entropy": 0.49021356572378844,
+        "recoveries": 42,
+        "failed_attempts": 80,
+        "inference_seconds": 0.003824902999326696
+      },
+      "all_three": {
+        "worlds": 256,
+        "cost_per_entity": 3.6390625,
+        "residual_faults": 5,
+        "completed_worlds": 251,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 0.0,
+        "mean_services": 6.0,
+        "forecast_nll": 0.3455506341462968,
+        "forecast_brier": 0.10610817510189792,
+        "forecast_entropy": 0.30426019253031444,
+        "recoveries": 70,
+        "failed_attempts": 101,
+        "inference_seconds": 0.0034207300018351816
+      },
+      "wait": {
+        "worlds": 256,
+        "cost_per_entity": 2.0234375,
+        "residual_faults": 259,
+        "completed_worlds": 65,
+        "blocked_actions": 0,
+        "trajectory_violations": 0,
+        "mean_inspections": 0.0,
+        "mean_services": 0.0,
+        "forecast_nll": 0.6931471805599453,
+        "forecast_brier": 0.25,
+        "forecast_entropy": 0.6931471805599453,
+        "recoveries": 0,
+        "failed_attempts": 0,
+        "inference_seconds": 0.0008443860001534631
+      },
+      "last_event": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.6392578125,
+          "residual_faults": 47.2,
+          "completed_worlds": 210.2,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.37578125,
+          "mean_services": 1.66953125,
+          "forecast_nll": 0.586761298229869,
+          "forecast_brier": 0.18748331862970816,
+          "forecast_entropy": 0.38864048245133226,
+          "recoveries": 31.0,
+          "failed_attempts": 83.6,
+          "inference_seconds": 2.886397833401861
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.607421875,
+            "residual_faults": 49,
+            "completed_worlds": 208,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.3203125,
+            "mean_services": 1.59765625,
+            "forecast_nll": 0.6034218778206516,
+            "forecast_brier": 0.19075554881905268,
+            "forecast_entropy": 0.3791583529956251,
+            "recoveries": 31,
+            "failed_attempts": 82,
+            "inference_seconds": 3.044731107004395
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.6625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.671875,
+            "mean_services": 1.69921875,
+            "forecast_nll": 0.5535248193406743,
+            "forecast_brier": 0.18136220657027202,
+            "forecast_entropy": 0.43308411777667516,
+            "recoveries": 31,
+            "failed_attempts": 84,
+            "inference_seconds": 5.479924712001889
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.6041015625,
+            "residual_faults": 56,
+            "completed_worlds": 203,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 4.86328125,
+            "mean_services": 1.5390625,
+            "forecast_nll": 0.6236073447758426,
+            "forecast_brier": 0.19665394387278357,
+            "forecast_entropy": 0.3818798947664232,
+            "recoveries": 24,
+            "failed_attempts": 82,
+            "inference_seconds": 3.026523366999072
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.6625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.671875,
+            "mean_services": 1.69921875,
+            "forecast_nll": 0.5888420762414253,
+            "forecast_brier": 0.18706920900892338,
+            "forecast_entropy": 0.375154303201415,
+            "recoveries": 31,
+            "failed_attempts": 84,
+            "inference_seconds": 1.274004388003732
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.659765625,
+            "residual_faults": 39,
+            "completed_worlds": 218,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.3515625,
+            "mean_services": 1.8125,
+            "forecast_nll": 0.5644103729707511,
+            "forecast_brier": 0.1815756848775091,
+            "forecast_entropy": 0.37392574351652286,
+            "recoveries": 38,
+            "failed_attempts": 86,
+            "inference_seconds": 1.6068055930002174
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.08769531249999996,
+          "cost_delta_95pct_descriptive_interval": [
+            0.02472167968749997,
+            0.1503222656249999
+          ],
+          "paired_mean_fault_delta_per_world": 0.0046875,
+          "fault_delta_95pct_descriptive_interval": [
+            -0.035175781249999996,
+            0.04453125
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "recurrent_belief": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.5475390624999998,
+          "residual_faults": 44.6,
+          "completed_worlds": 212.2,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.27890625,
+          "mean_services": 1.55859375,
+          "forecast_nll": 0.5438884596218655,
+          "forecast_brier": 0.17890236031754606,
+          "forecast_entropy": 0.46406329623427434,
+          "recoveries": 45.6,
+          "failed_attempts": 86.0,
+          "inference_seconds": 2.620679124599383
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.5400390625,
+            "residual_faults": 47,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.17578125,
+            "mean_services": 1.5234375,
+            "forecast_nll": 0.5642576711653469,
+            "forecast_brier": 0.18253843459474461,
+            "forecast_entropy": 0.42049768642466595,
+            "recoveries": 40,
+            "failed_attempts": 86,
+            "inference_seconds": 2.2192774470011045
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.553125,
+            "residual_faults": 44,
+            "completed_worlds": 212,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.34375,
+            "mean_services": 1.5703125,
+            "forecast_nll": 0.5461342160736491,
+            "forecast_brier": 0.17929647630319956,
+            "forecast_entropy": 0.4612245103822611,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 3.9196184059960615
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.53359375,
+            "residual_faults": 40,
+            "completed_worlds": 216,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.34375,
+            "mean_services": 1.58984375,
+            "forecast_nll": 0.5329910685210303,
+            "forecast_brier": 0.1767663385741077,
+            "forecast_entropy": 0.48635456030249014,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 4.298228001995767
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.559375,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.34375,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5430829033377799,
+            "forecast_brier": 0.17871966414122992,
+            "forecast_entropy": 0.4697105855438382,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 1.23828446200082
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5329764390115211,
+            "forecast_brier": 0.1771908879744485,
+            "forecast_entropy": 0.4825291385181163,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 1.4279873060031605
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": -0.004023437500000001,
+          "cost_delta_95pct_descriptive_interval": [
+            -0.019454101562500003,
+            0.009532226562499996
+          ],
+          "paired_mean_fault_delta_per_world": -0.00546875,
+          "fault_delta_95pct_descriptive_interval": [
+            -0.016406249999999997,
+            0.0031250000000000006
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "forecast_only": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.5533593749999999,
+          "residual_faults": 45.2,
+          "completed_worlds": 211.8,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.2828125,
+          "mean_services": 1.56015625,
+          "forecast_nll": 0.5401832844341596,
+          "forecast_brier": 0.1779925268774742,
+          "forecast_entropy": 0.4566213730856664,
+          "recoveries": 47.8,
+          "failed_attempts": 86.2,
+          "inference_seconds": 2.0743491198028097
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5497362281123337,
+            "forecast_brier": 0.17999155390609534,
+            "forecast_entropy": 0.4349064683422038,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 2.3594408369967823
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.560546875,
+            "residual_faults": 42,
+            "completed_worlds": 215,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.6640625,
+            "mean_services": 1.58203125,
+            "forecast_nll": 0.5255572743467051,
+            "forecast_brier": 0.17343374183170898,
+            "forecast_entropy": 0.4597028410989524,
+            "recoveries": 51,
+            "failed_attempts": 87,
+            "inference_seconds": 3.5572712120060714
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5508042336633083,
+            "forecast_brier": 0.1804205387108018,
+            "forecast_entropy": 0.4313209107696872,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 1.9848025730013887
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5382935198799027,
+            "forecast_brier": 0.17797226434777275,
+            "forecast_entropy": 0.4743991784918791,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 1.2342716820055557
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5365251661685484,
+            "forecast_brier": 0.17814453559099205,
+            "forecast_entropy": 0.4827774667256095,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 1.2359592950042497
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.001796874999999999,
+          "cost_delta_95pct_descriptive_interval": [
+            -0.0033593750000000004,
+            0.005859374999999999
+          ],
+          "paired_mean_fault_delta_per_world": -0.003125,
+          "fault_delta_95pct_descriptive_interval": [
+            -0.006269531249999999,
+            -0.00078125
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "joint": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.5515625,
+          "residual_faults": 46.0,
+          "completed_worlds": 211.0,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.1875,
+          "mean_services": 1.5546875,
+          "forecast_nll": 0.5348791698424743,
+          "forecast_brier": 0.17738552355831444,
+          "forecast_entropy": 0.4854926938865384,
+          "recoveries": 47.0,
+          "failed_attempts": 86.0,
+          "inference_seconds": 2.0387474272004056
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5470250486545871,
+            "forecast_brier": 0.17885632440894822,
+            "forecast_entropy": 0.4389096145031929,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 3.0286908019995735
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5308449151542873,
+            "forecast_brier": 0.17655870449044445,
+            "forecast_entropy": 0.48824570844316667,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 3.3431571889962015
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5314001404868104,
+            "forecast_brier": 0.17706102767596654,
+            "forecast_entropy": 0.5014084041700307,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 1.335063563996755
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5315235423099932,
+            "forecast_brier": 0.17700597972810359,
+            "forecast_entropy": 0.5041993194020707,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 1.2608336610060178
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.5336022026066934,
+            "forecast_brier": 0.17744558148810946,
+            "forecast_entropy": 0.49470042291423066,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 1.2259919200034801
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.0,
+          "cost_delta_95pct_descriptive_interval": [
+            0.0,
+            0.0
+          ],
+          "paired_mean_fault_delta_per_world": 0.0,
+          "fault_delta_95pct_descriptive_interval": [
+            0.0,
+            0.0
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "frozen_writer": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 2.1034375,
+          "residual_faults": 259.0,
+          "completed_worlds": 65.0,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 1.6,
+          "mean_services": 0.0,
+          "forecast_nll": 0.8151711029043545,
+          "forecast_brier": 0.30178779450250126,
+          "forecast_entropy": 0.5846472462748543,
+          "recoveries": 0.0,
+          "failed_attempts": 0.0,
+          "inference_seconds": 1.599917535400732
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 2.2234375,
+            "residual_faults": 259,
+            "completed_worlds": 65,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 4.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.8834991099895982,
+            "forecast_brier": 0.32823305168249056,
+            "forecast_entropy": 0.5201893744884831,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 3.2511787800009415
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 2.2234375,
+            "residual_faults": 259,
+            "completed_worlds": 65,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 4.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.8975408284756878,
+            "forecast_brier": 0.3308821683089766,
+            "forecast_entropy": 0.5160336613278252,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 2.5447164400034126
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 2.0234375,
+            "residual_faults": 259,
+            "completed_worlds": 65,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 0.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.744458197868762,
+            "forecast_brier": 0.27449264802484985,
+            "forecast_entropy": 0.6468565527982657,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 0.6684374229985224
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 2.0234375,
+            "residual_faults": 259,
+            "completed_worlds": 65,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 0.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.7456166162859049,
+            "forecast_brier": 0.27501461126797766,
+            "forecast_entropy": 0.6460869388917753,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 0.8039412990008259
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 2.0234375,
+            "residual_faults": 259,
+            "completed_worlds": 65,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 0.0,
+            "mean_services": 0.0,
+            "forecast_nll": 0.8047407619018192,
+            "forecast_brier": 0.3003164932282114,
+            "forecast_entropy": 0.5940697038679221,
+            "recoveries": 0,
+            "failed_attempts": 0,
+            "inference_seconds": 0.7313137349999579
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.5518750000000001,
+          "cost_delta_95pct_descriptive_interval": [
+            0.40674316406250005,
+            0.6848828124999999
+          ],
+          "paired_mean_fault_delta_per_world": 0.83203125,
+          "fault_delta_95pct_descriptive_interval": [
+            0.7421875,
+            0.9140625
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "policy_bc": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.55171875,
+          "residual_faults": 47.0,
+          "completed_worlds": 209.8,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.34375,
+          "mean_services": 1.52890625,
+          "forecast_nll": 0.6974716246540595,
+          "forecast_brier": 0.2521666837701663,
+          "forecast_entropy": 0.6838318871955723,
+          "recoveries": 41.2,
+          "failed_attempts": 84.8,
+          "inference_seconds": 0.341239720200133
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.53359375,
+            "residual_faults": 40,
+            "completed_worlds": 216,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.34375,
+            "mean_services": 1.58984375,
+            "forecast_nll": 0.7235610775075255,
+            "forecast_brier": 0.26512961064895085,
+            "forecast_entropy": 0.6905368574957258,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 0.5500160970024126
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.55859375,
+            "residual_faults": 48,
+            "completed_worlds": 209,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.34375,
+            "mean_services": 1.52734375,
+            "forecast_nll": 0.6731995182922567,
+            "forecast_brier": 0.24005811566090074,
+            "forecast_entropy": 0.6904685767023894,
+            "recoveries": 39,
+            "failed_attempts": 86,
+            "inference_seconds": 0.47960434299898225
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.58671875,
+            "residual_faults": 60,
+            "completed_worlds": 199,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.34375,
+            "mean_services": 1.41796875,
+            "forecast_nll": 0.6923551674296344,
+            "forecast_brier": 0.249602959950868,
+            "forecast_entropy": 0.6912311579899233,
+            "recoveries": 33,
+            "failed_attempts": 83,
+            "inference_seconds": 0.18317373100603618
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.54609375,
+            "residual_faults": 47,
+            "completed_worlds": 209,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.34375,
+            "mean_services": 1.51953125,
+            "forecast_nll": 0.6657398232210681,
+            "forecast_brier": 0.23674817690307642,
+            "forecast_entropy": 0.6619890422807322,
+            "recoveries": 40,
+            "failed_attempts": 83,
+            "inference_seconds": 0.1842742380015352
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.53359375,
+            "residual_faults": 40,
+            "completed_worlds": 216,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.34375,
+            "mean_services": 1.58984375,
+            "forecast_nll": 0.7325025368198133,
+            "forecast_brier": 0.26929455568703564,
+            "forecast_entropy": 0.6849338015090906,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 0.30913019199169867
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": 0.00015624999999999537,
+          "cost_delta_95pct_descriptive_interval": [
+            -0.028204101562499997,
+            0.027618164062499978
+          ],
+          "paired_mean_fault_delta_per_world": 0.0039062499999999983,
+          "fault_delta_95pct_descriptive_interval": [
+            -0.015625,
+            0.021875000000000002
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      },
+      "policy_dagger": {
+        "mean_across_model_seeds": {
+          "worlds": 256.0,
+          "cost_per_entity": 1.5479687500000001,
+          "residual_faults": 44.8,
+          "completed_worlds": 212.0,
+          "blocked_actions": 0.0,
+          "trajectory_violations": 0.0,
+          "mean_inspections": 5.21875,
+          "mean_services": 1.56171875,
+          "forecast_nll": 0.6977393669881758,
+          "forecast_brier": 0.25225416690431,
+          "forecast_entropy": 0.6835336265628886,
+          "recoveries": 47.0,
+          "failed_attempts": 86.0,
+          "inference_seconds": 0.3014736042005097
+        },
+        "per_seed": {
+          "7201": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.7241307442637145,
+            "forecast_brier": 0.26541001774269435,
+            "forecast_entropy": 0.6905050462577605,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 0.3964246679970529
+          },
+          "7202": {
+            "worlds": 256,
+            "cost_per_entity": 1.53359375,
+            "residual_faults": 40,
+            "completed_worlds": 216,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.34375,
+            "mean_services": 1.58984375,
+            "forecast_nll": 0.6718999940138061,
+            "forecast_brier": 0.2394221553320791,
+            "forecast_entropy": 0.6898896736341715,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 0.517508805001853
+          },
+          "7203": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.6887011506048244,
+            "forecast_brier": 0.24777613727002185,
+            "forecast_entropy": 0.6916208031943132,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 0.18865757999856214
+          },
+          "7204": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.6643798854196571,
+            "forecast_brier": 0.2360525862787301,
+            "forecast_entropy": 0.6634700812114462,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 0.22113074100138874
+          },
+          "7205": {
+            "worlds": 256,
+            "cost_per_entity": 1.5515625,
+            "residual_faults": 46,
+            "completed_worlds": 211,
+            "blocked_actions": 0,
+            "trajectory_violations": 0,
+            "mean_inspections": 5.1875,
+            "mean_services": 1.5546875,
+            "forecast_nll": 0.739585060638877,
+            "forecast_brier": 0.27260993789802473,
+            "forecast_entropy": 0.6821825285167518,
+            "recoveries": 47,
+            "failed_attempts": 86,
+            "inference_seconds": 0.18364622700369182
+          }
+        },
+        "paired_uncertainty": {
+          "paired_mean_cost_delta": -0.00359375,
+          "cost_delta_95pct_descriptive_interval": [
+            -0.009375976562499999,
+            0.001290039062499995
+          ],
+          "paired_mean_fault_delta_per_world": -0.004687500000000001,
+          "fault_delta_95pct_descriptive_interval": [
+            -0.00859375,
+            -0.0015625
+          ],
+          "independent_worlds": 256,
+          "note": "Model seeds averaged within worlds; shifted resampling stratified by family. Adaptive development, not confirmation."
+        }
+      }
+    }
+  },
+  "original_compute": {
+    "total_seconds": 647.939259952,
+    "initial_collection_worlds": 640,
+    "training_events": 14080,
+    "training_target_oracle_queries": 61440,
+    "common_collection_native_actions": 19200,
+    "optimizer_updates": 8960,
+    "model_fits": 35,
+    "note": "Exact native and student target counts recomputed by auditor; wall clock includes calibration and evaluation. Repeated seed worlds are not independent samples."
+  },
+  "student_native_calls": 25262,
+  "student_target_queries": 126648,
+  "known_bayes_initial_inspection_value": 0.40684024606479263,
+  "audit_seconds": 365.7541405679999,
+  "no_confirmation_or_general_architectural_superiority_claim": true
+}

@@ -965,3 +965,14 @@ Immediate blocker:
 the representation-to-executable-state content interface remains unresolved.
 The representation bit projection and the CASM state bit projection are
 separate learned maps.
+
+
+## DEV-052B-FRESH1: bounded learned world-state loop
+
+**Implemented and replay-verified:** a public-event GRU state, action-conditioned repair forecasts, cost-aware decisions, native constrained execution, and receipt-gated writes run end to end. All 35 checkpoint tensors and calibration choices reconstructed; 1,299 regression tests pass.
+
+**Robust advantage unsupported:** the joint model exactly matches estimated Bayes (cost/entity 1.40234375 in regime, 1.5515625 shifted; residual faults 26 and 46). No neural variant passes the cost-and-failure guard on both cohorts for all five initializations. Seed-specific improvements and unsuccessful controls are preserved.
+
+**Not established:** learned generic entity discovery, CDL routing, CASM program induction, variable-dynamics adaptation, scaling, industrial safety, compute advantage, or complete TAC-OSM superiority. Five model initializations reuse 512 distinct held-out worlds. The first complete matrix was excluded for smoke/test namespace overlap; a prospective fresh evaluation retained the recipe and acceptance rule. Separate-process reconstruction and independent primitive accounting were written by the same author and do not constitute third-party scientific review.
+
+Evidence: [DEV-052B results](DEV-052B-RESULTS.md), [audited numerical record](../research/dev052b/audited-summary.json), draft [PR #212](https://github.com/FPC-effortless/TAC-OSM/pull/212).
