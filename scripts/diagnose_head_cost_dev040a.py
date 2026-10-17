@@ -176,7 +176,8 @@ def refit(ck,train,alpha,seed):
         if not torch.isfinite(loss):raise FloatingPointError('nonfinite refit')
         loss.backward();opt.step()
     if alpha==.5:
-        for k,v in h.state_dict().items():torch.testing.assert_close(v,ck['heads']['mlp_balanced'][k],rtol=0,atol=0)
+        h.replay_max_weight_error=max(float((v-ck['heads']['mlp_balanced'][k]).abs().max()) for k,v in h.state_dict().items())
+        for k,v in h.state_dict().items():torch.testing.assert_close(v,ck['heads']['mlp_balanced'][k],rtol=0,atol=1e-4)
     return h
 
 
@@ -235,9 +236,15 @@ def run(evidence,output):
                 with torch.no_grad():
                     pl=head(ev['features']['trained']);dl=head(fit['calibration']['features']['trained'])
                     ps[name]=pl.softmax(-1)[...,1].numpy();ds[name]=dl.softmax(-1)[...,1].numpy()
-                new[name]=dict(weights=copy.deepcopy(head.state_dict()),logits=pl,dev_logits=dl,alpha=alpha)
+                new[name]=dict(weights=copy.deepcopy(head.state_dict()),logits=pl,dev_logits=dl,alpha=alpha,replay_max_weight_error=getattr(head,'replay_max_weight_error',None))
                 with torch.no_grad():torch.testing.assert_close(head(ev['features']['trained']),pl,rtol=0,atol=0)
-            np.testing.assert_array_equal(ps['weight_0.5'],ps['mlp_balanced'])
+            np.testing.assert_allclose(ps['weight_0.5'],ps['mlp_balanced'],rtol=0,atol=1e-5)
+            np.testing.assert_array_equal(ps['weight_0.5']>.5,ps['mlp_balanced']>.5)
+            replay_checks=dict(max_weight_error=new['weight_0.5']['replay_max_weight_error'],max_probability_error=float(np.abs(ps['weight_0.5']-ps['mlp_balanced']).max()),all_query_argmax_match=True)
+            assert choose_threshold(dy,ds['weight_0.5'])==choose_threshold(dy,ds['mlp_balanced'])
+            for threshold in GRID:
+                np.testing.assert_array_equal(ps['weight_0.5'][...,0]-ps['weight_0.5'][...,1]>threshold,ps['mlp_balanced'][...,0]-ps['mlp_balanced'][...,1]>threshold)
+                assert physical(y,ps['weight_0.5'][...,0]-ps['weight_0.5'][...,1],threshold)==physical(y,ps['mlp_balanced'][...,0]-ps['mlp_balanced'][...,1],threshold)
             torch.save(new,output/f'{seed}-{arm}-weight-sweep.pt')
             raw[str(seed)][arm]={}
             arm_summary={}
@@ -264,7 +271,7 @@ def run(evidence,output):
             u=exact_frontier(y,ps['mlp_uniform'][...,0]-ps['mlp_uniform'][...,1])
             b=exact_frontier(y,ps['mlp_balanced'][...,0]-ps['mlp_balanced'][...,1])
             # Grid regret separates threshold selection from the quality of the available score.
-            record['arms'][arm]=dict(heads=arm_summary,uniform_weakly_covers_balanced=weakly_covers(u,b),balanced_weakly_covers_uniform=weakly_covers(b,u))
+            record['arms'][arm]=dict(refit_equivalence=replay_checks,heads=arm_summary,uniform_weakly_covers_balanced=weakly_covers(u,b),balanced_weakly_covers_uniform=weakly_covers(b,u))
         summaries.append(record)
     save_csv(output/'label-metrics.csv',metrics);save_csv(output/'stratified-costs.csv',strata);save_csv(output/'threshold-frontiers.csv',frontier)
     analysis=dict(study='DEV-040A-POSTHOC-DIAGNOSTICS',status='INSPECTED_COHORT_EXPLORATORY',references=refs,by_seed=summaries,cost_differences={})

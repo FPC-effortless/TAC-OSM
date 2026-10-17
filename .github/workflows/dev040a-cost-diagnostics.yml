@@ -1,7 +1,7 @@
 name: DEV-040A post-hoc cost diagnosis and durable evidence
 on:
   pull_request:
-    types: [opened]
+    types: [opened, synchronize]
     paths:
       - 'scripts/diagnose_head_cost_dev040a.py'
       - 'research/dev040a-diagnostics/plan.json'
@@ -15,7 +15,7 @@ jobs:
     timeout-minutes: 35
     permissions:
       contents: write
-      actions: read
+      actions: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -23,6 +23,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Cancel redundant legacy full-training trigger
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          python - <<'PY'
+          import json,subprocess
+          r=json.loads(subprocess.check_output(['gh','run','view','39000598087','--json','status,headSha,workflowName']))
+          assert r['headSha']=='c02811bbe2bb030f985cd2d9468cd368ca116295'
+          assert r['workflowName']=='DEV-040A frozen-head pilot and complete raw evidence'
+          if r['status']!='completed':subprocess.run(['gh','run','cancel','39000598087'],check=True)
+          PY
       - name: Preserve the exact original ZIP in a research prerelease
         env:
           GH_TOKEN: ${{ github.token }}
@@ -85,3 +97,10 @@ jobs:
           cat artifacts/diagnostics/analysis.json
           cat artifacts/DEV-040A-diagnostics-SHA256SUMS
           cat artifacts/release-final.json
+          python - <<'PY'
+          from pathlib import Path
+          for name in ('failure-service-frontier.svg','weight-sweep.svg','reference-strata.csv','stratified-costs.csv'):
+              print('PUBLICATION_FILE_BEGIN '+name)
+              print((Path('artifacts/diagnostics')/name).read_text())
+              print('PUBLICATION_FILE_END '+name)
+          PY
