@@ -1,6 +1,6 @@
 # DEV-053B — Equal-information recurrent adaptation under changing repair dynamics
 
-**Completed and replay-audited development. No robust MTSK advantage established.** The actual repository MTSK kernel ran alongside generic recurrent and Bayesian controls. Public information, observation budgets and native action costs were paired. This is an MTSK component experiment, not a trained CDL/CASM system or proof of TAC-OSM's central thesis.
+**Null on adaptation; completed development replay audit.** See the [subsequent null review](DEV-053-NULL-REVIEW.md) for multiplicity correction, per-fit update counts, calibration and acquisition break-even. The actual repository MTSK kernel ran alongside generic recurrent and Bayesian controls. Public information, observation budgets and native action costs were paired. This is an MTSK component experiment, not a trained CDL/CASM system or proof of TAC-OSM's central thesis.
 
 The primary pooled fraction of oracle cost gap closed was **1.58% for MTSK**, descriptive 95% interval **[−11.82%, +12.83%]**. GRU-128 closed **3.73% [−13.74%, +18.89%]** and HMM plug-in **8.83% [−6.11%, +21.88%]**. All span zero. MTSK failed the registered combined cost/reliability mechanism guard against every required reference/control.
 
@@ -30,9 +30,9 @@ Costs average equally across both families and all five observation counts, per 
 
 The oracle and stationary rows are definitional endpoints, not superiority tests. Finite-sample oracle-gap closure is a comparative cost normalization, not a percentage of correctly learned world state. An oracle with current latent rates has privileged information; a well-specified posterior learner may still have irreducible uncertainty about the next regime.
 
-![Equal-information cost and gap curves](../research/dev053b/learning-curves.png)
+The original cost/normalized-curve figure remains in the immutable evidence archive. It is omitted from this current presentation because the drift/32 normalization is unstable.
 
-The top panels show actual native maintenance cost against the identical observation budget; the bottom panels expose unstable normalized ratios rather than clipping them. Shaded bands are crossed paired stream/seed intervals for the neural examples. Different probe levels have independent native realizations on shared stream histories; nonmonotonic curves do not establish that more observations cause worse performance. Oracle/reference curves and clustered pairing control finite-cohort difficulty variation.
+Absolute native maintenance costs against identical observation budgets are retained below. Different probe levels have independent native realizations on shared stream histories; nonmonotonic curves do not establish that more observations cause worse performance. Oracle/reference curves and clustered pairing control finite-cohort difficulty variation.
 
 ## Endpoint detail and headroom limits
 
@@ -52,7 +52,7 @@ At **32 public observations**, each family contains 128 distinct streams. Neural
 | Frozen MTSK kernel | 1.883125 | 46.6 | 1.532812 | 33.8 |
 | Reset MTSK | 1.865234 | 39.0 | 1.527344 | 29.0 |
 
-The switching endpoint has headroom **0.3296875/entity**; MTSK closes 5.59% of it, GRU-128 21.16%, and mixture DP 38.63%. The drift endpoint has only **0.007421875/entity** observed headroom. Around **44.7%** of its bootstrap denominator draws are nonpositive, so ratio intervals there are conditional, fragile, and unsuitable for a strong percentage claim. Raw costs, fault contrasts and invalid-draw rates remain in the numerical record. The generator and reference were not changed after this limitation appeared.
+The switching endpoint has headroom **0.3296875/entity**; MTSK closes 5.59% of it, GRU-128 21.16%, and mixture DP 38.63%. The drift endpoint has only **0.007421875/entity** observed headroom. Around **44.7%** of its bootstrap denominator draws are nonpositive, so its ratio and ratio interval are suppressed in this review. Raw costs, fault contrasts and invalid-draw rates remain in the numerical record. The generator and reference were not changed after this limitation appeared.
 
 The mixture planner's 32-observation switching cost is lower than the plug-in controls, but it leaves 71 faults versus stationary Beta's 44. This is the specified economic trade-off, not evidence that true or richer Bayesian knowledge is brittle. Conversely, its continuous-drift model is misspecified and does not dominate pooled cost. A single control or endpoint cannot replace the registered pooled result and reliability guard.
 
@@ -65,9 +65,9 @@ The mixture planner's 32-observation switching cost is lower than the plug-in co
 | Frozen MTSK kernel | -0.01050000 | [-0.02523437, +0.00461836] | Fail |
 | Reset MTSK | -0.00789062 | [-0.01719824, -0.00068672] | Fail |
 
-Carried MTSK state has a modest negative cost contrast versus the reset control, with its unadjusted descriptive interval below zero. This is retained as a limited signal; the full per-initialization/family reliability guard still fails. Frozen-kernel and generic-GRU contrasts do not establish a robust learned-kernel benefit. These results neither prove memory useless nor promote MTSK as superior.
+The reset contrast is secondary and does not survive multiplicity adjustment: the three-comparison Bonferroni interval is [−0.019956,+0.000474], spanning zero. Reset was separately retrained during training and evaluation. The full per-initialization/family reliability guard also fails. Frozen-kernel and generic-GRU contrasts do not establish a robust learned-kernel benefit. These results neither prove memory useless nor promote MTSK as superior.
 
-The neural and plug-in controls forecast three marginal rates and use a point-rate planner. The mixture reference additionally preserves joint regime/fault uncertainty during actions. Its difference from plug-in HMM includes a planning/representation change, not a clean memory comparison. Accurate marginal forecasts alone need not recover a sufficient predictive state for multi-action costs. Learning a richer joint predictive distribution, with convergence and strong matched controls on fresh worlds, remains an unexecuted follow-up—not a conclusion that a different writer must solve this task.
+The neural and plug-in controls forecast three marginal rates and use a point-rate planner. The mixture reference additionally preserves joint regime/fault uncertainty during actions. Its difference from plug-in HMM includes a planning/representation change, not a clean memory comparison. Accurate marginal forecasts alone need not recover a sufficient predictive state for multi-action costs. Learning a richer joint predictive distribution, with convergence and strong matched controls on fresh worlds, is tested prospectively in DEV-054; it is not a conclusion that a different writer must solve this task.
 
 ## Observation expense and compute
 
