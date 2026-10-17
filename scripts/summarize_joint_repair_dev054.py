@@ -48,12 +48,18 @@ def summary(directory, output):
         o = np.concatenate([matrix('oracle',f)[0].mean(-1) for f in ('switching','drift')])
         strata = [0]*(len(b)//2)+[1]*(len(b)//2)
         result['pooled'][arm] = interval(x,b,o,strata)
+        fx=np.concatenate([matrix(arm,f,'failures').mean(-1) for f in ('switching','drift')],1)
+        fb=np.concatenate([matrix('stationary_beta',f,'failures')[0].mean(-1) for f in ('switching','drift')])
+        fs=interval(fx,fb,strata=strata)
+        result['pooled'][arm]['paired_faults_per_world']={'difference':fs['delta_vs_beta'],'interval_95pct':fs['delta_95pct']}
         result['calibration'][arm] = {f:[c['calibration'] for c in cells(arm,f)] for f in ('switching','drift')}
         for family in ('switching','drift'):
             result['by_family'].setdefault(family,{})[arm]={}
             for i,n in enumerate(j.LEVELS):
                 x = matrix(arm,family)[:,:,i]; b=matrix('stationary_beta',family)[0,:,i]; o=matrix('oracle',family)[0,:,i]
                 stat=interval(x,b,o); saving=-stat['delta_vs_beta']; acquisition=.6*n
+                fs=interval(matrix(arm,family,'failures')[:,:,i],matrix('stationary_beta',family,'failures')[0,:,i])
+                stat['paired_faults_per_world']={'difference':fs['delta_vs_beta'],'interval_95pct':fs['delta_95pct']}
                 stat.update({'acquisition_per_entity':acquisition,'total_cost_per_entity':stat['cost']+acquisition,
                              'oracle_break_even_decisions':math.ceil(acquisition/stat['oracle_headroom']) if stat['oracle_headroom']>0 else None,
                              'model_break_even_decisions':math.ceil(acquisition/saving) if saving>0 else None,
