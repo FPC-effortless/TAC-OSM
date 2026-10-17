@@ -9,6 +9,20 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## DEV-054 joint-planning checkpoint (October 17, 2026)
+
+[DEV-054](docs/DEV-054-RESULTS.md) is completed and development-replay audited.
+All 15 checkpoints ran with the same joint regime–fault planner, including
+parameter-matched GRU and GRU-plus-HMM controls. MTSK's pooled cost difference
+versus stationary Beta was −0.01072/entity (paired 95% interval
+[−0.05714,+0.03407]), with **0.19227 additional residual faults/world**
+(interval [+0.16363,+0.22179]). All adjusted mechanism guards fail.
+This is a null on MTSK superiority; the component loop runs end to end,
+while full TAC-OSM, CDL/CASM and selective computation remain unvalidated.
+All 15 fits met the registered plateau diagnostic after 1,024 updates each;
+1,321 tests passed. See the [DEV-053 null review](docs/DEV-053-NULL-REVIEW.md)
+for corrected multiplicity, training exposure, calibration and economics.
+
 ## DEV-053 reviewed adaptation checkpoint (October 17, 2026)
 
 [DEV-053A](docs/DEV-053A-FORECAST-REVIEW.md) confirms that the generic DEV-052B

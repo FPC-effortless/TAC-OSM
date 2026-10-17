@@ -987,3 +987,26 @@ Evidence: [DEV-052B results](DEV-052B-RESULTS.md), [audited numerical record](..
 No trained CDL routing, CASM program discovery, industrial safety, full TAC-OSM advantage, or complexity-scaling result. Idealized public calibration fixtures, point-rate neural planning, unequal parameter counts, only 256 stream clusters, five initialization seeds, and same-author/shared-code reproduction limit the result.
 
 Evidence: [DEV-053A review](DEV-053A-FORECAST-REVIEW.md), [DEV-053B findings and curves](DEV-053B-ADAPTATION-RESULTS.md), draft [PR #213](https://github.com/FPC-effortless/TAC-OSM/pull/213).
+
+## DEV-054: common joint planner, matched encoders, reliability regression
+
+**Completed development replay; MTSK superiority unsupported.** Fifteen fits
+(three initializations × five encoders), 1,024 updates each, all reconstruct
+exactly. A parameter-matched GRU and GRU-plus-HMM use the same explicit joint
+regime–fault planner as MTSK/HMM. MTSK costs 1.644748/entity versus Beta 1.655469;
+paired difference −0.010720, interval [−0.057141,+0.034075]. Residual faults
+increase 0.192274/world, interval [+0.163628,+0.221788]. All four adjusted
+mechanism guards fail. 256 distinct stream clusters, not 768 independent
+seed-stream samples. All 15 validation plateau diagnostics pass, without
+establishing global convergence. 1,321 tests pass.
+
+The restored component checkpoint executes public observation→persistent
+belief→joint planning→native action→verification. The neural encoder learns
+regime weights; training-fitted endpoints and analytic physics/belief updates,
+addressing and Bellman planning remain explicit. No full TAC-OSM/CDL/CASM,
+selective-computation, commercial-value or parameter-efficiency claim follows.
+The monetary oracle also increases faults versus Beta, so its headroom is not
+a demonstrated reliability-feasible saving. Unstable/below-floor ratios are
+suppressed by the prospective rule. See [results](DEV-054-RESULTS.md),
+[protocol](../research/dev054/protocol.json), [summary](../research/dev054/summary.json)
+and draft [PR #214](https://github.com/FPC-effortless/TAC-OSM/pull/214).
