@@ -5,6 +5,7 @@ import argparse
 import json
 from pathlib import Path
 import statistics
+import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,6 +29,13 @@ def audit(directory):
     assert report["study"] == "DEV-049A" and not report["smoke"]
     assert report["protocol_sha256"] == digest(PROTOCOL)
     seed = report["seed"]
+    assert seed in range(4901, 4911) and seed == int(directory.name)
+    source_protocol = subprocess.check_output(
+        ["git", "show", report["source"] + ":research/dev049/study-protocol.json"], cwd=ROOT)
+    import hashlib
+    assert hashlib.sha256(source_protocol).hexdigest() == report["protocol_sha256"]
+    assert set(report["arms"]) == set(ARMS)
+    assert set(report["controls"]) == {"exact_public_history", "service_all"}
     cohorts = {s: study_cohort(seed, s) for s in ("calibration", "certification", "evaluation")}
     fingerprints = {s: [c.fingerprint for c in cs] for s, (cs, _) in cohorts.items()}
     fingerprints["fit"] = [c.fingerprint for step in range(216)
@@ -76,6 +84,7 @@ def audit(directory):
         assert safe == result["certification_used_threshold"]
         expected = dict(cost_tuned_threshold=cost, zero_calibration_failures=safe,
                         certified_or_service_all=safe if accepted else -1.)
+        assert set(result["policies"]) == set(expected)
         for name, policy in result["policies"].items():
             assert policy["threshold"] == expected[name]
             replay_policy(policy, cohorts["evaluation"], result["predictions"]["evaluation"])
@@ -123,6 +132,7 @@ def main(root, output):
     torch.set_num_threads(1)
     torch.use_deterministic_algorithms(True)
     rows = [audit(Path(root) / str(seed)) for seed in range(4901, 4911)]
+    assert [r["seed"] for r in rows] == list(range(4901, 4911))
     assert len({r["source"] for r in rows}) == 1
     summary = {}
     for name in rows[0]["policies"]:
