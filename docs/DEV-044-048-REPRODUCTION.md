@@ -66,3 +66,13 @@ No code in this program invokes GEPA's LLM reflection optimizer. DEV-048's
 development-only candidate archive is a deterministic control. No key or service
 is required and no GEPA effectiveness claim follows from it. The selective
 diagonal-state control is an equation-level hypothesis, not a Mamba reproduction.
+
+DEV-047's variants share observation/prediction initialization and training
+examples. The fast-GRU replacement creates a fresh writer before masking the
+other read channels; it is an architecture comparator, not a byte-matched
+single-bank ablation of the multiscale writer. The temporal-order replacement
+also initializes its own writer. Their effects cannot be attributed solely to
+removing or adding one memory channel. The temporal arm must additionally be
+compared under matched parameter, tuning and compute budgets before interpreting
+an advantage. The retention probe removes the earliest target observation,
+which need not be the decisive historical event in a cancellation sequence.
