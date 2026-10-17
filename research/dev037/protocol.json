@@ -1,0 +1,15 @@
+{
+  "experiment": "DEV-037 frozen-memory simulator action learning",
+  "status": "registered compact autoresearch pilot",
+  "parent": "DEV-036 bounded writer pilot; architecture selection is adaptive",
+  "frozen_memory": "DEV-036 bounded_local_multi_fp64 checkpoint, 216 updates, no further encoder/memory training",
+  "teacher": "For each entity, choose service iff 1+4*service_future_bit < 4*wait_future_bit, evaluated from copied simulator world only after pool selection. Teacher hidden outcomes never enter policy features.",
+  "policy_input": "Three frozen future-query probabilities per entity: wait, service, current",
+  "policy": "Shared 3-16-1 Tanh MLP, 81 trainable parameters, identical initial weights for random and active acquisition; sigmoid >=0.5 selects service; no inspection in any compared policy",
+  "acquisition": "Pool dev037-v1-pool, H512, 3 delays x 4 roles x 3 deadlines x 8 repetitions x 2 paired worlds=576. Select four complete paired repetitions per condition (288 worlds) either random seed37037 or smallest mean over pair of minimum per-entity |Pwait-Pservice-0.25|. Selection uses predictions only, no teacher labels.",
+  "training": "AdamW lr0.01 weight_decay0, 300 full-batch updates, BCEWithLogits pos_weight3, same budget for random and active policies",
+  "controls": "Fixed model-only threshold0.25 and a one-parameter threshold selected on random training worlds from grid [-0.5,0,0.1,0.2,0.25,0.3,0.4,0.5,0.75] by physical cost, first minimum wins. Privileged simulator oracle upper bound is evaluator-only.",
+  "evaluation": "Fresh dev037-v1-eval H512 namespace, same 3x4x3x8x2 conditions=576 worlds. Report all-entity physical failures, unnecessary services, service count, total cost, action-teacher agreement, mature cancellation target agreement, selection cohort and inference/training time. No evaluation-based hyperparameter selection.",
+  "audit": "Separate-process condition/split checks and physical receipt replay; saved policy predictions and checkpoint hashes. Re-running frozen memory forward shares code and does not independently validate the model.",
+  "claims": "Action-level imitation inspired by ActionOPD and active simulation, not its exact algorithm or a large teacher model; one frozen model, one scenario generator, no full TAC-OSM capability or scientific confirmation"
+}
