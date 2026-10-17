@@ -1,0 +1,190 @@
+{
+  "experiment": "DEV-039",
+  "frozen_source": "b913b7ba5c981a6e405208a45868f66294a01cf5",
+  "protocol_sha256": "161c6713597d002607fe1735a7a27548bbd14126d2c093499bc391d5d2b6f88c",
+  "checkpoint_sha256": "74b1b648b427d9382f4bfb8f62842cd87c8847ee0f4883085a1736a0c34c88c1",
+  "audit_passed": true,
+  "train_worlds": 576,
+  "holdout_worlds": 576,
+  "mature_primary_worlds": 384,
+  "mature_cancellation_worlds": 192,
+  "mature_reissued_worlds": 96,
+  "frozen_encoder_memory_steps": 0,
+  "head_refit_steps": 500,
+  "results": {
+    "original": {
+      "primary": 0.8125,
+      "cancellation": 0.625,
+      "reissued": 0.5,
+      "all_entity": 0.951171875,
+      "physical_totals": {
+        "failures": 0,
+        "unnecessary_services": 368,
+        "inspections": 0,
+        "total_cost": 2692.0,
+        "services": 2692
+      },
+      "cross_entropy": 0.06716351956129074
+    },
+    "refit_mlp": {
+      "primary": 0.921875,
+      "cancellation": 0.84375,
+      "reissued": 0.6875,
+      "all_entity": 0.990234375,
+      "physical_totals": {
+        "failures": 22,
+        "unnecessary_services": 44,
+        "inspections": 0,
+        "total_cost": 2434.0,
+        "services": 2346
+      },
+      "cross_entropy": 0.022021222859621048
+    },
+    "linear": {
+      "primary": 0.921875,
+      "cancellation": 0.84375,
+      "reissued": 0.6875,
+      "all_entity": 0.990234375,
+      "physical_totals": {
+        "failures": 21,
+        "unnecessary_services": 65,
+        "inspections": 0,
+        "total_cost": 2452.0,
+        "services": 2368
+      },
+      "cross_entropy": 0.030098889023065567
+    }
+  },
+  "training": {
+    "refit_mlp": {
+      "seconds": 4.945196191998548,
+      "curve": [
+        {
+          "update": 1,
+          "loss": 0.0700015053153038
+        },
+        {
+          "update": 100,
+          "loss": 0.03148878365755081
+        },
+        {
+          "update": 200,
+          "loss": 0.029916591942310333
+        },
+        {
+          "update": 300,
+          "loss": 0.028118012472987175
+        },
+        {
+          "update": 400,
+          "loss": 0.025649497285485268
+        },
+        {
+          "update": 500,
+          "loss": 0.022567562758922577
+        }
+      ]
+    },
+    "linear": {
+      "seconds": 0.6112202760123182,
+      "curve": [
+        {
+          "update": 1,
+          "loss": 0.6500673890113831
+        },
+        {
+          "update": 100,
+          "loss": 0.04621019959449768
+        },
+        {
+          "update": 200,
+          "loss": 0.03705781325697899
+        },
+        {
+          "update": 300,
+          "loss": 0.033577438443899155
+        },
+        {
+          "update": 400,
+          "loss": 0.03188645839691162
+        },
+        {
+          "update": 500,
+          "loss": 0.030925290659070015
+        }
+      ]
+    }
+  },
+  "exploratory_bootstrap": {
+    "refit_mlp minus original": {
+      "primary": {
+        "paired_groups": 192,
+        "difference": 0.109375,
+        "exploratory_pair_bootstrap_95pct": [
+          0.08072916666666667,
+          0.140625
+        ]
+      },
+      "cancellation": {
+        "paired_groups": 96,
+        "difference": 0.21875,
+        "exploratory_pair_bootstrap_95pct": [
+          0.16666666666666666,
+          0.265625
+        ]
+      },
+      "reissued": {
+        "paired_groups": 48,
+        "difference": 0.1875,
+        "exploratory_pair_bootstrap_95pct": [
+          0.11458333333333333,
+          0.25
+        ]
+      },
+      "total_cost": {
+        "paired_groups": 288,
+        "difference": -258.0,
+        "exploratory_pair_bootstrap_95pct": [
+          -312.0,
+          -204.0
+        ]
+      }
+    },
+    "refit_mlp minus linear": {
+      "primary": {
+        "paired_groups": 192,
+        "difference": 0.0,
+        "exploratory_pair_bootstrap_95pct": [
+          0.0,
+          0.0
+        ]
+      },
+      "cancellation": {
+        "paired_groups": 96,
+        "difference": 0.0,
+        "exploratory_pair_bootstrap_95pct": [
+          0.0,
+          0.0
+        ]
+      },
+      "reissued": {
+        "paired_groups": 48,
+        "difference": 0.0,
+        "exploratory_pair_bootstrap_95pct": [
+          0.0,
+          0.0
+        ]
+      },
+      "total_cost": {
+        "paired_groups": 288,
+        "difference": -18.0,
+        "exploratory_pair_bootstrap_95pct": [
+          -32.0,
+          -3.0
+        ]
+      }
+    }
+  },
+  "full_system_capability_established": false,
+  "architectural_superiority_established": false
+}
