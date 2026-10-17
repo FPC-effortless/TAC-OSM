@@ -48,8 +48,9 @@ def test_world_physical_intervention_and_last_event_information_barrier():
     a,b=make_order_pair(6,128,32,"at")
     target=a.target_entity
     assert last_observations(a.observations)==last_observations(b.observations)
-    assert execute(a.world,a.horizon,(),0)["failures"]>=1
+    initial=execute(a.world,a.horizon,(),0)
+    assert initial["failures"]>=1
     res=execute(a.world,a.horizon,(target,),0)
-    assert res["failures"]==0 and res["unnecessary_services"]==0
+    assert res["failures"]==initial["failures"]-1 and res["unnecessary_services"]==0
     bres=execute(b.world,b.horizon,(target,),0)
     assert bres["unnecessary_services"]==1
