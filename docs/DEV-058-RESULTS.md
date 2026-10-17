@@ -45,7 +45,8 @@ initializations, not 1,152 independently generated environments. Seeing zero
 failures at one seed is not a guarantee of zero failure probability.
 
 Seed 7582's 16 failed completions all exhausted the external action budget
-without stopping. Fifteen ended physically repaired; one retained two faults. They remain in the archive. Seed 7581 has zero such outcomes. The policies
+without stopping. Fifteen ended physically repaired; one retained two faults.
+They remain in the archive. Seed 7581 has zero such outcomes. The policies
 encountered 86 and 96 failed repair attempts respectively in the test rollouts;
 subsequent action choices still came from the checkpoint, not a retry routine.
 
@@ -198,7 +199,9 @@ not be reported as failures of the complete learned agent.
 
 The [evidence index](../research/dev058/evidence-index.json) lists hashes,
 checkpoints, the runnable torch-only package and the saved audit. The full
-regression result and current CI links are recorded there when available.
+local regression passed 1,354 tests. GitHub run URLs are recorded there; their
+current status is external to this frozen evidence index. [Draft PR #217](https://github.com/FPC-effortless/TAC-OSM/pull/217)
+contains this development checkpoint and remains unmerged.
 
 ## Run the exported model or reproduce the research
 

@@ -41,7 +41,7 @@
   "regression": {
     "passed": 1354,
     "seconds": 72.17,
-    "github": "pending"
+    "github": "Live status is external; follow the recorded run URLs."
   },
   "runtime_boundary": "Torch-only agent plus public JSON transport. No teacher/simulator/analytic planner/task-specific policy in export.",
   "training": "Teacher-assisted admission/address pretraining then joint neural task learning; staged, not unsupervised or reward-only discovery.",
@@ -57,5 +57,27 @@
     "scripts/run_fully_learned_dev058.py": "c175dd8f60dcfb188b3f3dd8939040a9031fd5cceea375e354bd96b1f5c12154",
     "scripts/audit_fully_learned_dev058.py": "71b65f23b54822df799104ac1c050548f1de03cbfe9a9ad8e3b43e798578fe35",
     "scripts/learned_agent_runtime_dev058.py": "d0a1917652a0467a6c277bb9edd647d8a75d04d1bcd0f0ae2bf32427cd1871b1"
+  },
+  "pull_request": "https://github.com/FPC-effortless/TAC-OSM/pull/217",
+  "github_runs": [
+    {
+      "scope": "Full regression",
+      "commit": "6ff893a2ae17ae9acad68322851167521849a5bf",
+      "url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077207289"
+    },
+    {
+      "scope": "Saved checkpoint, isolated export and native replay",
+      "commit": "6ff893a2ae17ae9acad68322851167521849a5bf",
+      "url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077207316"
+    }
+  ],
+  "extracted_export_check": {
+    "seeds": [
+      7581,
+      7582
+    ],
+    "exact_decisions_per_seed": 33,
+    "requires_simulator": false,
+    "requires_tac_osm": false
   }
 }
