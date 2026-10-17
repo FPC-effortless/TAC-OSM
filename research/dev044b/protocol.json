@@ -1,0 +1,17 @@
+{
+  "study": "DEV-044B0",
+  "status": "PREREGISTERED_BOUNDED_ATTRIBUTION_DEVELOPMENT_NOT_CONFIRMATORY",
+  "reason": "DEV-044A froze memory.query and memory.query_prior together with writer dynamics, confounding writer-only attribution",
+  "seeds": [4411,4412,4413],
+  "arms": ["writer_train_reader_train", "writer_frozen_reader_train", "writer_train_reader_frozen", "writer_frozen_reader_frozen"],
+  "writer_parameters": "All model.memory parameters except query.* and query_prior.*",
+  "reader_parameters": "model.memory.query.* and model.memory.query_prior.*",
+  "common_trainable": "Public event encoder, external query encoder, adapter and head; identical initial tensors and examples across four arms within seed",
+  "train": {"history": 128, "updates": 108, "batch_worlds": 2, "lr": 0.002, "objective": "mean pre/post inspection future cross entropy", "delays": [32,128,512], "roles": ["retention","acquisition","pending_cancel","reissued_cancel"], "deadlines": ["before","at","after"], "profile": "base only", "namespace": "dev044b0-fit"},
+  "calibration": {"history": 512, "repetitions_per_cell": 1, "namespace": "dev044b0-calibration"},
+  "evaluation": {"history": 512, "repetitions_per_cell": 2, "namespace": "dev044b0-evaluation"},
+  "primary": "Writer training contrast holding internal reader training fixed; report both factorial strata and interaction without evaluation arm selection",
+  "failure_guard": "No favorable decision claim when the intervention has more physical failures in any paired seed",
+  "audit": ["writer/reader parameter hashes independently", "frozen group exact invariance", "trainable group nonzero gradients and changed tensors", "byte-identical initial state dicts", "checkpoint forecasts/calibration/physical replay", "preserve every arm"],
+  "limitations": ["bounded pilot, not full DEV-044B equal-tuning/compute study", "three seeds descriptive", "128 training history differs from DEV-044A's 512", "only base retention profile", "no tuned GRU/delta convergence control", "matched updates not FLOPs", "no full architecture or pure event-encoder attribution claim"]
+}

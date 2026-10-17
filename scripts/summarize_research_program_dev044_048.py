@@ -18,21 +18,30 @@ def contrast(rows,reference):
 
 def summarize(root):
     root = Path(root)
-    paths = {s:root/("dev"+s)/("analysis/analysis.json" if s=="044" else "analysis.json") for s in ("044","045","046","047","048")}
+    paths = {s:root/("dev"+s)/("analysis/analysis.json" if s=="044" else "analysis.json") for s in ("044","044b","045","046","047","048")}
     data = {s:json.loads(p.read_text()) for s,p in paths.items()}
     for s,d in data.items():
-        assert d["study"].startswith("DEV-"+s)
+        assert d["study"].lower().startswith("dev-"+s)
         assert len(d["per_seed"])==3 and len({r["seed"] for r in d["per_seed"]})==3
         assert d["status"] in ("AUDITED_DEVELOPMENT_NOT_CONFIRMATORY",
             "CHECKPOINT_AND_PHYSICAL_REPLAY_PASSED_DEVELOPMENT_ONLY",
-            "CANDIDATE_AND_PHYSICAL_REPLAY_PASSED_DEVELOPMENT_ONLY")
-    out = dict(status="FIVE_AUDITED_DEVELOPMENT_STUDIES_NOT_CONFIRMATORY",training_seeds_per_study=3,
-               new_fitted_arms=84,full_architecture_superiority_established=False,studies={},
+            "CANDIDATE_AND_PHYSICAL_REPLAY_PASSED_DEVELOPMENT_ONLY",
+            "FACTORIAL_CHECKPOINT_AND_PHYSICAL_REPLAY_PASSED_DEVELOPMENT_ONLY")
+    out = dict(status="SIX_AUDITED_DEVELOPMENT_STUDIES_NOT_CONFIRMATORY",training_seeds_per_study=3,
+               new_fitted_arms=96,full_architecture_superiority_established=False,studies={},
                audit_sha256={s:hashlib.sha256(p.read_bytes()).hexdigest() for s,p in paths.items()})
     seeds = sorted(data["044"]["per_seed"],key=lambda r:r["seed"])
     out["studies"]["DEV-044A"] = contrast(
         [r["arms"][r["selected"]["trainable"]] for r in seeds],
         [r["arms"][r["selected"]["frozen"]] for r in seeds])
+    seeds = sorted(data["044b"]["per_seed"],key=lambda r:r["seed"])
+    out["studies"]["DEV-044B0"] = {arm:contrast([r["arms"][arm] for r in seeds],
+        [r["arms"]["writer_frozen_reader_"+arm.split("_reader_")[1]] for r in seeds])
+        for arm in seeds[0]["arms"]}
+    out["studies"]["DEV-044B0"]["writer_by_reader_interaction"] = [
+        (r["arms"]["writer_train_reader_train"]["cost_per_entity"]-r["arms"]["writer_frozen_reader_train"]["cost_per_entity"])-
+        (r["arms"]["writer_train_reader_frozen"]["cost_per_entity"]-r["arms"]["writer_frozen_reader_frozen"]["cost_per_entity"])
+        for r in seeds]
     seeds = sorted(data["045"]["per_seed"],key=lambda r:r["seed"])
     out["studies"]["DEV-045B"] = {}
     for memory in seeds[0]["memories"]:

@@ -23,10 +23,10 @@ def run(parent_root,output):
         raise ValueError("place evidence outside the source checkout to preserve source-lock checks")
     output.mkdir(parents=True,exist_ok=False)
     call("audit_reservoir_scaling_dev044.py",*[parent_root/str(s) for s in (4401,4402,4403)],"--output",output/"dev044-audit")
-    studies = {"045":(4501,4502,4503),"046":(4601,4602,4603),"047":(4701,4702,4703),"048":(4801,4802,4803)}
-    runners = {"045":"run_frozen_policy_dev045.py","046":"run_joint_training_dev046.py",
+    studies = {"044b":(4411,4412,4413),"045":(4501,4502,4503),"046":(4601,4602,4603),"047":(4701,4702,4703),"048":(4801,4802,4803)}
+    runners = {"044b":"run_writer_reader_factorial_dev044b.py","045":"run_frozen_policy_dev045.py","046":"run_joint_training_dev046.py",
                "047":"run_local_generalization_dev047.py","048":"run_verified_routing_dev048.py"}
-    audits = {"045":"audit_frozen_policy_dev045.py","046":"audit_joint_training_dev046.py",
+    audits = {"044b":"audit_writer_reader_factorial_dev044b.py","045":"audit_frozen_policy_dev045.py","046":"audit_joint_training_dev046.py",
               "047":"audit_local_generalization_dev047.py","048":"audit_verified_routing_dev048.py"}
     for study,seeds in studies.items():
         parent_args = []
