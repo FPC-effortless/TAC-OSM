@@ -8,6 +8,8 @@ def report():
     r=json.loads((ROOT/'research/dev054/summary.json').read_text())
     common=json.loads((ROOT/'results/dev054/common.json').read_text())
     audit=json.loads((ROOT/'results/dev054/audit.json').read_text())
+    assert audit['status']=='PASSED_DEVELOPMENT_REPLAY' and audit['checkpoint_reconstructions']==15
+    assert '1321 passed' in Path('/workspace/scratch/dev054-final-regression.log').read_text()
     profile=json.loads((ROOT/'research/dev054/profile.json').read_text())
     rows=[]
     for arm,v in r['pooled'].items():
@@ -108,6 +110,10 @@ Registration commit `86b1cbc` precedes implementation `0940063` and training. Re
 
 '''+f"The same-author separate-process audit reconstructed **{audit['checkpoint_reconstructions']} checkpoints**, replayed **{audit['separate_primitive_probe_executions']:,} probe executions / {audit['separate_probe_actions']:,} primitive actions**, plus **{audit['separate_coupon_actions']:,} fixture actions**. It shares model/generator code, so it establishes deterministic development reconstruction and separate native accounting, not independent scientific replication. Main runtime **{common['elapsed_seconds']:.2f}s**, audit **{audit['elapsed_seconds']:.2f}s**, combined **{compute:.2f} process-minutes**; smoke, reporting, demo, regression and profiling are additional separately logged engineering work. Main+audit execute30,720 optimizer updates. The complete1,321-test regression suite passed. Native Veritas remains pinned and clean. Draft [PR #214](https://github.com/FPC-effortless/TAC-OSM/pull/214) remains unmerged.\n"
     text += ('\nThe main/reconstruction tranche exceeded the approximate30-minute target by '+f'{compute-30:.2f}'+' minutes; the full fixed matrix was retained without outcome-based stopping.\n') if compute>30 else '\nThe main/reconstruction tranche remained within the approximate30-minute compute target.\n'
+    m=r['pooled']['mtsk'];lo,hi=m['delta_95pct'];fs=m['paired_faults_per_world']
+    conclusion=f"MTSK's pooled cost difference versus Beta is {m['delta_vs_beta']:+.6f}/entity, with paired95% interval [{lo:+.6f},{hi:+.6f}]. Its residual-fault difference is {fs['difference']:+.6f}/world, interval [{fs['interval_95pct'][0]:+.6f},{fs['interval_95pct'][1]:+.6f}]. Every adjusted mechanism comparison fails. This is a null on MTSK superiority, with a reliability regression against stationary Beta; the positive point estimate of normalized headroom closure is not an advantage claim.\n\n"
+    text=text.replace('## Registered result\n\n','## Registered result\n\n'+conclusion)
+    text += '\nChanging from the earlier study also changed data, exposure and evaluation budgets. Cross-study differences do not isolate the causal effect of joint planning. Here, continuous drift can violate the shared endpoint-mixture representation, and the monetary Bellman objective permits fault/cost trade-offs that fail the separate reliability guard. These are model/objective limitations to test, not post-hoc explanations established by this result.\n'
     (ROOT/'docs/DEV-054-RESULTS.md').write_text(text)
 
 
