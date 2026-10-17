@@ -1,0 +1,73 @@
+name: DEV-052 preserve original audited noisy transfer
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '.github/workflows/dev052-evidence-release.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Fetch exact audited original research ZIP
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          mkdir -p artifacts
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12106600848/zip > artifacts/DEV-052-audited-original.zip
+          printf '%s  %s\n' \
+            73a6c22222b3c5b474597e5cca95b5d8275a6efefe1f580c713c64a6ca4fc5d8 \
+            artifacts/DEV-052-audited-original.zip > artifacts/SHA256SUMS
+          sha256sum -c artifacts/SHA256SUMS
+          python - <<'PY'
+          import zipfile,json
+          with zipfile.ZipFile('artifacts/DEV-052-audited-original.zip') as z:
+              assert z.testzip() is None
+              names=z.namelist()
+              assert 'analysis/analysis.json' in names
+              d=json.loads(z.read('analysis/analysis.json'))
+              assert d['status']=='AUDITED_ADAPTIVE_DEVELOPMENT_NOT_CONFIRMATORY'
+              assert {x['seed'] for x in d['seeds']}=={7101,7102,7103}
+              for seed in (7101,7102,7103):
+                  assert f'DEV052-RAW-seed{seed}-development/report.json' in names
+              assert d['summary']['bayesian_dp']['mean_cost_per_entity']==1.2875
+              assert d['summary']['bc_frozen']['residual_faults_across_model_seeds']==87
+              assert all(not x for x in d['passed_cost_and_failure_guard'].values())
+          print('Original three-seed frozen transfer and independent replay verified.')
+          PY
+      - name: Publish development prerelease unchanged, or verify byte-identical existing release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          cat > artifacts/RELEASE-NOTES.md <<'TXT'
+          DEV-052A — independently audited ADAPTIVE DEVELOPMENT, NOT confirmation or trained OSM superiority.
+          Registered protocol and study: draft PR #211, research/dev052/study-protocol.json and docs/DEV-052-RESULTS.md.
+          Original scientific source: 69e641e30ee0fa6c3f579486d6de3399981c22ba.
+          Original native verifier/three frozen checkpoint run: https://github.com/FPC-effortless/TAC-OSM/actions/runs/39047034949
+          Reused unchanged DEV-051 BC/DAgger weights from https://github.com/FPC-effortless/TAC-OSM/actions/runs/39045522413, native Veritas commit b21d829b62d3cab2811e746267ca305e110ed004.
+          128 common new test worlds: Bayesian public belief 1.2875/entity, 10 residual faults; frozen student/BC 1.3515625/entity, 29 faults; all-three-service 3.6/entity and zero faults. This is an adaptively designed synthetic stress and the old learner lacks third-attempt support; it is NOT evidence of general neural impossibility.
+          Exact original archived three-seed reports plus separate physical replay are SHA-verified. Prerelease is deletable and not an independent DOI archive.
+          TXT
+          if gh release view dev052-noisy-transfer-evidence-2026-10-17 >/dev/null 2>&1; then
+            gh release download dev052-noisy-transfer-evidence-2026-10-17 --pattern 'DEV-052-audited-original.zip' --dir artifacts/existing
+            cmp artifacts/DEV-052-audited-original.zip artifacts/existing/DEV-052-audited-original.zip
+          else
+            gh release create dev052-noisy-transfer-evidence-2026-10-17 \
+              --target research/dev052-noisy-veritas-transfer-2026-10-17 \
+              --prerelease --title 'DEV-052A noisy-repair transfer: independently audited development' \
+              --notes-file artifacts/RELEASE-NOTES.md \
+              artifacts/DEV-052-audited-original.zip artifacts/SHA256SUMS
+          fi
+          gh release view dev052-noisy-transfer-evidence-2026-10-17 --json url,assets
