@@ -9,7 +9,6 @@ from dataclasses import dataclass
 from pathlib import Path
 import hashlib
 import json
-import time
 
 import torch
 from torch import nn
@@ -153,7 +152,7 @@ def rollout(episode,name,model=None,confidence_gate=None,collect=False):
                 complete=int(verified.state_score==1.) if hasattr(verified,"state_score") else
                          int(verified.model_dump(mode="json")["state"]==1),
                 total_cost=runtime.budget.spent/10+4*failures,
-                blocked=sum(int(e.blocked) for e in runtime.events),
+                blocked=sum(int(e["blocked"]) for e in runtime.trace()),
                 tool_calls=len(runtime.events),sensing_calls=sum(e.action_name=="inspect"
                                     for e in runtime.events),
                 fallbacks=fallbacks,decisions=decisions,
