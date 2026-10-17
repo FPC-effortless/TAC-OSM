@@ -72,7 +72,10 @@ def summary(directory, output):
                             matrix('mtsk',f,'violations')[i].sum()<=matrix(reference,f,'violations')[i].sum()) for i in range(len(reports))]
         adjusted=np.quantile(draws,[.05/8,1-.05/8]).tolist()
         result['contrasts'][reference]={'mtsk_minus_reference':float(diff.mean()),'bonferroni_four_95pct':adjusted,'reliability_by_seed_family':guards,'cost_reliability_guard':adjusted[1]<0 and all(all(v) for v in guards.values())}
-    result['robust_mtsk_advantage']=False # acquisition stream is not measured, so registered full guard cannot pass
+    result['cost_reliability_supported']=all(result['contrasts'][a]['cost_reliability_guard'] for a in ('gru_matched','gru_hmm'))
+    result['deployment_stream_measured']=False
+    result['robust_mtsk_advantage']=result['cost_reliability_supported'] and result['deployment_stream_measured']
+    result['commercial_guard_note']='Acquisition amortization is hypothetical; no persistent production decision stream was measured.'
     for r in reports:
         result['training'][str(r['seed'])]={a:c['training'] for a,c in r['arms'].items()}
     write(out/'summary.json',result)
