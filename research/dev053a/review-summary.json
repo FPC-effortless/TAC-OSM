@@ -1,0 +1,1282 @@
+{
+  "study": "DEV-053A",
+  "retrospective": true,
+  "smoke": false,
+  "source": "a7df5059721aeffc4cd82f937ed72d45af2dffee",
+  "protocol_sha256": "163c22120516226615d27cd902a255d177224824fc398787ae7be6cc0173e1ca",
+  "evidence_provenance": {
+    "study": "DEV-052B-FRESH1",
+    "status": "PUBLISHED_AND_DOWNLOADED_SHA256_VERIFIED",
+    "training_source": "b7a82cf9d122c44657770a70d278f3559f0d9010",
+    "reporting_source": "ab0438e6d4636c12f6d4bd61deefbba869be3078",
+    "evidence_commit": "4b0b9d4089e63961a03782adcc6f5e541ff7c982",
+    "archive_bytes": 15837374,
+    "archive_sha256": "36567e08e1415b3cb58805207c3ddf81cafc972fe949525d1a062f26ddf4fc8e",
+    "archive_url": "https://github.com/FPC-effortless/TAC-OSM/raw/4b0b9d4089e63961a03782adcc6f5e541ff7c982/DEV-052B-complete-development-evidence.tar.gz",
+    "checksum_url": "https://github.com/FPC-effortless/TAC-OSM/raw/4b0b9d4089e63961a03782adcc6f5e541ff7c982/SHA256SUMS",
+    "release": "https://github.com/FPC-effortless/TAC-OSM/releases/tag/dev052b-learned-belief-evidence-2026-10-17",
+    "publication_method": "Dedicated evidence-only git branch linked from prerelease; native release asset upload returned HTTP401. Exact published archive downloaded through GitHub API and verified against original SHA-256.",
+    "archive_inner_sha256_verified_files": 231,
+    "independent_scientific_review": false,
+    "reproducibility_audit": "Same-author separate process reconstructs training and policies; separate native primitive accounting path.",
+    "pr_draft_unmerged": true,
+    "commit_payload_sha256": "36bbdb6171bb35b8701358b3618de43b6a4deb6ebfae5a2d7cc6aaf843d9a9c9",
+    "canonical_commit_object_bytes_sha256": "3991da0284a50a89bda94688399863a244d3427aad8c78c20251d63e77e196f8",
+    "hash_definition": "SHA256(raw git cat-file commit payload); and SHA256(b\"commit \"+decimal_length+b\"\\0\"+payload). Git object IDs remain SHA1; these are explicitly defined additional byte digests, not migrated Git SHA256 IDs."
+  },
+  "experiments": {
+    "7201": {
+      "in_regime": {
+        "artifact": "seed7201-in_regime.json",
+        "sha256": "ba863d3aaf14a446547fe570b4f92676c04cfcc52b28c18d97ae8419f7dd51a1",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.40234375,
+              "residual_faults": 26,
+              "completed_worlds": 231,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.09375,
+              "mean_services": 1.57421875,
+              "forecast_nll": 0.48443684786832697,
+              "forecast_brier": 0.159041804345631,
+              "forecast_entropy": 0.4320140941032816,
+              "recoveries": 58,
+              "failed_attempts": 81,
+              "inference_seconds": 1.222466095996424
+            },
+            "mean_expected_nll": 0.3706680114791585,
+            "mean_oracle_entropy": 0.36105969243985303,
+            "mean_excess_nll": 0.009608319039305434,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.09999997740364655,
+              0.12948488656154167,
+              0.2697691146486967,
+              0.3436992564028077,
+              1.1654908238998294
+            ],
+            "fraction_gaps_over_0_1": 0.9029038112522686,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.171875,
+              "residual_faults": 278,
+              "completed_worlds": 56,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.751622247981276,
+              "forecast_brier": 0.54296875,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.08076978500002951
+            },
+            "mean_expected_nll": 5.036904959674478,
+            "mean_oracle_entropy": 0.5349586709081909,
+            "mean_excess_nll": 4.501946288766289,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.45390625,
+              "residual_faults": 178,
+              "completed_worlds": 104,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 3.828125,
+              "mean_services": 1.453125,
+              "forecast_nll": 1.0536396784648077,
+              "forecast_brier": 0.3278848216242569,
+              "forecast_entropy": 0.4322276647838204,
+              "recoveries": 12,
+              "failed_attempts": 36,
+              "inference_seconds": 1.0853771850056546
+            },
+            "mean_expected_nll": 0.6895126291222944,
+            "mean_oracle_entropy": 0.31441342799819433,
+            "mean_excess_nll": 0.3750992011241,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.0006337274990522723,
+              0.10000000804023074,
+              0.21218040382488113,
+              0.3098589288268081,
+              3.347676841548157
+            ],
+            "fraction_gaps_over_0_1": 0.7669376693766937,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 248
+          }
+        }
+      },
+      "shifted": {
+        "artifact": "seed7201-shifted.json",
+        "sha256": "0b3e824f3a5aac5e583d921402b8eb9667fb6780a158d38275c700d09e6598f6",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.5515625,
+              "residual_faults": 46,
+              "completed_worlds": 211,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.1875,
+              "mean_services": 1.5546875,
+              "forecast_nll": 0.5470250486545871,
+              "forecast_brier": 0.17885632440894822,
+              "forecast_entropy": 0.4389096145031929,
+              "recoveries": 47,
+              "failed_attempts": 86,
+              "inference_seconds": 1.1921056640144343
+            },
+            "mean_expected_nll": 0.4634996123500867,
+            "mean_oracle_entropy": 0.41147578414564234,
+            "mean_excess_nll": 0.052023828204444365,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.09999997740364655,
+              0.12948488656154167,
+              0.2697691146486967,
+              0.3155755291709732,
+              1.1654908238998294
+            ],
+            "fraction_gaps_over_0_1": 0.9045045045045045,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.0234375,
+              "residual_faults": 259,
+              "completed_worlds": 65,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.153489792183994,
+              "forecast_brier": 0.505859375,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.08253672399087009
+            },
+            "mean_expected_nll": 5.288750202658202,
+            "mean_oracle_entropy": 0.5561637013799532,
+            "mean_excess_nll": 4.7325865012782495,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.3884765625,
+              "residual_faults": 180,
+              "completed_worlds": 107,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 3.89453125,
+              "mean_services": 1.3125,
+              "forecast_nll": 1.0543390031730104,
+              "forecast_brier": 0.32786751202288344,
+              "forecast_entropy": 0.43651131626407136,
+              "recoveries": 9,
+              "failed_attempts": 30,
+              "inference_seconds": 1.092007382983411
+            },
+            "mean_expected_nll": 0.7378340326549622,
+            "mean_oracle_entropy": 0.36630375247314345,
+            "mean_excess_nll": 0.3715302801818188,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.002445541078558211,
+              0.10000000804023074,
+              0.19669071488620526,
+              0.3098589288268081,
+              3.261849412866974
+            ],
+            "fraction_gaps_over_0_1": 0.7677490368739681,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 250
+          }
+        }
+      }
+    },
+    "7202": {
+      "in_regime": {
+        "artifact": "seed7202-in_regime.json",
+        "sha256": "79ee24d838d2a99370c604b486c1ec9e3ba45fdb78050582c4a5ebd6e8fdad14",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.40234375,
+              "residual_faults": 26,
+              "completed_worlds": 231,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.09375,
+              "mean_services": 1.57421875,
+              "forecast_nll": 0.4804691245501989,
+              "forecast_brier": 0.15905337961659982,
+              "forecast_entropy": 0.4820480422643321,
+              "recoveries": 58,
+              "failed_attempts": 81,
+              "inference_seconds": 1.273832311986098
+            },
+            "mean_expected_nll": 0.3710024713217658,
+            "mean_oracle_entropy": 0.36105969243985303,
+            "mean_excess_nll": 0.00994277888191269,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.03168695656700127,
+              0.1000000090411127,
+              0.3374965239038783,
+              0.405938878232063,
+              1.1412137266152382
+            ],
+            "fraction_gaps_over_0_1": 0.7722323049001815,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.171875,
+              "residual_faults": 278,
+              "completed_worlds": 56,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.751622247981276,
+              "forecast_brier": 0.54296875,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.08010332699814171
+            },
+            "mean_expected_nll": 5.036904959674478,
+            "mean_oracle_entropy": 0.5349586709081909,
+            "mean_excess_nll": 4.501946288766289,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.479296875,
+              "residual_faults": 181,
+              "completed_worlds": 109,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 4.1953125,
+              "mean_services": 1.42578125,
+              "forecast_nll": 0.9382320419754295,
+              "forecast_brier": 0.3146625681439899,
+              "forecast_entropy": 0.48386999313391954,
+              "recoveries": 13,
+              "failed_attempts": 41,
+              "inference_seconds": 1.187400513999819
+            },
+            "mean_expected_nll": 0.632646861449993,
+            "mean_oracle_entropy": 0.31671378512698756,
+            "mean_excess_nll": 0.3159330763230054,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.0005710290975167731,
+              0.1000000090411127,
+              0.2800646236859172,
+              0.35846459768997974,
+              3.0335347958236696
+            ],
+            "fraction_gaps_over_0_1": 0.78125,
+            "native_actions_changed_worlds": 255,
+            "native_cost_changed_worlds": 251
+          }
+        }
+      },
+      "shifted": {
+        "artifact": "seed7202-shifted.json",
+        "sha256": "47e8f7f953d70ce96440134e2ae621b5bd3f8e2632118375fc32fbdd67a253d8",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.5515625,
+              "residual_faults": 46,
+              "completed_worlds": 211,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.1875,
+              "mean_services": 1.5546875,
+              "forecast_nll": 0.5308449151542873,
+              "forecast_brier": 0.17655870449044445,
+              "forecast_entropy": 0.48824570844316667,
+              "recoveries": 47,
+              "failed_attempts": 86,
+              "inference_seconds": 1.3101607720113861
+            },
+            "mean_expected_nll": 0.4503998954190994,
+            "mean_oracle_entropy": 0.41147578414564234,
+            "mean_excess_nll": 0.03892411127345704,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.03168695656700127,
+              0.1000000090411127,
+              0.3374965239038783,
+              0.3910204136813633,
+              1.1412137266152382
+            ],
+            "fraction_gaps_over_0_1": 0.7846846846846847,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.0234375,
+              "residual_faults": 259,
+              "completed_worlds": 65,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.153489792183994,
+              "forecast_brier": 0.505859375,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.08523328099454375
+            },
+            "mean_expected_nll": 5.288750202658202,
+            "mean_oracle_entropy": 0.5561637013799532,
+            "mean_excess_nll": 4.7325865012782495,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.3794921875,
+              "residual_faults": 173,
+              "completed_worlds": 112,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 4.19921875,
+              "mean_services": 1.36328125,
+              "forecast_nll": 0.9040534971117707,
+              "forecast_brier": 0.30086199986537665,
+              "forecast_entropy": 0.48912106731720895,
+              "recoveries": 6,
+              "failed_attempts": 27,
+              "inference_seconds": 1.3845592729835516
+            },
+            "mean_expected_nll": 0.6390790975667762,
+            "mean_oracle_entropy": 0.35611046575010613,
+            "mean_excess_nll": 0.2829686318166701,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.0028536665697098673,
+              0.1000000090411127,
+              0.2707164642739228,
+              0.3587667758883517,
+              3.178337201760101
+            ],
+            "fraction_gaps_over_0_1": 0.7940251572327044,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 248
+          }
+        }
+      }
+    },
+    "7203": {
+      "in_regime": {
+        "artifact": "seed7203-in_regime.json",
+        "sha256": "35c8f7e59994980af5bd9c988cb0072ed76c70d7e5401570dd4f1f2f0e79f0f1",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.40234375,
+              "residual_faults": 26,
+              "completed_worlds": 231,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.09375,
+              "mean_services": 1.57421875,
+              "forecast_nll": 0.4823159040684291,
+              "forecast_brier": 0.1595538950644206,
+              "forecast_entropy": 0.49469204436639713,
+              "recoveries": 58,
+              "failed_attempts": 81,
+              "inference_seconds": 1.240135577021647
+            },
+            "mean_expected_nll": 0.369924127327066,
+            "mean_oracle_entropy": 0.36105969243985303,
+            "mean_excess_nll": 0.008864434887212886,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.05493189733492909,
+              0.09999999390147532,
+              0.2663332596536392,
+              0.3552569479541159,
+              1.0881772829088592
+            ],
+            "fraction_gaps_over_0_1": 0.7332123411978222,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.171875,
+              "residual_faults": 278,
+              "completed_worlds": 56,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.751622247981276,
+              "forecast_brier": 0.54296875,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.0835447999952521
+            },
+            "mean_expected_nll": 5.036904959674478,
+            "mean_oracle_entropy": 0.5349586709081909,
+            "mean_excess_nll": 4.501946288766289,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.4009765625,
+              "residual_faults": 180,
+              "completed_worlds": 104,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 3.86328125,
+              "mean_services": 1.3359375,
+              "forecast_nll": 0.9179382576074541,
+              "forecast_brier": 0.3109998947111141,
+              "forecast_entropy": 0.4964523172699734,
+              "recoveries": 12,
+              "failed_attempts": 30,
+              "inference_seconds": 1.1181609829950503
+            },
+            "mean_expected_nll": 0.6373629439680165,
+            "mean_oracle_entropy": 0.3211018019515548,
+            "mean_excess_nll": 0.31626114201646166,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.0002863807077946312,
+              0.09999998262674986,
+              0.1891157125818661,
+              0.33367338440850913,
+              2.152343484694824
+            ],
+            "fraction_gaps_over_0_1": 0.6873626373626374,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 249
+          }
+        }
+      },
+      "shifted": {
+        "artifact": "seed7203-shifted.json",
+        "sha256": "2dcc294654290d978f0ae22e34d7826a198a4c7be4f57016694901322573ceba",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.5515625,
+              "residual_faults": 46,
+              "completed_worlds": 211,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.1875,
+              "mean_services": 1.5546875,
+              "forecast_nll": 0.5314001404868104,
+              "forecast_brier": 0.17706102767596654,
+              "forecast_entropy": 0.5014084041700307,
+              "recoveries": 47,
+              "failed_attempts": 86,
+              "inference_seconds": 1.2327727079941724
+            },
+            "mean_expected_nll": 0.4483110267278647,
+            "mean_oracle_entropy": 0.41147578414564234,
+            "mean_excess_nll": 0.036835242582222344,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.05493189733492909,
+              0.10000000074734816,
+              0.2627258951971342,
+              0.3552569479541159,
+              1.0881772829088592
+            ],
+            "fraction_gaps_over_0_1": 0.7509009009009009,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.0234375,
+              "residual_faults": 259,
+              "completed_worlds": 65,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.153489792183994,
+              "forecast_brier": 0.505859375,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.08762809599556931
+            },
+            "mean_expected_nll": 5.288750202658202,
+            "mean_oracle_entropy": 0.5561637013799532,
+            "mean_excess_nll": 4.7325865012782495,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.397265625,
+              "residual_faults": 186,
+              "completed_worlds": 105,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 3.9765625,
+              "mean_services": 1.2421875,
+              "forecast_nll": 0.9231065071540585,
+              "forecast_brier": 0.31097516082175125,
+              "forecast_entropy": 0.502585041985121,
+              "recoveries": 9,
+              "failed_attempts": 28,
+              "inference_seconds": 1.0939921029971629
+            },
+            "mean_expected_nll": 0.6552228338529162,
+            "mean_oracle_entropy": 0.3696899182978544,
+            "mean_excess_nll": 0.28553291555506183,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.0002863807077946312,
+              0.09999999390147532,
+              0.20222685734002643,
+              0.3353302401676159,
+              2.202017543729858
+            ],
+            "fraction_gaps_over_0_1": 0.7100494233937397,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 246
+          }
+        }
+      }
+    },
+    "7204": {
+      "in_regime": {
+        "artifact": "seed7204-in_regime.json",
+        "sha256": "851b2a40a63e2ea0a8107675eb6617f54165591d2e6b322ab86db75d22c46b7a",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.40234375,
+              "residual_faults": 26,
+              "completed_worlds": 231,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.09375,
+              "mean_services": 1.57421875,
+              "forecast_nll": 0.4805645242297063,
+              "forecast_brier": 0.15863610375798165,
+              "forecast_entropy": 0.4982722280520747,
+              "recoveries": 58,
+              "failed_attempts": 81,
+              "inference_seconds": 1.2372008860074857
+            },
+            "mean_expected_nll": 0.3747730940529758,
+            "mean_oracle_entropy": 0.36105969243985303,
+            "mean_excess_nll": 0.013713401613122733,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.0496898131243092,
+              0.10000000183420066,
+              0.2016242406994837,
+              0.3353576978921171,
+              1.1349955840473938
+            ],
+            "fraction_gaps_over_0_1": 0.7549909255898367,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.171875,
+              "residual_faults": 278,
+              "completed_worlds": 56,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.751622247981276,
+              "forecast_brier": 0.54296875,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.08145466700216275
+            },
+            "mean_expected_nll": 5.036904959674478,
+            "mean_oracle_entropy": 0.5349586709081909,
+            "mean_excess_nll": 4.501946288766289,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.4330078125,
+              "residual_faults": 198,
+              "completed_worlds": 101,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 3.56640625,
+              "mean_services": 1.1796875,
+              "forecast_nll": 0.9223583234284247,
+              "forecast_brier": 0.31214411288718313,
+              "forecast_entropy": 0.4979130443399447,
+              "recoveries": 11,
+              "failed_attempts": 34,
+              "inference_seconds": 1.0988834589948056
+            },
+            "mean_expected_nll": 0.6044916839071505,
+            "mean_oracle_entropy": 0.33354301697374417,
+            "mean_excess_nll": 0.27094866693340647,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.00041338064792395546,
+              0.09999998511266314,
+              0.1480249527280395,
+              0.30356366919947475,
+              2.189735507661133
+            ],
+            "fraction_gaps_over_0_1": 0.6688159437280188,
+            "native_actions_changed_worlds": 254,
+            "native_cost_changed_worlds": 249
+          }
+        }
+      },
+      "shifted": {
+        "artifact": "seed7204-shifted.json",
+        "sha256": "cdc04054b5c76cc7e13d2484978cde0d66015b1813b53f18d049040c874589c6",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.5515625,
+              "residual_faults": 46,
+              "completed_worlds": 211,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.1875,
+              "mean_services": 1.5546875,
+              "forecast_nll": 0.5315235423099932,
+              "forecast_brier": 0.17700597972810359,
+              "forecast_entropy": 0.5041993194020707,
+              "recoveries": 47,
+              "failed_attempts": 86,
+              "inference_seconds": 1.2518310499976906
+            },
+            "mean_expected_nll": 0.44887630216908786,
+            "mean_oracle_entropy": 0.41147578414564234,
+            "mean_excess_nll": 0.0374005180234455,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.0496898131243092,
+              0.10000000183420066,
+              0.2016242406994837,
+              0.3353576978921171,
+              1.1349955840473938
+            ],
+            "fraction_gaps_over_0_1": 0.7648648648648648,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.0234375,
+              "residual_faults": 259,
+              "completed_worlds": 65,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.153489792183994,
+              "forecast_brier": 0.505859375,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.08217500100818143
+            },
+            "mean_expected_nll": 5.288750202658202,
+            "mean_oracle_entropy": 0.5561637013799532,
+            "mean_excess_nll": 4.7325865012782495,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.29453125,
+              "residual_faults": 181,
+              "completed_worlds": 109,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 3.6875,
+              "mean_services": 1.16015625,
+              "forecast_nll": 0.9113253800842772,
+              "forecast_brier": 0.31019385347900136,
+              "forecast_entropy": 0.5019818065271134,
+              "recoveries": 11,
+              "failed_attempts": 21,
+              "inference_seconds": 1.3206831959982992
+            },
+            "mean_expected_nll": 0.64785739986217,
+            "mean_oracle_entropy": 0.3695748796359856,
+            "mean_excess_nll": 0.2782825202261842,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.00041338064792395546,
+              0.09999998511266314,
+              0.1649815413661857,
+              0.3036584928611321,
+              2.1847547830267335
+            ],
+            "fraction_gaps_over_0_1": 0.6737875288683602,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 249
+          }
+        }
+      }
+    },
+    "7205": {
+      "in_regime": {
+        "artifact": "seed7205-in_regime.json",
+        "sha256": "770041cc00c8ae0a20fd0474f293a34ec44e6210ad66b490d01cbdbbca4f534b",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.40234375,
+              "residual_faults": 26,
+              "completed_worlds": 231,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.09375,
+              "mean_services": 1.57421875,
+              "forecast_nll": 0.4780400673899207,
+              "forecast_brier": 0.15763403836434103,
+              "forecast_entropy": 0.48853691685092243,
+              "recoveries": 58,
+              "failed_attempts": 81,
+              "inference_seconds": 1.2383650790065985
+            },
+            "mean_expected_nll": 0.37571113479056717,
+            "mean_oracle_entropy": 0.36105969243985303,
+            "mean_excess_nll": 0.01465144235071413,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.0725800723414709,
+              0.0999999952916274,
+              0.23035696940219963,
+              0.3192070601453809,
+              1.1368159952527999
+            ],
+            "fraction_gaps_over_0_1": 0.6960072595281307,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.171875,
+              "residual_faults": 278,
+              "completed_worlds": 56,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.751622247981276,
+              "forecast_brier": 0.54296875,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.07938745299907168
+            },
+            "mean_expected_nll": 5.036904959674478,
+            "mean_oracle_entropy": 0.5349586709081909,
+            "mean_excess_nll": 4.501946288766289,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.434375,
+              "residual_faults": 191,
+              "completed_worlds": 100,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 3.65625,
+              "mean_services": 1.265625,
+              "forecast_nll": 0.9667899335284121,
+              "forecast_brier": 0.3237465031922462,
+              "forecast_entropy": 0.4894381745202638,
+              "recoveries": 11,
+              "failed_attempts": 27,
+              "inference_seconds": 1.12728304399252
+            },
+            "mean_expected_nll": 0.6516967215464791,
+            "mean_oracle_entropy": 0.3228247918308488,
+            "mean_excess_nll": 0.32887192971563034,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.000355102546577335,
+              0.09723036098808757,
+              0.11726875745002419,
+              0.2889334130625112,
+              2.318117908557129
+            ],
+            "fraction_gaps_over_0_1": 0.6272155517438537,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 249
+          }
+        }
+      },
+      "shifted": {
+        "artifact": "seed7205-shifted.json",
+        "sha256": "fcb659cf54fa623b3de194cc58f59a94e91f6346acc87503404d0ba85ffb7254",
+        "summary": {
+          "intact": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 1.5515625,
+              "residual_faults": 46,
+              "completed_worlds": 211,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 5.1875,
+              "mean_services": 1.5546875,
+              "forecast_nll": 0.5336022026066934,
+              "forecast_brier": 0.17744558148810946,
+              "forecast_entropy": 0.49470042291423066,
+              "recoveries": 47,
+              "failed_attempts": 86,
+              "inference_seconds": 1.2330153089997111
+            },
+            "mean_expected_nll": 0.4528330579303351,
+            "mean_oracle_entropy": 0.41147578414564234,
+            "mean_excess_nll": 0.04135727378469276,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.0725800723414709,
+              0.0999999952916274,
+              0.21480387204031048,
+              0.3192070601453809,
+              1.1368159952527999
+            ],
+            "fraction_gaps_over_0_1": 0.6995495495495495,
+            "native_actions_changed_worlds": 0,
+            "native_cost_changed_worlds": 0
+          },
+          "zeroed_probabilities": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.0234375,
+              "residual_faults": 259,
+              "completed_worlds": 65,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 0.0,
+              "mean_services": 0.0,
+              "forecast_nll": 8.153489792183994,
+              "forecast_brier": 0.505859375,
+              "forecast_entropy": 1.6118095650958319e-06,
+              "recoveries": 0,
+              "failed_attempts": 0,
+              "inference_seconds": 0.0947729930035166
+            },
+            "mean_expected_nll": 5.288750202658202,
+            "mean_oracle_entropy": 0.5561637013799532,
+            "mean_excess_nll": 4.7325865012782495,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.1,
+              0.1,
+              0.1,
+              0.1,
+              0.1
+            ],
+            "fraction_gaps_over_0_1": 0.0,
+            "native_actions_changed_worlds": 256,
+            "native_cost_changed_worlds": 256
+          },
+          "shuffled_forecast_rows": {
+            "native_summary": {
+              "worlds": 256,
+              "cost_per_entity": 2.260546875,
+              "residual_faults": 173,
+              "completed_worlds": 110,
+              "blocked_actions": 0,
+              "trajectory_violations": 0,
+              "mean_inspections": 3.6015625,
+              "mean_services": 1.21484375,
+              "forecast_nll": 0.9102099886863138,
+              "forecast_brier": 0.3071233077214435,
+              "forecast_entropy": 0.49547572497453457,
+              "recoveries": 13,
+              "failed_attempts": 34,
+              "inference_seconds": 1.1051907739938542
+            },
+            "mean_expected_nll": 0.6608077663020973,
+            "mean_oracle_entropy": 0.3734357646137242,
+            "mean_excess_nll": 0.28737200168837324,
+            "top2_gap_quantiles_0_25_50_75_100": [
+              0.000355102546577335,
+              0.09696507632416396,
+              0.13517766062524883,
+              0.2889334130625112,
+              2.306651358251953
+            ],
+            "fraction_gaps_over_0_1": 0.627039627039627,
+            "native_actions_changed_worlds": 254,
+            "native_cost_changed_worlds": 247
+          }
+        }
+      }
+    }
+  },
+  "old_arm_crossed_statistics": {
+    "in_regime": {
+      "last_event": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.5310937499999997,
+        "mean_baseline_cost": 1.40234375,
+        "paired_delta": 0.12874999999999998,
+        "paired_delta_95pct": [
+          0.07260644531250011,
+          0.18766699218750002
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.0,
+        "fraction_oracle_gap_closed": null,
+        "fraction_95pct": null,
+        "fraction_invalid_denominator_rate": 1.0
+      },
+      "recurrent_belief": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.403125,
+        "mean_baseline_cost": 1.40234375,
+        "paired_delta": 0.0007812499999999975,
+        "paired_delta_95pct": [
+          -0.018046875000000025,
+          0.017659179687500137
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.0,
+        "fraction_oracle_gap_closed": null,
+        "fraction_95pct": null,
+        "fraction_invalid_denominator_rate": 1.0
+      },
+      "forecast_only": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.4051171875000001,
+        "mean_baseline_cost": 1.40234375,
+        "paired_delta": 0.002773437499999999,
+        "paired_delta_95pct": [
+          -0.001132812499999869,
+          0.011486328124999763
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.0,
+        "fraction_oracle_gap_closed": null,
+        "fraction_95pct": null,
+        "fraction_invalid_denominator_rate": 1.0
+      },
+      "joint": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.40234375,
+        "mean_baseline_cost": 1.40234375,
+        "paired_delta": 0.0,
+        "paired_delta_95pct": [
+          0.0,
+          4.440892098500626e-16
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.0,
+        "fraction_oracle_gap_closed": null,
+        "fraction_95pct": null,
+        "fraction_invalid_denominator_rate": 1.0
+      },
+      "frozen_writer": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 2.251875,
+        "mean_baseline_cost": 1.40234375,
+        "paired_delta": 0.8495312500000001,
+        "paired_delta_95pct": [
+          0.6935537109375001,
+          1.0012177734374994
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.0,
+        "fraction_oracle_gap_closed": null,
+        "fraction_95pct": null,
+        "fraction_invalid_denominator_rate": 1.0
+      },
+      "policy_bc": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.40390625,
+        "mean_baseline_cost": 1.40234375,
+        "paired_delta": 0.0015624999999999947,
+        "paired_delta_95pct": [
+          -0.02925878906249981,
+          0.033830078125000086
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.0,
+        "fraction_oracle_gap_closed": null,
+        "fraction_95pct": null,
+        "fraction_invalid_denominator_rate": 1.0
+      },
+      "policy_dagger": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.4004687500000002,
+        "mean_baseline_cost": 1.40234375,
+        "paired_delta": -0.001875,
+        "paired_delta_95pct": [
+          -0.012071289062499907,
+          0.003671874999999991
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.0,
+        "fraction_oracle_gap_closed": null,
+        "fraction_95pct": null,
+        "fraction_invalid_denominator_rate": 1.0
+      }
+    },
+    "shifted": {
+      "last_event": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.6392578125,
+        "mean_baseline_cost": 1.5515625,
+        "paired_delta": 0.08769531249999997,
+        "paired_delta_95pct": [
+          0.016205078125000126,
+          0.15800976562500016
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.09453125000000001,
+        "fraction_oracle_gap_closed": -0.9276859504132227,
+        "fraction_95pct": [
+          -4.302270992366416,
+          -0.12429772096718407
+        ],
+        "fraction_invalid_denominator_rate": 0.006
+      },
+      "recurrent_belief": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.5475390624999998,
+        "mean_baseline_cost": 1.5515625,
+        "paired_delta": -0.004023437500000002,
+        "paired_delta_95pct": [
+          -0.026406249999999753,
+          0.011410156250000043
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.09453125000000001,
+        "fraction_oracle_gap_closed": 0.04256198347107464,
+        "fraction_95pct": [
+          -0.18499715040985684,
+          0.3444856050955392
+        ],
+        "fraction_invalid_denominator_rate": 0.006
+      },
+      "forecast_only": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.553359375,
+        "mean_baseline_cost": 1.5515625,
+        "paired_delta": 0.0017968749999999992,
+        "paired_delta_95pct": [
+          -0.0035546874999998813,
+          0.010390625000000098
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.09453125000000001,
+        "fraction_oracle_gap_closed": -0.019008264462809885,
+        "fraction_95pct": [
+          -0.144708969778416,
+          0.04264266941374147
+        ],
+        "fraction_invalid_denominator_rate": 0.006
+      },
+      "joint": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.5515625,
+        "mean_baseline_cost": 1.5515625,
+        "paired_delta": 0.0,
+        "paired_delta_95pct": [
+          0.0,
+          2.220446049250313e-16
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.09453125000000001,
+        "fraction_oracle_gap_closed": 0.0,
+        "fraction_95pct": [
+          -5.159468977779079e-15,
+          0.0
+        ],
+        "fraction_invalid_denominator_rate": 0.006
+      },
+      "frozen_writer": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 2.1034375,
+        "mean_baseline_cost": 1.5515625,
+        "paired_delta": 0.551875,
+        "paired_delta_95pct": [
+          0.3881640624999995,
+          0.7061035156250002
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.09453125000000001,
+        "fraction_oracle_gap_closed": -5.83801652892562,
+        "fraction_95pct": [
+          -21.06149880095921,
+          -2.701412916919421
+        ],
+        "fraction_invalid_denominator_rate": 0.006
+      },
+      "policy_bc": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.55171875,
+        "mean_baseline_cost": 1.5515625,
+        "paired_delta": 0.00015624999999999182,
+        "paired_delta_95pct": [
+          -0.033245117187499965,
+          0.037971679687500315
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.09453125000000001,
+        "fraction_oracle_gap_closed": -0.0016528925619832796,
+        "fraction_95pct": [
+          -0.6456756701730586,
+          0.4700993079027844
+        ],
+        "fraction_invalid_denominator_rate": 0.006
+      },
+      "policy_dagger": {
+        "world_clusters": 256,
+        "model_seeds": 5,
+        "mean_cost": 1.5479687500000001,
+        "mean_baseline_cost": 1.5515625,
+        "paired_delta": -0.0035937500000000006,
+        "paired_delta_95pct": [
+          -0.01640624999999974,
+          0.0011738281250002485
+        ],
+        "resampling": "Crossed: paired world clusters, global seed resample within each replicate; same world draws for controls/oracle",
+        "oracle_gap": 0.09453125000000001,
+        "fraction_oracle_gap_closed": 0.0380165289256198,
+        "fraction_95pct": [
+          -0.016548076923080232,
+          0.22708677074552924
+        ],
+        "fraction_invalid_denominator_rate": 0.006
+      }
+    }
+  },
+  "seconds": 93.59661934699989,
+  "status": "COMPLETED_RETROSPECTIVE_DIAGNOSTICS"
+}
