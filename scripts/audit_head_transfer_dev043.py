@@ -34,6 +34,8 @@ def physical_oracle(rows,cases,threshold):
 
 
 def audit(seed,folder,checkpoints):
+    torch.set_num_threads(1)
+    torch.use_deterministic_algorithms(True)
     folder=Path(folder)
     report=json.loads((folder/"report.json").read_text())
     assert report["seed"]==seed and report["study"]=="DEV-043"
