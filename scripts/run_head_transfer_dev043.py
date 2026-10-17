@@ -6,7 +6,6 @@ are used only for supervision/scoring. No inspected DEV-042 cohort is consulted.
 from __future__ import annotations
 import argparse
 import copy
-import hashlib
 import json
 from pathlib import Path
 import subprocess
@@ -15,10 +14,9 @@ import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/"src"),str(ROOT/"scripts")]
 import torch
-from torch import nn
 import torch.nn.functional as F
-from tac_osm.development.schema_maintenance import make_pair, exact_public_targets, execute
-from tac_osm.development.order_causal_cases import make_order_pair, last_observations
+from tac_osm.development.schema_maintenance import make_pair, exact_public_targets
+from tac_osm.development.order_causal_cases import make_order_pair
 from run_frozen_writer_dev041 import build, sha, THRESHOLDS
 from run_learned_schema_dev import public_stream_tensors,public_queries,labels
 from run_head_controls_dev040a import feature_input
