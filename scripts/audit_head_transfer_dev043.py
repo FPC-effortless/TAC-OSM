@@ -2,10 +2,8 @@
 from __future__ import annotations
 import argparse
 import copy
-import hashlib
 import json
 from pathlib import Path
-import statistics
 import sys
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -53,8 +51,8 @@ def audit(seed,folder,checkpoints):
     for i in range(0,288,2):
         a,b=cases[i:i+2]
         assert last_observations(a.observations)==last_observations(b.observations)
-        if i//2%48>=0 and a.horizon>=a.world.tick+0: # eligibility is checked from deadline labels below
-            pass
+        if a.wait_targets[a.target_entity]!=b.wait_targets[b.target_entity]:
+            assert (a.wait_targets[a.target_entity],b.wait_targets[b.target_entity])==(1,0)
     details={}
     for arm in ARMS:
         src_dir=Path(checkpoints)/f"DEV041-RAW-seed{seed}-development"
