@@ -50,7 +50,7 @@ def test_hard_negative_cost_ranking_loss_penalizes_bad_preference():
     poor=torch.tensor([[[.2,1.0,1.5]]])
     optimal=torch.tensor([[[4.,1.,4.1]]])
     assert contrastive_cost_margin(poor,optimal).item()>0
-    good=torch.tensor([[[3.,.1,4.]])
+    good=torch.tensor([[[3.,.1,4.]]])
     assert contrastive_cost_margin(good,optimal).item()==pytest.approx(0.)
 
 
