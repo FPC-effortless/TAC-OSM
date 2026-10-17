@@ -128,10 +128,7 @@ def replay_policy(policy, cohort_data, probabilities):
             assert policy["physical"][k] == v
 
 
-def main(root, output):
-    torch.set_num_threads(1)
-    torch.use_deterministic_algorithms(True)
-    rows = [audit(Path(root) / str(seed)) for seed in range(4901, 4911)]
+def summarize(rows, output):
     assert [r["seed"] for r in rows] == list(range(4901, 4911))
     assert len({r["source"] for r in rows}) == 1
     summary = {}
@@ -148,6 +145,12 @@ def main(root, output):
                      "No integrated superiority or constant-total entity memory claim."])
     Path(output).write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     print(json.dumps(summary, indent=2))
+
+
+def main(root, output):
+    torch.set_num_threads(1)
+    torch.use_deterministic_algorithms(True)
+    summarize([audit(Path(root) / str(seed)) for seed in range(4901, 4911)], output)
 
 
 if __name__ == "__main__":
