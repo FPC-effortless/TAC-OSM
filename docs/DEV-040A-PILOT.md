@@ -1,6 +1,7 @@
 # DEV-040A — Frozen-head loss and probe controls on fresh shared cohorts
 
-**Pre-execution development protocol. No outcome claimed.**
+**Completed development pilot. See [results and evidence](DEV-040A-RESULTS.md).**
+The original pre-execution protocol follows; its machine-readable file remains unchanged.
 This bounded pilot is separate from the reviewed, unregistered full DEV-040
 convergence/tuning proposal. Parent: DEV-039 PR#194 at
 `967c0e40420c76ad67c77d48e96a83b67d4af63c`. Preserve all prior experiments.
