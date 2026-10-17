@@ -9,7 +9,6 @@ from dataclasses import dataclass
 
 import torch
 from torch import nn
-import torch.nn.functional as F
 
 from .decision_cost_policy import select_actions,DecisionBatch,CostConvention
 
