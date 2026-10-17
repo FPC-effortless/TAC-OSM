@@ -107,3 +107,33 @@ def test_restored_checkpoint_matches_predictions_without_teacher(monkeypatch):
         expected=agent(state,*public)['logits']
         restored=LearnedAgent(seed=3).eval();restored.load_state_dict(agent.state_dict())
         torch.testing.assert_close(expected,restored(state,*public)['logits'],rtol=0,atol=0)
+
+
+def test_standalone_process_reproduces_autonomous_logits(tmp_path):
+    scripts=Path(__file__).resolve().parents[1]/'scripts';sys.path.insert(0,str(scripts))
+    try:
+        from audit_fully_learned_dev058 import export,standalone
+        agent=LearnedAgent(seed=8581011).eval()
+        checkpoint=tmp_path/'checkpoint';checkpoint.mkdir()
+        torch.save(agent.state_dict(),checkpoint/'agent.pt')
+        destination=tmp_path/'export'
+        export(checkpoint,{'config':agent.configuration()},destination)
+        result=standalone(destination,agent,8581012)
+        assert result['worlds']==12 and result['exact_logits'] and result['research_imports_forbidden']
+    finally:sys.path.remove(str(scripts))
+
+
+def test_native_replay_preserves_both_success_and_failed_stop():
+    import pytest
+    pytest.importorskip('investigation_world')
+    scripts=Path(__file__).resolve().parents[1]/'scripts';sys.path.insert(0,str(scripts))
+    try:
+        from audit_fully_learned_dev058 import native_replay
+        for healthy in (False,True):
+            w=World(8581013,int(healthy),4,32)
+            w.bits[:]=0 if healthy else 1
+            w.act(('stop',-1))
+            row=w.finish(3)
+            assert row['success']==healthy
+            assert native_replay(row)==1
+    finally:sys.path.remove(str(scripts))
