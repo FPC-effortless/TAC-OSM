@@ -1,0 +1,41 @@
+name: DEV-049-050 reliability and public Veritas checks
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research/dev049/**'
+      - 'research/dev050/**'
+      - 'scripts/*dev049.py'
+      - 'scripts/*dev050.py'
+      - 'src/tac_osm/development/reliability_gate.py'
+      - 'src/tac_osm/development/veritas_public_challenge.py'
+      - 'tests/test_reliability_gate_dev049.py'
+      - 'tests/test_veritas_public_dev050.py'
+      - '.github/workflows/dev049-050-reliability-veritas.yml'
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned research runtime
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.3.5 ruff==0.17.1
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Check source and full regression
+        run: |
+          python -m ruff check --select F scripts/run_reliability_dev049.py scripts/audit_reliability_dev049.py scripts/run_veritas_public_dev050.py src/tac_osm/development/reliability_gate.py src/tac_osm/development/veritas_public_challenge.py
+          python scripts/sync_test_count.py --check
+          python -m pytest tests/ -q

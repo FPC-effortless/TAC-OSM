@@ -1,0 +1,21 @@
+{
+  "study": "DEV-050A",
+  "status": "PREREGISTERED_PUBLIC_ENGINEERING_CHALLENGE_NOT_FRONTIER_QUALIFIED",
+  "veritas_repository": "https://github.com/FPC-effortless/veritas",
+  "veritas_source": "b21d829b62d3cab2811e746267ca305e110ed004",
+  "seeds": [5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008, 5009, 5010],
+  "episodes_per_seed": 64,
+  "policies": ["wait", "service_without_isolation", "stale_record", "service_all_once", "inspect_once", "inspect_verify_retry"],
+  "world": "Two public entity addresses, independently sampled Bernoulli(.5) faults, stale high-confidence records independently correct with probability .5, opaque instance identifiers, exclusive shared maintenance slot, 25% first-service failure, guaranteed second service in this synthetic generator only.",
+  "development_amendment": "After two public development runs, review identified deterministic fault/index association and readable seed/index identifiers. Randomize faults and record correctness independently; use opaque IDs and test ID-invariant policies. Preserve both earlier runs. No policies or tuning choices changed. This amended run is development, not untouched confirmation.",
+  "costs": {"inspection": 0.1, "isolation": 0.2, "service_attempt": 1.0, "remaining_failure": 4.0},
+  "acceptance": "Native Veritas runtime executes transitions and charges every tool call. Independent native verifier checks final targets, trajectory invariants, process, evidence and budget. Replay must reproduce full traces and verification.",
+  "falsifier": "An inspect/verify/retry reference leaves faults, violates the shared slot, exceeds budget, or gets credit for blocked service. Any policy oracle leak invalidates the comparison.",
+  "limitations": [
+    "Public synthetic scenarios authored for this study, not canonical or sealed Veritas benchmarks.",
+    "Policies are hand-written controls; no trained TAC-OSM cross-domain transfer claim.",
+    "No GEPA reflection or automated policy search performed.",
+    "Simulator validity, sufficient sensing and guaranteed second repair are assumptions, not certified physical facts.",
+    "Weighted verifier reward does not override an individual failed safety requirement."
+  ]
+}
