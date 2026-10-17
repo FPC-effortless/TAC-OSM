@@ -97,8 +97,16 @@ def evaluate(policy, spec, family, transitions, independent, smoke=False, neutra
                 inference_state = policy.initial(public) if neutral_memory else state
                 expanded = tuple(s[:,None].expand(-1,5,*s.shape[1:]).reshape(-1,*s.shape[1:]) if s is not None else None for s in inference_state)
                 probabilities = policy.predict(expanded, torch.arange(5).repeat(count), torch.full((count*5,), tick)).sigmoid().view(count,5,2).numpy()
-                for row in rows:
-                    for k in row['work']: row['work'][k] += policy.last_work[k]//count
+                # Attribute actual dispatched samples, including uneven halting.
+                per_world_calls = [0]*count
+                if policy.arm != 'no_casm':
+                    for trace in policy.compute.last_trace:
+                        for _, samples in trace.dispatched:
+                            for sample in samples: per_world_calls[sample//5] += 1
+                for index, row in enumerate(rows):
+                    row['work']['routing_candidates'] += 15
+                    row['work']['retained'] += 15 if policy.arm == 'uniform_route' else 10
+                    row['work']['operator_calls'] += per_world_calls[index]
             elif policy == 'oracle': probabilities = np.array([[w.expected(a) for a in range(5)] for w in worlds])
             else: probabilities = np.array([f.predict() for f in filters])
             actions = (COSTS[None,:]+4*probabilities.sum(-1)).argmin(-1).tolist()

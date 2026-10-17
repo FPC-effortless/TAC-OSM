@@ -87,6 +87,7 @@ def run(directory, output, veritas_root=None):
         if not Path(investigation_world.__file__).resolve().is_relative_to(vr): raise AssertionError('wrong Veritas import')
     result={'status':'RUNNING','restored_checkpoints':0,'physical_worlds':0,'physical_actions':0,
             'native_worlds':0,'native_actions':0,'native_unrepaired_worlds':0,'checkpoint_forecast_lesions':{},
+            'legacy_work_diagnostic_mismatches':0,'exact_operator_calls':{},
             'native_veritas_commit':PIN if native else None,
             'limitation':'Same author and shared physics/model code; development replay, not independent replication. Native effect tables encode recorded synthetic trajectories.'}
     def check_rows(rows):
@@ -115,7 +116,13 @@ def run(directory, output, veritas_root=None):
             model.load_state_dict(torch.load(checkpoint,weights_only=True))
             for family,evaluation in report['evaluation'].items():
                 replay=evaluate(model,p['splits'][family],family,tables['transitions'],tables['independent'])
-                if replay['rows'] != evaluation['rows']: raise AssertionError(f'restored inference mismatch {seed}/{arm}/{family}')
+                # Preserve batch-rounded legacy work bytes; all physical and
+                # inference fields must still match exactly after correction.
+                for actual,old in zip(replay['rows'],evaluation['rows']):
+                    if actual['work'] != old['work']: result['legacy_work_diagnostic_mismatches']+=1
+                    if {k:v for k,v in actual.items() if k!='work'} != {k:v for k,v in old.items() if k!='work'}:
+                        raise AssertionError(f'restored inference mismatch {seed}/{arm}/{family}')
+                result['exact_operator_calls'][f'{seed}/{arm}/{family}']=sum(r['work']['operator_calls'] for r in replay['rows'])
                 check_rows(evaluation['rows'])
             # Operational lesion on fresh disjoint worlds, not a new test endpoint.
             if arm=='mtsk':
