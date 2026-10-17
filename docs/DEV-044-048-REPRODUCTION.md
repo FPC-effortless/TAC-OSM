@@ -54,7 +54,10 @@ replications. Do not select the best evaluation arm and call it confirmatory.
 
 ## Remaining qualification gates
 
-DEV-044B still needs matched baseline tuning, longer optimization and at least
+The added DEV-044B0 independently freezes transition parameters and internal
+query projections because DEV-044A froze both together. That pilot uses three
+new seeds, 108 updates and 128-event training histories; it is not the full
+DEV-044B study, which still needs matched baseline tuning, longer optimization and at least
 ten new independent seeds. The continuation adds bounded training and integration
 evidence, not that missing attribution study. Learned memory-item retention,
 robust uncertainty/value-of-information learning, learned identity discovery,

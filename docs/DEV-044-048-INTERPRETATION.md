@@ -9,10 +9,15 @@ results with the per-seed failure counts and the registered guard.
 
 DEV-044A tests three predefined gain/retention profiles with trained and frozen
 writers. Its development-calibrated selections are base/base in every seed.
-Writer learning reduces mean cost from 1.000 to 0.830 per entity, but produces
+Training the memory module reduces mean cost from 1.000 to 0.830 per entity, but produces
 89, 4 and 45 failures against zero for frozen reservoirs. The failure guard
 therefore prevents an improvement claim. The schema control costs about 0.531.
-This does not replace longer, equally tuned GRU/delta/reservoir comparisons.
+The frozen module includes `query` and `query_prior` read projections as well
+as transition parameters. The contrast therefore confounds writer and internal
+reader learning. DEV-044B0 adds an independently frozen writer/reader factorial;
+its bounded 128-history pilot is separate from the required longer, equally
+tuned GRU/delta/reservoir comparison. The original results and artifacts remain
+unchanged.
 
 ## Readout and decision supervision
 
