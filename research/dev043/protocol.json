@@ -1,0 +1,135 @@
+{
+  "study": "DEV-043",
+  "status": "REGISTERED_ADAPTIVE_DEVELOPMENT_NOT_CONFIRMATORY",
+  "source": "Frozen DEV-041 checkpoints, previously inspected DEV-042 evaluation excluded from all fitting, calibration and scoring",
+  "purpose": "Separate transfer calibration from head-only learning of causal event order; avoid interpreting writer scale and un-tuned reservoir as architectural necessity",
+  "seeds": [
+    4101,
+    4102,
+    4103
+  ],
+  "sources": {
+    "checkpoint_artifact": 12090820964,
+    "checkpoint_run": 39003550880,
+    "checkpoint_training_sha": "4ba2ea65cd3d4f3961277d80c49d7fb641f556fc",
+    "arms": [
+      "bounded_trainable",
+      "bounded_random_frozen"
+    ],
+    "verify_checkpoint_hashes": true
+  },
+  "splits": {
+    "training_order": "dev043-order-train-v1",
+    "training_base": "dev043-base-train-v1",
+    "calibration_order": "dev043-order-calibration-v1",
+    "evaluation_order": "dev043-order-eval-v1",
+    "forbidden_domains": [
+      "dev042-evaluation-v1",
+      "dev041-eval-v1",
+      "dev041-calibration-v1"
+    ],
+    "history": 512,
+    "delays": [
+      32,
+      128,
+      512
+    ],
+    "deadlines": [
+      "before",
+      "at",
+      "after"
+    ],
+    "train_pairs": 180,
+    "calibration_pairs": 45,
+    "evaluation_pairs": 144,
+    "paired_units_intact": true,
+    "all_test_results_sealed_before_calibration": true
+  },
+  "arms": [
+    {
+      "name": "original_head",
+      "intervention": "No new training, old DEV-041 threshold"
+    },
+    {
+      "name": "calibration_only",
+      "intervention": "Fit positive temperature and positive-slope Platt logistic map on fresh order-calibration logits, with current recurrent weights and original head frozen"
+    },
+    {
+      "name": "refit_uniform",
+      "intervention": "Freeze encoder, recurrent writer, query encoder and read adapter; retrain new 44D MLP head at fixed equal budget with 0/10/50% order-train cases; fit calibration after head training"
+    }
+  ],
+  "order_train_fractions": [
+    0,
+    0.1,
+    0.5
+  ],
+  "head_optimizer": {
+    "updates": 120,
+    "lr": 0.002,
+    "weight_decay": 0.0001,
+    "loss": "uniform CE across all three queries and eight entities plus focus CE on mature target wait, equal 0.5 weights",
+    "fixed_budget": true,
+    "initialization": "copy archived original head and restore for every mix fraction"
+  },
+  "calibration": {
+    "methods": [
+      "identity",
+      "temperature_positive",
+      "platt_positive"
+    ],
+    "selection": "select calibration method by mean all-entity NLL on fresh disjoint calibration cases, ties identity > temperature > platt",
+    "decision_thresholds": [
+      0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.75,
+      0.8,
+      0.9,
+      1
+    ],
+    "decision_threshold_selection": "minimum physical cost on calibration only; no benchmark/eval threshold selection",
+    "notes": "Positive monotonic logit calibrators do not change within-pair ranking. No isotonic in bounded pilot because it can introduce exact ties; defer isotonic to prospective separate ablation."
+  },
+  "primary": {
+    "name": "paired_target_wait_ranking",
+    "population": "mature 96 held-out causal order pairs per seed (at+after)",
+    "definition": "fraction of pairs where score P(wait-failure|cancelled)>P(wait-failure|scheduled); ties count 0.5; original probability score and calibrated probability score reported separately",
+    "comparison": "Within frozen trainable and random MTSK, head-only mixes 0 vs 0.1 vs 0.5; present all seed values, no promotion threshold"
+  },
+  "secondary": [
+    "target hard wait accuracy",
+    "Brier/NLL for wait and service on all entities",
+    "pending wait accuracy",
+    "strict threshold physical failures/unnecessary services/cost",
+    "negative performance on old-distribution validation separately",
+    "per-pair retrospective oracle threshold ceiling, not model selection",
+    "target risk score margins",
+    "last-event and exact public-history cost references"
+  ],
+  "integrity": [
+    "strict separate training/calibration/evaluation fingerprint disjointness",
+    "no old DEV-042 cohort used anywhere, including selecting methods",
+    "all pretrained backbone weights byte-identical after fitting and after model restore",
+    "frozen checkpoint source/hash match",
+    "one benchmark corpus per study, paired histories held together",
+    "checkpoint, fit-manifest and all logits archived",
+    "independent audit reconstructs physical decisions from public simulator",
+    "do not promote on 3-seed pilot"
+  ],
+  "limitations": [
+    "this tests head transfer, not tuned random reservoir gain/decay; DEV-044 should tune frozen reservoir with equal budget",
+    "synthetic known-ID environment; last-event insufficient only on this constructed task",
+    "temperature scaling alone cannot fix ranking or force classification >50% without bias/threshold changes",
+    "oracle pairwise threshold accesses evaluation labels and is diagnostic only",
+    "no claim about full CDL/CASM/OSM integration"
+  ]
+}
