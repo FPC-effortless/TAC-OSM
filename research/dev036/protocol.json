@@ -1,0 +1,19 @@
+{
+  "experiment": "DEV-036 bounded-feedback learning pilot",
+  "status": "prospectively registered engineering/learning pilot",
+  "hypothesis": "Bounding the local multi-timescale writer's conditional corrective feedback prevents the DEV-034 numerical failure and improves usable prediction and physical decisions compared with the otherwise identical unbounded writer",
+  "trained_arms": ["unbounded_local_multi_fp64", "bounded_local_multi_fp64"],
+  "archived_reference_arms": ["mtsk_local_tied", "masked_local", "schema41"],
+  "parameter_and_state_budget": "New and unbounded arms have identical trainable initial tensors, parameter count, 768 recurrent scalars and public entity addressing; runtime may differ",
+  "bounded_writer": "key = raw_key/max(1, norm(raw_key)); alpha is unchanged; beta_effective = alpha*sigmoid(existing_beta_logits); other equations unchanged",
+  "conditional_operator": "For fixed responsibility, each rank3 value-coordinate row has A=alpha*I-beta_effective*r*k*k^T with eigenvalues alpha and alpha-beta_effective*r*norm(k)^2 in [0,alpha]; full responsibility-coupled Jacobian is not bounded by this statement",
+  "seed": 311,
+  "initialization_seed": 34311,
+  "training": {"updates": 216, "batch": 2, "history": 512, "namespace": "dev034-v1-train", "optimizer": "AdamW", "learning_rate": 0.002, "weight_decay": 0.0001, "clipping": "dense CPU FP32 gradients, FP64 norm, 1.0; applied to both trained arms", "failed_arm_handling": "save pre-update model, optimizer, RNG, attempted update and exception; never impute a score"},
+  "evaluation": {"namespace": "dev036-v1-holdout", "history": 512, "delays": [32,128,512], "roles": ["retention","acquisition","pending_cancel","reissued_cancel"], "deadlines": ["before","at","after"], "repetitions": 8, "paired_worlds": 576, "mature_primary_worlds": 384, "mature_cancellation_worlds": 192, "reported": ["target-entity primary accuracy", "cancellation accuracy", "all-entity accuracy", "cross entropy", "failures", "unnecessary services", "inspections", "total cost", "selected minus model-only cost", "training/inference time"]},
+  "selection": "No tuning or model selection on the new holdout. Prior archived references are evaluated on the same new cases; one initialization per trained arm, so no architecture superiority claim.",
+  "audit": "Separate-process exact checkpoint/evaluator replay, split census and independently reconstructed physical outcomes; shared prediction code is not an independent implementation",
+  "success_interpretation": "Numerical completion and conditional gain bounds are engineering criteria; useful-learning evidence requires improved held-out prediction and cost without over-servicing. One pilot never establishes fresh-seed reliability or complete TAC-OSM capability.",
+  "time_budget": "Approximately 30 minutes CPU for first research batch; preserve completed evidence if the budget interrupts remaining arms",
+  "scope": "MTSK memory writer only. No learned identity discovery, action teacher, causal OSM or full-system integration in this experiment. Those are scheduled separately."
+}
