@@ -102,7 +102,7 @@ OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python scripts/demo_joint_repair_dev054.py \
   --veritas-root /workspace/veritas
 ```
 
-After downloading evidence, use its raw run as `--directory` if not extracted to `results/dev054`. The demo checks that incremental public-state updates reproduce batch forecasts and records native actions, value margins, costs and verification. It is the complete execution loop for this component model, not the complete TAC-OSM architecture.
+After downloading evidence, use its raw run as `--directory` if not extracted to `results/dev054`. The demo checks that incremental public-state updates reproduce batch forecasts and records native actions, value margins, costs and verification. It is the complete execution loop for this component model, not the complete TAC-OSM architecture. The unselected fresh demo leaves 1/2/0 residual faults at 0/8/32 observations: passing the checkpoint/incremental engineering check does not mean fault-free task success. These failed outcomes remain in the raw evidence.
 
 ## Integrity and replay
 
