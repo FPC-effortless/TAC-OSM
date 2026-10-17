@@ -1,0 +1,13 @@
+{
+ "study":"DEV-053A", "status":"REGISTERED_RETROSPECTIVE_DEV052B_DIAGNOSTICS", "confirmation":false,
+ "source_parent":"0a29397", "input_evidence":"Unchanged SHA-verified DEV-052B-FRESH1 checkpoints and original 512 held-out worlds; retrospective diagnostics, never fresh generalization",
+ "seeds":[7201,7202,7203,7204,7205],
+ "interventions":["intact","zeroed_probabilities","shuffled_forecast_rows"],
+ "intervention_definition":"Joint arm only; zero replaces current-fault probability and all repair-success probabilities with zero (sensor accuracy fixed .85); shuffle replaces the entire forecast vector with a deterministic permutation of intact decision-state forecasts, sampled sequentially per seed/cohort. Closed-loop native rollouts, charged physically. These are diagnostic destructive interventions, not deployable policies.",
+ "decision_log":"All legal Q-values, chosen action, runner-up, top2 gap, oracle conditional forecast probabilities, learned forecast vector, and residual native trajectory. Reconstruct probability posterior using true generator rates and the actual public history, never hidden fault at inference.",
+ "forecast_quality":"Expected Bernoulli log loss versus true conditional simulator probabilities, wait and all three service risks on the SAME intact decision states; report Bayes entropy and excess cross-entropy. Also realized-label log loss already archived. Exact probabilities available only to diagnostic evaluator.",
+ "statistical_unit":"Paired worlds with crossed seed bootstrap: sample world clusters (stratify shifted families), sample initialization indices globally within each replicate; common controls/oracle paired with identical world draws. 2000 replicates, RNG5530001.",
+ "gap_metric":"Retrospective fraction of observed oracle cost gap closed; undefined if denominator <=1e-9. Recompute numerator and denominator in each bootstrap; report denominator failure rate. No retrospective change to DEV052B registered success rule.",
+ "evidence_hash":"Verify archive SHA256; record evidence Git SHA1, raw commit payload SHA256, canonical commit-object bytes SHA256, and original archive SHA256 with explicit byte definitions.",
+ "no_tuning":"No checkpoint fitting, threshold modification, arm selection or original-result rewrite. Original excluded-split record retained. Audit shares author/code; no external independence claim."
+}
