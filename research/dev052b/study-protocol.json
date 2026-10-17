@@ -1,0 +1,123 @@
+{
+  "study": "DEV-052B",
+  "version": 1,
+  "status": "PREREGISTERED_DESIGN_NOT_YET_IMPLEMENTED_OR_EXECUTED",
+  "adaptive_parent": "DEV-052A audited failure of frozen DEV-051 BC/DAgger vs known-config Bayesian DP; not an independent confirmation",
+  "claim_under_test": "A recurrent public-event predictive belief model with service-conditioned transitions can support selective low-cost interventions under noisy observations without leakage.",
+  "known_design_confounds": [
+    "DEV-052A old learned policies cannot select third attempt",
+    "DEV-052A oracle-known probability model gives Bayesian DP an information advantage under shifts if neural model must estimate unknown probabilities",
+    "DEV-051 policy is hand-engineered belief state not trained PLM; all must be separated in next study"
+  ],
+  "simulator": {
+    "pinned_veritas_commit": "b21d829b62d3cab2811e746267ca305e110ed004",
+    "public_inspection_accuracy_training": 0.85,
+    "public_repair_success_training": [
+      0.75,
+      0.8,
+      1
+    ],
+    "worlds_have_two_entities": true,
+    "third_repair_guaranteed_only_in_original_dev052_synthetic": true,
+    "planned_stress": "register both noisy-sensor and variable third-repair dynamics; no claims until native Veritas effects updated with tests",
+    "model_input_only": "public records, timestamps, native accepted/blocked, noisy inspected bits and public action contract; NEVER hidden fault/repair bits at inference"
+  },
+  "splits": {
+    "training_worlds": 640,
+    "validation_worlds": 160,
+    "calibration_worlds": 160,
+    "heldout_in_regime_worlds": 256,
+    "heldout_shifted_worlds": 256,
+    "paired_worlds_per_controller": true,
+    "configuration_disjoint": false,
+    "train_and_test_seeds": "to freeze in detailed training protocol before running",
+    "whole_episode_split": true
+  },
+  "comparator_groups": [
+    {
+      "name": "known-config Bayesian DP",
+      "assumptions": "given true generator probabilities, strong public-information ceiling; not a realistic unknown-config baseline"
+    },
+    {
+      "name": "estimated-parameter Bayesian DP",
+      "assumptions": "learn sensor and repair rates from same training worlds with no simulator-only labels at inference; match data budget"
+    },
+    {
+      "name": "public belief / event table",
+      "assumptions": "non-neural explicit posterior updates and repair attempt state"
+    },
+    {
+      "name": "last-event-only head",
+      "assumptions": "no history or action-effect inference"
+    },
+    {
+      "name": "supervised recurrent world belief",
+      "assumptions": "GRU per entity with public event embeddings, predicts p(fault) after actions"
+    },
+    {
+      "name": "recurrent plus action-conditioned transition",
+      "assumptions": "paired intervention prediction vs no-action, with calibrated uncertainty and cost-aware planning"
+    },
+    {
+      "name": "policy-only BC / DAgger with third action",
+      "assumptions": "matched third-service representation and public observation interface"
+    }
+  ],
+  "training": {
+    "prediction": [
+      "proper NLL or Brier for true fault state as TRAIN-ONLY privileged target",
+      "counterfactual post-inspection/repair outcome probabilities from simulator training rollouts"
+    ],
+    "decision": [
+      "soft cost-regret or teacher action loss on training worlds",
+      "separate action head cost constraint"
+    ],
+    "ablation": [
+      "forecast only",
+      "policy only",
+      "joint decision+forecast",
+      "writer frozen vs trained"
+    ],
+    "model_seeds": [
+      7201,
+      7202,
+      7203,
+      7204,
+      7205
+    ],
+    "registered_updates": 256,
+    "calibration": "fit thresholds on dev calibration worlds, never on fresh eval outcomes"
+  },
+  "evaluation": {
+    "primary": [
+      "residual faulty entities",
+      "world completion",
+      "trajectory-wide constraint violations",
+      "total actual native intervention cost per entity"
+    ],
+    "secondary": [
+      "forecasts NLL/Brier",
+      "calibration under shift",
+      "mean inspections and services",
+      "recovery after failed repair",
+      "noisy sensor resilience",
+      "runtime and state bytes"
+    ],
+    "reliability_guard": "no additional residual faults or blocked actions relative to matched public-knowledge Bayesian baseline before claiming net benefit",
+    "statistical_unit": "independently generated worlds and configuration families, not model-seed repeated worlds"
+  },
+  "integrity": [
+    "freeze full generator and severity costs, seeds, action contracts and model recipe before training",
+    "do not tune on previously inspected DEV-052A cohort",
+    "original DEV-052A negative results immutable",
+    "independent native runtime replay, checkpoint hashes and public-only inference",
+    "count all optimizer and simulator oracle queries in compute comparison",
+    "preserve unsuccessful seeds and failed runs"
+  ],
+  "limitations": [
+    "Five seeds development only; larger confirmation after freezing successful variant",
+    "Synthetic maintenance world is not industrial validation",
+    "Achieving Bayesian near-parity may be useful but not proof architectural novelty"
+  ],
+  "next_action": "Implement simulator variable-dynamics patch with independent native tests and full third-attempt recurrent state training; do not claim any DEV-052B fitted result until all experiments and audit pass."
+}

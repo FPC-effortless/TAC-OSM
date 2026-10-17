@@ -1,0 +1,78 @@
+{
+  "full_runs": {
+    "dev052b": {
+      "source": "ee9b243a140ed57f928be4e2c8d23304c50b7f5f",
+      "model_fits": 35,
+      "optimizer_updates": 8960,
+      "initial_training_target_cells": 61440,
+      "total_constructed_target_cells": 234772,
+      "native_calls_collection": 19200,
+      "native_calls_baseline_eval": 21023,
+      "native_calls_neural_eval": 131535,
+      "native_calls_neural_calibration": 127696,
+      "native_calls_student_collection": 25262,
+      "native_calls_all_phases": 325960,
+      "summed_fit_seconds": 152.85637429999917,
+      "total_process_wall_seconds": 627.535735618
+    },
+    "dev052b-fresh": {
+      "source": "b7a82cf9d122c44657770a70d278f3559f0d9010",
+      "model_fits": 35,
+      "optimizer_updates": 8960,
+      "initial_training_target_cells": 61440,
+      "total_constructed_target_cells": 234772,
+      "native_calls_collection": 19200,
+      "native_calls_baseline_eval": 21139,
+      "native_calls_neural_eval": 132885,
+      "native_calls_neural_calibration": 127696,
+      "native_calls_student_collection": 25262,
+      "native_calls_all_phases": 327426,
+      "summed_fit_seconds": 153.4157947789996,
+      "total_process_wall_seconds": 647.939259952
+    }
+  },
+  "accepted_run": "dev052b-fresh",
+  "excluded_run": "dev052b",
+  "separate_reconstruction_and_replay": {
+    "source": "b7a82cf9d122c44657770a70d278f3559f0d9010",
+    "model_fits": 35,
+    "optimizer_updates": 8960,
+    "initial_training_target_cells": 61440,
+    "total_constructed_target_cells": 234772,
+    "native_calls_collection": 19200,
+    "native_calls_baseline_eval": 21139,
+    "native_calls_neural_eval": 132885,
+    "native_calls_neural_calibration": 127696,
+    "native_calls_student_collection": 25262,
+    "native_calls_all_phases": 481450,
+    "summed_fit_seconds": 153.4157947789996,
+    "total_process_wall_seconds": 365.7541405679999,
+    "additional_independent_native_replay_calls": 154024
+  },
+  "full_research_optimizer_updates": 26880,
+  "full_research_native_calls": 1134836,
+  "full_research_target_cells": 704316,
+  "summed_full_process_wall_seconds": 1641.2291361379998,
+  "preflights": [
+    {
+      "run": "dev052b-smoke-v1",
+      "optimizer_updates_including_reconstruction": 56,
+      "target_cells_including_reconstruction": 2368,
+      "native_calls_including_reconstruction_and_replay": 4427,
+      "summed_process_wall_seconds": 3.440954823000027
+    },
+    {
+      "run": "dev052b-fresh-smoke",
+      "optimizer_updates_including_reconstruction": 56,
+      "target_cells_including_reconstruction": 2368,
+      "native_calls_including_reconstruction_and_replay": 4569,
+      "summed_process_wall_seconds": 5.547526211000104
+    }
+  ],
+  "all_research_optimizer_updates_including_smoke": 26992,
+  "all_research_native_calls_including_smoke": 1143832,
+  "all_research_target_cells_including_smoke": 709052,
+  "tests": "Two complete regression passes and targeted integrity tests are recorded separately; no trial or model selection from them.",
+  "accounting_definition": "Target queries count constructed scalar privileged supervision targets, including discarded validation/calibration target cells. Native calls count actual paid inspect/isolate/service, including calibration, DAgger and duplicate integrity run. Harness state reads for physical scoring are not learner queries.",
+  "wall_clock_note": "Summed process elapsed times include concurrent runs and are not CPU-seconds. No FLOP or compute advantage is claimed."
+}
