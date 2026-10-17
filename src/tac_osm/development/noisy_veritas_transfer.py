@@ -7,10 +7,7 @@ charged observable inspection receipt. This is an OOD frozen-transfer test.
 from __future__ import annotations
 
 from functools import lru_cache
-import hashlib
-import math
 import random
-from copy import deepcopy
 
 from .veritas_public_challenge import make_episode
 from .learned_veritas_policy import PublicBelief,choose_action,ACTIONS
@@ -168,7 +165,8 @@ def run_ood(episode,seed,index,name,model=None,gate=None):
                     if receipt.get("accepted"):
                         prior*=1-REPAIR_SUCCESS[attempts]
                         attempts+=1;isolated=False
-                state.observe("service",receipt)
+                if attempts<=2:
+                    state.observe("service",receipt)
             else:raise AssertionError("unknown action "+command)
             actions.append(dict(entity=e,command=command,receipt=dict(receipt)))
         else:
