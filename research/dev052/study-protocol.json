@@ -1,0 +1,90 @@
+{
+  "study": "DEV-052A",
+  "status": "REGISTERED_FROZEN_TRANSFER_DEVELOPMENT_NOT_CONFIRMATORY",
+  "source": {
+    "tac_parent": "DEV-051 audited",
+    "veritas_commit": "b21d829b62d3cab2811e746267ca305e110ed004",
+    "frozen_checkpoint_run": 39045522413,
+    "checkpoint_artifact_id": 12104804673,
+    "trained_seeds": [
+      7101,
+      7102,
+      7103
+    ],
+    "old_frozen_policy_logic": "unmodified DEV-051 public-state features, action classifier, legality cap of two service attempts"
+  },
+  "environment": {
+    "generation": "derived from DEV-050 public Veritas generator with new independent OOD namespace",
+    "entities": 2,
+    "inspection_sensor_accuracy": 0.85,
+    "first_repair_success_probability": 0.75,
+    "second_repair_success_probability": 0.8,
+    "third_repair_success_probability": 1,
+    "third_repair_is_added_pubic_action": true,
+    "repair_outcomes_hidden_until_next_sensor_read": true,
+    "shared_isolation_slot": true,
+    "costs": {
+      "inspection": 0.1,
+      "isolation": 0.2,
+      "service_attempt": 1,
+      "residual_fault": 4
+    },
+    "assumptions": "third repair guaranteed in this bounded synthetic study; not safety guarantee in real systems"
+  },
+  "data": {
+    "calibration_seeds": [
+      520101,
+      520102
+    ],
+    "calibration_worlds_per_seed": 32,
+    "evaluation_seeds": [
+      520201,
+      520202,
+      520203,
+      520204
+    ],
+    "evaluation_worlds_per_seed": 32,
+    "seed_namespace_disjoint_dev051": true,
+    "selection": "No learned model or hyperparameter selection on evaluation; all transferred checkpoint weights frozen; public planner parameters known and specified before running"
+  },
+  "arms": [
+    "DEV051_BC_frozen",
+    "DEV051_DAGGER_frozen",
+    "DEV051_DAGGER_old_gate_frozen",
+    "legacy_inspect_verify_retry",
+    "explicit_public_belief_dp",
+    "always_wait",
+    "service_all_three"
+  ],
+  "comparison": {
+    "primary": "native residual faults and full-world completion, paired over same 128 OOD worlds",
+    "secondary": [
+      "physical cost per entity",
+      "native tool calls",
+      "paid inspections",
+      "blocked actions",
+      "policy compute",
+      "fallback fraction",
+      "calibration-reported metrics independently evaluated"
+    ],
+    "success_guard": "only improved over public-belief reference if no extra faults, no blocked actions and strictly lower native total cost",
+    "unit": "evaluation worlds are shared across three frozen model seeds; do not count reuse as independent n"
+  },
+  "audit": [
+    "all original checkpoint SHA256 hashes verified against DEV051 report",
+    "no leakage of oracle fault/repair success into policy inputs",
+    "native Veritas action effects and public receipts replayed independently",
+    "all public identifiers opaque and no seed-index shortcuts",
+    "full cohort fingerprint disjointness",
+    "all attempted actions and sensor readings charged",
+    "negative and failed results archived"
+  ],
+  "limitations": [
+    "OOD cases are authored adaptively after inspecting DEV051 outcomes, not confirmatory",
+    "explicit DP belief controller knows synthetic generator sensor/repair probabilities; transferred learners did not train on them",
+    "trained model lacks third attempt representation by design; not evidence of intrinsic neural capacity failure",
+    "third repair guarantee and perfect repair acceptance bounded artificial assumptions",
+    "DEV052A is frozen policy transfer, not learning a new world-state model or verifying native repository task suite"
+  ],
+  "next": "DEV052B prospectively train a learned recurrent belief model and action-conditioned predictor on disjoint noisy repair histories, with a matched Bayes DP reference and fresh configuration-disjoint confirmation."
+}
