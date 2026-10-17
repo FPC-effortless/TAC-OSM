@@ -26,6 +26,7 @@ def make_episode(seed, index):
         fault = (index % 4 >> entity) & 1
         first_works = rng.random() >= .25
         initial[f"e{entity}.fault"] = fault
+        initial[f"e{entity}.attempt"] = 0
         targets.append(StateAssertion(object_id=f"e{entity}", field_name="fault", expected_value=0))
         records.append(OperationalRecord(record_id=f"record-{entity}", system="plant",
             record_type="maintenance", object_id=f"e{entity}",
@@ -40,8 +41,9 @@ def make_episode(seed, index):
             result = 0 if attempt == 2 or first_works else fault
             effects.append(HiddenActionEffect(action_name="service",
                 required_parameters={"entity": entity, "attempt": attempt},
-                required_state=[StateAssertion(object_id="plant", field_name="slot", expected_value=entity)],
-                set_state={f"e{entity}.fault": result, "plant.slot": -1},
+                required_state=[StateAssertion(object_id="plant", field_name="slot", expected_value=entity),
+                    StateAssertion(object_id=f"e{entity}", field_name="attempt", expected_value=attempt-1)],
+                set_state={f"e{entity}.fault": result, f"e{entity}.attempt": attempt, "plant.slot": -1},
                 observable_result={"accepted": True},
                 blocked_observable_result={"accepted": False, "reason": "isolation_required"}))
     targets.append(StateAssertion(object_id="plant", field_name="slot", expected_value=-1))

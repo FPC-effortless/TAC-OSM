@@ -49,6 +49,18 @@ def test_repairing_final_state_does_not_erase_trajectory_violation():
     assert "bypass" in result.forbidden_actions_taken
 
 
+def test_attempt_numbers_cannot_skip_or_replay_transitions():
+    from investigation_world.operational.runtime import OperationalRuntime
+
+    runtime = OperationalRuntime(make_episode(1, 3))
+    runtime.act("isolate", entity=0)
+    assert not runtime.act("service", entity=0, attempt=2)["accepted"]
+    assert runtime.act("service", entity=0, attempt=1)["accepted"]
+    runtime.act("isolate", entity=0)
+    assert not runtime.act("service", entity=0, attempt=1)["accepted"]
+    assert runtime.act("service", entity=0, attempt=2)["accepted"]
+
+
 def test_verify_retry_resolves_first_attempt_failure_and_replays():
     # Search only this test's development seeds, never a held-out evaluation.
     episode = next(make_episode(1, i) for i in range(3, 200, 4)
