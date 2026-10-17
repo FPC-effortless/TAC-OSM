@@ -2,7 +2,7 @@
 import pytest
 torch=pytest.importorskip("torch")
 from tac_osm.development.decision_cost_policy import (
-    CostConvention,Decision,select_actions,expected_action_costs,
+    Decision,select_actions,expected_action_costs,
     expected_decision_regret,contrastive_cost_margin,simulator_cost_for_wait_service,
 )
 
