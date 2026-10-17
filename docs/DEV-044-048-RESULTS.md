@@ -112,7 +112,7 @@ Routing reduces the entity positions entering the first OSM call. Inspection fal
 * [1,253 tests and training smokes passed](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39014569984). Focused writer/query independence tests pass.
 * DEV-044A original Actions run [39011950314](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39011950314) passed; original raw ZIP digests were verified byte for byte locally.
 * Separate audits reconstruct checkpoint forecasts and calibration and replay simulator interventions. DEV-048 replays every candidate and charges sensing/verification. Audits do not independently repeat optimizer steps.
-* [Evidence release](https://github.com/FPC-effortless/TAC-OSM/releases/tag/dev044-048-audited-development-2026-10-17): original DEV-044A seed ZIPs, continuation checkpoints/raw outcomes, source bundle, protocols, audit outputs, CI logs and SHA256 manifest.
+* [Complete evidence branch](https://github.com/FPC-effortless/TAC-OSM/tree/evidence/dev044-048-development-2026-10-17): original DEV-044A seed ZIPs, continuation checkpoints/raw outcomes, source bundle, protocols, audit outputs, CI logs and SHA256 manifest. GitHub binary release upload returned HTTP 401, so the archives are preserved on this dedicated branch; main and the research source branches contain no evidence binaries.
 
 Interpretation and remaining gates are in [the research discussion](DEV-044-048-INTERPRETATION.md), [reproduction guide](DEV-044-048-REPRODUCTION.md) and [source review](DEV-044-048-RESEARCH-SOURCES.md). No result establishes learned memory-item retention, calibrated uncertainty/value-of-information, original CASM/CDL equivalence, GEPA LLM-reflection effectiveness, industrial twin validity or untouched-domain superiority.
 
