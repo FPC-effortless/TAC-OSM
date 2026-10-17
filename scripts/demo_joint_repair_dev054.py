@@ -34,7 +34,8 @@ def demo(directory, output, veritas_root):
         batch=j.weights(model,j.data([stream],common['parameters'],.08),cell['temperature'])[0]
         assert np.allclose(batch,np.array([e['regime_weights'] for e in events]),atol=1e-7)
     write(Path(output),{'study':'DEV-054 live incremental component demo','seed':5542001,'checkpoint_seed':seed,
-                        'scope':'MTSK belief encoder, explicit joint planner and native Veritas; not full TAC-OSM','events':events})
+                        'scope':'MTSK belief encoder, explicit joint planner and native Veritas; not full TAC-OSM',
+                        'public_observations':stream['observations'],'public_tokens':stream['tokens'],'events':events})
     print(json.dumps([{'observations':e['observations'],'weights':e['regime_weights'],'cost':e['native_probe']['cost']/2,'faults':e['native_probe']['failures']} for e in events if 'native_probe' in e],indent=2))
 
 
