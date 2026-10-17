@@ -1,0 +1,128 @@
+name: DEV-051 learned public Veritas policy (development)
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'research/dev051/**'
+      - 'src/tac_osm/development/learned_veritas_policy.py'
+      - 'scripts/*dev051.py'
+      - 'tests/test_learned_veritas_dev051.py'
+      - '.github/workflows/dev051-learned-veritas.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  integrity-smoke:
+    if: github.event_name == 'workflow_dispatch' || github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned native Veritas and PyTorch
+        run: |
+          python -m pip install --quiet -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.3.5 ruff==0.17.1
+          python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Static analysis and full repo integrity
+        run: |
+          ruff check --select F src/tac_osm/development/learned_veritas_policy.py scripts/run_learned_veritas_dev051.py scripts/audit_learned_veritas_dev051.py tests/test_learned_veritas_dev051.py
+          python scripts/sync_test_count.py --check
+          python -m pytest tests/ -q
+      - name: Tiny two-world smoke for BC, DAgger, calibration and native evaluation
+        run: |
+          python scripts/run_learned_veritas_dev051.py --seed 7101 --smoke --veritas-root .veritas-public-runtime --output artifacts/dev051-smoke
+          python - <<'PY'
+          import json
+          d=json.load(open('artifacts/dev051-smoke/report.json'))
+          assert d['smoke'] and len(d['policies'])==7
+          assert d['model_fit']['optimizer_updates_per_arm']==4
+          assert d['policies']['inspect_verify_retry']['summary']['residual_faults']==0
+          print('DEV-051 INITIAL EXECUTION CONTRACT PASSED')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV051-smoke-only
+          path: artifacts/dev051-smoke/
+          if-no-files-found: warn
+  trained-seeds:
+    needs: integrity-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [7101, 7102, 7103]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pinned native Veritas plus CPU PyTorch
+        run: |
+          python -m pip install --quiet -e . -e .veritas-public-runtime numpy==2.3.5
+          python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Teacher observation and student-encountered action learning
+        run: |
+          python scripts/run_learned_veritas_dev051.py --seed ${{ matrix.seed }} --veritas-root .veritas-public-runtime --output artifacts/dev051-seed${{ matrix.seed }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV051-RAW-seed${{ matrix.seed }}-development
+          path: artifacts/dev051-seed${{ matrix.seed }}/
+          if-no-files-found: warn
+  independent-audit:
+    needs: trained-seeds
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: DEV051-RAW-seed*-development
+          path: artifacts/evidence
+      - name: Install independent pinned runtime
+        run: |
+          python -m pip install --quiet -e . -e .veritas-public-runtime numpy==2.3.5
+          python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Reconstruct all trained policies, thresholds, native actions and verifier outcomes
+        run: |
+          python scripts/audit_learned_veritas_dev051.py \
+            artifacts/evidence/DEV051-RAW-seed7101-development \
+            artifacts/evidence/DEV051-RAW-seed7102-development \
+            artifacts/evidence/DEV051-RAW-seed7103-development \
+            --output artifacts/evidence/analysis
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DEV051-COMPLETE-AUDITED-DEVELOPMENT-EVIDENCE
+          path: artifacts/evidence/
+          if-no-files-found: error
+      - name: Publish only independently audited result summary
+        run: cat artifacts/evidence/analysis/analysis.json

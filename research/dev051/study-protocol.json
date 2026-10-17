@@ -1,0 +1,140 @@
+{
+  "study": "DEV-051A",
+  "status": "PROSPECTIVELY_REGISTERED_DEVELOPMENT_NOT_CONFIRMATORY",
+  "question": "Can a policy trained only on public Veritas maintenance observations learn action selection and verification while beating or matching explicit public-belief and inspect-verify-retry controls on fresh worlds?",
+  "parent": "DEV-049A reliability and DEV-050A public Veritas verification, both development results",
+  "environment": {
+    "source": "FPC-effortless/veritas",
+    "commit": "b21d829b62d3cab2811e746267ca305e110ed004",
+    "task_generator": "unchanged DEV-050 final amended public generator, not canonical/sealed Veritas",
+    "entities": 2,
+    "first_repair_failure_probability": 0.25,
+    "second_repair_guaranteed": true,
+    "accurate_inspection": true,
+    "known_limitations": true
+  },
+  "data": {
+    "teacher_worlds": {
+      "seeds": [
+        51101,
+        51102,
+        51103,
+        51104
+      ],
+      "worlds_per_seed": 32
+    },
+    "onpolicy_worlds": {
+      "seeds": [
+        51201,
+        51202
+      ],
+      "worlds_per_seed": 32
+    },
+    "calibration_worlds": {
+      "seeds": [
+        52101,
+        52102
+      ],
+      "worlds_per_seed": 32
+    },
+    "evaluation_worlds": {
+      "seeds": [
+        53101,
+        53102,
+        53103,
+        53104
+      ],
+      "worlds_per_seed": 32
+    },
+    "model_seeds": [
+      7101,
+      7102,
+      7103
+    ],
+    "all_worlds_disjoint": true,
+    "all_episode_worlds_reused_across_model_seeds": true,
+    "do_not_reuse_DEV050_seeds": true
+  },
+  "teacher": "inspect_verify_retry (only public observations; oracle labels never given to training code)",
+  "actions": [
+    "INSPECT",
+    "ISOLATE",
+    "SERVICE",
+    "DONE"
+  ],
+  "admissibility": "Only isolate if slot free and not already isolated; service only if isolated with attempt count <2; DONE and INSPECT are always selectable, so safety is not encoded into admissibility",
+  "models": {
+    "architecture": "small MLP (12 public belief features -> 32 -> 4 actions) without privileged future/hidden state",
+    "arms": [
+      "behavior_cloning",
+      "on_policy_aggregation",
+      "confidence_gated_aggregation"
+    ],
+    "training": {
+      "behavior_cloning_updates": 160,
+      "aggregation_warmup_updates": 80,
+      "aggregation_followup_updates": 80,
+      "learning_rate": 0.003,
+      "optimizer": "AdamW",
+      "full_batch": true,
+      "uniform_cross_entropy": true,
+      "teacher_query_at_student_states": true
+    }
+  },
+  "calibration": {
+    "threshold_grid": [
+      0,
+      0.4,
+      0.6,
+      0.75,
+      0.85,
+      0.95,
+      1.01
+    ],
+    "selection": "choose minimum physical cost gated policy on disjoint calibration worlds subject to zero observed residual faults and blocked actions, otherwise use teacher-only fallback; no evaluation-dependent selection",
+    "selection_scope": "per model seed; once before final eval"
+  },
+  "references": [
+    "inspect_verify_retry",
+    "inspect_once",
+    "stale_record",
+    "wait",
+    "public_belief_rule"
+  ],
+  "evaluation": {
+    "primary": "residual faulty entities and complete-world fraction under native runtime independent verifier",
+    "secondary": [
+      "total cost per entity",
+      "blocked actions",
+      "unnecessary sensing",
+      "fallback decision fraction",
+      "verified service attempts",
+      "intervention count",
+      "calibrated confidence",
+      "wall-clock runtime"
+    ],
+    "safety_guard": "Learned policy is not declared superior if any residual faults exceed reference, even if cheaper"
+  },
+  "integrity": [
+    "freeze source and protocol before fitting",
+    "checkpoint SHA256 and raw per-world outcomes per policy, per seed",
+    "train labels constructed only from public records and observed action callback receipts",
+    "teacher never accesses hidden oracle",
+    "independent replay of frozen models and real Veritas native transitions",
+    "include every failed/blocked action and tool expense",
+    "strict split identity and no DEV050 world reuse",
+    "three seeds are development only"
+  ],
+  "limitations": [
+    "Known two-entity and opaque-ID task; no new dynamics/partial sensing/domain shift",
+    "Hand-coded belief teacher and heuristic safety fallback remain baseline and may outperform models",
+    "Student-state aggregation uses extra simulator interactions; matched updates not equal FLOPs",
+    "This is not complete TAC-OSM learned recurrent memory nor cross-domain transfer",
+    "Zero observed failures cannot certify real-world safety",
+    "No threshold or model tuning on sealed evaluation"
+  ],
+  "next": [
+    "DEV-051B: add sensor noise, uncertain second repair and entity interactions under frozen new protocol",
+    "DEV-052: student-encountered action-cost learning with learned persistent PLM vs explicit belief-state and matched tuned recurrent models"
+  ]
+}

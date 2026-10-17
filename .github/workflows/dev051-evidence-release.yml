@@ -1,0 +1,77 @@
+name: DEV-051 preserve audited development evidence on GitHub
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - '.github/workflows/dev051-evidence-release.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  release-archived-science:
+    if: github.event_name == 'workflow_dispatch' || github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Retrieve original complete evidence without changing it
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          mkdir -p artifacts
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12104804673/zip > artifacts/DEV-051-audited-original.zip
+          printf '%s  %s\n' \
+            24098f2c237b1a49588793103dead5491d2efb17f45af4adb9541483a36e58dd \
+            artifacts/DEV-051-audited-original.zip > artifacts/SHA256SUMS
+          sha256sum -c artifacts/SHA256SUMS
+          python - <<'PY'
+          import json,zipfile
+          p='artifacts/DEV-051-audited-original.zip'
+          with zipfile.ZipFile(p) as z:
+              assert z.testzip() is None
+              names=z.namelist()
+              assert 'analysis/analysis.json' in names,names
+              data=json.loads(z.read('analysis/analysis.json'))
+              assert data['status']=='AUDITED_ADAPTIVE_DEVELOPMENT_NOT_CONFIRMATORY'
+              assert {row['seed'] for row in data['per_model_seed']}=={7101,7102,7103}
+              for seed in (7101,7102,7103):
+                  assert f'DEV051-RAW-seed{seed}-development/report.json' in names
+                  for name in ('bc.pt','dagger.pt'):
+                      assert f'DEV051-RAW-seed{seed}-development/{name}' in names
+              for key,value in data['passed_strict_reliability_and_cost_guard'].items():
+                  assert value is False, (key,value)
+              print('VERIFIED: original 3-seed fit, full action evidence, independent audit and negative guard')
+          PY
+      - name: Publish evidence prerelease without changing source or weights
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          cat > artifacts/RELEASE-NOTES.md <<'TXT'
+          DEV-051A audited development evidence, NOT confirmatory and NOT learned TAC-OSM world-model superiority.
+          Frozen original training/eval source: d514fb5bd34b2de3932925cd1d1beb3b480c85f3.
+          Pinned public Veritas runtime: b21d829b62d3cab2811e746267ca305e110ed004.
+          Original training and independent audit: https://github.com/FPC-effortless/TAC-OSM/actions/runs/39045522413
+          Registered protocol and complete results: draft PR #210, docs/DEV-051-RESULTS.md.
+          Three seed variants of BC, student-state aggregation and confidence-gated aggregation all matched the public inspect/verify/retry reference on 128 shared fresh worlds, cost/entity 0.907421875, zero faults, zero blocked actions. Gate threshold 0 in all seeds (never invoked teacher fallback). No trained arm reduced cost below the explicit public-belief/reference controller. Reference performance is restricted to the same synthetic generator, two entities, accurate sensors and guaranteed second repair.
+          The ZIP contains original per-seed checkpoints, public native action traces, calibration decisions and separate audit. The SHA256SUMS file binds its exact bytes. GitHub prereleases are deletable and are NOT independent DOI archives.
+          TXT
+          if gh release view dev051-audited-development-2026-10-17 >/dev/null 2>&1; then
+            gh release download dev051-audited-development-2026-10-17 --pattern 'DEV-051-audited-original.zip' --dir artifacts/verify
+            cmp artifacts/DEV-051-audited-original.zip artifacts/verify/DEV-051-audited-original.zip
+            echo 'Identical existing release preserved'
+          else
+            gh release create dev051-audited-development-2026-10-17 \
+              --target research/dev051-learned-veritas-policy-2026-10-17 \
+              --prerelease --title 'DEV-051 public-state action imitation — audited development' \
+              --notes-file artifacts/RELEASE-NOTES.md \
+              artifacts/DEV-051-audited-original.zip artifacts/SHA256SUMS
+          fi
+          gh release view dev051-audited-development-2026-10-17 --json tagName,url,assets
