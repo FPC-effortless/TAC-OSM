@@ -9,6 +9,8 @@ on:
       - 'src/tac_osm/development/scalable_maintenance.py'
       - 'src/tac_osm/development/local_memory_variants.py'
       - 'src/tac_osm/development/verified_routing.py'
+      - 'src/tac_osm/development/writer_reader_factorial.py'
+      - 'scripts/*factorial_dev044b.py'
       - '.github/workflows/dev044-048-development-checks.yml'
 permissions:
   contents: read
@@ -31,9 +33,11 @@ jobs:
         run: |
           python -m ruff check --select F scripts/run_frozen_policy_dev045.py scripts/audit_frozen_policy_dev045.py scripts/run_joint_training_dev046.py scripts/audit_joint_training_dev046.py scripts/run_local_generalization_dev047.py scripts/audit_local_generalization_dev047.py scripts/run_verified_routing_dev048.py scripts/audit_verified_routing_dev048.py scripts/run_research_program_dev044_048.py src/tac_osm/development/frozen_action_heads.py src/tac_osm/development/public_state_training.py src/tac_osm/development/scalable_maintenance.py src/tac_osm/development/local_memory_variants.py src/tac_osm/development/verified_routing.py
           python scripts/sync_test_count.py --check
+          python -m ruff check --select F scripts/run_writer_reader_factorial_dev044b.py scripts/audit_writer_reader_factorial_dev044b.py src/tac_osm/development/writer_reader_factorial.py
       - name: Complete engineering regression
         run: python -m pytest tests/ -q
       - name: Two-update training smoke; no scientific claim
         run: |
           python scripts/run_joint_training_dev046.py --seed 4601 --smoke --output "$RUNNER_TEMP/dev046-smoke"
           python scripts/run_local_generalization_dev047.py --seed 4701 --smoke --output "$RUNNER_TEMP/dev047-smoke"
+          python scripts/run_writer_reader_factorial_dev044b.py --seed 4411 --smoke --output "$RUNNER_TEMP/dev044b-smoke"
