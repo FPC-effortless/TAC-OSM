@@ -1,0 +1,105 @@
+{
+  "study": "DEV-058",
+  "status": "FUNCTIONAL_TARGET_MET_LOCAL_AUDIT_PASS",
+  "confirmation": false,
+  "source": "e6b68098a13531476ddd52a24860736dc7e66d72",
+  "protocol_sha256": "2fdd640f66c17d46d2958b62113dd8e5fdc3b4c247b9a5be048854fd96fe99e8",
+  "archive": "evidence.tar.gz",
+  "sha256": "de8f6027315c6f2cbfa144d1bee3edd0e0e7122bc77e0ae1eacff3a6bf6794dd",
+  "archive_root": "dev058-main",
+  "runnable_export": "learned-agent.tar.gz",
+  "export_sha256": "8f091eca864407501aac1f9101b14074127e6cb8436dbcd60e9c9a6f6c8bea5e",
+  "recommended_seed": 7581,
+  "recommendation_basis": "First preregistered seed, not final-test selection",
+  "checkpoint_seeds": [
+    7581,
+    7582
+  ],
+  "parameters": 133580,
+  "persistent_state_float32_bytes": 6272,
+  "test_successes": {
+    "7581": 576,
+    "7582": 560
+  },
+  "test_worlds_per_seed": 576,
+  "test_distinct_worlds": 576,
+  "paired_across_seeds": true,
+  "repeat_seed_failures": {
+    "completion_failures": 16,
+    "missing_stop": 16,
+    "physically_repaired_missing_stop": 15,
+    "residual_fault_worlds": 1,
+    "residual_faults": 2
+  },
+  "audit_file": "audit.json",
+  "audit_sha256": "2a5ff6636675375ee44368cb9ed7bd7e481ad69b37b670c9d78b41ebb127ddb5",
+  "restored_checkpoints": 2,
+  "restored_cells": 102,
+  "native_replay_trajectories": 6528,
+  "native_replay_actions": 35911,
+  "audit_trajectory_scope": "Validation, full test and deliberate lesions; repeated shared worlds, not independent replications. Aggregate failures include lesions.",
+  "regression": {
+    "passed": 1355,
+    "seconds": 67.82,
+    "github": "Use draft PR checks for the current revision; original CI runs and failed diagnostic replay are preserved.",
+    "scope": "Complete local suite including audit-portability test"
+  },
+  "runtime_boundary": "Torch-only agent plus public JSON transport. No teacher/simulator/analytic planner/task-specific policy in export.",
+  "training": "Teacher-assisted admission/address pretraining then joint neural task learning; staged, not unsupervised or reward-only discovery.",
+  "limitations": [
+    "Bounded exact public-history synthetic task with 2/4/6 entities, 32 generic slots and fixed API schema",
+    "Neural CASM, not general symbolic DSL discovery; CDL-style reads, not original CDL distillation or learned C5 indexing",
+    "Same author/shared physics/native recorded effect tables; no independent replication or real-world verifier",
+    "No superiority or industrial reliability claim; MTSK novelty pursuit remains retired"
+  ],
+  "files": {
+    "src/tac_osm/development/learned_agent.py": "49d5a381979a3ad0ab26d0e4a488b11ff391e01a9473c2e81d2eecaa4b69a07a",
+    "src/tac_osm/development/learned_agent_world.py": "3990519e93e37308cf32492daec1818d22264fb77cf49930a1ce0707e0fb6b26",
+    "scripts/run_fully_learned_dev058.py": "c175dd8f60dcfb188b3f3dd8939040a9031fd5cceea375e354bd96b1f5c12154",
+    "scripts/audit_fully_learned_dev058.py": "cd7be150132de46f2766e3e5be84c7e57dadecae7480aafb466270fd9a5a4294",
+    "scripts/learned_agent_runtime_dev058.py": "d0a1917652a0467a6c277bb9edd647d8a75d04d1bcd0f0ae2bf32427cd1871b1"
+  },
+  "pull_request": "https://github.com/FPC-effortless/TAC-OSM/pull/217",
+  "github_runs": [
+    {
+      "scope": "Full regression",
+      "commit": "6ff893a2ae17ae9acad68322851167521849a5bf",
+      "url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077207289"
+    },
+    {
+      "scope": "Saved checkpoint, isolated export and native replay",
+      "commit": "6ff893a2ae17ae9acad68322851167521849a5bf",
+      "url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077207316"
+    }
+  ],
+  "extracted_export_check": {
+    "seeds": [
+      7581,
+      7582
+    ],
+    "exact_decisions_per_seed": 33,
+    "requires_simulator": false,
+    "requires_tac_osm": false
+  },
+  "initial_same_host_audit": "audit-initial-same-host.json",
+  "exact_inference_cells": 90,
+  "canonical_zero_dynamics_diagnostic_cells": 12,
+  "portability_correction": "Audit-only canonicalization of checked mathematical ties; complete learned agent, export and checkpoint bytes unchanged. Original main trajectories retained.",
+  "initial_ci_replay_failure": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077254013",
+  "post_outcome_audit_amendment": "audit-portability-amendment.json",
+  "current_collected_test_count": 1355,
+  "post_correction_boundary_tests": {
+    "passed": 10,
+    "seconds": 6.14
+  },
+  "portable_cpu_diagnostic_check": {
+    "ATEN_CPU_CAPABILITY": "default",
+    "MKL_CBWR": "COMPATIBLE",
+    "seeds": [
+      7581,
+      7582
+    ],
+    "passed": true
+  },
+  "verified_prior_full_regression": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077254078"
+}

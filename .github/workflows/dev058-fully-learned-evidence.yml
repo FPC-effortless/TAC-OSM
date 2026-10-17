@@ -1,0 +1,56 @@
+name: DEV-058 autonomous learned agent and standalone export
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev058/**'
+      - 'src/tac_osm/development/learned_agent.py'
+      - 'src/tac_osm/development/learned_agent_world.py'
+      - 'scripts/*dev058.py'
+      - 'tests/test_fully_learned_agent_dev058.py'
+      - '.github/workflows/dev058-fully-learned-evidence.yml'
+permissions:
+  contents: read
+jobs:
+  recorded-checkpoint-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install recorded CPU environment and native verifier
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Test learned deployment boundary and standalone process
+        run: python -m pytest tests/test_fully_learned_agent_dev058.py -q
+      - name: Check archive hash and restore saved evidence
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('research/dev058')
+          index=json.loads((root/'evidence-index.json').read_text())
+          assert hashlib.sha256((root/'evidence.tar.gz').read_bytes()).hexdigest()==index['sha256']
+          PY
+          mkdir -p results
+          tar -xzf research/dev058/evidence.tar.gz -C results
+      - name: Restore all fits and replay neural decisions, public receipts and native actions
+        run: python scripts/audit_fully_learned_dev058.py --directory results/dev058-main --output results/dev058-ci-audit.json --veritas-root .veritas-public-runtime --export-root results/dev058-export
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV058-RESTORED-STANDALONE-NATIVE-AUDIT
+          path: |
+            results/dev058-ci-audit.json
+            results/dev058-export
+          if-no-files-found: warn

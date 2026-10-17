@@ -1,0 +1,17 @@
+{
+  "study": "DEV-058",
+  "timing": "AFTER_MAIN_OUTCOMES_AND_FIRST_GITHUB_REPLAY",
+  "kind": "Numerical audit correction only",
+  "original_failure": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39077254013",
+  "reason": "Zeroed action-conditioned latents imply mathematically constant candidate policy inputs. CPU roundoff changed discrete choices among tied diagnostic scores. Complete-agent replay passed before that diagnostic.",
+  "correction": "Auditor-only subclass verifies max valid score spread <=1e-6 and canonicalizes the tie. Canonical trace must exactly match the previously frozen zero-policy reference; original raw zero-dynamics traces still undergo exact physical/native execution.",
+  "unchanged": [
+    "Training protocol and functional acceptance thresholds",
+    "Training/test splits and trained checkpoint weights",
+    "Deployed learned-agent source and standalone runtime",
+    "Original main archive, including all legacy control choices",
+    "Exact replay requirements for all complete-agent cells and other controls"
+  ],
+  "preserved": "audit-initial-same-host.json; original main evidence archive; failed CI run links",
+  "not_a_claim": "Not bitwise portable original zero-dynamics choices; not a learned controller fallback."
+}

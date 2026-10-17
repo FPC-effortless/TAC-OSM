@@ -9,6 +9,24 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## DEV-058 autonomous learned agent (October 17, 2026)
+
+[DEV-058](docs/DEV-058-RESULTS.md) replaces task-specific deployment control
+with trained admission, addressing, CDL-style reads, neural CASM composition,
+action-conditioned latent rollouts, completion estimates and actual action/stop
+selection. The exported torch-only process has no simulator, teacher, analytic
+planner, entity-slot dictionary or retry routine. Two seeds complete 576/576 and
+560/576 held-out bounded synthetic worlds; both meet the preregistered functional
+target. The repeat seed's 16 failed completions are preserved, including two
+residual faults. All initial observation and admitted-write costs are charged.
+
+This is teacher-assisted learning with exact public status records and only two
+to six entities. Fixed tensor/API architecture and external simulator/scoring
+rules remain programmed and documented. It does not demonstrate general
+CASM-S symbolic discovery, original CDL distillation, C5 scaling, MTSK novelty
+or industrial reliability. The report links standalone checkpoints, source,
+per-seed learning curves, operational lesions and restored native replay.
+
 ## DEV-056 / DEV-057 research decision (October 17, 2026)
 
 [DEV-056](docs/DEV-056-RESULTS.md) completed twelve fresh fits, including a
