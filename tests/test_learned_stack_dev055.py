@@ -1,4 +1,7 @@
 import inspect
+import importlib.util
+from pathlib import Path
+import sys
 import numpy as np
 import pytest
 import torch
@@ -80,3 +83,35 @@ def test_memory_lesion_changes_forecast():
         a=model.predict(state,ds[1][:,-1],torch.full((3,),4))
         b=model.predict(model.initial(ds[0][:,0]),ds[1][:,-1],torch.full((3,),4))
     assert not torch.allclose(a,b)
+
+
+def test_streaming_interface_rejects_hidden_labels_and_bad_ticks():
+    path=Path(__file__).resolve().parents[1]/'scripts/demo_learned_stack_dev055.py'
+    spec=importlib.util.spec_from_file_location('dev055_demo',path)
+    module=importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
+    assert module.parse_event({'action':0,'sensors':[0,1],'exact':[0,0],'tick':0}).tick == 0
+    with pytest.raises(ValueError):
+        module.parse_event({'action':0,'sensors':[0,1],'exact':[0,0],'tick':0,'target':[0,0]})
+    with pytest.raises(ValueError):
+        module.parse_event({'action':0,'sensors':[0,1],'exact':[0,0],'tick':20})
+
+
+def test_native_replay_preserves_unrepaired_outcomes():
+    pytest.importorskip('investigation_world')
+    scripts=Path(__file__).resolve().parents[1]/'scripts'
+    sys.path.insert(0,str(scripts))
+    try:
+        from audit_learned_stack_dev055 import native_replay
+        world=PhysicalWorld(8551914,0)
+        row={'seed':8551914,'index':0,'family':'coupling','actions':[],'cost':0.,'fault_exposure':0}
+        for tick in range(20):
+            event,cost,label=world.step(0)
+            row['actions'].append({'action':0,'cost':cost,'after':label['after'],'public':event.tensor()})
+            row['cost']+=cost; row['fault_exposure']+=sum(label['after'])
+        result=native_replay(row)
+        assert result['actions']==20
+        assert result['state_verified']==bool(sum(world.bits)==0)
+        row['cost']+=1
+        with pytest.raises(AssertionError): native_replay(row)
+    finally:
+        sys.path.remove(str(scripts))
