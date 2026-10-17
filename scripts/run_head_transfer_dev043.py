@@ -238,6 +238,30 @@ def retrospective_pairwise_oracle(rows):
                 note="Chosen using test labels per pair; cannot deploy or tune on this result.")
 
 
+def last_event_reference(calibration,evaluation):
+    # Lightweight structured non-neural control; fit on calibration alone.
+    cal_cases=[c for row in split_cases("calibration") for c in row["order"]]
+    eval_cases=[c for row in split_cases("evaluation") for c in row["order"]]
+    counts={}
+    for case in cal_cases:
+        ys=[[case.wait_targets[e],case.service_targets[e],case.current_targets[e]] for e in range(8)]
+        for key,y in zip(last_keys(case),ys):
+            if key not in counts:counts[key]=[torch.zeros(3),0]
+            counts[key][0]+=torch.tensor(y,dtype=torch.float32)
+            counts[key][1]+=1
+    means={k:(acc/n).tolist() for k,(acc,n) in counts.items()}
+    calp=torch.tensor([[means.get(k,[0.,0.,0.]) for k in last_keys(c)] for c in cal_cases])
+    devrows=as_rows(calibration,calp)
+    threshold=min(THRESHOLDS,key=lambda t:(action(devrows,t)["total_cost"],abs(t-.25),t))
+    testp=torch.tensor([[means.get(k,[0.,0.,0.]) for k in last_keys(c)] for c in eval_cases])
+    rows=as_rows(evaluation,testp)
+    # Critical oracle property: same final public events and queries, opposite mature outcomes.
+    for i in range(0,len(rows),2):
+        assert rows[i]["probabilities"]==rows[i+1]["probabilities"]
+    return dict(method="last-event-only",threshold=threshold,metrics=metrics(rows),
+                physical=action(rows,threshold))
+
+
 def disjoint(groups):
     keys=[]
     for data in groups:
@@ -313,6 +337,7 @@ def run(seed,checkpoint_root,output,smoke=False):
           ranking={k:round(v["metrics"]["pairwise_ranking"],4) for k,v in interventions.items()},
           cost={k:round(v["physical"]["cost_per_entity"],4) for k,v in interventions.items()})),flush=True)
     result["reference"]=reference(evaluation)
+    result["last_event"]=last_event_reference(calibration,evaluation)
     result["evaluation_fingerprints"]=[v["fingerprint"] for v in evaluation["conditions"]]
     (output/"report.json").write_text(json.dumps(result,indent=2,allow_nan=False)+"\n")
 
