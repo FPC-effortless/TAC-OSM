@@ -203,9 +203,11 @@ def order_eval(model,threshold,reps,smoke):
         assert a["labels"][e][0]==1 and b["labels"][e][0]==0
         signed.append(a["probabilities"][e][0]-b["probabilities"][e][0])
     rank=(sum(x>0 for x in signed)+.5*sum(x==0 for x in signed))/len(signed)
-    return dict(pair_ranking=rank,hard_wait=summary(
-        [r for r in rows if r["deadline"]!="before"],threshold)["mature_wait"],
-        physical=physical(rows,threshold),rows=rows)
+    mature=[r for r in rows if r["deadline"]!="before"]
+    hard=sum(int((r["probabilities"][r["target_entity"]][0]>.5)==bool(
+           r["labels"][r["target_entity"]][0])) for r in mature)/len(mature)
+    return dict(pair_ranking=rank,hard_wait=hard,
+                physical=physical(rows,threshold),rows=rows)
 
 
 def last_event_reference(calibration,evaluation,smoke):
