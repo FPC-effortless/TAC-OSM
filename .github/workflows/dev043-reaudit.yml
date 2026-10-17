@@ -1,0 +1,56 @@
+name: DEV-043 independent replay audit of frozen first run
+on:
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'scripts/audit_head_transfer_dev043.py'
+      - '.github/workflows/dev043-reaudit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit-original-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch first frozen DEV-043 seed outputs unchanged
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 39006497054
+          github-token: ${{ github.token }}
+          pattern: DEV043-RAW-seed*-not-confirmatory
+          path: artifacts/evidence
+      - name: Fetch immutable-by-hash DEV-041 source checkpoints
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          mkdir -p artifacts/dev041
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12090820964/zip > /tmp/dev041.zip
+          printf '%s  %s\n' b0dc2842537c50e2e76ecf0139b1519a032c2575af9181076897ccce0d5bd7c7 /tmp/dev041.zip | sha256sum -c -
+          python -c "import zipfile;zipfile.ZipFile('/tmp/dev041.zip').extractall('artifacts/dev041')"
+      - name: Install original pinned CPU
+        run: |
+          python -m pip install --quiet -e . numpy==2.3.3
+          python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Independently reconstruct logits, pair rankings and simulator costs
+        run: |
+          python scripts/audit_head_transfer_dev043.py \
+            artifacts/evidence/DEV043-RAW-seed4101-not-confirmatory \
+            artifacts/evidence/DEV043-RAW-seed4102-not-confirmatory \
+            artifacts/evidence/DEV043-RAW-seed4103-not-confirmatory \
+            --checkpoints artifacts/dev041 --output artifacts/evidence/analysis
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DEV043-ORIGINAL-EVIDENCE-SEPARATE-AUDIT-NOT-CONFIRMATORY
+          path: artifacts/evidence/
+          if-no-files-found: error
+      - name: Show validated summary only after successful archive
+        run: cat artifacts/evidence/analysis/analysis.json
