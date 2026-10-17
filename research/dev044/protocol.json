@@ -1,0 +1,137 @@
+{
+  "study": "DEV-044A",
+  "version": "1.0",
+  "status": "REGISTERED_BOUNDED_DEVELOPMENT_PILOT_NOT_CONFIRMATORY",
+  "parent_study": "DEV-043 audited no head-only hard accuracy benefit; archived in GitHub release dev043-audited-evidence-2026-10-17",
+  "questions": [
+    "Does initial recurrent scale/retention explain why DEV-041 frozen MTSK underperforms writer-learned MTSK?",
+    "How do matched-exposure GRU768, gated-delta768 and 41-scalar schema controls compare on the same synthetic generator and cost?"
+  ],
+  "trial_design": {
+    "seeds": [
+      4401,
+      4402,
+      4403
+    ],
+    "history": 512,
+    "train_updates": 108,
+    "batch_worlds": 2,
+    "lr": 0.002,
+    "training_domain": "dev044a-train-v1",
+    "calibration_domain": "dev044a-calibration-v1",
+    "evaluation_domain": "dev044a-evaluation-v1",
+    "order_evaluation_domain": "dev044a-order-eval-v1",
+    "calibration_repetitions_per_cell": 2,
+    "evaluation_repetitions_per_cell": 8,
+    "order_evaluation_repetitions_per_cell": 8,
+    "training_data_paired_across_all_arms": true,
+    "evaluation_fingerprint_hash_disjoint": true,
+    "fixed_test_only_after_training_and_calibration": true
+  },
+  "profiles": [
+    {
+      "name": "base",
+      "decay_logit_shift": 0,
+      "key_gain": 1,
+      "value_gain": 1
+    },
+    {
+      "name": "sticky",
+      "decay_logit_shift": 2,
+      "key_gain": 1,
+      "value_gain": 1
+    },
+    {
+      "name": "scaled",
+      "decay_logit_shift": 2,
+      "key_gain": 0.5,
+      "value_gain": 2
+    }
+  ],
+  "arms": {
+    "mtsk": [
+      "trainable",
+      "frozen"
+    ],
+    "same_architecture_and_initializer_within_profile": true,
+    "writer_tensors_frozen_before_optimizer": true,
+    "baseline": [
+      "schema41",
+      "gru768",
+      "delta768"
+    ]
+  },
+  "matching": {
+    "per_profile_trainable_frozen_same_initialization": true,
+    "same_train_step_count_and_case_stream_all_arms": true,
+    "same_number_of_mtsk_profiles_per_writer_training_condition": 3,
+    "baseline_tuning": "fixed original baseline initializations, no claim of baseline-convergence superiority",
+    "memory_budget": "MTSK / gated delta / GRU each 768 stored scalars, schema41 explicitly cheaper",
+    "compute_budget": "report training wall-time and trainable parameters but do not treat matched update count as equal FLOPs"
+  },
+  "selection": {
+    "profile_metric": "mean calibrated cost/entity on development calibration set; ties fewer failures then profile name",
+    "thresholds": [
+      0,
+      0.05,
+      0.1,
+      0.15,
+      0.2,
+      0.25,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.75,
+      0.8,
+      0.9,
+      1
+    ],
+    "profile_selections_per_seed": [
+      "trainable_mtsk",
+      "frozen_mtsk"
+    ],
+    "no_evaluation_use": true,
+    "no_retrospective_test_selection": true
+  },
+  "primary": {
+    "endpoint": "cost per entity on fresh synthetic paired worlds for selected trainable versus selected frozen MTSK",
+    "failure_guard": "do not declare improvement if selected arm has more physical failures than its comparator",
+    "unit": "paired seed, not independent world; n=3 is descriptive only"
+  },
+  "secondary": [
+    "calibrated cost and failures for every candidate",
+    "mature cancellation and reissued wait accuracy",
+    "pending wait and service prediction",
+    "order-pair ranking, hard accuracy, physical cost",
+    "last-event table and exact public-history reference",
+    "compute time per model",
+    "writer hash invariance",
+    "GRU and gated-delta numerical stability"
+  ],
+  "integrity": [
+    "frozen source and protocol before any seed job",
+    "SHA256 checkpoint manifest",
+    "reject partial or nonfinite runs",
+    "all three seeds and independent physical recomputation before reporting claims",
+    "preserve full negative outcomes",
+    "no merging / no system-level claim"
+  ],
+  "limitations": [
+    "fixed known eight-entity synthetic maintenance simulator",
+    "108 updates insufficient to establish convergence",
+    "three seeds insufficient for reliability",
+    "only three prechosen MTSK profiles, not an optimized random reservoir search",
+    "simulator event tables may still outperform neural models",
+    "original GRU768 computational requirements may differ",
+    "full PLM CDL CASM OSM not trained or validated"
+  ],
+  "next": [
+    "DEV-044B extend best candidates to 216+ updates, equal tuning budget across GRU/Delta and at least 10 independent seeds",
+    "DEV-045 compare cost-trained policies on frozen states against exact history, calibrated threshold and last-event",
+    "DEV-046 joint action-conditioned training with measured regret",
+    "DEV-047 entity-order memory/unknown entity IDs and entity scaling",
+    "DEV-048 constrained verified integration"
+  ]
+}
