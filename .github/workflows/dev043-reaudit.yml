@@ -11,6 +11,7 @@ permissions:
   actions: read
 jobs:
   audit-original-evidence:
+    if: github.event_name == 'workflow_dispatch' || github.event.action == 'opened'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
