@@ -1,0 +1,16 @@
+{
+  "study": "DEV-047A",
+  "status": "PREREGISTERED_BOUNDED_DEVELOPMENT_NOT_CONFIRMATORY",
+  "seeds": [4701, 4702, 4703],
+  "variants": ["multiscale_gru", "fast_gru", "selective_diagonal", "temporal_order"],
+  "controls": ["independent_public_event_queue", "last_observed_value"],
+  "train": {"entities": 8, "histories": [64, 128], "updates": 72, "lr": 0.003, "objective": "BCE + regret + 0.2 cost ranking", "batch_worlds": 2, "paired_stream": true, "roles": ["retention", "acquisition", "pending_cancel", "reissued_cancel"], "delays": [32, 128, 512], "deadline": ["before", "at", "after"], "multiple_pending": false},
+  "calibration": {"entities": 8, "history": 128, "roles": ["pending_cancel", "reissued_cancel"], "delays": [32, 512], "deadlines": ["before", "at", "after"], "repetitions": 1, "unseen_ids": false, "multiple_pending": false},
+  "evaluation": {"entities": [8, 16, 32], "histories": [128, 512], "roles": ["pending_cancel", "reissued_cancel"], "delays": [32, 512], "deadlines": ["before", "at", "after"], "repetitions": 1, "unseen_ids": true, "multiple_pending": [false, true]},
+  "identity_boundary": "Public entity catalog supplies registration/addressing; new IDs are not embedded or learned. No learned entity discovery claim.",
+  "selection": "Single threshold per variant on calibration cost at 8 entities; transfer unchanged to every evaluation condition",
+  "primary": "per-entity physical cost and failures under entity/history/queue shift; paired seed comparisons descriptive",
+  "retention_probe": "Remove earliest target observation on first evaluation pair of each condition; log delta forecast BCE and actual cost. Evaluation diagnostic only, not a learned retention objective.",
+  "evidence": ["per-condition raw actions and outcomes", "public reference versus simulator agreement", "checkpoint replay at each entity count", "permutation invariance", "routing and full inference time including encoding", "state scalars grow linearly with entity count"],
+  "limitations": ["equation-level diagonal SSM, not Mamba reproduction", "no equal-FLOP convergence claim", "explicit full-history event queue remains valid and may dominate", "three seeds and 72 updates only", "no sealed confirmation", "delayed consequences are deterministic and service reliable", "biology provides hypotheses rather than empirical support for these variants"]
+}
