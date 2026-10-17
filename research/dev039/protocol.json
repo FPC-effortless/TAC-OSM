@@ -1,0 +1,11 @@
+{
+  "experiment": "DEV-039 frozen-memory all-role prediction-head refit",
+  "source_motivation": "DEV-038 separate readout probe recovered reissued cancellations; evaluate a real replacement head across every role and physical cost",
+  "frozen": "DEV-036 bounded_local_multi_fp64 event encoder, memory, query encoder and adapter; no updates",
+  "arms": ["original trained 44-64-2 MLP head", "same MLP head refitted from its existing weights", "new 44-2 linear head"],
+  "training": "dev039-v1-train H512, 3 delays x 4 roles x 3 deadlines x 8 repetitions x 2 worlds=576, full 8 entities x 3 query labels; MLP AdamW lr0.002, linear lr0.02, each500 full-batch updates, no selection or early stopping",
+  "evaluation": "dev039-v1-eval same condition census with disjoint domain; report 384 mature primary worlds, 192 mature cancellation worlds, 96 mature reissued cancellation worlds, all-entity accuracy, model-only service actions at fixed probability-difference threshold0.25, failures, unnecessary services and total physical cost across all 576 worlds",
+  "rules": "Frozen public representations only; future labels used to train new heads. Oracle world used for physical scoring only after actions fixed. No head selection on evaluation. Preserve original head and DEV-036 trained result.",
+  "audit": "Independent condition/physical reconstruction and separate-process exact frozen-feature/head replay",
+  "claims": "One trained memory initialization and known synthetic generator; head refit is an intervention, not architecture superiority, identity discovery or full PLM-CDL-CASM-OSM capability"
+}
