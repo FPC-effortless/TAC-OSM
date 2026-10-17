@@ -1,0 +1,87 @@
+name: DEV-040A post-hoc cost diagnosis and durable evidence
+on:
+  pull_request:
+    types: [opened]
+    paths:
+      - 'scripts/diagnose_head_cost_dev040a.py'
+      - 'research/dev040a-diagnostics/plan.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnose-and-archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preserve the exact original ZIP in a research prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          mkdir -p artifacts/original artifacts/diagnostics
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12088257141/zip > artifacts/original/DEV-040A-original.zip
+          python - <<'PY'
+          import hashlib, pathlib, zipfile
+          p=pathlib.Path('artifacts/original/DEV-040A-original.zip')
+          expected='00808f47c9b6dc1739597032898a9760e2183ee5f22a04d78848bd237b3a191b'
+          assert p.stat().st_size==109834861
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==expected
+          with zipfile.ZipFile(p) as z:
+              assert len(z.infolist())==35 and z.testzip() is None
+              z.extractall('artifacts/evidence')
+          pathlib.Path('artifacts/original/SHA256SUMS').write_text(expected+'  DEV-040A-original.zip\n')
+          PY
+          if gh release view dev040a-evidence-2026-10-17 >/dev/null 2>&1; then
+            mkdir -p artifacts/verify
+            gh release download dev040a-evidence-2026-10-17 --pattern DEV-040A-original.zip --dir artifacts/verify
+            cmp artifacts/original/DEV-040A-original.zip artifacts/verify/DEV-040A-original.zip
+          else
+            gh release create dev040a-evidence-2026-10-17 --target 3ff9a7a9bcf1561f02cf94746e126fadf4d90de4 --prerelease --title 'DEV-040A audited development evidence' --notes-file research/dev040a-diagnostics/release-notes.md artifacts/original/DEV-040A-original.zip artifacts/original/SHA256SUMS
+          fi
+          gh api repos/FPC-effortless/TAC-OSM/releases/tags/dev040a-evidence-2026-10-17 > artifacts/diagnostics/original-release.json
+      - name: Install pinned CPU analysis runtime
+        run: |
+          python -m pip install --quiet -e . pytest==9.1.1 numpy==2.3.3 matplotlib==3.10.7 ruff==0.13.0
+          python -m pip install --quiet torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Regression and original evidence audit
+        run: |
+          ruff check --select F scripts/diagnose_head_cost_dev040a.py tests/test_head_cost_diagnostics_dev040a.py
+          python scripts/sync_test_count.py --check
+          python -m pytest tests/ -q
+          python scripts/audit_head_controls_dev040a.py artifacts/evidence/DEV-040A-RAW-seed4001-NOT-CONFIRMATORY artifacts/evidence/DEV-040A-RAW-seed4002-NOT-CONFIRMATORY artifacts/evidence/DEV-040A-RAW-seed4003-NOT-CONFIRMATORY --output artifacts/reaudit
+      - name: Frozen-feature loss sweep, threshold frontiers and stratified ranking
+        run: python scripts/diagnose_head_cost_dev040a.py artifacts/evidence --output artifacts/diagnostics
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV-040A-POSTHOC-DIAGNOSTICS
+          path: artifacts/diagnostics/
+          if-no-files-found: error
+      - name: Deposit diagnostic outputs and publish compact summary
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: FPC-effortless/TAC-OSM
+        run: |
+          python - <<'PY'
+          import pathlib,zipfile,hashlib
+          p=pathlib.Path('artifacts/DEV-040A-diagnostics.zip')
+          with zipfile.ZipFile(p,'w',compression=zipfile.ZIP_DEFLATED) as z:
+              for f in sorted(pathlib.Path('artifacts/diagnostics').glob('*')):
+                  if f.is_file():z.write(f,f.name)
+          pathlib.Path('artifacts/DEV-040A-diagnostics-SHA256SUMS').write_text(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+p.name+'\n')
+          PY
+          gh release upload dev040a-evidence-2026-10-17 artifacts/DEV-040A-diagnostics.zip artifacts/DEV-040A-diagnostics-SHA256SUMS
+          gh api repos/FPC-effortless/TAC-OSM/releases/tags/dev040a-evidence-2026-10-17 > artifacts/release-final.json
+          cat artifacts/diagnostics/analysis.json
+          cat artifacts/DEV-040A-diagnostics-SHA256SUMS
+          cat artifacts/release-final.json

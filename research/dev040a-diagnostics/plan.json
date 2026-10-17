@@ -1,0 +1,20 @@
+{
+  "study": "DEV-040A-POSTHOC-DIAGNOSTICS",
+  "status": "EXPLORATORY_INSPECTED_COHORT",
+  "question": "Separate score ranking, threshold selection, endpoint coverage and loss-weight sensitivity before proposing an objective mechanism.",
+  "source_commit": "3ff9a7a9bcf1561f02cf94746e126fadf4d90de4",
+  "source_artifact": 12088257141,
+  "source_zip_sha256": "00808f47c9b6dc1739597032898a9760e2183ee5f22a04d78848bd237b3a191b",
+  "seeds": [4001, 4002, 4003],
+  "arms": ["bounded_mtsk", "masked_local", "schema41"],
+  "original_heads": ["original", "mlp_uniform", "mlp_balanced"],
+  "focus": "all mature target-wait labels, 384/13824 = 1/36 of training labels; reissued subset is 96/13824 = 1/144",
+  "new_total_focus_masses": [0.0, 0.1, 0.25, 0.5],
+  "uniform_reference_mass": 0.027777777777777776,
+  "fitting": "Original MLP warm start, frozen 44D features, AdamW lr .002 wd .0001, 500 full-batch updates; .5 must reproduce archived balanced weights exactly.",
+  "controls": ["exact public-history controller", "last-event-per-entity table with public kind/value/due comparison; mapping fitted on 576 head-training worlds; threshold selected on 288 calibration worlds"],
+  "diagnostics": ["cost by role and deadline", "per-seed paired cost differences with exploratory t(df2) intervals", "per-query accuracy AUC Brier NLL and ECE", "strict threshold grid from 0 to 1 by .005 plus all-service endpoint", "exact attainable failure/unnecessary-service frontier coverage", "test-best-grid cost is diagnostic only, never deployable threshold selection"],
+  "gatekeeping": "No new primary or confirmatory p-values; preserve DEV-040A failed primary and failed utility criterion.",
+  "limitations": ["No fresh training seeds", "No fresh evaluation cohort", "No active sensing", "One-class labels have undefined AUC", "Curve crossing alone does not establish calibration shift", "Three seeds do not establish population reliability"],
+  "archive": "Deposit the original ZIP unchanged, with hash, as a GitHub research prerelease asset; no DOI or immutable-storage claim. Deposit diagnostic outputs alongside it."
+}
