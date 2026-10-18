@@ -17,7 +17,16 @@ def run(directory,statistics,output):
             ax.plot(x,[v['validation']['loss'] for v in r['curves']],alpha=.7,lw=1,label=str(seed))
         ax.axvspan(0,256,color='gray',alpha=.12);ax.set_title(arm);ax.set_ylabel('Validation combined loss');ax.set_xlabel('Update')
     axes.flat[-1].axis('off');axes.flat[-1].text(0,.8,'Ten fresh seeds per arm\nShading: belief/read warmup\nActor-only MLP objective differs\nFixed updates do not prove convergence')
+    handles,labels=axes.flat[0].get_legend_handles_labels();axes.flat[-1].legend(handles,labels,loc='lower left',ncol=2,fontsize=8)
     fig.savefig(target/'learning-curves.png',dpi=160);plt.close(fig)
+    fig,axes=plt.subplots(2,4,figsize=(16,7),constrained_layout=True)
+    pilots=json.loads((root/'tuning.json').read_text())
+    for ax,arm in zip(axes.flat,arms):
+        for r in pilots:
+            if r['arm']==arm:ax.plot([v['update'] for v in r['curves']],[v['validation']['loss'] for v in r['curves']],label=f"LR {r['lr']}")
+        ax.axvspan(0,256,color='gray',alpha=.12);ax.set_title(arm);ax.set_xlabel('Update');ax.set_ylabel('Validation combined loss');ax.legend()
+    axes.flat[-1].axis('off');axes.flat[-1].text(0,.8,'Dedicated tuning seed 9100\nTwo LRs per arm; same updates\nSelection uses rollout reliability first\nNo test selection')
+    fig.savefig(target/'learning-rate-pilots.png',dpi=160);plt.close(fig)
     values=np.array([[s['arms'][a]['per_seed'][str(seed)]['completion']*100 for a in arms] for seed in seeds])
     fig,ax=plt.subplots(figsize=(11,5),constrained_layout=True);im=ax.imshow(values,vmin=0,vmax=100,cmap='viridis',aspect='auto')
     for i in range(10):
