@@ -26,6 +26,17 @@ The exact public reference is an information-matched, reliability-constrained de
 
 This is posterior-supervised StageA. Public action-start records identify transitions; repair receipts have a state-independent two-entity schema. No filter, teacher, physical transition law, analytical planner or stop override enters exported inference. The latent state vocabulary and identity binding remain supplied priors. StageB learning without posterior targets has not been demonstrated.
 
+## Distribution and transfer qualification
+
+The registered KL gate is a median across20 seeds, not a per-seed guarantee. 0/20 TAC seeds individually meet KL<=.02; fixed-history KL range[0.039008,0.079326]. Completion reliability and posterior accuracy are different gates.
+
+Secondary cells remain separate from primary acceptance; in protocol order:
+- Cell0: worst-seed completion 98.44%, total residual faults across shared-seed evaluations 1.
+- Cell1: worst-seed completion 100.00%, total residual faults across shared-seed evaluations 0.
+- Cell2: worst-seed completion 64.06%, total residual faults across shared-seed evaluations 25.
+
+Twenty out of twenty successful training seeds has a Wilson95% seed-pass interval approximately[83.9%,100%], conditional on this training corpus and shared worlds. It does not prove>=90% population training reliability or a real-world fault bound.
+
 ## Artifacts and limits
 
 - [Protocol](PROTOCOL.md) and [per-seed table](statistics.csv).
