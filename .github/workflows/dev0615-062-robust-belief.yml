@@ -6,6 +6,10 @@ on:
     paths:
       - 'research/dev0615/**'
       - 'research/dev062/**'
+      - 'research/real-maint-001/**'
+      - 'src/tac_osm/development/maintenance_forecast.py'
+      - 'scripts/*real_maintenance_001.py'
+      - 'tests/test_real_maintenance_001.py'
       - 'src/tac_osm/development/robust_identity.py'
       - 'src/tac_osm/development/belief_agent.py'
       - 'scripts/*dev0615.py'
@@ -60,7 +64,7 @@ jobs:
         run: |
           python - <<'PY'
           import hashlib,json,pathlib,tarfile,tempfile,shutil
-          for study in ('dev0615','dev062'):
+          for study in ('dev0615','dev062','real-maint-001'):
               folder=pathlib.Path('research')/study
               index=json.loads((folder/'evidence-index.json').read_text())
               for name,sha in index['archives'].items():
@@ -76,6 +80,7 @@ jobs:
         run: |
           python scripts/audit_identity_dev0615.py --directory results/dev0615-main --output results/dev0615-remote-audit.json --veritas .veritas-public-runtime --exports results/dev0615-remote-export
           python scripts/audit_belief_dev062.py --directory results/dev062-main --output results/dev062-remote-audit.json --veritas .veritas-public-runtime --exports results/dev062-remote-export
+          python scripts/audit_real_maintenance_001.py --directory results/real-maint-001-main --output results/real-maint-001-remote-audit.json --exports results/real-maint-001-remote-export
       - name: Preserve remote diagnostics even on failure
         if: always()
         uses: actions/upload-artifact@v4

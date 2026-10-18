@@ -1,5 +1,6 @@
 """Torch-only JSON-lines public interface for a DEV061.5 research checkpoint."""
 import json
+import hashlib
 from pathlib import Path
 import sys
 import torch
@@ -10,6 +11,7 @@ torch.set_num_threads(1)
 root=Path(__file__).resolve().parent
 meta=json.loads((root/'metadata.json').read_text())
 model=IdentityAgent(meta['arm'],meta['spec']['width'],meta['spec']['aux_width']).double().eval()
+assert hashlib.file_digest((root/'agent.pt').open('rb'),'sha256').hexdigest()==meta['checkpoint_sha256'],'Checkpoint integrity mismatch'
 model.load_state_dict(torch.load(root/'agent.pt',weights_only=True,map_location='cpu'),strict=True)
 state=None
 

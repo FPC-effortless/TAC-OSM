@@ -16,7 +16,7 @@ from audit_fully_learned_dev058 import native_replay,PIN
 
 
 def export(folder,report,destination):
-    destination.mkdir(parents=True,exist_ok=True);shutil.copy(ROOT/'src/tac_osm/development/belief_agent.py',destination/'agent_model.py');shutil.copy(ROOT/'scripts/runtime_belief_dev062.py',destination/'runtime.py');shutil.copy(folder/'agent.pt',destination/'agent.pt');write(destination/'metadata.json',{'arm':report['arm'],'spec':report['spec'],'seed':report['seed'],'dtype':'float64','epsilon':1e-6,'checkpoint_sha256':digest(folder/'agent.pt')})
+    destination.mkdir(parents=True,exist_ok=True);(destination/'LICENSE-NOTICE.txt').write_text('Project metadata declares Apache-2.0; https://www.apache.org/licenses/LICENSE-2.0\n');shutil.copy(ROOT/'src/tac_osm/development/belief_agent.py',destination/'agent_model.py');shutil.copy(ROOT/'scripts/runtime_belief_dev062.py',destination/'runtime.py');shutil.copy(folder/'agent.pt',destination/'agent.pt');write(destination/'metadata.json',{'arm':report['arm'],'spec':report['spec'],'seed':report['seed'],'dtype':'float64','epsilon':1e-6,'checkpoint_sha256':digest(folder/'agent.pt')})
     (destination/'README.txt').write_text('Requires Python + PyTorch only. python runtime.py < demo-requests.jsonl\nPublic JSON-lines: reset, keys(2x16), events(new raw46-vectors), candidates(5x19), prices(sensor-error,inspection-price).\nEvents: source6(initial,relation,action-start,repair-receipt,exact-inspection,noise), subject16,other16,bit,action-type3,tick,exact,sensor-error,inspection-price.\nOutputs: learned choice index, scores, joint probabilities(00,01,10,11), completion and two fault marginals in one forward pass.\nPriors: public typed manifest, cosine identity binding, trained noise-type gate, FIFO64, two entity state labels.\nNo Bayes filter, teacher, physical transition function, analytical planner or stop override in deployment.\nPosterior-supervised bounded research model; independent external verification remains necessary. No commercial or universal calibration claim.\n')
 
 
@@ -65,7 +65,7 @@ def run(directory,output,exports=None,veritas=None,smoke=False):
                     translated=dict(row,entities=2,final_faults=row['faults'],success=row['completion'],write_cost=0.,observation_cost=row['costs']['observations']);result['native_actions']+=native_replay(translated)
         if exports and r['seed']==92601:result['portable_decisions']+=standalone(folder,r,m,Path(exports)/r['arm'])
         result['checkpoints']+=1;write(output,result);print('restored',str(folder.relative_to(root)),result['trajectories'],flush=True)
-    result.update(status='COMPLETE',elapsed_seconds=time.monotonic()-start,host={'python':sys.version,'torch':str(torch.__version__),'machine':subprocess.check_output(['uname','-a'],text=True).strip()});write(output,result)
+    result.update(status='COMPLETE',elapsed_seconds=time.monotonic()-start,host={'cpu_models':sorted({line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')}),'python':sys.version,'torch':str(torch.__version__),'machine':subprocess.check_output(['uname','-a'],text=True).strip()});write(output,result);print('AUDIT_COMPLETE',json.dumps({k:result[k] for k in ('status','checkpoints','trajectories','native_actions','portable_decisions','telemetry','host')}),flush=True)
 
 
 if __name__=='__main__':

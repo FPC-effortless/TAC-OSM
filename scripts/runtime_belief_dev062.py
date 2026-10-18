@@ -1,12 +1,15 @@
 """Torch-only public beliefs and learned action scores; no simulator imports."""
 import json
+import hashlib
 from pathlib import Path
 import sys
 import torch
 from agent_model import BeliefAgent
 
 torch.set_num_threads(1)
-root=Path(__file__).resolve().parent;meta=json.loads((root/'metadata.json').read_text());m=BeliefAgent(meta['arm'],meta['spec']['width'],meta['spec']['aux']).double().eval();m.load_state_dict(torch.load(root/'agent.pt',weights_only=True,map_location='cpu'));state=None
+root=Path(__file__).resolve().parent;meta=json.loads((root/'metadata.json').read_text());m=BeliefAgent(meta['arm'],meta['spec']['width'],meta['spec']['aux']).double().eval()
+assert hashlib.file_digest((root/'agent.pt').open('rb'),'sha256').hexdigest()==meta['checkpoint_sha256'],'Checkpoint integrity mismatch'
+m.load_state_dict(torch.load(root/'agent.pt',weights_only=True,map_location='cpu'));state=None
 
 def tensor(value,shape):
     x=torch.tensor(value,dtype=torch.float64)

@@ -48,3 +48,8 @@ windows is UNKNOWN health, not an independently verified negative. No statistica
 powered physical-reliability claim from four events or twenty training seeds.
 Do not use test intervals for thresholding/model selection. No fabricated repair
 actions, economic savings, sensor inspection costs or counterfactual outcomes.
+
+Pre-fit measurement clarification: per-sensor normalized MSE was added after the
+first disjoint smoke run and before any real-data fitting; model/loss/selection
+unchanged. Original smoke remains unqualified; v2 smoke includes the final metric
+schema. Gaussian marginal assumptions also cover the binary sensor channels.

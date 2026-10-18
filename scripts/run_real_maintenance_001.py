@@ -63,10 +63,10 @@ def loss(m,x,y):
 
 @torch.no_grad()
 def evaluate(m,data,include_rows=False):
-    dtype=next(m.parameters()).dtype;errors=[];nll=[]
+    dtype=next(m.parameters()).dtype;errors=[];nll=[];per_feature=[]
     for start in range(0,len(data['x']),128):
-        x=data['x'][start:start+128].to(dtype);y=data['y'][start:start+128].to(dtype);o=m(x);squared=(((y-m.mean)/m.scale)-o['normalized_mean'])**2;errors.extend(squared.mean(-1).tolist());nll.extend((.5*(o['log_variance']+squared*o['log_variance'].neg().exp())).mean(-1).tolist())
-    result={'normalized_MSE':float(np.mean(errors)),'Gaussian_NLL':float(np.mean(nll)),'windows':len(errors)}
+        x=data['x'][start:start+128].to(dtype);y=data['y'][start:start+128].to(dtype);o=m(x);squared=(((y-m.mean)/m.scale)-o['normalized_mean'])**2;errors.extend(squared.mean(-1).tolist());nll.extend((.5*(o['log_variance']+squared*o['log_variance'].neg().exp())).mean(-1).tolist());per_feature.append(squared.sum(0))
+    result={'per_feature_normalized_MSE':(torch.stack(per_feature).sum(0)/len(errors)).tolist(),'normalized_MSE':float(np.mean(errors)),'Gaussian_NLL':float(np.mean(nll)),'windows':len(errors)}
     if include_rows:result.update(squared_residual=errors,nll=nll,time=data['time'].tolist())
     return result
 

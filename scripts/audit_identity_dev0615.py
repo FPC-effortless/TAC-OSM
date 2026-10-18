@@ -31,7 +31,7 @@ def compare(actual,expected,drift):
 
 
 def export(folder,report,destination):
-    destination.mkdir(parents=True,exist_ok=True)
+    destination.mkdir(parents=True,exist_ok=True);(destination/'LICENSE-NOTICE.txt').write_text('Project metadata declares Apache-2.0; https://www.apache.org/licenses/LICENSE-2.0\n')
     shutil.copy(ROOT/'src/tac_osm/development/robust_identity.py',destination/'agent_model.py')
     shutil.copy(ROOT/'scripts/runtime_identity_dev0615.py',destination/'runtime.py')
     shutil.copy(folder/'agent.pt',destination/'agent.pt')
@@ -71,7 +71,7 @@ def run(directory,output,veritas=None,exports=None,smoke=False):
     if veritas:
         assert subprocess.check_output(['git','-C',veritas,'rev-parse','HEAD'],text=True).strip()==PIN
         sys.path.insert(0,str(Path(veritas)/'src'))
-    result={'status':'RUNNING','scope':'Strict float64 restore replay. Native coverage first registered seed/all arms only. Shared synthetic physics. Cross-host evidence requires remote execution.','checkpoints':0,'cells':0,'trajectories':0,'actions':0,'native_actions':0,'portable_decisions':0,'telemetry':{'values':0,'max_abs':0.},'parameter_changes':{},'host':{'python':sys.version,'torch':str(torch.__version__),'machine':subprocess.check_output(['uname','-a'],text=True).strip()},'cross_hardware':'UNKNOWN until comparison on another host'}
+    result={'status':'RUNNING','scope':'Strict float64 restore replay. Native coverage first registered seed/all arms only. Shared synthetic physics. Cross-host evidence requires remote execution.','checkpoints':0,'cells':0,'trajectories':0,'actions':0,'native_actions':0,'portable_decisions':0,'telemetry':{'values':0,'max_abs':0.},'parameter_changes':{},'host':{'cpu_models':sorted({line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')}),'python':sys.version,'torch':str(torch.__version__),'machine':subprocess.check_output(['uname','-a'],text=True).strip()},'cross_hardware':'UNKNOWN until comparison on another host'}
     paths=sorted(root.glob('*/**/report.json'));started=time.monotonic()
     for path in paths:
         r=json.loads(path.read_text());folder=path.parent;assert digest(folder/'agent.pt')==r['checkpoint_sha256'];
@@ -93,7 +93,7 @@ def run(directory,output,veritas=None,exports=None,smoke=False):
                 if veritas and r['seed']==p['export_seed'] and path.parent.parent.name.startswith('group-'):result['native_actions']+=native_replay(row)
         if r['seed']==p['export_seed'] and exports:result['portable_decisions']+=standalone(folder,r,m,Path(exports)/r['arm'])
         write(output,result);print('restored',key,result['trajectories'],flush=True)
-    result['status']='COMPLETE';result['elapsed_seconds']=time.monotonic()-started;write(output,result)
+    result['status']='COMPLETE';result['elapsed_seconds']=time.monotonic()-started;write(output,result);print('AUDIT_COMPLETE',json.dumps({k:result[k] for k in ('status','checkpoints','trajectories','native_actions','portable_decisions','telemetry','host')}),flush=True)
 
 
 if __name__=='__main__':
