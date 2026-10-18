@@ -1,0 +1,86 @@
+{
+  "status": "COMPLETE",
+  "checkpoints": 88,
+  "test_A_checkpoint_replays": 80,
+  "predicted_A_windows": 24800,
+  "portable_predictions": 8,
+  "telemetry": {
+    "values": 403760,
+    "max_abs": 1.3877787807814457e-17
+  },
+  "B_metrics_opened": false,
+  "benchmarks": [
+    {
+      "arm": "linear_revin",
+      "batch": 1,
+      "CPU_ms_median": 0.025388,
+      "wall_ms_median": 0.025719,
+      "parameter_bytes": 12352,
+      "scope": "Model only; tensor/JSON/source preprocessing/verification excluded. DRAM/FLOPs UNKNOWN."
+    },
+    {
+      "arm": "linear_revin",
+      "batch": 16,
+      "CPU_ms_median": 0.06025,
+      "wall_ms_median": 0.060612,
+      "parameter_bytes": 12352,
+      "scope": "Model only; tensor/JSON/source preprocessing/verification excluded. DRAM/FLOPs UNKNOWN."
+    },
+    {
+      "arm": "linear_static",
+      "batch": 1,
+      "CPU_ms_median": 0.017717,
+      "wall_ms_median": 0.017847,
+      "parameter_bytes": 12352,
+      "scope": "Model only; tensor/JSON/source preprocessing/verification excluded. DRAM/FLOPs UNKNOWN."
+    },
+    {
+      "arm": "linear_static",
+      "batch": 16,
+      "CPU_ms_median": 0.022683,
+      "wall_ms_median": 0.022855,
+      "parameter_bytes": 12352,
+      "scope": "Model only; tensor/JSON/source preprocessing/verification excluded. DRAM/FLOPs UNKNOWN."
+    },
+    {
+      "arm": "mlp_revin",
+      "batch": 1,
+      "CPU_ms_median": 0.034611,
+      "wall_ms_median": 0.035043,
+      "parameter_bytes": 51520,
+      "scope": "Model only; tensor/JSON/source preprocessing/verification excluded. DRAM/FLOPs UNKNOWN."
+    },
+    {
+      "arm": "mlp_revin",
+      "batch": 16,
+      "CPU_ms_median": 0.076704,
+      "wall_ms_median": 0.077267,
+      "parameter_bytes": 51520,
+      "scope": "Model only; tensor/JSON/source preprocessing/verification excluded. DRAM/FLOPs UNKNOWN."
+    },
+    {
+      "arm": "mlp_static",
+      "batch": 1,
+      "CPU_ms_median": 0.025568,
+      "wall_ms_median": 0.025809,
+      "parameter_bytes": 51520,
+      "scope": "Model only; tensor/JSON/source preprocessing/verification excluded. DRAM/FLOPs UNKNOWN."
+    },
+    {
+      "arm": "mlp_static",
+      "batch": 16,
+      "CPU_ms_median": 0.037696,
+      "wall_ms_median": 0.038018,
+      "parameter_bytes": 51520,
+      "scope": "Model only; tensor/JSON/source preprocessing/verification excluded. DRAM/FLOPs UNKNOWN."
+    }
+  ],
+  "audit_CPU_seconds": 5.166732745,
+  "host": {
+    "python": "3.12.14",
+    "torch": "2.14.1+cpu",
+    "cpu_models": [
+      "AMD EPYC 9V74 80-Core Processor"
+    ]
+  }
+}

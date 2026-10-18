@@ -1,3 +1,5 @@
+Current active goal: [ACTIVE-GOAL.md](ACTIVE-GOAL.md). The record below describes the preceding tranche.
+
 # Goal: verified economical learned maintenance decisions
 
 Deliver a portable trained agent that estimates current uncertainty from public
