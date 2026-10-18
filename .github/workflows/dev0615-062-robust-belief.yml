@@ -1,21 +1,22 @@
-name: DEV061.5 and DEV062A learned identity and belief evidence
+name: Learned identity, belief and real-maintenance research
 on:
   workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
       - 'research/dev0615/**'
-      - 'research/dev062/**'
+      - 'research/dev062*/**'
       - 'research/real-maint-001/**'
-      - 'src/tac_osm/development/maintenance_forecast.py'
-      - 'scripts/*real_maintenance_001.py'
-      - 'tests/test_real_maintenance_001.py'
+      - 'src/tac_osm/development/*belief_agent.py'
       - 'src/tac_osm/development/robust_identity.py'
-      - 'src/tac_osm/development/belief_agent.py'
+      - 'src/tac_osm/development/maintenance_forecast.py'
       - 'scripts/*dev0615.py'
-      - 'scripts/*dev062.py'
+      - 'scripts/*dev062*.py'
+      - 'scripts/*real_maintenance_001.py'
       - 'tests/test_identity*'
       - 'tests/test_belief*'
+      - 'tests/test_cached_belief*'
+      - 'tests/test_real_maintenance_001.py'
       - '.github/workflows/dev0615-062-robust-belief.yml'
 permissions:
   contents: read
@@ -33,59 +34,85 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install pinned environment
+      - name: Install recorded environment
         run: |
-          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4 matplotlib
           python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
-      - name: Full tests and provenance
+      - name: All tests and provenance
         run: |
           python -m pytest -q
           python scripts/sync_test_count.py --check
   recorded-replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - study: dev0615
+            script: audit_identity_dev0615.py
+            native: true
+          - study: dev062
+            script: audit_belief_dev062.py
+            native: true
+          - study: real-maint-001
+            script: audit_real_maintenance_001.py
+            native: false
+          - study: dev062-r1
+            script: audit_belief_dev062_r1.py
+            native: true
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 100
+      - name: Check whether conditional follow-up ran
+        id: enabled
+        env:
+          STUDY: ${{ matrix.study }}
+        run: |
+          python - <<'PY'
+          import json,os,pathlib
+          study=os.environ['STUDY']
+          enabled=study!='dev062-r1' or json.loads(pathlib.Path('research/dev062-r1/trigger.json').read_text())['run_followup']
+          with open(os.environ['GITHUB_OUTPUT'],'a') as stream:stream.write(f'enabled={str(enabled).lower()}\n')
+          PY
       - uses: actions/checkout@v4
+        if: steps.enabled.outputs.enabled == 'true' && matrix.native
         with:
           repository: FPC-effortless/veritas
           ref: b21d829b62d3cab2811e746267ca305e110ed004
           path: .veritas-public-runtime
       - uses: actions/setup-python@v5
+        if: steps.enabled.outputs.enabled == 'true'
         with:
           python-version: '3.12'
-      - name: Install pinned environment
+      - name: Install recorded CPU environment
+        if: steps.enabled.outputs.enabled == 'true'
+        env:
+          NATIVE: ${{ matrix.native }}
         run: |
-          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install -e . numpy==2.5.4
+          if [ "$NATIVE" = "true" ]; then python -m pip install -e .veritas-public-runtime; fi
           python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
-      - name: Verify and restore complete recorded studies
+      - name: Strict complete checkpoint and first-seed portable/native replay
+        if: steps.enabled.outputs.enabled == 'true'
+        env:
+          STUDY: ${{ matrix.study }}
+          AUDITOR: ${{ matrix.script }}
+          NATIVE: ${{ matrix.native }}
         run: |
-          python - <<'PY'
-          import hashlib,json,pathlib,tarfile,tempfile,shutil
-          for study in ('dev0615','dev062','real-maint-001'):
-              folder=pathlib.Path('research')/study
-              index=json.loads((folder/'evidence-index.json').read_text())
-              for name,sha in index['archives'].items():
-                  assert hashlib.sha256((folder/name).read_bytes()).hexdigest()==sha
-              with tempfile.TemporaryFile() as merged:
-                  for part in index['evidence_parts']:
-                      with (folder/part).open('rb') as stream:shutil.copyfileobj(stream,merged)
-                  merged.seek(0)
-                  with tarfile.open(fileobj=merged) as archive:
-                      archive.extractall('results',filter='data')
-          PY
-      - name: Strict float64 restored trajectories and native first-seed execution
-        run: |
-          python scripts/audit_identity_dev0615.py --directory results/dev0615-main --output results/dev0615-remote-audit.json --veritas .veritas-public-runtime --exports results/dev0615-remote-export
-          python scripts/audit_belief_dev062.py --directory results/dev062-main --output results/dev062-remote-audit.json --veritas .veritas-public-runtime --exports results/dev062-remote-export
-          python scripts/audit_real_maintenance_001.py --directory results/real-maint-001-main --output results/real-maint-001-remote-audit.json --exports results/real-maint-001-remote-export
-      - name: Preserve remote diagnostics even on failure
+          python scripts/restore_research_evidence_dev062.py --study "$STUDY"
+          if [ "$NATIVE" = "true" ]; then
+            python "scripts/$AUDITOR" --directory "results/$STUDY-main" --output "results/$STUDY-remote-audit.json" --exports "results/$STUDY-remote-export" --veritas .veritas-public-runtime
+          else
+            python "scripts/$AUDITOR" --directory "results/$STUDY-main" --output "results/$STUDY-remote-audit.json" --exports "results/$STUDY-remote-export"
+          fi
+      - name: Preserve remote diagnostics, including failures
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: dev0615-dev062-remote-replay
+          name: ${{ matrix.study }}-remote-replay
           path: |
             results/*remote-audit.json
             results/*remote-export/**
