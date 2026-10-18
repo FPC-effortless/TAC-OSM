@@ -36,7 +36,7 @@ def fixed_score(model,ds):
 
 def run(original,directory):
     torch.set_num_threads(1);p=json.loads(REPAIR.read_text());old=Path(original);root=Path(directory);root.mkdir(parents=True,exist_ok=False)
-    s=json.loads((old/'summary.json').read_text());assert s['status']=='COMPLETE' and s['test_opened']
+    s=json.loads((old/'summary.json').read_text());assert s['status']=='COMPLETE' and s['fits']==70
     assert not git('status','--porcelain','--untracked-files=no'),'Commit correction before fitting'
     specs=json.loads((old/'configurations.json').read_text());main_reports=json.loads((old/'fits.json').read_text())
     original_cpu=sum(r['cpu_seconds'] for r in main_reports+json.loads((old/'tuning.json').read_text()))
