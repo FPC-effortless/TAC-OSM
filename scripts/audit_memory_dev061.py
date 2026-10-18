@@ -135,7 +135,7 @@ def run(directory,output,veritas=None,exports=None):
     summary=json.loads((root/'summary.json').read_text());assert summary['status']=='COMPLETE' and summary['test_opened'];assert summary['protocol_sha256']==digest(PROTOCOL)
     for name,expected in json.loads((root/'manifest.json').read_text()).items():assert digest(root/name)==expected,name
     result={'status':'RUNNING','checkpoints':0,'trajectories':0,'actions':0,'native_actions':0,'standalone_decisions':0,'cells':0,
-       'failed_rollouts_all_arms_splits':0,'telemetry_drift':{'values':0,'max_absolute_difference':0.},'write_counters':{},'parameter_changes_from_seed_initialization':{},
+       'failed_rollouts_all_arms_splits':0,'telemetry_drift':{'values':0,'max_absolute_difference':0.},'write_counters':{},'parameter_changes_from_seed_initialization':{},'fixed_cached_incremental_action_matches':0,
        'scope':'Separate restoration/physical accounting/native execution. Shared synthetic physics; no independent real-world validation.'}
     p=json.loads(PROTOCOL.read_text());fixed_raw=raw_data(p['data']['fixed_query_seed'],p['data']['fixed_test_snapshots'])
     start=time.monotonic()
@@ -174,7 +174,14 @@ def run(directory,output,veritas=None,exports=None):
             for row in cell['rows']:physical(row,result,bool(veritas))
         if (folder/'test.json').exists():
             expected=json.loads((folder/'test.json').read_text());fixed=prepare(model,fixed_raw);state=model.training_state(fixed)
+            phase[0]='fixed-cache-equivalence';incremental=model.initial(len(fixed_raw['events']))
+            for t in range(fixed_raw['events'].shape[1]):incremental,_=model.observe(incremental,fixed_raw['events'][:,t],fixed_raw['present'][:,t])
+            torch.testing.assert_close(incremental[0],state[0],rtol=1e-5,atol=1e-5)
+            torch.testing.assert_close(incremental[1],state[1],rtol=0,atol=0)
+            incremental_output=model(incremental,fixed['descriptors'],fixed['valid'],fixed['queries'],fixed['query_valid'])
             out=model(state,fixed['descriptors'],fixed['valid'],fixed['queries'],fixed['query_valid']);qv=fixed['query_valid']
+            assert torch.equal(incremental_output['logits'].argmax(-1),out['logits'].argmax(-1)),'cache/incremental action mismatch'
+            result['fixed_cached_incremental_action_matches']+=len(fixed_raw['events'])
             brier=((out['current_logits'].sigmoid()-fixed['current'])**2)
             np.testing.assert_allclose(float(brier[qv].mean()),expected['fixed_current_brier'],rtol=1e-5,atol=1e-4)
             error=float(((out['current_logits']>=0)!=fixed['current'].bool())[qv].float().mean());assert error==expected['fixed_current_error']
