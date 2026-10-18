@@ -22,6 +22,26 @@ def timed(function,repeats=7):
     return {'median_ms':statistics.median(values),'min_ms':min(values),'max_ms':max(values),'samples_ms':values}
 
 
+class PublicIncrementalReference:
+    """Benchmark-only public rule; never imported by a learned artifact."""
+    def __init__(self):self.bits={};self.parents={}
+    def observe(self,e):
+        kind=int(e[:4].argmax())
+        if kind==3:return
+        key=int(e[4:12].argmax())
+        if kind==1:self.parents[key]=int(e[12:20].argmax())
+        else:self.bits[key]=int(e[20])
+    def choose(self,descriptors,valid):
+        active={int(d[3:].argmax()) for d,v in zip(descriptors,valid) if v and not d[0]}
+        healthy=not any(self.bits[k] for k in active)
+        for i,(d,v) in enumerate(zip(descriptors,valid)):
+            if not v:continue
+            kind=int(d[:3].argmax());key=int(d[3:].argmax())
+            if healthy and kind==0:return i
+            if kind==2 and self.bits[key] and (key not in self.parents or not self.bits[self.parents[key]]):return i
+        raise AssertionError('no public safe-progress action')
+
+
 @torch.no_grad()
 def run(directory,output):
     torch.set_num_threads(1);root=Path(directory);result={'models':{},'admission_sweep':[],
@@ -52,6 +72,23 @@ def run(directory,output):
         with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU],with_flops=True,profile_memory=True) as prof:m(state,*args)
         supported_flops=sum(e.flops for e in prof.key_averages())
         result['models'][arm]={'seed':9101,'runtime':'skip_closed_copy' if arm in ('generic','public_mlp') else 'registered','parameters':report['parameters'],'timing':measured,'decision_supported_operator_flops':supported_flops,'training_cpu_seconds':report['cpu_seconds']}
+    from audit_evidence_gaps_dev059 import public_reference
+    result['optimized_public_reference']=[]
+    for batch in (1,8,32):
+        worlds=[ResearchWorld(5611120,i,4,128) for i in range(batch)]
+        def public_build():
+            states=[PublicIncrementalReference() for _ in worlds]
+            for state,world in zip(states,worlds):
+                for event in world.events[:128]:state.observe(event)
+            return states
+        states=public_build();candidates=[w.candidates() for w in worlds]
+        for state,world,public in zip(states,worlds,candidates):
+            assert state.choose(public[0],public[1])==public_reference(world.events,public[0],public[1])
+        def public_decide():return [state.choose(public[0],public[1]) for state,public in zip(states,candidates)]
+        def public_complete():
+            return [state.choose(public[0],public[1]) for state,public in zip(public_build(),candidates)]
+        result['optimized_public_reference'].append({'batch':batch,'history':128,'observe':timed(public_build),'decision':timed(public_decide),'end_to_end':timed(public_complete),
+            'scope':'Explicit incremental Python/NumPy public-rule control; different representation prior. Input conversion excluded as for Torch timing. No neural architecture contribution.'})
     # Keep frozen DEV058 weights. Same event set and exact resulting outputs per dense/sparse pair.
     old=ROOT/'results/dev058-main/r0-7581';config=AgentConfig(**json.loads((old/'report.json').read_text())['config'])
     dense=SparseTemporalAgent(config,temporal=False,sparse=False).eval();sparse=SparseTemporalAgent(config,temporal=False,sparse=True).eval()
