@@ -16,7 +16,10 @@ preview API returned638MNT_COST rows,5067MNT_IMP rows and156193longitudinal-cond
 rows.360cost records report a positive total cost;334have nonmissing measured MRI
 both before and after treatment, across238sections. Four exact duplicate profile
 rows are reported; no rows silently removed. Five profile records have statusD,
-the rest statusE; code semantics still require the official user-guide audit.
+the rest statusE. The [official user guide](https://infopave.fhwa.dot.gov/InfoPave_Repository/files/FHWA-HRT-21-038.pdf)
+(pages11–12) warns that E is not inherently more reliable than non-E. Page44
+warns that highway agencies compute maintenance costs differently; no error-free
+quality or uniformly comparable economics is inferred.
 
 `ltpp-source-audit.json` preserves every source page's SHA256, coverage counts and
 matched treatment identifiers/dates. `scripts/acquire_ltpp_maintenance.py` reproduces
