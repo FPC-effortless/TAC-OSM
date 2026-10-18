@@ -8,6 +8,32 @@
 | [NGAFID, author paper](https://arxiv.org/abs/2210.07317) and [repository](https://github.com/hyang0129/NGAFIDDATASET) | Real flight/maintenance records with before/after-maintenance annotations; full archive multipleGB | Candidate future external sequence benchmark. Not downloaded or licensed for use on inference from paper licence alone; no actual cost or causal repair claim. |
 | [Open Repair Alliance](https://openrepair.org/open-data/downloads/), CC BY-SA4.0 | Downloaded complete80,391,622-byte electronics CSV from pinned primary Git LFS object; SHA256 checked; actual repair-status reports, schema and licence inspected | Source audit in `openrepair-source-audit.json`. Community repair outcomes, not industrial sensor trajectories or independent physical follow-up. `problem` includes solutions and leaks labels. No intervention/inspection costs or causal alternative-action data. No model fitted. |
 
+Additional primary source acquired for coverage on2026-10-18: **FHWA LTPP**
+([catalogue](https://catalog.data.gov/dataset/long-term-pavement-performance-ltpp),
+[table export](https://infopave.fhwa.dot.gov/Data/TableExport/),
+[official FAQ](https://infopave.fhwa.dot.gov/Page/Type/faq)). The normal public
+preview API returned638MNT_COST rows,5067MNT_IMP rows and156193longitudinal-condition
+rows.360cost records report a positive total cost;334have nonmissing measured MRI
+both before and after treatment, across238sections. Four exact duplicate profile
+rows are reported; no rows silently removed. Five profile records have statusD,
+the rest statusE; code semantics still require the official user-guide audit.
+
+`ltpp-source-audit.json` preserves every source page's SHA256, coverage counts and
+matched treatment identifiers/dates. `scripts/acquire_ltpp_maintenance.py` reproduces
+read-only acquisition with no credentials, SQL, fitting or outcome-based selection.
+The catalogue links the US government-works policy; reuse terms and attribution
+must be checked for the exact tables before redistributing raw data or commercial
+packaging. Raw source pages currently remain in the execution workspace.
+
+This is a stronger **maintenance** data candidate than unrelated-cost joins:
+actual dated work and reported costs link by state/section to physical roughness
+measurements. It is road pavement, not factory machinery. Measurement dates can
+be far from treatment; MRI is not binary repair success. Costs are historical
+reported dollars, missing costs remain missing, inspection prices are absent,
+and observational before/after measurements do not identify causal treatment
+benefit. No fitted benchmark, sealed performance score or commercial qualification
+is claimed from this source audit.
+
 Use each source within its actual information contract. Never join unrelated
 machines across datasets into fictitious action/outcome/cost trajectories.
 REAL-MAINT-001 is an observational external test, not a commercial maintenance
