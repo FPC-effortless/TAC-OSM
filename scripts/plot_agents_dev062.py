@@ -24,4 +24,4 @@ def plot(study):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--study',choices=['dev0615','dev062','real-maint-001'],required=True);a=p.parse_args();plot(a.study)
+    p=argparse.ArgumentParser();p.add_argument('--study',choices=['dev0615','dev062','dev062-r1','real-maint-001'],required=True);a=p.parse_args();plot(a.study)
