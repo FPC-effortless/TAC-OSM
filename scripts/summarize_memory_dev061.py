@@ -39,6 +39,9 @@ def metrics(cells):
         if healthy:
             if r['success']:lag.append(len(r['actions'])-1-healthy[0])
             else:censored.append(len(r['actions'])-healthy[0])
+        elif r['final_faults']==0 and not r['success']:
+            # Repair on the final allowed action leaves no next stop opportunity.
+            censored.append(0)
         if r.get('completion_probability'):
             p+=r['completion_probability'];labels+=[not any(a['before']) for a in r['actions']]
     decisions=len(actions);queries=sum(r.get('query_reads',0) for r in rows)

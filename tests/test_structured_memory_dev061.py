@@ -111,13 +111,15 @@ def test_stop_metrics_keep_early_late_and_censored_cases_separate():
     def action(kind,bit):return {'kind':kind,'target':0,'before':[bit]}
     rows=[{'actions':[action('inspect',0),action('stop',0)],'success':True,'stopped':True,'final_faults':0},
           {'actions':[action('stop',1)],'success':False,'stopped':True,'final_faults':1},
-          {'actions':[action('inspect',0)],'success':False,'stopped':False,'final_faults':0}]
+          {'actions':[action('inspect',0)],'success':False,'stopped':False,'final_faults':0},
+          {'actions':[action('repair',1)],'success':False,'stopped':False,'final_faults':0}]
     for r in rows:r.update(cost=0.,write_cost=0.)
     m=metrics([{'rows':rows}])
-    assert m['stop_confusion']=={'tp':1,'fp':1,'fn':2,'tn':0}
+    assert m['stop_confusion']=={'tp':1,'fp':1,'fn':2,'tn':1}
     assert m['stop_precision']==.5 and m['stop_recall_per_healthy_decision']==1/3
-    assert m['early_stop_worlds']==1 and m['missing_stop_worlds']==1
-    assert m['lag_observed']==1 and m['lag_censored']==1
+    assert m['early_stop_worlds']==1 and m['missing_stop_worlds']==2
+    assert m['lag_observed']==1 and m['lag_censored']==2
+    assert m['lag_censored_lower_bounds']==[1,0]
     assert m['healthy_to_stop_lag_mean_observed']==1
 
 
