@@ -174,6 +174,12 @@ controls. This is a new experimental branch, not a modification of DEV-058's
 export or DEV-059/060 evidence. The current-state updater is learned, while
 categorical public-ID routing is an openly declared structural prior.
 
+The [completed DEV-061 findings](DEV-061-RESULTS.md) support entity-local memory
+over generic slots under the registered recipe, but promote no architecture.
+Structured GRU remains competitive; the public-feature MLP reaches the public
+rule's ceiling. A separately registered retention arithmetic correction does
+not pass the physical no-regression guard. Unfamiliar-ID transfer remains poor.
+
 The next steps remain separately registered: DEV-062 belief inference with
 public action provenance and inspection costs; DEV-063 longer-horizon retention
 and cancellation schemas; DEV-064 direct outcome-to-policy causal tests and the

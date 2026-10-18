@@ -1,0 +1,47 @@
+{
+  "study": "DEV-061 and separately registered DEV-061-R1",
+  "decision": "NO_PROMOTION",
+  "archives": {
+    "evidence.tar.gz": "1f53f0118db52f59d16c5a93fb60369b07dfbd1b95e8ba2f8a06582604932041",
+    "learned-agent.tar.gz": "bb7e2f703a6e2b6dad703089d9e16a4e07408516e43a5e558f9103bf3b9b0f28",
+    "smoke-only.tar.gz": "c5f87abe0bd9926ea6704b3d014ea8cbc2138b40470eb9332b9b69ac354bd09c"
+  },
+  "counts": {
+    "original_pilot_fits": 14,
+    "original_fresh_fits": 70,
+    "corrected_fits": 20,
+    "registered_checkpoints": 104,
+    "smoke_only_excluded_fits": 28,
+    "initialization_seeds_per_arm": 10,
+    "original_native_trajectories": 55104,
+    "corrected_study_native_trajectories": 17280,
+    "original_native_actions": 195029,
+    "corrected_study_native_actions": 53718,
+    "fixed_cache_incremental_action_matches": 46080
+  },
+  "audit": {
+    "original": "PASS",
+    "correction": "PASS",
+    "full_local_regression": "1395 passed",
+    "source_original_fit": "1e27956",
+    "original_first_registration": "86425fd",
+    "correction_first_registration": "887647e",
+    "correction_fitting_execution": "0fee171",
+    "veritas": "b21d829b62d3cab2811e746267ca305e110ed004"
+  },
+  "integrity": "Both original retention mechanism claims unqualified due float32 STE timestamp perturbation. Original weights preserved. Correction refits use exact gate algebra, but neither passes physical no-regression guard. No architectural promotion.",
+  "timing": "CPU wall times and limited profiler FLOPs only; physical DRAM traffic UNKNOWN.",
+  "replay_scope": "Same synthetic laws/recorded effects, not independent real-world validation. All arms/splits including failures preserved.",
+  "evidence_extraction": "tar -xzf evidence.tar.gz -C results; regenerate shared train/validation datasets per workflow. Smoke-only archive is excluded from all scientific results.",
+  "benchmark_integrity": {
+    "all_dense_sparse_bitwise_states_equal": false,
+    "all_dense_sparse_bounded_outputs_equivalent": false,
+    "all_synthetic_probe_actions_exact": true,
+    "failed_case": "batch32,10% signals; max outcome difference0.000169754>unchanged bound",
+    "original_failure_logs": [
+      "benchmark-first-failure.log",
+      "benchmark-bounded-output-failure.log"
+    ],
+    "claim": "No output-preserving speed claim for failed equivalence cases; original rollout audits independently exact."
+  }
+}

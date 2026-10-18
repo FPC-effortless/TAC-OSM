@@ -9,6 +9,22 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## DEV-061 entity-local learned memory (October 18, 2026)
+
+[DEV-061 results](docs/DEV-061-RESULTS.md) compare seven families across ten
+fresh seeds each. Entity-local memory raises mean clean completion from 69.4%
+to 98.5%, but the structured GRU remains competitive and a public-feature MLP
+reaches 100% at the public rule's lower cost. No architecture is promoted.
+Public categorical-ID routing is an explicit structural prior; action and stop
+selection remain learned. Unfamiliar-ID transfer is poor.
+
+A separately preregistered twenty-fit numerical correction repairs retention
+training's binary-gate arithmetic. Both corrected arms fail the physical
+no-regression guard. Original flawed weights and all negative results remain
+archived. The [protocol](research/dev061/protocol.json), paired seed tables,
+learning curves and experimental torch-only exports accompany the report.
+This does not establish hidden-belief learning, CASM superiority or C5 scaling.
+
 ## DEV-060 foundations and the four-phase program (October 18, 2026)
 
 The [research program](docs/WORLD-STATE-RESEARCH-PROGRAM.md) links stabilization,

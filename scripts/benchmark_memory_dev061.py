@@ -89,7 +89,8 @@ def run(directory,output):
             return [state.choose(public[0],public[1]) for state,public in zip(public_build(),candidates)]
         result['optimized_public_reference'].append({'batch':batch,'history':128,'observe':timed(public_build),'decision':timed(public_decide),'end_to_end':timed(public_complete),
             'scope':'Explicit incremental Python/NumPy public-rule control; different representation prior. Input conversion excluded as for Torch timing. No neural architecture contribution.'})
-    # Keep frozen DEV058 weights. Same event set and exact resulting outputs per dense/sparse pair.
+    # Keep frozen DEV058 weights. Record bitwise and bounded float equivalence
+    # separately: different admitted batch shapes can change CPU GEMM rounding.
     old=ROOT/'results/dev058-main/r0-7581';config=AgentConfig(**json.loads((old/'report.json').read_text())['config'])
     dense=SparseTemporalAgent(config,temporal=False,sparse=False).eval();sparse=SparseTemporalAgent(config,temporal=False,sparse=True).eval()
     for m in (dense,sparse):m.load_state_dict(torch.load(old/'agent.pt',weights_only=True))
@@ -106,7 +107,16 @@ def run(directory,output):
                 for e in stream:state,_=model.observe(state,e)
                 return state
             a,b=process(dense),process(sparse)
-            assert all(torch.equal(x,y) for x,y in zip(a,b))
+            bitwise=all(torch.equal(x,y) for x,y in zip(a,b))
+            state_drift=max(float((x-y).abs().max()) for x,y in zip(a,b))
+            occupancy_equal=bool(torch.equal(a[1],b[1]))
+            state_bounded=all(torch.allclose(x,y,atol=1e-4,rtol=1e-5) for x,y in zip(a,b))
+            probes=[ResearchWorld(5611120,i,4,128) for i in range(batch)]
+            arguments=[torch.from_numpy(np.stack([w.candidates()[i] for w in probes])) for i in range(4)]
+            left,right=dense(a,*arguments),sparse(b,*arguments)
+            actions_equal=bool(torch.equal(left['logits'].argmax(-1),right['logits'].argmax(-1)))
+            output_drift={key:float((left[key]-right[key]).abs().max()) for key in ('logits','completion','outcomes','cost')}
+            outputs_bounded=all(torch.allclose(left[key],right[key],atol=1e-4,rtol=1e-5) for key in output_drift)
             admitted=int((sparse.admission(stream).squeeze(-1)>=0).sum());type_signals=int((stream[:,:,:4].argmax(-1)!=3).sum())
             agree=bool(torch.equal(sparse.admission(stream).squeeze(-1)>=0,stream[:,:,:4].argmax(-1)!=3))
             def admission_only():return sparse.admission(stream)
@@ -123,11 +133,17 @@ def run(directory,output):
                         if kind!=3 and route not in seen:seen.add(route);kept.append((t,i))
                 return kept
             row={'batch':batch,'history':128,'requested_rate':rate,'actual_admitted':admitted,'observations':128*batch,
+                 'bitwise_state_equal':bitwise,'maximum_state_absolute_difference':state_drift,'exact_occupancy':occupancy_equal,'exact_action_choices':actions_equal,'output_maximum_absolute_difference':output_drift,
+                 'state_bounded_equivalence':state_bounded,'outputs_bounded_equivalence':outputs_bounded,
+                 'bounded_equivalence_pass':occupancy_equal and actions_equal and state_bounded and outputs_bounded,
+                 'equivalence_scope':'Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.',
                  'public_type_signals':type_signals,'type_gate_exact_agreement':agree,'public_latest_records':len(last_filter()),
                  'dense':timed(lambda:process(dense)),'sparse':timed(lambda:process(sparse)),'gate_batched':timed(admission_only),'gate_streamed':timed(admission_streamed),
                  'public_type_filter_batched':timed(type_filter),'public_latest_filter_python':timed(last_filter),
                  'public_latest_filter_caveat':'Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.'}
             row['dense_over_sparse']=row['dense']['median_ms']/row['sparse']['median_ms'];result['admission_sweep'].append(row)
+    result['all_sweep_bounded_equivalence_pass']=all(row['bounded_equivalence_pass'] for row in result['admission_sweep'])
+    result['all_sweep_bitwise_states_equal']=all(row['bitwise_state_equal'] for row in result['admission_sweep'])
     write(output,result)
 
 

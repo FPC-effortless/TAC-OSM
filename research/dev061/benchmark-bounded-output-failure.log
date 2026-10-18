@@ -1,0 +1,31 @@
+USDT:2026-10-18 08:06:09 9565:9565 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:06:09 9565:9565 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:06:10 9565:9565 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:06:10 9565:9565 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:06:12 9565:9565 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:06:12 9565:9565 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:06:14 9565:9565 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:06:14 9565:9565 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:06:16 9565:9565 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:06:16 9565:9565 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:06:16 9565:9565 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:06:16 9565:9565 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:06:18 9565:9565 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:06:18 9565:9565 SyncActivityProfilerHandler.cpp:46] profiler_stop
+Traceback (most recent call last):
+  File "/workspace/TAC-OSM/scripts/benchmark_memory_dev061.py", line 147, in <module>
+    a=argparse.ArgumentParser(description=__doc__);a.add_argument('--directory',required=True);a.add_argument('--output',required=True);args=a.parse_args();run(args.directory,args.output)
+                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/TAC-OSM/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/TAC-OSM/scripts/benchmark_memory_dev061.py", line 119, in run
+    for key in output_drift:torch.testing.assert_close(left[key],right[key],atol=1e-4,rtol=1e-5)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/TAC-OSM/.venv/lib/python3.12/site-packages/torch/testing/_comparison.py", line 1689, in assert_close
+    raise error_metas[0].to_error(msg)
+AssertionError: Tensor-likes are not close!
+
+Mismatched elements: 8 / 2496 (0.3%)
+Greatest absolute difference: 0.0001697540283203125 at index (24, 5, 0) (up to 0.0001 allowed)
+Greatest relative difference: 0.00011624558828771114 at index (24, 5, 0) (up to 1e-05 allowed)

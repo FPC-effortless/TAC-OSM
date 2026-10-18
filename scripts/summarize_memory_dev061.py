@@ -141,6 +141,8 @@ def run(directory,diagnostic,output):
        'unvalidated':['continuous identity association NOT_SUPPORTED','unseen cancellation schema NOT_SUPPORTED','noisy stress is not a belief/POMDP validation','CASM-specific superiority not isolated by public-feature MLP','C5 indexed retrieval open'],
        'integrity_findings':{'retention':'Original left-associated STE can perturb stored timestamps and break exact CF label lookup. Both retention mechanism claims unqualified before heldout analysis. Separate DEV061-R1 correction registered; original evidence preserved.','factorial':'As implemented; does not validate intended retention target alignment.'},
        'decision':'PROMOTE' if any(c['promote'] for c in comp.values()) else 'NO_PROMOTION'}
+    # NumPy comparisons can produce np.bool_; preserve their value as JSON bool.
+    result=json.loads(json.dumps(result,default=lambda value:value.item() if isinstance(value,np.generic) else value,allow_nan=False))
     write(output,result)
     stream=io.StringIO();writer=csv.DictWriter(stream,fieldnames=list(seedrows[0]));writer.writeheader();writer.writerows(sorted(seedrows,key=lambda r:(r['seed'],r['arm'])))
     Path(output).with_suffix('.csv').write_text(stream.getvalue())

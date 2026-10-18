@@ -70,6 +70,40 @@ jobs:
           mkdir -p results
           tar -xzf research/dev061/evidence.tar.gz -C results
           tar -xzf research/dev058/evidence.tar.gz -C results
+      - name: Execute the published torch-only research bundle in isolation
+        run: |
+          python - <<'PY'
+          import json,math,pathlib,subprocess,sys,tarfile,tempfile
+          def same(actual,expected):
+              if isinstance(expected,float):
+                  assert math.isfinite(actual) and math.isclose(actual,expected,abs_tol=1e-4,rel_tol=1e-5),(actual,expected)
+              elif isinstance(expected,list):
+                  assert len(actual)==len(expected)
+                  for left,right in zip(actual,expected,strict=True):same(left,right)
+              elif isinstance(expected,dict):
+                  assert actual.keys()==expected.keys()
+                  for key in expected:same(actual[key],expected[key])
+              else:assert actual==expected
+          with tempfile.TemporaryDirectory(prefix='dev061-published-') as tmp:
+              with tarfile.open('research/dev061/learned-agent.tar.gz') as archive:
+                  archive.extractall(tmp,filter='data')
+              root=pathlib.Path(tmp)/'dev061-research-agents'
+              for item in json.loads((root/'manifest.json').read_text())['models']:
+                  folder=root/item['arm']
+                  guard="""import sys,runpy,builtins
+          sys.path.insert(0,'.')
+          import torch
+          original=builtins.__import__
+          def checked(name,*args,**kwargs):
+              if name.split('.')[0] in ('tac_osm','investigation_world','numpy'):raise RuntimeError('research dependency in published runtime')
+              return original(name,*args,**kwargs)
+          builtins.__import__=checked
+          runpy.run_path('runtime.py',run_name='__main__')
+          """
+                  actual=subprocess.run([sys.executable,'-I','-B','-c',guard],cwd=folder,input=(folder/'demo-requests.jsonl').read_text(),text=True,capture_output=True,check=True)
+                  same([json.loads(line) for line in actual.stdout.splitlines()],[json.loads(line) for line in (folder/'demo-expected.jsonl').read_text().splitlines()])
+                  print('Published artifact actions exact; bounded CPU float telemetry:',item['arm'])
+          PY
       - name: Reconstruct the shared training corpus and charged collection costs
         run: |
           python - <<'PYCODE'

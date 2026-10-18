@@ -12,7 +12,11 @@ those source files against every fit's recorded Git commit.
 
 Raw fits retain every pilot, selected learning rate, fresh seed, checkpoint,
 validation curve and held-out trajectory. No favorable seed replaces another.
-The evidence index will identify archive hashes and the final matrix status.
+The evidence index identifies archive hashes and matrix status. See
+[the results](../../docs/DEV-061-RESULTS.md), paired seed tables and curves.
+No candidate passes promotion. A separately registered numerical correction
+preserves the original flawed retention fits; neither corrected arm passes the
+physical no-regression guard.
 Statistics and release gates are derived from these records, not hand-edited.
 
 The archived frozen-reference diagnostic is generated separately with no new
