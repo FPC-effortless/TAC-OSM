@@ -1,0 +1,25 @@
+USDT:2026-10-18 08:04:41 9535:9535 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:04:41 9535:9535 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:04:42 9535:9535 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:04:42 9535:9535 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:04:44 9535:9535 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:04:44 9535:9535 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:04:46 9535:9535 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:04:46 9535:9535 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:04:48 9535:9535 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:04:48 9535:9535 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:04:48 9535:9535 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:04:48 9535:9535 SyncActivityProfilerHandler.cpp:46] profiler_stop
+USDT:2026-10-18 08:04:50 9535:9535 SyncActivityProfilerHandler.cpp:39] profiler_start
+USDT:2026-10-18 08:04:50 9535:9535 SyncActivityProfilerHandler.cpp:46] profiler_stop
+Traceback (most recent call last):
+  File "/workspace/TAC-OSM/scripts/benchmark_memory_dev061.py", line 135, in <module>
+    a=argparse.ArgumentParser(description=__doc__);a.add_argument('--directory',required=True);a.add_argument('--output',required=True);args=a.parse_args();run(args.directory,args.output)
+                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/TAC-OSM/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/TAC-OSM/scripts/benchmark_memory_dev061.py", line 109, in run
+    assert all(torch.equal(x,y) for x,y in zip(a,b))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

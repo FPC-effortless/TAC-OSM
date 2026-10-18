@@ -1,0 +1,1777 @@
+{
+  "models": {
+    "entity_aging_retention": {
+      "seed": 9101,
+      "runtime": "registered",
+      "parameters": 140703,
+      "timing": [
+        {
+          "batch": 1,
+          "history": 128,
+          "observe": {
+            "median_ms": 7.839212,
+            "min_ms": 7.052484,
+            "max_ms": 9.314557,
+            "samples_ms": [
+              7.839212,
+              7.052484,
+              8.000945,
+              9.314557,
+              8.295339,
+              7.511868,
+              7.443736
+            ]
+          },
+          "decision_with_auxiliary_probe": {
+            "median_ms": 2.497236,
+            "min_ms": 2.253248,
+            "max_ms": 3.025222,
+            "samples_ms": [
+              2.253248,
+              2.435802,
+              2.524216,
+              2.389674,
+              2.497236,
+              2.538248,
+              3.025222
+            ]
+          },
+          "end_to_end": {
+            "median_ms": 11.152718,
+            "min_ms": 10.26576,
+            "max_ms": 12.75835,
+            "samples_ms": [
+              11.152718,
+              10.933166,
+              12.75835,
+              10.706996,
+              11.827185,
+              11.643378,
+              10.26576
+            ]
+          },
+          "tensor_state_bytes_per_world": 8964
+        },
+        {
+          "batch": 8,
+          "history": 128,
+          "observe": {
+            "median_ms": 17.968677,
+            "min_ms": 16.966915,
+            "max_ms": 20.426783,
+            "samples_ms": [
+              18.162218,
+              17.591798,
+              17.922948,
+              16.966915,
+              20.426783,
+              17.968677,
+              18.611765
+            ]
+          },
+          "decision_with_auxiliary_probe": {
+            "median_ms": 3.909305,
+            "min_ms": 3.753571,
+            "max_ms": 4.225422,
+            "samples_ms": [
+              3.984678,
+              4.225422,
+              3.94551,
+              3.753571,
+              3.909305,
+              3.878529,
+              3.822344
+            ]
+          },
+          "end_to_end": {
+            "median_ms": 23.337712,
+            "min_ms": 21.522927,
+            "max_ms": 26.22721,
+            "samples_ms": [
+              23.337712,
+              22.431626,
+              25.057376,
+              23.583393,
+              21.522927,
+              21.620223,
+              26.22721
+            ]
+          },
+          "tensor_state_bytes_per_world": 8964
+        },
+        {
+          "batch": 32,
+          "history": 128,
+          "observe": {
+            "median_ms": 35.625952,
+            "min_ms": 34.888792,
+            "max_ms": 37.471876,
+            "samples_ms": [
+              35.466483,
+              36.947756,
+              37.471876,
+              34.888792,
+              35.486463,
+              35.625952,
+              36.022141
+            ]
+          },
+          "decision_with_auxiliary_probe": {
+            "median_ms": 10.530199,
+            "min_ms": 10.237768,
+            "max_ms": 11.690759,
+            "samples_ms": [
+              10.944625,
+              11.031365,
+              10.237768,
+              10.530199,
+              10.359092,
+              10.270388,
+              11.690759
+            ]
+          },
+          "end_to_end": {
+            "median_ms": 53.693444,
+            "min_ms": 45.409857,
+            "max_ms": 61.096421,
+            "samples_ms": [
+              47.392928,
+              45.409857,
+              53.66127,
+              55.634696,
+              53.693444,
+              54.593496,
+              61.096421
+            ]
+          },
+          "tensor_state_bytes_per_world": 8964
+        }
+      ],
+      "decision_supported_operator_flops": 6894847,
+      "training_cpu_seconds": 127.26881109500005
+    },
+    "entity_retention": {
+      "seed": 9101,
+      "runtime": "registered",
+      "parameters": 140701,
+      "timing": [
+        {
+          "batch": 1,
+          "history": 128,
+          "observe": {
+            "median_ms": 8.150191,
+            "min_ms": 7.490696,
+            "max_ms": 8.549242,
+            "samples_ms": [
+              7.554121,
+              8.172243,
+              8.150191,
+              8.220506,
+              7.827012,
+              7.490696,
+              8.549242
+            ]
+          },
+          "decision_with_auxiliary_probe": {
+            "median_ms": 2.360159,
+            "min_ms": 2.157944,
+            "max_ms": 2.580792,
+            "samples_ms": [
+              2.511968,
+              2.157944,
+              2.580792,
+              2.278456,
+              2.515914,
+              2.360159,
+              2.255592
+            ]
+          },
+          "end_to_end": {
+            "median_ms": 10.409156,
+            "min_ms": 9.205953,
+            "max_ms": 12.075659,
+            "samples_ms": [
+              9.205953,
+              10.112589,
+              10.409156,
+              10.867398,
+              12.075659,
+              10.940468,
+              9.94742
+            ]
+          },
+          "tensor_state_bytes_per_world": 8964
+        },
+        {
+          "batch": 8,
+          "history": 128,
+          "observe": {
+            "median_ms": 18.139774,
+            "min_ms": 17.540551,
+            "max_ms": 19.898707,
+            "samples_ms": [
+              17.540551,
+              18.909906,
+              18.139774,
+              17.845571,
+              19.898707,
+              17.619209,
+              18.355579
+            ]
+          },
+          "decision_with_auxiliary_probe": {
+            "median_ms": 4.346985,
+            "min_ms": 3.935395,
+            "max_ms": 4.881461,
+            "samples_ms": [
+              4.346985,
+              3.993221,
+              4.392524,
+              4.33033,
+              4.881461,
+              4.34979,
+              3.935395
+            ]
+          },
+          "end_to_end": {
+            "median_ms": 22.085845,
+            "min_ms": 21.44554,
+            "max_ms": 23.962024,
+            "samples_ms": [
+              23.962024,
+              22.440079,
+              21.44554,
+              23.101947,
+              22.085845,
+              21.617118,
+              22.061429
+            ]
+          },
+          "tensor_state_bytes_per_world": 8964
+        },
+        {
+          "batch": 32,
+          "history": 128,
+          "observe": {
+            "median_ms": 37.881255,
+            "min_ms": 36.507342,
+            "max_ms": 38.346817,
+            "samples_ms": [
+              37.369182,
+              38.161807,
+              37.881255,
+              36.915537,
+              37.954355,
+              38.346817,
+              36.507342
+            ]
+          },
+          "decision_with_auxiliary_probe": {
+            "median_ms": 10.11991,
+            "min_ms": 9.751866,
+            "max_ms": 10.867233,
+            "samples_ms": [
+              10.390949,
+              10.517209,
+              9.966309,
+              10.108303,
+              9.751866,
+              10.11991,
+              10.867233
+            ]
+          },
+          "end_to_end": {
+            "median_ms": 50.477389,
+            "min_ms": 48.212514,
+            "max_ms": 62.402993,
+            "samples_ms": [
+              62.402993,
+              50.716739,
+              48.675502,
+              48.212514,
+              48.214186,
+              50.477389,
+              51.670699
+            ]
+          },
+          "tensor_state_bytes_per_world": 8964
+        }
+      ],
+      "decision_supported_operator_flops": 6894843,
+      "training_cpu_seconds": 135.45651372400002
+    }
+  },
+  "admission_sweep": [
+    {
+      "batch": 1,
+      "history": 128,
+      "requested_rate": 0.0,
+      "actual_admitted": 0,
+      "observations": 128,
+      "bitwise_state_equal": true,
+      "maximum_state_absolute_difference": 0.0,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.0,
+        "completion": 0.0,
+        "outcomes": 0.0,
+        "cost": 0.0
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 0,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 0,
+      "dense": {
+        "median_ms": 23.201367,
+        "min_ms": 22.541872,
+        "max_ms": 26.622446,
+        "samples_ms": [
+          25.586033,
+          23.03103,
+          26.622446,
+          23.201367,
+          24.552524,
+          22.73216,
+          22.541872
+        ]
+      },
+      "sparse": {
+        "median_ms": 6.731522,
+        "min_ms": 6.197866,
+        "max_ms": 9.03247,
+        "samples_ms": [
+          6.323717,
+          6.197866,
+          9.03247,
+          6.731522,
+          7.753923,
+          6.805812,
+          6.510639
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.023245,
+        "min_ms": 0.022935,
+        "max_ms": 0.024167,
+        "samples_ms": [
+          0.024167,
+          0.023245,
+          0.023235,
+          0.022935,
+          0.023225,
+          0.023666,
+          0.023266
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.136631,
+        "min_ms": 2.107849,
+        "max_ms": 2.244105,
+        "samples_ms": [
+          2.244105,
+          2.143302,
+          2.116511,
+          2.136291,
+          2.136631,
+          2.16836,
+          2.107849
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.00672,
+        "min_ms": 0.005598,
+        "max_ms": 0.007481,
+        "samples_ms": [
+          0.007481,
+          0.006791,
+          0.00681,
+          0.00613,
+          0.005598,
+          0.006519,
+          0.00672
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 0.461937,
+        "min_ms": 0.446072,
+        "max_ms": 0.52326,
+        "samples_ms": [
+          0.52326,
+          0.488196,
+          0.448797,
+          0.462037,
+          0.448677,
+          0.461937,
+          0.446072
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 3.446674763894406
+    },
+    {
+      "batch": 1,
+      "history": 128,
+      "requested_rate": 0.1,
+      "actual_admitted": 13,
+      "observations": 128,
+      "bitwise_state_equal": true,
+      "maximum_state_absolute_difference": 0.0,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.0,
+        "completion": 0.0,
+        "outcomes": 0.0,
+        "cost": 0.0
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 13,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 7,
+      "dense": {
+        "median_ms": 23.621311,
+        "min_ms": 22.56629,
+        "max_ms": 24.322237,
+        "samples_ms": [
+          23.738587,
+          24.322237,
+          22.981506,
+          22.56629,
+          23.621311,
+          23.988954,
+          23.445665
+        ]
+      },
+      "sparse": {
+        "median_ms": 8.315008,
+        "min_ms": 8.004701,
+        "max_ms": 9.099051,
+        "samples_ms": [
+          8.166365,
+          8.315008,
+          8.34911,
+          8.004701,
+          8.248499,
+          9.099051,
+          8.937318
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.024447,
+        "min_ms": 0.024247,
+        "max_ms": 0.025578,
+        "samples_ms": [
+          0.025578,
+          0.024447,
+          0.024657,
+          0.024327,
+          0.024247,
+          0.024537,
+          0.024296
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.331456,
+        "min_ms": 2.108369,
+        "max_ms": 2.387941,
+        "samples_ms": [
+          2.334851,
+          2.304965,
+          2.231546,
+          2.387941,
+          2.331456,
+          2.343705,
+          2.108369
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.006149,
+        "min_ms": 0.005568,
+        "max_ms": 0.007241,
+        "samples_ms": [
+          0.007241,
+          0.006149,
+          0.005588,
+          0.00653,
+          0.00637,
+          0.005749,
+          0.005568
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 0.45721,
+        "min_ms": 0.447736,
+        "max_ms": 0.539944,
+        "samples_ms": [
+          0.539944,
+          0.45721,
+          0.447736,
+          0.461586,
+          0.450159,
+          0.518332,
+          0.452933
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 2.840804362425147
+    },
+    {
+      "batch": 1,
+      "history": 128,
+      "requested_rate": 0.5,
+      "actual_admitted": 64,
+      "observations": 128,
+      "bitwise_state_equal": true,
+      "maximum_state_absolute_difference": 0.0,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.0,
+        "completion": 0.0,
+        "outcomes": 0.0,
+        "cost": 0.0
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 64,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 15,
+      "dense": {
+        "median_ms": 24.849352,
+        "min_ms": 22.970669,
+        "max_ms": 26.696958,
+        "samples_ms": [
+          24.849352,
+          22.970669,
+          26.064534,
+          26.696958,
+          24.052771,
+          23.562101,
+          25.562047
+        ]
+      },
+      "sparse": {
+        "median_ms": 14.12478,
+        "min_ms": 13.525806,
+        "max_ms": 15.059349,
+        "samples_ms": [
+          14.12478,
+          13.531976,
+          14.657302,
+          14.557993,
+          15.059349,
+          13.525806,
+          13.665878
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.024047,
+        "min_ms": 0.023405,
+        "max_ms": 0.056335,
+        "samples_ms": [
+          0.024608,
+          0.024047,
+          0.023405,
+          0.056335,
+          0.028834,
+          0.023816,
+          0.023756
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.214329,
+        "min_ms": 2.08878,
+        "max_ms": 2.260599,
+        "samples_ms": [
+          2.233988,
+          2.233257,
+          2.260599,
+          2.214329,
+          2.090582,
+          2.152906,
+          2.08878
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.006039,
+        "min_ms": 0.005839,
+        "max_ms": 0.00709,
+        "samples_ms": [
+          0.00656,
+          0.006169,
+          0.005969,
+          0.005839,
+          0.005839,
+          0.006039,
+          0.00709
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 0.465142,
+        "min_ms": 0.454335,
+        "max_ms": 0.47066,
+        "samples_ms": [
+          0.454996,
+          0.465142,
+          0.455297,
+          0.467105,
+          0.454335,
+          0.466193,
+          0.47066
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 1.759273560366958
+    },
+    {
+      "batch": 1,
+      "history": 128,
+      "requested_rate": 1.0,
+      "actual_admitted": 128,
+      "observations": 128,
+      "bitwise_state_equal": true,
+      "maximum_state_absolute_difference": 0.0,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.0,
+        "completion": 0.0,
+        "outcomes": 0.0,
+        "cost": 0.0
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 128,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 16,
+      "dense": {
+        "median_ms": 22.850017,
+        "min_ms": 22.180608,
+        "max_ms": 25.761357,
+        "samples_ms": [
+          22.850017,
+          25.530179,
+          22.180608,
+          25.761357,
+          22.767532,
+          25.523249,
+          22.795835
+        ]
+      },
+      "sparse": {
+        "median_ms": 20.867448,
+        "min_ms": 19.415068,
+        "max_ms": 22.309783,
+        "samples_ms": [
+          21.235222,
+          20.867448,
+          19.415068,
+          20.158138,
+          20.633745,
+          22.309783,
+          21.410827
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.023716,
+        "min_ms": 0.023506,
+        "max_ms": 0.024878,
+        "samples_ms": [
+          0.024878,
+          0.023896,
+          0.023996,
+          0.023666,
+          0.023716,
+          0.023606,
+          0.023506
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.140428,
+        "min_ms": 2.10883,
+        "max_ms": 2.306128,
+        "samples_ms": [
+          2.117914,
+          2.306128,
+          2.202922,
+          2.140428,
+          2.231225,
+          2.136061,
+          2.10883
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.005718,
+        "min_ms": 0.005679,
+        "max_ms": 0.006549,
+        "samples_ms": [
+          0.006549,
+          0.0061,
+          0.005718,
+          0.005748,
+          0.005708,
+          0.005679,
+          0.005689
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 0.482617,
+        "min_ms": 0.458962,
+        "max_ms": 0.51715,
+        "samples_ms": [
+          0.506624,
+          0.51715,
+          0.487455,
+          0.458962,
+          0.482617,
+          0.478892,
+          0.474576
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 1.0950077364515298
+    },
+    {
+      "batch": 8,
+      "history": 128,
+      "requested_rate": 0.0,
+      "actual_admitted": 0,
+      "observations": 1024,
+      "bitwise_state_equal": true,
+      "maximum_state_absolute_difference": 0.0,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.0,
+        "completion": 0.0,
+        "outcomes": 0.0,
+        "cost": 0.0
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 0,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 0,
+      "dense": {
+        "median_ms": 25.902179,
+        "min_ms": 24.531913,
+        "max_ms": 28.757406,
+        "samples_ms": [
+          28.757406,
+          25.902179,
+          26.705241,
+          25.426512,
+          25.864022,
+          26.957861,
+          24.531913
+        ]
+      },
+      "sparse": {
+        "median_ms": 8.427408,
+        "min_ms": 7.833733,
+        "max_ms": 8.838378,
+        "samples_ms": [
+          8.838378,
+          8.427408,
+          8.453117,
+          7.964751,
+          8.277783,
+          7.833733,
+          8.666348
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.060382,
+        "min_ms": 0.059159,
+        "max_ms": 0.061012,
+        "samples_ms": [
+          0.061012,
+          0.059159,
+          0.060882,
+          0.059981,
+          0.060822,
+          0.060382,
+          0.05947
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.40695,
+        "min_ms": 2.255482,
+        "max_ms": 5.283317,
+        "samples_ms": [
+          5.283317,
+          3.309601,
+          2.437045,
+          2.321801,
+          2.356634,
+          2.40695,
+          2.255482
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.017947,
+        "min_ms": 0.011798,
+        "max_ms": 0.038998,
+        "samples_ms": [
+          0.018879,
+          0.018127,
+          0.017947,
+          0.038998,
+          0.011798,
+          0.017867,
+          0.017787
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 3.723675,
+        "min_ms": 3.648893,
+        "max_ms": 4.151881,
+        "samples_ms": [
+          3.658467,
+          4.151881,
+          3.857036,
+          3.723675,
+          3.648893,
+          3.947193,
+          3.662673
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 3.0735641373955076
+    },
+    {
+      "batch": 8,
+      "history": 128,
+      "requested_rate": 0.1,
+      "actual_admitted": 102,
+      "observations": 1024,
+      "bitwise_state_equal": false,
+      "maximum_state_absolute_difference": 7.152557373046875e-07,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.000102996826171875,
+        "completion": 1.049041748046875e-05,
+        "outcomes": 4.00543212890625e-05,
+        "cost": 1.430511474609375e-06
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 102,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 68,
+      "dense": {
+        "median_ms": 26.928427,
+        "min_ms": 26.285348,
+        "max_ms": 27.719971,
+        "samples_ms": [
+          26.928427,
+          27.220218,
+          27.719971,
+          27.030672,
+          26.470496,
+          26.703789,
+          26.285348
+        ]
+      },
+      "sparse": {
+        "median_ms": 15.950624,
+        "min_ms": 15.535426,
+        "max_ms": 17.744518,
+        "samples_ms": [
+          15.91591,
+          15.950624,
+          17.669225,
+          17.559609,
+          15.535426,
+          15.75565,
+          17.744518
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.057326,
+        "min_ms": 0.056115,
+        "max_ms": 0.087211,
+        "samples_ms": [
+          0.087211,
+          0.059931,
+          0.056516,
+          0.056115,
+          0.057326,
+          0.057466,
+          0.056946
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.470806,
+        "min_ms": 2.233668,
+        "max_ms": 2.684117,
+        "samples_ms": [
+          2.279838,
+          2.233668,
+          2.264625,
+          2.577867,
+          2.470806,
+          2.684117,
+          2.54607
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.012368,
+        "min_ms": 0.011958,
+        "max_ms": 0.040551,
+        "samples_ms": [
+          0.012368,
+          0.01302,
+          0.040551,
+          0.012549,
+          0.011978,
+          0.011998,
+          0.011958
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 3.890446,
+        "min_ms": 3.676815,
+        "max_ms": 4.0449,
+        "samples_ms": [
+          3.94575,
+          3.676815,
+          3.890446,
+          3.681412,
+          3.79918,
+          4.0449,
+          3.934223
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 1.6882365856031714
+    },
+    {
+      "batch": 8,
+      "history": 128,
+      "requested_rate": 0.5,
+      "actual_admitted": 512,
+      "observations": 1024,
+      "bitwise_state_equal": false,
+      "maximum_state_absolute_difference": 5.960464477539062e-07,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 4.2438507080078125e-05,
+        "completion": 2.86102294921875e-06,
+        "outcomes": 1.6689300537109375e-05,
+        "cost": 1.1920928955078125e-06
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 512,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 123,
+      "dense": {
+        "median_ms": 26.422574,
+        "min_ms": 25.04018,
+        "max_ms": 29.467736,
+        "samples_ms": [
+          26.880314,
+          25.04018,
+          25.831794,
+          26.044544,
+          26.422574,
+          29.467736,
+          26.449745
+        ]
+      },
+      "sparse": {
+        "median_ms": 22.161939,
+        "min_ms": 21.346269,
+        "max_ms": 22.760072,
+        "samples_ms": [
+          21.346269,
+          22.161939,
+          22.384204,
+          22.760072,
+          21.978103,
+          21.89087,
+          22.637286
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.067782,
+        "min_ms": 0.057607,
+        "max_ms": 0.341275,
+        "samples_ms": [
+          0.058899,
+          0.057607,
+          0.341275,
+          0.067782,
+          0.058759,
+          0.12613,
+          0.074923
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.265306,
+        "min_ms": 2.231995,
+        "max_ms": 2.558168,
+        "samples_ms": [
+          2.265306,
+          2.246418,
+          2.280369,
+          2.231995,
+          2.269702,
+          2.558168,
+          2.253668
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.011517,
+        "min_ms": 0.011237,
+        "max_ms": 0.013009,
+        "samples_ms": [
+          0.012319,
+          0.013009,
+          0.011517,
+          0.011397,
+          0.011647,
+          0.011428,
+          0.011237
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 3.781502,
+        "min_ms": 3.72004,
+        "max_ms": 3.918649,
+        "samples_ms": [
+          3.768813,
+          3.766109,
+          3.72004,
+          3.811918,
+          3.918649,
+          3.781502,
+          3.837587
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 1.192250100498878
+    },
+    {
+      "batch": 8,
+      "history": 128,
+      "requested_rate": 1.0,
+      "actual_admitted": 1024,
+      "observations": 1024,
+      "bitwise_state_equal": true,
+      "maximum_state_absolute_difference": 0.0,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.0,
+        "completion": 0.0,
+        "outcomes": 0.0,
+        "cost": 0.0
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 1024,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 127,
+      "dense": {
+        "median_ms": 27.419488,
+        "min_ms": 25.360893,
+        "max_ms": 34.50317,
+        "samples_ms": [
+          26.831321,
+          27.419488,
+          31.624268,
+          27.217923,
+          29.989694,
+          34.50317,
+          25.360893
+        ]
+      },
+      "sparse": {
+        "median_ms": 21.924842,
+        "min_ms": 20.735118,
+        "max_ms": 22.752621,
+        "samples_ms": [
+          21.389765,
+          20.735118,
+          22.195931,
+          22.752621,
+          22.114788,
+          21.522636,
+          21.924842
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.058127,
+        "min_ms": 0.056496,
+        "max_ms": 0.349387,
+        "samples_ms": [
+          0.058889,
+          0.057897,
+          0.058127,
+          0.057196,
+          0.056496,
+          0.349387,
+          0.070246
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.289022,
+        "min_ms": 2.237935,
+        "max_ms": 2.415052,
+        "samples_ms": [
+          2.352698,
+          2.237935,
+          2.263573,
+          2.289022,
+          2.317244,
+          2.415052,
+          2.243182
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.011177,
+        "min_ms": 0.011007,
+        "max_ms": 0.016775,
+        "samples_ms": [
+          0.013381,
+          0.016775,
+          0.011617,
+          0.011177,
+          0.011007,
+          0.011137,
+          0.011097
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 3.726249,
+        "min_ms": 3.62747,
+        "max_ms": 4.176098,
+        "samples_ms": [
+          4.001514,
+          3.715302,
+          3.726249,
+          4.176098,
+          3.85296,
+          3.658767,
+          3.62747
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 1.250612798030654
+    },
+    {
+      "batch": 32,
+      "history": 128,
+      "requested_rate": 0.0,
+      "actual_admitted": 0,
+      "observations": 4096,
+      "bitwise_state_equal": true,
+      "maximum_state_absolute_difference": 0.0,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.0,
+        "completion": 0.0,
+        "outcomes": 0.0,
+        "cost": 0.0
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 0,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 0,
+      "dense": {
+        "median_ms": 31.123584,
+        "min_ms": 30.04758,
+        "max_ms": 35.460232,
+        "samples_ms": [
+          30.04758,
+          30.928369,
+          30.845865,
+          31.137294,
+          35.460232,
+          31.123584,
+          31.816467
+        ]
+      },
+      "sparse": {
+        "median_ms": 7.948176,
+        "min_ms": 7.601543,
+        "max_ms": 9.173284,
+        "samples_ms": [
+          7.729085,
+          9.173284,
+          8.419587,
+          8.245614,
+          7.601543,
+          7.948176,
+          7.796546
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.182205,
+        "min_ms": 0.176155,
+        "max_ms": 0.316106,
+        "samples_ms": [
+          0.182205,
+          0.178449,
+          0.178849,
+          0.316106,
+          0.196566,
+          0.208715,
+          0.176155
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.380771,
+        "min_ms": 2.36723,
+        "max_ms": 2.513581,
+        "samples_ms": [
+          2.36723,
+          2.380771,
+          2.456634,
+          2.513581,
+          2.378637,
+          2.380359,
+          2.489795
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.050136,
+        "min_ms": 0.031117,
+        "max_ms": 0.075484,
+        "samples_ms": [
+          0.031117,
+          0.042865,
+          0.050136,
+          0.056796,
+          0.075484,
+          0.0331,
+          0.050256
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 14.909893,
+        "min_ms": 14.579997,
+        "max_ms": 16.297536,
+        "samples_ms": [
+          14.909893,
+          14.904506,
+          15.308459,
+          14.786637,
+          14.579997,
+          16.297536,
+          15.37863
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 3.915814647285113
+    },
+    {
+      "batch": 32,
+      "history": 128,
+      "requested_rate": 0.1,
+      "actual_admitted": 410,
+      "observations": 4096,
+      "bitwise_state_equal": false,
+      "maximum_state_absolute_difference": 9.5367431640625e-07,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.000102996826171875,
+        "completion": 3.24249267578125e-05,
+        "outcomes": 0.0001697540283203125,
+        "cost": 1.430511474609375e-05
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": false,
+      "bounded_equivalence_pass": false,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 410,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 274,
+      "dense": {
+        "median_ms": 30.787247,
+        "min_ms": 28.885139,
+        "max_ms": 33.270811,
+        "samples_ms": [
+          33.270811,
+          30.787247,
+          32.457636,
+          30.528616,
+          30.916001,
+          28.885139,
+          29.111439
+        ]
+      },
+      "sparse": {
+        "median_ms": 23.317812,
+        "min_ms": 22.930829,
+        "max_ms": 25.009723,
+        "samples_ms": [
+          23.835233,
+          22.930829,
+          25.009723,
+          23.317812,
+          23.481129,
+          23.235769,
+          23.171883
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.182304,
+        "min_ms": 0.177758,
+        "max_ms": 0.214333,
+        "samples_ms": [
+          0.18583,
+          0.214333,
+          0.182304,
+          0.17897,
+          0.178699,
+          0.177758,
+          0.202816
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.452068,
+        "min_ms": 2.38702,
+        "max_ms": 2.733342,
+        "samples_ms": [
+          2.700913,
+          2.452068,
+          2.65963,
+          2.433009,
+          2.38702,
+          2.733342,
+          2.398717
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.030816,
+        "min_ms": 0.030446,
+        "max_ms": 0.034823,
+        "samples_ms": [
+          0.034823,
+          0.03307,
+          0.03364,
+          0.030816,
+          0.030566,
+          0.030606,
+          0.030446
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 14.779877,
+        "min_ms": 14.568399,
+        "max_ms": 16.482696,
+        "samples_ms": [
+          14.885517,
+          14.779877,
+          16.482696,
+          14.651974,
+          15.305731,
+          14.568399,
+          14.747127
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 1.3203317275222908
+    },
+    {
+      "batch": 32,
+      "history": 128,
+      "requested_rate": 0.5,
+      "actual_admitted": 2048,
+      "observations": 4096,
+      "bitwise_state_equal": true,
+      "maximum_state_absolute_difference": 0.0,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.0,
+        "completion": 0.0,
+        "outcomes": 0.0,
+        "cost": 0.0
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 2048,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 481,
+      "dense": {
+        "median_ms": 30.916832,
+        "min_ms": 30.289837,
+        "max_ms": 34.414065,
+        "samples_ms": [
+          30.289837,
+          30.3654,
+          33.159913,
+          33.871127,
+          34.414065,
+          30.421544,
+          30.916832
+        ]
+      },
+      "sparse": {
+        "median_ms": 26.725071,
+        "min_ms": 25.144998,
+        "max_ms": 28.739719,
+        "samples_ms": [
+          25.144998,
+          26.725071,
+          28.26329,
+          25.784091,
+          26.063403,
+          26.788596,
+          28.739719
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.19862,
+        "min_ms": 0.17916,
+        "max_ms": 0.332591,
+        "samples_ms": [
+          0.19231,
+          0.332591,
+          0.19862,
+          0.215325,
+          0.184198,
+          0.17916,
+          0.199571
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.623797,
+        "min_ms": 2.397977,
+        "max_ms": 7.617277,
+        "samples_ms": [
+          2.660692,
+          2.478657,
+          2.397977,
+          2.426078,
+          7.617277,
+          2.742886,
+          2.623797
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.056075,
+        "min_ms": 0.047031,
+        "max_ms": 0.11912,
+        "samples_ms": [
+          0.11912,
+          0.061462,
+          0.047031,
+          0.049535,
+          0.054052,
+          0.082494,
+          0.056075
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 16.771201,
+        "min_ms": 16.10178,
+        "max_ms": 17.456775,
+        "samples_ms": [
+          16.437136,
+          16.771201,
+          16.559381,
+          17.006565,
+          17.456775,
+          16.10178,
+          17.440049
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 1.156847515952343
+    },
+    {
+      "batch": 32,
+      "history": 128,
+      "requested_rate": 1.0,
+      "actual_admitted": 4096,
+      "observations": 4096,
+      "bitwise_state_equal": true,
+      "maximum_state_absolute_difference": 0.0,
+      "exact_occupancy": true,
+      "exact_action_choices": true,
+      "output_maximum_absolute_difference": {
+        "logits": 0.0,
+        "completion": 0.0,
+        "outcomes": 0.0,
+        "cost": 0.0
+      },
+      "state_bounded_equivalence": true,
+      "outputs_bounded_equivalence": true,
+      "bounded_equivalence_pass": true,
+      "equivalence_scope": "Unchanged atol1e-4/rtol1e-5; failed cases remain false. Raw latency ratios do not establish output-preserving speedup when equivalence fails. Bitwise equality is separate.",
+      "public_type_signals": 4096,
+      "type_gate_exact_agreement": true,
+      "public_latest_records": 511,
+      "dense": {
+        "median_ms": 32.419838,
+        "min_ms": 30.619482,
+        "max_ms": 34.54957,
+        "samples_ms": [
+          32.419838,
+          32.086536,
+          33.219413,
+          34.54957,
+          30.619482,
+          33.126354,
+          31.144025
+        ]
+      },
+      "sparse": {
+        "median_ms": 26.663818,
+        "min_ms": 25.097116,
+        "max_ms": 28.705768,
+        "samples_ms": [
+          27.444926,
+          25.680715,
+          28.705768,
+          28.042447,
+          25.097116,
+          26.663818,
+          26.359258
+        ]
+      },
+      "gate_batched": {
+        "median_ms": 0.183477,
+        "min_ms": 0.173232,
+        "max_ms": 0.238049,
+        "samples_ms": [
+          0.200783,
+          0.1789,
+          0.173983,
+          0.224549,
+          0.173232,
+          0.238049,
+          0.183477
+        ]
+      },
+      "gate_streamed": {
+        "median_ms": 2.67279,
+        "min_ms": 2.467811,
+        "max_ms": 3.636453,
+        "samples_ms": [
+          3.241939,
+          2.670126,
+          2.826011,
+          2.467811,
+          3.636453,
+          2.567431,
+          2.67279
+        ]
+      },
+      "public_type_filter_batched": {
+        "median_ms": 0.061904,
+        "min_ms": 0.057747,
+        "max_ms": 0.140322,
+        "samples_ms": [
+          0.070376,
+          0.061904,
+          0.060882,
+          0.057747,
+          0.060141,
+          0.140322,
+          0.062454
+        ]
+      },
+      "public_latest_filter_python": {
+        "median_ms": 15.957284,
+        "min_ms": 15.31202,
+        "max_ms": 17.910578,
+        "samples_ms": [
+          15.31202,
+          16.688516,
+          15.957284,
+          17.910578,
+          15.647816,
+          15.465803,
+          15.958745
+        ]
+      },
+      "public_latest_filter_caveat": "Changes retained history/address allocation; no learned-policy output equivalence claimed. Selection timing alone is not end-to-end speed.",
+      "dense_over_sparse": 1.2158738107198301
+    }
+  ],
+  "scope": "CPU wall time on idle host. FLOPs are profiler-supported operators only, not complete algorithm/hardware counts. State tensor bytes include public metadata; exclude weights/intermediates/allocator overhead. No physical DRAM counter available; DRAM=UNKNOWN. No speed or allocation thresholds.",
+  "hardware": {
+    "threads": 1,
+    "torch": "2.14.1+cpu",
+    "numpy": "2.5.4"
+  },
+  "optimized_public_reference": [
+    {
+      "batch": 1,
+      "history": 128,
+      "observe": {
+        "median_ms": 0.050697,
+        "min_ms": 0.050315,
+        "max_ms": 0.051338,
+        "samples_ms": [
+          0.051338,
+          0.051167,
+          0.050606,
+          0.050697,
+          0.050446,
+          0.050786,
+          0.050315
+        ]
+      },
+      "decision": {
+        "median_ms": 0.007962,
+        "min_ms": 0.007701,
+        "max_ms": 0.023966,
+        "samples_ms": [
+          0.008893,
+          0.023966,
+          0.008343,
+          0.007832,
+          0.007701,
+          0.007962,
+          0.007711
+        ]
+      },
+      "end_to_end": {
+        "median_ms": 0.05946,
+        "min_ms": 0.058509,
+        "max_ms": 0.05994,
+        "samples_ms": [
+          0.05962,
+          0.05963,
+          0.05994,
+          0.05946,
+          0.058509,
+          0.059019,
+          0.058729
+        ]
+      },
+      "scope": "Explicit incremental Python/NumPy public-rule control; different representation prior. Input conversion excluded as for Torch timing. No neural architecture contribution."
+    },
+    {
+      "batch": 8,
+      "history": 128,
+      "observe": {
+        "median_ms": 0.418471,
+        "min_ms": 0.400474,
+        "max_ms": 0.459383,
+        "samples_ms": [
+          0.459383,
+          0.433764,
+          0.401465,
+          0.418471,
+          0.422778,
+          0.400474,
+          0.413694
+        ]
+      },
+      "decision": {
+        "median_ms": 0.074092,
+        "min_ms": 0.07239,
+        "max_ms": 0.137478,
+        "samples_ms": [
+          0.074092,
+          0.074161,
+          0.074482,
+          0.07288,
+          0.07239,
+          0.073661,
+          0.137478
+        ]
+      },
+      "end_to_end": {
+        "median_ms": 0.486914,
+        "min_ms": 0.474536,
+        "max_ms": 0.589128,
+        "samples_ms": [
+          0.475337,
+          0.486914,
+          0.493404,
+          0.486603,
+          0.589128,
+          0.503789,
+          0.474536
+        ]
+      },
+      "scope": "Explicit incremental Python/NumPy public-rule control; different representation prior. Input conversion excluded as for Torch timing. No neural architecture contribution."
+    },
+    {
+      "batch": 32,
+      "history": 128,
+      "observe": {
+        "median_ms": 1.746364,
+        "min_ms": 1.566702,
+        "max_ms": 2.336173,
+        "samples_ms": [
+          2.336173,
+          1.752863,
+          1.588575,
+          1.965794,
+          1.566702,
+          1.712512,
+          1.746364
+        ]
+      },
+      "decision": {
+        "median_ms": 0.282086,
+        "min_ms": 0.277018,
+        "max_ms": 0.302126,
+        "samples_ms": [
+          0.302126,
+          0.282086,
+          0.277018,
+          0.277037,
+          0.286722,
+          0.295055,
+          0.280864
+        ]
+      },
+      "end_to_end": {
+        "median_ms": 1.927357,
+        "min_ms": 1.858773,
+        "max_ms": 2.290114,
+        "samples_ms": [
+          1.858773,
+          1.927357,
+          2.168741,
+          2.290114,
+          1.973015,
+          1.911753,
+          1.876469
+        ]
+      },
+      "scope": "Explicit incremental Python/NumPy public-rule control; different representation prior. Input conversion excluded as for Torch timing. No neural architecture contribution."
+    }
+  ],
+  "all_sweep_bounded_equivalence_pass": false,
+  "all_sweep_bitwise_states_equal": false
+}

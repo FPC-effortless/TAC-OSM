@@ -1,0 +1,152 @@
+{
+  "study": "DEV-061",
+  "status": "REGISTERED_BEFORE_FITTING",
+  "date": "2026-10-18",
+  "question": "Does explicit entity-local recurrent memory improve reliable learned control, and do aging and model-counterfactual episodic retention add independent effects?",
+  "cadence": "Karpathy autoresearch-style registered change/train/measure/keep-or-reject under research/autoresearch/program.md. No upstream GPT trainer or GPU scaling claim.",
+  "preserve": [
+    "DEV-015 through DEV-060 evidence",
+    "DEV-058 exported weights",
+    "DEV-060 sparse optimization"
+  ],
+  "learned_arms": [
+    "generic",
+    "entity",
+    "entity_aging",
+    "entity_retention",
+    "entity_aging_retention",
+    "structured_gru",
+    "public_mlp"
+  ],
+  "factorial": "Within entity memory, aging on/off x retention on/off is a2x2 factorial. Generic is the existing controller with generic storage; structured_gru retrains the same entity recurrent memory without CASM; public_mlp is an intentionally strong public-feature policy reference.",
+  "diagnostics": [
+    "Frozen DEV058 seeds7581/7582: learned reads versus forced retained-bank latest status/relation reads versus oldest status with identical forced relation reads. All weights frozen. Forced reads alter addressing/concentration as well as age; latest-minus-oldest isolates status freshness conditional on that forced format, not universal causation."
+  ],
+  "references": [
+    "Public latest-state safe-progress controller",
+    "Privileged safe-progress teacher; same information ceiling on clean exact-status worlds"
+  ],
+  "information_contract": "All neural arms receive the same public events and candidates. Entity models impose one-hot public-ID routing and split status/relation/event state; this is a disclosed structural prior, NOT learned entity discovery. MLP receives task-specific latest-state/public-parent features, not hidden bits or teacher action flags. No public-state dictionary or planner is inserted into the generic learned deployment model.",
+  "memory": "32slots total: entity models use8entity GRU states,8relation GRU states,16episodic records. GRU updates are learned; public-ID routing and FIFO are programmed priors. Learned admission pretrained on public type labels. Generic uses existing learned admission/addressing. Aging uses a nonnegative learned public-time penalty. Retention after400controller updates uses training-only loss/regret change on removing an episodic slot with entity states fixed. Gate sees record and entity-prefix state only, never future/private labels at inference.",
+  "targets": "Same policy/future-action/one/two-action outcome/cost/completion labels across TAC arms, plus current-state BCE and public latest-status read supervision shared across TAC variants. Plain MLP uses identical policy/current-state labels with actor/state heads only, a disclosed optimization advantage rather than an equal-objective architecture control.",
+  "data": {
+    "train_seed": 5611001,
+    "validation_seed": 5611002,
+    "test_seed": 5611003,
+    "fixed_query_seed": 5611004,
+    "train_snapshots": 4096,
+    "validation_snapshots": 512,
+    "fixed_test_snapshots": 512,
+    "train_N": [
+      2,
+      4,
+      6
+    ],
+    "train_H": [
+      16,
+      32,
+      64,
+      96
+    ],
+    "training_IDs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "heldout_IDs": [
+      6,
+      7
+    ],
+    "curriculum": "DEV059 random-action and one-third repaired-terminal snapshots; all noise IDs restricted to training vocabulary too"
+  },
+  "training": {
+    "seeds": [
+      9101,
+      9102,
+      9103,
+      9104,
+      9105,
+      9106,
+      9107,
+      9108,
+      9109,
+      9110
+    ],
+    "tuning_seed": 9100,
+    "lrs": [
+      0.001,
+      0.002
+    ],
+    "admission_updates": 600,
+    "belief_warmup_updates": 256,
+    "controller_updates": 1200,
+    "batch": 64,
+    "optimizer": "AdamW wd0.0001 clip1",
+    "retention_warmup_controller_updates": 400,
+    "retention_target": "positive increase >0.01 in supervised combined policy/prediction/current-state/completion loss plus normalized true expected one-step action-risk regret after one episodic-slot deletion; teacher stop cost20/fault. Target detached; gates trained BCE plus0.01 expected episodic-write penalty. One counterfactual per batch/example. No claim that this single-next-decision proxy completes DEV063.",
+    "retention_schedule": "During first400controller updates retain all episodic writes. Then straight-through learned gates are trained; prefix GRU features align with write time in cached sequences. Counterfactual label holds entity state fixed and removes one actual retained episodic slot.",
+    "selection": "Independent two-LR validation sweeps, one dedicated seed/arm; prioritize fraction of validation cells >95%, fewer final faults, higher completion, then physical economic cost. Final update only. Fit all70fresh models before opening test; no favorable-seed selection.",
+    "resources": "2workers,1torch thread each,360CPU seconds/fit and180total fitting CPU minutes; capped/failed fits retained, matrix incomplete forbids promotion. Same updates/examples, NOT equal FLOPs/time/state bits. Active TAC parameter counts within5% of generic133580 plus shared current-state probe; MLP parameter matched. Record actual cost.",
+    "loss_definition": "Policy CE +0.3 future-policy CE +0.7 one-action BCE +0.3 selected-two-action BCE +0.5 mean of current/next/later completion BCE +0.1 normalized cost Huber +0.5 current-state BCE +0.5 public latest-read CE. MLP policy CE +0.5 current-state BCE +0.5 current completion BCE. Warmup current-state BCE plus0.5 read CE only."
+  },
+  "test": {
+    "worlds_per_cell": 32,
+    "primary_clean_N": [
+      2,
+      4,
+      6
+    ],
+    "primary_clean_H": [
+      32,
+      128,
+      512,
+      1024
+    ],
+    "OOD_H": 96,
+    "OOD_families": [
+      "unseen_onehot_IDs6/7",
+      "initial_status_bit_error0.1",
+      "receipt_status_bit_error0.1"
+    ],
+    "horizon": "2N+4",
+    "primary": "Fraction of10seeds whose pooled clean completion is STRICTLY >0.95; also each N/H cell and fraction passing every cell. Show paired per-seed table, means/SD/range, not only means.",
+    "cost": "Primary economic cost is interventions+terminal faults+all observations. Logical write charges separate; do not turn transactions/allocations into hardware DRAM costs.",
+    "headroom": "Require generic validation economic regret vs public rule >=0.10/world for a discriminating claim; assess and report without dropping the registered matrix.",
+    "metrics": [
+      "current-state fixed-query Brier and threshold error",
+      "stale/wrong-entity/latest-status reads, latest availability",
+      "unnecessary healthy repairs and actions",
+      "stop precision/recall from per-decision physical truth",
+      "early stops, healthy late actions, missing stop and censored healthy-to-stop lag",
+      "faults, completion, physical repair, public/private cost regret",
+      "parameter/state bytes, CPU fitting time, latency/work",
+      "all learning curves and LR choices"
+    ],
+    "limitations": "Noise families retain DEV058 action-provenance limitations and changed-entity receipt schema; they are OOD stress diagnostics, not a validated POMDP benchmark. Continuous learned identity association and unseen cancellation histories are NOT_SUPPORTED in the retained22feature API and must be reported as such, not merged with clean results. DEV062 must add provenance-aware uncertainty and cancellation schemas."
+  },
+  "analysis": {
+    "comparisons": "Four entity factorial cells versus generic; exact paired-seed binary pass randomization and Holm correction, paired seed/world cost/state intervals; factorial aging/retention interaction reported. State/retrieval fixed-query diagnostics use shared histories.",
+    "promotion": "Require >95% clean completion in >=9/10seeds and all-cell pass in >=9/10; significant corrected primary reliability-fraction advantage over generic, stale-read decrease>=0.01, fixed-state Brier decrease>=0.01, unnecessary repairs decrease>=0.10/world; paired95% final-fault difference upper<=0; competitive vs structuredGRU and publicMLP; economic cost at least0.05/world better than public rule with95% upper below-0.05. A perfect cheap public reference can block promotion. Untested noisy/identity/cancellation claims remain unapproved regardless of clean success.",
+    "no_claims": [
+      "universal convergence",
+      "MTSK superiority",
+      "learned symbolic CASM discovery",
+      "original CDL distillation",
+      "C5 indexing",
+      "industrial safety",
+      "physical DRAM savings"
+    ],
+    "intervals": "Paired seed bootstrap2000 replicates seed861061; world-paired bootstrap within common cells2000 replicates, reported separately. Primary exact paired binary-pass sign flips and Holm four comparisons."
+  },
+  "portfolio": {
+    "DEV062": "public-posterior imitation then no-posterior belief learning under provenance-aware noise",
+    "DEV063": "multi-step model-counterfactual retention and unseen cancellations",
+    "DEV064": "direct outcome-head interventions and CASM-LONG comparison against tuned same-feature MLP",
+    "DEV065": "staged/frozen/joint optimization",
+    "DEV066": "integrate only validated components",
+    "later_depth": "Reusable residual TAC blocks2/4,8onlyafter justified; keep depth distinct from imagination horizon, match parameter and compute budgets"
+  }
+}

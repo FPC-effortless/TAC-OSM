@@ -1,0 +1,193 @@
+{
+  "scope": "Exact tensor/parameter sizes; excludes allocator, activation, Python and hardware traffic. Not equal FLOPs or bits. All arms share controller snapshot exposures; objectives differ for the public-feature MLP control.",
+  "arms": {
+    "generic": {
+      "config": {
+        "event_features": 22,
+        "action_features": 11,
+        "query_features": 8,
+        "slots": 32,
+        "dimension": 48,
+        "read_heads": 2,
+        "read_top_k": 4,
+        "operators": 3,
+        "depth": 2
+      },
+      "inference_parameters": 138285,
+      "trainable_after_admission_freeze": 131916,
+      "weight_tensor_bytes": 553140,
+      "persistent_state_tensor_bytes_per_world": 9088,
+      "shapes": [
+        [
+          1,
+          32,
+          70
+        ],
+        [
+          1,
+          32
+        ]
+      ]
+    },
+    "entity": {
+      "config": {
+        "event_features": 22,
+        "action_features": 11,
+        "query_features": 8,
+        "slots": 32,
+        "dimension": 47,
+        "read_heads": 2,
+        "read_top_k": 4,
+        "operators": 3,
+        "depth": 2
+      },
+      "inference_parameters": 137363,
+      "trainable_after_admission_freeze": 136594,
+      "weight_tensor_bytes": 549452,
+      "persistent_state_tensor_bytes_per_world": 8964,
+      "shapes": [
+        [
+          1,
+          32,
+          69
+        ],
+        [
+          1,
+          33
+        ]
+      ]
+    },
+    "entity_aging": {
+      "config": {
+        "event_features": 22,
+        "action_features": 11,
+        "query_features": 8,
+        "slots": 32,
+        "dimension": 47,
+        "read_heads": 2,
+        "read_top_k": 4,
+        "operators": 3,
+        "depth": 2
+      },
+      "inference_parameters": 137365,
+      "trainable_after_admission_freeze": 136596,
+      "weight_tensor_bytes": 549460,
+      "persistent_state_tensor_bytes_per_world": 8964,
+      "shapes": [
+        [
+          1,
+          32,
+          69
+        ],
+        [
+          1,
+          33
+        ]
+      ]
+    },
+    "entity_retention": {
+      "config": {
+        "event_features": 22,
+        "action_features": 11,
+        "query_features": 8,
+        "slots": 32,
+        "dimension": 47,
+        "read_heads": 2,
+        "read_top_k": 4,
+        "operators": 3,
+        "depth": 2
+      },
+      "inference_parameters": 140701,
+      "trainable_after_admission_freeze": 139932,
+      "weight_tensor_bytes": 562804,
+      "persistent_state_tensor_bytes_per_world": 8964,
+      "shapes": [
+        [
+          1,
+          32,
+          69
+        ],
+        [
+          1,
+          33
+        ]
+      ]
+    },
+    "entity_aging_retention": {
+      "config": {
+        "event_features": 22,
+        "action_features": 11,
+        "query_features": 8,
+        "slots": 32,
+        "dimension": 47,
+        "read_heads": 2,
+        "read_top_k": 4,
+        "operators": 3,
+        "depth": 2
+      },
+      "inference_parameters": 140703,
+      "trainable_after_admission_freeze": 139934,
+      "weight_tensor_bytes": 562812,
+      "persistent_state_tensor_bytes_per_world": 8964,
+      "shapes": [
+        [
+          1,
+          32,
+          69
+        ],
+        [
+          1,
+          33
+        ]
+      ]
+    },
+    "structured_gru": {
+      "config": {
+        "event_features": 22,
+        "action_features": 11,
+        "query_features": 8,
+        "slots": 32,
+        "dimension": 61,
+        "read_heads": 2,
+        "read_top_k": 4,
+        "operators": 3,
+        "depth": 2
+      },
+      "inference_parameters": 136624,
+      "trainable_after_admission_freeze": 135855,
+      "weight_tensor_bytes": 546496,
+      "persistent_state_tensor_bytes_per_world": 10756,
+      "shapes": [
+        [
+          1,
+          32,
+          83
+        ],
+        [
+          1,
+          33
+        ]
+      ]
+    },
+    "public_mlp": {
+      "config": {
+        "width": 364
+      },
+      "inference_parameters": 138023,
+      "trainable_after_admission_freeze": 138023,
+      "weight_tensor_bytes": 552092,
+      "persistent_state_tensor_bytes_per_world": 1472,
+      "shapes": [
+        [
+          1,
+          16,
+          22
+        ],
+        [
+          1,
+          16
+        ]
+      ]
+    }
+  }
+}

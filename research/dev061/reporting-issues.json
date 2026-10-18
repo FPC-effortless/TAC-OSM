@@ -1,0 +1,15 @@
+{
+  "issues": [
+    {
+      "stage": "First post-fit statistics serialization",
+      "failure": "TypeError: Object of type bool is not JSON serializable (NumPy bool scalar)",
+      "resolution": "Convert NumPy scalar values to equivalent Python scalar values at JSON boundary. Recompute all statistics; no weight, protocol, threshold, score or action changes."
+    },
+    {
+      "stage": "Broad lint pattern",
+      "failure": "Pre-existing F401 MemoryConfig unused import in src/tac_osm/development/memory_experiment.py",
+      "resolution": "Leave unrelated historical code intact. All DEV061 scripts/modules/tests pass targeted F checks."
+    }
+  ],
+  "original_retention_integrity": "See separate pre-fit DEV061-R1 protocol; this is a scientific qualification, not a reporting issue."
+}

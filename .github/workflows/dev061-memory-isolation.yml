@@ -1,0 +1,181 @@
+name: DEV-061 registered memory isolation and fully learned control
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev061/**'
+      - 'src/tac_osm/development/*memory*.py'
+      - 'src/tac_osm/development/frozen_read_diagnostic.py'
+      - 'src/tac_osm/development/inference_public_features.py'
+      - 'src/tac_osm/development/exact_retention.py'
+      - 'scripts/*dev061.py'
+      - 'tests/test_structured_memory_dev061.py'
+      - '.github/workflows/dev061-memory-isolation.yml'
+permissions:
+  contents: read
+jobs:
+  full-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 50
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install recorded CPU environment
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Full regression and live provenance count
+        run: |
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+  recorded-models:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 50
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install recorded CPU environment
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify archive digests and restore all checkpoints and failures
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('research/dev061')
+          for filename,expected in json.loads((root/'evidence-index.json').read_text())['archives'].items():
+              assert hashlib.sha256((root/filename).read_bytes()).hexdigest()==expected
+          PY
+          mkdir -p results
+          tar -xzf research/dev061/evidence.tar.gz -C results
+          tar -xzf research/dev058/evidence.tar.gz -C results
+      - name: Execute the published torch-only research bundle in isolation
+        run: |
+          python - <<'PY'
+          import json,math,pathlib,subprocess,sys,tarfile,tempfile
+          def same(actual,expected):
+              if isinstance(expected,float):
+                  assert math.isfinite(actual) and math.isclose(actual,expected,abs_tol=1e-4,rel_tol=1e-5),(actual,expected)
+              elif isinstance(expected,list):
+                  assert len(actual)==len(expected)
+                  for left,right in zip(actual,expected,strict=True):same(left,right)
+              elif isinstance(expected,dict):
+                  assert actual.keys()==expected.keys()
+                  for key in expected:same(actual[key],expected[key])
+              else:assert actual==expected
+          with tempfile.TemporaryDirectory(prefix='dev061-published-') as tmp:
+              with tarfile.open('research/dev061/learned-agent.tar.gz') as archive:
+                  archive.extractall(tmp,filter='data')
+              root=pathlib.Path(tmp)/'dev061-research-agents'
+              for item in json.loads((root/'manifest.json').read_text())['models']:
+                  folder=root/item['arm']
+                  guard="""import sys,runpy,builtins
+          sys.path.insert(0,'.')
+          import torch
+          original=builtins.__import__
+          def checked(name,*args,**kwargs):
+              if name.split('.')[0] in ('tac_osm','investigation_world','numpy'):raise RuntimeError('research dependency in published runtime')
+              return original(name,*args,**kwargs)
+          builtins.__import__=checked
+          runpy.run_path('runtime.py',run_name='__main__')
+          """
+                  actual=subprocess.run([sys.executable,'-I','-B','-c',guard],cwd=folder,input=(folder/'demo-requests.jsonl').read_text(),text=True,capture_output=True,check=True)
+                  same([json.loads(line) for line in actual.stdout.splitlines()],[json.loads(line) for line in (folder/'demo-expected.jsonl').read_text().splitlines()])
+                  print('Published artifact actions exact; bounded CPU float telemetry:',item['arm'])
+          PY
+      - name: Reconstruct the shared training corpus and charged collection costs
+        run: |
+          python - <<'PYCODE'
+          import json,pathlib,sys,torch
+          sys.path.insert(0,'scripts')
+          from run_structured_memory_dev061 import raw_data,PROTOCOL
+          torch.set_num_threads(1)
+          p=json.loads(PROTOCOL.read_text());root=pathlib.Path('results/dev061-main/_datasets');root.mkdir()
+          for name,key,size in [('train','train_seed','train_snapshots'),('validation','validation_seed','validation_snapshots')]:
+              torch.save(raw_data(p['data'][key],p['data'][size]),root/f'{name}.pt')
+          PYCODE
+          python scripts/account_data_dev061.py --directory results/dev061-main --output results/dev061-ci-data-cost.json
+          cmp research/dev061/training-data-cost.json results/dev061-ci-data-cost.json
+      - name: Restore every model and fixed query; replay public actions and native Veritas
+        run: python scripts/audit_memory_dev061.py --directory results/dev061-main --output results/dev061-ci-audit.json --veritas-root .veritas-public-runtime
+      - name: Audit the separately registered exact-STE correction on fresh worlds
+        if: ${{ !cancelled() }}
+        run: python scripts/audit_retention_repair_dev061.py --original results/dev061-main --directory results/dev061-retention-repair --output results/dev061-ci-repair-audit.json --veritas-root .veritas-public-runtime
+      - name: Reproduce frozen latest/oldest interventions and public/private references
+        if: ${{ !cancelled() }}
+        run: |
+          python scripts/diagnose_memory_dev061.py --output results/dev061-ci-diagnostic.json
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'scripts')
+          from audit_memory_dev061 import compare
+          a=json.loads(Path('results/dev061-ci-diagnostic.json').read_text())
+          b=json.loads(Path('results/dev061-diagnostic.json').read_text())
+          assert a['references']==b['references']
+          assert a['protocol_sha256']==b['protocol_sha256']
+          drift={'values':0,'max_absolute_difference':0.}
+          for seed in b['frozen']:
+              assert a['frozen'][seed]['checkpoint_sha256']==b['frozen'][seed]['checkpoint_sha256']
+              for mode in b['frozen'][seed]['modes']:
+                  for actual,expected in zip(a['frozen'][seed]['modes'][mode],b['frozen'][seed]['modes'][mode],strict=True):compare(actual,expected,drift)
+          print(drift)
+          PY
+      - name: Reproduce paired-seed statistics and promotion gates without retraining
+        if: ${{ !cancelled() }}
+        run: |
+          python scripts/summarize_memory_dev061.py --directory results/dev061-main --diagnostic results/dev061-diagnostic.json --output results/dev061-ci-statistics.json
+          python - <<'PY'
+          import json,pathlib
+          a=json.loads(pathlib.Path('results/dev061-ci-statistics.json').read_text())
+          b=json.loads(pathlib.Path('research/dev061/statistics.json').read_text())
+          assert a==b
+          PY
+      - name: Reproduce all corrected and original paired-seed outcomes without retraining
+        if: ${{ !cancelled() }}
+        run: |
+          python scripts/audit_retention_repair_dev061.py --original results/dev061-main --directory results/dev061-retention-repair --summarize --output results/dev061-ci-repair-statistics.json
+          python - <<'PY'
+          import json,pathlib
+          a=json.loads(pathlib.Path('results/dev061-ci-repair-statistics.json').read_text())
+          b=json.loads(pathlib.Path('research/dev061/retention-repair/statistics.json').read_text())
+          assert a==b
+          PY
+      - name: Collect complete cross-CPU discrepancies without overriding strict failures
+        if: ${{ !cancelled() }}
+        run: python scripts/diagnose_cpu_replay_dev061.py --original results/dev061-main --corrected results/dev061-retention-repair --output results/dev061-ci-cpu-diagnostic.json --veritas-root .veritas-public-runtime
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV061-RESTORED-MODELS-NATIVE-PORTABILITY-AUDIT
+          path: |
+            results/dev061-ci-audit.json
+            results/dev061-ci-repair-audit.json
+            results/dev061-ci-repair-statistics.json
+            results/dev061-ci-data-cost.json
+            results/dev061-ci-statistics.json
+            results/dev061-ci-diagnostic.json
+            results/dev061-ci-cpu-diagnostic.json
+            results/dev061-ci-cpu-diagnostic/
+          if-no-files-found: warn
