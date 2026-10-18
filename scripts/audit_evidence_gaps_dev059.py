@@ -56,6 +56,17 @@ def reference_cells(seed):
 
 def summarize_rows(rows):
     def mean(values):return float(np.mean(values))
+    categories={'stop':0,'inspect':0,'repair_healthy_target':0,'repair_blocked_by_faulty_parent':0,
+                'repair_safe_success':0,'repair_safe_failure':0}
+    for row in rows:
+        parent=World(row['seed'],row['index'],row['entities'],row['history']).parents
+        for action in row['actions']:
+            kind,target=action['kind'],action['target']
+            if kind!='repair':categories[kind]+=1
+            elif not action['before'][target]:categories['repair_healthy_target']+=1
+            elif parent[target]>=0 and action['before'][parent[target]]:categories['repair_blocked_by_faulty_parent']+=1
+            elif action['after'][target]:categories['repair_safe_failure']+=1
+            else:categories['repair_safe_success']+=1
     return {'worlds':len(rows),'completion':mean([r['success'] for r in rows]),
             'physical_repair':mean([r['final_faults']==0 for r in rows]),
             'actions_per_world':mean([len(r['actions']) for r in rows]),
@@ -63,6 +74,7 @@ def summarize_rows(rows):
             'action_cost_including_terminal':mean([r['action_cost'] for r in rows]),
             'observation_cost':mean([r['observation_cost'] for r in rows]),'write_cost':mean([r['write_cost'] for r in rows]),
             'residual_faults':sum(r['final_faults'] for r in rows),'missing_stop':sum(not r['stopped'] for r in rows),
+            'action_categories':categories,
             'completion_wilson95':wilson(sum(r['success'] for r in rows),len(rows)),
             'physical_repair_wilson95':wilson(sum(r['final_faults']==0 for r in rows),len(rows))}
 

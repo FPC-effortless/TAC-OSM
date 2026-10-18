@@ -101,3 +101,33 @@ def test_wilson_conditional_interval_and_evaluation_physical_metric(specs):
     assert cell['physical_repair']>=cell['completion']
     assert all('initial_events' not in row for row in cell['rows'])
     assert all(len(row['public_initial_sha256'])==64 for row in cell['rows'])
+
+
+def test_replay_tolerance_applies_only_to_float_telemetry():
+    from audit_reliability_controls_dev059 import compare
+    reference={'rows':[{'actions':[{'kind':'stop'}],'cost':1.,'completion_probabilities':[.5],'stop_probabilities':[.6]}]}
+    actual=copy.deepcopy(reference);actual['rows'][0]['completion_probabilities'][0]+=1e-7
+    compare(actual,reference)
+    actual['rows'][0]['actions'][0]['kind']='repair'
+    with pytest.raises(AssertionError,match='discrete'):compare(actual,reference)
+
+
+def test_all_control_families_export_without_research_imports(tmp_path,specs):
+    from audit_reliability_controls_dev059 import standalone
+    for arm,spec in specs.items():
+        model=create(arm,spec,8591016).eval();checkpoint=tmp_path/f'{arm}.pt'
+        torch.save(model.state_dict(),checkpoint)
+        assert standalone(model,arm,spec,checkpoint)>=3
+
+
+def test_repair_routing_labels_use_public_records_not_private_task_targets(specs):
+    from repair_learned_checkpoint_dev059 import public_routing_targets,repair_loss
+    raw=data(8591017,8);model=create('full_stop',specs['full_stop'],8591018)
+    writer_fit(model,8591018,20);ds=retained_bank(model,raw)
+    first=public_routing_targets(ds,32)
+    changed=dict(ds,policy=torch.zeros_like(ds['policy']),one=torch.ones_like(ds['one']))
+    second=public_routing_targets(changed,32)
+    assert torch.equal(first['attention'],second['attention']) and torch.equal(first['graph'],second['graph'])
+    loss,metrics=repair_loss(model,first,torch.arange(8));loss.backward()
+    assert torch.isfinite(loss) and metrics['extra_stop_ce']>=0
+    assert model.read_query.weight.grad.abs().sum()>0

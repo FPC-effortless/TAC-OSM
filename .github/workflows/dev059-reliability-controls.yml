@@ -1,0 +1,70 @@
+name: DEV-059 retrained reliability controls and teacher audit
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev059/**'
+      - 'src/tac_osm/development/reliability_controllers.py'
+      - 'scripts/*dev059.py'
+      - 'tests/test_reliability_controls_dev059.py'
+      - '.github/workflows/dev059-reliability-controls.yml'
+permissions:
+  contents: read
+jobs:
+  recorded-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install recorded CPU environment
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify retraining, common-label gradients, information boundary and standalone controls
+        run: python -m pytest tests/test_reliability_controls_dev059.py -q
+      - name: Check archive hashes and restore evidence
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('research/dev059')
+          index=json.loads((root/'evidence-index.json').read_text())
+          for filename,value in index['archives'].items():
+              assert hashlib.sha256((root/filename).read_bytes()).hexdigest()==value
+          PY
+          mkdir -p results
+          tar -xzf research/dev059/evidence.tar.gz -C results
+          tar -xzf research/dev058/evidence.tar.gz -C results
+      - name: Restore every fit and replay public decisions, receipts and native execution
+        run: python scripts/audit_reliability_controls_dev059.py --directory results/dev059-main --output results/dev059-ci-audit.json --veritas-root .veritas-public-runtime
+      - name: Reproduce teacher and public-reference equality, admission and failure diagnostics
+        run: python scripts/audit_evidence_gaps_dev059.py --directory results/dev058-main --output results/dev059-ci-dev058-audit.json
+      - name: Reproduce paired seed/world summaries without retraining
+        run: |
+          python scripts/summarize_reliability_dev059.py --directory results/dev059-main --output results/dev059-ci-statistics.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('results/dev059-ci-statistics.json').read_text())
+          b=json.loads(Path('research/dev059/statistics.json').read_text())
+          assert a==b
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV059-RETRAINED-CONTROLS-AND-TEACHER-AUDIT
+          path: |
+            results/dev059-ci-audit.json
+            results/dev059-ci-dev058-audit.json
+            results/dev059-ci-statistics.json
+          if-no-files-found: warn

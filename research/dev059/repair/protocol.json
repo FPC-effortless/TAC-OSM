@@ -1,0 +1,51 @@
+{
+  "study": "DEV-059-R",
+  "status": "REGISTERED_BEFORE_REPAIR_TRAINING_AND_NEW_HOLDOUT",
+  "scope": "Targeted transfer-learning repair of both existing DEV058 checkpoints; distinct from ten-fresh-initialization common-target grid. Not ten independent initializations or a new architecture superiority test.",
+  "motivation": "Posthoc DEV058 audit:126 healthy failed-world decisions all top-score an older same-entity fault record. Four extra actions rescue only2of16 missing stops. Test learned temporal retrieval/termination, not a scripted stop fallback.",
+  "source_checkpoints": [
+    7581,
+    7582
+  ],
+  "training_seed": 5591001,
+  "training_snapshots": 8192,
+  "data": "Same prospective DEV059 public training curriculum; no DEV058 test histories enter fitting. Reconstruct original training-only latest-record/parent-graph labels from public cached records. No simulator state labels passed to deployment.",
+  "updates": 600,
+  "batch": 64,
+  "learning_rate": 0.0005,
+  "optimizer": "Fresh AdamW .0001weight_decay, clip1; this is fine-tuning with optimizer reset, not continuation of saved optimizer state.",
+  "trainable": "All model parameters except restored trained admission/address frozen. Preserve original model architecture and runtime code.",
+  "objective": "Original DEV058 joint teacher loss including .5 latest-read CE and .3 public-parent graph CE; add3x healthy-state policy CE to make total current stop weight4. No inference threshold, repair rule, planner or fallback added.",
+  "validation": {
+    "seed": 5592002,
+    "entities": [
+      2,
+      4,
+      6
+    ],
+    "histories": [
+      32,
+      96
+    ],
+    "worlds_per_cell": 64,
+    "acceptance": "Both repaired seeds must reach .90 completion at N2/4 and .80 at N6 AND not increase mean residual faults versus their own original checkpoint on these paired validation worlds. If either fails, no repair final test is opened and do not deploy as an accepted upgrade."
+  },
+  "test": {
+    "seed": 5592003,
+    "entities": [
+      2,
+      4,
+      6
+    ],
+    "histories": [
+      32,
+      96,
+      128
+    ],
+    "worlds_per_cell": 64,
+    "gate": "After both validation gates only. Same functional thresholds, paired missing-stop improvement and residual-fault nonincrease versus original on same worlds; show original/repaired cost, physical repair and valid stop. Preserve every failure. No final-test tuning or seed selection."
+  },
+  "budget": "Two inherited-checkpoint fits,600 updates each, at most5 CPU minutes extra fitting; local CPU only. Existing grid120 CPU-minute cap unchanged.",
+  "audit": "Checkpoint/source hashes, streamed inference and standalone export; unchanged torch-only model module; physical/native replay of any reported held-out repair trajectories.",
+  "limits": "Teacher-assisted repair, only2 inherited initializations, exact public-history worlds. Partial observability, unfamiliar entities/identities/dynamics, general symbolic CASM/CDL/C5 remain separate."
+}
