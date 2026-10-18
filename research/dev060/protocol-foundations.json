@@ -1,38 +1,80 @@
 {
- "study":"DEV-060 foundations",
- "status":"REGISTERED_BEFORE_PROBE_FITTING",
- "scope":"Engineering foundations and isolated exact-record retrieval study, not full learned-policy results or architecture superiority",
- "memory_probe":{
-  "arms":["content","temporal"],"initialization_seeds":[80601,80602,80603,80604,80605,80606,80607,80608,80609,80610],
-  "data_seeds":{"train":6061001,"validation":6061002,"test":6061003},
-  "train_examples":2048,"validation_examples":256,"test_examples_per_length":512,
-  "train_bank_lengths":[8,16],"test_bank_lengths":[8,16,32,64],
-  "identity":"Per-example random normalized continuous eight-dimensional identities, repeated across records and queries; no ID dictionary in learner",
-  "target":"Most recent matching-identity exact public status record; conflict sequences and irrelevant identities. No noisy-record correctness claim.",
-  "model":"Identical 3-layer pairwise learned content scorer, with/without nonnegative learned relative-time penalty. Temporal ordering is an explicit architectural prior, not discovered law.",
-  "updates":500,"batch":64,"optimizer":"AdamW lr0.003 weight_decay0.0001 clip1; no tuning or test-driven recipe changes",
-  "objective":"Cross entropy on public latest-record index; all fitted checkpoints and curves retained",
-  "budget":"2 CPU workers, torch1thread each, at most10 CPU minutes total fitting; stop and report incomplete if capped",
-  "selection":"Final update only; ten fresh seeds; no best-seed promotion",
-  "analysis":"Per-seed exact retrieval, stale same-identity selections, wrong-identity selections, status accuracy; paired seed difference and exact two-sided sign flip across4lengths with Holm correction. No inference from retrieval to world completion. No novelty claim against perfect latest-record reference."
- },
- "sparse_engineering":{
-  "semantics":"Copy-on-write state; skip address and encoder calls on closed gates; update only chosen rows/slots for admitted records. Every observation still pays admission cost.",
-  "comparators":"Same trained/fixed weights, dense reference versus sparse inference; require exact admission/address/state and action logits on fixed probe streams",
-  "measurements":"CPU latency distributions, throughput, torch allocator bytes and actual processed row counts. Try hardware counters; mark unavailable if permission denied. Allocator/counter estimates are not measured DRAM traffic. No guaranteed speedup."
- },
- "uncertainty_benchmark":{
-  "status":"Implement and verify worlds/references; no learned-agent fitting authorized by this foundations protocol",
-  "entities":2,"identities":"random normalized continuous8-vectors",
-  "initial_missing_probability":0.5,"sensor_error":0.1,"inspection_cost":0.1,"repair_cost":0.6,"observation_cost":0.01,"terminal_fault_cost":20,
-  "repair_success":0.95,"unnecessary_parent_child_fault_probability":0.8,
-  "public_relations":"Known acyclic pair or independent entities; no hidden relation information supplied to student",
-  "receipts":"Inspection exact/provenance tagged; repair emits one noisy status for EACH entity regardless of hidden change. Payload length/identity cannot leak which hidden state changed.",
-  "references":"Exact4-state public Bayes filter with known-law depth2 receding-horizon expected-cost controller; private safe-progress teacher. Planner is bounded, not globally optimal.",
-  "seed":6062003,"worlds":256,"horizon":8,
-  "metrics":"Completion, physical repair, faults, premature/missing stop, inspections, actions, cost split, public-belief Brier, disagreement with public latest-record shortcut",
-  "information_gap":"Private/public gap includes bounded planner approximation; no claim it is pure unavoidable information regret",
-  "acceptance":"Probability normalization and independent enumeration; sensor likelihood/exact inspection fixtures; identical-public-history different-hidden-state fixture; planner sometimes acquires costly information; reference outcomes preserved regardless of failure"
- },
- "claim_gates":"Ten seeds alone do not establish convergence. Perfect public reference blocks strict-completion superiority on exact-record task. No full-agent upgrade, original CDL, general symbolic CASM, JEPA benefit, C5, commercial safety or physical-traffic saving claim from foundations. Freeze a separate full-policy training protocol after these engineering checks, without tuning on these test outcomes."
+  "study": "DEV-060 foundations",
+  "status": "REGISTERED_BEFORE_PROBE_FITTING",
+  "scope": "Engineering foundations and isolated exact-record retrieval study, not full learned-policy results or architecture superiority",
+  "memory_probe": {
+    "arms": [
+      "content",
+      "temporal"
+    ],
+    "initialization_seeds": [
+      80601,
+      80602,
+      80603,
+      80604,
+      80605,
+      80606,
+      80607,
+      80608,
+      80609,
+      80610
+    ],
+    "data_seeds": {
+      "train": 6061001,
+      "validation": 6061002,
+      "test": 6061003
+    },
+    "train_examples": 2048,
+    "validation_examples": 256,
+    "test_examples_per_length": 512,
+    "train_bank_lengths": [
+      8,
+      16
+    ],
+    "test_bank_lengths": [
+      8,
+      16,
+      32,
+      64
+    ],
+    "identity": "Per-example random normalized continuous eight-dimensional identities, repeated across records and queries; no ID dictionary in learner",
+    "target": "Most recent matching-identity exact public status record; conflict sequences and irrelevant identities. No noisy-record correctness claim.",
+    "model": "Identical 3-layer pairwise learned content scorer, with/without nonnegative learned relative-time penalty. Temporal ordering is an explicit architectural prior, not discovered law.",
+    "updates": 500,
+    "batch": 64,
+    "optimizer": "AdamW lr0.003 weight_decay0.0001 clip1; no tuning or test-driven recipe changes",
+    "objective": "Cross entropy on public latest-record index; all fitted checkpoints and curves retained",
+    "budget": "2 CPU workers, torch1thread each, at most10 CPU minutes total fitting; stop and report incomplete if capped",
+    "selection": "Final update only; ten fresh seeds; no best-seed promotion",
+    "analysis": "Per-seed exact retrieval, stale same-identity selections, wrong-identity selections, status accuracy; paired seed difference and exact two-sided sign flip across4lengths with Holm correction. No inference from retrieval to world completion. No novelty claim against perfect latest-record reference.",
+    "information_match_amendment_before_fitting": "Both scorers receive the same normalized relative timestamp as a learned content feature; temporal arm additionally applies a nonnegative learned age penalty. Continuous IDs and bank order are identical. A win cannot be attributed simply to exposing time only to one arm."
+  },
+  "sparse_engineering": {
+    "semantics": "Copy-on-write state; skip address and encoder calls on closed gates; update only chosen rows/slots for admitted records. Every observation still pays admission cost.",
+    "comparators": "Same trained/fixed weights, dense reference versus sparse inference; require exact admission/address/state and action logits on fixed probe streams",
+    "measurements": "CPU latency distributions, throughput, torch allocator bytes and actual processed row counts. Try hardware counters; mark unavailable if permission denied. Allocator/counter estimates are not measured DRAM traffic. No guaranteed speedup."
+  },
+  "uncertainty_benchmark": {
+    "status": "Implement and verify worlds/references; no learned-agent fitting authorized by this foundations protocol",
+    "entities": 2,
+    "identities": "random normalized continuous8-vectors",
+    "initial_missing_probability": 0.5,
+    "sensor_error": 0.1,
+    "inspection_cost": 0.1,
+    "repair_cost": 0.6,
+    "observation_cost": 0.01,
+    "terminal_fault_cost": 20,
+    "repair_success": 0.95,
+    "unnecessary_parent_child_fault_probability": 0.8,
+    "public_relations": "Known acyclic pair or independent entities; no hidden relation information supplied to student",
+    "receipts": "Inspection exact/provenance tagged; repair emits one noisy status for EACH entity regardless of hidden change. Payload length/identity cannot leak which hidden state changed.",
+    "references": "Exact4-state public Bayes filter with known-law depth2 receding-horizon expected-cost controller; private safe-progress teacher. Planner is bounded, not globally optimal.",
+    "seed": 6062003,
+    "worlds": 256,
+    "horizon": 8,
+    "metrics": "Completion, physical repair, faults, premature/missing stop, inspections, actions, cost split, public-belief Brier, disagreement with public latest-record shortcut",
+    "information_gap": "Private/public gap includes bounded planner approximation; no claim it is pure unavoidable information regret",
+    "acceptance": "Probability normalization and independent enumeration; sensor likelihood/exact inspection fixtures; identical-public-history different-hidden-state fixture; planner sometimes acquires costly information; reference outcomes preserved regardless of failure"
+  },
+  "claim_gates": "Ten seeds alone do not establish convergence. Perfect public reference blocks strict-completion superiority on exact-record task. No full-agent upgrade, original CDL, general symbolic CASM, JEPA benefit, C5, commercial safety or physical-traffic saving claim from foundations. Freeze a separate full-policy training protocol after these engineering checks, without tuning on these test outcomes."
 }
