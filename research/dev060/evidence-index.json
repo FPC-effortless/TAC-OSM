@@ -1,0 +1,175 @@
+{
+  "study": "DEV-060 foundations",
+  "phase": "Engineering and isolated retrieval; NOT full learned-policy execution",
+  "archives": {
+    "evidence.tar.gz": "e6a86a25bf74e45fc77fc37f80893ce75fa432c957c90a15bc7bc3cb5bc5d3d9",
+    "sparse-agent.tar.gz": "ed95a238e1aa1921662137deeadb9dabc3914ae87d0c16ca76cd79ed2b23592c"
+  },
+  "protocol_sha256": "6d738c45d2bec06d0d5c44a62da902bd86727e751e9a8953aaa18876f754c030",
+  "memory_probe_fits": 20,
+  "initializations_per_arm": 10,
+  "unique_heldout_query_fixtures": 2048,
+  "recorded_retrieval_choices": 40960,
+  "probe_fit_source": "da2e37038aee33e5c52c33b6b3bf695df2c17587",
+  "fitted_model_data_fit_code_unchanged": {
+    "RetrievalProbe": true,
+    "data": true,
+    "fit": true
+  },
+  "probe_source_hashes": {
+    "scripts/run_memory_foundations_dev060.py": "4c61ceeabb3617b59ef3b0f57d7c9aa4270970a5a128ef06bd2569b99e50b006",
+    "src/tac_osm/development/temporal_agent.py": "e8f86fb4f39de87a670a0b55acd21c1c9e83371ee6a915e53b43a81d4dbb4a6c",
+    "src/tac_osm/development/uncertain_world.py": "2c26bfd5dc448f4576241fcd93455ab4f4415ed7fa338bbc8ff416c627999fa5"
+  },
+  "sparse_compatibility": {
+    "status": "PASS",
+    "source": "368d7f5c4b2906d058b0badcb7ba0ca59a290b81",
+    "temporal_bias": false,
+    "new_weights_trained": false,
+    "limitation": "Execution optimization of two existing agents, not ten-seed recipe validation or improved model reliability. Original parameter and state layouts retained when temporal=False.",
+    "checkpoints": {
+      "7581": "d3edd648b21c1a8a54575ad3668ddd20a90d9cf75983e2ffc075b9918f88330d",
+      "7582": "6000d007c8eeba09d3ce450ac6a23d242fe64d0d75fb79c836157ad406ae7149"
+    },
+    "exports": {
+      "7581": {
+        "worlds": 12,
+        "decisions": 33,
+        "exact_logits": true,
+        "research_imports_forbidden": true,
+        "successful_worlds": 12
+      },
+      "7582": {
+        "worlds": 12,
+        "decisions": 33,
+        "exact_logits": true,
+        "research_imports_forbidden": true,
+        "successful_worlds": 12
+      }
+    },
+    "cells": 18,
+    "trajectories": 1152,
+    "actions": 3747,
+    "native_actions": 3747
+  },
+  "acceptance": {
+    "zero_stale_retrieval_target_met": false,
+    "temporal_advantage_established": false,
+    "learned_uncertain_policy_trained": false,
+    "new_default_weights_promoted": false,
+    "sparse_original_decisions_preserved": true,
+    "physical_dram_traffic_measured": false,
+    "references_are_learned": false
+  },
+  "benchmark": {
+    "source": "368d7f5c4b2906d058b0badcb7ba0ca59a290b81",
+    "checkpoint_sha256": "d3edd648b21c1a8a54575ad3668ddd20a90d9cf75983e2ffc075b9918f88330d",
+    "events": 128,
+    "batch": 1,
+    "threads": 1,
+    "temporal_bias_enabled": false,
+    "semantics": "Original temporal-disabled weights. Identical weights. Exact state/address/gate and final action logits; copy-on-write. Admission runs on every event. Timestamp feature is public.",
+    "results": {
+      "dense": {
+        "latency_ms_per128_records": [
+          23.506755,
+          25.718532,
+          32.397927,
+          23.498415,
+          23.809595,
+          23.211784,
+          22.89131,
+          29.005,
+          23.346086,
+          23.160266,
+          22.714373,
+          24.048375,
+          37.133067,
+          35.578673,
+          32.537807,
+          22.418587,
+          23.760341,
+          26.462545,
+          22.037813,
+          23.397393,
+          21.108601,
+          21.752033,
+          22.787133,
+          31.124977,
+          26.523698,
+          24.499175,
+          26.188893,
+          28.115839,
+          33.393377,
+          29.181596
+        ],
+        "p50_ms": 23.928985,
+        "p95_ms": 34.595289799999996,
+        "records_per_second_at_median": 5349.161278675213,
+        "positive_net_operator_allocator_bytes": 2706112,
+        "admitted": 8,
+        "encoder_rows": 128,
+        "address_rows": 128,
+        "bank_clone_bytes": 0
+      },
+      "sparse": {
+        "latency_ms_per128_records": [
+          7.694884,
+          8.067596,
+          7.554082,
+          9.009136,
+          7.300519,
+          8.989587,
+          8.915315,
+          8.138262,
+          7.542864,
+          7.952753,
+          7.627893,
+          8.96488,
+          8.23598,
+          8.591035,
+          8.549242,
+          8.450934,
+          7.461262,
+          8.68021,
+          7.466169,
+          8.598727,
+          7.907915,
+          7.203352,
+          8.949867,
+          7.89788,
+          7.793973,
+          7.13496,
+          8.5741,
+          7.798961,
+          9.507718,
+          8.4683
+        ],
+        "p50_ms": 8.102929,
+        "p95_ms": 9.00033895,
+        "records_per_second_at_median": 15796.7569504805,
+        "positive_net_operator_allocator_bytes": 126208,
+        "admitted": 8,
+        "encoder_rows": 8,
+        "address_rows": 8,
+        "bank_clone_bytes": 50176
+      }
+    },
+    "physical_counter_probe": {
+      "available": false,
+      "reason": "perf not installed; physical DRAM traffic not measured"
+    },
+    "physical_dram_bytes": null,
+    "limitations": "Single CPU microbenchmark of observe only, no end-to-end speed or total memory-traffic claim. Sparse admitted writes still clone the entire bank. Allocator statistic is sum of positive net grouped-operator self allocations, not peak RSS or DRAM traffic. Timing is descriptive and not a CI threshold."
+  },
+  "reference_status": "256 small worlds per reference; exact law joint filter with bounded depth2 planner, not globally optimal or independently physical validation",
+  "hardware_context": {
+    "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+    "cpu_quota_cores": 2,
+    "torch_threads": 1,
+    "dram_counters": "unavailable"
+  },
+  "resource": {
+    "children_cpu_seconds": 16.846183999999997
+  }
+}
