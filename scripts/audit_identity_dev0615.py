@@ -71,7 +71,7 @@ def run(directory,output,veritas=None,exports=None,smoke=False):
     if veritas:
         assert subprocess.check_output(['git','-C',veritas,'rev-parse','HEAD'],text=True).strip()==PIN
         sys.path.insert(0,str(Path(veritas)/'src'))
-    result={'status':'RUNNING','scope':'Strict float64 restore replay. Native coverage first registered seed/all arms only. Shared synthetic physics. Cross-host evidence requires remote execution.','checkpoints':0,'cells':0,'trajectories':0,'actions':0,'native_actions':0,'portable_decisions':0,'telemetry':{'values':0,'max_abs':0.},'parameter_changes':{},'host':{'cpu_models':sorted({line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')}),'python':sys.version,'torch':str(torch.__version__),'machine':subprocess.check_output(['uname','-a'],text=True).strip()},'cross_hardware':'UNKNOWN until comparison on another host'}
+    result={'status':'RUNNING','scope':'Strict float64 restore replay. Native coverage first registered seed/all arms only. Shared synthetic physics. Cross-host evidence requires remote execution.','checkpoints':0,'cells':0,'trajectories':0,'actions':0,'native_actions':0,'portable_decisions':0,'telemetry':{'values':0,'max_abs':0.},'parameter_changes':{},'prediction_sums':{'current_squared':0.,'current_count':0,'outcome_squared':0.,'outcome_count':0,'cost_squared':0.,'decisions':0},'host':{'cpu_models':sorted({line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')}),'python':sys.version,'torch':str(torch.__version__),'machine':subprocess.check_output(['uname','-a'],text=True).strip()},'cross_hardware':'UNKNOWN until comparison on another host'}
     paths=sorted(root.glob('*/**/report.json'));started=time.monotonic()
     for path in paths:
         r=json.loads(path.read_text());folder=path.parent;assert digest(folder/'agent.pt')==r['checkpoint_sha256'];
@@ -82,7 +82,17 @@ def run(directory,output,veritas=None,exports=None,smoke=False):
         cells=r['validation']
         if (folder/'test.json').exists():cells=cells+json.loads((folder/'test.json').read_text())['cells']
         for cell in cells:
-            actual,_=rollout(m,cell['seed'],cell['entities'],cell['history'],len(cell['rows']),cell['family'],cell['horizon']);compare(actual,cell,result['telemetry']);result['cells']+=1
+            captured=[];original_decide=m.decide
+            def observed_decide(state,candidates,valid):
+                out=original_decide(state,candidates,valid)
+                from tac_osm.development.robust_identity import choose
+                captured.append((out,choose(out['logits'],valid)));return out
+            m.decide=observed_decide
+            actual,_=rollout(m,cell['seed'],cell['entities'],cell['history'],len(cell['rows']),cell['family'],cell['horizon']);m.decide=original_decide;compare(actual,cell,result['telemetry']);result['cells']+=1
+            for step,(out,chosen) in enumerate(captured):
+                for i,row in enumerate(cell['rows']):
+                    if step>=len(row['actions']):continue
+                    action=row['actions'][step];n=cell['entities'];s=result['prediction_sums'];before=torch.tensor(action['before'],dtype=torch.float64);after=torch.tensor(action['after'],dtype=torch.float64);j=int(chosen[i]);s['current_squared']+=float(((out['current'][i,:n].sigmoid()-before)**2).sum());s['current_count']+=n;s['outcome_squared']+=float(((out['outcomes'][i,j,:n].sigmoid()-after)**2).sum());s['outcome_count']+=n;s['cost_squared']+=float((out['cost'][i,j]*20-action['cost'])**2);s['decisions']+=1
             for row in cell['rows']:
                 w=IdentityWorld(row['seed'],row['index'],row['entities'],row['history'],cell['family'])
                 for action in row['actions']:
@@ -93,6 +103,7 @@ def run(directory,output,veritas=None,exports=None,smoke=False):
                 if veritas and r['seed']==p['export_seed'] and path.parent.parent.name.startswith('group-'):result['native_actions']+=native_replay(row)
         if r['seed']==p['export_seed'] and exports:result['portable_decisions']+=standalone(folder,r,m,Path(exports)/r['arm'])
         write(output,result);print('restored',key,result['trajectories'],flush=True)
+    s=result['prediction_sums'];result['visited_prediction_scores']={'current_state_Brier':s['current_squared']/max(1,s['current_count']),'one_action_outcome_Brier':s['outcome_squared']/max(1,s['outcome_count']),'one_action_cost_RMSE':(s['cost_squared']/max(1,s['decisions']))**.5,'scope':'Validation and heldout visited states of all arms, including poor controls; not complete-agent-only scores or causal necessity evidence.'}
     result['status']='COMPLETE';result['elapsed_seconds']=time.monotonic()-started;write(output,result);print('AUDIT_COMPLETE',json.dumps({k:result[k] for k in ('status','checkpoints','trajectories','native_actions','portable_decisions','telemetry','host')}),flush=True)
 
 
