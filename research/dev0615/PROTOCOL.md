@@ -12,11 +12,13 @@ dataset aggregation, EMA and curriculum? No simulator, teacher, public-state
 parser, repair rule, analytical planner or stopping override enters deployment.
 
 The new architecture uses separate identity and content streams, shared content
-weights, learned similarity strengths/type/temporal attention, relation-biased
+weights, learned similarity strengths and type gates, relation-biased
 cross-candidate attention, dense learned operator mixtures (not sparse symbolic
 programs), learned action-conditioned prediction and a learned action/stop head.
-Identity matching has a disclosed cosine-attention structural prior. No fixed
-identity-to-slot map or equality dictionary exists in the neural runtime. Typed
+A public episode entity manifest defines temporary slots. Hard nearest-cosine
+binding groups raw histories by those slots; learned cosine strengths implement
+subsequent soft CDL reads. This is an explicit entity-association prior, not
+learned identity discovery. No persistent categorical embedding dictionary exists. Typed
 38-vector inputs and 19-vector action descriptors remain programmed interfaces.
 Dense mixtures and float64 replay intentionally defer sparse-runtime claims.
 
@@ -24,7 +26,10 @@ The identity treatment bundles content/identity separation and fresh per-episode
 random-vector augmentation. Its control retains identity coordinates in content
 encoders and trains on static public codes. The training treatment bundles
 DAgger, EMA and horizon curriculum; this does not isolate each constituent.
-All TAC cells share the same new two-read/graph/operator/prediction controller.
+All TAC cells share the same new relation-read/graph/operator/prediction controller.
+Two latent transformations represent one candidate action, not a two-action
+planning horizon. Runtime re-encodes the bounded retained history at each decision;
+no C5 scaling or incremental-state compute advantage is claimed.
 It is a new architecture, not a causal comparison against frozen DEV-061 scores.
 
 ## Matrix and fair controls
@@ -35,10 +40,14 @@ no_casm_robust, raw_gru_robust, raw_mlp_robust. The first four are a 2x2
 identity-bundle x training-bundle factorial. No-CASM is retrained and parameter
 matched; the raw-event GRU and pooled-event MLP have no latest-state or parent-bit
 feature parser. All receive the same public records through an identical frozen,
-learned record-type admission network; all retained fields remain raw. This common
+learned record-type admission network; all retained fields remain raw. A second frozen learned type gate maintains a
+separate public relationship-key stream for every arm, including raw controls.
+This stream copies relationship pointers, never health bits, into manifest metadata.
+The raw controls are therefore raw-event content encoders with the same public
+binding interface, not completely unstructured recurrent baselines. This common
 noise front end is explicitly disclosed, not called relevance discovery. Retain
-unfiltered public logs and charge every incoming observation. Capacity64 retains
-all admitted records in these bounded tasks; FIFO is fixed infrastructure, not a
+unfiltered public logs and charge every incoming observation. Capacity64 uses
+FIFO; overflow remains a possible source of errors and is measured, not a
 learned retention result. Episodic retention remains deferred.
 
 All robust arms within a seed group contribute student trajectories to a shared
@@ -77,13 +86,14 @@ Near-collision and unconstrained-vector stress are separately qualified OOD case
 ## Training and finite resources
 
 One frozen shared type-admission pretrain:300steps, batch256, Adam0.01, input only
-four public source bits, signal/noise labels. No admission threshold tuning.
+four public source bits, signal/noise and relationship-type labels; pretrain both
+admission and relation gates. No gate threshold tuning.
 Models use float32 training, AdamW(wd1e-4), clip1, batch64,1024updates. First128
 updates train factual/current-state and read targets; then full actor/dynamics
 loss. Teacher policy is a distribution over all safe-progress actions, not an
 arbitrary single optimal index. Loss: policy KL/CE +0.5 current-state BCE
 +0.5 current-completion BCE +0.5 one-action fault BCE +0.25 one-action completion
-BCE +0.1 normalized action-cost Huber +0.25 public latest-read CE +0.05 safe-vs-
+BCE +0.1 normalized action-cost Huber +0.25 public relationship-binding CE +0.05 safe-vs-
 unsafe policy margin hinge(margin0.5). Proper probability losses are unweighted
 by economic fault cost. Do not call them perfectly calibrated.
 
@@ -97,7 +107,7 @@ corpus. BC samples the full initial corpus throughout. All data/inspection/repai
 collection costs and examples are recorded. The admission-only cost is shared.
 
 Two CPU workers, one Torch thread each. New study fitting cap180CPU minutes,
-including pilots, collection and per-fit validation. Cap600CPU seconds/seed group;
+including pilots, collection, calibration and per-fit validation. Cap600CPU seconds/seed group, including finalization;
 retain capped/failed groups. Incomplete20-seed matrix forbids acceptance/test opening.
 No automatic extension. Engineering smoke uses disjoint namespaces and SMOKE_ONLY.
 Freeze protocol, model and fitter before registered fitting; no test-based edits.
@@ -105,7 +115,8 @@ Freeze protocol, model and fitter before registered fitting; no test-based edits
 ## Replay, calibration and tie handling
 
 Train float32; deployment/evaluation uses float64 and one deterministic Torch
-thread. Dense attention/operator mixtures avoid hard internal routing ties.
+thread. Dense attention/operator mixtures avoid operator-selection ties; manifest binding
+still uses hard cosine routing, with separated identities except collision stress.
 A registered generic decoder selects the first supplied valid candidate within
 1e-6 of the maximum score. This is a numeric tie convention, not a repair or stop
 rule. No privileged semantic identifier controls ties. Log top2 gaps, epsilon-
@@ -153,3 +164,12 @@ stageB. Analytic VOI/filter/planner are references or training targets only;
 deployed decisions remain neural. Commercial and complex-task advantage remains
 UNESTABLISHED. Transformer depth, BDH dynamics and SSM replacements require
 separate arms after these gates; retention awaits genuine historical dependence.
+
+## Pre-fit implementation clarification
+
+The initial registration commit preceded implementation. Before any fit or smoke
+run, the final implementation explicitly adds the public manifest/relationship-key
+priors and replaces proposed latest-record attention supervision with relationship
+binding supervision. These changes are design corrections, not outcome-driven
+tuning. The original registration remains in Git history. Raw baselines receive
+the same added metadata. No privileged target is passed to deployment.
