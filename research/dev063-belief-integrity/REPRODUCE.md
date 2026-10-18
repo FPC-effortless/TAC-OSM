@@ -48,3 +48,11 @@ Local hardware measurements can be reproduced with
 `scripts/plot_belief_dev063.py`. No physical DRAM traffic/FLOP/energy claim follows
 from timings or retained tensor bytes. Strict cross-host replay checks recorded
 float64 decisions on tested hosts, not universal determinism.
+
+History-length strata include explicitly typed noise records, many rejected by
+the admission gate. H1024 therefore tests this clock/input-length distribution,
+not storage of1024relevant facts, growing entity counts or C5 retrieval scaling.
+The gate still examines raw records; rejected writes do not remove that scan.
+The task has two entities, three supplied static dependency structures, a fixed
+five-action vocabulary and deterministic repairs conditional on prerequisites.
+New identities and clock transformations are not new causal laws or real sensors.
