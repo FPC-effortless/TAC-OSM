@@ -139,9 +139,11 @@ def run(directory,output,veritas=None,exports=None):
     for source in {r['source'] for r in reports}:
         for name in ('scripts/run_structured_memory_dev061.py','src/tac_osm/development/structured_memory.py'):
             assert subprocess.check_output(['git','show',f'{source}:{name}'],cwd=ROOT)==(ROOT/name).read_bytes(),'Fitting/evaluation source changed after registration'
+    folders={}
+    for path in root.glob('*/report.json'):
+        r=json.loads(path.read_text());folders[(r['arm'],r['seed'],r['lr'])]=path.parent
     for report in reports:
-        arm,seed=report['arm'],report['seed']
-        folder=next(path.parent for path in root.glob('*/report.json') if json.loads(path.read_text())['arm']==arm and json.loads(path.read_text())['seed']==seed and json.loads(path.read_text())['lr']==report['lr'])
+        arm,seed=report['arm'],report['seed'];folder=folders[(arm,seed,report['lr'])]
         checkpoint=folder/'agent.pt';assert digest(checkpoint)==report['checkpoint_sha256']
         model=create(arm,report['config'],seed).eval();model.load_state_dict(torch.load(checkpoint,weights_only=True),strict=True)
         counters={'admitted':0,'episodic_writes':0,'observed_present':0};observe=model.observe
