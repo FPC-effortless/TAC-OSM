@@ -104,3 +104,46 @@ def test_oracle_read_changes_freshness_only_between_forced_modes():
     model.descriptors=descriptors;action=model.action_encoder(descriptors)
     latest=model.read(state,action)[1].argmax(-1);model.mode='oldest';oldest=model.read(state,action)[1].argmax(-1)
     assert latest.tolist()==[[[1,2]]] and oldest.tolist()==[[[0,2]]]
+
+
+def test_stop_metrics_keep_early_late_and_censored_cases_separate():
+    from summarize_memory_dev061 import metrics
+    def action(kind,bit):return {'kind':kind,'target':0,'before':[bit]}
+    rows=[{'actions':[action('inspect',0),action('stop',0)],'success':True,'stopped':True,'final_faults':0},
+          {'actions':[action('stop',1)],'success':False,'stopped':True,'final_faults':1},
+          {'actions':[action('inspect',0)],'success':False,'stopped':False,'final_faults':0}]
+    for r in rows:r.update(cost=0.,write_cost=0.)
+    m=metrics([{'rows':rows}])
+    assert m['stop_confusion']=={'tp':1,'fp':1,'fn':2,'tn':0}
+    assert m['stop_precision']==.5 and m['stop_recall_per_healthy_decision']==1/3
+    assert m['early_stop_worlds']==1 and m['missing_stop_worlds']==1
+    assert m['lag_observed']==1 and m['lag_censored']==1
+    assert m['healthy_to_stop_lag_mean_observed']==1
+
+
+def test_primary_paired_seed_test_keeps_ties_and_multiplicity():
+    from summarize_memory_dev061 import signflip,holm
+    assert signflip([0]*10)==1
+    assert signflip([1]*8+[0]*2)==2/256
+    assert holm({'a':.01,'b':.02,'c':.9,'d':1})=={'a':.04,'b':.06,'c':1.,'d':1.}
+
+
+def test_inference_only_metadata_optimization_preserves_outputs_and_old_state(settings):
+    from tac_osm.development.inference_memory import InferenceMemoryAgent
+    from torch import nn
+    old=create('generic',settings['generic'],17).eval();new=InferenceMemoryAgent(settings['generic'],'generic',17).eval()
+    # A controlled public gate exercises both physical skip and write paths.
+    for m in (old,new):
+        m.admission=nn.Linear(22,1)
+        with torch.no_grad():m.admission.weight.zero_();m.admission.weight[0,0]=8;m.admission.bias.fill_(-4)
+    new.load_state_dict(old.state_dict());a=old.initial(2);b=new.initial(2)
+    with torch.no_grad():
+        for i in range(8):
+            e=torch.from_numpy(event(0 if i%3==0 else 3,2,None,i%2,i))[None].expand(2,-1)
+            original=b;snapshot=tuple(v.clone() for v in b);a,ta=old.observe(a,e);b,tb=new.observe(b,e)
+            assert all(torch.equal(x,y) for x,y in zip(a,b))
+            assert all(torch.equal(x,y) for x,y in zip(original,snapshot))
+            if not ta['writes']:assert b is original
+            assert torch.equal(ta['gate'],tb['gate'])
+        w=runner.ResearchWorld(7161104,0,4,32);args=[torch.from_numpy(v)[None].expand(2,*v.shape) for v in w.candidates()[:4]]
+        torch.testing.assert_close(old(a,*args)['logits'],new(b,*args)['logits'],rtol=0,atol=0)

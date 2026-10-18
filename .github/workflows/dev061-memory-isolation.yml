@@ -1,0 +1,107 @@
+name: DEV-061 registered memory isolation and fully learned control
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev061/**'
+      - 'src/tac_osm/development/*memory*.py'
+      - 'src/tac_osm/development/frozen_read_diagnostic.py'
+      - 'scripts/*memory*dev061.py'
+      - 'tests/test_structured_memory_dev061.py'
+      - '.github/workflows/dev061-memory-isolation.yml'
+permissions:
+  contents: read
+jobs:
+  full-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install recorded CPU environment
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Full regression and live provenance count
+        run: |
+          python -m pytest tests/ -q
+          python scripts/sync_test_count.py --check
+  recorded-models:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install recorded CPU environment
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify archive digests and restore all checkpoints and failures
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('research/dev061')
+          for filename,expected in json.loads((root/'evidence-index.json').read_text())['archives'].items():
+              assert hashlib.sha256((root/filename).read_bytes()).hexdigest()==expected
+          PY
+          mkdir -p results
+          tar -xzf research/dev061/evidence.tar.gz -C results
+          tar -xzf research/dev058/evidence.tar.gz -C results
+      - name: Restore every model and fixed query; replay public actions and native Veritas
+        run: python scripts/audit_memory_dev061.py --directory results/dev061-main --output results/dev061-ci-audit.json --veritas-root .veritas-public-runtime
+      - name: Reproduce frozen latest/oldest interventions and public/private references
+        run: |
+          python scripts/diagnose_memory_dev061.py --output results/dev061-ci-diagnostic.json
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'scripts')
+          from audit_memory_dev061 import compare
+          a=json.loads(Path('results/dev061-ci-diagnostic.json').read_text())
+          b=json.loads(Path('results/dev061-diagnostic.json').read_text())
+          assert a['references']==b['references']
+          assert a['protocol_sha256']==b['protocol_sha256']
+          drift={'values':0,'max_absolute_difference':0.}
+          for seed in b['frozen']:
+              assert a['frozen'][seed]['checkpoint_sha256']==b['frozen'][seed]['checkpoint_sha256']
+              for mode in b['frozen'][seed]['modes']:
+                  for actual,expected in zip(a['frozen'][seed]['modes'][mode],b['frozen'][seed]['modes'][mode],strict=True):compare(actual,expected,drift)
+          print(drift)
+          PY
+      - name: Reproduce paired-seed statistics and promotion gates without retraining
+        run: |
+          python scripts/summarize_memory_dev061.py --directory results/dev061-main --diagnostic results/dev061-diagnostic.json --output results/dev061-ci-statistics.json
+          python - <<'PY'
+          import json,pathlib
+          a=json.loads(pathlib.Path('results/dev061-ci-statistics.json').read_text())
+          b=json.loads(pathlib.Path('research/dev061/statistics.json').read_text())
+          assert a==b
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV061-RESTORED-MODELS-NATIVE-PORTABILITY-AUDIT
+          path: |
+            results/dev061-ci-audit.json
+            results/dev061-ci-statistics.json
+            results/dev061-ci-diagnostic.json
+          if-no-files-found: warn
