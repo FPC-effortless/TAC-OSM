@@ -1,0 +1,99 @@
+{
+  "study": "DEV-059",
+  "status": "REGISTERED_BEFORE_NEW_TRAINING",
+  "date": "2026-10-18",
+  "scope": "Post-hoc DEV058 evidence audit plus prospective fixed-budget learned stopping and retrained control grid. No MTSK novelty pursuit.",
+  "retrospective_audit": [
+    "Teacher and public latest-record reference completion, physical repair, action counts, acquisition/write/physical costs on the 576 DEV058 worlds",
+    "Admission TP/FP/TN/FN, per-kind precision/recall and signal base rate for both checkpoints",
+    "Actual failure state/action sequences, learned completion and stop scores, latest-record retrieval on failed worlds; budget slack probe",
+    "Wilson conditional-world intervals versus across-seed uncertainty; no psychological diagnosis from outcomes alone"
+  ],
+  "prospective": {
+    "hypotheses": [
+      "Weighting healthy-state stop imitation improves autonomous stopping without increasing final faults",
+      "Retrained conventional controllers and no-CASM can match the full learned stack under the registered budget; lesions alone do not decide this"
+    ],
+    "arms": [
+      "full_common",
+      "full_stop",
+      "no_casm_stop",
+      "gru_stop",
+      "attention_stop"
+    ],
+    "teacher": "Same public-history-complete safe-progress teacher and common action/future-action/outcome/cost/completion targets. No read-address or graph-edge loss in ANY prospective arm. Full/no-CASM admission/address use explicitly disclosed learned pretraining; count its compute separately. Baselines receive complete raw public histories without admission filtering.",
+    "data": {
+      "train_seed": 5591001,
+      "validation_seed": 5591002,
+      "test_seed": 5591003,
+      "train_snapshots": 8192,
+      "validation_snapshots": 512,
+      "training_histories": [
+        16,
+        32,
+        64,
+        96
+      ],
+      "curriculum": "Same for all arms. One third of snapshots use teacher repairs followed by up to N+2 inspection receipts to enrich healthy terminal and repeated-receipt states. Other snapshots retain the original random-action distribution. Only training teacher generates labels; no teacher or state rules at neural deployment."
+    },
+    "models": {
+      "target_parameters": 133580,
+      "matching": "Choose architecture dimensions by parameter count alone before fitting; nearest feasible within5%. Count every active deployed parameter. Full D48; no-CASM removes graph/operators and increases width; GRU scans every public token, simple attention stores/attends all public tokens. Parameter matching is not retained-state or FLOP matching.",
+      "stop_change": "Multiply current-policy cross-entropy by4 on teacher-terminal healthy states in *_stop arms, weight1 elsewhere. No scripted stop, learned-logit threshold or runtime fallback.",
+      "memory": "Full/no-CASM 32 generic learned slots; raw attention capacity192 public records; GRU learned recurrent state. Report bytes and all writes; no equal-bits/C5 claim."
+    },
+    "training": {
+      "tuning_seed": 7780,
+      "initialization_seeds": [
+        7781,
+        7782,
+        7783,
+        7784,
+        7785,
+        7786,
+        7787,
+        7788,
+        7789,
+        7790
+      ],
+      "updates": 1200,
+      "writer_updates": 1200,
+      "batch": 64,
+      "learning_rates": [
+        0.002,
+        0.001
+      ],
+      "log_every": 300,
+      "optimizer": "AdamW weight_decay .0001; gradient clip1; common task losses from DEV058 excluding read/graph auxiliary losses; identical batch index RNG per seed across arms",
+      "selection": "Tune LR independently for each arm using one dedicated seed and validation only. Rank higher validation completion then fewer residual faults then lower physical action cost. Then fit all10 fresh initialization seeds at the selected LR. Open final test only after all selections. No selection of favorable final seeds. All failures/capped runs retained.",
+      "budget": "Fixed update/sample budget, not convergence or equal actual compute. 2 CPU workers,1torch thread each; maximum360 CPU seconds/fit; up to120 total CPU minutes, no paid compute. If any fit caps early, mark incomplete and do not call it update-matched. Lower update budget than DEV058 explicitly disclosed."
+    },
+    "evaluation": {
+      "entities": [
+        2,
+        4,
+        6
+      ],
+      "histories": [
+        32,
+        96,
+        128
+      ],
+      "worlds_per_cell": 64,
+      "primary_horizon": "2N+4",
+      "metrics": [
+        "Completion AND physical repair separately",
+        "Fault counts, premature stop, missing stop, first-healthy-to-stop lag, harmful extra repairs",
+        "Costs split physical/terminal, observations, writes; actions/world",
+        "Admission labels, CPU times, parameter and retained-state bytes",
+        "Per-seed learning curves and all ten seed outcomes; paired seed differences plus paired-world uncertainty, not 28800 independent worlds"
+      ],
+      "references": [
+        "Privileged safe-progress teacher",
+        "Public latest-record reference on exact public-history worlds"
+      ],
+      "claim_gate": "Development comparison only. No superiority claim unless full_stop beats EACH retrained learned control on paired seed completion while final-fault noninferiority holds; report all comparisons and Holm adjustment. Same teacher task labels; writer pretraining unique to slotted arms remains a disclosed training difference. No global optimality, symbolic discovery or C5 claim."
+    }
+  },
+  "next_partial_observability_gate": "Privileged-teacher regret is an upper-bound gap, not necessarily achievable with public information. Before any POMDP superiority study register an information-matched public-belief control, noisy/missing observation laws, unseen structures/identities/entity counts, observation costs and a nonidentifiability check. DEV059 does not relabel exact public-history tasks as POMDP reasoning."
+}
