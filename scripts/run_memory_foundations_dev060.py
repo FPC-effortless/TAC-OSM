@@ -75,7 +75,7 @@ def fit(job):
     write(path/'fit.json',report);return report
 
 
-def evaluate_all(directory):
+def evaluate_all(directory,write_outputs=True):
     torch.set_num_threads(1);root=Path(directory);p=json.loads(PROTOCOL.read_text())['memory_probe'];reports=json.loads((root/'fits.json').read_text())
     assert len(reports)==20 and all(r['updates']==p['updates'] for r in reports)
     result={'scope':'Exact-record full-bank retrieval only. Neither deployed policy reliability nor C5; no advantage possible over perfect latest-record reference.',
@@ -86,7 +86,9 @@ def evaluate_all(directory):
             path=root/f'{arm}-{seed}';model=RetrievalProbe(arm=='temporal',seed).eval()
             model.load_state_dict(torch.load(path/'agent.pt',weights_only=True))
             cells={str(length):score(model,data(p['data_seeds']['test'],p['test_examples_per_length'],length)) for length in p['test_bank_lengths']}
-            write(path/'test.json',cells);result['arms'][arm][str(seed)]={key:{k:v for k,v in c.items() if k not in ('chosen','targets')} for key,c in cells.items()}
+            if write_outputs:write(path/'test.json',cells)
+            else:assert cells==json.loads((path/'test.json').read_text()),'Restored retrieval choices/metrics differ'
+            result['arms'][arm][str(seed)]={key:{k:v for k,v in c.items() if k not in ('chosen','targets')} for key,c in cells.items()}
     raw={}
     for length in p['test_bank_lengths']:
         d=np.array([result['arms']['temporal'][str(s)][str(length)]['exact']-result['arms']['content'][str(s)][str(length)]['exact'] for s in p['initialization_seeds']])
@@ -96,8 +98,9 @@ def evaluate_all(directory):
     previous=0
     for rank,length in enumerate(sorted(raw,key=raw.get)):
         previous=max(previous,min(1.,raw[length]*(4-rank)));result['comparisons'][length]['holm_p']=previous
-    write(root/'summary.json',result)
-    write(root/'manifest.json',{str(f.relative_to(root)):digest(f) for f in sorted(root.rglob('*')) if f.is_file() and f.name!='manifest.json'})
+    if write_outputs:
+        write(root/'summary.json',result)
+        write(root/'manifest.json',{str(f.relative_to(root)):digest(f) for f in sorted(root.rglob('*')) if f.is_file() and f.name!='manifest.json'})
     return result
 
 
@@ -117,5 +120,9 @@ def run(directory):
 
 if __name__=='__main__':
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--directory',required=True);ap.add_argument('--replay',action='store_true');args=ap.parse_args()
-    if args.replay:evaluate_all(args.directory)
+    if args.replay:
+        root=Path(args.directory)
+        for name,value in json.loads((root/'manifest.json').read_text()).items():assert digest(root/name)==value,name
+        assert evaluate_all(root,False)==json.loads((root/'summary.json').read_text())
+        print('20 checkpoint restores and 40960 exact retrieval decisions: PASS')
     else:run(args.directory)

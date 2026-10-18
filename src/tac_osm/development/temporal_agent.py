@@ -17,17 +17,19 @@ except ImportError:
 class SparseTemporalAgent(LearnedAgent):
     def __init__(self,config=AgentConfig(),seed=0,temporal=True,sparse=True,timestamp_feature=-1):
         super().__init__(config,seed)
-        self.raw_decay=nn.Parameter(torch.full((config.read_heads,),math.log(math.expm1(1.))))
+        self.raw_decay=nn.Parameter(torch.full((config.read_heads,),math.log(math.expm1(1.)))) if temporal else None
         self.temporal=temporal
         self.sparse=sparse
         self.timestamp_feature=timestamp_feature
 
     def initial(self,batch,device=None):
         memory,occupied=super().initial(batch,device)
+        if not self.temporal:return memory,occupied
         return torch.cat((memory,torch.zeros_like(memory[:,:,:1])),-1),occupied
 
     def encode_bank(self,public_records,occupied):
         encoded=self.encoder(public_records)*occupied[:,:,None]
+        if not self.temporal:return encoded,occupied
         return torch.cat((encoded,public_records[:,:,self.timestamp_feature,None]*occupied[:,:,None]),-1),occupied
 
     def observe(self,state,event,present=None,force_write=False):
@@ -45,7 +47,8 @@ class SparseTemporalAgent(LearnedAgent):
             address=self.address(torch.cat((event,occupied),-1));all_choice=address.argmax(-1)
             choice[rows]=all_choice[rows]
             selected=F.one_hot(all_choice,self.config.slots).to(event.dtype)*hard[:,None]
-            value=torch.cat((self.encoder(event),event[:,self.timestamp_feature,None]),-1)
+            value=self.encoder(event)
+            if self.temporal:value=torch.cat((value,event[:,self.timestamp_feature,None]),-1)
             updated=memory*(1-selected[:,:,None])+selected[:,:,None]*value[:,None]
             trace.update(address_rows=len(event),encoder_rows=len(event))
             return (updated,torch.maximum(occupied,selected)),trace
@@ -55,7 +58,7 @@ class SparseTemporalAgent(LearnedAgent):
         value=self.encoder(event[rows])
         updated=memory.clone();used=occupied.clone()
         updated[rows,selected,:d]=value
-        updated[rows,selected,d]=event[rows,self.timestamp_feature]
+        if self.temporal:updated[rows,selected,d]=event[rows,self.timestamp_feature]
         used[rows,selected]=1
         trace.update(address_rows=len(rows),encoder_rows=len(rows),
                      bank_clone_bytes=memory.numel()*memory.element_size()+occupied.numel()*occupied.element_size())
@@ -90,14 +93,17 @@ class SparseTemporalAgent(LearnedAgent):
         return read,logits
 
 
-def proper_and_decision_losses(output,completion_target,outcome_target,candidate_risk,valid):
+def proper_and_decision_losses(output,completion_target,outcome_target,candidate_risk,valid,outcome_mask=None):
     """Proper scores stay unweighted; asymmetric risk belongs to decision loss.
 
 Risk is a training label or estimator, never an execution-time argmin. Passing
 privileged labels here during training does not permit deployment hidden inputs.
+    Decision gradients can still reach shared representations through policy logits;
+    separate proper terms do not guarantee calibration. Test it on held-out data.
 """
     completion=F.binary_cross_entropy_with_logits(output['completion'],completion_target)
-    outcomes=F.binary_cross_entropy_with_logits(output['outcomes'],outcome_target)
+    if outcome_mask is None:outcome_mask=valid[:,:,None].expand_as(outcome_target)
+    outcomes=F.binary_cross_entropy_with_logits(output['outcomes'][outcome_mask],outcome_target[outcome_mask])
     probability=output['logits'].masked_fill(~valid,-1e9).softmax(-1)
     decision=(probability*candidate_risk.detach().masked_fill(~valid,0)).sum(-1).mean()
     return {'completion_proper':completion,'outcome_proper':outcomes,'decision_risk':decision}
