@@ -105,8 +105,11 @@ training scores do not guarantee calibration or perfect empirical agreement.
 Fixed-query Brier/error and retrieval diagnostics use shared histories; visited
 state statistics also depend on each policy's trajectory. `fixed_rows.latest_hits`
 in raw evidence is a preferred supervised-slot hit, which can differ from
-latest-time correctness when duplicate latest records exist. Analysis derives
-latest-time correctness as queries minus stale and wrong-kind/entity reads.
+latest-time correctness when duplicate latest records exist. Analysis independently reconstructs full public fixed histories and measures
+latest-time correctness, staleness and latest-record availability against those
+histories, including when the newest record was dropped from memory. Raw
+`fixed_rows.stale` and `latest_available` concern retained-bank targets only and
+are preserved as such; they do not replace full-public-history diagnostics.
 Reported controller work counters are declared policy-path counts, exclude the
 auxiliary current-state read, and do not count every padded tensor operation.
 CPU timings include those auxiliary computations; profiler-supported FLOPs are

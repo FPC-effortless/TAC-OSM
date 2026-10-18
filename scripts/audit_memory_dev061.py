@@ -146,13 +146,19 @@ def run(directory,output,veritas=None,exports=None):
         arm,seed=report['arm'],report['seed'];folder=folders[(arm,seed,report['lr'])]
         checkpoint=folder/'agent.pt';assert digest(checkpoint)==report['checkpoint_sha256']
         model=create(arm,report['config'],seed).eval();model.load_state_dict(torch.load(checkpoint,weights_only=True),strict=True)
-        counters={'admitted':0,'episodic_writes':0,'observed_present':0};observe=model.observe
+        counters={'admitted':0,'episodic_writes':0,'observed_present':0,'admission_tp':0,'admission_fp':0,'admission_fn':0,'admission_tn':0,'admission_by_cell':{}};phase=['unassigned'];observe=model.observe
         def counted(state,event,present=None,force_write=False):
-            updated,trace=observe(state,event,present,force_write);counters['admitted']+=int(trace['writes']);counters['episodic_writes']+=int(trace.get('episodic_writes',0));counters['observed_present']+=len(event) if present is None else int(present.sum());return updated,trace
+            updated,trace=observe(state,event,present,force_write)
+            included=torch.ones(len(event),dtype=torch.bool) if present is None else present.bool();signal=event[:,:4].argmax(-1)!=3;admitted=trace['gate'].bool()
+            group=counters['admission_by_cell'].setdefault(phase[0],dict(tp=0,fp=0,fn=0,tn=0))
+            for name,mask in [('tp',signal&admitted),('fp',~signal&admitted),('fn',signal&~admitted),('tn',~signal&~admitted)]:
+                number=int((mask&included).sum());counters['admission_'+name]+=number;group[name]+=number
+            counters['admitted']+=int(trace['writes']);counters['episodic_writes']+=int(trace.get('episodic_writes',0));counters['observed_present']+=len(event) if present is None else int(present.sum());return updated,trace
         model.observe=counted
         cells=report['validation']
         if (folder/'test.json').exists():cells=cells+json.loads((folder/'test.json').read_text())['cells']
-        for cell in cells:
+        for index,cell in enumerate(cells):
+            phase[0]=('validation' if index<len(report['validation']) else 'test')+f"/{cell['family']}/N{cell['entities']}/H{cell['history']}"
             actual=evaluate(model,cell['seed'],cell['entities'],cell['history'],cell['worlds'],cell['family'])
             compare(actual,cell,result['telemetry_drift']);result['cells']+=1
             for row in cell['rows']:physical(row,result,bool(veritas))
@@ -172,7 +178,8 @@ def run(directory,output,veritas=None,exports=None):
                     actual={'queries':int(qv[i].sum()),'latest_hits':int(((select==latest)&qv[i]).sum()),'stale':int((stale&qv[i]).sum()),'wrong':int((~matching&qv[i]).sum()),'latest_available':int(((latest<32)&qv[i]).sum())}
                     assert all(actual[k]==row[k] for k in actual),'fixed retrieval mismatch'
         result['write_counters'][folder.name]=counters
-        if (folder/'test.json').exists():result['standalone_decisions']+=standalone(model,checkpoint,arm,report['config'],Path(exports)/arm if exports and seed==9101 else None)
+        if (folder/'test.json').exists():
+            phase[0]='portability';result['standalone_decisions']+=standalone(model,checkpoint,arm,report['config'],Path(exports)/arm if exports and seed==9101 else None)
         result['checkpoints']+=1;print('audited',folder.name,flush=True)
     result['elapsed_seconds']=time.monotonic()-start;result['status']='PASS';write(output,result)
 

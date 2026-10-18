@@ -149,3 +149,15 @@ def test_inference_only_metadata_optimization_preserves_outputs_and_old_state(se
             assert torch.equal(ta['gate'],tb['gate'])
         w=runner.ResearchWorld(7161104,0,4,32);args=[torch.from_numpy(v)[None].expand(2,*v.shape) for v in w.candidates()[:4]]
         torch.testing.assert_close(old(a,*args)['logits'],new(b,*args)['logits'],rtol=0,atol=0)
+
+
+def test_read_visibility_counts_dropped_latest_evidence_as_stale():
+    from memory_metrics_dev061 import visibility
+    records=torch.from_numpy(__import__('numpy').stack([event(0,2,None,1,0),event(2,2,None,0,3)]))[None]
+    raw=torch.zeros(1,3,22);raw[0,0]=records[0,0];occupied=torch.tensor([[1.,0.,0.]])
+    query=torch.zeros(1,1,8);query[0,0,2]=1
+    r=visibility(raw,occupied,records,torch.ones(1,2,dtype=torch.bool),query,torch.ones(1,1,dtype=torch.bool),torch.tensor([[0]]))[0]
+    assert r=={'queries':1,'stale':1,'latest_hits':0,'wrong':0,'latest_available':0}
+    raw[0,1]=records[0,1];raw[0,2]=records[0,1];occupied[:]=1
+    r=visibility(raw,occupied,records,torch.ones(1,2,dtype=torch.bool),query,torch.ones(1,1,dtype=torch.bool),torch.tensor([[2]]))[0]
+    assert r=={'queries':1,'stale':0,'latest_hits':1,'wrong':0,'latest_available':1}

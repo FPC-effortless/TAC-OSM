@@ -6,13 +6,16 @@ import itertools
 import json
 from pathlib import Path
 import numpy as np
+import torch
+from run_structured_memory_dev061 import PROTOCOL,raw_data,prepare,create
+from memory_metrics_dev061 import visibility
 from run_learned_stack_dev055 import write
 
 
-def interval(values):
+def interval(values,unit='seed'):
     x=np.asarray(values,float);rng=np.random.default_rng(861061)
     means=x[rng.integers(len(x),size=(2000,len(x)))].mean(-1)
-    return {'difference':float(x.mean()),'paired_seed_bootstrap95':np.quantile(means,[.025,.975]).tolist()}
+    return {'difference':float(x.mean()),f'paired_{unit}_bootstrap95':np.quantile(means,[.025,.975]).tolist()}
 
 
 def signflip(values):
@@ -64,7 +67,10 @@ def metrics(cells):
     return result
 
 
+@torch.no_grad()
 def run(directory,diagnostic,output):
+    torch.set_num_threads(1)
+    protocol=json.loads(PROTOCOL.read_text());fixed_public=raw_data(protocol['data']['fixed_query_seed'],protocol['data']['fixed_test_snapshots'])
     root=Path(directory);summary=json.loads((root/'summary.json').read_text());assert summary['status']=='COMPLETE' and summary['test_opened']
     runs=json.loads((root/'fits.json').read_text());d=json.loads(Path(diagnostic).read_text())
     tables={};records={};seedrows=[]
@@ -74,9 +80,13 @@ def run(directory,diagnostic,output):
         m=metrics(clean);m['pass']=m['completion']>.95;m['every_cell_pass']=all(np.mean([r['success'] for r in c['rows']])>.95 for c in clean)
         m['fixed_brier']=test['fixed_current_brier'];m['fixed_error']=test['fixed_current_error']
         if 'queries' in test['fixed_rows'][0]:
-            q=sum(r['queries'] for r in test['fixed_rows']);m['fixed_stale']=sum(r['stale'] for r in test['fixed_rows'])/q
-            m['fixed_latest']=sum(r['queries']-r['stale']-r['wrong'] for r in test['fixed_rows'])/q
-            m['fixed_latest_available']=sum(r['latest_available'] for r in test['fixed_rows'])/q
+            model=create(arm,fit['config'],seed).eval();model.load_state_dict(torch.load(root/f'{arm}-{seed}/agent.pt',weights_only=True))
+            fixed=prepare(model,fixed_public);state=model.training_state(fixed);out=model(state,fixed['descriptors'],fixed['valid'],fixed['queries'],fixed['query_valid'])
+            checked=visibility(state[0][:,:,-22:],state[1],fixed_public['events'],fixed_public['present'],fixed['queries'],fixed['query_valid'],out['state_read_logits'][:,:,0].argmax(-1))
+            q=sum(r['queries'] for r in checked);m['fixed_stale']=sum(r['stale'] for r in checked)/q
+            m['fixed_latest']=sum(r['latest_hits'] for r in checked)/q;m['fixed_latest_available']=sum(r['latest_available'] for r in checked)/q
+            m['retained_status_available']=sum(r['latest_available'] for r in test['fixed_rows'])/q
+            m['preferred_slot_hit']=sum(r['latest_hits'] for r in test['fixed_rows'])/q
         m['public_regret']=m['economic_cost']-reference['public']['economic_cost'];m['private_regret']=m['economic_cost']-reference['privileged']['economic_cost']
         tables.setdefault(arm,{})[seed]=m;records.setdefault(arm,{})[seed]=test
         seedrows.append(dict(arm=arm,seed=seed,**{k:m[k] for k in ('completion','pass','every_cell_pass','physical_repair','faults','economic_cost','public_regret','actions','unnecessary_repairs','early_stop_worlds','missing_stop_worlds','fixed_brier')}))
@@ -98,11 +108,14 @@ def run(directory,diagnostic,output):
         for k in ('completion','economic_cost','faults_per_world','unnecessary_repairs','fixed_brier','fixed_stale'):
             comp[arm][k]=interval([m[s][k]-baseline[s][k] for s in seeds])
         comp[arm]['cost_vs_public']=interval([m[s]['economic_cost']-reference['public']['economic_cost'] for s in seeds])
+        weight=np.array([(2,4,6)[i%3] for i in range(protocol['data']['fixed_test_snapshots'])]);weight=weight/weight.mean()
+        delta=np.array([[r['brier'] for r in records[arm][s]['fixed_rows']] for s in seeds])-np.array([[r['brier'] for r in records['generic'][s]['fixed_rows']] for s in seeds])
+        comp[arm]['world_paired_brier']=interval(delta.mean(0)*weight,'world')
         comp[arm]['world_paired_cost']={}
         for comparator in ('generic','structured_gru','public_mlp'):
             x=np.array([[r['economic_cost'] for c in records[arm][s]['cells'][:12] for r in c['rows']] for s in seeds])
             y=np.array([[r['economic_cost'] for c in records[comparator][s]['cells'][:12] for r in c['rows']] for s in seeds]);delta=(x-y).mean(0)
-            comp[arm]['world_paired_cost'][comparator]=interval(delta)
+            comp[arm]['world_paired_cost'][comparator]=interval(delta,'world')
             comp[arm]['world_paired_cost'][comparator]['scope']='World bootstrap after averaging paired seeds; complements seed intervals, not independent seed-world replicates.'
     adjusted=holm({a:comp[a]['primary_exact_p'] for a in names})
     refval=metrics(d['references']['public_validation'])['economic_cost'];genericval=np.mean([metrics(r['validation'])['economic_cost'] for r in runs if r['arm']=='generic'])
