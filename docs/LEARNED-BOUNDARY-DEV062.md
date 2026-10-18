@@ -3,8 +3,8 @@
 | Surface | Learned | Supplied infrastructure or training assistance |
 |---|---|---|
 | Observation interface | Neural encoders consume public records | Typed vectors, sensor names, masks, public entity manifests and available choices |
-| Identity | Shared recurrent content, soft CDL strengths | Cosine binding to temporary manifest slots; no learned entity discovery |
-| Relations | Neural relational computation and content | Public relationship-pointer stream, gated by a supervised type classifier |
+| Identity | Shared recurrent content, soft CDL strengths | DEV061.5 hard cosine routing; DEV062A continuous cosine features to public manifest; no entity discovery |
+| Relations | Neural relational computation and content; DEV062A encodes raw relation records recurrently | DEV061.5 additionally copies a gated public relationship-key stream; DEV062A has no such pointer-copy state |
 | Memory | Recurrent content updates | Bounded64-record FIFO, no learned retention or C5 indexing |
 | CDL/CASM | Soft relevance reads and trained dense neural operators/selectors | Fixed operator count and architecture; no symbolic program discovery or original CDL mechanism proof |
 | Action consequences | Candidate-conditioned outcome/belief and cost heads | Synthetic laws and reference filter supply training targets outside deployment |
