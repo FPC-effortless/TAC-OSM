@@ -53,3 +53,11 @@ Pre-fit measurement clarification: per-sensor normalized MSE was added after the
 first disjoint smoke run and before any real-data fitting; model/loss/selection
 unchanged. Original smoke remains unqualified; v2 smoke includes the final metric
 schema. Gaussian marginal assumptions also cover the binary sensor channels.
+
+Pre-fit baseline correction: source/design review, before any real-data fit or
+metric, adds deterministic ridge autoregression at1/24lags and penalties.01/1/100.
+Train-only normalization; select by validation MSE, save all six fits' validation
+scores and selected coefficients. It is a strong conventional reference, not a
+parameter-matched neural arm. Report CPU/parameters and require TAC's paired-seed
+MSE interval upper<=0 against this reference before any competitive claim. No
+extra NN fitting or held-out selection is introduced.

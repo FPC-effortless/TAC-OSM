@@ -34,3 +34,13 @@ def test_raw_sensor_model_never_imports_teacher_or_fault_table():
     root=Path(__file__).resolve().parents[1];tree=ast.parse((root/'src/tac_osm/development/maintenance_forecast.py').read_text())
     imports=[n.module for n in ast.walk(tree) if isinstance(n,ast.ImportFrom)]+[a.name for n in ast.walk(tree) if isinstance(n,ast.Import) for a in n.names]
     assert all(name and name.split('.')[0]=='torch' for name in imports)
+
+
+def test_linear_reference_selection_has_no_test_labels_and_recovers_linear_signal():
+    from ridge_real_maintenance_001 import fit_ridge,predict_ridge
+    torch.set_num_threads(1);rng=torch.Generator().manual_seed(1996309)
+    train={'x':torch.randn(96,24,15,generator=rng)};val={'x':torch.randn(24,24,15,generator=rng)}
+    for rows in (train,val):rows['y']=2*rows['x'][:,-1]+.5
+    model,choices=fit_ridge(train,val)
+    normalized=(val['y'].double()-model['mean'])/model['scale']
+    assert len(choices)==6 and ((predict_ridge(model,val['x'])-normalized)**2).mean()<1e-5
