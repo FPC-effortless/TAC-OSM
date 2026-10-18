@@ -29,3 +29,8 @@ CC BY4.0. Forecasts remain unpromoted under the strict original registration.
 The standalone belief bottleneck is a separate, UNTRAINED prototype. Its property
 tests establish information paths/time symmetries, not operational performance.
 No serialized belief-prototype weights are presented as a trained replacement.
+
+Subsequent work: the original prototype status above is historical. The separately
+registered [DEV063 trained study](../dev063-belief-integrity/RESULTS.md) now has
+140fresh fits and14pilots. Its failed calibration gates do not qualify the real
+forecast study or authorize opening July B.

@@ -21,7 +21,7 @@ def run():
         stream.write(reference.read_bytes())
     reference.unlink()
     index = json.loads((root / 'evidence-index.json').read_text())
-    index['decision'] = 'RESEARCH_ONLY_NOT_COMMERCIAL_QUALIFIED'
+    index['decision'] = 'NO_PROMOTION_CALIBRATION_AND_COMPETITIVE_GATES_FAILED'
     index['derived_evidence_sha256'] = {
         filename: digest(root / filename) for filename in [
             'statistics.json', 'statistics.csv', 'audit.json', 'interventions.json',

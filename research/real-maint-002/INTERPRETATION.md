@@ -27,3 +27,8 @@ The belief-only prototype is separately UNTRAINED. Its12-state distribution also
 represents dependency structure, preventing an information-mismatched health-only
 controller. Property tests establish a real bottleneck and declared temporal
 symmetries; fresh training, causal interventions and H1024 reliability remain open.
+
+Subsequent work: the original prototype status above is historical. The separately
+registered [DEV063 trained study](../dev063-belief-integrity/RESULTS.md) now has
+140fresh fits and14pilots. Its failed calibration gates do not qualify the real
+forecast study or authorize opening July B.
