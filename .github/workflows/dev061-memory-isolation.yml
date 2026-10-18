@@ -41,7 +41,7 @@ jobs:
           python scripts/sync_test_count.py --check
   recorded-models:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
         with:
@@ -85,6 +85,8 @@ jobs:
           cmp research/dev061/training-data-cost.json results/dev061-ci-data-cost.json
       - name: Restore every model and fixed query; replay public actions and native Veritas
         run: python scripts/audit_memory_dev061.py --directory results/dev061-main --output results/dev061-ci-audit.json --veritas-root .veritas-public-runtime
+      - name: Audit the separately registered exact-STE correction on fresh worlds
+        run: python scripts/audit_retention_repair_dev061.py --original results/dev061-main --directory results/dev061-retention-repair --output results/dev061-ci-repair-audit.json --veritas-root .veritas-public-runtime
       - name: Reproduce frozen latest/oldest interventions and public/private references
         run: |
           python scripts/diagnose_memory_dev061.py --output results/dev061-ci-diagnostic.json
@@ -113,12 +115,23 @@ jobs:
           b=json.loads(pathlib.Path('research/dev061/statistics.json').read_text())
           assert a==b
           PY
+      - name: Reproduce all corrected and original paired-seed outcomes without retraining
+        run: |
+          python scripts/audit_retention_repair_dev061.py --original results/dev061-main --directory results/dev061-retention-repair --summarize --output results/dev061-ci-repair-statistics.json
+          python - <<'PY'
+          import json,pathlib
+          a=json.loads(pathlib.Path('results/dev061-ci-repair-statistics.json').read_text())
+          b=json.loads(pathlib.Path('research/dev061/retention-repair/statistics.json').read_text())
+          assert a==b
+          PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: DEV061-RESTORED-MODELS-NATIVE-PORTABILITY-AUDIT
           path: |
             results/dev061-ci-audit.json
+            results/dev061-ci-repair-audit.json
+            results/dev061-ci-repair-statistics.json
             results/dev061-ci-data-cost.json
             results/dev061-ci-statistics.json
             results/dev061-ci-diagnostic.json
