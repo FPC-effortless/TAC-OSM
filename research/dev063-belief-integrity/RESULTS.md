@@ -69,3 +69,5 @@ The first-seed single-host H128/batch1float64 median decision CPU times were
 Concurrent CPU load and small samples limit the timing comparison. Logical state
 bytes and unique tensor-storage allocations are reported separately; DRAM traffic,
 FLOPs, energy and production SLA remain unmeasured.
+
+Final-head remote checks are tracked in [draft PR222](https://github.com/FPC-effortless/TAC-OSM/pull/222/checks); the committed local audit does not substitute for them.
