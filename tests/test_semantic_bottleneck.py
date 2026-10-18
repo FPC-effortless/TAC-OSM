@@ -37,3 +37,18 @@ def test_joint_belief_contains_relations_and_is_a_usable_learning_path():
 def test_invalid_clock_unit_cannot_silently_erase_time(unit):
     x,p,k,_,_=payload()
     with pytest.raises(ValueError):relative_events(x,p,k,'relative_unit',unit)
+
+
+def test_joint_targets_preserve_public_health_belief_and_physical_future_labels():
+    from pathlib import Path
+    import sys
+    sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
+    from data_belief_dev063 import BeliefWorld,snapshot
+    w=BeliefWorld(6340901,0,32);b=w.reference();r=snapshot(w,b);joint=r['posterior'].reshape(4,3)
+    torch.testing.assert_close(joint.sum(-1),r['health_posterior']);assert r['truth'] in range(12);assert r['future'].shape==(5,4)
+
+
+def test_factorial_and_strong_controls_are_parameter_matched():
+    from tac_osm.development.belief_bottleneck import configurations
+    configs=configurations();target=configs['tac_rel_belief']['parameters'];assert len(configs)==7
+    assert all(abs(s['parameters']/target-1)<=.05 for s in configs.values())
