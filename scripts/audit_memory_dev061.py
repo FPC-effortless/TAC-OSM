@@ -15,7 +15,8 @@ import tempfile
 import time
 import numpy as np
 import torch
-from run_structured_memory_dev061 import ROOT,PROTOCOL,ResearchWorld,create,evaluate,prepare,raw_data,read_targets
+from run_structured_memory_dev061 import ROOT,PROTOCOL,ResearchWorld,create,prepare,raw_data,read_targets
+from evaluate_memory_fast_dev061 import evaluate
 from run_learned_stack_dev055 import digest,write
 from audit_fully_learned_dev058 import native_replay,PIN
 

@@ -9,7 +9,8 @@ import sys
 import numpy as np
 import torch
 from run_retention_repair_dev061 import REPAIR,create,fixed_score
-from run_structured_memory_dev061 import ROOT,raw_data,prepare,evaluate
+from run_structured_memory_dev061 import ROOT,raw_data,prepare
+from evaluate_memory_fast_dev061 import evaluate
 from tac_osm.development.structured_memory import create as original_create
 from run_learned_stack_dev055 import write,digest
 from audit_memory_dev061 import compare,physical,standalone,PIN

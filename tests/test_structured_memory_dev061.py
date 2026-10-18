@@ -194,3 +194,20 @@ def test_exact_retention_preserves_timestamp_keys_and_gate_gradients(settings):
                 assert (cached['signals'][i,:,-1]==a[0][i,slot,-1]).any()
     model.train();value,_=runner.loss(model,cached,torch.arange(12),counterfactual=True);value.backward()
     assert model.keep[-1].bias.grad.abs().sum()>0
+
+
+def test_fast_replay_logger_preserves_multistep_worlds_and_every_metric(settings):
+    from evaluate_memory_fast_dev061 import evaluate as fast
+    class ReceiptExercise(type(create('entity',settings['entity']))):
+        calls=0
+        def forward(self,state,descriptors,valid,queries,query_valid,lesion='none'):
+            out=super().forward(state,descriptors,valid,queries,query_valid,lesion);self.calls+=1
+            kind=2 if self.calls<=4 else 0
+            chosen=(descriptors[:,:,kind].bool()&valid).float().argmax(-1)
+            out['logits']=torch.full_like(out['logits'],-1e9).scatter_(1,chosen[:,None],0)
+            return out
+    model=ReceiptExercise(settings['entity'],'entity',17).eval()
+    slow=runner.evaluate(model,7161106,4,128,3)
+    model.calls=0;quick=fast(model,7161106,4,128,3)
+    assert quick==slow
+    assert all(len(r['actions'])==5 for r in quick['rows'])
