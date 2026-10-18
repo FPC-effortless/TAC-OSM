@@ -26,7 +26,7 @@ def run():
         filename: digest(root / filename) for filename in [
             'statistics.json', 'statistics.csv', 'audit.json', 'interventions.json',
             'intervention-queries.jsonl.gz', 'public-reference.json.gz',
-            'hardware.json', 'learning-curves.png', 'per-seed.png',
+            'hardware.json', 'diagnostics.json', 'learning-curves.png', 'per-seed.png',
             'local-verification.json',
         ]}
     assert digest(root / 'intervention-queries.jsonl.gz') == interventions['details_sha256']

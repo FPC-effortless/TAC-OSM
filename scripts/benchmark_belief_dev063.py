@@ -52,12 +52,13 @@ def measure(directory, output):
                     'decision_wall_ms_median': float(np.median(wall)),
                     'parameter_bytes': sum(p.numel() * p.element_size() for p in model.parameters()),
                     'retained_tensor_bytes': sum(v.numel() * v.element_size() for v in state.values()),
+                    'retained_unique_storage_bytes': sum({v.untyped_storage().data_ptr(): v.untyped_storage().nbytes() for v in state.values()}.values()),
                     'admitted_records': int(state['present'].sum()) // batch,
                     'raw_records': len(observations),
                 })
     assert len(rows) == 56
     write(output, {
-        'scope': 'Single-host process CPU and wall time. Preconstructed public tensors; observation timing includes admission/buffering, decision timing includes belief reconstruction and policy. Batch times are per batch. Concurrent CPU work can affect wall time. No production SLA, physical DRAM traffic, FLOPs or energy claim.',
+        'scope': 'Single-host process CPU and wall time. Preconstructed public tensors; observation timing includes admission/buffering, decision timing includes belief reconstruction and policy. Batch times are per batch. Tensor bytes count logical elements; unique storage bytes deduplicate shared/view backing allocations, excluding allocator overhead and temporary workspaces. Concurrent CPU work can affect wall time. No production SLA, physical DRAM traffic, FLOPs or energy claim.',
         'host': {'python': sys.version, 'torch': str(torch.__version__)},
         'measurements': rows,
     })
