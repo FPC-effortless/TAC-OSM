@@ -120,8 +120,10 @@ jobs:
       - name: Restore every model and fixed query; replay public actions and native Veritas
         run: python scripts/audit_memory_dev061.py --directory results/dev061-main --output results/dev061-ci-audit.json --veritas-root .veritas-public-runtime
       - name: Audit the separately registered exact-STE correction on fresh worlds
+        if: ${{ !cancelled() }}
         run: python scripts/audit_retention_repair_dev061.py --original results/dev061-main --directory results/dev061-retention-repair --output results/dev061-ci-repair-audit.json --veritas-root .veritas-public-runtime
       - name: Reproduce frozen latest/oldest interventions and public/private references
+        if: ${{ !cancelled() }}
         run: |
           python scripts/diagnose_memory_dev061.py --output results/dev061-ci-diagnostic.json
           python - <<'PY'
@@ -141,6 +143,7 @@ jobs:
           print(drift)
           PY
       - name: Reproduce paired-seed statistics and promotion gates without retraining
+        if: ${{ !cancelled() }}
         run: |
           python scripts/summarize_memory_dev061.py --directory results/dev061-main --diagnostic results/dev061-diagnostic.json --output results/dev061-ci-statistics.json
           python - <<'PY'
@@ -150,6 +153,7 @@ jobs:
           assert a==b
           PY
       - name: Reproduce all corrected and original paired-seed outcomes without retraining
+        if: ${{ !cancelled() }}
         run: |
           python scripts/audit_retention_repair_dev061.py --original results/dev061-main --directory results/dev061-retention-repair --summarize --output results/dev061-ci-repair-statistics.json
           python - <<'PY'
@@ -158,6 +162,9 @@ jobs:
           b=json.loads(pathlib.Path('research/dev061/retention-repair/statistics.json').read_text())
           assert a==b
           PY
+      - name: Collect complete cross-CPU discrepancies without overriding strict failures
+        if: ${{ !cancelled() }}
+        run: python scripts/diagnose_cpu_replay_dev061.py --original results/dev061-main --corrected results/dev061-retention-repair --output results/dev061-ci-cpu-diagnostic.json --veritas-root .veritas-public-runtime
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -169,4 +176,6 @@ jobs:
             results/dev061-ci-data-cost.json
             results/dev061-ci-statistics.json
             results/dev061-ci-diagnostic.json
+            results/dev061-ci-cpu-diagnostic.json
+            results/dev061-ci-cpu-diagnostic/
           if-no-files-found: warn

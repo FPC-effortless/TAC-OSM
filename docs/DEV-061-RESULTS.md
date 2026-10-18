@@ -132,6 +132,12 @@ Standalone inference bundles contain PyTorch weights and serving code without im
 
 Native replay checks recorded actions against the pinned Veritas runtime and recorded synthetic effects. It verifies accounting and state consistency under those effects, not independent physical laws, industrial sensors, operational authorization, or real-world safety. Aggregate replay failures include all controls, pilots and splits; they are not failures of a single selected complete agent.
 
+## GitHub cross-CPU qualification
+
+The first remote run, [39110422875](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39110422875), passes the full 1,395-test suite and all five published-bundle fixtures. Its strict full-matrix replay **fails** on generic seed 9102: a completion estimate differs by 0.00358486 from the saved local value, exceeding the unchanged tolerance. The original local audit remains PASS on its recorded CPU, but cross-CPU full-matrix prediction equivalence is not established. The first complete CI log is preserved in `research/dev061/ci-first-failure.log`.
+
+No tolerance, weights, action logic or acceptance gate is changed. A separate diagnostic reruns every public trajectory and native action, independently counts changed action sequences, completions and final faults, and preserves actual CPU-specific rollouts. Diagnostic completion cannot override the failed strict check. Independent correction/reference/statistics checks are allowed to run even after a strict failure so the discrepancy cannot hide remaining coverage. Cross-CPU diagnosis is pending; a successful small exported fixture is not evidence that every checkpoint/world is portable to identical predictions.
+
 ## Next research gate
 
 Do not add depth or combine all proposed components to conceal these limits. DEV-062 is a draft, not registered/executed: first repair the observation/action provenance schema and establish an information-matched posterior baseline; then train belief reconstruction and charged information acquisition under genuine partial observability. Stage posterior imitation separately from learning without posterior targets. Explicitly separate information, representation and decision limits.
