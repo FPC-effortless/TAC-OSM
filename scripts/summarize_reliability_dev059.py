@@ -42,6 +42,8 @@ def matrix(directory,arm,seeds,metric):
                 if metric=='completion':values.append(float(r['success']))
                 elif metric=='repair':values.append(float(r['physical_repair']))
                 elif metric=='actions':values.append(float(len(r['actions'])))
+                elif metric=='completion_brier':values.append(float(np.mean((np.asarray(r['completion_probabilities'])-np.asarray(r['healthy_at_decision']))**2)))
+                elif metric=='stop_brier':values.append(float(np.mean((np.asarray(r['stop_probabilities'])-np.asarray(r['healthy_at_decision']))**2)))
                 else:values.append(float(r[metric]))
             cells.append(values)
         rows.append(cells)
@@ -57,7 +59,7 @@ def run(directory,output):
         'limitations':'Fixed update/sample budget with different actual CPU/state and structural pretraining. No convergence, industrial reliability, global optimality or C5 claim.'}
     if summary['smoke'] or len(seeds)!=10 or summary['status']!='COMPLETE':
         result['comparison_status']='INCOMPLETE_NO_SUPERIORITY_CLAIM';write(output,result);return result
-    metrics=('completion','repair','final_faults','cost','physical_action_cost','actions','healthy_nonstop_actions','harmful_regressions','writes','observations')
+    metrics=('completion','repair','final_faults','cost','physical_action_cost','actions','healthy_nonstop_actions','harmful_regressions','writes','observations','completion_brier','stop_brier')
     arrays={arm:{metric:matrix(root,arm,seeds,metric) for metric in metrics} for arm in arms}
     for arm in arms:
         spec=json.loads((root/f'{arm}-{seeds[0]}/report.json').read_text())

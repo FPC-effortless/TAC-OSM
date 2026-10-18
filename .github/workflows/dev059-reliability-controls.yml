@@ -46,9 +46,13 @@ jobs:
           tar -xzf research/dev059/evidence.tar.gz -C results
           tar -xzf research/dev058/evidence.tar.gz -C results
       - name: Restore every fit and replay public decisions, receipts and native execution
-        run: python scripts/audit_reliability_controls_dev059.py --directory results/dev059-main --output results/dev059-ci-audit.json --veritas-root .veritas-public-runtime
+        run: python scripts/audit_reliability_controls_dev059.py --directory results/dev059-main --repair-directory results/dev059-repair --output results/dev059-ci-audit.json --veritas-root .veritas-public-runtime
       - name: Reproduce teacher and public-reference equality, admission and failure diagnostics
         run: python scripts/audit_evidence_gaps_dev059.py --directory results/dev058-main --output results/dev059-ci-dev058-audit.json
+      - name: Reproduce the same-world public and privileged reference
+        run: |
+          python scripts/audit_reference_dev059.py --output results/dev059-ci-reference.json
+          cmp results/dev059-main-reference.json results/dev059-ci-reference.json
       - name: Reproduce paired seed/world summaries without retraining
         run: |
           python scripts/summarize_reliability_dev059.py --directory results/dev059-main --output results/dev059-ci-statistics.json

@@ -93,7 +93,49 @@ runpy.run_path('runtime.py',run_name='__main__')
     return len(expected)
 
 
-def run(directory,output,veritas_root=None):
+def verify_cells(model,cells,result,native):
+    for cell in cells:
+        actual=evaluate(model,cell['seed'],cell['entities'],cell['history'],cell['worlds'],cell['horizon_extra'])
+        compare(actual,cell);result['cells']+=1
+        for row in cell['rows']:
+            world=World(row['seed'],row['index'],row['entities'],row['history'])
+            assert __import__('hashlib').sha256(np.stack(world.events).astype(np.float32).tobytes()).hexdigest()==row['public_initial_sha256']
+            for recorded in row['actions']:
+                world.act((recorded['kind'],recorded['target']))
+                assert world.actions[-1]==recorded
+            physical=world.finish(row['writes'])
+            for key in ('success','stopped','final_faults','cost','action_cost','observations','write_cost','failed_actions'):
+                assert physical[key]==row[key]
+            result['trajectories']+=1;result['actions']+=len(row['actions'])
+            result['failed_rollouts_all_fits_and_splits']+=int(not row['success'])
+            if native:result['native_actions']+=native_replay(row)
+
+
+def audit_repairs(directory,result,native):
+    root=Path(directory);summary=json.loads((root/'summary.json').read_text())
+    assert summary['protocol_sha256']==digest(ROOT/'research/dev059/repair/protocol.json')
+    for name,value in json.loads((root/'manifest.json').read_text()).items():assert digest(root/name)==value,name
+    result['repair_status']=summary['status'];result['repair_checkpoint_restorations']=0
+    for report in summary['reports']:
+        seed=report['seed'];original_file=ROOT/f'results/dev058-main/r0-{seed}/agent.pt';repaired_file=root/str(seed)/'agent.pt'
+        assert digest(original_file)==report['original_checkpoint_sha256']
+        assert digest(repaired_file)==report['checkpoint_sha256']
+        old=torch.load(original_file,weights_only=True);new=torch.load(repaired_file,weights_only=True)
+        for key in old:
+            if key.startswith(('admission.','address.')):assert torch.equal(old[key],new[key]),'frozen trained writer changed'
+        test=root/str(seed)/'test.json'
+        for name,checkpoint in (('original',original_file),('repaired',repaired_file)):
+            model=create('full_stop',report['config'],seed).eval()
+            model.load_state_dict(torch.load(checkpoint,weights_only=True))
+            cells=list(report['validation'][name])
+            if test.exists():cells+=json.loads(test.read_text())[name]
+            verify_cells(model,cells,result,native)
+            result['standalone_decisions']+=standalone(model,'full_stop',report['config'],checkpoint)
+            result['repair_checkpoint_restorations']+=1
+        print('restored repair pair',seed,flush=True)
+
+
+def run(directory,output,veritas_root=None,repair_directory=None):
     torch.set_num_threads(1);torch.use_deterministic_algorithms(True);started=time.monotonic()
     root=Path(directory);summary=json.loads((root/'summary.json').read_text())
     assert not summary['smoke'] and summary['status']=='COMPLETE'
@@ -104,7 +146,7 @@ def run(directory,output,veritas_root=None):
         assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=vr,text=True).strip()==PIN
         sys.path.insert(0,str(vr/'src'))
     result={'status':'RUNNING','checkpoints':0,'cells':0,'trajectories':0,'actions':0,'native_actions':0,
-            'standalone_decisions':0,'complete_agent_failed_worlds':0,
+            'standalone_decisions':0,'failed_rollouts_all_fits_and_splits':0,
             'float_telemetry_tolerance':{'rtol':1e-5,'atol':1e-6},'decision_receipt_cost_checks':'EXACT',
             'source':summary['source'],'limitation':'Shared synthetic physics and recorded native effects; independent process/host engineering verification, not independent physical replication.'}
     tuning=json.loads((root/'tuning.json').read_text());fits=json.loads((root/'fits.json').read_text())
@@ -120,28 +162,16 @@ def run(directory,output,veritas_root=None):
         model.load_state_dict(torch.load(directory/'agent.pt',weights_only=True))
         cells=list(report['validation']);test=directory/'test.json'
         if test.exists():cells+=json.loads(test.read_text())['cells']
-        for cell in cells:
-            actual=evaluate(model,cell['seed'],cell['entities'],cell['history'],cell['worlds'],cell['horizon_extra'])
-            compare(actual,cell);result['cells']+=1
-            for row in cell['rows']:
-                world=World(row['seed'],row['index'],row['entities'],row['history'])
-                assert __import__('hashlib').sha256(np.stack(world.events).astype(np.float32).tobytes()).hexdigest()==row['public_initial_sha256']
-                for recorded in row['actions']:
-                    world.act((recorded['kind'],recorded['target']))
-                    assert world.actions[-1]==recorded
-                physical=world.finish(row['writes'])
-                for key in ('success','stopped','final_faults','cost','action_cost','observations','write_cost','failed_actions'):
-                    assert physical[key]==row[key]
-                result['trajectories']+=1;result['actions']+=len(row['actions'])
-                result['complete_agent_failed_worlds']+=int(not row['success'])
-                if veritas_root:result['native_actions']+=native_replay(row)
+        verify_cells(model,cells,result,veritas_root is not None)
         result['standalone_decisions']+=standalone(model,report['arm'],report['config'],directory/'agent.pt')
         result['checkpoints']+=1
         print('restored',report['arm'],report['seed'],report['lr'],flush=True)
+    if repair_directory:audit_repairs(repair_directory,result,veritas_root is not None)
     result.update(status='PASS',seconds=time.monotonic()-started)
     write(output,result);print(json.dumps(result),flush=True)
 
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--directory',required=True);parser.add_argument('--output',required=True);parser.add_argument('--veritas-root')
-    args=parser.parse_args();run(args.directory,args.output,args.veritas_root)
+    parser.add_argument('--repair-directory')
+    args=parser.parse_args();run(args.directory,args.output,args.veritas_root,args.repair_directory)
