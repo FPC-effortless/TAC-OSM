@@ -13,8 +13,8 @@ PROTOCOL=ROOT/'research/dev060/protocol-foundations.json'
 def calibration(probabilities,labels,bins=10):
     p=np.asarray(probabilities,float);y=np.asarray(labels,float)
     if not len(p):return {'count':0,'brier':None,'ece':None,'bins':[]}
-    if p.shape!=y.shape or not np.isfinite(p).all() or not np.isfinite(y).all() or np.any((p<0)|(p>1)|(y<0)|(y>1)):
-        raise ValueError('aligned finite probabilities and binary/soft targets in [0,1] required')
+    if p.shape!=y.shape or not np.isfinite(p).all() or not np.isfinite(y).all() or (np.any((p<0)|(p>1)) or np.any((y!=0)&(y!=1))):
+        raise ValueError('aligned finite probabilities in [0,1] and binary observed labels required')
     values=[];ece=0.;assigned=np.minimum((p*bins).astype(int),bins-1)
     for index in range(bins):
         lower=index/bins;mask=assigned==index

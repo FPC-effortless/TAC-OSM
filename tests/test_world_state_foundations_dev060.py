@@ -121,6 +121,7 @@ def test_both_probe_arms_receive_time_and_new_continuous_identities():
     assert ds['records'].shape==(8,16,10) and ds['query'].shape==(8,8)
     result=calibration([0,.5,1],[0,1,1]);assert result['count']==3
     assert sum(v['count'] for v in result['bins'])==3
-    boundary=calibration(np.arange(11)/10,np.arange(11)/10)
+    boundary=calibration(np.arange(11)/10,np.zeros(11))
     assert sum(v['count'] for v in boundary['bins'])==11
     with pytest.raises(ValueError):calibration([1.1],[0])
+    with pytest.raises(ValueError):calibration([.5],[.5])
