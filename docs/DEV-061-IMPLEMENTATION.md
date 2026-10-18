@@ -163,3 +163,9 @@ unnecessarily concatenates that metadata even on a closed admission gate. A
 separate inference-only subclass, `InferenceMemoryAgent`, returns the existing
 state on that path. State and action equivalence are tested; weights and fitting
 source remain unchanged. The portable generic artifact uses this optimization.
+
+The public-feature MLP control receives the same closed-record allocation fix in
+its own inference-only subclass. Both optimized runtimes preserve weights,
+state values and outputs; neither changes decisions. Idle-host timings use
+these served implementations, avoiding an artificial advantage against a
+control that needlessly clones its bank for discarded noise records.

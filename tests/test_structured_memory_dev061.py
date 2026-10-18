@@ -161,3 +161,17 @@ def test_read_visibility_counts_dropped_latest_evidence_as_stale():
     raw[0,1]=records[0,1];raw[0,2]=records[0,1];occupied[:]=1
     r=visibility(raw,occupied,records,torch.ones(1,2,dtype=torch.bool),query,torch.ones(1,1,dtype=torch.bool),torch.tensor([[2]]))[0]
     assert r=={'queries':1,'stale':0,'latest_hits':1,'wrong':0,'latest_available':1}
+
+
+def test_public_feature_control_gets_equivalent_allocation_optimization(settings):
+    from tac_osm.development.inference_public_features import InferencePublicFeatureMLP
+    old=create('public_mlp',settings['public_mlp'],17).eval();new=InferencePublicFeatureMLP(settings['public_mlp']['width'],17).eval();new.load_state_dict(old.state_dict())
+    a=old.initial(1);b=new.initial(1)
+    with torch.no_grad():
+        for i in range(8):
+            e=torch.from_numpy(event(3 if i%2 else 0,2,None,i%2,i))[None];before=b
+            a,_=old.observe(a,e);b,t=new.observe(b,e)
+            assert all(torch.equal(x,y) for x,y in zip(a,b))
+            if not t['writes']:assert b is before
+        w=runner.ResearchWorld(7161104,0,4,32);args=[torch.from_numpy(v)[None] for v in w.candidates()[:4]]
+        torch.testing.assert_close(old(a,*args)['logits'],new(b,*args)['logits'],atol=0,rtol=0)

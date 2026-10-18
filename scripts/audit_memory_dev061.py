@@ -42,7 +42,8 @@ def export(checkpoint,arm,config,destination):
     constructor='PublicFeatureMLP(config["width"],seed)' if arm=='public_mlp' else 'MemoryAgent(config,arm,seed)'
     (destination/'memory_model.py').write_text(ast.unparse(tree)+'\n\ndef create(arm,config,seed=0):\n    return '+constructor+'\n')
     if arm=='generic':shutil.copy(ROOT/'src/tac_osm/development/inference_memory.py',destination/'inference_model.py')
-    shutil.copy(checkpoint,destination/'agent.pt');write(destination/'metadata.json',{'arm':arm,'config':config,'runtime':'skip_closed_metadata_copy' if arm=='generic' else 'registered'})
+    if arm=='public_mlp':shutil.copy(ROOT/'src/tac_osm/development/inference_public_features.py',destination/'inference_public_features.py')
+    shutil.copy(checkpoint,destination/'agent.pt');write(destination/'metadata.json',{'arm':arm,'config':config,'runtime':'skip_closed_copy' if arm in ('generic','public_mlp') else 'registered'})
     (destination/'runtime.py').write_text('''import json
 from pathlib import Path
 import sys
@@ -54,6 +55,9 @@ meta=json.loads((root/'metadata.json').read_text())
 if meta['arm']=='generic':
     from inference_model import InferenceMemoryAgent
     model=InferenceMemoryAgent(meta['config'],'generic').eval()
+elif meta['arm']=='public_mlp':
+    from inference_public_features import InferencePublicFeatureMLP
+    model=InferencePublicFeatureMLP(meta['config']['width']).eval()
 else:model=create(meta['arm'],meta['config']).eval()
 model.load_state_dict(torch.load(root/'agent.pt',weights_only=True,map_location='cpu'),strict=True)
 state=model.initial(1)

@@ -9,6 +9,7 @@ import torch
 from run_structured_memory_dev061 import ROOT,ResearchWorld,create
 from tac_osm.development.temporal_agent import SparseTemporalAgent
 from tac_osm.development.inference_memory import InferenceMemoryAgent
+from tac_osm.development.inference_public_features import InferencePublicFeatureMLP
 from tac_osm.development.learned_agent import AgentConfig
 from run_learned_stack_dev055 import write
 
@@ -30,6 +31,8 @@ def run(directory,output):
         report=json.loads((folder/'report.json').read_text());arm=report['arm'];m=create(arm,report['config'],9101).eval();m.load_state_dict(torch.load(folder/'agent.pt',weights_only=True))
         if arm=='generic':
             original=m;m=InferenceMemoryAgent(report['config'],'generic').eval();m.load_state_dict(original.state_dict())
+        if arm=='public_mlp':
+            original=m;m=InferencePublicFeatureMLP(report['config']['width']).eval();m.load_state_dict(original.state_dict())
         measured=[]
         for batch in (1,8,32):
             worlds=[ResearchWorld(5611120,i,4,128) for i in range(batch)];events=torch.from_numpy(np.stack([w.events for w in worlds])).transpose(0,1)
@@ -48,7 +51,7 @@ def run(directory,output):
         args=[torch.from_numpy(v[None]) for v in w.candidates()[:4]]
         with torch.profiler.profile(activities=[torch.profiler.ProfilerActivity.CPU],with_flops=True,profile_memory=True) as prof:m(state,*args)
         supported_flops=sum(e.flops for e in prof.key_averages())
-        result['models'][arm]={'seed':9101,'runtime':'skip_closed_metadata_copy' if arm=='generic' else 'registered','parameters':report['parameters'],'timing':measured,'decision_supported_operator_flops':supported_flops,'training_cpu_seconds':report['cpu_seconds']}
+        result['models'][arm]={'seed':9101,'runtime':'skip_closed_copy' if arm in ('generic','public_mlp') else 'registered','parameters':report['parameters'],'timing':measured,'decision_supported_operator_flops':supported_flops,'training_cpu_seconds':report['cpu_seconds']}
     # Keep frozen DEV058 weights. Same event set and exact resulting outputs per dense/sparse pair.
     old=ROOT/'results/dev058-main/r0-7581';config=AgentConfig(**json.loads((old/'report.json').read_text())['config'])
     dense=SparseTemporalAgent(config,temporal=False,sparse=False).eval();sparse=SparseTemporalAgent(config,temporal=False,sparse=True).eval()
