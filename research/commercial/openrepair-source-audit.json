@@ -1,0 +1,75 @@
+{
+  "status": "COMPLETE_SOURCE_AUDIT_ONLY",
+  "source": "https://github.com/openrepair/data",
+  "commit": "b8c2ad6a1afc18165b09083cfaf64ed5af4ac0be",
+  "object": "OpenRepairData_v0.3_aggregate_202607_eee.csv",
+  "sha256": "c1362071b53405619e1fa89f8a0b6d0c6ebdfec71b6002e3458223654a29a157",
+  "bytes": 80391622,
+  "rows": 416282,
+  "duplicate_ids": 0,
+  "fields": [
+    "id",
+    "data_provider",
+    "country",
+    "partner_product_category",
+    "product_category",
+    "product_category_id",
+    "brand",
+    "year_of_manufacture",
+    "product_age",
+    "repair_status",
+    "repair_barrier_if_end_of_life",
+    "group_identifier",
+    "event_date",
+    "problem"
+  ],
+  "reported_repair_status": {
+    "End of life": 104321,
+    "Fixed": 226733,
+    "Repairable": 72504,
+    "Unknown": 12724
+  },
+  "providers": {
+    "anstiftung": 46809,
+    "Repair Caf\u00e9 International": 142293,
+    "The Restart Project": 146929,
+    "Repair Caf\u00e9 Denmark": 43804,
+    "Repair Cafe Wales": 26272,
+    "Repair Caf\u00e9 Toronto": 6102,
+    "Fixit Clinic": 1134,
+    "iFixit": 54,
+    "Repair Connects": 2885
+  },
+  "event_dates_lexical_range": [
+    "2012-06-12",
+    "2026-07-31"
+  ],
+  "licenses": [
+    {
+      "name": "CC-BY-SA-4.0",
+      "title": "Creative Commons Attribution Share-Alike 4.0",
+      "path": "https://creativecommons.org/licenses/by-sa/4.0/"
+    }
+  ],
+  "meaning": "Actual community repair-attempt reports, not industrial inspection sequences or independent physical post-repair verification.",
+  "label_contract": {
+    "Fixed": "Reported repair succeeded; no independent follow-up health measure",
+    "End of life": "Reported end-of-life result, not an interchangeable randomized alternative repair",
+    "Repairable": "Not a verified successful completed repair; preserve separately",
+    "Unknown": "Unknown outcome; never negative by default"
+  },
+  "leakage_exclusions": [
+    "repair_status is a target, never an input",
+    "repair_barrier_if_end_of_life is outcome-conditioned",
+    "problem explicitly describes fault AND SOLUTION; not certified pre-action text"
+  ],
+  "missing_commercial_fields": [
+    "available action alternatives",
+    "inspection result and time sequence",
+    "intervention choice and causal assignment",
+    "actual inspection/repair cost",
+    "independent post-repair physical outcome and follow-up"
+  ],
+  "model_fits": 0,
+  "commercial_validation": "NOT_ESTABLISHED"
+}

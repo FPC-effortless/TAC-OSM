@@ -1,0 +1,4653 @@
+{
+  "status": "COMPLETE",
+  "run": {
+    "status": "COMPLETE",
+    "test_opened": true,
+    "fits": 80,
+    "pilot_fits": 8,
+    "fitting_cpu_seconds": 288.57499895100005,
+    "protocol_sha256": "2d017ca41698dbe96992fb9efbe0148edb2db2681c6922df09dcb215044a62b6"
+  },
+  "total_fitting_cpu_including_ridge": 288.5894473860001,
+  "source": {
+    "source": "https://archive.ics.uci.edu/static/public/791/metropt+3+dataset.zip",
+    "doi": "10.24432/C5VW3R",
+    "license": "CC BY4.0",
+    "raw_archive_sha256": "aab991a970e58210de853bb8078ce0e63abb4d9412fdc5c79792dae3d8e1721a",
+    "raw_csv_sha256": "db30ccb4ea402e3c8bf2c99db06e288d4f2a772f6928f9dbe26a920d69793e24",
+    "raw_rows": 1516948,
+    "bins": 25521,
+    "features": [
+      "TP2",
+      "TP3",
+      "H1",
+      "DV_pressure",
+      "Reservoirs",
+      "Oil_temperature",
+      "Motor_current",
+      "COMP",
+      "DV_eletric",
+      "Towers",
+      "MPG",
+      "LPS",
+      "Pressure_switch",
+      "Oil_level",
+      "Caudal_impulses"
+    ],
+    "split_windows": {
+      "train": 396,
+      "validation": 136,
+      "test": 3131
+    },
+    "preprocessing_cpu_seconds": 11.139018585,
+    "time_contract": "Naive source local timestamps; bin features available at right edge. Next-bin forecasts issued before target observations. No future imputation or fault labels."
+  },
+  "baselines": {
+    "persistence_normalized_MSE": 7.46456565388443,
+    "train_mean_normalized_MSE": 192.5690257233007,
+    "ridge": {
+      "normalized_MSE": 191.7371239658721,
+      "selected_lags": 1,
+      "selected_penalty": 100.0,
+      "validation_candidates": [
+        {
+          "lags": 1,
+          "penalty": 0.01,
+          "validation_normalized_MSE": 0.5971060053813437
+        },
+        {
+          "lags": 1,
+          "penalty": 1.0,
+          "validation_normalized_MSE": 0.595775337816308
+        },
+        {
+          "lags": 1,
+          "penalty": 100.0,
+          "validation_normalized_MSE": 0.5916731791134655
+        },
+        {
+          "lags": 24,
+          "penalty": 0.01,
+          "validation_normalized_MSE": 1.078564257688374
+        },
+        {
+          "lags": 24,
+          "penalty": 1.0,
+          "validation_normalized_MSE": 0.7261868818591294
+        },
+        {
+          "lags": 24,
+          "penalty": 100.0,
+          "validation_normalized_MSE": 0.5943315211469754
+        }
+      ],
+      "fitting_cpu_seconds": 0.014448435000000037,
+      "coefficients": 240
+    }
+  },
+  "arms": {
+    "tac": {
+      "mean_normalized_MSE": 191.8306315993529,
+      "mean_Gaussian_NLL": 2532.1075254563166,
+      "per_seed": {
+        "92701": {
+          "normalized_MSE": 190.86479299550882,
+          "Gaussian_NLL": 354.2955456916234,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.11149401150238,
+            "TP3": 1.1520827419276154,
+            "H1": 8.28467350224739,
+            "DV_pressure": 927.1266736765537,
+            "Reservoirs": 1.1300010081128569,
+            "Oil_temperature": 4.636503146356266,
+            "Motor_current": 1.7020594252952301,
+            "COMP": 10.165808469392335,
+            "DV_eletric": 9.53702850310187,
+            "Towers": 8.244337066282503,
+            "MPG": 10.628296291052298,
+            "LPS": 4.4263097642149125,
+            "Pressure_switch": 22.738101225444115,
+            "Oil_level": 1133.509183034902,
+            "Caudal_impulses": 710.5793430662474
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.26981008513425014,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.625906512827141
+          }
+        },
+        "92702": {
+          "normalized_MSE": 192.06315309798342,
+          "Gaussian_NLL": 1558.6789891457531,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.651311476971047,
+            "TP3": 1.059244545960622,
+            "H1": 10.107591257707796,
+            "DV_pressure": 930.3864094349725,
+            "Reservoirs": 1.0774235868251634,
+            "Oil_temperature": 4.726402926104576,
+            "Motor_current": 1.7152993037150677,
+            "COMP": 10.59646020386249,
+            "DV_eletric": 10.504053317518391,
+            "Towers": 9.427755986706817,
+            "MPG": 11.65982693471974,
+            "LPS": 4.447438394386467,
+            "Pressure_switch": 22.596087297807262,
+            "Oil_level": 1141.1003081870558,
+            "Caudal_impulses": 711.8916836154374
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27111984282907664,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.5828088053615605
+          }
+        },
+        "92703": {
+          "normalized_MSE": 191.9797775397053,
+          "Gaussian_NLL": 15119.096481267445,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.434217693190872,
+            "TP3": 1.1686548369491885,
+            "H1": 10.09234481166212,
+            "DV_pressure": 932.3280091896312,
+            "Reservoirs": 1.1330570022880557,
+            "Oil_temperature": 5.357036490270108,
+            "Motor_current": 1.618003832956272,
+            "COMP": 11.326642826016357,
+            "DV_eletric": 10.818801964645704,
+            "Towers": 8.888055126104083,
+            "MPG": 12.428866504039764,
+            "LPS": 4.413392746392073,
+            "Pressure_switch": 22.503727340985527,
+            "Oil_level": 1139.2172848742555,
+            "Caudal_impulses": 708.9685678561924
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2770137524557957,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.619403331736688
+          }
+        },
+        "92704": {
+          "normalized_MSE": 191.88395613476715,
+          "Gaussian_NLL": 1707.4368245193905,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.153392160454649,
+            "TP3": 1.2642446082408068,
+            "H1": 10.560447969100135,
+            "DV_pressure": 932.9139865214313,
+            "Reservoirs": 1.5283494868343641,
+            "Oil_temperature": 3.3830089280935294,
+            "Motor_current": 1.7268927873499167,
+            "COMP": 11.836865683191844,
+            "DV_eletric": 10.516718783667617,
+            "Towers": 8.957794613209916,
+            "MPG": 12.663230600120244,
+            "LPS": 4.460394884275795,
+            "Pressure_switch": 22.246059960385736,
+            "Oil_level": 1132.5541019380457,
+            "Caudal_impulses": 714.4938530971054
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27537655533726263,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.39397674566318
+          }
+        },
+        "92705": {
+          "normalized_MSE": 192.3904923023888,
+          "Gaussian_NLL": 299.80882753184056,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.549011867107332,
+            "TP3": 1.0201513509492885,
+            "H1": 9.33501594219451,
+            "DV_pressure": 933.7573977175939,
+            "Reservoirs": 1.143458190116517,
+            "Oil_temperature": 4.803273751045422,
+            "Motor_current": 1.6896359804305476,
+            "COMP": 11.00026647829025,
+            "DV_eletric": 11.4211573352918,
+            "Towers": 9.152305750009882,
+            "MPG": 11.525923537393615,
+            "LPS": 4.434672309932279,
+            "Pressure_switch": 22.484282136626526,
+            "Oil_level": 1142.9205683224316,
+            "Caudal_impulses": 711.6202638664183
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27439423706614274,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.715181147489146
+          }
+        },
+        "92706": {
+          "normalized_MSE": 191.75448468674307,
+          "Gaussian_NLL": 1417.0139060105205,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.409346250623381,
+            "TP3": 1.2759139098681793,
+            "H1": 9.501650756702187,
+            "DV_pressure": 932.0391117210945,
+            "Reservoirs": 1.3447622054780786,
+            "Oil_temperature": 3.1647732642419975,
+            "Motor_current": 1.517121305620311,
+            "COMP": 11.44826116541268,
+            "DV_eletric": 10.145429143823048,
+            "Towers": 8.760460062311962,
+            "MPG": 11.907529559218395,
+            "LPS": 4.425831751545489,
+            "Pressure_switch": 22.048802053873988,
+            "Oil_level": 1141.1312790432594,
+            "Caudal_impulses": 708.1969981080719
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27144728225278325,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.635210964944012
+          }
+        },
+        "92707": {
+          "normalized_MSE": 191.53919201780081,
+          "Gaussian_NLL": 348.73299302033496,
+          "per_feature_normalized_MSE": {
+            "TP2": 8.792901609441287,
+            "TP3": 1.0664630361053178,
+            "H1": 9.285112507671505,
+            "DV_pressure": 931.4486876397829,
+            "Reservoirs": 1.0822978444306515,
+            "Oil_temperature": 3.7045460690265406,
+            "Motor_current": 1.4640120194798116,
+            "COMP": 10.946378917620024,
+            "DV_eletric": 10.649592993394497,
+            "Towers": 8.646062113309647,
+            "MPG": 11.32253423757881,
+            "LPS": 4.457803719632736,
+            "Pressure_switch": 22.648142522244186,
+            "Oil_level": 1137.3495721296488,
+            "Caudal_impulses": 710.2237729076455
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2724296005239031,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.580264925080974
+          }
+        },
+        "92708": {
+          "normalized_MSE": 191.8773857885893,
+          "Gaussian_NLL": 919.3710998951622,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.394412264797971,
+            "TP3": 1.0372258374238479,
+            "H1": 9.72488867996007,
+            "DV_pressure": 930.7061335061744,
+            "Reservoirs": 1.0158316399654264,
+            "Oil_temperature": 4.736255122557672,
+            "Motor_current": 1.5451448955924576,
+            "COMP": 10.849731782627929,
+            "DV_eletric": 10.998695483517709,
+            "Towers": 9.11273490802112,
+            "MPG": 12.677349726753192,
+            "LPS": 4.430029203660734,
+            "Pressure_switch": 22.48282606640015,
+            "Oil_level": 1134.0880851429567,
+            "Caudal_impulses": 715.3614425684298
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2737393582187295,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.680102440023198
+          }
+        },
+        "92709": {
+          "normalized_MSE": 191.51411419907868,
+          "Gaussian_NLL": 562.439262744823,
+          "per_feature_normalized_MSE": {
+            "TP2": 8.73658111010876,
+            "TP3": 1.1153330384189482,
+            "H1": 8.790284969698726,
+            "DV_pressure": 928.9039134734214,
+            "Reservoirs": 1.109769607334803,
+            "Oil_temperature": 4.224967049934953,
+            "Motor_current": 1.3174795514350224,
+            "COMP": 10.260818942592296,
+            "DV_eletric": 9.967431644980826,
+            "Towers": 8.83710083370233,
+            "MPG": 11.464335232943084,
+            "LPS": 4.436993282831795,
+            "Pressure_switch": 21.946391552705848,
+            "Oil_level": 1143.8405353556907,
+            "Caudal_impulses": 707.7597773403802
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2730844793713163,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.46221702457384
+          }
+        },
+        "92710": {
+          "normalized_MSE": 191.83247232453874,
+          "Gaussian_NLL": 4571.141940530239,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.239942676851882,
+            "TP3": 1.1512795557115354,
+            "H1": 9.559612083658863,
+            "DV_pressure": 935.828734637889,
+            "Reservoirs": 1.018971089051614,
+            "Oil_temperature": 7.264577041214544,
+            "Motor_current": 1.5922189836013172,
+            "COMP": 10.82396066188031,
+            "DV_eletric": 10.48477147679584,
+            "Towers": 8.996560969720214,
+            "MPG": 11.948344717055821,
+            "LPS": 4.4452283943774775,
+            "Pressure_switch": 22.40757605389137,
+            "Oil_level": 1132.1941273318644,
+            "Caudal_impulses": 710.5311791945168
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27144728225278325,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.674570906367418
+          }
+        },
+        "92711": {
+          "normalized_MSE": 191.77537942430732,
+          "Gaussian_NLL": 523.8434124319359,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.829692124955107,
+            "TP3": 1.142892751153761,
+            "H1": 10.348034094529584,
+            "DV_pressure": 932.486191086704,
+            "Reservoirs": 1.0465381666327767,
+            "Oil_temperature": 3.6310787674806835,
+            "Motor_current": 1.5873179195150275,
+            "COMP": 11.393821588300808,
+            "DV_eletric": 10.337145483238597,
+            "Towers": 8.645318377923042,
+            "MPG": 11.673149610540019,
+            "LPS": 4.484587293600169,
+            "Pressure_switch": 23.184730379255324,
+            "Oil_level": 1137.1260436760049,
+            "Caudal_impulses": 709.7141500447761
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2734119187950229,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.822407817573411
+          }
+        },
+        "92712": {
+          "normalized_MSE": 192.29331344976063,
+          "Gaussian_NLL": 7742.365142894479,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.87697038290677,
+            "TP3": 1.3538343164845181,
+            "H1": 10.44060655904588,
+            "DV_pressure": 934.0406274421379,
+            "Reservoirs": 1.328923414274908,
+            "Oil_temperature": 4.813495451500558,
+            "Motor_current": 1.8111386604460635,
+            "COMP": 11.502194854813567,
+            "DV_eletric": 10.987787972143693,
+            "Towers": 9.319879351811736,
+            "MPG": 12.38604849597504,
+            "LPS": 4.448669034086782,
+            "Pressure_switch": 22.138198879992025,
+            "Oil_level": 1141.177853345049,
+            "Caudal_impulses": 708.7734735857407
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27570399476096924,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.746654908238712
+          }
+        },
+        "92713": {
+          "normalized_MSE": 191.38880824869057,
+          "Gaussian_NLL": 524.4493048363258,
+          "per_feature_normalized_MSE": {
+            "TP2": 8.992678203824655,
+            "TP3": 1.1106649052779742,
+            "H1": 9.08925141485682,
+            "DV_pressure": 930.0569717851286,
+            "Reservoirs": 1.0554959694427501,
+            "Oil_temperature": 4.3903620992138155,
+            "Motor_current": 1.438756731185343,
+            "COMP": 10.480870802347843,
+            "DV_eletric": 9.673608169524503,
+            "Towers": 7.919906410848983,
+            "MPG": 11.697506180820481,
+            "LPS": 4.4267681381361745,
+            "Pressure_switch": 22.451577143455854,
+            "Oil_level": 1136.0680817073214,
+            "Caudal_impulses": 711.9796240689739
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27537655533726263,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.619918867882629
+          }
+        },
+        "92714": {
+          "normalized_MSE": 192.1110995890676,
+          "Gaussian_NLL": 3009.5424392500768,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.333697272223002,
+            "TP3": 1.1393304752803701,
+            "H1": 9.468587048224911,
+            "DV_pressure": 934.1610170468014,
+            "Reservoirs": 1.040920531675196,
+            "Oil_temperature": 4.353935395078776,
+            "Motor_current": 1.9541438277775056,
+            "COMP": 10.58245927009069,
+            "DV_eletric": 10.330271996868959,
+            "Towers": 9.073615460517935,
+            "MPG": 11.772595671370446,
+            "LPS": 4.420732539150741,
+            "Pressure_switch": 21.91032667350936,
+            "Oil_level": 1139.9679663945315,
+            "Caudal_impulses": 712.1568942329134
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2737393582187295,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.653352637386304
+          }
+        },
+        "92715": {
+          "normalized_MSE": 191.46626325431862,
+          "Gaussian_NLL": 2827.8765830908023,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.528660406065686,
+            "TP3": 1.1368361955644835,
+            "H1": 10.330156488603556,
+            "DV_pressure": 931.1135745810544,
+            "Reservoirs": 1.1030834728899563,
+            "Oil_temperature": 4.3560922782059714,
+            "Motor_current": 1.928238701167361,
+            "COMP": 11.13118875963558,
+            "DV_eletric": 11.05638737476877,
+            "Towers": 8.76572245800763,
+            "MPG": 12.810007693445899,
+            "LPS": 4.428000939258284,
+            "Pressure_switch": 22.22371661787762,
+            "Oil_level": 1132.9844454508825,
+            "Caudal_impulses": 709.0978373973518
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27537655533726263,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.6761101269907455
+          }
+        },
+        "92716": {
+          "normalized_MSE": 192.02708837515382,
+          "Gaussian_NLL": 435.8199264046469,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.818021372131415,
+            "TP3": 1.0811891459686824,
+            "H1": 10.081028283282123,
+            "DV_pressure": 932.8192178732884,
+            "Reservoirs": 0.9922350282906396,
+            "Oil_temperature": 4.5983620853142755,
+            "Motor_current": 1.8731753607415353,
+            "COMP": 11.303432750184106,
+            "DV_eletric": 10.82954929652276,
+            "Towers": 9.304852165027498,
+            "MPG": 12.350814102797251,
+            "LPS": 4.433040218928089,
+            "Pressure_switch": 22.211249088921235,
+            "Oil_level": 1139.6115520532637,
+            "Caudal_impulses": 709.0986068026449
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27635887360838246,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.59602298102332
+          }
+        },
+        "92717": {
+          "normalized_MSE": 191.3305801266719,
+          "Gaussian_NLL": 750.3479900166335,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.2319386151682,
+            "TP3": 1.1550391772732242,
+            "H1": 9.349299004256887,
+            "DV_pressure": 931.3124488926609,
+            "Reservoirs": 1.1053467519790499,
+            "Oil_temperature": 4.2386184807899205,
+            "Motor_current": 1.7863853107308878,
+            "COMP": 10.57101644114868,
+            "DV_eletric": 10.186963446830648,
+            "Towers": 9.03311021123373,
+            "MPG": 11.34606403970283,
+            "LPS": 4.435541662835621,
+            "Pressure_switch": 22.50400578104745,
+            "Oil_level": 1132.217628184243,
+            "Caudal_impulses": 711.485295900177
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2727570399476097,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.761495322659772
+          }
+        },
+        "92718": {
+          "normalized_MSE": 191.5401943834087,
+          "Gaussian_NLL": 2616.266281475242,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.596439149829754,
+            "TP3": 1.1317841062494796,
+            "H1": 8.92985753458714,
+            "DV_pressure": 928.4212400628422,
+            "Reservoirs": 1.1719181821444704,
+            "Oil_temperature": 4.251190041301921,
+            "Motor_current": 1.826141585646617,
+            "COMP": 11.130549062724667,
+            "DV_eletric": 10.509830334172511,
+            "Towers": 8.723762096491459,
+            "MPG": 11.806936585416786,
+            "LPS": 4.443845203334004,
+            "Pressure_switch": 22.535029535196475,
+            "Oil_level": 1138.3933931634874,
+            "Caudal_impulses": 710.2309991077055
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27406679764243613,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.762168252856046
+          }
+        },
+        "92719": {
+          "normalized_MSE": 192.21900481583342,
+          "Gaussian_NLL": 1816.1954785308576,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.265374458119961,
+            "TP3": 1.0651458927856918,
+            "H1": 9.21829517642496,
+            "DV_pressure": 935.406928620248,
+            "Reservoirs": 1.1429158777572577,
+            "Oil_temperature": 4.79501367400509,
+            "Motor_current": 1.4225784755333744,
+            "COMP": 11.477824548027957,
+            "DV_eletric": 10.404625725571165,
+            "Towers": 9.307411096636516,
+            "MPG": 12.120020796597025,
+            "LPS": 4.421944831443309,
+            "Pressure_switch": 22.379566018614536,
+            "Oil_level": 1136.6160490264333,
+            "Caudal_impulses": 714.2413780193028
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.275049115913556,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.613068243073366
+          }
+        },
+        "92720": {
+          "normalized_MSE": 192.76107923274083,
+          "Gaussian_NLL": 3537.428079838201,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.334831310776046,
+            "TP3": 1.031794794291903,
+            "H1": 9.574836536753473,
+            "DV_pressure": 934.1012928553716,
+            "Reservoirs": 1.0592461100670125,
+            "Oil_temperature": 4.886857680567877,
+            "Motor_current": 1.4330949660370325,
+            "COMP": 10.509562891376007,
+            "DV_eletric": 10.593960157211972,
+            "Towers": 8.183989534781874,
+            "MPG": 11.412103938247553,
+            "LPS": 4.41434916033052,
+            "Pressure_switch": 22.019685445340087,
+            "Oil_level": 1144.9297213140549,
+            "Caudal_impulses": 717.9308617959049
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27144728225278325,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.79918630887918
+          }
+        }
+      }
+    },
+    "no_casm": {
+      "mean_normalized_MSE": 191.963654870406,
+      "mean_Gaussian_NLL": 2624.2690017643145,
+      "per_seed": {
+        "92701": {
+          "normalized_MSE": 192.4193833554615,
+          "Gaussian_NLL": 1452.2869978951069,
+          "per_feature_normalized_MSE": {
+            "TP2": 8.230304999620097,
+            "TP3": 1.4176982698415848,
+            "H1": 9.223634110711936,
+            "DV_pressure": 937.3501160816513,
+            "Reservoirs": 1.3208469723227871,
+            "Oil_temperature": 4.657338082732534,
+            "Motor_current": 1.3879074583907174,
+            "COMP": 9.844520590886976,
+            "DV_eletric": 9.67580873415234,
+            "Towers": 8.18322633369295,
+            "MPG": 11.006081793273003,
+            "LPS": 4.419636304841526,
+            "Pressure_switch": 21.741186030837234,
+            "Oil_level": 1142.8833662900463,
+            "Caudal_impulses": 714.9490782789209
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.26981008513425014,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.62034842281753
+          }
+        },
+        "92702": {
+          "normalized_MSE": 191.24509134066236,
+          "Gaussian_NLL": 3006.3720807855843,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.218560010282475,
+            "TP3": 1.1787498513923973,
+            "H1": 10.32150783470602,
+            "DV_pressure": 924.336901500566,
+            "Reservoirs": 1.1523525458428605,
+            "Oil_temperature": 4.073275809394305,
+            "Motor_current": 1.7912189076714886,
+            "COMP": 11.118434076125634,
+            "DV_eletric": 11.07380218297706,
+            "Towers": 8.42367394237731,
+            "MPG": 12.481930407009441,
+            "LPS": 4.4294617858030145,
+            "Pressure_switch": 23.48963138048893,
+            "Oil_level": 1134.9046064932538,
+            "Caudal_impulses": 710.6822633820444
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2724296005239031,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.505442408962566
+          }
+        },
+        "92703": {
+          "normalized_MSE": 192.24324907823407,
+          "Gaussian_NLL": 5709.116344902042,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.83413895416693,
+            "TP3": 1.2417289822562891,
+            "H1": 9.948269227729842,
+            "DV_pressure": 933.9462864031727,
+            "Reservoirs": 1.2483954574181102,
+            "Oil_temperature": 4.296176188631917,
+            "Motor_current": 1.6203058194167876,
+            "COMP": 11.40514426525822,
+            "DV_eletric": 10.863909861494989,
+            "Towers": 9.044136778293522,
+            "MPG": 12.28343932258728,
+            "LPS": 4.421019502417786,
+            "Pressure_switch": 22.360493972518896,
+            "Oil_level": 1139.474263559442,
+            "Caudal_impulses": 711.6610278787057
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27406679764243613,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.80529209734536
+          }
+        },
+        "92704": {
+          "normalized_MSE": 191.8667557935887,
+          "Gaussian_NLL": 2975.694162168002,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.288043467912631,
+            "TP3": 1.0907617500218076,
+            "H1": 10.249060154515051,
+            "DV_pressure": 927.6732285682149,
+            "Reservoirs": 1.180984405256145,
+            "Oil_temperature": 4.633955636070372,
+            "Motor_current": 1.5718255327908641,
+            "COMP": 10.38986755570724,
+            "DV_eletric": 10.603299453447727,
+            "Towers": 8.633343045175184,
+            "MPG": 11.940253961621679,
+            "LPS": 4.435169901973968,
+            "Pressure_switch": 21.951603149449802,
+            "Oil_level": 1137.860139650192,
+            "Caudal_impulses": 716.4998006714817
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.275049115913556,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.486284339192394
+          }
+        },
+        "92705": {
+          "normalized_MSE": 192.10059140916596,
+          "Gaussian_NLL": 717.8933169678593,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.609892748822496,
+            "TP3": 0.9996992549840857,
+            "H1": 9.614213730310022,
+            "DV_pressure": 939.0858701232652,
+            "Reservoirs": 1.0464253021143552,
+            "Oil_temperature": 4.725358234427762,
+            "Motor_current": 1.774257700900426,
+            "COMP": 11.207539250901243,
+            "DV_eletric": 10.239280230775075,
+            "Towers": 8.373955542320237,
+            "MPG": 11.843665228894176,
+            "LPS": 4.423559010632568,
+            "Pressure_switch": 22.73449520413191,
+            "Oil_level": 1135.8566412666487,
+            "Caudal_impulses": 709.9740183083605
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2727570399476097,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.722560026877636
+          }
+        },
+        "92706": {
+          "normalized_MSE": 192.03388162999488,
+          "Gaussian_NLL": 1511.688241496862,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.509125541502584,
+            "TP3": 1.1441020415536223,
+            "H1": 10.13848230196378,
+            "DV_pressure": 932.1010077389652,
+            "Reservoirs": 1.1728382993697453,
+            "Oil_temperature": 4.381550072049252,
+            "Motor_current": 1.802439338042851,
+            "COMP": 11.265174313019715,
+            "DV_eletric": 9.994533425683999,
+            "Towers": 9.224362356039485,
+            "MPG": 12.000784205192463,
+            "LPS": 4.422296904315837,
+            "Pressure_switch": 21.63159111253909,
+            "Oil_level": 1138.0276195330098,
+            "Caudal_impulses": 713.6923172666759
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27177472167648986,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.885706977590094
+          }
+        },
+        "92707": {
+          "normalized_MSE": 191.4188910026147,
+          "Gaussian_NLL": 883.3811615949859,
+          "per_feature_normalized_MSE": {
+            "TP2": 8.246785811634537,
+            "TP3": 1.1637443447223068,
+            "H1": 8.342227990061536,
+            "DV_pressure": 925.4864917050767,
+            "Reservoirs": 1.1973464448024347,
+            "Oil_temperature": 3.4036588485448105,
+            "Motor_current": 1.1551117943261624,
+            "COMP": 10.03531407283704,
+            "DV_eletric": 9.079247461471684,
+            "Towers": 7.895424252825836,
+            "MPG": 11.234617129785981,
+            "LPS": 4.451224886083135,
+            "Pressure_switch": 22.145345735274372,
+            "Oil_level": 1147.1066567035268,
+            "Caudal_impulses": 710.3401678582476
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2724296005239031,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.405309501936714
+          }
+        },
+        "92708": {
+          "normalized_MSE": 191.84516894754174,
+          "Gaussian_NLL": 4314.513007887824,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.005446426267715,
+            "TP3": 1.0754267292320643,
+            "H1": 9.555550938797419,
+            "DV_pressure": 930.9600494337991,
+            "Reservoirs": 1.1318796275071112,
+            "Oil_temperature": 4.065357274236817,
+            "Motor_current": 1.3811976580303207,
+            "COMP": 11.075819373754298,
+            "DV_eletric": 10.118112154048703,
+            "Towers": 8.12442890219837,
+            "MPG": 11.88952320134872,
+            "LPS": 4.416903918062709,
+            "Pressure_switch": 22.824087713675805,
+            "Oil_level": 1142.5131378673618,
+            "Caudal_impulses": 709.5406129948053
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27079240340537003,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.792442734850897
+          }
+        },
+        "92709": {
+          "normalized_MSE": 192.17594373271632,
+          "Gaussian_NLL": 317.81485975765725,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.823338221172257,
+            "TP3": 1.3841646780484858,
+            "H1": 9.954175393994378,
+            "DV_pressure": 935.3816666805412,
+            "Reservoirs": 1.1248253045473107,
+            "Oil_temperature": 3.963490836986469,
+            "Motor_current": 1.6716842509429004,
+            "COMP": 10.643396917733535,
+            "DV_eletric": 10.772486421533802,
+            "Towers": 8.909217131254529,
+            "MPG": 12.579654853347805,
+            "LPS": 4.448412848758099,
+            "Pressure_switch": 22.045366534358,
+            "Oil_level": 1140.8526583006892,
+            "Caudal_impulses": 709.084617616837
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.275049115913556,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.631008944845389
+          }
+        },
+        "92710": {
+          "normalized_MSE": 192.21861563825294,
+          "Gaussian_NLL": 4056.1793150985272,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.09258130958638,
+            "TP3": 1.2869204692231555,
+            "H1": 10.423878893970084,
+            "DV_pressure": 934.2174712875342,
+            "Reservoirs": 1.4014372206298984,
+            "Oil_temperature": 5.450552234653838,
+            "Motor_current": 1.0885154675655953,
+            "COMP": 10.96216486279283,
+            "DV_eletric": 10.044086346186788,
+            "Towers": 9.026913104142874,
+            "MPG": 11.932547081684401,
+            "LPS": 4.442027583873213,
+            "Pressure_switch": 22.387069787060856,
+            "Oil_level": 1143.663152306188,
+            "Caudal_impulses": 707.8599166187014
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27144728225278325,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.678455465829925
+          }
+        },
+        "92711": {
+          "normalized_MSE": 191.45116335914744,
+          "Gaussian_NLL": 1944.6718073528282,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.035333909784983,
+            "TP3": 1.025251828094587,
+            "H1": 8.995338643834842,
+            "DV_pressure": 937.3167296414791,
+            "Reservoirs": 1.0850079047808905,
+            "Oil_temperature": 4.853286131313211,
+            "Motor_current": 1.5942732043136436,
+            "COMP": 10.793333762402593,
+            "DV_eletric": 10.374280069606126,
+            "Towers": 8.730906163550392,
+            "MPG": 12.042695577586581,
+            "LPS": 4.451695700187017,
+            "Pressure_switch": 22.288043363751964,
+            "Oil_level": 1130.4373188597965,
+            "Caudal_impulses": 708.7439556267295
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2734119187950229,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.658928919852919
+          }
+        },
+        "92712": {
+          "normalized_MSE": 191.7131570887194,
+          "Gaussian_NLL": 852.8638794407194,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.88612528494634,
+            "TP3": 0.9603203414054696,
+            "H1": 9.355686921200217,
+            "DV_pressure": 931.1623823038643,
+            "Reservoirs": 1.0187353431680888,
+            "Oil_temperature": 3.3895452193996496,
+            "Motor_current": 1.6678024406181866,
+            "COMP": 10.885365282114629,
+            "DV_eletric": 10.660076421165583,
+            "Towers": 8.542904199901653,
+            "MPG": 12.090707586439793,
+            "LPS": 4.447621087728535,
+            "Pressure_switch": 22.43848190286926,
+            "Oil_level": 1140.0773116959917,
+            "Caudal_impulses": 709.1142902999769
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2727570399476097,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.766765464053686
+          }
+        },
+        "92713": {
+          "normalized_MSE": 191.63720335465632,
+          "Gaussian_NLL": 1404.9989325498102,
+          "per_feature_normalized_MSE": {
+            "TP2": 8.567327248990578,
+            "TP3": 1.1964058372122734,
+            "H1": 8.750938431306885,
+            "DV_pressure": 933.4268764301313,
+            "Reservoirs": 1.2305165078797928,
+            "Oil_temperature": 4.734058045022951,
+            "Motor_current": 1.429039805646288,
+            "COMP": 10.318144774125079,
+            "DV_eletric": 9.91976075342895,
+            "Towers": 8.378990982609245,
+            "MPG": 10.961562633114553,
+            "LPS": 4.423158577602958,
+            "Pressure_switch": 22.57725256251794,
+            "Oil_level": 1136.6444239720322,
+            "Caudal_impulses": 711.9995937582237
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27406679764243613,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.454518210323225
+          }
+        },
+        "92714": {
+          "normalized_MSE": 192.5513454959721,
+          "Gaussian_NLL": 3165.3438816577896,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.86244459519227,
+            "TP3": 1.056161659676109,
+            "H1": 9.205677805069717,
+            "DV_pressure": 941.3459774639335,
+            "Reservoirs": 1.0683791554998419,
+            "Oil_temperature": 5.334854489380466,
+            "Motor_current": 1.9044219673116403,
+            "COMP": 11.815425102784214,
+            "DV_eletric": 10.212094631700726,
+            "Towers": 8.834812051624668,
+            "MPG": 12.101250523208135,
+            "LPS": 4.46236759833602,
+            "Pressure_switch": 22.211615385917398,
+            "Oil_level": 1136.5017346958923,
+            "Caudal_impulses": 712.3529653140542
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27635887360838246,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.7028989560413255
+          }
+        },
+        "92715": {
+          "normalized_MSE": 192.21300375679775,
+          "Gaussian_NLL": 8779.619131261572,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.73062094145499,
+            "TP3": 1.2793247123964537,
+            "H1": 10.101166311109075,
+            "DV_pressure": 933.284671048449,
+            "Reservoirs": 1.2133591023157306,
+            "Oil_temperature": 4.2933518574962735,
+            "Motor_current": 1.5339547100310067,
+            "COMP": 11.145930619299754,
+            "DV_eletric": 11.010614829727807,
+            "Towers": 9.032614241765717,
+            "MPG": 12.155675243838258,
+            "LPS": 4.436405396224919,
+            "Pressure_switch": 22.507257492951098,
+            "Oil_level": 1139.7347445644618,
+            "Caudal_impulses": 711.7353652804443
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27439423706614274,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.71577720965341
+          }
+        },
+        "92716": {
+          "normalized_MSE": 192.13063140332827,
+          "Gaussian_NLL": 822.8626584295423,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.756145123534157,
+            "TP3": 1.1566323069706497,
+            "H1": 9.473582578578105,
+            "DV_pressure": 930.539473995905,
+            "Reservoirs": 1.1347912350810365,
+            "Oil_temperature": 4.910962164304312,
+            "Motor_current": 1.6243486168693402,
+            "COMP": 10.963604873816111,
+            "DV_eletric": 10.531875262394228,
+            "Towers": 9.209751419258199,
+            "MPG": 11.49869621580034,
+            "LPS": 4.442220987876093,
+            "Pressure_switch": 22.128823055094728,
+            "Oil_level": 1140.3903202446672,
+            "Caudal_impulses": 714.1982429697741
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27537655533726263,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.257753010216318
+          }
+        },
+        "92717": {
+          "normalized_MSE": 191.92111950454378,
+          "Gaussian_NLL": 1736.5240320101111,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.796584237873915,
+            "TP3": 1.2269387670256549,
+            "H1": 9.56542718524992,
+            "DV_pressure": 929.6509990492262,
+            "Reservoirs": 1.175092543134463,
+            "Oil_temperature": 4.882135509621297,
+            "Motor_current": 1.8348908856693356,
+            "COMP": 10.64560024588065,
+            "DV_eletric": 10.852526478200652,
+            "Towers": 8.96275111360669,
+            "MPG": 12.3293615206865,
+            "LPS": 4.456382326985329,
+            "Pressure_switch": 21.81876398664459,
+            "Oil_level": 1139.3395971942336,
+            "Caudal_impulses": 712.2797415241179
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27439423706614274,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.552464768587035
+          }
+        },
+        "92718": {
+          "normalized_MSE": 192.1220593787063,
+          "Gaussian_NLL": 2752.422107824148,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.049000642367828,
+            "TP3": 1.2044087638374288,
+            "H1": 9.218238285734389,
+            "DV_pressure": 930.4353427725916,
+            "Reservoirs": 1.2866312854063418,
+            "Oil_temperature": 3.8870210565221504,
+            "Motor_current": 1.6974662879113012,
+            "COMP": 11.208597366267009,
+            "DV_eletric": 10.090162078806612,
+            "Towers": 8.759177525097199,
+            "MPG": 12.201779349947927,
+            "LPS": 4.4228781328784565,
+            "Pressure_switch": 22.42391659577994,
+            "Oil_level": 1142.428065721204,
+            "Caudal_impulses": 713.5182048162425
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27177472167648986,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.698422642958518
+          }
+        },
+        "92719": {
+          "normalized_MSE": 192.24884230871479,
+          "Gaussian_NLL": 4603.206873938913,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.634552669207219,
+            "TP3": 1.042578661760076,
+            "H1": 10.201410227978498,
+            "DV_pressure": 927.2510747645614,
+            "Reservoirs": 1.0283532868602931,
+            "Oil_temperature": 5.076403422331852,
+            "Motor_current": 1.92730513011109,
+            "COMP": 10.818883195438689,
+            "DV_eletric": 11.01692498562437,
+            "Towers": 9.050929690069006,
+            "MPG": 12.516657583947925,
+            "LPS": 4.451240433204877,
+            "Pressure_switch": 22.93544630781773,
+            "Oil_level": 1146.5951941532537,
+            "Caudal_impulses": 710.1856801185553
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2727570399476097,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.603368033559518
+          }
+        },
+        "92720": {
+          "normalized_MSE": 191.7169998293007,
+          "Gaussian_NLL": 1477.9272422664087,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.363549534334654,
+            "TP3": 1.0353179314256478,
+            "H1": 10.039217548603625,
+            "DV_pressure": 933.2449305267835,
+            "Reservoirs": 1.1013486976075837,
+            "Oil_temperature": 4.471700324401156,
+            "Motor_current": 1.9904092728402427,
+            "COMP": 11.26564928581777,
+            "DV_eletric": 11.320903037055981,
+            "Towers": 9.29880409838274,
+            "MPG": 11.911585888665867,
+            "LPS": 4.436708621246268,
+            "Pressure_switch": 22.27836746233283,
+            "Oil_level": 1136.5831817784936,
+            "Caudal_impulses": 707.4133234315191
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2773411918795023,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.840426014957249
+          }
+        }
+      }
+    },
+    "gru": {
+      "mean_normalized_MSE": 192.11083676268433,
+      "mean_Gaussian_NLL": 869.555986515035,
+      "per_seed": {
+        "92701": {
+          "normalized_MSE": 192.5276203633874,
+          "Gaussian_NLL": 558.6309775843853,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.6068003465023,
+            "TP3": 1.0451533692919934,
+            "H1": 10.090037345547811,
+            "DV_pressure": 931.2505124390024,
+            "Reservoirs": 1.04333686250728,
+            "Oil_temperature": 4.566530802650308,
+            "Motor_current": 1.959157097047748,
+            "COMP": 11.265606542999636,
+            "DV_eletric": 11.00775672748993,
+            "Towers": 9.583506832027266,
+            "MPG": 13.209931007973958,
+            "LPS": 4.443278843457817,
+            "Pressure_switch": 22.202007917705373,
+            "Oil_level": 1143.3115656440436,
+            "Caudal_impulses": 713.3291236725637
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27406679764243613,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.949397781410394
+          }
+        },
+        "92702": {
+          "normalized_MSE": 192.01863369251328,
+          "Gaussian_NLL": 776.6820605725097,
+          "per_feature_normalized_MSE": {
+            "TP2": 8.957762160015573,
+            "TP3": 1.1060088518611946,
+            "H1": 9.372131842437563,
+            "DV_pressure": 935.6606587794804,
+            "Reservoirs": 1.1233436097828462,
+            "Oil_temperature": 6.819503942644681,
+            "Motor_current": 1.5248576372567915,
+            "COMP": 10.489705237407081,
+            "DV_eletric": 10.411818315286256,
+            "Towers": 8.423962487338049,
+            "MPG": 12.292640785371898,
+            "LPS": 4.430144908534481,
+            "Pressure_switch": 22.53104113709764,
+            "Oil_level": 1136.129970626817,
+            "Caudal_impulses": 711.0059550663669
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27668631303208907,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.81873606230183
+          }
+        },
+        "92703": {
+          "normalized_MSE": 191.7690905243289,
+          "Gaussian_NLL": 665.7904211284723,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.691368823012892,
+            "TP3": 1.184941106856915,
+            "H1": 10.018095175496764,
+            "DV_pressure": 930.1184884919996,
+            "Reservoirs": 1.2686044554722176,
+            "Oil_temperature": 4.285724443431324,
+            "Motor_current": 1.7402218195721528,
+            "COMP": 11.391677218836511,
+            "DV_eletric": 11.273365823028914,
+            "Towers": 9.09363741540549,
+            "MPG": 11.980195551693779,
+            "LPS": 4.440711590054904,
+            "Pressure_switch": 22.134527803322623,
+            "Oil_level": 1136.418663904348,
+            "Caudal_impulses": 711.4961342424018
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27406679764243613,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.89649973520681
+          }
+        },
+        "92704": {
+          "normalized_MSE": 192.64752446210667,
+          "Gaussian_NLL": 352.5263632900601,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.705501196253648,
+            "TP3": 1.2602475649428357,
+            "H1": 10.126198253502826,
+            "DV_pressure": 934.556418433648,
+            "Reservoirs": 1.2893018258527473,
+            "Oil_temperature": 8.106881528634318,
+            "Motor_current": 1.6989283005693758,
+            "COMP": 11.141120813356682,
+            "DV_eletric": 10.938733116282513,
+            "Towers": 9.295788891982077,
+            "MPG": 12.069206081646048,
+            "LPS": 4.424495523919886,
+            "Pressure_switch": 22.53244510291404,
+            "Oil_level": 1141.468976767511,
+            "Caudal_impulses": 711.0986235305836
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2822527832351015,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.783785026261297
+          }
+        },
+        "92705": {
+          "normalized_MSE": 192.07985584607943,
+          "Gaussian_NLL": 562.5362960831749,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.093689931459991,
+            "TP3": 1.1222482669253406,
+            "H1": 9.765689519188498,
+            "DV_pressure": 930.9348400647442,
+            "Reservoirs": 1.1376840719788626,
+            "Oil_temperature": 3.979303948176994,
+            "Motor_current": 1.4168707938419873,
+            "COMP": 11.059360961566867,
+            "DV_eletric": 10.427656184819563,
+            "Towers": 8.604692662093662,
+            "MPG": 11.87770538945015,
+            "LPS": 4.424600002231397,
+            "Pressure_switch": 22.165285231528557,
+            "Oil_level": 1142.5594574559732,
+            "Caudal_impulses": 712.6287532072117
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2727570399476097,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.7696841586382615
+          }
+        },
+        "92706": {
+          "normalized_MSE": 192.25394375556743,
+          "Gaussian_NLL": 631.2324079532735,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.352453013667404,
+            "TP3": 1.0043921387035153,
+            "H1": 10.324910608631741,
+            "DV_pressure": 933.6818291685055,
+            "Reservoirs": 1.0533089520502614,
+            "Oil_temperature": 3.976246884286668,
+            "Motor_current": 1.5486061618424247,
+            "COMP": 11.180770636320178,
+            "DV_eletric": 10.064828727610898,
+            "Towers": 9.036885003698753,
+            "MPG": 12.006758930099181,
+            "LPS": 4.421295058883146,
+            "Pressure_switch": 22.525411767018188,
+            "Oil_level": 1140.5583754138365,
+            "Caudal_impulses": 713.0730838683569
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2737393582187295,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.656893368398603
+          }
+        },
+        "92707": {
+          "normalized_MSE": 191.91088425713062,
+          "Gaussian_NLL": 929.5446863442438,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.938594454898082,
+            "TP3": 0.9970507920614197,
+            "H1": 10.084517656923257,
+            "DV_pressure": 930.2313735862601,
+            "Reservoirs": 1.042176282352413,
+            "Oil_temperature": 4.492107226755829,
+            "Motor_current": 1.697413776680583,
+            "COMP": 10.944835236923733,
+            "DV_eletric": 11.254214145059692,
+            "Towers": 9.684440590824524,
+            "MPG": 12.642083137161078,
+            "LPS": 4.418800885069016,
+            "Pressure_switch": 22.18903455578588,
+            "Oil_level": 1140.9214029427944,
+            "Caudal_impulses": 708.1252185874097
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27603143418467585,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.795560819095403
+          }
+        },
+        "92708": {
+          "normalized_MSE": 191.1859122243949,
+          "Gaussian_NLL": 336.842461090801,
+          "per_feature_normalized_MSE": {
+            "TP2": 8.804261551225068,
+            "TP3": 1.2319468702916967,
+            "H1": 9.377496567801986,
+            "DV_pressure": 926.1512785211626,
+            "Reservoirs": 1.1909204701303662,
+            "Oil_temperature": 4.313890481299185,
+            "Motor_current": 1.368466256705217,
+            "COMP": 10.555115890036907,
+            "DV_eletric": 9.693104320977545,
+            "Towers": 8.272089464074606,
+            "MPG": 11.692889000724046,
+            "LPS": 4.44411987026566,
+            "Pressure_switch": 21.93358441373839,
+            "Oil_level": 1138.5442889967746,
+            "Caudal_impulses": 710.2152306907159
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.275049115913556,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.696549164687282
+          }
+        },
+        "92709": {
+          "normalized_MSE": 192.25038172254733,
+          "Gaussian_NLL": 355.6389118010187,
+          "per_feature_normalized_MSE": {
+            "TP2": 10.069615418437348,
+            "TP3": 1.1716129248816722,
+            "H1": 10.289576194114098,
+            "DV_pressure": 935.2329855615363,
+            "Reservoirs": 1.1966440715860753,
+            "Oil_temperature": 4.5777951188125,
+            "Motor_current": 1.6078520158777536,
+            "COMP": 10.943870487768367,
+            "DV_eletric": 10.981464529569712,
+            "Towers": 8.78803722572936,
+            "MPG": 12.556255340330823,
+            "LPS": 4.439435867548093,
+            "Pressure_switch": 22.35946149550812,
+            "Oil_level": 1137.1474201742903,
+            "Caudal_impulses": 712.3936994122198
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2730844793713163,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 5.008328928022097
+          }
+        },
+        "92710": {
+          "normalized_MSE": 192.04335134960215,
+          "Gaussian_NLL": 599.853172585866,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.700382338124237,
+            "TP3": 1.2083520438270676,
+            "H1": 9.8996029187877,
+            "DV_pressure": 932.2867511450536,
+            "Reservoirs": 1.204935277287867,
+            "Oil_temperature": 4.69798812064549,
+            "Motor_current": 1.7933629175515846,
+            "COMP": 11.337426671272992,
+            "DV_eletric": 11.116122160258632,
+            "Towers": 9.309338483427444,
+            "MPG": 12.896742073249905,
+            "LPS": 4.428929390298771,
+            "Pressure_switch": 22.75329782769599,
+            "Oil_level": 1136.4745773606735,
+            "Caudal_impulses": 711.5424615158772
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2730844793713163,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.998925136266396
+          }
+        },
+        "92711": {
+          "normalized_MSE": 192.47865607621694,
+          "Gaussian_NLL": 1173.3896976133642,
+          "per_feature_normalized_MSE": {
+            "TP2": 10.549659701800547,
+            "TP3": 1.0672128254045858,
+            "H1": 10.09018851966727,
+            "DV_pressure": 934.9872059747698,
+            "Reservoirs": 1.0279905729015435,
+            "Oil_temperature": 5.621963443386747,
+            "Motor_current": 1.843308486386097,
+            "COMP": 10.824063147862244,
+            "DV_eletric": 10.996675740648453,
+            "Towers": 9.055922202024119,
+            "MPG": 13.114615736881513,
+            "LPS": 4.43451638840915,
+            "Pressure_switch": 22.06684105179435,
+            "Oil_level": 1138.2345143687326,
+            "Caudal_impulses": 713.2651629825846
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2737393582187295,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.860910106726293
+          }
+        },
+        "92712": {
+          "normalized_MSE": 191.6937538867002,
+          "Gaussian_NLL": 1704.1571618600533,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.308061455977038,
+            "TP3": 1.4713196303688276,
+            "H1": 9.871474216825305,
+            "DV_pressure": 929.2904360432925,
+            "Reservoirs": 1.353162303485197,
+            "Oil_temperature": 5.8065601933901005,
+            "Motor_current": 1.6971827657521252,
+            "COMP": 10.76159059566014,
+            "DV_eletric": 10.13678612502966,
+            "Towers": 8.596254860613582,
+            "MPG": 11.153873608686084,
+            "LPS": 4.443828200042698,
+            "Pressure_switch": 22.0066867993121,
+            "Oil_level": 1138.9889355603796,
+            "Caudal_impulses": 710.5201559416878
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27603143418467585,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.937356758952977
+          }
+        },
+        "92713": {
+          "normalized_MSE": 191.76811157231845,
+          "Gaussian_NLL": 348.1355405235306,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.691281418713452,
+            "TP3": 1.130257870303735,
+            "H1": 9.795757958886513,
+            "DV_pressure": 934.7134600172419,
+            "Reservoirs": 1.1833709477646004,
+            "Oil_temperature": 4.405517700029036,
+            "Motor_current": 1.7455258419294715,
+            "COMP": 10.878494269065012,
+            "DV_eletric": 10.87330459173619,
+            "Towers": 9.166029745972981,
+            "MPG": 12.606835538548259,
+            "LPS": 4.445590606118228,
+            "Pressure_switch": 22.10398289905855,
+            "Oil_level": 1134.0028416888733,
+            "Caudal_impulses": 709.7794224905348
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27472167648984935,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.7504549717808136
+          }
+        },
+        "92714": {
+          "normalized_MSE": 192.26026130208515,
+          "Gaussian_NLL": 471.2060111848966,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.356321339540118,
+            "TP3": 1.0843622499489336,
+            "H1": 9.17028305300424,
+            "DV_pressure": 934.9912102439243,
+            "Reservoirs": 0.9990368635730776,
+            "Oil_temperature": 6.459788369172419,
+            "Motor_current": 1.5672594352046252,
+            "COMP": 11.063857116985918,
+            "DV_eletric": 10.857132454404617,
+            "Towers": 8.570600573314449,
+            "MPG": 12.073598368206225,
+            "LPS": 4.434599464647163,
+            "Pressure_switch": 22.302021272617083,
+            "Oil_level": 1136.6194704786215,
+            "Caudal_impulses": 714.3543782481129
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27668631303208907,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.712946633698576
+          }
+        },
+        "92715": {
+          "normalized_MSE": 192.71700978754188,
+          "Gaussian_NLL": 4312.9781993037495,
+          "per_feature_normalized_MSE": {
+            "TP2": 10.193403984720277,
+            "TP3": 1.0616135608019786,
+            "H1": 9.968829075386914,
+            "DV_pressure": 936.5030976342819,
+            "Reservoirs": 1.0578657269599319,
+            "Oil_temperature": 5.445614435715517,
+            "Motor_current": 1.9953404165887723,
+            "COMP": 11.535970698679519,
+            "DV_eletric": 10.861485375988842,
+            "Towers": 9.284405392257607,
+            "MPG": 12.481566438867233,
+            "LPS": 4.4483435353523815,
+            "Pressure_switch": 22.707401201745768,
+            "Oil_level": 1139.9764961861597,
+            "Caudal_impulses": 713.2337131496223
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2770137524557957,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.805304620526974
+          }
+        },
+        "92716": {
+          "normalized_MSE": 192.26807705212158,
+          "Gaussian_NLL": 663.1765564083228,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.759797519571212,
+            "TP3": 1.1582989529529377,
+            "H1": 9.84218869809917,
+            "DV_pressure": 937.0587606902616,
+            "Reservoirs": 1.2304092722814057,
+            "Oil_temperature": 4.831052348176781,
+            "Motor_current": 1.4304966812545048,
+            "COMP": 10.717305649464508,
+            "DV_eletric": 10.859473140979727,
+            "Towers": 9.242708896890997,
+            "MPG": 12.186815919590215,
+            "LPS": 4.416237354925912,
+            "Pressure_switch": 22.643905642446104,
+            "Oil_level": 1139.6789716433232,
+            "Caudal_impulses": 708.9647333716051
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.2770137524557957,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.780868450836892
+          }
+        },
+        "92717": {
+          "normalized_MSE": 192.04852220695034,
+          "Gaussian_NLL": 620.8982001042071,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.876336686867146,
+            "TP3": 1.4774555437772883,
+            "H1": 10.200084965150849,
+            "DV_pressure": 934.0907558204007,
+            "Reservoirs": 1.242532414232043,
+            "Oil_temperature": 4.346667035330162,
+            "Motor_current": 1.5353806912786128,
+            "COMP": 11.654693526061033,
+            "DV_eletric": 11.39721852594197,
+            "Towers": 9.581814984312162,
+            "MPG": 12.731947472212944,
+            "LPS": 4.42969061837384,
+            "Pressure_switch": 21.86432600525766,
+            "Oil_level": 1137.0608064486803,
+            "Caudal_impulses": 709.2381223663789
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27930582842174195,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.690592981519959
+          }
+        },
+        "92718": {
+          "normalized_MSE": 192.0953743071427,
+          "Gaussian_NLL": 473.32812537994994,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.362714748826846,
+            "TP3": 1.1725921442999754,
+            "H1": 9.940047781368396,
+            "DV_pressure": 931.9244183302501,
+            "Reservoirs": 1.1365031494446716,
+            "Oil_temperature": 6.30441286605139,
+            "Motor_current": 1.708536714170551,
+            "COMP": 11.852663058702932,
+            "DV_eletric": 10.871020553717322,
+            "Towers": 9.019841764515197,
+            "MPG": 12.285026452368397,
+            "LPS": 4.443082400092123,
+            "Pressure_switch": 22.056667201722846,
+            "Oil_level": 1137.3927781401994,
+            "Caudal_impulses": 711.9603093014099
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27537655533726263,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.956678078364719
+          }
+        },
+        "92719": {
+          "normalized_MSE": 192.1510175315084,
+          "Gaussian_NLL": 665.4081326615071,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.698272776394866,
+            "TP3": 1.1103619501990405,
+            "H1": 9.63327574658469,
+            "DV_pressure": 932.5007857118366,
+            "Reservoirs": 1.1085656084105853,
+            "Oil_temperature": 4.787307473733254,
+            "Motor_current": 1.7242158144275683,
+            "COMP": 11.42034485401056,
+            "DV_eletric": 10.864387105370378,
+            "Towers": 8.817636368691954,
+            "MPG": 12.477372273365308,
+            "LPS": 4.4557892998596795,
+            "Pressure_switch": 22.330822477438964,
+            "Oil_level": 1139.3768955204064,
+            "Caudal_impulses": 711.9592299918962
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.275049115913556,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.745255207254093
+          }
+        },
+        "92720": {
+          "normalized_MSE": 192.04875333344302,
+          "Gaussian_NLL": 1189.16434682731,
+          "per_feature_normalized_MSE": {
+            "TP2": 9.811824576327515,
+            "TP3": 1.1209501532471149,
+            "H1": 10.218011686938043,
+            "DV_pressure": 934.0220042135447,
+            "Reservoirs": 1.1750865658841323,
+            "Oil_temperature": 7.983633616599691,
+            "Motor_current": 1.7091677922091555,
+            "COMP": 10.661332573195486,
+            "DV_eletric": 10.447910160271839,
+            "Towers": 9.041687689354111,
+            "MPG": 11.883041967387289,
+            "LPS": 4.442747544725893,
+            "Pressure_switch": 22.748927790336683,
+            "Oil_level": 1136.1446081084814,
+            "Caudal_impulses": 709.320365563142
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.27537655533726263,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.771453854552162
+          }
+        }
+      }
+    },
+    "mlp": {
+      "mean_normalized_MSE": 208.48255488666786,
+      "mean_Gaussian_NLL": 37263.864896752246,
+      "per_seed": {
+        "92701": {
+          "normalized_MSE": 202.0221344841144,
+          "Gaussian_NLL": 30410.157253201436,
+          "per_feature_normalized_MSE": {
+            "TP2": 27.96082380478356,
+            "TP3": 17.507410788221627,
+            "H1": 9.491969518354153,
+            "DV_pressure": 876.1558118647832,
+            "Reservoirs": 17.545099984985892,
+            "Oil_temperature": 50.09180054986629,
+            "Motor_current": 37.419617334945805,
+            "COMP": 28.229956498667367,
+            "DV_eletric": 22.863948717199875,
+            "Towers": 33.65275738643387,
+            "MPG": 40.71472203245618,
+            "LPS": 4.599496057763832,
+            "Pressure_switch": 22.49440892060494,
+            "Oil_level": 1138.266828118289,
+            "Caudal_impulses": 703.3373656843606
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.31074001309757693,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.771318973098879
+          }
+        },
+        "92702": {
+          "normalized_MSE": 196.8447800916126,
+          "Gaussian_NLL": 39130.032251000135,
+          "per_feature_normalized_MSE": {
+            "TP2": 19.926249027243554,
+            "TP3": 9.548256250039456,
+            "H1": 15.386115632431359,
+            "DV_pressure": 911.4509927284327,
+            "Reservoirs": 12.250005241521684,
+            "Oil_temperature": 13.584384884262894,
+            "Motor_current": 8.538703658594972,
+            "COMP": 22.27188229462807,
+            "DV_eletric": 21.536598642196516,
+            "Towers": 16.00267621158781,
+            "MPG": 19.4174937303997,
+            "LPS": 4.5921545783692,
+            "Pressure_switch": 23.949040577749194,
+            "Oil_level": 1138.9650232165848,
+            "Caudal_impulses": 715.2521247001472
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3045186640471513,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.630677987273806
+          }
+        },
+        "92703": {
+          "normalized_MSE": 215.67728438596214,
+          "Gaussian_NLL": 33419.40433195243,
+          "per_feature_normalized_MSE": {
+            "TP2": 71.3684465814291,
+            "TP3": 41.87308320919579,
+            "H1": 15.263817137630479,
+            "DV_pressure": 813.5156168509222,
+            "Reservoirs": 64.89680846260389,
+            "Oil_temperature": 66.9832574493185,
+            "Motor_current": 86.37022007013023,
+            "COMP": 55.10281231440212,
+            "DV_eletric": 52.76563261167498,
+            "Towers": 42.13353433411758,
+            "MPG": 55.647864573213084,
+            "LPS": 4.3808353130941375,
+            "Pressure_switch": 22.632811018719885,
+            "Oil_level": 1130.8713624035015,
+            "Caudal_impulses": 711.3531634594783
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3241650294695481,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.446736612346385
+          }
+        },
+        "92704": {
+          "normalized_MSE": 244.9247943292328,
+          "Gaussian_NLL": 39766.605694359736,
+          "per_feature_normalized_MSE": {
+            "TP2": 123.42157613565195,
+            "TP3": 69.85633509192097,
+            "H1": 26.800274476773357,
+            "DV_pressure": 794.505516508013,
+            "Reservoirs": 104.8562540448675,
+            "Oil_temperature": 122.14404517904923,
+            "Motor_current": 144.575941850471,
+            "COMP": 109.11235701948438,
+            "DV_eletric": 122.65865937038059,
+            "Towers": 98.88606906809706,
+            "MPG": 88.98478078730892,
+            "LPS": 4.477381567717078,
+            "Pressure_switch": 22.377315010209525,
+            "Oil_level": 1137.0627939871863,
+            "Caudal_impulses": 704.1526148413617
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.30877537655533727,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.651528347046924
+          }
+        },
+        "92705": {
+          "normalized_MSE": 217.42813600235004,
+          "Gaussian_NLL": 33988.21835042512,
+          "per_feature_normalized_MSE": {
+            "TP2": 50.177535496192064,
+            "TP3": 71.93553975976818,
+            "H1": 46.63993385044938,
+            "DV_pressure": 812.0913464412382,
+            "Reservoirs": 42.071629254083284,
+            "Oil_temperature": 47.683256215065846,
+            "Motor_current": 85.50758299289281,
+            "COMP": 55.00351669327537,
+            "DV_eletric": 64.75667476941321,
+            "Towers": 55.904038966425524,
+            "MPG": 64.38750206372269,
+            "LPS": 4.493145527671618,
+            "Pressure_switch": 22.87751731619111,
+            "Oil_level": 1127.1606064965165,
+            "Caudal_impulses": 710.7322141923453
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3091028159790439,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.598797853394261
+          }
+        },
+        "92706": {
+          "normalized_MSE": 207.1904438189541,
+          "Gaussian_NLL": 41186.120027755256,
+          "per_feature_normalized_MSE": {
+            "TP2": 44.85505603194485,
+            "TP3": 49.86411501864413,
+            "H1": 15.019901356729763,
+            "DV_pressure": 812.3916398682275,
+            "Reservoirs": 54.59077570848925,
+            "Oil_temperature": 80.23248211863606,
+            "Motor_current": 20.680888454448418,
+            "COMP": 42.211992436884685,
+            "DV_eletric": 37.46765283455041,
+            "Towers": 37.70133986542214,
+            "MPG": 43.6796921680128,
+            "LPS": 4.47570301125701,
+            "Pressure_switch": 22.6109316759335,
+            "Oil_level": 1134.2888347691182,
+            "Caudal_impulses": 707.7856519660127
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3104125736738703,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.342496893463021
+          }
+        },
+        "92707": {
+          "normalized_MSE": 225.43219506207595,
+          "Gaussian_NLL": 42284.80444097679,
+          "per_feature_normalized_MSE": {
+            "TP2": 113.75599401752488,
+            "TP3": 11.18229865655168,
+            "H1": 49.16913576531637,
+            "DV_pressure": 796.4135069349162,
+            "Reservoirs": 12.221215809500821,
+            "Oil_temperature": 104.95042743840264,
+            "Motor_current": 55.427310060386525,
+            "COMP": 109.19577588733222,
+            "DV_eletric": 82.74894625703642,
+            "Towers": 76.56224196288312,
+            "MPG": 90.96331096034407,
+            "LPS": 4.446932597710055,
+            "Pressure_switch": 22.705930300863717,
+            "Oil_level": 1137.849494692338,
+            "Caudal_impulses": 713.8904045900322
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3205631958087754,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.291169539933351
+          }
+        },
+        "92708": {
+          "normalized_MSE": 200.9580551617956,
+          "Gaussian_NLL": 29218.00217198448,
+          "per_feature_normalized_MSE": {
+            "TP2": 34.27335534514448,
+            "TP3": 24.933693707524753,
+            "H1": 13.183260570683,
+            "DV_pressure": 881.1446565140665,
+            "Reservoirs": 25.88912231465183,
+            "Oil_temperature": 9.23244831782533,
+            "Motor_current": 36.25973387792547,
+            "COMP": 29.12964890583765,
+            "DV_eletric": 28.501038785106225,
+            "Towers": 26.11865277457531,
+            "MPG": 32.87762367075574,
+            "LPS": 4.8202270692802625,
+            "Pressure_switch": 21.859180070793183,
+            "Oil_level": 1131.1747424994014,
+            "Caudal_impulses": 714.9734430033628
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3048461034708579,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.5580764793349555
+          }
+        },
+        "92709": {
+          "normalized_MSE": 192.65385438698442,
+          "Gaussian_NLL": 36977.78635135935,
+          "per_feature_normalized_MSE": {
+            "TP2": 12.369347437552122,
+            "TP3": 17.739096945738705,
+            "H1": 15.098038605628169,
+            "DV_pressure": 861.0833255398743,
+            "Reservoirs": 22.95468771414034,
+            "Oil_temperature": 29.207909418414324,
+            "Motor_current": 14.761445960611669,
+            "COMP": 9.239967087666734,
+            "DV_eletric": 13.567552149179482,
+            "Towers": 8.833876902594433,
+            "MPG": 12.728312923744483,
+            "LPS": 4.989417652374378,
+            "Pressure_switch": 22.547610688496487,
+            "Oil_level": 1139.3404008675514,
+            "Caudal_impulses": 705.3468259111996
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3146692861820563,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.39915952650622
+          }
+        },
+        "92710": {
+          "normalized_MSE": 196.36401212185166,
+          "Gaussian_NLL": 38898.67064925959,
+          "per_feature_normalized_MSE": {
+            "TP2": 21.3819026185946,
+            "TP3": 6.154963163248506,
+            "H1": 12.986204757208249,
+            "DV_pressure": 878.0203047062922,
+            "Reservoirs": 6.558663370039081,
+            "Oil_temperature": 47.87113858019784,
+            "Motor_current": 15.372503075098203,
+            "COMP": 20.323406932202346,
+            "DV_eletric": 24.854353812017486,
+            "Towers": 17.211105348089433,
+            "MPG": 16.70024397332948,
+            "LPS": 4.408027713202744,
+            "Pressure_switch": 23.317765267025056,
+            "Oil_level": 1138.5587125743505,
+            "Caudal_impulses": 711.7408859368788
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.29927963326784546,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.373195554525838
+          }
+        },
+        "92711": {
+          "normalized_MSE": 202.05578649022783,
+          "Gaussian_NLL": 39341.662553926675,
+          "per_feature_normalized_MSE": {
+            "TP2": 20.805760203085253,
+            "TP3": 30.474538963043223,
+            "H1": 10.892658678135291,
+            "DV_pressure": 914.2058683292342,
+            "Reservoirs": 35.51623475981182,
+            "Oil_temperature": 40.13496555111422,
+            "Motor_current": 34.47769209765628,
+            "COMP": 18.433899772863974,
+            "DV_eletric": 15.835901343467018,
+            "Towers": 13.716318357821768,
+            "MPG": 19.561645417244854,
+            "LPS": 4.842845471997675,
+            "Pressure_switch": 23.79348323034454,
+            "Oil_level": 1136.9279774015554,
+            "Caudal_impulses": 711.2170077760424
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3199083169613621,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.514004167762576
+          }
+        },
+        "92712": {
+          "normalized_MSE": 203.2848980026118,
+          "Gaussian_NLL": 39862.048228623265,
+          "per_feature_normalized_MSE": {
+            "TP2": 33.119879485098245,
+            "TP3": 32.58803659960955,
+            "H1": 10.779053961559788,
+            "DV_pressure": 821.3638930184655,
+            "Reservoirs": 30.037323048429318,
+            "Oil_temperature": 83.54487497897799,
+            "Motor_current": 42.38138006116545,
+            "COMP": 33.02819243513185,
+            "DV_eletric": 39.99756258652538,
+            "Towers": 16.520750977191323,
+            "MPG": 27.376640002845942,
+            "LPS": 4.465548162878762,
+            "Pressure_switch": 24.236393311721514,
+            "Oil_level": 1139.4595978424968,
+            "Caudal_impulses": 710.3743435670791
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3120497707924034,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.7257092626805886
+          }
+        },
+        "92713": {
+          "normalized_MSE": 198.3811866353782,
+          "Gaussian_NLL": 39213.62067095995,
+          "per_feature_normalized_MSE": {
+            "TP2": 22.302488986119158,
+            "TP3": 8.649034350616017,
+            "H1": 23.14022730629337,
+            "DV_pressure": 884.3441976356992,
+            "Reservoirs": 7.49968019087096,
+            "Oil_temperature": 22.551706740127088,
+            "Motor_current": 18.763630536766374,
+            "COMP": 35.69478464034153,
+            "DV_eletric": 35.899876149305726,
+            "Towers": 25.500396233139988,
+            "MPG": 33.365060769282515,
+            "LPS": 4.611825458559522,
+            "Pressure_switch": 23.139210624409145,
+            "Oil_level": 1124.6734018351447,
+            "Caudal_impulses": 705.5822780739978
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3120497707924034,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.11914091317551
+          }
+        },
+        "92714": {
+          "normalized_MSE": 192.17825054932152,
+          "Gaussian_NLL": 37355.58369610267,
+          "per_feature_normalized_MSE": {
+            "TP2": 21.347005373729626,
+            "TP3": 4.2877680709673704,
+            "H1": 14.148526699313187,
+            "DV_pressure": 787.1130088588758,
+            "Reservoirs": 3.9339875818059884,
+            "Oil_temperature": 68.41992926197922,
+            "Motor_current": 16.224537805812872,
+            "COMP": 17.678486390263107,
+            "DV_eletric": 26.497787957561506,
+            "Towers": 18.795236065495942,
+            "MPG": 23.37278593858795,
+            "LPS": 4.681232568193859,
+            "Pressure_switch": 22.897788297124325,
+            "Oil_level": 1141.0032143468393,
+            "Caudal_impulses": 712.2724630232726
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.32187295350360184,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.712002874340619
+          }
+        },
+        "92715": {
+          "normalized_MSE": 234.39433116057054,
+          "Gaussian_NLL": 36710.88425293227,
+          "per_feature_normalized_MSE": {
+            "TP2": 124.94891835768476,
+            "TP3": 28.406210063688196,
+            "H1": 57.94296090170007,
+            "DV_pressure": 807.6694281681333,
+            "Reservoirs": 26.833131369588802,
+            "Oil_temperature": 42.262709537303984,
+            "Motor_current": 74.80911452409782,
+            "COMP": 124.59394514315498,
+            "DV_eletric": 114.66712223930178,
+            "Towers": 116.50883564439006,
+            "MPG": 113.83487775349884,
+            "LPS": 4.4372063109852355,
+            "Pressure_switch": 23.769634358501623,
+            "Oil_level": 1149.708927837555,
+            "Caudal_impulses": 705.5219451989738
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": false
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3094302554027505,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.844843740544008
+          }
+        },
+        "92716": {
+          "normalized_MSE": 201.2624569522064,
+          "Gaussian_NLL": 39639.3526533218,
+          "per_feature_normalized_MSE": {
+            "TP2": 32.03358649109584,
+            "TP3": 25.517461428467378,
+            "H1": 19.28748682385995,
+            "DV_pressure": 824.4534435663073,
+            "Reservoirs": 15.091057602370347,
+            "Oil_temperature": 65.37657776700554,
+            "Motor_current": 36.53537700546656,
+            "COMP": 44.75443521139533,
+            "DV_eletric": 39.0668408201596,
+            "Towers": 27.674728103466965,
+            "MPG": 26.8498047886632,
+            "LPS": 4.463089503005773,
+            "Pressure_switch": 23.111965833824694,
+            "Oil_level": 1129.7912119985135,
+            "Caudal_impulses": 704.9297873394944
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.29927963326784546,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.814184926890591
+          }
+        },
+        "92717": {
+          "normalized_MSE": 195.4028858613545,
+          "Gaussian_NLL": 38055.71911094588,
+          "per_feature_normalized_MSE": {
+            "TP2": 27.92726268412677,
+            "TP3": 5.716231920024406,
+            "H1": 12.575223505172193,
+            "DV_pressure": 809.9581151277768,
+            "Reservoirs": 5.631975286682604,
+            "Oil_temperature": 84.4739844744371,
+            "Motor_current": 13.103174495123904,
+            "COMP": 26.79721564623268,
+            "DV_eletric": 24.20554508205114,
+            "Towers": 25.2218480582899,
+            "MPG": 27.098738649737577,
+            "LPS": 4.647290348315424,
+            "Pressure_switch": 23.937745857206124,
+            "Oil_level": 1133.4688666729876,
+            "Caudal_impulses": 706.2800701121533
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.30419122462344467,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.952038883444258
+          }
+        },
+        "92718": {
+          "normalized_MSE": 200.1446615393173,
+          "Gaussian_NLL": 38494.59623180037,
+          "per_feature_normalized_MSE": {
+            "TP2": 39.820803758054325,
+            "TP3": 6.700702746936403,
+            "H1": 15.349681356686954,
+            "DV_pressure": 835.1609102558295,
+            "Reservoirs": 17.331534688504334,
+            "Oil_temperature": 39.942113139381625,
+            "Motor_current": 31.33617260098014,
+            "COMP": 38.21392188077811,
+            "DV_eletric": 48.79453457540433,
+            "Towers": 30.62738697468005,
+            "MPG": 31.519542484266278,
+            "LPS": 4.514198835822185,
+            "Pressure_switch": 22.126098109164847,
+            "Oil_level": 1135.4035400822304,
+            "Caudal_impulses": 705.3287816010397
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": false
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3025540275049116,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.760297599505875
+          }
+        },
+        "92719": {
+          "normalized_MSE": 193.43514555654417,
+          "Gaussian_NLL": 38285.295838455284,
+          "per_feature_normalized_MSE": {
+            "TP2": 15.212189956589715,
+            "TP3": 3.9236861297932784,
+            "H1": 10.178657051539377,
+            "DV_pressure": 926.5851687900188,
+            "Reservoirs": 3.3961632169269174,
+            "Oil_temperature": 9.473429495270395,
+            "Motor_current": 10.09579514926234,
+            "COMP": 15.5704446315099,
+            "DV_eletric": 11.114964273911845,
+            "Towers": 10.10584767837927,
+            "MPG": 10.748348197282509,
+            "LPS": 4.450740040884713,
+            "Pressure_switch": 21.655076801238355,
+            "Oil_level": 1130.5226712780402,
+            "Caudal_impulses": 718.494000657515
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3028814669286182,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.38208347725684
+          }
+        },
+        "92720": {
+          "normalized_MSE": 249.6158051408907,
+          "Gaussian_NLL": 33038.73317570214,
+          "per_feature_normalized_MSE": {
+            "TP2": 169.90391645354092,
+            "TP3": 68.90228813890818,
+            "H1": 63.981340021134194,
+            "DV_pressure": 826.7251630435263,
+            "Reservoirs": 60.587126150925094,
+            "Oil_temperature": 32.06699994227416,
+            "Motor_current": 139.5543686466712,
+            "COMP": 155.77366221774005,
+            "DV_eletric": 127.93919469503288,
+            "Towers": 109.77055167920999,
+            "MPG": 127.64980064359357,
+            "LPS": 5.245281556683504,
+            "Pressure_switch": 23.676697544143142,
+            "Oil_level": 1126.380571247921,
+            "Caudal_impulses": 706.0801151320564
+          },
+          "anomalies": {
+            "events": [
+              {
+                "start": "2020-04-18",
+                "end": "2020-04-18 23:59:00",
+                "covered_windows": 24,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-05-29 23:30:00",
+                "end": "2020-05-30 06:00:00",
+                "covered_windows": 7,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-06-05 10:00:00",
+                "end": "2020-06-07 14:30:00",
+                "covered_windows": 41,
+                "observed_detection": true,
+                "pre24h_alert": true
+              },
+              {
+                "start": "2020-07-15 14:30:00",
+                "end": "2020-07-15 19:00:00",
+                "covered_windows": 5,
+                "observed_detection": true,
+                "pre24h_alert": true
+              }
+            ],
+            "outside_reported_windows_alert_fraction": 0.3153241650294695,
+            "outside_reported_windows_health": "UNKNOWN, not verified negatives",
+            "threshold": 4.467963541638646
+          }
+        }
+      }
+    }
+  },
+  "comparisons": {
+    "no_casm": {
+      "MSE": {
+        "difference": -0.1330232710531277,
+        "paired_seed_bootstrap95": [
+          -0.389936765921687,
+          0.11196454350108648
+        ]
+      },
+      "p": 0.3301544189453125,
+      "holm_p": 0.3301544189453125
+    },
+    "gru": {
+      "MSE": {
+        "difference": -0.28020516333146334,
+        "paired_seed_bootstrap95": [
+          -0.5562308047706783,
+          -0.023585829852128287
+        ]
+      },
+      "p": 0.05775642395019531,
+      "holm_p": 0.11551284790039062
+    },
+    "mlp": {
+      "MSE": {
+        "difference": -16.65192328731496,
+        "paired_seed_bootstrap95": [
+          -24.200050394375978,
+          -9.995257414561053
+        ]
+      },
+      "p": 1.9073486328125e-06,
+      "holm_p": 5.7220458984375e-06
+    }
+  },
+  "versus_ridge": {
+    "difference": 0.09350763348078743,
+    "paired_seed_bootstrap95": [
+      -0.08490344421770271,
+      0.2770937770751893
+    ]
+  },
+  "versus_persistence": {
+    "difference": 184.36606594546845,
+    "paired_seed_bootstrap95": [
+      184.18765486776996,
+      184.54965208906285
+    ]
+  },
+  "gates": {
+    "no_worse_than_ridge": false,
+    "better_than_persistence": false,
+    "better_than_GRU_MLP": false,
+    "physical_repair_validation": "NOT_AVAILABLE",
+    "commercial_cost_validation": "NOT_AVAILABLE"
+  },
+  "promotion": "NOT_ESTABLISHED",
+  "commercial": "NOT_ESTABLISHED",
+  "scope": "One real machine, four reported fault intervals, twenty training seeds conditional on the same time series. No repair policy, causal effect or actual intervention costs. Published May maintenance timestamp inconsistent; not corrected."
+}

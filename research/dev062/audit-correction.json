@@ -1,0 +1,13 @@
+{
+  "initial_result": "FAILED audit before qualification",
+  "cause": "Numeric temperature-grid dictionary keys in Python versus string keys in saved JSON",
+  "correction": "Canonical JSON wire representation of recomputed fixed-history metrics before strict comparison",
+  "unchanged": [
+    "fitting sources",
+    "trained weights",
+    "data",
+    "decoder",
+    "atol1e-8 and rtol1e-8"
+  ],
+  "regression": "Actual fixed_metrics output roundtrip passes; perturbing posterior_KL by .01 still fails"
+}

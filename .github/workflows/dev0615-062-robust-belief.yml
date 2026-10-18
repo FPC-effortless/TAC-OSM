@@ -1,0 +1,134 @@
+name: Learned identity, belief and real-maintenance research
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev0615/**'
+      - 'research/dev062*/**'
+      - 'research/real-maint-001/**'
+      - 'src/tac_osm/development/*belief_agent.py'
+      - 'src/tac_osm/development/robust_identity.py'
+      - 'src/tac_osm/development/maintenance_forecast.py'
+      - 'scripts/*dev0615.py'
+      - 'scripts/*dev062*.py'
+      - 'scripts/*real_maintenance_001.py'
+      - 'tests/test_identity*'
+      - 'tests/test_belief*'
+      - 'tests/test_cached_belief*'
+      - 'tests/test_batched_belief*'
+      - 'tests/test_real_maintenance_001.py'
+      - '.github/workflows/dev0615-062-robust-belief.yml'
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install recorded environment
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4 matplotlib
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: All tests and provenance
+        run: |
+          python -m pytest -q
+          python scripts/sync_test_count.py --check
+  recorded-replay:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - study: dev0615
+            script: audit_identity_dev0615.py
+            native: true
+          - study: dev062
+            script: audit_belief_dev062.py
+            native: true
+          - study: real-maint-001
+            script: audit_real_maintenance_001.py
+            native: false
+          - study: dev062-r1
+            script: audit_belief_dev062_r1.py
+            native: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 100
+      - name: Check whether conditional follow-up ran
+        id: enabled
+        env:
+          STUDY: ${{ matrix.study }}
+        run: |
+          python - <<'PY'
+          import json,os,pathlib
+          study=os.environ['STUDY']
+          enabled=study!='dev062-r1' or json.loads(pathlib.Path('research/dev062-r1/trigger.json').read_text())['run_followup']
+          with open(os.environ['GITHUB_OUTPUT'],'a') as stream:stream.write(f'enabled={str(enabled).lower()}\n')
+          PY
+      - uses: actions/checkout@v4
+        if: steps.enabled.outputs.enabled == 'true' && matrix.native
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        if: steps.enabled.outputs.enabled == 'true'
+        with:
+          python-version: '3.12'
+      - name: Install recorded CPU environment
+        if: steps.enabled.outputs.enabled == 'true'
+        env:
+          NATIVE: ${{ matrix.native }}
+        run: |
+          python -m pip install -e . numpy==2.5.4
+          if [ "$NATIVE" = "true" ]; then python -m pip install -e .veritas-public-runtime; fi
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Strict complete checkpoint and first-seed portable/native replay
+        if: steps.enabled.outputs.enabled == 'true'
+        env:
+          STUDY: ${{ matrix.study }}
+          AUDITOR: ${{ matrix.script }}
+          NATIVE: ${{ matrix.native }}
+        run: |
+          python scripts/restore_research_evidence_dev062.py --study "$STUDY"
+          if [ "$NATIVE" = "true" ]; then
+            python "scripts/$AUDITOR" --directory "results/$STUDY-main" --output "results/$STUDY-remote-audit.json" --exports "results/$STUDY-remote-export" --veritas .veritas-public-runtime
+          else
+            python "scripts/$AUDITOR" --directory "results/$STUDY-main" --output "results/$STUDY-remote-audit.json" --exports "results/$STUDY-remote-export"
+          fi
+      - name: Same-weight incremental-state conformance and CPU profile
+        if: steps.enabled.outputs.enabled == 'true' && (matrix.study == 'dev062' || matrix.study == 'dev062-r1')
+        env:
+          STUDY: ${{ matrix.study }}
+        run: |
+          if [ "$STUDY" = "dev062-r1" ]; then SEED=92801; else SEED=92601; fi
+          python scripts/audit_cached_belief_dev062.py --directory "results/$STUDY-main" --output "results/$STUDY-cache-remote-audit.json" --exports "results/$STUDY-cache-remote-export" --seed-start "$SEED"
+      - name: Available-packet inference conformance and fair CPU profile
+        if: steps.enabled.outputs.enabled == 'true' && (matrix.study == 'dev062' || matrix.study == 'dev062-r1')
+        env:
+          STUDY: ${{ matrix.study }}
+        run: |
+          if [ "$STUDY" = "dev062-r1" ]; then SEED=92801; else SEED=92601; fi
+          python scripts/audit_batched_belief_dev062.py --directory "results/$STUDY-main" --output "results/$STUDY-batch-remote-audit.json" --exports "results/$STUDY-batch-remote-export" --seed-start "$SEED"
+      - name: Preserve remote diagnostics, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.study }}-remote-replay
+          path: |
+            results/*remote-audit.json
+            results/*remote-export/**
+          if-no-files-found: ignore
