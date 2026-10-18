@@ -55,7 +55,7 @@ def run(directory,output,exports=None,veritas=None,smoke=False):
     for path in sorted(root.glob('*/**/report.json')):
         r=json.loads(path.read_text());folder=path.parent;assert digest(folder/'agent.pt')==r['checkpoint_sha256'];
         if not smoke:
-            for source in ('src/tac_osm/development/belief_agent.py','src/tac_osm/development/belief_bottleneck.py','scripts/data_belief_dev062.py','scripts/data_belief_dev063.py','scripts/run_belief_dev063.py','research/dev063-belief-integrity/protocol.json','research/dev063-belief-integrity/PROTOCOL.md'):
+            for source in ('src/tac_osm/development/belief_agent.py','src/tac_osm/development/belief_bottleneck.py','scripts/data_belief_dev062.py','scripts/data_belief_dev063.py','scripts/run_belief_dev063.py','src/tac_osm/development/uncertain_world.py','research/dev063-belief-integrity/protocol.json','research/dev063-belief-integrity/PROTOCOL.md'):
                 assert subprocess.check_output(['git','show',f"{r['source']}:{source}"],cwd=ROOT)==(ROOT/source).read_bytes(),source
         weights=torch.load(folder/'agent.pt',weights_only=True);gate={k.removeprefix('gate.'):v.float() for k,v in weights.items() if k.startswith('gate.')};m=make(r['arm'],r['spec'],r['seed'],gate).double().eval();m.load_state_dict(weights);cells=r['validation']
         if (folder/'test.json').exists():

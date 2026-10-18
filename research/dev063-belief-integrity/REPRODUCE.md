@@ -54,5 +54,11 @@ the admission gate. H1024 therefore tests this clock/input-length distribution,
 not storage of1024relevant facts, growing entity counts or C5 retrieval scaling.
 The gate still examines raw records; rejected writes do not remove that scan.
 The task has two entities, three supplied static dependency structures, a fixed
-five-action vocabulary and deterministic repairs conditional on prerequisites.
+five-action vocabulary,95%eligible-repair success and an80%collateral-fault
+branch for certain unnecessary parent repairs.
 New identities and clock transformations are not new causal laws or real sensors.
+
+The training-only public teacher also forbids STOP unless its healthy posterior
+is at least1-1e-12, in addition to its depth2cost calculation. That certainty
+guard is a supplied teacher preference; the neural export receives no STOP
+mask. Independent physical-fault checks, not imitation fidelity, assess risk.
