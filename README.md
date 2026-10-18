@@ -9,6 +9,19 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## DEV-060 foundations and the four-phase program (October 18, 2026)
+
+The [research program](docs/WORLD-STATE-RESEARCH-PROGRAM.md) links stabilization,
+uncertain-state learning, self-supervised representations and later task transfer.
+[DEV-060 foundations](docs/DEV-060-FOUNDATIONS.md) adds genuinely skipped inference
+operators, an isolated ten-seed retrieval probe and a noisy/missing-observation
+world with public-belief and privileged references. Sparse-only execution keeps
+the original model weights, state and recorded decisions; a portable bundle is
+included. The temporal probe does not establish an advantage or eliminate stale
+retrieval. The new uncertainty results are references only, not learned-policy
+performance. No new full agent, JEPA result, symbolic CASM discovery, C5 scaling
+or commercial validation is claimed.
+
 ## DEV-059 reliability and retrained controls (October 18, 2026)
 
 [DEV-059](docs/DEV-059-RESULTS.md) completes fifty fresh fits across five

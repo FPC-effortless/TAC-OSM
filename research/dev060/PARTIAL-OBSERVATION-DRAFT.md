@@ -1,6 +1,8 @@
 # DEV-060 draft: public-information competence and privileged teaching
 
-Status: DRAFT, NOT STARTED. Freeze implementation, models, tuning/training
+Status: FULL LEARNED-POLICY STUDY DRAFT, NOT STARTED. Small two-entity
+world/reference foundations are implemented under `protocol-foundations.json`;
+see `docs/DEV-060-FOUNDATIONS.md`. These are not learned-policy results. Freeze implementation, models, tuning/training
 budgets and source before main training. DEV-059 remains an exact-public-history
 study. Keep MTSK novelty retirement in force.
 

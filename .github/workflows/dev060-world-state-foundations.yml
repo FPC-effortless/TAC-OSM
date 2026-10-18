@@ -1,0 +1,77 @@
+name: DEV-060 sparse execution and uncertain-world foundations
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev060/**'
+      - 'src/tac_osm/development/temporal_agent.py'
+      - 'src/tac_osm/development/uncertain_world.py'
+      - 'scripts/*dev060.py'
+      - 'tests/test_world_state_foundations_dev060.py'
+      - '.github/workflows/dev060-world-state-foundations.yml'
+permissions:
+  contents: read
+jobs:
+  recorded-foundations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned CPU environment
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Test sparse equivalence, temporal prior and public information limits
+        run: python -m pytest tests/test_world_state_foundations_dev060.py -q
+      - name: Verify archive digests and restore recorded evidence
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          root=Path('research/dev060')
+          index=json.loads((root/'evidence-index.json').read_text())
+          for filename,expected in index['archives'].items():
+              assert hashlib.sha256((root/filename).read_bytes()).hexdigest()==expected
+          PY
+          mkdir -p results
+          tar -xzf research/dev060/evidence.tar.gz -C results
+          tar -xzf research/dev058/evidence.tar.gz -C results
+      - name: Restore all twenty fits and compare every recorded retrieval choice
+        run: python scripts/run_memory_foundations_dev060.py --directory results/dev060-memory --replay
+      - name: Reproduce uncertain public, private and shortcut references
+        run: |
+          python scripts/evaluate_uncertainty_dev060.py --output results/dev060-ci-reference.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('results/dev060-ci-reference.json').read_text())
+          b=json.loads(Path('results/dev060-reference.json').read_text())
+          assert a['protocol_sha256']==b['protocol_sha256']
+          assert a['arms']==b['arms']
+          PY
+      - name: Replay unchanged policies through sparse inference and native Veritas
+        run: python scripts/audit_sparse_compatibility_dev060.py --output results/dev060-ci-compatibility.json --veritas-root .veritas-public-runtime --export-root results/dev060-ci-exports
+      - name: Verify scientific gate labels are derived from the recorded outcomes
+        run: python scripts/audit_foundation_gates_dev060.py
+      - name: Measure same-weight dense and sparse observe paths without speed thresholds
+        run: python scripts/benchmark_sparse_dev060.py --output results/dev060-ci-benchmark.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: DEV060-FOUNDATIONS-RECORDED-AUDIT
+          path: |
+            results/dev060-ci-reference.json
+            results/dev060-ci-compatibility.json
+            results/dev060-ci-benchmark.json
+          if-no-files-found: warn
