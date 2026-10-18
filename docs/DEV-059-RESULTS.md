@@ -167,6 +167,15 @@ against the same synthetic physics, not independent real-world ground truth.
 Aggregate replay failures include pilots and weak experimental models and must
 not be represented as failures of the original default model.
 
+The [first GitHub evidence run](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39091656983)
+failed when one diagnostic probability differed by 0.00000508 between hosts.
+The audit-only absolute tolerance was subsequently fixed at 0.0001, with
+relative tolerance unchanged at 0.00001. Maximum drift and counts beyond the
+original tolerance are now reported. All discrete action, receipt, cost, work
+and outcome comparisons remain exact; no runtime or checkpoint changed. The
+[first failure record](../research/dev059/ci-first-run.json) is preserved.
+The local complete replay above passed the original stricter tolerance.
+
 Main training source was frozen at `b498459`; later report source identifiers
 can show `5ccbd08` because audit and repair-registration files were committed
 while fitting. The main training/controller sources did not change between

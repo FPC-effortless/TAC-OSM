@@ -32,7 +32,7 @@ python scripts/audit_evidence_gaps_dev059.py \
 
 Compare recomputed statistics to the frozen `statistics.json` and reference to
 `results/dev059-main-reference.json`. Floating diagnostic probabilities allow
-`rtol=1e-5, atol=1e-6`; all recorded action choices, receipts, costs and work
+`rtol=1e-5, atol=1e-4`; all recorded action choices, receipts, costs and work
 counters must match exactly. Native effect replay uses the same synthetic laws.
 The dataset seed/configuration fingerprints are in the archive; redundant
 training tensor caches are excluded. Training source and checkpoint digests

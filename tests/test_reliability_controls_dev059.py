@@ -108,6 +108,13 @@ def test_replay_tolerance_applies_only_to_float_telemetry():
     reference={'rows':[{'actions':[{'kind':'stop'}],'cost':1.,'completion_probabilities':[.5],'stop_probabilities':[.6]}]}
     actual=copy.deepcopy(reference);actual['rows'][0]['completion_probabilities'][0]+=1e-7
     compare(actual,reference)
+    drift={'values':0,'max_absolute_difference':0.,'outside_initial_tolerance':0}
+    actual['rows'][0]['completion_probabilities'][0]=.50001
+    compare(actual,reference,drift)
+    assert drift['outside_initial_tolerance']==1 and drift['max_absolute_difference']>0
+    actual['rows'][0]['completion_probabilities'][0]=.51
+    with pytest.raises(AssertionError):compare(actual,reference)
+    actual['rows'][0]['completion_probabilities'][0]=.5
     actual['rows'][0]['actions'][0]['kind']='repair'
     with pytest.raises(AssertionError,match='discrete'):compare(actual,reference)
 
