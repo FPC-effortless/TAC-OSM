@@ -87,6 +87,11 @@ def run(directory,diagnostic,output):
             m['fixed_latest']=sum(r['latest_hits'] for r in checked)/q;m['fixed_latest_available']=sum(r['latest_available'] for r in checked)/q
             m['retained_status_available']=sum(r['latest_available'] for r in test['fixed_rows'])/q
             m['preferred_slot_hit']=sum(r['latest_hits'] for r in test['fixed_rows'])/q
+            action_valid=fixed['valid']&~fixed['descriptors'][:,:,0].bool()
+            action_reads=visibility(state[0][:,:,-22:],state[1],fixed_public['events'],fixed_public['present'],fixed['descriptors'][:,:,3:],action_valid,out['read_logits'][:,:,0].argmax(-1))
+            aq=sum(r['queries'] for r in action_reads);m['exploratory_action_head0_status_stale']=sum(r['stale'] for r in action_reads)/aq
+            m['exploratory_action_head0_status_latest']=sum(r['latest_hits'] for r in action_reads)/aq
+
         m['public_regret']=m['economic_cost']-reference['public']['economic_cost'];m['private_regret']=m['economic_cost']-reference['privileged']['economic_cost']
         tables.setdefault(arm,{})[seed]=m;records.setdefault(arm,{})[seed]=test
         seedrows.append(dict(arm=arm,seed=seed,**{k:m[k] for k in ('completion','pass','every_cell_pass','physical_repair','faults','economic_cost','public_regret','actions','unnecessary_repairs','early_stop_worlds','missing_stop_worlds','fixed_brier')}))
@@ -132,6 +137,7 @@ def run(directory,diagnostic,output):
     interaction={k:interval([tables['entity_aging_retention'][s][k]-tables['entity_aging'][s][k]-tables['entity_retention'][s][k]+tables['entity'][s][k] for s in sorted(baseline)]) for k in ('completion','economic_cost','fixed_brier','faults_per_world')}
     frozen={s:{mode:metrics(cells) for mode,cells in v['modes'].items()} for s,v in d['frozen'].items()}
     result={'status':'COMPLETE','run':summary,'references':reference,'headroom_validation_economic':headroom,'arms':aggregates,'comparisons':comp,'factorial_interaction':interaction,'frozen_reads':frozen,
+       'read_metric_scope':'Registered stale metrics concern top-ranked auxiliary current-state query head0. Additional action-head0 status diagnostics exclude stop and assume that role; neither establishes what information the policy used. Forced frozen reads are conditional-format interventions, with null stop reads.',
        'unvalidated':['continuous identity association NOT_SUPPORTED','unseen cancellation schema NOT_SUPPORTED','noisy stress is not a belief/POMDP validation','CASM-specific superiority not isolated by public-feature MLP','C5 indexed retrieval open'],
        'integrity_findings':{'retention':'Original left-associated STE can perturb stored timestamps and break exact CF label lookup. Both retention mechanism claims unqualified before heldout analysis. Separate DEV061-R1 correction registered; original evidence preserved.','factorial':'As implemented; does not validate intended retention target alignment.'},
        'decision':'PROMOTE' if any(c['promote'] for c in comp.values()) else 'NO_PROMOTION'}

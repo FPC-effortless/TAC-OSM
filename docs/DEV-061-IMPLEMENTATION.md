@@ -195,3 +195,12 @@ The original cached occupancy float can differ from one by rounding. Its
 positive/zero mask and FIFO count must match incremental inference exactly;
 float values use numerical tolerance, while action choices remain exact. The
 corrected implementation additionally verifies exact retained timestamp identity.
+
+The registered stale metric reads **auxiliary current-state query head 0**, not
+the policy's action-conditioned reads. Additional action-head-0 status probes
+exclude stop candidates and explicitly assume a status role; they are exploratory.
+Top-ranked record age alone does not establish the information used by a weighted
+multi-head read or its causal effect on decisions. The frozen forced-read modes
+set stop reads to null in both latest/oldest conditions, so stop also depends on
+learned candidate-graph/context processing. These are conditional-format
+interventions, not a guarantee that an optimal world belief was supplied.

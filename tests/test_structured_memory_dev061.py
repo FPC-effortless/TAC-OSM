@@ -192,3 +192,5 @@ def test_exact_retention_preserves_timestamp_keys_and_gate_gradients(settings):
         for i in range(12):
             for slot in (a[1][i,16:32]>0).nonzero().flatten()+16:
                 assert (cached['signals'][i,:,-1]==a[0][i,slot,-1]).any()
+    model.train();value,_=runner.loss(model,cached,torch.arange(12),counterfactual=True);value.backward()
+    assert model.keep[-1].bias.grad.abs().sum()>0
