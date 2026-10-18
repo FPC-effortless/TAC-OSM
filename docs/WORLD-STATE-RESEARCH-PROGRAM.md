@@ -164,3 +164,21 @@ insufficient. No external provider spending or deployment is part of this tranch
 - Draft PRs preserve protocols, checkpoints, curves, hashes, negative controls,
   repeatable audits and CI. Keep development claims separate from scientific
   novelty, external replication and commercial readiness. Do not merge by default.
+
+## DEV-061 implementation tranche
+
+[DEV-061](DEV-061-IMPLEMENTATION.md) now implements the isolated memory factorial,
+with a registered ten-seed reliability fraction, frozen latest/oldest-read
+interventions, public-rule MLP, structured-GRU and explicit public-history
+controls. This is a new experimental branch, not a modification of DEV-058's
+export or DEV-059/060 evidence. The current-state updater is learned, while
+categorical public-ID routing is an openly declared structural prior.
+
+The next steps remain separately registered: DEV-062 belief inference with
+public action provenance and inspection costs; DEV-063 longer-horizon retention
+and cancellation schemas; DEV-064 direct outcome-to-policy causal tests and the
+named CASM-versus-same-feature-MLP deadline; DEV-065 reliable staged/joint
+optimization; DEV-066 integration. Multi-layer TAC blocks at depths 2/4 come
+after those controls, with depth distinct from imagination horizon. No current
+experiment validates raw-text association, general symbolic discovery, C5
+indexing, JEPA pretraining, or Woyengi/Jev/LLM commercial superiority.
