@@ -26,4 +26,4 @@ def run(study,directory):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--study',choices=['dev0615','dev062'],required=True);p.add_argument('--directory',required=True);a=p.parse_args();run(a.study,a.directory)
+    p=argparse.ArgumentParser();p.add_argument('--study',choices=['dev0615','dev062','dev062-r1'],required=True);p.add_argument('--directory',required=True);a=p.parse_args();run(a.study,a.directory)
