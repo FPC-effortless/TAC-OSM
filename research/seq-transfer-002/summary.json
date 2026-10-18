@@ -1,0 +1,84 @@
+{
+  "name": "SEQ-TRANSFER-002",
+  "date": "2026-10-18",
+  "checkpoint_seeds": [
+    7581,
+    7582
+  ],
+  "train_per_task_length": 600,
+  "test_per_task_length": 400,
+  "history_lengths": [
+    32,
+    96
+  ],
+  "rows": [
+    {
+      "task": "constant",
+      "acc32": 1,
+      "acc96": 1,
+      "cross32to96": 1
+    },
+    {
+      "task": "alternating",
+      "acc32": 1,
+      "acc96": 1,
+      "cross32to96": 1
+    },
+    {
+      "task": "period3",
+      "acc32": 1,
+      "acc96": 1,
+      "cross32to96": 0.46
+    },
+    {
+      "task": "period5",
+      "acc32": 1,
+      "acc96": 1,
+      "cross32to96": 0.525
+    },
+    {
+      "task": "delay3",
+      "acc32": 1,
+      "acc96": 0.505,
+      "cross32to96": 0.51
+    },
+    {
+      "task": "delay5",
+      "acc32": 1,
+      "acc96": 0.46,
+      "cross32to96": 0.505
+    },
+    {
+      "task": "iid",
+      "acc32": 0.615,
+      "acc96": 0.485,
+      "cross32to96": 0.5125
+    }
+  ],
+  "means": {
+    "frozen_7581": 0.86179,
+    "frozen_7582": 0.86179,
+    "matched_address_random_encoder": 0.86179,
+    "random_forced_7581": 0.68893,
+    "random_forced_7582": 0.65464,
+    "trained_ngram5": 0.93
+  },
+  "fresh_iid": {
+    "length32": [
+      954,
+      960,
+      1006
+    ],
+    "length96": [
+      1022,
+      1048,
+      1070
+    ],
+    "per_replicate": 2000
+  },
+  "warnings": [
+    "Random-init model did not train the writer/encoder; only new readout was trained.",
+    "No natural-language training or text generation.",
+    "Main IID 32 test anomaly does not replicate in larger fresh samples."
+  ]
+}
