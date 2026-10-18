@@ -1,5 +1,7 @@
 """Reproduce the separately registered exact-STE correction and physical guard."""
 import argparse
+import csv
+import io
 import json
 from pathlib import Path
 import subprocess
@@ -34,6 +36,9 @@ def summarize(root,output):
         entry['cost_vs_public']=interval([after[seed]['economic_cost']-result['public_reference']['economic_cost'] for seed in p['seeds']])
         result['arms'][arm]=entry
     write(output,result)
+    stream=io.StringIO();fields=['arm','cohort','seed','completion','pass','every_cell_pass','physical_repair','faults','economic_cost','actions','unnecessary_repairs','fixed_brier']
+    writer=csv.DictWriter(stream,fieldnames=fields,extrasaction='ignore');writer.writeheader();writer.writerows(sorted(rows,key=lambda r:(r['seed'],r['arm'],r['cohort'])))
+    Path(output).with_suffix('.csv').write_text(stream.getvalue())
 
 
 @torch.no_grad()
