@@ -47,3 +47,9 @@ def test_zero_persistence_scale_is_not_floored_into_a_favorable_test_score():
     assert r['MASE']==[None]*8 and r['all_channels_no_worse']
     with torch.no_grad():m.network.bias.fill_(.1)
     r=evaluate(m,d,torch.zeros(8,dtype=torch.float64));assert r['worst_relative_MAE'] is None and not r['all_channels_no_worse']
+
+
+def test_analysis_preserves_zero_baseline_ties_without_hiding_positive_error():
+    from analyze_real_maintenance_002 import ratio_array
+    r=ratio_array(np.array([0.,.01,1.]),np.array([0.,0.,2.]))
+    assert r[0]==1. and np.isnan(r[1]) and r[2]==.5
