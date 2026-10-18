@@ -137,7 +137,7 @@ def run(directory,output,veritas=None,exports=None):
     start=time.monotonic()
     reports=json.loads((root/'tuning.json').read_text())+json.loads((root/'fits.json').read_text())
     for source in {r['source'] for r in reports}:
-        for name in ('scripts/run_structured_memory_dev061.py','src/tac_osm/development/structured_memory.py'):
+        for name in ('scripts/run_structured_memory_dev061.py','src/tac_osm/development/structured_memory.py','src/tac_osm/development/learned_agent.py','src/tac_osm/development/learned_agent_world.py','src/tac_osm/development/temporal_agent.py'):
             assert subprocess.check_output(['git','show',f'{source}:{name}'],cwd=ROOT)==(ROOT/name).read_bytes(),'Fitting/evaluation source changed after registration'
     folders={}
     for path in root.glob('*/report.json'):
