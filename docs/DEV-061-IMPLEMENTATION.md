@@ -46,10 +46,11 @@ single-cell GRU policy. The MLP deliberately has a public latest-state feature
 parser and actor-focused losses, a strong task-specific control with an explicit
 optimization/representation advantage.
 
-The parameter budget is matched within 5%; hidden widths change to achieve it.
-Consequently, recurrent-state capacity and FLOPs are not identical, and factorial
-contrasts are budget-controlled architectural comparisons rather than perfectly
-width-controlled mechanism effects. Admission pretraining has the same update
+The parameter budget is matched within 5%. All four entity factorial cells use
+width 47, so aging/retention contrasts hold that width fixed. The generic model
+uses width 48 and structured GRU width 61; their recurrent-state capacity and
+FLOPs are not identical. Exact counts and tensor-state sizes are recorded in
+`research/dev061/model-budgets.json`. Admission pretraining has the same update
 count and type-label distribution; generic addressing consumes extra random
 samples. Its exact synthetic pretraining samples differ from entity admission.
 The main controller snapshots are identical across arms.
