@@ -40,8 +40,8 @@ def export(folder,report,destination):
 
 
 @torch.no_grad()
-def standalone(folder,report,model,destination):
-    export(folder,report,destination);requests=[];expected=[];w=IdentityWorld(6151003,0,4,128,'fresh');d,v,k,q,commands=w.public_candidates();state=model.initial(torch.tensor(k)[None].double(),torch.tensor(q)[None]);pending=w.public()
+def standalone(folder,report,model,destination,demo_seed=6151003):
+    export(folder,report,destination);requests=[];expected=[];w=IdentityWorld(demo_seed,0,4,128,'fresh');d,v,k,q,commands=w.public_candidates();state=model.initial(torch.tensor(k)[None].double(),torch.tensor(q)[None]);pending=w.public()
     for tick in range(18):
         d,v,k,q,commands=w.public_candidates();request={'reset':tick==0,'keys':k.tolist(),'entity_valid':q.tolist(),'events':pending.tolist(),'candidates':d.tolist(),'valid':v.tolist()};requests.append(request)
         for e in pending:state,_=model.observe(state,torch.tensor(e)[None].double())
@@ -54,13 +54,13 @@ def standalone(folder,report,model,destination):
 sys.path.insert(0,'.')
 import torch
 original=builtins.__import__
-def checked(name,*args,**kwargs):
-    if name.split('.')[0] in ('numpy','tac_osm','investigation_world'):raise RuntimeError('Research import in deployment')
-    return original(name,*args,**kwargs)
+def checked(name,globals=None,locals=None,fromlist=(),level=0):
+    if level==0 and name.split('.')[0] in ('numpy','tac_osm','investigation_world'):raise ImportError('Research import in deployment')
+    return original(name,globals,locals,fromlist,level)
 builtins.__import__=checked
 runpy.run_path('runtime.py',run_name='__main__')
 """
-    r=subprocess.run([sys.executable,'-I','-B','-c',guard],cwd=destination,input=text,text=True,capture_output=True,check=True);compare([json.loads(s) for s in r.stdout.splitlines()],expected,{'values':0,'max_abs':0.});return len(expected)
+    r=subprocess.run([sys.executable,'-I','-B','-c',guard],cwd=destination,input=text,text=True,capture_output=True);assert r.returncode==0,r.stderr;compare([json.loads(s) for s in r.stdout.splitlines()],expected,{'values':0,'max_abs':0.});return len(expected)
 
 
 @torch.no_grad()
@@ -74,7 +74,11 @@ def run(directory,output,veritas=None,exports=None,smoke=False):
     result={'status':'RUNNING','scope':'Strict float64 restore replay. Native coverage first registered seed/all arms only. Shared synthetic physics. Cross-host evidence requires remote execution.','checkpoints':0,'cells':0,'trajectories':0,'actions':0,'native_actions':0,'portable_decisions':0,'telemetry':{'values':0,'max_abs':0.},'parameter_changes':{},'host':{'python':sys.version,'torch':str(torch.__version__),'machine':subprocess.check_output(['uname','-a'],text=True).strip()},'cross_hardware':'UNKNOWN until comparison on another host'}
     paths=sorted(root.glob('*/**/report.json'));started=time.monotonic()
     for path in paths:
-        r=json.loads(path.read_text());folder=path.parent;assert digest(folder/'agent.pt')==r['checkpoint_sha256'];m=make(r['arm'],r['spec'],r['seed']).double().eval();initial={k:v.clone() for k,v in m.named_parameters()};m.load_state_dict(torch.load(folder/'agent.pt',weights_only=True));key=str(folder.relative_to(root));result['parameter_changes'][key]={k:float((v-initial[k]).abs().max()) for k,v in m.named_parameters()};result['checkpoints']+=1
+        r=json.loads(path.read_text());folder=path.parent;assert digest(folder/'agent.pt')==r['checkpoint_sha256'];
+        if not smoke:
+            for source in ('src/tac_osm/development/robust_identity.py','scripts/data_identity_dev0615.py','scripts/run_identity_dev0615.py','research/dev0615/protocol.json'):
+                assert subprocess.check_output(['git','show',f"{r['source']}:{source}"],cwd=ROOT)==(ROOT/source).read_bytes(),source
+        m=make(r['arm'],r['spec'],r['seed']).double().eval();initial={k:v.clone() for k,v in m.named_parameters()};m.load_state_dict(torch.load(folder/'agent.pt',weights_only=True));key=str(folder.relative_to(root));result['parameter_changes'][key]={k:float((v-initial[k]).abs().max()) for k,v in m.named_parameters()};result['checkpoints']+=1
         cells=r['validation']
         if (folder/'test.json').exists():cells=cells+json.loads((folder/'test.json').read_text())['cells']
         for cell in cells:

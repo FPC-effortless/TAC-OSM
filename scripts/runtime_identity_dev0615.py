@@ -6,7 +6,7 @@ import torch
 from agent_model import IdentityAgent,choose
 
 torch.set_num_threads(1)
-torch.use_deterministic_algorithms(True)
+
 root=Path(__file__).resolve().parent
 meta=json.loads((root/'metadata.json').read_text())
 model=IdentityAgent(meta['arm'],meta['spec']['width'],meta['spec']['aux_width']).double().eval()

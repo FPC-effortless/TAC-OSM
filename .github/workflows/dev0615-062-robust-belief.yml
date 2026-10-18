@@ -1,0 +1,83 @@
+name: DEV061.5 and DEV062A learned identity and belief evidence
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev0615/**'
+      - 'research/dev062/**'
+      - 'src/tac_osm/development/robust_identity.py'
+      - 'src/tac_osm/development/belief_agent.py'
+      - 'scripts/*dev0615.py'
+      - 'scripts/*dev062.py'
+      - 'tests/test_identity*'
+      - 'tests/test_belief*'
+      - '.github/workflows/dev0615-062-robust-belief.yml'
+permissions:
+  contents: read
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned environment
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Full tests and provenance
+        run: |
+          python -m pytest -q
+          python scripts/sync_test_count.py --check
+  recorded-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 100
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned environment
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime pytest==9.1.1 numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify and restore complete recorded studies
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib,tarfile
+          for study in ('dev0615','dev062'):
+              folder=pathlib.Path('research')/study
+              index=json.loads((folder/'evidence-index.json').read_text())
+              for name,sha in index['archives'].items():
+                  assert hashlib.sha256((folder/name).read_bytes()).hexdigest()==sha
+              with tarfile.open(folder/'evidence.tar.gz') as archive:
+                  archive.extractall('results',filter='data')
+          PY
+      - name: Strict float64 restored trajectories and native first-seed execution
+        run: |
+          python scripts/audit_identity_dev0615.py --directory results/dev0615-main --output results/dev0615-remote-audit.json --veritas .veritas-public-runtime --exports results/dev0615-remote-export
+          python scripts/audit_belief_dev062.py --directory results/dev062-main --output results/dev062-remote-audit.json --veritas .veritas-public-runtime --exports results/dev062-remote-export
+      - name: Preserve remote diagnostics even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev0615-dev062-remote-replay
+          path: |
+            results/*remote-audit.json
+            results/*remote-export/**
+          if-no-files-found: ignore
