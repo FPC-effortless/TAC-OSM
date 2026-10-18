@@ -15,6 +15,11 @@ from audit_identity_dev0615 import compare
 from audit_fully_learned_dev058 import native_replay,PIN
 
 
+def compare_fixed_metrics(actual,expected,drift):
+    # JSON object keys have a string wire representation, including temperatures.
+    compare(json.loads(json.dumps(actual)),expected,drift)
+
+
 def export(folder,report,destination):
     destination.mkdir(parents=True,exist_ok=True);(destination/'LICENSE-NOTICE.txt').write_text('Project metadata declares Apache-2.0; https://www.apache.org/licenses/LICENSE-2.0\n');shutil.copy(ROOT/'src/tac_osm/development/belief_agent.py',destination/'agent_model.py');shutil.copy(ROOT/'scripts/runtime_belief_dev062.py',destination/'runtime.py');shutil.copy(folder/'agent.pt',destination/'agent.pt');write(destination/'metadata.json',{'arm':report['arm'],'spec':report['spec'],'seed':report['seed'],'dtype':'float64','epsilon':1e-6,'checkpoint_sha256':digest(folder/'agent.pt')})
     (destination/'README.txt').write_text('Requires Python + PyTorch only. python runtime.py < demo-requests.jsonl\nPublic JSON-lines: reset, keys(2x16), events(new raw46-vectors), candidates(5x19), prices(sensor-error,inspection-price).\nEvents: source6(initial,relation,action-start,repair-receipt,exact-inspection,noise), subject16,other16,bit,action-type3,tick,exact,sensor-error,inspection-price.\nOutputs: learned choice index, scores, joint probabilities(00,01,10,11), completion and two fault marginals in one forward pass.\nPriors: public typed manifest, cosine identity binding, trained noise-type gate, FIFO64, two entity state labels.\nNo Bayes filter, teacher, physical transition function, analytical planner or stop override in deployment.\nPosterior-supervised bounded research model; independent external verification remains necessary. No commercial or universal calibration claim.\n')
@@ -54,7 +59,7 @@ def run(directory,output,exports=None,veritas=None,smoke=False):
                 assert subprocess.check_output(['git','show',f"{r['source']}:{source}"],cwd=ROOT)==(ROOT/source).read_bytes(),source
         weights=torch.load(folder/'agent.pt',weights_only=True);gate={k.removeprefix('gate.'):v.float() for k,v in weights.items() if k.startswith('gate.')};m=make(r['arm'],r['spec'],r['seed'],gate).double().eval();m.load_state_dict(weights);cells=r['validation']
         if (folder/'test.json').exists():
-            t=json.loads((folder/'test.json').read_text());cells=cells+t['cells'];fixed=torch.load(root/'test-fixed.pt',weights_only=True);compare(fixed_metrics(m,fixed,copy.deepcopy(m.gate).float()),t['fixed'],result['telemetry'])
+            t=json.loads((folder/'test.json').read_text());cells=cells+t['cells'];fixed=torch.load(root/'test-fixed.pt',weights_only=True);compare_fixed_metrics(fixed_metrics(m,fixed,copy.deepcopy(m.gate).float()),t['fixed'],result['telemetry'])
         for c in cells:
             actual,_=rollout(m,c['seed'],c['history'],c['worlds'],c['horizon'],False,c['error'],c['inspection']);compare(actual,c,result['telemetry']);result['cells']+=1;result['trajectories']+=c['worlds']
             for row in c['rows']:

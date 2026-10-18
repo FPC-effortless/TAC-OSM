@@ -67,3 +67,14 @@ def test_empty_initial_evidence_and_visited_state_relabelling(data):
     c,visited=rollout(copy.deepcopy(m).double(),9962005,32,2,2,True)
     assert len(visited)==sum(len(r['actions']) for r in c['rows'])
     assert all(abs(float(r['posterior'].sum())-1)<1e-6 for r in visited)
+
+
+def test_saved_fixed_metric_grid_uses_json_keys_without_relaxing_numeric_tolerance(data):
+    import json
+    from run_belief_dev062 import fixed_metrics
+    from audit_belief_dev062 import compare_fixed_metrics
+    _,_,rows,m=data;model=copy.deepcopy(m).double().eval()
+    metrics=fixed_metrics(model,rows,m.gate);saved=json.loads(json.dumps(metrics))
+    compare_fixed_metrics(metrics,saved,{'values':0,'max_abs':0.})
+    saved['posterior_KL']+=.01
+    with pytest.raises(AssertionError):compare_fixed_metrics(metrics,saved,{'values':0,'max_abs':0.})
