@@ -73,3 +73,9 @@ choose a new registered question rather than tuning against A. Record real CPU,
 parameter/state bytes, data preparation and all model work; physical DRAM/FLOPs
 UNKNOWN without counters. Forecasting alone cannot qualify repair decisions:
 actual inspection/action prices and independent outcomes remain separate gates.
+
+Pre-fit implementation clarification: non-finite analog rows fail preprocessing;
+do not silently impute/drop them. Statistical qualification requires>=8distinct A
+days. Fitting CPU includes parent coordination and completed worker CPU, including
+worker startup; report group and total accounting. Initial interpreter bootstrap
+is excluded. Checkpoint selection validation uses float64 copies of EMA models.
