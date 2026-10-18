@@ -122,7 +122,7 @@ def run(directory,diagnostic,output):
     headroom=genericval-refval
     for arm in names:
         c=comp[arm];a=aggregates[arm];c['holm_p']=adjusted[arm]
-        gates={'reliability_9_of10':a['seeds_above95']>=9,'every_cell_9_of10':a['seeds_passing_every_cell']>=9,
+        gates={'retention_label_integrity':'retention' not in arm,'reliability_9_of10':a['seeds_above95']>=9,'every_cell_9_of10':a['seeds_passing_every_cell']>=9,
                'primary_advantage':adjusted[arm]<.05 and sum(r['pass'] for r in tables[arm].values())>sum(r['pass'] for r in baseline.values()),
                'stale_decrease_0.01':c['fixed_stale']['difference']<=-.01,'brier_decrease_0.01':c['fixed_brier']['difference']<=-.01,
                'unnecessary_decrease_0.10':c['unnecessary_repairs']['difference']<=-.1,'no_fault_increase':c['faults_per_world']['paired_seed_bootstrap95'][1]<=0,
@@ -133,6 +133,7 @@ def run(directory,diagnostic,output):
     frozen={s:{mode:metrics(cells) for mode,cells in v['modes'].items()} for s,v in d['frozen'].items()}
     result={'status':'COMPLETE','run':summary,'references':reference,'headroom_validation_economic':headroom,'arms':aggregates,'comparisons':comp,'factorial_interaction':interaction,'frozen_reads':frozen,
        'unvalidated':['continuous identity association NOT_SUPPORTED','unseen cancellation schema NOT_SUPPORTED','noisy stress is not a belief/POMDP validation','CASM-specific superiority not isolated by public-feature MLP','C5 indexed retrieval open'],
+       'integrity_findings':{'retention':'Original left-associated STE can perturb stored timestamps and break exact CF label lookup. Both retention mechanism claims unqualified before heldout analysis. Separate DEV061-R1 correction registered; original evidence preserved.','factorial':'As implemented; does not validate intended retention target alignment.'},
        'decision':'PROMOTE' if any(c['promote'] for c in comp.values()) else 'NO_PROMOTION'}
     write(output,result)
     stream=io.StringIO();writer=csv.DictWriter(stream,fieldnames=list(seedrows[0]));writer.writeheader();writer.writerows(sorted(seedrows,key=lambda r:(r['seed'],r['arm'])))

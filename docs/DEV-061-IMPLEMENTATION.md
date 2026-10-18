@@ -169,3 +169,29 @@ its own inference-only subclass. Both optimized runtimes preserve weights,
 state values and outputs; neither changes decisions. Idle-host timings use
 these served implementations, avoiding an artificial advantage against a
 control that needlessly clones its bank for discarded noise records.
+
+## Retention numerical integrity finding, before held-out analysis
+
+For float32 `p=0.55`, left-associated `1+p-p.detach()` evaluates to
+`0.99999994`. That perturbs stored public timestamps, and an exact timestamp
+lookup can then attach the counterfactual label to the wrong prefix. This is a
+software defect, independent of whether a fitted policy scores well. Original
+retention mechanism claims are unqualified; the entire original matrix and its
+as-implemented interactions remain preserved. The number of affected historical
+training labels is UNKNOWN because that quantity was not logged.
+
+[DEV-061-R1](../research/dev061/retention-repair/protocol.json), registered before
+opening main held-out numerical outcomes, corrects only the training-state STE:
+`hard + (probability - probability.detach())`, with a hard eval path. The forward
+gate and timestamp identities are exact; gradients remain available. It retrains
+both retention variants on all ten paired seeds, using frozen data, rates,
+updates and losses, within the original shared 180 fitting CPU-minute cap.
+Fresh test worlds compare original versus corrected checkpoints and the public
+reference. It is a numerical correction study, not a replacement winning cohort
+or a new architectural-superiority claim. Inference observation/action/stop
+code is unchanged, and served exports omit training-cache construction entirely.
+
+The original cached occupancy float can differ from one by rounding. Its
+positive/zero mask and FIFO count must match incremental inference exactly;
+float values use numerical tolerance, while action choices remain exact. The
+corrected implementation additionally verifies exact retained timestamp identity.

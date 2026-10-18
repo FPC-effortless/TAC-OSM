@@ -175,3 +175,20 @@ def test_public_feature_control_gets_equivalent_allocation_optimization(settings
             if not t['writes']:assert b is before
         w=runner.ResearchWorld(7161104,0,4,32);args=[torch.from_numpy(v)[None] for v in w.candidates()[:4]]
         torch.testing.assert_close(old(a,*args)['logits'],new(b,*args)['logits'],atol=0,rtol=0)
+
+
+def test_exact_retention_preserves_timestamp_keys_and_gate_gradients(settings):
+    from tac_osm.development.exact_retention import ExactRetentionAgent
+    p=torch.tensor(.55,requires_grad=True);gate=torch.ones_like(p)+(p-p.detach());assert gate.item()==1.;gate.backward();assert p.grad.item()==1.
+    assert (torch.ones_like(p)+p-p.detach()).item()!=1.
+    model=ExactRetentionAgent(settings['entity_retention'],'entity_retention',17).eval()
+    runner.pretrain_admission(model,17,40);model.retention_ready.fill_(True)
+    with torch.no_grad():
+        for value in model.keep.parameters():value.zero_()
+        model.keep[-1].bias.fill_(float(torch.logit(torch.tensor(.55))))
+        ds=runner.raw_data(7161105,12);cached=runner.prepare(model,ds);a=model.training_state(cached);b=model.initial(12)
+        for t in range(ds['events'].shape[1]):b,_=model.observe(b,ds['events'][:,t],ds['present'][:,t])
+        torch.testing.assert_close(a[0],b[0],atol=1e-6,rtol=1e-5);torch.testing.assert_close(a[1],b[1],atol=0,rtol=0)
+        for i in range(12):
+            for slot in (a[1][i,16:32]>0).nonzero().flatten()+16:
+                assert (cached['signals'][i,:,-1]==a[0][i,slot,-1]).any()

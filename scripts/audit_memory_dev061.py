@@ -38,6 +38,8 @@ def export(checkpoint,arm,config,destination):
     for source,name in [('learned_agent.py','agent_model.py'),('temporal_agent.py','temporal_model.py'),('structured_memory.py','memory_model.py')]:shutil.copy(ROOT/'src/tac_osm/development'/source,destination/name)
     tree=ast.parse((ROOT/'src/tac_osm/development/structured_memory.py').read_text())
     chosen='PublicFeatureMLP' if arm=='public_mlp' else 'MemoryAgent'
+    for node in tree.body:
+        if isinstance(node,ast.ClassDef):node.body=[item for item in node.body if not isinstance(item,ast.FunctionDef) or item.name!='training_state']
     tree.body=[node for node in tree.body if isinstance(node,(ast.Import,ast.ImportFrom,ast.Try)) or isinstance(node,ast.ClassDef) and node.name==chosen]
     constructor='PublicFeatureMLP(config["width"],seed)' if arm=='public_mlp' else 'MemoryAgent(config,arm,seed)'
     (destination/'memory_model.py').write_text(ast.unparse(tree)+'\n\ndef create(arm,config,seed=0):\n    return '+constructor+'\n')
@@ -177,7 +179,9 @@ def run(directory,output,veritas=None,exports=None):
             phase[0]='fixed-cache-equivalence';incremental=model.initial(len(fixed_raw['events']))
             for t in range(fixed_raw['events'].shape[1]):incremental,_=model.observe(incremental,fixed_raw['events'][:,t],fixed_raw['present'][:,t])
             torch.testing.assert_close(incremental[0],state[0],rtol=1e-5,atol=1e-5)
-            torch.testing.assert_close(incremental[1],state[1],rtol=0,atol=0)
+            assert torch.equal(incremental[1]>0,state[1]>0),'cache/incremental occupied-mask mismatch'
+            torch.testing.assert_close(incremental[1],state[1],rtol=0,atol=1e-6)
+            if state[1].shape[1]>32:assert torch.equal(incremental[1][:,32:],state[1][:,32:]),'FIFO counter mismatch'
             incremental_output=model(incremental,fixed['descriptors'],fixed['valid'],fixed['queries'],fixed['query_valid'])
             out=model(state,fixed['descriptors'],fixed['valid'],fixed['queries'],fixed['query_valid']);qv=fixed['query_valid']
             assert torch.equal(incremental_output['logits'].argmax(-1),out['logits'].argmax(-1)),'cache/incremental action mismatch'

@@ -1,0 +1,74 @@
+{
+  "study": "DEV-061-R1",
+  "status": "REGISTERED_BEFORE_CORRECTION_FITTING_AND_NEW_TEST",
+  "reason": "IEEE float32 left-associated hard+probability-probability.detach can yield0.99999994 for an intended1. Raw timestamp identity used for counterfactual label alignment can then fail. Original retention mechanism claims are unqualified regardless of outcomes; preserve the whole original matrix.",
+  "change": "Training-only gate = hard + (probability-probability.detach); eval uses hard. Same mathematical gradient, exact binary forward. All observation, inference, policy, loss weights and targets unchanged. No stopping fine-tune.",
+  "arms": [
+    "entity_retention",
+    "entity_aging_retention"
+  ],
+  "seeds": [
+    9101,
+    9102,
+    9103,
+    9104,
+    9105,
+    9106,
+    9107,
+    9108,
+    9109,
+    9110
+  ],
+  "configs": "Use archived original configurations, same matched47dimension.",
+  "lrs": {
+    "entity_retention": 0.001,
+    "entity_aging_retention": 0.001
+  },
+  "data": {
+    "train_seed": 5611001,
+    "validation_seed": 5611002,
+    "test_seed": 5611203,
+    "fixed_query_seed": 5611204,
+    "fixed_test_snapshots": 512
+  },
+  "training": {
+    "seeds": [
+      9101,
+      9102,
+      9103,
+      9104,
+      9105,
+      9106,
+      9107,
+      9108,
+      9109,
+      9110
+    ],
+    "tuning_seed": 9100,
+    "lrs": [
+      0.001,
+      0.002
+    ],
+    "admission_updates": 600,
+    "belief_warmup_updates": 256,
+    "controller_updates": 1200,
+    "batch": 64,
+    "optimizer": "AdamW wd0.0001 clip1",
+    "retention_warmup_controller_updates": 400,
+    "retention_target": "positive increase >0.01 in supervised combined policy/prediction/current-state/completion loss plus normalized true expected one-step action-risk regret after one episodic-slot deletion; teacher stop cost20/fault. Target detached; gates trained BCE plus0.01 expected episodic-write penalty. One counterfactual per batch/example. No claim that this single-next-decision proxy completes DEV063.",
+    "retention_schedule": "During first400controller updates retain all episodic writes. Then straight-through learned gates are trained; prefix GRU features align with write time in cached sequences. Counterfactual label holds entity state fixed and removes one actual retained episodic slot.",
+    "selection": "Independent two-LR validation sweeps, one dedicated seed/arm; prioritize fraction of validation cells >95%, fewer final faults, higher completion, then physical economic cost. Final update only. Fit all70fresh models before opening test; no favorable-seed selection.",
+    "resources": "2workers,1torch thread each,360CPU seconds/fit and180total fitting CPU minutes; capped/failed fits retained, matrix incomplete forbids promotion. Same updates/examples, NOT equal FLOPs/time/state bits. Active TAC parameter counts within5% of generic133580 plus shared current-state probe; MLP parameter matched. Record actual cost.",
+    "loss_definition": "Policy CE +0.3 future-policy CE +0.7 one-action BCE +0.3 selected-two-action BCE +0.5 mean of current/next/later completion BCE +0.1 normalized cost Huber +0.5 current-state BCE +0.5 public latest-read CE. MLP policy CE +0.5 current-state BCE +0.5 current completion BCE. Warmup current-state BCE plus0.5 read CE only."
+  },
+  "budget": "Original plus correction fits together <=180CPU minutes,2workers,360CPU seconds/fit. Retain caps/failures; no smaller favorable cohort.20newfits,10paired initialization seeds per arm; not20independent seeds.",
+  "tests": "After all20corrected fits close, evaluate original versus corrected retention checkpoints on fresh shared clean N2/4/6,H32/128/512/1024,32worlds/cell.512fresh fixed snapshots built incrementally. Public reference on identical worlds. No corrected OOD or broader architectural superiority claim.",
+  "acceptance": "Numerical integrity exact gate/timestamp identities; cache/incremental semantic-mask and action equivalence. Report paired10seed cost/completion/fault differences and primary fraction strictly>95%, all-cell fraction, all per-seed values. A correction that increases physical faults is not a served-model promotion. Original full architecture promotion criteria are not relaxed; public-rule cost superiority and missing matched corrected-world neural controls block any new architectural promotion.",
+  "integrity": "Both protocols and correction source committed before opening original main heldout numerical outcomes. No LR or seed chosen using original or corrected test results. Original data/weights/negative outcomes preserved. Correction replay tests deployed MemoryAgent because only training_state changed.",
+  "limitations": [
+    "Counterfactual retention remains local next-decision proxy with retained-only selection bias",
+    "Asymmetric risk surrogate is not literal charged regret",
+    "No general symbolic CASM discovery or C5 claim",
+    "Missing/ambiguous observations, continuous identity association and cancellations remain unvalidated"
+  ]
+}
