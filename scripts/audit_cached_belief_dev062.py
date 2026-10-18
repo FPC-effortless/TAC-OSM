@@ -50,20 +50,20 @@ def timed(model,records):
 
 
 @torch.no_grad()
-def run(directory,output,exports):
+def run(directory,output,exports,seed_start=92601):
     torch.set_num_threads(1);torch.use_deterministic_algorithms(True);root=Path(directory);assert json.loads((root/'summary.json').read_text())['status']=='COMPLETE';start=cpu_used();result={'status':'RUNNING','parity':{'values':0,'max_abs':0.},'checkpoints':0,'trajectories':0,'cells':0,'measurements':[],'failures':[],'scope':'Same weights, exact semantic choices; forced fixed-trace CPU timing excludes simulation/filter, JSON parsing and input tensor creation. No memory-traffic, C5 or commercial claim.'}
     try:
-        for path in sorted(root.glob('group-*/tac/report.json'))+sorted(p for p in (root/'group-92601').glob('*/report.json') if p.parent.name!='tac'):
-            r,m=restore(path.parent,True);allcells=json.loads((path.parent/'test.json').read_text())['cells'];cells=r['validation']+allcells if r['seed']==92601 else allcells[:2]
+        for path in sorted(root.glob('group-*/tac/report.json'))+sorted(p for p in (root/f'group-{seed_start}').glob('*/report.json') if p.parent.name!='tac'):
+            r,m=restore(path.parent,True);allcells=json.loads((path.parent/'test.json').read_text())['cells'];cells=r['validation']+allcells if r['seed']==seed_start else allcells[:2]
             for c in cells:
                 if cpu_used()-start>600:raise TimeoutError('Registered cache audit CPU cap')
                 actual,_=rollout(m,c['seed'],c['history'],c['worlds'],c['horizon'],False,c['error'],c['inspection']);compare(actual,c,result['parity']);result['cells']+=1;result['trajectories']+=c['worlds']
             result['checkpoints']+=1;write(output,result)
-        for path in sorted((root/'group-92601').glob('*/report.json')):
+        for path in sorted((root/f'group-{seed_start}').glob('*/report.json')):
             r,base=restore(path.parent);_,cached=restore(path.parent,True)
             for history in (32,128,512):
                 for index in range(8):
-                    trace=requests(base,6263001,index,history)
+                    trace=requests(base,6263001 if seed_start==92601 else 6283001,index,history)
                     for dtype in (torch.float32,torch.float64):
                         for label,model in [('base',copy.deepcopy(base).to(dtype)),('cache',copy.deepcopy(cached).to(dtype))]:
                             if cpu_used()-start>600:raise TimeoutError('Registered cache audit CPU cap')
@@ -91,4 +91,4 @@ runpy.run_path('runtime.py',run_name='__main__')
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--directory',required=True);p.add_argument('--output',required=True);p.add_argument('--exports',required=True);a=p.parse_args();run(a.directory,a.output,a.exports)
+    p=argparse.ArgumentParser();p.add_argument('--directory',required=True);p.add_argument('--output',required=True);p.add_argument('--exports',required=True);p.add_argument('--seed-start',type=int,default=92601);a=p.parse_args();run(a.directory,a.output,a.exports,a.seed_start)

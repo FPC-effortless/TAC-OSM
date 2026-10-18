@@ -24,3 +24,9 @@ registered replay before recommending cache. Store state bytes and transient wor
 limitations; a cache can use more RAM and remain O(history) for observation intake.
 No C5, physical-memory-traffic or production SLA claim. Qualification of equal
 inference does not repair an unreliable learned policy or establish commercial ROI.
+
+Conditional fresh-recipe coverage: if preregistered DEV062-R1 runs, repeat the same
+conformance/budget/10%CPU criteria on its20TAC checkpoints and all four fixed
+firstseed92801 arms. Separate600CPU-second audit, separate cached export/audit;
+never transfer numerical qualification from DEV062A weights to new weights. The
+R1 fixed timing namespace is6283001; original is6263001. Neither is used for fitting.
