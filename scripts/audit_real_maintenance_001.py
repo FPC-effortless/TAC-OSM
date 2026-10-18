@@ -53,4 +53,9 @@ runpy.run_path('runtime.py',run_name='__main__')
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--directory',required=True);p.add_argument('--output',required=True);p.add_argument('--exports',required=True);p.add_argument('--smoke',action='store_true');a=p.parse_args();run(a.directory,a.output,a.exports,a.smoke)
+    p=argparse.ArgumentParser();p.add_argument('--directory',required=True);p.add_argument('--output',required=True);p.add_argument('--exports',required=True);p.add_argument('--smoke',action='store_true');a=p.parse_args()
+    try:run(a.directory,a.output,a.exports,a.smoke)
+    except Exception:
+        from audit_failure_dev062 import preserve
+        preserve(a.output)
+        raise

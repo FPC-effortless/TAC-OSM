@@ -88,7 +88,7 @@ runpy.run_path('runtime.py',run_name='__main__')
     except Exception:
         import traceback
         result['status']='FAILED';result['qualifies']=False;result['failures'].append(traceback.format_exc())
-    result['audit_cpu_seconds']=cpu_used()-start;result['protocol_sha256']=digest(ROOT/'research/dev062-cache/PROTOCOL.md');write(output,result);print('CACHE_AUDIT',json.dumps({k:v for k,v in result.items() if k not in ('measurements','failures')}),flush=True)
+    result['host']={'cpu_models':sorted({line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')}),'torch':str(torch.__version__)};result['audit_cpu_seconds']=cpu_used()-start;result['protocol_sha256']=digest(ROOT/'research/dev062-cache/PROTOCOL.md');write(output,result);print('CACHE_AUDIT',json.dumps({k:v for k,v in result.items() if k not in ('measurements','failures')}),flush=True)
     if result['failures']:raise RuntimeError(result['failures'][0])
 
 

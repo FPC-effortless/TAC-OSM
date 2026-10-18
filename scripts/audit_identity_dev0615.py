@@ -109,4 +109,9 @@ def run(directory,output,veritas=None,exports=None,smoke=False):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--directory',required=True);p.add_argument('--output',required=True);p.add_argument('--veritas');p.add_argument('--exports');p.add_argument('--smoke',action='store_true');a=p.parse_args();run(a.directory,a.output,a.veritas,a.exports,a.smoke)
+    p=argparse.ArgumentParser();p.add_argument('--directory',required=True);p.add_argument('--output',required=True);p.add_argument('--veritas');p.add_argument('--exports');p.add_argument('--smoke',action='store_true');a=p.parse_args()
+    try:run(a.directory,a.output,a.veritas,a.exports,a.smoke)
+    except Exception:
+        from audit_failure_dev062 import preserve
+        preserve(a.output)
+        raise
