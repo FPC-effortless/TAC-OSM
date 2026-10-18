@@ -135,7 +135,7 @@ def run(directory,output,veritas=None,exports=None):
     summary=json.loads((root/'summary.json').read_text());assert summary['status']=='COMPLETE' and summary['test_opened'];assert summary['protocol_sha256']==digest(PROTOCOL)
     for name,expected in json.loads((root/'manifest.json').read_text()).items():assert digest(root/name)==expected,name
     result={'status':'RUNNING','checkpoints':0,'trajectories':0,'actions':0,'native_actions':0,'standalone_decisions':0,'cells':0,
-       'failed_rollouts_all_arms_splits':0,'telemetry_drift':{'values':0,'max_absolute_difference':0.},'write_counters':{},
+       'failed_rollouts_all_arms_splits':0,'telemetry_drift':{'values':0,'max_absolute_difference':0.},'write_counters':{},'parameter_changes_from_seed_initialization':{},
        'scope':'Separate restoration/physical accounting/native execution. Shared synthetic physics; no independent real-world validation.'}
     p=json.loads(PROTOCOL.read_text());fixed_raw=raw_data(p['data']['fixed_query_seed'],p['data']['fixed_test_snapshots'])
     start=time.monotonic()
@@ -149,7 +149,13 @@ def run(directory,output,veritas=None,exports=None):
     for report in reports:
         arm,seed=report['arm'],report['seed'];folder=folders[(arm,seed,report['lr'])]
         checkpoint=folder/'agent.pt';assert digest(checkpoint)==report['checkpoint_sha256']
-        model=create(arm,report['config'],seed).eval();model.load_state_dict(torch.load(checkpoint,weights_only=True),strict=True)
+        model=create(arm,report['config'],seed).eval();initial={name:value.detach().clone() for name,value in model.named_parameters()};model.load_state_dict(torch.load(checkpoint,weights_only=True),strict=True)
+        changes={}
+        for name,value in model.named_parameters():
+            group='.'.join(name.split('.')[:2]) if name.startswith(('operator.','graph_q.','graph_k.','graph_v.','graph_norm.')) else name.split('.')[0]
+            row=changes.setdefault(group,{'parameters':0,'changed_elements':0,'maximum_absolute_change':0.})
+            delta=(value-initial[name]).abs();row['parameters']+=value.numel();row['changed_elements']+=int((delta>0).sum());row['maximum_absolute_change']=max(row['maximum_absolute_change'],float(delta.max()))
+        result['parameter_changes_from_seed_initialization'][folder.name]=changes
         counters={'admitted':0,'episodic_writes':0,'observed_present':0,'admission_tp':0,'admission_fp':0,'admission_fn':0,'admission_tn':0,'admission_by_cell':{}};phase=['unassigned'];observe=model.observe
         def counted(state,event,present=None,force_write=False):
             updated,trace=observe(state,event,present,force_write)
