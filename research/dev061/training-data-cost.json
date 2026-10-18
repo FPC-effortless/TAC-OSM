@@ -1,0 +1,33 @@
+{
+  "protocol_sha256": "d76278f6aa3a4d2dd4ce9bd2084e4f1ce6996b470147752621f863fec2a86f89",
+  "splits": {
+    "train": {
+      "tensor_content_sha256": "361e27d629c56e2ee895ddeedc1bfd74d8a9c144b2654c6b60cefc60057d7ca6",
+      "snapshots": 4096,
+      "collection_cost": 6131.750000000012,
+      "observation_cost": 2252.05,
+      "action_cost": 3879.6999999999525,
+      "observations": 225205,
+      "actions": {
+        "inspect": 6679,
+        "repair": 5353
+      },
+      "all_public_histories_and_current_labels_exactly_reconstructed": true
+    },
+    "validation": {
+      "tensor_content_sha256": "36e717598c388b924446b5c8f7c012e711c613b724abbe908c5bc66ceeb20d26",
+      "snapshots": 512,
+      "collection_cost": 762.8099999999998,
+      "observation_cost": 280.01,
+      "action_cost": 482.7999999999999,
+      "observations": 28001,
+      "actions": {
+        "inspect": 808,
+        "repair": 670
+      },
+      "all_public_histories_and_current_labels_exactly_reconstructed": true
+    }
+  },
+  "scope": "One shared synthetic corpus, not reacquired per epoch or architecture. Observation and physically executed collection actions only; no terminal-task charge on unclosed training snapshots. Private instrumentation/analytic counterfactual labels are free in this simulator; real labeling/acquisition costs UNKNOWN. No commercial amortization or monetary CPU conversion.",
+  "total_unique_collection_cost": 6894.560000000011
+}

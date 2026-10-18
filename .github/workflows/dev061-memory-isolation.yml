@@ -68,6 +68,19 @@ jobs:
           mkdir -p results
           tar -xzf research/dev061/evidence.tar.gz -C results
           tar -xzf research/dev058/evidence.tar.gz -C results
+      - name: Reconstruct the shared training corpus and charged collection costs
+        run: |
+          python - <<'PYCODE'
+          import json,pathlib,sys,torch
+          sys.path.insert(0,'scripts')
+          from run_structured_memory_dev061 import raw_data,PROTOCOL
+          torch.set_num_threads(1)
+          p=json.loads(PROTOCOL.read_text());root=pathlib.Path('results/dev061-main/_datasets');root.mkdir()
+          for name,key,size in [('train','train_seed','train_snapshots'),('validation','validation_seed','validation_snapshots')]:
+              torch.save(raw_data(p['data'][key],p['data'][size]),root/f'{name}.pt')
+          PYCODE
+          python scripts/account_data_dev061.py --directory results/dev061-main --output results/dev061-ci-data-cost.json
+          cmp research/dev061/training-data-cost.json results/dev061-ci-data-cost.json
       - name: Restore every model and fixed query; replay public actions and native Veritas
         run: python scripts/audit_memory_dev061.py --directory results/dev061-main --output results/dev061-ci-audit.json --veritas-root .veritas-public-runtime
       - name: Reproduce frozen latest/oldest interventions and public/private references
@@ -104,6 +117,7 @@ jobs:
           name: DEV061-RESTORED-MODELS-NATIVE-PORTABILITY-AUDIT
           path: |
             results/dev061-ci-audit.json
+            results/dev061-ci-data-cost.json
             results/dev061-ci-statistics.json
             results/dev061-ci-diagnostic.json
           if-no-files-found: warn
