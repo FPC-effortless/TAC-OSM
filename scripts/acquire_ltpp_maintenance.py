@@ -87,7 +87,7 @@ def acquire(directory):
         'status': 'SOURCE_COVERAGE_ONLY', 'retrieved_utc': datetime.now(timezone.utc).isoformat(),
         'source': BASE + '/Data/TableExport/', 'files_sha256': manifest,
         'counts': {k: len(v) for k, v in tables.items()},
-        'exact_duplicate_row_counts': {k: len(rows) - len({json.dumps(row, sort_keys=True) for row in rows}) for k, rows in tables.items()},
+        'duplicate_selected_field_row_counts': {k: len(rows) - len({json.dumps(row, sort_keys=True) for row in rows}) for k, rows in tables.items()},
         'positive_reported_total_cost_rows': len(positive),
         'positive_total_cost_sections': len({(r['STATE_CODE'], r['SHRP_ID']) for r in positive}),
         'positive_cost_events_with_measured_MRI_before_and_after': len(matched),
