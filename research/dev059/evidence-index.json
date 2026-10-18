@@ -1,0 +1,52 @@
+{
+  "study": "DEV-059",
+  "scope": "Fixed-budget ten-seed comparison, retrospective DEV058 audit and rejected two-checkpoint repair. No upgraded default.",
+  "archives": {
+    "evidence.tar.gz": "3198a3394938c04907002345ec671a06b57aeb231d13bb60f069b1c9b6a18ee1"
+  },
+  "protocol_sha256": "16718dc41b3d2d2a30e21e922c02ba68f701a68a755e07e4f9aba8609e943e4f",
+  "repair_protocol_sha256": "706b7e181c1ae14855159ddbf8add2f48aeb6acb5f890001b8ad65968147e4ec",
+  "statistics_sha256": "ade6f147659f554355b5ac7d0b9fc1a16e0c8d418cf60316f8bab9703d4c86c1",
+  "grid_status": "COMPLETE",
+  "architecture_superiority_gate": false,
+  "repair_status": "TEST_GUARD_FAILED",
+  "main_fits": 50,
+  "tuning_fits": 10,
+  "repair_new_checkpoints": 2,
+  "test_worlds_shared_across_main_fits": 576,
+  "main_source": "b4984598bb7d5917514bd729616900eb0ef2b747",
+  "repair_source": "5ccbd080b6c158d0b051160c2286f611bdd32c87",
+  "main_source_integrity": "Training and controller sources unchanged between b498459 and 5ccbd08; later fit metadata may identify audit/repair-registration commit.",
+  "excluded": "Regenerable _datasets tensor caches and pre-main smoke checks. All tuning/main/repair fitted checkpoints and evaluation outcomes retained.",
+  "verification": {
+    "status": "PASS",
+    "checkpoints": 60,
+    "cells": 870,
+    "trajectories": 55680,
+    "actions": 204231,
+    "native_actions": 204231,
+    "standalone_decisions": 464,
+    "failed_rollouts_all_fits_and_splits": 26682,
+    "float_telemetry_tolerance": {
+      "rtol": 1e-05,
+      "atol": 1e-06
+    },
+    "decision_receipt_cost_checks": "EXACT",
+    "source": "b4984598bb7d5917514bd729616900eb0ef2b747",
+    "limitation": "Shared synthetic physics and recorded native effects; independent process/host engineering verification, not independent physical replication.",
+    "repair_status": "TEST_GUARD_FAILED",
+    "repair_checkpoint_restorations": 4,
+    "seconds": 414.7188726639979
+  },
+  "local_audit_commit": "e39a4bbc985078e14cd6c64bf1803236631ea410",
+  "telemetry_correction": "Audit-only post-first-CI absolute tolerance 0.0001; retain measured drift and exact decisions; no model changes.",
+  "verification_sources_sha256": {
+    "scripts/audit_evidence_gaps_dev059.py": "60c8263b717ee4df3f823587b45722fd00096ebfaef865a5666589b3d68051ec",
+    "scripts/audit_reference_dev059.py": "000138916da2727a37fd395be2dd2a297eb08309fb2a88c993c349cfa0bf3fd8",
+    "scripts/audit_reliability_controls_dev059.py": "fb899a766fadc49855897723b8cd17779dfc082c2786ef41866b8ac810f9e1a6",
+    "scripts/plot_reliability_dev059.py": "a6d2d0414fb976c50ecdf4182c06f787abbbea3892d3f86f3cc699a2484ad791",
+    "scripts/repair_learned_checkpoint_dev059.py": "ede09993126652d17025f344bfa367e50d09aad0d60cc28588110a0448793b12",
+    "scripts/run_reliability_controls_dev059.py": "531d00e91eca5742f44a5878cd726539cb3b059fae2f4f0bc7b449980e8b8afa",
+    "scripts/summarize_reliability_dev059.py": "180ff703ba8a6fdbaae5ff6360f30e4a70aee02f120534d7bdb821a74bd64232"
+  }
+}

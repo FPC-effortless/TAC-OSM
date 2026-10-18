@@ -9,6 +9,23 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## DEV-059 reliability and retrained controls (October 18, 2026)
+
+[DEV-059](docs/DEV-059-RESULTS.md) completes fifty fresh fits across five
+parameter-matched families and ten seeds. The stopping-weighted full model
+averages 65.7% completion versus 61.9% for retrained no-CASM; that difference
+is inconclusive. The registered overall superiority gate fails. Results vary
+sharply across seeds under the fixed 1,200-update budget; this is not a
+converged architecture ranking. A separately registered fine-tuning attempt
+increased residual faults in both original checkpoints and was rejected.
+No scripted stop rule or replacement default checkpoint was introduced.
+
+The [DEV-058 evidence audit](docs/DEV-058-REVIEW-AUDIT.md) reports the teacher
+and public lookup reference, exact admission precision/recall, stale retrieval
+in failed worlds, and the distinction between logical writes and real compute.
+Partial-observation research is [drafted](research/dev060/PARTIAL-OBSERVATION-DRAFT.md),
+not yet demonstrated. Existing bounded learned-agent artifacts remain available.
+
 ## DEV-058 autonomous learned agent (October 17, 2026)
 
 [DEV-058](docs/DEV-058-RESULTS.md) replaces task-specific deployment control
