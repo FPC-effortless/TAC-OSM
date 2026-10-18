@@ -1,0 +1,106 @@
+"""Memory-isolation invariants; no superiority assertion from these unit tests."""
+import importlib.util
+from pathlib import Path
+import sys
+
+import pytest
+import torch
+
+from tac_osm.development.structured_memory import create,configurations
+from tac_osm.development.learned_agent_world import event
+
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT/'scripts'))
+spec=importlib.util.spec_from_file_location('dev061',ROOT/'scripts/run_structured_memory_dev061.py')
+runner=importlib.util.module_from_spec(spec);spec.loader.exec_module(runner)
+
+
+@pytest.fixture(scope='module')
+def settings():
+    torch.set_num_threads(1)
+    return configurations()
+
+
+@pytest.mark.parametrize('arm',['generic','entity','entity_aging','entity_retention','entity_aging_retention','structured_gru','public_mlp'])
+def test_cached_and_incremental_states_match(settings,arm):
+    model=create(arm,settings[arm],81).eval()
+    if arm!='public_mlp':
+        runner.pretrain_admission(model,81,40)
+        if model.retention:
+            model.retention_ready.fill_(True)
+            # Exercise selective writes, including a closed branch.
+            with torch.no_grad():model.keep[-1].bias.fill_(-.05)
+    ds=runner.raw_data(7161101,12)
+    cached=runner.prepare(model,ds)
+    with torch.no_grad():
+        expected=model.training_state(cached);actual=model.initial(12)
+        for t in range(ds['events'].shape[1]):actual,_=model.observe(actual,ds['events'][:,t],ds['present'][:,t])
+    torch.testing.assert_close(actual[0],expected[0],atol=1e-6,rtol=1e-5)
+    torch.testing.assert_close(actual[1],expected[1],atol=0,rtol=0)
+
+
+def test_entity_update_cannot_corrupt_another_current_state(settings):
+    model=create('entity',settings['entity']).eval()
+    state=model.initial(1)
+    with torch.no_grad():
+        state,_=model.observe(state,torch.from_numpy(event(0,2,None,1,0))[None],force_write=True)
+        before=state[0].clone()
+        state,_=model.observe(state,torch.from_numpy(event(2,3,None,0,1))[None],force_write=True)
+    torch.testing.assert_close(state[0][:,2],before[:,2],atol=0,rtol=0)
+    assert not torch.equal(state[0][:,3],before[:,3])
+
+
+def test_no_private_target_enters_memory_and_retention_gradients(settings):
+    model=create('entity_retention',settings['entity_retention'],17)
+    runner.pretrain_admission(model,17,40);model.retention_ready.fill_(True)
+    raw=runner.raw_data(7161102,12);ds=runner.prepare(model,raw)
+    changed=dict(ds,current=1-ds['current'],policy=ds['policy'].roll(1,-1))
+    a=model.training_state(ds);b=model.training_state(changed)
+    torch.testing.assert_close(a[0],b[0],atol=0,rtol=0)
+    loss,_=runner.loss(model,ds,torch.arange(12),counterfactual=True)
+    loss.backward()
+    assert model.keep[-1].weight.grad.abs().sum()>0
+    assert model.local.weight_ih_l0.grad.abs().sum()>0
+    assert model.policy[-1].weight.grad.abs().sum()>0
+
+
+def test_active_parameter_match_and_retrained_no_casm(settings):
+    counts={a:sum(p.numel() for p in create(a,c).parameters()) for a,c in settings.items()}
+    assert all(abs(n/counts['generic']-1)<=.05 for n in counts.values())
+    assert not hasattr(create('structured_gru',settings['structured_gru']),'operator')
+
+
+def test_public_feature_mlp_action_is_trainable_not_scripted(settings):
+    model=create('public_mlp',settings['public_mlp'],17)
+    ds=runner.prepare(model,runner.raw_data(7161103,12))
+    value,_=runner.loss(model,ds,torch.arange(12));value.backward()
+    assert model.action.weight.grad.abs().sum()>0
+    assert model.network[0].weight.grad.abs().sum()>0
+
+
+def test_frozen_wrapper_learned_path_is_neutral():
+    from tac_osm.development.learned_agent import LearnedAgent,AgentConfig
+    from tac_osm.development.frozen_read_diagnostic import FrozenReadDiagnostic
+    config=AgentConfig(dimension=12);original=LearnedAgent(config,17).eval()
+    wrapped=FrozenReadDiagnostic(config,17).eval();wrapped.load_state_dict(original.state_dict(),strict=True)
+    a=original.initial(2);b=wrapped.initial(2);world=runner.ResearchWorld(7161104,0,4,32)
+    with torch.no_grad():
+        for e in world.events:
+            e=torch.from_numpy(e)[None].expand(2,-1);a,_=original.observe(a,e);b,_=wrapped.observe(b,e)
+        args=[torch.from_numpy(v)[None].expand(2,*v.shape) for v in world.candidates()[:4]]
+        x=original(a,*args);y=wrapped(b,*args)
+    torch.testing.assert_close(x['logits'],y['logits'],atol=0,rtol=0)
+    torch.testing.assert_close(a[0],b[0][:,:,:12],atol=0,rtol=0)
+
+
+def test_oracle_read_changes_freshness_only_between_forced_modes():
+    from tac_osm.development.learned_agent import AgentConfig
+    from tac_osm.development.frozen_read_diagnostic import FrozenReadDiagnostic
+    model=FrozenReadDiagnostic(AgentConfig(dimension=12),17,'latest').eval();state=model.initial(1)
+    events=[event(0,2,None,1,0),event(2,2,None,0,3),event(1,2,4,0,2)]
+    # Construct a retained public bank directly; no hidden fault labels supplied.
+    for i,e in enumerate(events):state[0][0,i,:12]=model.encoder(torch.from_numpy(e));state[0][0,i,12:]=torch.from_numpy(e);state[1][0,i]=1
+    descriptors=torch.zeros(1,1,11);descriptors[0,0,2]=1;descriptors[0,0,5]=1
+    model.descriptors=descriptors;action=model.action_encoder(descriptors)
+    latest=model.read(state,action)[1].argmax(-1);model.mode='oldest';oldest=model.read(state,action)[1].argmax(-1)
+    assert latest.tolist()==[[[1,2]]] and oldest.tolist()==[[[0,2]]]
