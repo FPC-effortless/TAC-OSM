@@ -40,6 +40,15 @@ falsifiable hypothesis, not a promised outcome or reason to weaken controls.
    as physical success. No foundation-model, valuation or deployment claim follows
    from a bounded compressor forecast or simulation study.
 
+Operational acceptance requires >=18/20 fresh seeds reaching >=95% completion in
+each required long-history/identity stratum, with no physical-fault regression.
+Track per-decision p95/p99 KL; numerical qualification thresholds must be committed
+with each task before fitting, never inferred from a favorable median.
+CASM-specific claim deadline: DEV064-CHAINED-CASM. Register a tuned-MLP/GRU/attention
+comparison and minimum oracle headroom before fitting; if its complete registered
+budget fails the cost/reliability/compute gate, narrow or retire the superiority
+claim instead of searching for a favorable benchmark after opening outcomes.
+
 Every candidate uses >=20 fresh training seeds, fixed validation-only selection,
 registered held-out gates, all failed fits, proper probability losses and physical
 risk reporting. Each tranche has a committed budget and decision rule. A failure
