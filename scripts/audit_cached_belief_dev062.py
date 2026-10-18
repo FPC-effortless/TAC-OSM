@@ -36,17 +36,19 @@ def requests(model,seed,index,history):
         for e in events:state=model.observe(state,e)
         candidates=torch.tensor(d)[None].double();out=model.decide(state,candidates,prices);choice=int(model.choice(out)[0]);records.append((torch.tensor(w.identities)[None].double(),events,candidates,prices,choice));start=len(w.events);w.act(int(permutation[choice]));pending=w.events[start:]
         if w.stopped:break
+    if pending:records.append((torch.tensor(w.identities)[None].double(),[torch.tensor(e)[None].double() for e in pending],None,None,-1))
     return records
 
 
 @torch.no_grad()
 def timed(model,records):
-    dtype=next(model.parameters()).dtype;state=model.initial(records[0][0].to(dtype));observe=decide=0.;matches=0
+    dtype=next(model.parameters()).dtype;state=model.initial(records[0][0].to(dtype));observe=decide=0.;matches=choices=0
     for _,events,candidates,prices,expected in records:
         for e in events:
             e=e.to(dtype);start=time.process_time_ns();state=model.observe(state,e);observe+=(time.process_time_ns()-start)/1e6
-        candidates=candidates.to(dtype);prices=prices.to(dtype);start=time.process_time_ns();choice=int(model.choice(model.decide(state,candidates,prices))[0]);decide+=(time.process_time_ns()-start)/1e6;matches+=choice==expected
-    return {'observe_cpu_ms':observe,'decision_cpu_ms':decide,'total_model_cpu_ms':observe+decide,'choices':len(records),'matched_float64_trace_choices':matches,'retained_tensor_bytes':sum(v.numel()*v.element_size() for v in state.values())}
+        if candidates is None:continue
+        choices+=1;candidates=candidates.to(dtype);prices=prices.to(dtype);start=time.process_time_ns();choice=int(model.choice(model.decide(state,candidates,prices))[0]);decide+=(time.process_time_ns()-start)/1e6;matches+=choice==expected
+    return {'observe_cpu_ms':observe,'decision_cpu_ms':decide,'total_model_cpu_ms':observe+decide,'choices':choices,'matched_float64_trace_choices':matches,'retained_tensor_bytes':sum(v.numel()*v.element_size() for v in state.values())}
 
 
 @torch.no_grad()
