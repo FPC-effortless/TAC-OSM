@@ -59,14 +59,18 @@ jobs:
       - name: Verify and restore complete recorded studies
         run: |
           python - <<'PY'
-          import hashlib,json,pathlib,tarfile
+          import hashlib,json,pathlib,tarfile,tempfile,shutil
           for study in ('dev0615','dev062'):
               folder=pathlib.Path('research')/study
               index=json.loads((folder/'evidence-index.json').read_text())
               for name,sha in index['archives'].items():
                   assert hashlib.sha256((folder/name).read_bytes()).hexdigest()==sha
-              with tarfile.open(folder/'evidence.tar.gz') as archive:
-                  archive.extractall('results',filter='data')
+              with tempfile.TemporaryFile() as merged:
+                  for part in index['evidence_parts']:
+                      with (folder/part).open('rb') as stream:shutil.copyfileobj(stream,merged)
+                  merged.seek(0)
+                  with tarfile.open(fileobj=merged) as archive:
+                      archive.extractall('results',filter='data')
           PY
       - name: Strict float64 restored trajectories and native first-seed execution
         run: |
