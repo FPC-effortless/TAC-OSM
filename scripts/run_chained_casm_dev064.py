@@ -313,6 +313,10 @@ def main():
     np.random.seed(640641)
     train_x, train_q, train_info = generate(TRAIN_SEED, TRAIN_N, purpose="train")
     val_x, val_q, val_info = generate(VAL_SEED, VAL_N, purpose="validation")
+    if (val_info["oracle_vs_one_step_greedy_expected_regret"] < 0.05 or
+            val_info["oracle_vs_greedy_nonzero_fraction"] < 0.05):
+        print(json.dumps({"status": "NO_HEADROOM", "validation": val_info}, sort_keys=True), flush=True)
+        raise RuntimeError("Registered chained benchmark lacks decision headroom")
     # This is a diagnostic on disjoint validation data only; no TEST generator exists here.
     params = {arm: sum(p.numel() for p in model(arm).parameters()) for arm in ARMS}
     if max(params.values()) / min(params.values()) > 1.10:
