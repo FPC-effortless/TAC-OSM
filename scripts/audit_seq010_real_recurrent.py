@@ -59,10 +59,14 @@ def audit(original, output):
         source_csv,source=acquire_training_csv(source_dir)
     finally:
         archive.unlink(missing_ok=True)
-    for field in ("zip_sha256","train_member_sha256","train_member_bytes",
+    archive_sha_equal = source["zip_sha256"] == recorded["zip_sha256"]
+    # Publisher may dynamically repack the ZIP container; archive mismatch is
+    # retained as a provenance discrepancy, not silently relabeled PASS.
+    # Exact bytes of the ONLY opened TRAIN CSV must match or replay FAILS.
+    for field in ("train_member_sha256","train_member_bytes",
                   "publisher_zip_url","dataset_doi","dataset_version"):
         if source[field]!=recorded[field]:
-            raise ValueError("Actual source mismatch "+field)
+            raise ValueError("Actual TRAIN source mismatch "+field)
     train,validation,cohort=load_real_windows(source_csv)
     original_cohort=report["cohort"]
     if cohort!=original_cohort:
@@ -95,11 +99,17 @@ def audit(original, output):
             "original_checkpoints_verified":len(rows),
             "new_model_fits":0,"published_test_opened":False,
             "published_validation_opened":False,
-            "source_match":True,"cohort_match":True,
+            "train_csv_bytes_identical":True,
+            "archive_zip_sha256_identical":archive_sha_equal,
+            "original_zip_sha256":recorded["zip_sha256"],
+            "replay_zip_sha256":source["zip_sha256"],
+            "cohort_match":True,
             "baseline":baseline,"replayed":rows}
     (output/"audit.json").write_text(json.dumps(result,sort_keys=True,indent=2)+"\n")
     print(json.dumps({"status":result["status"],"verified":len(rows),
-                      "new_fits":0,"test_opened":False}),flush=True)
+                      "new_fits":0,"test_opened":False,
+                      "archive_zip_sha256_identical":archive_sha_equal,
+                      "train_csv_bytes_identical":True}),flush=True)
 
 def main():
     parser=argparse.ArgumentParser()
