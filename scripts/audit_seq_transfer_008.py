@@ -29,6 +29,12 @@ ORIGINAL_FILE_BLOBS = {
 }
 
 
+def git_blob_sha1(path):
+    payload = Path(path).read_bytes()
+    header = b"blob " + str(len(payload)).encode() + b"\x00"
+    return hashlib.sha1(header + payload).hexdigest()
+
+
 def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -36,6 +42,9 @@ def sha256(path):
 def restore_replay(root, out):
     torch.set_num_threads(1)
     torch.use_deterministic_algorithms(True)
+    repo_root = Path(__file__).resolve().parent.parent
+    for relpath, sha in ORIGINAL_FILE_BLOBS.items():
+        assert git_blob_sha1(repo_root / relpath) == sha, ("Source changed: " + relpath)
     original = json.loads((root / "pilot.json").read_text())
     assert original["study"] == "SEQ-TRANSFER-008"
     assert original["status"] == "EXPLORATORY_VALIDATION_ONLY"
