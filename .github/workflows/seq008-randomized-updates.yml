@@ -1,0 +1,82 @@
+name: SEQ008 randomized state-update validation
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/run_seq_transfer_008.py'
+      - 'tests/test_seq_transfer_008.py'
+      - 'research/seq-transfer-008/PROTOCOL.md'
+      - '.github/workflows/seq008-randomized-updates.yml'
+permissions:
+  contents: read
+concurrency:
+  group: seq008-randomized
+  cancel-in-progress: true
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install fixed CPU training dependencies
+        run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Compile, replay, TEST guard and causal mutation checks
+        run: |
+          python -m py_compile scripts/run_seq_transfer_006.py scripts/run_seq_transfer_008.py
+          python -m unittest discover -s tests -p test_seq_transfer_008.py -v
+      - name: Validate one-seed two-update smoke (NOT results)
+        run: |
+          python scripts/run_seq_transfer_008.py --stage smoke --output results/seq008
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('results/seq008/smoke.json').read_text())
+          assert not data['test_opened'] and data['test_evaluations']==0
+          assert len(data['fits'])==3
+          assert not data['teacher_intermediate_states_consumed']
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seq008-preflight
+          path: results/seq008/smoke.json
+          if-no-files-found: ignore
+  validation-pilots:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Fit all six fixed validation-only agents
+        run: |
+          python scripts/run_seq_transfer_008.py --stage pilot --output results/seq008
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=Path('results/seq008')
+          data=json.loads((r/'pilot.json').read_text())
+          assert not data['test_opened'] and data['test_evaluations']==0
+          assert not data['teacher_intermediate_states_consumed']
+          assert len(data['fits'])==6
+          assert all(row['steps']==400 and row.get('sha256') for row in data['fits'])
+          assert len(list((r/'checkpoints').glob('*.pt')))==6
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seq008-original-pilot-evidence
+          path: |
+            results/seq008/pilot.json
+            results/seq008/checkpoints/*.pt
+          if-no-files-found: ignore
