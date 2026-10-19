@@ -11,6 +11,9 @@ permissions:
   actions: read
 jobs:
   restore-recorded-only:
+    # Recorded-only source/checkpoint replay succeeded in run 39336856338.
+    # Do not silently rerun on any later PR documentation edits.
+    if: github.event.pull_request.head.sha == '3b4604429c11c241ad196785d5853dc57433e5ae'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
