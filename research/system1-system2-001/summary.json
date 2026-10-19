@@ -1,0 +1,90 @@
+{
+  "study": "SYS1-SYS2-001",
+  "date": "2026-10-19",
+  "research_only": true,
+  "real_world_validation": false,
+  "checkpoint_weights_changed": false,
+  "dev067": {
+    "original_run": 39271150621,
+    "artifact_id": 12194964127,
+    "arms": {
+      "tac_frozen_log": {
+        "demo": "4/4",
+        "healthy_stop": "3/3",
+        "faulty_nonstop": "9/9",
+        "candidate_invariance": "120/120",
+        "decision_ms": 2.9744,
+        "future_ablation_switches": 49,
+        "broader_cases": 269,
+        "oracle_chain": "12/12"
+      },
+      "gru_frozen_log": {
+        "demo": "3/3",
+        "healthy_stop": "3/3",
+        "faulty_nonstop": "9/9",
+        "candidate_invariance": "120/120",
+        "decision_ms": 2.4745,
+        "future_ablation_switches": 20,
+        "broader_cases": 269,
+        "oracle_chain": "12/12"
+      },
+      "no_casm_frozen_log": {
+        "demo": "5/5",
+        "healthy_stop": "3/3",
+        "faulty_nonstop": "9/9",
+        "candidate_invariance": "120/120",
+        "decision_ms": 2.8438,
+        "future_ablation_switches": 21,
+        "broader_cases": 269,
+        "oracle_chain": "12/12"
+      }
+    },
+    "future_intervention_out_of_distribution": true,
+    "oracle_state_each_decision": true
+  },
+  "seq008": {
+    "original_run": 39309620973,
+    "artifact_id": 12215367412,
+    "model_seeds": [
+      780820,
+      780821
+    ],
+    "n_unique_per_length": 120,
+    "diagnostic_lengths": [
+      128,
+      256,
+      512
+    ],
+    "min_target_lag": [
+      39,
+      77,
+      154
+    ],
+    "mean_accuracy": {
+      "tac_gated": [
+        0.895833333,
+        0.883333333,
+        0.891666667
+      ],
+      "routed_gru": [
+        0.9625,
+        0.933333333,
+        0.958333333
+      ],
+      "global_gru": [
+        0.475,
+        0.466666667,
+        0.475
+      ]
+    },
+    "tac_seed_individual_L512": [
+      0.791666667,
+      0.991666667
+    ]
+  },
+  "verdict": {
+    "system1": "BOUNDED_REACTIVE_CAPABILITY_SUPPORTED",
+    "system2": "NOT_DEMONSTRATED",
+    "commercial": "UNKNOWN"
+  }
+}
