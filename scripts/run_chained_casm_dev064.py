@@ -23,7 +23,7 @@ TRAIN_SEED, VAL_SEED, TEST_SEED = 640641, 640642, 640643
 TRAIN_N, VAL_N = 4096, 1024
 STEPS, BATCH, LR = 1024, 128, 0.001
 ARMS = ("casm", "no_casm", "gru", "attention", "mlp")
-WIDTH = {"casm": 32, "no_casm": 48, "gru": 32, "attention": 16, "mlp": 48}
+WIDTH = {"casm": 34, "no_casm": 42, "gru": 44, "attention": 32, "mlp": 75}
 
 
 @dataclass(frozen=True)
@@ -45,7 +45,7 @@ class World:
 
 def world(rng):
     # Fresh permutations prevent stable node-index identities.
-    order = list(rng.permutation(3))
+    order = [int(i) for i in rng.permutation(3)]
     parent = [-1] * 3
     for i in range(1, 3):
         parent[order[i]] = order[i - 1]
@@ -315,6 +315,8 @@ def main():
     val_x, val_q, val_info = generate(VAL_SEED, VAL_N, purpose="validation")
     # This is a diagnostic on disjoint validation data only; no TEST generator exists here.
     params = {arm: sum(p.numel() for p in model(arm).parameters()) for arm in ARMS}
+    if max(params.values()) / min(params.values()) > 1.10:
+        raise AssertionError(f"Unmatched trainable parameter budgets: {params}")
     summary = {
         "study": "DEV064-CHAINED-CASM",
         "stage": args.stage, "status": "PREFLIGHT_ONLY" if args.stage == "smoke" else "VALIDATION_PILOTS_ONLY",
