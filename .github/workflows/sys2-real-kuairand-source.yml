@@ -1,0 +1,34 @@
+name: SYS1-SYS2-REAL-002 original KuaiRand provenance and descriptive baseline
+on:
+  push:
+    branches:
+      - research/sys2-real-kuairand-acquisition-2026-10-19
+    paths:
+      - ".github/workflows/sys2-real-kuairand-source.yml"
+      - "scripts/audit_sys2_real_002.py"
+      - "research/system1-system2-real-002/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authentic-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile source gate
+        run: python -m py_compile scripts/audit_sys2_real_002.py
+      - name: Publisher archive integrity and real logged reward baselines
+        run: |
+          python scripts/audit_sys2_real_002.py --download --output results/sys2-real-002/source-audit.json
+      - name: Archive sanitized results without individual user logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sys2-real-002-source-and-baselines
+          path: results/sys2-real-002/source-audit.json
+          if-no-files-found: warn
+          retention-days: 90
