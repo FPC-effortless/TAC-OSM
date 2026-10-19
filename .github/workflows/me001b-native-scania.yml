@@ -13,6 +13,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   property-preflight:
+    # Frozen original run 39334730465 completed at this exact source SHA.
+    # Later PR edits MUST NOT refit this exploratory cohort.
+    if: github.event.pull_request.head.sha == '13fc199642845698fa4d2d8dd623079731c3a47c'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -29,6 +32,7 @@ jobs:
           python -m py_compile scripts/me001b_real_native_tac.py
           python -m scripts.me001b_real_native_tac --property-only
   original-train-internal-real:
+    if: github.event.pull_request.head.sha == '13fc199642845698fa4d2d8dd623079731c3a47c'
     needs: property-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 100
