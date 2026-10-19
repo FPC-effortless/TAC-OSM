@@ -28,7 +28,7 @@ class TestSEQ006(unittest.TestCase):
         self.assertGreaterEqual(meta["min_target_lag"], 10)
 
     def test_full_sequence_exact_state_replay(self):
-        data, _ = generate(VALID_SEED + 1, 90, (128,), 6, purpose="validation")
+        data, _ = generate(VALID_SEED + 10, 90, (128,), 6, purpose="validation")
         ids, ops, active, states, q, tasks, label = data
         for i in range(len(ids)):
             physical_state = np.zeros(MAX_ENTITIES, dtype=np.float32)
