@@ -54,3 +54,48 @@ jobs:
           name: dev064b-validation-only-smoke
           path: results/dev064b-enabling/smoke.json
           if-no-files-found: ignore
+
+  validation-only-pilots:
+    needs: validation-only-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          sparse-checkout: |
+            scripts/run_enabling_casm_dev064b.py
+            research/dev064b-enabling-actions/PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU PyTorch
+        run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Fit 10 preregistered validation-only pilots
+        run: |
+          python scripts/run_enabling_casm_dev064b.py --stage pilot --output results/dev064b-enabling
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('results/dev064b-enabling')
+          report=json.loads((root/'pilot.json').read_text())
+          assert report['test_opened'] is False
+          assert report['status']=='VALIDATION_PILOTS_ONLY'
+          assert len(report['fits'])==10
+          assert {x['seed'] for x in report['fits']}=={641650,641651}
+          assert all(x['steps']==1024 for x in report['fits'])
+          assert all('checkpoint_sha256' in x for x in report['fits'])
+          assert len(list((root/'checkpoints').glob('*.pt')))==10
+          print('All ten validation-only pilots saved; no test-world evaluation')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev064b-validation-pilots
+          path: |
+            results/dev064b-enabling/pilot.json
+            results/dev064b-enabling/checkpoints/*.pt
+          if-no-files-found: ignore
