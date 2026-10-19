@@ -4,6 +4,7 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - 'scripts/audit_seq009_scania_source.py'
+      - 'scripts/acquire_seq009_scania_zip.py'
       - 'tests/test_seq009_scania_source.py'
       - 'research/seq009-real/PROTOCOL.md'
       - '.github/workflows/seq009-real-source.yml'
@@ -15,12 +16,13 @@ concurrency:
 jobs:
   source-integrity:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
           sparse-checkout: |
             scripts/audit_seq009_scania_source.py
+            scripts/acquire_seq009_scania_zip.py
             tests/test_seq009_scania_source.py
             research/seq009-real/PROTOCOL.md
           sparse-checkout-cone-mode: false
@@ -29,9 +31,9 @@ jobs:
           python-version: '3.12'
       - name: Run offline source/interface guards
         run: |
-          python -m py_compile scripts/audit_seq009_scania_source.py tests/test_seq009_scania_source.py
+          python -m py_compile scripts/audit_seq009_scania_source.py scripts/acquire_seq009_scania_zip.py tests/test_seq009_scania_source.py
           python -m unittest discover -s tests -p test_seq009_scania_source.py -v
-      - name: Download public SCANIA v3 small originals and verify provenance
+      - name: Download verified SCANIA v3 original ZIP; extract only allowlisted sources
         run: |
           python scripts/audit_seq009_scania_source.py --output results/seq009-source
           test -s results/seq009-source/acquisition.json
