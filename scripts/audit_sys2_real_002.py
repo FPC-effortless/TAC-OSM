@@ -35,6 +35,7 @@ def audit(path,out):
  'real_source_verified':True,'planning_demonstrated':False,'tac_checkpoint_evaluated':False,
  'publisher_url':URL,'archive_md5':md5,'archive_sha256':checksum(path,'sha256'),
  'excluded_scoring_from':'2022-04-28','incomplete_interaction_histories':True,
+ 'prior_run_correction':'Run 39318654169 source statistics aggregated future-period clicks; do not treat 2022-04-28..05-08 as sealed in this study',
  'caveat':'Random-exposure logs are selected subsets; no counterfactual multistep policy value is identified.'}
  with tarfile.open(path,'r:gz') as archive:
   members={}
@@ -58,7 +59,7 @@ def audit(path,out):
     if u<0 or v<0 or t<=0 or y not in (0,1) or rr not in (0,1) or not 0<=tab<=14 or not math.isfinite(duration):raise ValueError('Schema bounds failure')
     lo,hi=(20220408,20220421) if label=='train' else (20220422,20220508)
     if not lo<=d<=hi:raise ValueError('Temporal split violation')
-    n+=1;clicks+=y;rand+=rr;users.add(u);videos.add(v);min_date=min(min_date,d);max_date=max(max_date,d)
+    n+=1;clicks+=y if (label=='train' or (label=='random' and d<20220428)) else 0;rand+=rr;users.add(u);videos.add(v);min_date=min(min_date,d);max_date=max(max_date,d)
     if label=='train':
      prior[0]+=y;prior[1]+=1
      for store,key in ((user,u),(video,v)):
@@ -73,7 +74,7 @@ def audit(path,out):
      for key,p in (('global',base),('user',pu),('video',pv),('ensemble',(pu+pv)/2)):
       p=max(1e-6,min(1-1e-6,p));r=val[key]
       r[0]+=(p-y)**2;r[1]-=y*math.log(p)+(1-y)*math.log1p(-p);r[2]+=1
-   stats[label]={'rows':n,'distinct_users':len(users),'distinct_videos':len(videos),'first_date':min_date,'last_date':max_date,'click_rate':clicks/max(1,n),'is_rand_count':rand,'validation_randomized_rows':early,'later_rows_not_scored':test}
+   stats[label]={'rows':n,'distinct_users':len(users),'distinct_videos':len(videos),'first_date':min_date,'last_date':max_date,'click_rate':clicks/max(1,(n if label=='train' else (early if label=='random' else 0))) if label!='standard_later' else None,'is_rand_count':rand,'validation_randomized_rows':early,'later_rows_not_scored':test}
  result['sources']=stats
  if prior[1]<100 or stats['random']['validation_randomized_rows']<100:raise ValueError('Insufficient authentic training/validation')
  result['train_click_rate']=prior[0]/prior[1]
