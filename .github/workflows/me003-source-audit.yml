@@ -10,6 +10,9 @@ permissions:
   contents: read
 jobs:
   real-source-audit:
+    # Frozen original published source audit succeeded in run 39338118254.
+    # Later source-correction notes must not redownload or replace its evidence.
+    if: github.event.pull_request.head.sha == '8715a987904c661e5e825f726ab1feda332b5f09'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
