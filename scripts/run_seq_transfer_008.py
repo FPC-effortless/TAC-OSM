@@ -10,12 +10,14 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import sys
 import time
 
 import numpy as np
 import torch
 from torch.nn import functional as F
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from run_seq_transfer_006 import (
     ARMS, BATCH, LR, MAX_ENTITIES, STEPS, TASKS, StreamingAgent, evaluate,
 )
@@ -89,11 +91,9 @@ def _sample(rng, length, n_entities, kind):
     if kind == 2:
         # Each entity's first occurrence is SET and subsequent occurrences
         # are TOGGLE, regardless of interleaving between entities.
-        rng.shuffle(assignments)
         counts = {qa: 0, qb: 0}
         bits = {qa: int(rng.integers(2)), qb: int(rng.integers(2))}
         assignments = []
-        n_a, n_b = (n_a, n_b)
         order = [qa] * (n_a + 1) + [qb] * (n_b + 1)
         rng.shuffle(order)
         for e in order:
