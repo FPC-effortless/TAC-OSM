@@ -81,11 +81,28 @@ full-dataset sensor head, closed-loop action policy,
 future-calendar generalization, dropout uncertainty or
 censor-aware repair-risk outcome has yet been tested.
 
-The checkpoint file and source results are present in the
-original artifact. **Independent checkpoint restore/replay has
-NOT yet been completed at the time of initial result archival.**
-Any later completed audit must be appended with its exact run ID
-and should not refit or reopen published TEST.
+Original checkpoints and source records remain in the
+immutable original artifact. **Independent recorded-only checkpoint
+replay PASSED**:
+https://github.com/FPC-effortless/TAC-OSM/actions/runs/39319984873
+All four original SHA-256-bound model weights loaded, original
+vehicle-split and missing-value contract regenerated, and the
+persistence and per-model metrics reproduced within the registered
+numerical tolerance. Exactly **zero** additional fits; no publisher
+VALIDATION/TEST bodies opened. Replay artifact:
+seq010-original-checkpoint-audit, ID **12219547960**.
+
+**Important source-provenance discrepancy:** The first independent
+audit https://github.com/FPC-effortless/TAC-OSM/actions/runs/39319097167
+FAILED because the publisher v3 ZIP container's SHA256 differed
+between original and replay downloads. The audit did NOT silently
+accept this. The corrected audit separately retains both archive
+checksums and requires exact identity of the **extracted real TRAIN
+CSV bytes**. The replay PASS establishes the complete training
+member's SHA256/length were identical; the archive ZIP checksums
+remain **different**. This is consistent with ZIP re-packaging
+or metadata changes, but the precise reason is NOT established.
+The original failed audit and new recorded-only pass remain archived.
 
 No unseen physical action effect, observed inspection cost,
 economic benefit, causal utility, commercial readiness,
