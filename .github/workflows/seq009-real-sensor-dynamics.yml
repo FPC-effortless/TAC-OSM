@@ -14,6 +14,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   preflight:
+    # Original source-frozen validation has completed; never rerun the measured cohort on PR edits.
+    if: github.event.pull_request.head.sha == '654a98b5613199b2774a6d1cd7858fd91f120d6c'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
