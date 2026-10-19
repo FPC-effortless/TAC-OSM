@@ -1,0 +1,41 @@
+name: ME003 recorded-only source correction (exclude blank CSV index)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me003_correct_source_ledger.py
+      - .github/workflows/me003-recorded-source-correction.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  recorded-only-correction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore original untouched UCI source-count artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39338118254
+          name: me003-original-source-suitability
+          github-token: ${{ github.token }}
+          path: .
+      - name: Correct index-column annotation; no source re-read
+        run: |
+          python scripts/me003_correct_source_ledger.py
+          python - <<'PY'
+          import json
+          d=json.load(open('results/me003-correction/corrected-source-audit.json'))
+          assert d['real_sensor_count']==15 and d['bidirectional_sensor_count']==12
+          assert d['new_real_source_reads']==0 and d['model_fits']==0
+          assert d['future_reserved_labels_read']==False and not d['promoted']
+          PY
+      - name: Archive immutable correction and source references
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me003-recorded-source-correction
+          path: results/me003-correction/corrected-source-audit.json
+          if-no-files-found: ignore
