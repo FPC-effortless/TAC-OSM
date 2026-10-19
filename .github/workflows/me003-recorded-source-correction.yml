@@ -10,6 +10,8 @@ permissions:
   actions: read
 jobs:
   recorded-only-correction:
+    # Recorded-only correction passed on original source SHA in run 39338381208.
+    if: github.event.pull_request.head.sha == '568ab42193bc4a782e3efde0edbd21bc906182cb'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
