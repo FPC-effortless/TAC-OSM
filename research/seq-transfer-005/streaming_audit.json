@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "reference_checkpoint_sha256": "7acc30f5e492b0be599a17ae770a10fd8e04108e179d4f781b7d4b2c636f88e7",
+  "method": "compare packed entity-local GRU final hidden vectors with per-event recurrent updates",
+  "cases": [
+    {
+      "task": "stale_set",
+      "length": 512,
+      "entities": 4,
+      "sequences": 8,
+      "max_abs_difference": 2.220446049250313e-16,
+      "min_target_information_age": 508,
+      "exact_oracle_accuracy": 1
+    },
+    {
+      "task": "late_overwrite",
+      "length": 256,
+      "entities": 6,
+      "sequences": 8,
+      "max_abs_difference": 2.220446049250313e-16,
+      "min_target_information_age": 135,
+      "exact_oracle_accuracy": 1
+    },
+    {
+      "task": "toggle",
+      "length": 128,
+      "entities": 4,
+      "sequences": 8,
+      "max_abs_difference": 2.220446049250313e-16,
+      "min_target_information_age": 64,
+      "exact_oracle_accuracy": 1
+    },
+    {
+      "task": "pair_xor",
+      "length": 512,
+      "entities": 6,
+      "sequences": 8,
+      "max_abs_difference": 2.220446049250313e-16,
+      "min_target_information_age": 290,
+      "exact_oracle_accuracy": 1
+    }
+  ]
+}
