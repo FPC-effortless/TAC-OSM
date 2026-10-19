@@ -1,40 +1,29 @@
 #!/usr/bin/env python3
-"""Probe HEAD-only URLs for official SCANIA train_tte file.
-
-No bytes of TEST, no modeling. Candidate endpoint discovery only.
-"""
+"""GET-range probe of official SCANIA train_tte; bounded first bytes only."""
 import json
 import urllib.request
-import urllib.parse
 import urllib.error
+import urllib.parse
 
-BASE = "https://api.researchdata.se/dataset/2024-34/3"
-name = "train_tte.csv"
-queries = [name, "/" + name, "data/" + name, "Data/" + name,
-           "./" + name]
-candidates = [
-    BASE + "/file/data?" + urllib.parse.urlencode({"filePath": path})
-    for path in queries
-]
-candidates += [
-    BASE + "/file?" + urllib.parse.urlencode({"filePath": name}),
-    BASE + "/file/" + name,
-    "https://doris.snd.se/api/file/2024-34/3/data?" +
-    urllib.parse.urlencode({"filePath": name}),
-    BASE + "/files",
-    BASE,
-    BASE + "/file/zip",
-]
-for url in candidates:
+name="train_tte.csv"
+urls=[]
+for v in (3,2,1):
+    b=f"https://api.researchdata.se/dataset/2024-34/{v}"
+    urls += [b + "/file/data?" + urllib.parse.urlencode({"filePath":name}),
+             b + "/file/zip"]
+for u in urls:
     try:
-        req=urllib.request.Request(
-            url, method="HEAD", headers={"User-Agent":"TAC-OSM-seq009-provenance/1.0"})
-        with urllib.request.urlopen(req, timeout=8) as response:
-            print(json.dumps({"url":url, "status":response.status,
-                              "type":response.headers.get("Content-Type"),
-                              "size":response.headers.get("Content-Length"),
-                              "final_url":response.url}),flush=True)
+        req=urllib.request.Request(u,headers={
+            "User-Agent":"TAC-OSM-seq009-research/1.0",
+            "Range":"bytes=0-127"})
+        with urllib.request.urlopen(req,timeout=12) as rsp:
+            prefix=rsp.read(128)
+            print(json.dumps({"url":u,"status":rsp.status,
+                              "type":rsp.headers.get("Content-Type"),
+                              "size":rsp.headers.get("Content-Length"),
+                              "range":rsp.headers.get("Content-Range"),
+                              "prefix":prefix[:32].hex()}),flush=True)
     except urllib.error.HTTPError as e:
-        print(json.dumps({"url":url, "status":e.code}), flush=True)
+        print(json.dumps({"url":u,"status":e.code}),flush=True)
     except Exception as e:
-        print(json.dumps({"url":url, "error":str(e)[:180]}), flush=True)
+        print(json.dumps({"url":u,"error":str(e)[:150]}),flush=True)
