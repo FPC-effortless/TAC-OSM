@@ -13,6 +13,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   pre-exposure-contract:
+    # One-shot frozen research fit. PR updates must NOT refit or re-expose TEST.
+    if: github.event.pull_request.head.sha == 'a34f03450d8b42c8aa3d86e82e052b8fdf0763b4'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
