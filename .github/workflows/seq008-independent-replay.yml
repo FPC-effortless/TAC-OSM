@@ -1,0 +1,58 @@
+name: SEQ008 independent recorded-only replay
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/audit_seq_transfer_008.py'
+      - '.github/workflows/seq008-independent-replay.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: seq008-recorded-only
+  cancel-in-progress: true
+jobs:
+  audit-original-six-checkpoints:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/run_seq_transfer_006.py
+            scripts/run_seq_transfer_008.py
+            scripts/audit_seq_transfer_008.py
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen CPU inference dependencies
+        run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore original successful pilot artifact without refit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 39309620973 --repo FPC-effortless/TAC-OSM --name seq008-original-pilot-evidence --dir results/seq008-original
+          test -f results/seq008-original/pilot.json
+          test "$(find results/seq008-original/checkpoints -maxdepth 1 -name '*.pt' | wc -l)" -eq 6
+      - name: Verify source blobs, all checkpoints, data manifests and scores
+        run: |
+          python -m py_compile scripts/audit_seq_transfer_008.py
+          python scripts/audit_seq_transfer_008.py --artifact-root results/seq008-original --output results/seq008-independent/replay.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('results/seq008-independent/replay.json').read_text())
+          assert d['status']=='PASSED_ORIGINAL_CHECKPOINTS_REPLAYED'
+          assert d['fits_retrained']==0 and d['original_checkpoints_verified']==6
+          assert d['test_opened'] is False and len(d['per_fit'])==6
+          assert all(x['scores_equal_original'] for x in d['per_fit'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seq008-independent-recorded-replay
+          path: results/seq008-independent/replay.json
+          if-no-files-found: ignore
