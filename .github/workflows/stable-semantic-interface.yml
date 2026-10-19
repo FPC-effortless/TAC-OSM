@@ -1,0 +1,101 @@
+name: Recorded stable semantic-interface study
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev067-stable-interface/**'
+      - 'src/tac_osm/development/stable_semantic.py'
+      - 'scripts/*stable*dev067.py'
+      - 'tests/test_stable_semantic_interface.py'
+      - '.github/workflows/stable-semantic-interface.yml'
+permissions:
+  contents: read
+jobs:
+  strict-stable-checkpoints:
+    strategy:
+      fail-fast: false
+      matrix:
+        partition: [0, 1, 2, 3]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 100
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install -e . -e .veritas-public-runtime numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+          python scripts/restore_stable_semantic_dev067.py
+          python scripts/audit_stable_semantic_dev067.py --directory results/dev067-main --output results/dev067-remote-audit.json --exports results/dev067-remote-export --veritas .veritas-public-runtime --partition ${{ matrix.partition }}/4
+          python scripts/analyze_stable_semantic_dev067.py --directory results/dev067-main --output results/dev067-remote-statistics.json
+          python scripts/shuffle_stable_semantic_dev067.py --directory results/dev067-main --output results/dev067-remote-shuffle.json
+          python - <<'PY'
+          import json,sys
+          sys.path.insert(0,'scripts')
+          from audit_identity_dev0615 import compare
+          audit=json.load(open('results/dev067-remote-audit.json'))
+          assert audit['status']=='COMPLETE'
+          assert audit['partition']=='${{ matrix.partition }}/4'
+          assert audit['checkpoints'] in (30,36)
+          from pathlib import Path
+          root=Path('results/dev067-main');paths=sorted(root.glob('*/**/report.json'))
+          groups=sorted({p.parent.parent.name for p in paths})
+          selected={g for i,g in enumerate(groups) if i%4==${{ matrix.partition }}}
+          expected=[str(p.relative_to(root)) for p in paths if p.parent.parent.name in selected]
+          assert audit['checkpoint_paths']==expected and len(paths)==132
+          assert audit['telemetry']['max_abs']<=1e-8
+          for remote,recorded in [('statistics','statistics'),('shuffle','shuffle')]:
+              compare(json.load(open('results/dev067-remote-'+remote+'.json')),json.load(open('research/dev067-stable-interface/'+recorded+'.json')),{'values':0,'max_abs':0.})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev067-restored-checkpoints-${{ matrix.partition }}
+          path: |
+            results/dev067-remote-*.json
+            results/dev067-remote-export/**
+          if-no-files-found: ignore
+  strict-stable-counterfactuals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 100
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install -e . numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+          python scripts/restore_stable_semantic_dev067.py
+          python scripts/intervene_stable_semantic_dev067.py --directory results/dev067-main --output results/dev067-remote-interventions.json --details results/dev067-remote-interventions.jsonl.gz
+          python - <<'PY'
+          import json,sys
+          sys.path.insert(0,'scripts')
+          from audit_identity_dev0615 import compare
+          actual=json.load(open('results/dev067-remote-interventions.json'))
+          expected=json.load(open('research/dev067-stable-interface/interventions.json'))
+          assert actual['status']=='COMPLETE' and actual['checkpoints']==120
+          for key in ('checkpoints','trajectories','arms','per_seed'):
+              compare(actual[key],expected[key],{'values':0,'max_abs':0.})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev067-semantic-counterfactuals
+          path: |
+            results/dev067-remote-interventions.json
+            results/dev067-remote-interventions.jsonl.gz
+          if-no-files-found: ignore

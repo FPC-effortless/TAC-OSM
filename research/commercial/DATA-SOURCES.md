@@ -67,3 +67,50 @@ Additional candidates screened on2026-10-19:
 No newly qualified factory inspection/action/cost/independent-outcome cohort has
 been found in this screening. The real-outcome gate remains unmet; no negative
 result is relabeled as commercial evidence.
+
+
+Additional primary-source screening during DEV067 (2026-10-19):
+
+- [EPA MSOD](https://19january2021snapshot.epa.gov/moves/mobile-source-observation-database-msod_.html)
+  documents repair descriptions, links from earlier repairs to subsequent test
+  results, parts costs, repair minutes and emissions-component inspection minutes.
+  The costs/times are PROCURE fields and can aggregate several repairs; they are
+  not automatically prices for a single REPAIR record. The official page offers
+  database copies by contacting EPA. Only its public guide was acquired, not
+  populated tables. No request was sent and no cost/outcome coverage is verified.
+  `msod-source-screening.json` preserves the guide hash and access limitation.
+- [ORNL FRP measured HVAC faults, OEDI909](https://data.openei.org/submissions/909),
+  DOI10.25984/1862682, CC BY4.0: downloaded and SHA256/CRC-checked the3.77MB
+  experiment archive plus1.81MB description. These are measured physical
+  fault-injection experiments, not the separate EnergyPlus simulation dataset.
+  `ornl-source-inventory.json` and `scripts/audit_ornl_source_inventory.py`
+  preserve all member names, sizes and first-line schemas, without parsing sensor
+  values or fitting a model. The publisher describes49scenarios; the current zip
+  contains63equipment CSVs and5weather CSVs. Reconcile cohort membership before a
+  registered benchmark. Fault identity/intensity in filenames must never become
+  input features. Weather first lines are logger metadata. No actual repair or
+  inspection prices, independent field-repair follow-up or commercial qualification
+  are established. This can support an external physical-sensor experiment, not
+  replace the missing operational action/cost/outcome cohort.
+
+The source search remains open. Public source documentation, an injected fault
+and a measured baseline are not evidence of profitable real repairs.
+
+
+[Malawi flood-response handpump rehabilitation](https://openwashdata.github.io/floodchlorinationsurvey/),
+DOI10.5281/zenodo.15846578, CC BY4.0, was acquired from publisher commit
+`a2755213c841fdfc7b65aaaff0b91016296f2985` during this source search.
+`handpump-source-coverage.json` hashes the CSV, dictionary, licence and package
+metadata. It has328survey records,223normalized waterpoint names (82names recur),
+reported pre-intervention functionality and56replacement-related columns.
+325records have a recorded20L bucket-fill time,327have post-intervention
+functionality and327have strokes-to-water. These are **presence counts only**;
+no outcome distribution, predictive score or model has been inspected/fitted.
+No cost/price column exists. Missing replacement entries remain missing, not
+zero; report dates are not verified physical measurement dates. Collector
+independence, follow-up timing, action completeness, ambiguous/repeated names
+and possible post-treatment leakage require further source audit before fitting.
+Names, coordinates, linked photographs and postrepair fields must not become
+shortcuts for a pre-action model; no linked photos were requested. Real component
+replacements plus measured flow are useful factual-outcome candidates, but do
+not identify counterfactual repair benefit, actual economics or factory deployment.

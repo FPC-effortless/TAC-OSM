@@ -1,0 +1,82 @@
+{
+  "study": "dev067-stable-interface",
+  "decision": "NO_PROMOTION_REGISTERED_GATES_FAILED",
+  "archives": {
+    "evidence.tar.gz.part000": "3520324f9086986f2a7f695c4ffc7fa72db94ec3a7f8f290ef086a028857f1d0",
+    "evidence.tar.gz.part001": "13fa3b9a0173ec8005e9bb000127eb7a1d6be933af957b42b101257cce4ea2f5",
+    "evidence.tar.gz.part002": "b42ded1ba680e8fa646b79fc04791c236f8f0fdf01c34631891f898628e951c1",
+    "evidence.tar.gz.part003": "437b378036423b470834e97e2f25f1bda7a3795c5a00f22b914bf8f3897a5ec8",
+    "learned-agent.tar.gz": "4d23236e14d419e298a1abb2f9c6d18b4520f4264b6e2cdf30864aa211e21827",
+    "smoke-only.tar.gz": "31c23c500358a83ecaf2ea4a09b31434d94349648f7b110d9d86b6a1633bf755"
+  },
+  "evidence_parts": [
+    "evidence.tar.gz.part000",
+    "evidence.tar.gz.part001",
+    "evidence.tar.gz.part002",
+    "evidence.tar.gz.part003"
+  ],
+  "run": {
+    "status": "COMPLETE",
+    "fits": 120,
+    "pilot_fits": 12,
+    "unique_encoder_fits": 60,
+    "unique_pilot_encoder_fits": 6,
+    "fitting_cpu_seconds": 5904.586202012,
+    "test_opened": true,
+    "protocol_sha256": "314b242dd486286e6317833c4d1990afca3901bcffbec7e69b4208d2224d574d"
+  },
+  "scope": "All fitted checkpoints, raw/EMA deployment weights, shared data, collection trajectories, curves, failed outcomes and test trajectories preserved. Smoke excluded. See local/remote audits separately.",
+  "qualification": {
+    "primary": {
+      "arm": "tac_frozen_log",
+      "gates": {
+        "reliability18_each_history": true,
+        "reliability18_each_secondary": true,
+        "physical_no_excess_all20": true,
+        "individual_tails18of20": false,
+        "cost_noninferiority002": true,
+        "replay_complete": true,
+        "intervention_reliability18": true,
+        "intervention_zero_faults": true
+      },
+      "passing_intervention_seeds": 20,
+      "intervention_faults": 0,
+      "local_synthetic_qualified": false
+    },
+    "preselected_candidate": {
+      "arm": "gru_frozen_log",
+      "gates": {
+        "reliability18_each_history": true,
+        "reliability18_each_secondary": true,
+        "physical_no_excess_all20": true,
+        "individual_tails18of20": false,
+        "cost_noninferiority002": true,
+        "replay_complete": true,
+        "intervention_reliability18": true,
+        "intervention_zero_faults": true
+      },
+      "passing_intervention_seeds": 20,
+      "intervention_faults": 0,
+      "local_synthetic_qualified": false
+    }
+  },
+  "commercial_qualification": "UNMET_REAL_FORECAST_AND_REPAIR_OUTCOME_GATES",
+  "derived_evidence_sha256": {
+    "statistics.json": "51d7754ff4803edf59abe28a69650c14bb6178dbeb64a8c84cf9ba1f9fdb6953",
+    "statistics.csv": "0868a4191e6a9971507863fd832e7a36c5cfc4102e8b31ac68975f1bf9381184",
+    "audit.json": "02bc0c8b7268f7dbef817e207684b62459d263267e8369d5d24bbf4772d69776",
+    "interventions.json": "8c04f14127bae62d743972c50bcdf427dfbcc216171d13520e6b209844a67308",
+    "intervention-trajectories.jsonl.gz": "4bba821a970ce1c0321487ad7b7c211db79cfefd2d7c4ae28546c9b682f2dc5d",
+    "public-reference.json.gz": "8e56feb093f8b6f8c7c01e477a55ea163f5952041007db1c982ec06dbd187f8d",
+    "hardware.json": "8cc9a2777b899f034c6179173a715e45a1ff658f4c411cdb390a5f49c4ac34b6",
+    "diagnostics.json": "6351ecce13ff7ec3b8a3032471ea202afb67f2061aa65a13d9449b2a6677d4da",
+    "shuffle.json": "777c8a1938fdc940aa4623fff865accc3eb8dbe09eafb03ccfd2365e65247ccd",
+    "learning-curves.png": "8a7583d45ab7eb70491539d2dfa1ea21d65563a56bb2c9ae3628e1a607846d20",
+    "actor-curves.png": "e249aa987402ab0241829f1fd5b8db88c52f53055eb448a8f94193ef8bd54301",
+    "per-seed.png": "f7f14dcec79cde9cdcbb52f5578c0be29cb264c26cb101624291ffca2ef4ac27",
+    "local-verification.json": "a17839e8de3354c778647aacb707f805278dd665f8ca6263400c49104a0ba2dc",
+    "source-provenance.json": "8a02321ba001831372ef3fabaebe733d552cafac5c15eb082660240d6ef4aedc",
+    "qualification.json": "3883307ad7daf5d68010ccb15cc559e95650a281312a2ac413124edd095fe97d",
+    "archive-roundtrip.json": "e05c7092da8fe55dcad46af056f2ceec53572a8491093a7ef287257548eecfdc"
+  }
+}

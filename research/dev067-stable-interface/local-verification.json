@@ -1,0 +1,86 @@
+{
+  "status": "COMPLETE_LOCAL_REPLAY_NOT_REMOTE",
+  "regression": {
+    "passed": 1477,
+    "failures": 0,
+    "log": "regression.log",
+    "process_usage": {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q"
+      ],
+      "exit_code": 0,
+      "user_seconds": 263.953819,
+      "system_seconds": 4.651916,
+      "wall_seconds": 368.93754348100265,
+      "max_child_rss_kib": 547216
+    }
+  },
+  "audit_usage": {
+    "command": [
+      ".venv/bin/python",
+      "scripts/audit_stable_semantic_dev067.py",
+      "--directory",
+      "results/dev067-main",
+      "--output",
+      "research/dev067-stable-interface/audit.json",
+      "--exports",
+      "results/dev067-agents",
+      "--veritas",
+      "/workspace/veritas"
+    ],
+    "exit_code": 0,
+    "user_seconds": 808.034793,
+    "system_seconds": 6.511799,
+    "wall_seconds": 986.5233656269993,
+    "max_child_rss_kib": 488768
+  },
+  "intervention_usage": {
+    "command": [
+      ".venv/bin/python",
+      "scripts/intervene_stable_semantic_dev067.py",
+      "--directory",
+      "results/dev067-main",
+      "--output",
+      "research/dev067-stable-interface/interventions.json",
+      "--details",
+      "research/dev067-stable-interface/intervention-trajectories.jsonl.gz"
+    ],
+    "exit_code": 0,
+    "user_seconds": 673.73901,
+    "system_seconds": 1.053078,
+    "wall_seconds": 853.8960326449997,
+    "max_child_rss_kib": 424384
+  },
+  "smoke": "12excludedcheckpoints/48trajectories;two recorded-only partitions cover all12exactly",
+  "source_fitting": "c39fc6c2110e63e01314d6409ae52f5eb245eb04",
+  "exact_local_numeric_max_abs": 0.0,
+  "remote": "PENDING_NEW_HEAD_CHECKS;parentPR225all7PASSat8d3c5cc;notproofnewstudy",
+  "reserved_MetroPT_July_B_opened": false,
+  "benchmark_usage": {
+    "command": [
+      ".venv/bin/python",
+      "scripts/benchmark_stable_semantic_dev067.py",
+      "--directory",
+      "results/dev067-main",
+      "--output",
+      "research/dev067-stable-interface/hardware.json"
+    ],
+    "exit_code": 0,
+    "user_seconds": 10.102298999999999,
+    "system_seconds": 0.17807399999999998,
+    "wall_seconds": 10.136932282999624,
+    "max_child_rss_kib": 319612
+  },
+  "partition_smoke": {
+    "checkpoints": 12,
+    "trajectories": 48,
+    "native_actions": 240,
+    "portable_decisions": 60,
+    "clock_invariance_cases": 24,
+    "semantic_interface_cases": 12,
+    "disjoint_coverage": true
+  }
+}
