@@ -14,6 +14,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   preflight:
+    # Original six fits were completed at the frozen source HEAD; never refit on PR updates.
+    if: github.event.pull_request.head.sha == '7ffa779a2c0f2e853d84ca62a3a97f59655434f8'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
