@@ -42,3 +42,28 @@ machines across datasets into fictitious action/outcome/cost trajectories.
 REAL-MAINT-001 is an observational external test, not a commercial maintenance
 trial. Research code/weights keep their own licence; source data attribution and
 licence are recorded independently.
+
+Follow-up eligibility audit (2026-10-19): `ltpp-followup-audit.json` adds2,386
+rehabilitation records, hashes every additional public page and checks the original
+source hashes. Of334positive **component-total** cost events with before/after
+roughness,95have other recorded maintenance and56have recorded rehabilitation
+between nearest measurements (sets overlap).197have neither recorded category;
+only4also have both measurements within90days. Zero have both within30days.
+These are posthoc date/coverage counts, not preregistered sample selection or an
+effect estimate. Missing interventions, same-day treatment bundles and inspection
+prices remain unresolved; absence of a record is not absence of a treatment.
+
+Additional candidates screened on2026-10-19:
+
+- [Nepal medical-equipment maintenance study](https://link.springer.com/article/10.1186/s12913-022-08392-6):
+  public cost calculations exist, but the publisher explicitly excludes raw
+  maintenance job cards from the downloadable data. Several comparison scenarios
+  use modeled assumptions. Not an accessible action/outcome training cohort; no
+  author contact or restricted data requested.
+- [Medical equipment maintenance, Hugging Face](https://huggingface.co/datasets/electricsheepafrica/medical-equipment-maintenance):
+  the dataset card describes30,000 **simulated** observations. Excluded from real
+  repair validation despite its convenient cost/outcome fields.
+
+No newly qualified factory inspection/action/cost/independent-outcome cohort has
+been found in this screening. The real-outcome gate remains unmet; no negative
+result is relabeled as commercial evidence.

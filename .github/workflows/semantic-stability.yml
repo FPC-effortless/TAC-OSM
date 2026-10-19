@@ -1,0 +1,105 @@
+name: Recorded semantic-gradient study
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev065-semantic-stability/**'
+      - 'src/tac_osm/development/semantic_state.py'
+      - 'src/tac_osm/development/semantic_runtime.py'
+      - 'src/tac_osm/development/belief_agent.py'
+      - 'src/tac_osm/development/belief_bottleneck.py'
+      - 'src/tac_osm/development/uncertain_world.py'
+      - 'scripts/*semantic_dev065.py'
+      - 'scripts/runtime_semantic_batched_dev065.py'
+      - 'scripts/benchmark_semantic_runtime_dev065.py'
+      - 'scripts/data_belief_dev062.py'
+      - 'scripts/data_belief_dev063.py'
+      - 'scripts/analyze_belief_dev063.py'
+      - 'scripts/analyze_belief_dev062_r1.py'
+      - 'scripts/audit_identity_dev0615.py'
+      - 'scripts/audit_fully_learned_dev058.py'
+      - 'scripts/evaluate_uncertainty_dev060.py'
+      - 'scripts/summarize_memory_dev061.py'
+      - 'scripts/run_learned_stack_dev055.py'
+      - 'scripts/restore_research_evidence_dev062.py'
+      - 'scripts/package_research_dev062.py'
+      - 'tests/test_semantic_state_gradients.py'
+      - 'tests/test_semantic_runtime.py'
+      - '.github/workflows/semantic-stability.yml'
+permissions:
+  contents: read
+jobs:
+  strict-semantic-checkpoints:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 100
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install -e . -e .veritas-public-runtime numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+          python scripts/restore_semantic_dev065.py
+          python scripts/audit_semantic_dev065.py --directory results/dev065-main --output results/dev065-remote-audit.json --exports results/dev065-remote-export --veritas .veritas-public-runtime
+          python scripts/analyze_semantic_dev065.py --directory results/dev065-main --output results/dev065-remote-statistics.json
+          python - <<'PY'
+          import json,sys
+          sys.path.insert(0,'scripts')
+          from audit_identity_dev0615 import compare
+          audit=json.load(open('results/dev065-remote-audit.json'))
+          assert audit['status']=='COMPLETE' and audit['checkpoints']==132
+          assert audit['telemetry']['max_abs']<=1e-8
+          compare(json.load(open('results/dev065-remote-statistics.json')),json.load(open('research/dev065-semantic-stability/statistics.json')),{'values':0,'max_abs':0.})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev065-restored-checkpoints
+          path: |
+            results/dev065-remote-*.json
+            results/dev065-remote-export/**
+          if-no-files-found: ignore
+  strict-semantic-counterfactuals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 100
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install -e . numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+          python scripts/restore_semantic_dev065.py
+          python scripts/intervene_semantic_dev065.py --directory results/dev065-main --output results/dev065-remote-interventions.json --details results/dev065-remote-interventions.jsonl.gz
+          python - <<'PY'
+          import json,sys
+          sys.path.insert(0,'scripts')
+          from audit_identity_dev0615 import compare
+          a=json.load(open('results/dev065-remote-interventions.json'))
+          b=json.load(open('research/dev065-semantic-stability/interventions.json'))
+          assert a['status']=='COMPLETE' and a['checkpoints']==120
+          for key in ('checkpoints','trajectories','arms','per_seed'):
+              compare(a[key],b[key],{'values':0,'max_abs':0.})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev065-semantic-counterfactuals
+          path: |
+            results/dev065-remote-interventions.json
+            results/dev065-remote-interventions.jsonl.gz
+          if-no-files-found: ignore
