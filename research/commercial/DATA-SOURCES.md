@@ -114,3 +114,21 @@ Names, coordinates, linked photographs and postrepair fields must not become
 shortcuts for a pre-action model; no linked photos were requested. Real component
 replacements plus measured flow are useful factual-outcome candidates, but do
 not identify counterfactual repair benefit, actual economics or factory deployment.
+
+## 2026-10-19 research-priority change: operational fleet first
+
+The standing [real-world evidence policy](../REAL-WORLD-EVIDENCE-RULES.md)
+now governs all new experiments and model-promotion claims. **SCANIA Component X
+is the next primary real-world prediction benchmark**; its source was already
+catalogued in the 2026-10-18 audit, so this is a priority decision, NOT a
+newly discovered or downloaded raw dataset. Current publisher version 3:
+https://researchdata.se/en/catalogue/dataset/2024-34/3 ;
+DOI https://doi.org/10.5878/bnh5-ka77 ; CC BY 4.0 ; 11 files / 1.54 GiB.
+The version-3 publisher provides test labels. Keep them unopened for
+selection, verify actual acquisition plus file hashes before claiming
+import, and protect the official vehicle-disjoint splits. Recorded replacement
+is not a randomized intervention or independent post-repair physical success.
+The expert asymmetric cost matrix is a challenge proxy, not measured invoices.
+Use Backblaze as an independent forward-calendar-time operational failure task;
+retain LTPP / handpump real action-outcome research as separate incomplete
+commercial-utility gates. Freeze synthetic-only pilots as historical diagnostics.
