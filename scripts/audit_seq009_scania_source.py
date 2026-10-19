@@ -12,6 +12,7 @@ import hashlib
 import io
 import json
 from pathlib import Path
+import sys
 import time
 import urllib.error
 import urllib.parse
@@ -33,6 +34,7 @@ LIMIT_BYTES = {"train_tte.csv": 3_000_000,
 
 # Archived publisher ZIP route was GET-verified in CI; individual file endpoint
 # returned HTTP 404 and is deliberately not used for scientific provenance.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from acquire_seq009_scania_zip import acquire
 
 
