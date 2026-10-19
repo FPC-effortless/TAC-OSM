@@ -257,12 +257,13 @@ def losses(pred, true):
     return F.smooth_l1_loss(pred, true / 10) + F.cross_entropy(-pred, true.argmin(-1))
 
 
-def fit(arm, seed, train, val, steps):
+def fit(arm, seed, train, val, steps, checkpoint=None):
     torch.manual_seed(seed)
     m = model(arm).train()
     opt = torch.optim.AdamW(m.parameters(), lr=LR, weight_decay=1e-4)
     gen = torch.Generator().manual_seed(seed + 1_000_000)
     xs, qs = train
+    curve = []
     for step in range(steps):
         indices = torch.randint(0, len(xs), (BATCH,), generator=gen)
         out = m(xs[indices])
@@ -273,6 +274,8 @@ def fit(arm, seed, train, val, steps):
         loss.backward()
         nn.utils.clip_grad_norm_(m.parameters(), 1.0)
         opt.step()
+        if (step + 1) % 128 == 0 or step + 1 == steps:
+            curve.append({'update': step + 1, 'loss': float(loss.detach())})
     m.eval()
     vx, vq = val
     with torch.inference_mode():
@@ -287,7 +290,15 @@ def fit(arm, seed, train, val, steps):
             "val_expected_regret": float(selected_regret.mean()),
             "val_fault_free_action_rate": None,
             "val_loss": float(losses(pred, vq)),
+            "train_curve": curve,
         }
+    if checkpoint is not None:
+        checkpoint.parent.mkdir(parents=True, exist_ok=True)
+        torch.save({'arm': arm, 'seed': seed, 'steps': steps,
+                    'model': m.state_dict(), 'optimizer': opt.state_dict(),
+                    'metrics': metrics}, checkpoint)
+        metrics['checkpoint'] = str(checkpoint)
+        metrics['checkpoint_sha256'] = hashlib.sha256(checkpoint.read_bytes()).hexdigest()
     return metrics
 
 
@@ -315,7 +326,8 @@ def main():
     steps = 8 if args.stage == "smoke" else STEPS
     for seed in seeds:
         for arm in ARMS:
-            record = fit(arm, seed, (train_x, train_q), (val_x, val_q), steps)
+            ckpt = (Path(args.output) / 'checkpoints' / f'{arm}-{seed}.pt') if args.stage == 'pilot' else None
+            record = fit(arm, seed, (train_x, train_q), (val_x, val_q), steps, checkpoint=ckpt)
             summary["fits"].append(record)
             print(json.dumps(record, sort_keys=True), flush=True)
     target = Path(args.output) / (args.stage + ".json")
