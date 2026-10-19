@@ -38,3 +38,10 @@ Source coverage can be checked independently with
 This reads previously acquired public tables and adds rehabilitation dates via
 the normal public preview API. It never compares condition improvements or fits
 a model. It is unrelated to synthetic training and cannot qualify a factory agent.
+
+Resource accounting uses `scripts/research_process_usage.py REPORT COMMAND ...`.
+It supervises an already specified process and records OS CPU/wall/RSS only;
+it never loads weights, produces model scores or substitutes for a benchmark's
+registration. It lives outside the historical `measure_*` domain-benchmark
+namespace, whose M0 contract freeze remains unchanged. The actual batching
+measurement is governed by RUNTIME-PROTOCOL.md and its frozen source hashes.

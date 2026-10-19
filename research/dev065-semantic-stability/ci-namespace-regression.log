@@ -1,0 +1,28 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_________ test_every_measurement_script_is_either_contracted_or_exempt _________
+
+    def test_every_measurement_script_is_either_contracted_or_exempt():
+        """The M0 freeze's completeness assertion, in both directions.
+    
+        A script that is on neither list has no contract and no recorded exemption
+        — an unregistered measurement, which is the one thing M0 exists to
+        prevent. A script on both is a contradiction, and a script whose name
+        appears in neither list has been forgotten by the freeze entirely.
+        """
+        contracted = {name for name, _ in _WITH_CONTRACT}
+        exempt = {name for name, _ in _WITHOUT_CONTRACT}
+        actual = set(_measurement_scripts())
+    
+        unaccounted = actual - contracted - exempt
+>       assert not unaccounted, (
+            "measurement scripts with neither a contract nor a recorded exemption "
+            f"were found; each needs one or the other: {sorted(unaccounted)}"
+        )
+E       AssertionError: measurement scripts with neither a contract nor a recorded exemption were found; each needs one or the other: ['measure_research_process.py']
+E       assert not {'measure_research_process.py'}
+
+tests/test_contract.py:1452: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_contract.py::test_every_measurement_script_is_either_contracted_or_exempt
+1 failed in 0.07s

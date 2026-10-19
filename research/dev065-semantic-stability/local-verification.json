@@ -5,8 +5,8 @@
     "command": ".venv/bin/python -m pytest -q",
     "passed": 1472,
     "exit_code": 0,
-    "elapsed_seconds": 135.11,
-    "log_sha256": "a58531fa7e6cf2b478e6ab4069116e088e90998c7388497ce794d392ea99a87f"
+    "elapsed_seconds": 113.81,
+    "log_sha256": "0068dbce43cd6e21d50168e7eabd7e8b004d8ac6fd14fd5e01c0ab0d7e0391a3"
   },
   "audit": {
     "status": "COMPLETE",
@@ -93,5 +93,15 @@
   },
   "setup_incident": "Initial /usr/bin/time launcher unavailable (exit127), before any intervention executed. Failure log retained; same registered study then executed once via the standard-library resource wrapper. No model, budget, threshold or outcome selection changed.",
   "cross_host": "UNKNOWN until final-head remote checks; inspect draft PR, not a self-referential pass commit",
-  "commercial": "NOT_ESTABLISHED"
+  "commercial": "NOT_ESTABLISHED",
+  "ci_namespace_fix": {
+    "first_head": "7d2d189468d0d409ea0c629321398299a05c6090",
+    "observed_remote_regression": "FAILURE",
+    "local_reproduced_test": "tests/test_contract.py::test_every_measurement_script_is_either_contracted_or_exempt",
+    "cause": "Generic CPU process supervisor was named in the legacy measure_* model-benchmark namespace after the earlier local suite.",
+    "fix": "Rename to scripts/research_process_usage.py; no frozen contract, model, threshold, weight or replay tolerance changed.",
+    "negative_log_sha256": "3b3b030f552fd230a5ffc0e7f7663234c65956efdb53ea9f5e1b57788be1434a",
+    "final_local_passed": 1472,
+    "final_remote": "VERIFY_NEW_HEAD"
+  }
 }
