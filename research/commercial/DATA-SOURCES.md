@@ -114,3 +114,23 @@ Names, coordinates, linked photographs and postrepair fields must not become
 shortcuts for a pre-action model; no linked photos were requested. Real component
 replacements plus measured flow are useful factual-outcome candidates, but do
 not identify counterfactual repair benefit, actual economics or factory deployment.
+
+
+Further screening during REAL-MAINT-003:
+
+- [Uganda borehole company data](https://github.com/openwashdata/ugabore),
+  CC BY4.0, publisher commit21ddb31e0b24e9ba5e64cc4f45faada503885d10:
+  source/dictionary/licence acquired. Ten columns record asset/location metadata,
+  most recent repair date, depths in metres and yield in cubic metres/hour.
+  `ugabore-source-coverage.json` preserves hashes/schema. No prices or paired
+  before/after outcome columns exist; yield timing after repair is unestablished.
+  No numerical outcome distribution, fitting or independent repair claim.
+- A normal FMUCD public-API follow-up request returned HTTP403. No retry with
+  alternate credentials, cookies or access bypass was attempted. The earlier
+  header/metadata-only audit remains the actual coverage; no full-file or
+  independently verified outcome claim has been added.
+
+REAL-MAINT-003 now provides a separate measured-room-temperature forecast result,
+not commercial repair validation. The frozen protocol accidentally called rawF
+readingsC; its explicit unit erratum, unchanged-weight proof and correctedFexport
+are preserved alongside every fit. See its results for narrow numerical gates.

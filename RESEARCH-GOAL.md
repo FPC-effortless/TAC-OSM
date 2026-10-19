@@ -1,30 +1,33 @@
 # Active research goal
 
 Build a reliable learned maintenance model that earns its complexity on real
-sensing and verified action outcomes. Status: **ACTIVE; NOT COMMERCIAL-QUALIFIED**.
+sensing and verified action outcomes. **ACTIVE; NOT COMMERCIAL-QUALIFIED.**
 
 Acceptance: [active goal](research/commercial/ACTIVE-GOAL.md).
-Machine-readable progress: [goal state](research/commercial/goal-state.json).
+Progress: [goal state](research/commercial/goal-state.json).
 
-Latest closed study: [DEV067 results](research/dev067-stable-interface/RESULTS.md).
-All 120 fresh candidate fits and 12 pilots completed. Every arm reaches 100%
-completion and zero final faults across all 20 seeds on the primary and secondary
-synthetic tests. **NO PROMOTION:** only 16/20 TAC encoders and 9/20 preselected GRU
-encoders pass both individual calibration tails, below the required 18/20.
-Freezing has no established benefit; log coordinates increase cost. The no-CASM
-control also completes every world. No architectural superiority is demonstrated.
+[REAL-MAINT-003](research/real-maint-003/RESULTS.md) now passes every local numerical
+room-forecast gate. The validation-selected RevIN MLP reduces mean relative MAE
+by 32.1% versus persistence; all 20 seeds avoid regression on every room/horizon
+cell, with simultaneous bounds and a locked-ridge comparison passing. All 88
+neural checkpoints and 8 references replay with zero local drift. Remote checks
+for the new final head remain pending.
 
-All 132 checkpoints, 54,528 trajectories and 9,514 native actions replay locally;
-both portable adapters reproduce 22 decisions each with zero local drift. Fresh
-predicted/exact/blurred interventions preserve 92,160 trajectories. Damaged-agent
-failures remain separate. Remote checks for this final head must still complete.
+**Unit erratum:** published temperatures are Fahrenheit, despite the frozen
+protocol's incorrect Celsius wording. The corrected portable model explicitly
+returns Fahrenheit; weights, predictions and dimensionless gates are unchanged.
+See the [erratum](research/real-maint-003/UNIT-ERRATUM.md). This is one building's
+point-forecast component, not a repair policy, full analog-sensor qualification,
+calibrated health belief or profitable commercial agent.
 
-The [next decision](research/dev067-stable-interface/NEXT-DECISION.md) shifts to a
-new, registered measured-sensor forecast study on ORNL physical experiments.
-The draft remains unfitted. Actual Malawi repair/flow records were also sourced;
-prices, independent collection and follow-up timing remain unqualified.
+[DEV067](research/dev067-stable-interface/RESULTS.md) remains NO PROMOTION: all six
+arms complete every required world across 20 seeds with zero final faults, but
+only 16 TAC and 9 preselected GRU encoders pass both calibration tails. No CASM or
+freezing advantage is established; log coordinates increase cost. PR228's ten
+remote checks pass at417930c. Prior studies and weights stay intact.
 
-[REAL-MAINT-002](research/real-maint-002/RESULTS.md) remains failed, July B unopened.
-All earlier evidence, exports and negative results stay intact. The commercial
-inspection/action/cost/physical-outcome gate remains unmet. A failed registration
-is evidence, not goal completion; never select a test winner or weaken its rules.
+Next work requires independent-site/unit-verified sensing and actual public
+inspection/action/price/physical-outcome evidence. Learned state/dynamics and CASM
+attribution remain open. [REAL-MAINT-002](research/real-maint-002/RESULTS.md) stays
+failed and MetroPT July B unopened. A good forecasting component is progress,
+not completion of the broader maintenance goal.

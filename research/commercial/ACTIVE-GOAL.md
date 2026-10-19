@@ -68,9 +68,12 @@ thresholds, cost-free inspections, or scripted stopping fix hidden in an export.
   but only 16 TAC and 9 preselected GRU encoders pass both calibration tails.
   Freezing is inconclusive; log coordinates increase cost. Full local replay and
   fresh semantic interventions pass, without commercial qualification.
-- Next: register REAL-MAINT-003 on measured physical ORNL sensor histories, with
-  untouched date-based test values, persistence/drift/AR references and per-channel
-  gates. Drafting is not fitting or success. Further qualify the actual Malawi
+- REAL-MAINT-003 passes all local numerical room-forecast gates after 80 fresh
+  fits / 8 pilots, complete replay and a corrected Fahrenheit export. Mean relative
+  MAE is .6790; all 20 seeds avoid point regression on all 20 room/horizon cells.
+  The frozen protocol mislabeled units as Celsius; the erratum preserves unchanged
+  weights/scores and makes the release contract explicit. This remains one building
+  and point forecasting, not the complete sensing/repair/commercial goal. Further qualify the actual Malawi
   repair/flow source; missing prices and independent follow-up remain blockers.
 - Dependency complexity/R1 attribution and posterior-free learning follow their
   registered gates. Scale/SSM/attention arms wait for a valid real-data baseline.

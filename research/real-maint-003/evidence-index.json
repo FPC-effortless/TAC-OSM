@@ -1,0 +1,61 @@
+{
+  "study": "real-maint-003",
+  "decision": "LOCAL_NUMERICAL_GATES_PASS_UNIT_ERRATUM_REMOTE_PENDING",
+  "archives": {
+    "evidence.tar.gz.part000": "5dbf11865c556e8ae8b0983f33bc523500ec9cc780c4402d4b098cb37b7f2988",
+    "evidence.tar.gz.part001": "5abd0b399417d2e1ae0109c78f7bb2df77cabb741b85fcbdc43eb338dabfb52d",
+    "smoke-only.tar.gz": "9616cbfa351883b5b6cfe85998a254dcb9ef7736889103b137d5fb361de7cb16",
+    "learned-forecaster.tar.gz": "4b3fc1d46208986c7bf76ddffa2bc12c11e6c930df52a807d1675422bfeaa906"
+  },
+  "evidence_parts": [
+    "evidence.tar.gz.part000",
+    "evidence.tar.gz.part001"
+  ],
+  "run": {
+    "status": "COMPLETE",
+    "fits": 80,
+    "pilot_fits": 8,
+    "test_opened": true,
+    "candidate_validation_passing_seeds": 20,
+    "fitting_cpu_seconds": 133.24341668099999,
+    "protocol_sha256": "c8e1dbf9111e64e9801051e28f13ed60d4b8d744f564f36b8d94985fc0f8cff9"
+  },
+  "scope": "All80fresh+8pilot neuralraw/finalEMA checkpoints,37train15validation11testCSVdays,allreferencefits,windows,curvesanderrors preserved. Onebuilding, measured fault-injection data. Demo packet unitsF; original protocol unit label erroneous and retained. No actual repair policy/ROI or allanalogchannel claim.",
+  "qualification": {
+    "status": "COMPLETE",
+    "gates": {
+      "individual18of20_no_point_regression": true,
+      "mean_relative_improvement5percent": true,
+      "simultaneous20_cell_upper_no_regression": true,
+      "mean_MASE_vs_preselected_reference": true,
+      "source_checkpoint_standalone_replay": true,
+      "cpu10ms": true,
+      "corrected_unit_adapter_weight_prediction_parity": true
+    },
+    "numerical_forecast_gates_pass": true,
+    "candidate": "mlp_revin",
+    "scope": "RAW_F_ROOM_FORECAST_COMPONENT_ONLY_WITH_DECLARED_UNIT_ERRATUM",
+    "commercial_qualified": false,
+    "remote": "VERIFY_NEW_FINAL_HEAD_SEPARATELY"
+  },
+  "commercial_qualification": "UNMET_REAL_REPAIR_POLICY_COST_OUTCOME_GATES",
+  "derived_evidence_sha256": {
+    "statistics.json": "79fbd674f700a43097d3b3675e7e643a03411e9d2b3f75a629d6d45b3ea8912c",
+    "statistics.csv": "82fed245fedeafed95a10bdf288dd57513d3619b1540bb8d92fb90684d5f1ce4",
+    "audit.json": "8c39fa139ee9ae9ee4c4ee564d467695006041cc795a3128e33972e42e4fb460",
+    "hardware.json": "a9258d66e93d4bf49b81ddb59490b2c462332f865bd0df1067f6356ea0ce8bf2",
+    "qualification.json": "395918010190f9160fb339e167c5404d23ead21d0f79e988f4f45c0357290742",
+    "unit-erratum.json": "05cae0d72668d3828a0b39c36509c5d9bac7ec7b83b08dd61b3bcba67c854423",
+    "unit-correction-parity.json": "63a2bc4c38a65405544d33e1b8b887298c35e01f2b719ed28ee1dc7c40aa25bd",
+    "UNIT-ERRATUM.md": "196dd867c933fe3d4a4f4aa7baa790eef38cac7bbfdb466c9c7f2ac78551944d",
+    "pre-unit-correction-audit.json": "163a4107f595668d94a63da7df878e854fd1bc3ea97ad1c785be9bd3463e6983",
+    "pre-unit-correction-export.tar.gz": "3fda7bef48f432a6ac166674910dfadb01a64a163659086641d4e01091b9b9bb",
+    "learning-curves.png": "576316e0a70ce764ebacb0af4f5410959f821ce885f8a8f1718584637fc76c33",
+    "per-channel.png": "208c72e52de6990ac20d6b2f6bfda4dd0eae2d7da0297602228c7377d751ee05",
+    "first-day-forecasts.png": "0c060f09eb3a6c4c5594c9e5bf0ecb615eef9d3901e9bb341c6fa5469f3b62c3",
+    "local-verification.json": "e21e181d07db1b5d178450f4d619b8c8b15cfd8acc1926755d62c3a754617a6e",
+    "regression.log": "56a86795b708e0f20b7f51b0b4d24a86cf9c15bea6f61bffdf9a2b8e07592bea",
+    "source-provenance.json": "9fadfa4a78d270bba1d7b5af97e89e29b09c6a0ce7c77f9806f64f905bc1f6d1",
+    "archive-roundtrip.json": "63b00d62181a54b0df0e221a20b4d0f3a0d75c9db4ec21e85845b9327d8f3338"
+  }
+}
