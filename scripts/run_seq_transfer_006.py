@@ -79,8 +79,9 @@ def _build_one(rng, length, count_entities, task_idx, desired):
 
 def generate(seed, n, lengths=(32, 64), entities=4, *, purpose):
     """No callable TEST generator exists in the research/pilot implementation."""
-    if purpose not in ("train", "validation") or seed == TEST_SEED:
-        raise PermissionError("Reserved SEQ006 test set must remain sealed")
+    allowed = {"train": {TRAIN_SEED}, "validation": {VALID_SEED, VALID_SEED + 10}}
+    if purpose not in allowed or seed not in allowed[purpose] or seed == TEST_SEED:
+        raise PermissionError("Unregistered source seed or sealed SEQ006 TEST")
     if entities < 3 or entities > MAX_ENTITIES or not lengths or min(lengths) < 24:
         raise ValueError("Unsupported source configuration")
     rng = np.random.default_rng(seed)
@@ -255,7 +256,7 @@ def main():
         training_n, validation_n, iterations, seeds = 3000, 600, STEPS, PILOT_SEEDS
     train, train_manifest = generate(TRAIN_SEED, training_n, (32, 64), 4, purpose="train")
     v64, manifest64 = generate(VALID_SEED, validation_n, (64,), 4, purpose="validation")
-    v128, manifest128 = generate(VALID_SEED + 1, validation_n, (128,), 4, purpose="validation")
+    v128, manifest128 = generate(VALID_SEED + 10, validation_n, (128,), 4, purpose="validation")
     manifest = {"study": "SEQ-TRANSFER-006", "status": "SOFTWARE_SMOKE_ONLY"
                 if args.stage == "smoke" else "VALIDATION_PILOTS_ONLY",
                 "test_opened": False, "test_evaluations": 0,
