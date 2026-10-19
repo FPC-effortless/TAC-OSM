@@ -1,0 +1,96 @@
+{
+  "measurements": [
+    {
+      "arm": "linear_revin",
+      "seed": 97301,
+      "batch": 1,
+      "dtype": "float64",
+      "median_cpu_ms": 0.05823599919676781,
+      "median_wall_ms": 0.05872799828648567,
+      "parameter_bytes": 18080,
+      "buffer_bytes": 192,
+      "context_tensor_bytes": 832
+    },
+    {
+      "arm": "linear_revin",
+      "seed": 97301,
+      "batch": 16,
+      "dtype": "float64",
+      "median_cpu_ms": 0.10170099884271622,
+      "median_wall_ms": 0.10194399952888489,
+      "parameter_bytes": 18080,
+      "buffer_bytes": 192,
+      "context_tensor_bytes": 13312
+    },
+    {
+      "arm": "linear_static",
+      "seed": 97301,
+      "batch": 1,
+      "dtype": "float64",
+      "median_cpu_ms": 0.030774999409914017,
+      "median_wall_ms": 0.031057000160217285,
+      "parameter_bytes": 18080,
+      "buffer_bytes": 192,
+      "context_tensor_bytes": 832
+    },
+    {
+      "arm": "linear_static",
+      "seed": 97301,
+      "batch": 16,
+      "dtype": "float64",
+      "median_cpu_ms": 0.03883799910545349,
+      "median_wall_ms": 0.0391089990735054,
+      "parameter_bytes": 18080,
+      "buffer_bytes": 192,
+      "context_tensor_bytes": 13312
+    },
+    {
+      "arm": "mlp_revin",
+      "seed": 97301,
+      "batch": 1,
+      "dtype": "float64",
+      "median_cpu_ms": 0.07050400227308273,
+      "median_wall_ms": 0.07118699699640274,
+      "parameter_bytes": 68256,
+      "buffer_bytes": 192,
+      "context_tensor_bytes": 832
+    },
+    {
+      "arm": "mlp_revin",
+      "seed": 97301,
+      "batch": 16,
+      "dtype": "float64",
+      "median_cpu_ms": 0.12232200056314468,
+      "median_wall_ms": 0.12283500283956528,
+      "parameter_bytes": 68256,
+      "buffer_bytes": 192,
+      "context_tensor_bytes": 13312
+    },
+    {
+      "arm": "mlp_static",
+      "seed": 97301,
+      "batch": 1,
+      "dtype": "float64",
+      "median_cpu_ms": 0.040449999272823334,
+      "median_wall_ms": 0.0407320000231266,
+      "parameter_bytes": 68256,
+      "buffer_bytes": 192,
+      "context_tensor_bytes": 832
+    },
+    {
+      "arm": "mlp_static",
+      "seed": 97301,
+      "batch": 16,
+      "dtype": "float64",
+      "median_cpu_ms": 0.05776600167155266,
+      "median_wall_ms": 0.05822699889540672,
+      "parameter_bytes": 68256,
+      "buffer_bytes": 192,
+      "context_tensor_bytes": 13312
+    }
+  ],
+  "candidate_batch1_cpu10ms_pass": true,
+  "source": "scripts/benchmark_real_maintenance_003.py",
+  "raw_temperature_unit": "degF",
+  "scope": "One host, first predeclared initialization,5warmups100forwardrepetitions,preconstructed public contexts. Batch times perbatch. CPU/wall exclude JSON/startup/dataacquisition. Tensor bytes exclude allocator/temporaries and are not physical DRAM traffic. Not an energy/FLOP/production or universal-host claim."
+}

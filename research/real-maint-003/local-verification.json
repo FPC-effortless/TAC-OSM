@@ -1,0 +1,64 @@
+{
+  "status": "COMPLETE_LOCAL_NUMERICAL_AND_UNIT_CORRECTED_REPLAY",
+  "tests_passed": 1485,
+  "regression_usage": {
+    "command": [
+      ".venv/bin/python",
+      "-m",
+      "pytest",
+      "-q"
+    ],
+    "exit_code": 0,
+    "user_seconds": 143.992962,
+    "system_seconds": 3.871074,
+    "wall_seconds": 126.15650189699954,
+    "max_child_rss_kib": 543412
+  },
+  "corrected_audit_usage": {
+    "command": [
+      ".venv/bin/python",
+      "scripts/audit_real_maintenance_003.py",
+      "--directory",
+      "results/real003-main",
+      "--output",
+      "research/real-maint-003/audit.json",
+      "--exports",
+      "results/real003-agents"
+    ],
+    "exit_code": 0,
+    "user_seconds": 61.971303,
+    "system_seconds": 1.16546,
+    "wall_seconds": 62.36244523100322,
+    "max_child_rss_kib": 322136
+  },
+  "original_audit_usage": {
+    "command": [
+      ".venv/bin/python",
+      "scripts/audit_real_maintenance_003.py",
+      "--directory",
+      "results/real003-main",
+      "--output",
+      "research/real-maint-003/audit.json",
+      "--exports",
+      "results/real003-agents"
+    ],
+    "exit_code": 0,
+    "user_seconds": 61.482127,
+    "system_seconds": 1.073813,
+    "wall_seconds": 61.79089107399341,
+    "max_child_rss_kib": 322228
+  },
+  "source_fit": "7fedb402ef1ea04c4ab2f471e79494ec9d0d27e2",
+  "source_raw_temperature_unit": "degF",
+  "unit_erratum": "UNIT-ERRATUM.md; originalprotocolmistakenCelsiuslabel retained; sameweights/errors/relativegates",
+  "semantic_unit_test": "test_thermal_export_units.py: constant68Fmustnotbereturnedas68C; passes isolatedruntime",
+  "smoke": "results/real003-smoke-frozen,8synthetic-onlycheckpoints,excluded",
+  "all_prior_evidence_intact": true,
+  "MetroPT_July_B_opened": false,
+  "runtime_source_sha256": {
+    "scripts/runtime_thermal_forecast_003.py": "4b25ec5bf198d122ce5a9ffc14cdbfd5419f40a2d41ab02dda209c1505ab4006",
+    "scripts/audit_real_maintenance_003.py": "5eb98f6caa76f094f12d4a178d97411a5fc41548bf73ac92ac3a84d8464c4ed6",
+    "scripts/benchmark_real_maintenance_003.py": "735b8e7710100653c2dd82dd9cd152852647f10f6ae6f2bdc6a541f2da9fd4b8"
+  },
+  "parent_remote": "PR228all10PASSat417930c896de4d633f7a5846249f011e8bd53b9f;newstudyremotePENDING"
+}
