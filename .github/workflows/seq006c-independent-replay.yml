@@ -1,0 +1,57 @@
+name: SEQ006C independent recorded-only replay
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/audit_seq_transfer_006c.py'
+      - '.github/workflows/seq006c-independent-replay.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: seq006c-recorded-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  strict-original-checkpoint-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          sparse-checkout: |
+            scripts/run_seq_transfer_006.py
+            scripts/confirm_seq_transfer_006c.py
+            scripts/audit_seq_transfer_006c.py
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore original 60 checkpoints, no refitting
+        uses: actions/download-artifact@v4
+        with:
+          name: seq006c-original-60-fit-evidence
+          run-id: 39302028231
+          github-token: ${{ github.token }}
+          path: results/seq006c-original
+      - name: Independently replay all 540 test accuracy cells
+        run: |
+          python scripts/audit_seq_transfer_006c.py --archive-directory results/seq006c-original --output results/seq006c-replay.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('results/seq006c-replay.json').read_text())
+          assert d['status']=='COMPLETE' and d['no_fitting'] is True
+          assert d['checkpoint_hashes_verified']==60
+          assert d['compared_accuracy_cells']==540
+          assert d['max_abs_difference']<=1e-8
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seq006c-recorded-independent-replay
+          path: results/seq006c-replay.json
+          if-no-files-found: ignore

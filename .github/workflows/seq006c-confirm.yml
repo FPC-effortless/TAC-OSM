@@ -1,0 +1,89 @@
+name: SEQ006C registered long-history confirmation
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/confirm_seq_transfer_006c.py'
+      - 'tests/test_seq_transfer_006c.py'
+      - '.github/workflows/seq006c-confirm.yml'
+permissions:
+  contents: read
+concurrency:
+  group: seq006c-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  pre-exposure-contract:
+    # One-shot frozen research fit. PR updates must NOT refit or re-expose TEST.
+    if: github.event.pull_request.head.sha == 'a34f03450d8b42c8aa3d86e82e052b8fdf0763b4'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          sparse-checkout: |
+            scripts/run_seq_transfer_006.py
+            scripts/confirm_seq_transfer_006c.py
+            tests/test_seq_transfer_006c.py
+            research/seq-transfer-006c/PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU model requirements
+        run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Source compilation and strict pre-test checks
+        run: |
+          python -m py_compile scripts/confirm_seq_transfer_006c.py scripts/run_seq_transfer_006.py
+          python -m unittest discover -s tests -p test_seq_transfer_006c.py -v
+  train-then-test-frozen:
+    needs: pre-exposure-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          sparse-checkout: |
+            scripts/run_seq_transfer_006.py
+            scripts/confirm_seq_transfer_006c.py
+            research/seq-transfer-006c/PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU requirements
+        run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Fit all 60 fixed models before irrevocably exposing TEST
+        run: |
+          python scripts/confirm_seq_transfer_006c.py --output results/seq006c
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('results/seq006c')
+          fits=json.loads((root/'all-trained.json').read_text())
+          result=json.loads((root/'test-results.json').read_text())
+          marker=json.loads((root/'TEST-EXPOSURE.json').read_text())
+          assert len(fits['fits'])==60
+          assert len(result['models'])==60
+          assert marker['status']=='TEST_EXPOSED_AFTER_60_FITS'
+          assert result['test_opened'] is True
+          assert result['source_sha']==fits['source_sha']
+          assert all(len([x for x in result['models'] if x['arm']==a])==20
+                     for a in ('tac_gated','routed_gru','global_gru'))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seq006c-original-60-fit-evidence
+          path: |
+            results/seq006c/training-progress.json
+            results/seq006c/all-trained.json
+            results/seq006c/TEST-EXPOSURE.json
+            results/seq006c/test-results.json
+            results/seq006c/checkpoints/*.pt
+          if-no-files-found: ignore
