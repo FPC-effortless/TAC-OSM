@@ -18,6 +18,13 @@ jobs:
     timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/run_seq_transfer_006.py
+            scripts/run_seq_transfer_008.py
+            tests/test_seq_transfer_008.py
+            research/seq-transfer-008/PROTOCOL.md
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -52,6 +59,13 @@ jobs:
     timeout-minutes: 55
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/run_seq_transfer_006.py
+            scripts/run_seq_transfer_008.py
+            tests/test_seq_transfer_008.py
+            research/seq-transfer-008/PROTOCOL.md
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
