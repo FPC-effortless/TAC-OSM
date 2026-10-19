@@ -21,7 +21,9 @@ failures remain separate. Remote checks for this final head must still complete.
 
 The [next decision](research/dev067-stable-interface/NEXT-DECISION.md) shifts to a
 new, registered measured-sensor forecast study on ORNL physical experiments.
-The draft remains unfitted. Actual Malawi repair/flow records were also sourced;
+The [REAL-MAINT-003 protocol](research/real-maint-003/PROTOCOL.md) fixes all ten
+room channels, two horizons, controls, validation entry and test gates before fitting.
+Actual Malawi repair/flow records were also sourced;
 prices, independent collection and follow-up timing remain unqualified.
 
 [REAL-MAINT-002](research/real-maint-002/RESULTS.md) remains failed, July B unopened.

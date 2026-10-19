@@ -1,0 +1,96 @@
+{
+  "study": "REAL-MAINT-003-MEASURED-THERMAL-FORECAST",
+  "source": "OEDI909 measured physical ORNL FRP experiment archive; no simulator data",
+  "source_sha256": "1e6cd3df991abf865f7567e6cc0ac246968299eb02dfe9464d887727f930dde0",
+  "targets": [
+    "T_Room_102_Avg",
+    "T_Room_103_Avg",
+    "T_Room_104_Avg",
+    "T_Room_105_Avg",
+    "T_Room_106_Avg",
+    "T_Room_202_Avg",
+    "T_Room_203_Avg",
+    "T_Room_204_Avg",
+    "T_Room_205_Avg",
+    "T_Room_206_Avg"
+  ],
+  "exogenous_past": [
+    "T_out_Avg",
+    "Net_Total_Power"
+  ],
+  "past_samples": 8,
+  "horizon_steps": [
+    2,
+    4
+  ],
+  "nominal_minutes_per_sample": 15,
+  "input_time": "past minute-of-day sine/cosine only; no filename, date, year, fault identity/intensity, future weather/control input",
+  "split": "train all2017 and2018 beforeAug; validationAug2018; untouched test all2019. Every CSV is a dated experiment-day, not a distinct independent machine/fault. Weather CSV excluded. Both training and validation values unopened pending source-frozen preregistration. Test sensor values never opened.",
+  "models": [
+    "linear_static",
+    "linear_revin",
+    "mlp_static",
+    "mlp_revin"
+  ],
+  "reference": "Persistence, drift, univariate ridge and information-matched multivariate ridge; lambda.001/.1/10; validation meanMASE then worstrelativeMAE thenname; all six ridge fits retained.",
+  "recipe": "zero output residual head; global TRAIN-only scaling; RevIN from past rooms only; past exogenous standardized with TRAIN stats. Per-channel/horizon train persistence MAE scale. No persistence fallback selected from test or validation; all channels learned. Final float64 EMA; fixed1024updates. 20fresh seeds, pilot2LRs.",
+  "entry": "Before any test values: candidate pilot no validation point-regression acrossall20channel/horizoncells and>=5percentmean improvement; validation-only candidate locked before20freshfits. Fullmatrix retained. Candidate>=18of20freshseeds pass same valpointgate; otherwise closevalidation-rejected keep2019unopened.",
+  "heldout_gate": "All20cells simultaneous paired-day bootstrap95upper MAE difference<=0 vs persistence; mean relativeMAE<=.95; >=18/20individualseeds no point-regression all20cells. Report raw units, train-scaledMASE, perseed/channel/horizon/CSVday and strongestAR/drift control. Cannot retroactively qualify failedMetroPT/REAL002 or full159channels.",
+  "limits": "Point sensor forecasting, no calibrated belief probability, learned repair choices, repair economics, factory generalization, independent field outcome or commercial qualification. All10room air temperatures only. Usergoal remainsACTIVE.",
+  "seeds": [
+    97301,
+    97302,
+    97303,
+    97304,
+    97305,
+    97306,
+    97307,
+    97308,
+    97309,
+    97310,
+    97311,
+    97312,
+    97313,
+    97314,
+    97315,
+    97316,
+    97317,
+    97318,
+    97319,
+    97320
+  ],
+  "pilot_seed": 97300,
+  "lrs": [
+    0.001,
+    0.003
+  ],
+  "updates": 1024,
+  "batch_size": 64,
+  "fit_cpu_cap_seconds": 1800,
+  "group_cpu_cap_seconds": 60,
+  "head": "Final float64 EMA .995, raw retained; fixedTRAIN normalization; zero-initialized residual head; no intermediate validationcheckpoint or lambda fallback; AdamW1e-4decay clip1.",
+  "schema": "10room channels plus2past exogenous;8past records; timestamp only phase sin/cos, no date/year/filename/fault tag; all20 room/horizon outputs qualified.",
+  "missingness": "No imputation, clipping or outcome-based censoring. Drop nonfinite/noncontiguous windows, report every count and reject DATA_QUALITY if anyselectedCSV<32validwindows,train<12days,val<4days,test<6days. No cross-day/file windows. Train scaling andtrain perchannel/horizon persistence MAE mustbe positive; otherwise reject, never deletea channel.",
+  "test_inference": "Float64 final EMA; same hierarchical paired circular two-day-block bootstrap as PROTOCOL.md, with all20 simultaneous room/horizon persistence gates, individual18of20pointgates,5percentmean improvement and validation-selected reference comparison. Firstseed batch1CPUmedian<=10ms,5warmups100repetitions. No commercial qualification.",
+  "qualification": "QUALIFIED_ROOM_FORECAST_ONLY onlyifallpreregisteredgates; notcommercialorall159analogforecasts; cannotrevivefailedREAL002.",
+  "bootstrap": {
+    "draws": 2000,
+    "seed": 973003,
+    "seed_resampling": "20 paired training initializations",
+    "day_resampling": "circular moving two-day blocks, truncate to observed test-day count",
+    "simultaneous_upper_quantile": 0.9975,
+    "reference_mean_upper_quantile": 0.95
+  },
+  "revin_floor": 1e-06,
+  "gradient_clip": 1.0,
+  "ema_decay": 0.995,
+  "weight_decay": 0.0001,
+  "min_valid_windows_per_day": 32,
+  "minimum_days": {
+    "train": 12,
+    "validation": 4,
+    "test": 6
+  },
+  "qualification_scope": "10 room-temperature targets only,2 horizons, one physical building; NO calibration-probability, repair-policy, actualcost, CASM/CDL superiority, allanalog-channel or commercial claim.",
+  "source_cohort_units": "63equipmentCSVdays,11from2019; published49scenario count is not equated with files; repeated setting IDs occur; exact49scenario mapping not established; only one facility."
+}

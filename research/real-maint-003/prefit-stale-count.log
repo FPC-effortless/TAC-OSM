@@ -1,0 +1,68 @@
+........................................................................ [  4%]
+........................................................................ [  9%]
+........................................................................ [ 14%]
+........................................................................ [ 19%]
+........................................................................ [ 24%]
+........................................................................ [ 29%]
+........................................................................ [ 33%]
+........................................................................ [ 38%]
+.................................................F...................... [ 43%]
+........................................................................ [ 48%]
+........................................................................ [ 53%]
+........................................................................ [ 58%]
+........................................................................ [ 63%]
+........................................................................ [ 67%]
+........................................................................ [ 72%]
+........................................................................ [ 77%]
+........................................................................ [ 82%]
+........................................................................ [ 87%]
+........................................................................ [ 92%]
+........................................................................ [ 97%]
+............................................                             [100%]
+=================================== FAILURES ===================================
+___________ test_the_frozen_baseline_reports_the_current_test_count ____________
+
+    def test_the_frozen_baseline_reports_the_current_test_count():
+        """The one mutable number in the frozen doc, kept mutable by a script.
+    
+        Everything else in `docs/TACOSM-BASELINE-001.md` is frozen; this row's
+        second number is the exception, and an exception that is not pinned is the
+        exception that silently stops being maintained.
+        """
+        import re
+        import subprocess
+    
+        repo_root = Path(__file__).resolve().parent.parent
+        doc = repo_root / "docs" / "TACOSM-BASELINE-001.md"
+        text = doc.read_text(encoding="utf-8")
+        assert "<!--TESTCOUNT-->" not in text, (
+            "the frozen baseline carries the placeholder rather than a count; "
+            "run `python scripts/sync_test_count.py`"
+        )
+        # The frozen count is untouched: 327, and only 327.
+        m = re.search(r"test count @ freeze \| (\d+) \(current", text)
+        assert m, "the 'test count @ freeze' row is missing from the provenance table"
+        assert m.group(1) == "327", (
+            "the frozen count changed; the freeze is what later deltas compare "
+            f"against, and it was 327 (found {m.group(1)!r})"
+        )
+    
+        r = subprocess.run(
+            [sys.executable, "scripts/sync_test_count.py", "--check"],
+            cwd=repo_root, capture_output=True, text=True,
+        )
+>       assert r.returncode == 0, (
+            "the canonical test-count gate failed:\n"
+            f"{r.stdout}\n{r.stderr}"
+        )
+E       AssertionError: the canonical test-count gate failed:
+E         STALE: /workspace/TAC-OSM/docs/TACOSM-BASELINE-001.md does not say 'current count in `tests/`: 1484'
+E         
+E         
+E       assert 1 == 0
+E        +  where 1 = CompletedProcess(args=['/workspace/TAC-OSM/.venv/bin/python', 'scripts/sync_test_count.py', '--check'], returncode=1, ...ut="STALE: /workspace/TAC-OSM/docs/TACOSM-BASELINE-001.md does not say 'current count in `tests/`: 1484'\n", stderr='').returncode
+
+tests/test_integrity.py:423: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_integrity.py::test_the_frozen_baseline_reports_the_current_test_count
+1 failed, 1483 passed in 124.22s (0:02:04)
