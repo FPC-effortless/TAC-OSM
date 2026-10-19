@@ -1,0 +1,64 @@
+{
+  "study": "DEV067-FROZEN-SEMANTIC-INTERFACE",
+  "seeds": [
+    96701,
+    96702,
+    96703,
+    96704,
+    96705,
+    96706,
+    96707,
+    96708,
+    96709,
+    96710,
+    96711,
+    96712,
+    96713,
+    96714,
+    96715,
+    96716,
+    96717,
+    96718,
+    96719,
+    96720
+  ],
+  "lrs": [
+    0.001,
+    0.003
+  ],
+  "snapshots": 8192,
+  "legacy_snapshots": 4096,
+  "validation_snapshots": 1024,
+  "encoder_updates": 4096,
+  "actor_updates": 4096,
+  "warmup": 1024,
+  "group_cpu_cap_seconds": 600,
+  "fit_cpu_cap_seconds": 9600,
+  "primary": "tac_frozen_log",
+  "primary_seed": 6671003,
+  "secondary_seed": 6671004,
+  "fixed_test_seed": 6671005,
+  "histories": [
+    32,
+    128,
+    512,
+    1024
+  ],
+  "primary_worlds_per_history": 64,
+  "fixed_test_snapshots": 512,
+  "legacy_index_sha256": "f1461e32dfdcd9ebb24a58faf9e856550236350d5507ae4af714bc6dbc20481c",
+  "stage": "posterior-supervised staged-interface research; no commercial qualification",
+  "pilot_validation_screen": "Require p95<=.05,p99<=.1,zero validation faults and>=95percent closure in both H32/H128 before any fresh20seed fits or test opening",
+  "intervention_seed": 6671006,
+  "intervention_worlds": 64,
+  "intervention_histories": [
+    128,
+    1024
+  ],
+  "intervention_errors": [
+    0.1,
+    0.2
+  ],
+  "intervention_cpu_cap_seconds": 1200,
+  "legacy_manifest_sha256": "87a59373e6a012235154d20756c3d860e219720286a93c0fee9edfdd9ce7dd85"
+}

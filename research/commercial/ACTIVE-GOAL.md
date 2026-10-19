@@ -66,7 +66,8 @@ thresholds, cost-free inspections, or scripted stopping fix hidden in an export.
 - Next: a fresh stable-versus-evolving semantic-interface experiment, with generic
   probability/log-probability actor coordinates and matched encoder/actor updates.
   Exact beliefs failing to repair the actor makes decision fidelity a first-class
-  question. NEXT-DECISION.md is a proposal, not an already registered experiment.
+  question. DEV067 now registers that factorial. Validation-only pilot rejection
+  leaves test closed; no recipe is valid without the complete fresh20seed evaluation.
 - Dependency complexity/R1 attribution and posterior-free learning follow their
   registered gates. Scale/SSM/attention arms wait for a valid real-data baseline.
 

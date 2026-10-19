@@ -15,7 +15,7 @@ model quality is unchanged.
 
 The [next decision](research/dev065-semantic-stability/NEXT-DECISION.md) proposes
 stable-encoder actor training and generic probability/log-probability coordinates.
-It needs a fresh registration and untouched evaluation before fitting.
+The fresh [DEV067 registration](research/dev067-stable-interface/PROTOCOL.md) now fixes the experiment and untouched evaluation before fitting. Validation-only pilot screening cannot qualify a recipe; any promotion still needs20fresh seeds.
 
 [REAL-MAINT-002](research/real-maint-002/RESULTS.md) remains failed, July B unopened.
 [DEV063](research/dev063-belief-integrity/RESULTS.md) and all earlier checkpoints,
