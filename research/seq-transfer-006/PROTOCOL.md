@@ -34,8 +34,10 @@ and iid-unpredictable negative checks.
 
 ## Locked namespaces and budget
 - TRAIN: 690601, 3,000 examples/task mixture, lengths 32/64, 4 entities.
-- VALIDATION: 690602, separate 600 examples each at L64/E4 and L128/E4.
-  The same registered validation examples are used across all model arms.
+- VALIDATION: 690602 for L64/E4 and 690612 for L128/E4, 600 examples each.
+  Both validation namespaces are disjoint from reserved TEST 690603; the same
+  registered examples are used across all model arms. Earlier preflight CI
+  was blocked by the test-seed guard before evaluation; no test material was opened.
 - RESERVED TEST: 690603, 600 each at L256/E4, L512/E4 and L512/E6.
   **The initial script must not contain a way to open TEST**. No test
   generation until pilots, preregistration and full-seed training complete.
