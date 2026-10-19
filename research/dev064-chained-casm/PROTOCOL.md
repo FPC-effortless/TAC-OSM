@@ -33,8 +33,20 @@ at inference. Exact finite-state dynamic programming is EVALUATION / training-
 teacher only, never an exported learned-policy fallback.
 
 Before training, verify nontrivial exact-public-oracle headroom over one-step
-greedy on a **separate validation generator**; if absent, record NO_HEADROOM and
-do not interpret completion parity as CASM superiority.
+greedy on a **separate validation generator**. The precommitted minimum is
+mean exact-oracle regret of the one-step greedy choice >=0.05 cost units AND
+at least 5% of validation situations with strictly positive regret (>1e-6).
+If absent, record NO_HEADROOM and do not fit pilots or interpret completion
+parity as CASM superiority. This is a *necessary*, not sufficient, task
+discrimination requirement. Record the exact gap and fixed data hashes.
+
+The initial runnable implementation learns oracle action-Q values, not a
+separately supervised transition distribution. Consequently, that early
+value-regression preflight cannot establish autonomous consequence-model
+learning or full DEV064 architectural attribution. It must pass its own
+stronger closed-loop and consequence-prediction gates before any promotion.
+The five model arms are automatically enforced to be within 10% of one
+another in trainable parameter count.
 
 ## Comparators and training equality
 
