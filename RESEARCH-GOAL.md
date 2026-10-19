@@ -3,24 +3,28 @@
 Build a reliable learned maintenance model that earns its complexity on real
 sensing and verified action outcomes. Status: **ACTIVE; NOT COMMERCIAL-QUALIFIED**.
 
-Acceptance and scope: [active goal](research/commercial/ACTIVE-GOAL.md).
+Acceptance: [active goal](research/commercial/ACTIVE-GOAL.md).
 Machine-readable progress: [goal state](research/commercial/goal-state.json).
 
-Latest closed study: [DEV065 results](research/dev065-semantic-stability/RESULTS.md).
-All120fresh models plus12pilots completed, with **NO PROMOTION**. Isolation improved
-relative belief error but failed completion, higher-noise faults, calibration tails
-and cost qualification. Exact public beliefs did not fix the actor. Optional batched
-ingestion passed132state-parity checks and a narrow one-host6.94×CPU timing gate;
-model quality is unchanged.
+Latest closed study: [DEV067 results](research/dev067-stable-interface/RESULTS.md).
+All 120 fresh candidate fits and 12 pilots completed. Every arm reaches 100%
+completion and zero final faults across all 20 seeds on the primary and secondary
+synthetic tests. **NO PROMOTION:** only 16/20 TAC encoders and 9/20 preselected GRU
+encoders pass both individual calibration tails, below the required 18/20.
+Freezing has no established benefit; log coordinates increase cost. The no-CASM
+control also completes every world. No architectural superiority is demonstrated.
 
-The [next decision](research/dev065-semantic-stability/NEXT-DECISION.md) proposes
-stable-encoder actor training and generic probability/log-probability coordinates.
-It needs a fresh registration and untouched evaluation before fitting.
+All 132 checkpoints, 54,528 trajectories and 9,514 native actions replay locally;
+both portable adapters reproduce 22 decisions each with zero local drift. Fresh
+predicted/exact/blurred interventions preserve 92,160 trajectories. Damaged-agent
+failures remain separate. Remote checks for this final head must still complete.
+
+The [next decision](research/dev067-stable-interface/NEXT-DECISION.md) shifts to a
+new, registered measured-sensor forecast study on ORNL physical experiments.
+The draft remains unfitted. Actual Malawi repair/flow records were also sourced;
+prices, independent collection and follow-up timing remain unqualified.
 
 [REAL-MAINT-002](research/real-maint-002/RESULTS.md) remains failed, July B unopened.
-[DEV063](research/dev063-belief-integrity/RESULTS.md) and all earlier checkpoints,
-failed outcomes and source commits remain intact. Independent real inspection,
-action, cost and physical-outcome qualification is still unmet.
-
-A failed registration is evidence, not goal completion. Preserve reserved tests;
-never select a test winner, widen replay limits or call synthetic success commercial.
+All earlier evidence, exports and negative results stay intact. The commercial
+inspection/action/cost/physical-outcome gate remains unmet. A failed registration
+is evidence, not goal completion; never select a test winner or weaken its rules.

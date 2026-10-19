@@ -63,10 +63,15 @@ thresholds, cost-free inspections, or scripted stopping fix hidden in an export.
 - DEV065 is closed NO PROMOTION after120fresh models/12pilots, full local replay
   and closed-loop semantic substitutions. Optional batched ingestion independently
   passes its local engineering gates without changing model quality.
-- Next: a fresh stable-versus-evolving semantic-interface experiment, with generic
-  probability/log-probability actor coordinates and matched encoder/actor updates.
-  Exact beliefs failing to repair the actor makes decision fidelity a first-class
-  question. NEXT-DECISION.md is a proposal, not an already registered experiment.
+- DEV067 is closed NO PROMOTION after 120 fresh candidates / 12 pilots. All arms
+  complete every primary/secondary world across 20 seeds with zero final faults,
+  but only 16 TAC and 9 preselected GRU encoders pass both calibration tails.
+  Freezing is inconclusive; log coordinates increase cost. Full local replay and
+  fresh semantic interventions pass, without commercial qualification.
+- Next: register REAL-MAINT-003 on measured physical ORNL sensor histories, with
+  untouched date-based test values, persistence/drift/AR references and per-channel
+  gates. Drafting is not fitting or success. Further qualify the actual Malawi
+  repair/flow source; missing prices and independent follow-up remain blockers.
 - Dependency complexity/R1 attribution and posterior-free learning follow their
   registered gates. Scale/SSM/attention arms wait for a valid real-data baseline.
 
