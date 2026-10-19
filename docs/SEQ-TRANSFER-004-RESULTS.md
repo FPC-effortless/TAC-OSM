@@ -74,3 +74,7 @@ python summarize.py
 ```
 
 Run from the ZIP's study directory, preserving the local `previous/tac_seq_061_062/dev0615-remote-export/split_robust/` path. Host used CPU PyTorch 2.10.0+cpu, NumPy 2.3.5, deterministic algorithms and one torch thread. The published results were obtained via independent task-by-task invocations to keep output logs and checkpoints separate.
+
+## Supplemental DEV062-R1 attempt (excluded)
+
+An additional pretrained-vs-scratch `DEV062-R1` belief-agent comparison using the same 120-step protocol was attempted after the complete primary study. The run exceeded the execution limit after **8 of the planned 20 fits**; period5 and lag3 cells are present, but lag5, XOR4 and IID are missing. No DEV062-R1 macro score, architectural superiority comparison or valid model ranking is claimed. The partial log and its source are retained in the standalone ZIP. Its first version logged `loss_final` incorrectly (equal to `loss_initial`); this telemetry field is invalid in the partial log. The supplied source fixes that logging error, without claiming that the entire run has been executed.
