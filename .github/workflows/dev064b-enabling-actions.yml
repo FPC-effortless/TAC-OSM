@@ -1,0 +1,102 @@
+name: DEV064B prerequisite-enabled preflight
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev064b-enabling-actions/**'
+      - 'scripts/run_enabling_casm_dev064b.py'
+      - 'tests/test_enabling_casm_dev064b.py'
+      - '.github/workflows/dev064b-enabling-actions.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validation-only-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          sparse-checkout: |
+            scripts/run_enabling_casm_dev064b.py
+            tests/test_enabling_casm_dev064b.py
+            research/dev064b-enabling-actions/PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU PyTorch
+        run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify physical oracle and sealed test boundary
+        run: |
+          python -m unittest discover -s tests -p test_enabling_casm_dev064b.py -v
+      - name: Run validation-only smoke
+        run: |
+          python scripts/run_enabling_casm_dev064b.py --stage smoke --output results/dev064b-enabling
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('results/dev064b-enabling/smoke.json').read_text())
+          assert r['status']=='PREFLIGHT_ONLY' and r['test_opened'] is False
+          assert len(r['fits'])==5
+          assert all(x['steps']==8 for x in r['fits'])
+          assert r['validation']['seed']==641642
+          assert r['training']['seed']==641641
+          assert r['validation']['oracle_vs_one_step_greedy_expected_regret']>=0
+          print('preflight smoke PASS; no held-out test data opened')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev064b-validation-only-smoke
+          path: results/dev064b-enabling/smoke.json
+          if-no-files-found: ignore
+
+  validation-only-pilots:
+    if: github.event_name == 'workflow_dispatch'
+    needs: validation-only-smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          sparse-checkout: |
+            scripts/run_enabling_casm_dev064b.py
+            research/dev064b-enabling-actions/PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU PyTorch
+        run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Fit 10 preregistered validation-only pilots
+        run: |
+          python scripts/run_enabling_casm_dev064b.py --stage pilot --output results/dev064b-enabling
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('results/dev064b-enabling')
+          report=json.loads((root/'pilot.json').read_text())
+          assert report['test_opened'] is False
+          assert report['status']=='VALIDATION_PILOTS_ONLY'
+          assert len(report['fits'])==10
+          assert {x['seed'] for x in report['fits']}=={641650,641651}
+          assert all(x['steps']==1024 for x in report['fits'])
+          assert all('checkpoint_sha256' in x for x in report['fits'])
+          assert len(list((root/'checkpoints').glob('*.pt')))==10
+          print('All ten validation-only pilots saved; no test-world evaluation')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev064b-validation-pilots
+          path: |
+            results/dev064b-enabling/pilot.json
+            results/dev064b-enabling/checkpoints/*.pt
+          if-no-files-found: ignore
