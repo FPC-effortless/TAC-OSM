@@ -90,8 +90,20 @@ class GlobalGRU(nn.Module):
     def forward(self,x,**kwargs):
         return self.head(self.gru(x)[0][:,-1])
 
+class LinearHistory(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.head=nn.Linear(HISTORY*FEATURES*2,FEATURES)
+        nn.init.zeros_(self.head.weight)
+        nn.init.zeros_(self.head.bias)
+    def forward(self,x,**kwargs):
+        return self.head(x.flatten(1))
+
 def make_model(name):
-    return NativeTACAssembly() if name=="native_tac_assembly" else GlobalGRU() if name=="global_gru" else None
+    if name=="native_tac_assembly": return NativeTACAssembly()
+    if name=="global_gru": return GlobalGRU()
+    if name=="linear_history": return LinearHistory()
+    raise ValueError(name)
 
 def evaluate(model,data,thresholds=None,reset_at=None):
     x, delta, mask=data[:3]
@@ -185,7 +197,7 @@ def run(out,steps=STEPS):
             "entity_discovery_tested":False,"decision_utility_tested":False,
             "promoted":False}
     for seed in SEEDS:
-        for name in ("global_gru","native_tac_assembly"):
+        for name in ("linear_history","global_gru","native_tac_assembly"):
             result=fit(name,seed,prepared_train,prepared_val,thresholds,out,steps)
             print(json.dumps(result,sort_keys=True),flush=True)
             report["fits"].append(result)
