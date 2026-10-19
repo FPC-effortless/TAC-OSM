@@ -18,6 +18,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          sparse-checkout: |
+            scripts/run_chained_casm_dev064.py
+            tests/test_chained_casm_dev064.py
+            research/dev064-chained-casm/PROTOCOL.md
+          sparse-checkout-cone-mode: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
