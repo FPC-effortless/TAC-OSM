@@ -1,0 +1,60 @@
+{
+  "study": "SEQ-TRANSFER-005",
+  "date": "2026-10-19",
+  "status": "complete-local-60-fits",
+  "upstream_sha256": "7acc30f5e492b0be599a17ae770a10fd8e04108e179d4f781b7d4b2c636f88e7",
+  "prior_study": "SEQ-TRANSFER-004",
+  "training": {
+    "lengths": [
+      32,
+      64
+    ],
+    "examples_total_per_task": 1200,
+    "validation_examples": 200,
+    "updates": 100,
+    "batch": 48,
+    "learning_rate": 0.003,
+    "optimizer": "AdamW",
+    "optimizer_seeds": [
+      42,
+      43
+    ]
+  },
+  "test": {
+    "lengths": [
+      64,
+      128,
+      256,
+      512
+    ],
+    "entity_count_train": 4,
+    "entity_count_test": [
+      4,
+      6
+    ],
+    "heldout_examples_per_cell": 200
+  },
+  "tasks": [
+    "stale_set",
+    "late_overwrite",
+    "toggle",
+    "pair_xor",
+    "iid"
+  ],
+  "arms": [
+    "tac_pretrained",
+    "tac_scratch",
+    "routed_gru",
+    "global_gru",
+    "window_transformer",
+    "gated_ssm"
+  ],
+  "total_completed_fits": 60,
+  "notes": [
+    "Original checkpoint fixed on disk; fine-tune of native encoder and new task head",
+    "Native 64-event public cache bypassed; process full sequence with public identity routing and GRU hidden state",
+    "Transformer intentionally capped at latest 64; gated SSM is not Mamba/S4",
+    "No new pretraining seeds or full state-of-art controls",
+    "Original runnable archive and exact source are provided separately in the conversation; GitHub PR has results/protocol but currently no runnable benchmark source"
+  ]
+}
