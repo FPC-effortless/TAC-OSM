@@ -14,3 +14,5 @@ The [earlier design](research/dev063-belief-integrity/DESIGN.md) records the pre
 
 A failed registration is evidence, not goal completion. Preserve reserved tests
 and original artifacts; use fresh registrations and budgeted comparisons.
+
+Current continuation: [DEV065 semantic stability](research/dev065-semantic-stability/PROTOCOL.md), a fresh gradient/exposure factorial. Prior DEV063 is closed NO PROMOTION; the commercial goal remains active.
