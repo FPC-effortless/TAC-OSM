@@ -1,0 +1,56 @@
+name: SEQ009 official SCANIA v3 source and schema audit
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/audit_seq009_scania_source.py'
+      - 'tests/test_seq009_scania_source.py'
+      - 'research/seq009-real/PROTOCOL.md'
+      - '.github/workflows/seq009-real-source.yml'
+permissions:
+  contents: read
+concurrency:
+  group: seq009-source-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/audit_seq009_scania_source.py
+            tests/test_seq009_scania_source.py
+            research/seq009-real/PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run offline source/interface guards
+        run: |
+          python -m py_compile scripts/audit_seq009_scania_source.py tests/test_seq009_scania_source.py
+          python -m unittest discover -s tests -p test_seq009_scania_source.py -v
+      - name: Download public SCANIA v3 small originals and verify provenance
+        run: |
+          python scripts/audit_seq009_scania_source.py --output results/seq009-source
+          test -s results/seq009-source/acquisition.json
+          test -s results/seq009-source/audit.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          a=json.loads(Path('results/seq009-source/audit.json').read_text())
+          assert a['dataset_doi']=='10.5878/bnh5-ka77'
+          assert a['dataset_version']==3
+          assert a['models_fitted']==0 and not a['test_labels_opened']
+          assert len(a['files'])==3
+          assert all(len(x['sha256'])==64 and x['rows']>0 for x in a['files'].values())
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seq009-original-source-manifests
+          path: |
+            results/seq009-source/acquisition.json
+            results/seq009-source/audit.json
+          if-no-files-found: ignore
