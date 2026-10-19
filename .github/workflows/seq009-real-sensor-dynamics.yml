@@ -1,0 +1,73 @@
+name: SEQ009-S real SCANIA next-readout dynamics
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/run_seq009_real_sensor_baselines.py'
+      - 'tests/test_seq009_real_sensor_baselines.py'
+      - 'research/seq009-real/SENSOR-PREDICTION-PROTOCOL.md'
+      - '.github/workflows/seq009-real-sensor-dynamics.yml'
+permissions:
+  contents: read
+concurrency:
+  group: seq009-real-sensors-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/run_seq009_real_sensor_baselines.py
+            tests/test_seq009_real_sensor_baselines.py
+            research/seq009-real/SENSOR-PREDICTION-PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.5.4
+      - run: |
+          python -m py_compile scripts/run_seq009_real_sensor_baselines.py
+          python -m unittest discover -s tests -p test_seq009_real_sensor_baselines.py -v
+  real-prediction:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/run_seq009_real_sensor_baselines.py
+            research/seq009-real/SENSOR-PREDICTION-PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install numpy==2.5.4
+      - name: Train conventional model on authentic SCANIA sequences, validate on held-out trucks
+        run: |
+          python scripts/run_seq009_real_sensor_baselines.py --output results/seq009-real-sensors
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('results/seq009-real-sensors')
+          src=json.loads((root/'source.json').read_text())
+          d=json.loads((root/'results.json').read_text())
+          assert src['doi']=='10.5878/bnh5-ka77' and src['version']==3
+          assert src['test_entries_opened'] is False
+          assert d['test_set_opened'] is False and not d['test_labels_opened']
+          assert d['train_readouts']>100000 and d['validation_readouts']>10000
+          assert d['train_vehicle_count']>20000 and d['validation_vehicle_count']>4000
+          assert d['feature_count']>=100
+          assert set(d['metrics'])=={'persistence','affine_autoreg'}
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seq009-real-nextreadout-original-results
+          path: |
+            results/seq009-real-sensors/source.json
+            results/seq009-real-sensors/results.json
+          if-no-files-found: ignore
