@@ -1,5 +1,15 @@
 # Active research goal
 
+**New permanent research evidence rule:** only real-world collected training
+and held-out evaluation can establish TAC-OSM model capability or justify new
+architecture claims. Synthetic worlds, generated tasks, simulations and their
+successful pilots remain diagnostic tests only and never establish real-world
+performance. The governing protocol and selected real SCANIA dataset are in
+[research/REAL-WORLD-EVIDENCE-RULES.md](research/REAL-WORLD-EVIDENCE-RULES.md).
+Older results and locked protocols remain historical evidence, not current
+promotion targets.
+
+
 Build a reliable learned maintenance model that earns its complexity on real
 sensing and verified action outcomes. Status: **ACTIVE; NOT COMMERCIAL-QUALIFIED**.
 
