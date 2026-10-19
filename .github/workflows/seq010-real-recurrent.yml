@@ -1,0 +1,87 @@
+name: SEQ010 real SCANIA recurrent dynamics controls
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/seq010_real_recurrent.py'
+      - 'tests/test_seq010_real_recurrent.py'
+      - 'research/seq010-real/PROTOCOL.md'
+      - '.github/workflows/seq010-real-recurrent.yml'
+permissions:
+  contents: read
+concurrency:
+  group: seq010-real-recurrent-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-and-code-preflight:
+    # One-time frozen source experiment completed at this exact commit.
+    # New PR updates must NOT refit or re-expose the same internal holdout.
+    if: github.event.pull_request.head.sha == '1ef39eb80fa64b1de16f73c1effc62e860425a0d'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/seq010_real_recurrent.py
+            tests/test_seq010_real_recurrent.py
+            research/seq010-real/PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU training requirements
+        run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Source compile and software-only contracts
+        run: |
+          python -m py_compile scripts/seq010_real_recurrent.py
+          python -m unittest discover -s tests -p test_seq010_real_recurrent.py -v
+  original-real-pilot:
+    needs: source-and-code-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/seq010_real_recurrent.py
+            research/seq010-real/PROTOCOL.md
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Train/evaluate 4 frozen fits on authentic TRAIN-internal vehicle holdout
+        run: |
+          python scripts/seq010_real_recurrent.py --output results/seq010
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('results/seq010')
+          d=json.loads((root/'results.json').read_text())
+          src=json.loads((root/'source.json').read_text())
+          assert d['stage']=='TRAIN_INTERNAL_EXPLORATORY_REAL'
+          assert not d['official_publisher_validation_used'] and not d['official_publisher_test_used']
+          assert src['publisher_validation_entries_read'] is False
+          assert src['test_entries_read'] is False
+          assert d['cohort']['original_train_vehicle_count'] == 23550
+          assert len(d['recurrent'])==4
+          assert set((r['kind'],r['seed']) for r in d['recurrent'])=={
+            ('gru',810101),('gru',810102),
+            ('tac_gated_readout',810101),('tac_gated_readout',810102)}
+          assert len(list((root/'checkpoints').glob('*.pt')))==4
+          assert all(r['checkpoint_sha256'] for r in d['recurrent'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seq010-original-real-recurrent-results
+          path: |
+            results/seq010/source.json
+            results/seq010/results.json
+            results/seq010/checkpoints/*.pt
+          if-no-files-found: ignore

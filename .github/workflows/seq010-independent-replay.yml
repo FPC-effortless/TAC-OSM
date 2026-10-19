@@ -1,0 +1,60 @@
+name: SEQ010 independent recorded-only real-source replay
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/audit_seq010_real_recurrent.py'
+      - '.github/workflows/seq010-independent-replay.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: seq010-recorded-only
+  cancel-in-progress: true
+jobs:
+  restore-and-replay:
+    # Original same-source audit completed and is archived; never re-run on PR edits.
+    if: github.event.pull_request.head.sha == '2328f10c08a77c30610de65e173c9e87164aa874'
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/seq010_real_recurrent.py
+            scripts/audit_seq010_real_recurrent.py
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install frozen CPU inference dependencies
+        run: |
+          python -m pip install numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore exact original checkpoints and results (no refit)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 39317978344 --repo FPC-effortless/TAC-OSM --name seq010-original-real-recurrent-results --dir results/seq010-original
+          test -f results/seq010-original/results.json
+          test -f results/seq010-original/source.json
+          test "$(find results/seq010-original/checkpoints -name '*.pt' | wc -l)" -eq 4
+      - name: Redownload official source and replay every checkpoint
+        run: |
+          python -m py_compile scripts/audit_seq010_real_recurrent.py
+          python scripts/audit_seq010_real_recurrent.py --original results/seq010-original --output results/seq010-replay
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('results/seq010-replay/audit.json').read_text())
+          assert r['status']=='PASS_SAME_SOURCE_RECORDED_REPLAY'
+          assert r['new_model_fits']==0 and r['original_checkpoints_verified']==4
+          assert not r['published_test_opened'] and not r['published_validation_opened']
+          assert all(x['exact_match'] for x in r['replayed'])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seq010-original-checkpoint-audit
+          path: results/seq010-replay/audit.json
+          if-no-files-found: ignore
