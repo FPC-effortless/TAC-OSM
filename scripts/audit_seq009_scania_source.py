@@ -31,46 +31,9 @@ LIMIT_BYTES = {"train_tte.csv": 3_000_000,
                "train_specifications.csv": 4_000_000,
                "validation_labels.csv": 1_000_000}
 
-def publisher_file_url(name):
-    if name not in FILES:
-        raise PermissionError("Unapproved file request, including reserved TEST")
-    return PUBLISHER_BASE + "?" + urllib.parse.urlencode({"filePath": name})
-
-
-def download_publisher_csv(name, destination, *, max_attempts=3):
-    url = publisher_file_url(name)
-    last_error = None
-    for attempt in range(max_attempts):
-        try:
-            req = urllib.request.Request(
-                url, headers={"User-Agent": "TAC-OSM-SE009-research/1.0",
-                              "Accept": "text/csv,application/octet-stream,*/*"}
-            )
-            with urllib.request.urlopen(req, timeout=40) as response:
-                data = response.read(LIMIT_BYTES[name] + 1)
-                if len(data) > LIMIT_BYTES[name]:
-                    raise ValueError("Size limit exceeded; refusing unexpected dataset")
-                if not data or data.lstrip().startswith((b"<html", b"<!DOCTYPE", b"{")):
-                    raise ValueError("Server returned empty/error/HTML/JSON rather than CSV")
-                # Catch encoding and CSV corruption before making a durable file.
-                text = data.decode("utf-8-sig")
-                if len(text.splitlines()) < 2:
-                    raise ValueError("CSV has fewer than two lines")
-                if "," not in text.splitlines()[0]:
-                    raise ValueError("Not a comma-delimited header")
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                destination.write_bytes(data)
-                return {
-                    "filename": name, "url": url, "bytes": len(data),
-                    "sha256": hashlib.sha256(data).hexdigest(),
-                    "http_status": getattr(response, "status", None),
-                }
-        except (urllib.error.HTTPError, urllib.error.URLError,
-                TimeoutError, OSError, ValueError, UnicodeError) as exc:
-            last_error = str(exc)
-            if attempt < max_attempts - 1:
-                time.sleep(min(2 ** attempt, 4))
-    raise RuntimeError(f"Publisher download failed for {name}: {last_error}")
+# Archived publisher ZIP route was GET-verified in CI; individual file endpoint
+# returned HTTP 404 and is deliberately not used for scientific provenance.
+from acquire_seq009_scania_zip import acquire
 
 
 def audit_csv(path, name):
@@ -156,9 +119,11 @@ def main():
     acquisition = {"dataset_doi": DOI, "version": 3,
                    "catalogue": DATASET_URL, "files": {},
                    "test_labels_opened": False}
+    provenance = acquire(output)
+    acquisition["files"] = provenance["extracted_files"]
+    acquisition["archive"] = {k: v for k, v in provenance.items() if k != "extracted_files"}
     for name in FILES:
-        acquisition["files"][name] = download_publisher_csv(name, root / name)
-        print(f"publisher-acquired: {name}", flush=True)
+        print(f"publisher-zip member verified: {name}", flush=True)
     outcome = audit(root, acquisition)
     output.mkdir(parents=True, exist_ok=True)
     (output / "acquisition.json").write_text(
