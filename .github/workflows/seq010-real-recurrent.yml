@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   source-and-code-preflight:
+    # One-time frozen source experiment completed at this exact commit.
+    # New PR updates must NOT refit or re-expose the same internal holdout.
+    if: github.event.pull_request.head.sha == '1ef39eb80fa64b1de16f73c1effc62e860425a0d'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
