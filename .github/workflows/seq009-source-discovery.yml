@@ -1,0 +1,23 @@
+name: SEQ009 publisher URL discovery (HEAD only)
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/discover_seq009_publisher_paths.py'
+      - '.github/workflows/seq009-source-discovery.yml'
+permissions:
+  contents: read
+jobs:
+  probe-official-paths:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            scripts/discover_seq009_publisher_paths.py
+          sparse-checkout-cone-mode: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/discover_seq009_publisher_paths.py
