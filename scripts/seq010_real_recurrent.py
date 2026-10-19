@@ -176,7 +176,8 @@ def prepare(inputs,targets):
     delta=np.nan_to_num(targets-np.where(last_ok,last,0),nan=0)
     return (torch.from_numpy(inp.astype(np.float32)),
             torch.from_numpy(delta.astype(np.float32)),
-            torch.from_numpy(mask.astype(np.bool_))), last, targets, mask
+            torch.from_numpy(mask.astype(np.bool_)),
+            last, targets, mask)
 
 class ResidualRecurrent(nn.Module):
     def __init__(self,kind):
