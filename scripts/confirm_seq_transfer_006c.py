@@ -114,7 +114,7 @@ def test_data_after_exposure(root, name):
         "label_balance": {
             task: {"n": int(np.count_nonzero(tasks == k)),
                    "positive": int(np.count_nonzero((tasks == k) & (labels == 1)))}
-            for k, task in enumerate(TASKS),
+            for k, task in enumerate(TASKS)
         },
     }
     for task in TASKS:
