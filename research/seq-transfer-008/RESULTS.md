@@ -53,8 +53,8 @@ Only two optimizer seeds and public entity IDs were tested.
 - Separate preflight artifact: seq008-preflight, ID 12214448339.
 - Source reports per-seed final losses, checkpoint SHA-256 values,
   per-cell accuracies, model parameter counts and fit host wall time.
-  These are original training records; an *independent* restore/replay
-  across every checkpoint has NOT yet been carried out.
+  The original trained checkpoints were subsequently restored and
+  replayed by a separate recorded-only audit.
 - Original SOURCE/TEST boundary: no SEQ008 TEST source callable, no
   test evaluations, and no previous reserved SEQ006C or
   REAL-MAINT/DEV068 artifacts were changed.
@@ -69,6 +69,15 @@ Original fit SHA-256 digests:
 | TAC / 780821 | d4b6e9ea3238bd725e3e1ca300df6d687a658539b07dc0f118d892fe81582ece |
 | Routed GRU / 780821 | 1000abeb62cfe511f3808d20ebd87043369e7d4f3d0ef7ae28483d5a15ea4951 |
 | Global GRU / 780821 | 73b714bdd33a93a07f6dd33e787e36edea4f6a03b783f4bca3cd2f64c7f49549 |
+
+## Recorded-only independent checkpoint audit
+
+**PASS:** [GitHub Actions run 39310750160](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39310750160) independently downloaded the original six-checkpoint artifact, verified both unchanged source Git blob identities against the original training source commit, regenerated all train/validation input-and-label manifests, verified every checkpoint SHA-256 and complete model parameter layout, loaded all six original weights, and reproduced every recorded per-task validation score within 1e-8. No models were refitted and no reserved TEST data were opened.
+
+Audit script: [scripts/audit_seq_transfer_008.py](https://github.com/FPC-effortless/TAC-OSM/blob/research/seq-transfer-008-randomized-updates-2026-10-19/scripts/audit_seq_transfer_008.py).
+Independent audit report artifact name: seq008-independent-recorded-replay (available on that run).
+
+**Audit boundary:** This reproduces original predictions using the same generator, learned architecture and synthetic event laws. It is not a completely independent simulator, a fresh scientific holdout, or evidence of real-world action reliability.
 
 ## Interpretation and failures of attribution
 
