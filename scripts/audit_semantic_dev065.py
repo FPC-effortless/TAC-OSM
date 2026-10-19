@@ -74,13 +74,14 @@ def run(directory,output,exports=None,veritas=None,smoke=False):
     for name,sha in json.loads((root/'manifest.json').read_text()).items():assert digest(root/name)==sha,name
     if veritas:
         assert subprocess.check_output(['git','-C',veritas,'rev-parse','HEAD'],text=True).strip()==PIN;sys.path.insert(0,str(Path(veritas)/'src'))
+    validation_records=torch.load(root/'_datasets/validation.pt',weights_only=True)
     result={'status':'RUNNING','checkpoints':0,'cells':0,'trajectories':0,'native_actions':0,'portable_decisions':0,'portable_batched_decisions':0,'batched_state_parity_cases':0,'clock_invariance_cases':0,'semantic_interface_cases':0,'telemetry':{'values':0,'max_abs':0.},'cross_host':'UNKNOWN until remote execution','scope':'Strict local/remote float64 restoration; synthetic native effects first seed only; no independent real-world validation.'};start=time.monotonic()
     for path in sorted(root.glob('*/**/report.json')):
         r=json.loads(path.read_text());folder=path.parent;assert digest(folder/'agent.pt')==r['checkpoint_sha256'];
         if not smoke:
             for source in ('src/tac_osm/development/belief_agent.py','src/tac_osm/development/belief_bottleneck.py','scripts/data_belief_dev062.py','scripts/data_belief_dev063.py','scripts/run_semantic_dev065.py','scripts/data_semantic_dev065.py','src/tac_osm/development/semantic_state.py','src/tac_osm/development/uncertain_world.py','research/dev065-semantic-stability/protocol.json','research/dev065-semantic-stability/PROTOCOL.md'):
                 assert subprocess.check_output(['git','show',f"{r['source']}:{source}"],cwd=ROOT)==(ROOT/source).read_bytes(),source
-        weights=torch.load(folder/'agent.pt',weights_only=True);gate={k.removeprefix('gate.'):v.float() for k,v in weights.items() if k.startswith('gate.')};m=make(r['arm'],r['spec'],r['seed'],gate).double().eval();m.load_state_dict(weights);invariants(m);result['clock_invariance_cases']+=2;result['semantic_interface_cases']+=1;result['batched_state_parity_cases']+=1;cells=r['validation']
+        weights=torch.load(folder/'agent.pt',weights_only=True);gate={k.removeprefix('gate.'):v.float() for k,v in weights.items() if k.startswith('gate.')};m=make(r['arm'],r['spec'],r['seed'],gate).double().eval();m.load_state_dict(weights);assert r['status']=='COMPLETE' and r['updates']==(8 if smoke else 2048);compare_fixed_metrics(fixed_metrics(m,validation_records,copy.deepcopy(m.gate).float()),r['validation_fixed'],result['telemetry']);expected_temperature=float(min(r['validation_fixed']['policy_temperature_NLL'],key=lambda t:(r['validation_fixed']['policy_temperature_NLL'][t],float(t))));assert float(m.temperature)==expected_temperature;invariants(m);result['clock_invariance_cases']+=2;result['semantic_interface_cases']+=1;result['batched_state_parity_cases']+=1;cells=r['validation']
         if (folder/'test.json').exists():
             t=json.loads((folder/'test.json').read_text());cells=cells+t['cells'];fixed=torch.load(root/'test-fixed.pt',weights_only=True);compare_fixed_metrics(fixed_metrics(m,fixed,copy.deepcopy(m.gate).float()),t['fixed'],result['telemetry'])
         for c in cells:
