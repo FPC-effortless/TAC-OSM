@@ -58,13 +58,18 @@ thresholds, cost-free inspections, or scripted stopping fix hidden in an export.
 
 ## Current execution order
 
-- REAL-MAINT-002: diagnose REAL-MAINT-001 retrospectively, then new MetroPT2 data;
-  four baseline-first residual forecasting arms. Reserve a second future holdout.
-- DEV063-BELIEF-INTEGRITY: reproduce old failure; implement/test a belief bottleneck,
-  relative temporal encoding and fresh intervention/long-history evaluation.
+- REAL-MAINT-002 is closed NO PROMOTION; July B remains unopened.
+- DEV063 is closed NO PROMOTION; original weights/evidence stay intact.
+- DEV065 is closed NO PROMOTION after120fresh models/12pilots, full local replay
+  and closed-loop semantic substitutions. Optional batched ingestion independently
+  passes its local engineering gates without changing model quality.
+- Next: a fresh stable-versus-evolving semantic-interface experiment, with generic
+  probability/log-probability actor coordinates and matched encoder/actor updates.
+  Exact beliefs failing to repair the actor makes decision fidelity a first-class
+  question. NEXT-DECISION.md is a proposal, not an already registered experiment.
 - Dependency complexity/R1 attribution and posterior-free learning follow their
   registered gates. Scale/SSM/attention arms wait for a valid real-data baseline.
 
-Prior artifacts and draft PR221 stay intact. Work remains active until these
+Prior artifacts and draft PRs221/222 stay intact. Work remains active until these
 checks pass or a concrete missing dependency prevents a specified gate. Report
 which gate is blocked; do not rename an incomplete goal as success.

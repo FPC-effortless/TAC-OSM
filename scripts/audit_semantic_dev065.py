@@ -1,0 +1,107 @@
+"""Independent checkpoint/trajectory/portable-interface replay for DEV065."""
+import argparse
+import copy
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import time
+import torch
+from run_semantic_dev065 import ROOT,PROTOCOL,make,rollout,fixed_metrics
+from data_semantic_dev065 import BeliefWorld
+from tac_osm.development.semantic_runtime import observe_many
+from run_learned_stack_dev055 import write,digest
+from audit_identity_dev0615 import compare
+from audit_fully_learned_dev058 import native_replay,PIN
+
+
+def compare_fixed_metrics(actual,expected,drift):
+    # JSON object keys have a string wire representation, including temperatures.
+    compare(json.loads(json.dumps(actual)),expected,drift)
+
+
+def export(folder,report,destination):
+    destination.mkdir(parents=True,exist_ok=True);(destination/'LICENSE-NOTICE.txt').write_text('Project metadata declares Apache-2.0; https://www.apache.org/licenses/LICENSE-2.0\n');shutil.copy(ROOT/'src/tac_osm/development/belief_agent.py',destination/'agent_base.py');(destination/'agent_model.py').write_text((ROOT/'src/tac_osm/development/belief_bottleneck.py').read_text().replace('from .belief_agent import','from agent_base import'));(destination/'agent_semantic.py').write_text((ROOT/'src/tac_osm/development/semantic_state.py').read_text().replace('from .belief_agent import','from agent_base import').replace('from .belief_bottleneck import','from agent_model import'));shutil.copy(ROOT/'scripts/runtime_semantic_dev065.py',destination/'runtime.py');shutil.copy(ROOT/'scripts/runtime_semantic_batched_dev065.py',destination/'runtime-batched.py');shutil.copy(ROOT/'src/tac_osm/development/semantic_runtime.py',destination/'agent_ingest.py');shutil.copy(folder/'agent.pt',destination/'agent.pt');write(destination/'metadata.json',{'arm':report['arm'],'spec':report['spec'],'seed':report['seed'],'dtype':'float64','epsilon':1e-6,'training_updates':report['updates'],'source_commit':report['source'],'checkpoint_sha256':digest(folder/'agent.pt')})
+    (destination/'README.txt').write_text('Requires Python + PyTorch only. python runtime.py < demo-requests.jsonl\nPublic JSON-lines: reset, keys(2x16), events(new raw46-vectors), candidates(5x19), prices(sensor-error,inspection-price).\nEvents: source6(initial,relation,action-start,repair-receipt,exact-inspection,noise), subject16,other16,bit,action-type3,tick,exact,sensor-error,inspection-price.\nOutputs: learned choice index, scores, joint probabilities health4 xgraph3, health/relation marginals and action-conditioned outcomes in one forward pass. Healthy-state belief does not independently verify physical completion.\nPriors: public typed manifest, cosine identity binding, trained noise-type gate, FIFO64, two entities, supplied12-state vocabulary, event-clock prior for relative arms. All arms structurally exclude parallel actor latents; semantic-target mixing and gradient isolation are training-only. This export always uses predicted beliefs.\nNo Bayes filter, teacher, physical transition function, analytical planner or stop override in deployment.\nOptional runtime-batched.py uses unchanged gate weights and typed batched FIFO; see the independent runtime profile and parity audit.\nDEV065 posterior-supervised bounded research model; training isolation/exposure recipe disclosed in metadata; independent external verification remains necessary. No commercial or universal calibration claim.\n')
+
+
+@torch.no_grad()
+def standalone(folder,r,m,destination,demo_seed=6651003):
+    export(folder,r,destination);w=BeliefWorld(demo_seed,0,128);state=m.initial(torch.tensor(w.identities)[None].double());pending=w.events.copy();requests=[];expected=[]
+    for tick in range(10):
+        d,permutation=w.candidates();prices=[w.error,w.inspection];requests.append({'reset':tick==0,'keys':w.identities.tolist(),'events':[e.tolist() for e in pending],'candidates':d.tolist(),'prices':prices})
+        for e in pending:state=m.observe(state,torch.tensor(e)[None].double())
+        o=m.decide(state,torch.tensor(d)[None].double(),torch.tensor(prices,dtype=torch.float64)[None]);index=int(m.choice(o)[0]);p=o['posterior'][0];health=p.reshape(4,3).sum(-1);relation=p.reshape(4,3).sum(-2);expected.append({'index':index,'scores':o['logits'][0].tolist(),'joint_health_relation_probabilities':p.tolist(),'world_healthy_probability':float(health[0]),'entity_fault_probabilities':[float(health[2]+health[3]),float(health[1]+health[3])],'relation_probabilities':relation.tolist(),'action_outcome_probabilities':o['future'][0].softmax(-1).tolist(),'normalized_cost_scores':o['cost'][0].tolist()});start=len(w.events);w.act(int(permutation[index]));pending=w.events[start:]
+        if w.stopped:break
+    text=''.join(json.dumps(r)+'\n' for r in requests);(destination/'demo-requests.jsonl').write_text(text);(destination/'demo-expected.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in expected));guard="""import sys,runpy,builtins
+sys.path.insert(0,'.')
+import torch
+original=builtins.__import__
+def checked(name,globals=None,locals=None,fromlist=(),level=0):
+    if level==0 and name.split('.')[0] in ('numpy','tac_osm','investigation_world'):raise ImportError('research import in exported model')
+    return original(name,globals,locals,fromlist,level)
+builtins.__import__=checked
+runpy.run_path('runtime.py',run_name='__main__')
+""";response=subprocess.run([sys.executable,'-I','-B','-c',guard],cwd=destination,input=text,text=True,capture_output=True);assert response.returncode==0,response.stderr;compare([json.loads(s) for s in response.stdout.splitlines()],expected,{'values':0,'max_abs':0.});batched_response=subprocess.run([sys.executable,'-I','-B','-c',guard.replace("run_path('runtime.py'","run_path('runtime-batched.py'")],cwd=destination,input=text,text=True,capture_output=True);assert batched_response.returncode==0,batched_response.stderr;compare([json.loads(s) for s in batched_response.stdout.splitlines()],expected,{'values':0,'max_abs':0.});return len(expected)
+
+
+@torch.no_grad()
+def invariants(model):
+    # No outcomes or alternative physical trajectories are inspected here.
+    world=BeliefWorld(6651099,0,128)
+    keys=torch.tensor(world.identities,dtype=torch.float64)[None]
+    state=model.initial(keys)
+    for event in world.events:state=model.observe(state,torch.tensor(event,dtype=torch.float64)[None])
+    candidates=torch.tensor(world.candidates()[0],dtype=torch.float64)[None]
+    prices=torch.tensor([[world.error,world.inspection]],dtype=torch.float64)
+    batched=observe_many(model,model.initial(keys),torch.tensor(__import__('numpy').stack(world.events),dtype=torch.float64)[None])
+    for key in state:torch.testing.assert_close(state[key],batched[key],atol=0,rtol=0)
+    base=model.decide(state,candidates,prices)
+    actor=model.act_from_belief(base['posterior'],keys,candidates,prices)
+    for key in ('logits','future','cost'):torch.testing.assert_close(actor[key],base[key],atol=0,rtol=0)
+    for scale,shift in ((1,10000),(1000,0)):
+        changed={**state,'events':state['events'].clone()}
+        changed['events'][:,:,42]=torch.where(state['present'],changed['events'][:,:,42]*scale+shift,changed['events'][:,:,42])
+        output=model.decide(changed,candidates,prices)
+        for key in ('posterior','logits','future','cost'):torch.testing.assert_close(base[key],output[key],atol=0,rtol=0)
+        assert torch.equal(model.choice(base),model.choice(output))
+
+
+@torch.no_grad()
+def run(directory,output,exports=None,veritas=None,smoke=False):
+    torch.set_num_threads(1);torch.use_deterministic_algorithms(True);root=Path(directory);summary=json.loads((root/'summary.json').read_text());assert summary['status']==('SMOKE_ONLY' if smoke else 'COMPLETE');assert summary['protocol_sha256']==digest(PROTOCOL)
+    for name,sha in json.loads((root/'manifest.json').read_text()).items():assert digest(root/name)==sha,name
+    if veritas:
+        assert subprocess.check_output(['git','-C',veritas,'rev-parse','HEAD'],text=True).strip()==PIN;sys.path.insert(0,str(Path(veritas)/'src'))
+    validation_records=torch.load(root/'_datasets/validation.pt',weights_only=True)
+    result={'status':'RUNNING','checkpoints':0,'cells':0,'trajectories':0,'native_actions':0,'portable_decisions':0,'portable_batched_decisions':0,'batched_state_parity_cases':0,'clock_invariance_cases':0,'semantic_interface_cases':0,'telemetry':{'values':0,'max_abs':0.},'cross_host':'UNKNOWN until remote execution','scope':'Strict local/remote float64 restoration; synthetic native effects first seed only; no independent real-world validation.'};start=time.monotonic()
+    for path in sorted(root.glob('*/**/report.json')):
+        r=json.loads(path.read_text());folder=path.parent;assert digest(folder/'agent.pt')==r['checkpoint_sha256'];
+        if not smoke:
+            for source in ('src/tac_osm/development/belief_agent.py','src/tac_osm/development/belief_bottleneck.py','scripts/data_belief_dev062.py','scripts/data_belief_dev063.py','scripts/run_semantic_dev065.py','scripts/data_semantic_dev065.py','src/tac_osm/development/semantic_state.py','src/tac_osm/development/uncertain_world.py','research/dev065-semantic-stability/protocol.json','research/dev065-semantic-stability/PROTOCOL.md'):
+                assert subprocess.check_output(['git','show',f"{r['source']}:{source}"],cwd=ROOT)==(ROOT/source).read_bytes(),source
+        weights=torch.load(folder/'agent.pt',weights_only=True);gate={k.removeprefix('gate.'):v.float() for k,v in weights.items() if k.startswith('gate.')};m=make(r['arm'],r['spec'],r['seed'],gate).double().eval();m.load_state_dict(weights);assert r['status']=='COMPLETE' and r['updates']==(8 if smoke else 2048);compare_fixed_metrics(fixed_metrics(m,validation_records,copy.deepcopy(m.gate).float()),r['validation_fixed'],result['telemetry']);expected_temperature=float(min(r['validation_fixed']['policy_temperature_NLL'],key=lambda t:(r['validation_fixed']['policy_temperature_NLL'][t],float(t))));assert float(m.temperature)==expected_temperature;invariants(m);result['clock_invariance_cases']+=2;result['semantic_interface_cases']+=1;result['batched_state_parity_cases']+=1;cells=r['validation']
+        if (folder/'test.json').exists():
+            t=json.loads((folder/'test.json').read_text());cells=cells+t['cells'];fixed=torch.load(root/'test-fixed.pt',weights_only=True);compare_fixed_metrics(fixed_metrics(m,fixed,copy.deepcopy(m.gate).float()),t['fixed'],result['telemetry'])
+        for c in cells:
+            actual,_=rollout(m,c['seed'],c['history'],c['worlds'],c['horizon'],False,c['error'],c['inspection']);compare(actual,c,result['telemetry']);result['cells']+=1;result['trajectories']+=c['worlds']
+            for row in c['rows']:
+                w=BeliefWorld(c['seed'],row['index'],c['history'],c['error'],c['inspection'])
+                for a in row['actions']:w.act(a['action']);assert w.actions[-1]==a
+                for key,value in w.finish().items():assert row[key]==value,key
+                if veritas and r['seed']==96501+10000000*int(smoke) and c['inspection']==.1:
+                    translated=dict(row,entities=2,final_faults=row['faults'],success=row['completion'],write_cost=0.,observation_cost=row['costs']['observations']);result['native_actions']+=native_replay(translated)
+        if exports and r['seed']==96501+10000000*int(smoke):
+            decisions=standalone(folder,r,m,Path(exports)/r['arm'],demo_seed=16651900 if smoke else 6651003);result['portable_decisions']+=decisions;result['portable_batched_decisions']+=decisions
+        result['checkpoints']+=1;write(output,result);print('restored',str(folder.relative_to(root)),result['trajectories'],flush=True)
+    result.update(status='COMPLETE',elapsed_seconds=time.monotonic()-start,host={'cpu_models':sorted({line.split(':',1)[1].strip() for line in Path('/proc/cpuinfo').read_text().splitlines() if line.startswith('model name')}),'python':sys.version,'torch':str(torch.__version__),'machine':subprocess.check_output(['uname','-a'],text=True).strip()});write(output,result);print('AUDIT_COMPLETE',json.dumps({k:result[k] for k in ('status','checkpoints','trajectories','native_actions','portable_decisions','telemetry','host')}),flush=True)
+
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser();p.add_argument('--directory',required=True);p.add_argument('--output',required=True);p.add_argument('--exports');p.add_argument('--veritas');p.add_argument('--smoke',action='store_true');a=p.parse_args()
+    try:run(a.directory,a.output,a.exports,a.veritas,a.smoke)
+    except Exception:
+        from audit_failure_dev062 import preserve
+        preserve(a.output)
+        raise
