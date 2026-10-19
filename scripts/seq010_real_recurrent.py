@@ -145,7 +145,6 @@ def load_real_windows(csv_path):
         pair=(window(list(history)[:-1]),history[-1][1])
         (validation if digest_partition(vehicle) else training).append(pair)
     training = [(a,b) for a,b in training if np.isfinite(a[-1]).any() and np.isfinite(b).any()]
-    validation = [(a,b) for a,b in validation if np.isfinite(a[-1]&a[-1]).any()] if False else validation
     if len(training) < 10000 or len(validation) < 2000:
         raise ValueError("Too few real vehicle windows")
     train_ids={v for v in all_ids if not digest_partition(v)}
