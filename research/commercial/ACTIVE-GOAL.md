@@ -1,5 +1,17 @@
 # Active goal: a reliable learned maintenance model that earns its complexity
 
+**Binding new-research restriction (2026-10-19):**
+[REAL-WORLD-EVIDENCE-RULES.md](../REAL-WORLD-EVIDENCE-RULES.md) supersedes
+synthetic-only primary research/evaluation. No synthetic or simulated outcome
+can satisfy the primary learned-model reliability, usefulness or commercial
+gates. Require externally observed real-world operational validation; distinguish
+observed repairs from independently verified repair success and actual costs.
+The SCANIA Component X fleet is the first nominated primary real-world risk
+benchmark; Backblaze is a separate forward-time corroboration task. These
+source selections do not claim acquired bytes, model fits or positive results.
+
+
+
 Status: ACTIVE — replaces milestone-only completion as the operating objective.
 Owner: Codex research agent. User authorization: continue model development and
 source public maintenance data. No completion claim from trained checkpoints,
