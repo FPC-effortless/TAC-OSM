@@ -8,17 +8,16 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from scripts.acquire_seq009_scania_zip import ALLOW_FILES, ARCHIVE_URL, extract_approved
 from scripts.audit_seq009_scania_source import (
-    FILES, DOI, audit, audit_csv, publisher_file_url,
+    FILES, DOI, audit, audit_csv,
 )
 
 class TestRealSourcePreflight(unittest.TestCase):
-    def test_only_public_registered_files_downloadable(self):
-        self.assertIn("train_tte.csv", publisher_file_url("train_tte.csv"))
-        for filename in ("test_labels.csv", "test_operational_readouts.csv",
-                         "validation_operational_readouts.csv", "../test_labels.csv"):
-            with self.assertRaises(PermissionError):
-                publisher_file_url(filename)
+    def test_archive_allowlist_blocks_test_members(self):
+        self.assertIn("/2024-34/3/file/zip", ARCHIVE_URL)
+        self.assertEqual(set(FILES), set(ALLOW_FILES))
+        self.assertNotIn("test_labels.csv", ALLOW_FILES)
 
     def fixture(self, root):
         docs = {
