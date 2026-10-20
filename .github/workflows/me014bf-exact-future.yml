@@ -1,0 +1,72 @@
+name: ME014BF first frozen EXACT-parameter real user-action test
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me014b_exact_frozen_future.py
+      - .github/workflows/me014bf-exact-future.yml
+      - research/mathematical-engineering/me014/ME014B_EXACT_MATCH.md
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me014bf-first-strict-exact-real-future
+  cancel-in-progress: true
+jobs:
+  first-frozen-exact-model-test:
+    # Genuine first-exposure later user labels scored in successful run 39395321513.
+    # Freeze original source SHA so later results documents cannot repeat first test.
+    if: github.event.pull_request.head.sha == '5dea9bbbee43e25a9719e28df10225da66fb2e37'
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact original numerical dependencies
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Compile and rerun strict equal-parameter software check
+        run: |
+          python -m py_compile scripts/me014b_exact_action_memory.py scripts/me014b_exact_frozen_future.py
+          python -m scripts.me014b_exact_action_memory --self-test
+      - name: Restore ONLY the 6 original exactly matched fitted models
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39394500641
+          name: me014b-exact-real-original
+          github-token: ${{ github.token }}
+          path: .
+      - name: Verify original weight digests first then test later real user reactions once
+        run: |
+          python -m scripts.me014b_exact_frozen_future | tee me014bf-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('results/me014bf/future_scores.json').read_text())
+          assert d['study']=='ME014BF_EXACT_FIRST_FROZEN_REAL_USER_OUTCOME'
+          assert d['test_optimizer_updates']==0 and not d['model_promoted']
+          assert d['original_checkpoint_count']==6
+          assert d['source']['future_label_rows_opened_after_checkpoint_integrity']
+          assert not d['source']['future_rows_at_or_after_end_parsed']
+          assert d['test_window_count']>=500
+          assert all(v['parameters']==135050 for v in d['trained_models'])
+          assert d['test_period']==['2020-08-14','2020-09-06']
+          assert not d['causal_treatment_effects_estimated']
+          assert d['behavior_policy_propensities_missing']
+          assert set(d['baseline_scores'])=={
+              'global_training_rate','video_training_rate','causal_prior32_user_rate'}
+          PY
+      - name: Archive all first frozen outcomes, positive or negative
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me014bf-first-frozen-exact-user-outcomes
+          path: |
+            results/me014bf/future_scores.json
+            me014bf-original.log
+          if-no-files-found: ignore
+          retention-days: 90
