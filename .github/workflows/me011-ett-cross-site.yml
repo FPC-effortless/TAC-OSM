@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   first-registered-frozen-site-test:
+    # First real ETTh1/ETTh2 test completed successfully in 39388444587 at SHA below.
+    # Do not reopen the prospective data on research/documentation edits.
+    if: github.event.pull_request.head.sha == 'ec6d34ac0cc79e956eb492f8b4c03096058049b9'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
