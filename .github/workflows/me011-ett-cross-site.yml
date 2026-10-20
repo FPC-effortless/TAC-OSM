@@ -1,0 +1,71 @@
+name: ME011F original ETTh1 future and ETTh2 cross-site real TEST
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me011_future_etth.py
+      - .github/workflows/me011-ett-cross-site.yml
+      - research/mathematical-engineering/me011/PROTOCOL.md
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me011f-original-ett-cross-site-test
+  cancel-in-progress: true
+jobs:
+  first-registered-frozen-site-test:
+    # First real ETTh1/ETTh2 test completed successfully in 39388444587 at SHA below.
+    # Do not reopen the prospective data on research/documentation edits.
+    if: github.event.pull_request.head.sha == 'ec6d34ac0cc79e956eb492f8b4c03096058049b9'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original CPU torch/numpy versions
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check evaluator source compiles before official future data access
+        run: |
+          python -m py_compile scripts/me011_ett_quantiles.py scripts/me011_future_etth.py
+          python -m scripts.me011_ett_quantiles --self-test
+      - name: Restore only the original six trained ETTh1 checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39388044790
+          name: me011-original-etth1-quantiles
+          github-token: ${{ github.token }}
+          path: .
+      - name: One-time genuine ETTh1 chronological and ETTh2 unseen-site forecast scoring
+        run: |
+          python -m scripts.me011_future_etth | tee me011f-first.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('results/me011f/first-frozen-cross-site-results.json').read_text())
+          assert r['study']=='ME011F_REAL_TRANSFORMER_FROZEN_CROSS_SITE'
+          assert r['test_time_optimizer_updates']==0
+          assert not r['architecture_promoted']
+          assert set(r['sites'])=={'ETTh1','ETTh2'}
+          assert r['no_source_after_registered_end_parsed']
+          for name,entry in r['sites'].items():
+              assert entry['source']['parsed_rows']==14520
+              assert entry['source']['no_rows_after_test_cutoff_parsed']
+              assert len(entry['models'])==6
+              assert entry['window_selection']['windows']>=100
+              assert all(x['metrics']['predicted_crossings']==0 for x in entry['models'])
+          PY
+      - name: Preserve all original unseen-site evidence even when models fail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me011f-original-real-etth1-etth2-future
+          path: |
+            results/me011f/first-frozen-cross-site-results.json
+            me011f-first.log
+          if-no-files-found: ignore
+          retention-days: 90
