@@ -165,7 +165,7 @@ def run(native_dir,gru_dir,gate_dir,out):
          "period_start":"2020-03-30","period_end_exclusive":"2020-04-06",
          "test_optimizer_updates":0,"source_after_end_read":False,
          "model_promoted":False,"base_native_original_run":39382850579,
-         "gate_original_run":None,"baseline_gru_original_run":39382074165,
+         "gate_original_run":39384177806,"baseline_gru_original_run":39382074165,
          "evidence":"one-site real out-of-time testing, no real action effect"}
     (out/"results.json").write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
     print(json.dumps({"status":"FROZEN_RELIABILITY_REAL_TEST_DONE",
