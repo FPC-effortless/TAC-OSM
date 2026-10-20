@@ -16,6 +16,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   relevance-preflight:
+    # Completed run 39380424029 on original source SHA; no silent refits.
+    if: github.event.pull_request.head.sha == 'b51c2cd49d63e471862bf25b0b714cabf5f3bd76'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -32,6 +34,7 @@ jobs:
           python -m py_compile scripts/me006_causal_relevance.py scripts/me006_train_real_relevance.py
           python -m unittest discover -s tests -p test_me006_causal_relevance.py -v
   original-real-paired-fits:
+    if: github.event.pull_request.head.sha == 'b51c2cd49d63e471862bf25b0b714cabf5f3bd76'
     needs: relevance-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 100
