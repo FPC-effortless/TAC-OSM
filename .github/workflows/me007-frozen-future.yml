@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   first-frozen-time-shift-test:
+    # One-time registered future source opened in successful run 39382346906.
+    # Never repeat the frozen heldout test on later documentation edits.
+    if: github.event.pull_request.head.sha == '829f25ee957e180411ac9a8f1cc783befa30e85d'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
