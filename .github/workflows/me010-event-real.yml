@@ -1,0 +1,80 @@
+name: ME010 original real event-conditioned dynamics
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/me010_event_dynamics.py'
+      - 'scripts/me010_train_real_events.py'
+      - 'research/mathematical-engineering/me010/PROTOCOL.md'
+      - '.github/workflows/me010-event-real.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me010-original-event-readout-fits
+  cancel-in-progress: true
+jobs:
+  mathematical-preflight:
+    # Successful ORIGINAL six-fit evidence was frozen in run 39386385479.
+    if: github.event.pull_request.head.sha == '27d2bb84bf0d3640b290238a908ce4a9cb7a008a'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Finite gradients, no future in inference, original forecast preserved
+        run: |
+          python -m py_compile scripts/me010_event_dynamics.py scripts/me010_train_real_events.py
+          python -m scripts.me010_train_real_events --self-test
+  original-historical-calibration:
+    if: github.event.pull_request.head.sha == '27d2bb84bf0d3640b290238a908ce4a9cb7a008a'
+    needs: mathematical-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39382850579
+          name: me008-original-native1000
+          github-token: ${{ github.token }}
+          path: .
+      - name: Train 6 fixed real-data readouts, no native recurrence updates
+        run: |
+          python -m scripts.me010_train_real_events --original results/me008 --out results/me010 | tee me010-original.log
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path('results/me010')
+          d=json.loads((p/'results.json').read_text())
+          assert d['study']=='ME010_REAL_EVENT_CONDITIONED_DYNAMICS'
+          assert len(d['original_fits'])==6 and d['future_april6_13_unopened']
+          assert d['base_native_optimizer_steps_added']==0 and not d['model_promoted']
+          assert {(v['mode'],v['seed']) for v in d['original_fits']}=={
+              (m,s) for m in ('direct','mixture') for s in (101001,101002,101003)}
+          assert len(list((p/'checkpoints').glob('*.pt')))==6
+          assert len(d['historical_event_probability_by_horizon_sensor'])==2
+          PY
+      - name: Preserve original source/weights/traces even if model loses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me010-original-event-vs-direct
+          path: |
+            results/me010/results.json
+            results/me010/checkpoints/*.pt
+            me010-original.log
+          if-no-files-found: ignore
+          retention-days: 90
