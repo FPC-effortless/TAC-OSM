@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   one-frozen-future-exposure:
+    # Original future-week exposure passed in run 39358794541 on source SHA below.
+    # All later PR edits MUST NOT reopen the future period.
+    if: github.event.pull_request.head.sha == 'bd3a792054a5dff7bfce4e174cd2ef8e851815fc'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
