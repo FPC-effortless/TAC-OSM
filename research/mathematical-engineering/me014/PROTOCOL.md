@@ -1,0 +1,31 @@
+# ME-014 — Authentic logged-action user-state prediction: native TAC vs GRU
+
+**PREREGISTRATION: 2026-10-20, before running first ME-014 source fetch, model fits or test scores.** Retain ME001–ME013 original outcomes and negative router/uncertainty results. TAC-OSM remains the user's native two-timescale world-state architecture, NOT converted into an SSM/GRU. Avoid expanding the architecture until persistent state shows genuine downstream value.
+
+## Public authentic human behavior
+Source: [KuaiRec](https://github.com/chongminggao/KuaiRec), real Kuaishou video-exposure histories and recorded watch responses, 2020, version published at [Zenodo 18164998](https://zenodo.org/records/18164998). Original `KuaiRec.zip` 432 MB, **published MD5 `261550d472c48eff4990fb13c0e5bcf7`**. Use **big_matrix.csv ONLY**, not small_matrix.csv (which contains substantial missing timestamps) or item daily features (whose aggregates risk leaking later reactions). Record full archive SHA256, CSV member, date and missing-timestamp counts. Current exposed video (action offered by original platform) plus subsequent full-watch reaction form observed logged action/outcome pairs. **No propensities or counterfactual outcomes for unshown videos are provided for this test.** Never interpret one logged action as a randomized intervention, decision-policy uplift or independently verified utility.
+
+## Mandatory original TRAIN/parser boundary
+Fixed **cohort**: real user IDs satisfying `user_id % 16 == 0` (no outcome-based user selection). Source dates/time must be valid, original timestamps strictly ordered within each user's history after sort. Only parse the listed columns: user_id, video_id, video_duration, watch_ratio, timestamp. Discard missing timestamps, nonpositive duration, missing engagement and out-of-range item IDs; count exclusions. True binary reaction `y=1{watch_ratio >=1.0}` (full watch on displayed video), not invented “like” or commercial retention.
+
+- FIT source timestamp **before 2020-08-01 00:00:00 UTC**; no user future observations or reactions consumed by original fitting.
+- Earlier previously observable calendar period from **2020-08-01 to 2020-08-14 exclusive** is *development only* (may be inspected for diagnosing fit, NOT chosen by validation hyperparameters).
+- **UNOPENED later test** from **2020-08-14 inclusive to 2020-09-06 exclusive**, entirely withheld from the original training parser. A full ZIP download is needed to verify archive MD5 but do not parse the future rows.
+- Original training script is forbidden to open member CSV for `small_matrix`, social network or daily item aggregates. The later evaluation separately verifies the original checkpoints BEFORE parsing the registered later test.
+- History length **32** preceding genuine, timestamp-valid interactions of the **same user**. The current logged *action* video ID and original video_duration are provided; the current watch response is the target and must not appear in input or any earlier state at the same time. Only prior revealed responses may update user state.
+
+## Exact comparisons and training budgets
+All models use the same real training actions/targets and the same video embedding input size (8), same action metadata (duration and time/interval), and same target (complete watch). Video embeddings are trainable from *FIT events only*. Any unseen video IDs in test have untrained embeddings; report counts. The user ID is **never** supplied as a neural feature.
+
+- Native TAC recurrent bounded fast/slow state (same mathematical family proven/software-tested in ME004); history updates from observed prior video exposures/reactions, conditioned on the next offered action video.
+- GRU comparator with input equivalently structured, capacity adjusted to stay within **5% trainable parameter budget** of TAC (dominant common item embedding table). If strict 5% gate fails at software preflight, do NOT make a fair-head-to-head claim.
+- History-free neural control with identical current action embedding path, with random history blanked (train only on same FIT targets). It is an **ablation**, not a capacity-matched architecture competitor.
+- Train-only empirical video response-rate baseline, global event rate and causally computed same-user prior-32 full-watch fraction. Compare Brier and log loss; explicit no-time-forward contamination.
+
+Three seeds `14001,14002,14003`, fixed AdamW 300 updates × same training batch size 128 × same FIT cohort and same deterministic batch indices for both TAC and GRU; LR=.001, clip1. Record exact trainable parameters, FLOPs/CPU training time and checkpoint SHA256. No training on generated/simulated trajectories; software synthetic tensors only for shapes/masks/gradients. Prior-window feedback may be read at subsequent prediction steps but **never** from the current/future row.
+
+## Scientific gates
+Primary: authentic held-out event Brier score; secondary binary cross entropy, ROC-AUC, calibration by user and popular/rare item, marginal full-watch and long-history state sensitivity, positive/negative action strata, CPU cost. **All** thresholds and test groups fixed now. Extra meaningful state test: shuffle history outcomes within the same user *at inference* while holding action sequence and current action fixed, and compare degradation. User history mean baseline must also be beaten. A TAC memory benefit is a claim only if TAC wins a paired equal-parameter/data/step GRU in all three seeds and beats history-free and structured priors on later real outcomes. If not, do not promote. No claims of off-policy recommendation quality, counterfactual utility, agent reasoning or verified deployed interventions without an actual randomized policy comparison and independent receipts.
+
+## Fairness and audit limits
+Two neural models are trained on the SAME real FIT rows, same optimizer steps, matched parameter counts within 5% and documented measured CPU time; exact FLOP equality may remain unequal and must be marked. The direct outcome comes from app logs, **not external verified truth**. May not claim system-2 thinking, learned symbolic operators, transferable causal world state or commercially qualified neural CASM on this task. Keep all hypotheses in unified master plan, append results with exact original artifacts, no auto merge.
