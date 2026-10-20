@@ -1,0 +1,79 @@
+name: ME015 targeted native TAC mathematical bottleneck diagnosis
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me015_native_optimization.py
+      - research/mathematical-engineering/me015/PROTOCOL.md
+      - .github/workflows/me015-native-optimization.yml
+permissions:
+  contents: read
+concurrency:
+  group: me015-first-original-native-optimization
+  cancel-in-progress: true
+jobs:
+  numerical-preflight:
+    # Original 15 real fits archived in successful run 39398038257; never refit after heldout use.
+    if: github.event.pull_request.head.sha == '95d09ce24a287b74f5a2cff223a4d03ece4618ac'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install fixed CPU PyTorch and NumPy
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Assert initial analytic prior, gates, 5 equal parameter counts and finite gradients
+        run: |
+          python -m py_compile scripts/me015_native_optimization.py
+          python -m scripts.me015_native_optimization --self-test
+  authentic-diagnostic-fits:
+    if: github.event.pull_request.head.sha == '95d09ce24a287b74f5a2cff223a4d03ece4618ac'
+    needs: numerical-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Fit authentic KuaiRec original FIT; diagnose actual gates on reused DEV; do not open prior future test
+        run: |
+          python -m scripts.me015_native_optimization --out results/me015 | tee me015-original.log
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          d=json.loads(Path('results/me015/results.json').read_text())
+          assert d['study']=='ME015_NATIVE_TIMESCALE_CAUSAL_PRIOR_DIAGNOSIS'
+          assert not d['future_Aug14_Sept06_reopened']
+          assert not d['architecture_promoted']
+          assert d['source']['future_test_labels_parsed'] is False
+          assert d['real_train_examples']==68825
+          assert d['historical_dev_examples']==106245
+          assert len(d['models'])==15
+          assert all(f['trainable_params']==135050 for f in d['models'])
+          assert {(f['model'],f['seed']) for f in d['models']}=={
+             (a,s) for a in ('native_original','native_chrono','native_anchor',
+                 'native_chrono_anchor','gru_anchor')
+             for s in (14001,14002,14003)}
+          for entry in d['models']:
+              p=Path('results/me015')/entry['checkpoint']
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==entry['checkpoint_sha256']
+          PY
+      - name: Archive all 15 original real fits, real gate measurements, negative results and source evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me015-authentic-native-bottleneck-diagnosis
+          path: |
+            results/me015/results.json
+            results/me015/checkpoints/*.pt
+            me015-original.log
+          retention-days: 90
+          if-no-files-found: ignore
