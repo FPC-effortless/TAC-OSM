@@ -13,6 +13,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   exact-parameter-software-preflight:
+    # Exact original six-model training completed in run 39394500641 at this SHA.
+    if: github.event.pull_request.head.sha == 'f52aa90dd4061bf84ed915e09a773a4526b30db1'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -27,6 +29,7 @@ jobs:
           python -m py_compile scripts/me014b_exact_action_memory.py
           python -m scripts.me014b_exact_action_memory --self-test
   original-exact-fit:
+    if: github.event.pull_request.head.sha == 'f52aa90dd4061bf84ed915e09a773a4526b30db1'
     needs: exact-parameter-software-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 110
