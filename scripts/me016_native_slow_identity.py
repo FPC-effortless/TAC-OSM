@@ -216,7 +216,7 @@ def preflight():
         loss.backward()
         assert all(bool(torch.isfinite(v.grad).all()) for v in m.parameters() if v.grad is not None)
     assert set(counts.values())=={135050},counts
-    assert len(ARMS)==5
+    assert len(ARMS)==4
     print(json.dumps({"status":"ME016_IDENTITY_SLOW_CREDIT_MATH_PASS",
        "trainable_params":counts,"new_learnable_modules_added":False},sort_keys=True))
 
