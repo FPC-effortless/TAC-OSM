@@ -26,7 +26,8 @@ PINS={
           "md5":"51a229a3fc13579dd939364fefe9c7ab"}
 }
 
-def load_real_site(site):
+def load_real_site(site,cutoff=TEST_END):
+    if cutoff not in (CAL_END,TEST_END):raise ValueError("unregistered source cutoff")
     if site not in PINS:raise ValueError("not preregistered")
     p=PINS[site];url=URL_ROOT+site+".csv";buf=bytearray()
     request=urllib.request.Request(url,headers={"User-Agent":"TAC-OSM-ME012-original/1.0"})
@@ -42,7 +43,7 @@ def load_real_site(site):
     if tuple(reader.fieldnames or ())!=("date",)+COLUMNS:raise ValueError("unexpected telemetry schema")
     samples=[];prev=None
     for ix,row in enumerate(reader):
-        if ix==TEST_END:break
+        if ix==cutoff:break
         ts=datetime.fromisoformat(row["date"])
         if prev is not None and (ts-prev).total_seconds()!=3600:
             raise ValueError("hourly continuity broken")
@@ -50,7 +51,7 @@ def load_real_site(site):
         vals=[float(row[f]) for f in COLUMNS]
         if not all(math.isfinite(v) for v in vals):raise ValueError("unexpected nonfinite source field")
         samples.append(vals)
-    if len(samples)!=TEST_END:raise ValueError("insufficient authentic source history")
+    if len(samples)!=cutoff:raise ValueError("insufficient authentic source history")
     return np.array(samples,dtype=np.float32),{
       "site":site,"source_url":url,"source_sha256":actual_sha,
       "source_md5":p["md5"],"parsed_rows":len(samples),
@@ -114,8 +115,8 @@ def run(original,out):
     torch.set_num_threads(1)
     # Download of the publisher file is unavoidable to verify full-file digest,
     # but only previously opened ETTh1 calibration indices enter calibration.
-    etth1,source1=load_real_site("ETTh1")
-    cal=pack(etth1[:CAL_END],stats,CAL_START,CAL_END)
+    early_etth1,_=load_real_site("ETTh1",cutoff=CAL_END)
+    cal=pack(early_etth1,stats,CAL_START,CAL_END)
     xx,yy=cal[:2]
     baseline_offset=[]
     for h in range(2):
@@ -150,7 +151,7 @@ def run(original,out):
       "has_valid_exchangeability_guarantee":False,
       "architecture_promoted":False}
     for site in ("ETTh1","ETTh2"):
-        data,source=(etth1,source1) if site=="ETTh1" else load_real_site("ETTh2")
+        data,source=load_real_site(site,cutoff=TEST_END)
         hold=pack(data,stats,TEST_START,TEST_END)
         x,y=hold[:2]
         zero=torch.zeros_like(y)
