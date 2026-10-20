@@ -1,0 +1,53 @@
+{
+  "study": "ME023_BOUNDED_QUERY_CAUSAL_PREDICTION",
+  "arms": [
+    "self_terminal",
+    "action_terminal",
+    "self_prefix",
+    "action_prefix"
+  ],
+  "seeds": [
+    14001,
+    14002,
+    14003
+  ],
+  "parameters": 135562,
+  "history": 128,
+  "updates": 300,
+  "batch": 128,
+  "base_lr": 0.001,
+  "readout_lr": 0.006,
+  "weight_decay": 0.0001,
+  "clip_grad": 1.0,
+  "gain": 4.0,
+  "prefix_depths": [
+    32,
+    64,
+    96
+  ],
+  "prefix_loss_weights": [
+    0.16666666666666666,
+    0.16666666666666666,
+    0.16666666666666666,
+    0.5
+  ],
+  "trace_steps": [
+    0,
+    1,
+    25,
+    50,
+    100,
+    150,
+    200,
+    250,
+    300
+  ],
+  "cpu_seconds_ceiling_per_fit": 180,
+  "primary_contrast": "action_prefix minus self_prefix final historical DEV Brier",
+  "engineering_gate": "all 3 paired primary deltas < 0, mean <= -0.0005, and replacing action_prefix states by FIT-first1024 mean increases Brier in all 3 seeds by >= 0.0002",
+  "selection": "final step only; no retuning or further held-out exposure",
+  "source_sha256": "c23f211cf109c7a060a25a4afe9e8c681b1ccbbc816cca921d87ad37dd11c70c",
+  "parent_data_snapshot_sha256": "fea9675380d501e81b740a0c1e0cd8c99893863ba6bed9a7e6619a572cc21177",
+  "independent_test_allowed": false,
+  "architectural_superiority_claim_allowed": false
+}
