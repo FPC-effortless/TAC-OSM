@@ -1,0 +1,71 @@
+name: ME011 real electricity-transformer TAC quantile training
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me011_ett_quantiles.py
+      - research/mathematical-engineering/me011/PROTOCOL.md
+      - .github/workflows/me011-ett-training.yml
+permissions:
+  contents: read
+concurrency:
+  group: me011-first-genuine-etth1-training
+  cancel-in-progress: true
+jobs:
+  mathematical-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pin CPU numerical dependencies
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify noncrossing quantiles, native recurrence gradients and shape contract
+        run: |
+          python -m py_compile scripts/me011_ett_quantiles.py
+          python -m scripts.me011_ett_quantiles --self-test
+  original-frozen-early-data-fits:
+    needs: mathematical-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Train 6 frozen probabilistic models using only ETTh1 early observations
+        run: |
+          python -m scripts.me011_ett_quantiles --out results/me011 | tee me011-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('results/me011')
+          d=json.loads((p/'results.json').read_text())
+          assert d['study']=='ME011_REAL_TRANSFORMER_QUANTILES'
+          assert d['source']['rows_parsed']==11640
+          assert not d['official_future_labels_parsed']
+          assert not d['etth2_source_opened'] and not d['models_promoted']
+          assert len(d['fits'])==6
+          assert {(x['model'],x['seed']) for x in d['fits']}=={
+             (model,seed) for model in ('gru','native_tac') for seed in (11001,11002,11003)}
+          assert len(list((p/'checkpoints').glob('*.pt')))==6
+          assert all(x['historical_validation']['predicted_crossings']==0 for x in d['fits'])
+          PY
+      - name: Preserve original train-only weights, errors and source provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me011-original-etth1-quantiles
+          path: |
+            results/me011/results.json
+            results/me011/checkpoints/*.pt
+            me011-original.log
+          if-no-files-found: ignore
+          retention-days: 90
