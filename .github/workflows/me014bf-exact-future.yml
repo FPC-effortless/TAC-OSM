@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   first-frozen-exact-model-test:
+    # Genuine first-exposure later user labels scored in successful run 39395321513.
+    # Freeze original source SHA so later results documents cannot repeat first test.
+    if: github.event.pull_request.head.sha == '5dea9bbbee43e25a9719e28df10225da66fb2e37'
     runs-on: ubuntu-latest
     timeout-minutes: 110
     steps:
