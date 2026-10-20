@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   frozen-original-split-conformal-test:
+    # Original genuine final ETT period was first exposed in successful run 39389147643.
+    # Any later PR update must not rescore the period as untouched.
+    if: github.event.pull_request.head.sha == '990e140b00eb06bf739402f5ecbcf08fccf82e7b'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
