@@ -13,6 +13,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   mathematical-preflight:
+    # Successful original training was archived in run 39388044790 at source SHA below.
+    # Never retrain or change original weights after later data exposure.
+    if: github.event.pull_request.head.sha == '957d45e939e66d8f0bbce8d1f7537bed6e2f6d69'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -29,6 +32,7 @@ jobs:
           python -m py_compile scripts/me011_ett_quantiles.py
           python -m scripts.me011_ett_quantiles --self-test
   original-frozen-early-data-fits:
+    if: github.event.pull_request.head.sha == '957d45e939e66d8f0bbce8d1f7537bed6e2f6d69'
     needs: mathematical-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 100
