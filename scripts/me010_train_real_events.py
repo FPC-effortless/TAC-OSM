@@ -57,6 +57,7 @@ def main(out,original):
         "base_native_optimizer_steps_added":0,"future_april6_13_unopened":True,
         "original_fits":[],"model_promoted":False,
         "experiment_reuses_historical_labels":True}
+    manifest["historical_event_probability_by_horizon_sensor"]=(historical[1].abs()>threshold[None,:,:]).float().mean(0).tolist()
     x,y=historical
     for seed,bseed in zip(MODEL_SEEDS,BASE_SEEDS):
         for mode in ARMS:
