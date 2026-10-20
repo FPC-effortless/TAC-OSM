@@ -1,0 +1,104 @@
+name: ME019F first frozen real unseen user4 history comparison
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me019f_frozen_user4.py
+      - research/mathematical-engineering/me019/ME019F_FROZEN_USER4_PROTOCOL.md
+      - .github/workflows/me019f-frozen-real-user4.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me019f-first-frozen-unseen-user4
+  cancel-in-progress: true
+jobs:
+  frozen-provenance-numeric-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reproduce numerical environment
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check sealed original manifest constant and numerical script integrity, no future response access
+        run: |
+          python -m py_compile scripts/me019f_frozen_user4.py
+          python -m scripts.me019f_frozen_user4 --self-test
+  first-frozen-real-user4:
+    needs: frozen-provenance-numeric-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Reproduce numerical environment
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore 18 ORIGINAL 300-update real-history model checkpoints (previously source/hash sealed)
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39443325909
+          name: me019-original-authentic-128history-all-18
+          github-token: ${{ github.token }}
+          path: .
+      - name: Authenticate all original SHA256 files before opening any actual new user4 outcomes
+        run: |
+          python - <<'PY'
+          from scripts.me019f_frozen_user4 import restore_models, MANIFEST_SHA, TRAIN_RUN
+          import hashlib
+          from pathlib import Path
+          assert TRAIN_RUN == 39443325909
+          assert MANIFEST_SHA == '2a10ae3205e866ed792f5ad145e3c3c775e95c39de675f421184de44e56455b6'
+          assert hashlib.sha256(Path('results/me019/results.json').read_bytes()).hexdigest() == MANIFEST_SHA
+          models=restore_models('results/me019')
+          assert len(models)==18
+          print("ORIGINAL_18_SHA256_CHECKPOINTS_VERIFIED_BEFORE_FIRST_USER4_SOURCE_OPEN",flush=True)
+          PY
+      - name: Open user4 response cohort ONCE, frozen originals, genuine historical windows only
+        run: |
+          set -o pipefail
+          python -m scripts.me019f_frozen_user4 --original results/me019 --out results/me019f/unseen_user4_original.json | tee me019f-original.log
+      - name: Verify full real 18-model results and no test adaptation
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('results/me019f/unseen_user4_original.json').read_text())
+          assert r['study']=='ME019F_FIRST_FROZEN_USER4_REAL_LONG_HISTORY'
+          assert r['train_original_run']==39443325909
+          assert r['train_original_manifest_sha256']=='2a10ae3205e866ed792f5ad145e3c3c775e95c39de675f421184de44e56455b6'
+          assert r['original_full_18_checkpoint_hashes_verified_before_user4_outcomes']
+          assert r['genuine_future_test_windows'] >= 1500
+          assert r['genuine_future_users'] >= 2
+          assert r['history_exact_suffix_match']
+          assert r['frozen_original_train_user_remainder']==0 and r['new_test_user_remainder']==4
+          assert r['model_optimizer_updates_on_test']==0
+          assert r['all_trainable_params']==135050
+          assert not r['head_to_head_training_compute_fair'] and not r['model_promoted']
+          assert not r['causal_action_policy_value_claimed']
+          assert len(r['models'])==18
+          assert { (m['seed'],m['arm'],m['history']) for m in r['models'] } == {
+            (s,a,h) for s in (14001,14002,14003)
+            for a in ('native_chrono_anchor','gru_original','gru_anchor') for h in (32,128)
+          }
+          assert len(r['paired_user_clustered_differences'])==9
+          PY
+      - name: Retain all positive or negative genuine frozen first-exposure outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me019f-original-frozen-unseen-user4-real-response-evidence
+          path: |
+            results/me019f/unseen_user4_original.json
+            me019f-original.log
+          retention-days: 90
+          if-no-files-found: ignore
