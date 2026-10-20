@@ -217,7 +217,7 @@ def audit(original,gru,gate,new,out):
         "fits":results,"future_optimizer_updates":0,"future_after_end_read":False,
         "model_promoted":False,"original_native_run":39382850579,
         "original_gru_run":39382074165,"original_gate_run":39384177806,
-        "original_event_run":None,
+        "original_event_run":39386385479,
         "scope":"Single physical compressor, genuine observational forecasting; no logged action-effect conclusions."}
     (out/"results.json").write_text(json.dumps(record,sort_keys=True,indent=2)+"\n")
     print(json.dumps({"status":"ORIGINAL_FIRST_FROZEN_REAL_TEST_COMPLETE",
