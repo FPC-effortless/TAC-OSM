@@ -1,0 +1,75 @@
+name: ME016 engineer native slow-memory credit assignment on authentic KuaiRec
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me016_native_slow_identity.py
+      - research/mathematical-engineering/me016/PROTOCOL.md
+      - .github/workflows/me016-real-innovation.yml
+permissions:
+  contents: read
+concurrency:
+  group: me016-first-genuine-credit-assignment
+  cancel-in-progress: true
+jobs:
+  mathematical-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate bounding structure, parity, causal prior, initialization and differentiability
+        run: |
+          python -m py_compile scripts/me016_native_slow_identity.py
+          python -m scripts.me016_native_slow_identity --self-test
+  original-authentic-fits:
+    needs: mathematical-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Train 12 genuine FIT models for exact equal 600 optimizer updates; never open user3
+        run: |
+          python -m scripts.me016_native_slow_identity --out results/me016 | tee me016-original.log
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=Path('results/me016')
+          d=json.loads((p/'results.json').read_text())
+          assert d['study']=='ME016_NATIVE_SLOW_IDENTITY_CREDIT_DIAGNOSIS'
+          assert d['real_train_examples']==68825 and d['historical_dev_examples']==106245
+          assert d['fixed_optimizer_updates']==600 and d['fixed_batch_size']==128
+          assert d['source']['zip_sha256']=='c23f211cf109c7a060a25a4afe9e8c681b1ccbbc816cca921d87ad37dd11c70c'
+          assert d['all_prior_user1_user2_and_future_user3_labels_excluded']
+          assert not d['source']['future_test_labels_parsed'] and not d['architecture_promoted']
+          assert len(d['models'])==12
+          assert all(v['trainable_params']==135050 for v in d['models'])
+          assert {(v['model'],v['seed']) for v in d['models']}=={
+              (a,s) for a in ('native_chrono_anchor','native_identity_anchor',
+                    'gru_anchor','gru_original') for s in (14001,14002,14003)}
+          for row in d['models']:
+              ck=p/row['checkpoint']
+              assert hashlib.sha256(ck.read_bytes()).hexdigest()==row['checkpoint_sha256']
+          PY
+      - name: Archive all 12 original weights, real gate observations and negative evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me016-original-real-innovation-tac-strong-gru
+          path: |
+            results/me016/results.json
+            results/me016/checkpoints/*.pt
+            me016-original.log
+          retention-days: 90
+          if-no-files-found: ignore
