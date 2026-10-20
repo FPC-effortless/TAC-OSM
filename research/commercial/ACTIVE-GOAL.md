@@ -56,7 +56,13 @@ closes that registration; a new design uses a new ID and genuinely fresh holdout
 No retrospective resealing, cherry-picked successful seeds, widened replay
 thresholds, cost-free inspections, or scripted stopping fix hidden in an export.
 
-## Current execution order
+## Historical execution order — superseded by the58-PR reconciliation
+
+Current work follows https://github.com/FPC-effortless/TAC-OSM/pull/282 and
+DEV069 is stopped under its standing real-world policy. The order below is
+preserved as historical context, not an instruction to rerun completed studies.
+
+## Prior execution record
 
 - REAL-MAINT-002 is closed NO PROMOTION; July B remains unopened.
 - DEV063 is closed NO PROMOTION; original weights/evidence stay intact.

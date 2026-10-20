@@ -1,0 +1,63 @@
+name: Recorded stopped semantic-value diagnostic
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'research/dev069-semantic-value/**'
+      - 'src/tac_osm/development/semantic_value.py'
+      - 'scripts/*semantic_value_dev069.py'
+      - 'tests/test_semantic_value_dev069.py'
+      - '.github/workflows/dev069-semantic-value.yml'
+permissions:
+  contents: read
+jobs:
+  strict-stopped-readout-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 100
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b21d829b62d3cab2811e746267ca305e110ed004
+          path: .veritas-public-runtime
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore and audit recorded work; no fitting or test opening
+        run: |
+          python -m pip install -e . -e .veritas-public-runtime numpy==2.5.4
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+          python scripts/restore_public_outcome_dev068.py
+          python scripts/restore_semantic_value_dev069.py
+          python scripts/audit_semantic_value_dev069.py --directory results/dev069-main --parent results/dev068-main --output results/dev069-remote-audit.json --exports results/dev069-remote-agents --veritas .veritas-public-runtime
+          python scripts/analyze_semantic_value_dev069.py --directory results/dev069-main --output results/dev069-remote-statistics.json
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'scripts')
+          from audit_identity_dev0615 import compare
+          root=Path('results/dev069-main')
+          summary=json.loads((root/'summary.json').read_text())
+          assert summary['status']=='ADMINISTRATIVELY_STOPPED'
+          assert summary['fits']==24 and summary['complete_fresh_groups']==2
+          assert not summary['tests_opened'] and not (root/'TEST-OPENED.json').exists()
+          audit=json.load(open('results/dev069-remote-audit.json'))
+          assert audit['status']=='COMPLETE' and audit['checkpoints']==24 and audit['raw_checkpoints']==24
+          assert audit['partial_training_snapshots']==2 and audit['partial_frozen_body_cases']==24
+          assert audit['portable_decisions']==50 and audit['native_actions']==5655
+          assert audit['telemetry']['max_abs']<=1e-8
+          compare(json.load(open('results/dev069-remote-statistics.json')),json.load(open('research/dev069-semantic-value/statistics.json')),{'values':0,'max_abs':0.})
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev069-policy-stopped-recorded-replay
+          path: |
+            results/dev069-remote-*.json
+            results/dev069-remote-agents/**
+          if-no-files-found: ignore
