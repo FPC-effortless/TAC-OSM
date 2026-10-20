@@ -15,6 +15,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   preflight:
+    # Original four real-adapter fits succeeded in run 39377990208.
+    # Never repeat this explored validation fit on subsequent PR edits.
+    if: github.event.pull_request.head.sha == '6d9788cf78d9c5540072388dad055e32b4412264'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -31,6 +34,7 @@ jobs:
           python -m py_compile scripts/me005_unified_native_tac.py scripts/me005_train_real_adapter.py
           python -m unittest discover -s tests -p 'test_me005_unified_native.py' -v
   train-authentic-unchanged-source:
+    if: github.event.pull_request.head.sha == '6d9788cf78d9c5540072388dad055e32b4412264'
     needs: preflight
     runs-on: ubuntu-latest
     timeout-minutes: 110
