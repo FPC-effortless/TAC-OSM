@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   first-frozen-future-test:
+    # Full result first archived in cancelled run 39386665512 and reproduced byte-identically
+    # in successful 39386728877 at this SHA; never re-expose April6-13 after notes.
+    if: github.event.pull_request.head.sha == '75165b80f572377e86984444e67ff2452e3237f1'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
