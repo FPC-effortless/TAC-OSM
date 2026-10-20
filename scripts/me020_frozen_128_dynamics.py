@@ -351,7 +351,7 @@ def probe_task(fit, models, original_indices):
             features=torch.cat(snapshots[depth]).numpy()
             predictions=ridge_fit_predict(features[train],early[train],features[test])
             base=np.full(int(test.sum()),float(early[train].mean()))
-            last32_reference=(recent if depth>=32 else inputs[:,:depth].mean(1))
+            last32_reference=inputs[:,max(0,depth-32):depth].mean(axis=1)
             control=ridge_fit_predict(last32_reference[train],
                                       early[train],last32_reference[test])
             detail.append({
