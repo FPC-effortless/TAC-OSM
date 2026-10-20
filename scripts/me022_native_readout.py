@@ -109,8 +109,24 @@ def fit(arm, seed, train, dev, mean, scale, root):
                     "duration_scale": float(net.duration_scale),
                     "source_sha256": C["source_sha256"], "contract": C}, checkpoint)
         return p
-    record(0)
-    for step in range(1, C["updates"]+1):
+    first_step = 1
+    if checkpoint.exists():
+        saved = torch.load(checkpoint, weights_only=True)
+        if (saved["arm"], saved["seed"], saved["contract"]) != (arm, seed, C):
+            raise ValueError("resume checkpoint identity mismatch")
+        net_core.load_state_dict(saved["state_dict"], strict=True)
+        opt.load_state_dict(saved["optimizer"])
+        gen.set_state(saved["sampler_rng"])
+        torch.set_rng_state(saved["rng"])
+        trace = json.loads((root/f"{name}-trace.json").read_text())
+        assert trace[-1]["step"] == saved["step"]
+        cpu, wall = trace[-1]["train_cpu_seconds"], trace[-1]["train_wall_seconds"]
+        first_step = saved["step"]+1
+        step = saved["step"]
+        p = predictions(predictor, dev)
+    else:
+        record(0)
+    for step in range(first_step, C["updates"]+1):
         t, w = time.process_time(), time.perf_counter()
         net_core.train()
         ids = torch.randint(len(train["y"]), (C["batch"],), generator=gen)
@@ -137,13 +153,15 @@ def fit(arm, seed, train, dev, mean, scale, root):
     net_core.load_state_dict(torch.load(checkpoint, weights_only=True)["state_dict"])
     values = batch(dev, slice(0, 128))
     times = []
-    with torch.inference_mode():
+    with torch.no_grad():
         for j in range(10):
             t = time.perf_counter()
             forward(*values)
             if j >= 3: times.append(time.perf_counter()-t)
     np.savez_compressed(root/f"{name}-predictions.npz", probability=p)
     row = {"arm": arm, "seed": seed, "parameters": parameters(net_core),
+           "execution_source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+           "resumed_training_from_step": first_step-1,
            "steps": step, "presentations": step*C["batch"],
            "train_cpu_seconds": cpu, "train_wall_seconds": wall,
            "max_process_rss_kib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
@@ -194,26 +212,35 @@ def preflight():
     print("ME022 constructed-input algebra/capacity/gradient preflight PASS; no capability evidence", flush=True)
 
 
-def run(root):
+def run(root, resume=False):
     preflight()
     root = Path(root)
-    root.mkdir(parents=True, exist_ok=False)
+    root.mkdir(parents=True, exist_ok=resume)
     start = time.perf_counter()
-    users, source = read_early()
+    if resume:
+        result = json.loads((root/"results.json").read_text())
+        if hashlib.sha256((root/"data-snapshot.pt").read_bytes()).hexdigest() != result["data_snapshot_sha256"]:
+            raise ValueError("original cached data snapshot changed")
+        cache = torch.load(root/"data-snapshot.pt", weights_only=True)
+        train, dev, source = cache["train"], cache["dev"], cache["source"]
+    else:
+        users, source = read_early()
     if source["zip_sha256"] != C["source_sha256"] or source["zip_md5"] != PIN_MD5:
         raise ValueError("authenticated source mismatch")
     assert not source["future_test_labels_parsed"]
     assert source["later_rows_skipped_before_label_parsing"] > 0
-    train = original_128_windows(users, 0, FIT_CUT, C["fit_max"])
-    dev = original_128_windows(users, FIT_CUT, DEV_CUT, C["dev_max"])
+    if not resume:
+        train = original_128_windows(users, 0, FIT_CUT, C["fit_max"])
+        dev = original_128_windows(users, FIT_CUT, DEV_CUT, C["dev_max"])
     assert (len(train["y"]), len(dev["y"])) == (10776, 5952)
     assert max(train["timestamps"]) < FIT_CUT <= min(dev["timestamps"])
     assert max(dev["timestamps"]) < DEV_CUT
     assert all(u % 16 == 0 for u in train["users"]+dev["users"])
     mean = float(train["duration"].mean())
     scale = max(float(train["duration"].std(unbiased=False)), 1e-5)
-    torch.save({"train": train, "dev": dev, "source": source}, root/"data-snapshot.pt")
-    result = {"study": C["study"], "contract": C, "source": source,
+    if not resume:
+        torch.save({"train": train, "dev": dev, "source": source}, root/"data-snapshot.pt")
+    original_result = {"study": C["study"], "contract": C, "source": source,
               "fitting_source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
               "contract_sha256": hashlib.sha256(CONTRACT.read_bytes()).hexdigest(),
               "data_snapshot_sha256": hashlib.sha256((root/"data-snapshot.pt").read_bytes()).hexdigest(),
@@ -224,12 +251,22 @@ def run(root):
               "train_windows": len(train["y"]), "dev_windows": len(dev["y"]),
               "historical_development_only": True, "architecture_promoted": False,
               "full_resource_parity": False, "models": [], "unmatched_references": []}
+    if resume:
+        assert result["contract"] == C
+        result.setdefault("execution_amendments", []).append({
+            "source_commit": original_result["fitting_source_commit"],
+            "reason": "Post-fit TorchScript inference_mode timing failure; use no_grad and restore completed checkpoint without refit",
+            "training_equations_or_hyperparameters_changed": False})
+    else:
+        result = original_result
     prior = (dev["metadata"][:, -32:, 1].sum(-1).numpy()+1)/34
     result["causal_prior32"] = scores(prior, dev["y"].numpy())
     save_json(root/"results.json", result)
     for i, seed in enumerate(C["seeds"]):
         arms = C["arms"][i:]+C["arms"][:i]
         for arm in arms:
+            if any(x["arm"] == arm and x["seed"] == seed for x in result["models"]):
+                continue
             result["models"].append(fit(arm, seed, train, dev, mean, scale, root))
             save_json(root/"results.json", result)
     rates, _ = item_rates(train)
@@ -243,7 +280,7 @@ def run(root):
         torch.save({"state_dict": ref["network"].state_dict(),
                     "mean": torch.tensor(ref["mean"]), "std": torch.tensor(ref["std"]),
                     "item_rates": torch.tensor(rates)}, root/f"unmatched-mlp-seed{seed}.pt")
-    result["end_to_end_wall_seconds"] = time.perf_counter()-start
+    result["resumed_execution_wall_seconds" if resume else "end_to_end_wall_seconds"] = time.perf_counter()-start
     save_json(root/"results.json", result)
     return result
 
@@ -252,5 +289,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default="results/me022")
     parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("--resume", action="store_true")
     args = parser.parse_args()
-    preflight() if args.self_test else run(args.out)
+    preflight() if args.self_test else run(args.out, args.resume)

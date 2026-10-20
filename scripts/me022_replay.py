@@ -19,18 +19,43 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def audit(root):
+def fingerprints(data):
+    result = {}
+    for split in ("train", "dev"):
+        result[split] = {}
+        for key in ("items", "metadata", "action", "duration", "y", "users", "timestamps"):
+            value = data[split][key]
+            raw = (value.contiguous().numpy().tobytes() if isinstance(value, torch.Tensor)
+                   else json.dumps(value, separators=(",", ":")).encode())
+            result[split][key] = hashlib.sha256(raw).hexdigest()
+    return result
+
+
+def audit(root, rebuild_source=False):
     root = Path(root)
     r = json.loads((root/"results.json").read_text())
     c = r["contract"]
-    assert sha(root/"data-snapshot.pt") == r["data_snapshot_sha256"]
     expected = {(arm, seed) for arm in c["arms"] for seed in c["seeds"]}
     assert {(row["arm"], row["seed"]) for row in r["models"]} == expected
     assert len(r["models"]) == len(expected) == 12
     for row in r["models"]:
         assert sha(root/row["checkpoint"]) == row["checkpoint_sha256"]
     # Only read stored development responses after every original weight hash.
-    data = torch.load(root/"data-snapshot.pt", weights_only=True)
+    if (root/"data-snapshot.pt").exists():
+        assert sha(root/"data-snapshot.pt") == r["data_snapshot_sha256"]
+        data = torch.load(root/"data-snapshot.pt", weights_only=True)
+    elif rebuild_source:
+        from scripts.me014b_exact_action_memory import read_early, FIT_CUT, DEV_CUT
+        from scripts.me019_authentic_history import original_128_windows
+        users, source = read_early()
+        assert source["zip_sha256"] == c["source_sha256"]
+        data = {"train": original_128_windows(users, 0, FIT_CUT, c["fit_max"]),
+                "dev": original_128_windows(users, FIT_CUT, DEV_CUT, c["dev_max"]),
+                "source": source}
+    else:
+        raise FileNotFoundError("Provide original local data-snapshot.pt or --rebuild-source (official early source only)")
+    expected_fingerprints = json.loads((root/"data-fingerprints.json").read_text())
+    assert fingerprints(data) == expected_fingerprints
     tr, dev = data["train"], data["dev"]
     assert all(u % 16 == 0 for u in tr["users"]+dev["users"])
     assert max(tr["timestamps"]) < 1596240000 <= min(dev["timestamps"])
@@ -110,4 +135,6 @@ def audit(root):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", default="results/me022")
-    audit(parser.parse_args().root)
+    parser.add_argument("--rebuild-source", action="store_true")
+    args = parser.parse_args()
+    audit(args.root, args.rebuild_source)
