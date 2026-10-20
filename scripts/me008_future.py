@@ -157,7 +157,7 @@ def run(original,adapter,gru,native,out):
         "fits":rows,"optimizer_steps_in_future_eval":0,
         "future_after_end_not_read":True,"architecture_promoted":False,
         "original_gru_run_id":39382074165,
-        "original_tac_run_id":None,
+        "original_tac_run_id":39382850579,
         "scope":"one-site real continuous time-series forecasts, not action effects"}
     (out/"results.json").write_text(json.dumps(summary,indent=2,sort_keys=True)+"\n")
     print(json.dumps({"status":"FROZEN_REAL_EVAL_COMPLETE","forecasts":len(xx),
