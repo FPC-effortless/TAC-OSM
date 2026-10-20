@@ -271,10 +271,34 @@ def run(original, output):
     return report
 
 
+def convex_slow_update(previous, gate, proposal, fast, beta=0.25):
+    """Untrained, parameter-free conditional hypothesis; beta=0 recovers baseline.
+
+    This does not override accepted ME015 weights or change frozen diagnostics.
+    """
+    if not (0.0 <= beta <= 1.0):
+        raise ValueError("convex slow proposal requires 0<=beta<=1")
+    return (1 - gate) * previous + gate * ((1 - beta) * proposal + beta * fast)
+
+
 def preflight():
     # Synthetic/random inputs permitted exclusively for numerical software tests.
     torch.set_num_threads(1)
     torch.manual_seed(17017)
+    # Local algebraic numerical checks only, not task/model success evidence.
+    previous = torch.rand(4,32)*2-1
+    proposal = torch.rand(4,32)*2-1
+    gate = torch.sigmoid(torch.randn(4,32))
+    fast = (torch.rand(4,32)*2-1).requires_grad_(True)
+    mixed = convex_slow_update(previous,gate,proposal,fast,beta=0.25)
+    assert torch.all(mixed.abs() <= 1+1e-7)
+    assert torch.allclose(convex_slow_update(previous,gate,proposal,fast,beta=0),
+                          (1-gate)*previous+gate*proposal,atol=1e-7)
+    assert torch.allclose(convex_slow_update(previous,torch.zeros_like(gate),
+                           proposal,fast),previous,atol=1e-7)
+    direct = torch.autograd.grad(mixed.sum(),fast)[0]
+    assert torch.allclose(direct,0.25*gate,atol=1e-7)
+
     ids = torch.randint(VOCAB,(4,HISTORY))
     meta = torch.rand(4,HISTORY,3)
     meta[:,:,1] = (meta[:,:,1] > 0.5).float()
