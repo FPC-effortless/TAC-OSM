@@ -1,0 +1,75 @@
+name: ME009 original native reliability gate on real history
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/me009_reliability.py'
+      - 'scripts/me009_train_gate.py'
+      - 'research/mathematical-engineering/me009/PROTOCOL.md'
+      - '.github/workflows/me009-gate.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me009-native-reliability-original
+  cancel-in-progress: true
+jobs:
+  causal-mathematical-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - run: |
+          python -m py_compile scripts/me009_reliability.py scripts/me009_train_gate.py
+          python -m scripts.me009_train_gate --self-test
+  original-historical-calibration:
+    needs: causal-mathematical-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39382850579
+          name: me008-original-native1000
+          github-token: ${{ github.token }}
+          path: .
+      - name: Train three 161-parameter gates only on historical real calibration
+        run: |
+          python -m scripts.me009_train_gate --original results/me008 --out results/me009 | tee me009-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=Path('results/me009')
+          d=json.loads((r/'results.json').read_text())
+          assert d['study']=='ME009_NATIVE_RELIABILITY_CALIBRATION'
+          assert len(d['fits'])==3 and not d['future_test_read']
+          assert not d['base_weights_refit'] and not d['architecture_promoted']
+          assert {x['seed'] for x in d['fits']}=={909001,909002,909003}
+          assert all(x['trainable_gate_params']==161 for x in d['fits'])
+          assert len(list((r/'checkpoints').glob('*.pt')))==3
+          PY
+      - name: Preserve original calibration weights and failures
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: me009-original-real-reliability
+          path: |
+            results/me009/results.json
+            results/me009/checkpoints/*.pt
+            me009-original.log
+          if-no-files-found: ignore
+          retention-days: 90
