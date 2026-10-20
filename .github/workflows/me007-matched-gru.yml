@@ -1,0 +1,69 @@
+name: ME007 original real capacity-matched GRU controls
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/me007_train_matched_gru.py'
+      - 'research/mathematical-engineering/me007/PROTOCOL.md'
+      - '.github/workflows/me007-matched-gru.yml'
+permissions:
+  contents: read
+concurrency:
+  group: me007-strong-gru-original
+  cancel-in-progress: true
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install fixed CPU numerical tools
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - run: |
+          python -m py_compile scripts/me007_train_matched_gru.py
+          python -m scripts.me007_train_matched_gru --self-test
+  original-train-only:
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Train fixed GRU control budgets on official TRAIN history only
+        run: |
+          python -m scripts.me007_train_matched_gru --out results/me007 | tee me007-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=Path('results/me007')
+          j=json.loads((r/'results.json').read_text())
+          assert j['study']=='ME007_CAPACITY_MATCHED_GRU'
+          assert not j['future_period_ever_opened_by_this_script']
+          assert len(j['fits'])==3
+          assert all(len(f['checkpoints'])==2 for f in j['fits'])
+          assert {a['steps'] for f in j['fits'] for a in f['checkpoints']}=={450,1000}
+          assert all(a['parameters']==9249 for f in j['fits'] for a in f['checkpoints'])
+          assert len(list((r/'checkpoints').glob('*.pt')))==6
+          assert not j['promotion']
+          PY
+      - name: Preserve all original control weights, negative results and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me007-original-gru41-controls
+          path: |
+            results/me007/results.json
+            results/me007/checkpoints/*.pt
+            me007-original.log
+          if-no-files-found: ignore
+          retention-days: 90
