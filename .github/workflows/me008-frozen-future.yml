@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   first-frozen-time-shift-test:
+    # Only original SHA 6fcf99bfcf1f18054e5858940729903256a4c254 scored March23–30.
+    # Later research notes must not repeat the single-exposure test.
+    if: github.event.pull_request.head.sha == '6fcf99bfcf1f18054e5858940729903256a4c254'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
