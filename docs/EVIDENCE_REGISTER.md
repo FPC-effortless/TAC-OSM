@@ -362,3 +362,15 @@ Full source, decision rule, attempted-run amendment, artifacts and claim limits:
 See [ME023 results](../research/mathematical-engineering/me023/RESULTS.md),
 [mathematics](../research/mathematical-engineering/me023/MATHEMATICS.md) and
 [streaming API](../research/mathematical-engineering/me023/STREAMING.md).
+
+## ME024 native feedback × split RMS
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Coupled 64×64 Jacobian matches autograd; RMS derivative bound 10 and native state bounds verified | L1 | mathematical implementation | stated local derivatives, representability, causality and streaming | global contraction, selective affine scan or predictive benefit | state-dependent native gates remain nonlinear |
+| Primary feedback Brier deltas all positive; mean +.000080485; registered gate FAIL | L2 | negative native dynamics intervention | tied feedback .25 did not earn its registered benefit | all forms of slow-to-fast coupling are ineffective | twelve fixed fits, historical DEV, equal parameters/exposure; full compute parity unknown |
+| Secondary RMS-only Brier .167689800→.166529764 and ECE .034814499→.027447295, all three paired seeds improve Brier | L2 | native readout optimization | split normalization is a promising development candidate | independent generalization or passing the primary feedback gate | reused real DEV; no gains, biases or added parameters; recurrence unchanged |
+| Four recorded paths replay all 71,424 forecasts exactly; 96 real FIT full-Jacobian trajectories retained | L1 | artifact and derivative diagnostics | checkpoint/export integrity and sampled initial-state sensitivity | causal explanation, loss-gradient retention or complete-system reliability | held-input hidden-state derivatives only; no reserved outcomes accessed |
+
+See [ME024 results](../research/mathematical-engineering/me024/RESULTS.md) and
+[validation](../research/mathematical-engineering/me024/VALIDATION.md).

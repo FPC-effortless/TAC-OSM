@@ -1,0 +1,62 @@
+{
+  "study": "ME024_COUPLED_NATIVE_SPLIT_RMS",
+  "arms": [
+    "plain",
+    "rms",
+    "coupled",
+    "coupled_rms"
+  ],
+  "seeds": [
+    14001,
+    14002,
+    14003
+  ],
+  "parameters": 135050,
+  "history": 128,
+  "coupling": 0.25,
+  "rms_epsilon": 0.01,
+  "updates": 300,
+  "batch": 128,
+  "base_lr": 0.001,
+  "readout_lr": 0.006,
+  "weight_decay": 0.0001,
+  "clip_grad": 1.0,
+  "prefix_depths": [
+    32,
+    64,
+    96
+  ],
+  "prefix_loss_weights": [
+    0.16666666666666666,
+    0.16666666666666666,
+    0.16666666666666666,
+    0.5
+  ],
+  "trace_steps": [
+    0,
+    1,
+    25,
+    50,
+    100,
+    150,
+    200,
+    250,
+    300
+  ],
+  "cpu_seconds_ceiling_per_fit": 180,
+  "primary_contrast": "coupled_rms minus rms final historical DEV Brier",
+  "engineering_gate": "all 3 primary paired Brier deltas negative; mean <= -0.0005; coupled_rms FIT-feature-mean replacement worsens Brier >= 0.0002 each seed; mean coupled_rms ECE <= mean rms ECE + 0.002",
+  "probe_fit_windows": 8,
+  "probe_jacobian_depths": [
+    8,
+    32,
+    64,
+    96,
+    128
+  ],
+  "selection": "final step only; no tuning, extra seeds, best-checkpoint selection or further test access",
+  "source_sha256": "c23f211cf109c7a060a25a4afe9e8c681b1ccbbc816cca921d87ad37dd11c70c",
+  "parent_data_snapshot_sha256": "fea9675380d501e81b740a0c1e0cd8c99893863ba6bed9a7e6619a572cc21177",
+  "independent_test_allowed": false,
+  "architecture_promotion_allowed": false
+}

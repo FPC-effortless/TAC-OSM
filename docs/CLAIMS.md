@@ -1003,3 +1003,21 @@ development data, imperfect calibration, full compute equivalence unestablished,
 OOD intervention interpretation and no independently verified long-history gain.
 No architecture promotion, causal action utility or commercial qualification.
 See [ME023](../research/mathematical-engineering/me023/RESULTS.md).
+
+## ME024 — native slow feedback and split RMS readout
+
+**STATUS:** mathematically verified; registered feedback advantage rejected;
+secondary RMS optimization measured on reused real development data.
+**LAYER:** L1/L2.
+
+The optional coupled native core implements tied slow-to-fast feedback, split
+RMS features, exact full coupled derivatives and streaming execution, retaining
+135,050 parameters in every cell. Twelve fixed real-data fits use identical
+sample draws and four causal targets per window. Primary feedback mean Brier
+delta +0.000080485 is unfavorable in every seed; the feature-use guard also
+fails. Do not promote coupling. Secondary RMS-only mean Brier improves
+.167689800→.166529764 in all three seeds, with mean ECE .034814499→.027447295.
+This supports a development optimization candidate, not independent validation,
+causal memory value, SSM/LLM capability or architectural superiority. Full
+compute parity remains unestablished; reserved outcomes remain closed.
+See [ME024 results](../research/mathematical-engineering/me024/RESULTS.md).
