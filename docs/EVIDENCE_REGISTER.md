@@ -349,3 +349,16 @@ than changing addressing again.
 
 Full source, decision rule, attempted-run amendment, artifacts and claim limits:
 [ME022 results](../research/mathematical-engineering/me022/RESULTS.md).
+
+## ME023 bounded predictive native TAC
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Bounded action-query readout expresses nonzero state/action log-odds interaction; analytical derivatives and prefix-causality tests pass | L1 | mathematical representability and leakage gate | the implemented parameter path and stated local interaction bounds | empirical advantage or whole-network contraction | interaction bounded by 4; native recurrence and unconstrained linear head retain their original limits |
+| Primary action_prefix−self_prefix mean Brier +.000006871; registered gate FAIL | L2 | negative architecture intervention | action-query conditioning did not earn its registered advantage | impossibility of conditional memory on other data/budgets | exact 135,562 parameters and equal primary prefix supervision; full compute equivalence unestablished |
+| Prefix losses improve both native variants in all 3 seeds, mean about .17069→.16769; FIT-mean-state replacement increases all prefix-cell errors | L2 | secondary temporal-credit diagnostic | causal multi-depth prediction is a promising training direction | independent validation, causal memory value or an equal-supervision objective win |4 supervised responses/window versus 1; historical development data and OOD state replacement |
+| All 12 model/standalone/state-intervention paths replay 71,424 forecasts exactly; incremental/window transitions agree on real probes | L1 | numerical and execution engineering | local checkpoint and streaming equivalence | long-stream predictive accuracy, associative scan or constant training memory | original 128-event behavior only; input-window working memory and recurrent state are distinct |
+
+See [ME023 results](../research/mathematical-engineering/me023/RESULTS.md),
+[mathematics](../research/mathematical-engineering/me023/MATHEMATICS.md) and
+[streaming API](../research/mathematical-engineering/me023/STREAMING.md).
