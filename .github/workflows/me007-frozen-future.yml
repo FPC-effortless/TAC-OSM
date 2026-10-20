@@ -1,0 +1,84 @@
+name: ME007F first frozen later-week strong-baseline comparison
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/me007_frozen_future.py'
+      - '.github/workflows/me007-frozen-future.yml'
+      - 'research/mathematical-engineering/me007/PROTOCOL.md'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me007f-genuine-march16-23-first-exposure
+  cancel-in-progress: true
+jobs:
+  first-frozen-time-shift-test:
+    # One-time registered future source opened in successful run 39382346906.
+    # Never repeat the frozen heldout test on later documentation edits.
+    if: github.event.pull_request.head.sha == '829f25ee957e180411ac9a8f1cc783befa30e85d'
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install same CPU source/eval dependencies
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify evaluator syntax BEFORE opening new future source
+        run: python -m py_compile scripts/me007_frozen_future.py
+      - name: Restore original native TAC checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39357593422
+          name: me004-original-real-tac-models
+          github-token: ${{ github.token }}
+          path: .
+      - name: Restore original ME006 direct adapter checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39380424029
+          name: me006-original-causal-relevance
+          github-token: ${{ github.token }}
+          path: .
+      - name: Restore all original GRU41 matched controls
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39382074165
+          name: me007-original-gru41-controls
+          github-token: ${{ github.token }}
+          path: .
+      - name: Score untouched real week with no training or selection
+        run: |
+          python -m scripts.me007_frozen_future | tee me007f-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('results/me007f/results.json').read_text())
+          assert d['study']=='ME007F_CAPACITY_MATCHED_ONE_TIME_REAL'
+          assert d['total_optimizer_updates_on_test']==0
+          assert d['period_start']=='2020-03-16' and d['period_end_exclusive']=='2020-03-23'
+          assert d['source_after_test_end_read'] is False
+          assert d['cohort']['future_week_examples']>=500
+          assert len(d['fits'])==10
+          assert set(x['model'] for x in d['fits']) == {
+              'original_tac','tac_direct','gru41_450','gru41_1000'
+          }
+          assert not d['architecture_promoted']
+          PY
+      - name: Preserve original scores, including negative TAC findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me007f-original-frozen-fair-baselines
+          path: |
+            results/me007f/results.json
+            me007f-original.log
+          if-no-files-found: ignore
+          retention-days: 90
