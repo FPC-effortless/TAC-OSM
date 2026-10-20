@@ -25,17 +25,17 @@ No imputation, synthetic history, user reassignment or other cohort access.
 Same 128 genuine preceding observations; target exposure is known before its
 response. Temporal-gap reset and source-only stride inherit ME019 exactly.
 Expected FIT/DEV window counts 10,776 / 5,952. All normalization fits on FIT only.
-All users1–5 and other cohorts, labels from Aug14 onward, MetroPT and all sealed
+All users1–5 and other cohorts, labels from Aug 14 onward, MetroPT and all sealed
 tests remain closed. DEV is historical and has been inspected repeatedly.
 
 Fixed 2×2 native matrix: original, duration normalization only, head LR×6 only,
 both. All four have exactly 135,050 trainables and identical initialized weights,
-same batch-index draws, 300 AdamW updates, batch128, LR .001, weight decay .0001,
+same batch-index draws, 300 AdamW updates, batch 128, LR .001, weight decay .0001,
 global gradient clip1. Normalize only current duration by FIT mean/std (floor
-1e-5); no head or state normalization, no extra features. LR×6 applies only to
+1 e-5); no head or state normalization, no extra features. LR×6 applies only to
 existing `head.weight` and `head.bias`. All other trainables keep .001. Zero
 initial head means initial logits remain the original causal prior32 for every
-arm. Same model and analytic anchor in every cell. Three seeds14001–3; rotate
+arm. Same model and analytic anchor in every cell. Three seeds 14001–3; rotate
 arm execution order across seeds to reduce systematic timing drift.
 
 Record the declared dense step checkpoints' FIT/DEV losses, total training CPU
@@ -51,10 +51,10 @@ score-driven refit. Preserve every result, trace, final/partial optimizer/RNG
 checkpoint and event prediction, including negatives. Checkpoint final step only.
 
 Primary contrast: combined arm minus original mean paired final DEV Brier.
-Engineering candidate iff all3seed differences <0 and mean reduction >=.005.
+Engineering candidate iff all 3 seed differences <0 and mean reduction >= .005.
 Report separate factorial effects, logloss, AUC and descriptive ten-bin ECE.
 Also show fixed causal prior32 and the ME021 225-parameter standardized causal
-summary MLP (same FIT/DEV rows, 300 updates/3seeds) as **unmatched practical
+summary MLP (same FIT/DEV rows, 300 updates/3 seeds) as **unmatched practical
 references**, not an architecture ranking. Report their actual capacity/compute.
 This reference's summaries are richer explicit features; disclose that difference.
 

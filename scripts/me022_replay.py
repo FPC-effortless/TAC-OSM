@@ -15,6 +15,20 @@ from scripts.me022_native_readout import predictions, scores
 from scripts.me021_primary_interaction import features, predict_simple
 
 
+class ExactStandaloneNative(nn.Module):
+    """Serialized native graph with the exact two-scalar input transform."""
+    def __init__(self, core, mean, scale):
+        super().__init__()
+        self.core = core
+        self.register_buffer("duration_mean", torch.tensor(mean, dtype=torch.float32))
+        self.register_buffer("duration_scale", torch.tensor(scale, dtype=torch.float32))
+
+    def forward(self, items: torch.Tensor, metadata: torch.Tensor,
+                action: torch.Tensor, duration: torch.Tensor) -> torch.Tensor:
+        return self.core(items, metadata, action,
+                         (duration-self.duration_mean)/self.duration_scale)
+
+
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -64,6 +78,8 @@ def audit(root, rebuild_source=False):
     torch.set_num_threads(1)
     sampler = {}
     errors = []
+    folded_errors = []
+    export_errors = []
     for row in r["models"]:
         ck = torch.load(root/row["checkpoint"], weights_only=True)
         assert ck["step"] == row["steps"] == c["updates"]
@@ -105,11 +121,22 @@ def audit(root, rebuild_source=False):
             folded.head.weight[:, -1].div_(ck["duration_scale"])
             folded.head.bias.sub_(w*ck["duration_mean"]/ck["duration_scale"])
         exported = torch.jit.script(folded).eval()
-        export_path = root/f'{row["arm"]}-seed{row["seed"]}-standalone.jit.pt'
-        torch.jit.save(exported, str(export_path))
-        independent = torch.jit.load(str(export_path)).eval()
+        fold_path = root/f'{row["arm"]}-seed{row["seed"]}-fold-attempt.jit.pt'
+        torch.jit.save(exported, str(fold_path))
+        independent = torch.jit.load(str(fold_path)).eval()
         raw_predictions = predictions(independent, dev)
-        assert np.max(np.abs(raw_predictions-p)) <= 1e-6
+        folded_errors.append(float(np.max(np.abs(raw_predictions-p))))
+        # Retain every folding failure; qualify exact normalized exports instead.
+        exact_core = NativeExtended(128)
+        exact_core.load_state_dict(ck["state_dict"], strict=True)
+        exact = torch.jit.script(ExactStandaloneNative(
+            exact_core, ck["duration_mean"], ck["duration_scale"])).eval()
+        export_path = root/f'{row["arm"]}-seed{row["seed"]}-standalone.jit.pt'
+        torch.jit.save(exact, str(export_path))
+        exact_p = predictions(torch.jit.load(str(export_path)).eval(), dev)
+        export_error = float(np.max(np.abs(exact_p-p)))
+        assert export_error <= 1e-7
+        export_errors.append(export_error)
     for row in r["unmatched_references"]:
         ck = torch.load(root/f'unmatched-mlp-seed{row["seed"]}.pt', weights_only=True)
         net = nn.Sequential(nn.Linear(12, 16), nn.Tanh(), nn.Linear(16, 1))
@@ -123,7 +150,11 @@ def audit(root, rebuild_source=False):
     report = {"status": "PASS", "native_checkpoints": 12, "reference_checkpoints": 3,
               "native_prediction_comparisons": 12*len(dev["y"]),
               "maximum_native_prediction_absolute_error": max(errors),
-              "folded_standalone_exports": 12,
+              "exact_standalone_exports": 12,
+              "maximum_exact_export_probability_error": max(export_errors),
+              "float32_fold_gate_passed": bool(max(folded_errors) <= 1e-6),
+              "float32_fold_passing_models": sum(e <= 1e-6 for e in folded_errors),
+              "maximum_float32_fold_probability_error": max(folded_errors),
               "folded_export_probability_tolerance": 1e-6,
               "source_bounds_and_sampler_rng_match": True,
               "new_fits": 0, "new_test_outcomes": 0}
