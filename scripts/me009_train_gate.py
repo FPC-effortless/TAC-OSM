@@ -80,8 +80,8 @@ def run(original,out):
     if ledger["study"]!="ME008_NATIVE_EQUAL_STEPS":
         raise ValueError("exact original ME008 source needed")
     registered={}
-    for fit in ledger["fits"]:
-        for candidate in fit["checkpoints"]:
+    for source_record in ledger["fits"]:
+        for candidate in source_record["checkpoints"]:
             path=original/candidate["checkpoint"]
             if hashlib.sha256(path.read_bytes()).hexdigest()!=candidate["sha256"]:
                 raise ValueError("original checkpoint digest mismatch")
