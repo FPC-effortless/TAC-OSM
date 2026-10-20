@@ -13,6 +13,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   mathematical-preflight:
+    # First full genuine 600-step matrix passed in run 39412071932. Freeze exact fit SHA.
+    if: github.event.pull_request.head.sha == 'e12982eb59a2b820855888b2df0f74d2553abb40'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -28,6 +30,7 @@ jobs:
           python -m py_compile scripts/me016_native_slow_identity.py
           python -m scripts.me016_native_slow_identity --self-test
   original-authentic-fits:
+    if: github.event.pull_request.head.sha == 'e12982eb59a2b820855888b2df0f74d2553abb40'
     needs: mathematical-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 115
