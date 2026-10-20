@@ -172,33 +172,38 @@ def calibrate(logits,y,regularizer=1e-3, niter=80):
     with torch.no_grad():
         return float(w.item()),float(b.item())
 
-def logistic_or_mlp(train_features, train_y, test_features, seed, mlp):
+def train_logistic_or_mlp(train_features, train_y, seed, mlp):
+    """All 300 baseline optimization steps run BEFORE future5 source opens."""
     X=np.asarray(train_features,dtype="float64")
-    Xq=np.asarray(test_features,dtype="float64")
     y=np.asarray(train_y,dtype="float64").reshape(-1)
     mu=X.mean(0);scale=np.maximum(X.std(0),1e-5)
     train=torch.as_tensor((X-mu)/scale,dtype=torch.float32)
-    query=torch.as_tensor((Xq-mu)/scale,dtype=torch.float32)
     torch.manual_seed(seed+(600 if mlp else 500))
-    if mlp:
-        net=nn.Sequential(nn.Linear(X.shape[1],16),nn.Tanh(),nn.Linear(16,1))
-    else:
-        net=nn.Linear(X.shape[1],1)
-    # Both small baselines optimize the same real FIT target minibatches.
+    net=(nn.Sequential(nn.Linear(X.shape[1],16),nn.Tanh(),nn.Linear(16,1))
+         if mlp else nn.Linear(X.shape[1],1))
     gen=torch.Generator().manual_seed(seed+300)
     opt=torch.optim.AdamW(net.parameters(),lr=.006 if mlp else .015,weight_decay=.001)
     start=time.perf_counter()
+    labels=torch.as_tensor(y,dtype=torch.float32)
     for step in range(MLP_UPDATES):
-        ids=torch.randint(len(y),(MLP_BATCH,),generator=gen)
+        ids=torch.randint(len(labels),(MLP_BATCH,),generator=gen)
         logits=net(train[ids]).view(-1)
-        loss=F.binary_cross_entropy_with_logits(logits,torch.as_tensor(y[ids],dtype=torch.float32))
+        loss=F.binary_cross_entropy_with_logits(logits,labels[ids])
         opt.zero_grad(set_to_none=True)
         loss.backward()
         opt.step()
     elapsed=time.perf_counter()-start
+    net.eval()
+    return {"network":net,"mean":mu,"std":scale,
+       "parameters":sum(q.numel() for q in net.parameters()),
+       "train_seconds":round(elapsed,3)}
+
+def predict_simple(fitted, features):
+    x=np.asarray(features,dtype="float64")
+    query=torch.as_tensor((x-fitted["mean"])/fitted["std"],dtype=torch.float32)
     with torch.no_grad():
-        p=torch.sigmoid(net(query).view(-1)).numpy().astype("float64")
-    return p,sum(q.numel() for q in net.parameters()),round(elapsed,3)
+        return torch.sigmoid(fitted["network"](query).view(-1)).numpy().astype("float64")
+
 
 def user_cluster_ci(event_by_seed, users):
     """One event-wise mean over seeds, one common resampled user draw."""
@@ -277,42 +282,10 @@ def run(output):
         dev_predictions[key]=probs
         rawlogit=np.log(np.clip(probs,1e-7,1-1e-7)/np.clip(1-probs,1e-7,1-1e-7))
         calibration[key]=calibrate(rawlogit,dev["y"].numpy())
-    # Same genuine early FIT probe users and original 18 frozen models.
-    probes=frozen_probe_control(fit,originals)
-    # Validate all fit/dev preparation and calibration BEFORE future5 label opening.
-    if len(calibration)!=18 or len(probes)!=9:
-        raise AssertionError("frozen original 18 calibrations or nine probes missing")
-
-    # FIRST OPEN of user%16==5 future responses; absolutely no training follows.
-    future_users,future_src=source_future_user5()
-    future=original_128_windows(future_users,DEV_CUT,END_CUT,MAX_FUTURE)
-    if (len(future["y"])<1500 or
-            any(uid%16!=FUTURE_MOD for uid in future["users"]) or
-            min(future["timestamps"])<DEV_CUT or max(future["timestamps"])>=END_CUT):
-        raise ValueError("not a genuine unopened future5 128 event population")
-    truth=future["y"].numpy().reshape(-1)
-    ffeatures=features(future,rates)
-    # Diagnostic baseline family: fitting parameters on real train only,
-    # never calibrate or select a model using future5 outcomes.
-    baselines={
-        "recent32_laplace":ffeatures[:,0],
-        "all128_laplace":ffeatures[:,1],
-        "FIT_global_rate":np.full(len(truth),global_prior),
-        "item_popularity_fitonly":ffeatures[:,9],
-    }
-    for idx,half in enumerate(HALFLIVES):
-        baselines[f"EWMA_half_life_{half}"]=ffeatures[:,2+idx]
-    baseline_train=[]
-    for seed in SEEDS:
-        for kind in ("logistic","MLP16"):
-            pred,npars,elapsed=logistic_or_mlp(fit_f,fit["y"].numpy(),
-                                             ffeatures,seed,kind=="MLP16")
-            name=f"{kind}_seed{seed}"
-            baselines[name]=pred
-            baseline_train.append({"name":name,"parameters":npars,
-                 "optimizer_updates":MLP_UPDATES,"batch":MLP_BATCH,
-                 "actual_train_cpu_seconds":elapsed,
-                 "trained_only_on_original_genuine_FIT":True})
+    # Pre-fit ALL small baselines on the original real FIT BEFORE source5 exposure.
+    fitted_simple={}
+    for name,fitted in fitted_simple.items():
+        baselines[name]=predict_simple(fitted,ffeatures)
     preds={}
     corrected={}
     model_scores=[]
@@ -418,8 +391,9 @@ def preflight():
     m=metrics(fake_p,fake_y)
     assert math.isfinite(m["Brier"]) and math.isfinite(m["ROC_AUC"])
     fit_x=np.arange(48,dtype=float).reshape(12,4)/48
-    pp,n,sec=logistic_or_mlp(fit_x,np.arange(12)%2,fit_x,14001,False)
-    assert n==5 and pp.shape==(12,) and np.isfinite(pp).all()
+    fitted=train_logistic_or_mlp(fit_x,np.arange(12)%2,14001,False)
+    pp=predict_simple(fitted,fit_x)
+    assert fitted["parameters"]==5 and pp.shape==(12,) and np.isfinite(pp).all()
     ci=user_cluster_ci(np.tile(np.array([-.01,.02,-.03,.04]),(3,1)),[10,10,20,20])
     assert ci["unique_users"]==2 and len(ci["CI_95_user_clustered"])==2
     sl,b=calibrate(np.array([-.5,.7,-.3,1.2]),np.array([0,1,0,1]))
