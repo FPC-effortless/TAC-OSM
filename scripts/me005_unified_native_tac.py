@@ -225,16 +225,27 @@ class UnifiedNativeTAC(nn.Module):
                 'operator_usage':aux['operator_usage'],'attractor_prob':attractors}
 
 class EvidenceLedger:
-    """Never promote provisional executable knowledge without real distinct receipts."""
-    def __init__(self,min_contexts=3):
-        self.min_contexts=min_contexts;self.provisional={};self.persistent={}
+    """Provisional/persistent memory: FAIL CLOSED without an independent receipt verifier."""
+    def __init__(self,min_contexts=3,receipt_validator=None):
+        self.min_contexts=min_contexts
+        self.validator=receipt_validator
+        self.provisional={}
+        self.persistent={}
+        self.used_receipts=set()
     def propose(self,key,payload):
         if key in self.persistent:return False
         self.provisional.setdefault(key,{'payload':payload,'contexts':set(),'failed':False})
         return True
     def verify(self,key,context,success,receipt):
         if key not in self.provisional or not receipt:
-            raise ValueError('real receipt and provisional entry required')
+            raise ValueError('provisional memory and receipt ID required')
+        if self.validator is None:
+            raise PermissionError('no independent receipt verifier connected')
+        if not bool(self.validator(key,context,success,receipt)):
+            raise PermissionError('external receipt verification failed')
+        if str(receipt) in self.used_receipts:
+            raise ValueError('receipt replay prohibited')
+        self.used_receipts.add(str(receipt))
         entry=self.provisional[key]
         if not success:entry['failed']=True;return False
         entry['contexts'].add((str(context),str(receipt)))
