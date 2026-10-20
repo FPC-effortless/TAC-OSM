@@ -1,0 +1,73 @@
+name: ME016F first frozen strong GRU and native TAC-I on untouched real user3
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me016_frozen_user3.py
+      - .github/workflows/me016f-first-user3.yml
+      - research/mathematical-engineering/me016/PROTOCOL.md
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me016f-original-user3-first-exposure
+  cancel-in-progress: true
+jobs:
+  original-frozen-new-user3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned original numerical environment
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate both code files compile and full math/software preflight before source exposure
+        run: |
+          python -m py_compile scripts/me016_native_slow_identity.py scripts/me016_frozen_user3.py
+          python -m scripts.me016_native_slow_identity --self-test
+      - name: Retrieve ONLY original unchanged 12 trained weights
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39412071932
+          name: me016-original-real-innovation-tac-strong-gru
+          github-token: ${{ github.token }}
+          path: .
+      - name: Verify all 12 hashes BEFORE opening genuine user3 reactions, zero test updates
+        run: |
+          python -m scripts.me016_frozen_user3 | tee me016f-original.log
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          d=json.loads(Path('results/me016f/slow_innovation_user3_results.json').read_text())
+          assert d['study']=='ME016F_FIRST_FROZEN_STRONG_GRU_USER3'
+          assert d['source_sha256']=='c23f211cf109c7a060a25a4afe9e8c681b1ccbbc816cca921d87ad37dd11c70c'
+          assert d['user_group_never_fitted_by_models']==3
+          assert d['original_training_user_group']==0
+          assert d['future_period']==['2020-08-14','2020-09-06']
+          assert d['all_12_original_checkpoint_hashes_verified_before_user3']
+          assert d['source']['opened_after_all_frozen_checkpoint_hashes']
+          assert d['source']['parsed_no_outcomes_on_or_after_sep6']
+          assert d['new_actual_logged_reactions']>=500
+          assert d['optimizer_steps_on_test']==0 and not d['model_promoted']
+          assert len(d['models'])==12
+          assert all(v['trainable']==135050 for v in d['models'])
+          assert {(x['arm'],x['seed']) for x in d['models']}=={
+              (a,s) for a in ('native_chrono_anchor','native_identity_anchor',
+                   'gru_anchor','gru_original') for s in (14001,14002,14003)}
+          assert not d['causal_action_value_estimated'] and not d['trained_compute_equalized']
+          PY
+      - name: Archive untouched user3 results, including any candidate failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me016f-original-first-user3-strong-gru
+          path: |
+            results/me016f/slow_innovation_user3_results.json
+            me016f-original.log
+          retention-days: 90
+          if-no-files-found: ignore
