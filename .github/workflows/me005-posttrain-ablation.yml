@@ -10,6 +10,9 @@ permissions:
   actions: read
 jobs:
   frozen-module-ablation:
+    # Original no-refit source/weights study completed in run 39378702013.
+    # Future research edits must not reopen this used validation cohort.
+    if: github.event.pull_request.head.sha == 'b2a7d3d90e193bdcae1989645059e60630e5c013'
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
