@@ -1,0 +1,115 @@
+name: ME021 first-new-user5 paired statistical baseline audit
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me021_primary_interaction.py
+      - research/mathematical-engineering/me021/PROTOCOL.md
+      - .github/workflows/me021-user5-stat-baselines.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me021-first-new-user5-lock
+  cancel-in-progress: true
+jobs:
+  numerical-only-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pinned CPU dependency installation
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Paired bootstrap, tied ROC AUC, logistic+MLP and frozen calibrator numerical tests only
+        run: |
+          python -m py_compile scripts/me021_primary_interaction.py
+          python -m scripts.me021_primary_interaction --self-test
+  first-frozen-real-user5:
+    needs: numerical-only-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pinned CPU dependency installation
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore original unchanged 18 genuine KuaiRec H32/H128 trained models
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39443325909
+          name: me019-original-authentic-128history-all-18
+          github-token: ${{ github.token }}
+          path: .
+      - name: Verify original raw results and all 18 original checkpoint SHA256 before source
+        run: |
+          python - <<'PY'
+          from scripts.me019f_frozen_user4 import restore_models, MANIFEST_SHA
+          from pathlib import Path
+          from hashlib import sha256
+          assert MANIFEST_SHA=='2a10ae3205e866ed792f5ad145e3c3c775e95c39de675f421184de44e56455b6'
+          assert sha256(Path('results/me019/results.json').read_bytes()).hexdigest()==MANIFEST_SHA
+          models=restore_models('results/me019')
+          assert len(models)==18
+          print('ME021_SHA256_18_ORIGINAL_MODELS_VERIFIED_BEFORE_FIRST_USER5_SOURCE_OPEN',flush=True)
+          PY
+      - name: Fit baselines on FIT and calibrators on DEV BEFORE first real future5 open; single primary paired bootstrap
+        run: |
+          set -o pipefail
+          python -m scripts.me021_primary_interaction --out results/me021/frozen_new_user5_interaction.json | tee me021-original.log
+      - name: Strict evidence and claim boundaries
+        run: |
+          python - <<'PY'
+          import json,math,numpy as np
+          from pathlib import Path
+          root=Path('results/me021')
+          r=json.loads((root/'frozen_new_user5_interaction.json').read_text())
+          assert r['study']=='ME021_FIRST_NEW_USER5_PAIRED_INTERACTION_STAT_CALIBRATION_BASELINES'
+          assert r['original_me019_train_manifest_sha256']=='2a10ae3205e866ed792f5ad145e3c3c775e95c39de675f421184de44e56455b6'
+          assert r['all_18_original_checkpoint_sha256_verified_before_source']
+          assert r['publisher_zip_sha256']=='c23f211cf109c7a060a25a4afe9e8c681b1ccbbc816cca921d87ad37dd11c70c'
+          assert r['calibrator_trained_only_original_opened_DEV']
+          assert r['strong_baselines_trained_only_original_FIT']
+          assert r['new_future_user_modulo_16']==5
+          assert r['real_future_unique_users']>=2 and r['real_future_interaction_rows']>=1500
+          assert not r['original_neural_model_weights_updated']
+          assert not r['full_architecture_training_CPU_or_FLOP_fair']
+          assert not r['test_user_responses_used_in_model_training']
+          assert not r['original_future_user4_reopened']
+          assert r['single_primary_interaction_registered_before_future5']
+          assert r['seeds_not_independent']
+          assert len(r['models'])==18
+          assert len(r['random_initialization_untrained_probe'])==9
+          assert len(r['trained_simple_model_costs'])==6
+          assert len(r['fitonly_simple_baselines'])==17
+          assert r['primary_paired_unrecalibrated']['bootstrap_replicates']==2500
+          assert r['primary_paired_unrecalibrated']['N_events']==r['real_future_interaction_rows']
+          assert len(r['primary_paired_unrecalibrated']['per_seed_interactions'])==3
+          assert 'frozen_future5_event_scores.npz' in {p.name for p in root.iterdir()}
+          with np.load(root/'frozen_future5_event_scores.npz') as a:
+              assert len(a['observed_y'])==r['real_future_interaction_rows']
+              assert len(a['user_ids'])==r['real_future_interaction_rows']
+              assert sum(k.startswith('raw_') for k in a.files)==18
+              assert sum(k.startswith('cal_') for k in a.files)==18
+          assert math.isfinite(r['primary_paired_unrecalibrated']['point_mean'])
+          PY
+      - name: Archive exact first new-user prediction arrays for reproducible bootstrap and baseline audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me021-first-user5-frozen-primary-interaction-and-strong-baselines
+          path: |
+            results/me021/frozen_new_user5_interaction.json
+            results/me021/frozen_future5_event_scores.npz
+            me021-original.log
+          retention-days: 90
+          if-no-files-found: ignore
