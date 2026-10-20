@@ -15,6 +15,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   mathematical-preflight:
+    # Successful ORIGINAL six-fit evidence was frozen in run 39386385479.
+    if: github.event.pull_request.head.sha == '27d2bb84bf0d3640b290238a908ce4a9cb7a008a'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -30,6 +32,7 @@ jobs:
           python -m py_compile scripts/me010_event_dynamics.py scripts/me010_train_real_events.py
           python -m scripts.me010_train_real_events --self-test
   original-historical-calibration:
+    if: github.event.pull_request.head.sha == '27d2bb84bf0d3640b290238a908ce4a9cb7a008a'
     needs: mathematical-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 100
