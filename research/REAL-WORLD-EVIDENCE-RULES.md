@@ -62,6 +62,90 @@ protocols, failed runs, and evidence remain intact.
    evidence of a narrow, supervised ability only; its reserved synthetic TEST
    cannot satisfy this policy or be treated as a world-model milestone.
 
+10. **Compulsory equal-resource architecture comparisons.** Any new experiment
+    that ranks TAC-OSM against GRU, SSM, Transformer/attention, MLP, memory
+    ablations or another *trained architecture* MUST satisfy the matched
+    architecture-comparison contract below for its primary superiority claim.
+    Equal real-world data, trainable model parameters and training budget are
+    experimental requirements, not optional caveats. Non-matching runs are
+    exploratory and cannot establish architectural superiority.
+
+## Compulsory architecture-comparison contract (hard gate)
+
+**Applies prospectively to ALL trained-architecture comparisons and ablations**
+including TAC-OSM vs GRU, SSM, attention, other recurrent models, and
+retrieval/planning variants. Preregister the complete arm matrix before any
+held-out result is inspected. A table of uncontrolled model sizes, data or
+budgets is an *exploratory systems comparison*, NOT a valid head-to-head
+architecture win.
+
+1. **Equal trainable parameter counts.** Count every trained component used
+   in the scored pathway (encoders, state/memory, adapters, projectors, readout,
+   predictors, decision heads and controllers). Match exactly when feasible;
+   otherwise set the same preregistered target and demonstrate an absolute
+   relative parameter gap of **at most 1%** for *every* trained arm before
+   training. A comparison above that tolerance is **INELIGIBLE** for a
+   parameter-matched superiority claim. Record total deployed parameters,
+   non-trainable memory/state bits and actual activation/KV/state storage
+   separately; do not hide capacity in external learned weights or caches.
+2. **Equal real data and exposure.** Use the identical original real-world
+   source/version, eligible entities, feature channels, available-at-decision
+   timestamps, labels, training cohort, train/validation/test split, causal
+   preprocessing, prediction horizon, observation history/context, sample
+   order or deterministic shuffle schedule, and missingness/censoring rules.
+   Match examples, tokens/readouts, sequence lengths, batches and *total data
+   presentations* per seed. Do not use extra pretraining, distillation,
+   synthetic augmentation, privileged states, extra modalities or lookahead
+   for one arm unless every arm receives the equivalent allowed source and
+   exposure. Any such study needs its own separately labeled non-parity lane.
+3. **Equal training resource budgets.** Pre-register and enforce the SAME
+   optimizer-step/exposure ceilings AND the SAME maximum charged training
+   compute for all arms. Report actual FLOPs/MACs or audited profiler
+   estimates, GPU/CPU model and count, accelerator-seconds or CPU-seconds,
+   per-arm update count, examples seen, peak memory and failures. Use the
+   identical compute measurement convention, environment and seed matrix.
+   End-to-end costs include representation building and all learned
+   components. **Unused budget is not evidence of equivalent spend.**
+   Architectures that cannot meet both the matched-exposure and matched-compute
+   gates must NOT be claimed as having won a fully matched comparison; run
+   separately identified *compute-matched* and *exposure-matched* analyses and
+   disclose that the three-way parity gate was unmet.
+4. **Equal selection and tuning privileges.** Apply identical validation-only
+   selection rules, hyperparameter-search trial counts, tuning FLOP/time
+   allowance, early-stopping opportunities, seed counts, checkpoint policy,
+   retraining rules and access to held-out information. Report all failed
+   runs and tuning attempts. Hold test labels sealed until the registration's
+   one permitted final evaluation; never tune only TAC-OSM or a favored rival.
+5. **Equal evaluation contract.** Score on exactly the same held-out entities,
+   periods, recorded actions (when applicable), targets, metrics, threshold
+   rules, deployment constraints and statistical aggregation, including
+   per-seed distribution and confidence intervals. Report predictive
+   accuracy/calibration, decision cost *when genuinely observed*, and
+   inference memory/latency/energy as separate dimensions. Equal parameter
+   count does NOT imply equal compute or deployed memory.
+6. **Baselines with inherently unequal parameters.** Persistence, prevalence,
+   fixed physics and do-nothing/always-act baselines **MUST still be reported**
+   as practical reality checks, but explicitly label them *unmatched
+   reference baselines* rather than padding them with useless trainable
+   parameters. They can establish whether a complex model is useful at all;
+   they cannot be evidence of a parameter-matched architecture comparison.
+   Likewise unmatchable pretrained or foundation models belong in a separate
+   clearly labeled transfer/deployment comparison, never the parity lane.
+7. **Mandatory audit and claim gate.** For EACH arm publish a machine-readable
+   comparison manifest: source checksum; fixed IDs/splits; input contract;
+   effective history and data presentations; trainable/total parameter count;
+   training and tuning budgets **allocated and actually consumed**; hardware;
+   seed; selection rule; checkpoints; inference resources; and evaluated
+   outcomes. State PASS/FAIL for parameter, data/exposure, compute,
+   tuning/selection and test parity before discussing performance. **Any FAIL
+   means NO ARCHITECTURAL SUPERIORITY CLAIM**, regardless of the winning score.
+   Never retrospectively loosen parity thresholds after results are known.
+
+Preserve all historical studies with their original controls and accurately
+label those without full parity as historical diagnostic or unmatched evidence.
+This contract does not authorize synthetic primary evaluation and does not
+replace the stronger real-world outcome/causality requirements above.
+
 ## First primary real-world dataset: SCANIA Component X
 
 - **Original operational data:** heavy-duty truck fleet with 33,641
