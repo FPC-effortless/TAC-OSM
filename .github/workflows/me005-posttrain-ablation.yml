@@ -1,0 +1,59 @@
+name: ME005 recorded-only unified module sensitivity
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/me005_posttrain_ablation.py'
+      - '.github/workflows/me005-posttrain-ablation.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  frozen-module-ablation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fixed CPU libraries
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Original pretrained ME004 model artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39357593422
+          name: me004-original-real-tac-models
+          github-token: ${{ github.token }}
+          path: .
+      - name: Original frozen real-trained ME005 adapter artifact
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39377990208
+          name: me005-original-four-real-adapters
+          github-token: ${{ github.token }}
+          path: .
+      - name: Reproduce frozen full scores and compare switch-off effects, no fits
+        run: |
+          python -m scripts.me005_posttrain_ablation | tee me005-ablation.log
+          python - <<'PY'
+          import json
+          d=json.load(open('results/me005-attribution/ablation.json'))
+          assert d['refits']==0 and not d['official_future_test_read']
+          assert len(d['fits'])==2 and not d['architecture_promoted']
+          assert all(len(x['ablations'])==5 for x in d['fits'])
+          PY
+      - name: Archive even a negative ablation result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me005-original-recorded-only-ablation
+          path: |
+            results/me005-attribution/ablation.json
+            me005-ablation.log
+          if-no-files-found: ignore
+          retention-days: 90
