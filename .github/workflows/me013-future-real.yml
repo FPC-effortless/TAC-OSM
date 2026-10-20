@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   frozen-registered-future-and-site:
+    # Genuine future and unseen-site data first opened in successful run 39391688618.
+    # Never rescore that cohort as first-exposure after documentation updates.
+    if: github.event.pull_request.head.sha == '2df52eee20cc7dd721a9eb7717fb1d454860141d'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
