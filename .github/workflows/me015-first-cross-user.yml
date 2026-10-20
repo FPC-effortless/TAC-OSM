@@ -1,0 +1,75 @@
+name: ME015F exact frozen native TAC optimization on never-trained real users
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me015_frozen_cross_user.py
+      - research/mathematical-engineering/me015/ME015F_FIRST_UNSEEN_USERS_PROTOCOL.md
+      - .github/workflows/me015-first-cross-user.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me015f-first-never-trained-real-users
+  cancel-in-progress: true
+jobs:
+  first-authentic-unseen-users-only:
+    # Genuine user remainder-1 source was first opened in successful run 39399405951.
+    # Freeze first-exposure test to the exact original source SHA.
+    if: github.event.pull_request.head.sha == 'c2f24ab6910549731099925681368d951992e918'
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Identical original CPU numerical versions
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Compile evaluator and five-arm source before heldout user data exposure
+        run: |
+          python -m py_compile scripts/me015_native_optimization.py scripts/me015_frozen_cross_user.py
+          python -m scripts.me015_native_optimization --self-test
+      - name: Fetch ONLY original 15 hash-verified factual action-memory checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39398038257
+          name: me015-authentic-native-bottleneck-diagnosis
+          github-token: ${{ github.token }}
+          path: .
+      - name: First genuine user-remainder-1 reactions, original models frozen
+        run: |
+          python -m scripts.me015_frozen_cross_user | tee me015f-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('results/me015f/first_disjoint_user_results.json').read_text())
+          assert r['study']=='ME015F_FIRST_NEVER_TRAINED_REAL_USER_OUTCOMES'
+          assert r['heldout_user_remainder']==1 and r['training_user_remainder']==0
+          assert r['test_time_period']==['2020-08-14','2020-09-06']
+          assert r['all_original_models_verified_before_test_source']
+          assert r['source']['unseen_source_opened_after_checkpoint_verification']
+          assert r['source']['no_post_test_end_rows_parsed']
+          assert r['disjoint_heldout_windows']>=500
+          assert r['test_optimizer_updates']==0 and not r['model_promoted']
+          assert len(r['models'])==15 and all(v['trainable_parameters']==135050 for v in r['models'])
+          assert {(v['model'],v['seed']) for v in r['models']}=={
+              (arm,seed) for arm in ('native_original','native_chrono',
+              'native_anchor','native_chrono_anchor','gru_anchor')
+              for seed in (14001,14002,14003)}
+          assert not r['causal_action_effect_claim']
+          assert r['training_compute_equalized'] is False
+          PY
+      - name: Preserve first unseen-user results, including any failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me015f-original-first-never-trained-users
+          path: |
+            results/me015f/first_disjoint_user_results.json
+            me015f-original.log
+          retention-days: 90
+          if-no-files-found: ignore
