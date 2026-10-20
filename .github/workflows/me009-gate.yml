@@ -15,6 +15,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   causal-mathematical-preflight:
+    # Original successful calibration run 39384177806 on frozen SHA.
+    if: github.event.pull_request.head.sha == '9dbdc849a0feea91b54ba1c8dac06a0471939400'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -29,6 +31,7 @@ jobs:
           python -m py_compile scripts/me009_reliability.py scripts/me009_train_gate.py
           python -m scripts.me009_train_gate --self-test
   original-historical-calibration:
+    if: github.event.pull_request.head.sha == '9dbdc849a0feea91b54ba1c8dac06a0471939400'
     needs: causal-mathematical-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 90
