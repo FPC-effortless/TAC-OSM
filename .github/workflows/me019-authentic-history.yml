@@ -1,0 +1,88 @@
+name: ME019 native TAC 32 vs 128 genuine action histories
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me019_authentic_history.py
+      - research/mathematical-engineering/me019/PROTOCOL.md
+      - .github/workflows/me019-authentic-history.yml
+permissions:
+  contents: read
+concurrency:
+  group: me019-real128-original-research-training
+  cancel-in-progress: true
+jobs:
+  mathematical-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Assert exact real-architecture parameters and 32-step numerical equivalence
+        run: |
+          python -m py_compile scripts/me019_authentic_history.py
+          python -m scripts.me019_authentic_history --self-test
+  genuine-original-real-fits:
+    needs: mathematical-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pinned CPU numerical environment
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: All eighteen fits on identical genuine FIT target rows; no future outcomes
+        run: |
+          set -o pipefail
+          python -m scripts.me019_authentic_history --out results/me019 | tee me019-original.log
+      - name: Evidence integrity and fairness checks
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          r=json.loads(Path("results/me019/results.json").read_text())
+          assert r["study"]=="ME019_GENUINE_128_VS_32_PAST_HISTORY_ORIGINAL_FIT_ONLY"
+          assert r["real_original_data_sha256"]=="c23f211cf109c7a060a25a4afe9e8c681b1ccbbc816cca921d87ad37dd11c70c"
+          assert r["train_sampled_windows"]>=1500 and r["development_sampled_windows"]>=1500
+          assert r["same_real_training_targets_and_actions_all_arms"]
+          assert r["same_last32_exact_inputs_in_both_history_lengths"]
+          assert r["dev_already_inspected_in_prior_research"]
+          assert not r["original_labels_after_aug14_parsed"]
+          assert not r["user1_2_3_4_outcome_cohorts_opened"]
+          assert not r["head_to_head_fully_compute_fair"]
+          assert r["exact_all_arms_trainable_params"]==135050
+          assert not r["success_promoted"]
+          assert len(r["models"])==18
+          assert {(x["arm"],x["history"],x["seed"]) for x in r["models"]}=={
+            (a,h,s) for a in ("native_chrono_anchor","gru_original","gru_anchor")
+              for h in (32,128) for s in (14001,14002,14003)}
+          for x in r["models"]:
+              assert x["active_params"]==135050
+              assert x["optimizer_updates"]==300 and x["batch_size"]==128
+              assert x["train_windows"]==r["train_sampled_windows"]
+              assert x["dev_windows"]==r["development_sampled_windows"]
+              assert not x["source_future_labels_opened"]
+              assert not x["training_compute_matched_across_architectures"]
+              ck=Path("results/me019")/x["trained_weights"]
+              assert hashlib.sha256(ck.read_bytes()).hexdigest()==x["checkpoint_sha256"]
+          PY
+      - name: Preserve all original real model weights, provenance and negative findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me019-original-authentic-128history-all-18
+          path: |
+            results/me019/results.json
+            results/me019/checkpoints/*.pt
+            me019-original.log
+          retention-days: 90
+          if-no-files-found: ignore
