@@ -1,0 +1,64 @@
+name: ME004F one-time frozen future-week real forecasting
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me004_future_week.py
+      - research/mathematical-engineering/me004/FUTURE_PROTOCOL.md
+      - .github/workflows/me004-future-week.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me004f-one-time-untouched-future
+  cancel-in-progress: true
+jobs:
+  one-frozen-future-exposure:
+    # Original future-week exposure passed in run 39358794541 on source SHA below.
+    # All later PR edits MUST NOT reopen the future period.
+    if: github.event.pull_request.head.sha == 'bd3a792054a5dff7bfce4e174cd2ef8e851815fc'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fixed CPU numerical library versions
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check test source compiles before opening later real source
+        run: python -m py_compile scripts/me004_future_week.py
+      - uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39357593422
+          name: me004-original-real-tac-models
+          github-token: ${{ github.token }}
+          path: .
+      - name: Evaluate original frozen weights once on untouched March 2-9 observations
+        run: |
+          python -m scripts.me004_future_week | tee future-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('results/me004-future/future-week-results.json').read_text())
+          assert r['study']=='ME004F_FROZEN_FUTURE_WEEK'
+          assert r['train_steps_performed']==0 and len(r['fits'])==6
+          assert r['source']['no_records_after_test_end_read']
+          assert r['future_test_first_and_only_exposure']
+          assert r['cohort']['future_week_examples']>=500
+          assert not r['architecture_promoted']
+          assert {f['model'] for f in r['fits']} == {'gru','tac_identity','tac_two_timescale'}
+          PY
+      - name: Archive scores even if a frozen candidate fails
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: me004f-original-future-week-scores
+          path: |
+            results/me004-future/future-week-results.json
+            future-original.log
+          if-no-files-found: ignore
+          retention-days: 90
