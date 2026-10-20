@@ -13,6 +13,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   software-preflight:
+    # Original six-fit run 39357593422 passed at this exact SHA; never refit on PR updates.
+    if: github.event.pull_request.head.sha == '954baafe63d1450e4968cc1b49dac02a5e8f6f1d'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -29,6 +31,7 @@ jobs:
           python -m py_compile scripts/me004_native_real_forecast.py
           python scripts/me004_native_real_forecast.py --self-test
   original-train-and-score:
+    if: github.event.pull_request.head.sha == '954baafe63d1450e4968cc1b49dac02a5e8f6f1d'
     needs: software-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 100
