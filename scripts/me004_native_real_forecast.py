@@ -188,7 +188,7 @@ def selftest():
     for k in ('gru','tac_identity','tac_two_timescale'):
         model=make_model(k);y=model(x)
         assert y.shape==(4,2,len(FEATURES)) and bool(torch.isfinite(y).all())
-        y.square().mean().backward()
+        (y.square().mean()+y.mean()).backward()
         assert all(bool(torch.isfinite(p.grad).all()) for p in model.parameters() if p.grad is not None)
         assert any(bool(torch.any(p.grad!=0)) for p in model.parameters() if p.grad is not None)
         print(k, sum(p.numel() for p in model.parameters()),flush=True)
