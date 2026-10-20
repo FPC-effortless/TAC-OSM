@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   first-authentic-unseen-users-only:
+    # Genuine user remainder-1 source was first opened in successful run 39399405951.
+    # Freeze first-exposure test to the exact original source SHA.
+    if: github.event.pull_request.head.sha == 'c2f24ab6910549731099925681368d951992e918'
     runs-on: ubuntu-latest
     timeout-minutes: 115
     steps:
