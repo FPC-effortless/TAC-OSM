@@ -1,0 +1,68 @@
+name: ME014F first authentic chronological user-action evaluation
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me014_frozen_real_future.py
+      - research/mathematical-engineering/me014/PROTOCOL.md
+      - .github/workflows/me014-frozen-user-future.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me014f-original-later-user-reaction-first-exposure
+  cancel-in-progress: true
+jobs:
+  original-frozen-future-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact original torch and numpy
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Compile original source and evaluator before future reactions
+        run: |
+          python -m py_compile scripts/me014_real_logged_actions.py scripts/me014_frozen_real_future.py
+          python -m scripts.me014_real_logged_actions --self-test
+      - name: Fetch immutable original six early-time real trained weights
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39393360715
+          name: me014-original-real-user-action-memory
+          github-token: ${{ github.token }}
+          path: .
+      - name: One-time registered later reaction outcome scoring (no fitting)
+        run: |
+          python -m scripts.me014_frozen_real_future | tee me014f-original.log
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          d=json.loads(Path('results/me014f/future_scores.json').read_text())
+          assert d['study']=='ME014F_FIRST_FROZEN_REAL_USER_ACTION_OUTCOME'
+          assert d['original_checkpoint_count']==6
+          assert d['test_optimizer_updates']==0 and not d['model_promoted']
+          assert d['source']['future_label_rows_opened_after_checkpoint_integrity']
+          assert not d['source']['future_rows_at_or_after_end_parsed']
+          assert d['test_window_count']>=500 and len(d['trained_models'])==6
+          assert not d['causal_treatment_effects_estimated']
+          assert d['behavior_policy_propensities_missing']
+          assert d['evaluation_actions_observed_not_selected_by_model']
+          assert set(d['baseline_scores'])=={
+              'global_training_rate','video_training_rate','causal_prior32_user_rate'}
+          PY
+      - name: Archive every real frozen score, including negative findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me014f-original-frozen-later-user-actions
+          path: |
+            results/me014f/future_scores.json
+            me014f-original.log
+          if-no-files-found: ignore
+          retention-days: 90
