@@ -66,7 +66,7 @@ class NativeComputeKernel(nn.Module):
             s = (1.0 - gs) * s + gs * torch.tanh(self.slow(context))
         logits = self.head(torch.cat((z, s, self.emb(action), duration), dim=-1))
         count = metadata[:, :, 1].sum(dim=-1, keepdim=True)
-        prior = (count + 1.0) / float(HISTORY + 2)
+        prior = (count + 1.0) / 34.0
         return logits + torch.logit(prior)
 
 
