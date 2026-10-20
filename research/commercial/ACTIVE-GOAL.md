@@ -10,6 +10,16 @@ The SCANIA Component X fleet is the first nominated primary real-world risk
 benchmark; Backblaze is a separate forward-time corroboration task. These
 source selections do not claim acquired bytes, model fits or positive results.
 
+**Mandatory comparison fairness acceptance:** No TAC-OSM architecture claim
+passes without an audited trained-arm parity manifest: same authentic dataset,
+inputs/splits/exposures; matched trainable parameters (exact or preregistered
+<=1% tolerance); equal charged compute, training updates, tuning resources and
+seed matrix; same sealed test/evaluation. Any failed parity gate is NO
+SUPERIORITY, irrespective of scores. See
+[comparison contract](../REAL-WORLD-EVIDENCE-RULES.md#compulsory-architecture-comparison-contract-hard-gate).
+Zero-parameter reference policies remain required but distinct from matched
+trained-architecture rankings.
+
 
 
 Status: ACTIVE — replaces milestone-only completion as the operating objective.
