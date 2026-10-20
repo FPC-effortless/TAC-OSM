@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ME008 strong capacity-matched GRU controls, authentic previously-used TRAIN only.
+"""ME008: unchanged native TAC recurrence trained with matched optimizer-step budgets.
 
 Use frozen registration, no later-week opening here.
 TAC-OSM is a native world model and is NOT converted into an SSM or GRU.
