@@ -13,6 +13,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   preflight:
+    # Original accepted 9 fits in run 39391203298 at frozen SHA; never silently refit.
+    if: github.event.pull_request.head.sha == 'fc563c13c30b69a9b265c67812276754e2333659'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -28,6 +30,7 @@ jobs:
           python -m py_compile scripts/me013_multisite.py
           python -m scripts.me013_multisite --self-test
   original-ten-site-train:
+    if: github.event.pull_request.head.sha == 'fc563c13c30b69a9b265c67812276754e2333659'
     needs: preflight
     runs-on: ubuntu-latest
     timeout-minutes: 100
