@@ -12,7 +12,7 @@
 
 ## Strict matched trainable-parameter and training-data controls
 
-Both native two-timescale TAC and GRU with an active nonlinear action-conditioned residual contain EXACTLY **135,050 trainable parameters**, not dummy padding. Same genuine 68,825 train windows and labels, three paired seeds 14001/14002/14003, 300 fixed optimizer updates, identical sampled batch-index seed, batch128, Huber? **Bernoulli BCE-with-logits** objective, AdamW LR .001/decay1e-4 and gradclip1. The original near-matched 135050 vs 134982 run remains archived separately as nonstrict engineering evidence; only ME014B is used for this comparison.
+Both native two-timescale TAC and GRU with an active nonlinear action-conditioned residual contain EXACTLY **135,050 trainable parameters**, not dummy padding. Same genuine 68,825 train windows and labels, three paired seeds 14001/14002/14003, 300 fixed optimizer updates, identical sampled batch-index seed, batch128, **Bernoulli BCE-with-logits** objective, AdamW LR .001/decay1e-4 and gradclip1. The original near-matched 135050 vs 134982 run remains archived separately as nonstrict engineering evidence; only ME014B is used for this comparison.
 
 Original measured training CPU seconds, 3 seeds native **10.23 / 10.07 / 9.98** vs GRU **7.18 / 7.12 / 7.11**. Mean native training ~**1.41× slower**. Equal active params, data and number of optimizer steps do **not** mean equal FLOPs/wall-time training budgets; a strict equal-compute superiority result remains unavailable. It is nevertheless clear TAC has NOT shown a performance or efficiency advantage over this GRU control.
 
