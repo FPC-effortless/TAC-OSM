@@ -56,28 +56,42 @@ closes that registration; a new design uses a new ID and genuinely fresh holdout
 No retrospective resealing, cherry-picked successful seeds, widened replay
 thresholds, cost-free inspections, or scripted stopping fix hidden in an export.
 
-## Current execution order
+## Current execution order — reconciled20October2026
 
-- REAL-MAINT-002 is closed NO PROMOTION; July B remains unopened.
-- DEV063 is closed NO PROMOTION; original weights/evidence stay intact.
-- DEV065 is closed NO PROMOTION after120fresh models/12pilots, full local replay
-  and closed-loop semantic substitutions. Optional batched ingestion independently
-  passes its local engineering gates without changing model quality.
-- DEV067 is closed NO PROMOTION after 120 fresh candidates / 12 pilots. All arms
-  complete every primary/secondary world across 20 seeds with zero final faults,
-  but only 16 TAC and 9 preselected GRU encoders pass both calibration tails.
-  Freezing is inconclusive; log coordinates increase cost. Full local replay and
-  fresh semantic interventions pass, without commercial qualification.
-- REAL-MAINT-003 passes all local numerical room-forecast gates after 80 fresh
-  fits / 8 pilots, complete replay and a corrected Fahrenheit export. Mean relative
-  MAE is .6790; all 20 seeds avoid point regression on all 20 room/horizon cells.
-  The frozen protocol mislabeled units as Celsius; the erratum preserves unchanged
-  weights/scores and makes the release contract explicit. This remains one building
-  and point forecasting, not the complete sensing/repair/commercial goal. Further qualify the actual Malawi
-  repair/flow source; missing prices and independent follow-up remain blockers.
-- Dependency complexity/R1 attribution and posterior-free learning follow their
-  registered gates. Scale/SSM/attention arms wait for a valid real-data baseline.
+The [complete research reconciliation](../reconciliation-2026-10-20/README.md)
+and exact [real-world evidence policy](../REAL-WORLD-EVIDENCE-RULES.md) govern
+new work. Synthetic diagnostic success cannot qualify capabilities or justify
+standalone synthetic accuracy optimization. All old protocols/evidence remain.
 
-Prior artifacts and draft PRs221/222 stay intact. Work remains active until these
-checks pass or a concrete missing dependency prevents a specified gate. Report
-which gate is blocked; do not rename an incomplete goal as success.
+- REAL001/REAL002,DEV063/065/067/068 are closed without whole-model promotion.
+  REAL003 passes a bounded physical room-forecast component gate only; its raw
+  Fahrenheit unit correction stays explicit. REAL004 actual repair-outcome
+  pilots fail the simple reference and leave later test targets unopened.
+- DEV064 andDEV064B have been attempted and closed without CASM superiority;
+  do not continue labeling that deadline unexecuted. RoutedGRU matches the
+  later20-seed entity-update success. R1 joint-recipe attribution is still open.
+- ME001–021 are now included. Preserve useful native recurrence/runtime results
+  alongside stronger GRU/tiny-MLP/persistence controls, failed integration/gates,
+  real forecast shift and uncertainty failures. No unique CASM/CDL or fully
+  matched architectural superiority is established.
+- REAL001 already exposed the2020MetroPT3 March–August period. LaterME004F–010F
+  weeks are reused-source frozen-score evidence, not globally untouched tests.
+  The distinct2022MetroPT2 JulyB remains unopened. All exposed cohorts are
+  recorded in the reconciliation; do not silently reseal them.
+- DEV069 stopped after policy reconciliation with24completed heads and2partial
+  six-head groups preserved. No20-seed reliability claim, no test exposure,
+  no component promotion. Its checkpoint audit is preservation engineering only.
+- Next new real-data registration: factual feature access, normalization,
+  prediction-readout and measured optimization against strong tiny references
+  and matched native/GRU controls. ME022 is an unfitted draft requiring a new
+  source freeze; no memory/SSM/attention replacement is justified by contraction.
+  Compute-constrained and exposure-matched studies must be separated when
+  actual three-way parity cannot be attained, with no architectural win claim.
+- Continue genuine maintenance action/outcome and price-source work. Prediction
+  of logged video feedback or truck sensors cannot close independent physical
+  repair/economics/field-generalization gates. No deployment or spending occurs.
+
+Goal remains ACTIVE / NOT COMMERCIAL-QUALIFIED. Public source acquisition is
+already authorized. Report blocked fields honestly; never invent an economic
+cohort, turn work-order closure into physical success, or rename an incomplete
+research goal as completion. No PR or scientific architecture is auto-merged.

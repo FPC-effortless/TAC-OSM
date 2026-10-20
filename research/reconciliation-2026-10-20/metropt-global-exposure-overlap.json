@@ -1,0 +1,62 @@
+{
+  "status": "CROSS_STUDY_EXPOSURE_OVERLAP_VERIFIED",
+  "source_sha256": "aab991a970e58210de853bb8078ce0e63abb4d9412fdc5c79792dae3d8e1721a",
+  "earlier_study": "REAL-MAINT-001",
+  "earlier_frozen_source": "00037395c12b77c9e32ac38278793e37bc9882d2",
+  "earlier_test_targets": 3131,
+  "earlier_target_start_utc": "2020-03-01T09:00:00+00:00",
+  "earlier_target_end_utc": "2020-08-31T20:00:00+00:00",
+  "earlier_files_sha256": {
+    "_datasets/test.pt": "576f97b8049e7e8fe60bf038f0ecaee7c27d8fb6ac523d0a50a4f1c9ec923f44",
+    "_datasets/provenance.json": "1855d782dcb8c2928c929bc4cadb188ee3b057e04dfca6d5898494ac6e5b29a8",
+    "group-92701/tac/test.json": "81ff2fcc97910b3b30a8d500dd80980301f1fd2826b5e1aeee2e4be2185860b2",
+    "group-92701/tac/report.json": "43238428926c7faaf0df4c8f6cf75d1b7b948d358aaf7abeea0c39b159a6f31e"
+  },
+  "later_windows": [
+    {
+      "pr": 249,
+      "start_inclusive": "2020-03-02",
+      "end_exclusive": "2020-03-09",
+      "earlier_REAL001_test_targets": 124,
+      "disposition": "NOT_PROGRAM_WIDE_UNTOUCHED; retain later recorded scores as reused-source frozen-model evidence"
+    },
+    {
+      "pr": 252,
+      "start_inclusive": "2020-03-09",
+      "end_exclusive": "2020-03-16",
+      "earlier_REAL001_test_targets": 111,
+      "disposition": "NOT_PROGRAM_WIDE_UNTOUCHED; retain later recorded scores as reused-source frozen-model evidence"
+    },
+    {
+      "pr": 254,
+      "start_inclusive": "2020-03-16",
+      "end_exclusive": "2020-03-23",
+      "earlier_REAL001_test_targets": 137,
+      "disposition": "NOT_PROGRAM_WIDE_UNTOUCHED; retain later recorded scores as reused-source frozen-model evidence"
+    },
+    {
+      "pr": 256,
+      "start_inclusive": "2020-03-23",
+      "end_exclusive": "2020-03-30",
+      "earlier_REAL001_test_targets": 138,
+      "disposition": "NOT_PROGRAM_WIDE_UNTOUCHED; retain later recorded scores as reused-source frozen-model evidence"
+    },
+    {
+      "pr": 258,
+      "start_inclusive": "2020-03-30",
+      "end_exclusive": "2020-04-06",
+      "earlier_REAL001_test_targets": 117,
+      "disposition": "NOT_PROGRAM_WIDE_UNTOUCHED; retain later recorded scores as reused-source frozen-model evidence"
+    },
+    {
+      "pr": 260,
+      "start_inclusive": "2020-04-06",
+      "end_exclusive": "2020-04-13",
+      "earlier_REAL001_test_targets": 119,
+      "disposition": "NOT_PROGRAM_WIDE_UNTOUCHED; retain later recorded scores as reused-source frozen-model evidence"
+    }
+  ],
+  "inspected_now": "Only timestamps, previously exposed recorded metadata and manifests; no new source/outcome cohort opened",
+  "qualification": "This corrects program-wide novelty of the holdout. It does not demonstrate that later model fitting consumed future targets, falsify the numeric scores, or prove misconduct.",
+  "exclusion": "REAL002 is a different MetroPT2 recording in2022; sealed July B is unaffected."
+}
