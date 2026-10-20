@@ -41,6 +41,26 @@ class PredictiveNative(nn.Module):
         return self.gain*torch.tanh(self.interaction)/math.sqrt(512.)
 
     @torch.jit.export
+    def stream_step(self, item: torch.Tensor, metadata: torch.Tensor,
+                    state: torch.Tensor) -> torch.Tensor:
+        """One original state transition; caller owns the bounded fast/slow state.
+
+        No history buffer is read. A prior32 forecast separately requires the
+        caller's past-response count/FIFO and readout(state, action, duration, prior).
+        """
+        if state.dim() != 2 or state.size(1) != 64:
+            raise ValueError("stream state must be batch-by-64")
+        u = torch.cat((self.emb(item), metadata), -1)
+        z, s = state[:, :32], state[:, 32:]
+        proposal = torch.tanh(self.enc(u)+self.transition(z))
+        g = torch.sigmoid(self.gate(torch.cat((u, z), -1)))
+        z = (1.-g)*z+g*proposal
+        ctx = torch.cat((z, s), -1)
+        gs = torch.sigmoid(self.slow_gate(ctx))
+        s = (1.-gs)*s+gs*torch.tanh(self.slow(ctx))
+        return torch.cat((z, s), -1)
+
+    @torch.jit.export
     def readout(self, state: torch.Tensor, action: torch.Tensor,
                 duration: torch.Tensor, prior: torch.Tensor) -> torch.Tensor:
         a = self.emb(action)

@@ -127,3 +127,18 @@ def test_scripted_optimizer_checkpoint_and_standalone_roundtrip(tmp_path):
     with torch.no_grad():
         torch.testing.assert_close(model(*args), restored(*args), atol=0, rtol=0)
         assert model.bounded_matrix().norm() <= 4
+
+
+def test_streaming_native_state_matches_window_across_chunks():
+    args = values()
+    net = torch.jit.script(PredictiveNative(True, .7, .05)).eval()
+    with torch.no_grad():
+        state = torch.zeros(3, 64)
+        for begin, end in ((0, 19), (19, 64), (64, 103), (103, 128)):
+            for t in range(begin, end):
+                state = net.stream_step(args[0][:, t], args[1][:, t], state)
+                assert state.abs().max() <= 1
+        torch.testing.assert_close(state, net.encode(args[0], args[1]), atol=1e-6, rtol=0)
+        prior = (args[1][:, -32:, 1].sum(-1, keepdim=True)+1)/34
+        torch.testing.assert_close(net.readout(state, args[2], args[3], prior),
+                                   net(*args), atol=1e-6, rtol=0)

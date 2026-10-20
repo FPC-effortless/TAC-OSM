@@ -983,3 +983,23 @@ The result does not qualify learned long-history benefit, causal decisions,
 architectural superiority or commercial readiness. Float32 folding is rejected
 under its unchanged numerical guard; exact normalized standalone exports pass.
 See [ME022](../research/mathematical-engineering/me022/RESULTS.md).
+
+## ME023 — bounded query-conditioned predictive native core
+
+**STATUS:** implemented and mathematically checked; registered query advantage
+rejected; secondary prefix-learning improvement measured on historical DEV.
+**LAYER:** L1/L2.
+
+The optional Torch module retains native fast/slow dynamics, adds a 512-parameter
+bounded interaction and trains causal predictions at multiple actual history
+depths. Incremental state transitions and standalone exports preserve recorded
+native behavior. This is neither an SSM conversion nor an LLM-capability claim.
+
+Primary action-query mean contrast +.000006871 fails its locked gate. Secondary
+prefix training improves both variants in every seed to about .16769 Brier,
+versus .17069 terminal-only. State-mean replacement evidence becomes favorable,
+but supervision increases from 1 to 4 response losses/window. Blockers: reused
+development data, imperfect calibration, full compute equivalence unestablished,
+OOD intervention interpretation and no independently verified long-history gain.
+No architecture promotion, causal action utility or commercial qualification.
+See [ME023](../research/mathematical-engineering/me023/RESULTS.md).

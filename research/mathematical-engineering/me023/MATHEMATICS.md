@@ -28,11 +28,11 @@ r(h,a) = v^T B(U) q_a
 ell_new = ell_old + r(h,a)
 ```
 
-This is a bilinear readout with effective interaction rank at most8, not a
+This is a bilinear readout with effective interaction rank at most 8, not a
 Transformer attention layer or new SSM state. The primary equal-parameter
 control uses `q_h=tanh(h[:8])/sqrt(8)` in the same equation. It can learn a
 nonlinear state correction but its correction cannot depend on current action.
-Both add512 **active** parameters, for 135,562 total; no padding or frozen dummy
+Both add 512 **active** parameters, for 135,562 total; no padding or frozen dummy
 capacity. Zero-initialized U preserves the original initial logits exactly.
 
 Inductively the native states remain in[-1,1]: each update is a coordinatewise
@@ -51,6 +51,11 @@ mixed_Hessian_(h,e) r = B diag(sech(e)^2) / (8 sqrt(8))
 norm(mixed_Hessian) <= beta / (8 sqrt(8))
 ```
 
+The local action partial is
+`grad_e r = diag(sech(e)^2) B^T (h/8) / sqrt(8)`.
+These are local partials at independent state/query inputs; full parameter
+gradients also include every shared embedding and recurrent path.
+
 The self-query gradient also includes the derivative of q_h, with norm bound
 `beta/8 + beta/sqrt(8)`. These are bounds for the added readout term, not the
 entire network Jacobian. Unit tests compare analytical derivatives with
@@ -59,11 +64,11 @@ capability benchmark or a learned real-data performance claim.
 
 ## 3. Causal prediction supplies temporal supervision
 
-For a genuine128-event parent window, snapshots at depths 32,64,96 predict the
+For a genuine 128-event parent window, snapshots at depths 32,64,96 predict the
 **next logged event**, before consuming its feedback. At depth k, state uses
-events0 through k-1, query sees offered item[k] and duration[k], target is the
+events 0 through k-1, query sees offered item[k] and duration[k], target is the
 actual observed response[k]. The prior uses feedback[k-32:k]. The final depth 128
-predicts the parent's current target with its original prior32.
+predicts the parent's current target with its original prior 32.
 
 ```
 L_prefix = 0.5 BCE(ell_128, y_current)
@@ -72,21 +77,36 @@ L_terminal = BCE(ell_128,y_current)
 ```
 
 Weights sum to 1; the objective deliberately changes credit allocation. Prefix
-arms supervise4 real responses per sampled window versus 1 for terminal arms.
+arms supervise 4 real responses per sampled window versus 1 for terminal arms.
 They receive the same recorded observations, not extra sources or generated
 labels. This difference prevents treating cross-objective contrasts as equal
 supervision/compute claims. Primary comparison holds prefix supervision fixed.
 Perturbing feedback at/after k must not change the k forecast; tests enforce it.
 
+Let `J_t` be the full coupled 64-by 64 native state Jacobian. Its unchanged block
+form is `[[A,0],[B_s A,C_s]]`, with A the fast-state partial, B_s the slow
+partial with respect to updated fast state, and C_s its direct slow partial.
+For a prefix loss at depth k, credit to a prior state h_t follows the actual
+chronological product `J_k ... J_(t+1)`, not the product of Jacobian norms.
+The weighted proper-loss derivative is
+`dL/dtheta = sum_k weight_k (sigmoid(ell_k)-y_k) d(ell_k)/dtheta`.
+Prefix losses therefore introduce shorter genuine prediction-gradient paths;
+they do not enforce that every old observation remain relevant or guarantee
+that the final prediction improves. ME020's contraction findings retain their
+original limits.
+
 ## 4. Computational and scientific boundaries
 
-Native recurrence costs O(T) sequential steps and retains64 floating state
+Native recurrence costs O(T) sequential steps and retains 64 floating state
 coordinates per example. It is nonlinear and state-gated: no associative scan
-or parallel SSM execution is claimed. The extra final readout uses520 affine
+or parallel SSM execution is claimed. The extra final readout uses 520 affine
 MACs per example plus bounded nonlinearities. Prefix training adds three
 readouts, not attention over every history pair. Standard training autograd
 still stores O(T) activations; constant inference state is not constant training
-memory. Parameters are135,562; deployed float32 state is256 bytes/example.
+memory. Parameters are 135,562; deployed float 32 recurrent state is 256 bytes/example.
+The full-window implementation also materializes O(T) embedded input memory.
+The separately verified streaming operator avoids history replay/input storage
+for incremental transitions; it does not alter any fitted equation.
 
 This borrows the principles of context-dependent computation and causal
 next-event supervision. It does not implement a language model, Mamba selective
@@ -95,6 +115,6 @@ Longer-term work needs evidence for depth/residual composition, useful
 timescale spectra, calibrated state uncertainty and efficient exact execution.
 Those changes are separate hypotheses, not capabilities conferred by this one.
 
-Conceptual references: Vaswani et al., *Attention Is All You Need*, arXiv1706.03762;
+Conceptual references: Vaswani et al., *Attention Is All You Need*, arXiv 1706.03762;
 Gu & Dao, *Mamba: Linear-Time Sequence Modeling with Selective State Spaces*,
-arXiv2312.00752. These motivate design principles, not reproduced benchmark claims.
+arXiv 2312.00752. These motivate design principles, not reproduced benchmark claims.
