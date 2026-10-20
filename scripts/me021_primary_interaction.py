@@ -282,8 +282,40 @@ def run(output):
         dev_predictions[key]=probs
         rawlogit=np.log(np.clip(probs,1e-7,1-1e-7)/np.clip(1-probs,1e-7,1-1e-7))
         calibration[key]=calibrate(rawlogit,dev["y"].numpy())
-    # Pre-fit ALL small baselines on the original real FIT BEFORE source5 exposure.
+    # Train all fixed simple model baselines on genuine original FIT BEFORE user5.
     fitted_simple={}
+    baseline_train=[]
+    for seed in SEEDS:
+        for kind in ("logistic","MLP16"):
+            name=f"{kind}_seed{seed}"
+            fitted=train_logistic_or_mlp(fit_f,fit["y"].numpy(),seed,kind=="MLP16")
+            fitted_simple[name]=fitted
+            baseline_train.append({
+                "name":name,"parameters":fitted["parameters"],
+                "optimizer_updates":MLP_UPDATES,"batch":MLP_BATCH,
+                "actual_train_cpu_seconds":fitted["train_seconds"],
+                "trained_only_on_original_genuine_FIT":True})
+    probes=frozen_probe_control(fit,originals)
+    if len(calibration)!=18 or len(probes)!=9 or len(fitted_simple)!=6:
+        raise AssertionError("training/calibration/probe incomplete before future opening")
+
+    # FIRST OPEN of user%16==5 future original outcomes.
+    future_users,future_src=source_future_user5()
+    future=original_128_windows(future_users,DEV_CUT,END_CUT,MAX_FUTURE)
+    if (len(future["y"])<1500 or
+            any(uid%16!=FUTURE_MOD for uid in future["users"]) or
+            min(future["timestamps"])<DEV_CUT or max(future["timestamps"])>=END_CUT):
+        raise ValueError("not a genuine first-future user5 128-event population")
+    truth=future["y"].numpy().reshape(-1)
+    ffeatures=features(future,rates)
+    baselines={
+        "recent32_laplace":ffeatures[:,0],
+        "all128_laplace":ffeatures[:,1],
+        "FIT_global_rate":np.full(len(truth),global_prior),
+        "item_popularity_fitonly":ffeatures[:,9],
+    }
+    for idx,half in enumerate(HALFLIVES):
+        baselines[f"EWMA_half_life_{half}"]=ffeatures[:,2+idx]
     for name,fitted in fitted_simple.items():
         baselines[name]=predict_simple(fitted,ffeatures)
     preds={}
