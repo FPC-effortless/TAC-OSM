@@ -1,0 +1,80 @@
+{
+  "source_commit": "969a92e1280cf16248d9247ef5d49532139d9e46",
+  "primary_paired_deltas": [
+    0.0002192076755952732,
+    5.5811581340659e-06,
+    1.6667415766585814e-05
+  ],
+  "primary_mean_delta": 8.048541649864165e-05,
+  "coupled_rms_feature_mean_deltas": [
+    -8.012493139075705e-05,
+    0.0015493536725545431,
+    0.0019477020942277323
+  ],
+  "mean_ece_delta": 0.0009327305474161676,
+  "gates": {
+    "all_primary_negative": false,
+    "primary_mean_material": false,
+    "all_feature_mean_deltas_at_least_0002": false,
+    "mean_ece_guard": true
+  },
+  "engineering_gate_passed": false,
+  "secondary_paired_deltas": {
+    "coupling_without_rms": [
+      0.0004888906071578436,
+      0.00010817589330736066,
+      8.102806058271628e-05
+    ],
+    "rms_without_coupling": [
+      -7.41525724889669e-05,
+      -0.0022676552196616573,
+      -0.0011383001452919816
+    ],
+    "rms_with_coupling": [
+      -0.0003438355040515373,
+      -0.002370249954834952,
+      -0.0012026607901081121
+    ]
+  },
+  "training_process_cpu_seconds": 240.1289863490009,
+  "arm_means": {
+    "plain": {
+      "Brier": 0.16768980000013556,
+      "log_loss": 0.5013304222053457,
+      "ROC_AUC": 0.8057519826815867,
+      "ECE10": 0.03481449854416659,
+      "feature_mean_brier_delta": 0.0006336644619752141,
+      "train_cpu_seconds": 19.402646176333402,
+      "feedback_disabled_brier_delta": 0.0
+    },
+    "rms": {
+      "Brier": 0.16652976402098804,
+      "log_loss": 0.4984376382863882,
+      "ROC_AUC": 0.8064290334041595,
+      "ECE10": 0.027447295124812792,
+      "feature_mean_brier_delta": 0.0011889140296536909,
+      "train_cpu_seconds": 19.82095031966691,
+      "feedback_disabled_brier_delta": 0.0
+    },
+    "coupled": {
+      "Brier": 0.16791583152048487,
+      "log_loss": 0.5018796314241815,
+      "ROC_AUC": 0.8054936343795523,
+      "ECE10": 0.03638007830975303,
+      "feature_mean_brier_delta": 0.0005174683998149151,
+      "train_cpu_seconds": 20.401295404999903,
+      "feedback_disabled_brier_delta": -0.00030388028105548154
+    },
+    "coupled_rms": {
+      "Brier": 0.16661024943748667,
+      "log_loss": 0.4986112991641655,
+      "ROC_AUC": 0.8063901769097229,
+      "ECE10": 0.02838002567222896,
+      "feature_mean_brier_delta": 0.001138976945130506,
+      "train_cpu_seconds": 20.41810354866676,
+      "feedback_disabled_brier_delta": -7.594808155109156e-05
+    }
+  },
+  "independent_test_opened": false,
+  "architectural_superiority_claim": false
+}
