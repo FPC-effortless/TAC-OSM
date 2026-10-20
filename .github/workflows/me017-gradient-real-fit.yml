@@ -1,0 +1,80 @@
+name: ME017 frozen real FIT gradient and slow-state credit audit
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me017_frozen_real_credit.py
+      - research/mathematical-engineering/me017/PROTOCOL.md
+      - .github/workflows/me017-gradient-real-fit.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me017-real-fit-credit-diagnostic
+  cancel-in-progress: true
+jobs:
+  numerical-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify trained-forward reconstruction and convex math (software only)
+        run: |
+          python -m py_compile scripts/me017_frozen_real_credit.py
+          python -m scripts.me017_frozen_real_credit --self-test
+  frozen-real-credit:
+    needs: numerical-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Download only original twelve trained real models
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39412071932
+          name: me016-original-real-innovation-tac-strong-gru
+          github-token: ${{ github.token }}
+          path: results/me016
+      - name: Hash-verify original archive before source reading and measure real FIT only
+        run: |
+          python -m scripts.me017_frozen_real_credit --original results/me016 --out results/me017/real_fit_credit_audit.json | tee me017-credit.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path("results/me017/real_fit_credit_audit.json").read_text())
+          assert x["study"]=="ME017_FROZEN_REAL_FIT_MEMORY_CREDIT_AUDIT"
+          assert x["original_checkpoint_hashes_checked_before_real_data"]
+          assert x["genuine_real_early_fit_only"] and not x["historical_dev_used"]
+          assert x["model_training_updates"]==0
+          assert x["all_models_parameters"]==135050
+          assert len(x["models"])==12
+          assert all(r["diagnostics"]["instrumented_forward_matches_frozen_model"] for r in x["models"])
+          assert all(r["diagnostics"]["observed_real_fit_windows"]==384 for r in x["models"])
+          assert all(len(r["diagnostics"]["input_logit_gradient_curve_32"])==32 for r in x["models"])
+          assert all(len(r["diagnostics"].get("slow_state_logit_gradient_curve_32",[]))==32
+                     for r in x["models"] if r["arm"].startswith("native_"))
+          assert not x["users_1_2_3_and_future_test_scored"]
+          PY
+      - name: Archive all authentic gradient diagnostics including negative results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me017-frozen-genuine-fit-gradient-credit-audit
+          path: |
+            results/me017/real_fit_credit_audit.json
+            me017-credit.log
+          retention-days: 90
+          if-no-files-found: ignore
