@@ -338,3 +338,14 @@ than changing addressing again.
 | Shuffle-support q2 mean = 0.6793 versus normal = 0.9293 | L3 | context-use diagnostic | performance depends materially on the supplied support context | causal generality of the support mechanism | shuffle is a diagnostic intervention, not a new capability benchmark |
 | Oracle-operator q2 mean = 0.9740 | L3 | upper-bound/localization | seed-3 weakness is largely operator selection rather than the underlying state/content path | learned operator discovery | oracle supplies the hidden operator only for diagnostic measurement |
 | No-memory q2 mean = 0.6250 | L3 | mechanism diagnostic | the multimodal state representation remains functionally important | temporal persistence necessity | temporal carry was separately ruled out as necessary on E2E-008 |
+
+## ME022 native real-data readout optimization
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Fixed native duration normalization + head LR×6 lowers mean Brier .204558→.170687, all 3 paired seeds | L2 | training/interface intervention | better native learning under the registered 300-update real-development recipe | independent generalization, long-history memory improvement or architecture superiority | historical KuaiRec DEV; same 135,050 parameters/exposure; full compute parity unestablished |
+| State-readout knockout improves combined Brier by .002684; ECE worsens .026219→.037490 | L2 | negative diagnostic | memory reliance and calibration remain blockers | all historical information is useless or zeroing proves causal memory contribution | OOD internal knockout can also shift an intercept |
+| All 12 checkpoint and exact standalone paths replay 71,424 native forecasts with zero difference | L1 | numerical reproducibility | local artifact/replay integrity | scientific validity or commercial readiness | float32 normalization folding separately fails 1/12 fixed-tolerance guards |
+
+Full source, decision rule, attempted-run amendment, artifacts and claim limits:
+[ME022 results](../research/mathematical-engineering/me022/RESULTS.md).

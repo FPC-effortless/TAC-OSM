@@ -965,3 +965,21 @@ Immediate blocker:
 the representation-to-executable-state content interface remains unresolved.
 The representation bit projection and the CASM state bit projection are
 separate learned maps.
+
+## ME022 — native input/readout conditioning
+
+**STATUS:** measured historical-development improvement; independent validation
+pending. **TYPE:** bounded positive with negative mechanism/calibration findings.
+**LAYER:** L2 (plus L1 reproducibility).
+
+FIT-only normalization of current video duration combined with head learning
+rate×6 improves the same native TAC's mean KuaiRec DEV Brier from .204557548 to
+.170686756 across three paired seeds, with unchanged recurrence, 135,050
+trainables and 300-update exposure. No new memory component is introduced.
+
+Blockers: reused development population; actual full compute equivalence is
+unestablished; state-readout knockout improves prediction further; ECE worsens.
+The result does not qualify learned long-history benefit, causal decisions,
+architectural superiority or commercial readiness. Float32 folding is rejected
+under its unchanged numerical guard; exact normalized standalone exports pass.
+See [ME022](../research/mathematical-engineering/me022/RESULTS.md).
