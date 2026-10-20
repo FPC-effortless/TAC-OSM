@@ -118,7 +118,7 @@ def run():
       "future_period":["2020-08-14","2020-09-06"],
       "new_user_count":len(set(test["users"])),"new_actual_logged_reactions":len(test["y"]),
       "all_12_original_checkpoint_hashes_verified_before_user3":True,
-      "original_me016_run":null,
+      "original_me016_run":None,
       "active_parameters_for_every_model":135050,
       "optimizer_steps_on_test":0,"trained_compute_equalized":False,
       "policy_propensities_known":False,"causal_action_value_estimated":False,
