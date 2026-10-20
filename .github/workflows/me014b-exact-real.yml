@@ -1,0 +1,71 @@
+name: ME014B strict exact-parameter real user-action replication
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me014b_exact_action_memory.py
+      - research/mathematical-engineering/me014/ME014B_EXACT_MATCH.md
+      - .github/workflows/me014b-exact-real.yml
+permissions:
+  contents: read
+concurrency:
+  group: me014b-exact-original-fit
+  cancel-in-progress: true
+jobs:
+  exact-parameter-software-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - run: |
+          python -m py_compile scripts/me014b_exact_action_memory.py
+          python -m scripts.me014b_exact_action_memory --self-test
+  original-exact-fit:
+    needs: exact-parameter-software-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Train both exact-size recurrent arms on identical early original real user actions
+        run: |
+          python -m scripts.me014b_exact_action_memory --out results/me014b | tee me014b-original.log
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          root=Path('results/me014b')
+          d=json.loads((root/'results.json').read_text())
+          assert d['study']=='ME014B_EXACT_PARAMETER_REAL_LOGGED_ACTION_MEMORY'
+          assert len(d['fits'])==6 and not d['future_test_parsed']
+          assert d['source']['zip_md5']=='261550d472c48eff4990fb13c0e5bcf7'
+          assert d['parameter_mismatch_fraction_max']==0.0
+          assert all(x['parameters']==135050 for x in d['fits'])
+          assert {(v['arm'],v['seed']) for v in d['fits']}=={
+             (a,s) for a in ('native_tac','gru') for s in (14001,14002,14003)}
+          for f in d['fits']:
+              p=root/f['checkpoint']
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==f['sha256']
+          assert not d['causal_effect_estimated'] and not d['independent_reward_verification']
+          PY
+      - name: Preserve exact matched real trained checkpoints and original fit traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me014b-exact-real-original
+          path: |
+            results/me014b/results.json
+            results/me014b/checkpoints/*.pt
+            me014b-original.log
+          retention-days: 90
+          if-no-files-found: ignore
