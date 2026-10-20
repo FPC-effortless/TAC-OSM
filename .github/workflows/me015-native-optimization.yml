@@ -13,6 +13,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   numerical-preflight:
+    # Original 15 real fits archived in successful run 39398038257; never refit after heldout use.
+    if: github.event.pull_request.head.sha == '95d09ce24a287b74f5a2cff223a4d03ece4618ac'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -29,6 +31,7 @@ jobs:
           python -m py_compile scripts/me015_native_optimization.py
           python -m scripts.me015_native_optimization --self-test
   authentic-diagnostic-fits:
+    if: github.event.pull_request.head.sha == '95d09ce24a287b74f5a2cff223a4d03ece4618ac'
     needs: numerical-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 115
