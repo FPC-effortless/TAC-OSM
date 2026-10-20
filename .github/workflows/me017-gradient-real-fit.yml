@@ -47,7 +47,7 @@ jobs:
           run-id: 39412071932
           name: me016-original-real-innovation-tac-strong-gru
           github-token: ${{ github.token }}
-          path: results/me016
+          path: .
       - name: Hash-verify original archive before source reading and measure real FIT only
         run: |
           python -m scripts.me017_frozen_real_credit --original results/me016 --out results/me017/real_fit_credit_audit.json | tee me017-credit.log
