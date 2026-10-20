@@ -1,0 +1,33 @@
+name: ME006 verified TAC memory admission contracts
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'src/tac_osm/verified_promotion.py'
+      - 'tests/test_me006_verified_promotion.py'
+      - '.github/workflows/me006-verified-promotion.yml'
+permissions:
+  contents: read
+jobs:
+  verified-promotion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local TAC package
+        run: python -m pip install -e .
+      - name: Run full explicit evidence admission tests
+        run: |
+          python -m py_compile src/tac_osm/verified_promotion.py tests/test_me006_verified_promotion.py
+          python -m unittest discover -s tests -p test_me006_verified_promotion.py -v
+      - name: Check no model weights or external data required
+        run: |
+          python - <<'PY'
+          from tac_osm.verified_promotion import VerifiedPromotion
+          ledger = VerifiedPromotion(None)
+          assert ledger.snapshot()['persistent'] == 0
+          print('ME006 pure admission boundary: PASS; no receipt authenticity inferred')
+          PY
