@@ -1,0 +1,100 @@
+name: ME020 frozen genuine 128-event memory mathematical audit
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me020_frozen_128_dynamics.py
+      - research/mathematical-engineering/me020/PROTOCOL.md
+      - .github/workflows/me020-real-math-audit.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me020-exact-original-genuine-fit-math
+  cancel-in-progress: true
+jobs:
+  full-jacobian-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install verified CPU PyTorch and numpy versions
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Full analytic coupled 64-dimensional Jacobian versus autograd and probe numerical-only contract
+        run: |
+          python -m py_compile scripts/me020_frozen_128_dynamics.py
+          python -m scripts.me020_frozen_128_dynamics --self-test
+  original-real-fit-diagnostics:
+    needs: full-jacobian-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install verified CPU PyTorch and numpy versions
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore ALL original real ME019 18 immutable trained checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39443325909
+          name: me019-original-authentic-128history-all-18
+          github-token: ${{ github.token }}
+          path: .
+      - name: Hash-verify all original weights then inspect only genuine historical FIT
+        run: |
+          set -o pipefail
+          python -m scripts.me020_frozen_128_dynamics --original results/me019 --out results/me020/frozen_genuine_fit_128_dynamics.json | tee me020-original-real.log
+      - name: Reject any incomplete, contaminated, or unfaithful mathematical evidence
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,math
+          r=json.loads(Path('results/me020/frozen_genuine_fit_128_dynamics.json').read_text())
+          assert r['study']=='ME020_FROZEN_TRUE_REAL_128_JACOBIAN_GATES_DECODABILITY'
+          assert r['original_training_run']==39443325909
+          assert r['original_training_manifest_sha256']=='2a10ae3205e866ed792f5ad145e3c3c775e95c39de675f421184de44e56455b6'
+          assert r['all_18_original_checkpoint_hashes_verified_before_source']
+          assert r['actual_genuine_user0_early_FIT_only']
+          assert not r['historically_opened_development_used']
+          assert not r['user1_2_3_4_or_future_outcomes_reopened']
+          assert not r['new_native_architecture_created']
+          assert not r['independent_predictive_or_commercial_claim']
+          assert r['original_model_unchanged'] and r['original_optimizer_updates']==0
+          assert r['all_trainable_original_params']==135050
+          assert r['grad_real_windows']==72 and r['jacobian_real_windows']==12
+          assert r['probe_real_windows']==1200
+          assert len(r['models'])==9
+          assert {(x['arm'],x['history'],x['seed']) for x in r['models']}=={
+              (a,t,s) for a,t in (('native_chrono_anchor',32),
+                                  ('native_chrono_anchor',128),('gru_original',128))
+              for s in (14001,14002,14003)}
+          assert all(m['telemetry']['frozen_original_forward_equal'] for m in r['models'])
+          assert all(len(m['telemetry']['neural_only_input_gradient_curve'])==m['history'] for m in r['models'])
+          assert all(m['full_true_jacobian']['full_coupled_state_dimension']==64
+                     for m in r['models'] if m['arm']=='native_chrono_anchor')
+          assert len(r['frozen_linear_state_decodability'])==30
+          assert r['frozen_observational_old_history_relevance']['disjoint_train_test_user_ids']
+          assert r['frozen_observational_old_history_relevance']['unique_test_users']>=6
+          assert all(math.isfinite(d['old8_state_probe_outofuser_MSE'])
+                     for d in r['frozen_linear_state_decodability'])
+          PY
+      - name: Archive original positive and negative real-state analysis and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me020-real-fit-frozen-128-state-gradient-gate-jacobian-probes
+          path: |
+            results/me020/frozen_genuine_fit_128_dynamics.json
+            me020-original-real.log
+          retention-days: 90
+          if-no-files-found: ignore
