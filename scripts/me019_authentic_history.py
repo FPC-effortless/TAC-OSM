@@ -190,7 +190,7 @@ def validate_pair(short, long):
 def eval_brier(model, data):
     model.eval()
     probs = []
-    with torch.inference_mode():
+    with torch.no_grad():
         for i in range(0, len(data["y"]), 512):
             idx = slice(i, min(len(data["y"]), i+512))
             probs.append(torch.sigmoid(model(*batch(data, idx))).flatten().cpu())
