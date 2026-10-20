@@ -1,0 +1,90 @@
+name: ME008F original frozen native TAC vs GRU equal-step future test
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/me008_future.py'
+      - '.github/workflows/me008-frozen-future.yml'
+      - 'research/mathematical-engineering/me008/PROTOCOL.md'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me008f-genuine-march23-30-first-exposure
+  cancel-in-progress: true
+jobs:
+  first-frozen-time-shift-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install frozen scoring numerical dependencies
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check script compiles before any future label exposure
+        run: python -m py_compile scripts/me008_future.py
+      - name: Original native TAC checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39357593422
+          name: me004-original-real-tac-models
+          github-token: ${{ github.token }}
+          path: .
+      - name: Original direct forecast adaptation checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39380424029
+          name: me006-original-causal-relevance
+          github-token: ${{ github.token }}
+          path: .
+      - name: Original matched GRU41 frozen checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39382074165
+          name: me007-original-gru41-controls
+          github-token: ${{ github.token }}
+          path: .
+      - name: Original unchanged native TAC at 450/1000 steps
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39382850579
+          name: me008-original-native1000
+          github-token: ${{ github.token }}
+          path: .
+      - name: Score genuine March 23-30 forecast window once with 0 refits
+        run: |
+          python -m scripts.me008_future | tee me008-future-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('results/me008f/results.json').read_text())
+          assert d['study']=='ME008F_FIRST_FROZEN_REAL_COMPARISON'
+          assert d['period_start']=='2020-03-23' and d['period_end_exclusive']=='2020-03-30'
+          assert d['optimizer_steps_in_future_eval']==0
+          assert d['cohort']['future_week_examples']>=500
+          assert len(d['fits'])==15 and not d['architecture_promoted']
+          assert d['original_gru_run_id']==39382074165
+          assert d['original_tac_run_id']==39382850579
+          assert d['future_after_end_not_read']
+          assert {v['model'] for v in d['fits']}=={
+             'persistence','tac_direct','gru41_450','gru41_1000',
+             'native2time_450','native2time_1000'}
+          PY
+      - name: Archive first-exposure evidence including failures
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: me008f-first-frozen-equal-step-future
+          path: |
+            results/me008f/results.json
+            me008-future-original.log
+          if-no-files-found: ignore
+          retention-days: 90
