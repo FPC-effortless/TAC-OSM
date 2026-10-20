@@ -1,0 +1,73 @@
+name: ME014 authentic action-conditioned persistent-memory training
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me014_real_logged_actions.py
+      - research/mathematical-engineering/me014/PROTOCOL.md
+      - .github/workflows/me014-real-action-memory.yml
+permissions:
+  contents: read
+concurrency:
+  group: me014-original-real-logged-action-fits
+  cancel-in-progress: true
+jobs:
+  source-independent-software-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pin exact CPU math dependencies
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check causal shape and <=5% parameter mismatch
+        run: |
+          python -m py_compile scripts/me014_real_logged_actions.py
+          python -m scripts.me014_real_logged_actions --self-test
+  original-authentic-fit:
+    needs: source-independent-software-check
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Train same labeled actions on strict historical video exposures
+        run: |
+          python -m scripts.me014_real_logged_actions --out results/me014 | tee me014-original.log
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          d=json.loads(Path('results/me014/results.json').read_text())
+          assert d['study']=='ME014_REAL_LOGGED_ACTION_PERSISTENT_MEMORY'
+          assert len(d['fits'])==6 and not d['future_test_parsed']
+          assert not d['causal_effect_estimated'] and not d['independent_reward_verification']
+          assert d['source']['zip_md5']=='261550d472c48eff4990fb13c0e5bcf7'
+          assert d['source']['future_test_labels_parsed'] is False
+          assert d['source']['cohort_users']>=20
+          assert d['train_examples']>1000 and d['dev_examples']>100
+          assert d['parameter_mismatch_fraction_max']<=0.05
+          for fit in d['fits']:
+              p=Path('results/me014')/fit['checkpoint']
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==fit['sha256']
+          assert not d['provisional_only'] is False
+          PY
+      - name: Archive all real models, including losses and failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me014-original-real-user-action-memory
+          path: |
+            results/me014/results.json
+            results/me014/checkpoints/*.pt
+            me014-original.log
+          retention-days: 90
+          if-no-files-found: ignore
