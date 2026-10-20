@@ -24,4 +24,4 @@ jobs:
       - name: Validate mathematical and actual training-interface contracts
         run: |
           python -m py_compile scripts/me005_unified_native_tac.py tests/test_me005_unified_native.py
-          python -m unittest tests.test_me005_unified_native -v
+          python -m unittest discover -s tests -p 'test_me005_unified_native.py' -v
