@@ -1,0 +1,78 @@
+name: ME018 identical native TAC kernel on real FIT
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me018_native_kernel.py
+      - research/mathematical-engineering/me018/PROTOCOL.md
+      - .github/workflows/me018-native-kernel-real.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me018-native-kernel-genuine-fit
+  cancel-in-progress: true
+jobs:
+  numerical-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Native recurrence scripted/eager exact parameter and backward numerical parity
+        run: |
+          python -m py_compile scripts/me018_native_kernel.py
+          python -m scripts.me018_native_kernel --self-test
+  frozen-real-kernel:
+    needs: numerical-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore the original 600-step genuine KuaiRec checkpoint archive
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39412071932
+          name: me016-original-real-innovation-tac-strong-gru
+          github-token: ${{ github.token }}
+          path: .
+      - name: Authenticate original weights then genuine FIT and benchmark exactly equivalent native execution
+        run: |
+          python -m scripts.me018_native_kernel --original results/me016 --out results/me018/native_kernel_real_fit.json | tee me018-kernel.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("results/me018/native_kernel_real_fit.json").read_text())
+          assert d["study"]=="ME018_NATIVE_IDENTICAL_COMPUTE_REAL_FIT_ONLY"
+          assert d["all_original_checkpoint_hashes_verified_before_data"]
+          assert not d["source_future_or_independent_test_parsed"] and d["model_weight_changes"]==0
+          assert not d["scientific_world_model_claim"] and not d["training_compute_match_with_gru_claimed"]
+          assert len(d["models"])==3
+          assert {m["seed"] for m in d["models"]}=={14001,14002,14003}
+          assert all(m["new_model_training_updates"]==0 for m in d["models"])
+          assert all(m["native_active_trainable_parameters"]==135050 for m in d["models"])
+          assert all(m["backprop_gradient_parity_pass"] and m["exact_original_forward_parity_pass"] for m in d["models"])
+          assert all(m["real_fit_diagnostic_rows"]==128 for m in d["models"])
+          PY
+      - name: Archive both favorable and unfavorable native timing evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me018-native-identical-real-fit-kernel
+          path: |
+            results/me018/native_kernel_real_fit.json
+            me018-kernel.log
+          retention-days: 90
+          if-no-files-found: ignore
