@@ -48,6 +48,7 @@ jobs:
           audit=json.load(open('results/real004-remote-audit.json'))
           assert audit['status']=='COMPLETE' and audit['checkpoints']==24
           assert audit['portable_predictions']==10 and audit['telemetry']['max_abs']<=1e-8
+          assert audit['input_reconstruction']['max_ULP']<=1
           compare(json.load(open('results/real004-remote-statistics.json')),json.load(open('research/real-maint-004/statistics.json')),{'values':0,'max_abs':0.})
           for path in Path('results/real004-remote-forecasters').glob('*/metadata.json'):
               metadata=json.loads(path.read_text())

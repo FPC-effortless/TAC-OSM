@@ -14,6 +14,7 @@ from data_real_maintenance_004 import source, split, labeled, fit_schema, featur
 from run_real_maintenance_004 import reference_predict
 from run_learned_stack_dev055 import write, digest
 from audit_identity_dev0615 import compare
+from reconstruction_float64_004 import compare_inputs
 
 
 def export(model, folder, report, schema, rows, validation_ids, destination, qualified):
@@ -71,7 +72,8 @@ def run(directory, source_path, output, exports=None):
     if not summary['test_opened']:
         assert not (root/'TEST-OPENED.json').exists() and not (root/'test-labels.json').exists()
     result = dict(status='RUNNING', checkpoints=0, predictions=0, portable_predictions=0,
-        test_opened=summary['test_opened'], source=frozen, telemetry=dict(values=0, max_abs=0.), commercial_qualified=False)
+        test_opened=summary['test_opened'], source=frozen, telemetry=dict(values=0, max_abs=0.),
+        input_reconstruction=dict(values=0, max_abs=0., max_ULP=0, permitted_log1p_ULP=1), commercial_qualified=False)
     if not (root/'prepared.pt').exists():
         assert summary['status'] == 'SOURCE_HEADROOM_REJECTED'
     else:
@@ -82,8 +84,8 @@ def run(directory, source_path, output, exports=None):
         schemas = json.loads((root/'schemas.json').read_text())
         for arm, schema in schemas.items():
             assert schema == fit_schema(rows, train, arm)
-            torch.testing.assert_close(torch.tensor(features(rows, train, schema)), prepared[arm]['train'], atol=0, rtol=0)
-            torch.testing.assert_close(torch.tensor(features(rows, val, schema)), prepared[arm]['validation'], atol=0, rtol=0)
+            compare_inputs(torch.tensor(features(rows, train, schema)), prepared[arm]['train'], schema, result['input_reconstruction'])
+            compare_inputs(torch.tensor(features(rows, val, schema)), prepared[arm]['validation'], schema, result['input_reconstruction'])
         references = json.loads((root/'references.json').read_text())
         for name, ref in references.items():
             pred = reference_predict(ref['fit'], features(rows, val, schemas['repair']), rows, val, name)
@@ -97,7 +99,7 @@ def run(directory, source_path, output, exports=None):
             if summary['status'] == 'TEST_COMPLETE':
                 test_inputs = torch.load(root/'test-inputs.pt', weights_only=True)
                 for arm, schema in schemas.items():
-                    torch.testing.assert_close(torch.tensor(features(rows, test, schema)), test_inputs[arm], atol=0, rtol=0)
+                    compare_inputs(torch.tensor(features(rows, test, schema)), test_inputs[arm], schema, result['input_reconstruction'])
         reports = sorted(root.glob('*/report.json')); assert len(reports) == summary['fit_count']
         for path in reports:
             report = json.loads(path.read_text()); folder = path.parent; arm = report['arm']
