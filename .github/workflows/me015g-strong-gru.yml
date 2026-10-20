@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   once-frozen-genuine-new-users:
+    # Original user-2 source first opened in successful run 39400617213 at the SHA below.
+    # Later notes must never re-score this source as untouched.
+    if: github.event.pull_request.head.sha == '33e9082367f3e32c94d38d804a040ce9f952e4af'
     runs-on: ubuntu-latest
     timeout-minutes: 115
     steps:
