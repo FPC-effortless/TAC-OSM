@@ -1,0 +1,68 @@
+name: ME006F frozen relevance on authentic later week
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/me006_future_relevance.py'
+      - 'research/mathematical-engineering/me006/FUTURE_PROTOCOL.md'
+      - '.github/workflows/me006-future-relevance.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me006f-first-frozen-future-exposure
+  cancel-in-progress: true
+jobs:
+  one-time-frozen-score:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact evaluation dependencies
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Compile once before opening registered future data
+        run: python -m py_compile scripts/me006_future_relevance.py
+      - name: Restore original frozen native TAC forecasting checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39357593422
+          name: me004-original-real-tac-models
+          github-token: ${{ github.token }}
+          path: .
+      - name: Restore original direct and Hebbian adapter checkpoints
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39380424029
+          name: me006-original-causal-relevance
+          github-token: ${{ github.token }}
+          path: .
+      - name: Score both frozen arms once on authentic March 9-16 week
+        run: |
+          python -m scripts.me006_future_relevance | tee me006-future-original.log
+          python - <<'PY'
+          import json
+          r=json.load(open('results/me006-future/future-results.json'))
+          assert r['study']=='ME006F_ONE_TIME_FROZEN_FUTURE'
+          assert r['train_updates']==0 and len(r['adapters'])==4
+          assert r['source']['no_records_after_test_end_read']
+          assert r['new_future_after_end_not_read'] and not r['model_promoted']
+          assert {f['mode'] for f in r['adapters']}=={'direct','associative'}
+          assert set(r['original_scores'])=={'240401','240402'}
+          PY
+      - name: Preserve original future scores even when model loses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me006f-original-frozen-future-results
+          path: |
+            results/me006-future/future-results.json
+            me006-future-original.log
+          if-no-files-found: ignore
+          retention-days: 90
