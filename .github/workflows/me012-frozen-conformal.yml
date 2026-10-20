@@ -1,0 +1,72 @@
+name: ME012 authentic ETT conformal uncertainty transfer
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me012_frozen_conformal.py
+      - research/mathematical-engineering/me012/PROTOCOL.md
+      - .github/workflows/me012-frozen-conformal.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me012-first-final-ett-continuation
+  cancel-in-progress: true
+jobs:
+  frozen-original-split-conformal-test:
+    # Original genuine final ETT period was first exposed in successful run 39389147643.
+    # Any later PR update must not rescore the period as untouched.
+    if: github.event.pull_request.head.sha == '990e140b00eb06bf739402f5ecbcf08fccf82e7b'
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install fixed PyTorch/numpy dependencies
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate order statistic and input-only calibration source
+        run: |
+          python -m py_compile scripts/me012_frozen_conformal.py
+          python -m scripts.me012_frozen_conformal --self-test
+      - name: Recover exact original authentic ETTh1 frozen models
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39388044790
+          name: me011-original-etth1-quantiles
+          github-token: ${{ github.token }}
+          path: .
+      - name: Fit ZERO weights; calibrate from historical only then score final unseen sites
+        run: |
+          python -m scripts.me012_frozen_conformal | tee me012-original.log
+          python - <<'PY'
+          import json
+          d=json.load(open('results/me012/first-frozen-conformal-results.json'))
+          assert d['study']=='ME012_FROZEN_CONFORMAL_REAL_ETT'
+          assert d['new_optimizer_updates']==0 and not d['architecture_promoted']
+          assert set(d['sites'])=={'ETTh1','ETTh2'}
+          assert d['final_test_rows']==[14520,17420]
+          assert d['calibration_rows']==[8760,11640]
+          assert d['has_valid_exchangeability_guarantee'] is False
+          for entry in d['sites'].values():
+              assert entry['official_source']['parsed_rows']==17420
+              assert not entry['official_source']['later_rows_parsed']
+              assert len(entry['models'])==6
+              assert entry['window_metadata']['windows']>=100
+              for f in entry['models']:
+                  assert abs(f['raw']['point_mae_celsius']-f['corrected']['point_mae_celsius'])<1e-6
+          PY
+      - name: Preserve original real calibration and final source outcomes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me012-original-ett-conformal-real
+          path: |
+            results/me012/first-frozen-conformal-results.json
+            me012-original.log
+          if-no-files-found: ignore
+          retention-days: 90
