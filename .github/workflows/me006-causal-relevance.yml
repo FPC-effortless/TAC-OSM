@@ -1,0 +1,81 @@
+name: ME006 causal predictive relevance on genuine MetroPT
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/me006_causal_relevance.py'
+      - 'scripts/me006_train_real_relevance.py'
+      - 'tests/test_me006_causal_relevance.py'
+      - 'research/mathematical-engineering/me006/PROTOCOL.md'
+      - '.github/workflows/me006-causal-relevance.yml'
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me006-real-relevance-source-frozen
+  cancel-in-progress: true
+jobs:
+  relevance-preflight:
+    # Completed run 39380424029 on original source SHA; no silent refits.
+    if: github.event.pull_request.head.sha == 'b51c2cd49d63e471862bf25b0b714cabf5f3bd76'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact CPU numerical dependencies
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check math/software contracts without touching future source
+        run: |
+          python -m py_compile scripts/me006_causal_relevance.py scripts/me006_train_real_relevance.py
+          python -m unittest discover -s tests -p test_me006_causal_relevance.py -v
+  original-real-paired-fits:
+    if: github.event.pull_request.head.sha == 'b51c2cd49d63e471862bf25b0b714cabf5f3bd76'
+    needs: relevance-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39357593422
+          name: me004-original-real-tac-models
+          github-token: ${{ github.token }}
+          path: .
+      - name: Train exactly four future-supervised candidates on authentic original TRAIN
+        run: |
+          python -m scripts.me006_train_real_relevance --out results/me006 --original results/me004 | tee me006-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=Path('results/me006')
+          j=json.loads((r/'results.json').read_text())
+          assert j['study']=='ME006_REAL_CAUSAL_RELEVANCE'
+          assert len(j['fits'])==4 and j['original_pretrained_refits']==0
+          assert j['future_reserved_test_read'] is False and not j['promoted']
+          assert {(v['mode'],v['seed']) for v in j['fits']}=={
+            (mode,seed) for mode in ('direct','associative') for seed in (606001,606002)}
+          assert len(list((r/'checkpoints').glob('*.pt')))==4
+          PY
+      - name: Preserve original source/weights/results including negatives
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me006-original-causal-relevance
+          path: |
+            results/me006/results.json
+            results/me006/checkpoints/*.pt
+            me006-original.log
+          if-no-files-found: ignore
+          retention-days: 90
