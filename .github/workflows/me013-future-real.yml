@@ -1,0 +1,69 @@
+name: ME013F first frozen time and unseen-station real evaluation
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me013_frozen_future.py
+      - research/mathematical-engineering/me013/PROTOCOL.md
+      - .github/workflows/me013-future-real.yml
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: me013f-genuine-time-and-unseen-site-first-exposure
+  cancel-in-progress: true
+jobs:
+  frozen-registered-future-and-site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original CPU numerical dependencies
+        run: |
+          python -m pip install 'numpy==2.2.6'
+          python -m pip install 'torch==2.7.1' --index-url https://download.pytorch.org/whl/cpu
+      - name: Syntax preflight before future data exposure
+        run: python -m py_compile scripts/me013_multisite.py scripts/me013_frozen_future.py
+      - name: Retrieve only original immutable 9 model fits
+        uses: actions/download-artifact@v4
+        with:
+          repository: FPC-effortless/TAC-OSM
+          run-id: 39391203298
+          name: me013-original-ten-site-real-models
+          github-token: ${{ github.token }}
+          path: .
+      - name: Validate all hashes and score authentic later time and unseen stations once
+        run: |
+          python -m scripts.me013_frozen_future | tee me013f-original.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('results/me013f/future_results.json').read_text())
+          assert d['study']=='ME013F_REAL_FIRST_FROZEN_TIME_AND_UNSEEN_SITE'
+          assert not d['model_promoted'] and d['test_optimizer_updates']==0
+          assert d['source']['rows_after_source_cutoff_parsed'] is False
+          assert d['source']['heldout_sites_opened_only_after_all_model_hashes']
+          assert set(d['cohorts'])=={'known_future','heldout_station_future'}
+          assert d['cohorts']['known_future']['forecast_windows']>=100
+          assert d['cohorts']['heldout_station_future']['forecast_windows']>=100
+          for group in d['cohorts'].values():
+              assert len(group['trained_models'])==9
+              assert set(group['physical_baselines'])=={
+                  'persistence','trailing_24h_observed_mean',
+                  'prior_day_motion_extrapolation'}
+          assert set(d['cohorts']['heldout_station_future']['site_counts'])=={
+              'Shunyi','Wanshouxigong'}
+          PY
+      - name: Preserve all original successes AND failures unchanged
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me013f-first-frozen-real-site-time-results
+          path: |
+            results/me013f/future_results.json
+            me013f-original.log
+          if-no-files-found: ignore
+          retention-days: 90
