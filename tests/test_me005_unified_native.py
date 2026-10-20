@@ -47,13 +47,21 @@ class NativeUnifiedContracts(unittest.TestCase):
         self.assertIsNone(d['outcome_logit'])
         with self.assertRaises(ValueError):self.net(self.x,recorded_actions=torch.zeros(2,3))
     def test_persistent_memory_receipts(self):
-        v=EvidenceLedger(2)
+        v=EvidenceLedger(2,receipt_validator=lambda key,context,success,receipt: receipt in {'receipt-one','receipt-two','receipt-three'})
         v.propose('rule',{'proof':'requested'})
         with self.assertRaises(ValueError):v.verify('rule','one',True,None)
         self.assertFalse(v.verify('rule','one',True,'receipt-one'))
         self.assertFalse(v.verify('rule','one',True,'receipt-two'))
         self.assertTrue(v.verify('rule','two',True,'receipt-three'))
         self.assertIn('rule',v.persistent)
+        locked=EvidenceLedger(1)
+        locked.propose('unverified',{'x':1})
+        with self.assertRaises(PermissionError):locked.verify('unverified','context',True,'fake-receipt')
+        self.assertNotIn('unverified',locked.persistent)
+        replay=EvidenceLedger(2,receipt_validator=lambda *args:True)
+        replay.propose('r',{})
+        self.assertFalse(replay.verify('r','a',True,'same-receipt'))
+        with self.assertRaises(ValueError):replay.verify('r','b',True,'same-receipt')
     def test_energy_refinement_is_contracting_to_fixed_attractor(self):
         h=torch.randn(2,64)
         unit=self.net.reason
