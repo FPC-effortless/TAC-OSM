@@ -1,7 +1,7 @@
 # Research reconciliation — 20 October 2026
 
 **Goal remains ACTIVE / NOT COMMERCIAL-QUALIFIED.** This review checks all **58
-TAC-OSM pull requests #222–#281** (236 and240 are not PRs), including the48
+TAC-OSM pull requests #222–#281** (236 and240 are not PRs), including the 48
 additional studies/policy PRs #230–#279 missing from the maintenance working
 ledger. It also checks the PNDS Lean companion and component-repository recency.
 No original result, model weight, source freeze, holdout gate or PR is rewritten
@@ -12,14 +12,14 @@ file, document SHA256, current check and explicit review scope.
 
 PR bodies, source-frozen result/protocol documents, changed-file lists and actual
 GitHub check/run metadata were inspected; selected KuaiRec model/feature/parser
-code was read. **58 cited execution records** were queried:49success,7failure,
-2cancelled. These include preserved failures, not58independent successful trials.
+code was read. **58 cited execution records** were queried:49 success, 7 failure,
+2 cancelled. These include preserved failures, not58independent successful trials.
 This review downloads no original checkpoint archives and does not independently
 reproduce every published number. Prior maintenance checkpoint audits remain
 separate evidence. No new holdout outcomes were opened for the review.
 
-At the snapshot:22PR heads have only successful checks,7have successes plus
-skips,23only skips,5no checks and1a failure. **PR230's current smoke fails**;
+At the snapshot:22 PR heads have only successful checks,7 have successes plus
+skips,23 only skips,5 no checks and1 a failure. **PR230's current smoke fails**;
 its older successful preflight remains in the report. Cause of the latest failure
 was not established here. Skipped guarded first-exposure jobs protect opened
 cohorts; they are neither a fresh replay pass nor a numerical model failure.
@@ -30,7 +30,8 @@ The run index preserves actual statuses rather than calling all CI green.
 The source SHA256 is identical in REAL-MAINT-001 and the later ME compressor
 studies: `aab991a970e58210de853bb8078ce0e63abb4d9412fdc5c79792dae3d8e1721a`.
 REAL001 frozen source `00037395c12b77c9e32ac38278793e37bc9882d2` parsed the
-entire source and evaluated3131test targets, March1 09:00–August31 20:00 2020.
+entire source and evaluated3,131test targets, March1 09:00–August31 20:00 2020
+(source-local naive calendar; physical timezone not independently verified).
 The original test tensor, provenance, first-seed score/report hashes were checked
 against its stored manifest, not newly generated. Source code constructs test
 from March1 onward and explicitly evaluates it after fitting.
@@ -119,13 +120,13 @@ may be continued as a capability study; historical diagnostic archives remain.
 
 **DEV069 was stopped administratively, not scored as a failed hypothesis or a
 successful model.** Frozen source71a7bb693b9cb4988cb1cdf570ac2a3242e88dfd;
-12pilot heads and12fresh heads completed;2additional6-head groups were partially
+12 pilot heads and12 fresh heads completed;2additional6-head groups were partially
 trained and retain atomic raw/EMA/optimizer/RNG snapshots. The registered20-seed
 matrix is incomplete and no test opened. Stop is motivated by discovered policy,
 not selection of successful seeds; it cannot support a reliability comparison.
-Complete-checkpoint replay checks24EMA+24raw states,1536recorded trajectories,
-5655native actions,50standalone decisions and zero local replay drift. A separate
-partial-snapshot audit checks24frozen-body states. This is preservation of work,
+Complete-checkpoint replay checks24 EMA + 24 raw states,1,536 recorded trajectories,
+5,655 native actions,50 standalone decisions and zero local replay drift. A separate
+partial-snapshot audit checks24 frozen-body states. This is preservation of work,
 not renewed synthetic scientific promotion. Fitting source and weights unchanged.
 
 **ME022 remains a proposal, not an executed or promoted experiment.** Its draft
@@ -148,12 +149,12 @@ work-order closure with physical repair does not satisfy this goal.
 
 PNDS Lean PR4 at8e14f2ececf3a7cd617e82d7e6b18f73703cae8c has a successful build;
 its typed receipt assumptions and limits are recorded separately. TAC-transformer
-last pushed October17 and CDL-attention's latest research PRs dateSeptember;
+last pushed October 17 and CDL-attention's latest research PRs dateSeptember;
 no newer October18–20 research PR was found there in this recency check. This is
 not a fresh numerical audit of every historical component experiment. The binding
 component provenance exclusions, especially gold-leaking REAL017 and CASM heldout
 failure, remain in force. No other repository was modified.
 
-See [study-ledger.md](study-ledger.md) for all58PRs and dispositions; original
+See [study-ledger.md](study-ledger.md) for all 58PRs and dispositions; original
 run metadata and hashes are retained alongside this report. This reconciliation
 updates decisions, not scientific results. The model-development goal stays open.
