@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   one-time-frozen-score:
+    # Original registered future-week score succeeded in run 39380961862.
+    # Later edits must not rescore previously unopened March 9-16 data.
+    if: github.event.pull_request.head.sha == '3fe4a1771ce9930faeba01813207a6afbd4e8b87'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
