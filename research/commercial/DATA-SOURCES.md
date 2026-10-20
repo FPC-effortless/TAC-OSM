@@ -134,3 +134,18 @@ REAL-MAINT-003 now provides a separate measured-room-temperature forecast result
 not commercial repair validation. The frozen protocol accidentally called rawF
 readingsC; its explicit unit erratum, unchanged-weight proof and correctedFexport
 are preserved alongside every fit. See its results for narrow numerical gates.
+
+
+2026-10-20 follow-up: REAL-MAINT-004 trained24registered pilots on178valid
+training and70validation handpump bucket-fill outcomes from that frozen source.
+The selected neural recipe fails its entry gate (6.8898seconds MAE vs6.5788for
+the prestatus reference); later60assigned rows/39groups remain unopened as
+targets. See draftPR280 and its results/card. The initial source-coverage inventory
+is a historical acquisition snapshot, not the current model result.
+
+NYC HPD Open Market Order charge and violation metadata was screened next;
+`nyc-repair-source-coverage.json` records schemas/hashes only. No individual
+records or joined cohort was acquired. Award amounts are not final paid costs,
+current closure/certification is not independent physical verification, and a
+shared building ID cannot establish a repair-to-condition causal link. Do not
+fabricate scope, completion dates, invoice prices or successful repairs.

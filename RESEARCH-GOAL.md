@@ -31,3 +31,15 @@ inspection/action/price/physical-outcome evidence. Learned state/dynamics and CA
 attribution remain open. [REAL-MAINT-002](research/real-maint-002/RESULTS.md) stays
 failed and MetroPT July B unopened. A good forecasting component is progress,
 not completion of the broader maintenance goal.
+
+
+2026-10-20 continuation: DEV068 completed all80fresh+8pilot fits from public
+outcomes; selectedGRU passes only7/20seed guards, so no promotion and tests stay
+closed. All88checkpoints,5632validation trajectories,4114native actions and29
+standalone decisions replay locally. REAL004 actual field-repair forecast pilots
+also reject; PR280 remote replay and1490tests pass after an explicitly documented
+one-ULP log-transform reconstruction correction, with weights/gates unchanged.
+DEV069 controller-only semantic-value draft is the next isolated hypothesis;
+no actual fitting yet. Overall maintenance goal remains ACTIVE and NOT
+COMMERCIAL-QUALIFIED. Do not confuse a runnable export, component result or
+positive REAL003room forecast with a reliable economically verified repair agent.
