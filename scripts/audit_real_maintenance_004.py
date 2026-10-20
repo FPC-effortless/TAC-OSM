@@ -22,6 +22,7 @@ def export(model, folder, report, schema, rows, validation_ids, destination, qua
     shutil.copy(ROOT/'src/tac_osm/development/repair_outcome.py', destination/'model.py')
     shutil.copy(ROOT/'scripts/runtime_repair_outcome_004.py', destination/'runtime.py')
     write(destination/'metadata.json', dict(arm=report['arm'], seed=report['seed'], schema=schema,
+        recipe=report['recipe'], fitting_source_commit=json.loads((folder.parent/'summary.json').read_text())['source'],
         features=report['features'], checkpoint_sha256=report['checkpoint_sha256'],
         unit='seconds_per_20L', evidence_stage='FRESH_REGISTERED_FIT' if folder.name.startswith('fresh') else 'DIAGNOSTIC_PILOT_ONLY',
         local_numerical_qualification=qualified, commercial_qualified=False,
