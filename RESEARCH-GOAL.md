@@ -1,45 +1,25 @@
-# Active research goal
+# Active research goal — reconciled20October2026
 
-Build a reliable learned maintenance model that earns its complexity on real
-sensing and verified action outcomes. **ACTIVE; NOT COMMERCIAL-QUALIFIED.**
+Deliver a reliable learned maintenance model that earns its complexity on real
+sensing, uncertain state and verified action outcomes. **ACTIVE; NOT COMMERCIAL-
+QUALIFIED.** No synthetic or CI milestone completes this goal.
 
-Acceptance: [active goal](research/commercial/ACTIVE-GOAL.md).
-Progress: [goal state](research/commercial/goal-state.json).
+The [58-PR research review](research/reconciliation-2026-10-20/README.md),
+[complete study ledger](research/reconciliation-2026-10-20/study-ledger.md),
+[standing real-world/parity rules](research/REAL-WORLD-EVIDENCE-RULES.md) and
+[active acceptance checks](research/commercial/ACTIVE-GOAL.md) now govern work.
+Machine-readable progress: [goal-state.json](research/commercial/goal-state.json).
 
-[REAL-MAINT-003](research/real-maint-003/RESULTS.md) now passes every local numerical
-room-forecast gate. The validation-selected RevIN MLP reduces mean relative MAE
-by 32.1% versus persistence; all 20 seeds avoid regression on every room/horizon
-cell, with simultaneous bounds and a locked-ridge comparison passing. All 88
-neural checkpoints and 8 references replay with zero local drift. Remote checks
-for the new final head remain pending.
+The review corrects a stale CASM deadline, incorporates SEQ/ME001–021 results,
+separates mathematical/engineering success from empirical usefulness, and
+verifies an important holdout overlap: REAL001 already exposed2020MetroPT3
+March–August. LaterMarch–AprilME forecasts are retained, but do not constitute
+program-wide untouched tests. REAL002's separate2022JulyB stays unopened.
 
-**Unit erratum:** published temperatures are Fahrenheit, despite the frozen
-protocol's incorrect Celsius wording. The corrected portable model explicitly
-returns Fahrenheit; weights, predictions and dimensionless gates are unchanged.
-See the [erratum](research/real-maint-003/UNIT-ERRATUM.md). This is one building's
-point-forecast component, not a repair policy, full analog-sensor qualification,
-calibrated health belief or profitable commercial agent.
-
-[DEV067](research/dev067-stable-interface/RESULTS.md) remains NO PROMOTION: all six
-arms complete every required world across 20 seeds with zero final faults, but
-only 16 TAC and 9 preselected GRU encoders pass both calibration tails. No CASM or
-freezing advantage is established; log coordinates increase cost. PR228's ten
-remote checks pass at417930c. Prior studies and weights stay intact.
-
-Next work requires independent-site/unit-verified sensing and actual public
-inspection/action/price/physical-outcome evidence. Learned state/dynamics and CASM
-attribution remain open. [REAL-MAINT-002](research/real-maint-002/RESULTS.md) stays
-failed and MetroPT July B unopened. A good forecasting component is progress,
-not completion of the broader maintenance goal.
-
-
-2026-10-20 continuation: DEV068 completed all80fresh+8pilot fits from public
-outcomes; selectedGRU passes only7/20seed guards, so no promotion and tests stay
-closed. All88checkpoints,5632validation trajectories,4114native actions and29
-standalone decisions replay locally. REAL004 actual field-repair forecast pilots
-also reject; PR280 remote replay and1490tests pass after an explicitly documented
-one-ULP log-transform reconstruction correction, with weights/gates unchanged.
-DEV069 controller-only semantic-value draft is the next isolated hypothesis;
-no actual fitting yet. Overall maintenance goal remains ACTIVE and NOT
-COMMERCIAL-QUALIFIED. Do not confuse a runnable export, component result or
-positive REAL003room forecast with a reliable economically verified repair agent.
+Next new fitting must prioritize real factual-feature/readout/optimization
+competitiveness before another speculative recurrent-memory change. ME022 is
+only an unfitted draft. The synthetic-only DEV069 matrix was stopped under the
+standing policy; completed/partial checkpoints are preserved, not promoted.
+REAL003's room forecast remains a bounded positive component. REAL004 actual
+repair outcomes failed its reference. Real maintenance economics and independent
+post-repair verification are still missing. No architecture merged or deployed.
