@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   original-frozen-new-user3:
+    # Original first genuine user3 opening completed in successful run 39413283396.
+    # Lock the source SHA; do not repeat this as an unopened cohort.
+    if: github.event.pull_request.head.sha == '9edfe4f6979663b037c87984f8b8191ba12278da'
     runs-on: ubuntu-latest
     timeout-minutes: 115
     steps:
