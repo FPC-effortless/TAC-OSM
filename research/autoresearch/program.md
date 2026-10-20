@@ -1,5 +1,28 @@
 # TAC-OSM bounded autoresearch operating rules
 
+**Overriding prospective evidence gate (2026-10-19):**
+[Real-world evidence rules](../REAL-WORLD-EVIDENCE-RULES.md) govern all NEW
+registrations and claims. Primary training/evaluation must use authentic real
+observations, with held-out real outcomes; synthetic/simulator-only performance
+is engineering diagnostic evidence and cannot justify architectural promotion
+or commercial readiness. Do not launch new synthetic-only research tranches.
+Past locked protocols and their negative/positive results are preserved
+unchanged. The synthetic SEQ-TRANSFER-006 pilot is not a real-world capability
+gate. Begin SCANIA Component X real-truck prospective risk evaluation with
+publisher-held-out vehicle splits and appropriate survival/cost baselines.
+
+**Mandatory equal-resource comparison gate:** Before launching ANY comparative
+trained-model experiment, preregister a parity manifest under the
+[hard comparison contract](../REAL-WORLD-EVIDENCE-RULES.md#compulsory-architecture-comparison-contract-hard-gate):
+matched trainable parameters (exact or <=1% preregistered tolerance), identical
+real-world data/feature/target/split and exposure, equal charged training
+compute AND optimizer budgets, equal validation/tuning privileges/seeds and
+identical held-out evaluation. Audit allocated and consumed resources for EVERY
+arm; a failure invalidates architectural superiority claims. Report
+parameter-free persistence/constant policy baselines separately, never inflate
+their parameters to manufacture equality.
+
+
 Apply the experimental cadence of https://github.com/karpathy/autoresearch
 (reference commit 228791fb499afffb54b46200aca536f79142f117) to the existing
 TAC-OSM research program. The objective remains usable causal memory with

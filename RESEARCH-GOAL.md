@@ -1,5 +1,23 @@
 # Active research goal
 
+**New permanent research evidence rule:** only real-world collected training
+and held-out evaluation can establish TAC-OSM model capability or justify new
+architecture claims. Synthetic worlds, generated tasks, simulations and their
+successful pilots remain diagnostic tests only and never establish real-world
+performance. The governing protocol and selected real SCANIA dataset are in
+[research/REAL-WORLD-EVIDENCE-RULES.md](research/REAL-WORLD-EVIDENCE-RULES.md).
+Older results and locked protocols remain historical evidence, not current
+promotion targets.
+
+**Compulsory architecture comparison rule:** Any comparative claim for trained
+architectures MUST match real data/splits/exposure, total trainable parameters
+(within preregistered <=1% when exact equality is impossible), full training
+compute/update and tuning budgets, seeds and test contract. A failed parity
+check blocks architectural superiority, even if TAC-OSM scores higher. The
+[mandatory audit contract](research/REAL-WORLD-EVIDENCE-RULES.md#compulsory-architecture-comparison-contract-hard-gate)
+is governing; simple zero-parameter baselines remain separate reference checks.
+
+
 Build a reliable learned maintenance model that earns its complexity on real
 sensing and verified action outcomes. Status: **ACTIVE; NOT COMMERCIAL-QUALIFIED**.
 
