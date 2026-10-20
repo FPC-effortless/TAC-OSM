@@ -14,6 +14,9 @@ concurrency:
   cancel-in-progress: true
 jobs:
   once-frozen-future:
+    # First genuine exposure succeeded on original source SHA below.
+    # Further PR notes must not rescore April 2020 period again.
+    if: github.event.pull_request.head.sha == '71ffa66af9dbf42c4138513ffb85088b420f65a2'
     runs-on: ubuntu-latest
     timeout-minutes: 100
     steps:
