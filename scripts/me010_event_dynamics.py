@@ -99,5 +99,5 @@ def physical_event_metrics(model,details,target,threshold):
             "event_ece_10_bins":float(sum(
                 (mask.float().mean()*abs(p[mask].mean()-event.float()[mask].mean())).item()
                 for index in range(10)
-                for mask in [((p>=index/10)&(p<(index+1)/10))] if bool(mask.any()))})
+                for mask in [((p>=index/10)&(p<(index+1)/10))] if bool(mask.any())))})
     return metrics
