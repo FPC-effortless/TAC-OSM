@@ -7,7 +7,7 @@ import argparse,hashlib,json,os,pathlib,time,traceback
 import numpy as np
 SENSORS=12;TP3_INDEX=1;N_EVAL=24;N_TAB_CONTEXT=64
 TIMESFM_ID='google/timesfm-3.0-pytorch'
-TABFM_ID='google/tabfm-1.1.0-pytorch'
+TABFM_ID='google/tabfm-1.0.0-pytorch'
 
 def digest(path):
     h=hashlib.sha256()
@@ -111,7 +111,7 @@ def fm3(root):
 
 def tabfm(root):
     import pandas as pd
-    from tabfm import TabFMRegressor,tabfm_v1_1_0_pytorch
+    from tabfm import TabFMRegressor,tabfm_v1_0_0_pytorch
     p=pathlib.Path(root);d=np.load(p/'fixed-inputs.npz')
     Xtr=d['train_x'][:,:,:SENSORS];Xte=d['eval_x'][:,:,:SENSORS]
     Ytr=d['train_y'];Yte=d['eval_y']
@@ -120,7 +120,7 @@ def tabfm(root):
     test=pd.DataFrame(Xte.reshape(len(Xte),-1),columns=train.columns,dtype=np.float32)
     import torch
     torch.set_num_threads(2)
-    model=tabfm_v1_1_0_pytorch.load(model_type='regression')
+    model=tabfm_v1_0_0_pytorch.load(model_type='regression')
     pred=[]
     t0=time.perf_counter()
     for j in range(2):
@@ -134,10 +134,10 @@ def tabfm(root):
         **metrics(preds,Yte),'inference_cpu_seconds':round(time.perf_counter()-t0,3),
         'training_context_rows':len(Xtr),'flattened_sensor_features':Xtr.shape[1]*Xtr.shape[2],
         'per_horizon_refit_of_context_encoder':True}
-    write_json(p/'tabfm11-results.json',result);print(json.dumps(result),flush=True)
+    write_json(p/'tabfm10-results.json',result);print(json.dumps(result),flush=True)
 
 def main():
-    q=argparse.ArgumentParser();q.add_argument('--stage',choices=('pack','timesfm3','tabfm11'),required=True)
+    q=argparse.ArgumentParser();q.add_argument('--stage',choices=('pack','timesfm3','tabfm10'),required=True)
     q.add_argument('--original',default='.');q.add_argument('--out',default='results/bench-fm-001');a=q.parse_args()
     if a.stage=='pack':pack(a.original,a.out)
     elif a.stage=='timesfm3':fm3(a.out)
