@@ -1096,3 +1096,15 @@ teacher-gain/calibration PASS. Teacher has no S fitting, so this is not isolated
 memory information value. Previously used FIT/user separation, not independent
 or out-of-time qualification; compute parity unqualified. No architecture promoted.
 [Full evidence and limits](../research/mathematical-engineering/me032/RESULTS.md).
+
+### ME033 — semantic adaptation negative gates; exact frozen-table storage win
+
+54new real-data fits: common-only S adaptation strongest Brier.161558311; history
+frozen.162330508,history adapted.163599877,native adapted.166925030. Embedding updates
+worsen both factorial pathways in all3pooled seeds; history/native candidate gates
+FAIL. Frozen extra latents are functions of existing common features. Reused FIT,
+unequal freeze/adapt trainable counts/compute; no new architecture qualification.
+Component sum/count APIs verified on real prefixes; no full48byte forecast claim.
+Separate exact immutable-table sharing saves512000tensor-weight bytes/model,
+all18eligible checkpoints/64656forecasts unchanged.953tests+12subtests pass.
+[Evidence and limitations](../research/mathematical-engineering/me033/RESULTS.md).

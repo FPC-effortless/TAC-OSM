@@ -119,3 +119,27 @@ freeze/unfreeze embedding controls. The R teacher's lack of S fitting is not
 proof of memory value. No post-hoc fit is added to ME032. Only after useful native
 state is established should fixed-capacity learned summaries, compression,
 hierarchy or adaptive reasoning advance. Existing plan hypotheses remain intact.
+
+## ME033 completion — semantic adaptation isolated; exact storage optimization
+
+54new fits test history/query identity path x frozen/adapted item embeddings,
+plus native/common adaptation controls. Common-head-only S adaptation is strongest
+(Brier.161558311); history frozen.162330508,history adapted.163599877,native adapted
+.166925030. Updating embeddings worsens BOTH factorial paths in all3pooled seeds.
+History/native candidate gates and adaptation-specific interaction fail. Frozen
+latents are reconstructable from existing C, so their gain is finite readout
+fitting, not additional ideal historical information. See
+[verified results](mathematical-engineering/me033/RESULTS.md).
+
+Component moment states are48/16float32bytes, checkpoint-fixed; their sums/counts
+compose and reproduce real prefix forecasts within1.19e-7. They are not full
+forecast state, and embedding updates invalidate sums. A separate no-fit exact
+storage wrapper shares identical frozen item tables:512000tensor-weight bytes
+saved per eligible model, all18models/64656forecasts bit exact. This is storage
+engineering, not native predictive superiority or model promotion.
+
+Next unexecuted native optimization: freeze the R-pretrained input embedding while
+learning native dynamics/readout, with strong common-only S adaptation included.
+ME033 did not fit native_frozen. Separate registration before fitting; no post-hoc
+addition. New independent/out-of-time qualification and state-value gates remain
+necessary before compression,hierarchy or adaptive reasoning.
