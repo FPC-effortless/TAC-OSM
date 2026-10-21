@@ -1,0 +1,2345 @@
+{
+  "interpretation": "matrix FLOP lower bounds; unsupported/opaque operations retained; NOT full compute parity",
+  "models": {
+    "gru": {
+      "all_operations_counted": false,
+      "fit_windows": 8,
+      "forward_and_backward": true,
+      "full_training_FLOPs_measured": false,
+      "operations": [
+        {
+          "calls": 1121,
+          "operator": "aten::slice",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3037,
+          "operator": "aten::as_strided",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "prefix_logits",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::embedding",
+          "reported_flops": 0
+        },
+        {
+          "calls": 10,
+          "operator": "aten::reshape",
+          "reported_flops": 0
+        },
+        {
+          "calls": 282,
+          "operator": "aten::view",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::index_select",
+          "reported_flops": 0
+        },
+        {
+          "calls": 319,
+          "operator": "aten::empty",
+          "reported_flops": 0
+        },
+        {
+          "calls": 288,
+          "operator": "aten::select",
+          "reported_flops": 0
+        },
+        {
+          "calls": 262,
+          "operator": "aten::cat",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::new_zeros",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::new_empty",
+          "reported_flops": 0
+        },
+        {
+          "calls": 278,
+          "operator": "aten::zero_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "aten::gru_cell",
+          "reported_flops": 0
+        },
+        {
+          "calls": 264,
+          "operator": "aten::linear",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1319,
+          "operator": "aten::t",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1319,
+          "operator": "aten::transpose",
+          "reported_flops": 0
+        },
+        {
+          "calls": 264,
+          "operator": "aten::addmm",
+          "reported_flops": 9545344
+        },
+        {
+          "calls": 278,
+          "operator": "aten::expand",
+          "reported_flops": 0
+        },
+        {
+          "calls": 879,
+          "operator": "aten::copy_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1853,
+          "operator": "aten::resolve_conj",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "aten::unsafe_chunk",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "aten::unsafe_split",
+          "reported_flops": 0
+        },
+        {
+          "calls": 806,
+          "operator": "aten::narrow",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1301,
+          "operator": "aten::add_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "aten::sigmoid_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 258,
+          "operator": "aten::mul_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 277,
+          "operator": "aten::clone",
+          "reported_flops": 0
+        },
+        {
+          "calls": 153,
+          "operator": "aten::empty_like",
+          "reported_flops": 0
+        },
+        {
+          "calls": 320,
+          "operator": "aten::empty_strided",
+          "reported_flops": 0
+        },
+        {
+          "calls": 152,
+          "operator": "aten::add",
+          "reported_flops": 41965
+        },
+        {
+          "calls": 128,
+          "operator": "aten::tanh_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 132,
+          "operator": "aten::sub",
+          "reported_flops": 0
+        },
+        {
+          "calls": 298,
+          "operator": "aten::sum",
+          "reported_flops": 0
+        },
+        {
+          "calls": 309,
+          "operator": "aten::fill_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 79,
+          "operator": "aten::to",
+          "reported_flops": 0
+        },
+        {
+          "calls": 62,
+          "operator": "aten::_to_copy",
+          "reported_flops": 0
+        },
+        {
+          "calls": 69,
+          "operator": "aten::div",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::arange",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::resize_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 17,
+          "operator": "aten::unsqueeze",
+          "reported_flops": 0
+        },
+        {
+          "calls": 140,
+          "operator": "aten::neg",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::exp2",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::matmul",
+          "reported_flops": 0
+        },
+        {
+          "calls": 531,
+          "operator": "aten::mm",
+          "reported_flops": 19060800
+        },
+        {
+          "calls": 3,
+          "operator": "aten::_unsafe_view",
+          "reported_flops": 0
+        },
+        {
+          "calls": 17,
+          "operator": "aten::mean",
+          "reported_flops": 0
+        },
+        {
+          "calls": 17,
+          "operator": "aten::div_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 14,
+          "operator": "aten::contiguous",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::index",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::_reshape_alias",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::square",
+          "reported_flops": 0
+        },
+        {
+          "calls": 16,
+          "operator": "aten::pow",
+          "reported_flops": 0
+        },
+        {
+          "calls": 16,
+          "operator": "aten::result_type",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::sqrt",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::logit",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::binary_cross_entropy_with_logits",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::log_sigmoid",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::log_sigmoid_forward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::sub_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::lift_fresh",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::detach_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "detach_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 546,
+          "operator": "aten::mul",
+          "reported_flops": 145536
+        },
+        {
+          "calls": 1,
+          "operator": "aten::ones_like",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: MeanBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "MeanBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: SumBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "SumBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 257,
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 257,
+          "operator": "MulBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: BinaryCrossEntropyWithLogitsBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "BinaryCrossEntropyWithLogitsBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::sigmoid",
+          "reported_flops": 0
+        },
+        {
+          "calls": 6,
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 6,
+          "operator": "CatBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 516,
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 516,
+          "operator": "AddBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 264,
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 264,
+          "operator": "AddmmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 264,
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 264,
+          "operator": "TBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "EmbeddingBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::embedding_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::embedding_dense_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 277,
+          "operator": "aten::zeros",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "autograd::engine::evaluate_function: MeanBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "MeanBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: DivBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "DivBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: SqrtBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "SqrtBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: AddBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "AddBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: PowBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "PowBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 140,
+          "operator": "autograd::engine::evaluate_function: SliceBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 140,
+          "operator": "SliceBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 140,
+          "operator": "aten::slice_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "autograd::engine::evaluate_function: SubBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "SubBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "autograd::engine::evaluate_function: TanhBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "TanhBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "aten::tanh_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "autograd::engine::evaluate_function: SigmoidBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "SigmoidBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "aten::sigmoid_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "autograd::engine::evaluate_function: UnsafeSplitBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "UnsafeSplitBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "autograd::engine::evaluate_function: SelectBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "SelectBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "aten::select_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "torch::autograd::AccumulateGrad",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::detach",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "detach",
+          "reported_flops": 0
+        }
+      ],
+      "optimizer_steps": 0,
+      "profiler_reported_flops_lower_bound": 28793645
+    },
+    "mlp": {
+      "all_operations_counted": false,
+      "fit_windows": 8,
+      "forward_and_backward": true,
+      "full_training_FLOPs_measured": false,
+      "operations": [
+        {
+          "calls": 63,
+          "operator": "aten::slice",
+          "reported_flops": 0
+        },
+        {
+          "calls": 178,
+          "operator": "aten::as_strided",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "prefix_logits",
+          "reported_flops": 0
+        },
+        {
+          "calls": 30,
+          "operator": "aten::select",
+          "reported_flops": 0
+        },
+        {
+          "calls": 26,
+          "operator": "aten::sum",
+          "reported_flops": 0
+        },
+        {
+          "calls": 36,
+          "operator": "aten::fill_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "aten::add",
+          "reported_flops": 7065
+        },
+        {
+          "calls": 23,
+          "operator": "aten::to",
+          "reported_flops": 0
+        },
+        {
+          "calls": 22,
+          "operator": "aten::_to_copy",
+          "reported_flops": 0
+        },
+        {
+          "calls": 24,
+          "operator": "aten::empty_strided",
+          "reported_flops": 0
+        },
+        {
+          "calls": 50,
+          "operator": "aten::copy_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 21,
+          "operator": "aten::div",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::arange",
+          "reported_flops": 0
+        },
+        {
+          "calls": 47,
+          "operator": "aten::empty",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::resize_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 17,
+          "operator": "aten::unsqueeze",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::neg",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::exp2",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::matmul",
+          "reported_flops": 0
+        },
+        {
+          "calls": 20,
+          "operator": "aten::mm",
+          "reported_flops": 896512
+        },
+        {
+          "calls": 64,
+          "operator": "aten::resolve_conj",
+          "reported_flops": 0
+        },
+        {
+          "calls": 20,
+          "operator": "aten::clone",
+          "reported_flops": 0
+        },
+        {
+          "calls": 24,
+          "operator": "aten::empty_like",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::embedding",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::reshape",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::_unsafe_view",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::index_select",
+          "reported_flops": 0
+        },
+        {
+          "calls": 23,
+          "operator": "aten::view",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::mean",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::div_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 13,
+          "operator": "aten::contiguous",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::sub",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::index",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::_reshape_alias",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "aten::cat",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::linear",
+          "reported_flops": 0
+        },
+        {
+          "calls": 40,
+          "operator": "aten::t",
+          "reported_flops": 0
+        },
+        {
+          "calls": 40,
+          "operator": "aten::transpose",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::addmm",
+          "reported_flops": 435456
+        },
+        {
+          "calls": 14,
+          "operator": "aten::expand",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::tanh",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::logit",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::binary_cross_entropy_with_logits",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::log_sigmoid",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::log_sigmoid_forward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::sub_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::mul_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::lift_fresh",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::detach_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "detach_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::mul",
+          "reported_flops": 64
+        },
+        {
+          "calls": 1,
+          "operator": "aten::ones_like",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: MeanBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "MeanBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: SumBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "SumBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "MulBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: BinaryCrossEntropyWithLogitsBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "BinaryCrossEntropyWithLogitsBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::sigmoid",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "CatBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 28,
+          "operator": "aten::narrow",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "AddBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "AddmmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "TBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "autograd::engine::evaluate_function: TanhBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "TanhBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::tanh_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "EmbeddingBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::embedding_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::embedding_dense_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::zeros",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::zero_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "autograd::engine::evaluate_function: MeanBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "MeanBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 15,
+          "operator": "aten::add_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "torch::autograd::AccumulateGrad",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "aten::detach",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "detach",
+          "reported_flops": 0
+        }
+      ],
+      "optimizer_steps": 0,
+      "profiler_reported_flops_lower_bound": 1339097
+    },
+    "tac": {
+      "all_operations_counted": false,
+      "fit_windows": 8,
+      "forward_and_backward": true,
+      "full_training_FLOPs_measured": false,
+      "operations": [
+        {
+          "calls": 2398,
+          "operator": "aten::slice",
+          "reported_flops": 0
+        },
+        {
+          "calls": 6466,
+          "operator": "aten::as_strided",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "prefix_logits",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::embedding",
+          "reported_flops": 0
+        },
+        {
+          "calls": 10,
+          "operator": "aten::reshape",
+          "reported_flops": 0
+        },
+        {
+          "calls": 534,
+          "operator": "aten::view",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::index_select",
+          "reported_flops": 0
+        },
+        {
+          "calls": 700,
+          "operator": "aten::empty",
+          "reported_flops": 0
+        },
+        {
+          "calls": 288,
+          "operator": "aten::select",
+          "reported_flops": 0
+        },
+        {
+          "calls": 390,
+          "operator": "aten::cat",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::new_zeros",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::new_empty",
+          "reported_flops": 0
+        },
+        {
+          "calls": 659,
+          "operator": "aten::zero_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 644,
+          "operator": "aten::linear",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3219,
+          "operator": "aten::t",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3219,
+          "operator": "aten::transpose",
+          "reported_flops": 0
+        },
+        {
+          "calls": 516,
+          "operator": "aten::addmm",
+          "reported_flops": 11933312
+        },
+        {
+          "calls": 530,
+          "operator": "aten::expand",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1512,
+          "operator": "aten::copy_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4513,
+          "operator": "aten::resolve_conj",
+          "reported_flops": 0
+        },
+        {
+          "calls": 132,
+          "operator": "aten::matmul",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1419,
+          "operator": "aten::mm",
+          "reported_flops": 30167296
+        },
+        {
+          "calls": 923,
+          "operator": "aten::add",
+          "reported_flops": 51123
+        },
+        {
+          "calls": 256,
+          "operator": "aten::tanh",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1318,
+          "operator": "aten::narrow",
+          "reported_flops": 0
+        },
+        {
+          "calls": 257,
+          "operator": "aten::sigmoid",
+          "reported_flops": 0
+        },
+        {
+          "calls": 524,
+          "operator": "aten::neg",
+          "reported_flops": 0
+        },
+        {
+          "calls": 335,
+          "operator": "aten::to",
+          "reported_flops": 0
+        },
+        {
+          "calls": 318,
+          "operator": "aten::_to_copy",
+          "reported_flops": 0
+        },
+        {
+          "calls": 320,
+          "operator": "aten::empty_strided",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1568,
+          "operator": "aten::mul",
+          "reported_flops": 267904
+        },
+        {
+          "calls": 550,
+          "operator": "aten::sum",
+          "reported_flops": 0
+        },
+        {
+          "calls": 561,
+          "operator": "aten::fill_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 69,
+          "operator": "aten::div",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::arange",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::resize_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 17,
+          "operator": "aten::unsqueeze",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::exp2",
+          "reported_flops": 0
+        },
+        {
+          "calls": 21,
+          "operator": "aten::clone",
+          "reported_flops": 0
+        },
+        {
+          "calls": 25,
+          "operator": "aten::empty_like",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::_unsafe_view",
+          "reported_flops": 0
+        },
+        {
+          "calls": 17,
+          "operator": "aten::mean",
+          "reported_flops": 0
+        },
+        {
+          "calls": 17,
+          "operator": "aten::div_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 14,
+          "operator": "aten::contiguous",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::sub",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::index",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::_reshape_alias",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::square",
+          "reported_flops": 0
+        },
+        {
+          "calls": 16,
+          "operator": "aten::pow",
+          "reported_flops": 0
+        },
+        {
+          "calls": 16,
+          "operator": "aten::result_type",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::sqrt",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::logit",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::binary_cross_entropy_with_logits",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::log_sigmoid",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::log_sigmoid_forward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::sub_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::mul_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::lift_fresh",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::detach_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "detach_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::ones_like",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: MeanBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "MeanBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: SumBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "SumBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 513,
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 513,
+          "operator": "MulBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: BinaryCrossEntropyWithLogitsBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "BinaryCrossEntropyWithLogitsBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 390,
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 390,
+          "operator": "CatBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 388,
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 388,
+          "operator": "AddBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 516,
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 516,
+          "operator": "AddmmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 644,
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 644,
+          "operator": "TBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "EmbeddingBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::embedding_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::embedding_dense_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 658,
+          "operator": "aten::zeros",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "autograd::engine::evaluate_function: MeanBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "MeanBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2180,
+          "operator": "aten::add_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: DivBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "DivBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: SqrtBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "SqrtBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 264,
+          "operator": "autograd::engine::evaluate_function: AddBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 264,
+          "operator": "AddBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: PowBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "PowBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 521,
+          "operator": "autograd::engine::evaluate_function: SliceBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 521,
+          "operator": "SliceBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 521,
+          "operator": "aten::slice_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "autograd::engine::evaluate_function: TanhBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "TanhBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "aten::tanh_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "autograd::engine::evaluate_function: NegBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "NegBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "autograd::engine::evaluate_function: SigmoidBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "SigmoidBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 256,
+          "operator": "aten::sigmoid_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "autograd::engine::evaluate_function: MmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "MmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "autograd::engine::evaluate_function: SelectBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "SelectBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 128,
+          "operator": "aten::select_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "torch::autograd::AccumulateGrad",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "aten::detach",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "detach",
+          "reported_flops": 0
+        }
+      ],
+      "optimizer_steps": 0,
+      "profiler_reported_flops_lower_bound": 42419635
+    },
+    "transformer": {
+      "all_operations_counted": false,
+      "fit_windows": 8,
+      "forward_and_backward": true,
+      "full_training_FLOPs_measured": false,
+      "operations": [
+        {
+          "calls": 123,
+          "operator": "aten::slice",
+          "reported_flops": 0
+        },
+        {
+          "calls": 370,
+          "operator": "aten::as_strided",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "prefix_logits",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::embedding",
+          "reported_flops": 0
+        },
+        {
+          "calls": 48,
+          "operator": "aten::reshape",
+          "reported_flops": 0
+        },
+        {
+          "calls": 90,
+          "operator": "aten::view",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::index_select",
+          "reported_flops": 0
+        },
+        {
+          "calls": 155,
+          "operator": "aten::empty",
+          "reported_flops": 0
+        },
+        {
+          "calls": 52,
+          "operator": "aten::select",
+          "reported_flops": 0
+        },
+        {
+          "calls": 6,
+          "operator": "aten::cat",
+          "reported_flops": 0
+        },
+        {
+          "calls": 14,
+          "operator": "aten::linear",
+          "reported_flops": 0
+        },
+        {
+          "calls": 70,
+          "operator": "aten::t",
+          "reported_flops": 0
+        },
+        {
+          "calls": 124,
+          "operator": "aten::transpose",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "aten::addmm",
+          "reported_flops": 9803392
+        },
+        {
+          "calls": 26,
+          "operator": "aten::expand",
+          "reported_flops": 0
+        },
+        {
+          "calls": 153,
+          "operator": "aten::copy_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 106,
+          "operator": "aten::resolve_conj",
+          "reported_flops": 0
+        },
+        {
+          "calls": 22,
+          "operator": "aten::unsqueeze",
+          "reported_flops": 0
+        },
+        {
+          "calls": 23,
+          "operator": "aten::add",
+          "reported_flops": 82035
+        },
+        {
+          "calls": 1,
+          "operator": "aten::ones",
+          "reported_flops": 0
+        },
+        {
+          "calls": 76,
+          "operator": "aten::fill_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::triu",
+          "reported_flops": 0
+        },
+        {
+          "calls": 7,
+          "operator": "aten::is_floating_point",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::zeros_like",
+          "reported_flops": 0
+        },
+        {
+          "calls": 52,
+          "operator": "aten::empty_like",
+          "reported_flops": 0
+        },
+        {
+          "calls": 67,
+          "operator": "aten::empty_strided",
+          "reported_flops": 0
+        },
+        {
+          "calls": 47,
+          "operator": "aten::zero_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::masked_fill_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::full",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::eq",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::all",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::item",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::_local_scalar_dense",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "aten::layer_norm",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "aten::native_layer_norm",
+          "reported_flops": 0
+        },
+        {
+          "calls": 6,
+          "operator": "aten::matmul",
+          "reported_flops": 0
+        },
+        {
+          "calls": 45,
+          "operator": "aten::clone",
+          "reported_flops": 0
+        },
+        {
+          "calls": 23,
+          "operator": "aten::_unsafe_view",
+          "reported_flops": 0
+        },
+        {
+          "calls": 34,
+          "operator": "aten::mm",
+          "reported_flops": 29069568
+        },
+        {
+          "calls": 37,
+          "operator": "aten::add_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::unflatten",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::squeeze",
+          "reported_flops": 0
+        },
+        {
+          "calls": 20,
+          "operator": "aten::contiguous",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::scaled_dot_product_attention",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::_scaled_dot_product_flash_attention_for_cpu",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::permute",
+          "reported_flops": 0
+        },
+        {
+          "calls": 6,
+          "operator": "aten::dropout",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::gelu",
+          "reported_flops": 0
+        },
+        {
+          "calls": 48,
+          "operator": "aten::sum",
+          "reported_flops": 0
+        },
+        {
+          "calls": 79,
+          "operator": "aten::to",
+          "reported_flops": 0
+        },
+        {
+          "calls": 62,
+          "operator": "aten::_to_copy",
+          "reported_flops": 0
+        },
+        {
+          "calls": 69,
+          "operator": "aten::div",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::arange",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::resize_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "aten::neg",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::exp2",
+          "reported_flops": 0
+        },
+        {
+          "calls": 17,
+          "operator": "aten::mean",
+          "reported_flops": 0
+        },
+        {
+          "calls": 17,
+          "operator": "aten::div_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::sub",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::index",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::_reshape_alias",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::square",
+          "reported_flops": 0
+        },
+        {
+          "calls": 16,
+          "operator": "aten::pow",
+          "reported_flops": 0
+        },
+        {
+          "calls": 16,
+          "operator": "aten::result_type",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "aten::sqrt",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "aten::logit",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::binary_cross_entropy_with_logits",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::log_sigmoid",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::log_sigmoid_forward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 3,
+          "operator": "aten::sub_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::mul_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::lift_fresh",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::detach_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "detach_",
+          "reported_flops": 0
+        },
+        {
+          "calls": 34,
+          "operator": "aten::mul",
+          "reported_flops": 6272
+        },
+        {
+          "calls": 1,
+          "operator": "aten::ones_like",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: MeanBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "MeanBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: SumBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "SumBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: MulBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "MulBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "autograd::engine::evaluate_function: BinaryCrossEntropyWithLogitsBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "BinaryCrossEntropyWithLogitsBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 1,
+          "operator": "aten::sigmoid",
+          "reported_flops": 0
+        },
+        {
+          "calls": 6,
+          "operator": "autograd::engine::evaluate_function: CatBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 6,
+          "operator": "CatBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 38,
+          "operator": "aten::narrow",
+          "reported_flops": 0
+        },
+        {
+          "calls": 11,
+          "operator": "autograd::engine::evaluate_function: AddBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 11,
+          "operator": "AddBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "autograd::engine::evaluate_function: AddmmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "AddmmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 14,
+          "operator": "autograd::engine::evaluate_function: TBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 14,
+          "operator": "TBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "autograd::engine::evaluate_function: EmbeddingBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "EmbeddingBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::embedding_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 9,
+          "operator": "aten::embedding_dense_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 41,
+          "operator": "aten::zeros",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "autograd::engine::evaluate_function: MeanBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "MeanBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: DivBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "DivBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: SqrtBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "SqrtBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: AddBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "AddBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "autograd::engine::evaluate_function: PowBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 8,
+          "operator": "PowBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 16,
+          "operator": "autograd::engine::evaluate_function: SliceBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 16,
+          "operator": "SliceBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 16,
+          "operator": "aten::slice_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 10,
+          "operator": "autograd::engine::evaluate_function: SelectBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 10,
+          "operator": "SelectBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 10,
+          "operator": "aten::select_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 33,
+          "operator": "autograd::engine::evaluate_function: torch::autograd::AccumulateGrad",
+          "reported_flops": 0
+        },
+        {
+          "calls": 33,
+          "operator": "torch::autograd::AccumulateGrad",
+          "reported_flops": 0
+        },
+        {
+          "calls": 33,
+          "operator": "aten::detach",
+          "reported_flops": 0
+        },
+        {
+          "calls": 33,
+          "operator": "detach",
+          "reported_flops": 0
+        },
+        {
+          "calls": 30,
+          "operator": "autograd::engine::evaluate_function: ViewBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 30,
+          "operator": "ViewBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "autograd::engine::evaluate_function: NativeLayerNormBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "NativeLayerNormBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 5,
+          "operator": "aten::native_layer_norm_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "autograd::engine::evaluate_function: GeluBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "GeluBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::gelu_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "autograd::engine::evaluate_function: TransposeBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 12,
+          "operator": "TransposeBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "autograd::engine::evaluate_function: PermuteBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "PermuteBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "autograd::engine::evaluate_function: ScaledDotProductFlashAttentionForCpuBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "ScaledDotProductFlashAttentionForCpuBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "aten::_scaled_dot_product_flash_attention_for_cpu_backward",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "autograd::engine::evaluate_function: CloneBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "CloneBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "autograd::engine::evaluate_function: SqueezeBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "SqueezeBackward1",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "autograd::engine::evaluate_function: UnsqueezeBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "UnsqueezeBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "autograd::engine::evaluate_function: UnsafeViewBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 4,
+          "operator": "UnsafeViewBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "autograd::engine::evaluate_function: MmBackward0",
+          "reported_flops": 0
+        },
+        {
+          "calls": 2,
+          "operator": "MmBackward0",
+          "reported_flops": 0
+        }
+      ],
+      "optimizer_steps": 0,
+      "profiler_reported_flops_lower_bound": 38961267
+    }
+  }
+}

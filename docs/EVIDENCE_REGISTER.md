@@ -386,3 +386,15 @@ See [ME024 results](../research/mathematical-engineering/me024/RESULTS.md) and
 
 See [ME026 mathematics](../research/mathematical-engineering/me026/MATHEMATICS.md)
 and [results](../research/mathematical-engineering/me026/RESULTS.md).
+
+## ME027 learned-state value / training-resource curves
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Twelve fits, parameter counts 134907–135125, shared 26-channel causal features, all primary CPU spends 20.000041–20.129685s | L2 | separate controlled resource lanes | measured fixed-step and charged-CPU learning dynamics | simultaneous exposure/compute parity or optimal tuned architecture ranking | step lane compute differs; CPU lane examples differ; full FLOPs/energy unestablished |
+| TAC primary mean Brier contrast −.007219302, but state-mean replacement improves one seed; registered gate FAIL | L2 | negative state-use consistency result | useful native state is not consistently demonstrated by the declared guard | native state has zero information or causal intervention benefit | OOD feature replacement; repeated DEV; conditional bootstrap cannot repair reuse |
+| Feature MLP at 50 updates .164508 versus TAC .186103; forced CPU20 MLP degrades to .174862 | L2 | learning/readout allocation diagnostic | fast feature learning and later overtraining are material bottlenecks | pure on/off learned-state causal effect | MLP nonlinear readout differs from additive recurrent head; learned embeddings differ |
+| All 72 budget paths replay 428544 forecasts exactly; twelve primary exports replay 71424; active causality/GRU/native identity pass | L1 | mathematical and artifact integrity | implemented equations, saved weights/optimizer/sample-stream integrity | independent predictive generalization or SSM/LLM capability | frozen original source/cohort; no sealed outcomes; profiler counts remain lower bounds |
+
+See [ME027 mathematics](../research/mathematical-engineering/me027/MATHEMATICS.md)
+and [resource results](../research/mathematical-engineering/me027/RESULTS.md).

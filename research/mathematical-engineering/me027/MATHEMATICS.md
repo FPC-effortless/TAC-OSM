@@ -54,3 +54,39 @@ windows. Transformer full-window attention uses quadratic working activations;
 no KV-cache implementation is benchmarked. Training BPTT/attention working
 memory is distinct from persistent hidden state. Profiler matrix FLOP subtotals
 omit opaque kernels/nonlinearities and cannot certify a full compute match.
+
+## What would establish additional predictive state information?
+
+Interpretation addendum; no fitting rule or gate changes. Define C at the raw
+observable level: offered item/duration, causal prior, fixed rate summaries,
+FIT popularity, prior-item histogram and metadata means. Each fitted model
+projects that histogram through its own learned item embedding, so the 26
+feature **channels** are shared but their learned numerical values need not
+match after training. Let H be one frozen model's learned ordered-history state.
+For the true response distribution, write
+
+```
+m0(C)   = E[Y | C]
+m1(C,H) = E[Y | C,H]
+R0* - R1* = E[(m1(C,H)-m0(C))^2] >= 0
+```
+
+Here R0* and R1* are the corresponding Bayes-optimal Brier risks. This follows
+from the conditional-variance decomposition and defines additional predictive
+information; it is unrelated to intervention identification. For finite trained
+readouts f0(C), f1(C,H):
+
+```
+R(f0) - R(f1) = (R0* - R1*)
+               + E[(f0-m0)^2] - E[(f1-m1)^2]
+```
+
+Thus observed score differences mix information with representation, readout,
+estimation and optimization error. At CPU checkpoints, exposure also differs.
+The MLP has a nonlinear common-feature head while the recurrent arms have
+linear additive state/common heads; this is a genuine allocation difference,
+not a controlled switch that removes state from an otherwise identical model.
+Neither this experiment nor mean-feature replacement estimates the Bayes
+information term in isolation. It can locate practical failures and guide a
+subsequent native readout intervention, but cannot identify intrinsic state
+utility or a causal memory effect from a favorable CPU score alone.
