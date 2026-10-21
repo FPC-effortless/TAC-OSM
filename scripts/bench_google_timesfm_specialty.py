@@ -138,8 +138,9 @@ def train_eval(out):
             cpu=time.process_time()-t
             ck=out/f"{name}-{seed}.pt"
             torch.save({"weights":model.state_dict(),"seed":seed,"name":name,"updates":SHARED_UPDATES,"source_sha256":meta["source_sha256"]},ck)
-            with torch.inference_mode():
-                model.eval();p=torch.cat([model(xt[i:i+24]) for i in range(0,len(xt),24)]).numpy()
+            model.eval()
+            with torch.no_grad():
+                p=torch.cat([model(xt[i:i+24]) for i in range(0,len(xt),24)]).numpy()
             result["models"][f"{name}-{seed}"]={**score(p,test),"training_cpu_seconds":cpu,
                 "n_parameters":sum(t.numel() for t in model.parameters()),
                 "checkpoint_sha256":hashlib.sha256(ck.read_bytes()).hexdigest()}
