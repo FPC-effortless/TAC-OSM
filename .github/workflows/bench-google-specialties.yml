@@ -53,7 +53,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: bench-fm-002-native-timeseries-original
-          path: results/bench-fm-002/timeseries
+          path: .
       - name: Official TimesFM3 on 96h shared and 512h preferred contexts
         continue-on-error: true
         run: |
@@ -112,7 +112,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: bench-fm-002-native-tabular-original
-          path: results/bench-fm-002/tabular
+          path: .
       - name: Official pretrained TabFM on original mixed columns/few-shot labels
         continue-on-error: true
         run: |
