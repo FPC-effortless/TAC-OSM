@@ -431,3 +431,16 @@ Native conditional beats R teacher, fails both trained-control gates; no candida
 paths/161640forecasts exact;27fresh pipelines/108forecasts exact. Same original
 FIT/source boundaries, no DEV scores or new reserved cohort. Actual compute not
 fully matched; S-adaptation remains a confound of teacher-only gain. No promotion.
+
+### ME033 — history/query x item-embedding adaptation,2026-10-21
+
+Source/protocol freezebf297d9;54new300-step fits, same10776FIT windows/376users,
+3rotationsx3seeds; all frozen before scores. Both candidate gates and interaction
+flag FAIL. New common-only S reference strongest; no native frozen-embedding fit.
+54checkpoints/193968forecasts and63export/reference paths/226296forecasts exact;
+54fresh pipelines/216forecasts exact.36trained moment components reproduce2304real
+prefix forecasts within1.19e-7; frozen latents reconstruct from C within7.15e-7.
+Post-fit no-training table sharing removes512000tensor-weight bytes/model with
+18paths/64656forecasts exact.953tests+12subtests. No DEV score, new reserved cohort,
+full parity claim,promotion or deployment.
+[Full evidence](../research/mathematical-engineering/me033/RESULTS.md).

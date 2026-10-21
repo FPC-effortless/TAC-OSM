@@ -76,3 +76,26 @@ def test_prefix_noninterference_after_training_path_activated(arm):
         i=items.clone();m=meta.clone();i[:,k:]=torch.randint(16000,i[:,k:].shape)
         m[:,k:]=torch.rand_like(m[:,k:])
         torch.testing.assert_close(model(i,m,offered,ctx)[:,j],original[:,j],rtol=0,atol=1e-6)
+
+
+@pytest.mark.parametrize('arm',['history_frozen','query_frozen'])
+def test_shared_frozen_runtime_preserves_forecast_and_removes_duplicate_table(arm):
+    from tac_osm.me032_conditional_memory import FrozenContext
+    from tac_osm.me033_shared_runtime import SharedFrozenForecaster
+    items,meta,offered=data();emb=torch.randn(16000,8)
+    context=FrozenContext(emb,.5,.2,torch.full((16000,),.4),torch.zeros(26),torch.ones(26))
+    student=build_model(arm,CommonHead().state_dict(),emb,33)
+    with torch.no_grad():student.correction.output.weight.normal_();student.correction.direct.weight.normal_()
+    action=offered[:,-1];duration=torch.rand(2,1)
+    shared=SharedFrozenForecaster(context,student)
+    # The constructor leaves originals distinct and preserves the caller's weights.
+    assert context.emb.weight.data_ptr()!=student.memory.emb.weight.data_ptr()
+    assert shared.context.emb.weight.data_ptr()==shared.student.memory.emb.weight.data_ptr()
+    assert sum(p.numel() for p in shared.parameters())==137977
+    original_count=sum(p.numel() for p in context.parameters())+sum(p.numel() for p in student.parameters())
+    assert original_count==265977 and (original_count-137977)*4==512000
+    expected=student(items,meta,offered,context(items,meta,action,duration))
+    assert torch.equal(shared(items,meta,action,duration),expected)
+    assert torch.equal(torch.jit.script(shared)(items,meta,action,duration),expected)
+    with torch.no_grad():student.memory.emb.weight[0,0]+=1
+    with pytest.raises(ValueError):SharedFrozenForecaster(context,student)
