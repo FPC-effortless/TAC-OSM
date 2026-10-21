@@ -56,5 +56,37 @@ def run(out):
         'new_fits':0,'default_backend_changed':False}
     save(out/'inference.json',result);print(json.dumps({k:v for k,v in result.items() if k!='rows'}),flush=True)
 
+@torch.no_grad()
+def verify(out):
+    out=Path(out);receipt=json.loads((out/'inference.json').read_text())
+    assert receipt['status']=='EXACT_REPLAY_PASS' and len(receipt['rows'])==16
+    report=json.loads((out/'results.json').read_text());values=0
+    for domain,data in report['domains'].items():
+        mod=DOMAINS[domain];z,_=mod.get_source(out/domain)
+        for row in data['fits']:
+            if row['arm']!='pyramid_native':continue
+            item=next(v for v in receipt['rows'] if all(v[k]==row[k] for k in ('horizon','seed','lane')) and v['domain']==domain)
+            artifact=out/item['export'];assert sha(artifact)==item['sha256']
+            cp=out/domain/row['checkpoint'];assert sha(cp)==row['checkpoint_sha256']
+            net=build_model(row['arm'],row['horizon'],row['seed'],period(domain))
+            net.load_state_dict(torch.load(cp,weights_only=True)['state_dict'])
+            net.branch=torch.jit.load(str(artifact));net.eval()
+            with np.load(cp.parent/'DEV.npz') as saved:
+                ps=[];qs=[];cs=[];ix=saved['origin']
+                for j in range(0,len(ix),16):
+                    x,_=mod.samples(z,ix[j:j+16],row['horizon'])
+                    p,q,c=predict(net,x);ps.append(p.numpy());qs.append(q.numpy());cs.append(c.numpy())
+                actual=np.concatenate(ps)
+                assert np.array_equal(actual,saved['pred'])
+                assert np.array_equal(np.concatenate(cs),saved['cheap'])
+                assert np.array_equal(np.concatenate(qs),saved['q'])
+                values+=actual.size
+    result={'status':'PASS','original_compiled_exports':16,'forecast_scalars_exact':values,'new_fits':0}
+    save(out/'compiled-replay.json',result);print(json.dumps(result),flush=True)
+
+
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--out',required=True);a=p.parse_args();run(a.out)
+    p=argparse.ArgumentParser();p.add_argument('--out',required=True)
+    p.add_argument('--verify-only',action='store_true');a=p.parse_args()
+    if a.verify_only:verify(a.out)
+    else:run(a.out)

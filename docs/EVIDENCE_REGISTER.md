@@ -594,3 +594,25 @@ high-water RSS are recorded. Original ME035B precision failure remains unchanged
 Three-way parameter/data/compute parity is not achieved. No architectural
 superiority, fresh-site qualification, causal decision utility, native streaming
 throughput, adaptive System2 or complete world-model capability is established.
+
+
+### ME044 — original complete-model and exact execution records
+
+See [full results](../research/mathematical-engineering/me044/RESULTS.md) and
+[artifact/restoration contract](../research/mathematical-engineering/me044/ARTIFACT.md).
+Original source/protocol9c961237 preceded all80 real downstream fits; the
+post-fit inference addendum2f272b04 preceded its measurements. Both domains
+remain historical DEV with prior final tests closed. Full original checkpoint,
+optimizer/RNG, loss, source checksum, CPU/wall/RSS and real forecast/truth/trust/
+cheap arrays are delivered in eight lossless indexed repository archives.
+
+Local audit checks80 optimizers,18,032,640 exact full forecasts, truth/gate/cheap
+arrays, float64 metrics and24 original-context weight-retention comparisons.
+Optional16 compiled native exports preserve3,606,528 forecasts and yield1.414x
+paired full-inference CPU speedup. Local1041 tests +12 subtests pass; actual
+remote CI independently restores and replays delivered bytes before its status
+is claimed. No new capability fit occurs during restoration or compilation.
+
+Both per-domain combined predictive gates fail. Registered negative outcomes,
+all practical and matched controls, legacy precision exceptions and full parity
+limitations remain. No independent generalization or architectural superiority.

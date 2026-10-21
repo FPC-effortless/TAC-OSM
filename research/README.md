@@ -15,6 +15,7 @@ runtime change, commercial release or complete predictive-world-model qualificat
 | [ME041](https://github.com/FPC-effortless/TAC-OSM/pull/306) | 88 complete portfolio fits on Tetouan; CDL best at equal updates, context best at equal CPU | No new candidate cleared both gates |
 | [ME042](https://github.com/FPC-effortless/TAC-OSM/pull/307) | 88 cross-domain ETTh1 fits; context/native win different budgets | Historical DEV only; eight treatments failed combined gates |
 | [ME043 / B](mathematical-engineering/me043/RESULTS.md) | 160 authentic complete-model fits; context-seeded conditional native expert and scheduled expert learning | ~2.9x faster training than first adaptive design; cross-domain accuracy gates failed |
+| [ME044](mathematical-engineering/me044/RESULTS.md) | 80 complete fits; separate multiscale native decoder; optional1.414x exact compiled inference | Oil-temp improvement over practical references; combined gates failed |
 
 Historical runtime choices: ME037 remains the preferred recorded candidate for the legacy
 benchmark matrix. ME038 is the newer task-specific native architecture, with a

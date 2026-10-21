@@ -1247,3 +1247,35 @@ high-water RSS are recorded. Original ME035B precision failure remains unchanged
 Three-way parameter/data/compute parity is not achieved. No architectural
 superiority, fresh-site qualification, causal decision utility, native streaming
 throughput, adaptive System2 or complete world-model capability is established.
+
+
+### ME044 — separate multiscale native decoder, completed architecture development
+
+[Results](../research/mathematical-engineering/me044/RESULTS.md),
+[equations](../research/mathematical-engineering/me044/MATHEMATICS.md),
+[original model delivery](../research/mathematical-engineering/me044/ARTIFACT.md).
+Eighty authentic complete-model fits plus eight new FIT-only AR parents train
+separate native/context/GRU multiscale innovations alongside preserved context
+forecasts. All three matched systems use the same16 orthonormal spline/seasonal
+modes and active counts within0.04%; original context and prior scheduled TAC
+are unmatched practical references.
+
+Native fixed1000-update ETTh1 oil-temp MSE0.151925 improves original context
+0.154661 (~1.77%) and previous scheduled TAC0.154419 (~1.62%). Matched GRU
+0.151785 is slightly stronger. Tetouan fixed10-CPU-second native MSE0.102906
+narrowly improves original context0.103030, but matched GRU0.101859 is stronger.
+The registered combined accuracy/horizon/CPU gates fail on both domains.
+These are repeated historical-development point means, not independent evidence
+or statistical superiority. All original predictions and failed candidates remain.
+
+All80 original checkpoint forecasts replay18,032,640 values bit exactly;
+all24 real fixed-update cheap-path comparisons preserve original context weights.
+Native/context/GRU expert clocks are every fourth update; inference always
+executes the new expert. No ME043 conditional-inference or streaming claim.
+Separately registered optional native-branch compilation gives1.413705x full
+forecast CPU speedup on16 frozen native models and preserves3,606,528 forecasts
+exactly. This is execution engineering, not additional model accuracy or training
+throughput. Construction costs are separate; no default backend change.
+
+No full data/parameter/compute parity, fresh qualification, causal action,
+adaptive System2, commercial readiness or merge/promotion is established.

@@ -5,7 +5,8 @@
 > [Architecture-first plan](research/ARCHITECTURE-RESEARCH-PLAN.md) ·
 > [Original trained models and numerical evidence](research/model-artifacts/README.md).
 > ME041/ME042 trained complete native architecture portfolios on two real domains.
-> ME043 develops a context-first, compute-adaptive native innovation model.
+> ME043 trained compute-adaptive models; ME044 develops a separate multiscale
+> native innovation decoder while preserving the strong context predictor.
 > Original model bytes and research evidence remain linked above. Candidates are
 > unmerged/unpromoted; the historical v0.1 scope follows below.
 

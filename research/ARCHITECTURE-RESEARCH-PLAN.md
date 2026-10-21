@@ -4,6 +4,23 @@ This dated addendum preserves the historical roadmap and every failed study.
 It directs native architecture improvement. Standing real-world/parity rules
 remain in force; draft studies are not merged or commercially qualified.
 
+## Active next candidate: ME044 multiscale native innovations
+
+[ME044 protocol](mathematical-engineering/me044/PROTOCOL.md) registers80 complete
+models. Retain the strong original context predictor and train a separate bounded
+native forecast-innovation path, with orthogonal spline/seasonal horizon modes,
+observed-future coefficient supervision and separate gradient clipping. Context
+and GRU controls receive the same basis and matched active capacity. Preserve
+sparse expert learning; the new inference path always executes its expert.
+This is architecture-first predictive engineering, with all final tests closed.
+All80 fits completed. Native oil-temperature fixed-update MSE0.151925 improves
+original context0.154661 and ME043B0.154419, while matched GRU0.151785 remains
+slightly better. Tetouan equal-CPU native0.102906 narrowly improves original
+context0.103030, but matched GRU0.101859 is stronger. Both primary combined
+gates fail. An optional compiled native branch gives1.414x full-forecast CPU
+speedup with exact outputs. Preserve all models and failures; no promotion.
+See [complete results](mathematical-engineering/me044/RESULTS.md).
+
 ## Current direction: complete compute-adaptive models (ME043)
 
 Architecture-first development supersedes the diagnostic prerequisites in the
