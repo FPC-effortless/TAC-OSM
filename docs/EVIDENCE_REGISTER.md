@@ -374,3 +374,15 @@ See [ME023 results](../research/mathematical-engineering/me023/RESULTS.md),
 
 See [ME024 results](../research/mathematical-engineering/me024/RESULTS.md) and
 [validation](../research/mathematical-engineering/me024/VALIDATION.md).
+
+## ME025 evidence closure / ME026 native execution engineering
+
+| Evidence | Layer | Type | What it supports | What it does not support | Required caveat |
+|---|---|---|---|---|---|
+| Nine original ME025 neural fits complete; kernel mean Brier delta −.000070352 fails original gate | L2 | negative predictive intervention | extra fixed summary features did not earn promotion | broad memory-feature impossibility or Transformer superiority | repeated DEV; one seed worsens; full compute parity unknown; MLP reference not replayable |
+| Every native batch-128 compiled/window path is 1.266–1.329× faster than its own eager checkpoint | L1 | equivalent execution optimization | local CPU steady-state inference improvement | training speed, different-hardware throughput, accuracy gain or full-TAC scan | same six frozen checkpoints and work, nine paired repeats; compilation excluded |
+| 35,712 exported native probabilities match original records exactly; 53,568 nine-model replay probabilities within 1.192093e-7 | L1 | artifact/runtime integrity | original fits and derived exports are reproducible within registered tolerances | independent scientific validation or unobserved policy benefit | original source/weights validated before cached labels; no refits or new cohorts |
+| Active nonzero-head causality detects unmasked attention; affine summary identity/composition and normalized impulse derivatives verified | L1 | mathematical falsifiers | software causality checks are nonvacuous; summary segment algebra is correct | associative scan for the nonlinear native state or learned long-memory utility | fixed causal observation summaries only; production fitted implementations unchanged |
+
+See [ME026 mathematics](../research/mathematical-engineering/me026/MATHEMATICS.md)
+and [results](../research/mathematical-engineering/me026/RESULTS.md).

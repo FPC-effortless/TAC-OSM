@@ -1021,3 +1021,25 @@ This supports a development optimization candidate, not independent validation,
 causal memory value, SSM/LLM capability or architectural superiority. Full
 compute parity remains unestablished; reserved outcomes remain closed.
 See [ME024 results](../research/mathematical-engineering/me024/RESULTS.md).
+
+## ME025 / ME026 — feature-head gate rejected; native execution optimized
+
+**STATUS:** original nine ME025 fits complete and audited; kernel accuracy gate
+failed; ME026 equivalent compiled execution passes its local engineering gate.
+**LAYER:** L1/L2 for ME025; L1 execution engineering for ME026.
+
+ME025 kernel-head mean Brier delta −.000070352 fails the all-seed and −.001
+materiality gates. Its tiny Transformer comparison remains descriptive, with
+full compute parity unestablished. The unmatched MLP reference lacks saved
+weights/probabilities and cannot be independently replayed.
+
+ME026 retains all trained weights and achieves 1.266–1.329× faster full-window
+batch-128 CPU inference over all six native checkpoints. All 35,712 native
+exported probabilities match the original records exactly. Nine original neural
+models replay within 1.192093e-7. Active-head causal falsifiers, affine summary
+composition, typed streaming forecasts and six fresh Torch-only processes pass.
+This is no accuracy improvement, kernel-head promotion, full-TAC parallel scan,
+independent validation, Transformer superiority or LLM-scale capability claim.
+No new fits or reserved outcomes were used.
+See [ME025 results](../research/mathematical-engineering/me025/RESULTS.md) and
+[ME026 results](../research/mathematical-engineering/me026/RESULTS.md).
