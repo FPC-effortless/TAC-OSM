@@ -1122,3 +1122,18 @@ not established as the cause of adaptation penalties. No full parity/superiority
 causal utility, promotion or deployment claim. Frozen-table sharing saves512000
 tensor-weight bytes in27eligible models without forecast changes; not full RAM.
 [Results, mathematical limits and stop rule](../research/mathematical-engineering/me034/RESULTS.md).
+
+### ME035/ME035B — implemented native forecasting improvements, development only
+
+Joint trainable prediction/readout, causal normalization, residual slow state
+and multiscale initialization improve ETTh1 multivariate development MSE from
+.497194 to.432309 at equal250updates/18924weights (13.05%, all3seeds). A separately
+registered full-history AR/native composite with32154weights and explicit warm
+starts reaches.369106 versus ridge.370001. This is selected development model
+progress, not an independently qualified/matched-resource architecture win.
+The small ridge edge is not consistent across allseeds.15new neural fits and
+1ridge fit; no KuaiRec reopening, promotion, action-utility or commercial claim.
+983tests+12subtests;509796checkpoint/script forecast values replay exactly.
+Strict initial float32-versus-float64ridge tolerance fails at3values/seed and
+is preserved without relaxing it. Raw-unit deployable research models exported.
+[Implementation, scores, caveats and models](../research/mathematical-engineering/me035/RESULTS.md).

@@ -168,3 +168,34 @@ bytes saved each with exact forecasts. 971tests+12subtests;594279neural forecast
 exact through checkpoint/script/raw pipelines,84897tree forecasts exact. Full
 compute parity remains unqualified despite native/GRU parameter gap0.097% and
 operator-subtotal gaps<1%; no architectural-superiority claim.
+
+## User-directed architecture-first phase — ME035/ME035B
+
+The user's current priority supersedes the proposed diagnostic-first headroom
+sequence: implement and train model improvements now. Use diagnostics only to
+resolve a concrete integration/correctness problem or guide the next fix;
+proving unique state value is not a prerequisite for bounded real-data model
+development. Keep original stopping decisions and qualification boundaries intact.
+
+[ME035/ME035B](mathematical-engineering/me035/RESULTS.md) implements a joint
+trainable prediction path/SwiGLU readout, causal normalization with retained
+level/volatility, residual slow-state updates and multiscale initialization.
+All first-round TAC stages18924weights, same training/exposure. On authentic
+ETTh1 multivariate1/6/24h development forecasting, same250-step MSE improves
+from.497194 to.432309 (13.05%, all3seeds). Following the remaining ridge gap,
+a separately registered second build adds a trainable full-history AR backbone,
+training-only ridge initialization and anchored joint adaptation. The selected
+32154-weight model scores.369106, comparable with ridge.370001; the tiny mean
+edge is not consistent across seeds or independently qualified.
+
+15neural fits+1ridge fit, all attempts/checkpoints retained. The final candidate
+adds capacity and warm-start training; no matched superiority claim. Selected
+raw-unit TorchScript models are available. One strict initial float32/float64
+equivalence tolerance fails by1.41e-7 and remains recorded; all509796checkpoint
+forecast values replay bit-exactly. No promotion/merge or KuaiRec access.
+
+Next engineering should target lower error, efficient normalization/streaming
+and stronger trainable predictive paths, retaining useful components instead of
+requiring another standalone diagnostic study. Allocate new bounded development
+budgets transparently and qualify generalization on separately registered real
+cohorts when advancing a candidate. Do not retune on ME034's closed cohort.

@@ -1,0 +1,29 @@
+/home/agent/.local/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/home/agent/.local/lib/python3.12/site-packages/torch/jit/_serialization.py:176: FutureWarning: `torch.jit.load` is deprecated. Please switch to `torch.export`.
+  warnings.warn(
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/tac-research/scripts/me035b_audit.py", line 91, in <module>
+    else:audit(a.out,a.quick)
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/tac-research/scripts/me035b_audit.py", line 49, in audit
+    if ck['step']==0:np.testing.assert_allclose(a,np.load(parent/'ridge-predictions.npy'),rtol=0,atol=1e-6)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/testing/_private/utils.py", line 1711, in assert_allclose
+    assert_array_compare(compare, actual, desired, err_msg=str(err_msg),
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/site-packages/numpy/testing/_private/utils.py", line 919, in assert_array_compare
+    raise AssertionError(msg)
+AssertionError: 
+Not equal to tolerance rtol=0, atol=1e-06
+
+Mismatched elements: 3 / 9996 (0.03%)
+Max absolute difference among violations: 1.14092473e-06
+Max relative difference among violations: 3.85853271e-07
+ ACTUAL: array([[[ 0.381766, -0.127258,  0.47431 , ..., -0.511688, -2.228759,
+          0.115701],
+        [ 0.456185, -0.258046,  0.488522, ..., -0.016798, -2.087435,...
+ DESIRED: array([[[ 0.381766, -0.127258,  0.47431 , ..., -0.511688, -2.228759,
+          0.115701],
+        [ 0.456186, -0.258046,  0.488522, ..., -0.016798, -2.087434,...
