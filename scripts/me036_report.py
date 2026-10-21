@@ -88,12 +88,16 @@ def run():
         'stride24 validation differ from published recipes. These scores do not '
         'reproduce the published DLinear/PatchTST/iTransformer tables. Weather and '
         'Electricity are authenticated THUML benchmark copies, not raw instrument files. '
-        'Earlier ETT period exposure remains declared; no pristine-population claim.',
+        'Earlier ETT period exposure remains declared; no pristine-population claim. '
+        'Weather contains81training-only-9999codes, one duplicate timestamp and one100-minute '
+        'gap; original rows remain unchanged under the registered benchmark convention. '
+        'Its test targets contain no-9999codes, but training normalization includes them. '
+        'Weather results are sensitive to this source-quality limitation.',
         '', 'Serving still re-encodes the entire normalized96-step window. Twelve patch '
         'updates do not prove an eightfold runtime speedup or constant-time streaming. '
         'Runtime JSON records actual B1 latency and weight/input/output/state bytes. '
-        'Exports take globally standardized inputs; data.json supplies the physical-unit '
-        'conversion statistics. The old ME035B1e-6 equivalence failure remains recorded '
+        'Standardized exports and physical-input exports are both supplied; physical exports '
+        'include training mean/scale buffers and inversion. data.json records those statistics. The old ME035B1e-6 equivalence failure remains recorded '
         'and unchanged; new linear numerical tests use a prospective gamma_n bound.',
         '', 'See summary.json, results.json (per seed), comparison-manifest.json, '
         'frozen.json, replay.json and runtime.json for machine-readable evidence. '

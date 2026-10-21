@@ -24,7 +24,7 @@ def run():
             'minus9999_by_split':{k:int((a[first:last]==-9999).sum()) for k,first,last in
                 [('train',0,tr),('validation',tr,va),('test',va,end)]},
             'benchmark_policy':'Preserve publisher finite sentinel values as preregistered. '
-                'Weather MSE therefore includes missing-value codes and is not an error in physical units.'})
+                'Weather training normalization includes these codes; its test targets contain none in this source. Standardized benchmark MSE is not error in physical units.'})
     base.dump(base.REPORT/'source-audit.json',result)
 
 
