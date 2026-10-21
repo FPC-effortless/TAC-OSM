@@ -1,0 +1,94 @@
+name: ME025 authentic TAC versus causal Transformer feature-parity
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/tac_osm/me025_feature_parity.py
+      - scripts/me025_real_transformer_parity.py
+      - tests/test_me025_feature_parity.py
+      - research/mathematical-engineering/me025/**
+      - .github/workflows/me025-real-native-transformer.yml
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: me025-real-original-fit-dev-only
+  cancel-in-progress: true
+jobs:
+  numerical-and-repository-guards:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install executed numerical environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: No-data causal mathematics and exact parameter audit
+        run: |
+          python -m py_compile src/tac_osm/me025_feature_parity.py scripts/me025_real_transformer_parity.py
+          python -m scripts.me025_real_transformer_parity --self-test
+      - name: All repository regression and new no-future tests
+        run: python -m pytest -q
+  real-historical-fit-only-exploratory:
+    needs: numerical-and-repository-guards
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact numerical environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Use only official genuinely recorded early FIT and inspected DEV; no new cohort or future response
+        run: |
+          set -o pipefail
+          python -m scripts.me025_real_transformer_parity --out results/me025 | tee me025-original-real.log
+      - name: Check every registered arm, exact source, causal data and parity claim flags
+        run: |
+          python - <<'PY'
+          import json, math
+          from pathlib import Path
+          r=json.loads(Path('results/me025/manifest.json').read_text())
+          assert r['study']=='ME025_REAL_CAUSAL_FEATURE_PARITY_NATIVE_VS_TRANSFORMER'
+          assert r['official_publisher_zip_sha256']=='c23f211cf109c7a060a25a4afe9e8c681b1ccbbc816cca921d87ad37dd11c70c'
+          assert r['real_FIT_windows']==10776 and r['real_DEV_windows']==5952
+          assert r['historical_DEV_already_exposed'] and not r['unseen_user_cohorts_opened']
+          assert r['same_genuine_training_inputs_across_neural_models']
+          assert r['same_four_causal_supervised_response_targets']
+          assert r['equal_neural_training_optimizer_steps']
+          assert not r['actual_full_training_FLOPs_equal']
+          assert not r['strict_architecture_superiority_claim_allowed']
+          assert r['source_only_rate_features_and_item_popularity']
+          assert r['all_original_models_completed']
+          assert r['independent_test_held_closed']
+          assert len(r['model_results'])==9 and len(r['reference_results'])==3
+          required={ (s,a) for s in (14001,14002,14003) for a in (
+             'tac_rms','tac_kernel','tiny_transformer_kernel')}
+          assert {(m['seed'],m['arm']) for m in r['model_results']}==required
+          assert all(m['updates']==300 and m['sampled_windows']==38400
+                     and m['supervised_true_next_responses']==153600
+                     for m in r['model_results'])
+          assert r['param_counts']=={'tac_rms':135050,'tac_kernel':135056,
+                                   'tiny_transformer_kernel':134896}
+          assert len(r['registered_primary']['per_seed_deltas'])==3
+          assert all(math.isfinite(m['dev']['Brier']) for m in r['model_results'])
+          assert all((Path('results/me025')/m['checkpoint']).exists()
+                     for m in r['model_results'])
+          PY
+      - name: Retain ALL checkpoint weights, repeated real scores, failures and diagnostics without promoting
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me025-early-real-native-vs-tiny-transformer-all-9-checkpoints
+          path: |
+            results/me025/
+            me025-original-real.log
+          retention-days: 90
+          if-no-files-found: ignore
