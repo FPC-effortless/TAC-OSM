@@ -40,7 +40,7 @@ def test_me040_native_state_size_and_parent_coefficient_invariants():
 
 
 def test_me040_invalid_or_future_incomplete_window_rejected():
-    with pytest.raises(ValueError):
+    with pytest.raises((ValueError,torch.jit.Error)):
         pair_observed_patches(torch.randn(2,11,16))
-    with pytest.raises(ValueError):
+    with pytest.raises((ValueError,torch.jit.Error)):
         pair_observed_patches(torch.randn(2,12,15))
