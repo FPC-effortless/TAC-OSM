@@ -52,3 +52,14 @@ GitHub's 100 MB single-file limit; no LFS or private external storage is require
 The numerical continuations are engineering probes, not new capability models or
 new accuracy training results. A separate freeze candidate failed exact replay
 and is not included as a recommended serving model.
+
+
+## ME043 / ME043B: original compute-adaptive models
+
+[Full original A archives](me043/) and [full original B archives](me043b/) contain
+all160 actual fitted downstream models and their optimizer/RNG, authentic DEV
+predictions/labels/routing, loss/CPU traces and original AR parents. All eight
+archives have SHA256 manifests and per-payload indexes. They are repository-owned
+binary files, not merely a pointer to local workspace storage. See
+[reproduction and integrity receipts](../mathematical-engineering/me043/ARTIFACT.md).
+All candidates and failed acceptance gates are preserved. No promotion implied.

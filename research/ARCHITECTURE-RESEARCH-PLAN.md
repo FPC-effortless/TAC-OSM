@@ -4,6 +4,35 @@ This dated addendum preserves the historical roadmap and every failed study.
 It directs native architecture improvement. Standing real-world/parity rules
 remain in force; draft studies are not merged or commercially qualified.
 
+## Current direction: complete compute-adaptive models (ME043)
+
+Architecture-first development supersedes the diagnostic prerequisites in the
+historical sections below. Build/train complete models, measure accuracy and
+actual resource costs, then iterate. Mechanistic attribution is deferred;
+real-source integrity, frozen test access, numerical correctness and honest
+comparison contracts remain compulsory.
+
+ME040 shortened observed-token native processing; ME041/042 each trained an
+11-architecture portfolio on authentic historical development data. The
+published workflow outcomes favor different architectures across domains and
+resource budgets, and no new portfolio candidate passed both gates. See
+[ME041](https://github.com/FPC-effortless/TAC-OSM/pull/306) and
+[ME042](https://github.com/FPC-effortless/TAC-OSM/pull/307).
+
+[ME043](mathematical-engineering/me043/PROTOCOL.md) implements a context-first,
+input-routed native fast/slow/associative-memory expert with shared prediction
+heads and learned compute preferences. Registered 96 real full-model fits,
+including unchanged native/context/GRU references on both historical domains.
+The 96 A +64 separately registered B fits are complete. B preserves full context
+capacity and executes native training every eighth update; this reduces measured
+training CPU versus the dense adaptive design, but no candidate meets the joint
+cross-domain accuracy gates. [All original results](mathematical-engineering/me043/RESULTS.md)
+remain exploratory and unpromoted. New model development continues without
+synthetic capability claims or reopening
+previously consumed final tests. Only observed results can establish whether
+this design improves a practical frontier; independent new-site qualification
+remains separate.
+
 ## Established findings and immediate engineering
 
 ME024 RMS readout improved optimization; ME025 timescale additions failed the

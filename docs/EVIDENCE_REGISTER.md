@@ -563,3 +563,34 @@ independent qualification unestablished; no merge/promotion.
   empty draft release deleted, no credential extraction/manual login. No merge,
   default runtime change, model promotion or scientific architecture-superiority
   claim. Source/failed gates and snapshot/runtime provenance remain explicit.
+
+
+### ME043 / ME043B — compute-adaptive native architecture, completed development
+
+[Results and constraints](../research/mathematical-engineering/me043/RESULTS.md),
+[mathematical implementation](../research/mathematical-engineering/me043/MATHEMATICS.md),
+[original checkpoint delivery](../research/mathematical-engineering/me043/ARTIFACT.md).
+A trains96 full models with a compact context exit and context-seeded conditional
+native innovation expert. The separately preregistered post-A B trains64 further
+models with the full original context encoder and native expert learning on every
+eighth update. Eight original real-data AR parents are reused, not refitted in B.
+All six A and four B arms are within1% active parameter count in their own matrices.
+Both use authenticated Tetouan and ETTh1 historical FIT/DEV only; no new test opened.
+
+B's zero-cost candidate takes approximately2.9x less optimizer CPU at250 updates
+than A's zero-cost candidate and lowers its Tetouan five-CPU-second MSE from
+0.114563 to0.104769. This is an unmatched A/B engineering comparison: B has more
+capacity and a different native update schedule. No candidate meets all primary
+accuracy/horizon/CPU gates across both domains. Original context-only remains
+stronger on Tetouan at that CPU budget (0.103114 in A). No model is promoted.
+
+All160 original model forecasts, truths and routing arrays replay bit exactly,
+36,065,280 forecast values total. Independent float64 MSE/MAE recomputation passes
+an operation-count-derived bound. An initial strict float64 reduction-equality
+check failed and is preserved; the corrected metric check changes no forecast
+replay tolerance. Per-fit wall elapsed time was omitted; process CPU and process
+high-water RSS are recorded. Original ME035B precision failure remains unchanged.
+
+Three-way parameter/data/compute parity is not achieved. No architectural
+superiority, fresh-site qualification, causal decision utility, native streaming
+throughput, adaptive System2 or complete world-model capability is established.
