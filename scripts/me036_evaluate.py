@@ -47,6 +47,9 @@ def evaluate_dataset(name):
 def run():
     torch.set_num_threads(1)
     frozen=json.loads((OUT/'frozen.json').read_text())
+    code_freeze=json.loads((base.REPORT/'code-freeze.json').read_text())
+    for item in code_freeze['files']:
+        assert base.sha(base.ROOT/item['path'])==item['sha256'],item['path']
     assert frozen['protocol_sha256']==base.sha(base.REPORT/'PROTOCOL.md')
     assert frozen['source_manifest_sha256']==base.sha(base.REPORT/'sources.json')
     assert frozen['continuation_protocol_sha256']==base.sha(base.REPORT/'CONTINUATION.md')
