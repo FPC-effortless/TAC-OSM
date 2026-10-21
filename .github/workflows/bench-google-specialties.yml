@@ -1,0 +1,129 @@
+name: BENCH-FM-002 TimesFM long-context and TabFM real mixed-tabular skills
+on:
+  push:
+    branches: [research/bench-google-specialties-2026-10-21]
+    paths:
+      - ".github/workflows/bench-google-specialties.yml"
+      - "scripts/bench_google_timesfm_specialty.py"
+      - "scripts/bench_google_tabfm_specialty.py"
+      - "research/bench-fm-002/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  train-native-timeseries:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install numeric/ML framework CPU
+        run: |
+          python -m pip install --disable-pip-version-check numpy==2.3.5
+          python -m pip install --disable-pip-version-check torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Preflight
+        run: python -m py_compile scripts/bench_google_timesfm_specialty.py
+      - name: Train frozen native TAC and GRU and score fixed real ETTh1 future
+        run: |
+          set -o pipefail
+          python -m scripts.bench_google_timesfm_specialty --stage train 2>&1 | tee timeseries-train.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-fm-002-native-timeseries-original
+          path: |
+            results/bench-fm-002/timeseries/*.json
+            results/bench-fm-002/timeseries/*.pt
+            timeseries-train.log
+          retention-days: 90
+          if-no-files-found: warn
+  google-timesfm3:
+    needs: train-native-timeseries
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install official TimesFM3.0 PyTorch CPU
+        run: |
+          python -m pip install --disable-pip-version-check torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check timesfm==3.0.0 numpy==2.3.5
+      - uses: actions/download-artifact@v4
+        with:
+          name: bench-fm-002-native-timeseries-original
+          path: results/bench-fm-002/timeseries
+      - name: Official TimesFM3 on 96h shared and 512h preferred contexts
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python -m scripts.bench_google_timesfm_specialty --stage timesfm 2>&1 | tee timesfm3-specialty.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-fm-002-google-timesfm3-official-or-failure
+          path: |
+            results/bench-fm-002/timeseries/timesfm3-results.json
+            timesfm3-specialty.log
+          retention-days: 90
+          if-no-files-found: warn
+
+  train-native-tabular:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install tabular and CPU native reference libraries
+        run: |
+          python -m pip install --disable-pip-version-check torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check numpy==2.3.5 pandas==2.3.3 scikit-learn==1.7.2
+      - name: Preflight
+        run: python -m py_compile scripts/bench_google_tabfm_specialty.py
+      - name: Train/score native TAC-like structured classifier and true tabular controls
+        run: |
+          set -o pipefail
+          python -m scripts.bench_google_tabfm_specialty --stage train 2>&1 | tee tabular-train.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-fm-002-native-tabular-original
+          path: |
+            results/bench-fm-002/tabular/*.json
+            results/bench-fm-002/tabular/*.pt
+            tabular-train.log
+          retention-days: 90
+          if-no-files-found: warn
+
+  google-tabfm10:
+    needs: train-native-tabular
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Install current officially available pretrained TabFM1.0 backend
+        run: |
+          python -m pip install --disable-pip-version-check torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check "tabfm[pytorch]" safetensors numpy==2.3.5 pandas==2.3.3 scikit-learn==1.7.2
+      - uses: actions/download-artifact@v4
+        with:
+          name: bench-fm-002-native-tabular-original
+          path: results/bench-fm-002/tabular
+      - name: Official pretrained TabFM on original mixed columns/few-shot labels
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python -m scripts.bench_google_tabfm_specialty --stage tabfm 2>&1 | tee tabfm10-specialty.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-fm-002-google-tabfm10-official-or-failure
+          path: |
+            results/bench-fm-002/tabular/tabfm10-results.json
+            tabfm10-specialty.log
+          retention-days: 90
+          if-no-files-found: warn
