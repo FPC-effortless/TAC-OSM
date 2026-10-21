@@ -51,3 +51,26 @@ full-model timing. To verify the actual saved exports without refitting or timin
 ```bash
 python -m scripts.me044_inference --out restored-me044 --verify-only
 ```
+
+## Separate pinned AVX2 serving references
+
+[Additional serving-reference shards](../../model-artifacts/me044-avx2/) contain
+no new trained model weights. They bind the same original80 checkpoints to a
+separate, explicitly pinned numerical inference profile. Original AVX512 arrays
+and their failed cross-ISA exactness check remain intact; see [PORTABILITY.md](PORTABILITY.md).
+AVX2 references change3301/18,032,640 forecast values, maximum absolute drift
+4.76837158203125e-7. This is not an exact match to the original AVX512 arrays.
+No tolerance changed and no retraining occurred.
+
+Restore the separate references, then invoke the explicit variant audit in a
+new process. Environment settings must precede Python/PyTorch initialization:
+
+```bash
+python scripts/me044_artifacts.py verify research/model-artifacts/me044-avx2 restored-avx2
+ATEN_CPU_CAPABILITY=avx2 MKL_ENABLE_INSTRUCTIONS=AVX2 ONEDNN_MAX_CPU_ISA=AVX2 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m scripts.me044_train_multiscale --out restored-me044 --audit --portable-reference restored-avx2
+ATEN_CPU_CAPABILITY=avx2 MKL_ENABLE_INSTRUCTIONS=AVX2 ONEDNN_MAX_CPU_ISA=AVX2 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 python -m scripts.me044_inference --out restored-me044 --verify-only --portable-reference restored-avx2
+```
+
+Original timing/1.414x applies to the original measured environment. AVX2 timing
+was not qualified by this replay fix. CI checks exact AVX2-reference equality,
+not equality with the original AVX512 predictions.

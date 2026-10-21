@@ -1279,3 +1279,11 @@ throughput. Construction costs are separate; no default backend change.
 
 No full data/parameter/compute parity, fresh qualification, causal action,
 adaptive System2, commercial readiness or merge/promotion is established.
+
+ME044 numerical portability follow-up: original local AVX512 replay passes, but
+original strict remote AVX2 equality FAILS and remains recorded. A separately
+registered AVX2 serving profile preserves every original weight and reference,
+while generating separate canonical references (3301 changed forecast values;
+maximum drift4.76837158203125e-7). Exact agreement with new AVX2 references is a
+different check, never a retroactive pass of the original AVX512 cross-ISA guard.
+No new fit, accuracy qualification or transfer of the original timing is claimed.

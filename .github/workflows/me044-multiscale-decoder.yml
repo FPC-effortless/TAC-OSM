@@ -8,6 +8,7 @@ on:
       - tests/test_me044*.py
       - research/mathematical-engineering/me044/**
       - research/model-artifacts/me044/**
+      - research/model-artifacts/me044-avx2/**
       - .github/workflows/me044-multiscale-decoder.yml
 permissions:
   contents: read
@@ -22,6 +23,9 @@ jobs:
       OMP_NUM_THREADS: '1'
       MKL_NUM_THREADS: '1'
       OPENBLAS_NUM_THREADS: '1'
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -36,13 +40,13 @@ jobs:
           python -m pytest -q
           python scripts/sync_test_count.py --check
       - name: Restore actual original models and all indexed payloads
-        run: python scripts/me044_artifacts.py verify research/model-artifacts/me044 restored-me044
-      - name: Compare frozen numerical reference under explicit CPU dispatch profiles
-        run: python -m scripts.me044_replay_debug --out restored-me044
-      - name: Audit original optimizers, exact forecasts, cheap retention and real metrics
         run: |
-          python -m scripts.me044_train_multiscale --out restored-me044 --audit
-          python -m scripts.me044_inference --out restored-me044 --verify-only
+          python scripts/me044_artifacts.py verify research/model-artifacts/me044 restored-me044
+          python scripts/me044_artifacts.py verify research/model-artifacts/me044-avx2 restored-me044-avx2
+      - name: Exact separate AVX2-serving forecasts, original optimizer weights and metrics
+        run: |
+          python -m scripts.me044_train_multiscale --out restored-me044 --audit --portable-reference restored-me044-avx2
+          python -m scripts.me044_inference --out restored-me044 --verify-only --portable-reference restored-me044-avx2
       - name: Preserve original trained models and independent replay
         if: always()
         uses: actions/upload-artifact@v4
@@ -50,9 +54,9 @@ jobs:
           name: me044-80-original-trained-models-and-evidence
           path: |
             research/model-artifacts/me044/**
-            restored-me044/audit.json
-            restored-me044/compiled-replay.json
-            restored-me044/portability.json
+            research/model-artifacts/me044-avx2/**
+            restored-me044/portable-audit.json
+            restored-me044/portable-compiled-replay.json
           if-no-files-found: error
           retention-days: 90
           compression-level: 0

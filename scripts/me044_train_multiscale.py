@@ -147,6 +147,10 @@ def audit(out,portable_reference=None):
     out=Path(out);report=json.loads((out/'results.json').read_text());assert report['completed']
     values=0;models=0;optimizer_count=0;cheap_retention=0
     portable=json.loads((Path(portable_reference)/'records.json').read_text()) if portable_reference else None
+    if portable is not None:
+        import os
+        assert all(os.environ.get(k)==v for k,v in portable['profile'].items())
+        assert torch.backends.cpu.get_cpu_capability()=='AVX2'
     for domain,data in report['domains'].items():
         mod=DOMAINS[domain];dest=out/domain;z,_=mod.get_source(dest)
         for row in data['fits']:

@@ -1,0 +1,889 @@
+{
+  "run_id": 39655790123,
+  "original_strict_result": "FAIL",
+  "profiles": [
+    {
+      "profile": "default",
+      "settings": {},
+      "returncode": 0,
+      "comparison": {
+        "CPU_dispatch": "AVX2",
+        "torch": "2.14.1+cpu",
+        "numpy": "2.3.5",
+        "original_input_equal": true,
+        "from_original_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 49,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 19,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 148,
+            "max_absolute_error": 1.1175870895385742e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 15,
+            "max_absolute_error": 1.1920928955078125e-07
+          }
+        },
+        "from_recomputed_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 49,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 19,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 148,
+            "max_absolute_error": 1.1175870895385742e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 15,
+            "max_absolute_error": 1.1920928955078125e-07
+          }
+        }
+      }
+    },
+    {
+      "profile": "mkl_avx2",
+      "settings": {
+        "MKL_ENABLE_INSTRUCTIONS": "AVX2"
+      },
+      "returncode": 0,
+      "comparison": {
+        "CPU_dispatch": "AVX2",
+        "torch": "2.14.1+cpu",
+        "numpy": "2.3.5",
+        "original_input_equal": true,
+        "from_original_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 49,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 19,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 148,
+            "max_absolute_error": 1.1175870895385742e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 15,
+            "max_absolute_error": 1.1920928955078125e-07
+          }
+        },
+        "from_recomputed_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 49,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 19,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 148,
+            "max_absolute_error": 1.1175870895385742e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 15,
+            "max_absolute_error": 1.1920928955078125e-07
+          }
+        }
+      }
+    },
+    {
+      "profile": "aten_avx2",
+      "settings": {
+        "ATEN_CPU_CAPABILITY": "avx2"
+      },
+      "returncode": 0,
+      "comparison": {
+        "CPU_dispatch": "AVX2",
+        "torch": "2.14.1+cpu",
+        "numpy": "2.3.5",
+        "original_input_equal": true,
+        "from_original_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 49,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 19,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 148,
+            "max_absolute_error": 1.1175870895385742e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 15,
+            "max_absolute_error": 1.1920928955078125e-07
+          }
+        },
+        "from_recomputed_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 49,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 19,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 148,
+            "max_absolute_error": 1.1175870895385742e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 15,
+            "max_absolute_error": 1.1920928955078125e-07
+          }
+        }
+      }
+    },
+    {
+      "profile": "both_avx2",
+      "settings": {
+        "MKL_ENABLE_INSTRUCTIONS": "AVX2",
+        "ATEN_CPU_CAPABILITY": "avx2"
+      },
+      "returncode": 0,
+      "comparison": {
+        "CPU_dispatch": "AVX2",
+        "torch": "2.14.1+cpu",
+        "numpy": "2.3.5",
+        "original_input_equal": true,
+        "from_original_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 49,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 19,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 148,
+            "max_absolute_error": 1.1175870895385742e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 15,
+            "max_absolute_error": 1.1920928955078125e-07
+          }
+        },
+        "from_recomputed_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 49,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 19,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 148,
+            "max_absolute_error": 1.1175870895385742e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 15,
+            "max_absolute_error": 1.1920928955078125e-07
+          }
+        }
+      }
+    },
+    {
+      "profile": "cbwr_avx2",
+      "settings": {
+        "MKL_CBWR": "AVX2",
+        "ATEN_CPU_CAPABILITY": "avx2"
+      },
+      "returncode": 0,
+      "comparison": {
+        "CPU_dispatch": "AVX2",
+        "torch": "2.14.1+cpu",
+        "numpy": "2.3.5",
+        "original_input_equal": true,
+        "from_original_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 193,
+            "max_absolute_error": 2.384185791015625e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 73,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": false,
+            "different": 26,
+            "max_absolute_error": 5.960464477539063e-08
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 2558,
+            "max_absolute_error": 1.4901161193847656e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 164,
+            "max_absolute_error": 2.384185791015625e-07
+          }
+        },
+        "from_recomputed_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 193,
+            "max_absolute_error": 2.384185791015625e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 73,
+            "max_absolute_error": 3.725290298461914e-09
+          },
+          "trust": {
+            "equal": false,
+            "different": 26,
+            "max_absolute_error": 5.960464477539063e-08
+          },
+          "cheap": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "residual": {
+            "equal": false,
+            "different": 2558,
+            "max_absolute_error": 1.4901161193847656e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 164,
+            "max_absolute_error": 2.384185791015625e-07
+          }
+        }
+      }
+    },
+    {
+      "profile": "compatible",
+      "settings": {
+        "MKL_CBWR": "COMPATIBLE",
+        "ATEN_CPU_CAPABILITY": "default"
+      },
+      "returncode": 0,
+      "comparison": {
+        "CPU_dispatch": "DEFAULT",
+        "torch": "2.14.1+cpu",
+        "numpy": "2.3.5",
+        "original_input_equal": true,
+        "from_original_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": false,
+            "different": 5472,
+            "max_absolute_error": 2.384185791015625e-07
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": false,
+            "different": 12803,
+            "max_absolute_error": 5.364418029785156e-07
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 5673,
+            "max_absolute_error": 7.152557373046875e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 1381,
+            "max_absolute_error": 1.6763806343078613e-08
+          },
+          "trust": {
+            "equal": false,
+            "different": 23,
+            "max_absolute_error": 5.960464477539063e-08
+          },
+          "cheap": {
+            "equal": false,
+            "different": 4202,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "residual": {
+            "equal": false,
+            "different": 8601,
+            "max_absolute_error": 3.725290298461914e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 4599,
+            "max_absolute_error": 4.76837158203125e-07
+          }
+        },
+        "from_recomputed_inputs": {
+          "x": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "base": {
+            "equal": false,
+            "different": 5472,
+            "max_absolute_error": 2.384185791015625e-07
+          },
+          "tokens": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "context": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "latent": {
+            "equal": false,
+            "different": 12803,
+            "max_absolute_error": 5.364418029785156e-07
+          },
+          "mean": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "scale": {
+            "equal": true,
+            "different": 0,
+            "max_absolute_error": 0.0
+          },
+          "state": {
+            "equal": false,
+            "different": 5673,
+            "max_absolute_error": 7.152557373046875e-07
+          },
+          "coef": {
+            "equal": false,
+            "different": 1381,
+            "max_absolute_error": 1.6763806343078613e-08
+          },
+          "trust": {
+            "equal": false,
+            "different": 23,
+            "max_absolute_error": 5.960464477539063e-08
+          },
+          "cheap": {
+            "equal": false,
+            "different": 4202,
+            "max_absolute_error": 4.76837158203125e-07
+          },
+          "residual": {
+            "equal": false,
+            "different": 8601,
+            "max_absolute_error": 3.725290298461914e-08
+          },
+          "pred": {
+            "equal": false,
+            "different": 4599,
+            "max_absolute_error": 4.76837158203125e-07
+          }
+        }
+      }
+    }
+  ]
+}

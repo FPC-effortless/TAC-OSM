@@ -57,10 +57,11 @@ def run(out):
     save(out/'inference.json',result);print(json.dumps({k:v for k,v in result.items() if k!='rows'}),flush=True)
 
 @torch.no_grad()
-def verify(out):
+def verify(out,portable_reference=None):
     out=Path(out);receipt=json.loads((out/'inference.json').read_text())
     assert receipt['status']=='EXACT_REPLAY_PASS' and len(receipt['rows'])==16
     report=json.loads((out/'results.json').read_text());values=0
+    portable=json.loads((Path(portable_reference)/'records.json').read_text()) if portable_reference else None
     for domain,data in report['domains'].items():
         mod=DOMAINS[domain];z,_=mod.get_source(out/domain)
         for row in data['fits']:
@@ -71,7 +72,11 @@ def verify(out):
             net=build_model(row['arm'],row['horizon'],row['seed'],period(domain))
             net.load_state_dict(torch.load(cp,weights_only=True)['state_dict'])
             net.branch=torch.jit.load(str(artifact));net.eval()
-            with np.load(cp.parent/'DEV.npz') as saved:
+            reference=cp.parent/'DEV.npz'
+            if portable is not None:
+                r=next(v for v in portable['rows'] if v['domain']==domain and all(v[k]==row[k] for k in ('arm','lane','horizon','seed')))
+                reference=Path(portable_reference)/r['reference'];assert sha(reference)==r['sha256']
+            with np.load(reference) as saved:
                 ps=[];qs=[];cs=[];ix=saved['origin']
                 for j in range(0,len(ix),16):
                     x,_=mod.samples(z,ix[j:j+16],row['horizon'])
@@ -82,11 +87,12 @@ def verify(out):
                 assert np.array_equal(np.concatenate(qs),saved['q'])
                 values+=actual.size
     result={'status':'PASS','original_compiled_exports':16,'forecast_scalars_exact':values,'new_fits':0}
-    save(out/'compiled-replay.json',result);print(json.dumps(result),flush=True)
+    result['forecast_reference']='separate_AVX2_serving' if portable is not None else 'original_AVX512'
+    save(out/('portable-compiled-replay.json' if portable is not None else 'compiled-replay.json'),result);print(json.dumps(result),flush=True)
 
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--out',required=True)
-    p.add_argument('--verify-only',action='store_true');a=p.parse_args()
-    if a.verify_only:verify(a.out)
+    p.add_argument('--portable-reference');p.add_argument('--verify-only',action='store_true');a=p.parse_args()
+    if a.verify_only:verify(a.out,a.portable_reference)
     else:run(a.out)

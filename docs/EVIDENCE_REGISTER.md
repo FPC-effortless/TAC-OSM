@@ -616,3 +616,12 @@ is claimed. No new capability fit occurs during restoration or compilation.
 Both per-domain combined predictive gates fail. Registered negative outcomes,
 all practical and matched controls, legacy precision exceptions and full parity
 limitations remain. No independent generalization or architectural superiority.
+
+ME044 original remote strict-replay failure: CI39654740464. CPU-profile follow-up
+CI39655790123 verifies identical inputs and isolates AVX512/AVX2 vector math;
+all original failure logs/profile records remain under ME044. Separate AVX2
+reference registrationf6beb079 precedes generation. Same original80 model weights,
+no refits; separate forecasts differ in3301/18,032,640 values, max4.76837158203125e-7.
+Local AVX2 original-optimizer/weight/cheap checks and exact variant replay pass;
+remote exact-variant CI result is independently recorded on PR309. No original
+cross-ISA failure erased or forecast tolerance loosened.

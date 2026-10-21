@@ -99,3 +99,21 @@ All16 native checkpoints replay3,606,528 full forecast values exactly after comp
 - Cheap-trajectory retention is a software/optimization guarantee, not proof that native state or its additional residual improves future prediction. Bounded corrections do not establish safety or calibration.
 - Modular stop-gradient training preserves cheap-path weights; the full expert objective does not backpropagate through that cheap encoder. Inference always runs the expert, unlike ME043 hard routing. No persistent streaming, adaptive System2, causal action, counterfactual, commercial or foundation-model claim.
 - All original weights, optimizers/RNG, losses, source hashes, genuine predicted/observed arrays, timing and negative gates are retained in repository-owned lossless indexed archives. Archive restoration and CI establish their actual delivery/replay status separately.
+
+## Remote numerical portability exception and separate serving profile
+
+Initial CI39654740464 passed tests and archive integrity but failed strict
+original forecast equality on AVX2 hardware. The training workspace uses AVX512.
+Identical frozen inputs and weights produce slightly different vector-math
+results; [remote profile records](remote-portability.json) preserve all attempts.
+The original cross-ISA exactness check remains **FAIL**, not waived or relabeled.
+
+A separately registered AVX2 serving profile uses the same80 model checkpoints
+and separately stored references. It changes3301/18,032,640 forecast values,
+maximum absolute drift4.76837158203125e-7. No weights, original arrays, tolerances
+or predictive gates were replaced. Both variants' primary MSE point means agree
+at the six printed decimals. Local exact AVX2 replay passes all80 models and16
+compiled exports; remote CI reports its own actual result. Exact AVX2-reference
+agreement must not be described as exact agreement with original AVX512 arrays.
+Original1.414x timing remains specific to its original environment. See
+[reproduction](ARTIFACT.md) and [profile registration](PORTABILITY.md).
