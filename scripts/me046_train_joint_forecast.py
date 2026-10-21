@@ -244,7 +244,7 @@ def replay(destination):
             cp=out/domain/row["saved_checkpoint"]
             assert sha(cp)==row["checkpoint_sha256"]
             original=torch.load(cp,weights_only=True,map_location="cpu")
-            assert original["arm"]==row["arm"] and original["real_FIT_updates"] if False else True
+            assert original["arm"]==row["arm"] and original["updates"]==row["real_FIT_updates"]
             net=build_model(row["arm"],row["horizon"],row["seed"],period(domain))
             net.load_state_dict(original["state_dict"],strict=True)
             assert sum(p.numel() for p in net.parameters())==row["active_parameters"]
