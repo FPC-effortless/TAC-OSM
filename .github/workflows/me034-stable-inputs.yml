@@ -1,0 +1,27 @@
+name: ME034 stable inputs numerical and regression checks
+on:
+  pull_request:
+    paths:
+      - src/tac_osm/me034_*.py
+      - scripts/me034_*.py
+      - tests/test_me034*.py
+      - research/mathematical-engineering/me034/**
+      - .github/workflows/me034-stable-inputs.yml
+permissions:
+  contents: read
+concurrency:
+  group: me034-checks-${{ github.head_ref }}
+  cancel-in-progress: true
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pytest -q
+      - run: python scripts/sync_test_count.py --check
