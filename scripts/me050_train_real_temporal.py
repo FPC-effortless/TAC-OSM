@@ -77,7 +77,6 @@ def read_real_events(source, fit_only):
             if userid<0 or vid<0 or stamp<=0 or clicked not in (0,1) or isrand!=1:
                 raise RuntimeError("source event action, time or actual outcome malformed")
             rows.append((userid,vid,stamp,date,clicked,index))
-    if len(rows)<1000:raise RuntimeError("too few genuine events")
     return rows
 
 
@@ -256,6 +255,7 @@ def run(out):
     report["original_source_bytes"]=source.stat().st_size
     # Only FIT-record numeric values are exposed at this point.
     fit_rows=read_real_events(source,fit_only=True)
+    if len(fit_rows)<1000:raise RuntimeError("too few genuine FIT events")
     fit=assemble_histories(fit_rows)["FIT"]
     report["fit_cohort"]=verify_partition(fit,"FIT")
     report["FIT_tensor_sha256"]=fitted_example_digest(fit)
