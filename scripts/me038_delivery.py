@@ -83,6 +83,8 @@ def full():
         for e in parent['endpoints']:
             p=b.ROOT/e['checkpoint'];assert b.sha(p)==e['sha256']
             paths.extend([str(p.relative_to(b.ROOT)),str((p.parent/f"u{e['step']}-probe.npy").relative_to(b.ROOT))])
+            for name in ('trace.json','fit.json'):
+                if (p.parent/name).exists():paths.append(str((p.parent/name).relative_to(b.ROOT)))
     paths=sorted(set(paths));head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
     index={'source_snapshot_commit':head,'original_models_no_refit':True,'local_research_delivery':True,
         'payloads':[{'path':p,'bytes':(b.ROOT/p).stat().st_size,'sha256':b.sha(b.ROOT/p)} for p in paths]}
