@@ -25,6 +25,7 @@ STEPS=500
 BATCH=64
 TEST_LIMIT=8000
 DEV_LIMIT=3000
+MIN_FIT_ROWS=500_000
 torch.set_num_threads(1)
 
 
@@ -121,7 +122,7 @@ def apply_ratings(archive,state,assignment,stage):
         if old!=-1. and old!=value:raise RuntimeError("FIT factual ratings changed")
         state[user]["rating"][index]=value
         nread+=1
-    if stage=="FIT" and nread<500_000:
+    if stage=="FIT" and nread<MIN_FIT_ROWS:
         raise RuntimeError("unexpectedly few genuine FIT rating observations")
     if stage=="FINAL" and nread!=RECORDS:
         raise RuntimeError("missing original future ratings")
@@ -329,8 +330,8 @@ def run(dest):
     receipt["sealed_test_opened"]=True
     receipt["DEV_results"],_=score(root,state,dev,receipt["models"],"DEV")
     receipt["TEST_results"],pred=score(root,state,test,receipt["models"],"TEST")
-    _,_,y,_,_,users=outputs(RealRetentionPredictor("context_recent"),state,test,256)
-    # The unfitted dummy model above is used ONLY to obtain the same factual targets.
+    y=np.asarray([state[u]["rating"][i] for u,i in test],dtype=np.float32)
+    users=np.asarray([u for u,_ in test],dtype=np.int32)
     receipt["TEST_global_rating_mean_reference_MAE"]=float(np.mean(
         np.abs(y-np.mean([float(r) for entry in state.values()
            for r in entry["rating"][:entry["fit"]]]))))
