@@ -1199,3 +1199,20 @@ No full architecture parity or superiority claim; preserve ME037 legacy preferen
 All 240 fits +8 new parents completed. 1,008 checkpoints/37,310,976 saved validation values
 replay exactly. Independent final-score audit covers 52 Tetouan models/references,
 1,479,493,632 test forecast values. 1,020 tests +12 subtests pass. No earlier gate overwritten.
+
+### ME039 — execution engineering, no new predictive capability
+
+[Results](../research/mathematical-engineering/me039/RESULTS.md): compiled native
+core gives 1.076x steady and 1.067x cold-inclusive training speed; both registered
+speed targets FAIL. Gradient/parameter agreement passes the declared numerical
+contract; no exact-retraining claim. All 60 frozen models retain 4,224,000 saved
+standardized/raw validation values exactly. The 1.338x serving ratio is versus
+eager Python; comparison to the original serialized serving baseline is 0.963x.
+Retain original serving. A second freeze candidate fails strict replay and is
+rejected without tolerance changes. No new accuracy/architecture/control claim.
+
+Original model bytes and all 48 new numerical continuations' optimizer/RNG states,
+traces/snapshots are committed as checked repository archives and offered through
+CI artifacts. These are engineering probe states, not 48 new capability models.
+The older full 1.05 GB ME038 evidence archive is still local because the configured
+release-upload endpoint rejected credentials; no full hosted archive is claimed.

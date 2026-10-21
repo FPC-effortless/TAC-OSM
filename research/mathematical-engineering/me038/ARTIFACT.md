@@ -48,3 +48,16 @@ and license limits. State/parameter/CPU costs and both failed gates remain expli
 
 [Execution/replay commands](EXECUTION.md) · [Measured outcomes](RESULTS.md) ·
 [Native state equations](MATHEMATICS.md)
+
+## Repository delivery follow-up — ME039
+
+The identical original 60-model compact bundle is now tracked under
+[research/model-artifacts](../../model-artifacts/README.md), with SHA-256 and
+per-payload verification. The ME039 CI workflow provides a repository-owned
+Actions copy; actual run/artifact/download receipts are recorded under ME039.
+This supplements the original local-only delivery record without changing its
+weights, checkpoints, hashes, failed gates or historical manifests.
+
+The full 1.05 GB original evidence archive remains local. Draft release metadata
+writes succeeded, but the upload host rejected configured credentials (HTTP401);
+the empty draft was removed. No full-release-asset download is claimed.

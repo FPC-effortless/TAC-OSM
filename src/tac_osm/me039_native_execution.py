@@ -19,13 +19,3 @@ def build_model(horizon,seed,backend='scripted'):
     if backend not in ('eager','scripted'):raise ValueError('unregistered execution backend')
     model=native_model('innovation_tac',horizon,seed)
     return compile_native_core(model) if backend=='scripted' else model
-
-
-def freeze_serving(module):
-    """Freeze an eval-mode serialized model, preserving numerical optimizations off.
-
-    This is inference only. Learned weights become graph constants rather than
-    disappearing; their count must be taken from the original model metadata.
-    """
-    if module.training:raise ValueError('serving freeze requires eval mode')
-    return torch.jit.freeze(module,optimize_numerics=False)

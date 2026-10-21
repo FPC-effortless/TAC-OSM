@@ -3,7 +3,10 @@ import json,math,time
 import numpy as np
 import torch
 import scripts.me039_research as b
-from tac_osm.me039_native_execution import freeze_serving
+def freeze_serving(module):
+    # Rejected experimental construction; retained only to reproduce its failure.
+    if module.training:raise ValueError('serving freeze requires eval mode')
+    return torch.jit.freeze(module,optimize_numerics=False)
 
 
 def run():
