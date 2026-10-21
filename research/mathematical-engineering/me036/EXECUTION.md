@@ -26,3 +26,9 @@ Independent datasets use at most2single-thread inference workers. Aggregation an
 stride1 evaluation use the original registered scoring function unchanged. Saved
 per-dataset completion receipts prevent accidental re-scoring on resume. Runtime
 latency exports run afterward without concurrent training/evaluation workers.
+
+All280neural trajectories and20ridge fits completed without failures. Global
+selection/coefficient freeze is committed before test scoring. Publisher ETT README
+confirms that h1 is the hourly variant of m1: these are not independent physical
+sites. The supplemental publisher-document hash is recorded separately and does
+not alter the registered training-source manifest or fitted data.

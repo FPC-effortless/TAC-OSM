@@ -100,6 +100,7 @@ def run():
         'reproduce the published DLinear/PatchTST/iTransformer tables. Weather and '
         'Electricity are authenticated THUML benchmark copies, not raw instrument files. '
         'Earlier ETT period exposure remains declared; no pristine-population claim. '
+        'ETTh1 and ETTm1 are resolutions of the same transformer records, not independent sites. '
         'Weather contains81training-only-9999codes, one duplicate timestamp and one100-minute '
         'gap; original rows remain unchanged under the registered benchmark convention. '
         'Its test targets contain no-9999codes, but training normalization includes them. '
