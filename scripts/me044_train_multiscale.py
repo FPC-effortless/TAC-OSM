@@ -143,9 +143,10 @@ def run(out):
 
 
 @torch.no_grad()
-def audit(out):
+def audit(out,portable_reference=None):
     out=Path(out);report=json.loads((out/'results.json').read_text());assert report['completed']
     values=0;models=0;optimizer_count=0;cheap_retention=0
+    portable=json.loads((Path(portable_reference)/'records.json').read_text()) if portable_reference else None
     for domain,data in report['domains'].items():
         mod=DOMAINS[domain];dest=out/domain;z,_=mod.get_source(dest)
         for row in data['fits']:
@@ -164,6 +165,11 @@ def audit(out):
                 assert int(ck['optimizer']['state'][i]['step'])==updates,(n,updates)
             optimizer_count+=1
             path=cp.parent/'DEV.npz';assert sha(path)==row['metric']['predictions_sha256']
+            metric=row['metric']
+            if portable is not None:
+                item=next(v for v in portable['rows'] if v['domain']==domain and all(v[k]==row[k] for k in ('arm','lane','horizon','seed')))
+                assert item['checkpoint_sha256']==row['checkpoint_sha256']
+                path=Path(portable_reference)/item['reference'];assert sha(path)==item['sha256'];metric=item['metric']
             with np.load(path) as saved:
                 ps=[];ys=[];qs=[];cs=[];origins=saved['origin']
                 for j in range(0,len(origins),16):
@@ -182,8 +188,8 @@ def audit(out):
                 # epsilon/count bound is also recorded for alternate libraries.
                 n=pred.shape[0]*pred.shape[1];u=np.finfo(np.float64).eps/2
                 gamma=(2*n+8)*u/(1-(2*n+8)*u)
-                assert np.all(np.abs(mse-row['metric']['channel_MSE'])<=2*gamma*np.maximum(mse,np.finfo(float).tiny))
-                assert np.all(np.abs(mae-row['metric']['channel_MAE'])<=2*gamma*np.maximum(mae,np.finfo(float).tiny))
+                assert np.all(np.abs(mse-metric['channel_MSE'])<=2*gamma*np.maximum(mse,np.finfo(float).tiny))
+                assert np.all(np.abs(mae-metric['channel_MAE'])<=2*gamma*np.maximum(mae,np.finfo(float).tiny))
                 values+=pred.size;models+=1
             if row['arm'] in MATCHED and row['lane']=='exposure':
                 ref=next(r for r in data['fits'] if r['arm']=='original_context' and r['lane']=='exposure' and r['horizon']==row['horizon'] and r['seed']==row['seed'])
@@ -193,7 +199,9 @@ def audit(out):
     result={'status':'PASS','models':models,'optimizer_states':optimizer_count,
         'forecast_scalars_bit_exact':values,'cheap_trajectory_checks_exact':cheap_retention,
         'truth_and_gate_arrays_exact':True,'MSE_MAE_recomputed':True,'new_fits':0,'new_test_rows':0}
-    save(out/'audit.json',result);print(json.dumps(result),flush=True)
+    result['forecast_reference']='separate_AVX2_serving' if portable is not None else 'original_AVX512'
+    if portable is not None:result['original_AVX512_cross_ISA_replay']='FAILED_RETAINED'
+    save(out/('portable-audit.json' if portable is not None else 'audit.json'),result);print(json.dumps(result),flush=True)
 
 
 @torch.no_grad()
@@ -220,7 +228,7 @@ def latency(out):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--out',required=True)
-    p.add_argument('--audit',action='store_true');p.add_argument('--latency',action='store_true');a=p.parse_args()
-    if a.audit:audit(a.out)
+    p.add_argument('--portable-reference');p.add_argument('--audit',action='store_true');p.add_argument('--latency',action='store_true');a=p.parse_args()
+    if a.audit:audit(a.out,a.portable_reference)
     elif a.latency:latency(a.out)
     else:run(a.out)

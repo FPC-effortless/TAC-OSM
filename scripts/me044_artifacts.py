@@ -37,7 +37,7 @@ def package(source,destination):
 def verify(directory,restore):
     root=Path(restore);root.mkdir(parents=True,exist_ok=False)
     source=Path(directory);manifest=json.loads((source/'me044-manifest.json').read_text());count=0
-    assert manifest['study']=='ME044' and len(manifest['archives'])==8
+    assert len(manifest['archives'])=={'ME044':8,'ME044PORTABLE':4}[manifest['study']]
     for archive in manifest['archives']:
         p=source/archive['path'];assert sha(p)==archive['sha256']
         with tarfile.open(p,'r:xz') as tf:
@@ -52,7 +52,7 @@ def verify(directory,restore):
                 if out.exists():assert out.read_bytes()==b
                 else:out.write_bytes(b)
                 count+=1
-    print(json.dumps({'status':'PASS','archives':8,'payloads':count,'destination':str(root),'refits':0}),flush=True)
+    print(json.dumps({'status':'PASS','archives':len(manifest['archives']),'payloads':count,'destination':str(root),'refits':0}),flush=True)
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('mode',choices=['package','verify']);p.add_argument('source');p.add_argument('destination');a=p.parse_args()
