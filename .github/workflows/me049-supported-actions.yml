@@ -1,0 +1,104 @@
+name: ME049 supported randomized actions and action-state TAC
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/tac_osm/me049_action_state.py
+      - scripts/me049_train_supported_actions.py
+      - tests/test_me049_supported_actions.py
+      - research/mathematical-engineering/me049/**
+      - docs/TACOSM-BASELINE-001.md
+      - .github/workflows/me049-supported-actions.yml
+permissions:
+  contents: read
+concurrency:
+  group: me049-supported-real-action-${{ github.head_ref }}
+  cancel-in-progress: true
+jobs:
+  numerical-and-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install original pinned CPU dependencies
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Compile and verify numerical/data-support properties (software guards only)
+        run: |
+          python -m py_compile src/tac_osm/me049_action_state.py scripts/me049_train_supported_actions.py
+          python -m scripts.me049_train_supported_actions --self-test
+          python -m pytest -q tests/test_me049_supported_actions.py
+      - name: Run entire original regression suite and enforce frozen baseline
+        run: |
+          python -m pytest -q
+          python scripts/sync_test_count.py --check
+  original-two-action-real-training:
+    needs: numerical-and-regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install pinned CPU numerical environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verified authentic source, treatment-support preflight, eight fits, sealed real outcomes
+        run: |
+          set -o pipefail
+          python -m scripts.me049_train_supported_actions --out results/me049 | tee me049-original-fits.log
+      - name: Replay eight original frozen models on identical real records
+        run: |
+          set -o pipefail
+          python -m scripts.me049_train_supported_actions --out results/me049 --replay | tee me049-original-replay.log
+      - name: Fail closed on unsupported actions and unverified causal claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("results/me049/results.json").read_text())
+          assert r["complete"] and r["all_original_models_SHA_frozen_before_DEV_TEST"]
+          assert r["authentic_source_SHA256"]=="2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc"
+          assert r["sealed_outcomes_opened"] and len(r["trained_models"])==8
+          for part in ("FIT","DEV","TEST"):
+              expected={"FIT":80000,"DEV":20000,"TEST":20000}[part]
+              for action in ("0","1"):
+                  assert r["support_design"]["cohort_treatment_counts"][part][action]==expected
+                  assert r[part+"_actual_outcomes_by_treatment"][action]["n"]==expected
+                  assert r[part+"_actual_outcomes_by_treatment"][action]["visit_positive"]>0
+          assert not r["strict_causal_policy_value_qualified"]
+          assert not r["general_world_state_intelligence_qualified"]
+          assert not r["full_parameter_and_CPU_parity_established"]
+          assert r["no_merge_no_commercial_promotion"]
+          print("ME049_ORIGINAL_BOTH_ARM_REAL_ACTION_EVIDENCE_REPLAY_AND_LIMITS_PASS")
+          PY
+      - name: Preserve genuine trained weights and negative gates without licensed raw source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me049-authentic-both-action-native-state-original-weights-evidence
+          path: |
+            results/me049/results.json
+            results/me049/action_*-s*/
+            me049-original-fits.log
+            me049-original-replay.log
+          retention-days: 90
+          if-no-files-found: ignore
