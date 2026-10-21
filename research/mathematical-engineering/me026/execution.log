@@ -1,0 +1,14 @@
+{"status": "PASS", "original_neural_checkpoints": 9, "predictions_per_path": 53568, "maximum_probability_error": 1.1920928955078125e-07, "original_primary_gate_passed": false, "primary": {"ECE10_kernel_minus_native_mean": 0.001605190042953765, "all_3_seed_improve": false, "contrast": "tac_kernel minus tac_rms, historical DEV", "mean_delta": -7.03518321829207e-05, "no_external_efficacy_claim": true, "passed_development_only_engineering_gate": false, "per_seed_deltas": [4.24448224692342e-06, -0.0001049105967484143, -0.00011038938204727122]}, "mean_scores": {"tac_kernel": 0.16645941228227115, "tac_rms": 0.16652976411445408, "tiny_transformer_kernel": 0.16684367947278197}, "MLP_reference_weights_and_probabilities_available": false, "MLP_reference_independently_replayed": false, "parameter_parity": "PASS", "data_exposure_parity": "PASS", "tuning_selection_parity": "PASS", "full_compute_parity": "UNESTABLISHED", "architecture_superiority_claim_allowed": false, "training_CPU_seconds_by_arm": {"tac_rms": 81.35449652599956, "tac_kernel": 81.78533574400086, "tiny_transformer_kernel": 168.40093760499968}, "new_fits": 0, "new_test_outcomes": 0, "original_archive_sha256": "3bdcd318441e5bc7cf5c8b8338a5785d3ee32b690e7cd8a03d3fe56e1c0ec7ae"}
+/home/agent/.local/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+/home/agent/.local/lib/python3.12/site-packages/torch/jit/_serialization.py:89: FutureWarning: `torch.jit.save` is deprecated. Please switch to `torch.export`.
+  warnings.warn(
+/home/agent/.local/lib/python3.12/site-packages/torch/jit/_serialization.py:176: FutureWarning: `torch.jit.load` is deprecated. Please switch to `torch.export`.
+  warnings.warn(
+{"arm": "tac_rms", "seed": 14001, "batch128_speedup": 1.2868387893986355}
+{"arm": "tac_kernel", "seed": 14001, "batch128_speedup": 1.3287316834916736}
+{"arm": "tac_rms", "seed": 14002, "batch128_speedup": 1.276698548693783}
+{"arm": "tac_kernel", "seed": 14002, "batch128_speedup": 1.282486560520284}
+{"arm": "tac_rms", "seed": 14003, "batch128_speedup": 1.266318579305413}
+{"arm": "tac_kernel", "seed": 14003, "batch128_speedup": 1.2882182199825918}
+{"study": "ME026_NATIVE_COMPILED_STREAMING_ENGINEERING", "contract_sha256": "45568bc9108a11f9e6445eaaaed91925df1dc666ce0837db8850d3448707652c", "source_commit": "ecd7d973c10fd8bf021ed7161efa16f1f4943351", "new_fits": 0, "new_test_outcomes": 0, "architecture_promoted": false, "primary_engineering_gate_passed": true, "batch128_speedup_range": [1.266318579305413, 1.3287316834916736], "batch128_geometric_mean_speedup": 1.288069132884678, "process_lifetime_peak_RSS_KiB": 506132, "isolated_inference_memory_measured": false}
