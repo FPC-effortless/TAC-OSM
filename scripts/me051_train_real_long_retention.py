@@ -6,7 +6,7 @@ rows before fitting; original DEV/TEST RATING fields are first parsed after
 ALL ten real FIT-trained weights/optimizer/RNG are checksum-frozen.
 """
 from __future__ import annotations
-import argparse,bisect,hashlib,json,math,time,urllib.request,zipfile
+import argparse,bisect,hashlib,json,math,re,time,urllib.request,zipfile
 from pathlib import Path
 from collections import defaultdict
 import numpy as np
@@ -65,8 +65,8 @@ def fetch_source(out):
         raise RuntimeError("MovieLens original ratings.dat integrity failure")
     # Publisher checksum document is not a training label and may be read freely.
     with urllib.request.urlopen(SOURCE_MD5_URL,timeout=45) as resp:
-        advertised=resp.read(300).decode("ascii",errors="ignore").split()[0]
-    if advertised.lower()!=SOURCE_MD5:
+        receipt=resp.read(300).decode("ascii",errors="ignore").lower()
+    if not re.search(r"(?<![0-9a-f])"+SOURCE_MD5+r"(?![0-9a-f])",receipt):
         raise RuntimeError("publisher MD5 checksum no longer matches frozen registered source")
     return archive,hashlib.sha256(raw).hexdigest()
 
