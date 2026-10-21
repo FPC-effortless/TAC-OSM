@@ -1,0 +1,7 @@
+# ME044 optional native inference compilation
+
+Registered after Tetouan development training completed, while original ETTh1 fits are still running, before this execution benchmark. This is a post-fit execution optimization, not a new predictive model, fit or independent accuracy result. It does not alter the80 original fits, gates or original checkpoints.
+
+Compile only the six-update context-seeded native branch with torch.jit.script. Leave the complete original context/AR/forecast decoder eager, with identical learned coefficients. For all16 frozen pyramid_native checkpoints, compare every original real DEV forecast, cheap output and trust value exactly, same source windows/order/batches. Preserve compiled branch artifact and hashes. Reject any output disagreement; do not relax replay tolerance. No training/backend substitution or refit.
+
+For each frozen native checkpoint, time complete eager and compiled-branch forecasts on the same first actual DEV window, batch1/all original channels. Single thread;5warmups/backend,5paired repetitions alternating order,20calls per backend/repetition, record CPU and compilation CPU separately. Target >=1.25x geometric-mean full-forecast speedup (20% lower latency), conditional on all exact checks. Preserve negative timing/output results. No microsecond streaming or parameter compression claim; this remains full-window inference. Scripted artifacts are optional and do not change default model construction.

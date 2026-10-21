@@ -63,3 +63,13 @@ archives have SHA256 manifests and per-payload indexes. They are repository-owne
 binary files, not merely a pointer to local workspace storage. See
 [reproduction and integrity receipts](../mathematical-engineering/me043/ARTIFACT.md).
 All candidates and failed acceptance gates are preserved. No promotion implied.
+
+
+## ME044 original multiscale decoder models
+
+[Eight lossless model/evidence shards](me044/) and their SHA256 manifest retain
+all80 original fitted complete models, original optimizer/RNG and inference
+weights, genuine DEV predicted/observed/trust/cheap arrays, original AR parents,
+loss/cost records and optional exact compiled native exports. INDEX.json checks
+every payload. [Reproduction and boundaries](../mathematical-engineering/me044/ARTIFACT.md).
+These are actual repository-owned bytes, not local-workspace-only references.
