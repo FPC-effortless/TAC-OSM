@@ -79,3 +79,21 @@ replacement helped every joint-native seed. The head is rejected under this
 recipe. See [verified results](mathematical-engineering/me030/RESULTS.md).
 Conditional residual cross-fitting remains proposed and unexecuted. No compression,
 hierarchical state or internal reasoning mechanism is promoted by this failure.
+
+## ME031 completion — entity-isolated residual probe
+
+The proposed cross-fit diagnostic is now executed:36fits,3rotationsx3seeds, separate
+representation/readout/evaluation users, no DEV scoring or reserved cohort access.
+State residual Brier .164980411 vs common-only residual .162310484 and frozen base
+.162070604. State loses all9cells; calibration guard passes, predictive-value gates
+fail. This is finite-family prediction on previously used FIT, not an information
+estimate or independent architecture qualification. See
+[full results and limitations](mathematical-engineering/me031/RESULTS.md).
+
+The next unexecuted native architecture hypothesis targets representation learning:
+train the state to reduce genuine response residuals beyond a separately trained,
+frozen common predictor. Ensure gradients reach memory, preserve user separation,
+and give control encoders equal feature/target exposures and resource allowances.
+Preregister separately before any new fitting. ME031 froze state during probing;
+it did not execute this objective change. Compression/hierarchy/internal reasoning
+remain gated; none is justified by this negative result.

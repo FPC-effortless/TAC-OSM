@@ -1075,3 +1075,13 @@ Brier (.167361674 vs .164198272) and ECE (.049323629 vs .027659302). Every regis
 gate fails. Equal examples/updates and <1% global parameter gap; unequal actual
 compute, reused DEV. No conditional-information, chronology, architecture-superiority
 or qualification claim. [Full evidence](../research/mathematical-engineering/me030/RESULTS.md).
+
+### ME031 — cross-fitted residual state probe, negative (2026-10-21)
+
+36fits complete on original KuaiRec FIT, disjoint representation/readout/evaluation
+users in each model,3rotationsx3seeds. State residual Brier .164980411 vs common
+residual .162310484 and frozen common base .162070604. State loses all9cells;
+calibration guard passes, all predictive-value gates fail. Finite-family diagnostic,
+not conditional MI or proof that memory is useless; probe widths differ to match
+trainable counts. No historical DEV score, new reserved cohort, promotion or full
+compute-parity qualification. [Evidence](../research/mathematical-engineering/me031/RESULTS.md).

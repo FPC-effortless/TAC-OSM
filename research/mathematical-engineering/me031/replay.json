@@ -1,0 +1,125 @@
+{
+  "bit_exact_checkpoint_paths": 18,
+  "bit_exact_export_reference_paths": 36,
+  "checkpoint_residual_forecasts": 64656,
+  "corruption_rejected_before_source": true,
+  "export_and_reference_forecasts": 129312,
+  "features_rebuilt_and_checked": 23534784,
+  "fresh_torch_only_pipeline_checks": [
+    {
+      "forecasts": 8,
+      "max_abs_error": 0.0,
+      "tag": "r0-s14001"
+    },
+    {
+      "forecasts": 8,
+      "max_abs_error": 0.0,
+      "tag": "r1-s14001"
+    },
+    {
+      "forecasts": 8,
+      "max_abs_error": 0.0,
+      "tag": "r2-s14001"
+    },
+    {
+      "forecasts": 8,
+      "max_abs_error": 0.0,
+      "tag": "r0-s14002"
+    },
+    {
+      "forecasts": 8,
+      "max_abs_error": 0.0,
+      "tag": "r1-s14002"
+    },
+    {
+      "forecasts": 8,
+      "max_abs_error": 0.0,
+      "tag": "r2-s14002"
+    },
+    {
+      "forecasts": 8,
+      "max_abs_error": 0.0,
+      "tag": "r0-s14003"
+    },
+    {
+      "forecasts": 8,
+      "max_abs_error": 0.0,
+      "tag": "r1-s14003"
+    },
+    {
+      "forecasts": 8,
+      "max_abs_error": 0.0,
+      "tag": "r2-s14003"
+    }
+  ],
+  "historical_DEV_scored": false,
+  "optimizer_RNG_clock_receipts": 36,
+  "reserved_cohorts_opened": false,
+  "resource_subtotals": [
+    {
+      "arm": "common_residual",
+      "complete_pipeline_FLOPs": false,
+      "limitation": "Fixed-feature residual probe only; ignores encoder/base and unsupported nonlinear/elementwise operator work.",
+      "optimizer_included": false,
+      "probe_only_inference_cpu_median_seconds": 0.00010015800216933712,
+      "probe_only_inference_samples_seconds": [
+        0.00013107399718137458,
+        0.00010385399946244434,
+        9.905699698720127e-05,
+        0.0001286999977310188,
+        0.00010473499423824251,
+        0.00010015800216933712,
+        9.90959961200133e-05,
+        9.865500032901764e-05,
+        9.761399996932596e-05
+      ],
+      "residual_forward_backward_FLOP_subtotal_B128_four_targets": 2422272,
+      "shared_encoder_pipeline_B128_median_seconds": 0.012430267997842748,
+      "shared_encoder_pipeline_B128_samples_seconds": [
+        0.01267419800569769,
+        0.012430267997842748,
+        0.012557836002088152,
+        0.012321447000431363,
+        0.01259655399917392,
+        0.012271091996808536,
+        0.012270010003703646,
+        0.012257381997187622,
+        0.012733686999126803
+      ],
+      "shared_encoder_pipeline_note": "Both paths execute native prefix features; no optimized common-only feature extractor claimed."
+    },
+    {
+      "arm": "state_residual",
+      "complete_pipeline_FLOPs": false,
+      "limitation": "Fixed-feature residual probe only; ignores encoder/base and unsupported nonlinear/elementwise operator work.",
+      "optimizer_included": false,
+      "probe_only_inference_cpu_median_seconds": 7.697399996686727e-05,
+      "probe_only_inference_samples_seconds": [
+        7.877699681557715e-05,
+        7.798600563546643e-05,
+        8.050900214584544e-05,
+        7.697399996686727e-05,
+        7.655299850739539e-05,
+        7.634299981873482e-05,
+        7.719399582128972e-05,
+        7.592199835926294e-05,
+        7.563099643448368e-05
+      ],
+      "residual_forward_backward_FLOP_subtotal_B128_four_targets": 2436608,
+      "shared_encoder_pipeline_B128_median_seconds": 0.01246370700391708,
+      "shared_encoder_pipeline_B128_samples_seconds": [
+        0.012488403997849673,
+        0.012256920999789145,
+        0.012511829001596197,
+        0.01226424199558096,
+        0.01246370700391708,
+        0.012444329004210886,
+        0.012556665002193768,
+        0.012237762995937373,
+        0.012685285997577012
+      ],
+      "shared_encoder_pipeline_note": "Both paths execute native prefix features; no optimized common-only feature extractor claimed."
+    }
+  ],
+  "status": "PASS"
+}

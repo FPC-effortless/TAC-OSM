@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/tac-research/scripts/me031_crossfit_research.py", line 262, in <module>
+    run(Path(a.out))
+  File "/workspace/tac-research/scripts/me031_crossfit_research.py", line 161, in run
+    r,s,t=[subset(data,torch.tensor(role[k]['indices'])) for k in ('representation','readout','evaluation')]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/tac-research/scripts/me031_crossfit_research.py", line 31, in subset
+    return {k:(v[indices] if isinstance(v,torch.Tensor) else [v[i] for i in indices.tolist()])
+                                                              ~^^^
+TypeError: 'int' object is not subscriptable
