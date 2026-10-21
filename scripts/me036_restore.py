@@ -20,8 +20,7 @@ def run(archive,destination):
         for script in ('me036_research.py','me036b_continue.py'):
             subprocess.run([sys.executable,str(destination/'scripts'/script),'audit'],cwd=destination,env=env,stdout=log,stderr=subprocess.STDOUT,check=True)
     for row in index['payloads']:
-        # Auditors write only the replay receipt; recorded original receipts must reproduce exactly.
-        if row['path'] in ('results/me036/replay.json','results/me036b/replay.json'):continue
+        # Replayed receipts must reproduce exactly, as must every original payload.
         assert sha(destination/row['path'])==row['sha256'],row['path']
     a=json.loads((destination/'results/me036/replay.json').read_text())
     b=json.loads((destination/'results/me036b/replay.json').read_text())

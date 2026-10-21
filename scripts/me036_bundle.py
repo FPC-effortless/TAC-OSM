@@ -11,6 +11,12 @@ def run(destination):
     for r in frozen['fits']:
         for e in r['endpoints']:assert base.sha(base.ROOT/e['checkpoint'])==e['sha256']
     for r in frozen['ridge']:assert base.sha(base.ROOT/r['coefficient'])==r['sha256']
+    runtime=json.loads((out/'runtime.json').read_text())
+    for r in runtime['exports']:
+        assert base.sha(base.ROOT/r['path'])==r['sha256']
+        assert base.sha(base.ROOT/r['physical_path'])==r['physical_sha256']
+    corrected=json.loads((base.ROOT/'results/me036c/frozen.json').read_text())
+    for r in corrected['references']:assert base.sha(base.ROOT/r['coefficient'])==r['sha256']
     excluded={'ARTIFACT.md','archive.json','archive-index.json','restoration.json','restoration.log'}
     paths=[p for p in subprocess.check_output(['git','ls-files'],cwd=base.ROOT,text=True).splitlines()
         if (base.ROOT/p).is_file() and not (p.startswith('research/mathematical-engineering/me036/') and Path(p).name in excluded)]
