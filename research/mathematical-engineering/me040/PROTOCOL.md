@@ -25,7 +25,7 @@ Three complete jointly trainable models: innovation_tac (12-step unchanged), pai
 
 Exposure lane: exactly 250 updates batch4, identical samples (sampler seed+2000), same AR parent, same AdamW LR AR .0001 vs rest .001, weight decay1e-4, clip1, loss forecast MSE+10*AR anchor+.01*correction square. Save step100 and250, compare fixed step250 (no DEV checkpoint cherry-picking).
 
-CPU lane: separately initialized from identical parents and seed streams; spend 5 process-CPU seconds on optimization, finish crossing step; max1000 steps; actual updates and unequal target presentations MUST be reported. Exclude startup, validation, persistence and serialization from optimizer CPU but report them separately; actual total compute is unmatched. Score registered final step of each lane. Both lanes preserve original checkpoints, optimizer and sampler RNG, time/peak RSS, validation predictions and per-channel MSE/MAE. No changes after first outcomes.
+CPU lane: separately initialized from identical parents and seed streams; spend 5 process-CPU seconds on optimization, finish crossing step; max4000 steps; actual updates and unequal target presentations MUST be reported. Exclude startup, validation, persistence and serialization from optimizer CPU but report them separately; actual total compute is unmatched. Score registered final step of each lane. Both lanes preserve original checkpoints, optimizer and sampler RNG, time/peak RSS, validation predictions and per-channel MSE/MAE. No changes after first outcomes.
 
 Registered engineering gates, historical DEV only:
 - SPEED: paired/native geometric mean ratio of charged 250-update native CPU >=1.35 across four matched pairs.
