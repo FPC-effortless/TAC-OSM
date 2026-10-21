@@ -1043,3 +1043,26 @@ independent validation, Transformer superiority or LLM-scale capability claim.
 No new fits or reserved outcomes were used.
 See [ME025 results](../research/mathematical-engineering/me025/RESULTS.md) and
 [ME026 results](../research/mathematical-engineering/me026/RESULTS.md).
+
+## ME027 — learned-state value and resource curves
+
+**STATUS:** twelve real-data fits complete; registered learned-state consistency
+gate failed; no native architecture promotion.
+**LAYER:** L1 mathematical/software checks; L2 reused-development diagnostics.
+
+The common 26-channel causal interface exposes current-item/duration, rate
+summaries, FIT popularity and pooled historical inputs to near-equal-parameter
+TAC, GRU, Transformer and MLP models. All preserve four actual causal targets.
+Fixed-exposure and charged-CPU lanes are separate: they do not simultaneously
+match data and actual compute. All 20s spends are within 1%, but full FLOP/energy
+parity is unestablished and strict architectural superiority is disallowed.
+
+TAC−MLP Brier at 20s is −.007219302, but the faster MLP is overtrained at roughly
+3477 updates; at 50 updates it already reaches .164508 versus TAC .186103.
+TAC's feature-mean replacement improves one seed (−.000159266), failing the
+state guard. Nonlinear-readout allocation, representation and optimization
+prevent identifying intrinsic state utility from these score differences.
+All 428,544 budget forecasts and 71,424 primary exports replay exactly;
+913 software tests and twelve fresh Torch-only runtimes pass. No reserved
+cohort, new independent evidence, complete-system utility or commercial claim.
+See [ME027 results](../research/mathematical-engineering/me027/RESULTS.md).
