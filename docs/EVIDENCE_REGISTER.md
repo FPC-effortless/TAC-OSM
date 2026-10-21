@@ -543,3 +543,23 @@ independent qualification unestablished; no merge/promotion.
   failures preserved. Physical native exports, supported-FLOP subtotals and
   whole-window latency are measured separately from training. Local original
   model delivery is not a GitHub Actions training artifact; no merge/deployment.
+
+### ME039 — native execution and durable repository model records
+
+- Original registration c1aa9f71 before real-data timing. Eight preselected
+  ETTh1/Electricity cases, three repeats, 64 updates/path: 3,072 optimizer steps.
+  Steady 1.076x/cold-inclusive 1.067x; speed targets FAIL. Same parameters/data,
+  registered derivative/parameter agreement PASS, not bit-exact training.
+- All 60 frozen native models replay 2,112,000 standardized plus 2,112,000 raw physical
+  values exactly. No new final test metric, accuracy selection or cohort access.
+- Post hoc serialized-serving baseline addendum a0bd350d precedes its timing:
+  alternate export 0.963x original; original retained. Separate freeze follow-up
+  36ee9cb4 fails exact forecast replay; rejected, no tolerance relaxation.
+- Actual original ME038 60-model archive and every new continuation/gradient
+  record are checked into research/model-artifacts, not only a local manifest.
+  CI verifies whole-archive and per-payload SHA and uploads a separate Actions
+  copy; actual remote download verification is recorded under ME039.
+- Legacy full 1.05 GB evidence archive remains local after upload-host HTTP401;
+  empty draft release deleted, no credential extraction/manual login. No merge,
+  default runtime change, model promotion or scientific architecture-superiority
+  claim. Source/failed gates and snapshot/runtime provenance remain explicit.

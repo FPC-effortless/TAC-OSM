@@ -319,3 +319,35 @@ supports forecast-specific corrections; do not require another mechanistic study
 before building. Any new learned variant needs a separate registration and a new
 reserved real cohort for qualification. Equivalent execution optimization may use
 frozen models with exact prediction checks; it does not establish new accuracy.
+
+## ME039 completion — measured native execution and repository delivery
+
+[ME039](mathematical-engineering/me039/RESULTS.md) retains the new ME038 native
+architecture and adds an explicit compiled-core training path. Eight real-data
+cases, three paired repeats, 3,072 optimizer updates: 1.076x steady / 1.067x total
+speed, below registered 1.20x/1.10x targets. Native-gradient/parameter numerical
+agreement passes the registered engineering tolerance; retraining is not bit exact.
+All 60 frozen models match 4,224,000 standardized/raw saved validation values exactly.
+
+Serving is 1.338x faster than eager Python, but that is not the best pre-existing
+serving baseline. The post hoc comparison with original ME038 full serialized
+exports gives 0.963x: retain the ORIGINAL serving format. A second separately
+registered freeze construction failed exact physical replay (1,574 different
+values on the first failed case, max .015625 original units), was rejected, and did
+not finish its remaining/timing gates. Do not loosen precision after measurement.
+No new accuracy, architecture-novelty, controller or generalization claim.
+
+Original 60-model ME038 bytes plus all 48 ME039 optimizer/RNG continuation states,
+traces and gradient/parameter snapshots are now stored in checked repository
+archives, alongside 60 clearly labelled experimental exports. The root README,
+research index and evidence/claims/model cards link the latest studies. CI hashes
+original payloads and provides a repository-owned Actions download. The older
+full 1.05 GB evidence archive remains local after authenticated asset upload failed;
+its exact location/SHA/status are recorded, with no false remote-availability claim.
+
+Continue architecture-first development toward fewer sequential projections and
+forecast-relevant native state interactions. Compiler wrappers alone have not
+solved the measured CPU disadvantage. Preserve all negative attempts and the
+preferred original serving model. Fresh learned variants require a new source/
+cohort registration for qualification; no tuning on closed Tetouan/household/
+KuaiRec tests, and no prerequisite standalone mechanistic study.

@@ -1,0 +1,18 @@
+/home/agent/.local/lib/python3.12/site-packages/torch/jit/_serialization.py:176: FutureWarning: `torch.jit.load` is deprecated. Please switch to `torch.export`.
+  warnings.warn(
+/home/agent/.local/lib/python3.12/site-packages/torch/jit/_freeze.py:106: FutureWarning: `torch.jit.freeze` is deprecated. Please use `torch.compile` instead.
+  warnings.warn(
+FREEZE exposure-electricity-h720-innovation_tac-s38001 PASS
+FREEZE exposure-electricity-h720-innovation_tac-s38002 PASS
+FREEZE exposure-electricity-h336-innovation_tac-s38001 PASS
+FREEZE exposure-electricity-h336-innovation_tac-s38002 PASS
+FREEZE exposure-electricity-h192-innovation_tac-s38001 PASS
+FREEZE exposure-electricity-h192-innovation_tac-s38002 PASS
+Traceback (most recent call last):
+  File "/workspace/tac-research/scripts/me039_frozen_serving.py", line 55, in <module>
+    if __name__=='__main__':run()
+                            ^^^^^
+  File "/workspace/tac-research/scripts/me039_frozen_serving.py", line 20, in run
+    assert np.array_equal(y.numpy(),expected),r['key']
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: exposure-electricity-h96-innovation_tac-s38001
