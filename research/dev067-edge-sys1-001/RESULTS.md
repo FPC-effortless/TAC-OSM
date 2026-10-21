@@ -54,3 +54,18 @@ Official iPinYou RTB auction dataset (https://contest.ipinyou.com/) contains adv
 [CI workflow](../../.github/workflows/dev067-edge-bidding-feasibility.yml) pulls original restored DEV067 artifacts and runs [frozen checkpoint functional and latency test](../../scripts/test_dev067_edge_bidding_feasibility.py) separately for TAC, GRU, no-CASM. Original source is not modified; archived model/checkpoint manifest check is enforced. The alternative full local research package includes original exported weights/source, individual 160-repeat latency metrics and exact software tests.
 
 **Final verdict: PARTIAL SOFTWARE INTEGRATION FEASIBILITY, NOT A FUNCTIONING LEARNED BIDDER.** No model promotion, architecture superiority claim, confirmed live 100ms SLA, savings, ad-model transfer success, or merge.
+
+
+## Independent GitHub Actions run: exact original weights, identical input, green
+
+[Original-source frozen replay/latency workflow 39619467446](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39619467446) **PASS**; authentic original checkpoint/demos downloaded from DEV067 archive 12194964127; no training or checkpoint modifications. Result [artifact 12354685370](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39619467446/artifacts/12354685370) contains all three machine-readable measurements. GitHub Actions server differs from the local environment, so platform-specific latency is reported separately.
+
+| Original trained model | Frozen model p50 ms | p95 ms | p99 ms | <5ms calls, 64-event context |
+|---|---:|---:|---:|---:|
+| TAC | **6.4423** | **6.6011** | **6.7171** | **0/160** |
+| GRU | **5.0511** | **5.2195** | **5.4564** | **1/160** |
+| no-CASM | **6.3245** | **6.4500** | **6.5852** | **0/160** |
+
+All 480 GH samples complete below 100ms, excluding exchange network, traffic contention, upstream accounting, feature assembly and production side effects. Original recorded output replay PASS TAC4/4 GRU3/3 noCASM5/5. Action-field sensitivity and deterministic software envelope tests PASS. **No 5ms p99 SLO achieved on this runner.** Relative latency GRU is faster than both controller arms on matching inputs.
+
+The original local first pass, stricter local rerun, and independently observed GitHub times differ; **never infer deterministic p99 or production latency** from these samples. An earlier intermediate attempted CI run containing a script scope error was corrected without refitting or changing test data; successful final run and retained failed attempt are traceable on the branch. The source fixture is synthetic maintenance demo data, not real ad-auction input. The only real-world outcome test remains NOT RUN and no bid policy is qualified.
