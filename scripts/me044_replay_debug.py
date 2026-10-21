@@ -46,7 +46,7 @@ def profiles(out):
         choices['mkl_avx512']={'MKL_ENABLE_INSTRUCTIONS':'AVX512'}
     rows=[]
     for name,settings in choices.items():
-        p=subprocess.run([sys.executable,__file__,'--out',out,'--child'],env=dict(os.environ,**settings),capture_output=True,text=True)
+        p=subprocess.run([sys.executable,'-m','scripts.me044_replay_debug','--out',out,'--child'],env=dict(os.environ,**settings),capture_output=True,text=True)
         row={'profile':name,'settings':settings,'returncode':p.returncode}
         if p.returncode==0:row['comparison']=json.loads(p.stdout)
         else:row['failure']=p.stderr[-3000:]

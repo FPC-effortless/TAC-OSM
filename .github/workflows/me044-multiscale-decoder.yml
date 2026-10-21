@@ -38,7 +38,7 @@ jobs:
       - name: Restore actual original models and all indexed payloads
         run: python scripts/me044_artifacts.py verify research/model-artifacts/me044 restored-me044
       - name: Compare frozen numerical reference under explicit CPU dispatch profiles
-        run: python scripts/me044_replay_debug.py --out restored-me044
+        run: python -m scripts.me044_replay_debug --out restored-me044
       - name: Audit original optimizers, exact forecasts, cheap retention and real metrics
         run: |
           python -m scripts.me044_train_multiscale --out restored-me044 --audit
