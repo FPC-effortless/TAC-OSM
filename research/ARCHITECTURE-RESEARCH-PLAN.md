@@ -97,3 +97,25 @@ and give control encoders equal feature/target exposures and resource allowances
 Preregister separately before any new fitting. ME031 froze state during probing;
 it did not execute this objective change. Compression/hierarchy/internal reasoning
 remain gated; none is justified by this negative result.
+
+## ME032 completion — centered conditional memory training
+
+The proposed representation-training change is now executed:9R-only common-head
+fits+27new memory fits, all with user-separated fitting/evaluation. New centered
+correction delta(h,C)=w'h+v'[tanh(Bh+AC+a)-tanh(AC+a)] guarantees delta(0,C)=0.
+All27memories receive nonzero credit after initialization; conditional common
+heads remain exact while joint control adapts them. Native recurrence unchanged.
+
+Conditional native Brier.165824448 improves the R-only teacher.170203796, but
+joint native.165650858 and pooled.163399886 are stronger within this matrix.
+Teacher-gain/calibration pass; trained-control/fold/bootstrap gates fail. No
+candidate promoted. [Verified results](mathematical-engineering/me032/RESULTS.md).
+Source remains previously used FIT, not an independent or prospective temporal
+qualification. A learned nonzero constant state can still supply context correction.
+
+Next unexecuted native-engineering test: isolate S-specific common/embedding
+adaptation from ordered-memory effects, with an S-adapted common reference and
+freeze/unfreeze embedding controls. The R teacher's lack of S fitting is not
+proof of memory value. No post-hoc fit is added to ME032. Only after useful native
+state is established should fixed-capacity learned summaries, compression,
+hierarchy or adaptive reasoning advance. Existing plan hypotheses remain intact.
