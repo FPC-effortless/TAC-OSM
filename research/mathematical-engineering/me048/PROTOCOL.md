@@ -1,0 +1,31 @@
+# ME048 — Actual action-conditioned intelligence on randomized real intervention records
+
+Registered 2026-10-21 BEFORE new ME048 training/evaluation. Stacked separately on ME047 PR312 and does not change its source, trained checkpoints or failed zero-shot transfer acceptance gate. The research user's goal is **actual learned capabilities**, not further CPU micro-optimization or artificial/synthetic state machines.
+
+## Main task
+
+Train TAC action-conditioned outcome predictor Q(x,a,goal) on real randomly assigned advertising treatment/control and observed human visits/conversions, not fabricated consequences. Evaluate learned candidate treatment choices with separately held-out real randomized outcomes, reporting matched baselines and conservative statistical uncertainty. This tests decision-relevant numerical estimation, not online commercial ad bidding, native millisecond control, causally identified individual treatment effects, multi-step feedback, System2 semantics or counterfactual knowledge from purely unobserved actions.
+
+## Authentic data / license
+
+Criteo AI Lab corrected **Uplift Prediction Dataset v2.1** from randomized advertising incrementality tests. Official paper Diemert et al., Large Scale Benchmark for Uplift Modeling. Mirror at https://huggingface.co/datasets/criteo/criteo-uplift/resolve/2424920019e49d52d72c13ac1143ec5d53af276b/criteo-research-uplift-v2.1.csv.gz , original 311422618-byte compressed file SHA256 2716e1bf0fd157a93b5bf86924d9088419dfbac2022c6cd90030220634f616dc, 13,979,592 anonymized records. The corrected v2.1 release replaces known problematic old v1 treatment imbalance. Try official https://go.criteo.net/criteo-research-uplift-v2.1.csv.gz only if mirror fails AND it matches exact SHA256; refuse any different source. License CC-BY-NC-SA 4.0: research/attribution/noncommercial conditions; do NOT upload or redistribute raw bytes, and no commercial deployment claim.
+
+Each real user record contains 12 anonymized floating features f0..f11, actual randomized treatment indicator a∈{0,1}, observed visit y_visit∈{0,1}, observed conversion y_conv∈{0,1}, and exposure; treatment presence is NOT equivalent to confirmed exposure. The source does NOT identify persistent individual users nor chronological event order. Therefore any native recurrence here is a **feature-belief computation**, not evidence of causal persistent temporal memory or multi-step closed-loop control. True temporal/action-state learning needs a different linked-action log.
+
+Pre-register sampled original row positions: numeric source [0,180000) authentic FIT, [180000,240000) old-unseen study DEV, [240000,300000) sealed study TEST, preserving input order but NOT alleging temporal order. Training loader parses ONLY first180000 records before every model checkpoint is saved and SHA-frozen. Only then decompress and parse held-out outcomes [180000,300000) for single final evaluation. Feature means/std fit on FIT ONLY. Observed 0.85 treatment ratio is a reported global figure, NOT row-wise known action propensity; any inverse-weighted offline policy value is exploratory and requires exchangeability/known propensity assumptions, not independently verified causal policy gains.
+
+## Three complete real models
+
+- action_context: feedforward 12D→128→64 contextual state
+- action_gru: 12 anonymized features treated as sequential coordinate tokens to a 64D GRU, NOT a time series
+- action_tac: 12 anonymized numeric coordinates mapped to 16D tokens then passed through same original TAC ME038/040 fast32/slow32 and 8x8 associative prediction-error memory six times (paired), reused native math but NOT temporal action memory.
+
+All three use identical learned 16D typed goal embedding (visit/conversion) and same two-action outcome logit head, output Q(x,0,goal) and Q(x,1,goal), both learned exclusively from the randomized actually selected treatment/reward. They may infer counterfactual expectation under experimental randomization assumptions, but **never observe an individual's second potential outcome**. No arbitrary-language understanding or SLM invoked. No invented maintenance/bid cost; goal optimization uses observed visit indicator, not dollar cost or ROI.
+
+## 6 trained fits + honest controls
+
+2 seeds (48001,48002) × 3 arms = 6 genuine randomized FIT-trained models. AdamW 800 full updates batch256 same sampled original FIT user rows, LR.001, wd1e-4 clip1; binary logistic losses for real visit and conversion target, conversion contribution .3 to keep rare outcomes. All heads trained in same FIT. Report actual active parameters, optimizer CPU and dataset exposures; architecture params/FLOPs may differ and are not fair capacity-matched head-to-head unless verified.
+
+After all six original model/optimizer/RNG SHA checkpoints saved, load unopened DEV and TEST rows ONCE, score same heldout records for all three models and raw global treatment/control observed outcomes, report heldout visit+conversion Brier and log loss. Choose treatment iff Q_visit(x,1)>Q_visit(x,0), fixed threshold0 prefit, no post-TEST selection. Estimate heldout **exploratory** IPS and doubly robust policy values using reported global FIT treatment frequency p=FIT_mean treatment (not verified conditional logging propensity); compare always treat, never treat, model learned policy with bootstrap 95% intervals, effective sample size, actual observed supported treatment, and official randomized-trial caveats. No causal superiority without clear positive value interval vs strongest fixed policy and verified propensity/exchangeability. This evaluation reports a real-action outcome skill if logloss/Brier and policy value surpass context and strong fixed arms under controls; otherwise failure stays.
+
+Numerical tests may use constructed tensors to test stable TAC updates, action output shapes and gradient paths. They are NOT simulated action performance. Full original real-data checkpoint replay on pinned AVX2 required, all failure/uncertainty records archived on GitHub Actions without licensed raw data. No merge, model promotion or actual ad-bidding deployment from this benchmark. Further future research can integrate verified logged sequential actions and CASM/DeLoop, but this task alone cannot establish those.
