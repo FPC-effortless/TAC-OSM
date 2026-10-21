@@ -56,3 +56,8 @@ are embedded. All neural controls receive the same shared-channel observations.
 The matrix adds64coordinates to native64:128float32coordinates/channel, not one
 128-vector for a whole multichannel system. Serving normalization requires the
 complete96-step history, and the current trained model resets state per window.
+
+The core processes normalized tokens in order. Window statistics and the dense
+context branch use the complete observed96-step window, so raw-history prefix
+states cannot be reused as a causal streaming transform. Unit prefix checks
+apply to the core given tokens, not to separately normalized raw prefixes.
