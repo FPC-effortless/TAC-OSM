@@ -1,0 +1,108 @@
+name: ME029 authentic chronological-state value and order-free controls
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/tac_osm/me029_order_state.py
+      - scripts/me029_order_state_research.py
+      - tests/test_me029_order_state.py
+      - research/mathematical-engineering/me029/PROTOCOL.md
+      - .github/workflows/me029-real-order-state.yml
+permissions:
+  contents: read
+concurrency:
+  group: me029-original-frozen-real-user0-FIT-DEV
+  cancel-in-progress: true
+jobs:
+  numerical-causality-and-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned original CPU environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check all three arm matrices and mathematical causal boundaries without real labels
+        run: |
+          python -m py_compile src/tac_osm/me029_order_state.py scripts/me029_order_state_research.py
+          python -m scripts.me029_order_state_research --self-test
+      - name: Entire repository regression suite
+        run: python -m pytest -q
+  genuine-original-data-fit-and-replay:
+    needs: numerical-causality-and-regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned original CPU environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Nine authentic, identical-history fits with fixed 300 training steps and loss receipts
+        run: |
+          set -o pipefail
+          python -m scripts.me029_order_state_research --out results/me029 | tee me029-real-fit.log
+      - name: Verify archived weight/prediction digests and replay exact 53568 original DEV probabilities
+        run: |
+          set -o pipefail
+          python -m scripts.me029_order_state_research --out results/me029 --replay | tee me029-original-replay.log
+      - name: Enforce preregistered authentic test provenance and negative-claim boundaries
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          r=json.loads(Path("results/me029/results.json").read_text())
+          assert r["study"]=="ME029_AUTHENTIC_EARLY_CHRONOLOGICAL_LEARNED_STATE_INFORMATION"
+          assert r["source_SHA256"]=="c23f211cf109c7a060a25a4afe9e8c681b1ccbbc816cca921d87ad37dd11c70c"
+          assert r["historical_development_already_exposed"]
+          assert r["training_FIT_windows"]==10776
+          assert r["historical_DEV_windows"]==5952
+          assert r["same_real_train_examples_and_supervised_targets"]
+          assert r["all_neural_params_active"]
+          assert r["trainable_parameter_counts"]=={
+             "chrono_native":135377,"block_sorted_native":135377,"order_free_pool":135913}
+          assert r["equal_300_optimizer_steps"]
+          assert not r["full_training_FLOPs_equal"]
+          assert not r["same_CPU_budget_and_train_examples_simultaneously_matched"]
+          assert not r["independent_competitiveness_claim_allowed"]
+          assert r["all_models_complete"] and r["original_weights_and_probs_untouched"]
+          assert not r["reserved_user_cohorts_opened"]
+          assert r["reserved_cohorts_still_closed"] and not r["candidate_promoted"]
+          assert len(r["model_results"])==9
+          assert {(x["arm"],x["seed"]) for x in r["model_results"]}=={
+            (a,s) for a in ("chrono_native","block_sorted_native","order_free_pool")
+                for s in (14001,14002,14003)}
+          assert all(x["updates"]==300 and len(x["learning_curve"])==9
+                     and x["genuine_training_rows_drawn"]==38400
+                     and x["true_supervised_response_occurrences"]==153600
+                     for x in r["model_results"])
+          assert len(r["historical_user_clustered_contrasts"])==2
+          assert all(math.isfinite(x["historical_dev_metrics"]["Brier"]) for x in r["model_results"])
+          assert set(r["preregistered_descriptive_gates"])=={
+            "mean_chrono_minus_order_free_Brier",
+            "per_seed_chrono_minus_order_free_Brier",
+            "mean_chrono_minus_block_sorted_Brier",
+            "per_seed_chrono_minus_block_sorted_Brier",
+            "chronological_better_than_order_free_all_seeds",
+            "chronological_better_than_block_sorted_all_seeds",
+            "chrono_minus_order_free_mean_ECE10",
+            "calibration_guard","all_three_gates_pass"}
+          PY
+      - name: Archive all nine original complete trained models, real scores and negative gates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me029-genuine-ordered-history-state-vs-orderfree-all-9-checkpoints
+          path: |
+            results/me029/
+            me029-real-fit.log
+            me029-original-replay.log
+          retention-days: 90
+          if-no-files-found: ignore
