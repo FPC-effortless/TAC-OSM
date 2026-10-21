@@ -4,9 +4,10 @@
 > [Current research index](research/README.md) ·
 > [Architecture-first plan](research/ARCHITECTURE-RESEARCH-PLAN.md) ·
 > [Original trained models and numerical evidence](research/model-artifacts/README.md).
-> ME038 introduced coupled native innovation memory; ME039 measures its execution
-> trade-offs and makes the original models available in the repository. Research
-> candidates remain unmerged/unpromoted; the historical v0.1 scope follows below.
+> ME041/ME042 trained complete native architecture portfolios on two real domains.
+> ME043 develops a context-first, compute-adaptive native innovation model.
+> Original model bytes and research evidence remain linked above. Candidates are
+> unmerged/unpromoted; the historical v0.1 scope follows below.
 
 > **A controlled experimental environment for studying persistent-state-
 > conditioned relevance routing and selective computation.**

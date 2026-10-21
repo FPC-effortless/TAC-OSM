@@ -11,8 +11,12 @@ runtime change, commercial release or complete predictive-world-model qualificat
 | [ME037](mathematical-engineering/me037/RESULTS.md) | Context-integrated native model with bounded horizon correction | Development gate passed; household gate failed |
 | [ME038](mathematical-engineering/me038/RESULTS.md) | New native state transition with error-corrected associative memory | Tetouan power target passed; CPU/legacy targets failed |
 | [ME039](mathematical-engineering/me039/RESULTS.md) | Explicit compiled native training path and original repository-owned model delivery | Small training gain missed target; retain original serialized serving |
+| [ME040](mathematical-engineering/me040/PROTOCOL.md) | Six paired native updates with unchanged coefficient capacity | Changed predictions; new trained variant, not equivalent execution |
+| [ME041](https://github.com/FPC-effortless/TAC-OSM/pull/306) | 88 complete portfolio fits on Tetouan; CDL best at equal updates, context best at equal CPU | No new candidate cleared both gates |
+| [ME042](https://github.com/FPC-effortless/TAC-OSM/pull/307) | 88 cross-domain ETTh1 fits; context/native win different budgets | Historical DEV only; eight treatments failed combined gates |
+| [ME043 / B](mathematical-engineering/me043/RESULTS.md) | 160 authentic complete-model fits; context-seeded conditional native expert and scheduled expert learning | ~2.9x faster training than first adaptive design; cross-domain accuracy gates failed |
 
-Current choices: ME037 remains the preferred recorded candidate for the legacy
+Historical runtime choices: ME037 remains the preferred recorded candidate for the legacy
 benchmark matrix. ME038 is the newer task-specific native architecture, with a
 passed one-city temporal power target and unresolved compute cost. Use original
 ME038 full serialized models for serving; ME039's alternate export was slower,
