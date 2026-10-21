@@ -35,6 +35,8 @@ jobs:
       - name: All repository regression and new no-future tests
         run: python -m pytest -q
   real-historical-fit-only-exploratory:
+    # Do not repeat original research fits on stacked evidence/runtime PRs.
+    if: github.head_ref == 'research/me025-native-kernel-transformer-parity-2026-10-21'
     needs: numerical-and-repository-guards
     runs-on: ubuntu-latest
     timeout-minutes: 110
