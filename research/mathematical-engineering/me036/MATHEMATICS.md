@@ -55,3 +55,12 @@ For future float32 dot-product verification, let u=eps32/2 and
 is for the linear operation only, not a blanket tolerance for nonlinear networks.
 Same-CPU checkpoint replay must remain bit exact. ME035B's prior1e-6 initial
 ridge-equivalence failure is unchanged and is not covered by a retrospective bound.
+
+## State bounds
+
+Starting from zero, every coordinate of f and s stays in[-1,1] in exact arithmetic:
+each update is a convex combination of the previous coordinate and a tanh proposal,
+since both learned gates lie in(0,1). This bound is independent of stream length
+or patch values. The normalized64-vector has Euclidean norm at most sqrt(64).
+These are state-amplitude guarantees, not a guarantee of nonvanishing gradients,
+contractivity of the coupled Jacobian, useful memory, or forecast accuracy.

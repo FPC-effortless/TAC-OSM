@@ -19,3 +19,10 @@ while the first Electricity worker handles H192/H336. A guard pauses the first
 worker before H720 if needed until H720's last fit finishes. All H720 fit records
 are then reused; ridge coefficients are fitted only by the first worker. Maximum
 concurrent fit workers remains2, with no duplicated fit or modified optimizer path.
+
+After all selections and ridge coefficients freeze, the final evaluator verifies
+ALL endpoint/coefficient hashes and executes one full test pass per model/dataset.
+Independent datasets use at most2single-thread inference workers. Aggregation and
+stride1 evaluation use the original registered scoring function unchanged. Saved
+per-dataset completion receipts prevent accidental re-scoring on resume. Runtime
+latency exports run afterward without concurrent training/evaluation workers.
