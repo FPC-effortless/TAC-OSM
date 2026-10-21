@@ -407,3 +407,15 @@ FIT/historical DEV. Source freeze c413369; all four gates FAIL. 18 checkpoint/ex
 paths reproduce107136 forecasts exactly; fresh-process36-input check within5.96e-8;
 925tests+12subtests. Actual-compute parity FAIL; no independent held-out access,
 conditional-information estimate, promotion, merge or deployment.
+
+### ME031 — FIT-user-separated conditional residual prediction
+
+[Protocol, results and audits](../research/mathematical-engineering/me031/RESULTS.md).
+Corrected source freeze50bdadb before first fit; source-only scalar-schema failure
+preserved, zero fits/metrics on that failed launch.36original fits,10776FIT windows,
+376users, three isolated role rotations,3seeds; all models frozen before scoring.
+State loses all9cells, mean state-minus-common Brier+.002669927, conditional user-
+cluster CI[+.002095950,+.003187102]. No candidate.930tests+12subtests;36optimizer/RNG
+receipts; all193968 checkpoint/export/reference forecasts exact,72fresh pipeline
+forecasts exact. Actual-compute parity unqualified; prior FIT design exposure
+remains. No historical DEV scores, reserved cohort access, merge or deployment.

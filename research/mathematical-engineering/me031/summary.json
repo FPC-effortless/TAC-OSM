@@ -1,0 +1,76 @@
+{
+  "mean_metrics": {
+    "prior": {
+      "Brier": 0.2167222339870227,
+      "log_loss": 0.6252064673551796,
+      "ROC_AUC": 0.6531727453954387,
+      "ECE10": 0.042291697931601084
+    },
+    "base": {
+      "Brier": 0.1620706038601502,
+      "log_loss": 0.4923643516792646,
+      "ROC_AUC": 0.8236939067283281,
+      "ECE10": 0.013947099549490083
+    },
+    "common_residual": {
+      "Brier": 0.16231048396237907,
+      "log_loss": 0.49226579983774443,
+      "ROC_AUC": 0.8233655630678992,
+      "ECE10": 0.015713608813826305
+    },
+    "state_residual": {
+      "Brier": 0.16498041077678297,
+      "log_loss": 0.4993438692747871,
+      "ROC_AUC": 0.817534111953842,
+      "ECE10": 0.013006565673610962
+    }
+  },
+  "charged_pipeline_resources": {
+    "common_residual": {
+      "mean_charged_pipeline_cpu_seconds": 22.52348286122212,
+      "per_cell_charged_cpu_seconds": [
+        23.68665253400008,
+        22.464566406000124,
+        22.470044961999925,
+        22.27422460699988,
+        22.181381786999907,
+        22.274318813000264,
+        22.311168580000214,
+        22.75168564799918,
+        22.29730241399949
+      ]
+    },
+    "state_residual": {
+      "mean_charged_pipeline_cpu_seconds": 22.504345985777576,
+      "per_cell_charged_cpu_seconds": [
+        23.671783869000006,
+        22.450380583000012,
+        22.44784398599983,
+        22.25854312699991,
+        22.15660022799983,
+        22.252289019999694,
+        22.292987381999723,
+        22.73308910299943,
+        22.275596573999735
+      ]
+    }
+  },
+  "state_minus_common_Brier": 0.0026699268144038907,
+  "state_minus_common_per_seed": [
+    0.002154750627552654,
+    0.002355957117124504,
+    0.0034990726985345134
+  ],
+  "user_cluster_CI95": [
+    0.0020959499992538725,
+    0.003187102222189427
+  ],
+  "gates": {
+    "at_least_two_folds_per_seed": false,
+    "bootstrap_upper_below_zero": false,
+    "calibration": true,
+    "finite_family_state_candidate": false,
+    "state_beats_base": false,
+    "state_beats_common": false
+  }
+}
