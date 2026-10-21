@@ -182,12 +182,15 @@ def windows_for_source(sources,domain):
 
 def download_untouched_ETTm2(root):
     """Called ONLY after source-trained models/checkpoints are all immutable."""
-    folder=root/"independent-site";folder.mkdir()
+    folder=root/"independent-site";folder.mkdir(exist_ok=True)
     dest=folder/"ETTm2-original.csv"
     request=urllib.request.Request(ETTM2_URI,
                       headers={"User-Agent":"TAC-OSM-ME047-fixed-first-look/1.0"})
-    with urllib.request.urlopen(request,timeout=180) as response:
-        raw=response.read()
+    if dest.exists():
+        raw=dest.read_bytes()
+    else:
+        with urllib.request.urlopen(request,timeout=180) as response:
+            raw=response.read()
     if len(raw)!=ETTM2_BYTES or original_blob_hash(raw)!=ETTM2_BLOB:
         raise ValueError("third source changed; no ETTm2 scoring performed")
     dest.write_bytes(raw)
