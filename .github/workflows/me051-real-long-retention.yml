@@ -1,0 +1,104 @@
+name: ME051 genuine long-history predictive retention and memory intelligence
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/tac_osm/me051_long_retention.py
+      - scripts/me051_train_real_long_retention.py
+      - tests/test_me051_real_long_retention.py
+      - research/mathematical-engineering/me051/**
+      - docs/TACOSM-BASELINE-001.md
+      - .github/workflows/me051-real-long-retention.yml
+permissions:
+  contents: read
+concurrency:
+  group: me051-real-long-memory-${{ github.head_ref }}
+  cancel-in-progress: true
+jobs:
+  numerical-and-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install pinned original scientific environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify real 16/64/256 masked native mathematical and leakage software guards
+        run: |
+          python -m py_compile src/tac_osm/me051_long_retention.py scripts/me051_train_real_long_retention.py
+          python -m pytest -q tests/test_me051_real_long_retention.py
+      - name: Run complete regression suite and preserve frozen-baseline provenance
+        run: |
+          python -m pytest -q
+          python scripts/sync_test_count.py --check
+  original-real-long-memory-training:
+    needs: numerical-and-regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install same pinned environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Download official verified original MovieLens and train ten real long-history models before future labels
+        run: |
+          set -o pipefail
+          python -m scripts.me051_train_real_long_retention --out results/me051 | tee me051-original-fits.log
+      - name: Independently reload and bit-replay all ten original fitted models on all three genuine history lengths
+        run: |
+          set -o pipefail
+          python -m scripts.me051_train_real_long_retention --out results/me051 --replay | tee me051-original-replay.log
+      - name: Enforce original publisher source, sealed future labels and no unwarranted intelligence claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("results/me051/results.json").read_text())
+          assert r["complete"]
+          assert r["registered_publisher_zip_MD5"]=="c4d9eecfca2ab87c1945afe126590906"
+          assert len(r["source_archive_SHA256"])==len(r["ratings_dat_SHA256"])==64
+          assert len(r["models"])==10
+          assert r["all_ten_original_checkpoints_frozen_before_future_outcomes"]
+          assert r["sealed_test_opened"] and r["all_rating_rows_parsed_after_freeze"]==1000209
+          assert r["metadata_only_selection_before_outcomes"]["TEST_H256"]>=500
+          assert r["metadata_only_selection_before_outcomes"]["TEST_user_count"]>=20
+          assert r["all_future_rating_labels_frozen_until_after_fit"]
+          assert r["historical_256_inputs_compressed_to_32_updates"]
+          assert not r["cross_architecture_full_parameter_and_CPU_parity"]
+          assert not r["action_outcomes_causal_claim"]
+          assert not r["continuous_256_step_state_claim"]
+          assert r["research_only_no_redistribution"] and r["no_promotion_or_merge"]
+          print("ME051_AUTHENTIC_LONG_HISTORY_REPLAY_AND_CLAIM_GATES_PASS")
+          PY
+      - name: Preserve all original checkpoint optimizer RNG and failed gates; never licensed real users or raw ratings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me051-real-long-horizon-predictive-retention-original-models
+          path: |
+            results/me051/results.json
+            results/me051/*-s*/
+            me051-original-fits.log
+            me051-original-replay.log
+          if-no-files-found: ignore
+          retention-days: 90
