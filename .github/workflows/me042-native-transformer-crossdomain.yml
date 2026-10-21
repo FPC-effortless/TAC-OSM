@@ -1,0 +1,93 @@
+name: ME042 authentic ETTh1 cross-domain TAC architecture portfolio
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - research/mathematical-engineering/me042/**
+      - scripts/me042_real_transformer_crossdomain.py
+      - .github/workflows/me042-native-transformer-crossdomain.yml
+permissions:
+  contents: read
+concurrency:
+  group: me042-real-crossdomain-portfolio
+  cancel-in-progress: true
+jobs:
+  crossdomain-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned original real model dependencies
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify original 11 full models and historical causal predictor equations
+        run: |
+          python -m py_compile scripts/me042_real_transformer_crossdomain.py
+          python -m scripts.me042_real_transformer_crossdomain --self-test
+      - name: Run all 1032 existing tests including ME041 active state mathematical checks
+        run: python -m pytest -q
+      - name: Confirm baseline test count remains correct
+        run: python scripts/sync_test_count.py --check
+  full-etth1-real-fits-and-replay:
+    needs: crossdomain-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original numerical real forecast environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Train 88 complete TAC and context forecasting models on authentic hourly ETTh1 measurements
+        run: |
+          set -o pipefail
+          python -m scripts.me042_real_transformer_crossdomain --out results/me042 | tee me042-fit.log
+      - name: Independently replay all saved actual oil-temperature/load forecasts from frozen original checkpoints
+        run: |
+          set -o pipefail
+          python -m scripts.me042_real_transformer_crossdomain --out results/me042 --replay | tee me042-replay.log
+      - name: Verify all 88 real fits and no future/test cohort numeric labels read
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from tac_osm.me041_architecture_portfolio import ALL_ARMS
+          x=json.loads(Path("results/me042/results.json").read_text())
+          assert x["study"]=="ME042_AUTHENTIC_TRANSFORMER_CROSS_DOMAIN_PORTFOLIO"
+          assert x["original_source_sha256"]=="f18de3ad269cef59bb07b5438d79bb3042d3be49bdeecf01c1cd6d29695ee066"
+          assert x["original_csv_sha256"]==x["original_source_sha256"]
+          assert x["reserved_future_numeric_rows_parsed"]==0
+          assert x["provenance"]["numeric_source_rows_parsed"]==11520
+          assert x["provenance"]["train_numeric_rows"]==8640
+          assert x["provenance"]["source_timestamp_interval_seconds"]==3600
+          assert x["provenance"]["data_columns"][-1]=="OT"
+          assert x["all_original_models_complete"] and len(x["fits"])==88
+          assert x["parameters_within_one_percent"]
+          assert not x["fully_matched_architecture_compute"]
+          assert {(v["horizon"],v["seed"],v["arm"],v["lane"]) for v in x["fits"]}=={
+             (h,s,a,l) for h in (96,720) for s in (42001,42002)
+             for a in ALL_ARMS for l in ("exposure","cpu")}
+          assert all(v["metric"]["oil_MSE"]>=0 and v["metric"]["full7_MSE"]>=0 for v in x["fits"])
+          assert x["evaluation"]["exact_equal_treatment_active_parameter_counts"]
+          assert not x["evaluation"]["no_independent_generalization_claim"] is False
+          assert x["no_promotion_or_merge"]
+          print("ME042_ALL_88_AUTHENTIC_CROSSDOMAIN_TRAININGS_AND_GATE_RECEIPTS_PASS")
+          PY
+      - name: Archive all original trained weights, optimization costs, negative results and independent replay
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me042-authentic-transformer-oil-load-88-model-checkpoints
+          path: |
+            results/me042/
+            me042-fit.log
+            me042-replay.log
+          retention-days: 90
+          if-no-files-found: ignore
