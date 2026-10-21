@@ -1,0 +1,95 @@
+name: ME041 native architecture portfolio authentic model development
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/tac_osm/me041_architecture_portfolio.py
+      - scripts/me041_train_architecture_portfolio.py
+      - tests/test_me041_architecture_portfolio.py
+      - research/mathematical-engineering/me041/**
+      - docs/TACOSM-BASELINE-001.md
+      - .github/workflows/me041-native-portfolio.yml
+permissions:
+  contents: read
+concurrency:
+  group: me041-authentic-portfolio-fits
+  cancel-in-progress: true
+jobs:
+  full-regressions-and-native-math:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned actual model numerical dependencies
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check executable native math, 11 arms, active adapter gradients and causality
+        run: |
+          python -m py_compile src/tac_osm/me041_architecture_portfolio.py scripts/me041_train_architecture_portfolio.py
+          python -m scripts.me041_train_architecture_portfolio --self-test
+      - name: Entire repository original regressions and four new checks
+        run: python -m pytest -q
+      - name: Frozen historical test-count provenance
+        run: python scripts/sync_test_count.py --check
+  all-authentic-complete-model-fits-and-replay:
+    needs: full-regressions-and-native-math
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install actual frozen CPU environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Fit 88 neural models on authenticated real Tetouan history; retain every winner and loser
+        run: |
+          set -o pipefail
+          python -m scripts.me041_train_architecture_portfolio --out results/me041 | tee me041-full-fit.log
+      - name: Independently verify all original model/checkpoint/prediction SHA receipts and replay real forecasts
+        run: |
+          set -o pipefail
+          python -m scripts.me041_train_architecture_portfolio --out results/me041 --replay | tee me041-replay.log
+      - name: Inspect preregistration, all real model arms and closed data boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from tac_osm.me041_architecture_portfolio import ALL_ARMS,ARCHITECTURE_ARMS
+          r=json.loads(Path("results/me041/results.json").read_text())
+          assert r["study"]=="ME041_AUTHENTIC_NATIVE_MATH_PORTFOLIO"
+          assert r["original_source_sha256"]=="3c4bf684161180937043a9fb65701a83d44b740b0d42f0492b6e7aec57ddbbfe"
+          assert r["original_csv_sha256"]=="ca8b2f30cf07dd872cb7f2aa45dac110ee38dbe5fc5910a6ff4bcc530dae3a40"
+          assert r["reserved_future_numeric_rows_parsed"]==0 and r["provenance"]["numeric_future_rows_parsed"]==0
+          assert r["all_original_models_complete"] and len(r["fits"])==88
+          assert len(r["parent_results"])==4
+          assert r["parameters_within_one_percent"] and not r["fully_matched_architecture_compute"]
+          assert r["no_promotion_or_merge"]
+          assert {(q["horizon"],q["seed"],q["arm"],q["lane"]) for q in r["fits"]}=={
+              (h,s,a,l) for h in (96,720) for s in (41001,41002)
+              for a in ALL_ARMS for l in ("exposure","cpu")}
+          assert all(q["training_steps"]==250 for q in r["fits"] if q["lane"]=="exposure")
+          assert all(q["metric"]["power3_MSE"]>=0 for q in r["fits"])
+          assert len(r["evaluation"]["per_treatment_development_gates"])==8
+          assert r["evaluation"]["exact_equal_treatment_active_parameter_counts"]
+          assert r["evaluation"]["historical_development_reused"]
+          assert not r["evaluation"]["no_independent_generalization_claim"] is False
+          print("ME041_88_REAL_MODEL_FITS_AND_ALL_EVIDENCE_GATES_PASS")
+          PY
+      - name: Preserve all raw model fits and any failed candidates, source provenance and forecasts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me041-real-native-unified-architecture-88-fits-and-original-replay
+          path: |
+            results/me041/
+            me041-full-fit.log
+            me041-replay.log
+          retention-days: 90
+          if-no-files-found: ignore
