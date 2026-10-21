@@ -473,3 +473,24 @@ One registered initial-equivalence toleranceFAIL preserved (max1.1409247e-6
 versus1e-6); no all-receipts-pass claim.983tests+12subtests pass. Full parity and
 independent qualification unestablished; no merge/promotion.
 [Actual architecture and measured progress](../research/mathematical-engineering/me035/RESULTS.md).
+
+### ME036/ME036B/ME036C — native patch forecasting, 2026-10-21
+
+- [Frozen protocol and results](../research/mathematical-engineering/me036/RESULTS.md):
+  280neural trajectories,20registered ridge references plus20post hoc corrected
+  references; real ETTh1/ETTh2/ETTm1/Weather/Electricity; full96/192/336/720-step
+  prediction and stride1 test windows. Native macro MSE.346956; AR.348944;
+  context.343989; compact PatchTST-style.345084. Registered practical gate **FAIL**.
+- First source freeze458c319f, continuation9bb60592, global checkpoint/selection
+  freezeb7c6e2d5 precede final test scoring. Matched TAC/context/GRU parameters;
+  actual spend and other model sizes differ, so no architecture-superiority claim.
+- 1680original checkpoints replay81962496validation scalars exactly;40selected
+  native models each have standard/physical-input TorchScript exports,3902976
+  exact exported scalars in fresh Torch-only processes.995tests+12subtests pass.
+- ME036C fixes the reference's variance-weighting objective after test exposure:
+  corrected macro MSE.389767; alpha100 unchanged, no native changes/tuning.
+  Original incorrect-objective scores retained. Correction is explicitly post hoc.
+- Four completed dataset score receipts and248neural metrics preserved on scoring
+  resumption; one unfinished arithmetic job may restart. No new fit/selection.
+  Full original checkpoints and compact native inference artifacts remain local
+  deliveries, not claimed GitHub Actions training-artifact downloads. No merge.

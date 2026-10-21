@@ -1,0 +1,56 @@
+{
+  "overall_MSE": {
+    "tac_patch": 0.34695582093632105,
+    "ar": 0.3489443971048633,
+    "context": 0.34398919906511083,
+    "gru": 0.3484611136190378,
+    "dlinear": 0.3484811352651925,
+    "patchtst_small": 0.3450835461902334,
+    "itransformer_small": 0.35594877032024197,
+    "ridge": 11.090220681822958
+  },
+  "AR_relative_improvement": 0.005698833926095825,
+  "best_baseline_relative_gap": 0.008624171570714712,
+  "success_gate": false,
+  "neural_models": 280,
+  "failed_models": [],
+  "ridge_models": 20,
+  "total_neural_training_CPU_seconds": 2248.594830363985,
+  "total_ridge_training_CPU_seconds": 3.399639838999917,
+  "total_validation_CPU_seconds": 163.3248008410001,
+  "total_neural_test_CPU_seconds": 1307.0836386199999,
+  "total_ridge_test_CPU_seconds": 24.249566140000006,
+  "total_scored_neural_scalar_predictions": 34774790400,
+  "macro_aggregation": "equal weight dataset/horizon cells; mean fitted-seed MSE within cell",
+  "test_stride": 1,
+  "architecture_superiority_qualified": false,
+  "paper_parity_qualified": false,
+  "posthoc_corrected_ridge_MSE": 0.38976652450894755,
+  "TAC_relative_gap_to_posthoc_corrected_ridge": -0.10983678915618045,
+  "dataset_TAC_AR": {
+    "ETTh1": {
+      "TAC": 0.4723656245667319,
+      "AR": 0.44884877350875263
+    },
+    "ETTh2": {
+      "TAC": 0.3925808574365332,
+      "AR": 0.3777950331426243
+    },
+    "ETTm1": {
+      "TAC": 0.4001015802177523,
+      "AR": 0.4194314580100845
+    },
+    "weather": {
+      "TAC": 0.25896464030211247,
+      "AR": 0.27757498845539136
+    },
+    "electricity": {
+      "TAC": 0.21076640215847514,
+      "AR": 0.22107173240746375
+    }
+  },
+  "ETTh_720_AR_regression": {
+    "ETTh1": 0.17199974959916542,
+    "ETTh2": 0.11023940970556811
+  }
+}

@@ -1137,3 +1137,25 @@ The small ridge edge is not consistent across allseeds.15new neural fits and
 Strict initial float32-versus-float64ridge tolerance fails at3values/seed and
 is preserved without relaxing it. Raw-unit deployable research models exported.
 [Implementation, scores, caveats and models](../research/mathematical-engineering/me035/RESULTS.md).
+
+### ME036 — full-horizon forecasting build, improvement gate failed
+
+See [ME036 results](../research/mathematical-engineering/me036/RESULTS.md).
+Patched native fast/slow TAC trains end to end from scratch on five real benchmark
+files, four full output horizons, two seeds, with AR-only/context/GRU and compact
+modern forecasting controls. Native macro MSE0.346956 vs AR0.348944:0.57% better,
+below the registered2% target; context0.343989 and PatchTST-style0.345084 are lower.
+Native720-step ETTh1/ETTh2 errors regress17.20%/11.02% vs AR. No consistent-horizon,
+state-utility, SOTA, compute-parity, zero-shot or commercial qualification claim.
+
+All280neural trajectories completed1000updates, all1680checkpoints replay81962496
+saved validation forecast values exactly;40native model pairs export standalone
+with3902976exact standard/physical forecast values. Full test scores cover every
+eligible window and34,774,790,400neural scalar forecasts. This does not mean those
+billions of forecasts were all saved/replayed: audits use stored validation probes.
+
+Original ridge objective mismatch is retained; fixed variance weighting is a
+separately registered **post hoc** correction with macro MSE0.389767. Do not treat
+it as an untouched confirmation or overwrite the failed registered gate. Prior
+ETT exposure, shared ETTh1/ETTm1 equipment, Weather anomalies, execution resumption
+and the historical ME035B precision exception remain documented.995tests+12subtests.
