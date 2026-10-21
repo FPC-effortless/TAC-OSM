@@ -19,6 +19,18 @@ One PyTorch CPU thread, `torch 2.10.0+cpu`, NumPy 2.3.5, 160 warm repetitions pe
 | Matched trained GRU | **3.5395** | **4.1303** | **5.2590** | **157/160** | YES local |
 | Matched no-CASM | **4.8259** | **6.1033** | **7.7510** | **102/160** | YES local |
 
+### Stricter follow-up: identical recorded inputs across all three models
+
+After identifying that the first sweep used each export's own original saved demonstration tensors, I ran a new 160-call CPU sweep for each model with **exactly the same TAC original demo keys, 64 typed event vectors, five candidates and price vector**. This is the preferred input-matched control; the original table above is preserved as historical first measurements.
+
+| Trained model | 64-event p50 ms | p95 ms | p99 ms | <5ms calls |
+|---|---:|---:|---:|---:|
+| DEV067 TAC | **5.164** | **7.822** | **11.199** | **63/160** |
+| Trained GRU | **3.374** | **3.919** | **4.406** | **159/160** |
+| Trained no-CASM | **4.450** | **5.838** | **7.427** | **141/160** |
+
+All 480 matched-input calls still finish under 100ms locally; this is not a live exchange deadline. The two sweeps' timing variation demonstrates p99 instability of the software microbenchmark and reinforces that sub-5ms claims are not production-qualified. **A narrow <5ms p99 service guarantee fails for TAC on the matched-input sweep; the trained GRU is faster here.** GitHub CI runs the input-matched audit separately on its own runner; those timing values must not be confused with these local metrics.
+
 This is a single software environment and a small microbenchmark, not a p99 service SLO under real traffic. The original model **fails the strict 5ms p95/p99 objective**, and the simpler trained GRU is faster. Full local original-adapter ingest+decide medians are 4.737ms TAC, 3.416ms GRU, 4.741ms no-CASM; these also exclude feature assembly, network, database, concurrency, ad rules, authorization, and exchange response deadlines. No claim of microseconds or throughput under multi-campaign load.
 
 ## Direct software gates
