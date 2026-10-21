@@ -13,3 +13,9 @@ selection rules are unchanged. Actual processCPU is charged per fit; resource
 concurrency is2CPU processes, not a claim of exclusive physical-core allocation.
 This is execution scheduling, not a new hyperparameter trial. No test scoring until
 all models and ridge coefficients are frozen. Single-worker initial stage preserved.
+
+After Weather completes, its released CPU handles Electricity H720 independently
+while the first Electricity worker handles H192/H336. A guard pauses the first
+worker before H720 if needed until H720's last fit finishes. All H720 fit records
+are then reused; ridge coefficients are fitted only by the first worker. Maximum
+concurrent fit workers remains2, with no duplicated fit or modified optimizer path.
