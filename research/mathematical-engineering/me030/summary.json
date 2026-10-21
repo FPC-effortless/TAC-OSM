@@ -1,0 +1,70 @@
+{
+  "mean_metrics": {
+    "additive_native": {
+      "Brier": 0.16419827214336705,
+      "log_loss": 0.4937516384836355,
+      "ROC_AUC": 0.8112565895454759,
+      "ECE10": 0.027659302036711103,
+      "parameters": 135377,
+      "CPU_seconds": 20.786497344666685,
+      "inference_B128_ms": 12.484818667871878
+    },
+    "joint_native": {
+      "Brier": 0.16736167397768742,
+      "log_loss": 0.5013694370223836,
+      "ROC_AUC": 0.8101546235753408,
+      "ECE10": 0.04932362894151507,
+      "parameters": 136145,
+      "CPU_seconds": 20.827774562666605,
+      "inference_B128_ms": 12.534667999716476
+    },
+    "joint_pool": {
+      "Brier": 0.1651473740533982,
+      "log_loss": 0.4963723681583195,
+      "ROC_AUC": 0.8115505720960666,
+      "ECE10": 0.042120019695289966,
+      "parameters": 136681,
+      "CPU_seconds": 2.8001730733332906,
+      "inference_B128_ms": 0.45695799781242386
+    }
+  },
+  "gates": {
+    "beats_additive_native": false,
+    "beats_joint_pool": false,
+    "calibration": false,
+    "engineering_candidate": false,
+    "state_diagnostic": false
+  },
+  "contrasts": {
+    "additive_native": {
+      "draws": 1000,
+      "mean_Brier_delta": 0.0031634018343203356,
+      "per_seed_Brier_delta": [
+        0.004875901058273162,
+        0.001630525914546871,
+        0.002983778530140973
+      ],
+      "seed": 30030,
+      "user_clustered_CI95": [
+        0.0022200723176485455,
+        0.004147656315807627
+      ],
+      "users": 441
+    },
+    "joint_pool": {
+      "draws": 1000,
+      "mean_Brier_delta": 0.002214299924289207,
+      "per_seed_Brier_delta": [
+        0.006239153391933407,
+        0.0009325900663646502,
+        -0.0005288436854304361
+      ],
+      "seed": 30030,
+      "user_clustered_CI95": [
+        0.001042349058022534,
+        0.0033368180466620016
+      ],
+      "users": 441
+    }
+  }
+}

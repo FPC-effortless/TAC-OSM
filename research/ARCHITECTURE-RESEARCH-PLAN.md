@@ -1,0 +1,81 @@
+# TAC-OSM architecture research — 2026-10-21
+
+This dated addendum preserves the historical roadmap and every failed study.
+It directs native architecture improvement. Standing real-world/parity rules
+remain in force; draft studies are not merged or commercially qualified.
+
+## Established findings and immediate engineering
+
+ME024 RMS readout improved optimization; ME025 timescale additions failed the
+materiality gate. ME026 improved equivalent execution. ME027 exposed strong
+nonlinear common-feature controls and inconsistent native-state value. ME028's
+nonlinear observable readout improved prediction but did not qualify state;
+ME029's chronology-vs-sorted and chronology-vs-pool gates both failed. Its
+chronological mean Brier .164198272 is historical DEV engineering evidence.
+Repeated cohort use is not independent confirmation.
+
+ME030 tests a native limitation: an additive state/context logit cannot adapt
+state sensitivity to the query. A joint 12-unit tanh head preserves recurrence
+and is compared with the additive head and an equally expressive joint pooled
+head. See [protocol](mathematical-engineering/me030/PROTOCOL.md) and
+[derivation](mathematical-engineering/me030/MATHEMATICS.md). This is readout
+engineering, not conditional-information identification or chronology qualification.
+
+## Subsequent gates
+
+1. Freeze representations and test conditional residual prediction with FIT-user
+   cross-fitting, identical nonlinear readout interfaces, capacity, sampling and
+   selection controls. A user's features must come from a representation trained
+   without that user's records. Estimate finite-family predictive gain, not mutual
+   information. New reserved-cohort access requires a separate preregistration
+   after design/preprocessing freeze; current future cohorts stay closed.
+2. Only after useful state is established, test event-boundary compression at fixed
+   total state capacity. Include observed-boundary, random-boundary and fixed-window
+   controls with equal information and exposures. Preserve predictive distinctions,
+   not reconstruction alone. The earlier proposed ME028 compression stage was
+   deferred: ME028 became readout engineering, so compression needs a future ID.
+3. After compression earns its cost, test global/episodic/local state allocation
+   at fixed coordinates and parameter budgets. Isolate allocation from extra head
+   expressiveness or prediction supervision.
+4. Separate observed-world updates from internal computation: hold world state s
+   fixed while updating reasoning state r. Adaptive depth must improve observed
+   outcomes enough to pay measured compute costs. A reasoning step is neither a
+   new observation nor an external action. KuaiRec factual watch outcomes do not
+   supply identified intervention effects or actual decision costs.
+
+## Literature-informed hypotheses
+
+- [GenRec](https://arxiv.org/abs/2608.10257): align context and readout to downstream
+  prediction. TAC hypothesis: query conditioning may matter more than extra memory.
+  Event verbalization is optional; Netflix results are not TAC evidence.
+- [Sep-Latent](https://arxiv.org/abs/2610.22924): concentrate predictive information
+  at meaningful boundaries. Test genuine event anchors against controls; language
+  reasoning compression results do not validate physical memory.
+- [Next-Concept Modeling](https://arxiv.org/abs/2610.14162): investigate multiple
+  predictive resolutions after state value is established. This does not prescribe
+  vector quantization, Transformer conversion or a parallel text decoder.
+- [Hybrid Reasoning Agents](https://arxiv.org/abs/2610.18861): distinguish internal
+  latent computation from external interaction. A TAC adaptation needs authentic
+  outcome/cost evidence, instrumentation and a tested stopping rule.
+
+These papers motivate hypotheses; their reported metrics are not reproduced or
+used as TAC thresholds. Native TAC can use query conditioning, memory structure,
+credit assignment and computation allocation without becoming an SSM or LLM.
+
+## Evidence discipline
+
+Freeze complete matrices before fits; retain every attempt, checkpoint, optimizer/
+RNG, curve, source digest and actual resource receipt. Separate numerical proofs
+from capability evidence. Require calibration, entity/time shift checks and closed
+final cohorts. Equal caps are not equal spend. Any parameter, data, actual-compute,
+selection or evaluation parity failure blocks architecture-superiority claims.
+Keep practical simple references while each experiment diagnoses a native mechanism.
+
+## ME030 completion
+
+All nine registered fits are complete; the joint native head failed all gates.
+Brier .167361674 vs additive .164198272; calibration worsened, and mean-state
+replacement helped every joint-native seed. The head is rejected under this
+recipe. See [verified results](mathematical-engineering/me030/RESULTS.md).
+Conditional residual cross-fitting remains proposed and unexecuted. No compression,
+hierarchical state or internal reasoning mechanism is promoted by this failure.

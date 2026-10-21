@@ -1066,3 +1066,12 @@ All 428,544 budget forecasts and 71,424 primary exports replay exactly;
 913 software tests and twelve fresh Torch-only runtimes pass. No reserved
 cohort, new independent evidence, complete-system utility or commercial claim.
 See [ME027 results](../research/mathematical-engineering/me027/RESULTS.md).
+
+### ME030 — rejected joint native state/query readout (2026-10-21)
+
+Nine authentic historical-DEV fits complete. The joint head enables nonzero mixed
+state/query logit derivatives while preserving native recurrence, but worsens mean
+Brier (.167361674 vs .164198272) and ECE (.049323629 vs .027659302). Every registered
+gate fails. Equal examples/updates and <1% global parameter gap; unequal actual
+compute, reused DEV. No conditional-information, chronology, architecture-superiority
+or qualification claim. [Full evidence](../research/mathematical-engineering/me030/RESULTS.md).
