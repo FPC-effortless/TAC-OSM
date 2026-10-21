@@ -1,0 +1,113 @@
+{
+  "all_scalar_checkpoint_forecasts_bit_exact": true,
+  "architecture_superiority_claim": false,
+  "composite_relative_MSE_vs_ridge": -0.002419052495608809,
+  "composite_relative_gain_vs_selected_native_reference": 0.25762100810774013,
+  "development_windows": 476,
+  "independent_qualification": false,
+  "initial_equivalence_checks": [
+    {
+      "PASS": false,
+      "max_abs_error": 1.1409247275828704e-06,
+      "registered_atol": 1e-06,
+      "seed": 35001,
+      "values_exceeding_registered_tolerance": 3
+    },
+    {
+      "PASS": false,
+      "max_abs_error": 1.1409247275828704e-06,
+      "registered_atol": 1e-06,
+      "seed": 35002,
+      "values_exceeding_registered_tolerance": 3
+    },
+    {
+      "PASS": false,
+      "max_abs_error": 1.1409247275828704e-06,
+      "registered_atol": 1e-06,
+      "seed": 35003,
+      "values_exceeding_registered_tolerance": 3
+    }
+  ],
+  "initial_equivalence_registered_tolerance_pass": false,
+  "native_250_engineered_relative_gain": 0.1305024695045569,
+  "neural_fits": 15,
+  "original_training_windows": 2881,
+  "persistence": {
+    "MAE": 0.5176349248091183,
+    "MSE": 0.8099932347798802,
+    "channel_MSE": [
+      1.7034305331905306,
+      0.7370631581579968,
+      1.8801826373007486,
+      0.6905604704822976,
+      0.3798901358135332,
+      0.23297652297799115,
+      0.045849185536064097
+    ],
+    "horizon_MSE": [
+      0.14595317064966276,
+      1.7401380156338004,
+      0.5438885180561756
+    ],
+    "rows": 476
+  },
+  "ridge": {
+    "MAE": 0.39576649625361204,
+    "MSE": 0.37000145727926115,
+    "channel_MSE": [
+      0.4754988887832243,
+      0.43145800224637215,
+      0.5003791681489898,
+      0.402693244464347,
+      0.4768491382861865,
+      0.24949735868160475,
+      0.05363440034410326
+    ],
+    "horizon_MSE": [
+      0.15803131841421203,
+      0.40580693302867826,
+      0.5461661203948928
+    ],
+    "rows": 476
+  },
+  "ridge_fits": 1,
+  "scalar_checkpoint_forecasts_replayed": 509796,
+  "stages": [
+    {
+      "MAE": 0.46086500663528396,
+      "MSE": 0.4971940321072806,
+      "active_parameters": 18924,
+      "arm": "native_joint",
+      "selected_step": 250
+    },
+    {
+      "MAE": 0.43926879962511295,
+      "MSE": 0.4563487002988717,
+      "active_parameters": 18924,
+      "arm": "native_revin",
+      "selected_step": 250
+    },
+    {
+      "MAE": 0.4348225679129718,
+      "MSE": 0.44655417715647966,
+      "active_parameters": 18924,
+      "arm": "native_residual",
+      "selected_step": 250
+    },
+    {
+      "MAE": 0.4292718043173294,
+      "MSE": 0.4323089830943525,
+      "active_parameters": 18924,
+      "arm": "native_multiscale",
+      "selected_step": 250
+    },
+    {
+      "MAE": 0.39529214098873716,
+      "MSE": 0.36910640433065084,
+      "active_parameters": 32154,
+      "arm": "AR + native multiscale",
+      "selected_step": 25
+    }
+  ],
+  "total_new_training_CPU_seconds": 278.493174625
+}

@@ -459,3 +459,17 @@ Final bootstrap and ensemble metrics reproduced; corruption fails before source.
 971tests+12subtests. Remainder6 now exposed. No new architecture promotion,
 full compute parity, commercial or causal-action claim.
 [Verified results and original manifests](../research/mathematical-engineering/me034/RESULTS.md).
+
+### ME035/ME035B — architecture-first residual forecaster,2026-10-21
+
+First source/protocol freeze77e5ce19,12fits; second registered refinement freeze
+a91767b7,3fits. Authentic ETTh1 sourceSHAf18de3ad269cef59bb07b5438d79bb3042d3be49bdeecf01c1cd6d29695ee066,
+CC BY-ND4.0; unmodified source/license retained. New seven-channel1/6/24h objective,
+known early training/development periods only. No new holdout/cohort access.
+Same-step native improvement13.05%; composite selected MSE.369106, ridge.370001.
+51original checkpoint/Adam/RNG endpoints,509796scalar forecasts exact through
+checkpoint/script paths. Raw-unit runtimes reproduce29988values within1e-4.
+One registered initial-equivalence toleranceFAIL preserved (max1.1409247e-6
+versus1e-6); no all-receipts-pass claim.983tests+12subtests pass. Full parity and
+independent qualification unestablished; no merge/promotion.
+[Actual architecture and measured progress](../research/mathematical-engineering/me035/RESULTS.md).
