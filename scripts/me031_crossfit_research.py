@@ -136,8 +136,9 @@ def run(out):
     out.mkdir(parents=True,exist_ok=False);torch.set_num_threads(1)
     start=time.process_time();wall=time.perf_counter()
     data=load_source(ROOT/'results/me022')['train']
+    roles=roles_manifest(data)
     prep=time.process_time()-start
-    roles=roles_manifest(data);write_json(out/'roles.json',roles)
+    write_json(out/'roles.json',roles)
     record={'study':'ME031_FIT_USER_CROSSFIT_RESIDUAL_STATE_VALUE','complete':False,
         'protocol_sha256':file_sha(PROTOCOL),'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         'source_snapshot_sha256':file_sha(ROOT/'results/me022/data-snapshot.pt'),
@@ -158,6 +159,7 @@ def run(out):
             rotation=role['rotation'];tag=f'r{rotation}-s{seed}'
             cell_start=time.process_time()
             r,s,t=[subset(data,torch.tensor(role[k]['indices'])) for k in ('representation','readout','evaluation')]
+            split_cpu=time.process_time()-cell_start
             enc,enc_record=train_encoder(r,seed,rotation,out)
             e=time.process_time();fs=extract(enc,s);ft=extract(enc,t)
             # FIT readout-user moments only, no labels and no evaluation-user moments.
@@ -171,7 +173,9 @@ def run(out):
             headseed=seed+rotation*1000+10000
             base,base_record=train_probe(fs,ys,fs[...,90],False,headseed,out,'base-'+tag)
             # Compute frozen offsets without reading outer evaluation labels.
+            offset_start=time.process_time()
             offset_s=head_logits(base,fs,fs[...,90]);offset_t=head_logits(base,ft,ft[...,90])
+            offset_cpu=time.process_time()-offset_start
             probes=[]
             order=ARMS if (rotation+SEEDS.index(seed))%2==0 else ARMS[::-1]
             for arm in order:
@@ -179,7 +183,8 @@ def run(out):
                 probes.append({'arm':arm,**pr})
             cell={'tag':tag,'seed':seed,'rotation':rotation,'encoder':enc_record,'base':base_record,
                   'probes':probes,'feature_construction_cpu_seconds':feature_cpu,
-                  'shared_charged_cpu_seconds':prep+enc_record['charged_cpu_seconds']+feature_cpu+base_record['charged_cpu_seconds'],
+                  'role_subset_cpu_seconds':split_cpu,'base_offset_cpu_seconds':offset_cpu,
+                  'shared_charged_cpu_seconds':prep+split_cpu+enc_record['charged_cpu_seconds']+feature_cpu+base_record['charged_cpu_seconds']+offset_cpu,
                   'whole_cell_cpu_seconds':time.process_time()-cell_start}
             if max(cell['shared_charged_cpu_seconds']+p['charged_cpu_seconds'] for p in probes)>240:
                 raise RuntimeError('per-arm whole pipeline charged CPU cap exceeded')
