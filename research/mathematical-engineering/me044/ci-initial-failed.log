@@ -1,0 +1,31 @@
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	﻿2026-10-21T18:41:59.9430112Z ##[group]Run python -m scripts.me044_train_multiscale --out restored-me044 --audit
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9431110Z [36;1mpython -m scripts.me044_train_multiscale --out restored-me044 --audit[0m
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9431725Z [36;1mpython -m scripts.me044_inference --out restored-me044 --verify-only[0m
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9483818Z shell: /usr/bin/bash -e {0}
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9484075Z env:
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9484270Z   OMP_NUM_THREADS: 1
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9484506Z   MKL_NUM_THREADS: 1
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9484725Z   OPENBLAS_NUM_THREADS: 1
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9485018Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9485510Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9485935Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9486312Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9486711Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9487139Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:41:59.9487460Z ##[endgroup]
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.1519546Z /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.1521058Z   warnings.warn(
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6134390Z Traceback (most recent call last):
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6141987Z   File "<frozen runpy>", line 198, in _run_module_as_main
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6142583Z   File "<frozen runpy>", line 88, in _run_code
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6143260Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me044_train_multiscale.py", line 224, in <module>
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6143877Z     if a.audit:audit(a.out)
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6144338Z                ^^^^^^^^^^^^
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6145121Z   File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6145984Z     return func(*args, **kwargs)
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6146375Z            ^^^^^^^^^^^^^^^^^^^^^
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6146995Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me044_train_multiscale.py", line 175, in audit
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6147691Z     assert np.array_equal(pred,saved['pred']),str(cp)
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6148136Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.6148718Z AssertionError: restored-me044/etth1/exposure-h96-s44001-pyramid_native/final.pt
+original-models-and-correctness	Audit original optimizers, exact forecasts, cheap retention and real metrics	2026-10-21T18:42:01.8821918Z ##[error]Process completed with exit code 1.

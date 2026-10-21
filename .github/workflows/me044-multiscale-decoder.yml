@@ -37,6 +37,8 @@ jobs:
           python scripts/sync_test_count.py --check
       - name: Restore actual original models and all indexed payloads
         run: python scripts/me044_artifacts.py verify research/model-artifacts/me044 restored-me044
+      - name: Compare frozen numerical reference under explicit CPU dispatch profiles
+        run: python scripts/me044_replay_debug.py --out restored-me044
       - name: Audit original optimizers, exact forecasts, cheap retention and real metrics
         run: |
           python -m scripts.me044_train_multiscale --out restored-me044 --audit
@@ -50,6 +52,7 @@ jobs:
             research/model-artifacts/me044/**
             restored-me044/audit.json
             restored-me044/compiled-replay.json
+            restored-me044/portability.json
           if-no-files-found: error
           retention-days: 90
           compression-level: 0
