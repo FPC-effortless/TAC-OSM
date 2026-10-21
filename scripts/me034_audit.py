@@ -14,7 +14,7 @@ from tac_osm.me032_conditional_memory import FrozenContext
 from scripts.me034_stable_research import (
     ROOT,SEEDS,ARMS,COUNTS,construct,verify_frozen,subset,roles_manifest,load_source,
     auxiliary,context_features,restore_context,offered_items,predict,targets,
-    file_sha,write_json,batch,scores,tree_predict
+    file_sha,write_json,batch,scores,tree_predict,fit_only_popularity,EWMABank
 )
 
 
@@ -123,6 +123,24 @@ def audit(out,quick=False):
             tag=cell['tag'];role=roles[cell['rotation']]
             inc=torch.load(out/(tag+'-inherited.pt'),weights_only=True)
             context=restore_context(inc['context_state'])
+            rr=subset(data,torch.tensor(role['representation']['indices']))
+            cs=inc['context_state']
+            old=torch.load(ROOT/'results/me031'/f'encoder-r{cell["rotation"]}-s{cell["seed"]}.pt',weights_only=True)
+            assert torch.equal(old['state_dict']['emb.weight'],inc['embedding'])
+            assert torch.equal(fit_only_popularity(rr),cs['item_popularity'])
+            assert float(rr['duration'].mean())==float(cs['duration_mean'])
+            assert max(float(rr['duration'].std(unbiased=False)),1e-5)==float(cs['duration_scale'])
+            raw=eager_context(cs)
+            raw.feature_mean.zero_();raw.feature_scale.fill_(1.)
+            rf=context_features(torch.jit.script(raw),rr)[...,:26].reshape(-1,26)
+            torch.testing.assert_close(rf.mean(0),cs['feature_mean'],rtol=0,atol=1e-7)
+            torch.testing.assert_close(rf.std(0,unbiased=False).clamp_min(.05),cs['feature_scale'],rtol=0,atol=1e-7)
+            ec=auxiliary(rr,context_features(context,rr))
+            bank=EWMABank(cs['item_popularity'],torch.zeros(12),torch.ones(12))
+            with torch.no_grad():ef=bank.features(rr['items'],rr['metadata'],offered_items(rr),ec).reshape(-1,12)
+            torch.testing.assert_close(ef.mean(0),inc['ewma_mean'],rtol=0,atol=1e-7)
+            torch.testing.assert_close(ef.std(0,unbiased=False).clamp_min(.05),inc['ewma_scale'],rtol=0,atol=1e-7)
+            assert float(torch.logit(rr['y'].mean().clamp(.0001,.9999)))==inc['global_logit']
             t=subset(data,torch.tensor(role['evaluation']['indices']))
             for label,part in (('S',subset(data,torch.tensor(role['readout']['indices']))),('T',t)):
                 rebuilt=context_features(context,part)
