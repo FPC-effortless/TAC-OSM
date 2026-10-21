@@ -49,7 +49,7 @@ def run(folder,iterations):
         action_delta=float((oldscores-newscores).abs().max())
     # Note: original demo events are deliberately forced into the 64-record FIFO
     # to exercise full-context compute; this is NOT actual admitted state.
-    common=[json.loads(x) for x in (pathlib.Path(a.source)/"tac_frozen_log/demo-requests.jsonl").read_text().splitlines() if x.strip()]
+    common=[json.loads(x) for x in (folder.parent/"tac_frozen_log/demo-requests.jsonl").read_text().splitlines() if x.strip()]
     assert len(common[0]["events"])>=64
     full=model.initial(tensor(common[0]["keys"]))
     full["events"][0]=torch.as_tensor(common[0]["events"][:64],dtype=torch.float64)
