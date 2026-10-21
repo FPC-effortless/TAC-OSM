@@ -1159,3 +1159,21 @@ separately registered **post hoc** correction with macro MSE0.389767. Do not tre
 it as an untouched confirmation or overwrite the failed registered gate. Prior
 ETT exposure, shared ETTh1/ETTm1 equipment, Weather anomalies, execution resumption
 and the historical ME035B precision exception remain documented.995tests+12subtests.
+
+### ME037 — improved integrated forecaster, household gate failed
+
+[ME037 results](../research/mathematical-engineering/me037/RESULTS.md): native
+fast/slow patch memory plus a learned full-history context branch, joint AR and
+bounded horizon-dependent correction. 192 adaptation fits plus eight new AR
+parents, all completed. Five exposed benchmarks: native MSE .339944 vs AR-adapt
+.347832, 2.27% improvement; development engineering gate PASS. Context .341093,
+GRU .341475; no matched-compute architectural-superiority claim. H720 ETTh1/ETTh2
+changes versus AR +0.13%/-0.28%, without a theoretical no-regression guarantee.
+
+Separately reserved UCI374 household temporal test: .862641 vs AR .870339,
+0.88% lower MSE, prospective 2% gate FAIL. Energy-only scores .547785/.589338;
+not all channels/MAE improve. One house, two fitted seeds, not zero-shot transfer,
+causal action control or commercial qualification. Historical ME036 gain is
+unmatched for capacity/pretraining. 864 checkpoints/37,062,144 validation scalars
+replay exactly, 48 native model pairs/4,118,016 export values exactly; 1,005 tests
+plus 12 subtests. All earlier exceptions remain visible; no model promoted/merged.
