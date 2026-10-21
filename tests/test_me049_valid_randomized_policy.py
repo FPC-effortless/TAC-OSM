@@ -5,12 +5,12 @@ they NEVER constitute real-world randomized trial performance evidence.
 """
 import pytest,torch
 from tac_osm.me049_rct_action_models import (
-  ARMS,ACTION_NAMES,ThreeActionWorldModel,actual_logged_action_loss,test_math_preflight)
+  ARMS,ACTION_NAMES,ThreeActionWorldModel,actual_logged_action_loss,test_math_preflight as _math_preflight)
 from scripts.me049_train_randomized_policy import split,offline_value
 
 
 def test_me049_original_three_arm_equal_active_parameter_budget_and_native_gradient():
-    m=test_math_preflight()
+    m=_math_preflight()
     assert m["status"]=="ME049_NUMERICAL_NO_SYNTHETIC_SUCCESS"
     assert m["max_min_ratio"]<1.01
     assert len(m["active_parameter_counts"])==3
