@@ -1177,3 +1177,25 @@ causal action control or commercial qualification. Historical ME036 gain is
 unmatched for capacity/pretraining. 864 checkpoints/37,062,144 validation scalars
 replay exactly, 48 native model pairs/4,118,016 export values exactly; 1,005 tests
 plus 12 subtests. All earlier exceptions remain visible; no model promoted/merged.
+
+### ME038 — new native innovation-memory variant; task-specific gain, cost failure
+
+[ME038 results](../research/mathematical-engineering/me038/RESULTS.md): the native
+fast/slow transition is coupled to an 8x8 prediction-error associative store,
+with equally informed cross-channel context controls. This is new TAC development,
+not a global novelty claim for delta-rule/associative-memory primitives. State
+128 float32 coordinates/channel doubles ME037; neural parameter gaps below1%.
+
+Reserved UCI849 Tetouan temporal test, exposure lane: primary power MSE.153310
+native / .156326 context / .156362 GRU / .202714 AR; native 24.37% below AR and
+1.93% below context, registered power gate PASS. One city, two seeds; no statistical,
+unseen-city, causal/control or commercial qualification. Full 8-channel results
+and individual/aggregate MAE are reported without replacing the primary metric.
+
+Compute-budget lane, 5 training CPU seconds/H96+720: native.151090 vs context.146461
+power MSE; gate FAIL. Legacy exposure gate also FAIL, macro.340467 versus prior
+ME037.339944 (0.15% worse). Exposure native averages 10.88 CPU seconds vs context 2.16.
+No full architecture parity or superiority claim; preserve ME037 legacy preference.
+All 240 fits +8 new parents completed. 1,008 checkpoints/37,310,976 saved validation values
+replay exactly. Independent final-score audit covers 52 Tetouan models/references,
+1,479,493,632 test forecast values. 1,020 tests +12 subtests pass. No earlier gate overwritten.
