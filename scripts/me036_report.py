@@ -34,11 +34,22 @@ def run():
         'test_stride':1,'architecture_superiority_qualified':False,'paper_parity_qualified':False}
     b.dump(report/'summary.json',summary)
     manifest=[]
+    data_index={r['name']:r for r in json.loads((b.OUT/'data.json').read_text())}
+    cpu_model=json.loads((out/'runtime.json').read_text())['CPU_model']
     for row in rows:
         rid=row['arm']=='ridge';matched=row['arm'] in ('tac_patch','context','gru')
         manifest.append({**{k:row[k] for k in ('dataset','horizon','arm','seed','parameters','charged_training_CPU_seconds')},
             'source_sha256':json.loads((report/'sources.json').read_text())[row['dataset']+'.csv']['sha256'],
             'history':96,'full_output_steps':row['horizon'],'updates':None if rid else 1000,
+            'CPU_model':cpu_model,'threads_per_fit':1,'maximum_concurrent_fit_workers':2,
+            'allocated_fit_process_CPU_seconds':None if rid else [120,500],
+            'batch_size_windows':None if rid else 4,'sampler_seed':None if rid else row['seed']+1000,
+            'split_edges':data_index[row['dataset']]['split_edges'],
+            'channels':data_index[row['dataset']]['channels'],
+            'preprocessing':'train-only population mean/std; local history-only normalization',
+            'full_test_windows':row['test']['windows'],'full_test_scalar_targets':row['test']['scalar_targets'],
+            'full_test_CPU_seconds':row['test']['CPU_seconds'],
+            'selected_step':row.get('selected_step'),'total_deployed_trainable_parameters':row['parameters'],
             'training_windows':None if rid else 4000,'selection':'none' if rid else 'validation MSE over6endpoints',
             'parity':{'parameters':'PASS' if matched else 'FAIL_UNMATCHED_REFERENCE',
                 'data_exposure':'FAIL_RIDGE_DIFFERENT_EXPOSURE' if rid else 'PASS',

@@ -28,7 +28,8 @@ def run(destination):
     receipt={'path':str(destination),'bytes':destination.stat().st_size,'sha256':base.sha(destination),
         'indexed_payloads':len(paths),'source_snapshot_commit':head,
         'original_checkpoint_endpoints':sum(len(r['endpoints']) for r in frozen['fits']),
-        'native_TorchScript_exports':len(json.loads((out/'runtime.json').read_text())['exports']),
+        'native_selected_models':len(json.loads((out/'runtime.json').read_text())['exports']),
+        'native_TorchScript_exports':2*len(json.loads((out/'runtime.json').read_text())['exports']),
         'ridge_coefficients':len(frozen['ridge']),'public_GitHub_Actions_artifact':False}
     base.dump(report/'archive.json',receipt);print(json.dumps(receipt,indent=2))
 
