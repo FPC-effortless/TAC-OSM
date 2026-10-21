@@ -199,3 +199,38 @@ and stronger trainable predictive paths, retaining useful components instead of
 requiring another standalone diagnostic study. Allocate new bounded development
 budgets transparently and qualify generalization on separately registered real
 cohorts when advancing a candidate. Do not retune on ME034's closed cohort.
+
+## ME036 completion — full-horizon native patch forecasting
+
+Architecture-first construction continues in [ME036](mathematical-engineering/me036/RESULTS.md):
+ordered eight-step patches, native fast32/slow32 memory per channel, residual slow
+updates, trainable multiscale rates, SwiGLU/32-basis prediction and a joint AR path.
+All models start from scratch. Five authenticated benchmark files; full sequences
+at96/192/336/720steps; standard chronological splits and every test anchor.
+ETTh1/ETTm1 are resolutions of the same equipment records, not independent sites.
+
+280neural trajectories/two seeds each trained1000updates; AR-only, matched context
+and GRU corrections, compact DLinear/PatchTST/iTransformer-style controls. Macro
+MSE native.346956, AR.348944, context.343989, PatchTST-style.345084. Native's0.57%
+AR gain misses the registered2% gate. At720steps native regresses17.20%/11.02%
+against AR on ETTh1/ETTh2. No promotion, paper parity or matched-compute superiority.
+
+The original locally normalized ridge fit optimized a different residual objective;
+retain its scores. A separately recorded **post hoc** fixed variance-weight correction
+(alpha100, no tuning/TAC changes) scores.389767 macro MSE. This is corrected
+reference evidence, not a fresh prospective confirmation or a revised gate.
+
+1680checkpoints/81962496validation forecast values replay exactly. Forty selected
+native models have both standardized and physical-input standalone exports;
+3902976export forecast values replay exactly. Whole-window normalization still
+requires full96-step replay. The old ME035B precision exception remains unchanged.
+995tests+12subtests pass. Original models, optimizer/RNG states, data/provenance
+and logs are retained; no KuaiRec access or synthetic capability fits.
+
+**Next construction, not a diagnostic gate:** preserve strong linear and nonlinear
+context prediction paths while integrating native state, add horizon-conditioned
+residual control and richer channel coupling, and train the complete model with
+transparent budgets. Target the long-horizon regressions directly. Detailed
+mechanistic attribution remains deferred; retain competitive controls as columns.
+Use a new registration and disclose benchmark exposure before fitting; this
+completed test matrix is no longer a fresh qualification cohort.

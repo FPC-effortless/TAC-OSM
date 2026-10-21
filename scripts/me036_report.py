@@ -40,6 +40,8 @@ def run():
         summary['TAC_relative_gap_to_posthoc_corrected_ridge']=overall['tac_patch']/summary['posthoc_corrected_ridge_MSE']-1
         shutil.copyfile(correction_path,report/'corrected-ridge-results.json')
         shutil.copyfile(b.ROOT/'results/me036c/frozen.json',report/'corrected-ridge-frozen.json')
+    summary['dataset_TAC_AR']={d:{'TAC':float(np.mean([cell[(d,h,'tac_patch')] for h in b.HORIZONS])),'AR':float(np.mean([cell[(d,h,'ar')] for h in b.HORIZONS]))} for d in b.DATASETS}
+    summary['ETTh_720_AR_regression']={d:cell[(d,720,'tac_patch')]/cell[(d,720,'ar')]-1 for d in ('ETTh1','ETTh2')}
     b.dump(report/'summary.json',summary)
     manifest=[]
     data_index={r['name']:r for r in json.loads((b.OUT/'data.json').read_text())}
@@ -138,7 +140,29 @@ def run():
             '| Dataset | H | Corrected ridge MSE |', '|---|---:|---:|']
         for row in correction['references']:
             lines.append(f"| {row['dataset']} | {row['horizon']} | {row['test']['MSE']:.6f} |")
-    (report/'RESULTS.md').write_text('\n'.join(lines)+'\n')
+    lines += ['', '## Material long-horizon regressions', '',
+        'The macro mean masks regressions at720steps: TAC is17.20% worse than AR-only '
+        'on ETTh1 and11.02% worse on ETTh2. The complete model is therefore not consistently '
+        'competitive across horizons. Future architecture development should strengthen '
+        'its horizon-dependent predictive path; no mechanistic-ablation phase is required '
+        'before building that next model.', '',
+        'Scoring resumed at model granularity to use both CPUs after four datasets '
+        'finished. All248completed neural scores were preserved unchanged; one incomplete '
+        'arithmetic score may have restarted. No checkpoint/selection/metric changes. '
+        'See EVALUATION-EXECUTION.md and evaluation-reschedule.json.']
+    text='\n'.join(lines)+'\n'
+    for old,new in {
+        'original100-update':'original 100-update','to1000updates':'to 1,000 updates',
+        'horizons96/':'horizons 96/','the20dataset':'the 20 dataset',
+        'uses12ordered8-step':'uses twelve ordered eight-step',
+        'fast32/slow32':'32D fast/32D slow','below1%':'below 1%',
+        'samplers,1000-update':'samplers, 1,000-update','lookback96,1000-update':'96-step lookback, 1,000-update',
+        'stride24':'stride 24','contains81training-only-9999codes':'contains 81 training-only `-9999` codes',
+        'one100-minute':'one 100-minute','no-9999codes':'no `-9999` codes',
+        'ME035B1e-6':'ME035B `1e-6`','alpha100':'alpha 100',
+        'at720steps':'at 720 steps','is17.20%':'is 17.20%','and11.02%':'and 11.02%',
+        'All248completed':'All 248 completed'}.items():text=text.replace(old,new)
+    (report/'RESULTS.md').write_text(text)
     (report/'README.md').write_text('# ME036\n\n[Results](RESULTS.md) · [Registration](PROTOCOL.md) · '
         '[Prospective continuation](CONTINUATION.md) · [Equations](MATHEMATICS.md) · [Artifacts](ARTIFACT.md)\n')
     print(json.dumps(summary,indent=2))
