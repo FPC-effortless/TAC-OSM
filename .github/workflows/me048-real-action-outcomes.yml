@@ -85,8 +85,7 @@ jobs:
           assert {(x["arm"],x["seed"]) for x in r["models"]}=={
              (a,s) for a in ARMS for s in (48001,48002)}
           assert all(x["trained_on_real_randomized_treatment"]
-                and x["original_fit_update_count"] if False else x["real_record_exposures"]==800*256
-                for x in r["models"])
+                and x["real_record_exposures"]==800*256 for x in r["models"])
           assert r["selection"]["conditional_propensity_not_verified"]
           assert not r["selection"]["strict_action_superiority_qualified"]
           assert r["selection"]["no_promotion_or_merge"]
