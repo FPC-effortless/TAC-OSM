@@ -13,7 +13,7 @@ def compact():
             (folder/'serving-input.npy',alias+'-input.npy'),(folder/'serving-output.npy',alias+'-expected.npy')]:
             members.append((path,target))
         models.append({'key':key,'model':alias+'.jit.pt','input':alias+'-input.npy','expected':alias+'-expected.npy',
-            'selected_checkpoint':fits[key]['selected'],'dataset':r['dataset'],'horizon':r['horizon'],'seed':r['seed']})
+            'selected_checkpoint':fits[key]['selected'],'dataset':r['dataset'],'horizon':r['horizon'],'seed':r['seed'],'lane':r['lane']})
     for path in ('data.json','PROTOCOL.md','MATHEMATICS.md','RESULTS.md','sources.json'):
         members.append((b.REPORT/path,path))
     members.extend([(b.old.DATA/'ETT-LICENSE','ETT-LICENSE'),(b.old.DATA/'TSL-README.md','TSL-SOURCE-ATTRIBUTION.md'),

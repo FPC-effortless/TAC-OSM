@@ -274,3 +274,48 @@ further qualification claim. Forecast improvement does not demonstrate action
 control: an action-conditioned extension needs genuine actions, costs and observed
 outcomes. PR300 remains a draft task-specific foundation-model comparison, not
 proof of TAC control strengths or a prohibition on forecasting research.
+
+## ME038 completion — innovation-coupled native state transition
+
+[ME038](mathematical-engineering/me038/RESULTS.md) changes the architecture's
+native dynamics: an 8x8 associative state uses a normalized-key latent prediction
+error write and retrieves into BOTH fast32 and slow32 updates. Shared historical
+channel context feeds the coupled state and all neural controls. It is a new
+implemented TAC variant, not a first-in-literature claim for established delta
+writes or associative memory. Conditional write contraction and absolute state
+bounds are specified; full coupled Jacobian contraction is not claimed.
+
+All 192equal-update and 48separate five-second training CPU model fits completed,
+plus 8new AR parents. Native parameters match context/GRU within 1%; recurrent state
+is 128 float32 values/channel, twice ME037. Actual CPU in the exposure lane differs;
+CPU-budget lane consumes different examples and total pipeline costs differ.
+Neither qualifies architectural superiority. Numerical correctness is not
+mechanistic attribution, and attribution remains deferred until competitiveness.
+
+New UCI849 Tetouan temporal test, one city/three distribution zones: exposure-lane
+power MSE native.153310, context.156326, GRU.156362, AR.202714. Native improves AR
+24.37% and context 1.93%, H720 versus AR -12.85%; the registered PRIMARY power
+engineering gate PASS. It is not unseen-city transfer, causal action utility or
+multi-site population qualification. Power/MAE and all 8-channel scores are shown
+separately. All Tetouan test periods are now exposed; no retuning on them.
+
+At the 5s training deadline (H96/720), native power MSE.151090 versus context.146461,
+GRU.151773 and AR.192950: context is better; separate gate FAIL. Exposure native
+training averages 10.88 CPU seconds versus context 2.16. Legacy native macro.340467
+is 0.15% worse than ME037.339944; new development target FAIL because context gain
+0.80% misses 1%. **ME037 remains the preferred legacy benchmark candidate**; ME038
+is a task-specific architectural research candidate, not a universal replacement.
+
+All 1,008 parent/adaptation endpoints replay 37,310,976 validation scalars bit exactly,
+8,448,000 initial AR values exact;48 matched optimization prefixes replay 23,103 steps.
+Independent NumPy reduction audit recalculates all 52 Tetouan selected/reference
+scores (1,479,493,632 forecast values) within a prospectively registered float64 bound.
+The old 1,680 ME036/576 ME037 checkpoint hashes remain unchanged. 1,020 tests +12 subtests.
+All original artifacts and old precision failures remain preserved, no merge.
+
+Continue construction with native state interaction and efficiency as joint
+engineering objectives. Reduce projection/loop overhead and improve how memory
+supports forecast-specific corrections; do not require another mechanistic study
+before building. Any new learned variant needs a separate registration and a new
+reserved real cohort for qualification. Equivalent execution optimization may use
+frozen models with exact prediction checks; it does not establish new accuracy.

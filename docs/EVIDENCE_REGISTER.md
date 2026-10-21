@@ -516,3 +516,30 @@ independent qualification unestablished; no merge/promotion.
 - Native remains a full-window forecasting system. No streaming/controller/VoI,
   mechanistic attribution, foundation-model superiority or commercial claim.
   Original local model deliveries are not GitHub Actions training artifacts.
+
+### ME038 — innovation memory coupled to native TAC
+
+- [Protocol/results](../research/mathematical-engineering/me038/RESULTS.md):
+  registration 4ee2e56d before fits/new-source numeric parsing; selection/source
+  freeze 75d4dce0 before final scoring. Addendum 2de9220d specifies independent
+  metric aggregation tolerance before any test inspection. No post-test tuning.
+- New 8x8 matrix state retrieves into fast/slow native updates and writes latent
+  prediction error. Core state 128 float32/channel; native parameters matched to
+  context/GRU within 1%. All controls share historical channel context. Established
+  delta-rule ideas acknowledged; no global originality or mechanism attribution.
+- 192 exposure fits at 500 updates and 48separate trainingCPU-budget fits; 8 new Tetouan
+  AR parents, 40 verified cached parents. All pass. Unequal CPU in exposure lane,
+  unequal examples/total cost in CPU lane: architecture superiority INELIGIBLE.
+- Prospective same-city power gate PASS: native MSE.153310 vs AR.202714 and
+  context.156326. Compute-lane gate FAIL: native.151090 vs context.146461.
+  Legacy development target FAIL; native.340467 vs ME037.339944. No replacement
+  of preferred general legacy candidate or commercial/causal/model promotion.
+- 1,008 endpoints/37,310,976 validation forecast scalars bit exact; initial AR equality
+  8,448,000 values; 48 optimization-prefix pairs/23,103 steps bit exact. Independent
+  NumPy reduction verifies 52 Tetouan models/references/1,479,493,632 test forecast
+  values against preregistered float64 bound, not full-array bit-exact storage.
+  Legacy final metrics are not independently recalculated. 1,020 tests +12 subtests.
+- Old 1,680 ME036 and 576 ME037 checkpoint hashes unchanged; original precision/gate
+  failures preserved. Physical native exports, supported-FLOP subtotals and
+  whole-window latency are measured separately from training. Local original
+  model delivery is not a GitHub Actions training artifact; no merge/deployment.

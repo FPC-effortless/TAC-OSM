@@ -74,12 +74,12 @@ def run():
         f"Registered primary power target **{'PASS' if summary['exposure_prospective_power_gate'] else 'FAIL'}**. "
         f"H720 power regression vs AR: {summary['exposure_power_H720_regression_vs_AR']*100:+.2f}% (positive worse).",
         '',f"ME037 historical native macro MSE was {previous:.6f}; new candidate relative change: "
-        f"{summary['historical_unmatched_relative_gain']*100:.2f}% improvement. This historical comparison is unmatched "
+        f"{abs(summary['historical_unmatched_relative_gain'])*100:.2f}% {'lower' if summary['historical_unmatched_relative_gain']>=0 else 'higher'} MSE. This historical comparison is unmatched "
         'for parameters, state capacity, cross-channel information paths and actual CPU; it is not architecture superiority.',
         '', '## Separate training-CPU-budget lane','',
         'Five process-CPU-second optimization deadline, finish the crossing update, at most 10,000 updates. '
         'Sample exposure therefore differs. Validation/serialization and worker startup are measured outside this '
-        'training deadline and included in reported pipeline costs. This is not equal end-to-end compute/data parity.',
+        'training deadline and included in reported component cost sums. Shared data loading and final trace/report writing are not exhaustively metered; these are not complete end-to-end totals. This is not equal end-to-end compute/data parity.',
         '', '| Model | Tetouan power MSE (H96/720) | Mean updates, all compute cells | Mean training CPU seconds |',
         '|---|---:|---:|---:|']
     for a in b.ARMS:
@@ -100,6 +100,18 @@ def run():
         for h in b.HORIZONS:
             if (lane,'tetouan',h,b.ARMS[0]) in powers:
                 lines.append('| '+lane+' | '+str(h)+' | '+' | '.join(f"{powers[(lane,'tetouan',h,a)]:.6f}" for a in b.ARMS)+' |')
+    lines+=['', '## Power MAE and channel trade-offs','',
+        'The following zone MAEs are rescaled using each train-only channel std. Units remain the original publisher numeric units, which UCI does not specify; no Wh/kW conversion or measured savings is inferred.',
+        '', '| Lane | H | Model | Power standardized MAE | Zone1 MAE | Zone2 MAE | Zone3 MAE |',
+        '|---|---:|---|---:|---:|---:|---:|']
+    for lane in ('exposure','compute'):
+        for h in b.HORIZONS:
+            for arm in b.ARMS:
+                rows=g.get((lane,'tetouan',h,arm),[])
+                if not rows:continue
+                stdmae=np.mean([r['test']['power_MAE'] for r in rows])
+                physical=np.mean([r['test']['channel_MAE'][5:] for r in rows],axis=0)*np.asarray(meta['tetouan']['scale'][5:])
+                lines.append(f'| {lane} | {h} | {labels[arm]} | {stdmae:.6f} | '+ ' | '.join(f'{x:.3f}' for x in physical)+' |')
     lines+=['','## Evidence boundaries','',
         'All attempted fits, checkpoint selection, data hashes, parameter/exposure/cost contracts and per-channel '
         'scores are retained. No fit replacement or post-test modification. Parameter gaps are under 1% among '
