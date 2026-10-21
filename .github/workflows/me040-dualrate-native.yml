@@ -1,0 +1,97 @@
+name: ME040 real coupled dual-rate TAC architecture and CPU competitiveness
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/tac_osm/me040_dualrate_innovation.py
+      - scripts/me040_train_real_multirate.py
+      - tests/test_me040_dualrate_innovation.py
+      - research/mathematical-engineering/me040/**
+      - docs/TACOSM-BASELINE-001.md
+      - .github/workflows/me040-dualrate-native.yml
+permissions:
+  contents: read
+concurrency:
+  group: me040-genuine-original-fit-dev
+  cancel-in-progress: true
+jobs:
+  numerical-and-all-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned original numerical environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Six-step mathematical preflight without outcome data
+        run: |
+          python -m py_compile src/tac_osm/me040_dualrate_innovation.py scripts/me040_train_real_multirate.py
+          python -m scripts.me040_train_real_multirate --self-test
+      - name: Full historical and ME040 regression tests
+        run: python -m pytest -q
+      - name: Check frozen-baseline provenance test count
+        run: python scripts/sync_test_count.py --check
+  authentic-data-fits-and-checkpoint-replay:
+    needs: numerical-and-all-regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned original CPU numerical environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Fit on authentic early Tetouan FIT and score only historical DEV
+        run: |
+          set -o pipefail
+          python -m scripts.me040_train_real_multirate --out results/me040 | tee me040-fitting.log
+      - name: Hash and bit-exact replay all saved historical DEV predictions
+        run: |
+          set -o pipefail
+          python -m scripts.me040_train_real_multirate --out results/me040 --replay | tee me040-replay.log
+      - name: Enforce registered real-source boundary and complete failed/successful gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("results/me040/results.json").read_text())
+          assert r["study"]=="ME040_GENUINE_TETOUAN_PAIRRATE_COUPLED_NATIVE"
+          assert r["original_source_sha256"]=="3c4bf684161180937043a9fb65701a83d44b740b0d42f0492b6e7aec57ddbbfe"
+          assert r["original_csv_sha256"]=="ca8b2f30cf07dd872cb7f2aa45dac110ee38dbe5fc5910a6ff4bcc530dae3a40"
+          assert r["reserved_future_numeric_rows_parsed"]==0
+          assert r["provenance"]["numeric_source_rows_parsed"]==41933
+          assert r["provenance"]["previous_ME038_final20_was_already_exposed"]
+          assert not r["provenance"]["new_independent_test_scored"]
+          assert r["all_original_models_complete"] and len(r["fits"])==24
+          assert len(r["parent_results"])==4
+          assert r["parameters_within_one_percent"]
+          assert not r["fully_matched_architecture_compute"] and r["no_promotion_or_merge"]
+          assert {(q["horizon"],q["seed"],q["arm"],q["lane"]) for q in r["fits"]}=={
+              (h,s,a,l) for h in (96,720) for s in (40001,40002)
+              for a in ("innovation_tac","paired_innovation_tac","context_cross")
+              for l in ("exposure","cpu")}
+          assert all(q["training_steps"]==250 for q in r["fits"] if q["lane"]=="exposure")
+          assert all(q["metric"]["power3_MSE"]>=0 for q in r["fits"])
+          assert all(q["training_steps"]>0 and q["metric"]["forecast_scalar_targets"]>0 for q in r["fits"])
+          assert "all_three_development_gates_pass" in r["evaluation"]
+          assert len(r["evaluation"]["paired_speedup_by_H_seed"])==4
+          print("ME040_REGISTERED_FITS_AND_GATE_RECEIPTS_PASS")
+          PY
+      - name: Preserve all original model weights, optimizer states and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me040-genuine-six-step-innovation-24-fits-and-replay
+          path: |
+            results/me040/
+            me040-fitting.log
+            me040-replay.log
+          retention-days: 90
+          if-no-files-found: ignore
