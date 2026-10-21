@@ -1,0 +1,48 @@
+name: BENCH-FM-001 TabFM 1.0.0 official compatibility fallback
+on:
+  push:
+    branches:
+      - research/tac-timesfm-tabfm-metropt-pilot-2026-10-21
+    paths:
+      - ".github/workflows/bench-foundation-tabfm10-fallback.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  official-tabfm-1-0-fallback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official TabFM1.0 PyTorch backend
+        run: |
+          python -m pip install --disable-pip-version-check torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check "tabfm[pytorch]" numpy==2.3.5 pandas==2.3.3
+      - name: Restore EXACT original frozen future-week benchmark inputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p results/bench-fm-001
+          gh run download 39596526571 --repo FPC-effortless/TAC-OSM \
+            --name bench-fm-001-original-tac-and-fixed-real-input --dir results/bench-fm-001
+          test -s results/bench-fm-001/fixed-inputs.npz
+      - name: Execute official pretrained TabFM1.0 on unchanged real windows
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          python -m scripts.bench_foundation_models --stage tabfm10 --out results/bench-fm-001 \
+            2>&1 | tee results/bench-fm-001/tabfm10-execution.log
+      - name: Upload measured numbers or exact failure
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-fm-001-tabfm10-fallback-receipt
+          path: |
+            results/bench-fm-001/tabfm10-results.json
+            results/bench-fm-001/tabfm10-execution.log
+          if-no-files-found: warn
+          retention-days: 90

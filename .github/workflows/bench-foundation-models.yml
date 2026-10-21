@@ -1,0 +1,111 @@
+name: BENCH-FM-001 frozen TAC versus TimesFM3 and TabFM1.1 MetroPT pilot
+on:
+  push:
+    branches:
+      - research/tac-timesfm-tabfm-metropt-pilot-2026-10-21
+    paths:
+      - ".github/workflows/bench-foundation-models.yml"
+      - "scripts/bench_foundation_models.py"
+      - "research/bench-fm-001/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  frozen-tac-and-real-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up trusted CPU numerical environment
+        run: |
+          python -m pip install --disable-pip-version-check numpy==2.3.5
+          python -m pip install --disable-pip-version-check torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore the six ORIGINAL frozen trained checkpoints
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 39357593422 --repo FPC-effortless/TAC-OSM \
+            --name me004-original-real-tac-models --dir .
+          python -c "from pathlib import Path; assert Path('results/me004/results.json').exists()"
+      - name: Verify real source and score ORIGINAL TAC/GRU on fixed shared origins
+        run: |
+          python -m scripts.bench_foundation_models --stage pack --original results/me004 --out results/bench-fm-001
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-fm-001-original-tac-and-fixed-real-input
+          path: |
+            results/bench-fm-001/fixed-inputs.npz
+            results/bench-fm-001/tac-control-results.json
+          if-no-files-found: warn
+          retention-days: 90
+  timesfm3-original-pretrained:
+    needs: frozen-tac-and-real-data
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official TimesFM 3.0 CPU inference
+        run: |
+          python -m pip install --disable-pip-version-check torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check timesfm==3.0.0 numpy==2.3.5
+      - uses: actions/download-artifact@v4
+        with:
+          name: bench-fm-001-original-tac-and-fixed-real-input
+          path: results/bench-fm-001
+      - name: Run official TimesFM3 checkpoint on identical real windows
+        continue-on-error: true
+        run: |
+          mkdir -p results/bench-fm-001
+          set -o pipefail
+          python -m scripts.bench_foundation_models --stage timesfm3 --out results/bench-fm-001 \
+            2>&1 | tee results/bench-fm-001/timesfm3-execution.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-fm-001-timesfm3-real-scores-or-execution-failure
+          path: |
+            results/bench-fm-001/timesfm3-results.json
+            results/bench-fm-001/timesfm3-execution.log
+          if-no-files-found: warn
+          retention-days: 90
+  tabfm11-original-pretrained:
+    needs: frozen-tac-and-real-data
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official TabFM1.1 PyTorch CPU inference
+        run: |
+          python -m pip install --disable-pip-version-check torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check "tabfm[pytorch]" numpy==2.3.5 pandas==2.3.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: bench-fm-001-original-tac-and-fixed-real-input
+          path: results/bench-fm-001
+      - name: Run official TabFM1.1 regression checkpoint on identical real windows
+        continue-on-error: true
+        run: |
+          mkdir -p results/bench-fm-001
+          set -o pipefail
+          python -m scripts.bench_foundation_models --stage tabfm11 --out results/bench-fm-001 \
+            2>&1 | tee results/bench-fm-001/tabfm11-execution.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-fm-001-tabfm11-real-scores-or-execution-failure
+          path: |
+            results/bench-fm-001/tabfm11-results.json
+            results/bench-fm-001/tabfm11-execution.log
+          if-no-files-found: warn
+          retention-days: 90
