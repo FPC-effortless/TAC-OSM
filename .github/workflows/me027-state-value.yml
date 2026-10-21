@@ -1,0 +1,25 @@
+name: ME027 learned-state mathematical and causal checks
+on:
+  pull_request:
+    paths:
+      - src/tac_osm/state_value.py
+      - scripts/me027_*.py
+      - tests/test_state_value.py
+      - research/mathematical-engineering/me027/**
+      - .github/workflows/me027-state-value.yml
+permissions:
+  contents: read
+jobs:
+  mathematics-and-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Native identity, shared features, active causality and full regression
+        run: python -m pytest -q

@@ -13,7 +13,7 @@ permissions:
   contents: read
   actions: write
 concurrency:
-  group: me025-real-original-fit-dev-only
+  group: me025-real-original-fit-dev-only-${{ github.head_ref }}
   cancel-in-progress: true
 jobs:
   numerical-and-repository-guards:
