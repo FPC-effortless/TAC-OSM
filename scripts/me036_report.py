@@ -32,6 +32,14 @@ def run():
         'total_scored_neural_scalar_predictions':sum(r['test']['scalar_targets'] for r in rows if r['arm']!='ridge'),
         'macro_aggregation':'equal weight dataset/horizon cells; mean fitted-seed MSE within cell',
         'test_stride':1,'architecture_superiority_qualified':False,'paper_parity_qualified':False}
+    correction_path=b.ROOT/'results/me036c/results.json'
+    correction=None
+    if correction_path.exists():
+        correction=json.loads(correction_path.read_text())
+        summary['posthoc_corrected_ridge_MSE']=float(np.mean([r['test']['MSE'] for r in correction['references']]))
+        summary['TAC_relative_gap_to_posthoc_corrected_ridge']=overall['tac_patch']/summary['posthoc_corrected_ridge_MSE']-1
+        shutil.copyfile(correction_path,report/'corrected-ridge-results.json')
+        shutil.copyfile(b.ROOT/'results/me036c/frozen.json',report/'corrected-ridge-frozen.json')
     b.dump(report/'summary.json',summary)
     manifest=[]
     data_index={r['name']:r for r in json.loads((b.OUT/'data.json').read_text())}
@@ -70,7 +78,7 @@ def run():
         '| Model | Macro MSE | Native parameter parity |','|---|---:|---|']
     labels={'tac_patch':'Patched native TAC','ar':'AR only','context':'AR + context correction',
         'gru':'AR + GRU correction','dlinear':'Compact shared DLinear-style','patchtst_small':'Compact PatchTST-style',
-        'itransformer_small':'Compact iTransformer-style','ridge':'Shared-channel ridge'}
+        'itransformer_small':'Compact iTransformer-style','ridge':'Locally normalized ridge (original objective)'}
     for a in arms:lines.append(f"| {labels[a]} | {overall[a]:.6f} | {'within1%' if a in ('tac_patch','context','gru') else 'unmatched'} |")
     lines+=['',f"TAC improvement over AR: **{improvement*100:.2f}%**. Gap to the best macro baseline: "
         f"**{gap*100:.2f}%**. Registered practical gate: **{'PASS' if summary['success_gate'] else 'FAIL'}**.",
@@ -82,7 +90,8 @@ def run():
         'TAC uses12ordered8-step patches, learned fast32/slow32 native dynamics, residual '
         'slow updates, trainable multiscale rates, a SwiGLU/32-basis correction and joint '
         'channel-shared linear forecast path. All models start from scratch; ridge is '
-        'a separately fitted reference, not a TAC initializer.',
+        'a separately fitted reference, not a TAC initializer. Models are trained separately '
+        'per dataset/horizon; this is not zero-shot transfer.',
         '', 'TAC/context/GRU parameter gaps are below1%; all other model sizes differ. '
         'Examples, samplers,1000-update ceilings and selection privileges match for '
         'the neural models. Actual CPU spend differs: the strict compute-parity gate '
@@ -115,6 +124,20 @@ def run():
         'frozen.json, replay.json and runtime.json for machine-readable evidence. '
         'Final metrics stream without retaining billions of forecast values; checkpoint '
         'audits replay the saved validation probes, not the entire test metric array.']
+    if correction is not None:
+        value=summary['posthoc_corrected_ridge_MSE'];gap=summary['TAC_relative_gap_to_posthoc_corrected_ridge']
+        lines += ['', '## Post hoc ridge objective correction', '',
+            'The registered ridge fit minimized locally normalized residual errors without '
+            'the variance weights needed to match the scored forecasting MSE. Its extreme '
+            'ETTh2 results remain in the original table. ME036C fixes that algebra with '
+            'the same alpha100 and training anchors; no TAC changes or validation tuning. '
+            'It was registered after initial test scores, so it is descriptive corrected '
+            'reference evidence, not prospective confirmation. See RIDGE-CORRECTION.md.', '',
+            f'Corrected ridge macro MSE: **{value:.6f}**; TAC relative gap: **{gap*100:.2f}%**. '
+            'The registered gate above is unchanged and excludes this later correction.', '',
+            '| Dataset | H | Corrected ridge MSE |', '|---|---:|---:|']
+        for row in correction['references']:
+            lines.append(f"| {row['dataset']} | {row['horizon']} | {row['test']['MSE']:.6f} |")
     (report/'RESULTS.md').write_text('\n'.join(lines)+'\n')
     (report/'README.md').write_text('# ME036\n\n[Results](RESULTS.md) · [Registration](PROTOCOL.md) · '
         '[Prospective continuation](CONTINUATION.md) · [Equations](MATHEMATICS.md) · [Artifacts](ARTIFACT.md)\n')

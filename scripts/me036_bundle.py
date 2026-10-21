@@ -14,7 +14,7 @@ def run(destination):
     excluded={'ARTIFACT.md','archive.json','archive-index.json','restoration.json','restoration.log'}
     paths=[p for p in subprocess.check_output(['git','ls-files'],cwd=base.ROOT,text=True).splitlines()
         if (base.ROOT/p).is_file() and not (p.startswith('research/mathematical-engineering/me036/') and Path(p).name in excluded)]
-    for folder in (base.ROOT/'results/me036',out,base.DATA):
+    for folder in (base.ROOT/'results/me036',out,base.ROOT/'results/me036c',base.DATA):
         paths += [str(p.relative_to(base.ROOT)) for p in folder.rglob('*') if p.is_file() and not p.name.endswith('.tmp')]
     paths=sorted(set(paths));head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=base.ROOT,text=True).strip()
     index={'source_snapshot_commit':head,'original_models_no_refit':True,'local_research_delivery':True,
@@ -30,7 +30,8 @@ def run(destination):
         'original_checkpoint_endpoints':sum(len(r['endpoints']) for r in frozen['fits']),
         'native_selected_models':len(json.loads((out/'runtime.json').read_text())['exports']),
         'native_TorchScript_exports':2*len(json.loads((out/'runtime.json').read_text())['exports']),
-        'ridge_coefficients':len(frozen['ridge']),'public_GitHub_Actions_artifact':False}
+        'registered_ridge_coefficients':len(frozen['ridge']),
+        'posthoc_corrected_ridge_coefficients':20,'public_GitHub_Actions_artifact':False}
     base.dump(report/'archive.json',receipt);print(json.dumps(receipt,indent=2))
 
 
