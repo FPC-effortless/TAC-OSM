@@ -47,3 +47,18 @@ def test_float32_dot_error_uses_prospective_bound():
     ref=a.astype('float64')@b.astype('float64')
     bound=(gamma+2*u)*(abs(a.astype('float64'))@abs(b.astype('float64')))
     assert (abs((a@b).astype('float64')-ref)<=bound).all()
+
+
+def test_streamed_metric_covers_every_window_and_full_horizon():
+    from scripts.me036_research import score
+    class Persistence(torch.nn.Module):
+        def forward(self,x):return x[:,-1:].expand(-1,96,-1)
+    t=torch.arange(400.,dtype=torch.float32)
+    z=torch.stack((t,2*t),dim=-1)
+    metric=score(Persistence(),z,100,300,96,stride=1)
+    # For every anchor, channel errors are k and2k, k=1..96.
+    expected=((96+1)*(2*96+1)/6)*2.5
+    assert metric['windows']==105
+    assert metric['scalar_targets']==105*96*2
+    assert metric['MSE']==pytest.approx(expected,rel=4*np.finfo(np.float64).eps)
+    assert metric['MAE']==72.75
