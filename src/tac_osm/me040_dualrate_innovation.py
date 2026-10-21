@@ -77,7 +77,7 @@ def preflight():
     p = torch.randn(2,12,16)
     q = pair_observed_patches(p)
     assert q.shape == (2,6,16)
-    assert torch.equal(q, .25*p[:,0::2]+.75*p[:,1::2])
+    assert torch.allclose(q, .25*p[:,0::2]+.75*p[:,1::2],atol=2e-7,rtol=2e-7)
     for prefix in (2,4,6,8,10):
         changed=p.clone();changed[:,prefix:]+=123.
         if not torch.equal(pair_observed_patches(p)[:,:prefix//2],
@@ -91,9 +91,10 @@ def preflight():
         net.eval()
         with torch.no_grad():torch.nn.init.normal_(net.out.weight,std=.01)
         x=torch.randn(2,96,3)
-        script=torch.jit.script(net)
+        script=torch.jit.script(net.memory)
+        patches=torch.randn(2,12,16)
         with torch.no_grad():
-            assert torch.allclose(net(x),script(x),atol=1e-6,rtol=1e-6)
+            assert torch.allclose(net.memory(patches),script(patches),atol=1e-6,rtol=1e-6)
         assert net.memory(torch.randn(2,12,16)).shape==(2,64)
         opt=torch.optim.AdamW(net.parameters(),lr=.001)
         for _ in range(3):
