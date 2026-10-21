@@ -143,3 +143,28 @@ learning native dynamics/readout, with strong common-only S adaptation included.
 ME033 did not fit native_frozen. Separate registration before fitting; no post-hoc
 addition. New independent/out-of-time qualification and state-value gates remain
 necessary before compression,hierarchy or adaptive reasoning.
+
+## ME034 completion — stable inputs help; new-user gate fails and recipe closes
+
+The formerly unexecuted frozen-input proposal above is now completed in
+[ME034](mathematical-engineering/me034/RESULTS.md),72new real-data fits.
+R-only pretraining provenance is verified: no all-FIT/evaluation-user embedding
+pretraining within a rotation. On5841later observations/438new remainder6users,
+native frozen Brier.157755632 improves adapted native.158996207 but loses to
+common adaptation.156919508 and boosted.155062852. The registered adjusted
+Brier/AUC gates both FAIL. Source freeze260fd62b precedes fitting and final access.
+
+**Retire positive native-memory claims on this KuaiRec task and close this stable
+input recipe.** Remainder6 is exposed; no tuning, new-gate test, hierarchy,
+compression or latent-reasoning extension on it. Existing negative results and
+native mathematics remain preserved. No model promoted or merged. A stronger
+readout result does not prove recurrence is universally useless or that its exact
+failure mechanism has been isolated. Future work needs a genuinely new real task,
+objective or source rationale, registered before outcomes, with a train-only
+demonstration that ordered history offers headroom over strong summaries.
+
+Frozen-table sharing extends to27native/pooled/GRU runtimes,512000tensor-weight
+bytes saved each with exact forecasts. 971tests+12subtests;594279neural forecasts
+exact through checkpoint/script/raw pipelines,84897tree forecasts exact. Full
+compute parity remains unqualified despite native/GRU parameter gap0.097% and
+operator-subtotal gaps<1%; no architectural-superiority claim.

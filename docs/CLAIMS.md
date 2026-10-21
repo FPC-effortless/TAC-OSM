@@ -1108,3 +1108,17 @@ Component sum/count APIs verified on real prefixes; no full48byte forecast claim
 Separate exact immutable-table sharing saves512000tensor-weight bytes/model,
 all18eligible checkpoints/64656forecasts unchanged.953tests+12subtests pass.
 [Evidence and limitations](../research/mathematical-engineering/me033/RESULTS.md).
+
+### ME034 — frozen-input native improves, but new-user memory claim closes
+
+72new fits, R-only pretraining provenance verified. Registered remainder6 later
+cohort5841rows/438users: native frozen Brier.157755632, adapted native.158996207,
+common adaptation.156919508, boosted.155062852. Native-minus-common Brier
++.000836123 (adjusted97.5%CI[+.000140843,+.001500978]); AUC−.001726678
+(adjusted97.5%CI[−.003003694,−.000378038]). Both primary gates FAIL; close this
+KuaiRec native recipe and retire positive native-memory claims on the task.
+Remainder6 is now exposed, not reusable independent evidence. Input drift is
+not established as the cause of adaptation penalties. No full parity/superiority,
+causal utility, promotion or deployment claim. Frozen-table sharing saves512000
+tensor-weight bytes in27eligible models without forecast changes; not full RAM.
+[Results, mathematical limits and stop rule](../research/mathematical-engineering/me034/RESULTS.md).

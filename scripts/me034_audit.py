@@ -9,6 +9,8 @@ import time
 from pathlib import Path
 import numpy as np
 import torch
+from torch.profiler import profile,ProfilerActivity
+from torch.nn import functional as F
 from tac_osm.me034_runtime import StablePipeline
 from tac_osm.me032_conditional_memory import FrozenContext
 from scripts.me034_stable_research import (
@@ -125,8 +127,15 @@ def audit(out,quick=False):
             context=restore_context(inc['context_state'])
             rr=subset(data,torch.tensor(role['representation']['indices']))
             cs=inc['context_state']
-            old=torch.load(ROOT/'results/me031'/f'encoder-r{cell["rotation"]}-s{cell["seed"]}.pt',weights_only=True)
+            encoder=ROOT/'results/me031'/f'encoder-r{cell["rotation"]}-s{cell["seed"]}.pt'
+            assert file_sha(encoder)==cell['lineage']['encoder_sha256']
+            old=torch.load(encoder,weights_only=True)
+            assert old['step']==300 and old['rotation']==cell['rotation'] and old['seed']==cell['seed']
             assert torch.equal(old['state_dict']['emb.weight'],inc['embedding'])
+            teacher=ROOT/'results/me032'/f'teacher-r{cell["rotation"]}-s{cell["seed"]}.pt'
+            assert file_sha(teacher)==inc['parent_teacher_sha256']
+            original_head=torch.load(teacher,weights_only=True)['state_dict']
+            assert all(torch.equal(v,original_head[k]) for k,v in inc['common_state'].items())
             assert torch.equal(fit_only_popularity(rr),cs['item_popularity'])
             assert float(rr['duration'].mean())==float(cs['duration_mean'])
             assert max(float(rr['duration'].std(unbiased=False)),1e-5)==float(cs['duration_scale'])
@@ -194,12 +203,22 @@ assert not any(x.startswith(('tac_osm','scripts')) for x in sys.modules)
                     actual=np.load(output).astype(np.float64);np.testing.assert_allclose(actual,expected,rtol=0,atol=1e-6)
                     fresh.append({'name':st['name'],'forecasts':4,'max_abs_error':float(np.max(np.abs(actual-expected)))})
                 if not quick and cell['rotation']==0 and cell['seed']==14001:
+                    ss=subset(data,torch.tensor(role['readout']['indices'][:8]))
+                    sc=auxiliary(ss,inc['context_S'][:8]);so=offered_items(ss);sy=targets(ss)
+                    scripted.train();scripted.zero_grad(set_to_none=True)
+                    F.binary_cross_entropy_with_logits(scripted(ss['items'],ss['metadata'],so,sc),sy).backward()
+                    scripted.zero_grad(set_to_none=True)
+                    with profile(activities=[ProfilerActivity.CPU],with_flops=True) as prof:
+                        F.binary_cross_entropy_with_logits(scripted(ss['items'],ss['metadata'],so,sc),sy).backward()
+                    scripted.eval()
+                    subtotal=sum(e.flops or 0 for e in prof.key_averages())
                     x=batch(final,slice(0,128));samples=[]
                     with torch.no_grad():
                         for _ in range(3):runtime(*x)
                         for _ in range(9):
                             clock=time.perf_counter();runtime(*x);samples.append(time.perf_counter()-clock)
                     resources.append({'arm':st['arm'],'B128_full_pipeline_latency_median_seconds':float(np.median(samples)),
+                        'B8_forward_backward_operator_FLOP_subtotal':subtotal,'full_FLOPs':False,
                         'latency_samples_seconds':samples,'unique_parameter_bytes':sum(p.numel()*p.element_size() for p in runtime.parameters()),
                         'buffer_bytes':sum(p.numel()*p.element_size() for p in runtime.buffers()),
                         'context_cache_excluded':True,'recurrence_state_bytes':256 if st['arm'].startswith('native') else 144 if st['arm']=='gru_frozen' else None})

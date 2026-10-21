@@ -444,3 +444,18 @@ Post-fit no-training table sharing removes512000tensor-weight bytes/model with
 18paths/64656forecasts exact.953tests+12subtests. No DEV score, new reserved cohort,
 full parity claim,promotion or deployment.
 [Full evidence](../research/mathematical-engineering/me033/RESULTS.md).
+
+### ME034 — stable-input native and registered new-user stop,2026-10-21
+
+Freeze260fd62b;63neural300-step fits+9fixed boosting fits,3seeds*3role rotations.
+Original R-only embedding lineage/disjoint roles and preprocessing verified;
+all models hashed before scoring. One final remainder6 test,5841real later rows,
+438users. Native frozen/common Brier.157755632/.156919508; adjusted Brier and
+AUC primary gates FAIL. Registered stop closes this KuaiRec native recipe.
+594279neural forecasts bit-exact via checkpoints/scripts/raw pipelines;
+84897tree forecasts exact;63fresh Torch-only pipelines/252forecasts exact;
+27immutable-table-sharing runtimes save512000tensor-weight bytes each.
+Final bootstrap and ensemble metrics reproduced; corruption fails before source.
+971tests+12subtests. Remainder6 now exposed. No new architecture promotion,
+full compute parity, commercial or causal-action claim.
+[Verified results and original manifests](../research/mathematical-engineering/me034/RESULTS.md).
