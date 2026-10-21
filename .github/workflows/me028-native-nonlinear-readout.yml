@@ -1,0 +1,98 @@
+name: ME028 native nonlinear real-world readout controlled research
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/tac_osm/me028_nonlinear_readout.py
+      - scripts/me028_native_readout_fit.py
+      - tests/test_me028_nonlinear_readout.py
+      - research/mathematical-engineering/me028/**
+      - docs/TACOSM-BASELINE-001.md
+      - .github/workflows/me028-native-nonlinear-readout.yml
+permissions:
+  contents: read
+concurrency:
+  group: me028-original-real-FIT-DEV-registered
+  cancel-in-progress: true
+jobs:
+  all-math-and-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install executed numerical environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Compile and mathematical preflight without source outcome data
+        run: |
+          python -m py_compile scripts/me028_native_readout_fit.py src/tac_osm/me028_nonlinear_readout.py
+          python -m scripts.me028_native_readout_fit --self-test
+      - name: All repository regression and active nonzero-head causal falsifiers
+        run: python -m pytest -q
+  original-real-data-fit-and-replay:
+    # First registered fit is immutable; never silently rerun nine neural fits
+    # because someone archived results or updated documentation on this PR.
+    if: github.event.pull_request.head.sha == '275b09dceee4a84eb4ad508039adb55c5306b762'
+    needs: all-math-and-regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned numerical environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Fit only on original authenticated KuaiRec FIT; score only already-exposed DEV
+        run: |
+          set -o pipefail
+          python -m scripts.me028_native_readout_fit --out results/me028 | tee me028-fitting.log
+      - name: Independently SHA verify every final checkpoint and replay all original 53,568 genuine DEV predictions
+        run: |
+          set -o pipefail
+          python -m scripts.me028_native_readout_fit --out results/me028 --audit | tee me028-replay.log
+      - name: Enforce complete experiment, independent holdout and claim restriction
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          r=json.loads(Path('results/me028/results.json').read_text())
+          assert r['study']=='ME028_NONLINEAR_OBSERVABLE_NATIVE_READOUT_HISTORICAL_DEV'
+          assert r['source_SHA256']=='c23f211cf109c7a060a25a4afe9e8c681b1ccbbc816cca921d87ad37dd11c70c'
+          assert r['original_FIT_windows']==10776 and r['inspected_historical_DEV_windows']==5952
+          assert r['all_nine_original_real_FIT_fits_completed']
+          assert r['all_future_outcomes_held_closed']
+          assert not r['reserved_unseen_cohorts_opened']
+          assert not r['architecture_promoted']
+          assert not r['fully_compute_FLOP_matched']
+          assert not r['independent_accuracy_claim_allowed']
+          assert r['model_parameters']=={'tac_linear':135067,'tac_nonlinear':135377,'mlp252':135057}
+          assert len(r['model_rows'])==9
+          assert {(q['arm'],q['seed']) for q in r['model_rows']}=={
+             (a,s) for a in ('tac_linear','tac_nonlinear','mlp252')
+                   for s in (14001,14002,14003)}
+          assert all(q['updates']==300 and q['drawn_fit_windows']==38400
+                     and q['supervised_real_prefix_outcomes']==153600
+                     for q in r['model_rows'])
+          assert all(len(q['learning_curve'])==9 for q in r['model_rows'])
+          assert len(r['registered_gates']['primary_paired_nonlinear_minus_linear_DEV_Brier_by_seed'])==3
+          assert all(math.isfinite(q['dev_final']['Brier']) for q in r['model_rows'])
+          assert len([q for q in r['model_rows'] if q['state_mean_replacement']])==6
+          PY
+      - name: Publish all original trained checkpoints, scores and unfavorable evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me028-original-real-native-nonlinear-vs-linear-and-MLP-nine-checkpoints
+          path: |
+            results/me028/
+            me028-fitting.log
+            me028-replay.log
+          retention-days: 90
+          if-no-files-found: ignore
