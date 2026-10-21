@@ -234,3 +234,43 @@ transparent budgets. Target the long-horizon regressions directly. Detailed
 mechanistic attribution remains deferred; retain competitive controls as columns.
 Use a new registration and disclose benchmark exposure before fitting; this
 completed test matrix is no longer a fresh qualification cohort.
+
+## ME037 completion — bounded horizon control and integrated context
+
+[ME037](mathematical-engineering/me037/RESULTS.md) builds and trains a complete
+native fast/slow forecaster with a learned full-history context branch, joint AR
+backbone, SwiGLU readout and context-dependent monotone horizon gate. A bounded
+`tanh` correction prevents unlimited head rescaling from defeating attenuation;
+the resulting amplitude envelope is proved, without claiming a loss guarantee.
+ME036 already provided explicit level/scale context; 720-step outputs are direct
+forecasts, not 720 recurrent updates. State dilution is not an established cause.
+
+All 192 adaptation trajectories and eight new-house AR parents completed. Native
+macro MSE on the five exposed benchmarks is .339944 vs AR adaptation .347832:
+2.27% lower, passing the registered development gate. Context .341093 and GRU
+.341475 remain close. At H720 native versus AR is +0.13% ETTh1 / -0.28% ETTh2,
+substantially smaller regressions than ME036. Historical native .346956 vs .339944
+is an unmatched system-development improvement, with more capacity/pretraining.
+
+A separately reserved temporal test from UCI374, one Belgian house with real
+energy/temperature/humidity measurements, scores .862641 native vs .870339 AR:
+0.88% better, **failing** its separate 2% gate. Energy-only MSE .547785 vs .589338
+is reported separately; individual MAE/channel outcomes vary. This is training on
+the house's past, not zero-shot unseen-house transfer. New test outcomes are now
+exposed; no tuning on them or retrospective change to the registered gate.
+
+864 original parent/adaptation checkpoints replay 37,062,144 validation scalars
+bit exactly; 48 native models have standard/raw exports, 4,118,016 exact values.
+1,005 tests plus 12 subtests pass. All old 1,680 ME036 checkpoints are unchanged;
+ME035B's historical precision failure stays visible. Actual compute differs, so
+no architectural-superiority, modern-paper parity or mechanistic attribution claim.
+
+Continue architecture-first construction in a separately registered next build:
+add efficient cross-channel prediction and input-conditioned temporal feature
+selection while preserving the strong context/linear paths and bounded forecast
+correction. Train complete candidates; use matched controls as table columns,
+not as a prerequisite mechanistic study. Reserve a new real cohort before any
+further qualification claim. Forecast improvement does not demonstrate action
+control: an action-conditioned extension needs genuine actions, costs and observed
+outcomes. PR300 remains a draft task-specific foundation-model comparison, not
+proof of TAC control strengths or a prohibition on forecasting research.

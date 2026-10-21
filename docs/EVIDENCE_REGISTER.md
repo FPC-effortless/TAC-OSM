@@ -494,3 +494,25 @@ independent qualification unestablished; no merge/promotion.
   resumption; one unfinished arithmetic job may restart. No new fit/selection.
   Full original checkpoints and compact native inference artifacts remain local
   deliveries, not claimed GitHub Actions training-artifact downloads. No merge.
+
+### ME037 — context-integrated, horizon-bounded native forecasting
+
+- [Protocol/results](../research/mathematical-engineering/me037/RESULTS.md):
+  source/model registration 0f0c0d9e before fitting; global selection freeze
+  3492ff2e before new test scoring. Original measured legacy files plus UCI374
+  household sensors, train-only preprocessing. Eight new AR parent fits and
+  192 joint adaptation fits; all attempted trajectories retained.
+- Five exposed benchmarks macro MSE .339944 native / .341093 context / .341475
+  GRU / .347832 AR-adapt. Registered development gate PASS (2.27% gain plus H720
+  non-regression margin). Native parameter-matched to context/GRU within 1%,
+  shared training inputs/parents/exposure/selection; actual compute parity FAIL.
+- Prospective same-house temporal test .862641 native / .870339 AR: 0.88% gain,
+  separate 2% gate FAIL. Energy-only .547785/.589338; original channel errors
+  and physical energy MAE also reported. No multi-site or zero-shot claim.
+- 864 checkpoints replay 37,062,144 stored validation values bit exactly; initial
+  AR equality covers 8,236,032 values. 48 native standard/raw model pairs replay
+  4,118,016 values, standalone Torch-only physical loading. Original 1,680 ME036
+  checkpoint hashes unchanged (not all replayed again). 1,005 tests +12 subtests.
+- Native remains a full-window forecasting system. No streaming/controller/VoI,
+  mechanistic attribution, foundation-model superiority or commercial claim.
+  Original local model deliveries are not GitHub Actions training artifacts.

@@ -1,0 +1,46 @@
+{
+  "legacy_development_MSE": {
+    "tac_horizon": 0.33994430565717737,
+    "context_horizon": 0.3410934637288238,
+    "gru_horizon": 0.3414751107462106,
+    "ar_adapt": 0.3478318691627452
+  },
+  "prospective_household_MSE": {
+    "tac_horizon": 0.8626413831024419,
+    "context_horizon": 0.8676638206701639,
+    "gru_horizon": 0.8652979205626913,
+    "ar_adapt": 0.870339448309977
+  },
+  "prospective_energy_only_MSE": {
+    "tac_horizon": 0.5477852103514387,
+    "context_horizon": 0.5524719859747693,
+    "gru_horizon": 0.5508883905715303,
+    "ar_adapt": 0.589338486405474
+  },
+  "legacy_relative_improvement_vs_AR_adapt": 0.022676368110126743,
+  "household_relative_improvement_vs_AR_adapt": 0.008844899794537842,
+  "ETTh_720_relative_regression_vs_AR_adapt": {
+    "ETTh1": 0.0013326258462960094,
+    "ETTh2": -0.0027634347479067456
+  },
+  "household_720_relative_regression_vs_AR_adapt": -0.011632616191929901,
+  "legacy_engineering_gate": true,
+  "prospective_household_engineering_gate": false,
+  "historical_ME036_native_MSE": 0.34695582093632105,
+  "historical_relative_improvement": 0.020208668816167674,
+  "historical_comparison_matched": false,
+  "architectural_superiority_qualified": false,
+  "failed_fits": [],
+  "new_adaptation_fits": 192,
+  "new_parent_fits": 8,
+  "actual_new_adaptation_CPU_seconds": 609.9686047770069,
+  "actual_new_parent_CPU_seconds": 7.781247218999966,
+  "cached_parent_training_CPU_seconds_deduplicated": 58.46375370000132,
+  "neural_final_scoring_CPU_seconds": 585.178280442,
+  "neural_final_scalar_forecasts": 20611906560,
+  "seeds": [
+    37001,
+    37002
+  ],
+  "aggregation": "Mean over seeds within dataset/H, equal weight H/cells; legacy and new-house separate."
+}
