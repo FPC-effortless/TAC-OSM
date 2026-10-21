@@ -1,0 +1,111 @@
+name: ME045 real compute-adaptive multiscale native and GRU competition
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/tac_osm/me045_conditional_multiscale.py
+      - scripts/me045_train_conditional.py
+      - tests/test_me045_conditional_multiscale.py
+      - research/mathematical-engineering/me045/**
+      - docs/TACOSM-BASELINE-001.md
+      - .github/workflows/me045-conditional-multiscale.yml
+permissions:
+  contents: read
+concurrency:
+  group: me045-real-conditional-pyramid
+  cancel-in-progress: true
+jobs:
+  full-math-and-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install original pinned numerical dependencies
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Source syntax and exact conditional compute contracts
+        run: |
+          python -m py_compile src/tac_osm/me045_conditional_multiscale.py scripts/me045_train_conditional.py
+          python -m pytest -q tests/test_me045_conditional_multiscale.py
+      - name: All repository regression tests and baseline count
+        run: |
+          python -m pytest -q
+          python scripts/sync_test_count.py --check
+  registered-authentic-fits-and-immutable-forecasts:
+    needs: full-math-and-regressions
+    runs-on: ubuntu-latest
+    timeout-minutes: 115
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install original pinned numerical environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Train eight genuine frozen common backbones and 48 full conditional models
+        run: |
+          set -o pipefail
+          python -m scripts.me045_train_conditional --out results/me045 | tee me045-genuine-fit.log
+      - name: Exact original AVX2-checkpoint replay across adaptive/always/cheap paths
+        run: |
+          set -o pipefail
+          python -m scripts.me045_train_conditional --out results/me045 --replay | tee me045-independent-replay.log
+      - name: Verify all 48 real fits, actual routing, CPU, gates and unopened test
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from tac_osm.me045_conditional_multiscale import ARMS
+          r=json.loads(Path("results/me045/results.json").read_text())
+          assert r["complete"] and r["study"]=="ME045_REAL_FROZEN_CONTEXT_ROUTED_MULTISCALE"
+          assert r["new_test_outcomes_opened"]==0
+          assert r["nonindependent_dev"] and r["original_avx512_cross_isa_exception_retained"]
+          assert not r["all_three_way_resource_parity_qualified"]
+          assert set(r["domains"])=={"etth1","tetouan"}
+          assert all(len(d["parents"])==4 and len(d["frozen_contexts"])==4
+                     and len(d["fits"])==24 for d in r["domains"].values())
+          for domain,d in r["domains"].items():
+              assert {(v["horizon"],v["seed"],v["lane"],v["arm"]) for v in d["fits"]}=={
+                (h,s,l,a) for h in (96,720) for s in (45001,45002)
+                for l in ("exposure","cpu") for a in ARMS}
+              assert all(q["steps"]==1000 for q in d["fits"] if q["lane"]=="exposure")
+              assert all(q["metrics"]["adaptive"]["total_channel_windows"]>0
+                         and 0<=q["metrics"]["adaptive"]["executed_fraction"]<=1
+                         and q["latency"]["adaptive"]["median_full_forecast_CPU_ms"]>0
+                         for q in d["fits"])
+              assert d["provenance"]["numeric_future_rows_parsed"]==0
+          gates=r["selection"]["gates"]
+          assert "all_registered_dev_gates_pass" in gates
+          assert r["selection"]["no_promotion_or_merge"]
+          assert r["selection"]["sealed_cross_hardware_architecture_stop_rule_not_tested"]
+          print("ME045_ALL_48_REAL_FORECAST_MODELS_AND_DECLARED_OUTCOMES_PASS")
+          PY
+      - name: Preserve ALL trained original weights, RNG/optimizer, source, latency, routing, and negative gate results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me045-genuine-conditional-native-gru16-gru40-48-checkpoints
+          path: |
+            results/me045/
+            me045-genuine-fit.log
+            me045-independent-replay.log
+          retention-days: 90
+          if-no-files-found: ignore
