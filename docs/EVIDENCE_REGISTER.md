@@ -419,3 +419,15 @@ cluster CI[+.002095950,+.003187102]. No candidate.930tests+12subtests;36optimize
 receipts; all193968 checkpoint/export/reference forecasts exact,72fresh pipeline
 forecasts exact. Actual-compute parity unqualified; prior FIT design exposure
 remains. No historical DEV scores, reserved cohort access, merge or deployment.
+
+### ME032 — native state trained beyond R-only common predictor
+
+[Protocol/results/math](../research/mathematical-engineering/me032/RESULTS.md).
+Source freeze7c4fea4;9common-head+27student fits, same376FIT users/10776windows,
+3rotationsx3seeds; all models frozen before scores. Centered head's zero-state
+identity verified;27actual memory gradient paths and18exact frozen common heads.
+Native conditional beats R teacher, fails both trained-control gates; no candidate.
+936tests+12subtests; all36new checkpoints/129312forecasts and45export/reference
+paths/161640forecasts exact;27fresh pipelines/108forecasts exact. Same original
+FIT/source boundaries, no DEV scores or new reserved cohort. Actual compute not
+fully matched; S-adaptation remains a confound of teacher-only gain. No promotion.

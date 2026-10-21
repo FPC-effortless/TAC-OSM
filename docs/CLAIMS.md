@@ -1085,3 +1085,14 @@ calibration guard passes, all predictive-value gates fail. Finite-family diagnos
 not conditional MI or proof that memory is useless; probe widths differ to match
 trainable counts. No historical DEV score, new reserved cohort, promotion or full
 compute-parity qualification. [Evidence](../research/mathematical-engineering/me031/RESULTS.md).
+
+### ME032 — centered conditional memory learning (2026-10-21)
+
+36new real-data fits complete. Readout guarantees zero correction at zero state;
+actual gradients reach memory, frozen/common parameter behavior verified. Conditional
+native improves R-only teacher Brier.170203796->.165824448, but loses to joint native
+.165650858 and pooled memory.163399886 in each pooled seed. Overall candidate FAIL;
+teacher-gain/calibration PASS. Teacher has no S fitting, so this is not isolated
+memory information value. Previously used FIT/user separation, not independent
+or out-of-time qualification; compute parity unqualified. No architecture promoted.
+[Full evidence and limits](../research/mathematical-engineering/me032/RESULTS.md).

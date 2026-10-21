@@ -1,0 +1,48 @@
+........................................................................ [  7%]
+........................................................................ [ 15%]
+........................................................................ [ 23%]
+........................................................................ [ 30%]
+...................................................................... [ 38%]
+.............................................................. [ 44%]
+........................................................................ [ 52%]
+........................................................................ [ 60%]
+........................................................................ [ 67%]
+........................................................................ [ 75%]
+........................................................................ [ 83%]
+........................................................................ [ 91%]
+........................................................................ [ 98%]
+............                                                             [100%]
+=============================== warnings summary ===============================
+tests/test_coupled_native.py: 2 warnings
+tests/test_me028_nonlinear_readout.py: 1 warning
+tests/test_me029_order_state.py: 1 warning
+tests/test_me030_joint_readout.py: 3 warnings
+tests/test_me031_crossfit_state.py: 3 warnings
+tests/test_me032_conditional_memory.py: 3 warnings
+tests/test_native_forecast_runtime.py: 2 warnings
+tests/test_predictive_native.py: 3 warnings
+tests/test_state_value.py: 1 warning
+  /home/agent/.local/lib/python3.12/site-packages/torch/jit/_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+    warnings.warn(
+
+tests/test_coupled_native.py::test_active_gradients_optimizer_and_standalone_roundtrip
+tests/test_native_forecast_runtime.py::test_active_head_original_compiled_and_streaming_equality
+tests/test_predictive_native.py::test_scripted_optimizer_checkpoint_and_standalone_roundtrip
+tests/test_state_value.py::test_finite_active_gradients_and_jit_persistence
+  /home/agent/.local/lib/python3.12/site-packages/torch/jit/_serialization.py:89: FutureWarning: `torch.jit.save` is deprecated. Please switch to `torch.export`.
+    warnings.warn(
+
+tests/test_coupled_native.py::test_active_gradients_optimizer_and_standalone_roundtrip
+tests/test_native_forecast_runtime.py::test_active_head_original_compiled_and_streaming_equality
+tests/test_predictive_native.py::test_scripted_optimizer_checkpoint_and_standalone_roundtrip
+tests/test_state_value.py::test_finite_active_gradients_and_jit_persistence
+  /home/agent/.local/lib/python3.12/site-packages/torch/jit/_serialization.py:176: FutureWarning: `torch.jit.load` is deprecated. Please switch to `torch.export`.
+    warnings.warn(
+
+tests/test_me006_causal_relevance.py::CausalRelevanceContracts::test_future_labels_never_part_of_inference_arguments
+  /workspace/tac-research/tests/test_me006_causal_relevance.py:49: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+  Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+    self.assertAlmostEqual(float(future_gain(d["forecast"],target,d["baseline"])),0,places=6)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+936 passed, 28 warnings, 12 subtests passed in 18.39s
