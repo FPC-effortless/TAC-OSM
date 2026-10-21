@@ -28,7 +28,7 @@ WEIGHTS=torch.tensor([1/6,1/6,1/6,1/2]).reshape(1,4)
 
 
 def subset(data,indices):
-    return {k:(v[indices] if isinstance(v,torch.Tensor) else [v[i] for i in indices.tolist()])
+    return {k:(v[indices] if isinstance(v,torch.Tensor) else [v[i] for i in indices.tolist()] if isinstance(v,list) else v)
             for k,v in data.items()}
 
 

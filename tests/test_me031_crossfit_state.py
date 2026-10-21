@@ -58,3 +58,13 @@ def test_probe_counts_initial_offset_active_gradients_and_access(state,count):
     if state:assert x.grad[...,:64].norm()>0
     else:assert x.grad[...,:64].abs().sum()==0
     assert x.grad[...,90].abs().sum()==0  # only offset carries original prior
+
+
+def test_source_subset_preserves_scalar_provenance():
+    from scripts.me031_crossfit_research import subset
+    source={'items':torch.arange(6).reshape(3,2),'users':[0,16,32],
+            'eligible_target_count':100,'sampling_stride':2}
+    result=subset(source,torch.tensor([0,2]))
+    assert result['users']==[0,32]
+    assert torch.equal(result['items'],source['items'][[0,2]])
+    assert result['eligible_target_count']==100 and result['sampling_stride']==2
