@@ -30,6 +30,7 @@ Official UCI Bank Marketing archive outer ZIP SHA256 `e0bf5f5de5b846e2f18e9d9060
 | Model | Brier (lower) | ROC-AUC (higher) | PR-AUC |
 |---|---:|---:|---:|
 | Histogram gradient boost | **0.300111** | 0.5905 | 0.5066 |
+| Official **TabFM1.0 zero-shot** (256 labels in context) | **0.320011** | **0.620247** | **0.477496** |
 | Logistic regression | 0.3068 | **0.6280** | **0.5456** |
 | New TAC-inspired tabular feature recurrence seed31001 | 0.332223 | 0.625744 | 0.494826 |
 | Constant rate | 0.3411 | 0.5000 | 0.3854 |
@@ -37,7 +38,7 @@ Official UCI Bank Marketing archive outer ZIP SHA256 `e0bf5f5de5b846e2f18e9d9060
 
 Original baseline weights/features and results retained in successful real-data CI artifact `bench-fm-002-native-tabular-original`. This is explicitly **not** a trained native TAC software-action model: the gated fast/slow recurrence is adapted across a fixed 15-feature field sequence, with 12,769 params, 400 updates per seed, equal supervised 256 labeled rows. TabFM gets 256 in-context labeled examples, with original TabFM 1.0 pretrained weights held fixed. It is NOT TabFM 1.1; the official PyPI exports v1.0 only. All models receive same authentic 15 fields and labeled split, but their pretrained datasets and training compute are unmatched.
 
-**Official TabFM v1.0 observed outcome:** pending verified checkpoint result from original benchmark GitHub Actions; do NOT fill in based on expected performance or import success. The separate older BENCH-FM-001 TabFM v1.1 import and v1.0 loader failures are archived in PR299.
+**Official TabFM v1.0 observed outcome: COMPLETED SUCCESSFULLY, verified original GitHub Actions artifact [12345664566](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39601162496/artifacts/12345664566).** Original official downloaded `google/tabfm-1.0.0-pytorch` pretrained weights loaded, kept frozen; 256 authentic training examples passed as label context, 96 authentic chronological holdout rows predicted. TabFM Brier **0.32001140986571125**, logloss **0.9907556567746676**, ROC-AUC **0.6202473660100779**, PR-AUC **0.4774959013443591**. Mean predicted positive probability **0.0921518** versus real test observed positive **0.3854167**, illustrating heavy prevalence/calibration shift. Google weights load (including official HF download) 45.63s and CPU prediction 135.59s for 96 rows, excluding framework installation. TAC Brier 0.332223/0.392837: TabFM beats both TAC seeds in Brier but **not** tuned conventional histogram boost (0.3001) or logistic (0.3068). In AUC TabFM 0.6202 beats the weaker TAC but slightly loses to TAC seed31001 (0.6257) and logistic (0.6280). This is a genuine task-scoped outcome, not a universal model ranking. The separate older BENCH-FM-001 TabFM v1.1 import and v1.0 loader failures remain archived in PR299; this new successful v1.0 model is NOT v1.1.
 
 ## Rules and limitations
 
