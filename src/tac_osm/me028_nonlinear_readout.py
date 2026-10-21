@@ -84,9 +84,13 @@ def native_nonlinear_math_preflight():
     if base.shape!=(2,4): raise AssertionError("prefix output shape changed")
     for depth,col in ((32,0),(64,1),(96,2)):
         altered_items=items.clone();altered_meta=meta.clone()
-        altered_items[:,depth:]=torch.randint(16000,altered_items[:,depth:].shape)
-        altered_meta[:,depth:]=torch.rand_like(altered_meta[:,depth:])
-        altered_meta[:,depth:,1]=(altered_meta[:,depth:,1]>.5).float()
+        altered_items[:,depth+1:]=torch.randint(16000,altered_items[:,depth+1:].shape)
+        altered_meta[:,depth+1:]=torch.rand_like(altered_meta[:,depth+1:])
+        altered_meta[:,depth+1:,1]=(altered_meta[:,depth+1:,1]>.5).float()
+        # The next item identity and duration at index depth are known query
+        # inputs and MUST be held fixed. Only its unknown watch response is
+        # perturbed; later fully unobserved events may change arbitrarily.
+        altered_meta[:,depth,1]=1.-altered_meta[:,depth,1]
         changed=b.prefix_logits(altered_items,altered_meta,current,duration)
         if not torch.allclose(base[:,col],changed[:,col],atol=3e-6,rtol=3e-6):
             raise AssertionError(f"ME028 future event leaked through {depth} prefix")
