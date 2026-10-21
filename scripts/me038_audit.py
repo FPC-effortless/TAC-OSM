@@ -48,10 +48,20 @@ def audit():
             with torch.no_grad():p=model(x).numpy()
             assert np.array_equal(p,np.load(path.parent/f"u{e['step']}-probe.npy")),r['key']
             checkpoints+=1;values+=p.size
+    prefix_pairs=prefix_steps=0
+    for r in frozen['fits']:
+        if r['status']!='PASS' or r['lane']!='compute':continue
+        other=b.OUT/r['key'].replace('compute-','exposure-',1)/'trace.json'
+        a=json.loads((b.OUT/r['key']/'trace.json').read_text());c=json.loads(other.read_text())
+        n=min(len(a),len(c))
+        for x,y in zip(a[:n],c[:n]):
+            for key in ('step','MSE','loss','anchor_loss','correction_energy','gradient_norm','memory_gradient_after_clip'):
+                assert x[key]==y[key],(r['key'],key,x['step'])
+        prefix_pairs+=1;prefix_steps+=n
     receipt={'status':'PASS','parent_checkpoints':len(parents)*6,'adaptation_checkpoints':checkpoints-len(parents)*6,
         'original_checkpoints_replayed':checkpoints,'bit_exact_validation_forecast_values':values,
         'bit_exact_initial_AR_forecast_values':initial_values,'freeze_sha256':b.sha(b.OUT/'frozen.json'),
-        'test_metrics_recomputed':False}
+        'test_metrics_recomputed':False,'equal_optimization_prefix_pairs':prefix_pairs,'bit_exact_prefix_steps':prefix_steps}
     b.dump(b.OUT/'audit.json',receipt);print(json.dumps(receipt,indent=2),flush=True)
 
 
