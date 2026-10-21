@@ -1,0 +1,106 @@
+name: ME047 real hybrid predictive intelligence and zero-update cross-site transfer
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - src/tac_osm/me047_hybrid_capabilities.py
+      - scripts/me047_train_transfer_intent.py
+      - tests/test_me047_hybrid_capabilities.py
+      - research/mathematical-engineering/me047/**
+      - docs/TACOSM-BASELINE-001.md
+      - .github/workflows/me047-crossdomain-capabilities.yml
+permissions:
+  contents: read
+concurrency:
+  group: me047-real-intent-transfer
+  cancel-in-progress: true
+jobs:
+  numeric-and-regression-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install same original PyTorch and test numerical environment
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check mathematical source and four new software-only contracts
+        run: |
+          python -m py_compile src/tac_osm/me047_hybrid_capabilities.py scripts/me047_train_transfer_intent.py
+          python -m scripts.me047_train_transfer_intent --self-test
+          python -m pytest -q tests/test_me047_hybrid_capabilities.py
+      - name: Run full historical TAC regression suite and count original changes
+        run: |
+          python -m pytest -q
+          python scripts/sync_test_count.py --check
+  source-fits-then-sealed-cross-site:
+    needs: numeric-and-regression-integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 112
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install original CPU training dependencies
+        run: |
+          python -m pip install -e . 'numpy==2.3.5' 'pytest==9.1.1'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Pretrain genuine source encoder and macro, fit 8 complete goal-aware models, THEN fetch unseen ETTm2
+        run: |
+          set -o pipefail
+          python -m scripts.me047_train_transfer_intent --out results/me047 | tee me047-fit-transfer.log
+      - name: Independently replay every original source/target forecast and conditional goal
+        run: |
+          set -o pipefail
+          python -m scripts.me047_train_transfer_intent --out results/me047 --replay | tee me047-replay.log
+      - name: Confirm real-data provenance, all frozen checkpoints, zero transfer gradients and recorded negative gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from tac_osm.me047_hybrid_capabilities import ARMS,GOALS
+          r=json.loads(Path("results/me047/results.json").read_text())
+          assert r["study"]=="ME047_REAL_TRANSFER_INTENT_MACRO_HYBRID" and r["completed"]
+          assert r["all_training_checkpoints_frozen_before_target_open"]
+          assert r["target_site_opened"] and r["no_ETTm2_gradient_updates"]
+          assert r["target_original_provenance"]["source_git_blob_sha1"]=="f9d46027c987d442d2d8f81308d1d8c4d1d35db8"
+          assert r["target_original_provenance"]["observations_for_transfer_only"]==4192
+          assert len(r["source_training_models"])==8
+          assert {(q["arm"],q["seed"]) for q in r["source_training_models"]}=={
+             (a,s) for a in ARMS for s in (47001,47002)}
+          assert all(q["original_fit_update_count"]==1000
+                     and q["never_trained_on_target_ETTm2"] for q in r["source_training_models"])
+          assert r["frozen_shared"]["both_trained_exclusively_source_FIT"]
+          assert r["selection"]["zero_gradient_unseen_physical_station"]
+          assert not r["selection"]["trained_autonomous_action_policy"]
+          assert len(r["selection"]["ranking_unseen_ETTm2"])==4
+          assert r["selection"]["no_promotion_or_merge"]
+          print("ME047_ZERO_GRADIENT_UNSEEN_SITE_AND_ALL_REAL_GOAL_FORECAST_RECEIPTS_PASS")
+          PY
+      - name: Preserve source original fits, all real checkpoints, unseen-site scores and exact forecast/goal replay
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me047-real-hybrid-TAC-goal-intent-macro-unseen-ETTm2-models
+          path: |
+            results/me047/
+            me047-fit-transfer.log
+            me047-replay.log
+          retention-days: 90
+          if-no-files-found: ignore
