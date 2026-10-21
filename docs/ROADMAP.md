@@ -677,3 +677,10 @@ The hardened sequence is now:
 The first two experiments are control measurements. They are not evidence that
 PLM or C5 is solved. Their purpose is to ensure that the mechanism being measured
 exists in the executable call graph before compute is spent on learned architecture.
+
+## Dated research addendum — 2026-10-21
+
+The historical milestones remain preserved. The current native architecture
+sequence, ME027–ME029 negative state-value findings, joint readout engineering,
+and gated compression/hierarchy/internal computation are tracked in the
+[architecture research plan](../research/ARCHITECTURE-RESEARCH-PLAN.md).

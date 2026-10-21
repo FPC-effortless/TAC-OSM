@@ -398,3 +398,12 @@ and [results](../research/mathematical-engineering/me026/RESULTS.md).
 
 See [ME027 mathematics](../research/mathematical-engineering/me027/MATHEMATICS.md)
 and [resource results](../research/mathematical-engineering/me027/RESULTS.md).
+
+### ME030 — joint readout negative experiment, 2026-10-21
+
+[Protocol/results/math and audit](../research/mathematical-engineering/me030/RESULTS.md).
+Nine fits, seeds14001–3, four causal targets, 300updates; authentic unchanged KuaiRec
+FIT/historical DEV. Source freeze c413369; all four gates FAIL. 18 checkpoint/export
+paths reproduce107136 forecasts exactly; fresh-process36-input check within5.96e-8;
+925tests+12subtests. Actual-compute parity FAIL; no independent held-out access,
+conditional-information estimate, promotion, merge or deployment.
