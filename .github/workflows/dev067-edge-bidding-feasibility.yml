@@ -1,0 +1,50 @@
+name: DEV067 Edge System-1 frozen-checkpoint feasibility
+on:
+  push:
+    branches:
+      - research/dev067-edge-bidding-feasibility-2026-10-21
+    paths:
+      - ".github/workflows/dev067-edge-bidding-feasibility.yml"
+      - "scripts/test_dev067_edge_bidding_feasibility.py"
+      - "research/dev067-edge-sys1-001/**"
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-three-controllers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install original CPU model runtime
+        run: python -m pip install "numpy==2.3.5" "torch==2.10.0+cpu" --extra-index-url https://download.pytorch.org/whl/cpu
+      - name: Recover byte-identical DEV067 original trained checkpoint and demo requests
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh run download 39271150621 --repo FPC-effortless/TAC-OSM --name dev067-restored-checkpoints-0 --dir model-source
+          test -s model-source/dev067-remote-export/tac_frozen_log/agent.pt
+          test -s model-source/dev067-remote-export/gru_frozen_log/agent.pt
+          test -s model-source/dev067-remote-export/no_casm_frozen_log/agent.pt
+      - name: Compile input and safety fixture script
+        run: python -m py_compile scripts/test_dev067_edge_bidding_feasibility.py
+      - name: Frozen model original replay and latency — no model fitting
+        run: |
+          set -euo pipefail
+          for arm in tac_frozen_log gru_frozen_log no_casm_frozen_log; do
+            OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 OMP_NUM_THREADS=1 \
+              python scripts/test_dev067_edge_bidding_feasibility.py \
+                --source model-source/dev067-remote-export --arm "$arm" --repeat 160 \
+                --out "edge-results/$arm.json"
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dev067-edge-feasibility-real-checkpoints-and-software-fixtures
+          path: edge-results/*.json
+          if-no-files-found: warn
+          retention-days: 90
