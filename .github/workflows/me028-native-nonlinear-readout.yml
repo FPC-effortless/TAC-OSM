@@ -34,6 +34,9 @@ jobs:
       - name: All repository regression and active nonzero-head causal falsifiers
         run: python -m pytest -q
   original-real-data-fit-and-replay:
+    # First registered fit is immutable; never silently rerun nine neural fits
+    # because someone archived results or updated documentation on this PR.
+    if: github.event.pull_request.head.sha == '275b09dceee4a84eb4ad508039adb55c5306b762'
     needs: all-math-and-regressions
     runs-on: ubuntu-latest
     timeout-minutes: 105
