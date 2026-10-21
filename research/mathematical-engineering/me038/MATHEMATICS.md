@@ -61,3 +61,17 @@ The core processes normalized tokens in order. Window statistics and the dense
 context branch use the complete observed96-step window, so raw-history prefix
 states cannot be reused as a causal streaming transform. Unit prefix checks
 apply to the core given tokens, not to separately normalized raw prefixes.
+
+```mermaid
+flowchart LR
+  X[Observed patch and shared channel context] --> F[Native fast update]
+  F --> S[Native slow update]
+  F --> W[Prediction-error matrix write]
+  W --> M[8 by 8 associative state]
+  M -->|retrieval before write| F
+  M -->|retrieval after write| S
+  S --> Q[Next patch query and write signals]
+  Q --> M
+  F --> H[Fast and slow forecast representation]
+  S --> H
+```
