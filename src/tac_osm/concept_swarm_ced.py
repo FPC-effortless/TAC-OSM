@@ -135,15 +135,23 @@ class ConceptSwarmCED(nn.Module):
                outcome: torch.Tensor, predicted_outcome: torch.Tensor,
                available: torch.Tensor) -> ConceptBelief:
         self._validate(state)
-        core = self.core.verify(state.core, executed_action, outcome,
-                                predicted_outcome, available)
-        # Reuse core's finite-value and temporal-mask validation. No operation
-        # on unavailable NaNs, and missing outcomes produce bitwise identity.
+        proposed_core = self.core.verify(state.core, executed_action, outcome,
+                                         predicted_outcome, available)
+        # Core verification first checks all actually available labels for finite
+        # values, including zero-surprise ones; never hide invalid evidence.
         observed = torch.where(available, outcome, torch.zeros_like(outcome))
         preceding = torch.where(available, predicted_outcome.detach(), torch.zeros_like(outcome))
         residual = torch.tanh(observed - preceding)
+        # ME052/ME053 found bias-driven state drift after verification. A true
+        # zero innovation must be an exact no-op, also for the native substate.
+        scale = residual.abs().amax(dim=-1, keepdim=True)
+        core = Belief(state.core.fast + scale * (proposed_core.fast - state.core.fast),
+                      state.core.slow + scale * (proposed_core.slow - state.core.slow),
+                      state.core.memory + scale.unsqueeze(-1) *
+                      (proposed_core.memory - state.core.memory))
         e = residual[:, None, :].expand(-1, self.concept_count, -1)
         pair = torch.cat((state.concepts, e), dim=-1)
         delta = 0.125 * torch.sigmoid(self.verify_gate(pair)) * torch.tanh(self.verify_delta(pair))
-        concepts = state.concepts + torch.where(available.unsqueeze(-1), delta, torch.zeros_like(delta))
+        concepts = state.concepts + scale.unsqueeze(-1) * torch.where(
+            available.unsqueeze(-1), delta, torch.zeros_like(delta))
         return ConceptBelief(core, concepts)
