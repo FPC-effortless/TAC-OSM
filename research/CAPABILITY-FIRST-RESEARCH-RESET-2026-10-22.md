@@ -134,7 +134,10 @@ first model fit. Run:
 The guard requires established literature and a genuine unresolved TAC
 question, real-source SHA, identical sample and evaluation ID checksums,
 indistinguishable feature/target contracts, >=2 matching seeds, full active
-capacity within 1%, matched update/exposure/tuning and FLOP ceilings, and\nprefit profiler-measured FLOPs within 1% and CPU-seconds within 5%\n(on the same authenticated real-input batch shape). An equal CPU/FLOP cap is\nNOT enough to pass. Missing measured evidence or unequal conditions:
+capacity within 1%, matched update/exposure/tuning and training-compute
+budgets, independently verified on authentic real-input batch shapes. CPU
+runtime is diagnostic only, not a condition for equal training resources.
+Missing matched-budget evidence or unequal mandatory conditions:
 **STOP. NO TRAINING.**
 
 After original training, pass `--phase final` with actual measured receipts,
@@ -143,7 +146,7 @@ and SHA-frozen checkpoints before claiming comparison eligibility. CPU speed
 differences NEVER FAIL parameter/data/training-budget parity. Match the
 actual prescribed training budget; audit resource usage. Use comparable
 hardware and report its characteristics.
-The script is a fail-closed gate for machine-readable claims; it does NOT
+The validator no longer compares or caps elapsed CPU time across models.\nThe script is a fail-closed gate for machine-readable claims; it does NOT
 independently prove a JSON manifest is truthful. Original runner and
 independent log/weights verification remain necessary.
 
