@@ -1,10 +1,64 @@
 # TAC-OSM — Unified Master Research Plan
-Version: 2026-10-22 | Status: research proposal and evidence register
+Version: 2026-10-22 (portfolio-aligned capability revision) | Status: research proposal and evidence register; not an implemented or trained commercial system
 
 ## Mission and constraints
 Build a persistent action-conditioned predictive world model that learns what to remember, where to store it, how to retrieve it, how dynamics evolve, when to refine predictions, and when to correct beliefs. Retain ME-054 native and ME-056 Concept-Swarm as independently testable branches. Do not replace TAC-OSM with an LLM, Transformer, MTSK, or SSM.
 
 **Compulsory:** real-world longitudinal data and authentic observed outcomes for performance claims; synthetic data only for labeled diagnostics. Architecture comparisons match trainable parameters, data/splits, training budget/compute and evaluation. Report CPU wall time, do not force equality. Include persistence, GRU and relevant stronger baselines. Preserve untouched holdouts, seeds, checkpoints, code, provenance, logs, and results. Do not call untrained designs improvements.
+
+## Company-aligned north star and scope (2026-10-22 revision)
+
+**North star:** build TAC-OSM into a reusable *learned predictive-state and decision-intelligence engine* for real operational systems and authorized autonomous software. It must maintain useful beliefs across change, forecast *observed* futures under available action contexts, recognize uncertainty and information gaps, choose or recommend cost-aware interventions, and improve after independently verified outcomes. This is a scientific target, **not a claim of current intelligence or product readiness**. The primary commercial proof is measured improvement over the best appropriate simpler solution in an independently held-out, authentic operational setting.
+
+**Portfolio review scope:** the connected GitHub owner `FPC-effortless` was reviewed 2026-10-22. GitHub-confirmed forks and the owner's online-banking, crypto and Paws & Claws projects are excluded from this strategy. Repositories are possible components or test beds, not evidence that integrations or deployments exist. An app, codebase, mock, synthetic world or README cannot stand in for independently collected real outcomes.
+
+### System boundary — do not duplicate the rest of the company
+
+| Project / research family | Appropriate responsibility | TAC-OSM interface / restriction |
+| --- | --- | --- |
+| [Woyengi](https://github.com/FPC-effortless/Woyengi) | Identity-aware, authoritative, reconstructable organizational and agent records, provenance and permissions | Read *authorized time-cut snapshots/events*; write **proposals/predictions**, never silently overwrite canonical truth or bypass authority. Learned belief is distinct from authoritative state. |
+| [KoreFrame](https://github.com/FPC-effortless/KoreFrame) | Agent runtime, tool scheduling and execution | TAC predicts action outcomes / recommends a bounded next action; runtime executes only if separately allowed. |
+| [Veritas](https://github.com/FPC-effortless/veritas) | Executable operational worlds, independent agent evaluation, rollout and evidence packaging | Use for **reproducible engineering diagnostics and replay**. Generated worlds are synthetic; only separately collected real-world evaluations can promote TAC capabilities. |
+| SafeEdge and AegisFlow | Permission-bound action enforcement, security, policy and audit trails | Safety/governance remains **external hard constraint**: confidence scores never grant authority. Log proposal, authorization, action and result. |
+| BusinessData / knowledge-refinery | Versioned, policy-bound ingestion and retrieval | Supply legally available observation/context with timestamp and provenance; TAC learns relevance and state, does not certify source truth. |
+| [Nsat](https://github.com/FPC-effortless/Nsat) | Nigerian market, economic, weather and Earth-observation data engineering | Candidate *authentic forecast/transfer* lane (time/site/market split); **not** action-effect or policy-value evidence without actual interventions. |
+| Shipping / Scrappy-HCSE / other operational apps | Potential logistics and workforce application surfaces | Candidate measurement/pilot paths **only if** actual entity-linked temporal events, action logs, costs and verified results exist. No deployment assumption. |
+| [TAC-Transformer](https://github.com/FPC-effortless/TAC-transformer), [TAC-Prime](https://github.com/FPC-effortless/TAC-Prime), [ATLAS-CASSA](https://github.com/FPC-effortless/ATLAS-CASSA), PSN2, Neural-Field-Dynamics, USEF-X, CDL, PNDS-Lean | Comparative architectural hypotheses: reusable structures, hierarchical latent reasoning, concept dynamics, emergent specialization, mathematical proofs | Import **specific falsifiable insights only**. No automatic fusion, architecture replacement or component novelty claim; keep every imported idea's provenance and matched control. |
+| Product Bible / education / sports / consumer prototypes | Potential later product experiences | Not first-line evidence until legal data, entity continuity, measured outcomes and consent/permissions are independently established. |
+
+**Proposed integration contract** (design only):
+`authorized {entity_id, event_time, observed_at, provenance, observation, executed_action?, observed_outcome?, measured_cost?, available_actions, constraints}`
+→ TAC `{belief_version, horizon, factual_forecasts, uncertainty, proposed_action_or_inspection, predicted_value?, abstain_reason?, evidence_refs}`
+→ governed executor / human approval → signed actual execution receipt → independent outcome verification → delayed TAC update.
+Explicitly model missing actions, delayed/censored feedback, abstention and unknown costs. No permission transfer via model output, and no model-invented verified result. For causal claims add randomized assignment/propensity and support/identification fields.
+
+### Portfolio-specific first product hypothesis
+
+1. **First-choice integration:** Woyengi + KoreFrame + SafeEdge/Aegis + Veritas for long-running *authorized workflow decision support*. Target actual delayed completions, failure/intervention cost and evidence-backed stopping; demand real operational logs or authorized prospective collection before claiming improvement.
+2. **Second candidate:** logistics/shipment risk and next-action recommendations only where actual time-ordered shipments, interventions and verified delivery outcomes are available.
+3. **Third candidate:** Nsat regional/market forecasting and across-site transfer as a separate **prediction-only** lane, not a surrogate for decision intelligence.
+4. Workforce/other applications follow domain-data and legal qualification. Do **not** build bespoke product logic into the TAC core; use explicit domain adapters. Avoid implying a dataset exists just because a related app or data pipeline exists.
+
+### Capability scorecard (evidence status, not a product-completion percentage)
+
+`ME` studies and DEV variants often sit in **separate open draft PRs**, not a merged deployable checkpoint. Classifications below are evidence across research lineages, not an assertion that one model possesses the whole set.
+
+| Priority | Target capability | Evidence as of branch review | Promotion gate |
+| --- | --- | --- | --- |
+| P0 | Accurate persistent world-state belief | **Partial:** recurrent/entity-aware learned state and long-history tests exist; identity transfer and robust retention fail some gates | heldout real entity/time continuity and better calibrated future/error performance versus matched recurrent and structured baselines |
+| P0 | Real action-conditioned factual forecasting | **Partial:** real robot physical/action objectives and randomized observed-action heads trained; no broad persistence/GRU superiority | sealed real factual multi-horizon outcomes, persistence/servo priors and fully resource-audited matched GRU |
+| P0 | Cost-sensitive decision / stop / inspect / abstain | **Partial synthetic only** for learned multi-step action/stop; randomized ME049 chose the same fixed action | verified real intervention/action support, uncertainty-aware decisions, net cost or reward improvement versus best fixed/no-action policies |
+| P0 | Uncertainty and value of information | **Partial:** probabilistic/posterior heads exist; calibration and value-of-information benefit unresolved | out-of-time calibration, selective-risk/coverage, paid-inspection utility and safe abstention on genuine records |
+| P0 | Verified closed-loop belief correction | **Partial engineering:** masked bounded corrections exist, and synthetic learned controllers replay; no qualified real improvement | independent real outcome receipt, strictly delayed pre-feedback update, error reduction without overwriting verified facts |
+| P1 | Entity and relationship representation | **Partial synthetic:** entity-local DEV061 98.5% completion, below structured GRU 99% and public MLP 100%; unfamiliar IDs fragile | unseen-real-entity generalization, interference reduction, true identity continuity |
+| P1 | Decision-preserving selective long-term memory | **Partial:** routing/consolidation mechanisms exist; ME051 old-event gains inconsistent, GRU stronger | controlled real long-history decision/forecast gain and verified forgetting/interference trade-offs |
+| P1 | Multi-horizon latent and hierarchical abstraction | **Partial architectures:** fast/slow/associative and concept-CED prototypes; added depth does not imply thought | consistent real future/policy improvement across horizons over simpler matched controls |
+| P1 | Continual adaptation under shift | **Not established:** recurrent *state* updates are not online *weight learning* or useful adaptation | authorized sequential real site/time adaptation without leakage, forgetting or unauthorized side effects |
+| P1 | Transferable state intelligence | **Not established:** ME047 new-site inference executes but usefulness/persistence gates fail | sealed different site/task transfer with advantage over strong target-independent references |
+| P2 | Multimodal grounding | **Not established as native understanding:** structured events, actions and sensors exist | properly time-aligned independent audio/image/document observations and measured downstream lift |
+| P2 | Selective computation at scale | **Partial mechanics only:** actual routing/dispatch and timing exist; cost-law C5 untested | end-to-end relevant-subset scaling including index/addressing without loss of accuracy; real latency and resource receipts |
+
+**No capability is yet qualified as a cross-domain, commercial TAC-OSM advantage.** DEV058/DEV061 synthetic success remains diagnostics. The honest real-data negatives remain prerequisites, not inconveniences to optimize away.
 
 ## Existing baseline (source review, verify at pinned commits)
 ME-054 persistent fast32 + slow32 + associative 8x8 = 128 state elements. ME-056 adds 6x15 concept states = 218 elements; 4 shared-weight CED passes. State elements are not parameter counts. Both use gated recurrence, associative delta updates, bounded feedback. Neither explicitly models elapsed time. The 2026-10-22 reviews report real developmental forecasting losses to persistence; these are not independent confirmations of fused ideas.
@@ -29,6 +83,10 @@ L = sum_h w_h[lambda_x*L_physical(h)+lambda_z*L_latent(h)] + lambda_o*L_outcome 
 Introduce only justified terms in controlled ablations; prevent future-information leakage.
 
 ## Prior evidence and known limitations
+- ME049 genuine three-arm randomized dataset: trained TAC's heldout action selection collapsed to the training-best fixed Mens email action, yielding no personalized policy benefit; context achieved better Brier (PR #314). Do not treat action-head existence as real decision intelligence.
+- ME051 genuine MovieLens H256: oldest-history TAC MAE 0.787059/0.780177 across two seeds, recent TAC 0.791441/0.779113; GRU controls 0.775609/0.776760 best recent (PR #317). Old-history benefit inconsistent; cross-model capacity not parity-qualified.
+- ME047 executed frozen cross-site ETTm2 inference but failed useful forecast-transfer gates (PR #312). 
+- ME057 fused and ME059 registered variants are **not** trained/scored confirmations solely because their preflight tests passed (PRs #338, #337).
 - DEV-016 joint training reported 73.64% versus 59.32% frozen writer, but reliability gate failed.
 - DEV-017 structured 41-value memory reported 91.84% versus TAC 57.90% future prediction and 38.3% unnecessary interventions; historical protocol details must be checked before cross-experiment comparison.
 - DEV-020 audited structured state/read probes at 100%, TAC near chance; do not infer a unique causal defect.
@@ -38,17 +96,56 @@ Introduce only justified terms in controlled ablations; prevent future-informati
 - ME-054 recovered developmental MAE 0.07881 versus matching GRU 0.09232; ME-056 0.08037 versus matching GRU 0.09082; persistence 0.06695. Check provenance, data splits, parameter and compute parity before claiming fair superiority. Neither beats persistence.
 - ME-056 full fair GRU comparison not established by the initial preflight. Do not confuse early preflight with later experiments.
 
-## Ordered program
-0. Audit branch heads, experiment evidence, current training and test protocols; finish fair ME-056 GRU comparison.
-1. Measure real-data retention, key collision, physical retrieval, concept rank/entropy, CED per-pass error, horizon-conditioned errors.
-2. Ablate direct physical memory retrieval, projected versus tanh associative memory, multiscale retention, responsibility writes.
-3. Test entity-local routing only with reliable identity evidence.
-4. Compare concept cross-context routing and specialization; only adopt if it contributes factual prediction.
-5. Compare latent-first hierarchical physical forecasting.
-6. Compare fixed four-pass CED, deep supervision and adaptive depth.
-7. Test liquid elapsed-time recurrence if timestamps support it.
-8. Combine independently validated components in both branches, with parameter/data/compute parity.
-9. Assess long-horizon real-world forecasting, verification, action selection, unnecessary interventions, decision cost and generalization on untouched data.
+## Ordered integrated capability program — supersedes the previous component-first sequence
+
+Run **a small number of complete preregistered capability experiments**, not an endless queue of memory-gate/decoder microvariants. Each stage begins by reusing the strongest valid prior result and relevant established literature (R2D2, DreamerV3, TD-MPC2, modern recurrent/SSM baselines, offline-policy identification). Component ablations are **conditional failure diagnosis**, not default milestones.
+
+**Gate 0 — Evidence reconciliation and real-data authorization (no new architecture claim).**
+- Reconcile **separate lineages**: ME054 native, ME056 *Concept-CED* PR332, ME056 *anchored-native* PR334, ME057 fused PR338, ME058 source preflight PR336 and independent-task ME059 PR337. Do not conflate the duplicate ME056 names, source/test exposure, FLOP receipts or scores. Read their latest branch result artifacts before updating this plan.
+- Preserve original ME054 developmental robot MAE 0.07880869, GRU 0.09231612, persistence 0.06694929; the task's test was already exposed and full training-FLOP parity is not certified. **Do not call this a matched independent TAC win.** Independently verify any Concept-CED MAE attribution against actual training artifacts before promoting it.
+- ME057 PR338 reports 38,268 TAC vs 38,295 GRU parameters, profiled-update 42,640,106 vs 42,784,699 FLOPs, and **no scored full training result** as of its committed RESULTS. ME059 PR337 is registered but RESULTS says no completed ten-checkpoint / DEV / TEST score yet. The ME058 PR336 source preflight is not ME059 final training; partial profiler FLOPs are not a complete audited training-compute certificate.
+- Before a new fit: freeze dataset licence, authentic source hash/receipt, original chronological entity IDs, known action availability, missing/censored outcomes and exact source-specific time-cut. Mark **prediction-only** datasets separately from supported real-policy datasets. Confirm PR status and original artifact outcome rather than inferring from a workflow YAML.
+- **Accept:** auditable qualification ledger and real observations with eligible target definition. **STOP:** identity/actions/costs missing for the proposed estimand; missing parity manifest; invalid/test-exposed confirmation.
+
+**Gate 1 — Prove factual real-world prediction and stable state (P0).**
+- Use independent authentic multistep physical-robot trajectories as the immediate first test, following the sealed ME059 training/validation contract only when every preregistration, original data and true compute receipt is qualified. Evaluate future physical state (and human takeover only with enough positive support), *pre-feedback only*. Compare against last-state persistence, servo-only physical prior, GRU and a contemporary appropriately budgeted recurrent predictor.
+- Score MAE/MSE per physical channel and horizon, divergence/exploding state, calibration, long-history degradation, missingness and independent new-task generalization. Include factual action conditioning with the *executed recorded action*, never label potential outcomes as observed.
+- **Accept:** predeclared independent holdout, repeatable improvement over strongest practical reference and fully qualified matched neural comparison where claimed. **STOP:** still worse than persistence/servo reference, post-feedback leakage or unequal fairness budgets; diagnose root failure before building another architecture.
+
+**Gate 2 — Show real decision-relevant memory and learned entity structure (P0/P1).**
+- On a new authentic longitudinal entity dataset with verified IDs/times, test whether earlier facts materially change later observed outcome/decision quality. Compare identical-input equally resourced structured GRU, memory-free and direct-history baselines; include hard interference, ID permutation, unseen IDs and delayed contradictions.
+- Favor *future utility* over reconstructing an old summary. Only activate proposed direct associative reads, retention/responsibility writes, entity-local indexing, cross-concept messages or extra hierarchy if a prespecified failure demands them. Preserve separate native and Concept-CED arms.
+- **Accept:** consistent sealed heldout improvement in factual prediction or supported decision utility, not merely probe accuracy or synthetic retention.
+
+**Gate 3 — Establish action value, uncertainty and safe intervention (P0).**
+- First acquire/qualify authentic supported **action → measured outcome → actual cost → attribution** chains with known available choices and propensities or justified identification. If such data are absent, continue **prediction-only** reporting without claiming policy intelligence. Historical ME049 RCT was valid randomized one-step context but native selected the same fixed Mens email arm for every test case (no personalized policy gain).
+- Estimate uncertainty/calibration, expected costs/benefits, information value for inspect/wait, hard action support and abstention. Optimize over the **governed available-actions set**; compare best fixed action, no action, strongest bandit/GRU/policy references with appropriate off-policy variance checks. Distinguish predictive association, policy value and causal effect.
+- **Accept:** out-of-time/entity or independently randomized real policy net utility gain, cost distribution, risk coverage, confidence bounds, no unauthorized actions. **STOP:** unsupported counterfactual extrapolation or fictional decision prices.
+
+**Gate 4 — Verified closed-loop learning and useful deliberative depth (P0/P1).**
+- With actual outcome receipts, verify that correction changes only beliefs that evidence contradicts, preserves authoritative facts, and improves *subsequent* registered real predictions/actions. Demonstrate delayed/out-of-order outcome handling and bounded failures.
+- Then test fixed versus adaptive repeated latent refinements or hierarchical/global/entity/event representations **only if** they improve measured external predictions or net decisions under the same compute/data rules. A four-pass decoder, latent movement or teacher imitation is **not** System-2 intelligence.
+- **Accept:** independent temporal improvement after feedback with bounded unsafe/costly actions and demonstrated incremental value from extra reasoning.
+
+**Gate 5 — Transfer and scalable serving (P1/P2).**
+- Evaluate independently unseen sites, customers and relevant data modalities. Separate zero-update transfer from few-shot adaptation and from continual weight updates; preregister unseen shifts, data rights, retraining allowance, baseline and forgetting checks. ME047's existing cross-site ability to execute is **not** transfer success.
+- Only once capability thresholds pass, assess genuine relevant-subset compute scaling (**C5** including addressing/index build, reads, execution and verification), CPU/GPU memory, latency, energy and portability. Measure real throughput without demanding equal CPU wall time in scientific comparison.
+- **Accept:** independent transferable utility, stable calibration and operational service-level qualification; otherwise preserve the failed gate.
+
+**Gate 6 — Company pilot and product qualification (after scientific gates).**
+- Select **one** legally authorized customer/workflow wedge from Woyengi/KoreFrame/Veritas, logistics or Nsat. Use a time-cut read-only integration first; then shadow recommendations; then small approved governed interventions with independent outcome collection. Maintain product-specific SLAs, rollback, human escalation, data minimization and signed audit receipts through the appropriate external platform.
+- Measure improvement against the incumbent workflow **including full cost of collecting data, model execution, human inspections and failed actions**. A working demo or synthetic Veritas world is not commercial proof.
+- **Accept:** multi-period customer-relevant improvement, lawful source rights, verified real actions/outcomes and secure rollout; only then discuss commercial readiness.
+
+### Minimal common reporting card for EVERY stage
+
+Record: task question and owner; branch and exact commit; original external data licence/source/hash; entity/time cutoff and actual accessible features; preregistration; risk/support/censoring; strongest practical baselines; exact trainable/total parameters; real training data/order/tokens/updates; **actual audited training compute and tuning**; sample counts, >=2 seeds where the policy requires; sealed DEV/TEST access chronology; predictive metrics and interval; real decision cost/policy identification when applicable; calibration/abstention; full inference cost; raw checkpoints/logs; all failed attempts; reproducible CI; PASS/FAIL/UNKNOWN for each scientific gate. An unmeasured output is UNKNOWN, not PASS.
+
+**No automatic model training, merge or deployment is authorized by this planning document.**
+
+## Research provenance, interface decisions and ownership
+
+The company-facing mapping above is a **research/product hypothesis**, not permission to modify those repositories. Product teams own canonical state, agent execution, security and customer-specific data. TAC research owns belief dynamics, action predictions, loss contracts, uncertainty and model scores. Veritas may audit deterministic replay, but only authentic operational data can qualify real performance. Keep model recommendations distinguishable from authorized execution in code and evidence.
 
 ## Provenance and research hygiene
 Every idea needs ID, origin, repository paths, mathematical specification, claimed benefit, counter-hypotheses, implementation commit/PR, datasets and splits, controls, budgets, seeds, artifact links, quantitative outcomes, limitations, and status. Do not overwrite negative results. Keep exploratory tests separate from confirmatory holdouts.
