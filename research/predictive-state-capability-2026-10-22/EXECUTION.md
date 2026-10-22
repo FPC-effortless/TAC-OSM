@@ -14,7 +14,7 @@ research worktrees. No original experimental evidence is changed.
 - 17 new numerical/source tests; all pass. Synthetic tensors exercise numerical
   contracts only. No generated benchmark or manufactured decision outcomes.
 - 11 inherited compulsory scientific-parity tests; all pass.
-- Full canonical suite: `887 passed in 13.67s` with Python 3.11/Torch 2.14.1+cpu
+- Full canonical suite: `887 passed in 13.67s` with Python 3.12.14/Torch 2.14.1+cpu
   in the local workspace. Command: `PYTHONPATH=src python -m pytest tests/ -q`.
   Startup environment: `ATEN_CPU_CAPABILITY=avx2`,
   `MKL_ENABLE_INSTRUCTIONS=AVX2`, `OMP_NUM_THREADS=1`, `MKL_NUM_THREADS=1`,
