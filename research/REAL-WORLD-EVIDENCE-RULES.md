@@ -243,3 +243,31 @@ observational offline decision proxy / identified action effect /
 independently verified field cost utility are different evidence categories.
 Only the last category qualifies commercial claims, after its own preregistered
 reliability and out-of-site/time gates.
+
+
+## Enforced research reset — 2026-10-22 (prospective; read before any new experiment)
+
+The existing equal-resource clauses above were **not adequately enforced** in
+ME049–ME051. Merely disclosing unmatched parameters or CPU time does **not**
+satisfy the compulsory instruction. For all FUTURE ME/DEV experiments, require
+an immutable prefit `FAIR_COMPARISON.json` validated by
+`python scripts/validate_research_parity.py --manifest ... --phase preflight`
+and an independent postfit actual-resource receipt validated with
+`--phase final`. The new `.github/workflows/research-scientific-gate.yml`
+blocks changes to future experiments lacking the registration and both hooks.
+If source, parameter (within 1%), training data/order, optimizer exposure,
+planned FLOPs (within 1%), actually consumed FLOPs (within 1%), CPU-seconds
+(within 5% accounting for measurement jitter), tuning, or exact evaluation
+conditions cannot be matched, STOP that head-to-head experiment rather than
+run unmatched architectures with a comparison footnote. No scientific win can
+be claimed from an unverified self-reported manifest; reproduce measurements
+from original job logs/weights. Existing unmatched studies are preserved as
+historical diagnostics only, without score edits or retroactive parity.
+
+Every architecture proposal must also link actual published prior work,
+identify the established mechanism it REUSES, specify a still-unanswered TAC
+capability gap, and prefer one integrated capability study over serial
+low-information minor architecture variations. Do not run any additional
+ME052 architecture training until a fully matched preflight and authentic
+outcome/decision evidence contract exist. See
+[Capability-first research reset](CAPABILITY-FIRST-RESEARCH-RESET-2026-10-22.md).
