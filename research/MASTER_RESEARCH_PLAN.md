@@ -70,3 +70,14 @@ The owner-confirmed CPU rule is diagnostic-only. Successor [draft PR #335](https
 **Critical discovered information-boundary issue:** PR #334's dense auxiliary snapshots were saved after the same transition's actual next-state feedback. This can leak the supervised target into the state representation. The ME-057 successor saves pre-feedback snapshots and tests that mutating an unseen future target cannot change its own input. Historical resource receipts remain valid as descriptions of the old execution, not validated measures of corrected candidate training. Reprofile and train only after source qualification and complete preregistration. No new predictive performance result follows automatically.
 
 Primary capability gate remains authentic future-state MAE versus persistence and a genuinely equal-resource GRU under complete audited real data/compute exposure. After-takeover outcomes and uncontrolled action effect claims remain outside the supported causal estimand.
+
+
+### ME-057 FIT source qualification completed — audited real data, not training
+
+Original GitHub Actions qualification [run 39836744099](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39836744099) passed. Its downloaded artifact 12451242831 was parsed, and the canonical per-episode receipt hash independently recomputed.
+
+Verified original FIT source: 228/228 parquet episodes, 329,306 measured frames, 210,192 control-eligible candidate origins, and 375 actual takeover onsets. The canonical original source FIT evidence SHA256 is `c4064651e91cced7aafc11337c32a27266f470ea10388bb0dd2562ae955f88fd`. DEV and TEST trajectory data stayed unopened; no model trained in this phase. Detailed evidence is preserved at [research/ME057_AUTHENTIC_FIT_SOURCE_AUDIT.md](https://github.com/FPC-effortless/TAC-OSM/blob/research/ideas/research/ME057_AUTHENTIC_FIT_SOURCE_AUDIT.md).
+
+Also recovered and byte-verified all ten archived ME-054 original robot checkpoints from workflow 39781336855. Authentic developmental original TEST mean physical MAE: TAC 0.07880869, GRU 0.09231612, persistence 0.06694929; original TEST previously exposed, full training FLOP parity unverified, and takeover labels very sparse. See [ME054 artifact audit](https://github.com/FPC-effortless/TAC-OSM/blob/research/ideas/research/ME054_RECOVERED_ARTIFACT_AUDIT.md).
+
+**Next genuine research gate:** reprofile the corrected pre-feedback dense objective on verified FIT; freeze a prospective matched comparison with identical real trajectories/target access, active parameters, profiled and budgeted training FLOPs, paired schedules, seeds and final evaluation. Do not promote model performance until actual original new-task FIT training and heldout evidence exist.
