@@ -1,0 +1,110 @@
+name: ME059 independent authentic robot world-model training and factual evaluation
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'scripts/me059_train_independent_robot.py'
+      - 'scripts/validate_research_parity.py'
+      - 'research/mathematical-engineering/me059/**'
+      - 'tests/test_me059_independent_training.py'
+      - 'tests/test_research_parity_gate.py'
+      - '.github/workflows/me059-genuine-real-robot-training.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: me059-original-independent-robot
+  cancel-in-progress: true
+
+jobs:
+  registered-original-source-compute-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install identical pinned CPU original source reader and neural environment
+        run: |
+          python -m pip install 'pytest==9.1.1' 'numpy==2.3.5' 'pyarrow==21.0.0'
+          python -m pip install 'torch==2.9.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Numerically verify causal evaluator, exact frozen source contracts and CPU-independent parity
+        run: |
+          python -m py_compile scripts/me059_train_independent_robot.py
+          PYTHONPATH=src:. python -m pytest -q             tests/test_me059_independent_training.py             tests/test_me058_real_fit_prefit.py             tests/test_me056_execution_profile.py             tests/test_research_parity_gate.py
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me059/FAIR_COMPARISON.json --phase preflight
+      - name: Prohibit a diagnostic-only or mutable code source from proceeding to full model fits
+        run: |
+          PYTHONPATH=src:. python - <<'PY'
+          import json
+          from scripts.me059_train_independent_robot import allow_fit
+          m=json.load(open('research/mathematical-engineering/me059/FAIR_COMPARISON.json'))
+          result=allow_fit(m)
+          assert result['status']=='PASS'
+          assert m['full_FLOP_certification_available'] is False
+          assert m['cpu_time_matching_required'] is False
+          print('ME059_FROZEN_GENUINE_SOURCE_COMPARE_ELIGIBLE_FOR_DEVELOPMENTAL_TRAINING')
+          PY
+
+  genuine-independent-robot-FIT-ten-model-fits-and-heldout-measurement:
+    needs: registered-original-source-compute-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned authentic robot source reader and PyTorch
+        run: |
+          python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+          python -m pip install 'torch==2.9.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Read actual pinned FIT, train five TAC plus five GRU, freeze checkpoints and then score factual DEV and TEST
+        run: |
+          set -o pipefail
+          PYTHONPATH=src:. python -m scripts.me059_train_independent_robot             --output results/me059-original-real-robot             | tee me059-original-FIT-model-training.log
+      - name: Audit final original training-budget receipts and block any false full-FLOP superiority claim
+        run: |
+          python scripts/validate_research_parity.py --manifest results/me059-original-real-robot/FAIR_COMPARISON_FINAL.json --phase final
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('results/me059-original-real-robot')
+          report=json.loads((root/'results.json').read_text())
+          audit=report['postfit_resource_accounting']
+          assert report['all_checkpoints_frozen_before_heldout']
+          assert len(report['actual_checkpoints'])==10
+          assert audit['status']=='PASS_ACCOUNTING_ONLY_UNCERTIFIED_FLOPS'
+          assert audit['eligible_for_architecture_superiority'] is False
+          assert 'DEV_original_physical_forecasts' in report
+          assert 'TEST_original_physical_forecasts' in report
+          assert len(report['TEST_original_physical_forecasts'])==10
+          print('ME059_GENUINE_SOURCE_TEN_MODEL_DEVELOPMENTAL_RESULTS_AVAILABLE')
+          PY
+      - name: Preserve original scored real model weights, source-backed metrics and every negative result without original publisher data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me059-genuine-independent-robot-trained-weights-and-measured-physical-results
+          path: |
+            results/me059-original-real-robot/results.json
+            results/me059-original-real-robot/FAIR_COMPARISON_FINAL.json
+            results/me059-original-real-robot/*-s*/
+            me059-original-FIT-model-training.log
+          if-no-files-found: ignore
+          retention-days: 90
