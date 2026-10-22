@@ -1,10 +1,31 @@
 """No synthetic trajectory is used for model performance; fixture-only contracts."""
 import json
 import pytest
-import pyarrow as pa
 
 from scripts.audit_real_hil_trajectory import (
     SourceFailure, audit_episodes, audit_frame_table, EXPECTED_ROBOT_DIM)
+
+class FakeArray:
+    def __init__(self, values):
+        self.values=values
+    def to_pylist(self):
+        return self.values
+
+class FakeTable:
+    def __init__(self, data):
+        self.data=data
+        self.column_names=list(data)
+        self.num_rows=len(next(iter(data.values())))
+    def __getitem__(self, name):
+        return FakeArray(self.data[name])
+    def set_column(self, i, name, values):
+        fresh=dict(self.data)
+        fresh[name]=values
+        return FakeTable(fresh)
+    def append_column(self, name, values):
+        fresh=dict(self.data)
+        fresh[name]=values
+        return FakeTable(fresh)
 
 def example_episodes(length=5):
     return (json.dumps({"episode_index":0,"length":length,
@@ -15,7 +36,7 @@ def example_episodes(length=5):
 
 def table_episode(mask=(False,True,True,False,False), bad_times=False):
     n=len(mask)
-    return pa.table({
+    return FakeTable({
         "timestamp":[i/15 if not bad_times else 0.0 for i in range(n)],
         "frame_index":list(range(n)),
         "episode_index":[0]*n,
@@ -49,7 +70,7 @@ def test_missing_reward_cannot_be_silently_invented():
     table=table_episode()
     detail=audit_frame_table(table,{"length":5,"intervention_frames":2,"episode_index":0})
     assert not detail["explicit_scalar_reward_done_success_columns"]
-    enriched=table.append_column("reward",pa.array([0.,0.,0.,0.,0.]))
+    enriched=table.append_column("reward",[0.,0.,0.,0.,0.])
     assert audit_frame_table(enriched,{"length":5,"intervention_frames":2,"episode_index":0})[
         "explicit_scalar_reward_done_success_columns"]==["reward"]
 
