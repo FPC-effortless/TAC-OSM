@@ -59,8 +59,73 @@ def shared(rows,key,seed):
     demand(all(v==values[0] for v in values),
         f"seed {seed}: {key} differs across architecture arms")
 
+
+def check_original_real_source_registration(m,phase):
+    """Owner-authorized same-parameters/data/optimizer-budget certification.
+
+    Real original episode and actual FIT sampled-window digests cannot exist
+    until the publisher source is read. Validate the immutable prefit plan
+    here; original runner independently verifies source and sampled-order
+    hashes BEFORE the first optimizer step and holds all checkpoints before
+    opening TEST. Do not manufacture unavailable full FLOP measurements.
+    """
+    demand(m.get("study_type")=="architecture_comparison","genuine model comparison required")
+    demand(m.get("registered_before_first_fit") is True,"preregistration required")
+    digest(m.get("dataset_fit_receipt_sha256"),"original source-FIT archive")
+    cohorts=m.get("frozen_episode_split_sha256",{})
+    for key in ("FIT","DEV","TEST"): digest(cohorts.get(key),key+" cohort")
+    seeds=m.get("seeds",[])
+    demand(isinstance(seeds,list) and len(seeds)>=2 and
+           len(set(seeds))==len(seeds),"multiple distinct original paired seeds required")
+    counts=m.get("parameter_counts",{})
+    demand(set(counts)=={"native_tac","gru_world"},"two complete competitors required")
+    for name,n in counts.items():positive_num(n,name+" active params",whole=True)
+    demand((max(counts.values())-min(counts.values()))/max(counts.values())<=PARAM_TOLERANCE,
+           "active model parameters differ beyond compulsory 1%")
+    budget=m.get("training_budget",{})
+    for key in ("updates","batch_size","history_frames","backprop_frames"):
+        positive_num(budget.get(key),key,whole=True)
+    demand(budget.get("tuning_trials")==0,"identical zero tuning allowance required")
+    demand(m.get("same_authentic_training_data") is True and
+           m.get("same_real_training_sample_order_within_each_seed") is True,
+           "genuine matched original training data/order required")
+    demand(m.get("original_test_unopened_until_all_ten_checkpoints_frozen") is True,
+           "all real TEST observations must stay sealed until FIT models freeze")
+    demand(m.get("cpu_time_matching_required") is False,"CPU speed must not be a parity gate")
+    if phase=="final":
+        rows=m.get("completed_model_records",[])
+        require_total=len(seeds)*len(counts)
+        demand(len(rows)==require_total,"missing original trained model checkpoints")
+        for seed in seeds:
+            paired=[r for r in rows if r.get("seed")==seed]
+            demand({r.get("architecture") for r in paired}==set(counts),
+                   "missing original matched architecture/seed")
+            demand(len({r.get("training_schedule_SHA256") for r in paired})==1,
+                   "actual original FIT training windows/order not equal")
+            for r in paired:
+                digest(r.get("training_schedule_SHA256"),"real source sampling digest")
+                digest(r.get("original_checkpoint_sha256"),"trained original checkpoint")
+                demand(r.get("active_params")==counts[r["architecture"]],
+                       "trained original parameter counts mismatch")
+                demand(r.get("original_actual_fit_updates")==budget["updates"],
+                       "optimizer training update budget unequal")
+                demand(r.get("original_real_history_frames")==budget["history_frames"],
+                       "original recurrent temporal exposure unequal")
+                demand(r.get("real_backward_steps_per_update")==budget["backprop_frames"],
+                       "original BPTT budget unequal")
+        demand(m.get("all_frozen_original_models_before_heldout_opening") is True,
+               "heldout labels opened before models frozen")
+    return {"study_id":m["study_id"],"phase":phase,
+            "status":"PASS_OWNER_MANDATORY_PARAMS_DATA_TRAINING_BUDGET",
+            "eligible_for_architecture_superiority":
+                phase=="final" and m.get("full_fLOP_certification_available") is True,
+            "FLOP_exact_consumption_verified":False,
+            "CPU_runtime_is_efficiency_only":True}
+
 def check_manifest(m,phase="preflight"):
     demand(isinstance(m,dict),"manifest JSON object required")
+    if m.get("source_based_deferred_registration") is True:
+        return check_original_real_source_registration(m,phase)
     demand(m.get("schema_version")==SCHEMA,"unsupported parity schema")
     text_field(m.get("study_id"),"study_id")
     kind=m.get("study_type")
