@@ -98,7 +98,7 @@ def profile_real_matched_step(actual_fit,stats,scale,folder):
              "parameter_gap":gap("parameters"),
              "profiled_FLOP_gap":gap("one_genuine_optimizer_update_profiled_operator_flops"),
              "profiler_limitations":"PyTorch with_flops counts reported CPU ops; not full exact training FLOPs",
-             "no_model_training_begun":True}
+             "two_discarded_profile_optimizer_updates_executed_on_FIT":True}
     # This is an actual real-FIT prefit, but a profiler is not proof of all
     # unreported nonlinear kernels. Treat prefit equality conservatively.
     receipt["parameter_gate_pass"]=receipt["parameter_gap"]<=.01
@@ -148,7 +148,14 @@ def run(output):
         "test_set_previously_exposed":True}),flush=True)
     # Inherited fit checks actual source hashes, archives trained real model
     # checkpoints before scoring, then writes original developmental outcomes.
-    return m.run(output)
+    result=m.run(output)
+    result["study"]="ME056_CONCEPT_SWARM_CED_REAL_ORIGINAL_ROBOT"
+    result["concept_decoder_iterations"]=4
+    result["concept_slot_dimensions"]=[6,15]
+    result["robot_TEST_already_seen_is_only_developmental"]=True
+    result["exact_whole_training_FLOP_parity_certified"]=False
+    m.base.write_json(Path(output)/"results.json",result)
+    return result
 
 
 if __name__=="__main__":
