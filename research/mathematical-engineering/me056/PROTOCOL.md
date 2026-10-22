@@ -93,3 +93,36 @@ Refer to:
 
 **No training result exists until the actual GitHub source/fit workflow
 succeeds and trained weights/physical outcomes are audited.**
+
+## Explicit prefit amendment after failed original resource survey (no ME056 full fits yet)
+
+Original archived ME056 preflight on real FIT: 45,822 active TAC parameters,
+45,995 active GRU parameters; torch.profiler reported **143,598,385** versus
+**55,538,477** FLOPs per fully shaped real-FIT update; relative gap
+**61.323745%**. The scientifically required training gate blocked all 10
+architecture fit runs. Evidence:
+https://github.com/FPC-effortless/TAC-OSM/actions/runs/39756811130/artifacts/12415524972 .
+
+Rather than relaxing the gate or padding unused operations, the GRU now
+uses its actual trainable GRUCell weights to perform additional nontrivial
+recurrent observation, action-query and feedback refinement. These are
+substantive learned recurrent state transformations. No new weights or
+hidden labels are added; active parameter count remains 45,995.
+
+**Before the first full ME056 fit**, six deterministic GRU compute configurations
+are predeclared, tuples denote (observation passes, candidate-action passes,
+actual-feedback passes):
+`(2,2,2), (2,3,2), (2,4,2), (3,2,2), (2,2,3), (1,4,2)`.
+The real FIT source-backed profiler executes and records a full 256+16 update
+for each candidate, with no DEV/TEST access. Select solely by smallest
+absolute profiled-operator FLOP difference versus the identical TAC candidate;
+ties use listed order. This is architectural resource tuning with frozen
+compute targets, **not predictive-quality tuning**. The discarded FIT
+profiler updates are real diagnostics, but do not become training checkpoints
+or extra training data presentations for scored arms. The selected depth and
+all attempts are permanently recorded. Parameter/FLOP mismatch >1% blocks
+all further training. Matching PyTorch reported operations still does not
+certify all operations or exact actual FLOP spend.
+
+Any subsequent real TEST number is developmental because prior ME052 and
+ME054 evaluations already examined that original cohort.
