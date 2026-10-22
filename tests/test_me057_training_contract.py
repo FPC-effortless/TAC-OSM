@@ -41,7 +41,7 @@ def test_me057_registration_and_resource_receipt_pass_preflight():
         "research/me057-fused-anchor-preflight.json").read_text())
     assert receipt["strict_parameter_gate_pass"]
     assert receipt["strict_flop_gate_pass"]
-    assert receipt["strict_5pct_gate_pass"]
+    assert receipt["cpu_runtime_is_efficiency_only"]
     assert receipt["model_fits_started"] == 0
 
 

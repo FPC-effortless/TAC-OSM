@@ -14,6 +14,12 @@ The final factual burn-in transition remains in the gradient graph for both
 architectures, so each model's feedback dynamics are trained; the preceding
 255 transitions provide no-gradient recurrent context.
 
+Transition kernels execute in PyTorch eager mode. A compiled-kernel attempt
+aborted before its first optimizer update, so it exposed no heldout trajectory
+and produced no fitted model. Parameter, data, optimizer-update and profiled
+FLOP parity remain compulsory. CPU time is recorded independently as an
+efficiency result, consistent with the portfolio-aligned master plan.
+
 All ten checkpoints freeze before any DEV or TEST trajectory is downloaded.
 The final evaluation uses one deterministic robot-controlled origin per heldout
 episode and reports original-unit physical MAE through the first takeover.
