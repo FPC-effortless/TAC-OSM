@@ -12,6 +12,8 @@ import argparse
 import hashlib
 import json
 import os
+import subprocess
+import resource
 import time
 from pathlib import Path
 
@@ -59,6 +61,11 @@ def allow_fit(plan):
         raise RuntimeError("ME059_NO_TRAINING: source exposure changed")
     if not plan.get("me058_source_backed_FLOP_preflight_pass",False):
         raise RuntimeError("ME059_NO_TRAINING: corrected original FIT FLOP parity not verified")
+    # The native/GRU model graphs and original profile must remain immutable.
+    for path,expected in plan.get("frozen_code_blob_sha",{}).items():
+        observed=subprocess.check_output(["git","hash-object",path],text=True).strip()
+        if observed!=expected:
+            raise RuntimeError("ME059_NO_TRAINING: graph changed after true FIT profiler: "+path)
     checked=check_manifest(plan,"preflight")
     if checked["status"]!="PASS":
         raise RuntimeError("ME059_NO_TRAINING: machine preregistration failed")
@@ -259,8 +266,37 @@ def run(output):
         if digest_file(row["checkpoint_path"])!=row["checkpoint_sha256"]:
             raise RuntimeError("ME059 persisted checkpoint hash corruption")
     receipt["all_checkpoints_frozen_before_heldout"]=True
+    # Reconcile exact optimizer step count, original per-seed sample order and
+    # actual checkpoint hashes BEFORE accessing independent heldouts.
+    # FLOPs here are partial operator-profile estimates, never certified
+    # exact full original training FLOP accounting.
+    final_plan=json.loads(json.dumps(plan))
+    records={(x["architecture"],x["seed"]):x for x in receipt["actual_checkpoints"]}
+    for arm in final_plan["arms"]:
+        original=records[(arm["architecture"],arm["seed"])]
+        budget=arm["budget"]
+        arm["measured"]={
+            "actual_steps":original["original_optimizer_updates"],
+            "actual_examples":budget["examples_seen"],
+            "actual_tokens":budget["tokens_seen"],
+            "training_flops":budget["prefit_profile_training_flops"]*original["original_optimizer_updates"],
+            "training_flops_estimate_only":True,
+            "optimizer_cpu_seconds":max(1.e-6,original["train_CPU_seconds_efficiency_only"]),
+            "peak_memory_bytes":max(1,int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)*1024),
+            "flops_profiler":"Extrapolated torch.profiler CPU reported operators only; no true full FLOP certification",
+            "checkpoint_sha256":original["checkpoint_sha256"],
+            "actual_sample_order_sha256":original["training_schedule_sha256"],
+            "evaluation_split_sha256":arm["test_split_sha256"],
+        }
+    final_plan["all_frozen_original_models_before_heldout_opening"]=True
+    original_budget_review=check_manifest(final_plan,"final")
+    if original_budget_review["eligible_for_architecture_superiority"] is True:
+        raise RuntimeError("ME059 partial profiled FLOPs must NOT qualify superiority")
+    receipt["postfit_resource_accounting"]=original_budget_review
+    write_json(root/"FAIR_COMPARISON_FINAL.json",final_plan)
     write_json(root/"results.json",receipt)
-    # Never open new cohort trajectories until *all* real FIT models are frozen.
+    # Never open independent heldout trajectories until all original models
+    # and the final machine budget accounting have been verified.
     del fit
     for cohort in ("DEV","TEST"):
         original=load_true_cohort(groups[cohort],root/"private-"+cohort+"-data")
