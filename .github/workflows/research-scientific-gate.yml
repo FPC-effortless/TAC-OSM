@@ -1,0 +1,39 @@
+name: TAC-OSM compulsory real-research parity and novelty gate
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - AGENTS.md
+      - research/**
+      - src/tac_osm/**
+      - scripts/**
+      - tests/test_research_parity_gate.py
+      - .github/workflows/**
+permissions:
+  contents: read
+jobs:
+  scientific-policy-gate:
+    name: scientific-parity-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify the fairness gate itself fails closed
+        run: |
+          python -m pip install 'pytest==9.1.1'
+          python -m pytest -q tests/test_research_parity_gate.py
+      - name: Reject newly changed ME/DEV experiments lacking fair preregistration and pre/post-fit hooks
+        run: |
+          git fetch --no-tags origin "${{ github.base_ref }}"
+          python scripts/validate_research_parity.py --check-changed "origin/${{ github.base_ref }}...HEAD"
+      - name: Mandatory genuine capability design and prior-art policy is source-controlled
+        run: |
+          test -s research/REAL-WORLD-EVIDENCE-RULES.md
+          test -s research/CAPABILITY-FIRST-RESEARCH-RESET-2026-10-22.md
+          grep -q "Compulsory equal-resource architecture comparisons" research/REAL-WORLD-EVIDENCE-RULES.md
+          echo "POLICY_GOVERNANCE_PRESENT__NEW_COMPARISONS_REQUIRE_MACHINE_REGISTRATION"
