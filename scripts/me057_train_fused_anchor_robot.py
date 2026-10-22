@@ -24,10 +24,10 @@ from scripts.audit_real_hil_trajectory import audit_frame_table, download_file
 from scripts.me055_profile_prefit import HISTORY, HORIZON
 from scripts.me055_reserve_independent_robot_task import (
     REVISION, chosen_task, metadata_rows, reserve)
-from scripts.me057_profile_fused_anchor import candidate, fused_objective
+from scripts.me057_profile_fused_anchor import (
+    candidate, fused_objective, gru_objective)
 from scripts.validate_research_parity import check_manifest
-from tac_osm.real_robot_me055_rollout import (
-    ServoRolloutGRU, TrajectoryForecast, factual_multistep_loss)
+from tac_osm.real_robot_me055_rollout import ServoRolloutGRU
 
 torch.set_num_threads(1)
 DATASET_DIGEST = "6576fc10753e3724791f6327c4fcad5feb5db801bebd090a8fc162776a5f1395"
@@ -181,34 +181,6 @@ def kernels(model, name):
         methods.append(model._dense_transition_auxiliary_training)
     return tuple(torch.compile(method, dynamic=False, fullgraph=True,
         mode="reduce-overhead") for method in methods)
-
-
-def gru_objective(model, source_batch, compiled):
-    states, actions, human, _ = source_batch
-    burnin, observe, predict = compiled
-    belief = model.initial(len(states))
-    with torch.no_grad():
-        for step in range(HISTORY):
-            belief = burnin(belief, states[:, step], actions[:, step],
-                human[:, step], states[:, step+1], human[:, step+1])
-    current = states[:, HISTORY]
-    control = human[:, HISTORY]
-    future_human = human[:, HISTORY:HISTORY+HORIZON+1]
-    alive = (~future_human[:, :-1]).to(torch.int64).cumprod(1).bool()
-    onset = (~future_human[:, :-1] & future_human[:, 1:]).to(current.dtype)
-    predicted_states, predicted_logits = [], []
-    for step in range(HORIZON):
-        belief = observe(belief, current)
-        prediction = predict(
-            belief, current, actions[:, HISTORY+step:HISTORY+step+1], control)
-        current = prediction.next_joint_state[:, 0]
-        predicted_states.append(current)
-        predicted_logits.append(prediction.takeover_logits[:, 0])
-    forecast = TrajectoryForecast(
-        torch.stack(predicted_logits, 1), torch.stack(predicted_states, 1))
-    return factual_multistep_loss(
-        model, forecast, states[:, HISTORY+1:HISTORY+HORIZON+1],
-        alive, onset, alive)[0]
 
 
 def loss(model, name, source_batch, compiled):

@@ -13,10 +13,11 @@ def model():
 def test_fused_anchor_preserves_strict_parameter_parity():
     candidate = model()
     assert sum(p.numel() for p in candidate.parameters()) == 38268
-    assert candidate.anchor_projection.in_features == 69
+    assert candidate.anchor_projection.in_features == 81
     assert candidate.anchor_projection.out_features == 90
     assert not hasattr(candidate, "boundary_projection")
     assert not hasattr(candidate, "state_projection")
+    assert not hasattr(candidate, "episode_initializer")
 
 
 def test_fused_anchor_updates_bounded_slow_and_trace_state():
@@ -47,6 +48,10 @@ def test_fused_anchor_receives_dense_predictive_gradients():
     assert torch.isfinite(gradient).all()
     assert torch.all(gradient.abs().sum(1) > 0)
     assert torch.all(gradient.abs().sum(0) > 0)
+    for name in ("feedback_key.weight", "feedback_value.weight",
+                 "feedback_map.weight", "anchor_gain"):
+        active = dict(candidate.named_parameters())[name].grad
+        assert active is not None and active.abs().sum() > 0
 
 
 def test_compiled_fused_anchor_matches_eager_boundary():

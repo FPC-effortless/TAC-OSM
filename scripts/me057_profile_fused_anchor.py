@@ -37,19 +37,25 @@ def fused_objective(model, batch, kernels=None):
         burnin, boundary, observe, predict, dense = kernels
     belief = model.initial_from_observation(states[:, 0])
     with torch.no_grad():
-        for step in range(HISTORY):
+        for step in range(HISTORY-1):
             transition = boundary if (step+1) % 128 == 0 else burnin
             belief = transition(
                 belief, states[:, step], actions[:, step], human[:, step],
                 states[:, step+1], human[:, step+1])
+    # One factual transition remains in the gradient graph.  This makes the
+    # verification/correction dynamics trainable without backpropagating
+    # through the complete 256-frame history.
+    belief = boundary(
+        belief, states[:, HISTORY-1], actions[:, HISTORY-1],
+        human[:, HISTORY-1], states[:, HISTORY], human[:, HISTORY])
     # Train the final persistent belief to retain dynamics from the recent
     # authentic segment.  Expanding one terminal belief avoids replay-state
     # materialization and makes this a direct retention objective.
-    count = 144
+    count = 32
     fast = belief.fast[:, None].expand(-1, count, -1).reshape(-1, 32)
     slow = belief.slow[:, None].expand(-1, count, -1).reshape(-1, 32)
     memory = belief.memory[:, None].expand(-1, count, -1).reshape(-1, 8)
-    start = HISTORY-144
+    start = HISTORY-count
     def selected_frames(value, offset=0):
         width = value.shape[-1]
         return value[:, start+offset:HISTORY+offset].reshape(-1, width)
@@ -78,6 +84,38 @@ def fused_objective(model, batch, kernels=None):
     return primary+.05*auxiliary
 
 
+def gru_objective(model, batch, kernels=None):
+    states, actions, human, _ = batch
+    burnin, observe, predict = ((model._burnin_training,
+        model._observe_training, model._predict_training)
+        if kernels is None else kernels)
+    belief = model.initial(len(states))
+    with torch.no_grad():
+        for step in range(HISTORY-1):
+            belief = burnin(belief, states[:, step], actions[:, step],
+                human[:, step], states[:, step+1], human[:, step+1])
+    belief = burnin(belief, states[:, HISTORY-1], actions[:, HISTORY-1],
+        human[:, HISTORY-1], states[:, HISTORY], human[:, HISTORY])
+    current = states[:, HISTORY]
+    control = human[:, HISTORY]
+    future_human = human[:, HISTORY:HISTORY+HORIZON+1]
+    alive = (~future_human[:, :-1]).to(torch.int64).cumprod(1).bool()
+    onset = (~future_human[:, :-1] & future_human[:, 1:]).to(current.dtype)
+    predicted_states, predicted_logits = [], []
+    for step in range(HORIZON):
+        belief = observe(belief, current)
+        prediction = predict(
+            belief, current, actions[:, HISTORY+step:HISTORY+step+1], control)
+        current = prediction.next_joint_state[:, 0]
+        predicted_states.append(current)
+        predicted_logits.append(prediction.takeover_logits[:, 0])
+    forecast = TrajectoryForecast(
+        torch.stack(predicted_logits, 1), torch.stack(predicted_states, 1))
+    return factual_multistep_loss(
+        model, forecast, states[:, HISTORY+1:HISTORY+HORIZON+1],
+        alive, onset, alive)[0]
+
+
 def candidate(identified):
     return FusedAnchorServoRolloutTAC(**{
         name: value.tolist() for name, value in identified.items()})
@@ -96,7 +134,7 @@ def compiled_runner(model, batch, architecture, compile_mode):
         model.parameters(), lr=.001, weight_decay=.0001)
     loss = ((lambda: fused_objective(model, batch, kernels))
             if architecture == "native_tac"
-            else (lambda: objective(model, batch, kernels, use_scan=False)))
+            else (lambda: gru_objective(model, batch, kernels)))
     return optimizer, loss
 
 
@@ -107,7 +145,8 @@ def eager_flops(architecture, identified, batch):
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=.001, weight_decay=.0001)
     loss = ((lambda: fused_objective(model, batch))
-            if architecture == "native_tac" else None)
+            if architecture == "native_tac"
+            else (lambda: gru_objective(model, batch)))
     with profile(activities=[ProfilerActivity.CPU], with_flops=True) as recording:
         update(model, batch, optimizer, loss)
     result = int(sum(event.flops for event in recording.key_averages()))

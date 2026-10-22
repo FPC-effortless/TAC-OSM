@@ -2,7 +2,9 @@ import json
 from pathlib import Path
 
 import numpy as np
+import torch
 
+from scripts.me057_profile_fused_anchor import fused_objective, gru_objective
 from scripts.me057_train_fused_anchor_robot import build, schedule
 from scripts.validate_research_parity import check_manifest
 
@@ -41,3 +43,25 @@ def test_me057_registration_and_resource_receipt_pass_preflight():
     assert receipt["strict_flop_gate_pass"]
     assert receipt["strict_5pct_gate_pass"]
     assert receipt["model_fits_started"] == 0
+
+
+def test_registered_objectives_train_every_counted_parameter():
+    states = torch.randn(2, 273, 14)
+    actions = torch.randn(2, 272, 14)
+    human = torch.zeros(2, 273, 1, dtype=torch.bool)
+    source = (states, actions, human, ((0, 0), (1, 0)))
+    for name in ("native_tac", "gru_world"):
+        candidate = build(name, identified())
+        methods = (candidate._burnin_training, candidate._observe_training,
+                   candidate._predict_training)
+        if name == "native_tac":
+            methods = (methods[0], candidate._burnin_boundary_training,
+                       methods[1], methods[2],
+                       candidate._dense_transition_auxiliary_training)
+            objective = fused_objective(candidate, source, methods)
+        else:
+            objective = gru_objective(candidate, source, methods)
+        objective.backward()
+        missing = [parameter_name for parameter_name, parameter
+                   in candidate.named_parameters() if parameter.grad is None]
+        assert missing == []

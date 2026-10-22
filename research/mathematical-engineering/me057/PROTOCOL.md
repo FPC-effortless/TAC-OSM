@@ -7,9 +7,12 @@ block split is 228 FIT, 76 DEV and 80 TEST episodes.
 Five paired seeds train native TAC and the 40-wide GRU for 600 AdamW updates,
 batch two, from identical metadata-determined windows.  Each window contains
 256 factual history transitions and a 16-step action-conditioned forecast.
-Physical error after logged human takeover is censored.  TAC's anchor loss uses
-only transitions already present in the same history window; it receives no
-additional episode or future data.
+Physical error after logged human takeover is censored. TAC's anchor and
+physical-feedback losses use 32 transitions already present in the same
+history window; they receive no additional episode or future data.
+The final factual burn-in transition remains in the gradient graph for both
+architectures, so each model's feedback dynamics are trained; the preceding
+255 transitions provide no-gradient recurrent context.
 
 All ten checkpoints freeze before any DEV or TEST trajectory is downloaded.
 The final evaluation uses one deterministic robot-controlled origin per heldout
