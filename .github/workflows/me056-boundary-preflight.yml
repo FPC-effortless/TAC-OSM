@@ -1,0 +1,28 @@
+name: ME-056 boundary architecture and paired preflight contracts
+
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/real_robot_me056_boundary.py'
+      - 'scripts/me056_profile_paired_execution.py'
+      - 'tests/test_me056_*.py'
+      - 'research/me056-*.json'
+      - 'research/mathematical-engineering/me056/**'
+      - '.github/workflows/me056-boundary-preflight.yml'
+  workflow_dispatch:
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: pip install --index-url https://download.pytorch.org/whl/cpu torch==2.9.0
+      - run: pip install pytest numpy
+      - run: >-
+          PYTHONPATH=src:.
+          pytest -q
+          tests/test_me056_boundary_tac.py
+          tests/test_me056_execution_profile.py
+          tests/test_me056_profile_receipt.py
