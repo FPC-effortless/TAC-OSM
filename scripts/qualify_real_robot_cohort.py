@@ -16,7 +16,7 @@ import json
 import math
 from pathlib import Path
 
-from audit_real_hil_trajectory import (
+from scripts.audit_real_hil_trajectory import (
     DATASET, TASK, EXPECTED_EPISODES, EXPECTED_ROBOT_DIM,
     SourceFailure, require, download_file, audit_frame_table, checksum_bytes)
 
