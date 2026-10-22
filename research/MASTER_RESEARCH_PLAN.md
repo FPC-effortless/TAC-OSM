@@ -86,7 +86,7 @@ Introduce only justified terms in controlled ablations; prevent future-informati
 - ME049 genuine three-arm randomized dataset: trained TAC's heldout action selection collapsed to the training-best fixed Mens email action, yielding no personalized policy benefit; context achieved better Brier (PR #314). Do not treat action-head existence as real decision intelligence.
 - ME051 genuine MovieLens H256: oldest-history TAC MAE 0.787059/0.780177 across two seeds, recent TAC 0.791441/0.779113; GRU controls 0.775609/0.776760 best recent (PR #317). Old-history benefit inconsistent; cross-model capacity not parity-qualified.
 - ME047 executed frozen cross-site ETTm2 inference but failed useful forecast-transfer gates (PR #312). 
-- ME057 fused and ME059 registered variants are **not** trained/scored confirmations solely because their preflight tests passed (PRs #338, #337).
+- ME057 fused completed a five-seed real-robot comparison and failed its registered superiority gate (PR #338); ME059 remains a separately registered lineage whose result must be checked independently (PR #337).
 - DEV-016 joint training reported 73.64% versus 59.32% frozen writer, but reliability gate failed.
 - DEV-017 structured 41-value memory reported 91.84% versus TAC 57.90% future prediction and 38.3% unnecessary interventions; historical protocol details must be checked before cross-experiment comparison.
 - DEV-020 audited structured state/read probes at 100%, TAC near chance; do not infer a unique causal defect.
@@ -103,7 +103,7 @@ Run **a small number of complete preregistered capability experiments**, not an 
 **Gate 0 — Evidence reconciliation and real-data authorization (no new architecture claim).**
 - Reconcile **separate lineages**: ME054 native, ME056 *Concept-CED* PR332, ME056 *anchored-native* PR334, ME057 fused PR338, ME058 source preflight PR336 and independent-task ME059 PR337. Do not conflate the duplicate ME056 names, source/test exposure, FLOP receipts or scores. Read their latest branch result artifacts before updating this plan.
 - Preserve original ME054 developmental robot MAE 0.07880869, GRU 0.09231612, persistence 0.06694929; the task's test was already exposed and full training-FLOP parity is not certified. **Do not call this a matched independent TAC win.** Independently verify any Concept-CED MAE attribution against actual training artifacts before promoting it.
-- ME057 PR338 reports 38,268 TAC vs 38,295 GRU parameters, profiled-update 42,640,106 vs 42,784,699 FLOPs, and **no scored full training result** as of its committed RESULTS. ME059 PR337 is registered but RESULTS says no completed ten-checkpoint / DEV / TEST score yet. The ME058 PR336 source preflight is not ME059 final training; partial profiler FLOPs are not a complete audited training-compute certificate.
+- ME057 PR338 reports 38,268 TAC vs 38,295 GRU parameters and profiled-update 42,640,106 vs 42,784,699 FLOPs. Its completed 80-episode TEST means are TAC 0.663284, GRU 0.658526 and persistence 0.672681 original-unit MAE. TAC won one of five seeds; the episode-clustered TAC-minus-GRU interval was +0.000285 to +0.009266, so its registered gate failed in GRU's favor. ME059 PR337 remains separate and must not inherit this result. The ME058 PR336 source preflight is not ME059 final training; partial profiler FLOPs are not a complete audited training-compute certificate.
 - Before a new fit: freeze dataset licence, authentic source hash/receipt, original chronological entity IDs, known action availability, missing/censored outcomes and exact source-specific time-cut. Mark **prediction-only** datasets separately from supported real-policy datasets. Confirm PR status and original artifact outcome rather than inferring from a workflow YAML.
 - **Accept:** auditable qualification ledger and real observations with eligible target definition. **STOP:** identity/actions/costs missing for the proposed estimand; missing parity manifest; invalid/test-exposed confirmation.
 
@@ -194,3 +194,19 @@ Gaps: parameters 0.076%, reported FLOPs 0.680%; the prospective numeric prefligh
 A new genuine original task training [draft PR #337](https://github.com/FPC-effortless/TAC-OSM/pull/337) prospectively commits the source/feature/target/optimizer/evaluation contracts, identical real source windows and 600 updates per arm per seed, and a genuine ten-model FIT training workflow. Strong physical persistence and servo-only priors will be scored on factual new-task DEV/TEST **only after all ten checkpoints freeze**. The anchored TAC has a disclosed extra 128-FIT-transition auxiliary while the GRU uses the same observed original physical frames without that gradient loss; improvements cannot be attributed solely to native memory. This protocol is a machine-qualified developmental experiment, **not a certified architecture-superiority result** until complete true FLOP parity is independently measured.
 
 As of this documentation commit, no ME-059 checkpoint result or new source TEST predictive MAE is yet available. Keep that distinction explicit and update only with original run artifacts.
+
+### ME-057 fused predictive-anchor training completed — useful dynamics, no TAC advantage
+
+[Draft PR #338](https://github.com/FPC-effortless/TAC-OSM/pull/338) completed five paired 600-update fits per architecture on the independently reserved `clean_stains_off_tabletop` task. All ten checkpoints froze before DEV/TEST opened. Both trained recurrent systems beat physical persistence on the 80-episode TEST cohort, showing that this task contains useful action-conditioned temporal structure.
+
+| TEST original-unit physical MAE | Result |
+|---|---:|
+| Native fused TAC | 0.663284 |
+| Matched GRU | 0.658526 |
+| Persistence | 0.672681 |
+
+TAC improved 1.40% over persistence but was 0.72% worse than GRU, won one of five paired seeds, and had a +0.000285 to +0.009266 episode-clustered TAC-minus-GRU 95% interval. Its preregistered requirement of at least 2% improvement over both GRU and persistence therefore failed. Stable eager TAC also required about 56% more optimizer CPU than GRU in the completed local fits.
+
+The Actions run evaluated heldout data and then failed only while serializing a NumPy seed-win scalar. The committed result was recovered by rescoring hash-verified checkpoints without refitting; the workspace could not independently download the Azure-hosted Actions artifact, so local checkpoint hashes are not presented as a byte-for-byte audit of that archive. See the PR's completed-results receipt and retain this provenance distinction.
+
+**Architecture consequence:** preserve the bounded, causal physical feedback and action-conditioned rollout that now beat persistence. Do not promote the fused anchor as the competitive core. The next complete candidate must improve the *forecasting computation itself*: make the strong servo/physical prior and current observation a direct base prediction, then learn a bounded horizon-conditioned mixture of fast-state, slow-state and associative residual experts with calibrated uncertainty/abstention. Train the entire system against factual multihorizon physical outcomes under matched parameters, authentic windows and profiled FLOPs. Do not spend another stage merely probing ME057's state; use ablations only if the stronger integrated candidate fails.
