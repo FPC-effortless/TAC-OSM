@@ -370,6 +370,9 @@ def main_run(folder):
             row=train_one(name,seed,train,scheduled,root,source_shas,norm,support)
             result["actual_completed_training_models"].append(row)
             write_json(root/"results.json",result)
+    final_registration,checked=verify_after_fit(signed_plan,result["actual_completed_training_models"],True)
+    result["actual_parameter_data_training_budget_audit"]=checked
+    write_json(root/"FAIR_COMPARISON_FINAL.json",final_registration)
     if len(result["actual_completed_training_models"])!=10:
         raise RuntimeError("not all ten original real models fitted")
     # Hash-verify ALL ten original checkpoints before ANY heldout parquet.
