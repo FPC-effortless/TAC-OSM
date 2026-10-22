@@ -81,7 +81,7 @@ def partition_metadata(rows):
 
 
 def available_window_counts(members):
-    return {str(h):sum(max(0,n-h-1) for _,n in members) for h in HISTORY_LENGTHS}
+    return {str(h):sum(max(0,n-h) for _,n in members) for h in HISTORY_LENGTHS}
 
 
 def cohort_receipt(rows,parts,source_hashes):
@@ -103,7 +103,7 @@ def cohort_receipt(rows,parts,source_hashes):
     splits={}
     for part,members in parts.items():
         eid=[i for i,_ in members]
-        members_eligible_256=[i for i,n in members if n>=258]
+        members_eligible_256=[i for i,n in members if n>=257]
         splits[part]={
             "episode_ids":eid,
             "episode_count":len(eid),
@@ -122,7 +122,7 @@ def cohort_receipt(rows,parts,source_hashes):
 
 def deterministic_fit_sample(parts):
     fitted=parts["FIT"]
-    eligible=[i for i,n in fitted if n>=258]
+    eligible=[i for i,n in fitted if n>=257]
     eligible.sort(key=lambda i:(_hash(f"{REVISION}:{TASK}:train-only-audit:{i}"),i))
     require(len(eligible)>=N_FIT_AUDIT,
             "too few authentic FIT episodes for prefit source audit")
