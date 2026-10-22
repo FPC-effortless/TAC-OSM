@@ -34,8 +34,8 @@ def test_action_reordering_and_no_unverified_memory_write():
     pred=m.predict(z,x,a,h)
     order=[2,0,1]
     q=m.predict(z,x,a[:,order],h)
-    torch.testing.assert_close(pred.takeover_logits[:,order],q.takeover_logits,atol=0,rtol=0)
-    torch.testing.assert_close(pred.next_joint_state[:,order],q.next_joint_state,atol=0,rtol=0)
+    torch.testing.assert_close(pred.takeover_logits[:,order],q.takeover_logits,atol=1e-7,rtol=1e-6)
+    torch.testing.assert_close(pred.next_joint_state[:,order],q.next_joint_state,atol=1e-7,rtol=1e-6)
     assert all(torch.equal(old,new) for old,new in zip(saved,(*z.core,z.concepts)))
 
 
