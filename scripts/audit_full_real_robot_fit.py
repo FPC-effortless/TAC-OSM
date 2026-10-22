@@ -102,9 +102,6 @@ def build_full_fit_receipt(metadata,split_report,source_hashes,per_episode):
                          "observed_no_takeover_negatives",
                          "masked_already_human_frames")
         }
-        require(totals["horizon_support"][key]["real_observed_state_action_next_state_pairs"]==
-                split_report["FIT"] and False if False else True,
-                "unreachable")  # replaced below by explicit metadata consistency
         eligible=sum(max(0,n-H) for _,n in split_report["FIT"])
         require(totals["horizon_support"][key]["real_observed_state_action_next_state_pairs"]==eligible,
                 "real original temporal windows do not match frozen episode metadata")
@@ -121,8 +118,6 @@ def build_full_fit_receipt(metadata,split_report,source_hashes,per_episode):
         "metadata_source_hashes_SHA256":metadata,
         "all_original_fit_parquet_receipts_SHA256":digest,
         "original_FIT_source_file_checksums":fit_files,
-        "source_train_dev_test_episode_ID_hashes":{
-            k:split_report[k] for k in ()},
         "real_FIT_target_support":totals,
         "real_DEV_TEST_parquets_ever_opened":False,
         "partitions_fixed_before_any_train_or_outcome_comparison":True,
