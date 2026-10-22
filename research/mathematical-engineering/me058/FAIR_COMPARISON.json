@@ -1,0 +1,33 @@
+{
+  "schema_version": "tac-osm.parity.v3",
+  "study_id": "ME058_AUTHENTIC_ANCHORED_CAUSAL_RESOURCE_PREFIT",
+  "study_type": "noncomparative_diagnostic",
+  "scientific_purpose": "Measure corrected causal dense auxiliary and multistep GRU optimizer updates using original 228 authenticated FIT episode recordings to freeze fair training inputs before any full model fits",
+  "no_architecture_superiority_claim": true,
+  "training_authorized": false,
+  "model_fits_started": 0,
+  "source_registry": "research/me055-independent-robot-task-source.json",
+  "independent_frozen_real_FIT_receipt_sha256": "c4064651e91cced7aafc11337c32a27266f470ea10388bb0dd2562ae955f88fd",
+  "forward_protocol_requires_separate_comparison_manifest": true,
+  "planned_pair_seeds": [
+    58001,
+    58002,
+    58003,
+    58004,
+    58005
+  ],
+  "planned_equal_optimizer_updates": 600,
+  "planned_equal_batch_size": 2,
+  "planned_equal_history_frames": 256,
+  "planned_equal_prediction_horizon": 16,
+  "planned_tuning_trials": 0,
+  "expected_active_parameters": {
+    "native_tac": 38266,
+    "gru_world": 38295
+  },
+  "cpu_time_matching_required": false,
+  "profiler_limited_to_reported_operator_flops": true,
+  "original_DEV_TEST_trajectory_access_prohibited": true,
+  "future_outcome_supervision_is_different_for_dense_TAC_auxiliary": true,
+  "historical_ME056_execution_profile": "research/me056-paired-execution-profile.json"
+}
