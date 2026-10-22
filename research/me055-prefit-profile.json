@@ -1,0 +1,80 @@
+{
+  "arms": [
+    {
+      "architecture": "native_tac",
+      "compiled_forward": true,
+      "cpu_seconds_samples": [
+        0.040688299999999344,
+        0.039881279999999464,
+        0.039988770000000784,
+        0.039633481999999276,
+        0.039805126999999274,
+        0.0398555819999995,
+        0.03958074400000022,
+        0.04633046000000007,
+        0.04025230200000074,
+        0.03993468,
+        0.03967466300000133,
+        0.040009341000001086,
+        0.03978692000000095,
+        0.03968440700000109,
+        0.03955655799999924
+      ],
+      "deployed_parameters": 38266,
+      "first_compiled_update_cpu_seconds": 5.9032976999999995,
+      "last_profile_objective": 20.548324584960938,
+      "median_one_update_cpu_seconds": 0.0398555819999995,
+      "profiled_one_update_flops": 42724495,
+      "profiler": "torch.profiler CPU with_flops=True; one full authentic burn-in+rollout+backward+AdamW update",
+      "torchscript_kernels": false,
+      "trainable_parameters": 38266
+    },
+    {
+      "architecture": "gru_world",
+      "compiled_forward": true,
+      "cpu_seconds_samples": [
+        0.03472738700000022,
+        0.03419178100000053,
+        0.03446288299999978,
+        0.03430522900000099,
+        0.03405786200000094,
+        0.0342006640000001,
+        0.034604493999999875,
+        0.03474355099999826,
+        0.03467601100000195,
+        0.03635518699999807,
+        0.040121436999999815,
+        0.035012570999999326,
+        0.038272067000001186,
+        0.03411373500000181,
+        0.03442230399999957
+      ],
+      "deployed_parameters": 38295,
+      "first_compiled_update_cpu_seconds": 0.5380829909999996,
+      "last_profile_objective": 20.53052520751953,
+      "median_one_update_cpu_seconds": 0.034604493999999875,
+      "profiled_one_update_flops": 42546619,
+      "profiler": "torch.profiler CPU with_flops=True; one full authentic burn-in+rollout+backward+AdamW update",
+      "torchscript_kernels": false,
+      "trainable_parameters": 38295
+    }
+  ],
+  "batch_size": 2,
+  "batch_start_frames": [
+    0,
+    660
+  ],
+  "history_frames": 256,
+  "measured_CPU_relative_gap": 0.1317528872116255,
+  "model_fits_started": 0,
+  "parameter_relative_gap": 0.0007572790181485834,
+  "profiled_FLOP_relative_gap": 0.004163325979628314,
+  "rollout_frames": 16,
+  "source_episode": 12,
+  "source_sha256": "6fdfd71bd635a97319831fbe7b7e6583260e52113f209ef6a37955014e94b6cb",
+  "source_split": "FIT",
+  "strict_CPU_gate_pass": false,
+  "strict_FLOP_gate_pass": true,
+  "strict_parameter_gate_pass": true,
+  "study": "ME055_PREFIT_AUTHENTIC_RESOURCE_PROFILE"
+}
