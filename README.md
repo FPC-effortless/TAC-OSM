@@ -9,6 +9,17 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## Active architecture development — 2026-10-22
+
+The [integrated predictive-state candidate](research/predictive-state-capability-2026-10-22/README.md)
+implements native fast/slow associative state, action-conditioned prediction
+and masked outcome correction. It is **untrained**; no new capability gain is
+claimed. The publisher OBD example is checksum-verified and rejected for
+entity-memory research because it lacks documented persistent IDs. New fits
+remain blocked by dataset qualification and the
+[compulsory parity policy](research/CAPABILITY-FIRST-RESEARCH-RESET-2026-10-22.md).
+This draft includes governance PR #318; neither branch is merged into master.
+
 ## The central claim under test
 
 ```
