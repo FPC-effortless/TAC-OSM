@@ -30,7 +30,8 @@ jobs:
         run: |
           python scripts/audit_real_hil_trajectory.py \
             --private-cache /tmp/tac-osm-hil-original-not-artifact \
-            --receipt research/real-hil-source-eligibility-receipt.json
+            --receipt research/real-hil-source-eligibility-receipt.json \\
+            --expected-revision 9290f5a96dc91ea58256e81d9ce2dd9621890b51
       - name: Reject mistaken causal, success and training claims
         run: |
           python - <<'PY'
