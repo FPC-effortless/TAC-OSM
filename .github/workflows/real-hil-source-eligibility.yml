@@ -1,0 +1,57 @@
+name: TAC real-robot source eligibility — no model training
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/audit_real_hil_trajectory.py
+      - tests/test_real_hil_source_audit.py
+      - research/real-robot-source-qualification-2026-10-22.md
+      - docs/TACOSM-BASELINE-001.md
+      - .github/workflows/real-hil-source-eligibility.yml
+permissions:
+  contents: read
+jobs:
+  genuine-real-robot-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact original metadata and real-data table reader
+        run: |
+          python -m pip install 'pytest==9.1.1' 'pyarrow==21.0.0'
+      - name: Check numerical/data/temporal privacy invariants only
+        run: |
+          python -m py_compile scripts/audit_real_hil_trajectory.py
+          python -m pytest -q tests/test_real_hil_source_audit.py
+      - name: Audit immutable original publisher's actual robot metadata and ONE authentic episode
+        run: |
+          python scripts/audit_real_hil_trajectory.py \
+            --private-cache /tmp/tac-osm-hil-original-not-artifact \
+            --receipt research/real-hil-source-eligibility-receipt.json
+      - name: Reject mistaken causal, success and training claims
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path('research/real-hil-source-eligibility-receipt.json').read_text())
+          assert x['training_examples_scored']==x['optimizer_steps']==0
+          assert x['source_only_not_permission_to_fit']
+          assert x['source_file_sha256']
+          assert x['official_source_metadata_only']['episode_count']==505
+          assert x['one_real_episode_state_action_feedback_audit']['measured_state_dimensions']==14
+          assert not x['one_real_episode_state_action_feedback_audit']['explicit_scalar_reward_done_success_columns']
+          assert not x['integrated_decision_intelligence_qualified']
+          assert not x['matched_parameter_data_compute_parity_qualified']
+          print('REAL_HIL_SOURCE_ONLY_ELIGIBILITY__NO_TRAINED_MODEL_OR_REWARD_CLAIM')
+          PY
+      - name: Archive verified original publisher source hashes and counts ONLY (no robot trajectory)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-real-robot-source-eligibility-no-model-training
+          path: research/real-hil-source-eligibility-receipt.json
+          if-no-files-found: ignore
+          retention-days: 90
