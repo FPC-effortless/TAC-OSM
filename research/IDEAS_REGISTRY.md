@@ -79,3 +79,15 @@ Do not merge the physical state dimension, memory type, model counts, dataset sp
 - **Fairness:** Freeze five paired seed schedules (58001–58005), FIT-only physical prior without cross-episode artificial transitions; same real source windows, action/physical/authority fields, 600-step intended budget and evaluation. Distinct native dense auxiliary is declared as a treatment difference, not hidden.
 - **Status:** Code and diagnostic-only research registration committed; CI source-backed profiler results pending. No scored training, no new physical MAE, no claim of superiority over GRU or persistence.
 - **Next:** If all original source/hash/active parameters/reported operator-FLOP checks pass, author a separate complete preregistered architecture-comparison manifest before model fitting. Otherwise preserve the stopped preflight and identify measurable blocker.
+
+### TAC-024 — ME-059 genuine independent-robot five-seed training, physical forecasting and strong baselines
+
+- **Registered project:** [draft PR #337](https://github.com/FPC-effortless/TAC-OSM/pull/337), with actual new-task resource evidence from [ME-058 run 39840368795](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39840368795).
+- **Source:** 228 real FIT, 76 DEV, 80 TEST episodes from official `clean_stains_off_tabletop` robot task at immutable publisher revision `9290f5a96dc91ea58256e81d9ce2dd9621890b51`. The 228 FIT episode byte receipts are independently verified; TEST trajectory information is not part of the training selection.
+- **Design:** Five paired seeds 58001–58005, equal original sampled source windows per seed, 600 updates × batch2 × 256 observed history plus 16 future conditioning actions. Raw source/authority/physical channels and FIT-only physics prior are shared.
+- **Candidate difference:** TAC uses anchored 128-frame slow consolidation plus 128 **causal prefeedback** FIT auxiliary supervision transitions; GRU has a real learned baseline without that auxiliary. Study tests full training systems rather than isolating a memory-only effect.
+- **Original prefit evidence:** TAC vs GRU = 38,266 vs 38,295 parameters (0.076% gap), 42,257,730 vs 42,546,844 profiled operator FLOPs/update (0.680% gap); both prospective resource pilot gates PASS. CPU profiler update durations differ, with speed explicitly not a compulsory match.
+- **Evaluation objective:** true recorded 14D physical MAE pooled and by horizon 1–16 on new independent DEV/TEST cohorts, persistence and source-derived unlearned servo prior, factual action-conditioned forecasts censored after human takeover; no policy/counterfactual efficacy inference.
+- **Status:** Fully registered, GitHub workflow submitted. **No scored trained-model results are yet verified**. Total true whole-update FLOPs remain unverified; machine gate must withhold architecture-superiority qualification even if developmental MAE improves.
+- **Evidence links:** frozen `research/mathematical-engineering/me059/FAIR_COMPARISON.json`, `CONTRACTS.json`, `PROTOCOL.md`, future original checkpoints/metrics in PR #337 workflow artifacts.
+
