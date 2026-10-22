@@ -124,7 +124,7 @@ def check_manifest(m,phase="preflight"):
                        and math.isfinite(b[k]) and b[k]>=0,k+" must be a nonnegative compute estimate")
             else:positive_num(b.get(k),k,whole=k in ("steps","examples_seen","tokens_seen",
                                                         "batch_size","history_events"))
-        demand(b["planned_training_flops"]<=b["max_training_flops"],
+        text_field(b.get("prefit_profile_method"),"original prefit profiler method")\n        demand(b["planned_training_flops"]<=b["max_training_flops"],
             "planned compute must not exceed matched upper budget")
         if phase=="final":
             result=r.get("measured")
@@ -166,7 +166,7 @@ def check_manifest(m,phase="preflight"):
                     "tuning_trials","tuning_flops"):
             shared([r["budget"] for r in group],key,seed)
         close_enough(group,"trainable_parameters",PARAM_TOLERANCE,f"seed {seed} active parameters")
-        close_enough([r["budget"] for r in group],"planned_training_flops",FLOP_TOLERANCE,
+        close_enough([r["budget"] for r in group],"prefit_profile_training_flops",FLOP_TOLERANCE,\n                     f"seed {seed} PROFILER prefit FLOPs")\n        close_enough([r["budget"] for r in group],"prefit_profile_optimizer_cpu_seconds",CPU_TOLERANCE,\n                     f"seed {seed} PROFILER prefit CPU seconds")\n        close_enough([r["budget"] for r in group],"planned_training_flops",FLOP_TOLERANCE,
                      f"seed {seed} planned FLOPs")
         if phase=="final":
             actual=[r["measured"] for r in group]
