@@ -18,7 +18,7 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 DATASET = "BodenAI/RW-RL-HIL-Dataset"
-TASK = "r1lite_scoop_cat_litter"
+TASK = "scoop_cat_litter_into_trash_can"
 EXPECTED_EPISODES = 505
 EXPECTED_ROBOT_DIM = 14
 FILES = (
