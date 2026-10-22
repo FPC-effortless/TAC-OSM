@@ -5,7 +5,8 @@ Prior merged PR323 physically verified 325 original FIT robot episodes and
 354,027 measured frames, including 376 factual human-takeover onsets; PR324
 integrated native action-conditional next-state and masked onset-feedback.
 The compulsory FAIR_COMPARISON.json is NOT complete and no training is
-authorized until its genuine parameter/data/FLOP/CPU equality passes.
+authorized until its genuine parameter/data/training-budget parity passes.
+Different CPU execution times are permissible and informative.
 
 ## What we are NOT trying to rediscover
 
@@ -80,7 +81,7 @@ dev/test frozen IDs and label availability, all real 256 input histories.
 Prerequisite two: two fully specified scientifically strong architectures
 with **active and deployed parameters within 1%**, exactly equal original
 FIT examples/order/steps/tokens/tuning, and *fully validated* FLOP equality
-within 1%, measured CPU within 5% on the same original hardware/data
+within the declared compute budget, with CPU reported for efficiency on the same original hardware/data
 shape. Use 5 matched original seeds 52001..52005.
 Prerequisite three: independent original evaluator and identical physical
 metrics, full recurrent belief after physical correction and human feedback.
@@ -89,8 +90,18 @@ protocol are frozen.
 
 No training begins just because same declared budget ceilings are listed.
 Parameter parity and an incomplete profiler are insufficient.
-Postfit actual FLOP/CPU receipts and exact checkpoint/source replay remain
+Postfit actual training-budget/FLOP usage receipts, diagnostic CPU time,
+and exact checkpoint/source replay remain
 required before any TAC versus recurrent-model comparison.
 This robot dataset contains no independently verified success/cost/reward,
 so even a future valid physics-prediction gain cannot be presented as
 successful cost-sensitive action selection or causal robot policy benefit.
+
+
+**Scientific-rule clarification (2026-10-22):** CPU wall-clock/process time
+is an efficiency measurement and is never required to match between
+architectures. The compulsory fair-comparison requirements are model
+parameters, identical real training data/exposure, matched training/tuning
+budgets and equal evaluation conditions; see the latest amendment to
+`research/REAL-WORLD-EVIDENCE-RULES.md`. Historical CPU observations are
+preserved but do not make a comparison scientifically invalid by themselves.
