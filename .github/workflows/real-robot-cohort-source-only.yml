@@ -23,7 +23,7 @@ jobs:
         run: |
           python -m pip install 'pytest==9.1.1'
           python -m py_compile scripts/qualify_real_robot_cohort.py src/tac_osm/real_robot_transition_contract.py
-          python -m pytest -q tests/test_real_robot_cohort_and_target_contract.py
+          PYTHONPATH=src python -m pytest -q tests/test_real_robot_cohort_and_target_contract.py
   publisher-original-FIT-episode-audit:
     needs: source-cohort-mathematical-gates
     runs-on: ubuntu-latest
