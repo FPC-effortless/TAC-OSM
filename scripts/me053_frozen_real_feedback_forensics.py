@@ -136,8 +136,18 @@ def run(root,receipt):
     dev_ids=selected_dev_episodes(cohorts["DEV"])
     original={}
     for i in dev_ids:
-        row=load_episode(cache,i,original_metadata)
-        original[i]=row
+        for attempt in range(3):
+            parquet_file=cache/f"scoop_cat_litter_into_trash_can/data/chunk-{i//1000:03d}/episode_{i:06d}.parquet"
+            if parquet_file.exists() and parquet_file.stat().st_size==0:
+                parquet_file.unlink()
+            try:
+                original[i]=load_episode(cache,i,original_metadata)
+                break
+            except Exception:
+                if attempt==2:
+                    raise RuntimeError(f"original authentic DEV episode {i} could not be read from immutable source")
+                if parquet_file.exists():
+                    parquet_file.unlink()
     cp=torch.load(root/records[("native_tac",SEED_SUBSET[0])]["original_checkpoint_path"],
                   map_location="cpu",weights_only=False)
     scaling=cp["fixed_fit_only_scaling"]
@@ -175,9 +185,7 @@ def run(root,receipt):
             summary=summarize(rows)
             result["scores"][arm][str(seed)]=summary
             result["completed_frozen_checkpoint_and_real_DEV_count"]={
-                "models_verified":len(SOURCE for SOURCE in
-                  [*result["scores"]["native_tac"],*result["scores"].get("gru_world",{})])
-                  if False else len(records),
+                "original_trained_checkpoints_in_archive":len(records),
                 "original_DEV_episodes_per_comparison":len(dev_ids)}
             print(json.dumps({"event":"ME053_AUTHENTIC_DEV_FROZEN_MODEL_DIAGNOSTIC",
                 "arm":arm,"seed":seed,
