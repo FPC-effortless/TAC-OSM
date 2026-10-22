@@ -1,0 +1,68 @@
+name: ME052 original ten trained robot models — evaluation-only from frozen artifacts
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me052_score_frozen_real_robot.py
+      - .github/workflows/me052-frozen-evaluation.yml
+permissions:
+  contents: read
+  actions: read
+jobs:
+  genuine-robot-original-checkpoint-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install original pinned evaluation-only numerical stack
+        run: |
+          python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Restore the TEN actual original immutable trained checkpoints from prior failed heldout-source run
+        uses: actions/download-artifact@v4
+        with:
+          name: me052-ten-original-real-robot-tac-gru-models-and-heldout-evidence
+          run-id: 39714369920
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: .
+      - name: Verify checkpoint structure and score actual source-available real DEV/TEST physical trajectories — NO TRAINING
+        run: |
+          set -o pipefail
+          python -m py_compile scripts/me052_score_frozen_real_robot.py
+          PYTHONPATH=src python -m scripts.me052_score_frozen_real_robot --root results/me052 | tee me052-original-frozen-robot-eval.log
+      - name: Verify all real-model predictions are attached to original checkpoints
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('results/me052')
+          o=json.loads((root/'results.json').read_text())
+          x=json.loads((root/'original-source-recovered-evaluation.json').read_text())
+          assert len(o['actual_completed_training_models'])==10
+          assert x['evaluation_complete_on_original_available_heldout_episodes']
+          assert x['model_updates_during_evaluation']==0
+          assert x['all_original_checkpoints_sha_verified']
+          assert x['same_heldout_available_source_episodes_for_both_architectures']
+          assert set(x['scores']['TEST'])=={
+              f'{a}-s{seed}' for a in ('native_tac','gru_world')
+              for seed in (52001,52002,52003,52004,52005)}
+          print('ME052_ORIGINAL_TEN_FROZEN_TRAINED_MODELS_HAVE_GENUINE_REAL_HELDOUT_SCORES')
+          PY
+      - name: Preserve original real heldout scores and source missingness — NO RAW ROBOT EPISODES
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me052-original-ten-robot-world-models-heldout-scores-and-source-availability
+          path: |
+            results/me052/original-source-recovered-evaluation.json
+            me052-original-frozen-robot-eval.log
+          if-no-files-found: ignore
+          retention-days: 90

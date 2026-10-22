@@ -1,0 +1,41 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME052_real_world_robot_prediction",
+  "study_type": "architecture_comparison",
+  "source_based_deferred_registration": true,
+  "registered_before_first_fit": true,
+  "dataset_fit_receipt_sha256": "4aa30d5009bf897438194cdd2d3b9e9e6ec1d923ec5389c93a942f9b7046c96f",
+  "frozen_episode_split_sha256": {
+    "FIT": "771f027954711b73f38a0b8407db5319c7f3ac80e5ddd54754447dd196dfc6e1",
+    "DEV": "437c676b5d20b413a96938c96b371144fef453920d451bbeb8389102dd55c4e9",
+    "TEST": "6cb213a714ff60eeae841d41f40c9a8ca74098ffcdf5b5c19833231438dd92e8"
+  },
+  "seeds": [
+    52001,
+    52002,
+    52003,
+    52004,
+    52005
+  ],
+  "parameter_counts": {
+    "native_tac": 37985,
+    "gru_world": 38295
+  },
+  "training_budget": {
+    "updates": 80,
+    "batch_size": 2,
+    "history_frames": 256,
+    "backprop_frames": 8,
+    "tuning_trials": 0
+  },
+  "same_authentic_training_data": true,
+  "same_real_training_sample_order_within_each_seed": true,
+  "original_test_unopened_until_all_ten_checkpoints_frozen": true,
+  "full_fLOP_certification_available": false,
+  "cpu_time_matching_required": false,
+  "scientific_prior_art": [
+    "R2D2 recurrent replay",
+    "TD-MPC2 action-conditioned dynamics",
+    "DreamerV3 world model"
+  ]
+}
