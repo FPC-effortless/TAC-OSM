@@ -18,6 +18,12 @@ from .real_robot_me054_stable import StableRealTAC, checked_scale
 from .real_robot_gru_world_control import GRURobotWorldModel
 
 
+class ZeroUnsupervisedHead(nn.Module):
+    """No fictitious policy or information target on this factual corpus."""
+    def forward(self,x):
+        return x[..., :1].detach()*0
+
+
 class RealRobotConceptCED(StableRealTAC):
     """Physics-anchored concept inference over unchanged native belief."""
 
@@ -31,6 +37,11 @@ class RealRobotConceptCED(StableRealTAC):
         # The same ONE trained native persistent state is used by both
         # routes, not a second duplicated core with hidden additional weights.
         self.swarm.core = self.native
+        # Robot corpus has NO realized reward or information-gain targets.
+        # Eliminate unused trainable heads instead of padding model size.
+        self.swarm.future_map = nn.Identity()
+        self.swarm.policy_head = ZeroUnsupervisedHead()
+        self.swarm.information_head = ZeroUnsupervisedHead()
         self.physical_to_concept = nn.Linear(DOF,concept_dim)
         self.takeover_to_concept = nn.Linear(1,concept_dim)
         self.concept_feedback = nn.Linear(2*concept_dim,concept_dim)
@@ -62,7 +73,6 @@ class RealRobotConceptCED(StableRealTAC):
         flag=authority.to(candidate_actions.dtype).unsqueeze(1).expand(-1,candidate_actions.shape[1],-1)
         factual_action=torch.cat((candidate_actions,flag),dim=-1)
         p=self.swarm.predict(belief,measured_state,factual_action)
-        self.last_refinement_trace=None  # trace is returned separately by predict_trace, not persistent state
         physical=measured_state.unsqueeze(1) + self.factual_delta_scale * p.next_observation
         return RobotForecast(p.outcome_logits,physical)
 
