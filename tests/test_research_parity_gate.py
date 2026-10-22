@@ -23,7 +23,7 @@ def fixture():
             b={"steps":500,"examples_seen":32000,"tokens_seen":2048000,
                "batch_size":64,"history_events":64,"planned_training_flops":1_000_000_000,
                "max_training_flops":1_100_000_000,"max_optimizer_cpu_seconds":70,
-               "tuning_trials":0,"tuning_flops":0}
+               "tuning_trials":0,"tuning_flops":0,\n               "prefit_profile_training_flops":1_000_000_000,\n               "prefit_profile_optimizer_cpu_seconds":50.0,\n               "prefit_profile_method":"torch.profiler comparable real-input dry-run"}
             arms.append({"architecture":name,"seed":seed,
               "trainable_parameters":parameters,"deployed_parameters":parameters,
               "nontrainable_state_bytes":8192,"hardware_profile":"1-core CPU AVX2 pytorch2 pinned",
@@ -113,3 +113,17 @@ def test_diagnostic_cannot_smuggle_architecture_superiority_label():
     assert check_manifest(m)["status"]=="PASS_DIAGNOSTIC_ONLY"
     m["no_architecture_superiority_claim"]=False
     with pytest.raises(ParityError,match="forbid"):check_manifest(m)
+
+
+def test_prefit_blocks_training_when_measured_cpu_pilot_differs_despite_equal_caps():
+    m=fixture()
+    m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=70.0
+    with pytest.raises(ParityError,match="PROFILER prefit CPU"):
+        check_manifest(m,"preflight")
+
+
+def test_prefit_blocks_training_when_measured_flops_pilot_differs():
+    m=fixture()
+    m["arms"][1]["budget"]["prefit_profile_training_flops"]=1_120_000_000
+    with pytest.raises(ParityError,match="PROFILER prefit FLOPs"):
+        check_manifest(m,"preflight")
