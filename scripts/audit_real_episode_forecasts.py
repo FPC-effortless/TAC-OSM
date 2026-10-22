@@ -91,6 +91,23 @@ def evaluate(payload, motion_threshold, bootstrap, seed):
                 "paired_difference_model_minus_persistence": sum(differences)/len(differences),
                 "bootstrap_95pct_CI": [samples[int(.025*(bootstrap-1))],
                                          samples[int(.975*(bootstrap-1))]]}
+    if all("constant_velocity" in ep["errors"] for ep in per_episode):
+        result["constant_velocity"] = {}
+        for stratum in ("all", "motion", "static"):
+            paired = []
+            for ep in per_episode:
+                baseline = ep["errors"]["persistence"][stratum]
+                velocity = ep["errors"]["constant_velocity"][stratum]
+                if baseline:
+                    paired.append((sum(velocity)/len(velocity), sum(baseline)/len(baseline)))
+            if paired:
+                result["constant_velocity"][stratum] = {
+                    "episodes": len(paired),
+                    "velocity_episode_mean_mae": sum(v for v, _ in paired)/len(paired),
+                    "persistence_episode_mean_mae": sum(p for _, p in paired)/len(paired),
+                }
+            else:
+                result["constant_velocity"][stratum] = {"status": "no_samples"}
     result["constant_velocity_available_for_all_episodes"] = all("constant_velocity" in ep["errors"] for ep in per_episode)
     return result
 
