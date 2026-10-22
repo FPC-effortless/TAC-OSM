@@ -31,17 +31,26 @@ def evaluate(payload, motion_threshold, bootstrap, seed):
             raise ValueError("duplicate episode identifier")
         seen.add(identifier)
         current, actual, predictions = ep["current"], ep["actual"], ep["predictions"]
+        previous = ep.get("previous")
+        if previous is not None and len(previous) != len(current):
+            raise ValueError("previous state count mismatch")
         if models is None:
             models = tuple(sorted(predictions))
         if tuple(sorted(predictions)) != models or not current or len(current) != len(actual):
             raise ValueError("model names and aligned transition counts must match")
-        sums = {name: {"all": [], "motion": [], "static": []} for name in ("persistence",)+models}
+        reference_names = ("persistence", "constant_velocity") if previous is not None else ("persistence",)
+        sums = {name: {"all": [], "motion": [], "static": []} for name in reference_names+models}
         for t, (x, y) in enumerate(zip(current, actual)):
             if not all(math.isfinite(float(v)) for v in x+y):
                 raise ValueError("nonfinite physical state")
             motion = _mae(x, y)
             category = "motion" if motion > motion_threshold else "static"
             candidates = {"persistence": x}
+            if previous is not None:
+                before = previous[t]
+                if len(before) != len(x) or not all(math.isfinite(float(v)) for v in before):
+                    raise ValueError("nonfinite or misaligned previous physical state")
+                candidates["constant_velocity"] = [2*float(v)-float(u) for v,u in zip(x,before)]
             for name in models:
                 if len(predictions[name]) != len(current):
                     raise ValueError("prediction count mismatch")
@@ -82,6 +91,7 @@ def evaluate(payload, motion_threshold, bootstrap, seed):
                 "paired_difference_model_minus_persistence": sum(differences)/len(differences),
                 "bootstrap_95pct_CI": [samples[int(.025*(bootstrap-1))],
                                          samples[int(.975*(bootstrap-1))]]}
+    result["constant_velocity_available_for_all_episodes"] = all("constant_velocity" in ep["errors"] for ep in per_episode)
     return result
 
 
@@ -97,7 +107,7 @@ def main():
         parser.error("threshold must be nonnegative and bootstrap >= 100")
     report = evaluate(json.loads(Path(args.episodes_json).read_text()),
                       args.motion_threshold, args.bootstrap, args.seed)
-    Path(args.output_json).write_text(json.dumps(report, indent=2)+"\\n")
+    Path(args.output_json).write_text(json.dumps(report, indent=2)+"\n")
     print(json.dumps(report, indent=2))
 
 
