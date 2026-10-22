@@ -18,7 +18,7 @@ def test_physical_identity_prior_and_recurrent_concept_shape():
     m,x,a,h=case()
     z=m.observe(m.initial(2),x)
     pred=m.predict(z,x,a,h)
-    assert z.concepts.shape==(2,6,16)
+    assert z.concepts.shape==(2,6,15)
     assert pred.next_joint_state.shape==(2,3,14)
     assert pred.takeover_logits.shape==(2,3,1)
     torch.testing.assert_close(pred.next_joint_state,x.unsqueeze(1).expand(-1,3,-1),atol=0,rtol=0)
