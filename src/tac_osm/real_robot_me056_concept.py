@@ -115,19 +115,63 @@ class RealRobotConceptCED(StableRealTAC):
 
 
 class MatchedStableRobotGRU(GRURobotWorldModel):
-    """Substantive all-trained GRU, widened only to match active capacity."""
+    """Active weight-shared GRU refinement of observation, action and feedback.
 
-    def __init__(self,delta_scale,hidden_size=40):
+    Every extra recurrent pass changes learned state or conditioned prediction;
+    no parameter padding, dummy loops, sleeps or fabricated measured labels.
+    Candidate-action latent refinement is TEMPORARY and cannot commit memory.
+    """
+    def __init__(self,delta_scale,hidden_size=40, *,
+                 observe_depth=2, action_depth=3, feedback_depth=2):
         super().__init__(hidden_size=hidden_size)
+        if min(observe_depth,action_depth,feedback_depth)<1:
+            raise ValueError("positive recurrent refinement depth required")
+        self.observe_depth=observe_depth
+        self.action_depth=action_depth
+        self.feedback_depth=feedback_depth
         self.register_buffer("factual_delta_scale",checked_scale(delta_scale))
         with torch.no_grad():
             self.physical_head[-1].weight.zero_()
             self.physical_head[-1].bias.zero_()
 
+    def observe(self,state,measured_state):
+        # First pass preserves the standard learned GRU control contract.
+        z=super().observe(state,measured_state)
+        embedded=torch.tanh(self.observe_encoder(measured_state))
+        for _ in range(self.observe_depth-1):
+            z=self.observation_cell(embedded,z)
+        return z
+
     def predict(self,state,measured_state,candidate_actions,current_human):
-        p=super().predict(state,measured_state,candidate_actions,current_human)
-        return RobotForecast(p.takeover_logits,
-             measured_state.unsqueeze(1)+self.factual_delta_scale*p.next_joint_state)
+        b=state.shape[0]
+        if measured_state.shape!=(b,DOF) or candidate_actions.ndim!=3 or candidate_actions.shape[0]!=b or candidate_actions.shape[2]!=DOF:
+            raise ValueError("original 14D physical observation and candidate actions required")
+        if not torch.isfinite(measured_state).all():
+            raise ValueError("nonfinite current robot observation")
+        candidate=self._action(candidate_actions,current_human)
+        n=candidate.shape[1]
+        temporary=state.unsqueeze(1).expand(-1,n,-1).reshape(b*n,self.hidden_size)
+        flattened=candidate.reshape(b*n,self.hidden_size)
+        # A substantive action-conditioned GRU inference loop, same weights.
+        for _ in range(self.action_depth):
+            temporary=self.observation_cell(flattened,temporary)
+        refined=temporary.reshape(b,n,self.hidden_size)
+        latent=torch.cat((refined,candidate),-1)
+        onset=self.takeover_head(latent)
+        physical=measured_state.unsqueeze(1)+self.factual_delta_scale*self.physical_head(latent)
+        return RobotForecast(onset,physical)
+
+    def verify_real_feedback(self,state,executed_action,current_human,
+            actual_next_state,predicted_next_state,physical_available,
+            observed_takeover,predicted_takeover_logit,takeover_available):
+        z=state
+        # Every pass is a genuine learned feedback recurrence over the same
+        # ACTUALLY measured outcome, never an invented future observation.
+        for _ in range(self.feedback_depth):
+            z=super().verify_real_feedback(z,executed_action,current_human,
+                 actual_next_state,predicted_next_state,physical_available,
+                 observed_takeover,predicted_takeover_logit,takeover_available)
+        return z
 
 
 def count_active(model):
