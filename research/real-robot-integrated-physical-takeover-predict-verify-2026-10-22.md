@@ -83,8 +83,7 @@ Run one integrated full-data experiment only after a separate registered
 `FAIR_COMPARISON.json` verifies equal active/deployed parameter count (≤1%
 difference), equal original real FIT identities/chronology/sampling, exact
 feature and outcome timing, equal optimizer steps/token exposures, five seeds,
-validation-only selection, prefit measured FLOPs (≤1% difference) and CPU
-(≤5% difference) using exact real FIT example shape, original matched
+validation-only selection, matched prescribed training compute budgets and CPU time reported for efficiency only using exact real FIT example shape, original matched
 hardware, sealed TEST, and postfit measured resource/parity replay.
 
 The competing established recurrent world model must have exactly the same
@@ -101,3 +100,10 @@ Existing prior-art foundations (not claims of novelty):
 [DreamerV3](https://doi.org/10.1038/s41586-025-08744-2),
 [TD-MPC2](https://proceedings.iclr.cc/paper_files/paper/2024/hash/cf73d57b6dcda32b293df7c2d5341f49-Abstract-Conference.html),
 [HG-DAgger](https://arxiv.org/abs/1710.02840).
+
+
+> **User-specified scientific correction (2026-10-22):** Matching CPU execution
+> time is **not** compulsory. Match trainable parameters, genuine dataset and
+> exposures, training/tuning budgets and evaluation conditions. Record CPU time
+> as an efficiency finding, not a fairness PASS/FAIL gate. The standing
+> `research/REAL-WORLD-EVIDENCE-RULES.md` amendment controls future runs.
