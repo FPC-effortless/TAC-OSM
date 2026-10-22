@@ -27,7 +27,7 @@ class ZeroUnsupervisedHead(nn.Module):
 class RealRobotConceptCED(StableRealTAC):
     """Physics-anchored concept inference over unchanged native belief."""
 
-    def __init__(self, delta_scale, *, concept_count=6, concept_dim=16,
+    def __init__(self, delta_scale, *, concept_count=6, concept_dim=15,
                  refinement_steps=4):
         super().__init__(delta_scale)
         self.swarm = ConceptSwarmCED(DOF, DOF + 1, 1,
