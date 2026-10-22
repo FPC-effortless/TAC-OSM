@@ -358,8 +358,12 @@ def main_run(folder):
     if max(native_n,gru_n)-min(native_n,gru_n)>0.01*max(native_n,gru_n):
         raise RuntimeError("COMPULSORY MATCHED MODEL PARAMETER COUNT FAILED")
     result["original_active_parameters"]={"native_tac":native_n,"gru_world":gru_n}
+    frozen_schedules={seed:sample_schedule(train,seed) for seed in SEEDS}
+    signed_plan=verify_before_fit(fit,splits,frozen_schedules,{"native_tac":native_n,"gru_world":gru_n})
+    result["verified_real_source_and_equal_budgets_before_first_update"]=True
+    write_json(root/"results.json",result)
     for seed in SEEDS:
-        scheduled,support=sample_schedule(train,seed)
+        scheduled,support=frozen_schedules[seed]
         result.setdefault("matched_real_source_schedule",{})[str(seed)]=support
         # Schedule and seed frozen for BOTH arms before either training.
         for name in ARMS:
