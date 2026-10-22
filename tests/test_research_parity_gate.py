@@ -156,3 +156,43 @@ def test_v2_final_rejects_measured_cpu_mismatch():
     m["arms"][1]["measured"]["optimizer_cpu_seconds"]=58.0
     with pytest.raises(ParityError,match="actual CPU seconds"):
         check_manifest(m,"final")
+
+
+def test_v3_cpu_runtime_is_efficiency_only_at_preflight_and_final():
+    m=fixture()
+    m["schema_version"]="tac-osm.parity.v3"
+    # Prospective version must not impose the historical CPU ceiling.
+    for arm in m["arms"]:
+        arm["budget"].pop("max_optimizer_cpu_seconds")
+    m["arms"][0]["budget"]["prefit_profile_optimizer_cpu_seconds"]=38.0
+    m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=8.0
+    m["arms"][0]["measured"]["optimizer_cpu_seconds"]=560.0
+    m["arms"][1]["measured"]["optimizer_cpu_seconds"]=70.0
+    assert check_manifest(m,"preflight")["CPU_runtime_is_efficiency_only"] is True
+    assert check_manifest(m,"final")["CPU_runtime_is_efficiency_only"] is True
+
+
+def test_v3_still_enforces_matching_flops_and_sample_order():
+    m=fixture()
+    m["schema_version"]="tac-osm.parity.v3"
+    m["arms"][1]["budget"]["prefit_profile_training_flops"]=1_100_000_000
+    with pytest.raises(ParityError,match="PROFILER prefit FLOPs"):
+        check_manifest(m,"preflight")
+    m=fixture()
+    m["schema_version"]="tac-osm.parity.v3"
+    m["arms"][1]["training_sample_order_sha256"]=source_hash("b")
+    with pytest.raises(ParityError,match="training_sample_order_sha256"):
+        check_manifest(m,"preflight")
+    m=fixture()
+    m["schema_version"]="tac-osm.parity.v3"
+    m["arms"][1]["measured"]["training_flops"]=1_100_000_000
+    with pytest.raises(ParityError,match="actual FLOPs"):
+        check_manifest(m,"final")
+
+
+def test_v2_cpu_matching_rule_is_preserved_in_historical_manifests():
+    m=fixture()
+    m["schema_version"]="tac-osm.parity.v2"
+    m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=60.0
+    with pytest.raises(ParityError,match="PROFILER prefit CPU"):
+        check_manifest(m,"preflight")

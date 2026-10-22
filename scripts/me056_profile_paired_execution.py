@@ -33,17 +33,29 @@ def percentile_interval(values, *, seed=56001, samples=20_000):
     return [float(np.quantile(medians,.025)),float(np.quantile(medians,.975))]
 
 
-def boundary_objective(model,batch,kernels):
-    states,actions,human,_=batch
-    burnin,boundary,observe,predict,dense_auxiliary=kernels
+def burnin_with_causal_snapshots(model, states, actions, human, burnin, boundary):
+    """Snapshots for the transition t -> t+1 must precede seeing state[t+1].
+
+    The former post-feedback snapshots could encode the supervised target
+    through verification, turning the dense prediction loss into hindsight
+    reconstruction. Only time-t evidence may appear in the auxiliary state.
+    """
     belief=model.initial_from_observation(states[:,0])
     histories=[]
     with torch.no_grad():
         for step in range(HISTORY):
+            histories.append(type(belief)(*(value.detach() for value in belief)))
             transition=boundary if (step+1)%128==0 else burnin
             belief=transition(belief,states[:,step],actions[:,step],
                 human[:,step],states[:,step+1],human[:,step+1])
-            histories.append(type(belief)(*(value.detach() for value in belief)))
+    return belief,histories
+
+
+def boundary_objective(model,batch,kernels):
+    states,actions,human,_=batch
+    burnin,boundary,observe,predict,dense_auxiliary=kernels
+    belief,histories=burnin_with_causal_snapshots(
+        model,states,actions,human,burnin,boundary)
     # Half of the transitions exactly fills the profiled compute released by
     # anchored consolidation; the fixed stride is outcome-independent.
     selected=histories[::2]

@@ -29,6 +29,7 @@ HEX64 = re.compile(r"^[a-fA-F0-9]{64}$")
 STUDY_FILE = re.compile(r"(?:^|/)(?:me|dev)(\d{2,3})(?:[-_./]|$)",re.I)
 SCHEMA = "tac-osm.parity.v1"
 STRICT_SCHEMA = "tac-osm.parity.v2"
+PROSPECTIVE_SCHEMA = "tac-osm.parity.v3"  # CPU runtime is diagnostic only
 PARAM_TOLERANCE=0.01
 FLOP_TOLERANCE=0.01
 CPU_TOLERANCE=0.05
@@ -128,8 +129,8 @@ def check_manifest(m,phase="preflight"):
     demand(isinstance(m,dict),"manifest JSON object required")
     if m.get("source_based_deferred_registration") is True:
         return check_original_real_source_registration(m,phase)
-    demand(m.get("schema_version") in (SCHEMA,STRICT_SCHEMA),"unsupported parity schema")
-    strict_runtime=m.get("schema_version")==STRICT_SCHEMA
+    demand(m.get("schema_version") in (SCHEMA,STRICT_SCHEMA,PROSPECTIVE_SCHEMA),"unsupported parity schema")
+    strict_runtime=m.get("schema_version")==STRICT_SCHEMA  # Historical v2 contract only
     text_field(m.get("study_id"),"study_id")
     kind=m.get("study_type")
     demand(kind in ("architecture_comparison","noncomparative_diagnostic"),
@@ -262,11 +263,12 @@ def check_manifest(m,phase="preflight"):
             if strict_runtime:
                 close_enough(actual,"optimizer_cpu_seconds",CPU_TOLERANCE,
                              f"seed {seed} actual CPU seconds")
-    # v1 preserves historical interpretation. New ME055 work uses v2, which
-    # implements the owner's explicit measured CPU <=5% requirement.
+    # Preserve historical v2 CPU qualification and its failed receipts.
+    # Prospective v3 implements the owner-confirmed CPU-as-efficiency rule.
     return {"study_id":m["study_id"],"phase":phase,"matched_seeds":sorted(seed_sets),
             "matched_architectures":sorted(names),"matched_source":source["sha256"],
-            "status":"PASS","eligible_for_architecture_superiority":phase=="final"}
+            "status":"PASS","eligible_for_architecture_superiority":phase=="final",
+            "CPU_runtime_is_efficiency_only":m["schema_version"]!=STRICT_SCHEMA}
 
 
 def find_changed_studies(base_head):
