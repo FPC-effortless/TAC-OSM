@@ -70,3 +70,12 @@ Do not merge the physical state dimension, memory type, model counts, dataset sp
 - **Fix:** Save snapshot immediately **before** consuming the next physical measurement; regression test mutates the next-state target and checks that the corresponding pre-feedback snapshot is invariant.
 - **Status:** Implemented and submitted to CI; not trained or evaluated for predictive skill. Reprofile parameter/FLOP and runtime receipts for the corrected computation before any new comparison.
 - **General rule:** Distinguish causal forecasting losses, after-the-fact state verification, and reconstruction of already seen targets. They must not be mislabeled as interchangeable prediction evidence.
+
+### TAC-023 — Corrected causal resource qualification and original FIT matched schedules (ME-058)
+
+- **Implementation:** [draft PR #336](https://github.com/FPC-effortless/TAC-OSM/pull/336), stacked on source qualification PR #335; source-controlled script `scripts/me058_profile_original_fit.py`.
+- **Aim:** Requalify the originally proposed 128-anchor native world model using pre-feedback dense-transition states, original 228 authentic FIT robot episodes and *actual update* profiler receipts before any genuine comparative model fit.
+- **Frozen known evidence:** SHA256 of real original per-episode FIT receipt `c4064651e91cced7aafc11337c32a27266f470ea10388bb0dd2562ae955f88fd`. Historical ME-056 PR #334 FLOP parity is not a substitute for profiling the corrected objective.
+- **Fairness:** Freeze five paired seed schedules (58001–58005), FIT-only physical prior without cross-episode artificial transitions; same real source windows, action/physical/authority fields, 600-step intended budget and evaluation. Distinct native dense auxiliary is declared as a treatment difference, not hidden.
+- **Status:** Code and diagnostic-only research registration committed; CI source-backed profiler results pending. No scored training, no new physical MAE, no claim of superiority over GRU or persistence.
+- **Next:** If all original source/hash/active parameters/reported operator-FLOP checks pass, author a separate complete preregistered architecture-comparison manifest before model fitting. Otherwise preserve the stopped preflight and identify measurable blocker.
