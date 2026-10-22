@@ -67,8 +67,7 @@ No model architecture-training or superiority comparison may begin until
 the existing strict parity validator preflight passes: identical genuine
 FIT/DEV/TEST observations, source SHA, training row/sequence order, all
 inputs/labels, optimizer steps, training exposure, active and deployed
-parameters (within 1%), actual prefit profiler FLOPs (within 1%),
-CPU-seconds (within 5%), tuning privileges and source-verified evaluation
+parameters (within 1%), matched prefit training-compute budgets, reported CPU runtime (not required to match), tuning privileges and source-verified evaluation
 conditions. Minimum five matched seeds for this prospective capability
 program. Postfit measured resources and genuine-model replay must pass
 the separate mandatory final gate. No new reward labels, extra synthetic
@@ -87,3 +86,10 @@ No training is requested or approved by this source-audit-only branch.
 This source is promising for learning sequential physical-state prediction,
 but still lacks the measured action utility needed to qualify autonomous
 decision intelligence or real-world causal control.
+
+
+> **User-specified scientific correction (2026-10-22):** Matching CPU execution
+> time is **not** compulsory. Match trainable parameters, genuine dataset and
+> exposures, training/tuning budgets and evaluation conditions. Record CPU time
+> as an efficiency finding, not a fairness PASS/FAIL gate. The standing
+> `research/REAL-WORLD-EVIDENCE-RULES.md` amendment controls future runs.
