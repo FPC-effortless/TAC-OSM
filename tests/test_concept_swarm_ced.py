@@ -69,6 +69,14 @@ def test_verification_changes_only_observed_entities_with_bounded_updates():
     assert not torch.equal(new.concepts[0],state.concepts[0])
 
 
+def test_zero_physical_surprise_is_exact_noop_for_all_state():
+    m,x,a=fixture(); state=m.observe(m.initial(3),x)
+    predicted=torch.tensor([[.25],[.5],[.75]])
+    after=m.verify(state,a[:,0],predicted.clone(),predicted,torch.ones(3,1,dtype=torch.bool))
+    for old,new in zip((*state.core,state.concepts),(*after.core,after.concepts)):
+        assert torch.equal(old,new)
+
+
 def test_unobserved_feedback_is_exact_identity_even_for_nan_inputs():
     m,x,a=fixture(); state=m.observe(m.initial(3),x)
     missing=torch.zeros(3,1,dtype=torch.bool)
