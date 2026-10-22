@@ -1,0 +1,73 @@
+name: ME-057 fused predictive anchor real robot training
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'src/tac_osm/real_robot_me057_fused_anchor.py'
+      - 'scripts/me057_*.py'
+      - 'tests/test_me057_*.py'
+      - 'research/me057-*.json'
+      - 'research/mathematical-engineering/me057/**'
+      - '.github/workflows/me057-fused-anchor-training.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: me057-fused-anchor-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  strict-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install 'pytest==9.1.1' 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - run: >-
+          PYTHONPATH=src:.
+          pytest -q tests/test_me057_fused_anchor.py
+          tests/test_me057_training_contract.py
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me057/FAIR_COMPARISON.json --phase preflight
+
+  real-robot-training:
+    needs: strict-preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      ATEN_CPU_CAPABILITY: avx2
+      MKL_ENABLE_INSTRUCTIONS: AVX2
+      ONEDNN_MAX_CPU_ISA: AVX2
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      TORCHINDUCTOR_CACHE_DIR: /tmp/me057-inductor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Train ten frozen matched models, then open heldout trajectories once
+        run: |
+          set -o pipefail
+          PYTHONPATH=src:. python -m scripts.me057_train_fused_anchor_robot --output results/me057 | tee me057-training.log
+      - name: Enforce final actual compute and checkpoint parity
+        run: python scripts/validate_research_parity.py --manifest results/me057/FAIR_COMPARISON_FINAL.json --phase final
+      - name: Archive trained weights and factual scores, never source trajectories
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me057-fused-anchor-ten-models-real-robot-results
+          path: |
+            results/me057/*.pt
+            results/me057/results.json
+            results/me057/FAIR_COMPARISON_FINAL.json
+            me057-training.log
+          if-no-files-found: ignore
+          retention-days: 90
