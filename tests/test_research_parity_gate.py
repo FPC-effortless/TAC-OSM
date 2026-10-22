@@ -103,7 +103,7 @@ def test_literature_gap_or_required_seed_cannot_be_omitted():
     with pytest.raises(ParityError,match="prior research"):check_manifest(m)
     m=fixture()
     m["arms"]=[a for a in m["arms"] if a["seed"]==101]
-    with pytest.raises(ParityError,match="two controlled independent seeds|>=2 controlled independent seeds"):
+    with pytest.raises(ParityError,match="need >=2 architecture arms x >=2 seeds|two controlled independent seeds"):
         check_manifest(m)
 
 def test_diagnostic_cannot_smuggle_architecture_superiority_label():
