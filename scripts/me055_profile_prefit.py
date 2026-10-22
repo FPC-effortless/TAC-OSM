@@ -17,9 +17,10 @@ from pathlib import Path
 import numpy as np
 import torch
 from torch.profiler import ProfilerActivity, profile
+from torch._higher_order_ops import scan
 
 from tac_osm.real_robot_me055_rollout import (
-    ServoRolloutGRU, ServoRolloutTAC, factual_multistep_loss)
+    CompactBelief, ServoRolloutGRU, ServoRolloutTAC, factual_multistep_loss)
 
 torch.set_num_threads(1)
 HISTORY, HORIZON = 256, 16
@@ -93,7 +94,34 @@ def build(architecture,identified):
     return cls(**{name:value.tolist() for name,value in identified.items()})
 
 
-def objective(model,batch,kernels=None):
+def scanned_burnin(model,belief,states,actions,human):
+    """Tensor-only recurrent scan; avoids one Python dispatch per history step."""
+    xs=(states[:,:HISTORY].transpose(0,1),
+        actions[:,:HISTORY].transpose(0,1),
+        human[:,:HISTORY].transpose(0,1),
+        states[:,1:HISTORY+1].transpose(0,1),
+        human[:,1:HISTORY+1].transpose(0,1))
+    if isinstance(belief,CompactBelief):
+        initial=tuple(value.clone() for value in belief)
+        def body(carry,item):
+            current,action,authority,next_state,next_authority=item
+            result=model._burnin_training(
+                CompactBelief(*carry),current,action,authority,
+                next_state,next_authority)
+            next_carry=tuple(value.clone() for value in result)
+            return next_carry,result.fast.sum().clone()
+        final,_=scan(body,initial,xs)
+        return CompactBelief(*final)
+    def body(carry,item):
+        current,action,authority,next_state,next_authority=item
+        result=model._burnin_training(
+            carry,current,action,authority,next_state,next_authority)
+        return result.clone(),result.sum().clone()
+    final,_=scan(body,belief.clone(),xs)
+    return final
+
+
+def objective(model,batch,kernels=None,use_scan=False):
     states,actions,human,_=batch
     burnin,observe,predict=(
         (model._burnin_training,model._observe_training,model._predict_training)
@@ -101,9 +129,12 @@ def objective(model,batch,kernels=None):
     belief=(model.initial_from_observation(states[:,0])
             if hasattr(model,"initial_from_observation") else model.initial(len(states)))
     with torch.no_grad():
-        for step in range(HISTORY):
-            belief=burnin(belief,states[:,step],actions[:,step],
-                           human[:,step],states[:,step+1],human[:,step+1])
+        if use_scan:
+            belief=scanned_burnin(model,belief,states,actions,human)
+        else:
+            for step in range(HISTORY):
+                belief=burnin(belief,states[:,step],actions[:,step],
+                               human[:,step],states[:,step+1],human[:,step+1])
     origin=states[:,HISTORY]
     control=human[:,HISTORY]
     if control.any():
@@ -128,9 +159,9 @@ def objective(model,batch,kernels=None):
     return result
 
 
-def update(model,batch,optimizer,loss_function=None):
+def update(model,batch,optimizer,loss_function=None,use_scan=False):
     optimizer.zero_grad(set_to_none=True)
-    result=objective(model,batch) if loss_function is None else loss_function()
+    result=objective(model,batch,use_scan=use_scan) if loss_function is None else loss_function()
     result.backward()
     torch.nn.utils.clip_grad_norm_(model.parameters(),1.)
     optimizer.step()
@@ -138,7 +169,7 @@ def update(model,batch,optimizer,loss_function=None):
 
 
 def one_profile(architecture,identified,batch,repeats,compile_forward,script_kernels,
-                compile_mode):
+                compile_mode,use_scan):
     torch.manual_seed(55001)
     model=build(architecture,identified)
     optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
@@ -153,7 +184,7 @@ def one_profile(architecture,identified,batch,repeats,compile_forward,script_ker
             raise RuntimeError("TorchScript training parameters do not share storage")
         kernels=(scripted._burnin_training,scripted._observe_training,
                  scripted._predict_training)
-        loss_function=lambda: objective(model,batch,kernels)
+        loss_function=lambda: objective(model,batch,kernels,use_scan)
         update(model,batch,optimizer,loss_function)
         compile_cpu_seconds=time.process_time()-start
     elif compile_forward:
@@ -162,16 +193,16 @@ def one_profile(architecture,identified,batch,repeats,compile_forward,script_ker
                       for method in (model._burnin_training,
                                      model._observe_training,
                                      model._predict_training))
-        loss_function=lambda: objective(model,batch,kernels)
+        loss_function=lambda: objective(model,batch,kernels,use_scan)
         start=time.process_time()
         update(model,batch,optimizer,loss_function)
         compile_cpu_seconds=time.process_time()-start
     else:
-        update(model,batch,optimizer)
+        update(model,batch,optimizer,use_scan=use_scan)
     durations=[]
     for _ in range(repeats):
         start=time.process_time()
-        update(model,batch,optimizer,loss_function)
+        update(model,batch,optimizer,loss_function,use_scan)
         durations.append(time.process_time()-start)
     # FLOPs are recorded from an eager, structurally identical update because
     # compiler fusion removes profiler-visible operator accounting.
@@ -179,7 +210,7 @@ def one_profile(architecture,identified,batch,repeats,compile_forward,script_ker
     eager=build(architecture,identified)
     eager_optimizer=torch.optim.AdamW(eager.parameters(),lr=.001,weight_decay=.0001)
     with profile(activities=[ProfilerActivity.CPU],with_flops=True) as recording:
-        loss=update(eager,batch,eager_optimizer)
+        loss=update(eager,batch,eager_optimizer,use_scan=False)
     flops=sum(event.flops for event in recording.key_averages())
     if flops<=0:
         raise RuntimeError("PyTorch profiler emitted no operator FLOPs")
@@ -190,6 +221,7 @@ def one_profile(architecture,identified,batch,repeats,compile_forward,script_ker
             "median_one_update_cpu_seconds":statistics.median(durations),
             "cpu_seconds_samples":durations,"last_profile_objective":loss,
             "compiled_forward":compile_forward,
+            "scanned_burnin":use_scan,
             "torchscript_kernels":script_kernels,
             "first_compiled_update_cpu_seconds":compile_cpu_seconds,
             "profiler":"torch.profiler CPU with_flops=True; one full authentic burn-in+rollout+backward+AdamW update"}
@@ -204,6 +236,7 @@ def main():
     cli.add_argument("--batch-size",type=int,default=2)
     cli.add_argument("--compile-forward",action="store_true")
     cli.add_argument("--script-kernels",action="store_true")
+    cli.add_argument("--scan-burnin",action="store_true")
     cli.add_argument("--compile-mode",default="reduce-overhead",
                      choices=("default","reduce-overhead","max-autotune"))
     args=cli.parse_args()
@@ -215,7 +248,7 @@ def main():
         raise SystemExit("batch size must be at least two")
     batch=authentic_batch(state,action,human,identified,args.batch_size)
     arms=[one_profile(name,identified,batch,args.repeats,args.compile_forward,
-                      args.script_kernels,args.compile_mode)
+                      args.script_kernels,args.compile_mode,args.scan_burnin)
           for name in ("native_tac","gru_world")]
     def gap(key):
         values=[row[key] for row in arms]
