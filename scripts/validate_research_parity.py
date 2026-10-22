@@ -94,7 +94,7 @@ def check_manifest(m,phase="preflight"):
     seed_sets=defaultdict(list)
     for i,r in enumerate(rows):
         demand(isinstance(r,dict),"arm receipt must be object")
-        text_field(r.get("architecture"),f"arms[{i}].architecture")
+        demand(isinstance(r.get("architecture"),str) and len(r["architecture"].strip())>=2,\n               f"arms[{i}].architecture requires a nonempty name")
         positive_num(r.get("seed"),f"arms[{i}].seed",whole=True)
         seed_sets[r["seed"]].append(r)
         for key in ("trainable_parameters","deployed_parameters","nontrainable_state_bytes"):
@@ -165,7 +165,7 @@ def check_manifest(m,phase="preflight"):
                     "history_events","max_training_flops","max_optimizer_cpu_seconds",
                     "tuning_trials","tuning_flops"):
             shared([r["budget"] for r in group],key,seed)
-        close_enough(group,"trainable_parameters",PARAM_TOLERANCE,f"seed {seed} active parameters")
+        close_enough(group,"trainable_parameters",PARAM_TOLERANCE,f"seed {seed} active parameters")\n        close_enough(group,"deployed_parameters",PARAM_TOLERANCE,f"seed {seed} deployed parameters")\n        shared([r["budget"] for r in group],"prefit_profile_method",seed)
         close_enough([r["budget"] for r in group],"prefit_profile_training_flops",FLOP_TOLERANCE,\n                     f"seed {seed} PROFILER prefit FLOPs")\n        close_enough([r["budget"] for r in group],"prefit_profile_optimizer_cpu_seconds",CPU_TOLERANCE,\n                     f"seed {seed} PROFILER prefit CPU seconds")\n        close_enough([r["budget"] for r in group],"planned_training_flops",FLOP_TOLERANCE,
                      f"seed {seed} planned FLOPs")
         if phase=="final":
