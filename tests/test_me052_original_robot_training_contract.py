@@ -74,8 +74,8 @@ def test_me052_train_stream_has_genuine_onset_not_mislabeled_during_human_contro
     records=fixtures()
     states,actions,human=exp.get_batch(records,((0,0),(1,0)))
     assert bool(human[0,260]) and bool(human[0,261])
-    # In true source: first human frame t+1=272 is onset.
+    # In true source: first human frame t+1=260 is onset.
     target=((~human[:,259]) & human[:,260]).float()
-    masked=(~human[:,271])
+    masked=(~human[:,259])
     assert masked.all() and target.sum().item()==2
-    assert not (~human[:,272]).any()
+    assert not (~human[:,260]).any()
