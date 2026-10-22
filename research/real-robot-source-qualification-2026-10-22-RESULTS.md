@@ -45,7 +45,14 @@ training/heldout cohort acquisition and data-leakage tests remain blocked.
 **Mandatory next gate before fitting:** completely register the live source
 cohort and independent untouched physical episodes; verify no future-label
 access; construct a fully trained parameter-, exposure-, actual FLOP- and
-CPU-matched recurrent world-model comparator; instrument real pilot parity
+training-budget-matched recurrent world-model comparator; instrument real pilot parity
 on identical original physical batches; supply minimum five predeclared seeds;
 obtain a reproducible verified FAIR_COMPARISON.json that passes preflight.
 No model training or performance claims are authorized by this result.
+
+
+> **User-specified scientific correction (2026-10-22):** Matching CPU execution
+> time is **not** compulsory. Match trainable parameters, genuine dataset and
+> exposures, training/tuning budgets and evaluation conditions. Record CPU time
+> as an efficiency finding, not a fairness PASS/FAIL gate. The standing
+> `research/REAL-WORLD-EVIDENCE-RULES.md` amendment controls future runs.

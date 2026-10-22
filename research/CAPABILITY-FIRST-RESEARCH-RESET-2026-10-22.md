@@ -9,8 +9,9 @@ This supersedes **new experiments** proposed by the dated
 ## WHY THE PREVIOUS RESEARCH STRATEGY IS BLOCKED
 
 The users' compulsory parity rule was already written, but actual training
-continued with different trainable parameter counts and wildly different CPU
-consumption. That is a process failure. A footnote about mismatches is NOT a
+continued with different trainable parameter counts and mismatched training
+budgets. That is a process failure. CPU runtime alone is NOT a fairness
+violation. A footnote about mismatches is NOT a
 substitute for a pretraining hard gate. The earlier sequence of small experiments
 has also retested generic questions (can a recurrent module forecast? can an
 auxiliary old-history reconstruction head fit?) without closing TAC-OSM's key
@@ -133,16 +134,19 @@ first model fit. Run:
 The guard requires established literature and a genuine unresolved TAC
 question, real-source SHA, identical sample and evaluation ID checksums,
 indistinguishable feature/target contracts, >=2 matching seeds, full active
-capacity within 1%, matched update/exposure/tuning and FLOP ceilings, and\nprefit profiler-measured FLOPs within 1% and CPU-seconds within 5%\n(on the same authenticated real-input batch shape). An equal CPU/FLOP cap is\nNOT enough to pass. Missing measured evidence or unequal conditions:
+capacity within 1%, matched update/exposure/tuning and training-compute
+budgets, independently verified on authentic real-input batch shapes. CPU
+runtime is diagnostic only, not a condition for equal training resources.
+Missing matched-budget evidence or unequal mandatory conditions:
 **STOP. NO TRAINING.**
 
 After original training, pass `--phase final` with actual measured receipts,
-training FLOPs, CPU-seconds, original sample-order replay and SHA-frozen
-checkpoints before claiming comparison eligibility. Actual training FLOPs
-difference >1% or measured CPU-seconds difference >5% FAILS. CPU has 5%
-measurement tolerance only due to runner jitter and must be reported in full;
-5% is not evidence of equal latency. All runs must be on identical hardware.
-The script is a fail-closed gate for machine-readable claims; it does NOT
+training-budget receipts, recorded CPU runtime, original sample-order replay
+and SHA-frozen checkpoints before claiming comparison eligibility. CPU speed
+differences NEVER FAIL parameter/data/training-budget parity. Match the
+actual prescribed training budget; audit resource usage. Use comparable
+hardware and report its characteristics.
+The validator no longer compares or caps elapsed CPU time across models.\nThe script is a fail-closed gate for machine-readable claims; it does NOT
 independently prove a JSON manifest is truthful. Original runner and
 independent log/weights verification remain necessary.
 
@@ -158,7 +162,7 @@ thresholds after results are known.
   chronological history, real action/cost evidence, no leakage. Before train.
 - **Comparator qualification:** At least two seed-matched models with
   preregistered active counts, same examples/order/sequence/token budget,
-  same FLOP and CPU maximum, same validation selection access and sealed
+  same training-compute budget, same validation selection access and sealed
   holdout. Before train.
 - **Scientific capability qualification:** Independent heldout future
   prediction and downstream cost-sensitive decision improvements over the
@@ -173,7 +177,8 @@ thresholds after results are known.
 ## Explicit stop conditions
 
 Stop rather than fabricate, relax or retrofit if source legality, logged
-action/outcome support, equal actual FLOPs, same original example order,
+action/outcome support, matched prescribed training budgets and data,
+same original example order,
 state persistence, resource instrument or independent test sealing fails.
 There is no micro-study fallback to rescue a favorite TAC model. Go back to
 data qualification or mathematical architecture design, **not** trial-and-error
@@ -185,3 +190,12 @@ This branch implements process enforcement and the design/literature map.
 **No additional ME052 model experiments are started** until an integrated
 capability protocol can show real observations/actions/costs and pass machine
 pre-flight parity. Existing study weights and final results stay unchanged.
+
+
+**Scientific-rule clarification (2026-10-22):** CPU wall-clock/process time
+is an efficiency measurement and is never required to match between
+architectures. The compulsory fair-comparison requirements are model
+parameters, identical real training data/exposure, matched training/tuning
+budgets and equal evaluation conditions; see the latest amendment to
+`research/REAL-WORLD-EVIDENCE-RULES.md`. Historical CPU observations are
+preserved but do not make a comparison scientifically invalid by themselves.

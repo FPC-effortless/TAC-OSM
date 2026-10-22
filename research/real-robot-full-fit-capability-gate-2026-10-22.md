@@ -24,7 +24,7 @@ No raw robot frame, patient/user identity, video or copyrighted source file is c
 
 1. **Joint trained objective**: learn from actual FIT-only `(x_t, a_t, x_(t+1), policy/human authority_t)` episodes; persistent TAC fast/slow/associative belief updated from observed physical frames, supervised factual next 14D state and takeover-onset only while human not already in control, plus *postprediction* correction using measured physical discrepancy when it truly arrives. No future action in a prediction input.
 2. **Established recurrent world-model comparator**: same 14D physical state/action channels, same expected before-action information, same feedback timing, identical 325 FIT episodes and sample order. No scripted planner or fixed access to a privileged state. Match trainable and deployed parameter counts within 1% and tune meaningful model dimensions fairly; no dummy unused parameters.
-3. **Pretraining measured resource profiler**: run on the same actual train-only source batches with no optimizer updates or source-label fitting; show prefit actual FLOP projections within 1%, CPU time within 5%, peak memory and equal preprocessing costs. Disqualify mismatches; changing model widths or compute allocation requires newly frozen manifest *before training* and the same privileges for every rival.
+3. **Pretraining measured resource profiler**: run on the same actual train-only source batches with no optimizer updates or source-label fitting; report prefit compute budgets and actual FLOP estimates, CPU efficiency, peak memory and equal preprocessing/data exposure. CPU time differences do not disqualify matched budgets; changing model widths or compute allocation requires newly frozen manifest *before training* and the same privileges for every rival.
 4. **Data and exposure**: same 5 seeds, original train split membership, strictly original states/actions, 256 authentic history frames, identical optimizer-step count, example presentation order, tokens, tuning trials and validation opportunities. Test episode frame-level records remain unavailable until all model weights/optimizers/checkpoint SHA receipts freeze.
 5. **Evidence gates**: independently held-out 14D next physical-state MAE and RMSE, calibration/error by policy or human authority, actual onset PR-AUC and class base rate where positive cases exist, and predictive improvement after verified corrections at 16/64/256 true horizons. Report matched-resource head-to-head only if the source-controlled `FAIR_COMPARISON.json` passes **`scripts/validate_research_parity.py --phase preflight` and `--phase final`** on real receipts. Plain constant-state reference is allowed only as an explicitly unmatched practical baseline.
 
@@ -32,6 +32,13 @@ This particular data does **not** contain verified real return, task success, ta
 
 ## This stage's acceptance, failures and nonclaims
 
-The original publisher-source qualification passes only after all 325 FIT parquet files are physically downloaded and audited, their original file hashes are retained, history H256 factual next-state support is demonstrated, actual original human control/onset counts are recorded, and DEV/TEST trajectory files were never opened. If any FIT source fails, the entire stage FAILS and no training follows. This audit does not open the real TEST labels, train even one model, perform optimizer steps, calculate heldout prediction metrics, or pass the matched parameter/FLOP/CPU comparator gate.
+The original publisher-source qualification passes only after all 325 FIT parquet files are physically downloaded and audited, their original file hashes are retained, history H256 factual next-state support is demonstrated, actual original human control/onset counts are recorded, and DEV/TEST trajectory files were never opened. If any FIT source fails, the entire stage FAILS and no training follows. This audit does not open the real TEST labels, train even one model, perform optimizer steps, calculate heldout prediction metrics, or pass the matched parameter/data/training-budget comparator gate.
 
 **Research novelty is measured by integrated capability, not the existence of an action-conditioned recurrent neural model.** The next study must be a full trained TAC-versus-matched-established-agent experiment, not a sequence of tiny memory tweaks.
+
+
+> **User-specified scientific correction (2026-10-22):** Matching CPU execution
+> time is **not** compulsory. Match trainable parameters, genuine dataset and
+> exposures, training/tuning budgets and evaluation conditions. Record CPU time
+> as an efficiency finding, not a fairness PASS/FAIL gate. The standing
+> `research/REAL-WORLD-EVIDENCE-RULES.md` amendment controls future runs.

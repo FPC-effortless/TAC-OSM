@@ -256,9 +256,9 @@ and an independent postfit actual-resource receipt validated with
 `--phase final`. The new `.github/workflows/research-scientific-gate.yml`
 blocks changes to future experiments lacking the registration and both hooks.
 If source, parameter (within 1%), training data/order, optimizer exposure,
-planned FLOPs (within 1%), actually consumed FLOPs (within 1%), CPU-seconds
-(within 5% accounting for measurement jitter), tuning, or exact evaluation
-conditions cannot be matched, STOP that head-to-head experiment rather than
+matched training-compute allocation and measured FLOP accounting,
+tuning, or exact evaluation conditions cannot be matched, STOP that head-to-head
+experiment rather than
 run unmatched architectures with a comparison footnote. No scientific win can
 be claimed from an unverified self-reported manifest; reproduce measurements
 from original job logs/weights. Existing unmatched studies are preserved as
@@ -271,3 +271,38 @@ low-information minor architecture variations. Do not run any additional
 ME052 architecture training until a fully matched preflight and authentic
 outcome/decision evidence contract exist. See
 [Capability-first research reset](CAPABILITY-FIRST-RESEARCH-RESET-2026-10-22.md).
+
+## User correction — 2026-10-22: CPU speed is NOT a matched-budget requirement
+
+**The compulsory matched dimensions are (1) model parameters, (2) real
+training data and exposure, and (3) training/tuning budgets and evaluation
+conditions.** Previously a 5%-matching CPU-runtime condition was incorrectly
+added by the assistant and used to block training. **That requirement was not
+requested and is rescinded prospectively.** It is NOT valid to label a
+comparison unfair solely because TAC-OSM and a GRU take different amounts of
+wall-clock time or process CPU time to execute the same prescribed study.
+
+- **Parameters:** trained pathway counts within the existing 1% threshold,
+  without dummy/unusable parameters.
+- **Data:** exact source, splits, input features, labels, temporal horizons,
+  presentations/order and independent test records.
+- **Training budget:** same prescribed optimizer updates, batch sizes,
+  examples/tokens/history exposure, permitted training/tuning compute budget,
+  stopping/selection privileges and tuning trials, with original usage receipts.
+  FLOPs may quantify and audit compute allocation and consumption; CPU runtime
+  is not interchangeable with allocated training compute.
+- **Runtime:** record CPU/GPU elapsed/process time, peak memory, energy and
+  throughput as informative **efficiency outcomes only**. They can differ by
+  any amount without triggering a parity FAIL, provided the actual specified
+  parameter/data/training-budget obligations pass.
+
+The machine preflight and final validator must **not** require equal CPU
+runtime, a common CPU-time maximum, or matching profiled CPU seconds. Where
+the existing profiler cannot accurately account for training FLOPs, report
+that uncertainty and do not pretend partial FLOPs are fully measured. This
+does not give permission to vary real data, optimizer exposure or the
+common allocated compute budget to favor a preferred architecture.
+
+The earlier 56.7% TAC-versus-GRU CPU-runtime difference is an **efficiency
+measurement, not a fairness violation**. The original measured values remain
+unaltered; only their scientific interpretation is corrected.

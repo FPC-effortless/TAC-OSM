@@ -81,13 +81,15 @@ def test_preflight_rejects_planned_compute_inequality():
     m["arms"][1]["budget"]["max_training_flops"]=1_120_000_000
     with pytest.raises(ParityError,match="max_training_flops"):check_manifest(m)
 
-def test_postfit_rejects_actual_flops_or_cpu_time_budget_mismatch():
+def test_postfit_rejects_unmatched_training_compute_not_cpu_speed():
     m=fixture()
     m["arms"][1]["measured"]["training_flops"]=1_100_000_000
     with pytest.raises(ParityError,match="actual FLOPs"):check_manifest(m,"final")
     m=fixture()
-    m["arms"][1]["measured"]["optimizer_cpu_seconds"]=58.0
-    with pytest.raises(ParityError,match="actual CPU seconds"):check_manifest(m,"final")
+    # Runtime is efficiency reporting, NOT a mandate that unlike models
+    # take the same number of CPU seconds. This previously failed incorrectly.
+    m["arms"][1]["measured"]["optimizer_cpu_seconds"]=580.0
+    assert check_manifest(m,"final")["status"]=="PASS"
 
 def test_training_sample_order_evaluation_ids_and_tuning_privileges_are_hard_gates():
     m=fixture()
@@ -118,11 +120,11 @@ def test_diagnostic_cannot_smuggle_architecture_superiority_label():
     with pytest.raises(ParityError,match="forbid"):check_manifest(m)
 
 
-def test_prefit_blocks_training_when_measured_cpu_pilot_differs_despite_equal_caps():
+def test_prefit_cpu_duration_mismatch_is_allowed_when_parameters_data_budget_match():
     m=fixture()
-    m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=70.0
-    with pytest.raises(ParityError,match="PROFILER prefit CPU"):
-        check_manifest(m,"preflight")
+    m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=700.0
+    m["arms"][1]["budget"]["max_optimizer_cpu_seconds"]=700
+    assert check_manifest(m,"preflight")["status"]=="PASS"
 
 
 def test_prefit_blocks_training_when_measured_flops_pilot_differs():
@@ -130,3 +132,11 @@ def test_prefit_blocks_training_when_measured_flops_pilot_differs():
     m["arms"][1]["budget"]["prefit_profile_training_flops"]=1_120_000_000
     with pytest.raises(ParityError,match="PROFILER prefit FLOPs"):
         check_manifest(m,"preflight")
+
+def test_identical_training_budget_can_pass_without_a_cpu_time_limit():
+    m=fixture()
+    for arm in m["arms"]:
+        arm["budget"].pop("max_optimizer_cpu_seconds")
+        arm["budget"].pop("prefit_profile_optimizer_cpu_seconds")
+    assert check_manifest(m,"preflight")["status"]=="PASS"
+    assert check_manifest(m,"final")["status"]=="PASS"
