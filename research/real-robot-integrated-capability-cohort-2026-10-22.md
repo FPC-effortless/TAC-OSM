@@ -93,7 +93,7 @@ Do not train until (a) fresh original cohort and raw hashes are complete,
 recurrent predictive-state baseline have active and deployed parameter parity
 <=1%, (d) same FIT examples in same order, 256 real event exposure,
 identical optimizer steps, learning/tuning privileges and test IDs, (e)
-measured prefit profiler FLOP parity <=1% AND CPU time <=5%, (f) both actual
+measured and audited training-compute budgets, with CPU runtime only a diagnostic, (f) both actual
 postfit budgets, checkpoints, samples and test receipts pass the compulsory
 `scripts/validate_research_parity.py` validator, with five preregistered seeds.
 NO padding with useless weights, dummy FLOPs, sleep time or unconsumed budgets.
@@ -128,3 +128,10 @@ python -m scripts.qualify_real_robot_cohort --private-cache /tmp/tac-robot-priva
 Original robot frames are never committed or exported by the CI workflow;
 only anonymized episode IDs, aggregate counts, source hashes and no-model-fit
 receipts are archived.
+
+
+> **User-specified scientific correction (2026-10-22):** Matching CPU execution
+> time is **not** compulsory. Match trainable parameters, genuine dataset and
+> exposures, training/tuning budgets and evaluation conditions. Record CPU time
+> as an efficiency finding, not a fairness PASS/FAIL gate. The standing
+> `research/REAL-WORLD-EVIDENCE-RULES.md` amendment controls future runs.
