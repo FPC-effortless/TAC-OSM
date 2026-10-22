@@ -15,7 +15,7 @@ def fixtures():
         flags=np.zeros(n,dtype=np.bool_)
         frames[:,0]=np.arange(n)*.001
         commands[:,0]=np.arange(n)*.002
-        flags[272:274]=True
+        flags[260:262]=True
         examples[ep]={"state":torch.from_numpy(frames),
              "action":torch.from_numpy(commands),
              "human":torch.from_numpy(flags),"n":n,
@@ -73,9 +73,9 @@ def test_me052_real_sequence_loss_and_feedback_backpropagate_for_both_models():
 def test_me052_train_stream_has_genuine_onset_not_mislabeled_during_human_control():
     records=fixtures()
     states,actions,human=exp.get_batch(records,((0,0),(1,0)))
-    assert bool(human[0,272]) and bool(human[0,273])
+    assert bool(human[0,260]) and bool(human[0,261])
     # In true source: first human frame t+1=272 is onset.
-    target=((~human[:,271]) & human[:,272]).float()
+    target=((~human[:,259]) & human[:,260]).float()
     masked=(~human[:,271])
     assert masked.all() and target.sum().item()==2
     assert not (~human[:,272]).any()
