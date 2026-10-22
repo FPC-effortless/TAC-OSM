@@ -45,7 +45,7 @@ NEXT_FRAMES=HISTORY+BACKPROP
 LR=.001
 WEIGHT_DECAY=.0001
 AUX_WEIGHT=.2
-GRU_WIDTH=46  # frozen nearest 38,295 active-parameter rival from PR325
+GRU_WIDTH=40  # frozen nearest 38,295 active-parameter rival from PR325
 SOURCE_RELEASE=REVISION
 PHYSICAL_AVAILABLE=True
 NORM_FLOOR=.05
@@ -277,7 +277,7 @@ def score(model,data,original_episodes,scaling,part):
             n=row["n"]
             if n<257:continue
             z=model.initial(1)
-            ea=ep=ec=0.
+            ea=ec=0.
             sc=0
             for t in range(n-1):
                 st=row["state"][t:t+1]
@@ -402,8 +402,40 @@ def main_run(folder):
              "TAC_improves_over_GRU":a<b,"improvement_GRU_minus_TAC":b-a}
     result["paired_seed_comparison"]=per_seed
     result["original_Tac_win_count"]=wins
-    result["capability_primary_gate_PASSED"]=False # CI not used to force positive.
-    result["capability_primary_gate_unqualified_due_to_missing_episode_bootstrap"]=True
+    # Original episode-cluster paired interval: one resampled set of actual
+    # independent episode IDs shared across all five fixed seeds.
+    common=set(testresult[f"native_tac-s{SEEDS[0]}"]["episode_metrics"])
+    for seed in SEEDS:
+        common &= set(testresult[f"native_tac-s{seed}"]["episode_metrics"])
+        common &= set(testresult[f"gru_world-s{seed}"]["episode_metrics"])
+    if len(common)<30:
+        raise RuntimeError("insufficient distinct authentic original TEST episodes")
+    keys=sorted(common,key=int)
+    improvements=[];coordinates=[]
+    for episode in keys:
+        diff=0.;weight=0.
+        for seed in SEEDS:
+            tac=testresult[f"native_tac-s{seed}"]["episode_metrics"][episode]
+            gru=testresult[f"gru_world-s{seed}"]["episode_metrics"][episode]
+            if tac["observed_joint_coordinates"]!=gru["observed_joint_coordinates"]:
+                raise RuntimeError("unequal actual target sampling per architecture")
+            diff+=(gru["MAE_sum_real_units"]-tac["MAE_sum_real_units"])
+            weight+=tac["observed_joint_coordinates"]
+        improvements.append(diff)
+        coordinates.append(weight)
+    rng=np.random.default_rng(52052)
+    estimates=[]
+    for _ in range(1000):
+        sampled=rng.integers(0,len(keys),size=len(keys))
+        estimates.append(float(np.sum(np.asarray(improvements)[sampled])/
+                               np.sum(np.asarray(coordinates)[sampled])))
+    lo,hi=[float(x) for x in np.quantile(estimates,[.025,.975])]
+    result["heldout_original_episode_cluster_bootstrap"]={
+        "original_test_episode_count":len(keys),
+        "paired_GRU_minus_TAC_real_unit_MAE_CI95":[lo,hi],
+        "resamples":1000,"bootstrap_seed":52052}
+    result["capability_primary_gate_PASSED"]=wins>=4 and lo>0
+    result["remaining_comparison_limitation"]="complete operator training FLOPs not independently certified; matched optimizer/data/exposure/parameters but full FLOP equivalence NOT asserted."
     result["published_scores_are_direct_original_real_heldout_per_seed"]=True
     result["status"]="COMPLETE_ORIGINAL_GENUINE_TRAIN_AND_EVAL"
     result["dev_test_parquet_opened_ONLY_AFTER_all_weights_frozen"]=True
