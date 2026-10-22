@@ -1,0 +1,72 @@
+name: TAC real robot episode-cohort source only
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/qualify_real_robot_cohort.py
+      - src/tac_osm/real_robot_transition_contract.py
+      - tests/test_real_robot_cohort_and_target_contract.py
+      - research/real-robot-integrated-capability-cohort-2026-10-22.md
+      - docs/TACOSM-BASELINE-001.md
+      - .github/workflows/real-robot-cohort-source-only.yml
+permissions:
+  contents: read
+jobs:
+  source-cohort-mathematical-gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Exact software-only real-episode split and forward-time targets (NOT performance)
+        run: |
+          python -m pip install 'pytest==9.1.1'
+          python -m py_compile scripts/qualify_real_robot_cohort.py src/tac_osm/real_robot_transition_contract.py
+          python -m pytest -q tests/test_real_robot_cohort_and_target_contract.py
+  publisher-original-FIT-episode-audit:
+    needs: source-cohort-mathematical-gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Source-only reader, no model or optimizer installed
+        run: |
+          python -m pip install 'pyarrow==21.0.0'
+      - name: Retrieve frozen authentic publisher metadata and 20 FIT-only original physical episodes
+        run: |
+          python -m scripts.qualify_real_robot_cohort --private-cache /tmp/tac-private-robot-FIT-only --receipt results/real-robot-cohort-receipt.json
+      - name: Fail closed on missing original episodes, invalid forward-time support or heldout data access
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipt=json.loads(Path('results/real-robot-cohort-receipt.json').read_text())
+          assert receipt['immutable_source_revision']=='9290f5a96dc91ea58256e81d9ce2dd9621890b51'
+          assert receipt['schema_version']=='tac-osm.real-robot-cohort.v1'
+          assert [receipt['splits'][x]['episode_count'] for x in ('FIT','DEV','TEST')]==[325,80,100]
+          assert all(receipt['splits'][x]['eligible_real_one_step_pairs_by_prior_history']['256']>0
+                     for x in ('FIT','DEV','TEST'))
+          assert receipt['training_only_source_sample']['actual_original_FIT_episodes_inspected']==20
+          assert receipt['training_only_source_sample']['original_physical_FIT_frames_validated']>5000
+          assert len(receipt['training_only_source_sample']['source_parquet_SHA256'])==20
+          assert receipt['all_dev_test_outcome_files_remain_unopened']
+          assert receipt['strictly_sealed_dev_and_test_parquet']
+          assert receipt['membership_does_not_use_reward_or_intervention']
+          assert receipt['number_of_models_trained']==0
+          assert receipt['sampled_predicted_outcomes']==0
+          assert not receipt['equal_resource_comparison_preflight_passed']
+          assert not receipt['original_full_episode_parquet_validation_completed']
+          assert receipt['source_only_not_permission_to_fit']
+          print('TAC_REAL_ROBOT_AUTHENTIC_COHORT_PASSED__NO_FITS_NO_TEST_LABELS')
+          PY
+      - name: Archive original source SHA and deterministic episode IDs ONLY (never robot frames)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-real-robot-325-80-100-original-metadata-cohort-FIT-only-physical-audit
+          path: results/real-robot-cohort-receipt.json
+          retention-days: 90
+          if-no-files-found: ignore
