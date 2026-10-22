@@ -45,3 +45,20 @@ This is a **starter registry in TAC-OSM**, pending creation of a separate cross-
 Each idea should include: ID; title; problem; proposed mathematics; origin; relevant repositories; relation to existing ideas; hypotheses and failure modes; status (proposed/diagnostic/implemented/trained/verified/rejected); commit/PR; datasets and splits; parameter count; training budget; baselines; seeds; metrics; confidence and limitations; next experiment.
 
 No synthetic result may be labeled real-world success. Never erase negative findings. Source code, checkpoints, reports and runs should be linked rather than duplicated without provenance.
+
+## New evidence entry — ME-057 prospective scientific qualification (2026-10-22)
+
+- **ID:** TAC-021.
+- **Lineage:** Anchored native ME-056 in [PR #334](https://github.com/FPC-effortless/TAC-OSM/pull/334), carried into [draft PR #335](https://github.com/FPC-effortless/TAC-OSM/pull/335).
+- **Idea:** Separate compulsory matched scientific resources (parameters, data/order, FLOPs/budgets, evaluation) from CPU speed, which is an independent efficiency outcome.
+- **Implementation status:** Prospective parity-v3 validator changes, unit tests, and real FIT original-source audit script committed; no model training outcome.
+- **Evidence preservation:** Older parity-v2 CPU gate remains a documented historical failure (8.007% overhead, 95% CI 6.353–9.999%). Never reinterpret old results as passing.
+- **Next experiment:** Verify source audit for all 228 authentic FIT episodes and then preregister a real matched two-arm multi-seed prediction study; measure persistence, GRU and TAC.
+- **Known blockers:** No verified new FIT receipt yet; source independence across operators/sessions cannot be proven from published metadata; TEST remains sealed.
+
+### ME-056 lineage warning
+There are **two distinct experimental designs called ME-056**:
+1. **Concept-Swarm/CED ME-056**, [PR #332](https://github.com/FPC-effortless/TAC-OSM/pull/332): 6×15 concept states and shared-weight refinement loop, separate original robot source.
+2. **128-frame anchored native ME-056**, [PR #334](https://github.com/FPC-effortless/TAC-OSM/pull/334): fast32/slow32 plus 8D relevance trace; 38,266 native parameters, dense transition auxiliary.
+
+Do not merge the physical state dimension, memory type, model counts, dataset splits or measured scores from one lineage into the other. Registry entries must identify the exact branch/commit and source task.
