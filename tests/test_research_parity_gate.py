@@ -196,3 +196,14 @@ def test_v2_cpu_matching_rule_is_preserved_in_historical_manifests():
     m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=60.0
     with pytest.raises(ParityError,match="PROFILER prefit CPU"):
         check_manifest(m,"preflight")
+
+
+def test_v3_final_with_incomplete_operator_flops_cannot_qualify_superiority():
+    m=fixture()
+    m["schema_version"]="tac-osm.parity.v3"
+    m["full_FLOP_certification_available"]=False
+    result=check_manifest(m,"final")
+    assert result["status"]=="PASS_ACCOUNTING_ONLY_UNCERTIFIED_FLOPS"
+    assert result["eligible_for_architecture_superiority"] is False
+    assert result["FLOP_exact_consumption_verified"] is False
+    assert check_manifest(m,"preflight")["status"]=="PASS"
