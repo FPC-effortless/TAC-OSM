@@ -1,0 +1,99 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME056_real_robot_concept_swarm_recurrent_CED",
+  "study_type": "architecture_comparison",
+  "source_based_deferred_registration": true,
+  "registered_before_first_fit": true,
+  "dataset_fit_receipt_sha256": "4aa30d5009bf897438194cdd2d3b9e9e6ec1d923ec5389c93a942f9b7046c96f",
+  "frozen_episode_split_sha256": {
+    "FIT": "771f027954711b73f38a0b8407db5319c7f3ac80e5ddd54754447dd196dfc6e1",
+    "DEV": "437c676b5d20b413a96938c96b371144fef453920d451bbeb8389102dd55c4e9",
+    "TEST": "6cb213a714ff60eeae841d41f40c9a8ca74098ffcdf5b5c19833231438dd92e8"
+  },
+  "seeds": [
+    56001,
+    56002,
+    56003,
+    56004,
+    56005
+  ],
+  "parameter_counts": {
+    "native_tac": 45822,
+    "gru_world": 45995
+  },
+  "training_budget": {
+    "updates": 600,
+    "batch_size": 2,
+    "history_frames": 256,
+    "backprop_frames": 16,
+    "tuning_trials": 0
+  },
+  "same_authentic_training_data": true,
+  "same_real_training_sample_order_within_each_seed": true,
+  "original_test_unopened_until_all_ten_checkpoints_frozen": true,
+  "cpu_time_matching_required": false,
+  "full_fLOP_certification_available": false,
+  "train_only_after_measured_prefit_operator_flop_gap_at_most_1_percent": true,
+  "no_extra_pretraining_or_reward_targets": true,
+  "reused_original_FIT_task": "BodenAI RW-RL HIL scoop_cat_litter_into_trash_can",
+  "new_independent_test_available": false,
+  "original_ME052_TEST_already_exposed": true,
+  "new_test_independent_superiority_claim_forbidden": true,
+  "literature_baselines": [
+    {
+      "paper": "ME054 original stable real physical TAC vs GRU",
+      "url": "https://github.com/FPC-effortless/TAC-OSM/pull/329"
+    },
+    {
+      "paper": "Next-Concept Modeling",
+      "url": "https://arxiv.org/abs/2610.14162"
+    },
+    {
+      "paper": "DreamerV3",
+      "url": "https://doi.org/10.1038/s41586-025-08744-2"
+    },
+    {
+      "paper": "Deep Equilibrium Models",
+      "url": "https://arxiv.org/abs/1909.01377"
+    }
+  ],
+  "scientific_claim_limit": "Match 600-update/real-data/parameter budgets first; observed heldout scores are developmental, cannot assert novel world-model superiority without full FLOP certification and fresh test.",
+  "status": "PRE_REGISTERED_BEFORE_FIRST_ME056_REAL_MODEL_FIT",
+  "original_prefit_failed_operator_flop_relative_gap": 0.6132374538891924,
+  "original_failed_prefit_artifact": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39756811130/artifacts/12415524972",
+  "gru_recurrent_depth_candidates_pre_registered_before_first_full_fit": [
+    [
+      2,
+      2,
+      2
+    ],
+    [
+      2,
+      3,
+      2
+    ],
+    [
+      2,
+      4,
+      2
+    ],
+    [
+      3,
+      2,
+      2
+    ],
+    [
+      2,
+      2,
+      3
+    ],
+    [
+      1,
+      4,
+      2
+    ]
+  ],
+  "gru_depth_selection_rule": "Select the profiled GRU observation/action/feedback depth minimizing absolute genuine FIT full-training-update PyTorch-with_flops operator FLOPs mismatch, tie by listed order; no outcome criterion; abort training above 1%",
+  "all_gru_depths_reuse_same_genuine_trainable_parameters": true,
+  "diagnostic_fit_optimizer_updates_are_discarded_and_reported": true
+}
