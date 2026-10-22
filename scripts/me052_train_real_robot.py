@@ -34,6 +34,7 @@ from scripts.qualify_real_robot_cohort import (
 from tac_osm.real_robot_predictive_state import RealRobotPredictiveState
 from tac_osm.real_robot_gru_world_control import GRURobotWorldModel
 from scripts.validate_research_parity import check_manifest
+from scripts.me052_source_checks import verify_before_fit,verify_after_fit
 
 torch.set_num_threads(1)
 SEEDS=(52001,52002,52003,52004,52005)
