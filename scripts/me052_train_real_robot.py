@@ -33,6 +33,7 @@ from scripts.qualify_real_robot_cohort import (
     REVISION, METADATA_PATHS, metadata_only_rows, partition_metadata)
 from tac_osm.real_robot_predictive_state import RealRobotPredictiveState
 from tac_osm.real_robot_gru_world_control import GRURobotWorldModel
+from scripts.validate_research_parity import check_manifest
 
 torch.set_num_threads(1)
 SEEDS=(52001,52002,52003,52004,52005)
