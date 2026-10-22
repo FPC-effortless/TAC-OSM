@@ -68,7 +68,7 @@ real-unit physical MAE, baseline persistence absolute next-state MAE, and
 masked operator onset logloss/AP where enough positives; same episode-
 level prediction positions and same actual labels for all models.
 Score original future positions after 256 authentic history frames,
-every 16th target frame per heldout episode. Do not use feedback from future
+every 64th target frame per heldout episode. Do not use feedback from future
 frames before their actual arrival. Provide performance by seed and paired
 episode-bootstrap intervals if sample support allows. No macro
 task-success/reward, causal policy win or System2 claim.
@@ -102,3 +102,13 @@ This protocol may not be changed after first fit. Corrections allowed only
 for evident runner bugs BEFORE any DEV/TEST data revelation and must be
 fully audited. No promotion or merge of architecture based only on numerical
 test success.
+
+**Pre-fit exact implementation clarification:** GRU hidden size is 40,
+38,295 active trainable parameters, not 46. Both original source methods were
+inspected before any training. Heldout episode scores use the strict
+`t >= 255 AND ((t-255) mod 64) == 0` real-frame sampling rule; no
+outcome-dependent selection. One bootstrap resamples whole TEST episodes
+1,000 times with seed 52052, aggregating paired GRU-minus-TAC physical MAE
+across all five fixed seeds. The primary gate is >=4/5 seeds plus lower
+bootstrap confidence bound >0. All clarifications are prefit and not derived
+from heldout model scores.
