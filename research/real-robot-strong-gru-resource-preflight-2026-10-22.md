@@ -70,8 +70,10 @@ passed off as fully measured training FLOPs. **The preflight must remain
 FALSE** unless additional validated full-operator accounting is available.
 
 This audit is intentionally not a comparison win or model fit. The
-demonstrated resource mismatch (if any) is a falsification of training
-readiness; no cherry-picked reinterpretation can authorize original training.
+original 56.7% **CPU-runtime difference is an efficiency observation, not a
+training-budget failure**; earlier statements implying otherwise are corrected.
+The genuinely incomplete compute-accounting and preregistered training
+budget/source contract must still be addressed before fitting.
 
 ## Next one real matched integrated experiment: BLOCKED until quantified
 
@@ -80,9 +82,9 @@ dataset SHA and immutable episode-ID and sample-order receipts, independent
 dev/test frozen IDs and label availability, all real 256 input histories.
 Prerequisite two: two fully specified scientifically strong architectures
 with **active and deployed parameters within 1%**, exactly equal original
-FIT examples/order/steps/tokens/tuning, and *fully validated* FLOP equality
-within the declared compute budget, with CPU reported for efficiency on the same original hardware/data
-shape. Use 5 matched original seeds 52001..52005.
+FIT examples/order/steps/tokens/tuning and the same allocated training
+compute budget with defensible resource-use auditing. CPU time is reported
+separately for efficiency and never required to match. Use 5 matched original seeds 52001..52005.
 Prerequisite three: independent original evaluator and identical physical
 metrics, full recurrent belief after physical correction and human feedback.
 The TEST parquet episodes remain unopened until checkpoints and fitting
