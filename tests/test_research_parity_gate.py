@@ -81,7 +81,7 @@ def test_preflight_rejects_planned_compute_inequality():
     m["arms"][1]["budget"]["max_training_flops"]=1_120_000_000
     with pytest.raises(ParityError,match="max_training_flops"):check_manifest(m)
 
-def test_postfit_rejects_unmatched_training_compute_not_cpu_speed():
+def test_v1_postfit_rejects_unmatched_training_compute_not_cpu_speed():
     m=fixture()
     m["arms"][1]["measured"]["training_flops"]=1_100_000_000
     with pytest.raises(ParityError,match="actual FLOPs"):check_manifest(m,"final")
@@ -120,7 +120,7 @@ def test_diagnostic_cannot_smuggle_architecture_superiority_label():
     with pytest.raises(ParityError,match="forbid"):check_manifest(m)
 
 
-def test_prefit_cpu_duration_mismatch_is_allowed_when_parameters_data_budget_match():
+def test_v1_prefit_cpu_duration_mismatch_is_allowed_when_parameters_data_budget_match():
     m=fixture()
     m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=700.0
     m["arms"][1]["budget"]["max_optimizer_cpu_seconds"]=700
@@ -140,3 +140,19 @@ def test_identical_training_budget_can_pass_without_a_cpu_time_limit():
         arm["budget"].pop("prefit_profile_optimizer_cpu_seconds")
     assert check_manifest(m,"preflight")["status"]=="PASS"
     assert check_manifest(m,"final")["status"]=="PASS"
+
+
+def test_v2_prefit_rejects_measured_cpu_mismatch():
+    m=fixture()
+    m["schema_version"]="tac-osm.parity.v2"
+    m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=70.0
+    with pytest.raises(ParityError,match="PROFILER prefit CPU"):
+        check_manifest(m,"preflight")
+
+
+def test_v2_final_rejects_measured_cpu_mismatch():
+    m=fixture()
+    m["schema_version"]="tac-osm.parity.v2"
+    m["arms"][1]["measured"]["optimizer_cpu_seconds"]=58.0
+    with pytest.raises(ParityError,match="actual CPU seconds"):
+        check_manifest(m,"final")

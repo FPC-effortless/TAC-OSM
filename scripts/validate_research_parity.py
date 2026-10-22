@@ -6,8 +6,8 @@ receipts BEFORE reading or claiming heldout architectural-superiority results.
 This is a resource-integrity validator, not itself evidence of model skill.
 Mandatory matched variables are trainable parameters, identical real data,
 matched training/tuning COMPUTE budgets and identical evaluation conditions.
-CPU wall-clock/process runtime is recorded for efficiency only; differences
-in how fast distinct architectures execute are NOT a fairness-gate failure.
+Historical v1 manifests record CPU as efficiency metadata. Prospective v2
+manifests enforce the owner's additional <=5% measured CPU parity contract.
 It never accepts claimed 'matched' labels in place of numerical receipts.
 
 Usage:
@@ -28,8 +28,10 @@ from pathlib import Path
 HEX64 = re.compile(r"^[a-fA-F0-9]{64}$")
 STUDY_FILE = re.compile(r"(?:^|/)(?:me|dev)(\d{2,3})(?:[-_./]|$)",re.I)
 SCHEMA = "tac-osm.parity.v1"
+STRICT_SCHEMA = "tac-osm.parity.v2"
 PARAM_TOLERANCE=0.01
 FLOP_TOLERANCE=0.01
+CPU_TOLERANCE=0.05
 
 class ParityError(ValueError): pass
 
@@ -126,7 +128,8 @@ def check_manifest(m,phase="preflight"):
     demand(isinstance(m,dict),"manifest JSON object required")
     if m.get("source_based_deferred_registration") is True:
         return check_original_real_source_registration(m,phase)
-    demand(m.get("schema_version")==SCHEMA,"unsupported parity schema")
+    demand(m.get("schema_version") in (SCHEMA,STRICT_SCHEMA),"unsupported parity schema")
+    strict_runtime=m.get("schema_version")==STRICT_SCHEMA
     text_field(m.get("study_id"),"study_id")
     kind=m.get("study_type")
     demand(kind in ("architecture_comparison","noncomparative_diagnostic"),
@@ -194,6 +197,10 @@ def check_manifest(m,phase="preflight"):
             else:positive_num(b.get(k),k,whole=k in ("steps","examples_seen","tokens_seen",
                                                         "batch_size","history_events"))
         text_field(b.get("prefit_profile_method"),"original prefit profiler method")
+        if strict_runtime:
+            positive_num(b.get("max_optimizer_cpu_seconds"),"max_optimizer_cpu_seconds")
+            positive_num(b.get("prefit_profile_optimizer_cpu_seconds"),
+                         "prefit_profile_optimizer_cpu_seconds")
         demand(b["planned_training_flops"]<=b["max_training_flops"],
             "planned compute must not exceed matched upper budget")
         if phase=="final":
@@ -216,6 +223,9 @@ def check_manifest(m,phase="preflight"):
                    "evaluated test IDs differ from frozen plan")
             demand(result["training_flops"]<=b["max_training_flops"],
                    "actual billed FLOPs exceeded the common preregistered ceiling")
+            if strict_runtime:
+                demand(result["optimizer_cpu_seconds"]<=b["max_optimizer_cpu_seconds"],
+                       "actual optimizer CPU exceeded the common preregistered ceiling")
     demand(len(seed_sets)>=2,"need >=2 controlled independent seeds")
     names={r["architecture"] for r in rows}
     demand(len(names)>=2,"need at least two different architectures")
@@ -233,18 +243,27 @@ def check_manifest(m,phase="preflight"):
                     "history_events","max_training_flops",
                     "tuning_trials","tuning_flops"):
             shared([r["budget"] for r in group],key,seed)
+        if strict_runtime:
+            shared([r["budget"] for r in group],"max_optimizer_cpu_seconds",seed)
         close_enough(group,"trainable_parameters",PARAM_TOLERANCE,f"seed {seed} active parameters")
         close_enough(group,"deployed_parameters",PARAM_TOLERANCE,f"seed {seed} deployed parameters")
         shared([r["budget"] for r in group],"prefit_profile_method",seed)
         close_enough([r["budget"] for r in group],"prefit_profile_training_flops",FLOP_TOLERANCE,
                      f"seed {seed} PROFILER prefit FLOPs")
+        if strict_runtime:
+            close_enough([r["budget"] for r in group],
+                         "prefit_profile_optimizer_cpu_seconds",CPU_TOLERANCE,
+                         f"seed {seed} PROFILER prefit CPU seconds")
         close_enough([r["budget"] for r in group],"planned_training_flops",FLOP_TOLERANCE,
                      f"seed {seed} planned FLOPs")
         if phase=="final":
             actual=[r["measured"] for r in group]
             close_enough(actual,"training_flops",FLOP_TOLERANCE,f"seed {seed} actual FLOPs")
-    # No CPU-time parity test: real execution speed is an efficiency result,
-    # not a requirement for equal data, parameters or compute allotments.
+            if strict_runtime:
+                close_enough(actual,"optimizer_cpu_seconds",CPU_TOLERANCE,
+                             f"seed {seed} actual CPU seconds")
+    # v1 preserves historical interpretation. New ME055 work uses v2, which
+    # implements the owner's explicit measured CPU <=5% requirement.
     return {"study_id":m["study_id"],"phase":phase,"matched_seeds":sorted(seed_sets),
             "matched_architectures":sorted(names),"matched_source":source["sha256"],
             "status":"PASS","eligible_for_architecture_superiority":phase=="final"}

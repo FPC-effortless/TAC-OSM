@@ -1,0 +1,33 @@
+name: ME-055 architecture and blocked-preflight contracts
+
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/real_robot_me055_rollout.py'
+      - 'scripts/me055_*.py'
+      - 'scripts/validate_research_parity.py'
+      - 'tests/test_me055_*.py'
+      - 'tests/test_research_parity_gate.py'
+      - 'research/me055-*.json'
+      - 'research/mathematical-engineering/me055/**'
+      - '.github/workflows/me055-architecture-preflight.yml'
+  workflow_dispatch:
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install --index-url https://download.pytorch.org/whl/cpu torch==2.9.0
+      - run: pip install pytest numpy
+      - name: Verify architecture, reservation, governance and blocked receipt
+        run: >-
+          PYTHONPATH=src:.
+          pytest -q
+          tests/test_me055_servo_rollout.py
+          tests/test_me055_independent_task_reservation.py
+          tests/test_me055_profile_receipt.py
+          tests/test_research_parity_gate.py
