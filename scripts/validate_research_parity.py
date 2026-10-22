@@ -265,9 +265,17 @@ def check_manifest(m,phase="preflight"):
                              f"seed {seed} actual CPU seconds")
     # Preserve historical v2 CPU qualification and its failed receipts.
     # Prospective v3 implements the owner-confirmed CPU-as-efficiency rule.
+    # Prospective v3 must not turn extrapolated *partial* CPU profiler
+    # operator counts into certified whole-run equality. Earlier v1/v2
+    # outcomes retain their historical interpretation.
+    v3=m["schema_version"]==PROSPECTIVE_SCHEMA
+    certified=(not v3 or m.get("full_FLOP_certification_available") is True)
     return {"study_id":m["study_id"],"phase":phase,"matched_seeds":sorted(seed_sets),
             "matched_architectures":sorted(names),"matched_source":source["sha256"],
-            "status":"PASS","eligible_for_architecture_superiority":phase=="final",
+            "status":("PASS_ACCOUNTING_ONLY_UNCERTIFIED_FLOPS"
+                      if phase=="final" and not certified else "PASS"),
+            "eligible_for_architecture_superiority":phase=="final" and certified,
+            "FLOP_exact_consumption_verified":certified if phase=="final" else False,
             "CPU_runtime_is_efficiency_only":m["schema_version"]!=STRICT_SCHEMA}
 
 
