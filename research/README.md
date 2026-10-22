@@ -39,3 +39,15 @@ These forecasts remain components of the broader TAC/CDL/CASM research ambition.
 They do not prove action utility, causal interventions, value of inspection,
 arbitrary-lifetime streaming or native-memory architectural superiority. Detailed
 mechanistic attribution stays deferred while complete models are engineered.
+
+
+## Mandatory scientific governance reset (2026-10-22)
+
+[Read the capability-first research reset](CAPABILITY-FIRST-RESEARCH-RESET-2026-10-22.md)
+and the established [equal-resource rules](REAL-WORLD-EVIDENCE-RULES.md)
+before launching another architecture comparison. Automated
+`scripts/validate_research_parity.py` **must pass before and after training**;
+missing/mismatched receipts block further experiments and claims. Most legacy
+ME comparisons are unmatched practical references, not scientific proof of
+architectural superiority. New work must reuse known research and pursue a
+single integrated, real-data capability question rather than micro-ablations.
