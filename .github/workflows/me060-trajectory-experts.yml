@@ -1,0 +1,27 @@
+name: ME060 native trajectory experts contract
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/real_robot_me060_trajectory.py'
+      - 'scripts/me060_*.py'
+      - 'tests/test_me060_*.py'
+      - 'research/mathematical-engineering/me060/**'
+      - '.github/workflows/me060-trajectory-experts.yml'
+  workflow_dispatch:
+jobs:
+  numerical-and-registration-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install numpy pytest pyarrow
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: PYTHONPATH=src:. pytest -q tests/test_me060_trajectory.py
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me060/FAIR_COMPARISON.json --phase preflight
+      # Full real-data fits are launched explicitly; later result edits cannot
+      # automatically trigger another round against the same evaluation data.
+      - run: |
+          if [ -f research/mathematical-engineering/me060/FAIR_COMPARISON_FINAL.json ]; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me060/FAIR_COMPARISON_FINAL.json --phase final
+          fi
