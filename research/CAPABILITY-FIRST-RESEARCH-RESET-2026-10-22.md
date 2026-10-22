@@ -133,8 +133,7 @@ first model fit. Run:
 The guard requires established literature and a genuine unresolved TAC
 question, real-source SHA, identical sample and evaluation ID checksums,
 indistinguishable feature/target contracts, >=2 matching seeds, full active
-capacity within 1%, matched update/exposure/tuning and FLOP ceilings, and
-actual planned compute within 1%. Missing evidence or unequal conditions:
+capacity within 1%, matched update/exposure/tuning and FLOP ceilings, and\nprefit profiler-measured FLOPs within 1% and CPU-seconds within 5%\n(on the same authenticated real-input batch shape). An equal CPU/FLOP cap is\nNOT enough to pass. Missing measured evidence or unequal conditions:
 **STOP. NO TRAINING.**
 
 After original training, pass `--phase final` with actual measured receipts,
