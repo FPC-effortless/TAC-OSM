@@ -34,7 +34,7 @@ is NOT success. Data collection is selection biased.
 
 The new audit script fetches a SHA-pinned publisher repository revision at
 runtime. It downloads ONLY source metadata plus one genuine episode parquet
-from the real r1lite_scoop_cat_litter task. It checks the actual original
+from the real scoop_cat_litter_into_trash_can task. It checks the actual original
 episode counts, IDs and split boundaries, original source SHA256,
 strictly increasing real times, state/action 14-channel dimensions,
 policy/human authority and intervention metadata agreement.
