@@ -23,7 +23,10 @@ def fixture():
             b={"steps":500,"examples_seen":32000,"tokens_seen":2048000,
                "batch_size":64,"history_events":64,"planned_training_flops":1_000_000_000,
                "max_training_flops":1_100_000_000,"max_optimizer_cpu_seconds":70,
-               "tuning_trials":0,"tuning_flops":0,\n               "prefit_profile_training_flops":1_000_000_000,\n               "prefit_profile_optimizer_cpu_seconds":50.0,\n               "prefit_profile_method":"torch.profiler comparable real-input dry-run"}
+               "tuning_trials":0,"tuning_flops":0,
+               "prefit_profile_training_flops":1_000_000_000,
+               "prefit_profile_optimizer_cpu_seconds":50.0,
+               "prefit_profile_method":"torch.profiler comparable real-input dry-run"}
             arms.append({"architecture":name,"seed":seed,
               "trainable_parameters":parameters,"deployed_parameters":parameters,
               "nontrainable_state_bytes":8192,"hardware_profile":"1-core CPU AVX2 pytorch2 pinned",
