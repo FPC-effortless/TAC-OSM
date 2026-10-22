@@ -1,0 +1,44 @@
+{
+  "study": "ME057_FUSED_PREDICTIVE_ANCHOR_REAL_ROBOT_COMPARISON",
+  "source_commit": "ca02615c41da036159990dcb0646a48d537b53bd",
+  "github_actions_run": 39870099690,
+  "github_actions_artifact": 12465724861,
+  "actions_status": "ten checkpoints and heldout scoring completed; final JSON write failed on numpy.int64",
+  "recovery": "Exact local run froze all checkpoints before opening DEV/TEST. Hash-verified checkpoints were rescored without refitting after converting the seed-win count to a native int.",
+  "final_parity_status": "PASS",
+  "test_episodes": 80,
+  "dev_episodes": 76,
+  "test_summary": {
+    "native_TAC_mean_MAE": 0.6632843306032009,
+    "GRU_mean_MAE": 0.6585257253353485,
+    "persistence_mean_MAE": 0.6726808481500484,
+    "TAC_minus_GRU_episode_bootstrap_95_interval": [
+      0.0002854169090278424,
+      0.009265943763894021
+    ],
+    "TAC_seed_wins": 1,
+    "registered_accuracy_gate_pass": false
+  },
+  "dev_mean_MAE": {
+    "native_TAC": 0.6007375723069631,
+    "GRU": 0.5875016027840932
+  },
+  "checkpoints": [
+    {"architecture": "native_tac", "seed": 57001, "sha256": "6ec362eb0484ca5f8ea940c1233fe64280fc3dc583fa18399fcff472f3d978bc", "optimizer_cpu_seconds": 59.980989894000004},
+    {"architecture": "gru_world", "seed": 57001, "sha256": "ae3e61aa89b036a2a1570df30ffe451e84690be51211a2b42d701fcda4e29e1c", "optimizer_cpu_seconds": 38.866679911999995},
+    {"architecture": "native_tac", "seed": 57002, "sha256": "6ae67f4fe2c06c467d8905b61eb0b283bf17524190efe9833b192b358ca24543", "optimizer_cpu_seconds": 59.915761812},
+    {"architecture": "gru_world", "seed": 57002, "sha256": "ca77da4308a98637f2fbc92ef8f381c8bc72b3f3d025082e28842decb96128cf", "optimizer_cpu_seconds": 37.97003642600001},
+    {"architecture": "native_tac", "seed": 57003, "sha256": "55175baa68ba363da70f6b49d03ff6dc3d6cfa1d3d5549dec70f5e2e5fb0dde3", "optimizer_cpu_seconds": 59.170980688999975},
+    {"architecture": "gru_world", "seed": 57003, "sha256": "685b4ccc57e5eca289ac9cbe48cc7ae9b0c0690c8f7ec292c561168d6591e740", "optimizer_cpu_seconds": 38.16279911999999},
+    {"architecture": "native_tac", "seed": 57004, "sha256": "6230a41652438e48d4fdc9b7b74a67b76662b2f73cba1a3d19a38d8f26e28498", "optimizer_cpu_seconds": 59.41039876799999},
+    {"architecture": "gru_world", "seed": 57004, "sha256": "1c908f316bd08ed143229b8e9a4286aa7aa65618d478fb235a2bdc57e324701c", "optimizer_cpu_seconds": 38.09674100799998},
+    {"architecture": "native_tac", "seed": 57005, "sha256": "89ad9d43ec18a02ff40eb572fbfb57b183d613fb970ba43c8a37b0e4c378e00e", "optimizer_cpu_seconds": 59.22720513500002},
+    {"architecture": "gru_world", "seed": 57005, "sha256": "e34a37d69525b848a9de6256f70eb617965da62c73a657373b35e8fa6f346b85", "optimizer_cpu_seconds": 37.8715383}
+  ],
+  "claims": {
+    "predictive_superiority": false,
+    "decision_intelligence": false,
+    "policy_value": false,
+    "autonomous_control": false
+  }
+}
