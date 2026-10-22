@@ -30,13 +30,19 @@ EXPECTED=REGISTRATION
 _original_source_preflight=base.verify_real_source_before_any_optimizer
 ARMS=("native_tac","gru_world")
 SEEDS=(56001,56002,56003,56004,56005)
+# Compute-only architectural resource survey. No outcomes enter selection.
+PROFILE_CANDIDATES=((2,2,2),(2,3,2),(2,4,2),(3,2,2),(2,2,3),(1,4,2))
+_SELECTED_GRU_DEPTH=PROFILE_CANDIDATES[0]
 
 
 def network(name,delta_scale):
     if name=="native_tac":
         return RealRobotConceptCED(delta_scale)
     if name=="gru_world":
-        return MatchedStableRobotGRU(delta_scale,hidden_size=44)
+        return MatchedStableRobotGRU(delta_scale,hidden_size=44,
+                                     observe_depth=_SELECTED_GRU_DEPTH[0],
+                                     action_depth=_SELECTED_GRU_DEPTH[1],
+                                     feedback_depth=_SELECTED_GRU_DEPTH[2])
     raise ValueError("unrecognized real robot prediction arm")
 
 
