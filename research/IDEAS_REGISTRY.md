@@ -62,3 +62,11 @@ There are **two distinct experimental designs called ME-056**:
 2. **128-frame anchored native ME-056**, [PR #334](https://github.com/FPC-effortless/TAC-OSM/pull/334): fast32/slow32 plus 8D relevance trace; 38,266 native parameters, dense transition auxiliary.
 
 Do not merge the physical state dimension, memory type, model counts, dataset splits or measured scores from one lineage into the other. Registry entries must identify the exact branch/commit and source task.
+
+### TAC-022 — Causal pre-feedback dense supervision
+
+- **Origin:** Code audit of anchored ME-056 PR #334's `boundary_objective`; tracked in successor [PR #335](https://github.com/FPC-effortless/TAC-OSM/pull/335).
+- **Finding:** Recorded transition snapshots had already ingested the next measured physical state through verification, while the auxiliary regressed a target from that same transition. This is a hindsight-information leak for forecasting supervision.
+- **Fix:** Save snapshot immediately **before** consuming the next physical measurement; regression test mutates the next-state target and checks that the corresponding pre-feedback snapshot is invariant.
+- **Status:** Implemented and submitted to CI; not trained or evaluated for predictive skill. Reprofile parameter/FLOP and runtime receipts for the corrected computation before any new comparison.
+- **General rule:** Distinguish causal forecasting losses, after-the-fact state verification, and reconstruction of already seen targets. They must not be mislabeled as interchangeable prediction evidence.
