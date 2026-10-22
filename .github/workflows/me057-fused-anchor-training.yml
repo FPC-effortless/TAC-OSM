@@ -1,15 +1,9 @@
 name: ME-057 fused predictive anchor real robot training
 
+# ME-057's TEST cohort has been opened and its result is final. Keep the
+# workflow for an explicitly requested historical reproduction; do not
+# automatically refit the completed experiment on later repository changes.
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths:
-      - 'src/tac_osm/real_robot_me057_fused_anchor.py'
-      - 'scripts/me057_*.py'
-      - 'tests/test_me057_*.py'
-      - 'research/me057-*.json'
-      - 'research/mathematical-engineering/me057/**'
-      - '.github/workflows/me057-fused-anchor-training.yml'
   workflow_dispatch:
 
 permissions:

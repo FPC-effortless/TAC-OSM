@@ -35,9 +35,35 @@ The paired bootstrap 95% interval for eager TAC overhead is 51.64% to 52.73%.
 This is a material efficiency limitation and is retained as such; it does not
 invalidate equal parameter, data, update and profiled-FLOP exposure.
 
-## Training status
+## Completed authentic-data result
 
-The architecture and five-seed, 600-update protocol are frozen.  Real-data
-training is authorized by the passed numerical parity preflight but has not yet produced an
-accuracy result in the committed repository.  Until the workflow finishes,
-there is no improved-intelligence, predictive-superiority or control claim.
+All ten 600-update checkpoints froze before DEV or TEST trajectories opened.
+Actions run 39870099690 then evaluated the heldout cohorts but failed on its
+last report write because NumPy produced an `int64` seed-win count. The archive
+contains the frozen checkpoints. The exact run was reproduced locally from the
+same commit, source hashes, schedules and seeds; its checkpoint hashes were
+verified before rescoring. Rescoring used no refit.
+
+Original-unit 16-step physical MAE, lower is better:
+
+| Cohort | Native TAC | GRU | Persistence |
+|---|---:|---:|---:|
+| DEV, 76 episodes | 0.600738 | 0.587502 | not a registered comparison |
+| TEST, 80 episodes | 0.663284 | 0.658526 | 0.672681 |
+
+TAC improved over persistence by 1.40%, but was 0.72% worse than GRU and won
+only one of five paired seeds. The episode-clustered 95% interval for TAC minus
+GRU was +0.000285 to +0.009266 MAE, excluding zero in GRU's favor. The
+registered accuracy gate therefore failed.
+
+ME-057 is a bounded improvement over the earlier ME-052 failure because both
+trained recurrent models now beat persistence on this task. It does not
+qualify TAC predictive superiority, decision intelligence, policy value or
+autonomous control. Eager TAC also used about 56% more optimizer CPU across the
+completed local fits. The branch remains draft and unpromoted.
+
+Aggregate scores and all ten local checkpoint hashes are preserved in
+`research/me057-fused-anchor-completed-results.json`. The GitHub Actions
+artifact is `12465724861`; its Azure-hosted bytes were unavailable to this
+workspace, so the committed local hashes are not represented as an independent
+byte-for-byte audit of that Actions archive.

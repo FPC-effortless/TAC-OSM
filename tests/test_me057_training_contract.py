@@ -5,7 +5,8 @@ import numpy as np
 import torch
 
 from scripts.me057_profile_fused_anchor import fused_objective, gru_objective
-from scripts.me057_train_fused_anchor_robot import build, schedule
+from scripts.me057_train_fused_anchor_robot import (
+    SEEDS, build, paired_seed_wins, schedule)
 from scripts.validate_research_parity import check_manifest
 
 
@@ -33,6 +34,17 @@ def test_metadata_only_schedule_is_deterministic():
     assert len(left[0]) == 600
 
 
+def test_seed_win_count_is_json_native():
+    episodes = ["7"]
+    scores = {}
+    for seed in SEEDS:
+        scores[f"native_tac-s{seed}"] = {"7": {"physical_MAE": np.float64(.1)}}
+        scores[f"gru_world-s{seed}"] = {"7": {"physical_MAE": np.float64(.2)}}
+    wins = paired_seed_wins(scores, episodes)
+    assert type(wins) is int
+    assert json.loads(json.dumps({"wins": wins})) == {"wins": 5}
+
+
 def test_me057_registration_and_resource_receipt_pass_preflight():
     plan = json.loads(Path(
         "research/mathematical-engineering/me057/FAIR_COMPARISON.json").read_text())
@@ -43,6 +55,21 @@ def test_me057_registration_and_resource_receipt_pass_preflight():
     assert receipt["strict_flop_gate_pass"]
     assert receipt["cpu_runtime_is_efficiency_only"]
     assert receipt["model_fits_started"] == 0
+
+
+def test_completed_result_preserves_failed_gate_and_checkpoint_hashes():
+    result = json.loads(Path(
+        "research/me057-fused-anchor-completed-results.json").read_text())
+    assert result["test_summary"]["registered_accuracy_gate_pass"] is False
+    assert result["test_summary"]["TAC_seed_wins"] == 1
+    assert len(result["checkpoints"]) == 10
+    assert len({row["sha256"] for row in result["checkpoints"]}) == 10
+    assert result["claims"] == {
+        "predictive_superiority": False,
+        "decision_intelligence": False,
+        "policy_value": False,
+        "autonomous_control": False,
+    }
 
 
 def test_registered_objectives_train_every_counted_parameter():

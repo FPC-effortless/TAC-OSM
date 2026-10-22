@@ -282,9 +282,24 @@ def paired_interval(values, seed=57057, samples=20_000):
     return [float(np.quantile(means, .025)), float(np.quantile(means, .975))]
 
 
-def run(output):
+def paired_seed_wins(test, episode_ids):
+    """Return a JSON-native count, even though NumPy computes the means."""
+    return int(sum(
+        np.mean([test[f"native_tac-s{s}"][e]["physical_MAE"]
+                 for e in episode_ids]) <
+        np.mean([test[f"gru_world-s{s}"][e]["physical_MAE"]
+                 for e in episode_ids])
+        for s in SEEDS))
+
+
+def run(output, source_cache=None):
     folder = Path(output); folder.mkdir(parents=True, exist_ok=False)
-    cache = folder/"private-source-not-uploaded"; cache.mkdir()
+    if source_cache is None:
+        cache = folder/"private-source-not-uploaded"; cache.mkdir()
+    else:
+        cache = Path(source_cache)
+        if not cache.is_dir():
+            raise ValueError("source cache must be an existing directory")
     plan = json.loads(REGISTRATION.read_text())
     receipt = json.loads(PREFLIGHT.read_text())
     if not all(receipt[key] for key in ("strict_parameter_gate_pass",
@@ -336,8 +351,7 @@ def run(output):
     summary = {"native_TAC_mean_MAE": tac_mean, "GRU_mean_MAE": gru_mean,
         "persistence_mean_MAE": persistence_mean,
         "TAC_minus_GRU_episode_bootstrap_95_interval": paired_interval(difference),
-        "TAC_seed_wins": sum(np.mean([test[f"native_tac-s{s}"][e]["physical_MAE"] for e in episode_ids]) <
-                             np.mean([test[f"gru_world-s{s}"][e]["physical_MAE"] for e in episode_ids]) for s in SEEDS)}
+        "TAC_seed_wins": paired_seed_wins(test, episode_ids)}
     summary["registered_accuracy_gate_pass"] = (
         tac_mean <= .98*gru_mean and tac_mean <= .98*persistence_mean and
         summary["TAC_minus_GRU_episode_bootstrap_95_interval"][1] < 0)
@@ -365,5 +379,7 @@ def run(output):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", default="results/me057")
+    parser.add_argument("--source-cache", help=(
+        "reuse a private publisher cache; source files are never archived"))
     args = parser.parse_args()
-    run(args.output)
+    run(args.output, args.source_cache)
