@@ -70,9 +70,11 @@ def profile_real_matched_step(actual_fit,stats,scale,folder):
     states,actions,human=base.base.get_batch(norm,real_schedule[0])
     batch=(states,actions,human)
     measurements=[]
-    for name in ARMS:
+    for name,depths in [("native_tac",None)]+[("gru_world",p) for p in PROFILE_CANDIDATES]:
         torch.manual_seed(SEEDS[0])
-        model=network(name,scale)
+        model=(network("native_tac",scale) if depths is None else
+               MatchedStableRobotGRU(scale,hidden_size=44,
+                  observe_depth=depths[0],action_depth=depths[1],feedback_depth=depths[2]))
         optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
         start=time.process_time()
         with profile(activities=[ProfilerActivity.CPU],with_flops=True) as prof:
@@ -87,10 +89,17 @@ def profile_real_matched_step(actual_fit,stats,scale,folder):
         flops=sum(int(event.flops) for event in values)
         if flops<=0:
             raise RuntimeError("authentic FIT profiler recorded no operator FLOPs")
-        measurements.append({"arm":name,"parameters":count_active(model),
+        measurements.append({"arm":name,"depths":depths,"parameters":count_active(model),
                              "one_genuine_optimizer_update_profiled_operator_flops":flops,
                              "cpu_seconds_efficiency_only":time.process_time()-start,
                              "true_FIT_loss":float(loss.detach())})
+    reference=measurements[0]
+    best=min(measurements[1:],key=lambda row:(
+        abs(row["one_genuine_optimizer_update_profiled_operator_flops"]-
+            reference["one_genuine_optimizer_update_profiled_operator_flops"]),
+        PROFILE_CANDIDATES.index(tuple(row["depths"]))))
+    original_profiles=measurements
+    measurements=[reference,best]
     gap=lambda field:(max(v[field] for v in measurements)-
                       min(v[field] for v in measurements))/max(v[field] for v in measurements)
     receipt={"study":"ME056_ACTUAL_ORIGINAL_ROBOT_PREFIT_NO_CLAIM",
@@ -101,10 +110,14 @@ def profile_real_matched_step(actual_fit,stats,scale,folder):
              "seeds":list(SEEDS),"same_sample_per_arm":True,
              "same_600_updates_batch2_burnin256_real_BPTT16":True,
              "cpu_time_must_match":False,"arms":measurements,
+             "all_original_FIT_candidate_profiles":original_profiles,
+             "chosen_GRU_depth":best["depths"],
+             "selection_only_by_FIT_operator_FLOPs":True,
+             "prior_original_failed_FLOP_gap":.6132374538891924,
              "parameter_gap":gap("parameters"),
              "profiled_FLOP_gap":gap("one_genuine_optimizer_update_profiled_operator_flops"),
              "profiler_limitations":"PyTorch with_flops counts reported CPU ops; not full exact training FLOPs",
-             "two_discarded_profile_optimizer_updates_executed_on_FIT":True}
+             "discarded_FIT_optimizer_profile_updates":len(original_profiles)}
     # This is an actual real-FIT prefit, but a profiler is not proof of all
     # unreported nonlinear kernels. Treat prefit equality conservatively.
     receipt["parameter_gate_pass"]=receipt["parameter_gap"]<=.01
@@ -119,6 +132,8 @@ def profile_real_matched_step(actual_fit,stats,scale,folder):
     if not (receipt["parameter_gate_pass"] and receipt["profiled_operator_gate_pass"]):
         raise RuntimeError("ME056_BLOCKED_BEFORE_FIT: actual genuine original FIT preflight "
                            "violates mandatory parameter/compute parity")
+    global _SELECTED_GRU_DEPTH
+    _SELECTED_GRU_DEPTH=tuple(best["depths"])
     return receipt
 
 
