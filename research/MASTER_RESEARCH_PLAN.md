@@ -81,3 +81,19 @@ Verified original FIT source: 228/228 parquet episodes, 329,306 measured frames,
 Also recovered and byte-verified all ten archived ME-054 original robot checkpoints from workflow 39781336855. Authentic developmental original TEST mean physical MAE: TAC 0.07880869, GRU 0.09231612, persistence 0.06694929; original TEST previously exposed, full training FLOP parity unverified, and takeover labels very sparse. See [ME054 artifact audit](https://github.com/FPC-effortless/TAC-OSM/blob/research/ideas/research/ME054_RECOVERED_ARTIFACT_AUDIT.md).
 
 **Next genuine research gate:** reprofile the corrected pre-feedback dense objective on verified FIT; freeze a prospective matched comparison with identical real trajectories/target access, active parameters, profiled and budgeted training FLOPs, paired schedules, seeds and final evaluation. Do not promote model performance until actual original new-task FIT training and heldout evidence exist.
+
+### ME-058 original FIT parity preflight passed; ME-059 real fit preregistered
+
+Source-backed original FIT comparison [GitHub Actions run 39840368795](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39840368795) passed with 228 original physically measured FIT episodes, original per-episode source SHA `c4064651e91cced7aafc11337c32a27266f470ea10388bb0dd2562ae955f88fd`. It reprofiled the **corrected pre-feedback causal dense objective**; do not substitute the leaked PR #334 preflight.
+
+| Original-source corrected one-update profile | Anchored TAC | GRU |
+|---|---:|---:|
+| Active trainable parameters | 38,266 | 38,295 |
+| Reported operator FLOPs | 42,257,730 | 42,546,844 |
+| Instrumented CPU time, efficiency only | 0.87256 s | 0.64799 s |
+
+Gaps: parameters 0.076%, reported FLOPs 0.680%; the prospective numeric preflight passed both 1% thresholds. Whole true training FLOPs are not independently certified. The original FIT-only normalization/servo prior SHA is `3d66d00ba01f345d7fcf3c23149f808986da795b1dea07ead4520b8bafd8af96`. Five outcome-independent paired sampling schedules for seeds 58001–58005 are frozen in the preflight receipt.
+
+A new genuine original task training [draft PR #337](https://github.com/FPC-effortless/TAC-OSM/pull/337) prospectively commits the source/feature/target/optimizer/evaluation contracts, identical real source windows and 600 updates per arm per seed, and a genuine ten-model FIT training workflow. Strong physical persistence and servo-only priors will be scored on factual new-task DEV/TEST **only after all ten checkpoints freeze**. The anchored TAC has a disclosed extra 128-FIT-transition auxiliary while the GRU uses the same observed original physical frames without that gradient loss; improvements cannot be attributed solely to native memory. This protocol is a machine-qualified developmental experiment, **not a certified architecture-superiority result** until complete true FLOP parity is independently measured.
+
+As of this documentation commit, no ME-059 checkpoint result or new source TEST predictive MAE is yet available. Keep that distinction explicit and update only with original run artifacts.
