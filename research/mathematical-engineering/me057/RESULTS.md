@@ -18,3 +18,25 @@ As of 2026-10-22 this branch contains prospective parity-v3 governance code and 
 The current `FAIR_COMPARISON.json` remains **noncomparative_diagnostic** with `training_authorized: false`. Future scientific model fitting requires a separate fully registered architecture-comparison manifest built with the independently verified FIT source receipt, exact training objective FLOPs, sealed evaluation and matched exposure/compute conditions.
 
 Neither original TEST results nor the asserted predictive superiority of a model are established by this branch.
+
+
+## Additional correctness finding: future-target leakage in ME-056 dense auxiliary
+
+The original PR #334 `boundary_objective` saved `histories` *after*
+calling `_burnin_training` / `_burnin_boundary_training`. Both calls
+receive `next_state` as measured verification feedback. The auxiliary
+then attempts to predict the **same transition's next state** using a
+memory snapshot already corrected with that target. This violates a strict
+causal forecasting information boundary, even though it uses real data.
+It is a hindsight supervised/reconstruction path, not legitimate
+pre-outcome predictive supervision.
+
+The successor branch now captures the recurrent belief **before**
+processing each transition's `next_state`. A regression test checks that
+changing a future target cannot change its own prefeedback snapshot while
+later beliefs may legitimately change. This correction is source engineering,
+not a measured improvement. The earlier reported engineering FLOP/CPU receipt
+remains archived as the exact historical implementation, and a genuinely
+training-eligible corrected candidate must be reprofiled on original FIT.
+
+There is no new trained prediction result or future-horizon MAE from this fix.
