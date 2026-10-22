@@ -57,3 +57,16 @@ Source entry points:
 - ME-054: https://github.com/FPC-effortless/TAC-OSM/blob/research/me054-real-physical-residual-stable-feedback-2026-10-22/src/tac_osm/predictive_state_agent.py
 - ME-056: https://github.com/FPC-effortless/TAC-OSM/pull/332
 - Historical DEV PRs: #172, #173, #176, #217, #220, #221. Revalidate precise linkage and metrics before treating summaries as independently audited.
+
+
+## 2026-10-22: Anchored-native ME-056 and successor ME-057 evidence correction
+
+Two separate ME-056 study lineages exist: concept-CED ([PR #332](https://github.com/FPC-effortless/TAC-OSM/pull/332)) and 128-frame anchored-native ([PR #334](https://github.com/FPC-effortless/TAC-OSM/pull/334)). Never aggregate their parameter counts, source splits or outcomes.
+
+Anchored-native PR #334 reports 38,266 TAC vs 38,295 GRU trainable parameters (0.076% difference), 42,257,505 vs 42,546,619 profiled FLOPs/update (0.680% difference), and an 8.007% paired CPU overhead (95% CI 6.353–9.999%) against the historical 5% CPU gate. This is an engineering result, **not a trained model improvement**.
+
+The owner-confirmed CPU rule is diagnostic-only. Successor [draft PR #335](https://github.com/FPC-effortless/TAC-OSM/pull/335) implements prospective scientific parity-v3, preserving historical v2 failures. The successor audits all 228 authentic FIT robot episodes before new training registration. Its separate source-only diagnostic manifest explicitly forbids model fitting until original source hashes and a complete comparison plan have been verified.
+
+**Critical discovered information-boundary issue:** PR #334's dense auxiliary snapshots were saved after the same transition's actual next-state feedback. This can leak the supervised target into the state representation. The ME-057 successor saves pre-feedback snapshots and tests that mutating an unseen future target cannot change its own input. Historical resource receipts remain valid as descriptions of the old execution, not validated measures of corrected candidate training. Reprofile and train only after source qualification and complete preregistration. No new predictive performance result follows automatically.
+
+Primary capability gate remains authentic future-state MAE versus persistence and a genuinely equal-resource GRU under complete audited real data/compute exposure. After-takeover outcomes and uncontrolled action effect claims remain outside the supported causal estimand.
