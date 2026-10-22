@@ -71,7 +71,7 @@ Temporary action-conditioned decoder, with shared weights at all K levels:
 Verification concept correction with real measured feedback only:
 
     e = tanh(y_observed - stopgrad(y_predicted_pre_feedback))
-    C_verified = C + available * .125 *
+    C_verified = C + available * ||e||_inf * .125 *
                       sigmoid(G_verify(C,e)) * tanh(F_verify(C,e))
 
 These are **bounded one-step updates**, not proofs of global convergence,
@@ -86,9 +86,9 @@ native predictive_state_agent.py:
     PYTHONPATH=src OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 \
       python -m pytest -q tests/test_concept_swarm_ced.py
 
-Result: **10 passed** on CPU / PyTorch 2.10.0+cpu. Tests are shape,
+Result: **11 passed** on CPU / PyTorch 2.10.0+cpu. Tests are shape,
 read-only query, action order, persistent observation, no-feedback identity,
-bounded correction, gradient connectivity, batch entity separation, finite
+zero-observation-error exact identity, bounded correction, gradient connectivity, batch entity separation, finite
 130-event stream, and untrained save/load replay. Randomized numerical
 fixtures are not world simulation and provide **zero evidence of predictive
 capability**. Full repository CI has to run independently on the PR.
@@ -99,6 +99,10 @@ Representative shape example (5 context values, 3 action values, 1 outcome,
 - Original native model: **25,184** active parameters (reference only).
 - New variant: **32,701** active parameters.
 - New extra persistent concept coordinates: 96 per externally routed entity.
+- Physical/outcome surprise now attenuates native and concept verification;
+  an exactly zero residual makes verification an exact no-op. This addresses
+  the known ME052/ME053 bias-driven-feedback failure mode numerically, not
+  its observed field performance.
 - This **does not** satisfy the mandatory 1%-parameter parity threshold:
   a native/GRU comparator must be properly matched and independently profiled
   before any trained head-to-head comparison.
@@ -116,7 +120,7 @@ satisfy preflight. A formal first fit must:
 
 1. Independently acquire and checksum an authentic, entity-continuous source,
    review license, chronology, censoring, actions and outcomes. SCANIA v3 is
-   preferred for longitudinal observational forecasting; it **does not**
+   an eligible longitudinal observational forecasting source; it **does not**
    establish causal intervention effects or measured decision costs.
 2. Pre-register source hashes, split/entity IDs, target contracts, horizons,
    leakage guard, source-verified calibration and baseline acceptance metrics.
@@ -157,3 +161,37 @@ satisfy preflight. A formal first fit must:
 **Unanswered capability:** Does concept-specific, persistent, relevance-
 conditioned recursion improve authentic future outcomes and grounded
 decisions under a fair matched budget? No answer from this source-only work.
+
+
+## Newly verified real-robot lineage — essential for the next experiment
+
+Independent recent TAC-OSM drafts already trained real physical robot
+world models and must not be bypassed:
+
+- [ME052 ten fitted TAC/GRU models](https://github.com/FPC-effortless/TAC-OSM/pull/327):
+  real 325-FIT / 80-DEV / 100-TEST robot episodes, 14 measured state and
+  action dimensions, five matched seeds. Reported TEST MAE: TAC 30.552486,
+  GRU 2.613201, raw last-state 0.066949. This is a **strong negative**
+  result for the then-native design.
+- [ME053 diagnosis](https://github.com/FPC-effortless/TAC-OSM/pull/328):
+  real DEV post-feedback recurrent norms reached ~1054; feedback drift
+  without physical innovation was implicated.
+- [ME054 bounded physical-feedback and identity prior](https://github.com/FPC-effortless/TAC-OSM/pull/329):
+  the appropriate real-world scaffold for a future concept-loop comparison.
+  This standalone generic concept code does not import the unmerged ME054
+  world-model runner or pretend to reproduce its FIT/DEV/TEST evidence.
+- [ME055 16-step model](https://github.com/FPC-effortless/TAC-OSM/pull/330):
+  an untrained multistep candidate; its proposed mandatory equal-CPU
+  timing gate conflicts with the owner's explicit requirement that CPU
+  wall time need not match. Do not import that change as binding science
+  policy. Parameter, real data, actual matched training budget and heldout
+  contract remain mandatory.
+
+A proper **whole-architecture** test should use the actual original robot
+FIT task or an independent newly reserved robot task, include a strong GRU
+world-model and persistence controls, and incorporate ME054's physical
+identity anchor and FIT-only scaling. That requires a robot-specific adapter,
+registered equal-parameter/data/training-compute experiment and real training.
+This PR does not yet supply those pieces. Previous robot TEST episodes were
+already opened: re-scoring them would be developmental, not an independent
+final test. Never present this source-only work as a completed real-data run.
