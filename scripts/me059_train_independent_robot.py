@@ -128,7 +128,7 @@ def score_episode(name,model,original,identified):
     a=torch.from_numpy(((original["action"]-am)/ast).astype(np.float32))
     human=torch.from_numpy(original["human"].astype(np.bool_))
     score={"errors":{m:[0.]*HORIZON for m in
-                     ("native_tac","gru_world","persistence","servo_prior")},
+                     (name,"persistence","servo_prior")},
            "counts":[0]*HORIZON,"origins":0,"onset_positives":0}
     for origin in ORIGINS:
         if origin+HORIZON>=len(x) or bool(human[origin]):
