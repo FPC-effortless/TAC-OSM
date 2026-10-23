@@ -1,0 +1,37 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME067_POSTHOC_FROZEN_REAL_ROBOT_MEMORY_LESIONS",
+  "study_type": "noncomparative_diagnostic",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Unchanged original ME066 trained checkpoints: ablate fast state, slow state, associative 8x8 map and observed velocity/innovation readout only at inference, and compare to original unablated physical error on already revealed authentic 40 source CAL and 80 charger-installation robot episodes. Diagnose whether trained native memory influences scores; not independent confirmation, retraining, action causality or model improvement.",
+  "real_world_source": {
+    "name": "Original BodenAI RW-RL-HIL ME066 exposed real robot publisher episodes; same r1_lite robot",
+    "observed_real_outcomes": true,
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "trainable_model_updates": 0,
+  "trained_weights_modified": false,
+  "heldout_new_task_access": false,
+  "reserved_tissue_box_untouched": true,
+  "origin_original_ME066": "research/replay-bundles/ME066/EVALUATION_REPLAY_RECEIPT.json",
+  "checkpoint_inventory": "research/replay-bundles/ME066/TRAINING_RESULT.json",
+  "data_access": "Reopen only already exposed source CAL and plug_charger_into_power_strip original publisher parquet; verify exact per-episode hashes against frozen ME066 original score files",
+  "lesions_frozen_before_evaluation": [
+    "full",
+    "association_zero",
+    "slow_zero",
+    "fast_zero",
+    "fast_slow_zero",
+    "kinematics_zero",
+    "all_hidden_zero"
+  ],
+  "gru_controls": [
+    "full",
+    "fast_zero",
+    "kinematics_zero",
+    "all_hidden_zero"
+  ],
+  "inferential_unit": "20 original four-episode recording blocks, paired original fixed 5 models; block CI cannot establish independent-seed robustness",
+  "limitation": "Posthoc lesion is OOD model-state intervention and does not prove memory necessity or improve independent test score"
+}

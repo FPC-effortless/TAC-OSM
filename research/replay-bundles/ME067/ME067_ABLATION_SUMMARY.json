@@ -1,0 +1,471 @@
+{
+  "checkpoint_or_optimizer_mutated": false,
+  "exact_model_weights_original_sha256_verified": true,
+  "gru_control_lesion_names": [
+    "full",
+    "fast_zero",
+    "kinematics_zero",
+    "all_hidden_zero"
+  ],
+  "limits": [
+    "Latent-state interventions are out-of-distribution and diagnose sensitivity, not strict causal memory necessity.",
+    "Exposed outcomes cannot qualify independent model generalization or be used for tuning thresholds.",
+    "No true new action intervention, no autonomous policy cost, no publisher-independent robot/site.",
+    "Block-resampled intervals for fixed averaged trained seeds are not independent model-fit confidence."
+  ],
+  "model_training_updates": 0,
+  "native_lesion_names": [
+    "full",
+    "association_zero",
+    "slow_zero",
+    "fast_zero",
+    "fast_slow_zero",
+    "kinematics_zero",
+    "all_hidden_zero"
+  ],
+  "new_independent_task_opened": false,
+  "original_ME066_score_replay_sha256": "51fea78d4a5334366f0a1895cedaf9000ebee8d72e3566e5783ad758ff167f04",
+  "original_ME066_target_sha256": "c58415d9f6c6a501341223b87f355144b381b5bf1e533501bfeb4b570478bd92",
+  "original_trained_model_count": 20,
+  "remaining_reserved_tissue_box_task_unopened": true,
+  "results": {
+    "exposed_source_CAL": {
+      "descriptive_scores": {
+        "gru_world.all_hidden_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.08630979435984046,
+            0.09319655433064326,
+            0.14693349259905517,
+            0.12380897032562643,
+            0.121609749738127
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.8686671234294772,
+          "seed_mean_MAE": [
+            0.8483747065765783,
+            0.8536478635622189,
+            0.8912588086910546,
+            0.868993176985532,
+            0.8810610613320022
+          ]
+        },
+        "gru_world.fast_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.056411687401123345,
+            0.06790370518574491,
+            0.08023732593283057,
+            0.0879134901566431,
+            0.07613520310260355
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.8280156935146078,
+          "seed_mean_MAE": [
+            0.8184765996178612,
+            0.8283550144173205,
+            0.82456264202483,
+            0.8330976968165487,
+            0.8355865146964788
+          ]
+        },
+        "gru_world.full": {
+          "mean_physical_MAE": 0.7542954111588187,
+          "seed_mean_MAE": [
+            0.7620649122167379,
+            0.7604513092315756,
+            0.7443253160919994,
+            0.7451842066599056,
+            0.7594513115938752
+          ]
+        },
+        "gru_world.kinematics_zero": {
+          "lesion_minus_full_seed_delta": [
+            -0.009356400044634939,
+            0.013357281370554119,
+            0.05024666404351592,
+            0.05632835768628865,
+            0.007897675794083625
+          ],
+          "lesion_worse_seed_count": 4,
+          "mean_physical_MAE": 0.7779901269287802,
+          "seed_mean_MAE": [
+            0.7527085121721029,
+            0.7738085906021297,
+            0.7945719801355153,
+            0.8015125643461942,
+            0.7673489873879589
+          ]
+        },
+        "native_tac.all_hidden_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.11191662726923823,
+            0.14478522213175893,
+            0.1545155705884099,
+            0.12226223459001631,
+            0.1146161674754694
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.8868235027510672,
+          "seed_mean_MAE": [
+            0.8682823115028441,
+            0.8872571274172515,
+            0.912682247767225,
+            0.8831325986422598,
+            0.882763228425756
+          ]
+        },
+        "native_tac.association_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.0029176874086260796,
+            0.010954421036876738,
+            -0.0008735379436984658,
+            0.011402177845593543,
+            0.0037533486960455776
+          ],
+          "lesion_worse_seed_count": 4,
+          "mean_physical_MAE": 0.7628351577487774,
+          "seed_mean_MAE": [
+            0.7592833716422319,
+            0.7534263263223693,
+            0.7572931392351165,
+            0.7722725418978371,
+            0.7719004096463322
+          ]
+        },
+        "native_tac.fast_slow_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.07476908806711435,
+            0.09332501385360956,
+            0.09691674117930234,
+            0.07368295670021326,
+            0.06784376942086964
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.8385118521843106,
+          "seed_mean_MAE": [
+            0.8311347723007202,
+            0.8357969191391021,
+            0.8550834183581173,
+            0.8345533207524568,
+            0.8359908303711563
+          ]
+        },
+        "native_tac.fast_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.04821920162066817,
+            0.07925558658316731,
+            0.02755774143151939,
+            0.007711443747393787,
+            0.016362842894159256
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.7930257015954703,
+          "seed_mean_MAE": [
+            0.804584885854274,
+            0.8217274918686599,
+            0.7857244186103344,
+            0.7685818077996374,
+            0.784509903844446
+          ]
+        },
+        "native_tac.full": {
+          "mean_physical_MAE": 0.7572043383400887,
+          "seed_mean_MAE": [
+            0.7563656842336058,
+            0.7424719052854926,
+            0.758166677178815,
+            0.7608703640522435,
+            0.7681470609502867
+          ]
+        },
+        "native_tac.kinematics_zero": {
+          "lesion_minus_full_seed_delta": [
+            -0.011896902334410698,
+            -0.0046579983783885835,
+            0.018844027345767244,
+            -0.002185358200222254,
+            0.009090428485069423
+          ],
+          "lesion_worse_seed_count": 2,
+          "mean_physical_MAE": 0.7590431777236517,
+          "seed_mean_MAE": [
+            0.7444687818991952,
+            0.7378139069071039,
+            0.7770107045245822,
+            0.7586850058520213,
+            0.7772374894353561
+          ]
+        },
+        "native_tac.slow_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.024726209859363735,
+            0.03690272597596049,
+            0.0520135449944064,
+            0.03011187636293471,
+            0.030374595290049912
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.7920301288366318,
+          "seed_mean_MAE": [
+            0.7810918940929696,
+            0.779374631261453,
+            0.8101802221732214,
+            0.7909822404151783,
+            0.7985216562403366
+          ]
+        }
+      },
+      "episode_count": 40,
+      "lesions_are_out_of_training_distribution": true,
+      "native_lesion_cluster_differences": {},
+      "original_test_previously_exposed": false,
+      "preselected_observation_time": "middle eligible episode origin; same original ME066 methodology",
+      "scientific_superiority_or_memory_necessity_qualified": false,
+      "source_group": "exposed_source_CAL"
+    },
+    "previously_opened_target": {
+      "descriptive_scores": {
+        "gru_world.all_hidden_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.008045470248907805,
+            0.0473341524368152,
+            0.0599136425415054,
+            0.1112068744841963,
+            -0.06760847761761397
+          ],
+          "lesion_worse_seed_count": 4,
+          "mean_physical_MAE": 0.41330651681870223,
+          "seed_mean_MAE": [
+            0.4231279990170151,
+            0.37164108075667174,
+            0.44078715778887273,
+            0.4290894989389926,
+            0.4018868475919589
+          ]
+        },
+        "gru_world.fast_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.1276469939853996,
+            0.26742504807189105,
+            0.20494884897489102,
+            0.2364443264901638,
+            0.13039025589823722
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.5748992790840566,
+          "seed_mean_MAE": [
+            0.5427295227535069,
+            0.5917319763917476,
+            0.5858223642222583,
+            0.5543269509449601,
+            0.5998855811078101
+          ]
+        },
+        "gru_world.full": {
+          "mean_physical_MAE": 0.3815281843999401,
+          "seed_mean_MAE": [
+            0.4150825287681073,
+            0.3243069283198565,
+            0.38087351524736734,
+            0.3178826244547963,
+            0.46949532520957293
+          ]
+        },
+        "gru_world.kinematics_zero": {
+          "lesion_minus_full_seed_delta": [
+            -0.11718967971391976,
+            -0.045094095473177734,
+            -0.02701546725584194,
+            0.06886309469118715,
+            -0.17332043596543373
+          ],
+          "lesion_worse_seed_count": 1,
+          "mean_physical_MAE": 0.3227768676565029,
+          "seed_mean_MAE": [
+            0.29789284905418756,
+            0.2792128328466788,
+            0.35385804799152537,
+            0.38674571914598344,
+            0.2961748892441392
+          ]
+        },
+        "native_tac.all_hidden_zero": {
+          "lesion_minus_full_seed_delta": [
+            -0.054982269613537936,
+            0.006423989171162247,
+            0.04253152660094202,
+            0.029004638618789613,
+            -0.05413456533569842
+          ],
+          "lesion_worse_seed_count": 3,
+          "mean_physical_MAE": 0.4043588681239635,
+          "seed_mean_MAE": [
+            0.3967204123735428,
+            0.4361834007315338,
+            0.4319367109797895,
+            0.38221177777741105,
+            0.3747420387575403
+          ]
+        },
+        "native_tac.association_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.03360816567437723,
+            0.035472268052399156,
+            0.011415358097292484,
+            0.03643592181615531,
+            0.044392854627221826
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.4428551178891212,
+          "seed_mean_MAE": [
+            0.48531084766145793,
+            0.4652316796127707,
+            0.40082054247613996,
+            0.38964306097477674,
+            0.47326945872046056
+          ]
+        },
+        "native_tac.fast_slow_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.024202748259995133,
+            0.07306842354591936,
+            0.12239135216223077,
+            0.07117271446622908,
+            0.07864584315102548
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.48448642055271196,
+          "seed_mean_MAE": [
+            0.4759054302470759,
+            0.5028278351062909,
+            0.5117965365410783,
+            0.42437985362485053,
+            0.5075224472442642
+          ]
+        },
+        "native_tac.fast_zero": {
+          "lesion_minus_full_seed_delta": [
+            0.18341684356564655,
+            0.18954440217930824,
+            0.1687457880936563,
+            0.14339280291460454,
+            0.2627356808632612
+          ],
+          "lesion_worse_seed_count": 5,
+          "mean_physical_MAE": 0.6001573077589274,
+          "seed_mean_MAE": [
+            0.6351195255527273,
+            0.6193038137396798,
+            0.5581509724725038,
+            0.496599942073226,
+            0.6916122849565
+          ]
+        },
+        "native_tac.full": {
+          "mean_physical_MAE": 0.410590204235632,
+          "seed_mean_MAE": [
+            0.45170268198708075,
+            0.4297594115603715,
+            0.38940518437884747,
+            0.35320713915862145,
+            0.4288766040932387
+          ]
+        },
+        "native_tac.kinematics_zero": {
+          "lesion_minus_full_seed_delta": [
+            -0.14374174993718042,
+            -0.1541230538394302,
+            -0.06745399995706976,
+            -0.05456855159718543,
+            -0.15702800317667426
+          ],
+          "lesion_worse_seed_count": 0,
+          "mean_physical_MAE": 0.29520713253412395,
+          "seed_mean_MAE": [
+            0.30796093204990027,
+            0.2756363577209413,
+            0.3219511844217777,
+            0.298638587561436,
+            0.2718486009165645
+          ]
+        },
+        "native_tac.slow_zero": {
+          "lesion_minus_full_seed_delta": [
+            -0.08429105946561322,
+            -0.04396343701519072,
+            0.009753399109467865,
+            0.007952213333919645,
+            -0.036734911240637304
+          ],
+          "lesion_worse_seed_count": 2,
+          "mean_physical_MAE": 0.38113344518002124,
+          "seed_mean_MAE": [
+            0.36741162252146753,
+            0.3857959745451808,
+            0.39915858348831534,
+            0.36115935249254105,
+            0.3921416928526014
+          ]
+        }
+      },
+      "episode_count": 80,
+      "lesions_are_out_of_training_distribution": true,
+      "native_lesion_cluster_differences": {
+        "all_hidden_zero": {
+          "20_recording_block_bootstrap_95": [
+            -0.029950480756524483,
+            0.02042640359437791
+          ],
+          "important_limitation": "CI resamples 20 original blocks averaged over five FIXED fitted seeds; not a CI across independent training seeds",
+          "mean_lesion_minus_full": -0.0062313361116685
+        },
+        "association_zero": {
+          "20_recording_block_bootstrap_95": [
+            0.024389693956123667,
+            0.04093000258458778
+          ],
+          "important_limitation": "CI resamples 20 original blocks averaged over five FIXED fitted seeds; not a CI across independent training seeds",
+          "mean_lesion_minus_full": 0.0322649136534892
+        },
+        "fast_slow_zero": {
+          "20_recording_block_bootstrap_95": [
+            0.06081401927449043,
+            0.08784468576125797
+          ],
+          "important_limitation": "CI resamples 20 original blocks averaged over five FIXED fitted seeds; not a CI across independent training seeds",
+          "mean_lesion_minus_full": 0.07389621631707996
+        },
+        "fast_zero": {
+          "20_recording_block_bootstrap_95": [
+            0.1666557876933948,
+            0.2124893527347595
+          ],
+          "important_limitation": "CI resamples 20 original blocks averaged over five FIXED fitted seeds; not a CI across independent training seeds",
+          "mean_lesion_minus_full": 0.18956710352329537
+        },
+        "kinematics_zero": {
+          "20_recording_block_bootstrap_95": [
+            -0.14527494422014567,
+            -0.0851280891385395
+          ],
+          "important_limitation": "CI resamples 20 original blocks averaged over five FIXED fitted seeds; not a CI across independent training seeds",
+          "mean_lesion_minus_full": -0.11538307170150804
+        },
+        "slow_zero": {
+          "20_recording_block_bootstrap_95": [
+            -0.04103663553285878,
+            -0.015726295727538
+          ],
+          "important_limitation": "CI resamples 20 original blocks averaged over five FIXED fitted seeds; not a CI across independent training seeds",
+          "mean_lesion_minus_full": -0.029456759055610748
+        }
+      },
+      "original_test_previously_exposed": true,
+      "preselected_observation_time": "middle eligible episode origin; same original ME066 methodology",
+      "scientific_superiority_or_memory_necessity_qualified": false,
+      "source_group": "previously_opened_target"
+    }
+  },
+  "source_CAL_already_exposed": true,
+  "status": "EXPLORATORY_POSTHOC_NOT_INDEPENDENT",
+  "study": "ME067_POSTHOC_FROZEN_REAL_ROBOT_MEMORY_ABLATION"
+}
