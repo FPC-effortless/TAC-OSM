@@ -17,7 +17,7 @@ import pyarrow.parquet as pq
 import torch
 
 from scripts.audit_real_hil_trajectory import audit_frame_table, download_file
-from scripts.me060_train_trajectory import cohorts, evaluate, digest
+from scripts.me060_train_trajectory import cohorts, evaluate, digest, HISTORY, HORIZON
 from scripts.me057_train_fused_anchor_robot import load_part, normalize, sha_bytes, sha_file, write_json
 from scripts.me063_prefit_original_fit import model_for, SEEDS, CONFIG
 from scripts.me055_reserve_independent_robot_task import REVISION
@@ -53,6 +53,28 @@ def load_model(record):
     return model, identified
 
 
+def evaluate_with_regime_receipts(model, original, identified):
+    """Same original physical evaluator plus causal router weights for each episode."""
+    prediction = evaluate(model, original, identified)
+    model.eval()
+    with torch.no_grad():
+        for ep, measured in sorted(prediction.items(), key=lambda x: int(x[0])):
+            row = original[int(ep)]
+            origin = measured["origin"]
+            belief = model.initial(1)
+            for j in range(origin-HISTORY, origin):
+                belief=model.observe(
+                    belief, row["state"][j:j+1],row["action"][j:j+1],
+                    row["state"][j+1:j+2],row["human"][j:j+1,None])
+            forecast=model.forecast(
+                belief, row["state"][origin:origin+1],
+                row["action"][None,origin:origin+HORIZON])
+            weights=forecast.weights[0]
+            measured["regime_weights_mean"]=weights.mean(0).tolist()
+            measured["regime_weights_by_horizon"]=weights.tolist()
+    return prediction
+
+
 def source_scores(cache, records):
     split, metadata = cohorts(cache)
     scores = {"CAL":{}, "DEV":{}}
@@ -62,7 +84,7 @@ def source_scores(cache, records):
         source_hashes[group]=digest({str(e):r["sha256"] for e,r in sorted(original.items())})
         for record in records:
             model,identified=load_model(record)
-            scores[group][f'{record["arm"]}-s{record["seed"]}']=evaluate(
+            scores[group][f'{record["arm"]}-s{record["seed"]}']=evaluate_with_regime_receipts(
                 model,normalize(original,identified),identified)
         print(json.dumps({"event":"ME063_SOURCE_EVALUATION_FINISHED",
                           "group":group,"episodes":len(original)}),flush=True)
@@ -107,7 +129,7 @@ def frozen_target(cache, records):
     outputs={}
     for record in records:
         model,identified=load_model(record)
-        outputs[f'{record["arm"]}-s{record["seed"]}']=evaluate(
+        outputs[f'{record["arm"]}-s{record["seed"]}']=evaluate_with_regime_receipts(
             model,normalize(original,identified),identified)
     write_json(BUNDLE/"ORIGINAL_TRANSFER_SCORES.json",{
         "study":"ME063_FROZEN_DIFFERENT_TASK_TRANSFER",
@@ -141,6 +163,17 @@ def summarize(episode_tables, group, source_cal=None, target=False):
     seed_wins=sum(bool(a<b) for a,b in zip(
         errors["native_tac"].mean(axis=1),errors["gru_world"].mean(axis=1)))
     gate=bool(means["native_tac"]<=.98*min(means["gru_world"],means["persistence"],means["servo"]) and ci[1]<0)
+    routing={}
+    for arm in CONFIG:
+        seed_route=[]
+        for seed in SEEDS:
+            observations=episode_tables[f"{arm}-s{seed}"]
+            weights=np.asarray([observations[e]["regime_weights_mean"] for e in ids])
+            seed_route.append(weights.mean(0))
+        routing[arm]={
+            "mean_weights_persistence_servo_neural":np.mean(seed_route,axis=0).tolist(),
+            "per_seed_weights":[row.tolist() for row in seed_route],
+        }
     result={
         "population":group,"episodes":len(ids),"mean_physical_MAE":means,
         "TAC_paired_seed_wins":seed_wins,
@@ -151,6 +184,7 @@ def summarize(episode_tables, group, source_cal=None, target=False):
         "transfer_new_different_task_not_separate_site":target,
         "trained_checkpoints":10,"transfer_training_updates":0,
         "calibration":{},
+        "routing":routing,
     }
     if source_cal is not None:
         for arm in CONFIG:
