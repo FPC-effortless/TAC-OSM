@@ -87,3 +87,7 @@ postfit checkpoint verification described in the master plan. Manifest-only
 counts and recycled historical IDs never grant an exemption. Preserve original
 historical evidence using explicit pinned replay; never fill in proof after the
 fact. CPU time remains an efficiency outcome, not a parity veto.
+
+## ME077 current physical capability evidence
+
+Read the ME077 section of the master plan before proposing another System1 fit. The integrated selective model improved exposed-development all-case prediction, but failed the registered 5% persistence/moving-state gates. Preserve all five original checkpoints and the MIXED_TRADEOFF status. Focus next on real changing-state capability; no automatic sealed-task access, tuning restart, deployment or architecture-winner claim.

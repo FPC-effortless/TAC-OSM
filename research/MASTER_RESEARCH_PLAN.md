@@ -17,6 +17,50 @@ The prospective claim checker is at [`scripts/validate_capability_progress.py`](
 
 **Not yet globally enforced:** the implementation is on `research/master-research-plan`, currently **not integrated into each open model-development draft branch or demonstrated as a mandatory protected-branch check**. Every new study must bring this validator/standard into its exact working branch and publish its honest scorecard; do not call the new policy universally installed, do not edit old study/checkpoint records and do not merge research drafts without a separately authorized decision.
 
+## ME077 — native selective physical prediction, mixed authentic development result (2026-10-23)
+
+[Draft PR #364](https://github.com/FPC-effortless/TAC-OSM/pull/364) trains the next
+**whole native System1 model**, not another attribution study. Five original
+102,503-active/deployed-parameter models combine bounded fast recurrence,
+already-observed velocity context, a persistence/motion Laplace mixture,
+mixture-median prediction and coherent uncertainty. Natural within-task outcome
+frequency replaces ME076's enriched motion sampling. Larger training budget is
+explicit: 1,024×24 transition presentations per seed versus ME076's 160×12.
+This is a **practical integrated-system development comparison**, not matched
+architecture, sample-efficiency, new-source transfer or control superiority.
+
+Same exact authentic 40 exposed REPORT episodes / 960 genuine next-state queries:
+
+| Cohort | Frozen ME076 MAE | New ME077 MAE | Persistence MAE | FIT servo MAE |
+| --- | ---: | ---: | ---: | ---: |
+| All 960 | 0.080158 | **0.066476** | 0.068668 | 0.097457 |
+| Actual moving 84 | 0.748786 | 0.741981 | 0.743241 | **0.704517** |
+| Near-stationary 876 | 0.016043 | **0.001701** | 0.003983 | 0.039245 |
+
+Five-seed means. Overall error decreased **17.07% vs ME076**, **3.19% vs
+persistence**; stationary error decreased **89.39% vs ME076**. All five seed and
+task means improved overall. Paired episode-cluster 95% CI for new-minus-
+persistence MAE [-0.002446,-0.001945], conditional on the fixed fitted models and
+this exposed population. **Full registered gain gate FAILED**: persistence gain
+missed 5%; moving-state gain was only 0.17%, and servo remains stronger there.
+Tier **MIXED_TRADEOFF**, not independent intelligence, reliable motion anticipation,
+causal action utility, safety or investor/customer qualification. Original
+ME076 negative evidence and protected tissue-box holdout remain unchanged.
+
+Original prefit/source freeze `1396564b`; all five original weights+optimizer+RNG
+and live receipts frozen at `1b358218` **before** REPORT scoring; raw forecasts
+and scores at `3cabf74c`. Fresh remote Git clone restored and replayed all five
+models and raw real scores within the unchanged numerical contract, with no
+refit. Separate [GitHub original-model/source replay39992505986](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39992505986) and normal CI passed at score commit3cabf74c; the final local suite passed1,142tests. No universal platform guarantee.
+[Full results and limits](https://github.com/FPC-effortless/TAC-OSM/blob/research/me077-selective-physical-state-2026-10-23/research/mathematical-engineering/me077/RESULTS.md).
+
+**Next physical capability priority:** improve genuine changing-state prediction
+without losing stationary gains, through an integrated model trained on authentic
+multistep outcomes and strictly available action context. No automatic new fit,
+sealed-task opening, attribution campaign or policy deployment. Enterprise,
+Temporal, Edge and Counterfactual lanes retain their separate evidence status.
+Operational/customer value is UNKNOWN/NOT_MEASURED.
+
 ## DIAGKEY004 — trained native write/read repair, synthetic-only (2026-10-23)
 
 [Draft PR #362](https://github.com/FPC-effortless/TAC-OSM/pull/362) completes one
