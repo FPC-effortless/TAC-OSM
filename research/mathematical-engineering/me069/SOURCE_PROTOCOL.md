@@ -15,6 +15,13 @@ exact attribution; do not redistribute original traces in this repository.
 Only original source hashes, code, aggregates and derived model artifacts
 are proposed for repository retention. No Woyengi customer log is assumed.
 
+Retrieval receipt: the original download endpoint timed out. A pinned public
+research mirror at Gength/generalization_analysis commit
+`82d076ea0bb77c1164e6990b33b1f102540dacdc` supplied the exact original gzip,
+matching publisher MD5 and size. Its SHA256 is
+`5cd9cc16b9bcb20bd4aae45666a5d87479ddbf47e6371618b6ad217174cecdf3`.
+This is byte-identity verification, not reliance on third-party relabeling.
+
 ## Frozen task semantics and time split
 
 Read original case boundaries, timestamps, activities, lifecycle values and
