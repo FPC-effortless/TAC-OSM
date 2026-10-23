@@ -6,7 +6,10 @@ No real-world capability or full-compute-matched architectural advantage is esta
 Preregistered code/plan: `79b11a5e`. All25 final models and50 original640/4096-update
 checkpoint+optimizer/RNG files were frozen at `04002ef6` BEFORE the first TEST query.
 Five seeds, four distinct random key/value stores then one answer-free QUERY,
-zero distractors,32 values/chance3.125%,512 synthetic queries per seed per model.
+zero distractors,32 values/unconditional chance3.125%,512 synthetic queries per seed per model.
+An answer chosen uniformly from the four observed values has25% expected accuracy
+(and NLL log4) without using the query key; GRU/no-association≈24% does not establish
+reliable key binding.
 The same2,560 synthetic queries are reused across arms/milestones;50 score sets
 are NOT25,600 independent cases. All original logits/labels/correct bits are stored.
 
