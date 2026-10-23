@@ -1,0 +1,426 @@
+{
+  "architecture": "eswam004_kinetic_exchange_native",
+  "checkpoints": [
+    {
+      "deployed_parameters": 101706,
+      "parameter_values_sha256": "972014ebb7483fb73c51eb4e2f209550e9e885d09e6f6ba4bbba128ac866afa6",
+      "path": "research/replay-bundles/ESWAM004/seed-76004/final.pt",
+      "sha256": "3add19280bc63c8ccc4c4cedf25173787e21def013da19f6ccab8264fcec8ddc",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 640,
+      "trainable_parameters": 101706
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 101706,
+    "trainable_parameters": 101706
+  },
+  "last_pre_update": {
+    "deployed_parameters": 101706,
+    "successful_optimizer_steps": 639,
+    "trainable_parameters": 101706
+  },
+  "manifest_path": "/home/runner/work/TAC-OSM/TAC-OSM/research/mathematical-engineering/eswam004/FAIR_COMPARISON.json",
+  "manifest_sha256": "96f8748aad21636002771e5364e0d845cdf5da07cbae0570173658d0625164af",
+  "model_class": "tac_osm.variants.kinetic_exchange_world.KineticExchangeWorldModel",
+  "preflight": {
+    "deployed_parameters": 101706,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "shrink_log_scale",
+        "numel": 14,
+        "requires_grad": true,
+        "shape": [
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "velocity_log_gain",
+        "numel": 14,
+        "requires_grad": true,
+        "shape": [
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "action_step_logit",
+        "numel": 14,
+        "requires_grad": true,
+        "shape": [
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "log_kinetic_gain",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": []
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "prior_velocity_logits",
+        "numel": 14,
+        "requires_grad": true,
+        "shape": [
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory.exchange_map.weight",
+        "numel": 512,
+        "requires_grad": true,
+        "shape": [
+          16,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory.exchange_map.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory.merge_gate.weight",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          1,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory.merge_gate.bias",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": [
+          1
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 3870,
+        "requires_grad": true,
+        "shape": [
+          90,
+          43
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 90,
+        "requires_grad": true,
+        "shape": [
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 8100,
+        "requires_grad": true,
+        "shape": [
+          90,
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 90,
+        "requires_grad": true,
+        "shape": [
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.weight",
+        "numel": 32400,
+        "requires_grad": true,
+        "shape": [
+          180,
+          180
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.bias",
+        "numel": 180,
+        "requires_grad": true,
+        "shape": [
+          180
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.weight",
+        "numel": 32400,
+        "requires_grad": true,
+        "shape": [
+          180,
+          180
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.bias",
+        "numel": 180,
+        "requires_grad": true,
+        "shape": [
+          180
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "key_map.weight",
+        "numel": 1440,
+        "requires_grad": true,
+        "shape": [
+          16,
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "key_map.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "value_map.weight",
+        "numel": 1440,
+        "requires_grad": true,
+        "shape": [
+          16,
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "value_map.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query_map.weight",
+        "numel": 1440,
+        "requires_grad": true,
+        "shape": [
+          16,
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query_map.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "verification_map.weight",
+        "numel": 1440,
+        "requires_grad": true,
+        "shape": [
+          90,
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "verification_map.bias",
+        "numel": 90,
+        "requires_grad": true,
+        "shape": [
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.weight",
+        "numel": 12544,
+        "requires_grad": true,
+        "shape": [
+          64,
+          196
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "next_heads.weight",
+        "numel": 1792,
+        "requires_grad": true,
+        "shape": [
+          28,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "next_heads.bias",
+        "numel": 28,
+        "requires_grad": true,
+        "shape": [
+          28
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "action_head.weight",
+        "numel": 1092,
+        "requires_grad": true,
+        "shape": [
+          14,
+          78
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "action_head.bias",
+        "numel": 14,
+        "requires_grad": true,
+        "shape": [
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "predicted_code.weight",
+        "numel": 1024,
+        "requires_grad": true,
+        "shape": [
+          16,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "predicted_code.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_head.0.weight",
+        "numel": 832,
+        "requires_grad": true,
+        "shape": [
+          4,
+          208
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_head.0.bias",
+        "numel": 4,
+        "requires_grad": true,
+        "shape": [
+          4
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_head.2.weight",
+        "numel": 4,
+        "requires_grad": true,
+        "shape": [
+          1,
+          4
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_head.2.bias",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": [
+          1
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "kinetic_event.0.weight",
+        "numel": 448,
+        "requires_grad": true,
+        "shape": [
+          8,
+          56
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "kinetic_event.0.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "kinetic_event.2.weight",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          1,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "kinetic_event.2.bias",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": [
+          1
+        ]
+      }
+    ],
+    "trainable_parameters": 101706
+  },
+  "run_id": "0fcd4b92ad364570bff982705d938a7f",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 76004,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ESWAM004_CAUSAL_KINETIC_EVIDENCE_REAL_DEVELOPMENT",
+  "successful_optimizer_steps": 640
+}
