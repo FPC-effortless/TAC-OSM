@@ -17,6 +17,36 @@ The prospective claim checker is at [`scripts/validate_capability_progress.py`](
 
 **Not yet globally enforced:** the implementation is on `research/master-research-plan`, currently **not integrated into each open model-development draft branch or demonstrated as a mandatory protected-branch check**. Every new study must bring this validator/standard into its exact working branch and publish its honest scorecard; do not call the new policy universally installed, do not edit old study/checkpoint records and do not merge research drafts without a separately authorized decision.
 
+## ME081 — learned horizon-query forecasting: stronger averages, quiet-state trade-off
+
+[Draft PR #375](https://github.com/FPC-effortless/TAC-OSM/pull/375) trains **five complete 100,165-parameter native models**. Fast/slow/8×8 associative dynamics remain intact. New training uses 32 actual observation frames with full gradient credit, a shared horizon-query distribution decoder, and properly scored CRPS plus a small log score and factual motion supervision. This is actual end-to-end learning, not an execution-only result or attribution study.
+
+Primary evaluation preserves the exact original eight-frame task: 40 already-exposed real REPORT episodes, 960/956/928 factual pairs at 1/4/16 frames. All figures below are means of individual models, not an ensemble deployment.
+
+| Physical MAE, lower is better | Frozen ME080 | ME081 | Persistence |
+| --- | ---: | ---: | ---: |
+| 1 frame | 0.059393 | **0.055968** | 0.068668 |
+| 4 frames | 0.219619 | **0.166113** | 0.302400 |
+| 16 frames | 0.883994 | **0.737952** | 0.975966 |
+
+**Improved:** mean errors fall **5.77%, 24.36% and 16.52%** versus ME080, and 18.49%, 45.07% and 24.39% versus persistence. Four-frame MAE is also 10.67% below the stronger ME079 native reference. Actual-moving one-frame MAE falls from 0.533420 to **0.408457**, below ME078's 0.421182 and clipped velocity's 0.482509 on the same 84 moving queries. Proper interval scores fall **51.57%, 38.10% and 50.50%**, with nominal 90% coordinate coverage 92.92%, 92.88% and 91.88%.
+
+**Regressed:** stationary MAE rises **59.04%, 55.65% and 162.28%** versus ME080 at the three horizons. One-frame stationary MAE is 0.022168, about 13 times ME077's 0.001701. Physical marginal NLL also worsens at every horizon. One-frame risk AP/AUC (0.54992/0.91466) improves over ME080 but remains below the stronger historical ME078/079 rankings. Better interval scores do not establish uniformly better calibration.
+
+All five fits improve primary one-frame mean error over their ME080 counterparts, but the fixed-model paired 40-episode bootstrap 95% interval for new-minus-old error is **[−0.012166, +0.005730]**, including zero. Quiet preservation and this confidence gate fail. **Full gate FAIL / MIXED_TRADEOFF; no further ME081 fits.** There is no independently confirmed intelligence or architecture-superiority claim.
+
+**Actual longer-context readout:** 904 registered genuine 32-frame query histories provide 904/900/872 future pairs. Mean errors are 0.055557/0.157857/0.740098. On exactly those IDs, the same model with eight frames scores 0.055775/0.159718/0.748874. These small descriptive differences do not demonstrate a material memory advantage or arbitrary-history retention. Both information conditions and all adverse cases are preserved.
+
+**Resource/source scope:** unchanged licensed BodenAI/RW-RL-HIL archive, 120 FIT / 40 exposed REPORT, source revision 9290f5a96dc91ea58256e81d9ce2dd9621890b51. Five cold starts, 2,048 updates and batch 24, final-only, no sweep/restart/warm start. Each model sees 1,572,864 observed prefix presentations, **four times ME080**; no matched-compute, sample-efficiency or architectural-winner claim. Protected tissue-box, source CAL and TEST remain closed. Factual action inputs are not identified causal control.
+
+**Original proof:** prefit `b5698c86`; all five whole-model/optimizer/RNG/live receipts frozen at `dd71fee2` before either readout; original scores `bf23f52b`. Fresh remote sparse checkout restores and replays **27,600 original model forecast records** and recomputes the full summary exactly locally. These remain repeated forecasts over 40 episode clusters. The initial disposable full clone hit disk capacity; original worktrees/checkpoints were untouched.
+
+**Strict external replay FAIL:** [run 40021655456](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40021655456) completed the all-model/both-history census. Out-of-tolerance record counts: point prediction 8, MAE 5, lower quantile 8, upper quantile 6, width 12, interval score 11; counts overlap. Max absolute point drift 1.50443e-5 and MAE drift 4.18854e-5. Targets, coverage, risk probabilities/Brier and NLL meet the frozen contract, but full replay remains failed. No old/new tolerance or original output changed. Local full suite: **1,169 tests PASS**.
+
+[Full results](https://github.com/FPC-effortless/TAC-OSM/blob/research/me081-horizon-query-world-2026-10-23/research/mathematical-engineering/me081/RESULTS.md) · [Original checkpoints and forecasts](https://github.com/FPC-effortless/TAC-OSM/tree/research/me081-horizon-query-world-2026-10-23/research/replay-bundles/ME081).
+
+**Next capability requirement:** retain these real moving-state/mid-horizon skills while recovering quiet precision and density quality, then independently qualify the complete model. New fitting requires a new substantive prospective registration. No default attribution campaign, hidden retry, protected TEST access, universal-intelligence claim, merge or deployment. Enterprise/Temporal/Edge/Counterfactual, causal policy and customer/operator value remain separately unqualified.
+
 ## Native computation reuse — formal architecture and measured execution improvement
 
 [Draft PR #372](https://github.com/FPC-effortless/TAC-OSM/pull/372) implements the owner's request for mathematical notation and an optimized computational workflow. The [specific native specification](https://github.com/FPC-effortless/TAC-OSM/blob/research/native-computation-reuse-2026-10-23/research/computation-reuse/MATHEMATICAL_ARCHITECTURE.md) defines a shared encoder tensor DAG, explicit fast/slow/associative transition, conditional mixture decoder and versioned caller-owned inference effects. It preserves the trained ME080 architecture and all 99,816 parameters; **no model was fitted or predictive-intelligence improvement claimed**.
