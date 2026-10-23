@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'scripts/me064_score_frozen.py'
+      - 'scripts/me064_validate_numeric_replay.py'
       - '.github/workflows/me064-score-frozen.yml'
   workflow_dispatch:
 permissions: {contents: write}
@@ -63,40 +64,25 @@ jobs:
         with: {python-version: '3.12'}
       - run: python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
       - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
-      - name: Bind exact already published score digests
+      - name: Preserve original score files before independent replay
         run: |
-          sha256sum research/replay-bundles/ME064/ORIGINAL_SOURCE_CAL_SCORES.json \
-            research/replay-bundles/ME064/ORIGINAL_UNTOUCHED_TASK_SCORES.json \
-            research/replay-bundles/ME064/REAL_WORLD_EVALUATION_SUMMARY.json \
-            > /tmp/me064-frozen-original.sha256
-      - name: Independently repeat full original real-world scoring without refits
+          mkdir -p /tmp/me064-published
+          cp research/replay-bundles/ME064/ORIGINAL_SOURCE_CAL_SCORES.json /tmp/me064-published/
+          cp research/replay-bundles/ME064/ORIGINAL_UNTOUCHED_TASK_SCORES.json /tmp/me064-published/
+          cp research/replay-bundles/ME064/REAL_WORLD_EVALUATION_SUMMARY.json /tmp/me064-published/
+      - name: Independently recompute original real outcomes WITHOUT model refitting
         run: |
           PYTHONPATH=src:. python scripts/me064_score_frozen.py \
             --cache "${{ runner.temp }}/me064-independent-public-data-source"
-          sha256sum -c /tmp/me064-frozen-original.sha256
-          echo 'ME064_INDEPENDENT_PUBLISHER_ORIGINAL_SCORE_REPLAY_PASS'
+      - name: Audit exact score structure and declared CPU float tolerance, not false byte parity
+        run: |
+          PYTHONPATH=src:. python scripts/me064_validate_numeric_replay.py \
+            --published /tmp/me064-published \
+            --recomputed research/replay-bundles/ME064/ \
+            --receipt research/replay-bundles/ME064/EVALUATION_REPLAY_RECEIPT.json
       - name: Preserve independent score replay receipt in Git
         env: {PUSH_BRANCH: "${{ github.head_ref || github.ref_name }}"}
         run: |
-          python - <<'PY'
-          import json,hashlib
-          from pathlib import Path
-          root=Path('research/replay-bundles/ME064')
-          source=json.loads((root/'REAL_WORLD_EVALUATION_SUMMARY.json').read_text())
-          receipt={
-            'status':'PASS', 'study':source['study'],
-            'exact_score_file_sha256_replayed':{
-              name:hashlib.sha256((root/name).read_bytes()).hexdigest()
-              for name in ('ORIGINAL_SOURCE_CAL_SCORES.json','ORIGINAL_UNTOUCHED_TASK_SCORES.json','REAL_WORLD_EVALUATION_SUMMARY.json')},
-            'original_git_checkpoint_count':10,
-            'different_task':source['untouched_evaluation_task'],
-            'different_robot_or_site_independent':False,
-            'target_updates':0,'original_source_TEST_opened':False,
-            'replayed_MAE':source['results']['physical_MAE'],
-            'superiority_gate_pass':source['results']['registered_superiority_gate_pass'],
-          }
-          (root/'EVALUATION_REPLAY_RECEIPT.json').write_text(json.dumps(receipt,sort_keys=True,indent=2)+'\n')
-          PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f research/replay-bundles/ME064/EVALUATION_REPLAY_RECEIPT.json
