@@ -156,13 +156,32 @@ def summarize(episode_tables, group, source_cal=None, target=False):
     reference=next(iter(episode_tables.values()))
     means["persistence"]=float(np.mean([reference[e]["persistence_MAE"] for e in ids]))
     means["servo"]=float(np.mean([reference[e]["servo_MAE"] for e in ids]))
-    rng=np.random.default_rng(62062 if not target else 62063)
-    diff=by_ep["native_tac"]-by_ep["gru_world"]
-    boot=diff[rng.integers(len(ids),size=(20000,len(ids)))].mean(axis=1)
-    ci=np.quantile(boot,[.025,.975]).tolist()
+    # Adjacent episodes share recording blocks. Cluster bootstrap by original
+    # 4-episode provenance block, not falsely independent episode rows.
+    rng=np.random.default_rng(63063 if not target else 63064)
+    blocks=sorted({int(e)//4 for e in ids})
+    if len(blocks)<10:
+        raise ValueError("insufficient independent recording blocks for registered CI")
+    reference_episodes={
+        "gru_world":by_ep["gru_world"],
+        "persistence":np.asarray([reference[e]["persistence_MAE"] for e in ids]),
+        "servo":np.asarray([reference[e]["servo_MAE"] for e in ids]),
+    }
+    intervals={}
+    for comparator,reference_values in reference_episodes.items():
+        diff=by_ep["native_tac"]-reference_values
+        block_means=np.asarray([
+            diff[np.asarray([int(e)//4==block for e in ids])].mean()
+            for block in blocks])
+        sampled=rng.integers(len(block_means),size=(20000,len(block_means)))
+        interval=np.quantile(block_means[sampled].mean(axis=1),[.025,.975]).tolist()
+        intervals[comparator]=interval
+    ci=intervals["gru_world"]
     seed_wins=sum(bool(a<b) for a,b in zip(
         errors["native_tac"].mean(axis=1),errors["gru_world"].mean(axis=1)))
-    gate=bool(means["native_tac"]<=.98*min(means["gru_world"],means["persistence"],means["servo"]) and ci[1]<0)
+    gate=bool(all(
+        means["native_tac"]<=.98*means[name] and intervals[name][1]<0
+        for name in reference_episodes))
     routing={}
     for arm in CONFIG:
         seed_route=[]
@@ -178,6 +197,8 @@ def summarize(episode_tables, group, source_cal=None, target=False):
         "population":group,"episodes":len(ids),"mean_physical_MAE":means,
         "TAC_paired_seed_wins":seed_wins,
         "TAC_minus_GRU_episode_bootstrap_95_interval":ci,
+        "TAC_minus_each_comparator_recording_block_95_intervals":intervals,
+        "recording_block_count":len(blocks),
         "registered_performance_gate_pass":gate,
         "per_seed_MAE":{arm:values.mean(axis=1).tolist() for arm,values in errors.items()},
         "development_not_independent":not target,
