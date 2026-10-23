@@ -11,9 +11,11 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from scripts.me064_mixed_real_fit import task_registration, get_meta, load_members
-from scripts.me057_train_fused_anchor_robot import identify, normalize
-from scripts.me060_train_trajectory import digest
+# Original publisher/Parquet loaders are loaded only in actual data-access mode;
+# importing scientific score/policy tests must not require full source tooling.
+def digest(obj):
+    return hashlib.sha256(json.dumps(obj,sort_keys=True,separators=(",",":")).encode()).hexdigest()
+
 from scripts.validate_research_parity import check_manifest
 from tac_osm.parameter_budget import (
     budgeted_optimizer, checked_optimizer_step, save_training_checkpoint)
@@ -53,6 +55,8 @@ def classify_members(registration):
     return fit,report
 
 def load_original(cache):
+    from scripts.me064_mixed_real_fit import task_registration, get_meta, load_members
+    from scripts.me057_train_fused_anchor_robot import identify, normalize
     reg=task_registration()
     fit_ids,report_ids=classify_members(reg)
     raw={}
