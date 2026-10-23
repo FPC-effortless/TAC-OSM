@@ -1,0 +1,34 @@
+native-model-and-real-replay	Replay all five original real-data models	﻿2026-10-23T09:14:46.3755027Z ##[group]Run if [ -f research/replay-bundles/ME071/ORIGINAL_SCORES.json ]; then
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3755666Z [36;1mif [ -f research/replay-bundles/ME071/ORIGINAL_SCORES.json ]; then[0m
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3756439Z [36;1m  python scripts/validate_research_parity.py --manifest research/replay-bundles/ME071/FINAL_REGISTRATION.json --phase final[0m
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3757343Z [36;1m  PYTHONPATH=src:. python scripts/me071_persistent_workflow.py --phase replay --cache /tmp/me071-source[0m
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3758096Z [36;1mfi[0m
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3821995Z shell: /usr/bin/bash -e {0}
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3822269Z env:
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3822553Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3823035Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3823505Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3823917Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3824358Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3824816Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.3825166Z ##[endgroup]
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:14:46.4303273Z {"eligible_for_architecture_superiority": false, "phase": "final", "status": "PASS_SINGLE_ARCHITECTURE_DEVELOPMENT", "study_id": "ME071_PERSISTENT_CALIBRATED_NATIVE_EVENT_MODEL"}
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1850486Z {
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1851090Z   "error": "original preprocessing changed",
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1851619Z   "original_files_restored": true,
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1851982Z   "status": "FAIL"
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1852302Z }
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1852490Z 
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1855872Z Traceback (most recent call last):
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1864359Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me071_persistent_workflow.py", line 292, in <module>
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1865762Z     {"register":registration,"train":train,"calibrate":calibrate,"score":score,"replay":replay}[args.phase](args.cache)
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1866836Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me071_persistent_workflow.py", line 263, in replay
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1867340Z     score(cache)
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1867798Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me071_persistent_workflow.py", line 244, in score
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1868325Z     for row,model in original_models(pre):
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1868933Z                      ^^^^^^^^^^^^^^^^^^^^
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1869511Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me071_persistent_workflow.py", line 175, in original_models
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1870180Z     if saved["preprocessing"]!=pre:raise ValueError("original preprocessing changed")
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1889481Z                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.1890098Z ValueError: original preprocessing changed
+native-model-and-real-replay	Replay all five original real-data models	2026-10-23T09:15:10.5261732Z ##[error]Process completed with exit code 1.

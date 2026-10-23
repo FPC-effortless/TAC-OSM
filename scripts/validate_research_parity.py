@@ -132,8 +132,39 @@ def check_manifest(m,phase="preflight"):
     strict_runtime=m.get("schema_version")==STRICT_SCHEMA
     text_field(m.get("study_id"),"study_id")
     kind=m.get("study_type")
-    demand(kind in ("architecture_comparison","noncomparative_diagnostic"),
+    demand(kind in ("architecture_comparison","noncomparative_diagnostic","capability_development"),
         "study_type must explicitly distinguish architecture comparison from diagnostics")
+    if kind=="capability_development":
+        # Owner-requested single-architecture construction, not a disguised
+        # unmatched winner or a synthetic-only capability experiment.
+        demand(m.get("no_architecture_superiority_claim") is True,"development forbids superiority claims")
+        demand(m.get("registered_before_first_fit") is True,"development must be registered before fitting")
+        text_field(m.get("scientific_purpose"),"development purpose")
+        source=m.get("real_world_source",{})
+        demand(source.get("observed_real_outcomes") is True,"development requires real outcomes")
+        digest(source.get("sha256"),"real source SHA")
+        text_field(source.get("license"),"source license")
+        demand(m.get("architecture_count")==1,"multiple architectures require comparison parity")
+        seeds=m.get("seeds",[])
+        demand(len(seeds)>=2 and len(set(seeds))==len(seeds),"multiple distinct development seeds required")
+        budget=m.get("training_budget",{})
+        for key in ("epochs","batch_size","backprop_events","expected_targets_per_seed"):
+            positive_num(budget.get(key),key,whole=True)
+        positive_num(m.get("trainable_parameters"),"development parameters",whole=True)
+        text_field(m.get("repository_storage_plan"),"original checkpoint storage plan")
+        for role in ("FIT","TEMP","CQR","REPORT"):
+            digest(m.get("split_sha256",{}).get(role),role+" identity")
+        if phase=="final":
+            records=m.get("completed_model_records",[])
+            demand(len(records)==len(seeds),"missing original development fits")
+            demand({r.get("seed") for r in records}==set(seeds),"development seed receipts differ")
+            for row in records:
+                digest(row.get("checkpoint_sha256"),"original development checkpoint")
+                demand(row.get("actual_targets")==budget["expected_targets_per_seed"],"development exposure differs from registration")
+                demand(row.get("epochs")==budget["epochs"],"development epochs differ")
+                positive_num(row.get("optimizer_cpu_seconds"),"actual training CPU")
+        return {"study_id":m["study_id"],"phase":phase,"status":"PASS_SINGLE_ARCHITECTURE_DEVELOPMENT",
+                "eligible_for_architecture_superiority":False}
     if kind=="noncomparative_diagnostic":
         demand(m.get("no_architecture_superiority_claim") is True,
             "diagnostic must forbid architecture-superiority claims")
@@ -290,7 +321,7 @@ def check_changed(base_head,root):
             f"{study}: missing preregistered FAIR_COMPARISON.json; no new experiment permitted")
         manifest=json.loads(file.read_text())
         result=check_manifest(manifest,"preflight")
-        if manifest["study_type"]=="architecture_comparison":
+        if manifest["study_type"] in ("architecture_comparison","capability_development"):
             workflows=list((root/".github/workflows").glob(study+"*.yml"))
             workflows+=list((root/".github/workflows").glob(study+"*.yaml"))
             demand(bool(workflows),

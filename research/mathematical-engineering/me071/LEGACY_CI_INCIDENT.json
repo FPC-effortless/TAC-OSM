@@ -1,0 +1,17 @@
+{
+  "scope": "Unintended inherited ME052 auto-training triggered by shared validator edit; separate from ME071 native fits",
+  "github_run": 39928421854,
+  "status": "CANCELLED",
+  "reported_partial_progress": [
+    "actual-original-robot-model-fit\tFIT ten original TAC/GRU models on authentic actual robot observations, then score untouched original test episodes\t2026-10-23T09:01:39.4978683Z {\"event\": \"ME052_MODEL_TRAINING_PROGRESS\", \"arm\": \"native_tac\", \"seed\": 52001, \"updates\": 20, \"loss\": 4.233224}"
+  ],
+  "final_updates": "UNKNOWN after last progress line",
+  "completed_fits_claimed": 0,
+  "partial_model_recovery": "UNVERIFIED/NOT_PRESERVED: no checkpoint retrieved; temporary artifact download returned HTTP403",
+  "temporary_artifact": {
+    "id": 12491115741,
+    "bytes": 1425
+  },
+  "fix": "Historical ME052 fitting now requires explicit workflow_dispatch run_original_training=true; PRs retain preflight only",
+  "ME071_weights_affected": false
+}

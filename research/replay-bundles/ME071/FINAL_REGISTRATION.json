@@ -1,0 +1,117 @@
+{
+  "architecture_count": 1,
+  "cohort_counts": {
+    "CQR": 463,
+    "FIT": 7096,
+    "REPORT": 925,
+    "TEMP": 462
+  },
+  "completed_model_records": [
+    {
+      "actual_targets": 715134,
+      "actual_updates": 1958,
+      "checkpoint_sha256": "804a2c4748fbb901531cf545f039154941fb7df1fd6337ef5c7bee06bc51174d",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 87.899795145,
+      "path": "research/replay-bundles/ME071/checkpoints/native-s71001.pt",
+      "seed": 71001
+    },
+    {
+      "actual_targets": 715134,
+      "actual_updates": 1952,
+      "checkpoint_sha256": "2c770ece9d194197939ed4dfb6a2e17cffbfa24a5e9290c59cc193780e8a80b8",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 88.916709072,
+      "path": "research/replay-bundles/ME071/checkpoints/native-s71002.pt",
+      "seed": 71002
+    },
+    {
+      "actual_targets": 715134,
+      "actual_updates": 1959,
+      "checkpoint_sha256": "bc0c7b36f936ca3797911e7efbab7e73a135b59316b7628f91d2f19cf4dbe4ed",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 90.53962978700002,
+      "path": "research/replay-bundles/ME071/checkpoints/native-s71003.pt",
+      "seed": 71003
+    },
+    {
+      "actual_targets": 715134,
+      "actual_updates": 1958,
+      "checkpoint_sha256": "2b139cdcaa3c2df8f08efea98e4edc7bde7c97a7ece79a29d22d0f902c77e78a",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 88.77358717200002,
+      "path": "research/replay-bundles/ME071/checkpoints/native-s71004.pt",
+      "seed": 71004
+    },
+    {
+      "actual_targets": 715134,
+      "actual_updates": 1954,
+      "checkpoint_sha256": "b28a2781dc4270ed83daff89f257bb82f88ee588af1eb6ad33e5ae49d0e50aa9",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 88.21337028200003,
+      "path": "research/replay-bundles/ME071/checkpoints/native-s71005.pt",
+      "seed": 71005
+    }
+  ],
+  "evaluation_contract": "DEV-only development readout: one target after exactly6 observed events per eligible case, separate TEMP first quarter, CQR second quarter, REPORT last half. Original TEST remains unscored. No early stopping or weight selection. Log loss, multiclass Brier, ECE diagnostic, quantile scores, MAE, interval score, coverage, width distribution; no superiority or fresh qualification.",
+  "history_prior_bytes": 64656,
+  "history_prior_path": "research/replay-bundles/ME070/practical-ngrams/FIT_NGRAM_STATE.json",
+  "history_prior_sha256": "b860c5209d7df66330cd2843011c8131e04f5fe7d4160f1cdf678790640d8a00",
+  "limits": "Previously studied institution and exposed DEV, not independent confirmation. CQR guarantee requires exchangeable cases, not guaranteed under chronological shift. No universal shrinkage, overconfidence diagnosis, GRU failure, >128 history or intelligence/autonomy claim.",
+  "no_architecture_superiority_claim": true,
+  "numerical_contract": {
+    "forecast_absolute": 1e-05,
+    "forecast_relative": 1e-05,
+    "mean_metric_absolute": 0.0001,
+    "mean_metric_relative": 1e-05,
+    "units": "Store primary outputs as log probabilities/log1p waiting quantiles. Seconds derived in float64; compare primary outputs directly before seconds metrics. No bitwise portability promise."
+  },
+  "preprocessing_sha256": "5bdd59024d4b106baf19d3c2a6153c50b1a1c128c058ac332944a20158e7b1d3",
+  "prior_art": [
+    "Guo et al. On Calibration of Modern Neural Networks,ICML2017,https://proceedings.mlr.press/v70/guo17a.html",
+    "Romano et al. Conformalized Quantile Regression,NeurIPS2019,https://arxiv.org/abs/1905.03222",
+    "Dai et al. Transformer-XL,ACL2019,https://aclanthology.org/P19-1285/"
+  ],
+  "real_world_source": {
+    "license": "4TU General Terms of Use; raw traces external, publisher-hash verified",
+    "name": "original BPI Challenge2012 loan event log",
+    "observed_real_outcomes": true,
+    "sha256": "5cd9cc16b9bcb20bd4aae45666a5d87479ddbf47e6371618b6ad217174cecdf3"
+  },
+  "registered_before_first_fit": true,
+  "repository_storage_plan": "Five original model/optimizer/Torch/NumPy RNG checkpoints at research/replay-bundles/ME071/checkpoints, approx8MB total; calibration JSON, original forecast NPZ and score JSON plus raw source legal acquisition, independent clean GitHub checkout full inference replay. Freeze originals before DEV calibration; freeze calibration before REPORT scoring.",
+  "schedule_sha256": {
+    "71001": "bd8c026d2d73b122417957973400dbfaa1f4129781014c8e91f8e2e06d70c702",
+    "71002": "ecfdb2baa6a13405904c8f32031124108f02f03f28c62ea16a7fb3fc1290262e",
+    "71003": "36cfb7c62449f4e1734b34a3e289db4ebbe2fe4248883d9a8902abf516b9c268",
+    "71004": "8990659fb0a0d71ee2eb40080e7a42510c6f4ce9019454a1fc7edee6e040cdfb",
+    "71005": "4568ce824dc2c0629b832ff404ac415291639aa9dfd1790dd13cb7fab8ab3eac"
+  },
+  "schema_version": "tac-osm.parity.v1",
+  "scientific_purpose": "Owner-requested construction and real-FIT training of one integrated native TAC event model: persistent chunk state, label smoothing, history log pooling, ordered log-time quantiles, disjoint DEV temperature and conformal calibration. Not an attribution or cross-architecture benchmark.",
+  "seeds": [
+    71001,
+    71002,
+    71003,
+    71004,
+    71005
+  ],
+  "split_sha256": {
+    "CQR": "1f0f167fca99faa2f3211864ed38be0e42a9334bc5a7d4df0409322535c0e0df",
+    "FIT": "04b9a6864abb17b3f9e8e4c9d9d9ce81e965c27ba524f754a8ef69ba2bb63645",
+    "REPORT": "4659093a04f06b9d07c8010f628c400130dce5f154c67475cc12c63c34907ba0",
+    "TEMP": "7afcebf3193f7ee374049c0883f09469b90aa67387a3fb936f4885cf0e730798"
+  },
+  "study_id": "ME071_PERSISTENT_CALIBRATED_NATIVE_EVENT_MODEL",
+  "study_type": "capability_development",
+  "trainable_parameters": 93770,
+  "training_budget": {
+    "architecture_search_trials": 0,
+    "backprop_events": 32,
+    "batch_size": 32,
+    "epochs": 6,
+    "expected_targets_per_seed": 715134,
+    "label_smoothing": 0.05,
+    "optimizer": "AdamW lr .001 weight_decay .0001 clip1"
+  }
+}
