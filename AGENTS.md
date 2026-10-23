@@ -79,3 +79,9 @@ require an explicit original registration, full Git commit and checkpoint hashes
 in `research/governance/FROZEN_REPLAY_REGISTRY.json`. They authorize integrity
 replay only. Do not rewrite old registrations to manufacture pre-update evidence.
 See `research/governance/LIVE_PARAMETER_ENFORCEMENT.md` for the contract and limits.
+
+
+For DIAGKEY004, apply `research/CAPABILITY_PROGRESS_TRUTH_STANDARD.md` and its
+claim checker. This one owner-authorized zero-delay synthetic repair is governed
+by its frozen protocol and 100k live guard. It is not real-world intelligence
+evidence and does not authorize another synthetic tuning series.

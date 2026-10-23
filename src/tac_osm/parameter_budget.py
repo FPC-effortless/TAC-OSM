@@ -89,6 +89,9 @@ def declared_budgets(manifest):
             )
             for s in manifest.get("seeds", [])
         ]
+    if kind == "synthetic_mechanism_training" and manifest.get("study_id") == "DIAGKEY004_ALIGNED_GATED_ZERO_REPAIR_SYNTHETIC_ONLY":
+        from tac_osm.diagkey004_registration import validate
+        return validate(manifest)
     if kind == "synthetic_mechanism_training" and manifest.get("study_id") == "DIAGKEY003_NATIVE_100K_ZERO_DISTRACTOR_MECHANISM_ONLY":
         # Exactly one additional owner-requested zero-delay learning diagnosis:
         # same live pre-update model-size guards, never operational evidence.
