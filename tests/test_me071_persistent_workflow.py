@@ -5,7 +5,8 @@ import pytest
 import torch
 
 from scripts.me069_workflow_source import fit_preprocessing,encode_cases
-from scripts.me071_persistent_workflow import forward_chunk,pack,metrics
+from scripts.me071_persistent_workflow import forward_chunk,pack,metrics,frozen_preprocessing
+from scripts.me069_workflow_source import digest
 from scripts.validate_research_parity import check_manifest,ParityError
 from tac_osm.workflow_me071 import (PersistentWorkflowModel,EntityMemory,detach_belief,
     assimilate_masked,predictive_loss,fit_temperature,cqr_correction,calibrated_seconds)
@@ -122,3 +123,16 @@ def test_development_lane_cannot_admit_multiple_architectures_or_missing_origina
     changed=copy.deepcopy(plan);changed["architecture_count"]=2
     with pytest.raises(ParityError):check_manifest(changed)
     with pytest.raises(ParityError):check_manifest(plan,"final")
+
+
+def test_restore_uses_exact_frozen_statistics_and_rejects_identity_changes():
+    original={'activities':{'a':1},'resources':{'r':1},'time_prior':[[1.]]}
+    reconstructed=copy.deepcopy(original);reconstructed['time_prior'][0][0]+=1e-12
+    restored=frozen_preprocessing(original,reconstructed,digest(original))
+    assert restored is original and restored['time_prior'][0][0]==1.
+    changed=copy.deepcopy(original);changed['time_prior'][0][0]=2.
+    with pytest.raises(ValueError,match='checksum'):
+        frozen_preprocessing(changed,reconstructed,digest(original))
+    reconstructed['activities']['future']=2
+    with pytest.raises(ValueError,match='vocabulary'):
+        frozen_preprocessing(original,reconstructed,digest(original))

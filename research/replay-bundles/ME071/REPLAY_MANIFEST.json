@@ -73,9 +73,9 @@
       "sha256": "059058ad17a5dda9f88cae6529e6978000e043bd27c56f08f0749dbef573e8cd"
     },
     {
-      "bytes": 18799,
+      "bytes": 19677,
       "path": "scripts/me071_persistent_workflow.py",
-      "sha256": "5a24be425bad38f010bd383939fffd0316f3ac36a4acd31ee894668b01cf2333"
+      "sha256": "91af7b4c374d582bf65b80fd1d6b4a92d2fa2098ee885af8d010c07d43566699"
     },
     {
       "bytes": 7582,
@@ -115,10 +115,12 @@
   ],
   "independent_audit": "research/mathematical-engineering/me071/REPLAY_AUDIT.json",
   "independent_audit_sha256": "ab9e8aaaf24b458c939a2727656d5c8ebb434a8f615d6b05fc2341105224f5c2",
-  "independent_scoring_replay": "PASS_CLEAN_GITHUB_CHECKOUT",
+  "independent_scoring_replay": "PASS_PRIOR_RUN_39929979913; FROZEN_PREPROCESSING_LOADER_REPAIR_AWAITING_CI",
+  "loader_repair": "Restore exact Git-frozen FIT preprocessing and verify its checksum/vocabulary/source identity; do not recompute numerical priors for comparison with original checkpoint. No weights, calibrators, outputs or tolerances changed.",
   "raw_source_distribution": "external, 4TU General Terms of Use; loader verifies publisher MD5 and SHA256",
   "scope": "five original native fits; development prediction only; no trained competitors or independent superiority claim",
   "score_correction": "First produced calibration pinball entries incorrectly reused raw quantiles. Preserve that readout separately; final scores use adjusted quantiles with unchanged model/calibration/prediction arrays. No selection or threshold change.",
   "source_sha256": "5cd9cc16b9bcb20bd4aae45666a5d87479ddbf47e6371618b6ad217174cecdf3",
-  "study": "ME071"
+  "study": "ME071",
+  "subsequent_preprocessing_failure_run": 39930371158
 }

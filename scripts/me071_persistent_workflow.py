@@ -29,7 +29,14 @@ PREFIX=5  # A fixed sixth observed event, independent of final trace length.
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def source(cache):
+def frozen_preprocessing(original,reconstructed,expected_digest):
+    if digest(original)!=expected_digest:raise ValueError("frozen preprocessing checksum changed")
+    for field in ("activities","resources"):
+        if original[field]!=reconstructed[field]:raise ValueError("source vocabulary changed")
+    return original  # Never replace recorded floats with regenerated statistics.
+
+
+def source(cache,use_frozen=True):
     cohorts,pre,receipt=load(cache)
     state=json.loads(STATE.read_text())
     if state["real_source_sha256"]!=receipt["source_sha256"]:raise ValueError("history prior source differs")
@@ -38,7 +45,14 @@ def source(cache):
     for c in cohorts["FIT"]:
         for a,d in zip(c["activity"][:-1],c["gap"][1:]):delays[int(a)].append(float(d))
     all_delays=[d for rows in delays for d in rows]
-    pre["log_wait_quantile_prior"]=[np.quantile(np.log1p(rows or all_delays),[.05,.5,.95]).tolist() for rows in delays]
+    if use_frozen:
+        plan=json.loads((ROOT/"FAIR_COMPARISON.json").read_text())
+        if (receipt["source_sha256"]!=plan["real_world_source"]["sha256"] or
+                receipt["cohorts"]["FIT"]["ids_sha256"]!=plan["split_sha256"]["FIT"]):
+            raise ValueError("original source/FIT identity changed")
+        pre=frozen_preprocessing(json.loads((ROOT/"FIT_PREPROCESSING.json").read_text()),pre,plan["preprocessing_sha256"])
+    else:
+        pre["log_wait_quantile_prior"]=[np.quantile(np.log1p(rows or all_delays),[.05,.5,.95]).tolist() for rows in delays]
     cohorts.pop("TEST")
     for rows in cohorts.values():
         for c in rows:
@@ -90,7 +104,7 @@ def forward_chunk(model,data,belief=None):
 
 
 def registration(cache):
-    torch.set_num_threads(1);cohorts,pre,receipt=source(cache)
+    torch.set_num_threads(1);cohorts,pre,receipt=source(cache,use_frozen=False)
     model=PersistentWorkflowModel(pre)
     targets=sum(c["n"]-1 for c in cohorts["FIT"])*EPOCHS
     manifest={"schema_version":"tac-osm.parity.v1","study_id":"ME071_PERSISTENT_CALIBRATED_NATIVE_EVENT_MODEL",
