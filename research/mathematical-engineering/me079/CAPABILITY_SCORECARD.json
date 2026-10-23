@@ -1,0 +1,71 @@
+{
+  "architecture_superiority_claim": false,
+  "guardrails": [
+    {
+      "metric": "H1_5pct_gain_vs_persistence_and_ME077",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1_moving_5pct_gain_vs_best_physical_reference",
+      "status": "PASS"
+    },
+    {
+      "metric": "no_task_10pct_regression_vs_persistence",
+      "status": "PASS"
+    },
+    {
+      "metric": "preserve_ME077_stationary_within10pct",
+      "status": "FAIL"
+    },
+    {
+      "metric": "both registered learned-control superiority gates",
+      "status": "FAIL"
+    }
+  ],
+  "integrity": {
+    "external_replay_status": "FAIL:29derived_interval_scores; allotherfields_PASS_original_contract",
+    "git_original_checkpoints": true,
+    "independent_clean_replay": true,
+    "independent_raw_case_audit": true,
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true
+  },
+  "model": {
+    "candidate_sha256": "f8ab8c3c130f4513c10cf6207994d4ee1410d07698da8f3db0d0cdcc5522e9fb",
+    "deployed_parameters": 100200,
+    "prior_sha256": "51779984a9bf90cf71b24b9f69ad999cf1183d5927d417cbc78fe6770edd30b1",
+    "scope": "first-seed identities; all15individual original models indexed in FIT_INDEX",
+    "trainable_parameters": 100200
+  },
+  "operator_value": "NOT_MEASURED",
+  "practical_reference_scored": true,
+  "primary_comparison": {
+    "candidate": 0.060594653011428364,
+    "direction": "lower_is_better",
+    "minimum_useful_gain": 0.003323797314477569,
+    "prior": 0.06647594628955138
+  },
+  "schema_version": "tac-osm.capability-progress.v1",
+  "source": {
+    "authentic_real_data": true,
+    "eligible_ids_sha256": "de074a324739ec05959baac263a51e0e0c3eb597084ba2efde9af4e5d9a3c771",
+    "exposure": "EXPOSED_DEV",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "study_id": "ME079_RISK_SHRINKAGE_MULTI_HORIZON_COMPARISON",
+  "task": {
+    "actual_future_targets": 40,
+    "actual_query_origins": 960,
+    "count_unit": "episode resampling units; operator/site independence NOT established",
+    "future_query_target_pairs": 2844,
+    "independent_cases": 40,
+    "prediction_time_validated": true,
+    "query_and_horizon": "sameME077H1queries plus explicitly availableH4/H16",
+    "same_case_ids_target_horizon_metric": true,
+    "target": "same recorded14Dphysical next-state MAE"
+  },
+  "tier": "MIXED_TRADEOFF",
+  "what_improved": "Native beats persistence by11.76/38.51/2.92% at1/4/16frames; H1MAE8.85%belowME077; actual motion substantially better than ME077 and strongest physical reference.",
+  "what_regressed": "Stationary H1still14.6timesME077; moving error worse thanME078; global AP belowME078; native loses aggregate learned-control comparison. Full registered gates failed.",
+  "what_remains_unknown": "Independent transfer, a unified stationary/moving winner, hardware-compute superiority, coherent joint trajectory probabilities, causal policy utility and customer value."
+}

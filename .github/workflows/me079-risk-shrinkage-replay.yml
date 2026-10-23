@@ -1,0 +1,39 @@
+name: ME079 matched real world predictor preflight and original replay
+on:
+  pull_request:
+    paths: ['src/tac_osm/variants/risk_shrinkage_world.py', 'scripts/me079*', 'research/mathematical-engineering/me079/**', 'research/replay-bundles/ME079/**', 'tests/test_me079*', '.github/workflows/me079-real-world-replay.yml']
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install 'pytest==9.1.1' 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - run: PYTHONPATH=src:. python -m pytest -q tests/test_me079_risk_shrinkage.py
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me079/FAIR_COMPARISON.json --phase preflight
+      - name: Verify actual final weights and guarded optimizer receipts
+        if: hashFiles('research/replay-bundles/ME079/FIT_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/me079_train_world.py finalize
+      - name: Final parity check
+        if: hashFiles('research/mathematical-engineering/me079/FINAL_COMPARISON.json') != ''
+        run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me079/FINAL_COMPARISON.json --phase final
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/me079-source
+          key: me079-original-source-v1
+      - name: Independently restore and replay all15original real models without fitting
+        if: hashFiles('research/replay-bundles/ME079/ORIGINAL_SCORE_INDEX.json') != ''
+        run: |
+          PYTHONPATH=src:. python scripts/me079_train_world.py replay --cache "${{ runner.temp }}/me079-source"
+          python - <<'PY'
+          from pathlib import Path
+          print('ME079_EXTERNAL_REPLAY='+Path('research/replay-bundles/ME079/INDEPENDENT_REPLAY.json').read_text())
+          PY
+      - name: Read-only full numerical audit (strict failure remains failed)
+        if: always() && hashFiles('research/replay-bundles/ME079/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/me078_cross_cpu_audit.py --study me079 --cache "${{ runner.temp }}/me079-source"
