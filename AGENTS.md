@@ -3,6 +3,36 @@
 For substantive engineering, product or research tasks, read `.agents/skills/fpc-universal/SKILL.md` and then the relevant repository-local instructions, specs, README, workflows and tests. Repository-specific safety, release, data, science and architecture requirements always override general skill guidance. Never assume a skill grants permission to access secrets, incur compute costs, deploy, merge or make external changes. Use a task branch and verify before submitting a PR.
 
 
+## Six isolated TAC research regimes — prospective branch (2026-10-23)
+
+This research branch is a **no-fit refactor** with typed boundary adapters in
+`src/tac_osm/variants/`. Choose one explicit lane for all subsequent work:
+`system1`, `physical`, `enterprise`, `temporal`, `edge_lite`,
+`counterfactual`. Read [the source-local research and actual study map](research/SIX_VARIANT_ARCHITECTURE_AND_EVIDENCE.md)
+and [machine-readable lane history](research/SIX_VARIANT_EXPERIMENT_INDEX.json).
+The complete up-to-date [master plan](https://github.com/FPC-effortless/TAC-OSM/blob/research/master-research-plan/research/MASTER_RESEARCH_PLAN.md)
+and [strict capability progress truth standard](https://github.com/FPC-effortless/TAC-OSM/blob/research/master-research-plan/research/CAPABILITY_PROGRESS_TRUTH_STANDARD.md)
+currently live on a separate research-plan branch; these documents are **not yet
+merged into this code branch or default branch**.
+
+Do not reinterpret this scaffolding as six independently fitted neural
+architectures or claim improved intelligence from its software tests.
+Preserve ME069–ME073 original trained checkpoints/optimizer/RNG and source code.
+ME074 associative-readout lesions are small/inconsistent; do not remove
+a trained tensor without a new compatible fit. Early fast-state sensitivity
+is not real sub-ms policy evidence. Real physical transfer has lost strongly
+to persistence; servo is not automatically superior. BPI log endings are not
+verified completion. Woyengi retains authoritative dual-clock source, other
+services retain execution permission, and Veritas simulations remain diagnostic.
+
+Current **95,000–105,000** prospective trained AND deployed learned parameter
+gate applies to all six variants. The proposed smaller System1/Physical/Edge
+sizes are unapproved until the owner explicitly updates the rule. For all new
+fit registrations retain licensed real data, full original Git model bytes,
+proper same-task old/new capability comparison, clean independent replay and
+true source/heldout exposure. The new adapter suite is allowed without any
+training, customer outreach or production deployment.
+
 ## TAC-OSM capability priority — owner direction 2026-10-23
 
 **Develop real learned abilities first; attribution is optional diagnosis, not the goal.** For the next TAC model iteration, prefer one **integrated native world model** that is actually trained, independently replayed and evaluated on authentic observed outcomes for *new useful capabilities*: multi-horizon prediction, uncertain timing, carried and corrected entity state, missingness resilience, and later action/outcome consequences if factual intervention records exist. Use proven mathematical techniques and existing research rather than many tiny diagnostic experiments. Prioritize genuine end-to-end ability over proving which memory cell caused it, CPU micro-optimization, or a new GRU comparison every iteration.
