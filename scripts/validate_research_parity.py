@@ -30,6 +30,45 @@ STUDY_FILE = re.compile(r"(?:^|/)(?:me|dev)(\d{2,3})(?:[-_./]|$)",re.I)
 SCHEMA = "tac-osm.parity.v1"
 PARAM_TOLERANCE=0.01
 FLOP_TOLERANCE=0.01
+# Prospective model-size policy: all trained neural models ~100k trainables.
+# Historical studies remain immutable, not silently retroactively disqualified.
+MODEL_TARGET_PARAMETERS = 100_000
+MODEL_TARGET_RELATIVE_TOLERANCE = 0.05
+MODEL_MIN_PARAMETERS = 95_000
+MODEL_MAX_PARAMETERS = 105_000
+LEGACY_MAX_ME_NUMBER = 72
+LEGACY_MAX_DEV_NUMBER = 61
+
+def requires_100k_policy(study_id):
+    """Prospective trained studies; keep already executed historical evidence frozen.
+
+    ME001..ME072 and DEV001..DEV061 were registered before the new constraint.
+    Any unrecognized/new study ID follows the new policy, not a bypass.
+    """
+    if not isinstance(study_id, str):
+        return True
+    m = re.match(r"^\\s*(ME|DEV)[-_ ]?(\\d{1,3})(?:\\b|[_-])", study_id, re.I)
+    if m:
+        cutoff = LEGACY_MAX_ME_NUMBER if m.group(1).upper() == "ME" else LEGACY_MAX_DEV_NUMBER
+        return int(m.group(2)) > cutoff
+    return True
+
+def check_model_parameter_target(trainable_parameters, deployed_parameters=None, *, label="model"):
+    """Hard prefit and postfit count guard for ALL new trained neural models.
+
+    Count trained encoder/memory/decoder/router/uncertainty/action heads. Include
+    frozen learned model weights in deployed counts; exclude nonlearned buffers.
+    """
+    positive_num(trainable_parameters, f"{label}.trainable_parameters", whole=True)
+    demand(MODEL_MIN_PARAMETERS <= trainable_parameters <= MODEL_MAX_PARAMETERS,
+           f"{label}: prospective 100k target requires 95,000..105,000 trainable parameters, got {trainable_parameters}")
+    if deployed_parameters is not None:
+        positive_num(deployed_parameters, f"{label}.deployed_parameters", whole=True)
+        demand(deployed_parameters >= trainable_parameters,
+               f"{label}: deployed learned parameters cannot be below trainable count")
+        demand(MODEL_MIN_PARAMETERS <= deployed_parameters <= MODEL_MAX_PARAMETERS,
+               f"{label}: 100k target requires 95,000..105,000 deployed learned parameters, got {deployed_parameters}")
+
 
 class ParityError(ValueError): pass
 
@@ -108,6 +147,9 @@ def check_manifest(m,phase="preflight"):
             else:positive_num(val,key,whole=True)
         demand(r["deployed_parameters"]>=r["trainable_parameters"],
             "trainable parameters cannot exceed total deployed parameters")
+        if requires_100k_policy(m["study_id"]):
+            check_model_parameter_target(r["trainable_parameters"], r["deployed_parameters"],
+                                         label=f"arms[{i}] {r['architecture']}")
         for k in ("dataset_sha256","train_split_sha256","dev_split_sha256",
                   "test_split_sha256","training_sample_order_sha256",
                   "feature_contract_sha256","target_contract_sha256",
@@ -178,6 +220,7 @@ def check_manifest(m,phase="preflight"):
         if phase=="final":
             actual=[r["measured"] for r in group]
             close_enough(actual,"training_flops",FLOP_TOLERANCE,f"seed {seed} actual FLOPs")
+    # Absolute 100k ±5% arm checks apply independently of the matched-arm 1% gate.
     # No CPU-time parity test: real execution speed is an efficiency result,
     # not a requirement for equal data, parameters or compute allotments.
     return {"study_id":m["study_id"],"phase":phase,"matched_seeds":sorted(seed_sets),
