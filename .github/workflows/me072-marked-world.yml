@@ -1,0 +1,28 @@
+name: ME072 native marked multihorizon capability
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/workflow_me072.py'
+      - 'scripts/me072_*.py'
+      - 'tests/test_me072_*.py'
+      - 'research/mathematical-engineering/me072/**'
+      - 'research/replay-bundles/ME072/**'
+      - '.github/workflows/me072-marked-world.yml'
+  workflow_dispatch:
+jobs:
+  native-futures-and-real-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install numpy==2.3.5 pytest==9.1.1
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: PYTHONPATH=src:. pytest -q tests/test_me072_marked_world.py
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me072/FAIR_COMPARISON.json --phase preflight
+      - name: Restore original models and recompute all factual futures
+        run: |
+          if [ -f research/replay-bundles/ME072/ORIGINAL_SCORES.json ]; then
+            python scripts/validate_research_parity.py --manifest research/replay-bundles/ME072/FINAL_REGISTRATION.json --phase final
+            PYTHONPATH=src:. python scripts/me072_marked_world.py --phase replay --cache /tmp/me072-source
+          fi

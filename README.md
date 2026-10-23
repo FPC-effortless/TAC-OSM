@@ -11,6 +11,16 @@ reported.
 
 ## Active architecture development — 2026-10-23
 
+Latest trained candidate: [ME072 native multi-horizon futures](research/mathematical-engineering/me072/RESULTS.md).
+Five original 123,377-parameter models predict 1/2/4/8 recorded events ahead,
+source-record boundary mass and a coherent zero/positive mixture clock.
+After six observed events, conditional future-activity accuracy is
+82.02%/68.47%/59.64%/54.18%. Timing remains uneven and sometimes very broad;
+record boundaries are retrospective source proxies, not verified workflow
+completion. Full original distributions, weights and factual scoring replay
+are preserved in [ME072's bundle](research/replay-bundles/ME072). This is
+capability development, not a new architecture-superiority or autonomy claim.
+
 Latest integrated candidate: [ME071 persistent native event model](research/mathematical-engineering/me071/RESULTS.md).
 Five original native fits add full-case detached state carry, label smoothing,
 history log pooling, ordered waiting quantiles, DEV-only temperature/CQR and
