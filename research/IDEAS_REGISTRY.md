@@ -2,6 +2,20 @@
 
 This is a **starter registry in TAC-OSM**, pending creation of a separate cross-project ideas repository. The registry does not claim that proposals were implemented or evaluated.
 
+## Owner-ordered next capability work — 2026-10-23
+
+The research owner is **more interested in model capabilities than ablation/attribution studies**. Prioritize integrated trained model progress over proving every TAC submodule novel or better than GRU. A comparator remains mandatory **if claiming architectural superiority**, but is not a prerequisite for a real single-architecture capability-development cycle. Existing held-out data, fair-budget gates for comparisons, authentic-only success claims, and full original Git checkpoint/replay rules are unchanged. ME070's 64-event scientific rejection applies only to a *memory-superiority claim*, not to whether TAC-OSM should continue learning useful skills.
+
+| Capability ID | Whole-model capability to develop | Measured development evidence required (not an untrained proposal) |
+| --- | --- | --- |
+| CAP-017 | Native multi-horizon workflow forecasting from observed prefixes | Actual original real-case queries at eligible horizons; case coverage, next-event/next-several-event metrics and proper time scores; no hindsight midpoint; record rare branch and status-change errors |
+| CAP-018 | Informative reliable waiting-time, event/stop uncertainty | Jointly trained zero/positive event and temporal distributions, proper log loss/Brier/ECE/pinball/interval score, coverage with median/p90/p99 width, real censoring and terminal-case boundary |
+| CAP-019 | Persistent, updateable, missingness-robust factual belief | Real observational entity continuity, state carry/read/revision over genuinely supported histories, verified-outcome feedback, time gaps and missing observation behavior; execution mechanism alone is not a predictive gain |
+| CAP-020 | Action-conditioned future state and event outcome representation | **Only when authentic records include actions available at prediction time and observed consequences**; multi-horizon action-conditioned factual outcomes, error/decision costs, safe uncertainty; no causal-treatment promise without identification |
+| CAP-021 | Native hierarchical / iterative state correction and generalization | Integrated mathematical engineering only where errors warrant it, train/checkpoint full original variants with real outcomes, and qualify on independently sourced real domain/site/task before external-product claims |
+
+**Execution:** extend frozen ME071 into an integrated next candidate and actually train it on legally available real data. Keep original checkpoints and source-replay provenance available inside TAC-OSM's repository. If novel long-history source acquisition remains blocked, improve genuinely supported enterprise forecasting and outcome/time calibration rather than staging more model-comparison diagnostics or manufacturing artificial long cases. **No CAP-017–021 capability is claimed as trained or demonstrated by this registry entry.**
+
 ## Current integrated capability work: ME071
 
 | ID | Capability | Delivered evidence | Remaining objective |
