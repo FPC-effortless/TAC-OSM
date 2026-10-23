@@ -28,6 +28,7 @@ jobs:
           test -f research/mathematical-engineering/me066/FAIR_COMPARISON.json
           test -f research/replay-bundles/ME066/TRAINING_RESULT.json
           test -f research/replay-bundles/ME066/CLEAN_CHECKOUT_MODEL_REPLAY.json
+          python scripts/validate_research_parity.py --manifest research/replay-bundles/ME066/FAIR_COMPARISON_FINAL.json --phase final
           PYTHONPATH=src:. python scripts/me066_verify_repo_checkpoints.py
       - name: First original real CAL plus metadata-frozen unseen charger task scoring; no refit
         run: |
