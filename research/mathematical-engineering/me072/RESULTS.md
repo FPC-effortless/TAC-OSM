@@ -125,3 +125,6 @@ Next integrated capability work should improve difficult early branches and
 longer-horizon mark/time coupling and tail quality, then qualify a frozen
 candidate on a genuinely new authentic source. Do not replace that work with
 another default component-attribution milestone.
+
+Operational relevance and evidence-stage boundaries are recorded in
+[the capability-to-value card](CAPABILITY_TO_VALUE.md); no customer value was measured.
