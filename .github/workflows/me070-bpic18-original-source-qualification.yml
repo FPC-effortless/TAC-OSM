@@ -1,9 +1,8 @@
 name: ME070 original BPI2018 long-history source qualification
+# The original 4TU file endpoint timed out on GitHub Actions run 39920980632.
+# Do not repeatedly consume CI minutes on every PR sync. Relaunch manually when
+# lawful byte source access is restored, preserving original recorded failure.
 on:
-  pull_request:
-    paths:
-      - 'scripts/me070_qualify_long_xes.py'
-      - '.github/workflows/me070-bpic18-original-source-qualification.yml'
   workflow_dispatch:
 permissions:
   contents: read
