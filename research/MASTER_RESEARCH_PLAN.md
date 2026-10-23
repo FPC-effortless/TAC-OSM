@@ -69,6 +69,11 @@ pass or model promotion is claimed.
 Subsequent GitHub run `39905632298` passed the identical fixed tolerance without
 a numerical/model change; this does not erase the original failing run
 `39905268211` or establish uniform CPU portability.
+Latest code-validation run `39905869711` printed a bit-identical DEV/TEST
+replay PASS receipt. The second failing run `39905753892` reported a
+1.221ms waiting-error discrepancy against a 0.226ms permitted difference.
+Both failures and successful receipts are repository-owned; no tolerance was
+relaxed and no original score was replaced.
 The full repository regression passed 1,005 tests. See the
 [results and limits](https://github.com/FPC-effortless/TAC-OSM/blob/research/me069-authentic-workflow-world-model-2026-10-23/research/mathematical-engineering/me069/RESULTS.md)
 and [original checkpoints](https://github.com/FPC-effortless/TAC-OSM/tree/research/me069-authentic-workflow-world-model-2026-10-23/research/replay-bundles/ME069).
