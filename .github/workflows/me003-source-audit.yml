@@ -1,0 +1,47 @@
+name: ME003 original MetroPT real dynamic source audit
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/me003_metropt_source_audit.py
+      - research/mathematical-engineering/me003/PROTOCOL.md
+      - .github/workflows/me003-source-audit.yml
+permissions:
+  contents: read
+jobs:
+  real-source-audit:
+    # Frozen original published source audit succeeded in run 39338118254.
+    # Later source-correction notes must not redownload or replace its evidence.
+    if: github.event.pull_request.head.sha == '8715a987904c661e5e825f726ab1feda332b5f09'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify Python compile before opening source
+        run: python -m py_compile scripts/me003_metropt_source_audit.py
+      - name: Audit UCI MetroPT-3 earliest thirty days, no neural training
+        run: python scripts/me003_metropt_source_audit.py | tee me003-original.log
+      - name: Enforce source suitability gate, without model selection
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('results/me003/source-audit.json'))
+          assert d['study']=='ME003' and d['model_fits']==0
+          assert d['future_reserved_labels_read'] is False
+          assert d['rows_inspected']>=10000 and d['eligible_short_interval_pairs']>=5000
+          assert d['bidirectional_count']>=3, 'source has too few authentic bidirectional sensor features'
+          print('ME003 authentic source-suitability gate passed; no model-performance claim')
+          PY
+      - name: Archive original source counts even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me003-original-source-suitability
+          path: |
+            results/me003/source-audit.json
+            me003-original.log
+          if-no-files-found: ignore
+          retention-days: 90
