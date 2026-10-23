@@ -180,6 +180,13 @@ def _check_manifest_declarations(m,phase):
     kind=m.get("study_type")
     demand(kind in ("architecture_comparison","noncomparative_diagnostic","capability_development","single_model_training","synthetic_mechanism_training"),
         "study_type must explicitly distinguish architecture comparison from diagnostics")
+    if kind=="synthetic_mechanism_training" and m.get("study_id")=="DIAGKEY004_ALIGNED_GATED_ZERO_REPAIR_SYNTHETIC_ONLY":
+        from tac_osm.diagkey004_registration import validate
+        validate(m)
+        demand(phase=="preflight","synthetic exception cannot pass REAL final science gate")
+        return {"study_id":m["study_id"],"phase":phase,
+                "eligible_for_architecture_superiority":False,"real_world_capability_evidence":False,
+                "status":"PASS_SYNTHETIC_ZERO_REPAIR_ONLY"}
     if kind=="synthetic_mechanism_training" and m.get("study_id")=="DIAGKEY003_NATIVE_100K_ZERO_DISTRACTOR_MECHANISM_ONLY":
         demand(m.get("registered_before_first_fit") is True and
                m.get("explicit_owner_requested_single_exception") is True and

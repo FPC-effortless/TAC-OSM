@@ -1,12 +1,6 @@
+# Completed original DIAGKEY003: never automatically refit on later core changes.
 name: DIAGKEY003 guarded 100k native zero-distractor association learning, synthetic-only
 on:
-  pull_request:
-    paths:
-      - 'scripts/diagkey003_train_native_zero.py'
-      - 'research/mathematical-engineering/diagkey003/**'
-      - 'src/tac_osm/parameter_budget.py'
-      - 'scripts/validate_research_parity.py'
-      - '.github/workflows/diagkey003-native-zero-ladder.yml'
   workflow_dispatch:
 permissions:
   contents: write

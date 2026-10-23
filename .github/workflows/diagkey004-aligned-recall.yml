@@ -1,0 +1,49 @@
+name: DIAGKEY004 guarded memory repair and original synthetic replay
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/aligned_associative_tac.py'
+      - 'src/tac_osm/diagkey004_registration.py'
+      - 'scripts/diagkey004_*.py'
+      - 'tests/test_diagkey004_*.py'
+      - 'research/mathematical-engineering/diagkey004/**'
+      - 'research/replay-bundles/DIAGKEY004/**'
+      - '.github/workflows/diagkey004-aligned-recall.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reference-and-frozen-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PYTHONPATH: src:.
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install numpy==2.3.5 pytest==9.1.1
+      - run: python -m pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m pytest -q tests/test_diagkey004_aligned_memory.py tests/test_capability_progress_truth_gate.py
+      - run: python scripts/audit_training_budget.py
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/diagkey004/FAIR_COMPARISON.json --phase preflight
+      - name: Restore originals only; this workflow never fits or tunes
+        run: |
+          if [ -f research/replay-bundles/DIAGKEY004/ORIGINAL_SUMMARY.json ]; then
+            python -m scripts.diagkey004_aligned_recall replay
+          fi
+      - name: Check honest capability scorecard
+        run: python scripts/validate_capability_progress.py research/mathematical-engineering/diagkey004/CAPABILITY_SCORECARD.json
+      - name: Audit all numeric differences without changing the original replay tolerance
+        if: always()
+        run: python -m scripts.diagkey004_replay_drift
+      - name: Preserve cross-CPU audit, including a strict replay failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagkey004-original-cross-cpu-audit
+          path: research/replay-bundles/DIAGKEY004/CROSS_CPU_AUDIT.json
+          if-no-files-found: ignore

@@ -1,0 +1,177 @@
+{
+  "architecture": "gru",
+  "checkpoints": [
+    {
+      "deployed_parameters": 101500,
+      "parameter_values_sha256": "1587336ec9c6dab842d10d168be5473f1a8c78ebdbb2f6377e289e2422d466d3",
+      "path": "research/replay-bundles/DIAGKEY004/gru-s75005/step-640.pt",
+      "sha256": "f50031f05d63cc5cbab2ede2ff76b33d08f39eb6f2c398e34eb8ba9675b5ad85",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 640,
+      "trainable_parameters": 101500
+    },
+    {
+      "deployed_parameters": 101500,
+      "parameter_values_sha256": "1f685793a88e1a882b167f093910c297d0810721feebb4282846a864f52da758",
+      "path": "research/replay-bundles/DIAGKEY004/gru-s75005/step-4096.pt",
+      "sha256": "92640dc22580ab07ff66fed33dc567b6a1db4ff9fe35d329b8a46b6cc0e074ab",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 4096,
+      "trainable_parameters": 101500
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 101500,
+    "trainable_parameters": 101500
+  },
+  "last_pre_update": {
+    "deployed_parameters": 101500,
+    "successful_optimizer_steps": 4095,
+    "trainable_parameters": 101500
+  },
+  "manifest_path": "/workspace/tac-diagkey004/research/mathematical-engineering/diagkey004/FAIR_COMPARISON.json",
+  "manifest_sha256": "769864a1dab1910934c09ff0e4da962776d4821de0315cdbde2f36c1af0d6f75",
+  "model_class": "scripts.diagkey001_associative_recall.GRU",
+  "preflight": {
+    "deployed_parameters": 101500,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "kind_embed.weight",
+        "numel": 144,
+        "requires_grad": true,
+        "shape": [
+          3,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "key.weight",
+        "numel": 3120,
+        "requires_grad": true,
+        "shape": [
+          65,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "value.weight",
+        "numel": 1584,
+        "requires_grad": true,
+        "shape": [
+          33,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.weight",
+        "numel": 2304,
+        "requires_grad": true,
+        "shape": [
+          48,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.bias",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "cell.weight_ih",
+        "numel": 18432,
+        "requires_grad": true,
+        "shape": [
+          384,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "cell.weight_hh",
+        "numel": 49152,
+        "requires_grad": true,
+        "shape": [
+          384,
+          128
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "cell.bias_ih",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          384
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "cell.bias_hh",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          384
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.weight",
+        "numel": 21824,
+        "requires_grad": true,
+        "shape": [
+          124,
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.bias",
+        "numel": 124,
+        "requires_grad": true,
+        "shape": [
+          124
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.weight",
+        "numel": 3968,
+        "requires_grad": true,
+        "shape": [
+          32,
+          124
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      }
+    ],
+    "trainable_parameters": 101500
+  },
+  "run_id": "cb2fd56d5e3b4939ae8381d91dcaec13",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 75005,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "DIAGKEY004_ALIGNED_GATED_ZERO_REPAIR_SYNTHETIC_ONLY",
+  "successful_optimizer_steps": 4096
+}
