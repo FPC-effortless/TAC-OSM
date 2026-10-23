@@ -321,7 +321,7 @@ def check_changed(base_head,root):
             f"{study}: missing preregistered FAIR_COMPARISON.json; no new experiment permitted")
         manifest=json.loads(file.read_text())
         result=check_manifest(manifest,"preflight")
-        if manifest["study_type"]=="architecture_comparison":
+        if manifest["study_type"] in ("architecture_comparison","capability_development"):
             workflows=list((root/".github/workflows").glob(study+"*.yml"))
             workflows+=list((root/".github/workflows").glob(study+"*.yaml"))
             demand(bool(workflows),

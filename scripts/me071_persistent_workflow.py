@@ -215,6 +215,7 @@ def metrics(array,labels,wait,temperature=1.,correction=0.):
     ece=sum(np.mean(hit)*abs(np.mean(confidence[hit])-np.mean(correct[hit])) for i in range(10)
         if np.any(hit:=((confidence>=i/10)&(confidence<(i+1)/10 if i<9 else confidence<=1))))
     q=array[:,-3:].astype(np.float64);y=np.log1p(wait)
+    positive_probability=torch.tensor(array[:,-4],dtype=torch.float64).sigmoid().numpy()
     error=y[:,None]-q;levels=np.asarray([.05,.5,.95])
     pinball=np.maximum(levels*error,(levels-1)*error).mean(0)
     seconds=calibrated_seconds(torch.tensor(q),correction).numpy();low,median,high=seconds.T
@@ -225,6 +226,7 @@ def metrics(array,labels,wait,temperature=1.,correction=0.):
     return {"cases":len(wait),"activity_NLL":float(-np.log(p[np.arange(len(labels)),labels]).mean()),
         "activity_accuracy":float(correct.mean()),"multiclass_Brier":float(np.mean(np.sum(p*p,1)-2*p[np.arange(len(labels)),labels]+1)),
         "ECE_10_equal_width_bins":float(ece),"waiting_MAE_hours":float(np.mean(abs(median-wait))/3600),
+        "positive_wait_Brier":float(np.mean((positive_probability-(wait>0))**2)),
         "positive_gap_MAE_hours":float(np.mean(abs(median[wait>0]-wait[wait>0]))/3600),
         "log1p_pinball_q05_q50_q95":pinball.tolist(),"log1p_interval_score":float(loginterval.mean()),
         "coverage_90":float(covered.mean()),"mean_width_hours":float(width.mean()/3600),
@@ -248,20 +250,35 @@ def score(cache):
 
 
 def replay(cache):
-    original=json.loads((BUNDLE/"ORIGINAL_SCORES.json").read_text())
-    arrays={k:v.copy() for k,v in np.load(BUNDLE/"ORIGINAL_FORECASTS.npz").items()}
-    score(cache)
-    restored=json.loads((BUNDLE/"ORIGINAL_SCORES.json").read_text())
-    plan=json.loads((ROOT/"FAIR_COMPARISON.json").read_text());tol=plan["numerical_contract"]
-    for k,v in np.load(BUNDLE/"ORIGINAL_FORECASTS.npz").items():
-        np.testing.assert_allclose(v,arrays[k],atol=tol["forecast_absolute"],rtol=tol["forecast_relative"])
-    for seed,rows in original["seeds"].items():
-        if rows["checkpoint_sha256"]!=restored["seeds"][seed]["checkpoint_sha256"]:raise ValueError("wrong model replay")
-        for variant in ("raw","calibrated"):
-            for field,value in rows[variant].items():
-                np.testing.assert_allclose(restored["seeds"][seed][variant][field],value,
-                    atol=tol["mean_metric_absolute"],rtol=tol["mean_metric_relative"])
-    write_json(ROOT/"REPLAY_AUDIT.json",{"status":"PASS","original_models_restored":5,"original_forecast_arrays_recomputed":True,
+    paths=[BUNDLE/"ORIGINAL_SCORES.json",BUNDLE/"ORIGINAL_FORECASTS.npz"]
+    for path in paths:verify_blob(path)
+    original_bytes={p:p.read_bytes() for p in paths}
+    original=json.loads(original_bytes[paths[0]])
+    with np.load(paths[1]) as saved:arrays={k:v.copy() for k,v in saved.items()}
+    audit=ROOT/"REPLAY_AUDIT.json";audit.unlink(missing_ok=True)
+    try:
+        score(cache)
+        restored=json.loads(paths[0].read_text())
+        plan=json.loads((ROOT/"FAIR_COMPARISON.json").read_text());tol=plan["numerical_contract"]
+        with np.load(paths[1]) as current:
+            if set(current)!=set(arrays):raise ValueError("replay seed arrays differ")
+            for k,v in current.items():
+                np.testing.assert_allclose(v,arrays[k],atol=tol["forecast_absolute"],rtol=tol["forecast_relative"])
+        for seed,rows in original["seeds"].items():
+            for field in ("checkpoint_sha256","ids_sha256"):
+                if rows[field]!=restored["seeds"][seed][field]:raise ValueError("wrong model/case replay")
+            for variant in ("raw","calibrated"):
+                for field,value in rows[variant].items():
+                    np.testing.assert_allclose(restored["seeds"][seed][variant][field],value,
+                        atol=tol["mean_metric_absolute"],rtol=tol["mean_metric_relative"])
+    except Exception as error:
+        for p in paths:(p.parent/("FAILED_REPLAY_"+p.name)).write_bytes(p.read_bytes())
+        write_json(audit,{"status":"FAIL","error":str(error),"original_files_restored":True})
+        print(audit.read_text(),flush=True)
+        raise
+    finally:
+        for p,value in original_bytes.items():p.write_bytes(value)
+    write_json(audit,{"status":"PASS","original_models_restored":5,"original_forecast_arrays_recomputed":True,
         "real_REPORT_scores_recomputed":True,"parameters_refit":False,"TEST_scored":False})
     print((ROOT/"REPLAY_AUDIT.json").read_text(),flush=True)
 
