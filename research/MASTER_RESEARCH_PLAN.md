@@ -17,6 +17,53 @@ The prospective claim checker is at [`scripts/validate_capability_progress.py`](
 
 **Not yet globally enforced:** the implementation is on `research/master-research-plan`, currently **not integrated into each open model-development draft branch or demonstrated as a mandatory protected-branch check**. Every new study must bring this validator/standard into its exact working branch and publish its honest scorecard; do not call the new policy universally installed, do not edit old study/checkpoint records and do not merge research drafts without a separately authorized decision.
 
+## DIAGKEY004 — trained native write/read repair, synthetic-only (2026-10-23)
+
+[Draft PR #362](https://github.com/FPC-effortless/TAC-OSM/pull/362) completes one
+prospectively registered immediate-recall repair with25 guarded original fits,
+five seeds and50 original model/optimizer/RNG milestone checkpoints. The new
+**101,527-parameter** native candidate retains88D fast/88D slow and ONE8x8 matrix;
+shares learned key addresses between writing/querying, ties value-code decoding,
+separates retention/error-write gates, protects QUERY from memory modification
+and uses a radius-four projection. Published gated-delta math is credited and
+checked against a pinned independent Flash Linear Attention reference. The old
+model already normalized keys/queries; normalization alone was not the repair.
+
+On the same new512 synthetic TEST queries/seed and identical original training
+examples/order, revised native exact recall is **97.93% at640 updates and99.84%
+at4096**, final seeds99.80/100/99.41/100/100%. The original **>=90% in EVERY seed**
+gate passes without relaxation. Unchanged native reaches30.31%/94.02% at640/4096,
+with one final seed77.15%; budget was an important limitation too. No-association
+TAC and GRU reach24.26/24.18% final; the Transformer reaches99.92% (100% at640).
+The task has four stored pairs,16 possible initial keys,64 total key vocabulary,
+32 values; unconditional chance3.125%, but ignoring the query and uniformly
+choosing a stored value gives25%. The old one-hot oracle had8 values, not32;
+its capacity conclusion must remain restricted to protected orthogonal keys.
+
+**Evidence boundaries:** all25 models and both milestone sets were Git-frozen at
+04002ef6 BEFORE first TEST scoring; actual original guard/source/data digests
+verified. All arms have<0.12% parameter discrepancy and the same optimizer
+exposure, but partial FLOP profiles differ and full-compute parity is unverified:
+**no fair architecture-winner or real-world intelligence claim**. A clean fresh
+local Git clone reproduced all50 original score sets under the registered1e-5
+contract. A local AVX2 check also passed. The separate GitHub runner exceeded the
+original logit tolerance; that strict external replay exception is preserved and
+not converted to success by widening tolerances. See
+[results](https://github.com/FPC-effortless/TAC-OSM/blob/research/diagkey004-aligned-gated-retrieval-2026-10-23/research/mathematical-engineering/diagkey004/RESULTS.md)
+and the adjacent numerical-replay status. Canonical real-world scorecard remains
+**ENGINEERING_VERIFIED**, authentic_real_data=false. Neither delay/interference,
+long memory, authentic forecast improvement nor action utility is established.
+
+**Next decision:** this qualifies the simplest synthetic mechanism rung only.
+No automatic1/4/16/256-delay training. Any interference curriculum needs a new
+prospective registration and preserved original evidence; authentic System1,
+Enterprise and Physical development priorities continue independently. Do not
+use this result to overwrite ME076's real negative result, promote the model,
+or make memory-capacity/causal-attribution claims from cosine alone. The cheap
+frozen DIAGKEY003 read check finds strongly negative learned key/query cosine
+in several higher-accuracy seeds; decoder coding/sign and OOD substitutions
+prevent treating cosine as a standalone retention/retrieval diagnosis.
+
 ## ME076 first authentic System 1 original model training — NEGATIVE CAPABILITY RESULT (2026-10-23)
 
 **Preserved original evidence:** five genuinely fitted 100,476-active-parameter native fast-only System1 models, 160 AdamW updates/seed, on real original BodenAI RW-RL-HIL robot FIT episodes, registered in [ME076 FAIR_COMPARISON](https://github.com/FPC-effortless/TAC-OSM/blob/research/me075-system1-native-gated-delta-2026-10-23/research/mathematical-engineering/me076/FAIR_COMPARISON.json). Original 160-episode SHA `4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776` matched frozen source; source FIT redivided by deterministic episode key into 120 FIT and 40 **already exposed original FIT-derived episode-disjoint REPORT**. FIT-only normalizer/servo. 960 genuine eligible observed next-state queries on 40 REPORT episodes **per seed**; 84 genuinely moving under preregistered 0.025-unit mean 14-joint change threshold, 876 near-stationary. This source's previous-exposure status means **DEV evidence only**.

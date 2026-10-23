@@ -2,6 +2,21 @@
 
 This is a **starter registry in TAC-OSM**, pending creation of a separate cross-project ideas repository. The registry does not claim that proposals were implemented or evaluated.
 
+
+## DIAGKEY004 native memory interface repair — synthetic-only
+
+[Draft #362](https://github.com/FPC-effortless/TAC-OSM/pull/362): original guarded
+101,527-parameter native model, shared write/query addresses and tied value
+codes, decoupled gates and protected queries. Five final synthetic accuracies
+99.80/100/99.41/100/100%; all-five90% immediate-recall gate passes. Same-task
+640-update mean97.93% versus unchanged native30.31%; at4096 unchanged native
+improves to94.02% but one seed77.15%. All25 original fits and50 milestone
+checkpoints/logits preserved. Full FLOP parity is unverified. Fresh local clone
+replay passed; strict external GitHub logit-tolerance exception remains visible.
+**ENGINEERING_VERIFIED synthetic mechanism**, not a real skill/architecture winner.
+Next interference rung is not trained or automatically authorized. Preserve
+independent authentic System1/Physical/Enterprise work and ME076 negatives.
+
 ## ME076 — Actual authentic System 1 native predictive failure (2026-10-23)
 
 **Real original FIT training and replay completed, strict skill gain FAILED.** [Draft PR #360](https://github.com/FPC-effortless/TAC-OSM/pull/360) now includes **five fitted 100,476-parameter** native fast-only whole models, 160 real source optimizer updates per seed, original source FIT 120 episodes / source-exposed episode-disjoint 40 report, five original checkpoint+optimizer+RNG files and 5×960 original real per-case predictions. Independent clean-runner checkpoint+score replay **PASS all five**; independently audited original training budgets 100,476 learned parameters and 160 updates/seed **PASS**, no untrained-head camouflage. Original source 160-episode SHA `4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776`; original CAL, original TEST and the reserved protected task **never opened**.
