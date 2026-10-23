@@ -1,0 +1,71 @@
+{
+  "schema_version": "tac-osm.parity.v2",
+  "study_id": "DIAGKEY002_NO_FIT_WRITE_RETAIN_RETRIEVE_MECHANISM_DIAG",
+  "study_type": "noncomparative_diagnostic",
+  "no_architecture_superiority_claim": true,
+  "no_new_model_fits": true,
+  "scientific_purpose": "Software-only exact onehot delta-rule 8x8 oracle and replay of 20 original unguarded synthetic DIAGKEY001 pilot models on 0/1/2/4/8/16/64/256 distractor ladder; inspect original actual key write/retrieval gradients. No future model training, no use of real test.",
+  "real_world_source": {
+    "name": "NO REAL DATA: SYNTHETIC SOFTWARE MECHANISM ONLY",
+    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "observed_real_outcomes": false
+  },
+  "data_source": "Current original DIAGKEY001 first quarantined synthetic pilot binary checkpoints with original SHA, not the later guarded model paths",
+  "checkpoints_pretrained_models": 20,
+  "original_optimizer_guard_pass": false,
+  "actual_current_fit_optimizer_updates": 0,
+  "reported_parameter_counts": {
+    "tac": 101554,
+    "tac_noassoc": 101560,
+    "gru": 101500,
+    "transformer": 101616
+  },
+  "training_lengths_original": [
+    16,
+    64,
+    256
+  ],
+  "source_synthetic_ladder_lengths": [
+    0,
+    1,
+    2,
+    4,
+    8,
+    16,
+    64,
+    256
+  ],
+  "out_of_distribution_shorter_lengths": [
+    0,
+    1,
+    2,
+    4,
+    8
+  ],
+  "original_pilot_scientific_qualification": "FAILED SCIENTIFIC OPTIMIZER GUARD AND FLOP PARITY; all frozen scores descriptive only",
+  "oracle_write_admission_known_ground_truth": true,
+  "oracle_n_trials_per_delay": 1000,
+  "original_pilot_eval_examples_per_arm_seed_delay": 512,
+  "original_pilot_five_fixed_seeds": [
+    75001,
+    75002,
+    75003,
+    75004,
+    75005
+  ],
+  "conditions": [
+    "correct write-mask oracle",
+    "unfiltered distractor writes",
+    "original global L2 norm after all write steps",
+    "query-time zero write"
+  ],
+  "gradient_checks": [
+    "first four input event encoder norm",
+    "last query event gradient norm",
+    "write_map.weight.grad",
+    "query.weight.grad",
+    "fast_map.weight.grad"
+  ],
+  "outcome_interpretation": "A passing oracle shows 8x8 delta arithmetic can bind four ideal orthogonal keys; not trained TAC recall, no transferable capability, no new fair model comparison",
+  "actual_authentic_source_TEST_opened": false
+}
