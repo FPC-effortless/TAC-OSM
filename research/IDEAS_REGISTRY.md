@@ -2,6 +2,17 @@
 
 This is a **starter registry in TAC-OSM**, pending creation of a separate cross-project ideas repository. The registry does not claim that proposals were implemented or evaluated.
 
+## Current integrated capability work: ME071
+
+| ID | Capability | Delivered evidence | Remaining objective |
+| --- | --- | --- | --- |
+| CAP-016 | Persistent, probability-aware native enterprise event model | [ME071 PR #350](https://github.com/FPC-effortless/TAC-OSM/pull/350): five original 93,770-parameter native fits; six real FIT epochs/715,134 targets each. Full-case detached fast/slow/associative carry, history log pooling, smoothing, ordered waiting quantiles, disjoint temperature/CQR, independent entity streams. Fixed-six-event DEV REPORT accuracy81.58%, fitted NLL .401741 vs raw .420459; Brier/ECE worsen and calibrated mean intervals51.69h. Original Git checkpoints, forecast arrays and independent five-model real-score replay preserved; later preprocessing mismatch preserved and loader repaired to restore exact frozen values. | Improve complete model's probability quality and interval usefulness, then qualify on an untouched authentic source. No new baseline matrix, attribution fit, fresh TEST, 256-memory, action-policy or commercial claim. State carry is not longer gradient credit. Preserve ME070's long-memory rejection rule. |
+
+The owner's current emphasis is integrated architectural power before detailed
+mechanism attribution. This single-architecture development lane cannot be
+used to bypass the matched-resource contract for future architecture winners.
+Synthetic fixtures/interleaving are supporting engineering checks only.
+
 | ID | Idea | Origin | Status | Evidence or next test |
 |---|---|---|---|---|
 | TAC-001 | Direct associative retrieval for physical forecast | ME-054 review | Proposed | Ablate on authentic robot trajectories |

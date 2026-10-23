@@ -1,5 +1,5 @@
 # TAC-OSM — Unified Master Research Plan
-Version: 2026-10-23 (ME069 authentic enterprise event-model update) | Status: research proposal and evidence register; not a commercially qualified system
+Version: 2026-10-23 (ME071 persistent native capability-development update) | Status: research proposal and evidence register; not a commercially qualified system
 
 ## Mission and constraints
 Build a persistent action-conditioned predictive world model that learns what to remember, where to store it, how to retrieve it, how dynamics evolve, when to refine predictions, and when to correct beliefs. Retain ME-054 native and ME-056 Concept-Swarm as independently testable branches. Do not replace TAC-OSM with an LLM, Transformer, MTSK, or SSM.
@@ -14,7 +14,89 @@ Build a persistent action-conditioned predictive world model that learns what to
 
 ## Company-aligned north star and scope (2026-10-22 revision)
 
-### Current architecture-first execution: authentic enterprise workflows (ME069)
+### Current architecture-first execution: ME071 persistent event model
+
+The owner's latest direction prioritizes making the full native model more
+powerful before detailed attribution. [Draft PR #350](https://github.com/FPC-effortless/TAC-OSM/pull/350)
+implements and actually trains one integrated native architecture rather than
+another baseline matrix. The explicit `capability_development` registration
+enforces authentic data, original checkpoint preservation, seeds and exposure;
+it rejects multiple architectures and confers **no architecture-superiority
+eligibility**. Future comparative claims still require existing parity gates.
+
+**Delivered:** all fast64/slow64/8x8 associative values carry across detached
+32-event chunks; width128 SwiGLU decoder; .05 label smoothing; learned log-linear
+pooling with the FIT-only five-event prior; ordered log1p-second .05/.50/.95
+quantiles and positive-delay occurrence; disjoint DEV temperature and CQR;
+entity-separated timestamped streaming; masked assimilation and interleaving
+execution tests. These reuse established methods while retaining native TAC.
+State carry does not extend backward credit beyond 32 events or prove useful
+256-event memory. BPI2012 still lacks adequate long-history confirmation.
+
+**Actual training:** five original native seeds, 93,770 trainable parameters,
+six complete real FIT epochs and 715,134 supervised transitions per model;
+mean optimizer CPU 88.87s per model. No new trained comparator, architecture
+ablation, fresh TEST evaluation or BPI2018 retry was performed. The inherited
+FIT count prior's deployed bytes/hash are recorded separately.
+
+**Development readout:** predict after exactly six observed events, using
+367 eligible cases from the later DEV REPORT partition. Distinct TEMP=240
+and CQR=235 eligible cases fit postprocessing. Original weights froze in Git
+at `7c503e95`; calibration froze at `080976ee` before REPORT scoring.
+
+| Same native pipeline | Raw | Frozen temperature + CQR |
+| --- | ---: | ---: |
+| Next-event log loss | 0.420459 | **0.401741** |
+| Next-event accuracy | 81.58% | 81.58% |
+| Multiclass Brier | **0.225696** | 0.234267 |
+| ECE, ten bins | **0.071837** | 0.073577 |
+| Waiting median MAE, hours | 2.0573 | 2.0573 |
+| Nominal90 interval coverage | 91.39% | 93.35% |
+| Mean interval width, hours | **48.15** | 51.69 |
+
+NLL improves 4.45% through fitted temperature, but Brier/ECE worsen. CQR
+widens two seeds' intervals and improves coverage; useful sharpness is still
+unresolved. No exact chronological coverage or 50–80% width reduction is
+promised. The early fixed-prefix target differs from ME069's hindsight
+midpoint: do not compare 81.58% and 94.77%, or new/old widths, as a controlled
+model improvement/regression. This is previously exposed DEV development,
+not independent qualification or a general intelligence milestone.
+
+On 16 already exposed real cases per seed, entity interleaving reproduces
+isolated states exactly; hiding four observations worsens next-event loss.
+These support implementation, not unique retention or GRU failure. The
+ME070 64-event rejection criterion and authentic-source qualification
+requirements remain intact for later memory claims.
+
+All five original model/optimizer/RNG files, calibrators, primary forecast
+arrays, original scores and executable replay are Git-owned. Independent
+[GitHub run 39929979913](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39929979913)
+restored originals and recomputed all 1,835 case vectors. A later runner
+reported regenerated-preprocessing mismatch; its log is preserved and the
+loader now restores exact frozen FIT preprocessing instead of recalculating
+numerical priors. No weights, calibration or tolerance was changed. The
+post-repair replay receipt and current test count are maintained in
+[ME071 results](https://github.com/FPC-effortless/TAC-OSM/blob/research/me071-persistent-calibrated-event-model-2026-10-23/research/mathematical-engineering/me071/RESULTS.md).
+Post-repair [GitHub run 39934866901](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39934866901)
+passed full five-model, 1,835-vector real scoring replay with unchanged original
+weights/calibration/forecasts/tolerances. **REPO_REPLAY=PASS**; **1,024 repository
+tests passed**. Earlier success and preprocessing failure remain recorded.
+
+The initial calibrated pinball-reporting error is archived separately; the
+corrected score uses adjusted quantiles and leaves forecasts unchanged. An
+inherited old robot CI training auto-trigger was cancelled and made opt-in;
+its partial unrecovered state is explicitly disclosed, not counted as a
+completed fit. Woyengi authority, actual action/cost utility, online weight
+learning and language capabilities are not implied by this event model.
+
+**Continue architecture-first:** improve the jointly learned probability and
+time representation on development data, then freeze a stronger integrated
+candidate for a separately sourced authentic qualification cohort. Do not
+insert another diagnostic-only milestone or claim component attribution as
+a prerequisite for construction. Preserve the untouched physical holdout and
+the established no-synthetic-primary-evidence boundary.
+
+### ME069 enterprise foundation (historical, preserved)
 
 The user's latest direction prioritizes making the integrated native model more
 capable for enterprise operations. ME069 therefore adds an authentic enterprise
