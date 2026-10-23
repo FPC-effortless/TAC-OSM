@@ -41,8 +41,8 @@ def test_valid_transport_and_non_authoritative_reply():
     digest = validate_prediction_request(r)
     assert len(digest) == 64 and digest == validate_prediction_request(deepcopy(r))
     reply = prediction_response(r, forecast_summaries=[
-        {"scenario_id": "candidate:hold", "mean_error": None},
-        {"scenario_id": "candidate:move", "mean_error": None},
+        {"scenario_id": "candidate:hold", "predicted_states": [[0.]*14], "predicted_std": [[1.]*14], "review_required": True},
+        {"scenario_id": "candidate:move", "predicted_states": [[1.]*14], "predicted_std": [[1.]*14], "review_required": True},
     ], model_replay_commit="b"*40)
     assert reply["execute"] is False
     assert reply["authority"] == "none"
@@ -73,4 +73,13 @@ def test_reject_reply_with_wrong_scenario_order():
         prediction_response(r, forecast_summaries=[
             {"scenario_id": "candidate:move"},
             {"scenario_id": "candidate:hold"},
+        ], model_replay_commit="b"*40)
+
+
+def test_unqualified_predictions_cannot_become_automatic_actions():
+    r = sample()
+    with pytest.raises(ValueError):
+        prediction_response(r, forecast_summaries=[
+            {"scenario_id": "candidate:hold", "predicted_states": [[0.]*14], "predicted_std": [[1.]*14], "review_required": False, "execute": True},
+            {"scenario_id": "candidate:move", "predicted_states": [[1.]*14], "predicted_std": [[1.]*14], "review_required": True},
         ], model_replay_commit="b"*40)
