@@ -1,0 +1,52 @@
+name: ME077A original real motion discrimination audit - frozen models only
+on:
+  pull_request:
+    paths:
+      - 'scripts/me077a_original_motion_audit.py'
+      - 'tests/test_me077a_original_motion_audit.py'
+      - 'research/mathematical-engineering/me077a/**'
+      - '.github/workflows/me077a-real-motion-discrimination.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: me077a-genuine-no-fit-audit-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  audit-original-authentic-case-risk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5' 'pytest==8.4.2'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify pure scoring and original no-training policy
+        run: |
+          PYTHONPATH=src:. python -m pytest -q tests/test_me077a_original_motion_audit.py
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me077a/FAIR_COMPARISON.json --phase preflight
+      - name: Evaluate original 5 frozen real robot models' actual 960-case motion ranking and calibration; never refit
+        run: PYTHONPATH=src:. python scripts/me077a_original_motion_audit.py
+      - name: Preserve immutable original real case-cluster motion evidence, including negative findings
+        env:
+          PUSH_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          set -eu
+          FILE=research/replay-bundles/ME077A/ORIGINAL_REAL_MOTION_RANKING.json
+          git add -f "$FILE"
+          if ! git diff --cached --quiet; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git commit -m 'evidence(me077a): original real 40-episode frozen movement-risk calibration and ranking; no fits'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin "$PUSH_BRANCH"
+              git rebase "origin/$PUSH_BRANCH"
+              if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+              if [ "$attempt" -eq 5 ]; then exit 1; fi
+            done
+          fi
