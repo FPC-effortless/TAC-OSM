@@ -1,0 +1,26 @@
+name: TAC-OSM capability progress evidence claim guard
+on:
+  push:
+    branches:
+      - research/master-research-plan
+    paths:
+      - scripts/validate_capability_progress.py
+      - tests/test_capability_progress_truth_gate.py
+      - .github/workflows/capability-progress-truth-gate.yml
+  pull_request:
+    paths:
+      - scripts/validate_capability_progress.py
+      - tests/test_capability_progress_truth_gate.py
+      - .github/workflows/capability-progress-truth-gate.yml
+  workflow_dispatch:
+jobs:
+  claim-declaration-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install pytest==9.1.1
+      - name: Validate honest claim tier and no-false-promotion regression fixtures
+        run: python -m pytest -q tests/test_capability_progress_truth_gate.py
