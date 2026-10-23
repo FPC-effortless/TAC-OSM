@@ -18,6 +18,7 @@ def summarize(folder,cache,model_factory=build):
     torch.set_num_threads(1)
     report=json.loads((folder/"results.json").read_text())
     final_plan=json.loads((folder/"FAIR_COMPARISON_FINAL.json").read_text())
+    seeds=sorted({r["seed"] for r in final_plan["arms"]})
     final=check_manifest(final_plan,"final")
     split,metadata=cohorts(cache)
     first=torch.load(folder/report["checkpoints"][0]["path"],weights_only=False)
@@ -42,11 +43,11 @@ def summarize(folder,cache,model_factory=build):
     ids=sorted(next(iter(dev.values())),key=int)
     by_arm={};uncertainty={};per_seed={}
     for arm in ("native_tac","gru_world"):
-        episode=np.asarray([[dev[f"{arm}-s{s}"][e]["MAE"] for e in ids] for s in SEEDS])
+        episode=np.asarray([[dev[f"{arm}-s{s}"][e]["MAE"] for e in ids] for s in seeds])
         by_arm[arm]=episode.mean(0)
         per_seed[arm]=episode.mean(1).tolist()
         uncertainty[arm]=[]
-        for seed in SEEDS:
+        for seed in seeds:
             key=f"{arm}-s{seed}"
             cal=list(evaluation["CAL"][key].values())
             cal_scores=np.asarray([max(row["scaled_errors"]) for row in cal])
