@@ -82,6 +82,12 @@ waiting-time score tolerance (first reported at DEV / GRU seed 69005 / row
 This is a numerical portability exception, not a relaxed tolerance or an
 all-environment replay pass. Original weights, scores and acceptance thresholds
 remain unchanged. The branch remains draft and unpromoted.
+The subsequent [GitHub run 39905632298](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39905632298)
+passed the same fixed replay contract without a numerical/model change. This
+does not erase the preceding failure or establish uniform CPU portability.
+Artifact download from that run returned HTTP 403 in this environment; its
+successful check is verified through the GitHub run/step records, separately
+from the locally retrieved, bit-identical clean-checkout receipt.
 
 Full repository regression: **1,005 tests passed**. Numerical fixtures are
 engineering evidence only. GitHub CI additionally loads the repository-owned

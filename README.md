@@ -21,8 +21,9 @@ accuracy. TAC improves substantially over the empirical reference but loses
 its registered GRU superiority gate (1/5 seed wins). Waiting-time intervals
 remain wide. All original weights and scores are in the
 [Git-owned replay bundle](research/replay-bundles/ME069); local clean-checkout
-score replay is exact, while GitHub CPU replay has a strict waiting-score
-tolerance failure. This is observational forecasting, not actual SLA failure,
+score replay is exact. One GitHub CPU replay failed the strict waiting-score
+tolerance; a later run passed unchanged. That portability exception remains
+recorded. This is observational forecasting, not actual SLA failure,
 policy utility, Woyengi deployment or commercial qualification.
 
 Earlier [ME061 native world model](research/mathematical-engineering/me061/RESULTS.md),

@@ -129,6 +129,7 @@ def replay(cache):
         write_json(audit, {"status": "FAIL", "test_metrics_recomputed": True,
                           "all_case_score_records_within_preregistered_tolerance": False,
                           "error": str(error), "original_score_bytes_preserved": True})
+        print(audit.read_text(), flush=True)
         raise
     # Keep the original committed score bytes, even when a replay differs within tolerance.
     exact = target.read_bytes() == original_bytes
@@ -139,6 +140,7 @@ def replay(cache):
         "bit_identical_evaluation_json": exact, "primary_absolute_tolerance": 1e-5,
         "record_absolute_tolerance": 1e-4, "record_relative_tolerance": 1e-5,
         "cases_per_seed": {p: len(next(iter(original["scores"][p].values()))) for p in ("DEV", "TEST")}})
+    print(audit.read_text(), flush=True)
 
 
 if __name__ == "__main__":
