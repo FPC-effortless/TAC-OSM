@@ -56,6 +56,10 @@ argument for unconditional global fast-state removal. Any early gating,
 association deletion or memory conversion would require **a newly fitted**
 model under the active 100k training gate; preserve old ME073 weights.
 
+Additional published methods and authentic evaluation designs are indexed in
+[the six-lane peer-reviewed literature-to-experiment map](SIX_VARIANT_LITERATURE_TO_EXPERIMENTS.md).
+Published results are prior art, **not** demonstrated TAC capability gains.
+
 ## Historical experiments attached to each research lane
 
 | Lane | Source studies / records | Correct interpretation |
