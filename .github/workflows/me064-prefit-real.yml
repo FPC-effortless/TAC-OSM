@@ -1,0 +1,41 @@
+name: ME064 original multi-task FIT resource preflight (no training)
+on:
+  pull_request:
+    paths:
+      - 'scripts/me064_prefit_original_fit.py'
+      - 'scripts/me064_mixed_real_fit.py'
+      - '.github/workflows/me064-prefit-real.yml'
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  multi-task-fit-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: "${{ github.head_ref || github.ref_name }}"}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Original publisher five FIT task data, fixed samples, no heldout outcomes
+        run: |
+          PYTHONPATH=src:. python scripts/me064_prefit_original_fit.py \
+            --cache "${{ runner.temp }}/me064-prefit-source" \
+            --output research/mathematical-engineering/me064/PREFLIGHT_MEASURED.json
+      - name: Persist real FIT prefit evidence in Git before model training
+        if: always()
+        env: {PUSH_BRANCH: "${{ github.head_ref || github.ref_name }}"}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A research/mathematical-engineering/me064/
+          if ! git diff --cached --quiet; then
+            git commit -m 'evidence(me064): preserve five-task original FIT param/FLOP receipt before fitting'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin "$PUSH_BRANCH"
+              git rebase "origin/$PUSH_BRANCH"
+              if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+              if [ "$attempt" -eq 5 ]; then exit 1; fi
+            done
+          fi
