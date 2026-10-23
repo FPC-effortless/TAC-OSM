@@ -2,9 +2,11 @@
 import copy
 import numpy as np
 import torch
+import pytest
 from scripts.me069_workflow_source import fit_preprocessing,encode_cases,split_cases
 from scripts.me069_train_workflow import build,pack,predictions,objective
 from tac_osm.workflow_me069 import WorkflowForecast,waiting_quantile
+from scripts.me069_verify_workflow import compare
 
 
 def cases():
@@ -66,3 +68,14 @@ def test_wait_distribution_handles_real_zero_mass():
     median=waiting_quantile(p,.5)
     assert median[0]==0 and median[1]>0
     assert (waiting_quantile(p,.95)>=waiting_quantile(p,.05)).all()
+
+
+def test_replay_rejects_identity_and_out_of_contract_score_changes():
+    original={"source":"original", "records":[{"score":.5,"case_id":"a"}]}
+    compare(original,copy.deepcopy(original))
+    changed=copy.deepcopy(original);changed["records"][0]["case_id"]="b"
+    with pytest.raises(ValueError,match="identity"):
+        compare(original,changed)
+    changed=copy.deepcopy(original);changed["records"][0]["score"]+=.01
+    with pytest.raises(ValueError,match="float"):
+        compare(original,changed)
