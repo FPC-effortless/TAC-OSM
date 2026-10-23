@@ -1,0 +1,403 @@
+{
+  "full_score_replay": "PENDING_INDEPENDENT_SOURCE_RECALCULATION",
+  "heldout_normalization_fit": false,
+  "heldout_training_updates": 0,
+  "new_task_registered_before_all_FIT_models": true,
+  "old_ME064_test_reused": false,
+  "original_FIT_source_sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+  "original_new_task_holdout_sha256": "ccc0259672458c59a644b1aeebe1956456149c20dde5dcb6ac402a2c4a94800f",
+  "results": {
+    "action_counterfactual_policy_value_proven": false,
+    "independent_robot_or_site_proven": false,
+    "mean_router_weights": {
+      "compact_rssm": [
+        0.21131973841809665,
+        0.3396114700846374,
+        0.4490687936730683
+      ],
+      "gru_world": [
+        0.21527577232569456,
+        0.3327059936989099,
+        0.45201823759824034
+      ],
+      "native_tac": [
+        0.2818375616223784,
+        0.33296713178511705,
+        0.3851953065022826
+      ],
+      "selective_diagonal_ssm": [
+        0.17259990198479497,
+        0.36362871827557686,
+        0.46377138176932925
+      ]
+    },
+    "memory_mechanism_necessary_proven": false,
+    "motion_diagnostics_NOT_realtime": {
+      "limited_motion_0_025_to_0_100": 30,
+      "me064_retrospective_cutoffs_not_used_for_model_selection": true,
+      "moving_persistence_mae_gte_0_100": 23,
+      "near_stationary_persistence_mae_lt_0_025": 27,
+      "warning": "This uses future outcome-derived persistence errors for posthoc diagnostics only; never used as input to the trained forecast."
+    },
+    "native_tac_against_each_reference": {
+      "compact_rssm": {
+        "tac_minus_each_seed": [
+          0.030003297270741358,
+          0.06461522455792873,
+          -0.027514397725462936,
+          -0.01480896691791711,
+          -0.016762777511030447
+        ],
+        "tac_minus_reference_block_bootstrap_95": [
+          -0.0071538331091287495,
+          0.020974591557693198
+        ],
+        "tac_minus_reference_mean": 0.007106475934851917,
+        "tac_seed_wins": 3
+      },
+      "gru_world": {
+        "tac_minus_each_seed": [
+          0.03662015340523794,
+          0.1054524827748537,
+          0.008531668758951116,
+          0.035324515076354146,
+          -0.040618721116334244
+        ],
+        "tac_minus_reference_block_bootstrap_95": [
+          0.01766173059871653,
+          0.04044166361948009
+        ],
+        "tac_minus_reference_mean": 0.029062019779812553,
+        "tac_seed_wins": 1
+      },
+      "persistence": {
+        "tac_minus_each_seed": null,
+        "tac_minus_reference_block_bootstrap_95": [
+          0.11451410811375538,
+          0.20985601243056587
+        ],
+        "tac_minus_reference_mean": 0.16520636103523428,
+        "tac_seed_wins": null
+      },
+      "selective_diagonal_ssm": {
+        "tac_minus_each_seed": [
+          0.07265699232229966,
+          0.07548742084763943,
+          -0.03259247257374226,
+          -0.02454128446988757,
+          -0.03297832238022241
+        ],
+        "tac_minus_reference_block_bootstrap_95": [
+          0.0027689385638805138,
+          0.019484386928379522
+        ],
+        "tac_minus_reference_mean": 0.011606466749217365,
+        "tac_seed_wins": 3
+      },
+      "servo": {
+        "tac_minus_each_seed": null,
+        "tac_minus_reference_block_bootstrap_95": [
+          -0.8668919146414846,
+          -0.7062023697463449
+        ],
+        "tac_minus_reference_mean": -0.7899396031978541,
+        "tac_seed_wins": null
+      }
+    },
+    "original_episode_count": 80,
+    "original_recording_block_count": 20,
+    "physical_MAE": {
+      "compact_rssm": 0.40348372830078005,
+      "gru_world": 0.38152818445581943,
+      "native_tac": 0.410590204235632,
+      "persistence": 0.2453838432003977,
+      "selective_diagonal_ssm": 0.3989837374864146,
+      "servo": 1.200529807433486
+    },
+    "real_safe_autonomous_execution_proven": false,
+    "registered_superiority_gate_pass": false,
+    "source_ONLY_calibrated_uncertainty": {
+      "compact_rssm": {
+        "exchangeability_qualified": false,
+        "mean_physical_interval_width": 20.641806741147185,
+        "mean_whole_episode_coverage": 0.8125,
+        "nominal": 0.9,
+        "per_seed": [
+          {
+            "mean_physical_interval_width": 21.82482414570409,
+            "seed": 65001,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 8.14409351348877,
+            "weights_persistence_servo_neural": [
+              0.21624549776315688,
+              0.34720475096255543,
+              0.43654975183308126
+            ],
+            "whole_episode_coverage": 0.8375
+          },
+          {
+            "mean_physical_interval_width": 30.82820595622843,
+            "seed": 65002,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 7.413498401641846,
+            "weights_persistence_servo_neural": [
+              0.20468129850924016,
+              0.3407952801324427,
+              0.45452342918142674
+            ],
+            "whole_episode_coverage": 0.8375
+          },
+          {
+            "mean_physical_interval_width": 16.720778618650268,
+            "seed": 65003,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 6.949049949645996,
+            "weights_persistence_servo_neural": [
+              0.19776128560770304,
+              0.3396308159455657,
+              0.46260789688676596
+            ],
+            "whole_episode_coverage": 0.8125
+          },
+          {
+            "mean_physical_interval_width": 17.41894464245714,
+            "seed": 65004,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 6.614400863647461,
+            "weights_persistence_servo_neural": [
+              0.20226649264222943,
+              0.3061088563874364,
+              0.49162465129047633
+            ],
+            "whole_episode_coverage": 0.7625
+          },
+          {
+            "mean_physical_interval_width": 16.416280342696002,
+            "seed": 65005,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 6.199431896209717,
+            "weights_persistence_servo_neural": [
+              0.2356441175681539,
+              0.3643176469951868,
+              0.40003823917359116
+            ],
+            "whole_episode_coverage": 0.8125
+          }
+        ],
+        "width_to_mean_MAE_ratio": 51.1589570862684
+      },
+      "gru_world": {
+        "exchangeability_qualified": false,
+        "mean_physical_interval_width": 19.722435021236436,
+        "mean_whole_episode_coverage": 0.79,
+        "nominal": 0.9,
+        "per_seed": [
+          {
+            "mean_physical_interval_width": 23.783833732615278,
+            "seed": 65001,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 9.187698364257812,
+            "weights_persistence_servo_neural": [
+              0.26595787981059404,
+              0.33341602422297,
+              0.40062610022723677
+            ],
+            "whole_episode_coverage": 0.9
+          },
+          {
+            "mean_physical_interval_width": 28.391368823294602,
+            "seed": 65002,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 6.9381279945373535,
+            "weights_persistence_servo_neural": [
+              0.23913808583747595,
+              0.30302427751012145,
+              0.4578376390039921
+            ],
+            "whole_episode_coverage": 0.8375
+          },
+          {
+            "mean_physical_interval_width": 12.192002556828516,
+            "seed": 65003,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 5.08831787109375,
+            "weights_persistence_servo_neural": [
+              0.18389439263846724,
+              0.3278446920216084,
+              0.48826091587543485
+            ],
+            "whole_episode_coverage": 0.6375
+          },
+          {
+            "mean_physical_interval_width": 12.758157754601097,
+            "seed": 65004,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 6.787111759185791,
+            "weights_persistence_servo_neural": [
+              0.20116205858066677,
+              0.2990961829200387,
+              0.4997417636215687
+            ],
+            "whole_episode_coverage": 0.7125
+          },
+          {
+            "mean_physical_interval_width": 21.486812238842692,
+            "seed": 65005,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 7.645426273345947,
+            "weights_persistence_servo_neural": [
+              0.1862264447612688,
+              0.4001487918198109,
+              0.4136247692629695
+            ],
+            "whole_episode_coverage": 0.8625
+          }
+        ],
+        "width_to_mean_MAE_ratio": 51.69325838762581
+      },
+      "native_tac": {
+        "exchangeability_qualified": false,
+        "mean_physical_interval_width": 23.17612783755455,
+        "mean_whole_episode_coverage": 0.7775000000000001,
+        "nominal": 0.9,
+        "per_seed": [
+          {
+            "mean_physical_interval_width": 24.12914291702662,
+            "seed": 65001,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 4.894918918609619,
+            "weights_persistence_servo_neural": [
+              0.2966629026690498,
+              0.34150603946764024,
+              0.361831062566489
+            ],
+            "whole_episode_coverage": 0.8
+          },
+          {
+            "mean_physical_interval_width": 23.707357888768104,
+            "seed": 65002,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 5.126518249511719,
+            "weights_persistence_servo_neural": [
+              0.12393969440890942,
+              0.42046066503971813,
+              0.45559963919222357
+            ],
+            "whole_episode_coverage": 0.725
+          },
+          {
+            "mean_physical_interval_width": 17.36640352424841,
+            "seed": 65003,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 4.563612937927246,
+            "weights_persistence_servo_neural": [
+              0.1663367941742763,
+              0.34223861964419483,
+              0.4914245827123523
+            ],
+            "whole_episode_coverage": 0.65
+          },
+          {
+            "mean_physical_interval_width": 21.505189310941063,
+            "seed": 65004,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 11.196869850158691,
+            "weights_persistence_servo_neural": [
+              0.3782331866212189,
+              0.2592068232130259,
+              0.36255999030545355
+            ],
+            "whole_episode_coverage": 0.85
+          },
+          {
+            "mean_physical_interval_width": 29.172545546788534,
+            "seed": 65005,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 10.775644302368164,
+            "weights_persistence_servo_neural": [
+              0.44401523023843764,
+              0.30142351156100633,
+              0.25456125773489474
+            ],
+            "whole_episode_coverage": 0.8625
+          }
+        ],
+        "width_to_mean_MAE_ratio": 56.44588594289525
+      },
+      "selective_diagonal_ssm": {
+        "exchangeability_qualified": false,
+        "mean_physical_interval_width": 20.24681709512281,
+        "mean_whole_episode_coverage": 0.7424999999999999,
+        "nominal": 0.9,
+        "per_seed": [
+          {
+            "mean_physical_interval_width": 39.66655723180683,
+            "seed": 65001,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 8.593481063842773,
+            "weights_persistence_servo_neural": [
+              0.2762257433030754,
+              0.3124349662102759,
+              0.4113392894156277
+            ],
+            "whole_episode_coverage": 0.8375
+          },
+          {
+            "mean_physical_interval_width": 13.305946260164706,
+            "seed": 65002,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 5.490445613861084,
+            "weights_persistence_servo_neural": [
+              0.13624815258663148,
+              0.35674704890698195,
+              0.5070048006251454
+            ],
+            "whole_episode_coverage": 0.7375
+          },
+          {
+            "mean_physical_interval_width": 14.551696830975448,
+            "seed": 65003,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 4.6863508224487305,
+            "weights_persistence_servo_neural": [
+              0.04346265255589969,
+              0.4168041910976171,
+              0.5397331591695547
+            ],
+            "whole_episode_coverage": 0.6
+          },
+          {
+            "mean_physical_interval_width": 16.066305512462822,
+            "seed": 65004,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 5.392747402191162,
+            "weights_persistence_servo_neural": [
+              0.18448149474861567,
+              0.3391165010631084,
+              0.4764020085334778
+            ],
+            "whole_episode_coverage": 0.7
+          },
+          {
+            "mean_physical_interval_width": 17.643579640204244,
+            "seed": 65005,
+            "source_CAL_episode_count": 40,
+            "source_CAL_quantile": 7.232831954956055,
+            "weights_persistence_servo_neural": [
+              0.2225814667297527,
+              0.39304088409990073,
+              0.3843776511028409
+            ],
+            "whole_episode_coverage": 0.8375
+          }
+        ],
+        "width_to_mean_MAE_ratio": 50.74597080742474
+      }
+    },
+    "target_model_updates": 0,
+    "task": "plug_charger_into_power_strip"
+  },
+  "source_CAL_only_calibration": true,
+  "study": "ME066_FOUR_ARM_GENUINE_ORIGINAL_ROBOT_FIT_EQUAL_BUDGET",
+  "trained_original_checkpoints_replayed_from_clean_Git": 20
+}
