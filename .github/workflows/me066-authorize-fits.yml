@@ -1,0 +1,43 @@
+name: ME066 authorize original FIT 20-model experiment after Git frozen preregistration
+on:
+  pull_request:
+    paths:
+      - 'scripts/me066_authorize_fits.py'
+      - '.github/workflows/me066-authorize-fits.yml'
+  workflow_dispatch:
+permissions: {contents: write}
+concurrency:
+  group: me066-one-time-full-four-arm-training-permission
+  cancel-in-progress: false
+jobs:
+  authorize-on-existing-original-source-only-evidence:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: "${{ github.head_ref || github.ref_name }}",persist-credentials: true}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Verify original Git committed FIT preregistration and binary storage proof; no fits
+        run: |
+          if [ -f research/mathematical-engineering/me066/TRAINING_PERMISSION.json ]; then
+            echo 'Prior frozen original source-only training permission exists; no replacement'
+          else
+            PYTHONPATH=src:. python scripts/me066_authorize_fits.py
+          fi
+      - name: Commit prefit authorization to Git BEFORE any real trained checkpoint
+        env: {PUSH_BRANCH: "${{ github.head_ref || github.ref_name }}"}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/mathematical-engineering/me066/FAIR_COMPARISON.json research/mathematical-engineering/me066/TRAINING_PERMISSION.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'evidence(me066): authorize only original FIT twenty-model training after numeric and Git storage gates'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin "$PUSH_BRANCH"
+              git rebase "origin/$PUSH_BRANCH"
+              if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+              if [ "$attempt" -eq 5 ]; then exit 1; fi
+            done
+          fi
