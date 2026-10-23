@@ -8,7 +8,7 @@ Executed locally on the default-branch implementation:
 
 | Check | Observed result |
 |---|---|
-| `python -m pytest -q` | 978 passed, 14.46 seconds |
+| `python -m pytest -q` | 979 passed, 14.66 seconds |
 | `python scripts/audit_training_budget.py` | PASS, 88 Python files audited |
 | `python scripts/verify_frozen_replay.py --all` | PASS, six pinned registrations, 15 distinct original checkpoints (each checked for prefit/final) |
 | `python scripts/sync_test_count.py --check` | PASS |
@@ -25,3 +25,8 @@ the unmocked runtime-integration tests. A reused v2 label cannot restore CPU par
 This is not a replay of scientific forecasts. Original scores remain historical.
 CI status and branch-protection enforcement must be checked separately; local
 passes do not establish default-branch integration or mandatory merge protection.
+
+The initial smaller GitHub CI environments exposed an accidental NumPy dependency
+in tensor hashing (four integration failures). Hashing now uses Torch uint8 bytes
+and the standard library; an explicit no-NumPy regression test passes. The full
+local suite was rerun after this fix. Earlier failed workflow runs remain visible.

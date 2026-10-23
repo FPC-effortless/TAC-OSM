@@ -181,13 +181,9 @@ def parameter_values_sha(state, inventory):
             )
         digest.update(row["name"].encode())
         digest.update(
-            value.detach()
-            .cpu()
-            .contiguous()
-            .reshape(-1)
-            .view(torch.uint8)
-            .numpy()
-            .tobytes()
+            bytes(
+                value.detach().cpu().contiguous().reshape(-1).view(torch.uint8).tolist()
+            )
         )
     return digest.hexdigest()
 

@@ -411,3 +411,15 @@ def test_frozen_registration_edit_after_first_update_blocks_further_updates(tmp_
     path.write_text(json.dumps(value))
     with pytest.raises(ParameterBudgetError, match="changed during"):
         checked_optimizer_step(opt)
+
+
+def test_checkpoint_hashing_has_no_numpy_dependency(monkeypatch):
+    from tac_osm.parameter_budget import parameter_values_sha
+
+    def unavailable(*args, **kwargs):
+        raise AssertionError("NumPy is not required for the runtime guard")
+
+    monkeypatch.setattr(torch.Tensor, "numpy", unavailable)
+    model = Toy()
+    _, inventory = live_inventory(model)
+    assert len(parameter_values_sha(model.state_dict(), inventory)) == 64

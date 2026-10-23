@@ -354,8 +354,7 @@ def _check_manifest_declarations(m,phase):
         if phase=="final":
             actual=[r["measured"] for r in group]
             close_enough(actual,"training_flops",FLOP_TOLERANCE,f"seed {seed} actual FLOPs")
-    # v1 preserves historical interpretation. New ME055 work uses v2, which
-    # implements the owner's explicit measured CPU <=5% requirement.
+    # Current owner policy: CPU runtime is efficiency metadata for either schema.
     return {"study_id":m["study_id"],"phase":phase,"matched_seeds":sorted(seed_sets),
             "matched_architectures":sorted(names),"matched_source":source["sha256"],
             "status":"PASS","eligible_for_architecture_superiority":phase=="final"}
