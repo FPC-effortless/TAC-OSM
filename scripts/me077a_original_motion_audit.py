@@ -214,6 +214,7 @@ def run():
         print("ME077A_NO_FIT_ORIGINAL_REPLAY_PASS",flush=True)
         return
     dest.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+    print("ME077A_ORIGINAL_SCORE_RECEIPT_SHA256="+sha_bytes(dest.read_bytes()),flush=True)
     print("ME077A_GENUINE_REAL_ORIGINAL_NO_FIT_AUDIT="+json.dumps({
         "motion_rate":base,
         "aux_Brier":result["original_5seed_mean_auxiliary_motion"]["Brier"],
