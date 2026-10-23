@@ -2,6 +2,19 @@
 
 This is a **starter registry in TAC-OSM**, pending creation of a separate cross-project ideas repository. The registry does not claim that proposals were implemented or evaluated.
 
+## ME075 actual System 1 engineering status — 2026-10-23
+
+**Current owner priority:** focus the next capable-model design cycle on truthful real one-step System1 performance and a **separate** mathematically grounded Gated Delta associative memory candidate. DIAGKEY001 PR #357 guarded original synthetic recall fits (TAC 3.75/4.49/3.48% versus Transformer 99.06/98.79/98.87% at16/64/256) reveal *this fitted mechanism/recipe* did not learn the synthetic key/value task, but their ~18–21% partial FLOP budget disparity and artificial sources preclude universal architectural inferiority or real-world prediction conclusions. Do **not** block proven ability in five other domain lanes merely because random-key recall failed.
+
+| Registration | Implemented now | Measured evidence / exact tier | Biggest missing capability |
+| --- | --- | --- | --- |
+| `ME075-S1` | [Draft PR #360](https://github.com/FPC-effortless/TAC-OSM/pull/360) `System1FastModel`: 96D fast-only recurrence, exactly **100,541** active trainable/deployed parameters on physical registered 14D streams, bounded residual one-step next-state distribution, unqualified event-logit, no authority or rollout | Engineering **only**, [test workflow](https://github.com/FPC-effortless/TAC-OSM/actions/workflows/me075-system1-engineering.yml); **zero original new ME075 fitted native checkpoints or real scored cases** | Actual training and honest real one-step prediction on source verified physical motion/action windows; strong persistence, motion-rich cases, hardware p95/p99, authorization boundary |
+| `ME075-GDM` | `gated_delta_memory.py`: optional corrective 8×8 `alpha M + beta(v - alpha M k)⊗k` with separate retention/write gates and no-write query | Known published mathematics, analytical unit invariants only; **not** a new trained keyed-recall pass or 90%/Transformer-matching model | New explicit lawful diagnostic preregistration if synthetic fitting; genuine real long-context evidence for any memory-intelligence claim |
+
+Historical genuine ME068 FIT-only robotic audit scores **257,971** autonomous original transitions, near-stationary diagnostic fraction **91.23%**, one-step persistence MAE **0.070195** versus FIT-only servo best tested causal lag1 MAE **0.119142**. These are previously measured original FIT-only reference statistics **not** a new independent held-out System1 evaluation, physical policy success or causal actuator alignment. They show why a naive one-step accuracy/MAE could appear high on static trajectories; select and report **movement-rich** original factual outcomes as well as all-case results.
+
+**Hard constraints preserved:** Future trained models across all variants still must have **95k–105k** actual learned parameters (25k System1 would require an explicit prospective owner amendment); real original outcomes and observed-at causal fields; original Git checkpoint/optimizer/RNG and independent replay; same-task ability improvement and appropriate heldout confidence; no trained memory or System1 intelligence claim from synthetic/CI alone. `ME075` branch stacks on six-variant draft #358; master plan is separately updated, neither branch merged.
+
 ## New six-lane TAC-OSM capability research registry — 2026-10-23
 
 The integrated six-regime architecture is now the prospective research portfolio; it is **not** evidence of six trained neural models. Common native recurrent and bounded residual mathematics can be shared while event, physical, temporal and policy targets remain separate. Read the binding [six-lane master plan section](MASTER_RESEARCH_PLAN.md) and [isolated six-variant branch](https://github.com/FPC-effortless/TAC-OSM/tree/research/six-variant-core-lanes-2026-10-23/src/tac_osm/variants).
