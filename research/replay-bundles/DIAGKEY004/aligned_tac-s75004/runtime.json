@@ -1,0 +1,223 @@
+{
+  "architecture": "aligned_tac",
+  "checkpoints": [
+    {
+      "deployed_parameters": 101527,
+      "parameter_values_sha256": "f5a7d7ce5ea9c15eebc5cdf23bcc70296dc9d8d4d66f6034c6d286687ed86359",
+      "path": "research/replay-bundles/DIAGKEY004/aligned_tac-s75004/step-640.pt",
+      "sha256": "30ffc4b872a1ef23b35f32dc64cc1010ae42c432ced8b6d7c5b408f383a662af",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 640,
+      "trainable_parameters": 101527
+    },
+    {
+      "deployed_parameters": 101527,
+      "parameter_values_sha256": "00e2c5b2c7f2bfd2745c31bbe9d5c1a8c804a909b4f3a42da46d06e6b049f2b3",
+      "path": "research/replay-bundles/DIAGKEY004/aligned_tac-s75004/step-4096.pt",
+      "sha256": "50cfecd90f2a2f209410bbde486e30892aa01ea04989494f3d66f1b10b8df76c",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 4096,
+      "trainable_parameters": 101527
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 101527,
+    "trainable_parameters": 101527
+  },
+  "last_pre_update": {
+    "deployed_parameters": 101527,
+    "successful_optimizer_steps": 4095,
+    "trainable_parameters": 101527
+  },
+  "manifest_path": "/workspace/tac-diagkey004/research/mathematical-engineering/diagkey004/FAIR_COMPARISON.json",
+  "manifest_sha256": "769864a1dab1910934c09ff0e4da962776d4821de0315cdbde2f36c1af0d6f75",
+  "model_class": "tac_osm.aligned_associative_tac.AlignedAssociativeTAC",
+  "preflight": {
+    "deployed_parameters": 101527,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "read_gain",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": []
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "kind_embed.weight",
+        "numel": 144,
+        "requires_grad": true,
+        "shape": [
+          3,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "key.weight",
+        "numel": 3120,
+        "requires_grad": true,
+        "shape": [
+          65,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "value.weight",
+        "numel": 1584,
+        "requires_grad": true,
+        "shape": [
+          33,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.weight",
+        "numel": 2304,
+        "requires_grad": true,
+        "shape": [
+          48,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.bias",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.weight",
+        "numel": 520,
+        "requires_grad": true,
+        "shape": [
+          65,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.weight",
+        "numel": 264,
+        "requires_grad": true,
+        "shape": [
+          33,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.weight",
+        "numel": 25344,
+        "requires_grad": true,
+        "shape": [
+          176,
+          144
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.weight",
+        "numel": 32384,
+        "requires_grad": true,
+        "shape": [
+          176,
+          184
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.weight",
+        "numel": 448,
+        "requires_grad": true,
+        "shape": [
+          2,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.bias",
+        "numel": 2,
+        "requires_grad": true,
+        "shape": [
+          2
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.weight",
+        "numel": 30624,
+        "requires_grad": true,
+        "shape": [
+          132,
+          232
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.bias",
+        "numel": 132,
+        "requires_grad": true,
+        "shape": [
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.weight",
+        "numel": 4224,
+        "requires_grad": true,
+        "shape": [
+          32,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      }
+    ],
+    "trainable_parameters": 101527
+  },
+  "run_id": "f551bd3352ed4852a22c64813ec4ebb6",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 75004,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "DIAGKEY004_ALIGNED_GATED_ZERO_REPAIR_SYNTHETIC_ONLY",
+  "successful_optimizer_steps": 4096
+}
