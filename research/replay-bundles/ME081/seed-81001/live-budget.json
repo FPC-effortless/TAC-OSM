@@ -1,0 +1,193 @@
+{
+  "architecture": "native_horizon_query",
+  "checkpoints": [
+    {
+      "deployed_parameters": 100165,
+      "parameter_values_sha256": "90a54b96a82d8e0eec5dd70718fec839eade5223073e40d13993f1d8f79ca3f0",
+      "path": "research/replay-bundles/ME081/seed-81001/final.pt",
+      "sha256": "1c224dacd7240e3032a3beb6e94e9545d60aacdb340745e00b99f61d36cc3371",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 2048,
+      "trainable_parameters": 100165
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 100165,
+    "trainable_parameters": 100165
+  },
+  "last_pre_update": {
+    "deployed_parameters": 100165,
+    "successful_optimizer_steps": 2047,
+    "trainable_parameters": 100165
+  },
+  "manifest_path": "/workspace/tac-me081/research/mathematical-engineering/me081/FAIR_COMPARISON.json",
+  "manifest_sha256": "77bc004ada9c5f648b8d495f3ca5c6672cc643da4d5cda4ee0cac5d59c7c934d",
+  "model_class": "tac_osm.variants.horizon_query_world.HorizonQueryWorld",
+  "preflight": {
+    "deployed_parameters": 100165,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 3648,
+        "requires_grad": true,
+        "shape": [
+          64,
+          57
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.weight",
+        "numel": 8192,
+        "requires_grad": true,
+        "shape": [
+          64,
+          128
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.weight",
+        "numel": 1152,
+        "requires_grad": true,
+        "shape": [
+          18,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.bias",
+        "numel": 18,
+        "requires_grad": true,
+        "shape": [
+          18
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.weight",
+        "numel": 4608,
+        "requires_grad": true,
+        "shape": [
+          64,
+          72
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.weight",
+        "numel": 59160,
+        "requires_grad": true,
+        "shape": [
+          340,
+          174
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.bias",
+        "numel": 340,
+        "requires_grad": true,
+        "shape": [
+          340
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.weight",
+        "numel": 14450,
+        "requires_grad": true,
+        "shape": [
+          85,
+          170
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.bias",
+        "numel": 85,
+        "requires_grad": true,
+        "shape": [
+          85
+        ]
+      }
+    ],
+    "trainable_parameters": 100165
+  },
+  "run_id": "3afca45607144954bbc117ea9335dfe1",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 81001,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME081_HORIZON_QUERY_CRPS_LONG_CONTEXT",
+  "successful_optimizer_steps": 2048
+}
