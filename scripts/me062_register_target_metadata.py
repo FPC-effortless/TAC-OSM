@@ -12,8 +12,22 @@ from scripts.audit_real_hil_trajectory import download_file
 from scripts.me055_reserve_independent_robot_task import (
     REVISION, CANDIDATES, metadata_rows,
 )
-from scripts.me060_train_trajectory import HISTORY, HORIZON, digest
-from scripts.me057_train_fused_anchor_robot import sha_bytes, write_json
+HISTORY, HORIZON = 64, 16
+
+
+def sha_bytes(value):
+    return hashlib.sha256(value).hexdigest()
+
+
+def digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True,
+        separators=(",", ":")).encode()).hexdigest()
+
+
+def write_json(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, sort_keys=True, indent=2) + "\\n")
+
 
 ROOT = Path("research/mathematical-engineering/me062")
 EXCLUDE = (
