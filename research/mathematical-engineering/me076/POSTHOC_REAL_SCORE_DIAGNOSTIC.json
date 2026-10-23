@@ -1,0 +1,252 @@
+{
+  "all": {
+    "fit_only_servo_MAE": 0.09745665016089333,
+    "native_minus_persistence_MAE": 0.011490269530063036,
+    "native_model_MAE": 0.08015828495595391,
+    "number_of_episode_motion_rich_queries": 84,
+    "observed_query_count": 960,
+    "original_episodes": 40,
+    "persistence_MAE": 0.06866801542589088
+  },
+  "case_cluster_bootstrap_all": {
+    "bootstrap_iterations": 5000,
+    "ci95_native_minus_persistence": [
+      0.011116154554924833,
+      0.011861584043741307
+    ],
+    "limits": "POSTHOC, exposed-FIT-derived development only; does not establish independent gain; model-seed uncertainty reported separately",
+    "method": "paired independent REAL EPISODE cluster bootstrap, 40 units, 5 seeds averaged per observed query",
+    "original_episodes": 40,
+    "seed": 76076
+  },
+  "case_cluster_bootstrap_motion": {
+    "bootstrap_iterations": 5000,
+    "ci95_native_minus_persistence": [
+      0.004138168675261881,
+      0.007019768540322035
+    ],
+    "limits": "POSTHOC, exposed-FIT-derived development only; does not establish independent gain; model-seed uncertainty reported separately",
+    "method": "paired independent REAL EPISODE cluster bootstrap, 40 units, 5 seeds averaged per observed query",
+    "original_episodes": 37,
+    "seed": 76077
+  },
+  "decision": "The registered >=5 percent physical error gain over persistence FAILED on overall and motion-rich cohorts for every seed. Even a favorable CI would not rescue an already exposed-development generalization claim.",
+  "future_labels_used_as_inference_features": false,
+  "independent_real_case_units": 40,
+  "limitations": [
+    "posthoc interval, no preregistered scientific promotion",
+    "selection requires source verified future autonomous continuation",
+    "old publisher original FIT history already exposed",
+    "no previously untouched external task opened",
+    "does not prove a specific model-module attribution",
+    "no causal action evaluation, no permission or sub-ms runtime qualification"
+  ],
+  "motion_rich": {
+    "fit_only_servo_MAE": 0.7045166131131173,
+    "native_minus_persistence_MAE": 0.005545343201430068,
+    "native_model_MAE": 0.7487862011417746,
+    "number_of_episode_motion_rich_queries": 84,
+    "observed_query_count": 84,
+    "original_episodes": 37,
+    "persistence_MAE": 0.7432408579403446
+  },
+  "near_stationary": {
+    "fit_only_servo_MAE": 0.03924542083670746,
+    "native_minus_persistence_MAE": 0.01206033095883606,
+    "native_model_MAE": 0.016043279294299863,
+    "number_of_episode_motion_rich_queries": 0,
+    "observed_query_count": 876,
+    "original_episodes": 40,
+    "persistence_MAE": 0.0039829483354638035
+  },
+  "new_model_fits": 0,
+  "original_data_source_overridden": false,
+  "original_raw_case_count": 960,
+  "per_seed_reused_exact_same_cases": true,
+  "scientific_tier": "REAL_PREVIOUSLY_EXPOSED_DEV_DIAGNOSTIC_ONLY",
+  "seeds": [
+    {
+      "native_all_MAE": 0.08307754256796519,
+      "native_motion_MAE": 0.7515790493094495,
+      "original_checkpoint_sha256": "8b92c59a8d519aecb3d92c9486e4695b65ba767a95812aee2de99ead3be8191f",
+      "original_forecast_sha256": "87b593b17e90ad46c24bee91f882ee1fc6ad1644c797de66c2ca7f161359cebc",
+      "seed": 76001
+    },
+    {
+      "native_all_MAE": 0.07660385101795934,
+      "native_motion_MAE": 0.7469424374978102,
+      "original_checkpoint_sha256": "5ce16ac9389ed5e7a4978ecb6cb39f03771aff796092f7a467079dbfa4591411",
+      "original_forecast_sha256": "660b83287274bcda247424ba68b2082aa5fcf5dfa66f4d3ba9d937e5ae9708ad",
+      "seed": 76002
+    },
+    {
+      "native_all_MAE": 0.08097677133021837,
+      "native_motion_MAE": 0.7492886215359682,
+      "original_checkpoint_sha256": "943b0a87fab86f2ec37454150666a2252b30c616b24d7b48ce1ce777de707906",
+      "original_forecast_sha256": "446945794b742de6175f60539435f6d1985f5437de974e64b20f96e37eab23b0",
+      "seed": 76003
+    },
+    {
+      "native_all_MAE": 0.0803204809317928,
+      "native_motion_MAE": 0.7500362417971095,
+      "original_checkpoint_sha256": "3fda38429aff4bfe6b645afc7cc6435fef291ecaefc8ec8f56407b2b93620aa5",
+      "original_forecast_sha256": "289072e5f856fc4c418c7618227201ef807d12cd8f2ae4ccbdc12482a890d7e0",
+      "seed": 76004
+    },
+    {
+      "native_all_MAE": 0.07981277893183385,
+      "native_motion_MAE": 0.7460846555685359,
+      "original_checkpoint_sha256": "aac83169856e46e0c3271a46c473155ba4505508a663512a076e5f7f4d8ca74a",
+      "original_forecast_sha256": "7b718a87df0a019e1f977262e09a2cf175f09dfb85fe2bc23a2ca128728acf3a",
+      "seed": 76005
+    }
+  ],
+  "study": "ME076_POSTHOC_REAL_CASE_SCORE_INSPECTION",
+  "task_strata": {
+    "clean_stains_off_tabletop": {
+      "all": {
+        "fit_only_servo_MAE": 0.08102276824744574,
+        "native_minus_persistence_MAE": 0.011126684660151417,
+        "native_model_MAE": 0.048000720551741934,
+        "number_of_episode_motion_rich_queries": 11,
+        "observed_query_count": 192,
+        "original_episodes": 8,
+        "persistence_MAE": 0.036874035891590516
+      },
+      "moving": {
+        "fit_only_servo_MAE": 0.5649004649709571,
+        "native_minus_persistence_MAE": 0.007369059425863369,
+        "native_model_MAE": 0.5831441872837869,
+        "number_of_episode_motion_rich_queries": 11,
+        "observed_query_count": 11,
+        "original_episodes": 7,
+        "persistence_MAE": 0.5757751278579235
+      },
+      "stationary": {
+        "fit_only_servo_MAE": 0.051615836402370455,
+        "native_minus_persistence_MAE": 0.011355048624666162,
+        "native_model_MAE": 0.015478189424380085,
+        "number_of_episode_motion_rich_queries": 0,
+        "observed_query_count": 181,
+        "original_episodes": 8,
+        "persistence_MAE": 0.004123140799713923
+      }
+    },
+    "fold_and_stack_scattered_clothes_neatly": {
+      "all": {
+        "fit_only_servo_MAE": 0.09732602334649225,
+        "native_minus_persistence_MAE": 0.01031320860877069,
+        "native_model_MAE": 0.08320060889418528,
+        "number_of_episode_motion_rich_queries": 16,
+        "observed_query_count": 192,
+        "original_episodes": 8,
+        "persistence_MAE": 0.07288740028541459
+      },
+      "moving": {
+        "fit_only_servo_MAE": 0.8014357748324983,
+        "native_minus_persistence_MAE": 0.0028455941006541247,
+        "native_model_MAE": 0.8392696866299957,
+        "number_of_episode_motion_rich_queries": 16,
+        "observed_query_count": 16,
+        "original_episodes": 7,
+        "persistence_MAE": 0.8364240925293416
+      },
+      "stationary": {
+        "fit_only_servo_MAE": 0.033316045938673516,
+        "native_minus_persistence_MAE": 0.010992082654963105,
+        "native_model_MAE": 0.014467056372747967,
+        "number_of_episode_motion_rich_queries": 0,
+        "observed_query_count": 176,
+        "original_episodes": 8,
+        "persistence_MAE": 0.0034749737177848642
+      }
+    },
+    "hang_clothes_on_drying_rack": {
+      "all": {
+        "fit_only_servo_MAE": 0.10359562230466206,
+        "native_minus_persistence_MAE": 0.011287984377694708,
+        "native_model_MAE": 0.09747236858117199,
+        "number_of_episode_motion_rich_queries": 23,
+        "observed_query_count": 192,
+        "original_episodes": 8,
+        "persistence_MAE": 0.0861843842034773
+      },
+      "moving": {
+        "fit_only_servo_MAE": 0.6618160255577253,
+        "native_minus_persistence_MAE": 0.0046016451457272425,
+        "native_model_MAE": 0.6982678675295217,
+        "number_of_episode_motion_rich_queries": 23,
+        "observed_query_count": 23,
+        "original_episodes": 8,
+        "persistence_MAE": 0.6936662223837946
+      },
+      "stationary": {
+        "fit_only_servo_MAE": 0.02762479819329841,
+        "native_minus_persistence_MAE": 0.01219795953944176,
+        "native_model_MAE": 0.015707300676958712,
+        "number_of_episode_motion_rich_queries": 0,
+        "observed_query_count": 169,
+        "original_episodes": 8,
+        "persistence_MAE": 0.003509341137516953
+      }
+    },
+    "line_trash_can_with_trash_bag": {
+      "all": {
+        "fit_only_servo_MAE": 0.10130778829746608,
+        "native_minus_persistence_MAE": 0.011926809679164305,
+        "native_model_MAE": 0.09883678188925842,
+        "number_of_episode_motion_rich_queries": 21,
+        "observed_query_count": 192,
+        "original_episodes": 8,
+        "persistence_MAE": 0.08690997221009411
+      },
+      "moving": {
+        "fit_only_servo_MAE": 0.68632295958343,
+        "native_minus_persistence_MAE": 0.006897294290718563,
+        "native_model_MAE": 0.7538606656803971,
+        "number_of_episode_motion_rich_queries": 21,
+        "observed_query_count": 21,
+        "original_episodes": 8,
+        "persistence_MAE": 0.7469633713896785
+      },
+      "stationary": {
+        "fit_only_servo_MAE": 0.029463819893926643,
+        "native_minus_persistence_MAE": 0.012544469463710272,
+        "native_model_MAE": 0.018395252300872963,
+        "number_of_episode_motion_rich_queries": 0,
+        "observed_query_count": 171,
+        "original_episodes": 8,
+        "persistence_MAE": 0.005850782837162689
+      }
+    },
+    "pour_water_from_kettle_to_make_tea": {
+      "all": {
+        "fit_only_servo_MAE": 0.10403104860840055,
+        "native_minus_persistence_MAE": 0.012796660324534059,
+        "native_model_MAE": 0.07328094486341191,
+        "number_of_episode_motion_rich_queries": 13,
+        "observed_query_count": 192,
+        "original_episodes": 8,
+        "persistence_MAE": 0.06048428453887785
+      },
+      "moving": {
+        "fit_only_servo_MAE": 0.8083051731093571,
+        "native_minus_persistence_MAE": 0.006810665474488178,
+        "native_model_MAE": 0.8587619167107802,
+        "number_of_episode_motion_rich_queries": 13,
+        "observed_query_count": 13,
+        "original_episodes": 7,
+        "persistence_MAE": 0.851951251236292
+      },
+      "stationary": {
+        "fit_only_servo_MAE": 0.05288264850497912,
+        "native_minus_persistence_MAE": 0.013231397380682642,
+        "native_model_MAE": 0.01623484076276505,
+        "number_of_episode_motion_rich_queries": 0,
+        "observed_query_count": 179,
+        "original_episodes": 8,
+        "persistence_MAE": 0.0030034433820824054
+      }
+    }
+  }
+}
