@@ -19,7 +19,7 @@ def fixture():
     digests["dataset_sha256"]=source_hash("a")
     arms=[]
     for seed in (101,102):
-        for name,parameters in (("TAC native",10000),("GRU control",10040)):
+        for name,parameters in (("TAC native",100000),("GRU control",100400)):
             b={"steps":500,"examples_seen":32000,"tokens_seen":2048000,
                "batch_size":64,"history_events":64,"planned_training_flops":1_000_000_000,
                "max_training_flops":1_100_000_000,"max_optimizer_cpu_seconds":70,
@@ -31,7 +31,7 @@ def fixture():
               "trainable_parameters":parameters,"deployed_parameters":parameters,
               "nontrainable_state_bytes":8192,"hardware_profile":"1-core CPU AVX2 pytorch2 pinned",
               **digests,"budget":b,
-              "measured":{"actual_steps":500,"actual_examples":32000,"actual_tokens":2048000,
+              "measured":{"trainable_parameters":parameters,"deployed_parameters":parameters,"actual_steps":500,"actual_examples":32000,"actual_tokens":2048000,
                   "training_flops":1_000_000_000,"optimizer_cpu_seconds":50.0,
                   "peak_memory_bytes":2_000_000,"flops_profiler":"torch.profiler CPU traced all kernels",
                   "checkpoint_sha256":source_hash("e"),
@@ -63,8 +63,8 @@ def test_final_requires_real_measurement_fields_and_replay_receipts():
 
 def test_preflight_rejects_parameter_mismatch_not_merely_warns():
     m=fixture()
-    m["arms"][1]["trainable_parameters"]=11500
-    m["arms"][1]["deployed_parameters"]=11500
+    m["arms"][1]["trainable_parameters"]=101500
+    m["arms"][1]["deployed_parameters"]=101500
     with pytest.raises(ParityError,match="parameters mismatch"):check_manifest(m)
 
 def test_preflight_rejects_source_or_actual_exposure_mismatch():
@@ -113,7 +113,7 @@ def test_literature_gap_or_required_seed_cannot_be_omitted():
 
 def test_diagnostic_cannot_smuggle_architecture_superiority_label():
     m={"schema_version":"tac-osm.parity.v1","study_id":"REAL_DIAGNOSTIC",
-       "study_type":"noncomparative_diagnostic","scientific_purpose":"Investigate numerical replay",
+       "study_type":"noncomparative_diagnostic","scientific_purpose":"Investigate numerical replay","no_new_model_fits":True,
        "no_architecture_superiority_claim":True}
     assert check_manifest(m)["status"]=="PASS_DIAGNOSTIC_ONLY"
     m["no_architecture_superiority_claim"]=False
@@ -156,3 +156,11 @@ def test_v2_final_rejects_measured_cpu_mismatch():
     m["arms"][1]["measured"]["optimizer_cpu_seconds"]=58.0
     with pytest.raises(ParityError,match="actual CPU seconds"):
         check_manifest(m,"final")
+
+
+def test_new_absolute_scale_rejects_undersized_and_hidden_frozen_weights():
+    from scripts.validate_research_parity import check_model_parameter_target,ParityError
+    import pytest
+    check_model_parameter_target(99781,99781)
+    for trained,deployed in ((94999,94999),(105001,105001),(100000,200000),(100000,99999)):
+        with pytest.raises(ParityError):check_model_parameter_target(trained,deployed)

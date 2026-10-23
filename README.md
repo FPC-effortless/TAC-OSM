@@ -11,7 +11,18 @@ reported.
 
 ## Active architecture development — 2026-10-23
 
-Latest trained candidate: [ME072 native multi-horizon futures](research/mathematical-engineering/me072/RESULTS.md).
+Latest trained candidate: [ME073 native autoregressive trajectories](research/mathematical-engineering/me073/RESULTS.md).
+Five 99,781-parameter native models generate dependent activity/time paths with
+separate imagined fast/slow/associative memory and bounded conditional clocks.
+Six-event-prefix1/2/4/8 activity accuracy 81.85%/68.83%/62.11%/53.44%; one-step
+NLL .372472,90% time coverage 85.99%, mean interval score 18.97h. Early two-event
+accuracy remains 40%; early NLL and distant8-step NLL regress relative to the
+historical ME072 recipe, and long-tail intervals remain broad. This is exposed
+DEV capability development, not an architecture winner or enterprise deployment.
+Original weights and outputs are in [ME073's bundle](research/replay-bundles/ME073);
+independent replay status is recorded in the study report.
+
+Earlier trained candidate: [ME072 native multi-horizon futures](research/mathematical-engineering/me072/RESULTS.md).
 Five original 123,377-parameter models predict 1/2/4/8 recorded events ahead,
 source-record boundary mass and a coherent zero/positive mixture clock.
 After six observed events, conditional future-activity accuracy is
@@ -21,7 +32,7 @@ completion. Full original distributions, weights and factual scoring replay
 are preserved in [ME072's bundle](research/replay-bundles/ME072). This is
 capability development, not a new architecture-superiority or autonomy claim.
 
-Latest integrated candidate: [ME071 persistent native event model](research/mathematical-engineering/me071/RESULTS.md).
+Earlier integrated candidate: [ME071 persistent native event model](research/mathematical-engineering/me071/RESULTS.md).
 Five original native fits add full-case detached state carry, label smoothing,
 history log pooling, ordered waiting quantiles, DEV-only temperature/CQR and
 entity-separated streaming. On the registered fixed-six-event development
@@ -31,7 +42,7 @@ from the older midpoint task. Original weights, forecast arrays and executable
 real-data replay are in [ME071's repository bundle](research/replay-bundles/ME071).
 This single-model construction cycle makes no architecture-winner claim.
 
-Latest draft research: [ME069 enterprise event-state model](research/mathematical-engineering/me069/RESULTS.md)
+Earlier enterprise research: [ME069 enterprise event-state model](research/mathematical-engineering/me069/RESULTS.md)
 adds categorical event/resource encoders, elapsed-time native fast/slow and
 associative memory, learned event-regime mixing and probabilistic waiting
 times. Ten original fits use the authentic BPI2012 loan-process log. Frozen
