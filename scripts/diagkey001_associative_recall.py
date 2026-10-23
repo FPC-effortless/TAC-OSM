@@ -160,18 +160,20 @@ def eval_model(model,seed):
     model.eval();scores={}
     with torch.no_grad():
         for length in LENGTHS:
-            correct=0;total=0;negative_log_loss=0.
+            correct=0;total=0;negative_log_loss=0.;correct_bits=[]
             # Prespecified 512 independent fresh synthetic sequences per delay.
             for i in range(16):
                 t,k,v,y=batch_for(seed+20000,200000+length*37+i,batch_size=32,
                                    length=length,split="TEST")
                 logits=model(t,k,v)
-                correct+=int((logits.argmax(-1)==y).sum())
+                case_correct=(logits.argmax(-1)==y)
+                correct_bits.extend([int(z) for z in case_correct.tolist()])
+                correct+=int(case_correct.sum())
                 negative_log_loss+=float(F.cross_entropy(logits,y,reduction="sum"))
                 total+=len(y)
             scores[str(length)]={"exact_recall_correct":correct,
                 "query_count":total,"accuracy":correct/total,
-                "NLL":negative_log_loss/total}
+                "NLL":negative_log_loss/total,"correct_bits":correct_bits}
     return scores
 
 def one_fit(seed,arm,steps=STEPS):
@@ -218,12 +220,96 @@ def one_fit(seed,arm,steps=STEPS):
         "arm":arm,"seed":seed,"test":score,"checkpoint_sha256":digest}),flush=True)
     return output
 
+
+def independent_git_replay():
+    """Read original Git bytes then rerun held-out synthetic diagnostic inference.
+    No optimizer updates; all 20 original model/optimizer/RNG state files required.
+    This is not a real-world verification.
+    """
+    import subprocess
+    torch.set_num_threads(1)
+    model_counts()
+    all_data={}
+    for seed in SEEDS:
+        all_data[str(seed)]={}
+        for arm in ARMS:
+            folder=RESULT_DIR/f"seed-{seed}"
+            target=folder/(arm+".pt")
+            record_path=folder/(arm+".json")
+            if not target.is_file() or not record_path.is_file():
+                raise ValueError(f"missing full original synthetic model/score {seed}/{arm}")
+            original=subprocess.check_output(["git","show","HEAD:"+target.as_posix()])
+            if original!=target.read_bytes():
+                raise ValueError(f"diagnostic original training weight bytes not owned by Git: {target}")
+            row=json.loads(record_path.read_text())
+            if hashlib.sha256(target.read_bytes()).hexdigest()!=row["original_checkpoint_sha256"]:
+                raise ValueError("original synthetic trained checkpoint hash mismatch")
+            learned=torch.load(target,map_location="cpu",weights_only=False)
+            if learned["spec"]["arm"]!=arm or learned["spec"]["seed"]!=seed:
+                raise ValueError("original trained model identity mismatch")
+            network=model_for(arm);network.load_state_dict(learned["weights"],strict=True)
+            recovered=eval_model(network,seed)
+            for length in LENGTHS:
+                old=row["scores"][str(length)];new=recovered[str(length)]
+                if old["correct_bits"]!=new["correct_bits"] or abs(old["NLL"]-new["NLL"])>1e-5:
+                    raise ValueError("independent frozen synthetic diagnostic score differs")
+            all_data[str(seed)][arm]=row
+            print(f"REPLAY_SYNTHETIC_ONLY_{seed}_{arm}_PASS",flush=True)
+    comparison={}
+    for length in LENGTHS:
+        metrics={}
+        for arm in ARMS:
+            accuracy=[all_data[str(seed)][arm]["scores"][str(length)]["accuracy"] for seed in SEEDS]
+            metrics[arm]={"mean_exact_recall_accuracy":float(np.mean(accuracy)),
+                          "five_seed_accuracy":accuracy}
+        metrics["tac_minus_gru"]=float(np.mean([
+            all_data[str(seed)]["tac"]["scores"][str(length)]["accuracy"]-
+            all_data[str(seed)]["gru"]["scores"][str(length)]["accuracy"] for seed in SEEDS]))
+        metrics["tac_minus_noassoc"]=float(np.mean([
+            all_data[str(seed)]["tac"]["scores"][str(length)]["accuracy"]-
+            all_data[str(seed)]["tac_noassoc"]["scores"][str(length)]["accuracy"] for seed in SEEDS]))
+        comparison[str(length)]=metrics
+    # Profilers record only supported operators. An unmeasured kernel is
+    # NEVER silently counted as zero total physical compute.
+    profiled={}
+    measured_parity={}
+    for length in LENGTHS:
+        row={arm:all_data[str(SEEDS[0])][arm]["partial_supported_operator_flops_at_batch2"][str(length)] for arm in ARMS}
+        profiled[str(length)]=row
+        if all(isinstance(n,int) and n>0 for n in row.values()):
+            values=list(row.values())
+            measured_parity[str(length)]=(max(values)-min(values))/max(values)
+        else:
+            measured_parity[str(length)]=None
+    eligible=False # supported-op counts cannot certify full hardware compute
+    report={"study":STUDY,"scientific_type":"SYNTHETIC_SOFTWARE_MECHANISM_DIAGNOSTIC",
+            "trained_original_models_replayed":len(SEEDS)*len(ARMS),
+            "all_original_checkpoint_bytes_Git_owned":True,
+            "real_world_capability_established":False,
+            "equal_parameters":model_counts(),
+            "fits_per_arm":len(SEEDS),
+            "equal_example_budgets":{"updates":STEPS,"batch_size":BATCH},
+            "partial_supported_operator_flops_per_length":profiled,
+            "relative_supported_operator_profile_difference":measured_parity,
+            "FLOPs_end_to_end_coverage_verified":False,
+            "fair_head_to_head_eligible":eligible,
+            "chance_exact_recall":CHANCE,"scores":comparison,
+            "decision":"ONLY SYNTHETIC MECHANISM DIAGNOSTIC; never qualify or reject global associative or real-world architectural superiority",
+            "next":"Equal-input/compute real-data trained ablation + matched GRU/Transformer/direct heads on genuinely untouched qualified long-history source"}
+    output=RESULT_DIR/"INDEPENDENT_SYNTHETIC_DIAGNOSTIC_REPLAY.json"
+    if output.exists():raise ValueError("independent synthetic diagnostic result already in Git")
+    output.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
+    print("DIAGKEY001_SYNTHETIC_FINAL="+json.dumps({"means":comparison,"fair_head_to_head":eligible}),flush=True)
+
 def main():
     p=argparse.ArgumentParser()
     p.add_argument("--seed",type=int,default=75001)
     p.add_argument("--arm",choices=ARMS,default="tac")
-    p.add_argument("--mode",choices=("smoke","fit"),default="smoke")
+    p.add_argument("--mode",choices=("smoke","fit","replay"),default="smoke")
     args=p.parse_args()
+    if args.mode=="replay":
+        independent_git_replay()
+        return
     if args.mode=="smoke":
         print("ACTUAL_100K_COUNTS="+json.dumps(model_counts(),sort_keys=True))
         for arm in ARMS:
