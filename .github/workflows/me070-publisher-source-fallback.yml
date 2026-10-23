@@ -1,9 +1,7 @@
 name: ME070 authentic publisher source metadata and 256-history gate
+# Verified original metadata in run 39923219365, but 3 publisher file endpoints
+# returned HTTP 504. Manual only until official file storage recovers.
 on:
-  pull_request:
-    paths:
-      - 'scripts/me070_acquire_official_source.py'
-      - '.github/workflows/me070-publisher-source-fallback.yml'
   workflow_dispatch:
 permissions:
   contents: read
