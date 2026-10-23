@@ -5,6 +5,14 @@ registration, model-selection decision, architecture claim, and research handoff
 This changes prospective evaluation rules; historical experiments, their locked
 protocols, failed runs, and evidence remain intact.
 
+## Mandatory independent-progress truth standard — 2026-10-23
+
+Before describing a new trained TAC-OSM model as **smarter**, **more capable**, or **improved**, apply the prospective [Capability Progress and Intelligence Evidence Standard](CAPABILITY_PROGRESS_TRUTH_STANDARD.md). An original training and replay receipt confirms reproducibility, not a gain; new mechanisms and additional forecast horizons confirm implementation, not useful capability. Exposed DEV provides developmental evidence only.
+
+A same-skill before/after improvement requires **the same factual original real cohort, prediction-time information, actual case IDs, eligible targets, horizons and score implementation**. A stronger claim requires a separate genuinely untouched real cohort, prespecified nonzero meaningful gain with valid paired independent-case uncertainty, stable multi-seed evidence, authentic strong practical reference, and all registered safety/calibration/time-tail guardrails. A genuine new skill must score actual observed outcomes against an appropriate practical reference; do not equate source-log ending with a verified business result.
+
+Every study must disclose **what got better, what got worse and what remains unknown**, with explicit evidence tier. A model with better NLL but materially worse interval coverage or rare-risk errors is `MIXED_TRADEOFF`, not globally more intelligent. Neither this policy nor its scorecard requires default ablations before useful integrated native model development. Do not weaken the standing real-source, prospective 95k–105k live training, equal-budget architecture-comparison or repository-original checkpoint rules.
+
 ## Non-negotiable requirements
 
 1. **Real-world, independently sourced observations are the default training
