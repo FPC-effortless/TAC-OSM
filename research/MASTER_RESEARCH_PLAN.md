@@ -58,7 +58,7 @@ to the empirical reference (64.86% lower log loss, 5/5 seed wins). It does
 superiority gate **FAILS**. Nominal 90% interval coverage is 92.28%, with a
 wide 230.12-hour mean width; useful operational uncertainty is not qualified.
 
-**Original-environment REPO_REPLAY=PASS; cross-CPU replay FAIL:** all ten original model/optimizer/RNG checkpoints were
+**Original-environment REPO_REPLAY=PASS; cross-CPU numerical exception retained:** all ten original model/optimizer/RNG checkpoints were
 Git-owned at `491f085b` before scoring, restored from a separate clean checkout,
 and all 44,680 DEV/TEST case-score records were independently recomputed
 bit-identically. Original score commit `7b458208`; no retraining replacement.
@@ -66,6 +66,9 @@ GitHub's different CPU runner subsequently failed the fixed waiting-time
 per-record tolerance at DEV / GRU seed 69005 / row 520. Preserve that numerical
 portability exception and the original tolerance; no all-environment replay
 pass or model promotion is claimed.
+Subsequent GitHub run `39905632298` passed the identical fixed tolerance without
+a numerical/model change; this does not erase the original failing run
+`39905268211` or establish uniform CPU portability.
 The full repository regression passed 1,005 tests. See the
 [results and limits](https://github.com/FPC-effortless/TAC-OSM/blob/research/me069-authentic-workflow-world-model-2026-10-23/research/mathematical-engineering/me069/RESULTS.md)
 and [original checkpoints](https://github.com/FPC-effortless/TAC-OSM/tree/research/me069-authentic-workflow-world-model-2026-10-23/research/replay-bundles/ME069).
