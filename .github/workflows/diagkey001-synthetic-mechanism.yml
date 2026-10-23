@@ -1,0 +1,110 @@
+name: DIAGKEY001 synthetic native associative recall mechanism ONLY
+on:
+  pull_request:
+    paths:
+      - 'scripts/diagkey001_associative_recall.py'
+      - 'tests/test_diagkey001_synthetic_mechanism.py'
+      - 'research/mathematical-engineering/diagkey001/**'
+      - '.github/workflows/diagkey001-synthetic-mechanism.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: diagkey001-synthetic-mechanism-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  compulsory-diagnostic-integrity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5' 'pytest==8.4.2'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Prove 100k counts live, active gradients and no-answer leakage
+        run: |
+          PYTHONPATH=src:. python -m pytest -q tests/test_diagkey001_synthetic_mechanism.py
+          PYTHONPATH=src:. python scripts/diagkey001_associative_recall.py --mode smoke
+  paired-five-seed-synthetic-diagnostic:
+    needs: compulsory-diagnostic-integrity
+    runs-on: ubuntu-latest
+    timeout-minutes: 105
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [75001,75002,75003,75004,75005]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Fit exactly four useful 100k-capacity neural memory mechanisms on identical synthetic data
+        env:
+          SEED: ${{ matrix.seed }}
+        run: |
+          set -eu
+          for arm in tac tac_noassoc gru transformer; do
+            if [ -e "research/replay-bundles/DIAGKEY001/seed-$SEED/$arm.json" ]; then
+              echo "Preserved original synthetic mechanism model present; DO NOT retrain $arm"
+            else
+              PYTHONPATH=src:. python scripts/diagkey001_associative_recall.py --mode fit --arm "$arm" --seed "$SEED"
+            fi
+          done
+      - name: Preserve original trained synthetic diagnostic weights optimizer RNG and their actual scores in Git
+        env:
+          PUSH_BRANCH: ${{ github.head_ref || github.ref_name }}
+          SEED: ${{ matrix.seed }}
+        run: |
+          set -eu
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "research/replay-bundles/DIAGKEY001/seed-$SEED/"
+          if ! git diff --cached --quiet; then
+            git commit -m "evidence(diagkey001): synthetic ONLY seed $SEED original model bytes and metrics; NOT a real-world claim"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin "$PUSH_BRANCH"
+              git rebase "origin/$PUSH_BRANCH"
+              if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+              if [ "$attempt" -eq 8 ]; then exit 1; fi
+            done
+          fi
+  independent-synthetic-diagnostic-replay:
+    needs: paired-five-seed-synthetic-diagnostic
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Recheck all original 20 synthetic model Git SHA bytes and fresh paired 512-case scores without fitting
+        run: PYTHONPATH=src:. python scripts/diagkey001_associative_recall.py --mode replay
+      - name: Preserve independent replay score receipt; cannot imply real-world intelligence
+        env:
+          PUSH_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          set -eu
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/replay-bundles/DIAGKEY001/INDEPENDENT_SYNTHETIC_DIAGNOSTIC_REPLAY.json
+          git commit -m 'audit(diagkey001): independent original synthetic ONLY memory mechanism replay; real-world claim blocked'
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin "$PUSH_BRANCH"
+            git rebase "origin/$PUSH_BRANCH"
+            if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+            if [ "$attempt" -eq 8 ]; then exit 1; fi
+          done
