@@ -1,0 +1,56 @@
+{
+  "schema_version": "tac-osm.parity.v2",
+  "study_id": "ME077A_ORIGINAL_REAL_MOTION_DISCRIMINATION_NO_FIT",
+  "study_type": "noncomparative_diagnostic",
+  "no_architecture_superiority_claim": true,
+  "no_new_model_fits": true,
+  "scientific_purpose": "Audit whether ME077 auxiliary real motion probability and learned mixture probability actually discriminate measured physical change, using identical 960 previously exposed real source queries across all five frozen original 102503-param models. No new fit, no untouched TEST, no architecture-superiority, deployment or policy claims.",
+  "source_study": "ME077_SELECTIVE_PHYSICAL_REAL_CAPABILITY",
+  "source_original_summary_sha256": "095816cf45de5ff7e3e1e3a6fd9f84f0165302c72fc725f7abb0f69bf438c959",
+  "expected_original_five_seeds": [
+    77001,
+    77002,
+    77003,
+    77004,
+    77005
+  ],
+  "expected_query_count_per_seed": 960,
+  "expected_original_episode_count": 40,
+  "real_source": "Original BodenAI/RW-RL-HIL observed real joint and lag1 issued action traces from historical source FIT; exposed DEV, never independent",
+  "strict_claims": [
+    "Real historical motion labels only for retrospective scoring; not available to forecast model",
+    "Task/source end is not verified robot success",
+    "Do not tune prediction thresholds or alter checkpoints on exposed results",
+    "Auxiliary global motion probability is not equivalent to the joint-wise mixture component probabilities",
+    "Actual motion is only 84 of 960 eligible original real queries; model gains on stationary state do not prove hazard discrimination"
+  ],
+  "registered_metrics": {
+    "ranking": [
+      "ROC_AUC",
+      "average_precision",
+      "top10pct_capture"
+    ],
+    "proper": [
+      "Brier",
+      "Brier_vs_perfect_hindsight_constant_prevalence_baseline"
+    ],
+    "thresholds": [
+      0.05,
+      0.1,
+      0.25,
+      0.5
+    ],
+    "calibration_bins": [
+      0,
+      0.05,
+      0.1,
+      0.2,
+      0.4,
+      0.6,
+      0.8,
+      1
+    ],
+    "uncertainty": "2000 paired 40-episode cluster bootstraps for rank and Brier differences, five model predictions averaged per observed real query; seed 77078",
+    "interpretation": "Descriptive original exposed DEV only. Hindsight prevalence baseline is not deployable; an adequate predictive risk head needs actual ranking utility, calibration and prospective verification."
+  }
+}
