@@ -243,6 +243,8 @@ def check_manifest(m,phase="preflight"):
         demand(m.get("no_architecture_superiority_claim") is True,
             "diagnostic must forbid architecture-superiority claims")
         text_field(m.get("scientific_purpose"),"diagnostic scientific_purpose")
+        if requires_100k_policy(m["study_id"]):
+            demand(m.get("no_new_model_fits") is True,"prospective diagnostics must explicitly forbid new fits")
         return {"study_id":m["study_id"],"phase":phase,"eligible_for_architecture_superiority":False,
                 "status":"PASS_DIAGNOSTIC_ONLY"}
     demand(m.get("registered_before_first_fit") is True,
