@@ -238,3 +238,18 @@ def test_new_study_above_target_still_invalid_when_arms_match_to_1_percent():
         row["deployed_parameters"]=109500
     with pytest.raises(ParityError,match="100k target"):
         check_manifest(m)
+
+
+def test_new_study_ids_and_unknown_studies_cannot_escape_100k_training_gate():
+    for name in ("ME073_NEXT_PHYSICAL_MODEL", "DEV062_NEW_MODEL", "NEW_RECURRENT_WORLD_MODEL"):
+        assert requires_100k_policy(name)
+    assert not requires_100k_policy("ME072_HISTORICAL_ALREADY_FIT")
+    assert not requires_100k_policy("DEV061_ORIGINAL_HISTORICAL")
+    # Even two identically undersized models cannot qualify in a new study.
+    m=fixture()
+    m["study_id"]="ME073_NEXT_PHYSICAL_MODEL"
+    for arm in m["arms"]:
+        arm["trainable_parameters"]=43000
+        arm["deployed_parameters"]=43000
+    with pytest.raises(ParityError,match="100k target"):
+        check_manifest(m,"preflight")
