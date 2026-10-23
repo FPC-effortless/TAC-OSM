@@ -25,7 +25,7 @@ NVAL=32
 CHANCE=1.0/NVAL
 RESULT_DIR=Path("research/replay-bundles/DIAGKEY001")
 ARMS=("tac","tac_noassoc","gru","transformer")
-PER_ARM_PARAMETERS={"tac":101554,"tac_noassoc":101744,"gru":101500,"transformer":101616}
+PER_ARM_PARAMETERS={"tac":101554,"tac_noassoc":101560,"gru":101500,"transformer":101616}
 
 class Native(nn.Module):
     """Direct recurrence lifted from native ME069: nonlinear fast/slow,
@@ -39,11 +39,11 @@ class Native(nn.Module):
         self.kind_embed=nn.Embedding(3,48)
         self.key=nn.Embedding(65,48)
         self.value=nn.Embedding(33,48)
-        self.encoder=nn.Linear(48,48);self.query=nn.Linear(48,8)
-        self.fast_map=nn.Linear(48+width+8,2*width)
-        self.slow_map=nn.Linear(2*width+8,2*width)
+        self.encoder=nn.Linear(48,48);self.query=nn.Linear(48,8) if association else None
+        self.fast_map=nn.Linear(48+width+(8 if association else 0),2*width)
+        self.slow_map=nn.Linear(2*width+(8 if association else 0),2*width)
         if association:self.write_map=nn.Linear(48+2*width,18)
-        self.readout=nn.Sequential(nn.Linear(2*width+8+48,decoder),nn.SiLU(),
+        self.readout=nn.Sequential(nn.Linear(2*width+(8 if association else 0)+48,decoder),nn.SiLU(),
                                    nn.Linear(decoder,NVAL))
     def forward(self,t,k,v):
         x=torch.tanh(self.encoder(self.kind_embed(t)+self.key(k)+self.value(v)))
@@ -52,9 +52,9 @@ class Native(nn.Module):
             e=x[:,j]
             query=F.normalize(f[:,:8]+s[:,:8],dim=-1,eps=1e-6)
             recall=torch.bmm(m,query.unsqueeze(-1)).squeeze(-1)
-            value,gate=self.fast_map(torch.cat((e,f,recall),-1)).chunk(2,-1)
+            value,gate=self.fast_map(torch.cat((e,f,recall),-1) if self.association else torch.cat((e,f),-1)).chunk(2,-1)
             f=torch.lerp(f,value.tanh(),gate.sigmoid())
-            delta,gate=self.slow_map(torch.cat((f,s,recall),-1)).chunk(2,-1)
+            delta,gate=self.slow_map(torch.cat((f,s,recall),-1) if self.association else torch.cat((f,s),-1)).chunk(2,-1)
             s=torch.lerp(s,(s+delta.tanh()).tanh(),.25*gate.sigmoid())
             if self.association:
                 kk,vv,beta,relevance=self.write_map(torch.cat((e,f,s),-1)).split((8,8,1,1),-1)
@@ -62,8 +62,10 @@ class Native(nn.Module):
                 error=vv.tanh()-torch.bmm(m,kk.unsqueeze(-1)).squeeze(-1)
                 m=m+((beta.sigmoid()*relevance.sigmoid())*error).unsqueeze(-1)*kk.unsqueeze(1)
                 m=m/m.square().sum((1,2),keepdim=True).sqrt().clamp_min(1.)
-        memory_read=torch.bmm(m,F.normalize(self.query(x[:,-1]),dim=-1).unsqueeze(-1)).squeeze(-1)
-        return self.readout(torch.cat((f,s,memory_read,x[:,-1]),-1))
+        if self.association:
+            memory_read=torch.bmm(m,F.normalize(self.query(x[:,-1]),dim=-1).unsqueeze(-1)).squeeze(-1)
+            return self.readout(torch.cat((f,s,memory_read,x[:,-1]),-1))
+        return self.readout(torch.cat((f,s,x[:,-1]),-1))
 
 class GRU(nn.Module):
     def __init__(self,width=128,decoder=124):
@@ -99,7 +101,7 @@ class CausalTransformer(nn.Module):
 def model_for(arm):
     return {
         "tac":lambda:Native(88,120,True),
-        "tac_noassoc":lambda:Native(88,136,False),
+        "tac_noassoc":lambda:Native(88,152,False),
         "gru":lambda:GRU(128,124),
         "transformer":lambda:CausalTransformer(64,144),
     }[arm]()
