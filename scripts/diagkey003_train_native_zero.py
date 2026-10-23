@@ -174,7 +174,12 @@ def replay():
             "long_memory_256_recall_claim":False,
             "next_gate":"If 0-delay learned ≥90% for each of five seeds, preregister new 1/2/4/8/16 curriculum. Otherwise stop and diagnose optimization/key binding before another long-delay fit."}
     dest=OUT/"INDEPENDENT_SYNTHETIC_ORIGINAL_ZERO_REPLAY.json"
-    if dest.exists():raise FileExistsError("do not rewrite original replay evidence")
+    if dest.exists():
+        previous=json.loads(dest.read_text())
+        if previous!=report:
+            raise ValueError("frozen original all-five checkpoint replay numerical values changed; do not overwrite")
+        print("DIAGKEY003_REPEAT_FROZEN_ORIGINAL_REPLAY_PASS",flush=True)
+        return
     dest.write_text(json.dumps(report,indent=2,sort_keys=True)+"\n")
     print("DIAGKEY003_ACTUAL_ORIGINAL_FIVE_GUARDED_ZERO_RESULTS="+json.dumps(report),flush=True)
 
