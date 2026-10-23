@@ -19,7 +19,7 @@ jobs:
       - name: Verify actual final weights and all guarded optimizer updates
         if: hashFiles('research/replay-bundles/ME080/FIT_INDEX.json') != ''
         run: |
-          PYTHONPATH=src:. python scripts/me080_train_world.py finalize
+          PYTHONPATH=src:. python scripts/me080_finalize_originals.py
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me080/FINAL_COMPARISON.json --phase final
       - uses: actions/cache@v4
         with:

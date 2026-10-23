@@ -70,7 +70,7 @@ def main():
     oldtotals=np.array([[sum(r['mae'] for r in oldmerged if r['horizon']==1 and (r['task'],r['episode'])==ep),sum(r['horizon']==1 and (r['task'],r['episode'])==ep for r in oldmerged)] for ep in episodes])
     ns=newtotals[draws].sum(1);os=oldtotals[draws].sum(1)
     ci=np.quantile(ns[:,0]/ns[:,1]-os[:,0]/os[:,1],[.025,.975]).tolist()
-    wins=sum(np.mean([r['mae'] for r in n if r['horizon']==1])<np.mean([r['mae'] for r in o if r['horizon']==1]) for n,o in zip(raw,prior))
+    wins=int(sum(np.mean([r['mae'] for r in n if r['horizon']==1])<np.mean([r['mae'] for r in o if r['horizon']==1]) for n,o in zip(raw,prior)))
     gates={'H1at_least5pct_below_ME079':newmetrics['1']['all']['mae']<=.95*oldmetrics['1']['all']['mae'],
       'H1moving_within5pct_ME078':newmetrics['1']['moving']['mae']<=1.05*earliermetrics['1']['moving']['mae'],
       'H1stationary_within10pct_ME077':newmetrics['1']['stationary']['mae']<=1.10*oldquiet,
@@ -80,6 +80,7 @@ def main():
         gates[f'H{h}_coverage_at_least85pct']=newmetrics[str(h)]['all']['coverage']>=.85
         gates[f'H{h}_interval_score_no_worse_ME079']=newmetrics[str(h)]['all']['interval_score']<=oldmetrics[str(h)]['all']['interval_score']
         if h!=1:gates[f'H{h}_MAEwithin5pct_ME079']=newmetrics[str(h)]['all']['mae']<=1.05*oldmetrics[str(h)]['all']['mae']
+    gates={k:bool(v) for k,v in gates.items()}
     if all(gates.values()):tier='DEV_GAIN'
     elif newmetrics['1']['all']['mae']<oldmetrics['1']['all']['mae']:tier='MIXED_TRADEOFF'
     else:tier='REGRESSION'
