@@ -30,6 +30,13 @@ archive. They are unaffected — their scripts are unchanged — but they cannot
 be re-verified by the gate, which is recorded in ``docs/CLAIMS.md`` as a
 limitation of the frozen baseline rather than a claim about it.
 
+**Legacy-only checkpoint generator (pre-2026-10-23).** This script preserves a
+historical diagnostic but DOES NOT SATISFY the mandatory repository-availability
+rule for any NEW or CONTINUED trained experiment. Never call its successful run
+a finished experiment without committing the actual checkpoint bytes plus full
+model and scoring replay bundle to the research repository and independently
+verifying a clean checkout per `research/REPOSITORY-REPLAY-AND-CHECKPOINT-RULE.md`.
+
 **The archive is a local artifact, not a committed one.** ``results/*.json``
 is gitignored, so the weights do not travel with the repository; re-running
 this script regenerates them deterministically from the same seeds. The
