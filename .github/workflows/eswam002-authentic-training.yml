@@ -1,11 +1,8 @@
 name: ESWAM002 authentic real model training and original same-case replay
+# Original five Git-owned models have now been trained and independently replayed.
+# Rerunning fitting is prohibited; preserve this workflow for provenance only.
+# A manual dispatch is fail-closed when originals already exist.
 on:
-  pull_request:
-    paths:
-      - "scripts/eswam002_train_real.py"
-      - "src/tac_osm/variants/exchange_world_action.py"
-      - "research/mathematical-engineering/eswam002/FAIR_COMPARISON.json"
-      - ".github/workflows/eswam002-authentic-training.yml"
   workflow_dispatch:
 permissions:
   contents: write
