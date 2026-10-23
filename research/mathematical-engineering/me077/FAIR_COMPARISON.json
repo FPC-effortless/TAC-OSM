@@ -1,0 +1,107 @@
+{
+  "checkpoints": "research/replay-bundles/ME077/seed-7700X/final.pt",
+  "evaluation_contract": {
+    "all_models_Git_frozen_before_scoring": true,
+    "bootstrap": "5000 paired episode-cluster resamples, seed77077; five-seed model average per genuine query; uncertainty conditional on fitted models",
+    "interval_probability": 0.9,
+    "new_source_holdout": false,
+    "no_hyperparameter_sweep": true,
+    "old_model": "ME076, original 5 frozen checkpoint predictions",
+    "point_prediction": "coordinate-wise median of the fitted two-Laplace mixture, fixed 26-step bisection",
+    "protected_tissue_box_opened": false,
+    "raw_replay_atol": 1e-06,
+    "raw_replay_rtol": 1e-05
+  },
+  "guard": "Whole model pre/post update live check via budgeted_optimizer, guarded optimizer.step, save_training_checkpoint. Entire original fit/checkpoint/per-case outputs in Git; never alter existing ME054-075 results.",
+  "implementation_sha256": {
+    "scripts/me057_train_fused_anchor_robot.py": "f086f1daa27060695be4d17ac7d98b285bb07d410f18ddcbaf5ecb2fccbf613e",
+    "scripts/me064_mixed_real_fit.py": "d17695f761b2788074aaf2402a99dc49dcb15c4e28ed78c44b42b26cce4f33dc",
+    "scripts/me076_train_system1_real.py": "e3910ec1c42fe80b5300db6d9bb789ef4d11ee38e6f2b20a607d0adbf5f18767",
+    "scripts/me077_selective_physical.py": "fd4657b3bfd7aa0636aeee72e2936375a7861b1ea0783c6b710852f04c1b093e",
+    "scripts/validate_research_parity.py": "ec690df6d0c2a4f13aeceb3804bfc974cc58189c66ada923fe0006fd39e829ff",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "src/tac_osm/variants/selective_physical.py": "82aed0025b4c532bce5e7beb5df3a0e9442a1dfdfcffc9fe9cb8fdb31b5a8e98"
+  },
+  "loss": "proper two-component Laplace NLL + 0.2*BCE(global genuine motion >=0.025 physical mean14D change). Global motion probability is an auxiliary forecast, NOT identical to mixture-component assignment.",
+  "measurable_promotion_rule": "Provisional DEV_GAIN only if all five seeds reduce MAE >=5% against ME076 and persistence, five-seed-average movement-rich MAE <=0.95*persistence; no task >10% regression relative to persistence; episode-cluster 95% CI upper(model-persistence)<0. Otherwise report REGRESSION, MIXED_TRADEOFF or INCONCLUSIVE. No untouched TEST.",
+  "models": [
+    {
+      "architecture": "system1_selective_physical",
+      "deployed_parameters": 102503,
+      "seed": 77001,
+      "trainable_parameters": 102503
+    },
+    {
+      "architecture": "system1_selective_physical",
+      "deployed_parameters": 102503,
+      "seed": 77002,
+      "trainable_parameters": 102503
+    },
+    {
+      "architecture": "system1_selective_physical",
+      "deployed_parameters": 102503,
+      "seed": 77003,
+      "trainable_parameters": 102503
+    },
+    {
+      "architecture": "system1_selective_physical",
+      "deployed_parameters": 102503,
+      "seed": 77004,
+      "trainable_parameters": 102503
+    },
+    {
+      "architecture": "system1_selective_physical",
+      "deployed_parameters": 102503,
+      "seed": 77005,
+      "trainable_parameters": 102503
+    }
+  ],
+  "no_architecture_superiority_claim": true,
+  "primary_development_measure": "Same exact 960 ME076 observed query origins per seed, physical joint MAE; movement-rich >=0.025 physical units, near-stationary, tasks, motion Brier and coherent marginal 90% interval score.",
+  "real_world_source": {
+    "license": "CC-BY-4.0",
+    "name": "BodenAI/RW-RL-HIL-Dataset, frozen revision 9290f5a96dc91ea58256e81d9ce2dd9621890b51, original ME064 registered five authentic tasks previously exposed FIT 160 episodes; CC-BY-4.0 with publisher attribution",
+    "observed_real_outcomes": true,
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "registered_before_first_fit": true,
+  "schema_version": "tac-osm.parity.v2",
+  "scientific_purpose": "Train an integrated native motion-selective distribution and proper conditional median on authentic physical transitions, suppressing false change predictions while preserving changing-state skill. Exposed DEV only; no architectural attribution or superiority.",
+  "source_policy": {
+    "CAL_or_unopened_target_access": false,
+    "license_verified_by_publisher": true,
+    "log_end_is_task_success": false,
+    "source_is_previously_exposed": true,
+    "valid_action_alignment_causal_proof": false
+  },
+  "source_train_fit_qualification": "metadata and normalized state/action computed only from designated FIT episode members; source fingerprint includes entire original five-task FIT 160 archive but eval rows never used for normalization",
+  "strict_no_claims": [
+    "no original model trained before this registration",
+    "no actual action permission",
+    "no measured millisecond device bound",
+    "no untouched external confirmation",
+    "no matched GRU superiority",
+    "no synthetic success"
+  ],
+  "study_id": "ME077_SELECTIVE_PHYSICAL_REAL_CAPABILITY",
+  "study_type": "single_model_training",
+  "training_budget": {
+    "batch_size": 24,
+    "gradient_clip_norm": 1.0,
+    "learning_rate": 0.0007,
+    "observation_history_frames": 8,
+    "optimizer": "AdamW",
+    "seeds": [
+      77001,
+      77002,
+      77003,
+      77004,
+      77005
+    ],
+    "selection": "final update only, no DEV tuning",
+    "supervised_targets_per_seed": 24576,
+    "train_window_sampling": "equal task round-robin, uniform eligible actual transitions; no outcome oversampling",
+    "updates_per_seed": 1024,
+    "weight_decay": 0.0001
+  }
+}
