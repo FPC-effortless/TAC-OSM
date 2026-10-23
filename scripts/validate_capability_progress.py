@@ -70,7 +70,7 @@ def check(record: dict) -> list[str]:
                 "invalid actual future target count; repeated seeds/paths do not add cases")
         require(bool(task.get("target")) and bool(task.get("query_and_horizon")),
                 "must specify factual target and query/horizon")
-        require(integrity.get("git_original_checkpoints") is True, "original model bytes not verified")
+        require(integrity.get("git_original_checkpoints") is True, "original checkpoint bytes not verified")
         require(integrity.get("independent_clean_replay") is True, "independent original-score replay absent")
         require(integrity.get("raw_case_scores_preserved") is True, "raw original case scores missing")
         require(isinstance(model.get("candidate_sha256"), str) and SHA.fullmatch(model["candidate_sha256"]) is not None,
