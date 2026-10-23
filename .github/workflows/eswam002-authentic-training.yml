@@ -1,0 +1,89 @@
+name: ESWAM002 authentic real model training and original same-case replay
+on:
+  push:
+    branches: [research/eswam-pauli-world-action-2026-10-23]
+    paths:
+      - "scripts/eswam002_train_real.py"
+      - "src/tac_osm/variants/exchange_world_action.py"
+      - "research/mathematical-engineering/eswam002/FAIR_COMPARISON.json"
+      - ".github/workflows/eswam002-authentic-training.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eswam002-original-real-models
+  cancel-in-progress: false
+jobs:
+  fit-authentic-original-models:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam-pauli-world-action-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned scientific dependencies
+        run: |
+          python -m pip install 'pytest==9.1.1' 'numpy==2.3.5' 'pyarrow==21.0.0'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Hard fail before fit on software, parity or model-size violation
+        run: |
+          python -m py_compile scripts/eswam002_train_real.py src/tac_osm/variants/exchange_world_action.py
+          PYTHONPATH=src:. python -m pytest -q tests/test_exchange_world_action.py
+          PYTHONPATH=src:. python scripts/eswam002_train_real.py preflight
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/eswam002/FAIR_COMPARISON.json --phase preflight
+          python scripts/audit_training_budget.py
+      - name: Cache original publicly licensed publisher source only
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/me076-pinned-publisher-source
+          key: me076-bodenai-public-five-tasks-original-fit-v1
+      - name: Train five guarded authentic original ESWAM models and score same original cases
+        run: PYTHONPATH=src:. python scripts/eswam002_train_real.py fit --cache "${{ runner.temp }}/me076-pinned-publisher-source"
+      - name: Commit original five complete trained real model and original score bytes
+        if: success()
+        env:
+          TARGET_BRANCH: research/eswam-pauli-world-action-2026-10-23
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/mathematical-engineering/eswam002/SOURCE_QUALIFICATION.json
+          git add -f research/mathematical-engineering/eswam002/RESULTS.json
+          git add -f research/replay-bundles/ESWAM002
+          git commit -m 'research(eswam002): preserve original real five-model checkpoints and scores'
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+  independent-clean-checkout-original-replay:
+    needs: fit-authentic-original-models
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam-pauli-world-action-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/me076-pinned-publisher-source
+          key: me076-bodenai-public-five-tasks-original-fit-v1
+      - name: Restore five original Git weights and recompute all real-case forecasts without fitting
+        run: PYTHONPATH=src:. python scripts/eswam002_train_real.py replay --cache "${{ runner.temp }}/me076-pinned-publisher-source"
+      - name: Commit independent original replay audit
+        env:
+          TARGET_BRANCH: research/eswam-pauli-world-action-2026-10-23
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/replay-bundles/ESWAM002/INDEPENDENT_ORIGINAL_REAL_REPLAY.json
+          git commit -m 'audit(eswam002): independent original real models same-case replay'
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
