@@ -7,7 +7,7 @@ ME064 spray-nozzle old exposed test is prohibited. Real factual action prefixes
 are not evidence for unexecuted counterfactual outcomes or policy utility.
 """
 from __future__ import annotations
-import argparse,hashlib,json,math
+import argparse,hashlib,json,math,os
 from pathlib import Path
 import numpy as np
 import torch
@@ -20,6 +20,8 @@ from scripts.me060_train_trajectory import digest
 
 ROOT=Path("research/mathematical-engineering/me066")
 OUT=Path("research/replay-bundles/ME066")
+# Separate independent scoring outputs may never overwrite published original bytes.
+RESULT_DIR=Path(os.environ.get("ME066_RESULT_DIRECTORY",str(OUT)))
 ME064_TASKS=Path("research/mathematical-engineering/me064/TASK_LEVEL_SPLIT.json")
 ARMS=tuple(CONFIG)
 
@@ -56,7 +58,7 @@ def verify_inventory():
     for row in records:
         if sha(row["path"])!=row["checkpoint_sha256"]:
             raise RuntimeError("original model checkpoint SHA changed before target read")
-    if (OUT/"ORIGINAL_UNTOUCHED_TASK_SCORES.json").exists():
+    if (RESULT_DIR/"ORIGINAL_UNTOUCHED_TASK_SCORES.json").exists():
         raise RuntimeError("original unseen robot task already opened and scored; refuse redo")
     return task,manifest,records
 
@@ -91,7 +93,7 @@ def read_original_source_cal(cache,records,task):
             sample=normalize(cal_by_task[name],identified)
             scores.update({f"{name}:{ep}":val for ep,val in evaluate(model,sample,identified).items()})
         all_scores[f"{row['arm']}-s{row['seed']}"]=scores
-    write_json(OUT/"ORIGINAL_SOURCE_CAL_SCORES.json",{
+    write_json(RESULT_DIR/"ORIGINAL_SOURCE_CAL_SCORES.json",{
         "study":task["study"],
         "original_source_CAL_episode_counts":{name:len(rows) for name,rows in cal_by_task.items()},
         "CAL_origin_source_sha256":provenance,
@@ -117,7 +119,7 @@ def read_once_unseen_original(cache,records,task):
         model,identified=frozen_model(row,task)
         scored[f"{row['arm']}-s{row['seed']}"]=evaluate(
             model,normalize(by_ep,identified),identified)
-    write_json(OUT/"ORIGINAL_UNTOUCHED_TASK_SCORES.json",{
+    write_json(RESULT_DIR/"ORIGINAL_UNTOUCHED_TASK_SCORES.json",{
         "study":task["study"],"task":name,
         "original_episode_count":len(by_ep),
         "heldout_publisher_parquet_sha256":{str(ep):row["sha256"] for ep,row in by_ep.items()},
@@ -225,7 +227,7 @@ def run(cache):
     cal=read_original_source_cal(cache,records,task)
     target,sha_new=read_once_unseen_original(cache,records,task)
     result=describe(cal,target,task)
-    write_json(OUT/"REAL_WORLD_EVALUATION_SUMMARY.json",{
+    write_json(RESULT_DIR/"REAL_WORLD_EVALUATION_SUMMARY.json",{
         "study":manifest["study_id"],
         "original_FIT_source_sha256":task["source_FIT_hash"],
         "original_new_task_holdout_sha256":sha_new,
