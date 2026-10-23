@@ -1,5 +1,9 @@
 name: ME064 authentic five-task leave-one-OUT zero-shot frozen evaluation
 on:
+  pull_request:
+    paths:
+      - '.github/workflows/me064-score-frozen.yml'
+      - 'scripts/me064_validate_numeric_replay.py'
   workflow_dispatch:
 permissions: {contents: write}
 concurrency:
@@ -78,6 +82,12 @@ jobs:
       - name: Preserve independent score replay receipt in Git
         env: {PUSH_BRANCH: "${{ github.head_ref || github.ref_name }}"}
         run: |
+          # The replay re-computes original score JSON with tiny CPU floating
+          # differences. Keep the FROZEN published score bytes unchanged in
+          # this branch; only the exact validated tolerance receipt is new.
+          git restore -- research/replay-bundles/ME064/ORIGINAL_SOURCE_CAL_SCORES.json \
+            research/replay-bundles/ME064/ORIGINAL_UNTOUCHED_TASK_SCORES.json \
+            research/replay-bundles/ME064/REAL_WORLD_EVALUATION_SUMMARY.json
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -f research/replay-bundles/ME064/EVALUATION_REPLAY_RECEIPT.json
