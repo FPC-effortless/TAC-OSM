@@ -45,10 +45,13 @@ def test_seed_win_count_is_json_native():
     assert json.loads(json.dumps({"wins": wins})) == {"wins": 5}
 
 
-def test_me057_registration_and_resource_receipt_pass_preflight():
+def test_me057_original_receipt_is_preserved_but_does_not_authorize_a_new_fit():
     plan = json.loads(Path(
         "research/mathematical-engineering/me057/FAIR_COMPARISON.json").read_text())
-    assert check_manifest(plan, "preflight")["status"] == "PASS"
+    import pytest
+    from scripts.validate_research_parity import ParityError
+    with pytest.raises(ParityError,match="100k target"):
+        check_manifest(plan,"preflight")
     receipt = json.loads(Path(
         "research/me057-fused-anchor-preflight.json").read_text())
     assert receipt["strict_parameter_gate_pass"]

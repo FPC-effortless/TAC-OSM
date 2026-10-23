@@ -83,7 +83,11 @@ GATE_MIN_ACCURACY = 0.5
 # --------------------------------------------------------------------------- #
 
 
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 @dataclass
+
 class GateResult:
     """The representability gate, as a record rather than a pass/fail flag.
 
@@ -258,7 +262,7 @@ def train_bridge(runtime: CasmSRuntime) -> dict:
     model = runtime.model
 
     episodes, x, target = _batch(runtime, train)
-    opt = torch.optim.AdamW(model.parameters(), lr=TRAIN_LR)
+    opt = budgeted_optimizer(model, torch.optim.AdamW, model.parameters(), lr=TRAIN_LR)
     history = []
     model.train()
     for _epoch in range(TRAIN_EPOCHS):
@@ -267,7 +271,7 @@ def train_bridge(runtime: CasmSRuntime) -> dict:
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        opt.step()
+        checked_optimizer_step(opt)
         history.append(float(loss.detach().cpu().item()))
 
     model.eval()

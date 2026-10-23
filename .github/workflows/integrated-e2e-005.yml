@@ -31,12 +31,20 @@ on:
       - docs/AUDIT-TACOSM-PLM-INTEGRATED-E2E-005.md
       - .github/workflows/integrated-e2e-005.yml
   workflow_dispatch:
+    inputs:
+      allow_new_fits:
+        description: Explicit opt-in; requires a new compliant registration and live-model guard
+        type: boolean
+        required: true
+        default: false
 
 permissions:
   contents: read
 
 jobs:
   smoke:
+    # Historical fits are not authorized by PRs or push markers. Live gates still apply.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     name: E2E-005 smoke and integrity preflight
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -67,9 +75,10 @@ jobs:
           if-no-files-found: ignore
 
   full:
+    # Historical fits are not authorized by PRs or push markers. Live gates still apply.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     name: E2E-005 confirmatory functional measurement
     needs: smoke
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[run-plm-integrated-e2e-005-full]')) }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:

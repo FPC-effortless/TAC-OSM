@@ -6,13 +6,19 @@ on:
       - 'research/mathematical-engineering/me068/FAIR_COMPARISON.json'
       - '.github/workflows/me068-action-alignment-audit.yml'
   workflow_dispatch:
+    inputs:
+      allow_new_fits:
+        description: Explicit opt-in; current live gates remain compulsory
+        type: boolean
+        default: false
 permissions: {contents: write}
 concurrency:
   group: me068-source-only-causal-action-timing-audit
   cancel-in-progress: false
 jobs:
   original-only-action-timing:
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    # Retained historical lane; current live guards still reject incompatible new fits.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 65
     steps:

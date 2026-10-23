@@ -32,6 +32,9 @@ GENERATOR_VERSION="integrated-e2e-v6-residual-linear-fresh-heldout"
 assert len(HELDOUT)==8 and set(HELDOUT).isdisjoint(EXCLUDED-set(HELDOUT))
 assert len(TRAIN_COMBOS)==len(ALL_COMBOS)-56
 
+
+from tac_osm.parameter_budget import save_training_checkpoint
+
 def make_query(payload,combo,entity):
     op,i,j=combo;a,b=payload[entity][i],payload[entity][j]
     answer={"xor":a^b,"and":a&b,"or":a|b,"xnor":1-(a^b)}[op]
@@ -73,7 +76,7 @@ def episode_fingerprint(episodes:Iterable[tuple])->str:
         serial.append({"entities":[int(r[0]) for r in obs],"payload":{str(k):list(map(int,v)) for k,v in sorted(p.items())},
                        "q1":list(q1),"q2":list(q2),"text":[r[1].tolist() for r in obs],
                        "image":[r[2].tolist() for r in obs],"audio":[r[3].tolist() for r in obs]})
-    torch.save(serial,buf);return hashlib.sha256(buf.getvalue()).hexdigest()
+    save_training_checkpoint(serial,buf);return hashlib.sha256(buf.getvalue()).hexdigest()
 
 def generator_hash():
     return hashlib.sha256(open(__file__,"r",encoding="utf-8").read().encode()).hexdigest()

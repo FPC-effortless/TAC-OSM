@@ -115,7 +115,7 @@ def test_development_lane_cannot_admit_multiple_architectures_or_missing_origina
         "registered_before_first_fit":True,"no_architecture_superiority_claim":True,"architecture_count":1,
         "scientific_purpose":"build one integrated native architecture on authentic data",
         "real_world_source":{"observed_real_outcomes":True,"sha256":"a"*64,"license":"actual source terms"},
-        "seeds":[1,2],"trainable_parameters":100,
+        "seeds":[1,2],"trainable_parameters":100000,"deployed_parameters":100000,
         "training_budget":{"epochs":2,"batch_size":2,"backprop_events":32,"expected_targets_per_seed":100},
         "repository_storage_plan":"original model bytes in tracked replay bundle before scoring",
         "split_sha256":{k:"b"*64 for k in ("FIT","TEMP","CQR","REPORT")}}

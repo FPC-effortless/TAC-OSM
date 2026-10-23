@@ -19,6 +19,8 @@ ROOT=Path("research/mathematical-engineering/me064")
 OUT=Path("research/replay-bundles/ME064")
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def train():
     torch.set_num_threads(1)
     if not (OUT/"UNTRAINED_STORAGE_PROBE.pt").exists() or not (OUT/"STORAGE_PROBE_MANIFEST.json").exists():
@@ -57,7 +59,7 @@ def train():
             count=sum(p.numel() for p in model.parameters())
             if count!=receipt["trainable_parameters"]:
                 raise RuntimeError("matched parameter budget changed")
-            optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+            optimizer=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
             traces=[]
             started=time.process_time()
             for step,pick in enumerate(picks,1):
@@ -69,7 +71,7 @@ def train():
                 norm=torch.nn.utils.clip_grad_norm_(model.parameters(),1.)
                 if not torch.isfinite(norm):
                     raise RuntimeError(f"nonfinite authentic multi-task FIT gradient: {arm}/{seed}/{step}")
-                optimizer.step()
+                checked_optimizer_step(optimizer)
                 if step==1 or step%100==0:
                     traces.append({"step":step,"loss":float(loss.detach())})
                     print(json.dumps({"event":"ME064_ORIGINAL_FIT_MODEL","arm":arm,"seed":seed,
@@ -78,7 +80,7 @@ def train():
             actual_profile=profile_once(model,batch(fit,picks[-1]))
             measured_flops=actual_profile["profiled_forward_backward_flops"]*UPDATES
             file=ckpts/f"{arm}-seed{seed}.pt"
-            torch.save({
+            save_training_checkpoint({
                 "experiment":manifest["study_id"],"training_complete":True,
                 "architecture":arm,"seed":seed,
                 "update_count":UPDATES,"training_source_sha256":original["fit_original_sha256"],

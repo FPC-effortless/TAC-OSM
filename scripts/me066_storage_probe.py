@@ -3,11 +3,12 @@ from __future__ import annotations
 import hashlib,json
 from pathlib import Path
 import torch
+from tac_osm.parameter_budget import save_training_checkpoint
 ROOT=Path("research/replay-bundles/ME066")
 ROOT.mkdir(parents=True,exist_ok=True)
 file=ROOT/"UNTRAINED_STORAGE_PROBE.pt"
 if file.exists():raise RuntimeError("probe already written; never silently overwrite original bytes")
-torch.save({"ME066_untrained_storage_only":True,
+save_training_checkpoint({"ME066_untrained_storage_only":True,
             "no_training":True,"no_source_data":True,
             "checkpoint_format":"torch serialization; full future optimizer/RNG state required",
             "probe_tensor":torch.arange(4,dtype=torch.float32)},file)

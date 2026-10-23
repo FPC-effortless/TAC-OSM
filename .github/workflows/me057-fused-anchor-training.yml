@@ -5,6 +5,11 @@ name: ME-057 fused predictive anchor real robot training
 # automatically refit the completed experiment on later repository changes.
 on:
   workflow_dispatch:
+    inputs:
+      allow_new_fits:
+        description: Explicit opt-in; current live gates remain compulsory
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -15,6 +20,8 @@ concurrency:
 
 jobs:
   strict-preflight:
+    # Retained historical lane; current live guards still reject incompatible new fits.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -30,6 +37,8 @@ jobs:
       - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me057/FAIR_COMPARISON.json --phase preflight
 
   real-robot-training:
+    # Retained historical lane; current live guards still reject incompatible new fits.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     needs: strict-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 360

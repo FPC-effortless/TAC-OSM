@@ -29,6 +29,8 @@ OUT = Path("research/replay-bundles/ME063")
 REGISTRATION = ROOT / "FAIR_COMPARISON.json"
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def fit():
     torch.set_num_threads(1)
     if not (OUT / "UNTRAINED_STORAGE_PROBE.pt").exists():
@@ -74,7 +76,7 @@ def fit():
             active = sum(p.numel() for p in model.parameters())
             if active != row["trainable_parameters"]:
                 raise RuntimeError("actual model width/parameter budget changed")
-            optimizer = torch.optim.AdamW(model.parameters(), lr=.001, weight_decay=.0001)
+            optimizer = budgeted_optimizer(model, torch.optim.AdamW, model.parameters(), lr=.001, weight_decay=.0001)
             loss_trace = []
             began = time.process_time()
             for step, pick in enumerate(picks, 1):
@@ -86,7 +88,7 @@ def fit():
                 gradient = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.)
                 if not torch.isfinite(gradient):
                     raise RuntimeError(f"nonfinite real FIT gradient {name}/{seed}/{step}")
-                optimizer.step()
+                checked_optimizer_step(optimizer)
                 if step == 1 or step % 100 == 0:
                     loss_trace.append({"update": step, "loss": float(loss.detach())})
                     print(json.dumps({"event": "ME063_AUTHENTIC_FIT", "seed": seed,
@@ -96,7 +98,7 @@ def fit():
             flop_receipt = profile_once(model, sampled)
             total_flops = flop_receipt["profiled_forward_backward_flops"] * UPDATES
             path = ckpts / f"{name}-seed{seed}.pt"
-            torch.save({
+            save_training_checkpoint({
                 "training_complete": True,
                 "experiment": plan["study_id"],
                 "architecture": name, "seed": seed,

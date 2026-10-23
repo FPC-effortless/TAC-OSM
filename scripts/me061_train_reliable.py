@@ -24,6 +24,8 @@ SEEDS=(61001,61002,61003,61004,61005)
 CONFIG={"native_tac":(32,64),"gru_world":(44,82)}
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def build(name,identified):
     config=json.loads((ROOT/"MODEL_CONFIG.json").read_text()) if (ROOT/"MODEL_CONFIG.json").exists() else CONFIG
     return ReliableTrajectoryModel(identified,name,*config[name])
@@ -103,19 +105,19 @@ def train(cache,folder):
             row=next(r for r in plan["arms"] if r["architecture"]==name and r["seed"]==seed)
             if digest(picks)!=row["training_sample_order_sha256"]:raise RuntimeError("schedule changed")
             torch.manual_seed(seed);model=build(name,identified)
-            opt=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+            opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
             trace=[];start=time.process_time()
             for step,pick in enumerate(picks,1):
                 opt.zero_grad(set_to_none=True);value=objective(model,batch(source,pick))
                 if not torch.isfinite(value):raise RuntimeError("nonfinite authentic objective")
                 value.backward()
                 if not torch.isfinite(torch.nn.utils.clip_grad_norm_(model.parameters(),1.)):raise RuntimeError("nonfinite gradient")
-                opt.step()
+                checked_optimizer_step(opt)
                 if step%100==0:
                     trace.append({"update":step,"loss":float(value.detach())});print(json.dumps({"arm":name,"seed":seed,**trace[-1]}),flush=True)
             cpu=time.process_time()-start;cost=flops(model,batch(source,picks[-1]))*UPDATES
             path=folder/f"{name}-s{seed}.pt"
-            torch.save({"model":model.state_dict(),"optimizer":opt.state_dict(),"identified":{k:v.tolist() for k,v in identified.items()},
+            save_training_checkpoint({"model":model.state_dict(),"optimizer":opt.state_dict(),"identified":{k:v.tolist() for k,v in identified.items()},
                 "seed":seed,"architecture":name,"trace":trace},path)
             measured={"actual_steps":UPDATES,"actual_examples":UPDATES*BATCH,"actual_tokens":UPDATES*BATCH*(HISTORY+HORIZON),
                 "training_flops":cost,"optimizer_cpu_seconds":cpu,"peak_memory_bytes":int(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024),

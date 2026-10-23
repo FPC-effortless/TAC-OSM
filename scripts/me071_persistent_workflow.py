@@ -26,6 +26,8 @@ EPOCHS,BATCH,CHUNK=6,32,32
 PREFIX=5  # A fixed sixth observed event, independent of final trace length.
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
@@ -149,7 +151,7 @@ def train(cache):
     records=[]
     for seed in SEEDS:
         torch.manual_seed(seed);model=PersistentWorkflowModel(pre)
-        opt=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+        opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
         schedule=schedules(cohorts["FIT"],seed)
         if digest(schedule)!=plan["schedule_sha256"][str(seed)]:raise ValueError("FIT order changed")
         steps=targets=0;trace=[];began=time.process_time()
@@ -164,13 +166,13 @@ def train(cache):
                     if not torch.isfinite(loss):raise ValueError("nonfinite original training loss")
                     loss.backward()
                     if not torch.isfinite(torch.nn.utils.clip_grad_norm_(model.parameters(),1.)):raise ValueError("nonfinite gradient")
-                    opt.step();belief=detach_belief(belief)
+                    checked_optimizer_step(opt);belief=detach_belief(belief)
                     steps+=1;targets+=int(data[7].sum());losses.append(float(loss.detach()))
             trace.append({"epoch":epoch,"mean_batch_loss":float(np.mean(losses)),"updates":steps,"actual_targets":targets})
             print(json.dumps({"seed":seed,**trace[-1]}),flush=True)
             # Also preserve the last recoverable state if a subsequent epoch fails.
             path=folder/f"native-s{seed}.pt"
-            torch.save({"model":model.state_dict(),"optimizer":opt.state_dict(),"torch_rng_state":torch.get_rng_state(),
+            save_training_checkpoint({"model":model.state_dict(),"optimizer":opt.state_dict(),"torch_rng_state":torch.get_rng_state(),
                 "numpy_rng_state":np.random.get_state(),"preprocessing":pre,"seed":seed,"epoch":epoch,
                 "schedule_sha256":digest(schedule),"trace":trace,"source_sha256":source_receipt["source_sha256"]},path)
         record={"seed":seed,"path":str(path),"checkpoint_sha256":sha(path),"actual_targets":targets,
@@ -188,7 +190,7 @@ def original_models(pre):
         saved=torch.load(r["path"],weights_only=False,map_location="cpu")
         if saved["preprocessing"]!=pre:raise ValueError("original preprocessing changed")
         model=PersistentWorkflowModel(pre);model.load_state_dict(saved["model"],strict=True);model.eval()
-        opt=torch.optim.AdamW(model.parameters());opt.load_state_dict(saved["optimizer"])
+        opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters());opt.load_state_dict(saved["optimizer"])
         yield r,model
 
 

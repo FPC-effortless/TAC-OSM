@@ -25,6 +25,8 @@ from tac_osm.real_robot_me055_rollout import (
 from tac_osm.real_robot_me057_fused_anchor import FusedAnchorServoRolloutTAC
 
 
+from tac_osm.parameter_budget import budgeted_optimizer
+
 def fused_objective(model, batch, kernels=None):
     states, actions, human, _ = batch
     if kernels is None:
@@ -131,7 +133,7 @@ def eager_runner(model, batch, architecture):
     # named-tuple recurrent kernels are called repeatedly. Eager mode executes
     # the same equations and remains stable over complete 256-frame histories.
     kernels = tuple(methods)
-    optimizer = torch.optim.AdamW(
+    optimizer = budgeted_optimizer(model, torch.optim.AdamW,
         model.parameters(), lr=.001, weight_decay=.0001)
     loss = ((lambda: fused_objective(model, batch, kernels))
             if architecture == "native_tac"
@@ -143,7 +145,7 @@ def eager_flops(architecture, identified, batch):
     torch.manual_seed(57001)
     model = candidate(identified) if architecture == "native_tac" else build(
         architecture, identified)
-    optimizer = torch.optim.AdamW(
+    optimizer = budgeted_optimizer(model, torch.optim.AdamW,
         model.parameters(), lr=.001, weight_decay=.0001)
     loss = ((lambda: fused_objective(model, batch))
             if architecture == "native_tac"

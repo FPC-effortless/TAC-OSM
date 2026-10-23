@@ -26,6 +26,8 @@ torch.set_num_threads(1)
 HISTORY, HORIZON = 256, 16
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 def sha_file(path):
     h = hashlib.sha256()
     with open(path,"rb") as stream:
@@ -164,7 +166,7 @@ def update(model,batch,optimizer,loss_function=None,use_scan=False):
     result=objective(model,batch,use_scan=use_scan) if loss_function is None else loss_function()
     result.backward()
     torch.nn.utils.clip_grad_norm_(model.parameters(),1.)
-    optimizer.step()
+    checked_optimizer_step(optimizer)
     return float(result.detach())
 
 
@@ -172,7 +174,7 @@ def one_profile(architecture,identified,batch,repeats,compile_forward,script_ker
                 compile_mode,use_scan):
     torch.manual_seed(55001)
     model=build(architecture,identified)
-    optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+    optimizer=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
     compile_cpu_seconds=0.
     loss_function=None
     if compile_forward and script_kernels:
@@ -208,7 +210,7 @@ def one_profile(architecture,identified,batch,repeats,compile_forward,script_ker
     # compiler fusion removes profiler-visible operator accounting.
     torch.manual_seed(55001)
     eager=build(architecture,identified)
-    eager_optimizer=torch.optim.AdamW(eager.parameters(),lr=.001,weight_decay=.0001)
+    eager_optimizer=budgeted_optimizer(eager, torch.optim.AdamW, eager.parameters(),lr=.001,weight_decay=.0001)
     with profile(activities=[ProfilerActivity.CPU],with_flops=True) as recording:
         loss=update(eager,batch,eager_optimizer,use_scan=False)
     flops=sum(event.flops for event in recording.key_averages())

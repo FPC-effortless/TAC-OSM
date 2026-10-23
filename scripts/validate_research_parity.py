@@ -6,8 +6,8 @@ receipts BEFORE reading or claiming heldout architectural-superiority results.
 This is a resource-integrity validator, not itself evidence of model skill.
 Mandatory matched variables are trainable parameters, identical real data,
 matched training/tuning COMPUTE budgets and identical evaluation conditions.
-Historical v1 manifests record CPU as efficiency metadata. Prospective v2
-manifests enforce the owner's additional <=5% measured CPU parity contract.
+CPU wall-clock/process runtime is efficiency metadata, including when an
+older schema label is supplied; current owner policy does not require parity.
 It never accepts claimed 'matched' labels in place of numerical receipts.
 
 Usage:
@@ -31,50 +31,21 @@ SCHEMA = "tac-osm.parity.v1"
 STRICT_SCHEMA = "tac-osm.parity.v2"
 PARAM_TOLERANCE=0.01
 FLOP_TOLERANCE=0.01
-CPU_TOLERANCE=0.05
 
-# Prospective model-size policy: all trained neural models ~100k trainables.
-# Historical studies remain immutable, not silently retroactively disqualified.
-MODEL_TARGET_PARAMETERS = 100_000
-MODEL_TARGET_RELATIVE_TOLERANCE = 0.05
-MODEL_MIN_PARAMETERS = 95_000
-MODEL_MAX_PARAMETERS = 105_000
-LEGACY_MAX_ME_NUMBER = 72
-LEGACY_MAX_DEV_NUMBER = 61
+# All NEW updates use the same policy, irrespective of a study's numeric ID.
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
+from tac_osm.parameter_budget import (ParameterBudgetError,check_parameter_budget,
+    check_declared_budgets,declared_budgets,validate_runtime_evidence)
+ParityError=ParameterBudgetError
+MODEL_MIN_PARAMETERS,MODEL_MAX_PARAMETERS=95_000,105_000
 
 def requires_100k_policy(study_id):
-    """Prospective trained studies; keep already executed historical evidence frozen.
-
-    ME001..ME072 and DEV001..DEV061 were registered before the new constraint.
-    Any unrecognized/new study ID follows the new policy, not a bypass.
-    """
-    if not isinstance(study_id, str):
-        return True
-    m = re.match(r"^\s*(ME|DEV)[-_ ]?(\d{1,3})(?:\b|[_-])", study_id, re.I)
-    if m:
-        cutoff = LEGACY_MAX_ME_NUMBER if m.group(1).upper() == "ME" else LEGACY_MAX_DEV_NUMBER
-        return int(m.group(2)) > cutoff
+    """Deprecated compatibility API: a study name never exempts a new fit."""
     return True
 
-def check_model_parameter_target(trainable_parameters, deployed_parameters=None, *, label="model"):
-    """Hard prefit and postfit count guard for ALL new trained neural models.
+def check_model_parameter_target(trainable_parameters,deployed_parameters=None,*,label="model"):
+    return check_parameter_budget(trainable_parameters,deployed_parameters,label=label)
 
-    Count trained encoder/memory/decoder/router/uncertainty/action heads. Include
-    frozen learned model weights in deployed counts; exclude nonlearned buffers.
-    """
-    positive_num(trainable_parameters, f"{label}.trainable_parameters", whole=True)
-    demand(MODEL_MIN_PARAMETERS <= trainable_parameters <= MODEL_MAX_PARAMETERS,
-           f"{label}: prospective 100k target requires 95,000..105,000 trainable parameters, got {trainable_parameters}")
-    if deployed_parameters is not None:
-        positive_num(deployed_parameters, f"{label}.deployed_parameters", whole=True)
-        demand(deployed_parameters >= trainable_parameters,
-               f"{label}: deployed learned parameters cannot be below trainable count")
-        demand(MODEL_MIN_PARAMETERS <= deployed_parameters <= MODEL_MAX_PARAMETERS,
-               f"{label}: 100k target requires 95,000..105,000 deployed learned parameters, got {deployed_parameters}")
-
-
-
-class ParityError(ValueError): pass
 
 def demand(condition, message):
     if not condition: raise ParityError(message)
@@ -125,6 +96,8 @@ def check_original_real_source_registration(m,phase):
     for name,n in counts.items():positive_num(n,name+" active params",whole=True)
     demand((max(counts.values())-min(counts.values()))/max(counts.values())<=PARAM_TOLERANCE,
            "active model parameters differ beyond compulsory 1%")
+    deployed=m["deployed_parameter_counts"]
+    demand((max(deployed.values())-min(deployed.values()))/max(deployed.values())<=PARAM_TOLERANCE,"deployed model parameters differ beyond compulsory 1%")
     budget=m.get("training_budget",{})
     for key in ("updates","batch_size","history_frames","backprop_frames"):
         positive_num(budget.get(key),key,whole=True)
@@ -165,12 +138,44 @@ def check_original_real_source_registration(m,phase):
             "FLOP_exact_consumption_verified":False,
             "CPU_runtime_is_efficiency_only":True}
 
-def check_manifest(m,phase="preflight"):
+def check_manifest(m,phase="preflight",*,operation="training",provenance=None):
     demand(isinstance(m,dict),"manifest JSON object required")
+    demand(phase in ("preflight","final"),"unsupported validation phase")
+    demand(operation in ("training","replay"),"unsupported validation operation")
+    if operation=="replay":
+        from scripts.verify_frozen_replay import verify_frozen_replay
+        return verify_frozen_replay(m,provenance)
+    rows=check_declared_budgets(m)
+    result=_check_manifest_declarations(m,phase)
+    if phase=="final" and rows:
+        used=set()
+        for row in rows:
+            actual=row.get("measured",{})
+            if m.get("source_based_deferred_registration") or m.get("study_type")=="capability_development":
+                candidates=[r for r in m.get("completed_model_records",[]) if r.get("seed")==row.get("seed") and r.get("architecture")==row.get("architecture")]
+                demand(len(candidates)==1,"missing/unpaired actual model runtime receipt")
+                actual=candidates[0]
+            proof={**row,"runtime_evidence":actual.get("runtime_evidence"),"_prefit_registration_sha256":m.get("prefit_registration_sha256")}
+            if actual.get("checkpoint_sha256") is not None:proof["checkpoint_sha256"]=actual["checkpoint_sha256"]
+            expected_steps=actual.get("actual_steps",actual.get("actual_updates"))
+            if m.get("source_based_deferred_registration"):
+                expected_steps=m["training_budget"]["updates"]
+            elif m.get("study_type")=="architecture_comparison":
+                expected_steps=row["budget"]["steps"]
+            proof["_expected_optimizer_steps"]=expected_steps
+            for key in ("trainable_parameters","deployed_parameters"):
+                if key in actual:
+                    demand(actual[key]==row[key],"postfit actual model size differs from live registration")
+            run_id=validate_runtime_evidence(proof)
+            demand(run_id not in used,"one model runtime receipt reused across arms/seeds")
+            used.add(run_id)
+    return result
+
+
+def _check_manifest_declarations(m,phase):
     if m.get("source_based_deferred_registration") is True:
         return check_original_real_source_registration(m,phase)
     demand(m.get("schema_version") in (SCHEMA,STRICT_SCHEMA),"unsupported parity schema")
-    strict_runtime=m.get("schema_version")==STRICT_SCHEMA
     text_field(m.get("study_id"),"study_id")
     kind=m.get("study_type")
     demand(kind in ("architecture_comparison","noncomparative_diagnostic","capability_development","single_model_training"),
@@ -306,10 +311,6 @@ def check_manifest(m,phase="preflight"):
             else:positive_num(b.get(k),k,whole=k in ("steps","examples_seen","tokens_seen",
                                                         "batch_size","history_events"))
         text_field(b.get("prefit_profile_method"),"original prefit profiler method")
-        if strict_runtime:
-            positive_num(b.get("max_optimizer_cpu_seconds"),"max_optimizer_cpu_seconds")
-            positive_num(b.get("prefit_profile_optimizer_cpu_seconds"),
-                         "prefit_profile_optimizer_cpu_seconds")
         demand(b["planned_training_flops"]<=b["max_training_flops"],
             "planned compute must not exceed matched upper budget")
         if phase=="final":
@@ -335,9 +336,6 @@ def check_manifest(m,phase="preflight"):
                    "evaluated test IDs differ from frozen plan")
             demand(result["training_flops"]<=b["max_training_flops"],
                    "actual billed FLOPs exceeded the common preregistered ceiling")
-            if strict_runtime:
-                demand(result["optimizer_cpu_seconds"]<=b["max_optimizer_cpu_seconds"],
-                       "actual optimizer CPU exceeded the common preregistered ceiling")
     demand(len(seed_sets)>=2,"need >=2 controlled independent seeds")
     names={r["architecture"] for r in rows}
     demand(len(names)>=2,"need at least two different architectures")
@@ -355,27 +353,17 @@ def check_manifest(m,phase="preflight"):
                     "history_events","max_training_flops",
                     "tuning_trials","tuning_flops"):
             shared([r["budget"] for r in group],key,seed)
-        if strict_runtime:
-            shared([r["budget"] for r in group],"max_optimizer_cpu_seconds",seed)
         close_enough(group,"trainable_parameters",PARAM_TOLERANCE,f"seed {seed} active parameters")
         close_enough(group,"deployed_parameters",PARAM_TOLERANCE,f"seed {seed} deployed parameters")
         shared([r["budget"] for r in group],"prefit_profile_method",seed)
         close_enough([r["budget"] for r in group],"prefit_profile_training_flops",FLOP_TOLERANCE,
                      f"seed {seed} PROFILER prefit FLOPs")
-        if strict_runtime:
-            close_enough([r["budget"] for r in group],
-                         "prefit_profile_optimizer_cpu_seconds",CPU_TOLERANCE,
-                         f"seed {seed} PROFILER prefit CPU seconds")
         close_enough([r["budget"] for r in group],"planned_training_flops",FLOP_TOLERANCE,
                      f"seed {seed} planned FLOPs")
         if phase=="final":
             actual=[r["measured"] for r in group]
             close_enough(actual,"training_flops",FLOP_TOLERANCE,f"seed {seed} actual FLOPs")
-            if strict_runtime:
-                close_enough(actual,"optimizer_cpu_seconds",CPU_TOLERANCE,
-                             f"seed {seed} actual CPU seconds")
-    # v1 preserves historical interpretation. New ME055 work uses v2, which
-    # implements the owner's explicit measured CPU <=5% requirement.
+    # Current owner policy: CPU runtime is efficiency metadata for either schema.
     return {"study_id":m["study_id"],"phase":phase,"matched_seeds":sorted(seed_sets),
             "matched_architectures":sorted(names),"matched_source":source["sha256"],
             "status":"PASS","eligible_for_architecture_superiority":phase=="final"}
@@ -422,6 +410,8 @@ def main():
     group.add_argument("--check-changed",metavar="BASE...HEAD")
     group.add_argument("--model-parameters",type=int)
     cli.add_argument("--deployed-parameters",type=int)
+    cli.add_argument("--operation",choices=("training","replay"),default="training")
+    cli.add_argument("--provenance",help="Frozen replay registry key; cannot authorize training")
     cli.add_argument("--phase",choices=("preflight","final"),default="preflight")
     args=cli.parse_args()
     try:
@@ -429,7 +419,7 @@ def main():
             check_model_parameter_target(args.model_parameters,args.deployed_parameters,label="standalone_model")
             print(json.dumps({"status":"PASS_100K_TARGET","trainable_parameters":args.model_parameters,"deployed_parameters":args.deployed_parameters}))
         elif args.manifest:
-            r=check_manifest(json.loads(Path(args.manifest).read_text()),args.phase)
+            r=check_manifest(json.loads(Path(args.manifest).read_text()),args.phase,operation=args.operation,provenance=args.provenance)
             print(json.dumps(r,sort_keys=True))
         else:
             studies=check_changed(args.check_changed,Path.cwd())

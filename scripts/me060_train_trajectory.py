@@ -28,6 +28,8 @@ ROOT = Path("research/mathematical-engineering/me060")
 CONFIG = {"native_tac": (32,64), "gru_world": (44,88)}
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def digest(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True,
         separators=(",", ":")).encode()).hexdigest()
@@ -216,7 +218,7 @@ def train(cache,output):
             row=next(r for r in plan["arms"] if r["seed"]==seed and r["architecture"]==name)
             if digest(picks)!=row["training_sample_order_sha256"]:raise RuntimeError("schedule changed")
             torch.manual_seed(seed);model=build(name,identified)
-            opt=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+            opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
             trace=[];start=time.process_time()
             for step,pick in enumerate(picks,1):
                 opt.zero_grad(set_to_none=True);value=objective(model,batch(source,pick))
@@ -224,14 +226,14 @@ def train(cache,output):
                 value.backward()
                 if not torch.isfinite(torch.nn.utils.clip_grad_norm_(model.parameters(),1.)):
                     raise RuntimeError("nonfinite gradient")
-                opt.step()
+                checked_optimizer_step(opt)
                 if step%100==0:
                     trace.append({"update":step,"loss":float(value.detach())})
                     print(json.dumps({"arm":name,"seed":seed,**trace[-1]}),flush=True)
             cpu=time.process_time()-start
             measured_flops=update_flops(model,batch(source,picks[-1]))*UPDATES
             target=output/f"{name}-s{seed}.pt"
-            torch.save({"model":model.state_dict(),"optimizer":opt.state_dict(),
+            save_training_checkpoint({"model":model.state_dict(),"optimizer":opt.state_dict(),
                 "identified":{k:v.tolist() for k,v in identified.items()},"seed":seed,
                 "architecture":name,"trace":trace},target)
             measured={"actual_steps":UPDATES,"actual_examples":UPDATES*BATCH,

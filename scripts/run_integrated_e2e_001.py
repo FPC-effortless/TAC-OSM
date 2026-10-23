@@ -51,7 +51,11 @@ ALL_COMBOS = tuple(
 TRAIN_COMBOS = tuple(combo for combo in ALL_COMBOS if combo not in HELDOUT)
 
 
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 @dataclass(frozen=True)
+
 class EpisodeBatch:
     text: tuple[Tensor, ...]
     image: tuple[Tensor, ...]
@@ -172,7 +176,7 @@ def train_seed(seed: int) -> IntegratedE2EModel:
     torch.manual_seed(seed)
     rng = random.Random(seed + 9001)
     model = IntegratedE2EModel(IntegratedConfig()).cpu()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=0.002, weight_decay=1e-4)
+    optimizer = budgeted_optimizer(model, torch.optim.AdamW, model.parameters(), lr=0.002, weight_decay=1e-4)
     for _ in range(STEPS):
         episodes = [sample_episode(rng) for _ in range(BATCH_SIZE)]
         batch = batchify(episodes)
@@ -188,7 +192,7 @@ def train_seed(seed: int) -> IntegratedE2EModel:
         )
         out["loss"].backward()
         nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        optimizer.step()
+        checked_optimizer_step(optimizer)
     return model
 
 

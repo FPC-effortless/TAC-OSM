@@ -15,6 +15,8 @@ from scripts.me069_train_workflow import (
 from scripts.me069_workflow_source import load, write_json
 
 
+from tac_osm.parameter_budget import budgeted_optimizer
+
 def restore(cache):
     torch.set_num_threads(1)
     records = json.loads((BUNDLE / "CHECKPOINT_MANIFEST.json").read_text())
@@ -25,7 +27,7 @@ def restore(cache):
         saved = torch.load(record["path"], map_location="cpu", weights_only=False)
         model = build(record["architecture"], pre)
         model.load_state_dict(saved["model"], strict=True)
-        optimizer = torch.optim.AdamW(model.parameters(), lr=.001, weight_decay=.0001)
+        optimizer = budgeted_optimizer(model, torch.optim.AdamW, model.parameters(), lr=.001, weight_decay=.0001)
         optimizer.load_state_dict(saved["optimizer"])
         if saved["preprocessing"] != pre or saved["source_sha256"] != source["source_sha256"]:
             raise ValueError("checkpoint source/preprocessing identity mismatch")

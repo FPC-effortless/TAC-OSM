@@ -11,6 +11,8 @@ on:
   workflow_dispatch:
 jobs:
   workflow-math-and-scientific-preflight:
+    # Retained historical lane; current live guards still reject incompatible new fits.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

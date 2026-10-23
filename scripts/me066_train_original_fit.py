@@ -20,6 +20,8 @@ ROOT=Path("research/mathematical-engineering/me066")
 OUT=Path("research/replay-bundles/ME066")
 STUDY="ME066_FOUR_ARM_GENUINE_ORIGINAL_ROBOT_FIT_EQUAL_BUDGET"
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def digest_file(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
@@ -29,7 +31,9 @@ def write_json(path, value):
 
 def train():
     torch.set_num_threads(1)
-    if set(CONFIG)!={"native_tac","gru_world","compact_rssm","selective_diagonal_ssm"}:\n        raise RuntimeError("four registered architectures required; no added or dropped arm")\n    manifest=json.loads((ROOT/"FAIR_COMPARISON.json").read_text())
+    if set(CONFIG)!={"native_tac","gru_world","compact_rssm","selective_diagonal_ssm"}:
+        raise RuntimeError("four registered architectures required; no added or dropped arm")
+    manifest=json.loads((ROOT/"FAIR_COMPARISON.json").read_text())
     registration=json.loads((ROOT/"TASK_LEVEL_SPLIT.json").read_text())
     permission=json.loads((ROOT/"TRAINING_PERMISSION.json").read_text())
     probe=json.loads((OUT/"STORAGE_PROBE_MANIFEST.json").read_text())
@@ -78,7 +82,7 @@ def train():
                 model=model_for(arm,identified)
                 if sum(p.numel() for p in model.parameters())!=receipt["trainable_parameters"]:
                     raise RuntimeError("candidate active parameter count changed since prefit")
-                optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+                optimizer=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
                 started=time.process_time()
                 trace=[]
                 for step,pick in enumerate(picks,1):
@@ -90,7 +94,7 @@ def train():
                     norm=torch.nn.utils.clip_grad_norm_(model.parameters(),1.0)
                     if not bool(torch.isfinite(norm)):
                         raise RuntimeError("nonfinite authentic FIT gradient")
-                    optimizer.step()
+                    checked_optimizer_step(optimizer)
                     if step==1 or step%100==0:
                         record={"step":step,"source_fit_loss":float(loss.detach())}
                         trace.append(record)
@@ -99,7 +103,7 @@ def train():
                 actual=measure(model,batch(fit,picks[-1]))
                 measured_flops=int(actual["supported_operator_forward_backward_flops_per_update"])*600
                 file=ckpts/f"{arm}-seed{seed}.pt"
-                torch.save({
+                save_training_checkpoint({
                     "study":STUDY,"training_complete":True,
                     "arm":arm,"seed":seed,"training_updates":600,
                     "model_config":list(CONFIG[arm]),"model":model.state_dict(),
