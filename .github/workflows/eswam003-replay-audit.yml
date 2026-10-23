@@ -1,0 +1,40 @@
+name: ESWAM003 immutable trained-checkpoint numeric audit, zero refits
+on:
+  pull_request:
+    paths:
+      - "scripts/eswam003_numeric_replay_audit.py"
+      - ".github/workflows/eswam003-replay-audit.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  numeric-original-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam003-selective-dynamics-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/me076-pinned-publisher-source
+          key: me076-bodenai-public-five-tasks-original-fit-v1
+      - name: Quantify every original strict-score replay difference (NO FIT)
+        run: PYTHONPATH=src:. python scripts/eswam003_numeric_replay_audit.py --cache "${{ runner.temp }}/me076-pinned-publisher-source"
+      - name: Preserve unchanged-tolerance evidence
+        env:
+          TARGET_BRANCH: research/eswam003-selective-dynamics-2026-10-23
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/replay-bundles/ESWAM003/CROSS_CPU_REPLAY_AUDIT.json
+          git commit -m 'audit(eswam003): preserve full unchanged-tolerance cross-CPU replay exceptions'
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
