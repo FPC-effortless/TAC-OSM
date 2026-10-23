@@ -178,8 +178,40 @@ def _check_manifest_declarations(m,phase):
     demand(m.get("schema_version") in (SCHEMA,STRICT_SCHEMA),"unsupported parity schema")
     text_field(m.get("study_id"),"study_id")
     kind=m.get("study_type")
-    demand(kind in ("architecture_comparison","noncomparative_diagnostic","capability_development","single_model_training"),
+    demand(kind in ("architecture_comparison","noncomparative_diagnostic","capability_development","single_model_training","synthetic_mechanism_training"),
         "study_type must explicitly distinguish architecture comparison from diagnostics")
+    if kind=="synthetic_mechanism_training":
+        # Narrow user-requested mechanism software diagnostic, never evidence
+        # for actual world-model skill, architectural superiority or commercial AI.
+        demand(m.get("study_id")=="DIAGKEY001_SYNTHETIC_ASSOCIATIVE_RECALL_MECHANISM_ONLY" and
+               m.get("explicit_owner_requested_single_exception") is True and
+               m.get("no_architecture_superiority_claim") is True and
+               m.get("no_real_world_capability_claim") is True,
+               "synthetic fitting is not a real-research pathway; only explicit DIAGKEY001 mechanism exception")
+        demand(m.get("registered_before_first_fit") is True,"preregistration required")
+        rows=m.get("models",[])
+        demand(len(rows)==20,"exactly 20 paired synthetic-only models required")
+        identity={(row.get("architecture"),row.get("seed")) for row in rows}
+        demand(identity=={(arm,seed) for arm in ("tac","tac_noassoc","gru","transformer")
+                          for seed in (75001,75002,75003,75004,75005)},
+               "synthetic-only study arms/seeds changed")
+        for row in rows:
+            check_model_parameter_target(row.get("trainable_parameters"),
+                                         row.get("deployed_parameters"),
+                                         label="synthetic software-only declared model")
+        counts=[row["trainable_parameters"] for row in rows]
+        demand((max(counts)-min(counts))/max(counts)<=PARAM_TOLERANCE,
+               "even synthetic diagnostics must meet 1% parameter parity")
+        budget=m.get("training_budget",{})
+        demand(budget.get("steps")==640 and budget.get("batch_size")==16,
+               "registered synthetic-only update exposure changed")
+        demand(phase=="preflight",
+               "synthetic software diagnostic never qualifies final architectural superiority phase")
+        return {"study_id":m["study_id"],"phase":phase,
+                "eligible_for_architecture_superiority":False,
+                "real_world_capability_evidence":False,
+                "status":"PASS_SYNTHETIC_MECHANISM_ONLY_NOT_REAL_SCIENCE"}
+
     if kind=="single_model_training":
         demand(m.get("registered_before_first_fit") is True,
                "single-model fit must be preregistered")

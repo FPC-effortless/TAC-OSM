@@ -89,6 +89,16 @@ def declared_budgets(manifest):
             )
             for s in manifest.get("seeds", [])
         ]
+    if kind == "synthetic_mechanism_training":
+        # One explicitly owner-requested software diagnostic. NEVER qualifies
+        # real-world research; no other study may use this registration type.
+        if (manifest.get("study_id") !=
+                "DIAGKEY001_SYNTHETIC_ASSOCIATIVE_RECALL_MECHANISM_ONLY"
+                or manifest.get("explicit_owner_requested_single_exception") is not True
+                or manifest.get("no_architecture_superiority_claim") is not True
+                or manifest.get("no_real_world_capability_claim") is not True):
+            raise ParameterBudgetError("unregistered synthetic training or forbidden model superiority promotion")
+        return manifest.get("models", [])
     if kind == "noncomparative_diagnostic":
         if manifest.get("no_new_model_fits") is not True:
             raise ParameterBudgetError(

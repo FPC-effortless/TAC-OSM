@@ -1,0 +1,150 @@
+{
+  "schema_version": "tac-osm.parity.v2",
+  "study_id": "DIAGKEY001_SYNTHETIC_ASSOCIATIVE_RECALL_MECHANISM_ONLY",
+  "study_type": "synthetic_mechanism_training",
+  "registered_before_first_fit": true,
+  "explicit_owner_requested_single_exception": true,
+  "no_architecture_superiority_claim": true,
+  "no_real_world_capability_claim": true,
+  "scientific_purpose": "One narrow implementation-only synthetic associative-recall diagnostic, 4 matches and 5 paired seeds, not evidence for operational TAC research success",
+  "models": [
+    {
+      "seed": 75001,
+      "architecture": "tac",
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    },
+    {
+      "seed": 75001,
+      "architecture": "tac_noassoc",
+      "trainable_parameters": 101560,
+      "deployed_parameters": 101560
+    },
+    {
+      "seed": 75001,
+      "architecture": "gru",
+      "trainable_parameters": 101500,
+      "deployed_parameters": 101500
+    },
+    {
+      "seed": 75001,
+      "architecture": "transformer",
+      "trainable_parameters": 101616,
+      "deployed_parameters": 101616
+    },
+    {
+      "seed": 75002,
+      "architecture": "tac",
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    },
+    {
+      "seed": 75002,
+      "architecture": "tac_noassoc",
+      "trainable_parameters": 101560,
+      "deployed_parameters": 101560
+    },
+    {
+      "seed": 75002,
+      "architecture": "gru",
+      "trainable_parameters": 101500,
+      "deployed_parameters": 101500
+    },
+    {
+      "seed": 75002,
+      "architecture": "transformer",
+      "trainable_parameters": 101616,
+      "deployed_parameters": 101616
+    },
+    {
+      "seed": 75003,
+      "architecture": "tac",
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    },
+    {
+      "seed": 75003,
+      "architecture": "tac_noassoc",
+      "trainable_parameters": 101560,
+      "deployed_parameters": 101560
+    },
+    {
+      "seed": 75003,
+      "architecture": "gru",
+      "trainable_parameters": 101500,
+      "deployed_parameters": 101500
+    },
+    {
+      "seed": 75003,
+      "architecture": "transformer",
+      "trainable_parameters": 101616,
+      "deployed_parameters": 101616
+    },
+    {
+      "seed": 75004,
+      "architecture": "tac",
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    },
+    {
+      "seed": 75004,
+      "architecture": "tac_noassoc",
+      "trainable_parameters": 101560,
+      "deployed_parameters": 101560
+    },
+    {
+      "seed": 75004,
+      "architecture": "gru",
+      "trainable_parameters": 101500,
+      "deployed_parameters": 101500
+    },
+    {
+      "seed": 75004,
+      "architecture": "transformer",
+      "trainable_parameters": 101616,
+      "deployed_parameters": 101616
+    },
+    {
+      "seed": 75005,
+      "architecture": "tac",
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    },
+    {
+      "seed": 75005,
+      "architecture": "tac_noassoc",
+      "trainable_parameters": 101560,
+      "deployed_parameters": 101560
+    },
+    {
+      "seed": 75005,
+      "architecture": "gru",
+      "trainable_parameters": 101500,
+      "deployed_parameters": 101500
+    },
+    {
+      "seed": 75005,
+      "architecture": "transformer",
+      "trainable_parameters": 101616,
+      "deployed_parameters": 101616
+    }
+  ],
+  "training_budget": {
+    "steps": 640,
+    "batch_size": 16,
+    "epochs": 1,
+    "optimizer": "AdamW lr0.001, clip1.0, weight_decay1e-4",
+    "sequence_distractors": [
+      16,
+      64,
+      256
+    ]
+  },
+  "source": "STATLESS_SYNTHETIC_4_KV_PAIRS_RANDOM_DISTRACTOR_DIAGNOSTIC_NO_REAL_DATA",
+  "fit_dataset_schedule": "SHA256(DIAGKEY001+FIT+seed+step+length+4pairs+32values)",
+  "test_dataset_schedule": "SHA256(DIAGKEY001+TEST+(seed+20000)+(200000+length*37+i)+length+4pairs+32values)",
+  "qualifier": "parameter matched yes; exact FLOP/runtime/budget parity not independently established; no real-world or scientific superiority claim",
+  "original_checkpoint_storage": "research/replay-bundles/DIAGKEY001_GUARDED/seed-XXXXX/arm.pt",
+  "original_weights_optimizer_rng_required": true,
+  "pretrained_backbones": false
+}
