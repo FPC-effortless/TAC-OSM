@@ -1,0 +1,28 @@
+name: ME071 persistent native event capability
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/workflow_me071.py'
+      - 'scripts/me071_*.py'
+      - 'tests/test_me071_*.py'
+      - 'research/mathematical-engineering/me071/**'
+      - 'research/replay-bundles/ME071/**'
+      - '.github/workflows/me071-persistent-workflow.yml'
+  workflow_dispatch:
+jobs:
+  native-model-and-real-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install numpy==2.3.5 pytest==9.1.1
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: PYTHONPATH=src:. pytest -q tests/test_me071_persistent_workflow.py
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me071/FAIR_COMPARISON.json --phase preflight
+      - name: Replay all five original real-data models
+        run: |
+          if [ -f research/replay-bundles/ME071/ORIGINAL_SCORES.json ]; then
+            python scripts/validate_research_parity.py --manifest research/replay-bundles/ME071/FINAL_REGISTRATION.json --phase final
+            PYTHONPATH=src:. python scripts/me071_persistent_workflow.py --phase replay --cache /tmp/me071-source
+          fi
