@@ -75,6 +75,14 @@ and optimizers before first TEST inference. Original case scores were then
 preserved at `7b458208` before the independent scoring replay. See
 RESTORATION.json, REPLAY_AUDIT.json and ARTIFACT.md for executed audit evidence.
 
+The local clean-checkout score replay is **bit-identical PASS**. GitHub's
+different CPU runner recomputed both cohorts but **FAILED** the fixed per-record
+waiting-time score tolerance (first reported at DEV / GRU seed 69005 / row
+520). [Original failing run](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39905268211).
+This is a numerical portability exception, not a relaxed tolerance or an
+all-environment replay pass. Original weights, scores and acceptance thresholds
+remain unchanged. The branch remains draft and unpromoted.
+
 Full repository regression: **1,005 tests passed**. Numerical fixtures are
 engineering evidence only. GitHub CI additionally loads the repository-owned
 originals and recomputes real DEV and TEST scores when the bundle exists.

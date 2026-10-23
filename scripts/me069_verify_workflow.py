@@ -109,21 +109,31 @@ def compare(original, restored, path="root"):
 
 def replay(cache):
     target = BUNDLE / "REAL_EVALUATION.json"
+    audit = ROOT / "REPLAY_AUDIT.json"
+    audit.unlink(missing_ok=True)  # A prior committed receipt cannot attest this execution.
     original_bytes = subprocess.check_output(["git", "show", "HEAD:" + str(target)])
     original = json.loads(original_bytes)
     score(cache)
     replayed = json.loads(target.read_text())
-    compare(original, replayed)
-    before, after = summarize(original), summarize(replayed)
-    for part in ("DEV", "TEST"):
-        for key, row in before["cohorts"][part]["models"].items():
-            delta = abs(row["activity_NLL"] - after["cohorts"][part]["models"][key]["activity_NLL"])
-            if delta > 1e-5:
-                raise ValueError("primary replay tolerance exceeded")
+    try:
+        compare(original, replayed)
+        before, after = summarize(original), summarize(replayed)
+        for part in ("DEV", "TEST"):
+            for key, row in before["cohorts"][part]["models"].items():
+                delta = abs(row["activity_NLL"] - after["cohorts"][part]["models"][key]["activity_NLL"])
+                if delta > 1e-5:
+                    raise ValueError("primary replay tolerance exceeded")
+    except ValueError as error:
+        target.rename(BUNDLE / "FAILED_REPLAY_EVALUATION.json")
+        target.write_bytes(original_bytes)
+        write_json(audit, {"status": "FAIL", "test_metrics_recomputed": True,
+                          "all_case_score_records_within_preregistered_tolerance": False,
+                          "error": str(error), "original_score_bytes_preserved": True})
+        raise
     # Keep the original committed score bytes, even when a replay differs within tolerance.
     exact = target.read_bytes() == original_bytes
     target.write_bytes(original_bytes)
-    write_json(ROOT / "REPLAY_AUDIT.json", {"original_checkpoint_count": 10,
+    write_json(audit, {"status": "PASS", "original_checkpoint_count": 10,
         "cohorts_recomputed": ["DEV", "TEST"], "test_metrics_recomputed": True,
         "all_case_score_records_within_preregistered_tolerance": True,
         "bit_identical_evaluation_json": exact, "primary_absolute_tolerance": 1e-5,
