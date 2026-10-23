@@ -1,18 +1,5 @@
 name: Research PLM matched feed-forward feedback 002
 on:
-  pull_request:
-    branches: [master]
-    paths:
-      - "src/tac_osm/integrated_e2e_008_benchmark.py"
-      - "src/tac_osm/integrated_e2e_005.py"
-      - "src/tac_osm/integrated_e2e_005_benchmark.py"
-      - "src/tac_osm/integrated_e2e_ff_feedback_baseline.py"
-      - "scripts/run_matched_ff_002.py"
-      - "contracts/TACOSM-PLM-MATCHED-FF-002.json"
-      - "tests/test_matched_ff_002.py"
-      - ".github/workflows/matched-ff-002.yml"
-permissions:
-  contents: read
   workflow_dispatch:
     inputs:
       allow_new_fits:
@@ -20,6 +7,9 @@ permissions:
         type: boolean
         required: true
         default: false
+
+permissions:
+  contents: read
 
 jobs:
   confirmatory:
