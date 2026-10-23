@@ -12,7 +12,8 @@ codes, decoupled gates and protected queries. Five final synthetic accuracies
 640-update mean97.93% versus unchanged native30.31%; at4096 unchanged native
 improves to94.02% but one seed77.15%. All25 original fits and50 milestone
 checkpoints/logits preserved. Full FLOP parity is unverified. Fresh local clone
-replay passed; strict external GitHub logit-tolerance exception remains visible.
+replay passed; GitHub predicted classes/NLL match, with2/819,200 logit elements
+failing the original tolerance. That strict external exception remains visible.
 **ENGINEERING_VERIFIED synthetic mechanism**, not a real skill/architecture winner.
 Next interference rung is not trained or automatically authorized. Preserve
 independent authentic System1/Physical/Enterprise work and ME076 negatives.

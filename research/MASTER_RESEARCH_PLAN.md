@@ -46,9 +46,10 @@ verified. All arms have<0.12% parameter discrepancy and the same optimizer
 exposure, but partial FLOP profiles differ and full-compute parity is unverified:
 **no fair architecture-winner or real-world intelligence claim**. A clean fresh
 local Git clone reproduced all50 original score sets under the registered1e-5
-contract. A local AVX2 check also passed. The separate GitHub runner exceeded the
-original logit tolerance; that strict external replay exception is preserved and
-not converted to success by widening tolerances. See
+contract. A local AVX2 check also passed. The separate GitHub runner reproduced ALL25,600 classifications exactly and
+all50 NLL scores within the original limit, but2/819,200 raw logits exceeded
+abs/rel1e-5 (overall max abs difference3.62e-5). The strict external replay gate
+stays FAIL; no tolerance widened. The complete external audit is Git-preserved. See
 [results](https://github.com/FPC-effortless/TAC-OSM/blob/research/diagkey004-aligned-gated-retrieval-2026-10-23/research/mathematical-engineering/diagkey004/RESULTS.md)
 and the adjacent numerical-replay status. Canonical real-world scorecard remains
 **ENGINEERING_VERIFIED**, authentic_real_data=false. Neither delay/interference,
