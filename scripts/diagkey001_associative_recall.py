@@ -14,6 +14,7 @@ import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
+from tac_osm.parameter_budget import budgeted_optimizer,checked_optimizer_step,save_training_checkpoint
 
 STUDY="DIAGKEY001_SYNTHETIC_ASSOCIATIVE_RECALL_MECHANISM_ONLY"
 SEEDS=(75001,75002,75003,75004,75005)
@@ -23,7 +24,8 @@ BATCH=16
 NKEY=64
 NVAL=32
 CHANCE=1.0/NVAL
-RESULT_DIR=Path("research/replay-bundles/DIAGKEY001")
+RESULT_DIR=Path("research/replay-bundles/DIAGKEY001_GUARDED")
+REGISTRATION=Path("research/mathematical-engineering/diagkey001/FAIR_COMPARISON.json")
 ARMS=("tac","tac_noassoc","gru","transformer")
 PER_ARM_PARAMETERS={"tac":101554,"tac_noassoc":101560,"gru":101500,"transformer":101616}
 
@@ -183,14 +185,17 @@ def one_fit(seed,arm,steps=STEPS):
     torch.manual_seed(seed)
     random.seed(seed);np.random.seed(seed)
     m=model_for(arm);m.train()
-    optimizer=torch.optim.AdamW(m.parameters(),lr=.001,weight_decay=1e-4)
+    folder=RESULT_DIR/f"seed-{seed}";folder.mkdir(parents=True,exist_ok=True)
+    receipt_path=folder/(arm+"-live-receipt.json")
+    optimizer=budgeted_optimizer(m,torch.optim.AdamW,m.parameters(),lr=.001,weight_decay=1e-4,
+        budget_manifest=REGISTRATION,budget_receipt=receipt_path,budget_seed=seed,budget_architecture=arm)
     outcomes=[];start=time.perf_counter()
     for step in range(steps):
         t,k,v,y=batch_for(seed,step)
         loss=F.cross_entropy(m(t,k,v),y)
         optimizer.zero_grad(set_to_none=True);loss.backward()
         torch.nn.utils.clip_grad_norm_(m.parameters(),1.0)
-        optimizer.step()
+        checked_optimizer_step(optimizer)
         if step in (0,steps//2,steps-1):outcomes.append({"update":step+1,"loss":float(loss.detach())})
     score=eval_model(m,seed)
     output={
@@ -207,14 +212,17 @@ def one_fit(seed,arm,steps=STEPS):
             "A positive diagnostic cannot establish real-world forecasting superiority."],
     }
     RESULT_DIR.mkdir(parents=True,exist_ok=True)
-    folder=RESULT_DIR/f"seed-{seed}";folder.mkdir(parents=True,exist_ok=True)
     destination=folder/(arm+".pt")
     if destination.exists():raise RuntimeError("original synthetic weights already committed; refuse retraining")
-    torch.save({"original_synthetic_train_only":True,
+    save_training_checkpoint({"original_synthetic_train_only":True,
                "weights":m.state_dict(),"optimizer":optimizer.state_dict(),
                "rng":torch.get_rng_state(),"spec":output},destination)
     digest=hashlib.sha256(destination.read_bytes()).hexdigest()
+    receipt=json.loads(receipt_path.read_text())
+    if receipt.get("status")!="CHECKPOINT_VERIFIED" or receipt.get("successful_optimizer_steps")!=steps:
+        raise ValueError("live pretrained/optimizer/checkpoint budget receipt invalid")
     output["original_checkpoint_sha256"]=digest
+    output["live_budget_receipt_sha256"]=hashlib.sha256(receipt_path.read_bytes()).hexdigest()
     (folder/(arm+".json")).write_text(json.dumps(output,indent=2,sort_keys=True)+"\n")
     print("SYNTHETIC_DIAGNOSTIC_ONLY="+json.dumps({
         "arm":arm,"seed":seed,"test":score,"checkpoint_sha256":digest}),flush=True)
@@ -244,6 +252,13 @@ def independent_git_replay():
             row=json.loads(record_path.read_text())
             if hashlib.sha256(target.read_bytes()).hexdigest()!=row["original_checkpoint_sha256"]:
                 raise ValueError("original synthetic trained checkpoint hash mismatch")
+            receipt_path=folder/(arm+"-live-receipt.json")
+            if not receipt_path.is_file():raise ValueError("missing mandatory original live budget receipt")
+            official_receipt=json.loads(receipt_path.read_text())
+            if (official_receipt.get("status")!="CHECKPOINT_VERIFIED" or
+                official_receipt.get("successful_optimizer_steps")!=STEPS or
+                hashlib.sha256(receipt_path.read_bytes()).hexdigest()!=row.get("live_budget_receipt_sha256")):
+                raise ValueError("original synthetic fit not protected by live budget guard")
             learned=torch.load(target,map_location="cpu",weights_only=False)
             if learned["spec"]["arm"]!=arm or learned["spec"]["seed"]!=seed:
                 raise ValueError("original trained model identity mismatch")
