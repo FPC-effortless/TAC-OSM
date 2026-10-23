@@ -40,6 +40,13 @@ jobs:
           fi
       - name: Generate compact actual five-seed ladder, oracle and gradient summary tied to full original SHA
         run: PYTHONPATH=src:. python scripts/diagkey002_compact_summary.py
+      - name: Inspect actual original native write admission, distractor interference, read-key alignment and query-time write in five frozen models
+        run: |
+          if [ -f research/replay-bundles/DIAGKEY002/ACTUAL_LEARNED_WRITE_READ_GATES.json ]; then
+            echo 'Already original Git-owned learned gate evidence; do not overwrite'
+          else
+            PYTHONPATH=src:. python scripts/diagkey002_gate_trace.py
+          fi
       - name: Commit actual measured negative and positive software-only outcomes, never research superiority
         if: always()
         env:
@@ -49,7 +56,7 @@ jobs:
           if [ -f research/replay-bundles/DIAGKEY002/ORACLE_AND_FROZEN_LADDER.json ]; then
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add -f research/replay-bundles/DIAGKEY002/ORACLE_AND_FROZEN_LADDER.json research/replay-bundles/DIAGKEY002/COMPACT_AUDITED_RESULTS.json
+            git add -f research/replay-bundles/DIAGKEY002/ORACLE_AND_FROZEN_LADDER.json research/replay-bundles/DIAGKEY002/COMPACT_AUDITED_RESULTS.json research/replay-bundles/DIAGKEY002/ACTUAL_LEARNED_WRITE_READ_GATES.json
             if ! git diff --cached --quiet; then
               git commit -m 'evidence(diagkey002): original no-fit synthetic write/read oracle and frozen model ladder; real-world claims forbidden'
               for attempt in 1 2 3 4 5 6 7 8; do
