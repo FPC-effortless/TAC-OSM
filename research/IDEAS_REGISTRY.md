@@ -2,6 +2,10 @@
 
 This is a **starter registry in TAC-OSM**, pending creation of a separate cross-project ideas repository. The registry does not claim that proposals were implemented or evaluated.
 
+## Active native trajectory capability: ME073
+
+[Draft PR #353](https://github.com/FPC-effortless/TAC-OSM/pull/353): five registered99,781-parameter native fits, six FIT epochs, shared eight-step autoregressive activity/time rollout; functional imagined state, bounded activity-conditional clocks and first-observed-record context. CAP-017/018, CAP-022/023 and CAP-INV-001/002. **Training running; no REPORT score or learned gain yet.** Original prefit commit4afb9131, checkpoints before scores and independent Git replay required. No metadata availability shortcut, arbitrary72h clamp, native-to-SSM replacement, task legality, external customer value or architecture winner. See the study's capability-to-value card; stages beyond research remain unqualified.
+
 ## Commercially guided capability-to-value program — investor-readiness companion (2026-10-23)
 
 **Owner's actual objective:** TAC-OSM should get *more capable* as a predictive world model **while** building evidence for credible deep-tech investment and a specific independent customer use case. Do not turn this into an endless component-ablation, architecture-attribution, marketing, or fundraising-only project. The canonical, binding [investability and capability master plan](MASTER_RESEARCH_PLAN.md) defines evaluation and stage gates. The current code may be sufficient for **exploratory research pre-seed conversations**, but enterprise-scale product value, validated paying customers, commercial seed readiness and competitive IP rights are **NOT VERIFIED** from research repository artifacts.
