@@ -1,0 +1,99 @@
+{
+  "aggregates_by_motion_band": {
+    "limited_motion": {
+      "episode_count": 2,
+      "mean_gru_physical_MAE": 0.19733692035079003,
+      "mean_model_persistence_routing_weight": 0.472526390850544,
+      "mean_persistence_physical_MAE": 0.048002999275922775,
+      "mean_servo_physical_MAE": 1.0225726664066315,
+      "mean_tac_physical_MAE": 0.179749059677124,
+      "tac_better_than_gru_episode_count": 1,
+      "tac_better_than_persistence_episode_count": 0,
+      "tac_oracle_regret_to_persistence": 0.13174606040120124,
+      "unique_original_blocks": 2
+    },
+    "moving": {
+      "episode_count": 0,
+      "mean_gru_physical_MAE": null,
+      "mean_model_persistence_routing_weight": null,
+      "mean_persistence_physical_MAE": null,
+      "mean_servo_physical_MAE": null,
+      "mean_tac_physical_MAE": null,
+      "tac_better_than_gru_episode_count": 0,
+      "tac_better_than_persistence_episode_count": 0,
+      "tac_oracle_regret_to_persistence": null,
+      "unique_original_blocks": 0
+    },
+    "near_stationary": {
+      "episode_count": 78,
+      "mean_gru_physical_MAE": 0.14720298775638907,
+      "mean_model_persistence_routing_weight": 0.5115274226818329,
+      "mean_persistence_physical_MAE": 0.011457654429623524,
+      "mean_servo_physical_MAE": 0.9157533882520138,
+      "mean_tac_physical_MAE": 0.13400973168989788,
+      "tac_better_than_gru_episode_count": 54,
+      "tac_better_than_persistence_episode_count": 0,
+      "tac_oracle_regret_to_persistence": 0.12255207726027435,
+      "unique_original_blocks": 20
+    }
+  },
+  "all_original_target_episodes": 80,
+  "diagnostic_bands_predefined_in_physical_mae": {
+    "limited_motion": "0.025 <= persistence MAE < 0.1",
+    "moving": "persistence MAE >= 0.1",
+    "near_stationary": "persistence MAE < 0.025",
+    "warning": "Uses future original outcome labels AFTER evaluation exclusively for diagnosis, never permissible input to a real-time gate."
+  },
+  "no_causal_counterfactual_inference": true,
+  "no_model_fitting_or_selection": true,
+  "no_new_trajectory_read": true,
+  "not_actionable_prediction_threshold": true,
+  "overall_means": {
+    "gru": 0.1484563360712491,
+    "persistence": 0.012371288050781004,
+    "servo": 0.9184238702058792,
+    "tac": 0.13515321488957852
+  },
+  "paired_seed_tac_wins": 2,
+  "per_seed_paired_scores": [
+    {
+      "gru_mae": 0.05879639161285013,
+      "seed": 64001,
+      "tac_mae": 0.057913378812372684,
+      "tac_wins": true
+    },
+    {
+      "gru_mae": 0.0578136169235222,
+      "seed": 64002,
+      "tac_mae": 0.07461220575496555,
+      "tac_wins": false
+    },
+    {
+      "gru_mae": 0.04298364508431405,
+      "seed": 64003,
+      "tac_mae": 0.06298620621673763,
+      "tac_wins": false
+    },
+    {
+      "gru_mae": 0.0914970173034817,
+      "seed": 64004,
+      "tac_mae": 0.14301281918305903,
+      "tac_wins": false
+    },
+    {
+      "gru_mae": 0.4911910094320774,
+      "seed": 64005,
+      "tac_mae": 0.3372414644807577,
+      "tac_wins": true
+    }
+  ],
+  "qualification": "POSTHOC_EXPLORATORY_ALREADY_EXPOSED",
+  "source_original_score_sha256": "38fb856ed29d0b73652665c7f0b306904f5f35caf6c136e321db9b324286217b",
+  "strongest_baseline_gate": "FAIL_PER_PREDECLARED_ORIGINAL_TEST",
+  "study": "ME064_UNTOUCHED_TASK_POSTHOC_DIAGNOSTIC_FROM_FROZEN_SCORE_ONLY",
+  "tac_episode_win_counts": {
+    "better_than_gru": 55,
+    "better_than_persistence": 0
+  },
+  "task": "install_spray_nozzle_onto_bottle"
+}
