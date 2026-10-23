@@ -184,6 +184,12 @@ There is no micro-study fallback to rescue a favorite TAC model. Go back to
 data qualification or mathematical architecture design, **not** trial-and-error
 on an already-opened TEST set.
 
+## New mandatory repository checkpoint and replay gate — 2026-10-23
+
+The owner's new compulsory delivery rule is documented in [REPOSITORY-REPLAY-AND-CHECKPOINT-RULE.md](REPOSITORY-REPLAY-AND-CHECKPOINT-RULE.md). Every future or continued original fit—local workstation, external notebook, cloud hardware, or GitHub Actions—must ship **all original checkpoint bytes for every arm/seed, replay code, pinned configuration/environment, lawful data-source manifest, prediction/metric material and full reproducibility receipts within this TAC-OSM repository**. Compute-matched comparison, successful CI and a hash-only checkpoint report do not suffice. Clean-checkout byte retrieval, original model reload without retraining and replayed scores must pass before final promotion; status `REPO_REPLAY=FAIL/BLOCKED` otherwise. Original historical results remain historical and must not be retroactively promoted. Where publisher data rights preclude redistribution, preserve permitted acquisition and SHA evidence without uploading private data; full evaluation replay stays BLOCKED if independent access cannot be recreated.
+
+This is a **reproducibility-delivery gate**, separate from real-data provenance, sealed test order, scientific baseline parity, causal policy evidence and commercial safety. It does not authorize creating new models, additional compute spending or merging PRs.
+
 ## Immediate authorized work in this branch
 
 This branch implements process enforcement and the design/literature map.
