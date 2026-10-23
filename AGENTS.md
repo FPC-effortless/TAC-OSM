@@ -109,3 +109,7 @@ require an explicit original registration, full Git commit and checkpoint hashes
 in `research/governance/FROZEN_REPLAY_REGISTRY.json`. They authorize integrity
 replay only. Do not rewrite old registrations to manufacture pre-update evidence.
 See `research/governance/LIVE_PARAMETER_ENFORCEMENT.md` for the contract and limits.
+
+## ME078/ME079 current physical evidence
+
+Thirty original real fits completed across two equal-opportunity native/GRU/Transformer recipes. Native actual-motion forecasts and event discrimination improved, but stationary preservation and registered learned-rival superiority failed. Read both original result reports before designing another model; preserve every original checkpoint and strict external interval-score exception. Existing registrations authorize NO further fits. Continue integrated real capability development under a NEW prospective registration, not a new attribution campaign or TEST-tuned retry. Independent transfer, causal control, safety and commercial value remain unqualified.

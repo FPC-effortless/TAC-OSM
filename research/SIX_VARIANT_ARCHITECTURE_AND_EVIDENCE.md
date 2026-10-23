@@ -152,3 +152,7 @@ closure or a synthetic simulation into customer ROI.
 **Merge policy:** draft/isolated six-lane code PR only. Not merged into
 default branch, not a signed deployment of Woyengi/Veritas, and no trained
 six-lane model weights created by this refactor.
+
+## ME078/ME079 trained physical capability update
+
+Two integrated recipes,30original real fits including matched GRU/causal-attention controls. Native motion forecasting and factual movement discrimination improved on exposed source data. Stationary preservation and cross-architecture superiority remain failed; independent transfer/control/customer value unqualified. Read the original [ME078 results](mathematical-engineering/me078/RESULTS.md) and [ME079 results](mathematical-engineering/me079/RESULTS.md), with every model/optimizer/RNG checkpoint in Git. Both local clean-clone replays pass; both external strict replays retain small derived interval-score exceptions. These are physical research models, not six deployed domain engines or Woyengi authorization.

@@ -101,3 +101,10 @@ without refitting. The full original metric JSON matched as well.
 [Independent receipt](../../replay-bundles/ME079/INDEPENDENT_REPLAY.json).
 External strict CPU replay/audit is tracked separately; no passing status is
 assumed from local success.
+
+**External strict replay FAIL, preserved:** [run40001617818](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40001617818)
+restored all15original models. Its [complete read-only audit](../../replay-bundles/ME079/GITHUB_CROSS_CPU_AUDIT.json)
+confirms all prediction arrays, actual targets, MAE, probabilities/Brier, quantile
+endpoints/widths and coverage meet the frozen contract. **29of42,660derived
+interval scores** exceed it, maximum absolute difference6.10352e-5. The full
+strict gate remains FAIL; no tolerance, model byte or original score was changed.
