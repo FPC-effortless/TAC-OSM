@@ -11,7 +11,22 @@ reported.
 
 ## Active architecture development — 2026-10-23
 
-Latest draft research: [ME061 native world model](research/mathematical-engineering/me061/RESULTS.md),
+Latest draft research: [ME069 enterprise event-state model](research/mathematical-engineering/me069/RESULTS.md)
+adds categorical event/resource encoders, elapsed-time native fast/slow and
+associative memory, learned event-regime mixing and probabilistic waiting
+times. Ten original fits use the authentic BPI2012 loan-process log. Frozen
+temporal TEST next-event log loss is **0.122626 native / 0.119182 GRU /
+0.348946 empirical transition prior**; both neural models reach 94.77%
+accuracy. TAC improves substantially over the empirical reference but loses
+its registered GRU superiority gate (1/5 seed wins). Waiting-time intervals
+remain wide. All original weights and scores are in the
+[Git-owned replay bundle](research/replay-bundles/ME069); local clean-checkout
+score replay is exact. One GitHub CPU replay failed the strict waiting-score
+tolerance; a later run passed unchanged. That portability exception remains
+recorded. This is observational forecasting, not actual SLA failure,
+policy utility, Woyengi deployment or commercial qualification.
+
+Earlier [ME061 native world model](research/mathematical-engineering/me061/RESULTS.md),
 updated 2026-10-23. Five paired authentic-robot fits train bounded fast/slow
 associative state, direct action-conditioned trajectories and predictive
 uncertainty. Native TAC source DEV MAE is .603894 versus .702952 persistence
