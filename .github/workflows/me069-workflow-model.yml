@@ -30,3 +30,13 @@ jobs:
             PYTHONPATH=src:. python scripts/me069_verify_workflow.py --phase restore --cache /tmp/me069-source
             PYTHONPATH=src:. python scripts/me069_verify_workflow.py --phase replay --cache /tmp/me069-source
           fi
+      - name: Preserve replay outputs including numerical failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me069-real-score-replay
+          path: |
+            research/replay-bundles/ME069/REAL_EVALUATION.json
+            research/mathematical-engineering/me069/RESTORATION.json
+            research/mathematical-engineering/me069/REPLAY_AUDIT.json
+          if-no-files-found: ignore

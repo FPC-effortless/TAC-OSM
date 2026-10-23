@@ -102,7 +102,7 @@ def compare(original, restored, path="root"):
             compare(a, b, path + f"[{i}]")
     elif isinstance(original, float):
         if not np.isfinite(restored) or abs(original - restored) > 1e-4 + 1e-5 * abs(original):
-            raise ValueError("replay float differs: " + path)
+            raise ValueError(f"replay float differs: {path}; original={original!r}, restored={restored!r}, allowed={1e-4 + 1e-5 * abs(original)!r}")
     elif original != restored:
         raise ValueError("replay identity differs: " + path)
 
