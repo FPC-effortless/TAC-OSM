@@ -1,0 +1,42 @@
+name: ESWAM006 original real 256-history forecasting fixed baselines
+on:
+  pull_request:
+    paths:
+      - "scripts/eswam006_original_256history_baselines.py"
+      - ".github/workflows/eswam006-authentic-longhistory-priors.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  preregistered-original-traffic-future-scores:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam006-original-256history-baselines-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch exact licensed original traffic source outside Git
+        run: |
+          curl --fail --location --retry 3 --silent --show-error \
+            -o "${{ runner.temp }}/interaction_TC_original.zip" \
+            "https://huggingface.co/datasets/INTERACTION-dataset/INTERACTION-dataset/resolve/3587152b529f26649ada0838a308eeaf77f5bdc2/INTERACTION-Dataset-TC-v1_0.zip"
+          printf '9aa78102006dc8d8a64675cf64eba5264085cfb1c006b1f4d0e856d94e657aec  %s\n' "${{ runner.temp }}/interaction_TC_original.zip" | sha256sum --check
+      - name: Score ONLY original real consecutive 256-frame histories and actual true future positions
+        run: |
+          python -m py_compile scripts/eswam006_original_256history_baselines.py
+          PYTHONPATH=src:. python scripts/eswam006_original_256history_baselines.py --archive "${{ runner.temp }}/interaction_TC_original.zip"
+      - name: Permanently record untouched actual true real future comparisons and source IDs
+        env:
+          TARGET_BRANCH: research/eswam006-original-256history-baselines-2026-10-23
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/mathematical-engineering/eswam006/REAL_FIXED_PRIORS_RESULTS.json
+          git add -f research/mathematical-engineering/eswam006/ORIGINAL_REAL_CASES.json
+          git commit -m 'research(eswam006): freeze actual 256-history measured next-position fixed priors'
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
