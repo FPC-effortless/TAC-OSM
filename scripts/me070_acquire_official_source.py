@@ -47,27 +47,41 @@ def download():
         return json.load(response)
 
 def acquire(metadata,path):
+    from urllib.error import HTTPError, URLError
     path=Path(path)
     path.parent.mkdir(parents=True,exist_ok=True)
     temp=path.with_name(path.name+".part")
-    md5=hashlib.md5()
-    sha=hashlib.sha256()
-    length=0
+    file_id=metadata.get("file_id")
+    candidates=[metadata["url"]]
+    if isinstance(file_id,int) and file_id>0:
+        candidates.extend([f"https://ndownloader.figshare.com/files/{file_id}",
+                           f"https://figshare.com/ndownloader/files/{file_id}"])
+    errors=[]
     try:
-        with urlopen(Request(metadata["url"],headers={"User-Agent":"TAC-OSM-ME070-source-qualification/1.0"}),timeout=50) as response, temp.open("wb") as out:
-            while data := response.read(1<<20):
-                out.write(data);md5.update(data);sha.update(data);length+=len(data)
-        if md5.hexdigest()!=metadata["publisher_md5"]:
-            raise ValueError("downloaded file differs from original publisher MD5")
-        if metadata["declared_bytes"] is not None and length!=metadata["declared_bytes"]:
-            raise ValueError("downloaded file size differs from publisher manifest")
-        if path.name.endswith(".gz") and temp.open("rb").read(2)!=b"\x1f\x8b":
-            raise ValueError("download claims gzip XES but magic is wrong")
-        if path.name.endswith(".xes") and not temp.open("rb").read(80).lstrip().startswith((b"<?xml",b"<log")):
-            raise ValueError("download claims XES but XML magic is wrong")
-        os.replace(temp,path)
-        return {"sha256":sha.hexdigest(),"md5":md5.hexdigest(),"bytes":length,
-                "publisher_metadata":{k:v for k,v in metadata.items() if k!="url"}}
+        for i,url in enumerate(dict.fromkeys(candidates),1):
+            md5=hashlib.md5();sha=hashlib.sha256();length=0
+            print("PUBLISHER_FILE_ATTEMPT",i,"HOST",url.split("/",3)[2],flush=True)
+            try:
+                with urlopen(Request(url,headers={"User-Agent":"TAC-OSM-ME070-source-qualification/1.0"}),timeout=45) as response, temp.open("wb") as out:
+                    while data := response.read(1<<20):
+                        out.write(data);md5.update(data);sha.update(data);length+=len(data)
+                if md5.hexdigest()!=metadata["publisher_md5"]:
+                    raise ValueError("downloaded file differs from original publisher MD5")
+                if metadata["declared_bytes"] is not None and length!=metadata["declared_bytes"]:
+                    raise ValueError("downloaded file size differs from publisher manifest")
+                if path.name.endswith(".gz") and temp.open("rb").read(2)!=bytes.fromhex("1f8b"):
+                    raise ValueError("download claims gzip XES but magic is wrong")
+                if path.name.endswith(".xes") and not temp.open("rb").read(80).lstrip().startswith((b"<?xml",b"<log")):
+                    raise ValueError("download claims XES but XML magic is wrong")
+                os.replace(temp,path)
+                return {"sha256":sha.hexdigest(),"md5":md5.hexdigest(),"bytes":length,
+                        "publisher_metadata":{k:v for k,v in metadata.items() if k!="url"}}
+            except (HTTPError,URLError,TimeoutError) as exc:
+                error=f"source host {url.split('/',3)[2]}: {type(exc).__name__}: {str(exc)[:140]}"
+                print("PUBLISHER_FILE_TRANSPORT_FAILURE",error,flush=True)
+                errors.append(error)
+                temp.unlink(missing_ok=True)
+        raise RuntimeError("NO_SOURCE_FILE_OBTAINED; publisher metadata validated but all download attempts failed: "+"; ".join(errors))
     finally:
         temp.unlink(missing_ok=True)
 
@@ -77,6 +91,8 @@ def main():
     args=parser.parse_args()
     meta=checked_metadata(download())
     target=args.directory/meta["file_name"]
+    print("VERIFIED_PUBLISHER_METADATA",json.dumps({k:v for k,v in meta.items() if k!="url"},sort_keys=True),flush=True)
+    print("CANONICAL_PUBLISHER_DELIVERY_HOST",meta["url"].split("/",3)[2],flush=True)
     receipt=acquire(meta,target)
     print(json.dumps(receipt,indent=2,sort_keys=True))
     (args.directory/"ORIGINAL_SOURCE_PATH.txt").write_text(str(target))
