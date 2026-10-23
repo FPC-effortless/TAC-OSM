@@ -1,0 +1,206 @@
+{
+  "capability_to_value": {
+    "business_stage": "research only; no actions, deployment or commercial qualification",
+    "customer_value": "UNKNOWN",
+    "external_pilot": "NOT_MEASURED",
+    "operator_question": "Could a read-only physical forecast help a human notice genuine movement without jitter?",
+    "skill": "native longer-context multi-horizon state distributions with sharper proper uncertainty and actual-motion skill"
+  },
+  "evaluation": {
+    "all_eligible_origins": true,
+    "decision": "DEV_GAIN only if every primary+guardrail passes and paired episode bootstrap95%upper(new-ME080 H1)<0, >=4/5seed improves ME080; otherwise honest MIXED_TRADEOFF/REGRESSION/INCONCLUSIVE. One recipe only; no additional fits under registration.",
+    "exposure": "EXPOSED_DEV",
+    "guardrails": "H4/H16see primary; secondary32frame H1/H4/H16mean MAE must beat persistence, movingH1<=velocity;  no task H1>1.10*persistence; nominal90%coordinate coverage >=.85 and proper interval score <=ME080 at each horizon",
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "models_Git_frozen_before_REPORT": true,
+    "numeric": "float32 neural parameters, float64 mixture quantile inversion40bisections and ALL scalar scoring; raw rtol1e-5/atol1e-6 frozen prospectively; no old-study tolerance edits",
+    "old_frozen_full_models": [
+      "ME077",
+      "ME078",
+      "ME079",
+      "ME080"
+    ],
+    "primary": "same original8frame query H1MAE <=0.95*ME080, movingH1 <=1.05*ME078, stationaryH1 <=1.10*ME077; all simultaneous. H4 <=0.95*ME079 and H16<=1.05*ME080. Also score all causally eligible32frame original query prefixes separately; no differing-input old/new winner claim",
+    "protected_tissue_box_opened": false,
+    "queries": {
+      "REPORT_episode_count": 40,
+      "REPORT_selected_query_sha256": "de074a324739ec05959baac263a51e0e0c3eb597084ba2efde9af4e5d9a3c771",
+      "REPORT_selected_real_queries": 960,
+      "original_REPORT_all_autonomous_windows": 67797
+    },
+    "runtime_scope": "functional step/chunk equivalence and actual stored cache; trained32frame full gradients; primary8frame and secondary32frame factual forecasts; arbitrary-history or memory superiority NOT established",
+    "sealed_TEST_opened": false,
+    "statistics": "5000paired episode-cluster bootstrap, fixedseed81081, conditional on fixed fivefits; all40episode clusters; no independent-source promotion"
+  },
+  "implementation_sha256": {
+    "scripts/me057_train_fused_anchor_robot.py": "f086f1daa27060695be4d17ac7d98b285bb07d410f18ddcbaf5ecb2fccbf613e",
+    "scripts/me064_mixed_real_fit.py": "d17695f761b2788074aaf2402a99dc49dcb15c4e28ed78c44b42b26cce4f33dc",
+    "scripts/me076_train_system1_real.py": "e3910ec1c42fe80b5300db6d9bb789ef4d11ee38e6f2b20a607d0adbf5f18767",
+    "scripts/me079_train_world.py": "b1ba79af549c0056c49634714294e7aff2c681b40f5d2d128a78cac1f3450f1b",
+    "scripts/me081_train_world.py": "da99e28a42970a42482fac2c15ee2068928fe223a4981323888d1697287004b5",
+    "scripts/validate_research_parity.py": "ec690df6d0c2a4f13aeceb3804bfc974cc58189c66ada923fe0006fd39e829ff",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "src/tac_osm/variants/horizon_query_world.py": "5f1360b79b4e69236ac00da915ee9c915d950c8fa038e6be0791aff4696a50ca",
+    "src/tac_osm/variants/kinematic_world.py": "a5a252c4dccba1843e4beb4cec112a60804c6033513553776d2f3064d73728d1",
+    "src/tac_osm/variants/reusable_execution.py": "0079bef8d479853f626fcce877d2ec932cc1bd56ff8459cd7ae0b4dbd7fda283",
+    "src/tac_osm/variants/streaming_mixture_world.py": "23d10cb5258528c2e56e6d4a72197fbd0bea4b5c02290f1c63db8d74eb3f6539"
+  },
+  "literature": [
+    {
+      "paper": "Mixture Density Networks, Bishop1994",
+      "reuse": "conditional mixture likelihood and distributional predictions",
+      "url": "https://publications.aston.ac.uk/id/eprint/373/"
+    },
+    {
+      "paper": "Gated Delta Networks",
+      "reuse": "gated error-correcting associative updates, not invented here",
+      "url": "https://arxiv.org/abs/2412.06464"
+    },
+    {
+      "paper": "R2D2, ICLR2019",
+      "reuse": "explicit recurrent state and state staleness cautions; no claim this eight-frame study proves long retention",
+      "url": "https://willdabney.com/publication/r2d2/"
+    },
+    {
+      "paper": "Mamba-2/SSD, ICML2024",
+      "reuse": "hardware-aware stateful computation motivation; native nonlinear TAC is NOT a linear scan",
+      "url": "https://proceedings.mlr.press/v235/dao24a.html"
+    }
+  ],
+  "models": [
+    {
+      "architecture": "native_horizon_query",
+      "deployed_parameters": 100165,
+      "seed": 81001,
+      "trainable_parameters": 100165
+    },
+    {
+      "architecture": "native_horizon_query",
+      "deployed_parameters": 100165,
+      "seed": 81002,
+      "trainable_parameters": 100165
+    },
+    {
+      "architecture": "native_horizon_query",
+      "deployed_parameters": 100165,
+      "seed": 81003,
+      "trainable_parameters": 100165
+    },
+    {
+      "architecture": "native_horizon_query",
+      "deployed_parameters": 100165,
+      "seed": 81004,
+      "trainable_parameters": 100165
+    },
+    {
+      "architecture": "native_horizon_query",
+      "deployed_parameters": 100165,
+      "seed": 81005,
+      "trainable_parameters": 100165
+    }
+  ],
+  "no_architecture_superiority_claim": true,
+  "real_world_source": {
+    "license": "CC-BY-4.0; BodenAI and RW-RL attribution",
+    "name": "BodenAI/RW-RL-HIL-Dataset original160 episode subset; revision9290f5a96dc91ea58256e81d9ce2dd9621890b51;120FIT/40previously exposedREPORT",
+    "observed_real_outcomes": true,
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "registered_before_first_fit": true,
+  "schedules": {
+    "81001": {
+      "importance_sha256": "12feacd281ac163f735d6b64dd73d656886de89949fadc015015428349c4c638",
+      "sample_order_sha256": "70a73f9da391ddce7aa06faf7312ed6aebfc8382e148879f631d9b95eed33ab2",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "81002": {
+      "importance_sha256": "e34abf429d7b889f2a59517bba1f6621a475938fb0948bd44d19d1510148c172",
+      "sample_order_sha256": "51a958909503558286d3de2d9f414b83c88122a3446f42ebd2d8d3971e247124",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "81003": {
+      "importance_sha256": "97b4c5029ee1b7832f800c1a77979532c13f5ec49dfc8f86f3814069583e0ae5",
+      "sample_order_sha256": "e17f618825f4f8a58f4fb1e494b85c100bdb9dac739836b3258e4a1b2bc989dc",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "81004": {
+      "importance_sha256": "b66c04b77cd6a6240e446fe80a1e0c962eade25286f27c5696658c2deaf104c1",
+      "sample_order_sha256": "3c3312a9cdd43b8b53538312f69dddea7c5b45ea95e75b593dede2214fcfdbe6",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "81005": {
+      "importance_sha256": "8f0cf165b6f7ad0c2b92125da087de51939deca5bbe3d9f59b3f28134693d9db",
+      "sample_order_sha256": "91371f2b2294429af0a58825414e11ece4bf37f9ff8dc6fa26f95c57f16f7017",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    }
+  },
+  "schema_version": "tac-osm.parity.v2",
+  "secondary32_queries": 904,
+  "secondary32_queries_sha256": "09ad7b3bebe10a7ed8f2638eb143480cab017e501d82c604360f5f9c5b0b8ef9",
+  "source_qualification_sha256": "4e5bbe6c7200e12776aea5f9b2b5a0764da831b8ad6be8bce4cc336c832531cf",
+  "study_id": "ME081_HORIZON_QUERY_CRPS_LONG_CONTEXT",
+  "study_type": "single_model_training",
+  "training_budget": {
+    "batch_size": 24,
+    "compute": "actual2048updates/49152windows/1572864observed prefix presentations per seed; NO FLOP-matched comparison or exact hardware FLOP claim",
+    "dense_prefixes": 32,
+    "history": 32,
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "loss": "proper physical normalized CRPS +0.02physical NLL +0.2factual motion BCE; shared horizon-query decoder with ordered component scales, all eligible dense prefixes/horizons; natural target importance weights",
+    "optimizer": "AdamW lr0.0007 wd0.0001 clip1",
+    "sampling": "same nominal 50%uniform+50%movement proposal and balance importance as ME078/079; finite task round-robin counts differ by at most1/component",
+    "seeds": [
+      81001,
+      81002,
+      81003,
+      81004,
+      81005
+    ],
+    "selection": "final only; no sweep/restart/warm start; five cold starts",
+    "updates": 2048
+  },
+  "unresolved_capability": "Can native32frame state learning, a horizon-query decoder and proper CRPS distribution training jointly improve actual quiet/motion and multihorizon predictive skill?"
+}
