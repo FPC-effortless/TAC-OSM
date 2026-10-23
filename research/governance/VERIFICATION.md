@@ -8,7 +8,7 @@ Executed locally on the default-branch implementation:
 
 | Check | Observed result |
 |---|---|
-| `python -m pytest -q` | 979 passed, 14.66 seconds |
+| `python -m pytest -q` | 981 passed, 14.75 seconds |
 | `python scripts/audit_training_budget.py` | PASS, 88 Python files audited |
 | `python scripts/verify_frozen_replay.py --all` | PASS, six pinned registrations, 15 distinct original checkpoints (each checked for prefit/final) |
 | `python scripts/sync_test_count.py --check` | PASS |
@@ -30,3 +30,6 @@ The initial smaller GitHub CI environments exposed an accidental NumPy dependenc
 in tensor hashing (four integration failures). Hashing now uses Torch uint8 bytes
 and the standard library; an explicit no-NumPy regression test passes. The full
 local suite was rerun after this fix. Earlier failed workflow runs remain visible.
+
+Final receipts also cross-check declared/budgeted optimizer updates against the
+guard’s successful updates and reject conflicting postfit deployed counts.

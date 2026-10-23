@@ -423,3 +423,17 @@ def test_checkpoint_hashing_has_no_numpy_dependency(monkeypatch):
     model = Toy()
     _, inventory = live_inventory(model)
     assert len(parameter_values_sha(model.state_dict(), inventory)) == 64
+
+
+def test_final_declared_update_count_must_equal_actual_guarded_updates(tmp_path):
+    _, _, manifest, _, _ = completed(tmp_path)
+    manifest["models"][0]["measured"]["actual_steps"] = 10
+    with pytest.raises(ParameterBudgetError, match="step count"):
+        check_manifest(manifest, "final")
+
+
+def test_final_deployed_count_cannot_contradict_the_guarded_whole_model(tmp_path):
+    _, _, manifest, _, _ = completed(tmp_path)
+    manifest["models"][0]["measured"]["deployed_parameters"] = 100001
+    with pytest.raises(ParameterBudgetError, match="actual model size"):
+        check_manifest(manifest, "final")

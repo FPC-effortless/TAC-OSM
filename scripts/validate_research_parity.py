@@ -157,6 +157,15 @@ def check_manifest(m,phase="preflight",*,operation="training",provenance=None):
                 actual=candidates[0]
             proof={**row,"runtime_evidence":actual.get("runtime_evidence"),"_prefit_registration_sha256":m.get("prefit_registration_sha256")}
             if actual.get("checkpoint_sha256") is not None:proof["checkpoint_sha256"]=actual["checkpoint_sha256"]
+            expected_steps=actual.get("actual_steps",actual.get("actual_updates"))
+            if m.get("source_based_deferred_registration"):
+                expected_steps=m["training_budget"]["updates"]
+            elif m.get("study_type")=="architecture_comparison":
+                expected_steps=row["budget"]["steps"]
+            proof["_expected_optimizer_steps"]=expected_steps
+            for key in ("trainable_parameters","deployed_parameters"):
+                if key in actual:
+                    demand(actual[key]==row[key],"postfit actual model size differs from live registration")
             run_id=validate_runtime_evidence(proof)
             demand(run_id not in used,"one model runtime receipt reused across arms/seeds")
             used.add(run_id)
