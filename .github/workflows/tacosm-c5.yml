@@ -4,12 +4,20 @@ on:
   push:
     branches: [compute/c5-001]
   workflow_dispatch:
+    inputs:
+      allow_new_fits:
+        description: Explicit opt-in; requires a new compliant registration and live-model guard
+        type: boolean
+        required: true
+        default: false
 
 permissions:
   contents: read
 
 jobs:
   c5:
+    # Historical fits are not authorized by PRs or push markers. Live gates still apply.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     name: CASM-S C5 confirmatory run (CPU)
     runs-on: ubuntu-latest
     timeout-minutes: 330

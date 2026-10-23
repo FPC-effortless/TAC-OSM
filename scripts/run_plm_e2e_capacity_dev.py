@@ -63,6 +63,9 @@ assert len(TRAIN_DEV_COMBOS) == 224
 assert len(TRAIN_DEV_COMBOS) + len(DEV_COMBOS) + len(HELDOUT) == len(ALL_COMBOS)
 
 
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 def config_hash(config: FunctionalConfig) -> str:
     payload = {
         "hidden_dim": config.hidden_dim,
@@ -97,7 +100,7 @@ def train_seed(seed: int, config: FunctionalConfig) -> tuple[nn.Module, set[tupl
     torch.manual_seed(seed)
     rng = random.Random(seed + 700000)
     model = FunctionalMultimodalPLM(config=config).cpu()
-    optimizer = torch.optim.AdamW(
+    optimizer = budgeted_optimizer(model, torch.optim.AdamW,
         model.parameters(),
         lr=0.002,
         weight_decay=0.0001,
@@ -114,7 +117,7 @@ def train_seed(seed: int, config: FunctionalConfig) -> tuple[nn.Module, set[tupl
         loss = train_batch(model, batch)
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        optimizer.step()
+        checked_optimizer_step(optimizer)
     return model, training_keys
 
 
@@ -189,7 +192,7 @@ def run() -> dict:
         model64 = FunctionalMultimodalPLM(
             config=FunctionalConfig(hidden_dim=64)
         ).cpu()
-        optimizer64 = torch.optim.AdamW(
+        optimizer64 = budgeted_optimizer(model64, torch.optim.AdamW,
             model64.parameters(),
             lr=0.002,
             weight_decay=0.0001,
@@ -205,7 +208,7 @@ def run() -> dict:
             loss = train_batch(model64, batch)
             loss.backward()
             nn.utils.clip_grad_norm_(model64.parameters(), 1.0)
-            optimizer64.step()
+            checked_optimizer_step(optimizer64)
         overlap64 = keys64 & eval_keys
         if overlap64:
             raise AssertionError(f"hidden64 train/dev overlap for seed {seed}")

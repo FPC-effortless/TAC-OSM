@@ -64,6 +64,9 @@ assert set(HELDOUT).isdisjoint(set(E2E006_HELDOUT))
 assert set(HELDOUT).isdisjoint(set(E2E007_HELDOUT))
 assert set(HELDOUT).isdisjoint(set(TRAIN_COMBOS))
 
+
+from tac_osm.parameter_budget import save_training_checkpoint
+
 def _noise(shape: tuple[int, ...], rng: random.Random) -> torch.Tensor:
     g = torch.Generator(device="cpu")
     g.manual_seed(rng.randrange(2**31))
@@ -150,7 +153,7 @@ def episode_fingerprint(episodes: Iterable[tuple]) -> str:
             "audio": [row[3].tolist() for row in obs],
         })
     b = io.BytesIO()
-    torch.save(serial, b)
+    save_training_checkpoint(serial, b)
     return hashlib.sha256(b.getvalue()).hexdigest()
 
 def generator_hash() -> str:

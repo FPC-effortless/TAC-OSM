@@ -14,12 +14,20 @@ on:
       - tests/test_integrated_e2e_006.py
       - .github/workflows/plm-state-content-dev.yml
   workflow_dispatch:
+    inputs:
+      allow_new_fits:
+        description: Explicit opt-in; requires a new compliant registration and live-model guard
+        type: boolean
+        required: true
+        default: false
 
 permissions:
   contents: read
 
 jobs:
   development:
+    # Historical fits are not authorized by PRs or push markers. Live gates still apply.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     name: Paired state-content write development benchmark
     runs-on: ubuntu-latest
     timeout-minutes: 300

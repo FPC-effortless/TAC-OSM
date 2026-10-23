@@ -20,10 +20,12 @@ def test_all_workflow_direct_local_script_references_exist():
                 missing.append(f"{path.relative_to(ROOT)} -> {script}")
     assert not missing, "workflow references missing local scripts: " + "; ".join(missing)
 
-def test_e2e005_full_authorization_is_push_marker_or_dispatch_only():
+def test_historical_training_jobs_require_explicit_manual_opt_in():
     path = WORKFLOWS / "integrated-e2e-005.yml"
     workflow_text = path.read_text(encoding="utf-8")
     assert "if: ${{ github.event_name == 'workflow_dispatch'" in workflow_text
-    assert "github.event.head_commit.message" in workflow_text
+    assert "inputs.allow_new_fits == true" in workflow_text
+    assert "default: false" in workflow_text
+    assert "|| (github.event_name == 'push'" not in workflow_text
     assert "toJSON(github.event.commits)" not in workflow_text
     assert "if: \\${{" not in workflow_text

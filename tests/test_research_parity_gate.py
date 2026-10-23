@@ -10,6 +10,15 @@ from scripts.validate_research_parity import (
     requires_100k_policy
 )
 
+@pytest.fixture(autouse=True)
+def isolate_parity_arithmetic_from_runtime_integration(monkeypatch):
+    # These pre-existing tests use declared software receipts to isolate data/
+    # compute matching. Real optimizer/checkpoint proof is exercised without
+    # mocks in test_parameter_budget_enforcement.py.
+    monkeypatch.setattr("scripts.validate_research_parity.validate_runtime_evidence",
+        lambda row: str(row.get("architecture"))+":"+str(row.get("seed")))
+
+
 def source_hash(ch):return ch*64
 
 def fixture():
@@ -172,15 +181,12 @@ def test_new_model_size_limits_are_inclusive_and_bound_frozen_learned_capacity()
         check_model_parameter_target(100000,120000)
 
 
-def test_historical_original_study_is_not_retroactively_disqualified():
-    m=fixture()
-    m["study_id"]="ME066_FOUR_ARM_GENUINE_ORIGINAL_ROBOT_FIT_EQUAL_BUDGET"
+def test_recycled_historical_id_does_not_authorize_new_small_fits():
+    m=fixture();m["study_id"]="ME066_FOUR_ARM_GENUINE_ORIGINAL_ROBOT_FIT_EQUAL_BUDGET"
     for row in m["arms"]:
-        row["trainable_parameters"]=37177
-        row["deployed_parameters"]=37177
-    # Equal counts remain mandatory; absolute policy only governs new fits.
-    assert not requires_100k_policy(m["study_id"])
-    assert check_manifest(m,"preflight")["status"]=="PASS"
+        row["trainable_parameters"]=37177;row["deployed_parameters"]=37177
+    assert requires_100k_policy(m["study_id"])
+    with pytest.raises(ParityError,match="100k target"):check_manifest(m,"preflight")
 
 
 def test_new_single_model_uses_same_absolute_100k_rule_and_final_real_count():
@@ -238,3 +244,13 @@ def test_new_study_above_target_still_invalid_when_arms_match_to_1_percent():
         row["deployed_parameters"]=109500
     with pytest.raises(ParityError,match="100k target"):
         check_manifest(m)
+
+
+def test_old_schema_label_does_not_reintroduce_cpu_parity():
+    m=fixture();m['schema_version']='tac-osm.parity.v2'
+    for row in m['arms']:
+        if row['architecture']=='GRU control':
+            row['budget']['prefit_profile_optimizer_cpu_seconds']=2.0
+            row['measured']['optimizer_cpu_seconds']=200.0
+    assert check_manifest(m,'preflight')['status']=='PASS'
+    assert check_manifest(m,'final')['eligible_for_architecture_superiority']
