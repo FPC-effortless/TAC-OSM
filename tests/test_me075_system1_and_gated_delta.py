@@ -13,14 +13,13 @@ def test_100k_native_system1_count_and_true_all_active_gradients():
     torch.manual_seed(75)
     m = System1FastModel(dimension=14)
     counts = sum(p.numel() for p in m.parameters() if p.requires_grad)
-    assert counts == 100541
+    assert counts == 100476
     assert check_parameter_budget(counts, counts)
     x = torch.randn(3, 14)
     a = torch.randn(3, 14)
     forecast = m(x, a, torch.tensor([0., 1., 3600.]))
     assert forecast.mean_next.shape == x.shape
     assert forecast.scale_next.shape == x.shape
-    assert forecast.event_logit.shape == (3,)
     assert torch.isfinite(forecast.mean_next).all()
     assert (forecast.scale_next > 0).all()
     loss = physical_one_step_nll(forecast, torch.randn_like(x), torch.tensor([True, True, False]))
@@ -47,12 +46,13 @@ def test_streaming_fast_state_is_bounded_and_does_not_mutate_original():
 def test_system1_has_no_slow_or_associative_state_and_no_action_authority():
     m = System1FastModel()
     f = m(torch.ones(1, 14), torch.zeros(1, 14), torch.zeros(1))
-    assert len(f) == 4
+    assert len(f) == 3
     assert not hasattr(f, "action")
     assert not hasattr(f, "allow")
+    assert not hasattr(f, "event_logit")
     assert not hasattr(f, "slow")
     assert not hasattr(f, "memory")
-    assert sum(p.numel() for p in m.parameters() if p.requires_grad) == 100541
+    assert sum(p.numel() for p in m.parameters() if p.requires_grad) == 100476
 
 
 @pytest.mark.parametrize("invalid_time", [-1, float("nan"), float("inf")])
