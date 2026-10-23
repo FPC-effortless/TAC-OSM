@@ -30,6 +30,45 @@ STUDY_FILE = re.compile(r"(?:^|/)(?:me|dev)(\d{2,3})(?:[-_./]|$)",re.I)
 SCHEMA = "tac-osm.parity.v1"
 PARAM_TOLERANCE=0.01
 FLOP_TOLERANCE=0.01
+# Prospective model-size policy: all trained neural models ~100k trainables.
+# Historical studies remain immutable, not silently retroactively disqualified.
+MODEL_TARGET_PARAMETERS = 100_000
+MODEL_TARGET_RELATIVE_TOLERANCE = 0.05
+MODEL_MIN_PARAMETERS = 95_000
+MODEL_MAX_PARAMETERS = 105_000
+LEGACY_MAX_ME_NUMBER = 72
+LEGACY_MAX_DEV_NUMBER = 61
+
+def requires_100k_policy(study_id):
+    """Prospective trained studies; keep already executed historical evidence frozen.
+
+    ME001..ME072 and DEV001..DEV061 were registered before the new constraint.
+    Any unrecognized/new study ID follows the new policy, not a bypass.
+    """
+    if not isinstance(study_id, str):
+        return True
+    m = re.match(r"^\s*(ME|DEV)[-_ ]?(\d{1,3})(?:\b|[_-])", study_id, re.I)
+    if m:
+        cutoff = LEGACY_MAX_ME_NUMBER if m.group(1).upper() == "ME" else LEGACY_MAX_DEV_NUMBER
+        return int(m.group(2)) > cutoff
+    return True
+
+def check_model_parameter_target(trainable_parameters, deployed_parameters=None, *, label="model"):
+    """Hard prefit and postfit count guard for ALL new trained neural models.
+
+    Count trained encoder/memory/decoder/router/uncertainty/action heads. Include
+    frozen learned model weights in deployed counts; exclude nonlearned buffers.
+    """
+    positive_num(trainable_parameters, f"{label}.trainable_parameters", whole=True)
+    demand(MODEL_MIN_PARAMETERS <= trainable_parameters <= MODEL_MAX_PARAMETERS,
+           f"{label}: prospective 100k target requires 95,000..105,000 trainable parameters, got {trainable_parameters}")
+    if deployed_parameters is not None:
+        positive_num(deployed_parameters, f"{label}.deployed_parameters", whole=True)
+        demand(deployed_parameters >= trainable_parameters,
+               f"{label}: deployed learned parameters cannot be below trainable count")
+        demand(MODEL_MIN_PARAMETERS <= deployed_parameters <= MODEL_MAX_PARAMETERS,
+               f"{label}: 100k target requires 95,000..105,000 deployed learned parameters, got {deployed_parameters}")
+
 
 class ParityError(ValueError): pass
 
@@ -64,14 +103,50 @@ def check_manifest(m,phase="preflight"):
     demand(m.get("schema_version")==SCHEMA,"unsupported parity schema")
     text_field(m.get("study_id"),"study_id")
     kind=m.get("study_type")
-    demand(kind in ("architecture_comparison","noncomparative_diagnostic"),
-        "study_type must explicitly distinguish architecture comparison from diagnostics")
+    demand(kind in ("architecture_comparison","single_model_training","noncomparative_diagnostic"),
+        "study_type must distinguish comparison, single-model fit and no-fit diagnostics")
     if kind=="noncomparative_diagnostic":
         demand(m.get("no_architecture_superiority_claim") is True,
             "diagnostic must forbid architecture-superiority claims")
         text_field(m.get("scientific_purpose"),"diagnostic scientific_purpose")
+        if requires_100k_policy(m["study_id"]):
+            demand(m.get("no_new_model_fits") is True,
+                   "prospective noncomparative diagnostics MUST be explicitly no-fit; use single_model_training for a new model")
         return {"study_id":m["study_id"],"phase":phase,"eligible_for_architecture_superiority":False,
                 "status":"PASS_DIAGNOSTIC_ONLY"}
+    if kind=="single_model_training":
+        demand(m.get("registered_before_first_fit") is True,
+               "single-model fit must be preregistered")
+        source=m.get("real_world_source")
+        demand(isinstance(source,dict) and source.get("observed_real_outcomes") is True,
+               "authentic real source outcomes required")
+        digest(source.get("sha256"),"real_world_source.sha256")
+        models=m.get("models")
+        demand(isinstance(models,list) and len(models)>=1,
+               "single-model training requires >=1 declared model/seed")
+        for i,model in enumerate(models):
+            demand(isinstance(model,dict),f"models[{i}] must be an object")
+            if requires_100k_policy(m["study_id"]):
+                check_model_parameter_target(model.get("trainable_parameters"),
+                                             model.get("deployed_parameters"),
+                                             label=f"models[{i}]")
+            positive_num(model.get("trainable_parameters"),f"models[{i}].trainable_parameters",whole=True)
+            positive_num(model.get("deployed_parameters"),f"models[{i}].deployed_parameters",whole=True)
+            positive_num(model.get("seed"),f"models[{i}].seed",whole=True)
+            if phase=="final":
+                receipt=model.get("measured")
+                demand(isinstance(receipt,dict),
+                       f"models[{i}] final actual measurement receipt required")
+                if requires_100k_policy(m["study_id"]):
+                    check_model_parameter_target(receipt.get("trainable_parameters"),
+                                                 receipt.get("deployed_parameters"),
+                                                 label=f"models[{i}].measured")
+                demand(receipt.get("trainable_parameters")==model["trainable_parameters"],
+                       f"models[{i}] actual trainable count differs from frozen preregistration")
+                digest(receipt.get("checkpoint_sha256"),f"models[{i}] final checkpoint")
+        return {"study_id":m["study_id"],"phase":phase,
+                "eligible_for_architecture_superiority":False,
+                "status":"PASS_SINGLE_MODEL" if phase=="final" else "PASS_PREFIT_SINGLE_MODEL"}
     demand(m.get("registered_before_first_fit") is True,
         "experiment must have a preregistered comparison before the first fit")
     source=m.get("real_world_source")
@@ -108,6 +183,9 @@ def check_manifest(m,phase="preflight"):
             else:positive_num(val,key,whole=True)
         demand(r["deployed_parameters"]>=r["trainable_parameters"],
             "trainable parameters cannot exceed total deployed parameters")
+        if requires_100k_policy(m["study_id"]):
+            check_model_parameter_target(r["trainable_parameters"], r["deployed_parameters"],
+                                         label=f"arms[{i}] {r['architecture']}")
         for k in ("dataset_sha256","train_split_sha256","dev_split_sha256",
                   "test_split_sha256","training_sample_order_sha256",
                   "feature_contract_sha256","target_contract_sha256",
@@ -139,6 +217,13 @@ def check_manifest(m,phase="preflight"):
                 positive_num(result.get(k),k,
                     whole=k in ("actual_steps","actual_examples","actual_tokens","peak_memory_bytes"))
             text_field(result.get("flops_profiler"),"independent training_flops profiler provenance")
+            if requires_100k_policy(m["study_id"]):
+                check_model_parameter_target(
+                    result.get("trainable_parameters"),result.get("deployed_parameters"),
+                    label=f"postfit {r['architecture']} seed {r['seed']}")
+                demand(result["trainable_parameters"]==r["trainable_parameters"] and
+                       result["deployed_parameters"]==r["deployed_parameters"],
+                       "postfit actual model parameter counts deviate from registered original prefit counts")
             digest(result.get("checkpoint_sha256"),"frozen checkpoint")
             digest(result.get("actual_sample_order_sha256"),"actual data replay digest")
             digest(result.get("evaluation_split_sha256"),"actual evaluated test IDs")
@@ -178,6 +263,7 @@ def check_manifest(m,phase="preflight"):
         if phase=="final":
             actual=[r["measured"] for r in group]
             close_enough(actual,"training_flops",FLOP_TOLERANCE,f"seed {seed} actual FLOPs")
+    # Absolute 100k ±5% arm checks apply independently of the matched-arm 1% gate.
     # No CPU-time parity test: real execution speed is an efficiency result,
     # not a requirement for equal data, parameters or compute allotments.
     return {"study_id":m["study_id"],"phase":phase,"matched_seeds":sorted(seed_sets),
@@ -206,7 +292,7 @@ def check_changed(base_head,root):
             f"{study}: missing preregistered FAIR_COMPARISON.json; no new experiment permitted")
         manifest=json.loads(file.read_text())
         result=check_manifest(manifest,"preflight")
-        if manifest["study_type"]=="architecture_comparison":
+        if manifest["study_type"] in ("architecture_comparison","single_model_training"):
             workflows=list((root/".github/workflows").glob(study+"*.yml"))
             workflows+=list((root/".github/workflows").glob(study+"*.yaml"))
             demand(bool(workflows),
@@ -224,10 +310,20 @@ def main():
     group=cli.add_mutually_exclusive_group(required=True)
     group.add_argument("--manifest")
     group.add_argument("--check-changed",metavar="BASE...HEAD")
+    group.add_argument("--model-parameters",type=int,
+                       help="Standalone prefit guard on exact counted trainable parameters, even outside matched comparisons")
+    cli.add_argument("--deployed-parameters",type=int,
+                     help="Optional complete learned parameter count for standalone prefit/final guard")
     cli.add_argument("--phase",choices=("preflight","final"),default="preflight")
     args=cli.parse_args()
     try:
-        if args.manifest:
+        if args.model_parameters is not None:
+            check_model_parameter_target(args.model_parameters,args.deployed_parameters,
+                                         label="standalone_model")
+            print(json.dumps({"status":"PASS_100K_TARGET",
+                              "trainable_parameters":args.model_parameters,
+                              "deployed_parameters":args.deployed_parameters},sort_keys=True))
+        elif args.manifest:
             r=check_manifest(json.loads(Path(args.manifest).read_text()),args.phase)
             print(json.dumps(r,sort_keys=True))
         else:
