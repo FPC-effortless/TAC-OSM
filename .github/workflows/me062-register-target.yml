@@ -1,0 +1,43 @@
+name: ME062 metadata-only prospective different robot task registration
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  metadata-only-target-freeze:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Publisher metadata only; no parquet, no outcomes, no training
+        run: |
+          PYTHONPATH=src:. python scripts/me062_register_target_metadata.py \
+            --source-cache "${{ runner.temp }}/me062-target-metadata"
+      - name: Publish preregistration BEFORE any transfer scoring
+        env:
+          PUSH_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/me062/TRANSFER_PROTOCOL.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'research(me062): freeze real transfer metadata before labels'
+            git fetch origin "$PUSH_BRANCH"
+            git rebase "origin/$PUSH_BRANCH"
+            git push origin "HEAD:refs/heads/$PUSH_BRANCH"
+          fi
+      - name: Verify metadata-only access receipt
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('research/mathematical-engineering/me062/TRANSFER_PROTOCOL.json'))
+          assert r['target_trajectory_files_opened']==0 and not r['target_outcome_data_opened']
+          assert r['training_updates']==0 and len(r['cohort'])>=40
+          print('ME062_TARGET_METADATA_REGISTERED_ONLY',r['task'],len(r['cohort']))
+          PY

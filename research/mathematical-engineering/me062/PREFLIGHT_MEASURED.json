@@ -1,0 +1,100 @@
+{
+  "budget_if_trained": {
+    "batch_size": 8,
+    "history": 64,
+    "horizon": 16,
+    "updates": 600
+  },
+  "cal_partition_digest": "f54d4b26492b96f6ee7c4b56891dabacfea27f144f0a7661273d4a5d5e9d729c",
+  "cal_trajectory_opened": false,
+  "dev_partition_digest": "eee28e584fffa0d379ceac3fe31c36412e88f519e09931042e8ec2f728f1bd01",
+  "dev_trajectory_opened": false,
+  "fit_episode_count": 208,
+  "fit_partition_digest": "f88e19251ddba1f17ee9a3e822b859718e495062e8d65406d54a4ba13ce85b10",
+  "independent_test": false,
+  "operator_flop_relative_gap": 0.0063581892674847845,
+  "optimizer_steps": 0,
+  "parameter_relative_gap": 0.00674079774952894,
+  "per_arm": {
+    "gru_world": {
+      "has_finite_gradients": {
+        "cell.bias_hh": true,
+        "cell.bias_ih": true,
+        "cell.weight_hh": true,
+        "cell.weight_ih": true,
+        "decoder.bias": true,
+        "decoder.weight": true,
+        "encoder.bias": true,
+        "encoder.weight": true,
+        "log_scale_head.0.bias": true,
+        "log_scale_head.0.weight": true,
+        "log_scale_head.2.bias": true,
+        "log_scale_head.2.weight": true,
+        "output.bias": true,
+        "output.weight": true,
+        "query.bias": true,
+        "query.weight": true,
+        "trust_head.0.bias": true,
+        "trust_head.0.weight": true,
+        "trust_head.2.bias": true,
+        "trust_head.2.weight": true
+      },
+      "initial_loss": 0.7155960202217102,
+      "parameters": 37681,
+      "profiled_forward_backward_flops": 56827806
+    },
+    "native_tac": {
+      "has_finite_gradients": {
+        "decoder.bias": true,
+        "decoder.weight": true,
+        "encoder.bias": true,
+        "encoder.weight": true,
+        "fast_map.bias": true,
+        "fast_map.weight": true,
+        "log_scale_head.0.bias": true,
+        "log_scale_head.0.weight": true,
+        "log_scale_head.2.bias": true,
+        "log_scale_head.2.weight": true,
+        "output.bias": true,
+        "output.weight": true,
+        "query.bias": true,
+        "query.weight": true,
+        "retention": true,
+        "slow_map.bias": true,
+        "slow_map.weight": true,
+        "trust_head.0.bias": true,
+        "trust_head.0.weight": true,
+        "trust_head.2.bias": true,
+        "trust_head.2.weight": true,
+        "write_map.bias": true,
+        "write_map.weight": true
+      },
+      "initial_loss": 0.7155960202217102,
+      "parameters": 37427,
+      "profiled_forward_backward_flops": 57191440
+    }
+  },
+  "profile_limitation": "torch.profiler supported operators only; optimizer and uncounted ops excluded",
+  "python": "3.12.15",
+  "pytorch": "2.14.1+cpu",
+  "real_source_fit_sha256": "b55d0e1f894072c5738ef8e45aa283a3b464c1a1dc8f60c63594666d16b30a49",
+  "repo_replay_status": "BLOCKED",
+  "schedule_sha256": {
+    "62001": "a6ed28006e932e3173d36a482ec41f7a1f3500033e92299f799c0e40cef2be21",
+    "62002": "bb996fcf4fe99a185bbcb39cd454c56460a2062e8d3e814eae182e9faee70c10",
+    "62003": "e8bac0d79a86a8bc0489cda920c942e53693448bc0336bc9e0008c0b06d56e62",
+    "62004": "ed208c465f05e8ee4893b21169af267f8e969c211f0bf29f7287ce1124dd6138",
+    "62005": "5831518b223ce49787378ccdbb011333fe2e145b4973da41f44b79464be798fa"
+  },
+  "scientific_status": "PREFLIGHT_DIAGNOSTIC_NOT_TRAINED",
+  "seeds": [
+    62001,
+    62002,
+    62003,
+    62004,
+    62005
+  ],
+  "study": "ME062_AUTHENTIC_FIT_PREFLIGHT_ONLY",
+  "test_trajectory_opened": false,
+  "training_status": "NOT_RUN"
+}
