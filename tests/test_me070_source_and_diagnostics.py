@@ -91,3 +91,13 @@ def test_source_qualification_can_read_compressed_xes(tmp_path):
     gz=tmp_path/"software_fixture.xes.gz"
     gz.write_bytes(gzip.compress(original.read_bytes()))
     assert measure(gz)["case_count"]==5
+
+def test_lifecycle_targets_are_separated_from_base_activity():
+    from scripts.me070_audit_lifecycle import lifecycle, audit
+    assert lifecycle("W_Behandelen|START") == ("W_Behandelen","start")
+    assert lifecycle("W_Behandelen|COMPLETE") == ("W_Behandelen","complete")
+    cases=[{"n":4,"activity":[1,2,1,2]},{"n":3,"activity":[1,2,3]}]
+    r=audit(cases,{"A|START":1,"A|COMPLETE":2,"B|COMPLETE":3})
+    assert r["eligible_midpoint_cases"] == 2
+    assert r["start_to_same_activity_complete_fraction"] == 1
+    assert r["target_lifecycle_counts"]["complete"] == 2
