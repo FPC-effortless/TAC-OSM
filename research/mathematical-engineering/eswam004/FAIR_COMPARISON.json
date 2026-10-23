@@ -1,0 +1,96 @@
+{
+  "schema_version": "tac-osm.parity.v2",
+  "study_id": "ESWAM004_CAUSAL_KINETIC_EVIDENCE_REAL_DEVELOPMENT",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Prespecified single native ES-WAM kinetic evidence architecture refinement: a source-only kinetic-history movement classifier and rational gate, trained with EXACT original ESWAM003 data order, 640 updates per seed, batch12 and exactly the same real factual targets/loss; preserve source roles, frozen original output/checkpoints and public real robot source. Never claim a fair architecture winner, causal policy or independent real-world skill.",
+  "real_world_source": {
+    "name": "BodenAI/RW-RL-HIL-Dataset, frozen revision 9290f5a96dc91ea58256e81d9ce2dd9621890b51, original ME064 registered five authentic tasks previously exposed FIT 160 episodes; CC-BY-4.0 with publisher attribution",
+    "license": "CC-BY-4.0",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+    "observed_real_outcomes": true
+  },
+  "models": [
+    {
+      "seed": 76001,
+      "architecture": "eswam004_kinetic_exchange_native",
+      "trainable_parameters": 101706,
+      "deployed_parameters": 101706
+    },
+    {
+      "seed": 76002,
+      "architecture": "eswam004_kinetic_exchange_native",
+      "trainable_parameters": 101706,
+      "deployed_parameters": 101706
+    },
+    {
+      "seed": 76003,
+      "architecture": "eswam004_kinetic_exchange_native",
+      "trainable_parameters": 101706,
+      "deployed_parameters": 101706
+    },
+    {
+      "seed": 76004,
+      "architecture": "eswam004_kinetic_exchange_native",
+      "trainable_parameters": 101706,
+      "deployed_parameters": 101706
+    },
+    {
+      "seed": 76005,
+      "architecture": "eswam004_kinetic_exchange_native",
+      "trainable_parameters": 101706,
+      "deployed_parameters": 101706
+    }
+  ],
+  "training_budget": {
+    "seeds": [
+      76001,
+      76002,
+      76003,
+      76004,
+      76005
+    ],
+    "updates_per_seed": 640,
+    "batch_size": 12,
+    "observation_history_frames": 8,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0007,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1,
+    "fit_members_per_task": 24,
+    "development_members_per_task": 8,
+    "selection": "frozen SHA256 task/episode lexicographic 24 FIT / 8 previously exposed original FIT-DEV per task",
+    "min_per_episode_scoring_origins": 1,
+    "max_per_episode_scoring_origins": 24,
+    "train_window_sampling": "seeded equal-task task round robin with half outcome-change >0.025 physical mean units and half uniform, within FIT only",
+    "checkpoint": "single final original model per seed; full optimizer/RNG/data-order/factual-source receipt Git-frozen BEFORE external replay; no best-seed choice or edits to previous checkpoints",
+    "auxiliary_target": "logged future issued action[t] at scoring origin t; training only; not input to the forecast (last input is action[t-1])",
+    "loss": "UNCHANGED from registered ESWAM003: proper Laplace next-real-state NLL + 0.5 physical-normalized MAE + 0.20 natural-FIT-prevalence-weighted moving-event BCE + 0.05 real next logged-command SmoothL1",
+    "sampling": "EXACT original ESWAM003 deterministic four 160-step rounds per seed, seed+round*100000, identical 120 original FIT episodes, no new source or extra training passes",
+    "action_target": "actual next recorded issued qpos[t] supervised target only; previous a[t-1] input",
+    "motion_target": "real mean physical 14D |x[t+1]-x[t]| >=0.025, target only; FIT source natural movement frequency used for training risk importance correction"
+  },
+  "primary_development_measure": "same 960 genuine real H1 cases/seed, all/moving/stationary physical-unit MAE and risk AP/Brier and recorded next-command L1 versus repetition; original frozen ESWAM003/ME077/ME078/ME079 and persistence source-matched context",
+  "measurable_promotion_rule": "Physical source DEV combined gate >=5% versus persistence on all and moving and stationary <=1.10 frozen ME077 0.001701; command must beat exact repeat-last source command. Report all five seeds, direction vs frozen ESWAM003, risk AP/Brier and exact external replay exceptions. No architectural attribution without verified algorithmic compute parity and learned controls.",
+  "source_policy": {
+    "CAL_or_unopened_target_access": false,
+    "source_is_previously_exposed": true,
+    "license_verified_by_publisher": true,
+    "valid_action_alignment_causal_proof": false,
+    "log_end_is_task_success": false,
+    "output_command_label_only": true,
+    "causal_intervention_claim": false
+  },
+  "checkpoints": "research/replay-bundles/ESWAM004/seed-7600X/final.pt",
+  "source_train_fit_qualification": "metadata and normalized state/action computed only from designated FIT episode members; source fingerprint includes entire original five-task FIT 160 archive but eval rows never used for normalization",
+  "guard": "live instantiated whole model pre-first-update and each guarded optimizer step, Git checkpoint + original per-case recorded outcomes and independent zero-fit replay",
+  "strict_no_claims": [
+    "No new independent source, protected CAL/TEST, multi-entity long-delay retrieval or causal action",
+    "No retrospective change to ESWAM003 original scripts/checkpoints/protocol/results",
+    "No fair learned-family architecture winner; FLOP parity not profiled",
+    "No software test or synthetic fixture counts as trained capability",
+    "No post-DEV fit tuning or uncontrolled retest",
+    "CPU wall time measured, not required equal"
+  ]
+}
