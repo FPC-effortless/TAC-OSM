@@ -21,6 +21,7 @@ replay), Edge-Lite (hardware-export/parameter evidence), and Counterfactual
 
 See [architectural plan and historical evidence](research/SIX_VARIANT_ARCHITECTURE_AND_EVIDENCE.md),
 [structured ME/DEV lane index](research/SIX_VARIANT_EXPERIMENT_INDEX.json),
+[peer-reviewed literature and next real experiments](research/SIX_VARIANT_LITERATURE_TO_EXPERIMENTS.md),
 and [variant software tests](tests/test_six_variant_adapters.py). Existing
 ME069–ME073 models/replay bundles retain their original paths and weights.
 ME074's frozen associative-memory lesion was small/inconsistent and does not
