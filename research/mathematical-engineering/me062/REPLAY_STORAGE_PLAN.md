@@ -1,0 +1,14 @@
+# ME062 checkpoint and experiment preservation plan — BEFORE TRAINING
+
+Status: **PLANNED / NOT YET STORAGE-PROVEN**. This is a prospective source-only registration, not a training receipt, completed experiment or real predictive result.
+
+- Branch under review: `research/me062-reliability-woyengi-handoff-2026-10-23` (draft PR #341).
+- Git-native bundle destination: `research/replay-bundles/ME062/`; do not rely on GitHub Actions artifacts, expiring downloads, ignored `results` folders, hash-only notices or external model registries.
+- Proposed first matched comparison: five seeds `62001,62002,62003,62004,62005`, architecture candidates native TAC and matched trained GRU, with 600 updates, batch eight, 64 real prior transitions and 16 future observed action prefixes. **The no-memory hypothesis-specific third arm is not yet registered or resource-matched; do not declare a full three-arm/final study ready.**
+- Prospective minimum bytes: 10 original model+optimizer state `.pt` checkpoints (plus one full-size no-memory checkpoint per seed if properly matched); expect under 20 MiB based on the historical archive but **actual measured size unknown**. Verify repository practical file limits and total upload capacity, including failed/rejected recoverable checkpoints.
+- Freeze and hash all checkpoints **before** accessing source CAL/DEV or a new target, with original train sample-order manifests, loss/optimizer traces, model shapes, FIT identification, source/episode licensing, and current source SHA. Include RNG states if exact resumption claimed. Do not claim exact training resumption without the actual required RNG/sampler states.
+- Publish checkpoint *bytes* on a pinned git commit in this repo immediately after freeze using GitHub token scoped to this repository/branch, or stop and label `NOT_PRESERVED`. Use Git LFS with verified retrievability or smaller checksum-indexed files if practical Git upload limits apply.
+- From an **independent clean checkout**, verify SHA-256, load all required checkpoint states, reproduce heldout predictions/MAE given legally accessible pinned publisher source and report machine/environment tolerances. Source data itself is not to be republished unless lawful redistribution is proved.
+- A source-only FIT preflight may use the GitHub Actions repository token to commit the measured JSON receipt back to this PR branch; a passing push is limited proof of branch write capability, **not proof that all trained-model bytes or LFS quota are available**.
+- Stop on data source/commit/hash mismatch, unfitted active parameters, >1% trainable parameter or supported-operator FLOP gap, zero capacity, inaccessible original source, or inability to preserve weights. Record precise stage and error.
+- `TRAINING=NOT_RUN`, `MODEL_REPLAY=BLOCKED`, `FULL_EVALUATION_REPLAY=BLOCKED`, `SUPERIORITY=UNKNOWN` until actual evidence changes these statuses.
