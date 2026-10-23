@@ -1,5 +1,5 @@
 # TAC-OSM — Unified Master Research Plan
-Version: 2026-10-22 (portfolio-aligned capability revision) | Status: research proposal and evidence register; not an implemented or trained commercial system
+Version: 2026-10-23 (ME060/ME061 trained capability update) | Status: research proposal and evidence register; not a commercially qualified system
 
 ## Mission and constraints
 Build a persistent action-conditioned predictive world model that learns what to remember, where to store it, how to retrieve it, how dynamics evolve, when to refine predictions, and when to correct beliefs. Retain ME-054 native and ME-056 Concept-Swarm as independently testable branches. Do not replace TAC-OSM with an LLM, Transformer, MTSK, or SSM.
@@ -46,9 +46,9 @@ Explicitly model missing actions, delayed/censored feedback, abstention and unkn
 | Priority | Target capability | Evidence as of branch review | Promotion gate |
 | --- | --- | --- | --- |
 | P0 | Accurate persistent world-state belief | **Partial:** recurrent/entity-aware learned state and long-history tests exist; identity transfer and robust retention fail some gates | heldout real entity/time continuity and better calibrated future/error performance versus matched recurrent and structured baselines |
-| P0 | Real action-conditioned factual forecasting | **Partial:** real robot physical/action objectives and randomized observed-action heads trained; no broad persistence/GRU superiority | sealed real factual multi-horizon outcomes, persistence/servo priors and fully resource-audited matched GRU |
+| P0 | Real action-conditioned factual forecasting | **Partial, trained ME061:** source DEV TAC MAE .603894 vs persistence .702952 and GRU .602600; different-task TAC .493206 vs GRU .509535 but persistence .455992. Both superiority gates fail | sealed real factual multi-horizon outcomes, persistence/servo priors and fully resource-audited matched GRU |
 | P0 | Cost-sensitive decision / stop / inspect / abstain | **Partial synthetic only** for learned multi-step action/stop; randomized ME049 chose the same fixed action | verified real intervention/action support, uncertainty-aware decisions, net cost or reward improvement versus best fixed/no-action policies |
-| P0 | Uncertainty and value of information | **Partial:** probabilistic/posterior heads exist; calibration and value-of-information benefit unresolved | out-of-time calibration, selective-risk/coverage, paid-inspection utility and safe abstention on genuine records |
+| P0 | Uncertainty and value of information | **Partial, measured ME061:** positive forecast scales and source split-conformal intervals implemented; nominal 90% whole-episode coverage reaches 85.79% on DEV with broad intervals. Useful uncertainty/inspection value unresolved | out-of-time calibration, selective-risk/coverage, paid-inspection utility and safe abstention on genuine records |
 | P0 | Verified closed-loop belief correction | **Partial engineering:** masked bounded corrections exist, and synthetic learned controllers replay; no qualified real improvement | independent real outcome receipt, strictly delayed pre-feedback update, error reduction without overwriting verified facts |
 | P1 | Entity and relationship representation | **Partial synthetic:** entity-local DEV061 98.5% completion, below structured GRU 99% and public MLP 100%; unfamiliar IDs fragile | unseen-real-entity generalization, interference reduction, true identity continuity |
 | P1 | Decision-preserving selective long-term memory | **Partial:** routing/consolidation mechanisms exist; ME051 old-event gains inconsistent, GRU stronger | controlled real long-history decision/forecast gain and verified forgetting/interference trade-offs |
@@ -210,3 +210,64 @@ TAC improved 1.40% over persistence but was 0.72% worse than GRU, won one of fiv
 The Actions run evaluated heldout data and then failed only while serializing a NumPy seed-win scalar. The committed result was recovered by rescoring hash-verified checkpoints without refitting; the workspace could not independently download the Azure-hosted Actions artifact, so local checkpoint hashes are not presented as a byte-for-byte audit of that archive. See the PR's completed-results receipt and retain this provenance distinction.
 
 **Architecture consequence:** preserve the bounded, causal physical feedback and action-conditioned rollout that now beat persistence. Do not promote the fused anchor as the competitive core. The next complete candidate must improve the *forecasting computation itself*: make the strong servo/physical prior and current observation a direct base prediction, then learn a bounded horizon-conditioned mixture of fast-state, slow-state and associative residual experts with calibrated uncertainty/abstention. Train the entire system against factual multihorizon physical outcomes under matched parameters, authentic windows and profiled FLOPs. Do not spend another stage merely probing ME057's state; use ablations only if the stronger integrated candidate fails.
+
+### 2026-10-23: ME060/ME061 implemented and trained capability tranche
+
+[ME060 draft PR #339](https://github.com/FPC-effortless/TAC-OSM/pull/339) and
+[ME061 draft PR #340](https://github.com/FPC-effortless/TAC-OSM/pull/340) implement
+and train complete native fast/slow/associative physical world models. Twenty
+original fits completed across two integrated recipes, with five paired seeds
+per recipe. All failures remain preserved. This is a two-design development
+program with historical source DEV exposure, not a single selection-free
+independent source test.
+
+ME060 introduced bounded 8x8 associative delta memory with norm projection,
+direct horizon/action-conditioned reads, a SwiGLU residual trajectory decoder
+and positive Laplace scales. Its source DEV TAC MAE .845300 lost to persistence
+.702952. Frozen clothes-hanging TAC .373251 beat GRU .381716 but lost to
+persistence .351410. Both gates failed; merely adding experts and a physical
+prior did not make the system useful.
+
+ME061 retained native state dynamics, added shared causal velocity/innovation
+statistics, initialized forecasts exactly at persistence, learned signed
+reliability-attenuated physical corrections and aligned its primary loss with
+original-unit MAE. This is an integrated architecture/training improvement;
+individual component effects and expert specialization have not been proven.
+
+| ME061 factual physical MAE | Native TAC | GRU | Persistence | Servo |
+|---|---:|---:|---:|---:|
+| Historical source DEV,76 episodes | .603894 | .602600 | .702952 | 1.105522 |
+| Frozen tea-pouring task,80 episodes | .493206 | .509535 | .455992 | 1.421244 |
+
+Source TAC improves 14.09% over persistence and 28.56% over the preceding
+ME060 recipe, with changed capacity/features/loss/seeds disclosed. It still
+loses narrowly to the matched GRU, so the source gate fails. On the separately
+registered different task, TAC beats GRU by 3.20%, wins all five paired seeds,
+and has TAC-minus-GRU episode interval [-.021299,-.012083]. Persistence remains
+8.16% better than TAC, so the transfer gate also fails. Target trajectories
+opened only after models froze; no target fitting or preprocessing adaptation
+occurred. Same robot interface does not establish different-site/operator
+generalization. Intervals condition on fitted seeds and are not multiplicity
+adjusted across this program.
+
+ME061 uncertainty is implemented and measured, not qualified: 90% nominal
+whole-episode intervals attain 85.79% source DEV coverage with mean physical
+width11.116. No observed inspection-cost utility, policy value, causal control,
+iterative reasoning benefit or online weight adaptation was evaluated.
+
+ME061 parameters33,548 vs33,802 and common operator-profile estimates51.22M
+vs50.85M per update pass 1% gates. Mean optimizer CPU18.810 vs7.905 seconds
+is an efficiency limitation. Supported-operator estimates do not certify true
+complete hardware FLOPs. Source error arrays and frozen target results replay
+exactly;978 tests pass. All20 weights/optimizer checkpoints and detailed scores
+are retained in a checksummed workspace archive (PR340 ARTIFACT.md), not
+misrepresented as an independently downloaded GitHub Actions training artifact.
+
+**Next construction objective:** retain ME061 as a development candidate and
+learn reliable residual utility under real task shift, so the integrated
+predictor can preserve persistence when physical/learned corrections are
+unhelpful. Train against authentic future losses and calibration/risk targets;
+require a newly registered target task to beat the strongest practical prior
+as well as matched learned rivals. This is the next capability implementation,
+not a return to an open-ended sequence of memory probes. Cost-sensitive
+actions remain blocked on actual supported action/outcome/cost evidence.
