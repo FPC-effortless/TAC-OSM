@@ -1,9 +1,6 @@
 name: ESWAM003 immutable trained-checkpoint numeric audit, zero refits
+# Original numeric audit frozen; only explicit manual read-only replay is allowed.
 on:
-  pull_request:
-    paths:
-      - "scripts/eswam003_numeric_replay_audit.py"
-      - ".github/workflows/eswam003-replay-audit.yml"
   workflow_dispatch:
 permissions:
   contents: write
