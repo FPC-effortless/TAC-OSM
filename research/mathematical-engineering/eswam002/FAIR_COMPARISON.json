@@ -1,0 +1,94 @@
+{
+  "schema_version": "tac-osm.parity.v2",
+  "study_id": "ESWAM002_EXCHANGE_REAL_ROBOT_DEVELOPMENT",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "First guarded real-data fit of the ES-WAM native fast/slow exchange-structured world model on existing historically exposed original BodenAI robot FIT source; exactly ME076 eligible real cases and per-seed training schedule; jointly score factual next-physical-state MAE/NLL and next recorded qpos behavioral imitation. Exposed DEV only; no causal action choice, no architecture superiority, no independent benefit claim.",
+  "real_world_source": {
+    "name": "BodenAI/RW-RL-HIL-Dataset, frozen revision 9290f5a96dc91ea58256e81d9ce2dd9621890b51, original ME064 registered five authentic tasks previously exposed FIT 160 episodes; CC-BY-4.0 with publisher attribution",
+    "license": "CC-BY-4.0",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+    "observed_real_outcomes": true
+  },
+  "models": [
+    {
+      "seed": 76001,
+      "architecture": "eswam_exchange_world_action_candidate",
+      "trainable_parameters": 100343,
+      "deployed_parameters": 100343
+    },
+    {
+      "seed": 76002,
+      "architecture": "eswam_exchange_world_action_candidate",
+      "trainable_parameters": 100343,
+      "deployed_parameters": 100343
+    },
+    {
+      "seed": 76003,
+      "architecture": "eswam_exchange_world_action_candidate",
+      "trainable_parameters": 100343,
+      "deployed_parameters": 100343
+    },
+    {
+      "seed": 76004,
+      "architecture": "eswam_exchange_world_action_candidate",
+      "trainable_parameters": 100343,
+      "deployed_parameters": 100343
+    },
+    {
+      "seed": 76005,
+      "architecture": "eswam_exchange_world_action_candidate",
+      "trainable_parameters": 100343,
+      "deployed_parameters": 100343
+    }
+  ],
+  "training_budget": {
+    "seeds": [
+      76001,
+      76002,
+      76003,
+      76004,
+      76005
+    ],
+    "updates_per_seed": 160,
+    "batch_size": 12,
+    "observation_history_frames": 8,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0007,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1,
+    "fit_members_per_task": 24,
+    "development_members_per_task": 8,
+    "selection": "frozen SHA256 task/episode lexicographic 24 FIT / 8 previously exposed original FIT-DEV per task",
+    "min_per_episode_scoring_origins": 1,
+    "max_per_episode_scoring_origins": 24,
+    "train_window_sampling": "seeded equal-task task round robin with half outcome-change >0.025 physical mean units and half uniform, within FIT only",
+    "checkpoint": "original final optimizer update only; five seeds, complete checkpoint+optimizer/RNG in Git before scoring replay",
+    "auxiliary_target": "logged future issued action[t] at scoring origin t; training only; not input to the forecast (last input is action[t-1])",
+    "loss": "real next-state normalized Laplace NLL plus 0.05 times recorded next-command SmoothL1 imitation"
+  },
+  "primary_development_measure": "real 14D physical MAE and Laplace NLL, same original 960 episode-disjoint queries/seed, paired persistence, FIT servo, original frozen ME076 per-case checkpoint outputs",
+  "measurable_promotion_rule": "DEV_CAPABILITY_OBSERVED only if actual real source outcomes and source-matched practical baselines improve with all five seed signs; no full compute parity, causal action or independent source claim",
+  "source_policy": {
+    "CAL_or_unopened_target_access": false,
+    "source_is_previously_exposed": true,
+    "license_verified_by_publisher": true,
+    "valid_action_alignment_causal_proof": false,
+    "log_end_is_task_success": false,
+    "output_command_label_only": true,
+    "causal_intervention_claim": false
+  },
+  "checkpoints": "research/replay-bundles/ESWAM002/seed-7600X/final.pt",
+  "source_train_fit_qualification": "metadata and normalized state/action computed only from designated FIT episode members; source fingerprint includes entire original five-task FIT 160 archive but eval rows never used for normalization",
+  "guard": "live full-parameter preflight 100343 before every guarded optimizer step, original Git checkpoint and scorer receipt; compare frozen ME076 on identical 960 factual cases",
+  "strict_no_claims": [
+    "no original ESWAM002 model trained before registration",
+    "no six-model portfolio training",
+    "no architecture winner without exact matched measured training FLOPs and necessary tuning controls",
+    "no autonomous or safe physical action claim",
+    "no independent source holdout",
+    "no synthetic qualification",
+    "no commercialization claim"
+  ]
+}
