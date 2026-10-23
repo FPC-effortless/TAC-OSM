@@ -115,7 +115,7 @@ def choose_training(fit,identified,seed):
     if len(tasks)!=5 or sum(len(v[0]) for v in pools.values())<1000:
         raise RuntimeError("source has insufficient genuine autonomous training windows")
     rng=np.random.default_rng(seed)
-    flat={task:[], for_task:None} if False else {task:[] for task in tasks}
+    flat={task:[] for task in tasks}
     moving={task:[] for task in tasks}
     for (task,ep),(all_times,motion_times) in pools.items():
         flat[task].extend((task,ep,t) for t in all_times)
@@ -241,7 +241,7 @@ def train_one(fit,report,identified,evidence,seed):
       "study_id":"ME076_SYSTEM1_REAL_FIT_ONLY_ONE_STEP_CAPABILITY",
       "seed":seed,"architecture":"system1_native_fast",
       "weights":model.state_dict(),"optimizer":optimizer.state_dict(),
-      "torch_rng_state":torch.get_rng_state(),"numpy_rng_state":np.random.get_state(),
+      "torch_rng_state":torch.get_rng_state(),"numpy_rng_state":{\n        "bit_generator":np.random.get_state()[0],\n        "state":np.random.get_state()[1].tolist(),\n        "pos":int(np.random.get_state()[2]),\n        "has_gauss":int(np.random.get_state()[3]),\n        "cached_gaussian":float(np.random.get_state()[4]),\n      },
       "updates":UPDATES,"original_source":evidence,"training_sampling":fit_stats,
       "observed_state_scale_physical":identified["state_scale"].tolist(),
       "FIT_only_identified":{k:v.tolist() for k,v in identified.items()},
