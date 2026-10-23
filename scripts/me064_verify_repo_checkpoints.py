@@ -71,7 +71,7 @@ def verify():
                          "bytes": path.stat().st_size,
                          "reloaded": True})
     receipt = {
-        "study": "ME064_CAUSAL_REGIME_MIXTURE_REAL_FIT_DEVELOPMENT",
+        "study": "ME064_FIVE_TASK_FIT_LEAVE_ONE_UNTOUCHED_TASK_OUT",
         "execution": "separate clean GitHub Actions job, exact Git branch checkout",
         "checkpoint_byte_hash_and_torch_restore": "PASS",
         "checkpoints_restored": len(verified),
