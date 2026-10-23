@@ -2,6 +2,12 @@
 
 This is a **starter registry in TAC-OSM**, pending creation of a separate cross-project ideas repository. The registry does not claim that proposals were implemented or evaluated.
 
+## Compulsory evidence tier for every capability claim — 2026-10-23
+
+All future CAP/ME/DEV research records must link to the canonical [Capability Progress and Intelligence Evidence Standard](CAPABILITY_PROGRESS_TRUTH_STANDARD.md) and name the fixed `tier`. Merely integrating, training and replaying a model is **not** a measured improvement. Development tasks and previously exposed TEST are not fresh confirmation. For a before/after gain, compare frozen complete systems on the exact same real cases, targets, prediction ages and horizons, retaining primary proper scores, original per-case outputs, statistical uncertainty and all worse outcomes. Independently confirmed improvement additionally needs a genuine unseen real cohort and predefined meaningful effect, no severe risk/calibration regression and independent replay. Mark any tradeoff honestly; never invent a scalar “intelligence increase”. Comparative architecture winners require separate matched parameter/data/exposure/compute evidence, while single-architecture capability development may proceed without default ablations.
+
+Every new registry entry records `what_improved`, `what_regressed`, `what_is_unknown`, case counts, frozen old/new model identities, result tier, investor/customer meaning or `NOT_MEASURED`. Historical ME071–ME074 interpretation is specified in the canonical policy without modifying their actual checkpoints or score receipts.
+
 ## Compulsory runtime size-policy integration — 2026-10-23
 
 Before the next capability fit, integrate the universal live-model guard from
