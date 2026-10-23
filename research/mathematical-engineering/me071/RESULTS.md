@@ -75,8 +75,8 @@ priors were recomputed from visible events. This is a posthoc missing-input
 stress check, not evidence that TAC uniquely reconstructs hidden facts or
 that a GRU would fail. See STREAMING_PROBES.json.
 
-Nine new mathematical/causality/gradient/calibration tests pass. Full repository
-regression: **1,023 tests passed**. The inherited frozen documentation count
+Ten new mathematical/causality/gradient/calibration tests pass. Full repository
+regression: **1,024 tests passed**. The inherited frozen documentation count
 was synchronized after the initial count-only failure.
 
 ## Preservation and scope
@@ -109,6 +109,15 @@ workflow. Replay does not retrain weights or refit calibration.
 **REPO_REPLAY=PASS:** [GitHub run 39929979913](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39929979913)
 restored all five originals and recomputed 1,835 case-forecast vectors and
 all raw/calibrated REPORT metrics under the preregistered numerical contract.
+A subsequent runner failed while comparing regenerated FIT statistics with
+the checkpoint's original preprocessing, before prediction scoring. That
+failure is retained in PREPROCESSING_REPLAY_FAILURE.log. The loader now uses
+the exact Git-frozen preprocessing, verifies its checksum and vocabulary/source
+identity, and never substitutes recomputed numeric priors. Original model
+weights, calibrators, forecast arrays and tolerances are unchanged.
+[Post-repair run 39934866901](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39934866901)
+passed complete five-model original-array and real-score replay. Both the
+earlier receipt and failure are retained in the repository.
 
 This cycle delivers a more complete native predictive architecture and a
 measured NLL improvement from its fitted probability interface. Useful tight
