@@ -99,8 +99,13 @@ original metric JSON also matched. [Local independent receipt](../../replay-bund
 **External GitHub strict replay FAILED**, first on native78001interval_score in
 [run39999894647](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39999894647).
 No tolerance, original model, original scores or training/scoring source changed.
-A read-only complete cross-CPU drift audit is tracked separately; audit completion
-must not be called a successful strict replay. No all-platform green claim.
+The [complete external audit](../../replay-bundles/ME078/GITHUB_CROSS_CPU_AUDIT.json)
+restored all15original models and checked every field of42,660forecasts. All
+predictions, targets, MAE, risk probabilities/Brier, interval endpoints/widths
+and coverage meet the original tolerance. **54of42,660derived interval scores**
+violate it, maximum absolute interval-score drift4.57764e-5. Full strict replay
+stays FAIL. Audit completion is not a successful strict contract; no threshold
+was widened, original byte changed or exception hidden.
 
 1152local regression tests PASS; scientific preflight/final parameter/data/
 exposure/estimated-compute gates PASS. Reproducibility is distinct from utility,
