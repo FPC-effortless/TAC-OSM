@@ -58,7 +58,7 @@ def test_cache_invalidates_weights_buffers_and_mode():
         with pytest.raises(RuntimeError,match='model changed'):cache.step('a',1,x,x)
 
 
-def test_chunk_boundary_preserves_outputs_and_gradients():
+def test_chunk_boundary_preserves_outputs_and_state():
     _,m=pair();x=torch.randn(2,9,14,dtype=torch.double)*.01;a=torch.randn_like(x)
     full,state=m(x,a,return_state=True)
     left,carried=m(x[:,:4],a[:,:4],return_state=True)
