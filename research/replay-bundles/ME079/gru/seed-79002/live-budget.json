@@ -1,0 +1,184 @@
+{
+  "architecture": "gru",
+  "checkpoints": [
+    {
+      "deployed_parameters": 100536,
+      "parameter_values_sha256": "b202d54288ac9ae6efc0fd7e926ebe2ddf15992c95092fd998abd801a52269f6",
+      "path": "research/replay-bundles/ME079/gru/seed-79002/final.pt",
+      "sha256": "ee5f18c188f5311183525a9dc021ccd647997ac5d4749a850b64a8ddb02f7e86",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 2048,
+      "trainable_parameters": 100536
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 100536,
+    "trainable_parameters": 100536
+  },
+  "last_pre_update": {
+    "deployed_parameters": 100536,
+    "successful_optimizer_steps": 2047,
+    "trainable_parameters": 100536
+  },
+  "manifest_path": "/workspace/tac-me079/research/mathematical-engineering/me079/FAIR_COMPARISON.json",
+  "manifest_sha256": "d44a2b9fbd5fa189d860f7fd2bc2341131224fad14f27151c3d1f4e0e6f628f2",
+  "model_class": "tac_osm.variants.risk_shrinkage_world.ShrinkageWorld",
+  "preflight": {
+    "deployed_parameters": 100536,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "shrinkage_scale",
+        "numel": 42,
+        "requires_grad": true,
+        "shape": [
+          3,
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 3648,
+        "requires_grad": true,
+        "shape": [
+          64,
+          57
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.input.weight",
+        "numel": 10752,
+        "requires_grad": true,
+        "shape": [
+          168,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.input.bias",
+        "numel": 168,
+        "requires_grad": true,
+        "shape": [
+          168
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.hidden.weight",
+        "numel": 9408,
+        "requires_grad": true,
+        "shape": [
+          168,
+          56
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.hidden.bias",
+        "numel": 168,
+        "requires_grad": true,
+        "shape": [
+          168
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.weight",
+        "numel": 3584,
+        "requires_grad": true,
+        "shape": [
+          64,
+          56
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.weight",
+        "numel": 41820,
+        "requires_grad": true,
+        "shape": [
+          246,
+          170
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.bias",
+        "numel": 246,
+        "requires_grad": true,
+        "shape": [
+          246
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.weight",
+        "numel": 26199,
+        "requires_grad": true,
+        "shape": [
+          213,
+          123
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.bias",
+        "numel": 213,
+        "requires_grad": true,
+        "shape": [
+          213
+        ]
+      }
+    ],
+    "trainable_parameters": 100536
+  },
+  "run_id": "fb06310783744b6099dc7aaeb7002717",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 79002,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME079_RISK_SHRINKAGE_MULTI_HORIZON_COMPARISON",
+  "successful_optimizer_steps": 2048
+}

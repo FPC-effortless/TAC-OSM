@@ -1,0 +1,203 @@
+{
+  "architecture": "native",
+  "checkpoints": [
+    {
+      "deployed_parameters": 100200,
+      "parameter_values_sha256": "0606abbced52f93bd889b6685ab34d8dd5eaf1b7fda34617159be194cd99265e",
+      "path": "research/replay-bundles/ME079/native/seed-79002/final.pt",
+      "sha256": "15cf1e8f2ab9b0edd431ebc7968c3e408194e8d30311e06403ab489b27975ae8",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 2048,
+      "trainable_parameters": 100200
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 100200,
+    "trainable_parameters": 100200
+  },
+  "last_pre_update": {
+    "deployed_parameters": 100200,
+    "successful_optimizer_steps": 2047,
+    "trainable_parameters": 100200
+  },
+  "manifest_path": "/workspace/tac-me079/research/mathematical-engineering/me079/FAIR_COMPARISON.json",
+  "manifest_sha256": "d44a2b9fbd5fa189d860f7fd2bc2341131224fad14f27151c3d1f4e0e6f628f2",
+  "model_class": "tac_osm.variants.risk_shrinkage_world.ShrinkageWorld",
+  "preflight": {
+    "deployed_parameters": 100200,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "shrinkage_scale",
+        "numel": 42,
+        "requires_grad": true,
+        "shape": [
+          3,
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 3648,
+        "requires_grad": true,
+        "shape": [
+          64,
+          57
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.weight",
+        "numel": 8192,
+        "requires_grad": true,
+        "shape": [
+          64,
+          128
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.weight",
+        "numel": 1152,
+        "requires_grad": true,
+        "shape": [
+          18,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.bias",
+        "numel": 18,
+        "requires_grad": true,
+        "shape": [
+          18
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.weight",
+        "numel": 4608,
+        "requires_grad": true,
+        "shape": [
+          64,
+          72
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.weight",
+        "numel": 45220,
+        "requires_grad": true,
+        "shape": [
+          266,
+          170
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.bias",
+        "numel": 266,
+        "requires_grad": true,
+        "shape": [
+          266
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.weight",
+        "numel": 28329,
+        "requires_grad": true,
+        "shape": [
+          213,
+          133
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.bias",
+        "numel": 213,
+        "requires_grad": true,
+        "shape": [
+          213
+        ]
+      }
+    ],
+    "trainable_parameters": 100200
+  },
+  "run_id": "f5418efe3fb44213942ce242f11b9cc1",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 79002,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME079_RISK_SHRINKAGE_MULTI_HORIZON_COMPARISON",
+  "successful_optimizer_steps": 2048
+}
