@@ -24,3 +24,9 @@ jobs:
           if [ -f research/replay-bundles/ME069/FAIR_COMPARISON_FINAL.json ]; then
             python scripts/validate_research_parity.py --manifest research/replay-bundles/ME069/FAIR_COMPARISON_FINAL.json --phase final
           fi
+      - name: Restore original Git checkpoints and recompute real held-out scores
+        run: |
+          if [ -f research/replay-bundles/ME069/REAL_EVALUATION.json ]; then
+            PYTHONPATH=src:. python scripts/me069_verify_workflow.py --phase restore --cache /tmp/me069-source
+            PYTHONPATH=src:. python scripts/me069_verify_workflow.py --phase replay --cache /tmp/me069-source
+          fi
