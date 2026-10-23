@@ -20,6 +20,44 @@ Build a persistent action-conditioned predictive world model that learns what to
 
 **Scientific purpose:** The 100k budget is a controlled research scale, NOT evidence that growing a model from 37k to 100k by itself improves intelligence. Continue to prioritize real-state prediction, calibrated uncertainty, action-conditioned physical forecasting, hierarchical persistent memory, verified outcome correction and realistic decision value. Interpret performance only against strong, appropriately matched 100k neural controls and *unmodified* persistence/servo/analytical baselines on genuine external outcomes with full original Git-owned model bytes and independent replay. The upcoming predictive-motion model must start at this budget and demonstrate a benefit over persistence and other matched controls before consuming the final unopened robot task.
 
+## Live parameter-enforcement update — 2026-10-23
+
+The review found declaration-only gaps in capability-development and deferred-source
+registration, plus historical-ID exemptions. [Draft PR #354](https://github.com/FPC-effortless/TAC-OSM/pull/354)
+closes these in the default-branch implementation; [draft PR #355](https://github.com/FPC-effortless/TAC-OSM/pull/355)
+applies the same enforcement to ME073's newer research entrypoints. **Both are
+unmerged proposals: enforcement is not claimed to be integrated everywhere or
+protected by mandatory branch settings.** Do not start another fit until its
+actual branch has the guard and its complete preregistration passes.
+
+The shared `src/tac_osm/parameter_budget.py` checks all registration routes and
+the actual whole model immediately before each optimizer update. It records
+trainable/deployed counts, optimizer coverage, arm/seed identity, named parameter
+inventory and the frozen registration digest before update zero. Final validation
+reads the original checkpoint tensors and their runtime receipt. A standalone
+`--model-parameters` invocation is declaration checking, **not** evidence that a
+live model was checked. Both counts must be 95k–105k; comparisons retain the
+independent 1% requirement and authentic data/exposure/training-compute parity.
+CPU time remains efficiency metadata, including for an inherited v2 schema label.
+
+No new fit is exempt because its study number is old. Immutable historical
+replay requires explicit pinned registration/checkpoint provenance, authorizes
+no optimizer update, and never retroactively qualifies old training. Original
+ME071/ME072/ME073 registrations, scores and checkpoint bytes remain unchanged.
+The ME073 overlay restores original code for replay and blocks all optimizer
+updates in that process. Existing unsupported legacy fitting lanes are manual
+opt-in and still face the live gate; ordinary software/policy CI remains automatic.
+
+Local verification: **979 tests** on the default-branch proposal (924 before the
+change), **1,103 tests** on the ME073 overlay (1,043 before); guard coverage audits
+passed across 88/164 Python files respectively. Different counts reflect different
+branch suites. Six immutable registrations and 15 distinct original checkpoints
+passed the Git-byte provenance audit. GitHub's latest PR354 root and scientific
+gates passed after a Torch-only hashing portability fix; other workflow and PR355
+statuses must be checked at their exact heads before claiming complete green CI.
+These are software-enforcement results, **not new trained-model capability evidence**.
+See [the enforcement contract](https://github.com/FPC-effortless/TAC-OSM/blob/governance/universal-live-parameter-budget-2026-10-23/research/governance/LIVE_PARAMETER_ENFORCEMENT.md).
+
 ## Completed integrated architecture: ME073 native autoregressive trajectories
 
 [ME073 draft PR #353](https://github.com/FPC-effortless/TAC-OSM/pull/353) retains native fast64/slow64/8x8 associative observed state and generates successive activity/time proposals using separate imagined copies. First-record context initializes the state; untimed requested-amount/registration metadata remains excluded. No SSM replacement, fixed72h cap or lowest-predicted-variance hard router.

@@ -2,6 +2,19 @@
 
 This is a **starter registry in TAC-OSM**, pending creation of a separate cross-project ideas repository. The registry does not claim that proposals were implemented or evaluated.
 
+## Compulsory runtime size-policy integration — 2026-10-23
+
+Before the next capability fit, integrate the universal live-model guard from
+[draft #354](https://github.com/FPC-effortless/TAC-OSM/pull/354) or its
+[ME073 overlay #355](https://github.com/FPC-effortless/TAC-OSM/pull/355).
+Both remain unmerged; an old study ID or declared manifest count cannot authorize
+new fitting. Capability development and deferred-source studies require the same
+95k–105k live trainable/deployed counts, pre-update runtime receipt and original
+checkpoint verification. Fair comparisons retain the independent 1% and real
+data/compute conditions; CPU is efficiency only. Preserve original models and
+registrations through explicit immutable replay, never retroactive attestations.
+This closes software-governance gaps; it adds no predictive capability claim.
+
 ## Completed native trajectory capability: ME073
 
 **ME073 trained and independently replayed, 2026-10-23:** five original99,781-parameter models, six authentic FIT epochs, shared eight-step native imagined-state rollout and activity-conditional bounded incremental clocks. At six observations, conditional1/2/4/8-event accuracy81.85/68.83/62.11/53.44% over367/326/275/189 actual future records; one-step NLL.372472, proper interval score18.97h, nominal90% coverage85.99%. **Early goal failed:** two-observation accuracy40% in every seed and NLL1.416298; distant8-step probability scoring regresses relative to the historical ME072 recipe. Age16/h8 mean width636.94h remains broad. Different budgets/objectives/inference prevent an architecture-winner claim. Original checkpoints frozen100671c7 before scores190c2bc8; [independent replay39948180370](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39948180370) restored all five and recomputed8,495 case/query vectors,33,980 horizon marginals and67,960 representative weighted paths plus actual scores. These are repeated forecasts over925 exposed DEV cases. See [ME073 results](https://github.com/FPC-effortless/TAC-OSM/blob/research/me073-autoregressive-native-trajectories-2026-10-23/research/mathematical-engineering/me073/RESULTS.md). Original TEST remains unscored by ME073; no external source/customer, long-memory, causal action or production qualification.

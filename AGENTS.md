@@ -60,3 +60,14 @@ Before claiming **any** locally trained or externally trained (GitHub Actions/cl
 ## Binding 100k trained-model scale (effective 2026-10-23)
 
 For EVERY future trained TAC-OSM neural model or comparator (including event/robot models, one-off fits and each seed), require **100,000 trainable parameters ±5% inclusive (95,000–105,000)** AND the same band for all deployed learned model parameters. For matched architecture studies, independently require **≤1% relative parameter gap between every trained arm** on exactly matching real data/budget. Count ALL active encoder, fast/slow/associative memory, concept, shared-weight decoder, routing, action, forecast, uncertainty and policy heads; no dummy padding or bypass with a frozen pretrained encoder. Measure the actual instantiated model **BEFORE the first optimizer step** and remeasure the actual final model at the postfit gate. Use `scripts/validate_research_parity.py --manifest ... --phase preflight` and `--phase final`, or `--model-parameters COUNT --deployed-parameters COUNT` for a standalone prefit. For solo training use `study_type: single_model_training`; prospective diagnostics are explicitly no-fit. If outside the band or missing receipts, DO NOT TRAIN. Do not relax the matched data, training compute, checkpoints/replay or real-world evaluation obligations, and do not require equal CPU time. Historical unchanged ME001–ME072/DEV001–DEV061 experiments and their existing model bytes remain as originally measured; any NEW trained fit belongs to this prospective rule regardless of recycled old code or paths. See rule 12 in `research/REAL-WORLD-EVIDENCE-RULES.md`.
+
+
+## Live 100k enforcement integration status (2026-10-23)
+
+The default implementation is proposed in draft PR #354 and the ME073 overlay
+in draft PR #355. Neither is merged. Before any new fit on the actual working
+branch, require the shared whole-model optimizer guard, pre-update receipt and
+postfit checkpoint verification described in the master plan. Manifest-only
+counts and recycled historical IDs never grant an exemption. Preserve original
+historical evidence using explicit pinned replay; never fill in proof after the
+fact. CPU time remains an efficiency outcome, not a parity veto.
