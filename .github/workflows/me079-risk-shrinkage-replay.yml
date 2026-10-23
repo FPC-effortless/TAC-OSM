@@ -34,3 +34,6 @@ jobs:
           from pathlib import Path
           print('ME079_EXTERNAL_REPLAY='+Path('research/replay-bundles/ME079/INDEPENDENT_REPLAY.json').read_text())
           PY
+      - name: Read-only full numerical audit (strict failure remains failed)
+        if: always() && hashFiles('research/replay-bundles/ME079/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/me078_cross_cpu_audit.py --study me079 --cache "${{ runner.temp }}/me079-source"
