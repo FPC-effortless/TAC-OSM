@@ -1,0 +1,32 @@
+name: TAC-OSM ME075 native System1 and gated delta engineering
+on:
+  push:
+    branches: [research/me075-system1-native-gated-delta-2026-10-23]
+    paths:
+      - "src/tac_osm/variants/system1_native.py"
+      - "src/tac_osm/variants/gated_delta_memory.py"
+      - "tests/test_me075_system1_and_gated_delta.py"
+      - ".github/workflows/me075-system1-engineering.yml"
+  pull_request:
+    paths:
+      - "src/tac_osm/variants/system1_native.py"
+      - "src/tac_osm/variants/gated_delta_memory.py"
+      - "tests/test_me075_system1_and_gated_delta.py"
+      - ".github/workflows/me075-system1-engineering.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  engineering-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pytest==9.1.1
+      - run: python -m pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - name: System1 100k parameter and gated-delta numerical-only tests
+        run: PYTHONPATH=src:. python -m pytest -q tests/test_me075_system1_and_gated_delta.py
+      - name: Compile source and verify no experimental fit was invoked
+        run: python -m py_compile src/tac_osm/variants/system1_native.py src/tac_osm/variants/gated_delta_memory.py
