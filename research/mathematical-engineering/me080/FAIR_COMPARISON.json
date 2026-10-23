@@ -1,0 +1,206 @@
+{
+  "capability_to_value": {
+    "business_stage": "research only; no actions, deployment or commercial qualification",
+    "customer_value": "UNKNOWN",
+    "external_pilot": "NOT_MEASURED",
+    "operator_question": "Could a read-only physical forecast help a human notice genuine movement without jitter?",
+    "skill": "quiet/movement-aware short physical future forecasts with explicit reusable native state"
+  },
+  "evaluation": {
+    "all_eligible_origins": true,
+    "decision": "DEV_GAIN only if every primary+guardrail passes and paired episode bootstrap95%upper(new-ME079 H1)<0, >=4/5seed improves ME079; otherwise honest MIXED_TRADEOFF/REGRESSION/INCONCLUSIVE. One recipe only; no additional fits under registration.",
+    "exposure": "EXPOSED_DEV",
+    "guardrails": "H4/H16mean MAE <=1.05*ME079 native; no task H1>1.10*persistence; nominal90%coordinate coverage >=.85 and proper interval score <=ME079 at each horizon",
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "models_Git_frozen_before_REPORT": true,
+    "numeric": "float32 neural parameters, float64 mixture quantile inversion40bisections and ALL scalar scoring; raw rtol1e-5/atol1e-6 frozen prospectively; no old-study tolerance edits",
+    "old_frozen_full_models": [
+      "ME077",
+      "ME078",
+      "ME079"
+    ],
+    "primary": "H1mean physical MAE <=0.95*ME079 native, conditional moving H1 <=1.05*ME078 native, stationary H1 <=1.10*ME077 native; all simultaneous",
+    "protected_tissue_box_opened": false,
+    "queries": {
+      "REPORT_episode_count": 40,
+      "REPORT_selected_query_sha256": "de074a324739ec05959baac263a51e0e0c3eb597084ba2efde9af4e5d9a3c771",
+      "REPORT_selected_real_queries": 960,
+      "original_REPORT_all_autonomous_windows": 67797
+    },
+    "runtime_scope": "functional step/chunk equivalence and actual stored cache; trained/scored eight-frame windows only; arbitrary-history accuracy NOT established",
+    "sealed_TEST_opened": false,
+    "statistics": "5000paired episode-cluster bootstrap, fixedseed80080, conditional on fixed fivefits; all40episode clusters; no independent-source promotion"
+  },
+  "implementation_sha256": {
+    "scripts/me057_train_fused_anchor_robot.py": "f086f1daa27060695be4d17ac7d98b285bb07d410f18ddcbaf5ecb2fccbf613e",
+    "scripts/me064_mixed_real_fit.py": "d17695f761b2788074aaf2402a99dc49dcb15c4e28ed78c44b42b26cce4f33dc",
+    "scripts/me076_train_system1_real.py": "e3910ec1c42fe80b5300db6d9bb789ef4d11ee38e6f2b20a607d0adbf5f18767",
+    "scripts/me079_train_world.py": "b1ba79af549c0056c49634714294e7aff2c681b40f5d2d128a78cac1f3450f1b",
+    "scripts/me080_train_world.py": "39ef0de1ce6c38389e71c641edcad42fbf7127cc8c7780e607d0e0c4ca145a3a",
+    "scripts/validate_research_parity.py": "ec690df6d0c2a4f13aeceb3804bfc974cc58189c66ada923fe0006fd39e829ff",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "src/tac_osm/variants/kinematic_world.py": "a5a252c4dccba1843e4beb4cec112a60804c6033513553776d2f3064d73728d1",
+    "src/tac_osm/variants/streaming_mixture_world.py": "23d10cb5258528c2e56e6d4a72197fbd0bea4b5c02290f1c63db8d74eb3f6539"
+  },
+  "literature": [
+    {
+      "paper": "Mixture Density Networks, Bishop1994",
+      "reuse": "conditional mixture likelihood and distributional predictions",
+      "url": "https://publications.aston.ac.uk/id/eprint/373/"
+    },
+    {
+      "paper": "Gated Delta Networks",
+      "reuse": "gated error-correcting associative updates, not invented here",
+      "url": "https://arxiv.org/abs/2412.06464"
+    },
+    {
+      "paper": "R2D2, ICLR2019",
+      "reuse": "explicit recurrent state and state staleness cautions; no claim this eight-frame study proves long retention",
+      "url": "https://willdabney.com/publication/r2d2/"
+    },
+    {
+      "paper": "Mamba-2/SSD, ICML2024",
+      "reuse": "hardware-aware stateful computation motivation; native nonlinear TAC is NOT a linear scan",
+      "url": "https://proceedings.mlr.press/v235/dao24a.html"
+    }
+  ],
+  "models": [
+    {
+      "architecture": "native_streaming_mixture",
+      "deployed_parameters": 99816,
+      "seed": 80001,
+      "trainable_parameters": 99816
+    },
+    {
+      "architecture": "native_streaming_mixture",
+      "deployed_parameters": 99816,
+      "seed": 80002,
+      "trainable_parameters": 99816
+    },
+    {
+      "architecture": "native_streaming_mixture",
+      "deployed_parameters": 99816,
+      "seed": 80003,
+      "trainable_parameters": 99816
+    },
+    {
+      "architecture": "native_streaming_mixture",
+      "deployed_parameters": 99816,
+      "seed": 80004,
+      "trainable_parameters": 99816
+    },
+    {
+      "architecture": "native_streaming_mixture",
+      "deployed_parameters": 99816,
+      "seed": 80005,
+      "trainable_parameters": 99816
+    }
+  ],
+  "no_architecture_superiority_claim": true,
+  "real_world_source": {
+    "license": "CC-BY-4.0; BodenAI and RW-RL attribution",
+    "name": "BodenAI/RW-RL-HIL-Dataset original160 episode subset; revision9290f5a96dc91ea58256e81d9ce2dd9621890b51;120FIT/40previously exposedREPORT",
+    "observed_real_outcomes": true,
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "registered_before_first_fit": true,
+  "schedules": {
+    "80001": {
+      "importance_sha256": "3db4f80a74373cfe5f4ac2b43bf50fa45394441c8c1bfc3b3123cabd7a954dab",
+      "sample_order_sha256": "77325dc3e80eb365782369c5b92615dea254bf528f4c7108e0a8a254f1665590",
+      "sampling": "50%uniform+50%moving, exact balance-heuristic importance to natural within-task distribution",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07875289532703408,
+        "fold_and_stack_scattered_clothes_neatly": 0.10357912009024715,
+        "hang_clothes_on_drying_rack": 0.08928571428571429,
+        "line_trash_can_with_trash_bag": 0.13198981756470088,
+        "pour_water_from_kettle_to_make_tea": 0.06637095985127686
+      },
+      "unique_FIT_eligible_origins": 190911
+    },
+    "80002": {
+      "importance_sha256": "28776889cf1edee633363f21ece59e8709f7db6564042b9eeb2f45c91a30ab78",
+      "sample_order_sha256": "dad9be35f176e31b22cf327914f60b18a4beb87f28549011bf3331a1a5b01932",
+      "sampling": "50%uniform+50%moving, exact balance-heuristic importance to natural within-task distribution",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07875289532703408,
+        "fold_and_stack_scattered_clothes_neatly": 0.10357912009024715,
+        "hang_clothes_on_drying_rack": 0.08928571428571429,
+        "line_trash_can_with_trash_bag": 0.13198981756470088,
+        "pour_water_from_kettle_to_make_tea": 0.06637095985127686
+      },
+      "unique_FIT_eligible_origins": 190911
+    },
+    "80003": {
+      "importance_sha256": "5d4eae6ee51180ded9c47c144f1aec13a21d31781f8e360e805b995330906e3b",
+      "sample_order_sha256": "862fad181e7ffec006d2f0230ef0ef9d4b2faa02a11019437b456f2fa20ef720",
+      "sampling": "50%uniform+50%moving, exact balance-heuristic importance to natural within-task distribution",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07875289532703408,
+        "fold_and_stack_scattered_clothes_neatly": 0.10357912009024715,
+        "hang_clothes_on_drying_rack": 0.08928571428571429,
+        "line_trash_can_with_trash_bag": 0.13198981756470088,
+        "pour_water_from_kettle_to_make_tea": 0.06637095985127686
+      },
+      "unique_FIT_eligible_origins": 190911
+    },
+    "80004": {
+      "importance_sha256": "d4624ffc17d5f8f364f12c28bf4cd097ce7c1a6bd57087439ac194d51caf2afa",
+      "sample_order_sha256": "09106bd29323a4b36bdc3b6e06a086d79086bad1bb09a4ebc7a96c70894bd3f3",
+      "sampling": "50%uniform+50%moving, exact balance-heuristic importance to natural within-task distribution",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07875289532703408,
+        "fold_and_stack_scattered_clothes_neatly": 0.10357912009024715,
+        "hang_clothes_on_drying_rack": 0.08928571428571429,
+        "line_trash_can_with_trash_bag": 0.13198981756470088,
+        "pour_water_from_kettle_to_make_tea": 0.06637095985127686
+      },
+      "unique_FIT_eligible_origins": 190911
+    },
+    "80005": {
+      "importance_sha256": "78ab57662037cf7d7e1ee20faa3ad84a0fb983527f8887fa9993f38ee232f760",
+      "sample_order_sha256": "25c4d79316e96801221d2dea9b9c8eb10d7a382bde237e3360863cf648ad7482",
+      "sampling": "50%uniform+50%moving, exact balance-heuristic importance to natural within-task distribution",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07875289532703408,
+        "fold_and_stack_scattered_clothes_neatly": 0.10357912009024715,
+        "hang_clothes_on_drying_rack": 0.08928571428571429,
+        "line_trash_can_with_trash_bag": 0.13198981756470088,
+        "pour_water_from_kettle_to_make_tea": 0.06637095985127686
+      },
+      "unique_FIT_eligible_origins": 190911
+    }
+  },
+  "schema_version": "tac-osm.parity.v2",
+  "source_qualification_sha256": "4e5bbe6c7200e12776aea5f9b2b5a0764da831b8ad6be8bce4cc336c832531cf",
+  "study_id": "ME080_STREAMING_MIXTURE_NATIVE_CAPABILITY",
+  "study_type": "single_model_training",
+  "training_budget": {
+    "batch_size": 24,
+    "compute": "actual2048updates/49152windows/393216observed prefix presentations per seed; NO FLOP-matched comparison or exact hardware FLOP claim",
+    "dense_prefixes": 8,
+    "history": 8,
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "loss": "proper coordinate-wise two-Laplace mixture physical NLL +0.2global factual motion BCE, all eligible dense prefixes/horizons; natural target importance weights",
+    "optimizer": "AdamW lr0.0007 wd0.0001 clip1",
+    "sampling": "same nominal 50%uniform+50%movement proposal and balance importance as ME078/079; finite task round-robin counts differ by at most1/component",
+    "seeds": [
+      80001,
+      80002,
+      80003,
+      80004,
+      80005
+    ],
+    "selection": "final only; no sweep/restart/warm start; five cold starts",
+    "updates": 2048
+  },
+  "unresolved_capability": "Can an integrated likelihood-trained native predictive state combine quiet fidelity with meaningful actual-motion and multihorizon forecasts, while sharing reusable causal computation?"
+}

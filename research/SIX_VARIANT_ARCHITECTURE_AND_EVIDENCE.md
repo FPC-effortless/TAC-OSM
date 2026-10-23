@@ -156,3 +156,7 @@ six-lane model weights created by this refactor.
 ## ME078/ME079 trained physical capability update
 
 Two integrated recipes,30original real fits including matched GRU/causal-attention controls. Native motion forecasting and factual movement discrimination improved on exposed source data. Stationary preservation and cross-architecture superiority remain failed; independent transfer/control/customer value unqualified. Read the original [ME078 results](mathematical-engineering/me078/RESULTS.md) and [ME079 results](mathematical-engineering/me079/RESULTS.md), with every model/optimizer/RNG checkpoint in Git. Both local clean-clone replays pass; both external strict replays retain small derived interval-score exceptions. These are physical research models, not six deployed domain engines or Woyengi authorization.
+
+## ME080 native reusable-state continuation (draftPR371)
+
+Five complete99,816parameter native fits on the same120FIT/40exposedREPORT source. A two-Laplace coordinate distribution supplies consistent medians/quantiles; functional fast/slow/8×8state enables chunk/step reuse. H1MAE.059393andH16.883994improve vsME079; H4.219619and movingH1.533420regress. StationaryH1.013938is better thanME079but8.19timesME077. Full gateFAIL/MIXED_TRADEOFF. Original Git checkpoint+optimizer+RNG per seed and14,220forecast records preserved; local independent replayPASS, strict external lower-quantile replayFAIL. No long-history predictive, policy/control, independent transfer or customer qualification; no more fits underME080.

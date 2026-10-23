@@ -1,0 +1,119 @@
+{
+  "architecture_superiority_claim": false,
+  "guardrails": [
+    {
+      "metric": "H16_MAEwithin5pct_ME079",
+      "status": "PASS"
+    },
+    {
+      "metric": "H16_coverage_at_least85pct",
+      "status": "PASS"
+    },
+    {
+      "metric": "H16_interval_score_no_worse_ME079",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1_coverage_at_least85pct",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1_interval_score_no_worse_ME079",
+      "status": "FAIL"
+    },
+    {
+      "metric": "H1at_least5pct_below_ME079",
+      "status": "FAIL"
+    },
+    {
+      "metric": "H1moving_within5pct_ME078",
+      "status": "FAIL"
+    },
+    {
+      "metric": "H1stationary_within10pct_ME077",
+      "status": "FAIL"
+    },
+    {
+      "metric": "H4_MAEwithin5pct_ME079",
+      "status": "FAIL"
+    },
+    {
+      "metric": "H4_coverage_at_least85pct",
+      "status": "PASS"
+    },
+    {
+      "metric": "H4_interval_score_no_worse_ME079",
+      "status": "FAIL"
+    },
+    {
+      "metric": "at_least4of5paired_seed_H1wins",
+      "status": "PASS"
+    },
+    {
+      "metric": "no_task_H1over10pct_persistence",
+      "status": "PASS"
+    },
+    {
+      "metric": "paired_episode95CI_upper_below0",
+      "status": "FAIL"
+    }
+  ],
+  "independent_real_distributions": 0,
+  "integrity": {
+    "external_full_census_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40006593903",
+    "external_replay_status": "FAIL:3lower_quantile_records_and1interval_score; all_other_fields_PASS_original_contract",
+    "git_original_checkpoints": true,
+    "independent_audit_run_url": "freshremoteclone ea6cdd5e; external status separately in ARTIFACT.md",
+    "independent_clean_replay": true,
+    "independent_raw_case_audit": true,
+    "raw_case_score_artifact_path": "research/replay-bundles/ME080",
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true
+  },
+  "model": {
+    "candidate_sha256": "0b62cc22fff71d01635d7952e7d508c06cc0841026f9c1e2d1c09e00ee92df8c",
+    "deployed_parameters": 99816,
+    "prior_sha256": "f8ab8c3c130f4513c10cf6207994d4ee1410d07698da8f3db0d0cdcc5522e9fb",
+    "scope": "first seed identities; all5originals indexed in repository, no multi-model deployment",
+    "trainable_parameters": 99816,
+    "training_exposure_and_compute_note": "new single native recipe with changed objective; no matched-compute/architecture winner"
+  },
+  "operator_value": "NOT_MEASURED",
+  "practical_reference_scored": true,
+  "primary_comparison": {
+    "beneficial_seed_count": 4,
+    "candidate": 0.05939313373396018,
+    "direction": "lower_is_better",
+    "minimum_useful_gain": 0.0030297326505714186,
+    "name": "H1same actual query physical MAE vs frozenME079",
+    "paired_case_cluster_95ci_new_minus_old": [
+      -0.009942166342028259,
+      0.006326554202696993
+    ],
+    "paired_seed_count": 5,
+    "prior": 0.06059465301142837
+  },
+  "schema_version": "tac-osm.capability-progress.v1",
+  "source": {
+    "authentic_real_data": true,
+    "eligible_ids_sha256": "de074a324739ec05959baac263a51e0e0c3eb597084ba2efde9af4e5d9a3c771",
+    "exposure": "EXPOSED_DEV",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "study_id": "ME080_STREAMING_MIXTURE_NATIVE_CAPABILITY",
+  "task": {
+    "actual_future_targets": 40,
+    "actual_query_origins": 960,
+    "count_unit": "episode clusters; source operator/session independence unqualified",
+    "future_query_target_pairs": 2844,
+    "independent_cases": 40,
+    "prediction_time_validated": true,
+    "query_and_horizon": "same960H1origins;956H4and928H16observed future pairs",
+    "same_case_ids_target_horizon_metric": true,
+    "target": "original14Dphysical state MAE"
+  },
+  "tier": "MIXED_TRADEOFF",
+  "what_improved": "Same-task H1 MAE1.98%lower, H16MAE6.69%lower, H1stationary MAE43.79%lower than ME079; explicit native state reused on authentic query inputs.",
+  "what_regressed": "H4MAE18.10%higher; H1moving MAE22.93%higher, AP/AUC lower; H1/H4interval scores worse; stationary still8.19timesME077. Full gateFAIL.",
+  "what_remains_unknown": "Independent source, longer-history predictive utility, sharper calibration, architecture superiority, causal control, operator/customer benefit."
+}

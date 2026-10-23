@@ -1,0 +1,193 @@
+{
+  "architecture": "native_streaming_mixture",
+  "checkpoints": [
+    {
+      "deployed_parameters": 99816,
+      "parameter_values_sha256": "7307b55c156de196c8fb5a87eccc755e86ba0bdb6a72dbdce2a062c9b1ac7340",
+      "path": "research/replay-bundles/ME080/seed-80003/final.pt",
+      "sha256": "aa8ed37b5379aab18963c8793021e7473b019825d23369d610f9eb457636d663",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 2048,
+      "trainable_parameters": 99816
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 99816,
+    "trainable_parameters": 99816
+  },
+  "last_pre_update": {
+    "deployed_parameters": 99816,
+    "successful_optimizer_steps": 2047,
+    "trainable_parameters": 99816
+  },
+  "manifest_path": "/workspace/tac-me080/research/mathematical-engineering/me080/FAIR_COMPARISON.json",
+  "manifest_sha256": "a69a1f7ab8ba3e5ce7a4b48009a544e757ef209a9bd96296bbdfe8f5d7035d8a",
+  "model_class": "tac_osm.variants.streaming_mixture_world.StreamingMixtureWorld",
+  "preflight": {
+    "deployed_parameters": 99816,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 3648,
+        "requires_grad": true,
+        "shape": [
+          64,
+          57
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.weight",
+        "numel": 8192,
+        "requires_grad": true,
+        "shape": [
+          64,
+          128
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.weight",
+        "numel": 1152,
+        "requires_grad": true,
+        "shape": [
+          18,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.bias",
+        "numel": 18,
+        "requires_grad": true,
+        "shape": [
+          18
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.weight",
+        "numel": 4608,
+        "requires_grad": true,
+        "shape": [
+          64,
+          72
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.weight",
+        "numel": 41820,
+        "requires_grad": true,
+        "shape": [
+          246,
+          170
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.bias",
+        "numel": 246,
+        "requires_grad": true,
+        "shape": [
+          246
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.weight",
+        "numel": 31365,
+        "requires_grad": true,
+        "shape": [
+          255,
+          123
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.bias",
+        "numel": 255,
+        "requires_grad": true,
+        "shape": [
+          255
+        ]
+      }
+    ],
+    "trainable_parameters": 99816
+  },
+  "run_id": "6f17a66484764cb0baee2294081ec117",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 80003,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME080_STREAMING_MIXTURE_NATIVE_CAPABILITY",
+  "successful_optimizer_steps": 2048
+}
