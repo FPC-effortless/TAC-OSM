@@ -97,8 +97,11 @@ predictions, gates or numerical metrics. Neither incident authorizes retraining.
 CDF inversion and scalar scoring use prospectively specified float64; neural
 parameters stayfloat32. Original raw replay limits rtol1e-5/atol1e-6remain fixed.
 ME078/079strict external interval-score failures stay visible and unchanged.
-Independent local clean-clone and external status are recorded separately in
-ARTIFACT.md; a source/test workflow pass alone is not original-score replay.
+Independent local clean-clone replay PASS. The complete external census
+(run40006593903) restores all five models and14,220forecasts: three lower
+quantiles and one interval score FAIL the frozen tolerance; all other recorded
+fields PASS. Full strict external replay remains FAIL. See ARTIFACT.md; a
+source/test/audit-process pass is not a full original-score replay PASS.
 
 Physical forecasting only. Source CAL/TEST/protected tissue-box stayed closed.
 Future takeover/source endings mask target availability, not input features.
@@ -115,3 +118,5 @@ caching or mean error. Choose the next substantial integrated objective under
 a new registration, with all development attempts visible and no protected
 TEST tuning. Independent-source qualification and operator usefulness remain
 separate outstanding gates. No more fits under ME080.
+
+Final local repository suite: **1,161 tests PASS**. Static live-training audit: **198 supported Python files PASS**.

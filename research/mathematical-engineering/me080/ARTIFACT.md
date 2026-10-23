@@ -43,3 +43,20 @@ Git. The protected tissue-box, sourceCALandTEST remain closed.
 This is exposed-development physical forecasting, with a failed full capability
 gate, no architecture-superiority or causal-control claim, and no measured
 operator/customer value.
+
+## Complete external census
+
+[Run 40006593903](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40006593903)
+restored all five original models and recomputed all 14,220 forecast records.
+The read-only census completed successfully, but **strict original replay is
+FAIL**: three lower-quantile records and one derived interval score exceed the
+original tolerance. Maximum absolute lower-quantile drift is 8.3226e-6;
+maximum interval-score drift is 1.09736e-4. These are field counts and may
+refer to overlapping records. Every other recorded field, including actual
+point predictions, targets, physical MAE, NLL, probabilities, Brier, upper
+quantiles, widths and coverage, meets the frozen contract. Coverage and target
+arrays are exact. This does not authorize a whole-replay PASS.
+
+Full per-model/per-field counts, maxima, examples and actual original checkpoint
+hashes are committed at `research/replay-bundles/ME080/GITHUB_CROSS_CPU_AUDIT.json`.
+No weight, original output, registration or tolerance was changed.
