@@ -102,3 +102,27 @@ def test_lifecycle_targets_are_separated_from_base_activity():
     assert r["start_to_same_activity_complete_fraction"] == .5
     assert r["target_lifecycle_counts"]["complete"] == 1
     assert r["target_lifecycle_counts"]["start"] == 1
+
+
+def test_original_ngram_reference_software_fixture_and_backoff():
+    """Only mathematical fixture. Does not constitute authentic training."""
+    import numpy as np
+    from scripts.me070_ngram_real_workflow import fit, predict, score
+    pre={"activities":{"A|START":1,"B|COMPLETE":2},
+         "global_next_activity_probability":[.1,.45,.45],
+         "transition_log_probability":[[0.,0.,0.]] * 3}
+    import math
+    pre["transition_log_probability"]=[[math.log(1/3)]*3 for _ in range(3)]
+    cases=[{"n":7,"activity":np.asarray([1,2,1,2,1,2,1])},
+           {"n":5,"activity":np.asarray([1,2,1,2,1])}]
+    src={"source_sha256":"a"*64,"cohorts":{"FIT":{"ids_sha256":"b"*64}}}
+    state=fit(cases,pre,src)
+    assert state["fit_cases"]==2
+    assert "1,2" in state["context_transition_counts"]["2"]
+    row=predict(state,[1,2],2)
+    assert abs(sum(row)-1)<1e-10
+    assert row[1] > 0
+    assert predict(state,[1,2],5)==predict(state,[1,2],2)
+    report=score(state,{"DEV":cases,"TEST":cases},src)
+    assert report["cohorts"]["TEST"]["cases"]==2
+    assert report["scope"].startswith("EXPOSED_ME069_")
