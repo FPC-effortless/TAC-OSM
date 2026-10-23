@@ -3,6 +3,14 @@
 For substantive engineering, product or research tasks, read `.agents/skills/fpc-universal/SKILL.md` and then the relevant repository-local instructions, specs, README, workflows and tests. Repository-specific safety, release, data, science and architecture requirements always override general skill guidance. Never assume a skill grants permission to access secrets, incur compute costs, deploy, merge or make external changes. Use a task branch and verify before submitting a PR.
 
 
+## Mandatory capability-progress evidence standard — 2026-10-23
+
+Read `research/CAPABILITY_PROGRESS_TRUTH_STANDARD.md` before registering a new model study or making claims about intelligence, capabilities or investment readiness. Every new study must report the fixed evidence tier and the Capability Progress Scorecard, including the exact original real source, eligible case IDs, available-at-time inputs, old/new full model hashes, horizon, proper metrics, per-seed uncertainty, failures and regressions. Passing tests and successfully replaying trained weights do not establish predictive improvement.
+
+A DEV-only gain is provisional; independent confirmation requires a previously untouched real cohort, same-task/paired-case scoring, a preregistered meaningful effect with uncertainty, and no material guardrail regression. Material NLL gain with worse time coverage or important errors must be labeled `MIXED_TRADEOFF`, never “overall smarter”. New skills require factual outcomes and appropriate practical references. Do not infer verified completion from a source-log ending, policy utility from observational associations, or generalization from a single dataset.
+
+Keep capability-first integrated native model development. Default component ablations are not prerequisites for training a stronger model. The standing 95k–105k live scale, matched architecture-superiority budgets, authentic-data requirement and Git-owned original replay remain compulsory.
+
 ## TAC-OSM capability priority — owner direction 2026-10-23
 
 **Develop real learned abilities first; attribution is optional diagnosis, not the goal.** For the next TAC model iteration, prefer one **integrated native world model** that is actually trained, independently replayed and evaluated on authentic observed outcomes for *new useful capabilities*: multi-horizon prediction, uncertain timing, carried and corrected entity state, missingness resilience, and later action/outcome consequences if factual intervention records exist. Use proven mathematical techniques and existing research rather than many tiny diagnostic experiments. Prioritize genuine end-to-end ability over proving which memory cell caused it, CPU micro-optimization, or a new GRU comparison every iteration.
