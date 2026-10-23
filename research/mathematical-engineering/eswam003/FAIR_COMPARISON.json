@@ -1,0 +1,96 @@
+{
+  "schema_version": "tac-osm.parity.v2",
+  "study_id": "ESWAM003_SELECTIVE_EXCHANGE_REAL_MOTION_AND_COMMAND",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "One integrated 101226-parameter native ES-WAM capability study: learn original real next-joint physical state, supervised movement discrimination and next already-observed logged qpos change with a source-causal velocity feature and conservative shrinkage. Compare DEV to source-matched persistence and original ME076/ESWAM002/ME077/ME078/ME079 frozen scores where definitions match. No fair architecture superiority, causal action or independent source claim.",
+  "real_world_source": {
+    "name": "BodenAI/RW-RL-HIL-Dataset, frozen revision 9290f5a96dc91ea58256e81d9ce2dd9621890b51, original ME064 registered five authentic tasks previously exposed FIT 160 episodes; CC-BY-4.0 with publisher attribution",
+    "license": "CC-BY-4.0",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+    "observed_real_outcomes": true
+  },
+  "models": [
+    {
+      "seed": 76001,
+      "architecture": "eswam003_selective_exchange_native",
+      "trainable_parameters": 101226,
+      "deployed_parameters": 101226
+    },
+    {
+      "seed": 76002,
+      "architecture": "eswam003_selective_exchange_native",
+      "trainable_parameters": 101226,
+      "deployed_parameters": 101226
+    },
+    {
+      "seed": 76003,
+      "architecture": "eswam003_selective_exchange_native",
+      "trainable_parameters": 101226,
+      "deployed_parameters": 101226
+    },
+    {
+      "seed": 76004,
+      "architecture": "eswam003_selective_exchange_native",
+      "trainable_parameters": 101226,
+      "deployed_parameters": 101226
+    },
+    {
+      "seed": 76005,
+      "architecture": "eswam003_selective_exchange_native",
+      "trainable_parameters": 101226,
+      "deployed_parameters": 101226
+    }
+  ],
+  "training_budget": {
+    "seeds": [
+      76001,
+      76002,
+      76003,
+      76004,
+      76005
+    ],
+    "updates_per_seed": 640,
+    "batch_size": 12,
+    "observation_history_frames": 8,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0007,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1,
+    "fit_members_per_task": 24,
+    "development_members_per_task": 8,
+    "selection": "frozen SHA256 task/episode lexicographic 24 FIT / 8 previously exposed original FIT-DEV per task",
+    "min_per_episode_scoring_origins": 1,
+    "max_per_episode_scoring_origins": 24,
+    "train_window_sampling": "seeded equal-task task round robin with half outcome-change >0.025 physical mean units and half uniform, within FIT only",
+    "checkpoint": "single final model per seed after 640 guarded updates, Git saved with original model/optimizer/torch/numpy/python RNG and raw real forecasts",
+    "auxiliary_target": "logged future issued action[t] at scoring origin t; training only; not input to the forecast (last input is action[t-1])",
+    "loss": "source real normalized next-state Laplace NLL plus 0.5 physical-normalized MAE plus 0.20 train-prior-importance-weighted movement BCE plus 0.05 next recorded-action SmoothL1; no future movement flag as feature",
+    "sampling": "four consecutive 160-step rounds from ORIGINAL ME076 FIT-only source sampler, seed seed+round*100000; no additional raw episodes; every sampled origin authentic",
+    "action_target": "actual next recorded issued qpos[t] supervised target only; previous a[t-1] input",
+    "motion_target": "real mean physical 14D |x[t+1]-x[t]| >=0.025, target only; FIT source natural movement frequency used for training risk importance correction"
+  },
+  "primary_development_measure": "physical-unit 14D H1 MAE on exactly original 960 factual sources cases, motion-rich/stationary stratification, proper Laplace NLL, natural-population Brier/AP for risk, next-command MAE versus repeat-last",
+  "measurable_promotion_rule": "DEV-only ability if both overall and movement-rich physical MAE <=.95 source-matched persistence and stationary MAE<=1.10 frozen ME077; action imitation must beat exact repeat-last-action on same source; independent claim requires untouched externally sourced holdout and matched original data/compute controls",
+  "source_policy": {
+    "CAL_or_unopened_target_access": false,
+    "source_is_previously_exposed": true,
+    "license_verified_by_publisher": true,
+    "valid_action_alignment_causal_proof": false,
+    "log_end_is_task_success": false,
+    "output_command_label_only": true,
+    "causal_intervention_claim": false
+  },
+  "checkpoints": "research/replay-bundles/ESWAM003/seed-7600X/final.pt",
+  "source_train_fit_qualification": "metadata and normalized state/action computed only from designated FIT episode members; source fingerprint includes entire original five-task FIT 160 archive but eval rows never used for normalization",
+  "guard": "live instantiated whole model pre-first-update and each guarded optimizer step, Git checkpoint + original per-case recorded outcomes and independent zero-fit replay",
+  "strict_no_claims": [
+    "no architecture superiority (budget/objective differ)",
+    "no actual command execution or causal action",
+    "no masked future motion feature at inference",
+    "no artificial outcome records",
+    "no frozen original ME073/ME076/ME077/ME078/ME079 checkpoint modifications",
+    "no fresh independent physical site or protected TEST"
+  ]
+}
