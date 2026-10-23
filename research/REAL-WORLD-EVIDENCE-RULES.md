@@ -70,6 +70,12 @@ protocols, failed runs, and evidence remain intact.
     experimental requirements, not optional caveats. Non-matching runs are
     exploratory and cannot establish architectural superiority.
 
+## Mandatory checkpoint publication and replay gate (effective 2026-10-23)
+
+**Non-negotiable rule 11 — every new/continued fit MUST be preserved in this repository, regardless of training host.** Local training, GitHub Actions, remote GPU/TPU, hosted notebooks and externally executed training are identical for evidence delivery. No trained model/seed/arm may be reported as a *completed, independently reproducible* experiment unless its original trained checkpoint bytes and every legally shareable input/config/environment and result-replay dependency are committed at specific git-tracked paths in `FPC-effortless/TAC-OSM` (or retrievable, hash-verified Git LFS objects controlled by the same repository). This includes a manifest of all arms/seeds and failed-but-recoverable fits; frozen original weights, optimizer/scheduler/RNG/sampler state when full training/resume replay is claimed; score code, pinned environment, source hashes and time splits, actual prediction arrays/metrics and exact replay command. A log, temporary GitHub artifact, model link, checksum, generator script or retraining recipe alone cannot substitute for the original weights.
+
+**Fail-closed:** before final acceptance, verify in a new clean checkout at the pinned commit that **all** model bytes are actually obtainable, hashes match, models load *without refitting*, recorded predictions and scored metrics replay, and lawful evaluation inputs can be obtained. Record `REPO_REPLAY=PASS/FAIL/BLOCKED` separately from parameter/data/compute parity and scientific validity. Until a clean-checkout replay PASS, the fit and its comparative scientific claim remain **unqualified**; do not silently publish "completed" or "audited". If raw external data are restricted, never redistribute illegally: preserve legally reproducible download/access instructions, license and checksums; mark full independent evaluation `BLOCKED` when independently unretrievable. All historical non-repository artefacts retain their historical label, without retroactive promotion. See [REPOSITORY-REPLAY-AND-CHECKPOINT-RULE.md](REPOSITORY-REPLAY-AND-CHECKPOINT-RULE.md) for full study-bundle and CI requirements.
+
 ## Compulsory architecture-comparison contract (hard gate)
 
 **Applies prospectively to ALL trained-architecture comparisons and ablations**
