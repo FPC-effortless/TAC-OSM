@@ -65,6 +65,10 @@ For every CAP item, preserve external source licences, real identifiers and time
 | ME-054 | MAE 0.07881 vs GRU 0.09232 | Persistence 0.06695; parity needs audit |
 | ME-056 | MAE 0.08037 vs GRU 0.09082 | Persistence 0.06695; parity needs audit |
 
+## Mandatory artifact availability for any implemented CAP/TAC study
+
+A trained research idea is **not completed** until original TAC/GRU/other model checkpoints for each seed and each recoverable failed run, plus all lawful data/metadata, config, code, dependencies, outcome predictions, score scripts, hashes and clean-checkout replay receipts are **available from this repository**. See [repository checkpoint/replay rule](REPOSITORY-REPLAY-AND-CHECKPOINT-RULE.md). Temporary GitHub Actions links or locally ignored `results/` do not count; external-provider runs have exactly the same requirement. Track `REPO_REPLAY=PASS/FAIL/BLOCKED` separately from real-world scientific and parity gates.
+
 ## Record schema for future ideas
 Each idea should include: ID; title; problem; proposed mathematics; origin; relevant repositories; relation to existing ideas; hypotheses and failure modes; status (proposed/diagnostic/implemented/trained/verified/rejected); commit/PR; datasets and splits; parameter count; training budget; baselines; seeds; metrics; confidence and limitations; next experiment.
 
