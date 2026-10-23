@@ -1,0 +1,109 @@
+name: DIAGKEY003 guarded 100k native zero-distractor association learning, synthetic-only
+on:
+  pull_request:
+    paths:
+      - 'scripts/diagkey003_train_native_zero.py'
+      - 'research/mathematical-engineering/diagkey003/**'
+      - 'src/tac_osm/parameter_budget.py'
+      - 'scripts/validate_research_parity.py'
+      - '.github/workflows/diagkey003-native-zero-ladder.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: diagkey003-guarded-synthetic-zero-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  prefit-source-and-live-budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Freeze the one narrow synthetic-only live 100k no-architecture-superiority training budget
+        run: |
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/diagkey003/FAIR_COMPARISON.json --phase preflight
+          PYTHONPATH=src:. python scripts/diagkey003_train_native_zero.py --mode smoke
+  five-original-fits:
+    needs: prefit-source-and-live-budget
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [75001,75002,75003,75004,75005]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Run 640 whole-model guarded original 101554-param native updates on zero-distractor synthetic data ONLY
+        env:
+          SEED: ${{ matrix.seed }}
+        run: |
+          set -eu
+          if [ -f "research/replay-bundles/DIAGKEY003/seed-$SEED/tac.json" ]; then
+            echo "Original qualifying seed already exists; never silently refit"
+          else
+            PYTHONPATH=src:. python scripts/diagkey003_train_native_zero.py --mode fit --seed "$SEED"
+          fi
+      - name: Commit original checkpoint optimizer RNG plus pre-update runtime receipt and measured zero-delay TEST scores into Git
+        env:
+          PUSH_BRANCH: ${{ github.head_ref || github.ref_name }}
+          SEED: ${{ matrix.seed }}
+        run: |
+          set -eu
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "research/replay-bundles/DIAGKEY003/seed-$SEED/"
+          if ! git diff --cached --quiet; then
+            git commit -m "evidence(diagkey003): ORIGINAL guarded synthetic zero-delay native seed $SEED model+optimizer+RNG+receipt"
+            for attempt in 1 2 3 4 5 6 7 8; do
+              git fetch origin "$PUSH_BRANCH"
+              git rebase "origin/$PUSH_BRANCH"
+              if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+              if [ "$attempt" -eq 8 ]; then exit 1; fi
+            done
+          fi
+  independent-original-replay:
+    needs: five-original-fits
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify all five original checkpoint hashes and live budget receipts, reload real original trained bytes then score untouched synthetic TEST
+        run: PYTHONPATH=src:. python scripts/diagkey003_train_native_zero.py --mode replay
+      - name: Preserve independent zero-delay replay and predefined all-five >=90 percent mechanism learning gate
+        env:
+          PUSH_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          set -eu
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/replay-bundles/DIAGKEY003/INDEPENDENT_SYNTHETIC_ORIGINAL_ZERO_REPLAY.json
+          git commit -m "audit(diagkey003): five original guarded native zero delay fits replay; synthetic-only evidence"
+          for attempt in 1 2 3 4 5 6 7 8; do
+            git fetch origin "$PUSH_BRANCH"
+            git rebase "origin/$PUSH_BRANCH"
+            if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+            if [ "$attempt" -eq 8 ]; then exit 1; fi
+          done

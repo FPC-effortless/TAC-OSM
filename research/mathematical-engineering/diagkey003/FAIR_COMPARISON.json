@@ -1,0 +1,75 @@
+{
+  "schema_version": "tac-osm.parity.v2",
+  "study_id": "DIAGKEY003_NATIVE_100K_ZERO_DISTRACTOR_MECHANISM_ONLY",
+  "study_type": "synthetic_mechanism_training",
+  "registered_before_first_fit": true,
+  "explicit_owner_requested_single_exception": true,
+  "no_architecture_superiority_claim": true,
+  "no_real_world_capability_claim": true,
+  "scientific_purpose": "Single native TAC ~101.5k mechanism training on four original key/value WRITEs followed by immediate answer-free QUERY; no distractors, five frozen seeds, 640 guarded AdamW updates; test if write/read can learn at all before adding distractors. Synthetic only, never primary real-world training evidence.",
+  "models": [
+    {
+      "architecture": "tac",
+      "seed": 75001,
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    },
+    {
+      "architecture": "tac",
+      "seed": 75002,
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    },
+    {
+      "architecture": "tac",
+      "seed": 75003,
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    },
+    {
+      "architecture": "tac",
+      "seed": 75004,
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    },
+    {
+      "architecture": "tac",
+      "seed": 75005,
+      "trainable_parameters": 101554,
+      "deployed_parameters": 101554
+    }
+  ],
+  "training_budget": {
+    "steps": 640,
+    "batch_size": 16,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "clip_gradient_norm": 1,
+    "trained_distractor_length": 0,
+    "learning_curve_steps": [
+      1,
+      16,
+      32,
+      64,
+      128,
+      256,
+      512,
+      640
+    ]
+  },
+  "source": "STATLESS_SYNTHETIC_4_RANDOM_DISTINCT_KEY_VALUE_WRITES_AND_UNANSWERED_IMMEDIATE_QUERY",
+  "oracle_control": "8x8 onehot delta rule with protected writes, untrained analytic positive control",
+  "dev_query_per_seed": 128,
+  "sealed_final_test_queries_per_seed": 512,
+  "original_runtime_receipt": "research/replay-bundles/DIAGKEY003/seed-XXXXX/tac-live-receipt.json",
+  "original_checkpoint_storage": "research/replay-bundles/DIAGKEY003/seed-XXXXX/tac.pt",
+  "trainable_parameter_budget_rule": "inclusive 95000..105000, actual entire model",
+  "qualifiers": [
+    "No matched GRU/Transformer training in this stage; NO architecture-comparison or compute-parity claim",
+    "This is synthetic software mechanism testing only; cannot qualify commercial performance or real-world intelligence",
+    "Single native architecture: equal per-seed actual counts, exact training examples and steps",
+    "All original fit checkpoints include model/optimizer/RNG and runtime receipts bound to registered manifest SHA"
+  ],
+  "decision_gate": "If ALL five originally trained seeds reach >=90% exactly correct on original sealed 512 zero-distractor queries after 640 fixed updates, only then authorize separately registered 1/2/4/8/16 curriculum; otherwise diagnose first-write/key/read training objective and learning recipe without increasing distractors."
+}

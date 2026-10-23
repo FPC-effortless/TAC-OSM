@@ -180,6 +180,34 @@ def _check_manifest_declarations(m,phase):
     kind=m.get("study_type")
     demand(kind in ("architecture_comparison","noncomparative_diagnostic","capability_development","single_model_training","synthetic_mechanism_training"),
         "study_type must explicitly distinguish architecture comparison from diagnostics")
+    if kind=="synthetic_mechanism_training" and m.get("study_id")=="DIAGKEY003_NATIVE_100K_ZERO_DISTRACTOR_MECHANISM_ONLY":
+        demand(m.get("registered_before_first_fit") is True and
+               m.get("explicit_owner_requested_single_exception") is True and
+               m.get("no_architecture_superiority_claim") is True and
+               m.get("no_real_world_capability_claim") is True,
+               "owner-only zero-distractor software fit requires frozen narrow exception")
+        models=m.get("models",[])
+        demand(len(models)==5 and
+               {(row.get("architecture"),row.get("seed")) for row in models}==
+                    {("tac",seed) for seed in (75001,75002,75003,75004,75005)},
+               "exact five native 101554-param original models required")
+        for row in models:
+            check_model_parameter_target(row.get("trainable_parameters"),
+                                         row.get("deployed_parameters"),
+                                         label="synthetic-only 100k zero-delay actual fit")
+            demand(row.get("trainable_parameters")==101554 and
+                   row.get("deployed_parameters")==101554,
+                   "the native model's original measured capacity changed")
+        budget=m.get("training_budget",{})
+        demand(budget.get("steps")==640 and budget.get("batch_size")==16 and
+               budget.get("trained_distractor_length")==0,
+               "exact synthetic-only 640-step zero-delay original recipe required")
+        demand(phase=="preflight",
+               "software synthetic-only study never qualifies REAL final research status")
+        return {"study_id":m["study_id"],"phase":phase,
+                "eligible_for_architecture_superiority":False,
+                "real_world_capability_evidence":False,
+                "status":"PASS_GUARDED_NATIVE_ZERO_MECHANISM_ONLY_NOT_REAL_SCIENCE"}
     if kind=="synthetic_mechanism_training":
         # Narrow user-requested mechanism software diagnostic, never evidence
         # for actual world-model skill, architectural superiority or commercial AI.

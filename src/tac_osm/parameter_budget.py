@@ -89,6 +89,19 @@ def declared_budgets(manifest):
             )
             for s in manifest.get("seeds", [])
         ]
+    if kind == "synthetic_mechanism_training" and manifest.get("study_id") == "DIAGKEY003_NATIVE_100K_ZERO_DISTRACTOR_MECHANISM_ONLY":
+        # Exactly one additional owner-requested zero-delay learning diagnosis:
+        # same live pre-update model-size guards, never operational evidence.
+        if (manifest.get("explicit_owner_requested_single_exception") is not True
+                or manifest.get("no_architecture_superiority_claim") is not True
+                or manifest.get("no_real_world_capability_claim") is not True):
+            raise ParameterBudgetError("invalid second synthetic-only exception")
+        models=manifest.get("models",[])
+        if ({row.get("seed") for row in models}!={75001,75002,75003,75004,75005}
+                or len(models)!=5
+                or any(row.get("architecture")!="tac" for row in models)):
+            raise ParameterBudgetError("only the five original native TAC zero-delay models qualify")
+        return models
     if kind == "synthetic_mechanism_training":
         # One explicitly owner-requested software diagnostic. NEVER qualifies
         # real-world research; no other study may use this registration type.
