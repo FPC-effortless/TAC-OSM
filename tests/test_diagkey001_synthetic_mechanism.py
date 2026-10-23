@@ -42,3 +42,22 @@ def test_each_model_reads_same_synthetic_example_and_has_active_gradients():
         assert torch.isfinite(logits).all()
         assert all(p.grad is not None for p in model.parameters() if p.requires_grad)
         assert all(torch.isfinite(p.grad).all() for p in model.parameters() if p.requires_grad)
+
+
+def test_only_explicit_owner_requested_synthetic_diagnostic_can_pass_live_registration():
+    import copy,json
+    from pathlib import Path
+    from scripts.validate_research_parity import check_manifest,ParityError
+    registration=json.loads(Path("research/mathematical-engineering/diagkey001/FAIR_COMPARISON.json").read_text())
+    result=check_manifest(registration,"preflight")
+    assert result["status"]=="PASS_SYNTHETIC_MECHANISM_ONLY_NOT_REAL_SCIENCE"
+    assert result["eligible_for_architecture_superiority"] is False
+    assert result["real_world_capability_evidence"] is False
+    other=copy.deepcopy(registration);other["study_id"]="DIAGKEY002_SPURIOUS_NEW_TRAINING"
+    with pytest.raises(ParityError):
+        check_manifest(other,"preflight")
+    too_small=copy.deepcopy(registration);too_small["models"][0]["trainable_parameters"]=39000
+    with pytest.raises(ParityError):
+        check_manifest(too_small,"preflight")
+    with pytest.raises(ParityError):
+        check_manifest(registration,"final")
