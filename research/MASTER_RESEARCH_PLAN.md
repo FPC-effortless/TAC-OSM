@@ -48,13 +48,14 @@ The ME073 overlay restores original code for replay and blocks all optimizer
 updates in that process. Existing unsupported legacy fitting lanes are manual
 opt-in and still face the live gate; ordinary software/policy CI remains automatic.
 
-Local verification: **979 tests** on the default-branch proposal (924 before the
-change), **1,103 tests** on the ME073 overlay (1,043 before); guard coverage audits
+Local verification: **981 tests** on the default-branch proposal (924 before the
+change), **1,105 tests** on the ME073 overlay (1,043 before); guard coverage audits
 passed across 88/164 Python files respectively. Different counts reflect different
 branch suites. Six immutable registrations and 15 distinct original checkpoints
-passed the Git-byte provenance audit. GitHub's latest PR354 root and scientific
-gates passed after a Torch-only hashing portability fix; other workflow and PR355
-statuses must be checked at their exact heads before claiming complete green CI.
+passed the Git-byte provenance audit. GitHub's latest root and scientific gates passed at PR354 commit `5175574c`
+and PR355 commit `485e026b`. All applicable checks passed at both exact code heads, including the
+ME071/ME072/ME073 pinned scientific replays with optimizer updates blocked. The initial Torch-only hashing portability failure and its
+fix remain recorded, rather than erasing the failed workflow.
 These are software-enforcement results, **not new trained-model capability evidence**.
 See [the enforcement contract](https://github.com/FPC-effortless/TAC-OSM/blob/governance/universal-live-parameter-budget-2026-10-23/research/governance/LIVE_PARAMETER_ENFORCEMENT.md).
 
