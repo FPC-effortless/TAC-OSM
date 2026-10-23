@@ -47,7 +47,7 @@ guarantee. The inherited count table's path, hash and deployed bytes are
 charged separately from trainable neural parameters.
 
 Use .05 label smoothing. Fit a scalar class temperature on TEMP only using
-a fixed 162-point candidate set in [0.1,10] including the identity. No neural
+a fixed grid in [0.1,10] including the identity (161 distinct candidates). No neural
 weight selection, early stopping or architecture sweep is allowed. Equal
 accuracy and different NLL do not diagnose overconfidence by themselves;
 report multiclass Brier and ECE alongside log loss.

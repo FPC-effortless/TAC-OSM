@@ -11,6 +11,16 @@ reported.
 
 ## Active architecture development — 2026-10-23
 
+Latest integrated candidate: [ME071 persistent native event model](research/mathematical-engineering/me071/RESULTS.md).
+Five original native fits add full-case detached state carry, label smoothing,
+history log pooling, ordered waiting quantiles, DEV-only temperature/CQR and
+entity-separated streaming. On the registered fixed-six-event development
+query, mean log loss is 0.401741 and accuracy 81.58%; calibrated NLL improves
+4.45%, while Brier/ECE and interval width do not improve. These targets differ
+from the older midpoint task. Original weights, forecast arrays and executable
+real-data replay are in [ME071's repository bundle](research/replay-bundles/ME071).
+This single-model construction cycle makes no architecture-winner claim.
+
 Latest draft research: [ME069 enterprise event-state model](research/mathematical-engineering/me069/RESULTS.md)
 adds categorical event/resource encoders, elapsed-time native fast/slow and
 associative memory, learned event-regime mixing and probabilistic waiting
