@@ -2,10 +2,10 @@
 
 Physical example contract: available current observation x_t, requested/observed
 action a_t, and elapsed observation time since the previous *known* tick.
-Predict x_(t+1) and an exploratory event logit. No slow matrix, associative
+Predict x_(t+1) and its uncertainty only. No ungrounded risk head, slow matrix, associative
 matrix, imagined trajectories, action authorization or latency claim.
 
-For dimension=14 this model has 100,541 actually trainable/deployed parameters
+For dimension=14 this model has 100,476 actually trainable/deployed parameters
 without unused padding. All new fits require the repository live 95k–105k
 guard, authentic data, frozen pre-registered targets and full Git replay.
 """
@@ -20,7 +20,6 @@ from torch.nn import functional as F
 class ImmediateForecast(NamedTuple):
     mean_next: torch.Tensor
     scale_next: torch.Tensor
-    event_logit: torch.Tensor
     fast: torch.Tensor
 
 
@@ -44,7 +43,7 @@ class System1FastModel(nn.Module):
         self.fast_candidate_gate = nn.Linear(2 * width, 2 * width)
         self.fast_residual_gate = nn.Linear(2 * width, 2 * width)
         self.readout = nn.Linear(2 * width, 64)
-        self.one_step_heads = nn.Linear(64, 2 * dimension + 1)
+        self.one_step_heads = nn.Linear(64, 2 * dimension)
         scale = torch.ones(dimension, dtype=torch.float32) if state_scale is None else torch.as_tensor(
             state_scale, dtype=torch.float32
         )
@@ -90,7 +89,7 @@ class System1FastModel(nn.Module):
         # Residual prediction anchored to the last *observed* current state.
         mean_next = current + self.state_scale * (0.1 * heads[:, :d].tanh())
         scale_next = self.state_scale * (F.softplus(heads[:, d:2*d]) + 1e-4)
-        return ImmediateForecast(mean_next, scale_next, heads[:, -1], updated)
+        return ImmediateForecast(mean_next, scale_next, updated)
 
 
 def physical_one_step_nll(prediction: ImmediateForecast, actual_next: torch.Tensor,
