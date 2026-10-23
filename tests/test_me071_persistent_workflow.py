@@ -5,7 +5,7 @@ import pytest
 import torch
 
 from scripts.me069_workflow_source import fit_preprocessing,encode_cases
-from scripts.me071_persistent_workflow import forward_chunk,pack
+from scripts.me071_persistent_workflow import forward_chunk,pack,metrics
 from scripts.validate_research_parity import check_manifest,ParityError
 from tac_osm.workflow_me071 import (PersistentWorkflowModel,EntityMemory,detach_belief,
     assimilate_masked,predictive_loss,fit_temperature,cqr_correction,calibrated_seconds)
@@ -98,6 +98,15 @@ def test_cqr_finite_sample_rank_and_float64_seconds_conversion():
     seconds=calibrated_seconds(torch.tensor(q,dtype=torch.float32),correction)
     assert seconds.dtype==torch.float64 and (seconds[:,2]>=seconds[:,0]).all()
     with pytest.raises(ValueError):cqr_correction(q[:1],wait[:1])
+
+
+def test_calibrated_pinball_scores_the_adjusted_quantiles():
+    array=np.array([[-.5,-1.,1.,.2,1.,2.]])
+    wait=np.array([np.expm1(3.)]);labels=np.array([0])
+    result=metrics(array,labels,wait,correction=.5)
+    adjusted=np.array([0.,1.,2.5]);delta=3.-adjusted
+    expected=np.maximum(np.array([.05,.5,.95])*delta,(np.array([.05,.5,.95])-1)*delta)
+    np.testing.assert_allclose(result['log1p_pinball_q05_q50_q95'],expected)
 
 
 def test_development_lane_cannot_admit_multiple_architectures_or_missing_originals():

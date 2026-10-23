@@ -216,7 +216,10 @@ def metrics(array,labels,wait,temperature=1.,correction=0.):
         if np.any(hit:=((confidence>=i/10)&(confidence<(i+1)/10 if i<9 else confidence<=1))))
     q=array[:,-3:].astype(np.float64);y=np.log1p(wait)
     positive_probability=torch.tensor(array[:,-4],dtype=torch.float64).sigmoid().numpy()
-    error=y[:,None]-q;levels=np.asarray([.05,.5,.95])
+    scored_q=q.copy()
+    scored_q[:,0]=np.maximum(0,scored_q[:,0]-correction)
+    scored_q[:,2]+=correction
+    error=y[:,None]-scored_q;levels=np.asarray([.05,.5,.95])
     pinball=np.maximum(levels*error,(levels-1)*error).mean(0)
     seconds=calibrated_seconds(torch.tensor(q),correction).numpy();low,median,high=seconds.T
     width=high-low;covered=(wait>=low)&(wait<=high)
