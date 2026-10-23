@@ -11,6 +11,12 @@ Version: 2026-10-23 (integrated capability and investor-readiness guiding object
 
 **Research priority remains capability-first:** these proof rules do **not** mandate default ablations or GRU comparisons before one integrated native candidate is trained and tested. Architecture-winner claims still require the exact matched parameter/data/exposure/training/tuning-compute contract; future live fits additionally face the repository's **95,000–105,000** trainable/deployed parameter target. CPU runtime is not an equality gate. This new standard is an evidence/promotion control, not proof of an additional trained-model gain.
 
+### Implementation and current enforcement boundary
+
+The prospective claim checker is at [`scripts/validate_capability_progress.py`](../scripts/validate_capability_progress.py), with [a deliberately invalid claim template](CAPABILITY_PROGRESS_SCORECARD_TEMPLATE.json), eight adverse/positive software fixtures and [GitHub Actions run 39969267686](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39969267686): **8/8 tests PASS** and the incomplete template was correctly rejected. These are **policy-software tests**, not new TAC-OSM model results. The script rejects self-declared independent gain on exposed DEV/TEST, insufficient paired CI/seed evidence, absent same-task old model, missing genuine observed-case counts, failed guardrails and unsupported transfer/customer promotion. Its PASS means **declaration format only**; source authenticity, original per-case score calculations and funding/pilot evidence still require independent audit.
+
+**Not yet globally enforced:** the implementation is on `research/master-research-plan`, currently **not integrated into each open model-development draft branch or demonstrated as a mandatory protected-branch check**. Every new study must bring this validator/standard into its exact working branch and publish its honest scorecard; do not call the new policy universally installed, do not edit old study/checkpoint records and do not merge research drafts without a separately authorized decision.
+
 ## Mission and constraints
 Build a persistent action-conditioned predictive world model that learns what to remember, where to store it, how to retrieve it, how dynamics evolve, when to refine predictions, and when to correct beliefs. Retain ME-054 native and ME-056 Concept-Swarm as independently testable branches. Do not replace TAC-OSM with an LLM, Transformer, MTSK, or SSM.
 
