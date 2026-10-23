@@ -1,12 +1,7 @@
 name: ESWAM003 authentic motion-selective physical training and independent replay
+# Original five real models and the numeric replay audit are frozen in Git.
+# No automatic re-fitting on further PR updates.
 on:
-  pull_request:
-    paths:
-      - "scripts/eswam003_train_real.py"
-      - "src/tac_osm/variants/selective_exchange_world.py"
-      - "tests/test_selective_exchange_world.py"
-      - "research/mathematical-engineering/eswam003/FAIR_COMPARISON.json"
-      - ".github/workflows/eswam003-authentic-training.yml"
   workflow_dispatch:
 permissions:
   contents: write
