@@ -1,26 +1,41 @@
 {
+  "architecture_superiority": false,
+  "integrity": {
+    "git_original_checkpoints": true,
+    "independent_clean_replay": false,
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true
+  },
+  "model": {
+    "candidate_checkpoint_hashes": [
+      "aa4c0413a0993107fb2d8336dad810574bb54ff6c37aad4ec212da7eadc3071c",
+      "4212e6eacd60769a032aa225fbbd57f6299f6ecf4cf480fb117e11975cb77aa0",
+      "f26af4e2d6deb19e6ce1e3bda6e2f4a509c4ce107682c8553f07631b2d501dab",
+      "50cfecd90f2a2f209410bbde486e30892aa01ea04989494f3d66f1b10b8df76c",
+      "6b38c3eed88f6dc1fe6efeaf80e2e39186a380e6c51286949622beec51d146da"
+    ],
+    "deployed_parameters": 101527,
+    "trainable_parameters": 101527
+  },
+  "real_world_gain": false,
   "schema_version": "tac-osm.capability-progress.v1",
-  "study_id": "DIAGKEY004",
-  "tier": "ENGINEERING_VERIFIED",
-  "what_improved": "Shared write/query addressing, tied value decoding and protected queries implemented; no measured real-world gain.",
-  "what_regressed": "Unknown before fitting; original full models preserved. No predictive success claimed.",
-  "what_remains_unknown": "Actual synthetic recall and its transfer to authentic real histories.",
   "source": {
     "authentic_real_data": false,
     "exposure": "SYNTHETIC_MECHANISM_ONLY"
   },
+  "study_id": "DIAGKEY004",
+  "synthetic_mechanism": {
+    "all_five_ge90": true,
+    "independent_replay": false,
+    "mean_accuracy4096": 0.9984375,
+    "status": "TRAINED_ORIGINAL_SYNTHETIC_SCORES"
+  },
   "task": {
-    "target": "32-class zero-distractor key-value recall",
-    "independent_cases": 0
+    "independent_cases": 0,
+    "target": "32-class zero-distractor key-value recall"
   },
-  "model": {
-    "trainable_parameters": 101527,
-    "deployed_parameters": 101527
-  },
-  "integrity": {
-    "git_original_checkpoints": false,
-    "independent_clean_replay": false
-  },
-  "real_world_gain": false,
-  "architecture_superiority": false
+  "tier": "ENGINEERING_VERIFIED",
+  "what_improved": "Synthetic-only immediate recall: revised native97.93% at640 and99.84% at4096; all five seeds pass90%. No measured real-world improvement.",
+  "what_regressed": "No authentic-data skill tested. Transformer reference accuracy/NLL worsened at4096 versus640; all checkpoints retained.",
+  "what_remains_unknown": "Interference/delay, real task transfer, individual mechanism effects, full FLOP-matched architecture advantage."
 }
