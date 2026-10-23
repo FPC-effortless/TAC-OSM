@@ -1,0 +1,81 @@
+{
+  "architecture_count": 1,
+  "development_support_before_fit": {
+    "16": 165,
+    "2": 925,
+    "32": 52,
+    "6": 555,
+    "64": 2
+  },
+  "horizons": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "interpretation": "Report all reached-prefix cases, present/boundary counts, conditional activity accuracy and time scores separately. Fewer than25 real cases at a query is sparse development only; no memory superiority or >128-event claim.",
+  "mathematical_contract": "Joint mass=P(EOR) or P(record)*P(activity|record)*[zero atom + positive lognormal mixture]; survival decreases, zero mass decreases, component locations increase and scales/weights shared over horizons, so conditional waiting quantiles cannot reverse. Observational futures, not intervention effects.",
+  "no_architecture_superiority_claim": true,
+  "numerical_contract": {
+    "metric_atol": 0.0001,
+    "metric_rtol": 1e-05,
+    "primary_atol": 1e-05,
+    "primary_rtol": 1e-05
+  },
+  "preprocessing_sha256": "eefbb4fbac5dbe603c76ea98b3227ec13e2966d4fa7ea2e4dc9de0b77856e338",
+  "prior_art": [
+    "Shchur et al. Intensity-Free Learning of Temporal Point Processes,ICLR2020,https://arxiv.org/abs/1909.12127",
+    "Tax et al. Predictive Business Process Monitoring with LSTM Neural Networks,CAiSE2017,https://arxiv.org/abs/1612.02130"
+  ],
+  "query_ages": [
+    2,
+    6,
+    16,
+    32,
+    64
+  ],
+  "real_world_source": {
+    "license": "4TU General Terms of Use; raw original traces external; exact publisher file hash verified",
+    "name": "publisher verified BPI Challenge2012 actual financial institution event log",
+    "observed_real_outcomes": true,
+    "sha256": "5cd9cc16b9bcb20bd4aae45666a5d87479ddbf47e6371618b6ad217174cecdf3"
+  },
+  "registered_before_first_fit": true,
+  "repository_storage_plan": "Five original model/optimizer/RNG checkpoints under research/replay-bundles/ME072/checkpoints, approx12MB; per-query original distribution arrays, raw scores, source/config/environment/SHA manifest and independent GitHub clean-checkout restore and full factual scoring replay. Freeze all originals before REPORT scoring.",
+  "roles": "inherit FIT and already exposed DEV partition; TEMP/CQR roles unused, no posthoc fitting; REPORT last925 DEV cases. Original TEST unscored; source file ingestion disclosed.",
+  "schedule_sha256": {
+    "72001": "0e8efc9afc6e91f122bea55518ea9c6e1af203b541a0ec45fb818e22ab2ac45b",
+    "72002": "56948bf40640c726dbaac0447067b50d48d053a9f5282da172f50a33ed7d5a70",
+    "72003": "1716ef36fcd719b35ce1f8ae0720b70d5f96e98a5ec218fb53e0af3c028075fe",
+    "72004": "540ea0344db49488d0af4ef9783ff25a7cf6ed354d49e8514bac2cc95910e028",
+    "72005": "aead283b144e2c464b93359ccfdbc155c43629cbeb80fa97c8529a0ce027e5b2"
+  },
+  "schema_version": "tac-osm.parity.v1",
+  "scientific_purpose": "Train one integrated native model for observed future activity, source-record boundary mass and coherent zero/positive waiting times at 1/2/4/8 events, carrying native state across full original cases. No attribution/comparator matrix or causal policy claim.",
+  "seeds": [
+    72001,
+    72002,
+    72003,
+    72004,
+    72005
+  ],
+  "split_sha256": {
+    "CQR": "1f0f167fca99faa2f3211864ed38be0e42a9334bc5a7d4df0409322535c0e0df",
+    "FIT": "04b9a6864abb17b3f9e8e4c9d9d9ce81e965c27ba524f754a8ef69ba2bb63645",
+    "REPORT": "4659093a04f06b9d07c8010f628c400130dce5f154c67475cc12c63c34907ba0",
+    "TEMP": "7afcebf3193f7ee374049c0883f09469b90aa67387a3fb936f4885cf0e730798"
+  },
+  "study_id": "ME072_COHERENT_MULTIHORIZON_MARKED_NATIVE_WORLD_MODEL",
+  "study_type": "capability_development",
+  "target_contract": "For each reached prefix and futureh: actual activity and elapsed time if original record exists; otherwise explicit end-of-record mass, no timing target. Source boundary/censoring is NOT independently verified workflow completion, timeout, interruption or success.",
+  "trainable_parameters": 123377,
+  "training_budget": {
+    "backprop_events": 32,
+    "batch_size": 32,
+    "epochs": 6,
+    "expected_targets_per_seed": 3030840,
+    "observed_prefix_exposures": 757710,
+    "optimizer": "AdamW lr .001 wd .0001 clip1",
+    "selection": "all final models; no early stopping, calibration or outcome-based search"
+  }
+}
