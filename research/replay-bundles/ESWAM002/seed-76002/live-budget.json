@@ -1,0 +1,307 @@
+{
+  "architecture": "eswam_exchange_world_action_candidate",
+  "checkpoints": [
+    {
+      "deployed_parameters": 100343,
+      "parameter_values_sha256": "40103d67757d1ce5d952e914abe463ee76e3fcf5b3b711093b8aed46bf8a4c07",
+      "path": "research/replay-bundles/ESWAM002/seed-76002/final.pt",
+      "sha256": "0e1926f06cf4a7ef001544e9a0f1f876c1ad4b46f3a3bc18d45141b70e604b95",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 160,
+      "trainable_parameters": 100343
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 100343,
+    "trainable_parameters": 100343
+  },
+  "last_pre_update": {
+    "deployed_parameters": 100343,
+    "successful_optimizer_steps": 159,
+    "trainable_parameters": 100343
+  },
+  "manifest_path": "/home/runner/work/TAC-OSM/TAC-OSM/research/mathematical-engineering/eswam002/FAIR_COMPARISON.json",
+  "manifest_sha256": "7d7c91df79b0cb76fa11f8456076724dbe45ce2d464cdf9d5fdfbad0109f08ee",
+  "model_class": "tac_osm.variants.exchange_world_action.ExchangeWorldActionModel",
+  "preflight": {
+    "deployed_parameters": 100343,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "memory.exchange_map.weight",
+        "numel": 512,
+        "requires_grad": true,
+        "shape": [
+          16,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory.exchange_map.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory.merge_gate.weight",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          1,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory.merge_gate.bias",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": [
+          1
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 3870,
+        "requires_grad": true,
+        "shape": [
+          90,
+          43
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 90,
+        "requires_grad": true,
+        "shape": [
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 8100,
+        "requires_grad": true,
+        "shape": [
+          90,
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 90,
+        "requires_grad": true,
+        "shape": [
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.weight",
+        "numel": 32400,
+        "requires_grad": true,
+        "shape": [
+          180,
+          180
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.bias",
+        "numel": 180,
+        "requires_grad": true,
+        "shape": [
+          180
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.weight",
+        "numel": 32400,
+        "requires_grad": true,
+        "shape": [
+          180,
+          180
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.bias",
+        "numel": 180,
+        "requires_grad": true,
+        "shape": [
+          180
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "key_map.weight",
+        "numel": 1440,
+        "requires_grad": true,
+        "shape": [
+          16,
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "key_map.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "value_map.weight",
+        "numel": 1440,
+        "requires_grad": true,
+        "shape": [
+          16,
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "value_map.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query_map.weight",
+        "numel": 1440,
+        "requires_grad": true,
+        "shape": [
+          16,
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query_map.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "verification_map.weight",
+        "numel": 1440,
+        "requires_grad": true,
+        "shape": [
+          90,
+          16
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "verification_map.bias",
+        "numel": 90,
+        "requires_grad": true,
+        "shape": [
+          90
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.weight",
+        "numel": 12544,
+        "requires_grad": true,
+        "shape": [
+          64,
+          196
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "next_heads.weight",
+        "numel": 1792,
+        "requires_grad": true,
+        "shape": [
+          28,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "next_heads.bias",
+        "numel": 28,
+        "requires_grad": true,
+        "shape": [
+          28
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "action_head.weight",
+        "numel": 1092,
+        "requires_grad": true,
+        "shape": [
+          14,
+          78
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "action_head.bias",
+        "numel": 14,
+        "requires_grad": true,
+        "shape": [
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "predicted_code.weight",
+        "numel": 1024,
+        "requires_grad": true,
+        "shape": [
+          16,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "predicted_code.bias",
+        "numel": 16,
+        "requires_grad": true,
+        "shape": [
+          16
+        ]
+      }
+    ],
+    "trainable_parameters": 100343
+  },
+  "run_id": "2e19c5e79cfd43bbaff3e26b451477a1",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 76002,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ESWAM002_EXCHANGE_REAL_ROBOT_DEVELOPMENT",
+  "successful_optimizer_steps": 160
+}
