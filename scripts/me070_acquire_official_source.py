@@ -55,7 +55,8 @@ def acquire(metadata,path):
     candidates=[metadata["url"]]
     if isinstance(file_id,int) and file_id>0:
         candidates.extend([f"https://ndownloader.figshare.com/files/{file_id}",
-                           f"https://figshare.com/ndownloader/files/{file_id}"])
+                           f"https://figshare.com/ndownloader/files/{file_id}",
+                           f"https://api.figshare.com/v2/file/download/{file_id}"])
     errors=[]
     try:
         for i,url in enumerate(dict.fromkeys(candidates),1):
