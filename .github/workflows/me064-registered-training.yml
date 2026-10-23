@@ -87,7 +87,11 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f research/replay-bundles/ME064/CLEAN_CHECKOUT_MODEL_REPLAY.json
-          git commit -m 'evidence(me064): independent checkpoint bytes/load replay receipt'
-          git fetch origin "$PUSH_BRANCH"
-          git rebase "origin/$PUSH_BRANCH"
-          git push origin "HEAD:refs/heads/$PUSH_BRANCH"
+          if ! git diff --cached --quiet; then
+            git commit -m 'evidence(me064): independent checkpoint bytes/load replay receipt'
+            git fetch origin "$PUSH_BRANCH"
+            git rebase "origin/$PUSH_BRANCH"
+            git push origin "HEAD:refs/heads/$PUSH_BRANCH"
+          else
+            echo 'ME064 original model replay receipt already tracked; no mutation necessary'
+          fi
