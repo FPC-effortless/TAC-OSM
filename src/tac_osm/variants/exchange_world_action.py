@@ -102,7 +102,7 @@ class ExchangeMemory(nn.Module):
                 new_ids[i, slot] = ids[i]
                 new_keys[i, slot] = F.normalize(keys[i], dim=0, eps=1e-6)
             if bool(new_occupied[i, slot, role]):
-                old = new_values[i, slot, role]
+                old = new_values[i, slot, role].clone()
                 incoming = values[i]
                 symmetric, antisymmetric = self.exchange(old, incoming)
                 # Learned merge rate; antisymmetry gives direction-sensitive
