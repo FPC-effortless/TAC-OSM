@@ -1,0 +1,90 @@
+name: ME063 frozen authentic real-world source and transfer scoring
+on:
+  pull_request:
+    paths:
+      - 'scripts/me063_score_frozen.py'
+      - '.github/workflows/me063-score-frozen.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  real-physical-frozen-evaluation:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Prove all 10 original Git model hashes and clean-checkout load receipt before opening labels
+        run: |
+          test -f research/replay-bundles/ME063/CLEAN_CHECKOUT_MODEL_REPLAY.json
+          test -f research/mathematical-engineering/me063/TRANSFER_PROTOCOL.json
+          PYTHONPATH=src:. python scripts/me063_verify_repo_checkpoints.py --check
+      - name: Open original CAL and historically exposed DEV and reserved different physical task
+        run: |
+          PYTHONPATH=src:. python scripts/me063_score_frozen.py \
+            --publisher-cache "${{ runner.temp }}/me063-frozen-scoring-sources"
+      - name: Publish only genuine original frozen outcome/error receipts into git
+        if: always()
+        env:
+          PUSH_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A research/replay-bundles/ME063/
+          if ! git diff --cached --quiet; then
+            git commit -m 'evidence(me063): original frozen source+transfer outcome scores and calibration'
+            git fetch origin "$PUSH_BRANCH"
+            git rebase "origin/$PUSH_BRANCH"
+            git push origin "HEAD:refs/heads/$PUSH_BRANCH"
+          fi
+  independent-real-evaluation-replay:
+    needs: real-physical-frozen-evaluation
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          clean: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Save original published source and transfer score digests
+        run: |
+          sha256sum research/replay-bundles/ME063/ORIGINAL_SOURCE_SCORES.json \
+            research/replay-bundles/ME063/ORIGINAL_TRANSFER_SCORES.json \
+            research/replay-bundles/ME063/REAL_WORLD_EVALUATION_SUMMARY.json \
+            > /tmp/me063-original-registered-scores.sha256
+      - name: Re-evaluate original frozen model bytes against legally retrievable real publisher outcomes
+        run: |
+          PYTHONPATH=src:. python scripts/me063_score_frozen.py \
+            --publisher-cache "${{ runner.temp }}/me063-independent-physical-replay"
+          sha256sum -c /tmp/me063-original-registered-scores.sha256
+          echo 'ME063_INDEPENDENT_REAL_WORLD_SCORE_REPLAY_PASS'
+      - name: Save independent clean-checkout original scoring evidence
+        env:
+          PUSH_BRANCH: ${{ github.head_ref || github.ref_name }}
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research/replay-bundles/ME063/EVALUATION_REPLAY_RECEIPT.json')
+          s=json.loads(Path('research/replay-bundles/ME063/REAL_WORLD_EVALUATION_SUMMARY.json').read_text())
+          p.write_text(json.dumps({'status':'PASS','scope':'real published source CAL/historical DEV + preregistered different-task transfer','all_score_files_sha256_bitwise_replayed':True,'original_git_checkpoints':10,'source_test_independent':False,'separate_operator_site_independence':False,'actual_transfer_mae':s['frozen_transfer']['mean_physical_MAE'],'actual_source_dev_mae':s['source_dev']['mean_physical_MAE'],'no_refits':True},indent=2,sort_keys=True))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/replay-bundles/ME063/EVALUATION_REPLAY_RECEIPT.json
+          git commit -m 'evidence(me063): independent source and frozen transfer score replay'
+          git fetch origin "$PUSH_BRANCH"
+          git rebase "origin/$PUSH_BRANCH"
+          git push origin "HEAD:refs/heads/$PUSH_BRANCH"
