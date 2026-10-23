@@ -1,0 +1,37 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME068_ORIGINAL_FIT_ONLY_COMMAND_OBSERVATION_TIMING_AUDIT",
+  "study_type": "noncomparative_diagnostic",
+  "no_architecture_superiority_claim": true,
+  "registered_before_first_fit": true,
+  "scientific_purpose": "Without any model optimizer updates, audit real original FIT-only robot qpos action/observation temporal alignment and preexisting servo innovation semantics over common genuine human-free original frames. Do not use old CAL or exposed test or final unopened tissue target.",
+  "real_world_source": {
+    "name": "Original BodenAI RW-RL-HIL original five-task genuine robot FIT episodes at frozen revision 9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+    "observed_real_outcomes": true
+  },
+  "action_lags_relative_to_t": [
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    4,
+    8
+  ],
+  "causal_usable_lags": [
+    0,
+    1,
+    2,
+    4,
+    8
+  ],
+  "future_action_negative_lags_use": "retrospective source-only timestamp diagnostics, strictly banned at actual forecasting",
+  "train_optimizer_steps": 0,
+  "original_frozen_source_fit_episodes": 160,
+  "parameter_or_data_parity_claim": "NOT_AN_ARCHITECTURE_COMPARISON",
+  "test_model_performance_claim": false,
+  "CAL_TEST_or_unopened_task_access": false,
+  "primary_report": "Original FIT one-step persistence vs unchanged FIT-identified servo forecast per common measured autonomous frame and each physical task; report winning lag as exploratory ONLY and absolute physical movement distribution",
+  "scientific_limit": "Source FIT in-sample servo identification cannot claim true physical actuator latency or generalization; do not change deployed action timing before independent frozen real testing"
+}
