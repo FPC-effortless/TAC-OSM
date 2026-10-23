@@ -99,5 +99,5 @@ def test_lifecycle_targets_are_separated_from_base_activity():
     cases=[{"n":4,"activity":[1,2,1,2]},{"n":3,"activity":[1,2,3]}]
     r=audit(cases,{"A|START":1,"A|COMPLETE":2,"B|COMPLETE":3})
     assert r["eligible_midpoint_cases"] == 2
-    assert r["start_to_same_activity_complete_fraction"] == 1
+    assert r["start_to_same_activity_complete_fraction"] == .5
     assert r["target_lifecycle_counts"]["complete"] == 2
