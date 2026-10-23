@@ -1,0 +1,19 @@
+{
+  "study_id": "ENG_REUSE_001",
+  "operation": "no_fit_execution_optimization",
+  "registered_before_timing": true,
+  "lane": "physical",
+  "source_model": "ME080 five original checkpoints, original report/query/source contract unchanged",
+  "scope": ["mathematical notation", "batched independent decoder", "last-query demand execution", "shared quantile inversion", "explicit versioned entity cache"],
+  "no_new_training": true,
+  "no_original_checkpoint_or_tolerance_edits": true,
+  "no_intelligence_or_prediction_gain_claim": true,
+  "prediction_agreement": {"rtol": 0.00001, "atol": 0.000001, "all_five_models": true, "all_960_exposed_real_query_windows": true},
+  "gradient_agreement": "float64 software reference gradient comparison; no optimizer step",
+  "timing": {"threads": 1, "batch": 24, "history": 8, "warmup_rounds": 5, "measured_rounds": 31, "order": "randomized interleaving with seed81081", "report": "all five individual fits, median paired speedup and bootstrap95CI conditional on fixed host/batch; no hardware generality"},
+  "workflows": ["forward all causal prefixes", "forward/backward all causal prefixes", "last-prefix inference", "three mixture quantiles"],
+  "selection": "one implementation; no timing-based checkpoint selection or model tuning",
+  "success": "unchanged live parameter count99816 and output/gradient contracts; report timing regressions as measured",
+  "cache": "caller-owned versioned inference only; reject gaps/conflicting duplicates; reset after revisions; no training graph cache",
+  "unqualified": ["long-history prediction", "better predictive accuracy", "architecture superiority", "causal control", "customer value", "compiler or GPU kernel fusion"]
+}
