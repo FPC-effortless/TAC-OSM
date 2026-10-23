@@ -52,10 +52,12 @@ def audited_pair(native: list[dict], gru: list[dict]) -> dict:
         if not all(math.isfinite(v) and v >= 0 for v in val):
             raise ValueError("invalid stored interval widths")
         sorted_widths = sorted(val)
+        n = len(val)
+        q = lambda p: sorted_widths[max(0, math.ceil(p * n)-1)]
         return {
             "median_hours": statistics.median(val),
             "mean_hours": statistics.mean(val),
-            "p90_hours": sorted_widths[math.ceil(.9 * len(val)) - 1],
+            "p90_hours": q(.9), "p99_hours": q(.99), "maximum_hours": sorted_widths[-1],
             "fraction_width_gt_168h": sum(v > 168 for v in val) / len(val),
             "fraction_width_le_24h": sum(v <= 24 for v in val) / len(val),
         }
@@ -70,6 +72,15 @@ def audited_pair(native: list[dict], gru: list[dict]) -> dict:
         "exact_mcnemar_p_two_sided": exact_mcnemar_p(tac_only, gru_only),
         "interval_widths_native": widths([a[k] for k in keys]),
         "interval_widths_gru": widths([b[k] for k in keys]),
+        "positive_wait_rate": statistics.mean(bool(a[k]["positive_wait_observed"]) for k in keys),
+        "coverage_positive_native": statistics.mean(
+            bool(a[k]["interval_90_covered"]) for k in keys if a[k]["positive_wait_observed"]),
+        "coverage_positive_gru": statistics.mean(
+            bool(b[k]["interval_90_covered"]) for k in keys if b[k]["positive_wait_observed"]),
+        "median_width_positive_native_hours": statistics.median(
+            float(a[k]["interval_width_seconds"])/3600 for k in keys if a[k]["positive_wait_observed"]),
+        "median_width_positive_gru_hours": statistics.median(
+            float(b[k]["interval_width_seconds"])/3600 for k in keys if b[k]["positive_wait_observed"]),
         "coverage_native": statistics.mean(bool(a[k]["interval_90_covered"]) for k in keys),
         "coverage_gru": statistics.mean(bool(b[k]["interval_90_covered"]) for k in keys),
         "mean_logloss_native": statistics.mean(float(a[k]["activity_NLL"]) for k in keys),
