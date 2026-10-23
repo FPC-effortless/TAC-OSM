@@ -1,0 +1,31 @@
+name: ESWAM004 read-only paired original real episode uncertainty
+# Completed original 40-episode paired real-source audit is Git-frozen.
+# No automatic retesting/altering registered comparisons.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original-zero-fit-paired-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam004-causal-kinetic-evidence-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compute fixed paired original episode cluster confidence from frozen Git scores ONLY
+        run: python scripts/eswam004_paired_episode_audit.py
+      - name: Preserve original read-only paired-episode result, no checkpoint writes
+        env:
+          TARGET_BRANCH: research/eswam004-causal-kinetic-evidence-2026-10-23
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/mathematical-engineering/eswam004/PAIRED_EPISODE_AUDIT.json
+          git commit -m 'audit(eswam004): freeze paired real-episode confidence without fitting'
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"

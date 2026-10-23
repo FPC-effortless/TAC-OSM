@@ -1,0 +1,84 @@
+name: ESWAM004 original authentic kinetic models and independent replay
+# All original models and separate numeric audit are Git-owned.
+# Finished study; no automatic fitting or retesting on further commits.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eswam004-original-real-fits
+  cancel-in-progress: false
+jobs:
+  original-authentic-model-fits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam004-causal-kinetic-evidence-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pinned real-research tooling
+        run: |
+          python -m pip install 'pytest==9.1.1' 'numpy==2.3.5' 'pyarrow==21.0.0'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Fail before optimization unless model/source/compulsory budget passes
+        run: |
+          python -m py_compile scripts/eswam004_train_real.py src/tac_osm/variants/kinetic_exchange_world.py
+          PYTHONPATH=src:. python -m pytest -q tests/test_kinetic_exchange_world.py
+          PYTHONPATH=src:. python scripts/eswam004_train_real.py preflight
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/eswam004/FAIR_COMPARISON.json --phase preflight
+          python scripts/audit_training_budget.py
+      - name: Cache only original permitted published robot source
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/me076-pinned-publisher-source
+          key: me076-bodenai-public-five-tasks-original-fit-v1
+      - name: Train five guarded original models with frozen real sampling and score
+        run: PYTHONPATH=src:. python scripts/eswam004_train_real.py fit --cache "${{ runner.temp }}/me076-pinned-publisher-source"
+      - name: Preserve original model bytes before independent replay
+        if: success()
+        env:
+          TARGET_BRANCH: research/eswam004-causal-kinetic-evidence-2026-10-23
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/mathematical-engineering/eswam004/SOURCE_QUALIFICATION.json
+          git add -f research/mathematical-engineering/eswam004/RESULTS.json
+          git add -f research/replay-bundles/ESWAM004
+          git commit -m 'research(eswam004): freeze original five real kinetic model checkpoints and scores'
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
+  independent-original-replay:
+    needs: original-authentic-model-fits
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam004-causal-kinetic-evidence-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: |
+          python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/me076-pinned-publisher-source
+          key: me076-bodenai-public-five-tasks-original-fit-v1
+      - name: Reload every original published checkpoint and re-evaluate actual robot outcomes (zero fitting)
+        run: PYTHONPATH=src:. python scripts/eswam004_train_real.py replay --cache "${{ runner.temp }}/me076-pinned-publisher-source"
+      - name: Preserve strict original independent replay receipt
+        env:
+          TARGET_BRANCH: research/eswam004-causal-kinetic-evidence-2026-10-23
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/replay-bundles/ESWAM004/INDEPENDENT_ORIGINAL_REAL_REPLAY.json
+          git commit -m 'audit(eswam004): independent original real model replay'
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
