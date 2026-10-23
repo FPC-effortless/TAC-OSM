@@ -26,7 +26,7 @@ def digest(value):
 
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, sort_keys=True, indent=2) + "\\n")
+    path.write_text(json.dumps(value, sort_keys=True, indent=2))
 
 
 ROOT = Path("research/mathematical-engineering/me062")
