@@ -1,0 +1,169 @@
+{
+  "actual_examples": 49152,
+  "actual_steps": 2048,
+  "actual_tokens": 393216,
+  "architecture": "gru",
+  "checkpoint_sha256": "e69f258a0ab7996bed1d55d2c9ca9a072805cf4270290eb0c1c4ef9c0edd0dd0",
+  "peak_process_memory_bytes": 611803136,
+  "postfit_profile": {
+    "adamw_analytical_scalar_operations": 1608200,
+    "dispatch_calls": {
+      "aten._foreach_norm.Scalar": 1,
+      "aten._to_copy.default": 1,
+      "aten.abs.default": 1,
+      "aten.add.Tensor": 121,
+      "aten.addmm.default": 28,
+      "aten.asinh.default": 2,
+      "aten.binary_cross_entropy_with_logits.default": 1,
+      "aten.cat.default": 21,
+      "aten.clamp.Tensor": 1,
+      "aten.clamp.default": 1,
+      "aten.detach.default": 72,
+      "aten.div.Scalar": 11,
+      "aten.div.Tensor": 19,
+      "aten.expand.default": 9,
+      "aten.lift_fresh.default": 1,
+      "aten.linalg_vector_norm.default": 1,
+      "aten.masked_fill.Scalar": 6,
+      "aten.maximum.default": 4,
+      "aten.mean.default": 1,
+      "aten.mean.dim": 5,
+      "aten.mm.default": 54,
+      "aten.mul.Tensor": 131,
+      "aten.neg.default": 13,
+      "aten.new_zeros.default": 1,
+      "aten.ones_like.default": 3,
+      "aten.reciprocal.default": 1,
+      "aten.rsub.Scalar": 8,
+      "aten.select.int": 19,
+      "aten.select_backward.default": 8,
+      "aten.sigmoid.default": 19,
+      "aten.sigmoid_backward.default": 18,
+      "aten.silu.default": 2,
+      "aten.silu_backward.default": 2,
+      "aten.slice.Tensor": 15,
+      "aten.slice_backward.default": 4,
+      "aten.softplus.default": 2,
+      "aten.softplus_backward.default": 2,
+      "aten.split.Tensor": 17,
+      "aten.stack.default": 4,
+      "aten.sub.Tensor": 10,
+      "aten.sum.dim_IntList": 32,
+      "aten.t.default": 138,
+      "aten.tanh.default": 11,
+      "aten.tanh_backward.default": 11,
+      "aten.unbind.int": 1,
+      "aten.unsqueeze.default": 22,
+      "aten.view.default": 49,
+      "aten.where.self": 6,
+      "aten.zeros_like.default": 2
+    },
+    "forward_backward_clip_scalar_operations": 115823598,
+    "learned_parameter_tensors": 14,
+    "operation_breakdown": {
+      "_foreach_norm": 200988,
+      "_to_copy": 0,
+      "abs": 8064,
+      "add": 553993,
+      "addmm": 38400192,
+      "asinh": 5376,
+      "binary_cross_entropy_with_logits": 6912,
+      "cat": 0,
+      "clamp": 2689,
+      "detach": 0,
+      "div": 145440,
+      "expand": 0,
+      "lift_fresh": 0,
+      "linalg_vector_norm": 28,
+      "masked_fill": 0,
+      "maximum": 24206,
+      "mean": 32352,
+      "mm": 74568960,
+      "mul": 443354,
+      "neg": 43022,
+      "new_zeros": 0,
+      "ones_like": 0,
+      "reciprocal": 1,
+      "rsub": 10752,
+      "select": 0,
+      "select_backward": 0,
+      "sigmoid": 152832,
+      "sigmoid_backward": 112896,
+      "silu": 179520,
+      "silu_backward": 359040,
+      "slice": 0,
+      "slice_backward": 0,
+      "softplus": 80640,
+      "softplus_backward": 96768,
+      "split": 0,
+      "stack": 0,
+      "sub": 50976,
+      "sum": 187925,
+      "t": 0,
+      "tanh": 39168,
+      "tanh_backward": 117504,
+      "unbind": 0,
+      "unsqueeze": 0,
+      "view": 0,
+      "where": 0,
+      "zeros_like": 0
+    },
+    "parameter_count": 100494,
+    "total_update_operations": 117431798,
+    "unsupported_float_operators": {}
+  },
+  "sampling": {
+    "importance_sha256": "215018aaf4ce94050d096ec94a6122e24b2174f10201eb46e372fc8f0e4d1908",
+    "sample_order_sha256": "efbc110a3c40fd5600e0f6231419196a934db67b755ae910d6cbae9f4c420cb8",
+    "sampling": "50%uniform+50%moving, exact balance-heuristic importance to natural within-task distribution",
+    "task_motion_prevalence": {
+      "clean_stains_off_tabletop": 0.07875289532703408,
+      "fold_and_stack_scattered_clothes_neatly": 0.10357912009024715,
+      "hang_clothes_on_drying_rack": 0.08928571428571429,
+      "line_trash_can_with_trash_bag": 0.13198981756470088,
+      "pour_water_from_kettle_to_make_tea": 0.06637095985127686
+    },
+    "unique_FIT_eligible_origins": 190911
+  },
+  "seed": 78005,
+  "trace": [
+    {
+      "FIT_loss": 0.4678611755371094,
+      "step": 1
+    },
+    {
+      "FIT_loss": 0.5685825943946838,
+      "step": 256
+    },
+    {
+      "FIT_loss": 0.26155221462249756,
+      "step": 512
+    },
+    {
+      "FIT_loss": 0.29264941811561584,
+      "step": 768
+    },
+    {
+      "FIT_loss": 0.335134357213974,
+      "step": 1024
+    },
+    {
+      "FIT_loss": 0.40242934226989746,
+      "step": 1280
+    },
+    {
+      "FIT_loss": 0.39006713032722473,
+      "step": 1536
+    },
+    {
+      "FIT_loss": 0.1872658133506775,
+      "step": 1792
+    },
+    {
+      "FIT_loss": 0.26149848103523254,
+      "step": 2048
+    }
+  ],
+  "training_cpu_seconds": 21.282895837000012,
+  "valid_dense_future_target_presentations": 1172562
+}

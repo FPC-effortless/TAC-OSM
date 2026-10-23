@@ -62,3 +62,15 @@ def test_exact_importance_weight_recovers_natural_motion_prevalence():
     w_m=1/(.5+.5/p);w_s=2.
     assert abs(q_m*w_m-p)<1e-12
     assert abs(q_m*w_m+q_s*w_s-1)<1e-12
+
+
+@pytest.mark.parametrize('scores,labels,auc,ap',[
+    ([.9,.8,.2,.1],[1,1,0,0],1.,1.),
+    ([.1,.2,.8,.9],[1,1,0,0],0.,5/12),
+    ([.5,.5],[1,0],.5,.5),
+])
+def test_motion_ranking_has_correct_tie_and_direction_behavior(scores,labels,auc,ap):
+    from scripts.me078_report_capability import ranking
+    result=ranking([{'moving':bool(y),'motion_probability':p} for p,y in zip(scores,labels)])
+    assert abs(result['auc']-auc)<1e-12
+    assert abs(result['ap']-ap)<1e-12
