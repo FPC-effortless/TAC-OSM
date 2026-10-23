@@ -9,6 +9,33 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
+## Six specialized TAC-OSM research lanes — unmerged code refactor
+
+This research branch adds a **shared typed interface and six domain-specific
+advisory/evidence modules**, not six new trained neural checkpoints:
+`src/tac_osm/variants/` — System1 (one-step risk, no authorization),
+Physical (real-state/action and honest persistence/servo baseline), Enterprise
+(registered original-checkpoint forecast envelope), Temporal (dual clock as-of
+replay), Edge-Lite (hardware-export/parameter evidence), and Counterfactual
+(noncausal scenario evaluation).
+
+See [architectural plan and historical evidence](research/SIX_VARIANT_ARCHITECTURE_AND_EVIDENCE.md),
+[structured ME/DEV lane index](research/SIX_VARIANT_EXPERIMENT_INDEX.json),
+and [variant software tests](tests/test_six_variant_adapters.py). Existing
+ME069–ME073 models/replay bundles retain their original paths and weights.
+ME074's frozen associative-memory lesion was small/inconsistent and does not
+prove its removal improves a newly trained model; early fast-state effects do
+not prove a reflex policy. No new trained model, heldout prediction gain,
+hardware latency, verified business completion or causal real-world action
+policy is established by these interfaces.
+
+**Every new trainable model in any lane remains subject to the prospective
+95k–105k actual learned-parameter budget** until specifically amended by the
+owner. Proposed tiny 10k–80k architectures are *not authorized new fits*.
+For scientific promotion use the [capability truth standard](https://github.com/FPC-effortless/TAC-OSM/blob/research/master-research-plan/research/CAPABILITY_PROGRESS_TRUTH_STANDARD.md),
+authentic outcomes, original Git-held fitted weights and independent replay.
+Woyengi owns authoritative state and external enforcers own action permission.
+
 ## Active architecture development — 2026-10-23
 
 Latest trained candidate: [ME073 native autoregressive trajectories](research/mathematical-engineering/me073/RESULTS.md).
