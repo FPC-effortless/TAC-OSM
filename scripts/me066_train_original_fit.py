@@ -29,7 +29,7 @@ def write_json(path, value):
 
 def train():
     torch.set_num_threads(1)
-    manifest=json.loads((ROOT/"FAIR_COMPARISON.json").read_text())
+    if set(CONFIG)!={"native_tac","gru_world","compact_rssm","selective_diagonal_ssm"}:\n        raise RuntimeError("four registered architectures required; no added or dropped arm")\n    manifest=json.loads((ROOT/"FAIR_COMPARISON.json").read_text())
     registration=json.loads((ROOT/"TASK_LEVEL_SPLIT.json").read_text())
     permission=json.loads((ROOT/"TRAINING_PERMISSION.json").read_text())
     probe=json.loads((OUT/"STORAGE_PROBE_MANIFEST.json").read_text())
