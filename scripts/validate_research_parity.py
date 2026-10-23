@@ -217,6 +217,13 @@ def check_manifest(m,phase="preflight"):
                 positive_num(result.get(k),k,
                     whole=k in ("actual_steps","actual_examples","actual_tokens","peak_memory_bytes"))
             text_field(result.get("flops_profiler"),"independent training_flops profiler provenance")
+            if requires_100k_policy(m["study_id"]):
+                check_model_parameter_target(
+                    result.get("trainable_parameters"),result.get("deployed_parameters"),
+                    label=f"postfit {r['architecture']} seed {r['seed']}")
+                demand(result["trainable_parameters"]==r["trainable_parameters"] and
+                       result["deployed_parameters"]==r["deployed_parameters"],
+                       "postfit actual model parameter counts deviate from registered original prefit counts")
             digest(result.get("checkpoint_sha256"),"frozen checkpoint")
             digest(result.get("actual_sample_order_sha256"),"actual data replay digest")
             digest(result.get("evaluation_split_sha256"),"actual evaluated test IDs")
