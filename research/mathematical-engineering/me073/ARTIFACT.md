@@ -34,3 +34,15 @@ bytes and clean GitHub scoring replay is required before REPO_REPLAY=PASS.
 Training continuation/full deterministic training replay is not independently
 claimed merely because state/order is preserved. Scoring evidence is exposed
 DEV only. EOR is a retrospective record proxy; no sealed TEST is scored.
+
+## Executed preservation and replay
+
+Original five model/optimizer/RNG bytes frozen at100671c7 before scoring;
+original distributions/scores at190c2bc8. REPLAY_MANIFEST.json indexes37 exact
+loader/code/config/model/output files (23,210,690 bytes) and the separate
+independent audit SHA. Independent GitHub run39948180370 PASS restored all
+five models/optimizers, remeasured actual99,781 trainable/deployed counts,
+recomputed8,495 case/query outputs,33,980 horizon marginals and67,960
+representative weighted paths and all real REPORT scores. Original outputs
+restored byte-for-byte after numeric comparisons under the preregistered
+contract. No fit, posthoc calibration or TEST inference occurred.

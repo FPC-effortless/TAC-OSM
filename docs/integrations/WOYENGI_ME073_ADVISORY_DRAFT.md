@@ -19,7 +19,8 @@ Return checkpoint identity and source provenance; per-horizon activity/EOR
 probabilities, conditional time quantiles and representative imagined paths;
 finite-particle count, evidence/exposure tier and abstention reasons. A source
 record boundary is not a completed or stalled customer workflow. Include
-conditional survival support and clear time units.
+conditional survival support and clear time units. Imagined paths are weighted
+record-continuation scenarios; all proposed events are not asserted to occur.
 
 The model can estimate `P(delay to next recorded event >24h | event exists)`.
 This is **not** `P(SLA breach)` and omits cases with no subsequently observed

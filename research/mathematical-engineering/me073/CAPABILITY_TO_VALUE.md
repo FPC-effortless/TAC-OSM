@@ -25,3 +25,13 @@
 - **Stage:** R0 research development only. No R1 independent useful prediction,
   R2 product readiness, R3 customer value or R4 investment/business diligence
   milestone is unlocked by local training. Keep PR draft and unmerged.
+
+## Executed developmental readout
+
+Five originals trained, frozen before REPORT at100671c7; original outputs at
+190c2bc8. Six-prefix four-event accuracy62.11%, one-step NLL .372472 and
+interval score 18.97h; nominal 90 one-step coverage 85.99%. Early two-prefix
+accuracy 40% in every seed and worse NLL 1.416298; distant probability quality
+and timing tails remain weak. Independent GitHub run39948180370 restored all five originals and recomputed
+all registered real distributions, paths and scores without refitting.
+REPO_REPLAY=PASS; receipt in REPLAY_AUDIT.json. No R1–R4 or customer-value stage unlocked.
