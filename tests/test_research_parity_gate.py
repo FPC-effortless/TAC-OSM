@@ -67,8 +67,8 @@ def test_final_requires_real_measurement_fields_and_replay_receipts():
 
 def test_preflight_rejects_parameter_mismatch_not_merely_warns():
     m=fixture()
-    m["arms"][1]["trainable_parameters"]=115000
-    m["arms"][1]["deployed_parameters"]=115000
+    m["arms"][1]["trainable_parameters"]=102000
+    m["arms"][1]["deployed_parameters"]=102000
     with pytest.raises(ParityError,match="parameters mismatch"):check_manifest(m)
 
 def test_preflight_rejects_source_or_actual_exposure_mismatch():
@@ -118,7 +118,8 @@ def test_literature_gap_or_required_seed_cannot_be_omitted():
 def test_diagnostic_cannot_smuggle_architecture_superiority_label():
     m={"schema_version":"tac-osm.parity.v1","study_id":"REAL_DIAGNOSTIC",
        "study_type":"noncomparative_diagnostic","scientific_purpose":"Investigate numerical replay",
-       "no_architecture_superiority_claim":True}
+       "no_architecture_superiority_claim":True,
+       "no_new_model_fits":True}
     assert check_manifest(m)["status"]=="PASS_DIAGNOSTIC_ONLY"
     m["no_architecture_superiority_claim"]=False
     with pytest.raises(ParityError,match="forbid"):check_manifest(m)
