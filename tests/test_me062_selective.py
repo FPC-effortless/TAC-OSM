@@ -46,7 +46,8 @@ def test_no_future_action_can_change_an_earlier_horizon():
 
 def test_shared_physical_objective_has_finite_gradients():
     torch.manual_seed(62002)
-    x = torch.randn(2, 14)
+    history = torch.randn(2, 4, 14)
+    executed = torch.randn(2, 3, 14)
     actions = torch.randn(2, 16, 14)
     y = torch.randn(2, 16, 14)
     for name in ("native_tac", "gru_world"):
@@ -54,7 +55,11 @@ def test_shared_physical_objective_has_finite_gradients():
         optim = torch.optim.AdamW(model.parameters(), lr=.001)
         for _ in range(2):
             optim.zero_grad(set_to_none=True)
-            p = model.forecast(model.initial(2), x, actions)
+            belief = model.initial(2)
+            for t in range(3):
+                belief = model.observe(belief, history[:, t], executed[:, t],
+                                       history[:, t+1], torch.zeros(2, 1, dtype=torch.bool))
+            p = model.forecast(belief, history[:, -1], actions)
             loss = selective_gaussian_forecast_loss(model, p, y, torch.ones(2, 16, 1, dtype=torch.bool))
             assert torch.isfinite(loss)
             loss.backward()
