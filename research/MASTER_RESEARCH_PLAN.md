@@ -243,8 +243,8 @@ Source TAC improves 14.09% over persistence and 28.56% over the preceding
 ME060 recipe, with changed capacity/features/loss/seeds disclosed. It still
 loses narrowly to the matched GRU, so the source gate fails. On the separately
 registered different task, TAC beats GRU by 3.20%, wins all five paired seeds,
-and has TAC-minus-GRU episode interval [-.021299,-.012083]. Persistence remains
-8.16% better than TAC, so the transfer gate also fails. Target trajectories
+and has TAC-minus-GRU episode interval [-.021299,-.012083]. TAC remains
+8.16% worse than persistence, so the transfer gate also fails. Target trajectories
 opened only after models froze; no target fitting or preprocessing adaptation
 occurred. Same robot interface does not establish different-site/operator
 generalization. Intervals condition on fitted seeds and are not multiplicity
@@ -252,15 +252,15 @@ adjusted across this program.
 
 ME061 uncertainty is implemented and measured, not qualified: 90% nominal
 whole-episode intervals attain 85.79% source DEV coverage with mean physical
-width11.116. No observed inspection-cost utility, policy value, causal control,
+width 11.116. No observed inspection-cost utility, policy value, causal control,
 iterative reasoning benefit or online weight adaptation was evaluated.
 
-ME061 parameters33,548 vs33,802 and common operator-profile estimates51.22M
-vs50.85M per update pass 1% gates. Mean optimizer CPU18.810 vs7.905 seconds
+ME061 parameters 33,548 vs 33,802 and common operator-profile estimates 51.22M
+vs 50.85M per update pass 1% gates. Mean optimizer CPU 18.810 vs 7.905 seconds
 is an efficiency limitation. Supported-operator estimates do not certify true
 complete hardware FLOPs. Source error arrays and frozen target results replay
-exactly;978 tests pass. All20 weights/optimizer checkpoints and detailed scores
-are retained in a checksummed workspace archive (PR340 ARTIFACT.md), not
+exactly; 978 tests pass. All 20 weights/optimizer checkpoints and detailed scores
+are retained in a checksummed workspace archive (PR #340 ARTIFACT.md), not
 misrepresented as an independently downloaded GitHub Actions training artifact.
 
 **Next construction objective:** retain ME061 as a development candidate and
