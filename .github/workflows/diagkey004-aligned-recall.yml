@@ -37,3 +37,13 @@ jobs:
           fi
       - name: Check honest capability scorecard
         run: python scripts/validate_capability_progress.py research/mathematical-engineering/diagkey004/CAPABILITY_SCORECARD.json
+      - name: Audit all numeric differences without changing the original replay tolerance
+        if: always()
+        run: python -m scripts.diagkey004_replay_drift
+      - name: Preserve cross-CPU audit, including a strict replay failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagkey004-original-cross-cpu-audit
+          path: research/replay-bundles/DIAGKEY004/CROSS_CPU_AUDIT.json
+          if-no-files-found: ignore
