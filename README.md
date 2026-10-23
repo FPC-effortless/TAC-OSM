@@ -9,16 +9,22 @@ in which a specific mechanism can be switched off, measured, and attributed —
 and in which a measurement that refers to nothing is caught before it is
 reported.
 
-## Active architecture development — 2026-10-22
+## Active architecture development — 2026-10-23
 
-The [integrated predictive-state candidate](research/predictive-state-capability-2026-10-22/README.md)
-implements native fast/slow associative state, action-conditioned prediction
-and masked outcome correction. It is **untrained**; no new capability gain is
-claimed. The publisher OBD example is checksum-verified and rejected for
-entity-memory research because it lacks documented persistent IDs. New fits
-remain blocked by dataset qualification and the
-[compulsory parity policy](research/CAPABILITY-FIRST-RESEARCH-RESET-2026-10-22.md).
-This draft includes governance PR #318; neither branch is merged into master.
+Latest draft research: [ME061 native world model](research/mathematical-engineering/me061/RESULTS.md),
+updated 2026-10-23. Five paired authentic-robot fits train bounded fast/slow
+associative state, direct action-conditioned trajectories and predictive
+uncertainty. Native TAC source DEV MAE is .603894 versus .702952 persistence
+and .602600 matched GRU. Frozen different-task MAE is .493206 versus .509535
+GRU and .455992 persistence. Source prediction improved, but both registered
+superiority gates failed. No policy-value, autonomous-control or commercial
+qualification is claimed. [ME060's preceding failures](research/mathematical-engineering/me060/RESULTS.md)
+remain preserved; all work is in stacked draft research branches.
+
+The earlier [integrated predictive-state design](research/predictive-state-capability-2026-10-22/README.md)
+and [compulsory parity policy](research/CAPABILITY-FIRST-RESEARCH-RESET-2026-10-22.md)
+remain source references. OBD lacks documented persistent entity IDs and is
+not used as evidence of sequential entity memory.
 
 ## The central claim under test
 

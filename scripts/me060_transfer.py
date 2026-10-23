@@ -13,10 +13,10 @@ from scripts.me060_train_trajectory import ROOT, HISTORY, HORIZON, digest, build
 from scripts.me057_train_fused_anchor_robot import sha_bytes, sha_file, normalize, write_json
 
 
-def reserve(cache):
+def reserve(cache,root=ROOT,tag="me060",excluded=()):
     import hashlib
-    available=[t for t in CANDIDATES if t!="clean_stains_off_tabletop"]
-    task=min(available,key=lambda t:hashlib.sha256(f"{REVISION}:me060-transfer:v1:{t}".encode()).hexdigest())
+    available=[t for t in CANDIDATES if t!="clean_stains_off_tabletop" and t not in excluded]
+    task=min(available,key=lambda t:hashlib.sha256(f"{REVISION}:{tag}-transfer:v1:{t}".encode()).hexdigest())
     info=download_file(REVISION,f"{task}/meta/info.json",cache/task/"meta/info.json",1_000_000)
     episodes=download_file(REVISION,f"{task}/meta/episodes.jsonl",cache/task/"meta/episodes.jsonl",2_000_000)
     metadata=json.loads(info);rows=metadata_rows(episodes)
@@ -24,8 +24,8 @@ def reserve(cache):
         raise RuntimeError("different physical interface requires separate qualification")
     blocks=sorted({e//4 for e,n in rows if n>HISTORY+HORIZON},key=lambda b:digest([task,"me060-transfer-block",b]))[:20]
     cohort=[(e,n) for e,n in rows if e//4 in blocks and n>HISTORY+HORIZON]
-    plan={"study":"ME060_FROZEN_DIFFERENT_TASK_TRANSFER","task":task,"revision":REVISION,
-        "selection":"minimum SHA256(revision:me060-transfer:v1:task), excluding source task; 20 hashed adjacent-episode blocks",
+    plan={"study":tag.upper()+"_FROZEN_DIFFERENT_TASK_TRANSFER","task":task,"revision":REVISION,
+        "selection":f"minimum SHA256(revision:{tag}-transfer:v1:task), excluding source and prior targets; 20 hashed adjacent-episode blocks",
         "info_sha256":sha_bytes(info),"episodes_sha256":sha_bytes(episodes),"cohort":cohort,
         "cohort_sha256":digest(cohort),"trajectory_files_opened":0,"training_updates":0,
         "checkpoint_selection":"all ten source final checkpoints; no target normalization/calibration or model selection",
@@ -33,14 +33,14 @@ def reserve(cache):
         "gate":"TAC >=2% lower MAE than GRU and both priors; episode paired TAC-GRU 95% interval upper bound below0",
         "scope":"different authentic task in this study, not a different robot/site/operator; causal policy value unsupported",
         "registration_before_target_trajectory_access":True}
-    write_json(ROOT/"TRANSFER_PROTOCOL.json",plan)
+    write_json(root/"TRANSFER_PROTOCOL.json",plan)
     print(json.dumps({"task":task,"episodes":len(cohort),"trajectory_files_opened":0}),flush=True)
 
 
-def run(cache,folder):
+def run(cache,folder,root=ROOT,model_factory=build):
     import pyarrow.parquet as pq
     torch.set_num_threads(1)
-    plan=json.loads((ROOT/"TRANSFER_PROTOCOL.json").read_text());task=plan["task"]
+    plan=json.loads((root/"TRANSFER_PROTOCOL.json").read_text());task=plan["task"]
     report=json.loads((folder/"results.json").read_text());records=report["checkpoints"]
     if len(records)!=10:raise RuntimeError("all ten frozen source models required")
     for r in records:
@@ -64,7 +64,7 @@ def run(cache,folder):
     for r in records:
         checkpoint=torch.load(folder/r["path"],weights_only=False)
         identified={k:np.asarray(v,dtype=np.float32) for k,v in checkpoint["identified"].items()}
-        model=build(r["arm"],identified);model.load_state_dict(checkpoint["model"])
+        model=model_factory(r["arm"],identified);model.load_state_dict(checkpoint["model"])
         predictions[f'{r["arm"]}-s{r["seed"]}']=evaluate(model,normalize(raw,identified),identified)
     write_json(folder/"TRANSFER_RESULTS.json",{"protocol":plan,"target_source_sha256":digest({str(e):r["sha256"] for e,r in sorted(raw.items())}),
         "source_checkpoint_hashes":[r["measured"]["checkpoint_sha256"] for r in records],

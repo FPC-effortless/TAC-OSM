@@ -1,0 +1,25 @@
+name: ME061 reliable native world model contract
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/real_robot_me061_reliable.py'
+      - 'scripts/me061_*.py'
+      - 'tests/test_me061_*.py'
+      - 'research/mathematical-engineering/me061/**'
+      - '.github/workflows/me061-reliable-world-model.yml'
+  workflow_dispatch:
+jobs:
+  mathematical-and-resource-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip install numpy pytest pyarrow
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: PYTHONPATH=src:. pytest -q tests/test_me061_reliable.py
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me061/FAIR_COMPARISON.json --phase preflight
+      - run: |
+          if [ -f research/mathematical-engineering/me061/FAIR_COMPARISON_FINAL.json ]; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me061/FAIR_COMPARISON_FINAL.json --phase final
+          fi

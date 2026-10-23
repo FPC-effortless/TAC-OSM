@@ -18,6 +18,7 @@ def summarize(folder,cache,model_factory=build):
     torch.set_num_threads(1)
     report=json.loads((folder/"results.json").read_text())
     final_plan=json.loads((folder/"FAIR_COMPARISON_FINAL.json").read_text())
+    seeds=sorted({r["seed"] for r in final_plan["arms"]})
     final=check_manifest(final_plan,"final")
     split,metadata=cohorts(cache)
     first=torch.load(folder/report["checkpoints"][0]["path"],weights_only=False)
@@ -42,11 +43,11 @@ def summarize(folder,cache,model_factory=build):
     ids=sorted(next(iter(dev.values())),key=int)
     by_arm={};uncertainty={};per_seed={}
     for arm in ("native_tac","gru_world"):
-        episode=np.asarray([[dev[f"{arm}-s{s}"][e]["MAE"] for e in ids] for s in SEEDS])
+        episode=np.asarray([[dev[f"{arm}-s{s}"][e]["MAE"] for e in ids] for s in seeds])
         by_arm[arm]=episode.mean(0)
         per_seed[arm]=episode.mean(1).tolist()
         uncertainty[arm]=[]
-        for seed in SEEDS:
+        for seed in seeds:
             key=f"{arm}-s{seed}"
             cal=list(evaluation["CAL"][key].values())
             cal_scores=np.asarray([max(row["scaled_errors"]) for row in cal])
@@ -88,8 +89,40 @@ def summarize(folder,cache,model_factory=build):
     print(json.dumps({k:summary[k] for k in ("mean_physical_MAE","TAC_minus_GRU_episode_bootstrap_95_interval", "TAC_paired_seed_wins","registered_development_gate_pass","replay")}),flush=True)
 
 
+def summarize_transfer(folder):
+    report=json.loads((folder/"TRANSFER_RESULTS.json").read_text())
+    values=report["evaluation"]
+    ids=sorted(next(iter(values.values())),key=int)
+    seeds=sorted({int(key.rsplit("-s",1)[1]) for key in values})
+    errors={arm:np.asarray([[values[f"{arm}-s{s}"][e]["MAE"] for e in ids] for s in seeds])
+        for arm in ("native_tac","gru_world")}
+    reference=next(iter(values.values()))
+    means={arm:float(x.mean()) for arm,x in errors.items()}
+    means.update({key:float(np.mean([reference[e][key+"_MAE"] for e in ids]))
+                  for key in ("persistence","servo")})
+    d=errors["native_tac"].mean(0)-errors["gru_world"].mean(0)
+    rng=np.random.default_rng(60061)
+    interval=np.quantile(d[rng.integers(len(ids),size=(20000,len(ids)))].mean(1),[.025,.975]).tolist()
+    result={"study":report["protocol"]["study"],"task":report["protocol"]["task"],
+        "episodes":len(ids),"mean_physical_MAE":means,
+        "TAC_minus_GRU_episode_bootstrap_95_interval":interval,
+        "TAC_paired_seed_wins":int(sum(errors["native_tac"].mean(1)<errors["gru_world"].mean(1))),
+        "per_seed_MAE":{a:x.mean(1).tolist() for a,x in errors.items()},
+        "target_updates":0,"target_preprocessing_fitted":False,
+        "target_source_sha256":report["target_source_sha256"],
+        "registered_transfer_gate_pass":bool(means["native_tac"]<=.98*min(means["gru_world"],means["persistence"],means["servo"]) and interval[1]<0),
+        "limitations":["same robot interface, different task; site/operator independence unknown",
+            "interval conditional on five source-trained models; no multiple-comparison adjustment",
+            "no policy value or autonomous control evaluation"]}
+    write_json(folder/"TRANSFER_SUMMARY.json",result)
+    print(json.dumps(result),flush=True)
+
+
 if __name__=="__main__":
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument("--output",type=Path,default=Path("results/me060"))
     p.add_argument("--source-cache",type=Path,required=True)
-    a=p.parse_args();summarize(a.output,a.source_cache)
+    p.add_argument("--transfer-summary",action="store_true")
+    a=p.parse_args()
+    if a.transfer_summary:summarize_transfer(a.output)
+    else:summarize(a.output,a.source_cache)
