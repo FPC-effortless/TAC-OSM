@@ -37,6 +37,14 @@ jobs:
         run: |
           python scripts/me070_audit_lifecycle.py             --cache /tmp/me070-lifecycle-original             --output /tmp/me070-original-lifecycle-diagnostic.json
           test -s /tmp/me070-original-lifecycle-diagnostic.json
+      - name: Count genuine 64/128/256-event support in original checksum-qualified BPI2012 cohorts
+        env:
+          PYTHONPATH: .
+        run: |
+          python scripts/me070_qualify_existing_bpi2012.py \
+            --cache /tmp/me070-lifecycle-original \
+            --output /tmp/me070-original-bpi2012-eligibility.json
+          test -s /tmp/me070-original-bpi2012-eligibility.json
       - name: Disclose missing authentic long-history source and prohibited inference
         run: |
           echo 'ME070 LONG_HISTORY_SOURCE=NOT_YET_VERIFIED: source must be provided from licensed original file.'
@@ -50,4 +58,5 @@ jobs:
           path: |
             /tmp/me070-original-score-diagnostic.json
             /tmp/me070-original-lifecycle-diagnostic.json
+            /tmp/me070-original-bpi2012-eligibility.json
           if-no-files-found: ignore
