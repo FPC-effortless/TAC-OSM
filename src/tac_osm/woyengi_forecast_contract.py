@@ -115,17 +115,37 @@ def validate_prediction_request(payload: Mapping[str, Any], *, width: int = 14) 
 def prediction_response(request: Mapping[str, Any], *,
                         forecast_summaries: list[Mapping[str, Any]],
                         model_replay_commit: str, width: int = 14) -> dict:
-    """Return non-authoritative proposals; no field grants tool authority."""
+    """Only finite predictions requiring review; no passthrough tool commands."""
     fingerprint = validate_prediction_request(request, width=width)
     if len(forecast_summaries) != len(request["candidate_scenarios"]):
         raise ValueError("forecast count must match scenario count")
-    expected_ids = [s["scenario_id"] for s in request["candidate_scenarios"]]
-    actual_ids = [s.get("scenario_id") for s in forecast_summaries]
-    if actual_ids != expected_ids:
-        raise ValueError("forecast identity/order mismatch")
-    _ = model_replay_commit.strip() if isinstance(model_replay_commit, str) else ""
-    if len(_) != 40 or any(c not in "0123456789abcdef" for c in _):
+    if not isinstance(model_replay_commit, str) or len(model_replay_commit) != 40 or any(
+            c not in "0123456789abcdef" for c in model_replay_commit):
         raise ValueError("pinned 40-hex Git commit required")
+
+    accepted = []
+    for source, row in zip(request["candidate_scenarios"], forecast_summaries):
+        if not isinstance(row, Mapping) or row.get("scenario_id") != source["scenario_id"]:
+            raise ValueError("forecast identity/order mismatch")
+        # This architecture has not qualified abstention or risk thresholds.
+        # The receiver MUST review all outputs; authorization is external.
+        if row.get("review_required") is not True:
+            raise ValueError("unqualified forecasts must request review")
+        mean = row.get("predicted_states")
+        std = row.get("predicted_std")
+        horizon = len(source["proposed_actions"])
+        if not isinstance(mean, list) or not isinstance(std, list) or (
+                len(mean) != horizon or len(std) != horizon):
+            raise ValueError("forecast must cover each proposed action horizon")
+        for i in range(horizon):
+            _vector(mean[i], width, "forecast.predicted_states")
+            _vector(std[i], width, "forecast.predicted_std")
+            if any(value <= 0 for value in std[i]):
+                raise ValueError("forecast std must be positive")
+        accepted.append({
+            "scenario_id": source["scenario_id"], "predicted_states": mean,
+            "predicted_std": std, "review_required": True,
+        })
     return {
         "schema_version": SCHEMA,
         "request_id": request["request_id"],
@@ -138,5 +158,5 @@ def prediction_response(request: Mapping[str, Any], *,
         "status": "forecast_only_unqualified",
         "authority": "none",
         "execute": False,
-        "forecasts": [dict(row) for row in forecast_summaries],
+        "forecasts": accepted,
     }
