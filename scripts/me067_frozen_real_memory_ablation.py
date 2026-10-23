@@ -16,7 +16,7 @@ import torch
 from scripts.me060_train_trajectory import HISTORY,HORIZON
 from scripts.me064_mixed_real_fit import load_members,get_meta
 from scripts.me057_train_fused_anchor_robot import normalize
-from scripts.me066_score_frozen import verify_inventory,frozen_model
+from scripts.me066_score_frozen import frozen_model
 
 REPLAY = Path("research/replay-bundles/ME066")
 OUT = Path("research/replay-bundles/ME067")
@@ -29,6 +29,26 @@ GRU_LESIONS = ("full","fast_zero","kinematics_zero","all_hidden_zero")
 
 def digest_file(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+def original_frozen_inventory():
+    task=json.loads((Path("research/mathematical-engineering/me066")/"TASK_LEVEL_SPLIT.json").read_text())
+    manifest=json.loads((Path("research/mathematical-engineering/me066")/"FAIR_COMPARISON.json").read_text())
+    training=json.loads((REPLAY/"TRAINING_RESULT.json").read_text())
+    audited=json.loads((REPLAY/"CLEAN_CHECKOUT_MODEL_REPLAY.json").read_text())
+    if (audited.get("model_replay")!="PASS" or
+            audited.get("original_git_trained_model_bytes_hashed_and_restored")!=20 or
+            training.get("real_task_transfer_result")!="NOT_RUN" or
+            training.get("target_trajectory_files_opened")!=0):
+        raise RuntimeError("cannot reopen immutable original ME066 model evidence")
+    rows=training["original_checkpoints"]
+    if len(rows)!=20 or len({(r["arm"],r["seed"]) for r in rows})!=20:
+        raise RuntimeError("not all original 20 trained model identities preserved")
+    for row in rows:
+        if digest_file(row["path"])!=row["checkpoint_sha256"]:
+            raise RuntimeError("original trained model binary SHA mismatch")
+    if task["heldout_task_name"]!=manifest["prospective_untouched_target"]["task"]:
+        raise RuntimeError("frozen ME066 metadata target altered")
+    return task,manifest,rows
 
 def require_original():
     if not (REPLAY/"EVALUATION_REPLAY_RECEIPT.json").is_file():
@@ -156,7 +176,7 @@ def summarize(scores,lesions,site):
 
 def main(cache):
     torch.set_num_threads(1)
-    task,manifest,rows=verify_inventory()
+    task,manifest,rows=original_frozen_inventory()
     # ME066 verifies no repeat score-file write and cannot run here because
     # target is already exposed. Reuse only its original reader + checkpoints.
     original_target,original_cal=require_original()
