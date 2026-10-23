@@ -35,3 +35,18 @@ PYTHONPATH=src:. python scripts/verify_reusable_execution.py
 ```
 
 Original timing collection is deliberately one-shot and refuses to overwrite the preserved benchmark artifact. For a new host/timing study, create a new dated registration/output rather than silently replacing original timings.
+
+## Independent external verification
+
+[GitHub run 40012640343](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40012640343)
+**PASS** at source commit `b80db79c`: five software tests, original actual-model/
+optimizer-receipt integrity, all five original models and all 960 real query
+windows per model. All-prefix parameters, final-only parameters and end-to-end
+final quantiles meet rtol 1e-5 / atol 1e-6 against the frozen reference on that
+host. Full per-model receipt: [EXTERNAL_EXECUTION_VERIFICATION.json](EXTERNAL_EXECUTION_VERIFICATION.json).
+
+This passes optimized-vs-reference execution, not historical cross-CPU replay.
+No original ME080 exception, score, checkpoint or tolerance changed. Timing was
+not repeated externally; only the original local speed measurements are claimed.
+The local full suite passed **1,166 tests**; static training-budget audit passed
+for **201 supported Python files**. There were no optimizer updates/new fits.

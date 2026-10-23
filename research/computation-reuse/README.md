@@ -39,3 +39,17 @@ The original model used eight-frame resets for training/scoring. An incremental
 stream is equivalent to a full **carried-state** prefix computation, not to a
 sliding eight-frame reset window. Long-history accuracy remains unqualified.
 No original ME080 score, checkpoint, tolerance or failed gate is modified.
+
+```mermaid
+flowchart LR
+  O[Verified observation and known command] --> E[Shared causal encoder and projections]
+  E --> S[Native fast / slow / associative transition]
+  S --> D[Batched decoder or final-only decoder]
+  D --> Q[Shared mixture-CDF quantiles]
+  H[Versioned caller-owned cache] --> S
+  S --> H
+```
+
+The cache arrow carries explicit recurrent state, not a detached training graph.
+For exact latest-event retries, the handler returns its stored forecast without
+re-entering the neural graph. New verified observations always update state.

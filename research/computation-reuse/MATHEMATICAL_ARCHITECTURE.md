@@ -24,6 +24,19 @@ features, \(E\) encodes them, \(\Phi\) advances native state, and \(D\) predicts
 coordinate distributions at horizons \(h\in\{1,4,16\}\).
 `Scan` means an ordinary sequential fold here. It does **not** assert an efficient
 associative tensor scan for TAC's nonlinear transition.
+The displayed composition uses tuple-carrying stages: the encoder stage keeps
+\(\phi_t\) alongside \(e_t\), and the fold emits per-event readout values as
+well as the terminal cache. More explicitly,
+
+\[
+\phi_t=\Psi(o_t,u_t,S_{t-1}),\quad e_t=E_\theta(\phi_t),\quad
+(S_t,z_t)=\Phi_\theta(S_{t-1},e_t,\phi_t),\quad
+\widehat P_{t,h}=D_{\theta,h}(\phi_t,e_t,z_t).
+\]
+
+The full transition also copies the verified physical observation/velocity into
+the new cache. The readout \(z_t\) contains the **pre-write** matrix read; it is
+emitted during transition, not assumed reconstructible from updated \(M_t\).
 
 State and identity are explicit:
 
