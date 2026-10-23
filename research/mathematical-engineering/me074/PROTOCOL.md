@@ -1,0 +1,31 @@
+# ME074 — Honest evidence for TAC persistent memory and real multi-step forecasting
+
+## Status and rationale
+
+Only diagnostic work on **previously exposed authentic BPI2012 DEV REPORT**. No new full neural fits, fine-tunes, unseen original TEST, new 100k architectures, or independent TAC superiority assertions. Preserve ME073 original five trained 99,781-parameter model/optimizer/RNG checkpoints and scores unchanged and the preexisting ME070 original FIT-only ngram count state unchanged.
+
+Known measured background: ME069 comparable trained native TAC vs GRU gave **0.122626 vs 0.119182 TEST next-event log loss** in favor of GRU, despite equal 94.77% accuracy. This does NOT prove that later ME073 autoregressive event-time trajectories beat a matched autoregressive GRU or direct horizon model. ME073 native DEV age6 conditional activity accuracy h1 **81.85%**, h8 **53.44%**, with event-eligible populations 367 vs 189; isolated accuracy is not an architectural comparison. ME073 already implements absorbing source EOR, exact teacher-forced joint suffix likelihood, and 90%-nominal interval coverage (h1 85.99%/11.38h mean width, h8 90.26%/232.36h mean width). Source EOR is a retrospective event-record boundary, **not known completed business**.
+
+## Registered experiment A: all-case real ngram paths vs ME073 frozen predictions
+
+Reuse exactly the already Git-owned **ME070 FIT-only** empirical Markov/5-gram count model, with smoothing and no new chosen prior from REPORT. Propagate an absorbing EOR probability using the unchanged FIT-derived ME073 per-activity source continuation prior (hybrid with a shared empirical survival reference; not a fair one-to-one model architecture). Exact bigram is matrix power of an (N+1)×(N+1) stochastic transition; third- and fifth-order use **256** fixed-seed sampled autoregressive mark/EOR paths per case, same particle count as ME073, with exact h1 distribution and eps1e-6 finite-particle smoothing at later horizons. No observed future activity or end label may be fed into a generated path.
+
+Original real ages **2, 6 and 16**, horizons **1,2,4,8**. Same source/case IDs and future-label ordering as immutable original ME073 `ORIGINAL_FORECASTS.npz`. All age-reached cases stay eligible for joint activity-or-EOR NLL/Brier at every horizon, and separately conditional activity NLL/accuracy is scored only where there really was an activity. Track the true event/END denominators. Original ME073 five-seed predictions are rescored from frozen original output distributions and compared to original published per-seed joint scores. All neural input features (resource/calendar, elapsed time) are not shared by the empirical count baselines: any gain/loss is a **practical reference** and cannot identify the value of TAC-specific memory.
+
+The direct head vs autoregressive GRU vs causal Transformer controls have NOT YET been trained at 95k–105k, and no superiority claim is authorized by this diagnostic. Exact teacher-forced suffix likelihood is not the same as a free-run path metric. All-case EOR scoring is **not** actual legal completion or a validated online case-finality event.
+
+## Registered experiment B: native fast/slow/associative memory influence
+
+For each of the five originally FIT-trained and Git hash-verified ME073 weights, evaluate the same true original DEV query events at ages2,6,16. Zero a single **readout state before the next observed-future prediction** (fast64, slow64, associative8x8) or all hidden memory; leave all neural weights and actual observations/encoders unchanged. Exact unaltered h1 output probability must reproduce the Git-owned ME073 h1 arrays within 1e-5 on every case before any result can be published. Report joint activity/EOR NLL and Brier, conditional accuracy and NLL, original per-case difference distributions and independent original seed directions. All zeroed-state interventions are out of the trained distribution and do **not** demonstrate that a normally trained memory ablation would be better/worse or that keys are intelligently stored.
+
+## Small controlled keyed-recall sanity fixtures only
+
+Use deterministic **16,64,256**-event key/value distractor streams with exact ground truth and answer-free query tokens as **unit/integration tests for the evaluation protocol**. No learned neural models fitted to synthetic targets, no synthetic accuracy as research success and no unqualified architectural advantage. Any later synthetic trained comparison would require a separately authorized diagnostic exception and still follow live 100k/1% parity and identical budgets, and could never establish real-world model intelligence. Preserve your real-data-first policy rather than replacing authentic evidence with toys.
+
+## Next trained architecture comparison (not authorized by ME074)
+
+Register prospective **ME075** full real-data trained 4-arm comparison: native TAC autoregressive, matched 100k GRU autoregressive, matched 100k causal Transformer (inference-context carefully budgeted), and matched 100k direct multi-horizon head, plus external FIT ngram and END baselines. Same exact lawful actual FIT source, training updates/FLOPs/data, selection rights, 5 paired seeds, all 20 original Git-owned model+optimizer/RNG checkpoints and clean independent replay BEFORE opening a **genuinely new unexposed source/TEST**. Query-time information parity; all-case END-aware joint NLL/Brier, later free-running marginal NLL, exact teacher-forced path likelihood (different quantity), timing coverage AND median/p90/p99 width/pinball/interval score, seed robustness and case-block uncertainty. BPI2012 has insufficient verified 64/256-event histories for a long-memory qualification: qualify and register an authentically long-history source first. DO NOT open the remaining original robot tissue-box holdout to validate workflow event intelligence. Woyengi remains advisory-only.
+
+## Preservation
+
+All original source scores, count state and model artifacts are immutable. Append only `research/replay-bundles/ME074/REAL_DEV_END_AWARE_BASELINE.json` and `EXPOSED_MEMORY_LESIONS.json` after observed execution. Git CI checks source hashes, original output identities and nonfitting status. Any failed run is documented rather than sold as a capability.
