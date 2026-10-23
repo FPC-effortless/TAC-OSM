@@ -156,3 +156,11 @@ def test_v2_final_rejects_measured_cpu_mismatch():
     m["arms"][1]["measured"]["optimizer_cpu_seconds"]=58.0
     with pytest.raises(ParityError,match="actual CPU seconds"):
         check_manifest(m,"final")
+
+
+def test_new_absolute_scale_rejects_undersized_and_hidden_frozen_weights():
+    from scripts.validate_research_parity import check_model_parameter_target,ParityError
+    import pytest
+    check_model_parameter_target(99781,99781)
+    for trained,deployed in ((94999,94999),(105001,105001),(100000,200000),(100000,99999)):
+        with pytest.raises(ParityError):check_model_parameter_target(trained,deployed)

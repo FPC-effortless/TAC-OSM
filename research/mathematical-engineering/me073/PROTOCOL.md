@@ -126,3 +126,15 @@ abs1e-4/rel1e-5. Independent clean GitHub checkout must restore and recompute
 all original distributions, paths and real REPORT scores without refitting;
 otherwise REPO_REPLAY=FAIL/BLOCKED. No threshold relaxation after results.
 Published prior methods and exact provenance are in FAIR_COMPARISON.json.
+
+## Parameter-policy synchronization during FIT
+
+Master branch6cbbe10a was fetched after FIT had started. Its new absolute
+95k–105k trainable/deployed scale applies from ME073. Original prefit commit
+4afb9131 already measured **99,781 total parameters**, all trainable. No model
+resize, refit, budget or evaluation change occurred. SCALE_REGISTRATION.json
+normalizes that original evidence to the new single_model_training schema;
+it explicitly discloses that this derived sidecar was produced during FIT,
+not before it. FINAL_SCALE_AUDIT.json will independently remeasure original
+restored models. Both original capability and supplemental absolute-scale
+gates are required in replay CI. Preserve the original prefit registration.

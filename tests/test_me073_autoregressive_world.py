@@ -93,3 +93,18 @@ def test_initial_context_depends_only_on_first_recorded_observation():
     for index in (9,10,11):torch.testing.assert_close(a[index],b[index],atol=0,rtol=0)
     state=model.initial_from_context(model.event_encoding(*a[9:12]))
     assert state.fast.abs().max()<=.5 and state.slow.abs().max()<=.5
+
+
+def test_free_run_readout_separates_actual_futures_from_record_boundaries():
+    from scripts.me073_autoregressive_world import metrics
+    cases,_,model=fixture();data=pack(cases,[0],length=69)
+    args,_=observed(model,data,all_steps=False)
+    forecasts,paths=generate(model,*args,particles=32)
+    _,joint,mask,_,_=teacher_path(model,*args,data[5][:,-1],data[6][:,-1],data[7][:,-1],data[8][:,-1])
+    rows=metrics(forecasts,paths,data,joint.detach(),mask)
+    assert rows['1']['future_record_cases']==1
+    for horizon in ('2','4','8'):
+        assert rows[horizon]['future_record_cases']==0
+        assert rows[horizon]['record_boundary_cases']==1
+        assert rows[horizon]['mean_interval_score_hours'] is None
+    assert all(row['generated_path_time_monotone'] for row in rows.values())
