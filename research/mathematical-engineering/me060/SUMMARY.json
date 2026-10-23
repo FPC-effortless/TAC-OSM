@@ -1,0 +1,168 @@
+{
+  "DEV_episode_count": 76,
+  "TAC_minus_GRU_episode_bootstrap_95_interval": [
+    -0.0003629124935986096,
+    0.002985156794587179
+  ],
+  "TAC_paired_seed_wins": 1,
+  "final_numerical_parity": {
+    "eligible_for_architecture_superiority": true,
+    "matched_architectures": [
+      "gru_world",
+      "native_tac"
+    ],
+    "matched_seeds": [
+      60001,
+      60002,
+      60003,
+      60004,
+      60005
+    ],
+    "matched_source": "b55d0e1f894072c5738ef8e45aa283a3b464c1a1dc8f60c63594666d16b30a49",
+    "phase": "final",
+    "status": "PASS",
+    "study_id": "ME060_NATIVE_TRAJECTORY_EXPERTS_DEVELOPMENT"
+  },
+  "independent_qualification": false,
+  "limitations": [
+    "historically exposed development population",
+    "episode bootstrap conditional on five fitted seeds",
+    "episode blocks do not establish operator/session independence",
+    "observed future actions are supplied factual covariates",
+    "conformal exchangeability unverified",
+    "PyTorch supported-operator FLOPs omit some operations",
+    "no observed action utility, causal policy value, or autonomous control evaluation"
+  ],
+  "mean_physical_MAE": {
+    "gru_world": 0.8439658466628508,
+    "native_tac": 0.8452999600650448,
+    "persistence": 0.7029518222568042,
+    "servo": 1.1055221840812777
+  },
+  "old_TEST_opened": false,
+  "per_seed_MAE": {
+    "gru_world": [
+      0.8451573333678473,
+      0.8443101686609321,
+      0.8455056875674544,
+      0.8413830476531171,
+      0.8434729960649029
+    ],
+    "native_tac": [
+      0.8415499086749103,
+      0.8449035332121543,
+      0.8494733168045059,
+      0.8468318052197757,
+      0.843741236413878
+    ]
+  },
+  "registered_development_gate_pass": false,
+  "replay": {
+    "CAL_DEV_source_receipts": {
+      "CAL": "7ed02ed1a6b4ed492ba9232f44378f89188f23c99a5bfc495546fdd6b7aaff19",
+      "DEV": "9bbba40d8f0b13044669907f59e57eb26afc07f4bc7ab74bab70c2cf47d5888a"
+    },
+    "all_ten_checkpoints_hash_verified": true,
+    "forecast_scores_exact": true,
+    "standardized_absolute_error_scalar_replays": 207340
+  },
+  "source_commit": "ca259e59c832cbc7096d29d343493ef34915d4b2",
+  "study": "ME060_NATIVE_TRAJECTORY_EXPERTS_DEVELOPMENT",
+  "true_full_training_FLOPs_certified": false,
+  "uncertainty": {
+    "gru_world": [
+      {
+        "DEV_episode_coverage": 0.9078947368421053,
+        "DEV_marginal_coverage": 0.998015873015873,
+        "DEV_mean_physical_interval_width": 21.12614016843578,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 13.580550193786621,
+        "seed": 60001
+      },
+      {
+        "DEV_episode_coverage": 0.868421052631579,
+        "DEV_marginal_coverage": 0.9966931216931217,
+        "DEV_mean_physical_interval_width": 19.01611396976913,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 11.173007011413574,
+        "seed": 60002
+      },
+      {
+        "DEV_episode_coverage": 0.9078947368421053,
+        "DEV_marginal_coverage": 0.9983164983164983,
+        "DEV_mean_physical_interval_width": 20.51827221100019,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 12.565324783325195,
+        "seed": 60003
+      },
+      {
+        "DEV_episode_coverage": 0.881578947368421,
+        "DEV_marginal_coverage": 0.9977753727753728,
+        "DEV_mean_physical_interval_width": 22.036741289020704,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 13.224090576171875,
+        "seed": 60004
+      },
+      {
+        "DEV_episode_coverage": 0.9210526315789473,
+        "DEV_marginal_coverage": 0.9985569985569985,
+        "DEV_mean_physical_interval_width": 24.538117651145225,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 13.117431640625,
+        "seed": 60005
+      }
+    ],
+    "native_tac": [
+      {
+        "DEV_episode_coverage": 0.9342105263157895,
+        "DEV_marginal_coverage": 0.9990379990379991,
+        "DEV_mean_physical_interval_width": 25.89040047304626,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 14.39712905883789,
+        "seed": 60001
+      },
+      {
+        "DEV_episode_coverage": 0.8947368421052632,
+        "DEV_marginal_coverage": 0.998015873015873,
+        "DEV_mean_physical_interval_width": 19.655554053761485,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 10.699769973754883,
+        "seed": 60002
+      },
+      {
+        "DEV_episode_coverage": 0.9210526315789473,
+        "DEV_marginal_coverage": 0.9986772486772487,
+        "DEV_mean_physical_interval_width": 23.886293147282732,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 13.933145523071289,
+        "seed": 60003
+      },
+      {
+        "DEV_episode_coverage": 0.9210526315789473,
+        "DEV_marginal_coverage": 0.998015873015873,
+        "DEV_mean_physical_interval_width": 23.612073200381143,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 13.791763305664062,
+        "seed": 60004
+      },
+      {
+        "DEV_episode_coverage": 0.9210526315789473,
+        "DEV_marginal_coverage": 0.9987373737373737,
+        "DEV_mean_physical_interval_width": 26.40408324834911,
+        "calibration_episodes": 20,
+        "nominal_episode_coverage": 0.9,
+        "quantile": 15.20674991607666,
+        "seed": 60005
+      }
+    ]
+  }
+}
