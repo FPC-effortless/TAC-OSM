@@ -31,10 +31,10 @@ class VariantSpec:
 
 VARIANTS: Mapping[Variant, VariantSpec] = {
     Variant.SYSTEM1: VariantSpec(
-        Variant.SYSTEM1, ("tac_osm.real_robot_me061_reliable",),
+        Variant.SYSTEM1, ("tac_osm.real_robot_me061_reliable", "tac_osm.variants.system1_native"),
         "single-observation risk/response from authentic live state",
         "one-step risk or proposed reaction; NEVER authorization",
-        "ME074 fast-state readout sensitivity is not latency or policy evidence",
+        "ME075 100541-param fast-only model coded and tested but NOT FIT; DIAGKEY001 synthetic recall failure does not qualify latency/policy",
         ("ME054", "ME061", "ME074"),
     ),
     Variant.PHYSICAL: VariantSpec(
