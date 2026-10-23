@@ -49,7 +49,7 @@ def supervised_next_command(rows, selection):
 
 
 def rollout(model, x, a, ids):
-    if x.ndim != 3 or x.shape[1:] != (HISTORY, 14) or a.shape != x:
+    if x.ndim != 3 or x.shape[1:] != (HISTORY, 14) or a.shape != x.shape:
         raise ValueError("eight genuine real observed state/action frames required")
     if ids.shape != (len(x),) or ids.dtype != torch.long:
         raise ValueError("original episode identity required")
