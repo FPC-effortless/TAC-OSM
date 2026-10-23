@@ -1,0 +1,138 @@
+{
+  "architecture_count": 1,
+  "claim_limits": "Different surviving query-age populations; source EOR proxy only. Conditional-survival quantiles may reverse across horizons due population selection, while every path clock is nondecreasing. No process-legality, memory superiority, causal action, external operator value or commercial claim.",
+  "completed_model_records": [
+    {
+      "actual_prefix_exposures": 757710,
+      "actual_targets": 4998618,
+      "actual_updates": 1977,
+      "checkpoint_sha256": "52462da11672566ea834fea5d0925a26e75cc493b26f3e3148bcd6a0e62e89ed",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 195.459586796,
+      "path": "research/replay-bundles/ME073/checkpoints/native-s73001.pt",
+      "seed": 73001
+    },
+    {
+      "actual_prefix_exposures": 757710,
+      "actual_targets": 4998618,
+      "actual_updates": 1975,
+      "checkpoint_sha256": "4257c2703e0807e48adf1ad47abe56cff1780e57495c0d956e55336445f6394e",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 199.262506081,
+      "path": "research/replay-bundles/ME073/checkpoints/native-s73002.pt",
+      "seed": 73002
+    },
+    {
+      "actual_prefix_exposures": 757710,
+      "actual_targets": 4998618,
+      "actual_updates": 1967,
+      "checkpoint_sha256": "15a837700bc828a66219382322db3a22b1621f8bed32887387e98e54a50d381f",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 196.776885923,
+      "path": "research/replay-bundles/ME073/checkpoints/native-s73003.pt",
+      "seed": 73003
+    },
+    {
+      "actual_prefix_exposures": 757710,
+      "actual_targets": 4998618,
+      "actual_updates": 1975,
+      "checkpoint_sha256": "c1b52d3da1521d72e1a842d5531d55ff687d3e4b65368a491cb14bc4532cc855",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 194.49755109699993,
+      "path": "research/replay-bundles/ME073/checkpoints/native-s73004.pt",
+      "seed": 73004
+    },
+    {
+      "actual_prefix_exposures": 757710,
+      "actual_targets": 4998618,
+      "actual_updates": 1972,
+      "checkpoint_sha256": "ec5264f15e7d2620b3d252741c2d7140460c411a8abd581e58fbb1f45f52312e",
+      "epochs": 6,
+      "optimizer_cpu_seconds": 197.06864441200003,
+      "path": "research/replay-bundles/ME073/checkpoints/native-s73005.pt",
+      "seed": 73005
+    }
+  ],
+  "development_support_before_fit": {
+    "16": 165,
+    "2": 925,
+    "32": 52,
+    "6": 555,
+    "64": 2
+  },
+  "horizons": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "input_availability": "Original observed events/resource/time features; context only first observed event/resource/calendar. Untimed REG_DATE/AMOUNT_REQ and case IDs excluded. Original TEST no scoring; published file parsed for inherited chronological split.",
+  "loss": "Exact teacher-forced 8-step suffix likelihood components: survival+mark+.2 zero/log-time density+.05 mark Brier; stop after first EOR. Weight observed prefix ages1..6 by2, others1; no heldout-derived weights.",
+  "no_architecture_superiority_claim": true,
+  "numerical_contract": {
+    "metric_atol": 0.0001,
+    "metric_rtol": 1e-05,
+    "primary_atol": 1e-05,
+    "primary_rtol": 1e-05
+  },
+  "particles": 256,
+  "preprocessing_sha256": "768c2297e7d48801e80f064a563322acc5453e3bab927455cc8b7175b54750d9",
+  "prior_art": [
+    "Tax et al., Predictive Business Process Monitoring with LSTM Neural Networks,CAiSE2017,https://arxiv.org/abs/1612.02130",
+    "Shchur et al., Intensity-Free Learning of Temporal Point Processes,ICLR2020,https://arxiv.org/abs/1909.12127",
+    "Bengio et al., Scheduled Sampling for Sequence Prediction with Recurrent Neural Networks,NeurIPS2015,https://arxiv.org/abs/1506.03099 (exposure bias identified; no scheduled-sampling claim)",
+    "Dawid, The Well-Calibrated Bayesian,JASA1982,https://doi.org/10.1080/01621459.1982.10477856 (coherence does not establish empirical calibration)"
+  ],
+  "query_ages": [
+    2,
+    6,
+    16,
+    32,
+    64
+  ],
+  "readout": "Free-run 256 deterministic scrambled Sobol trajectories, shared native step updates and conditional marks/clocks. Rao-Blackwell survival weights. h1 activity exact; h2/4/8 finite-particle normalized smoothed categorical probabilities (epsilon1e-6). Weighted .05/.50/.95 elapsed quantiles. Exact factual suffix density likelihood reported separately; future labels never enter generation.",
+  "real_world_source": {
+    "license": "4TU General Terms of Use; raw source external, commercial reuse not qualified",
+    "name": "original publisher-verified BPI Challenge2012 loan process log",
+    "observed_real_outcomes": true,
+    "sha256": "5cd9cc16b9bcb20bd4aae45666a5d87479ddbf47e6371618b6ad217174cecdf3"
+  },
+  "registered_before_first_fit": true,
+  "repository_storage_plan": "Five original model/optimizer/RNG checkpoints in research/replay-bundles/ME073/checkpoints (expected <15MB), actual schedules/source/frozen preprocessing, original QMC forecast distributions, representative generated paths, factual suffix scores, independent GitHub clean-checkout replay; freeze weights before REPORT. Recoverable failed states retained, never overwritten with retraining.",
+  "roles": "FIT only training/statistics; TEMP/CQR unused; previously exposed last925 DEV REPORT. No new TEST or external qualification.",
+  "rollout_steps": 8,
+  "schedule_sha256": {
+    "73001": "243c284b6546011b16331018af38fe69a6a0728dd896246b8075c9e0bcb75cf1",
+    "73002": "578d61cda28b0feb80cf1b995b8f735d89f55d3673554de85db92c01b13b595c",
+    "73003": "7577b55e20064123dd635ec910ac2bee64462a63d54e0d629de4670d241143d2",
+    "73004": "12c7c9edd1ba61c3815257d96757f1171daf4d90a4304fd61412f4a86996cba0",
+    "73005": "c8516030b332b3720d13dc58994cb11bacbeff520b0aa32b17ce420125a47dc1"
+  },
+  "schema_version": "tac-osm.parity.v1",
+  "scientific_purpose": "Train one integrated native autoregressive marked trajectory model, activity-conditioned stable incremental clocks and lawful first-event context initialization. No comparator or causal-policy claim.",
+  "seeds": [
+    73001,
+    73002,
+    73003,
+    73004,
+    73005
+  ],
+  "split_sha256": {
+    "CQR": "1f0f167fca99faa2f3211864ed38be0e42a9334bc5a7d4df0409322535c0e0df",
+    "FIT": "04b9a6864abb17b3f9e8e4c9d9d9ce81e965c27ba524f754a8ef69ba2bb63645",
+    "REPORT": "4659093a04f06b9d07c8010f628c400130dce5f154c67475cc12c63c34907ba0",
+    "TEMP": "7afcebf3193f7ee374049c0883f09469b90aa67387a3fb936f4885cf0e730798"
+  },
+  "study_id": "ME073_AUTOREGRESSIVE_NATIVE_MARKED_TRAJECTORIES",
+  "study_type": "capability_development",
+  "trainable_parameters": 99781,
+  "training_budget": {
+    "backprop_events": 32,
+    "batch_size": 32,
+    "epochs": 6,
+    "expected_targets_per_seed": 4998618,
+    "observed_prefix_exposures": 757710,
+    "optimizer": "AdamW lr.001 wd.0001 clip1",
+    "selection": "all five final six-epoch originals; no DEV tuning/selection or calibration"
+  }
+}

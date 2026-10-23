@@ -10,8 +10,8 @@
   preserving the1% mismatch and compute/CPU tests; no real model was resized
   or retrained. Current targeted25 architecture/governance checks passed.
 - Added readout eligibility/EOR integration check and preserved its result.
-  Current repository test count1,043; final full regression will be recorded
-  with original-model replay evidence. No unit fixture is real-data evidence.
+  Final full local regression: **1,043 passed**,18.22s; original output
+  preserved in REGRESSION.log. Independent original-model replay remains pending. No unit fixture is real-data evidence.
 
 Actual original training continues under fixed six epochs/five seeds. These
 software corrections do not change source, model, objective, FIT order or
