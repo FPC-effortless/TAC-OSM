@@ -1,24 +1,17 @@
 name: ME054 actual stable physical TAC versus GRU real robot training
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    paths:
-      - src/tac_osm/real_robot_me054_stable.py
-      - scripts/me054_train_real_stable_robot.py
-      - research/mathematical-engineering/me054/**
-      - tests/test_me054_stable_robot_world_models.py
-      - .github/workflows/me054-real-physics-capability-training.yml
-permissions:
-  contents: read
-concurrency:
-  group: me054-genuine-robot-physical-training-${{ github.head_ref }}
-  cancel-in-progress: true
   workflow_dispatch:
     inputs:
       allow_new_fits:
         description: Explicit opt-in; current live gates remain compulsory
         type: boolean
         default: false
+
+permissions:
+  contents: read
+concurrency:
+  group: me054-genuine-robot-physical-training-${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
   original-mathematical-and-source-preflight:

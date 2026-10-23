@@ -1,0 +1,182 @@
+{
+  "all": {
+    "brier": 0.07921218544317526,
+    "coverage": 0.9395535656375189,
+    "interval_score": 0.9628315934988981,
+    "n": 960,
+    "new": 0.06647594628955138,
+    "old": 0.08015828495595391,
+    "persist": 0.06866801542589088,
+    "servo": 0.09745665016089333,
+    "width": 0.30094438901791964
+  },
+  "architecture_superiority": false,
+  "claim_tier": "MIXED_TRADEOFF",
+  "customer_value": "NOT_MEASURED",
+  "distinct_real_episodes": 40,
+  "episode_uncertainty": {
+    "old": {
+      "conditional_on_fitted_models": true,
+      "exposed_DEV": true,
+      "method": "paired episode-cluster percentile bootstrap; seed77077;5000resamples; fixed fitted seeds averaged per query",
+      "real_episode_units": 40,
+      "upper_lower_95": [
+        -0.014158209538632954,
+        -0.013211808783810484
+      ]
+    },
+    "persist": {
+      "conditional_on_fitted_models": true,
+      "exposed_DEV": true,
+      "method": "paired episode-cluster percentile bootstrap; seed77077;5000resamples; fixed fitted seeds averaged per query",
+      "real_episode_units": 40,
+      "upper_lower_95": [
+        -0.0024459839634184736,
+        -0.0019445090568058073
+      ]
+    },
+    "servo": {
+      "conditional_on_fitted_models": true,
+      "exposed_DEV": true,
+      "method": "paired episode-cluster percentile bootstrap; seed77077;5000resamples; fixed fitted seeds averaged per query",
+      "real_episode_units": 40,
+      "upper_lower_95": [
+        -0.036734146849003085,
+        -0.025081636388556178
+      ]
+    }
+  },
+  "movement_rich": {
+    "brier": 0.7958057001942679,
+    "coverage": 0.8947278792659442,
+    "interval_score": 8.099018007978087,
+    "n": 84,
+    "new": 0.7419812592733207,
+    "old": 0.7487862011417746,
+    "persist": 0.7432408579403446,
+    "servo": 0.7045166131131173,
+    "width": 0.6022485635465099
+  },
+  "near_stationary": {
+    "brier": 0.010497738823207462,
+    "coverage": 0.9438519191252042,
+    "interval_score": 0.2785397455351402,
+    "n": 876,
+    "new": 0.0017014642226145854,
+    "old": 0.016043279294299863,
+    "persist": 0.0039829483354638035,
+    "servo": 0.03924542083670746,
+    "width": 0.27205220789873985
+  },
+  "original_summary_sha256": "095816cf45de5ff7e3e1e3a6fd9f84f0165302c72fc725f7abb0f69bf438c959",
+  "real_queries": 960,
+  "registered_gain_gate_passed": false,
+  "registered_gates": {
+    "episode_CI_upper_below_zero_vs_persistence": true,
+    "every_seed_5pct_allcase_gain_vs_old_and_persistence": false,
+    "moving_mean_5pct_gain_vs_persistence": false,
+    "no_task_10pct_regression_vs_persistence": true
+  },
+  "resource_comparison": "new1024updates*24targets vs old160*12; systems comparison, NOT architecture effect",
+  "seeds": [
+    {
+      "all_case_5pct_gain_vs_both": false,
+      "normalized_mixture_nll": -5.624999783017362,
+      "physical_mae_model": 0.06646128036961348,
+      "physical_mae_persistence": 0.06866801542589088,
+      "prior_ME076_physical_mae": 0.08307754256796519,
+      "seed": 77001
+    },
+    {
+      "all_case_5pct_gain_vs_both": false,
+      "normalized_mixture_nll": -5.596521089039743,
+      "physical_mae_model": 0.06649069761977368,
+      "physical_mae_persistence": 0.06866801542589088,
+      "prior_ME076_physical_mae": 0.07660385101795934,
+      "seed": 77002
+    },
+    {
+      "all_case_5pct_gain_vs_both": false,
+      "normalized_mixture_nll": -5.60882924363638,
+      "physical_mae_model": 0.06647456480347576,
+      "physical_mae_persistence": 0.06866801542589088,
+      "prior_ME076_physical_mae": 0.08097677133021837,
+      "seed": 77003
+    },
+    {
+      "all_case_5pct_gain_vs_both": false,
+      "normalized_mixture_nll": -5.624928059677283,
+      "physical_mae_model": 0.06645652362517278,
+      "physical_mae_persistence": 0.06866801542589088,
+      "prior_ME076_physical_mae": 0.0803204809317928,
+      "seed": 77004
+    },
+    {
+      "all_case_5pct_gain_vs_both": false,
+      "normalized_mixture_nll": -5.6203602690094465,
+      "physical_mae_model": 0.0664966650297212,
+      "physical_mae_persistence": 0.06866801542589088,
+      "prior_ME076_physical_mae": 0.07981277893183385,
+      "seed": 77005
+    }
+  ],
+  "study": "ME077",
+  "tasks": {
+    "clean_stains_off_tabletop": {
+      "brier": 0.055064952812002355,
+      "coverage": 0.9366815418625872,
+      "interval_score": 0.6320501269520415,
+      "n": 192,
+      "new": 0.03444678707703209,
+      "old": 0.048000720551741934,
+      "persist": 0.036874035891590516,
+      "servo": 0.08102276824744574,
+      "width": 0.25450498358501744
+    },
+    "fold_and_stack_scattered_clothes_neatly": {
+      "brier": 0.07608287753682816,
+      "coverage": 0.9461309464027483,
+      "interval_score": 0.8606851508511074,
+      "n": 192,
+      "new": 0.07102535007989748,
+      "old": 0.08320060889418528,
+      "persist": 0.07288740028541459,
+      "servo": 0.09732602334649225,
+      "width": 0.3002990957446552
+    },
+    "hang_clothes_on_drying_rack": {
+      "brier": 0.10453786002350778,
+      "coverage": 0.9469493981450796,
+      "interval_score": 1.2415386475001773,
+      "n": 192,
+      "new": 0.08421828804203908,
+      "old": 0.09747236858117199,
+      "persist": 0.0861843842034773,
+      "servo": 0.10359562230466206,
+      "width": 0.3213029084785376
+    },
+    "line_trash_can_with_trash_bag": {
+      "brier": 0.0959371050502038,
+      "coverage": 0.9157738036476076,
+      "interval_score": 1.2832518588809763,
+      "n": 192,
+      "new": 0.08367007544300122,
+      "old": 0.09883678188925843,
+      "persist": 0.08690997221009411,
+      "servo": 0.10130778829746608,
+      "width": 0.3263694740191568
+    },
+    "pour_water_from_kettle_to_make_tea": {
+      "brier": 0.06443813179333423,
+      "coverage": 0.9522321381295721,
+      "interval_score": 0.7966321833101877,
+      "n": 192,
+      "new": 0.059019230805787026,
+      "old": 0.07328094486341191,
+      "persist": 0.06048428453887785,
+      "servo": 0.10403104860840055,
+      "width": 0.3022454832622316
+    }
+  },
+  "unseen_generalization": false
+}
