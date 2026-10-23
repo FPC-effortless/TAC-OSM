@@ -1,0 +1,174 @@
+{
+  "architecture": "gru",
+  "checkpoints": [
+    {
+      "deployed_parameters": 100494,
+      "parameter_values_sha256": "d1a70d72a4b403de21fd55a874e416f0cb731b26643c19d5c6924f5dada1510a",
+      "path": "research/replay-bundles/ME078/gru/seed-78002/final.pt",
+      "sha256": "f1d13748c97b8cf173fdfc99ab7b101aa902b3592e740eaefeac7b1374a09662",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 2048,
+      "trainable_parameters": 100494
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 100494,
+    "trainable_parameters": 100494
+  },
+  "last_pre_update": {
+    "deployed_parameters": 100494,
+    "successful_optimizer_steps": 2047,
+    "trainable_parameters": 100494
+  },
+  "manifest_path": "/workspace/tac-me078/research/mathematical-engineering/me078/FAIR_COMPARISON.json",
+  "manifest_sha256": "eec853fc9d3eba2bda61a7d1c3017e3913420d00c1d5c1bbc22ed34f55cb35bf",
+  "model_class": "tac_osm.variants.kinematic_world.KinematicWorld",
+  "preflight": {
+    "deployed_parameters": 100494,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 3648,
+        "requires_grad": true,
+        "shape": [
+          64,
+          57
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.input.weight",
+        "numel": 10752,
+        "requires_grad": true,
+        "shape": [
+          168,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.input.bias",
+        "numel": 168,
+        "requires_grad": true,
+        "shape": [
+          168
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.hidden.weight",
+        "numel": 9408,
+        "requires_grad": true,
+        "shape": [
+          168,
+          56
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.hidden.bias",
+        "numel": 168,
+        "requires_grad": true,
+        "shape": [
+          168
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.weight",
+        "numel": 3584,
+        "requires_grad": true,
+        "shape": [
+          64,
+          56
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.weight",
+        "numel": 41820,
+        "requires_grad": true,
+        "shape": [
+          246,
+          170
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.bias",
+        "numel": 246,
+        "requires_grad": true,
+        "shape": [
+          246
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.weight",
+        "numel": 26199,
+        "requires_grad": true,
+        "shape": [
+          213,
+          123
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.bias",
+        "numel": 213,
+        "requires_grad": true,
+        "shape": [
+          213
+        ]
+      }
+    ],
+    "trainable_parameters": 100494
+  },
+  "run_id": "933f717ddf92412dbbad6e3e3b89007d",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 78002,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME078_NATIVE_KINEMATIC_MULTI_HORIZON_COMPARISON",
+  "successful_optimizer_steps": 2048
+}
