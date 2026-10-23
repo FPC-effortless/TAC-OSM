@@ -54,6 +54,9 @@ def test_physical_defaults_persistence_and_cannot_fake_neural_calibration():
     assert a.forecast((1, 2), [(3, 4)]).method == "persistence"
     with pytest.raises(ValueError):
         PhysicalAdvisory(dimension=2, residual_real_transfer_qualified=True)
+    with pytest.raises(ValueError, match="independent real-outcome"):
+        PhysicalAdvisory(dimension=2, residual_step=lambda state, action: state,
+                         residual_real_transfer_qualified=True)
     b = PhysicalAdvisory(dimension=2, baseline="servo",
                           servo_step=lambda state, action: tuple(x + y for x, y in zip(state, action)))
     assert b.forecast((1, 2), [(3, 4), (3, 4)]).states == ((4., 6.), (7., 10.))
@@ -131,3 +134,18 @@ def test_scenario_branch_is_never_causal_or_executable():
         ScenarioEstimate("route-a", {}, "observational_conditioning", causal_effect_established=True)
     with pytest.raises(ValueError):
         engine.assess({}, ["duplicate", "duplicate"])
+
+
+def test_machine_readable_lane_evidence_is_separated_from_replay_or_production():
+    from pathlib import Path
+    import json
+    path = Path(__file__).resolve().parents[1] / "research/SIX_VARIANT_EXPERIMENT_INDEX.json"
+    source = json.loads(path.read_text())
+    assert set(source["lanes"]) == {v.value for v in Variant}
+    for lane, entry in source["lanes"].items():
+        assert entry["next"] and entry["owner_status"]
+        assert len(entry["experiments"]) >= 2
+        for original in entry["experiments"]:
+            assert original["study"] and original["role"] and original["evidence"]
+            assert bool(original.get("pr")) != bool(original.get("original_source"))
+    assert "no new model-fit" in source["scope"]
