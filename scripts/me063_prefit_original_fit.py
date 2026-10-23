@@ -19,7 +19,7 @@ from scripts.me060_train_trajectory import (
     prepare, batch, schedules, digest, HISTORY, HORIZON, BATCH, UPDATES,
 )
 from tac_osm.real_robot_me061_reliable import VerifiedState
-from tac_osm.real_robot_me063_selective import (
+from tac_osm.real_robot_me063_regime import (
     RegimeMixtureModel, gaussian_physical_loss,
 )
 
