@@ -1,0 +1,166 @@
+{
+  "architecture": "gru",
+  "checkpoints": [
+    {
+      "deployed_parameters": 101500,
+      "parameter_values_sha256": "3b56946f94ab4634d0f8867ce3764589434aed19dea9fe893c3bd01bfade8a3a",
+      "path": "research/replay-bundles/DIAGKEY001_GUARDED/seed-75004/gru.pt",
+      "sha256": "cc0513fc5f30579fb00eabf564d6c7f8cd1403c4807f38f4c4629f46ce4143db",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 640,
+      "trainable_parameters": 101500
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 101500,
+    "trainable_parameters": 101500
+  },
+  "last_pre_update": {
+    "deployed_parameters": 101500,
+    "successful_optimizer_steps": 639,
+    "trainable_parameters": 101500
+  },
+  "manifest_path": "/home/runner/work/TAC-OSM/TAC-OSM/research/mathematical-engineering/diagkey001/FAIR_COMPARISON.json",
+  "manifest_sha256": "38c927be82bed9478e1c8c62e11f45aa88ec66d68c41bf4395775c803a87615d",
+  "model_class": "__main__.GRU",
+  "preflight": {
+    "deployed_parameters": 101500,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "kind_embed.weight",
+        "numel": 144,
+        "requires_grad": true,
+        "shape": [
+          3,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "key.weight",
+        "numel": 3120,
+        "requires_grad": true,
+        "shape": [
+          65,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "value.weight",
+        "numel": 1584,
+        "requires_grad": true,
+        "shape": [
+          33,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.weight",
+        "numel": 2304,
+        "requires_grad": true,
+        "shape": [
+          48,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.bias",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "cell.weight_ih",
+        "numel": 18432,
+        "requires_grad": true,
+        "shape": [
+          384,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "cell.weight_hh",
+        "numel": 49152,
+        "requires_grad": true,
+        "shape": [
+          384,
+          128
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "cell.bias_ih",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          384
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "cell.bias_hh",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          384
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.weight",
+        "numel": 21824,
+        "requires_grad": true,
+        "shape": [
+          124,
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.bias",
+        "numel": 124,
+        "requires_grad": true,
+        "shape": [
+          124
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.weight",
+        "numel": 3968,
+        "requires_grad": true,
+        "shape": [
+          32,
+          124
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      }
+    ],
+    "trainable_parameters": 101500
+  },
+  "run_id": "4026baaee6b84e118ec0da15b8e4c85e",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 75004,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "DIAGKEY001_SYNTHETIC_ASSOCIATIVE_RECALL_MECHANISM_ONLY",
+  "successful_optimizer_steps": 640
+}
