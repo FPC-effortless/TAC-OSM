@@ -34,3 +34,6 @@ jobs:
           import json
           print('ME080_EXTERNAL_REPLAY='+json.dumps(json.loads(Path('research/replay-bundles/ME080/INDEPENDENT_REPLAY.json').read_text())))
           PY
+      - name: Complete read-only numerical census (strict failure stays failed)
+        if: always() && hashFiles('research/replay-bundles/ME080/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/me080_cross_cpu_audit.py --cache "${{ runner.temp }}/me080-source"
