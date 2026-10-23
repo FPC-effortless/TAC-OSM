@@ -24,9 +24,10 @@ def main():
                     'checkpoint_sha256':cp['sha256'],'logit_count':int(a.size),
                     'logits_outside_registered_tolerance':int((~close).sum()),
                     'maximum_absolute_logit_error':float(error.max()),
-                    'different_classifications':sum(x!=y for x,y in zip(original['correct_bits'],actual['correct_bits'])),
+                    'different_correctness_bits':sum(x!=y for x,y in zip(original['correct_bits'],actual['correct_bits'])),
+                    'different_classifications':int((a.argmax(-1)!=b.argmax(-1)).sum()),
                     'absolute_NLL_error':abs(original['NLL']-actual['NLL'])})
-    strict=all(r['logits_outside_registered_tolerance']==0 and r['different_classifications']==0 and r['absolute_NLL_error']<=1e-5 for r in rows)
+    strict=all(r['logits_outside_registered_tolerance']==0 and r['different_classifications']==0 and r['different_correctness_bits']==0 and r['absolute_NLL_error']<=1e-5 for r in rows)
     report={'status':'PASS_REGISTERED_NUMERICS' if strict else 'FAIL_REGISTERED_NUMERICS_PRESERVED',
         'registered_atol':1e-5,'registered_rtol':1e-5,'registered_NLL_absolute_tolerance':1e-5,
         'original_checkpoint_hashes_and_live_receipts_verified':True,'new_optimizer_updates':0,
@@ -37,6 +38,7 @@ def main():
                    'MKL_ENABLE_INSTRUCTIONS':os.environ.get('MKL_ENABLE_INSTRUCTIONS'),
                    'ATEN_CPU_CAPABILITY':os.environ.get('ATEN_CPU_CAPABILITY')},'rows':rows}
     path=OUT/'CROSS_CPU_AUDIT.json';path.write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
+    print('DIAGKEY004_CROSS_CPU_AUDIT='+json.dumps(report,sort_keys=True))
     print(json.dumps({'status':report['status'],'exact_classifications':report['exact_all_classifications'],
         'NLL_within_contract':report['all_NLL_within_original_contract'],
         'logits_outside_tolerance':sum(r['logits_outside_registered_tolerance'] for r in rows),
