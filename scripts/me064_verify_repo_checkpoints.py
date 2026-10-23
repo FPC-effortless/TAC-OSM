@@ -13,7 +13,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from scripts.me064_mixed_real_fit import SEEDS
+SEEDS = (64001, 64002, 64003, 64004, 64005)
 from scripts.me063_prefit_original_fit import model_for, CONFIG
 from scripts.validate_research_parity import check_manifest
 
