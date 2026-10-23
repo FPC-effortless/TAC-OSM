@@ -44,6 +44,9 @@ TRAIN_COMBOS = tuple(combo for combo in ALL_COMBOS if combo not in HELDOUT)
 GENERATOR_VERSION = "integrated-e2e-v3-functional-no-aux-supervision"
 
 
+
+from tac_osm.parameter_budget import save_training_checkpoint
+
 def _noise(shape: tuple[int, ...], rng: random.Random) -> Tensor:
     generator = torch.Generator(device="cpu")
     generator.manual_seed(rng.randrange(2**31))
@@ -190,7 +193,7 @@ def episode_fingerprint(episodes: Iterable[tuple]) -> str:
                 "audio": [row[3].tolist() for row in observations],
             }
         )
-    torch.save(serial, buffer)
+    save_training_checkpoint(serial, buffer)
     return hashlib.sha256(buffer.getvalue()).hexdigest()
 
 

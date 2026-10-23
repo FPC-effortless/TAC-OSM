@@ -321,3 +321,28 @@ common allocated compute budget to favor a preferred architecture.
 The earlier 56.7% TAC-versus-GRU CPU-runtime difference is an **efficiency
 measurement, not a fairness violation**. The original measured values remain
 unaltered; only their scientific interpretation is corrected.
+
+### Rule 12 implementation contract: universal live-model guard
+
+All supported registration paths apply the same absolute size function before
+any early return: ordinary comparisons, solo fits, capability development and
+source-deferred comparisons. Explicit deployed counts are compulsory; a missing
+count is not inferred from a trainable count. New updates never receive an
+exemption from an ME/DEV number.
+
+The fitting entrypoint must bind its **whole instantiated model** to the shared
+optimizer guard in `src/tac_osm/parameter_budget.py`. Before the first update,
+the guard verifies live trainable/deployed counts, optimizer coverage of all
+trainable heads, the declared arm and seed, and writes the named-parameter
+inventory and registration digest to disk. It rechecks at each update and binds
+the saved original checkpoint tensors to that receipt. Postfit validation reads
+both the receipt and actual checkpoint tensors. See
+[the implementation and evidence contract](governance/LIVE_PARAMETER_ENFORCEMENT.md).
+Declaration-only preflight is necessary but is not proof of compliant training.
+
+Immutable historical evidence uses explicit `--operation replay --provenance KEY`
+with a trusted pinned registration/checkpoint registry. An old identifier, an
+old parameter count, optimizer restoration or a replay label does not authorize
+new fitting. Preserve original registrations rather than retroactively filling
+in new evidence. Software-only optimizer fixtures verify enforcement and are
+never reported as real-world model training or capability gains.

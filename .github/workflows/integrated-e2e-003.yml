@@ -16,6 +16,12 @@ on:
       - "docs/AUDIT-TACOSM-PLM-INTEGRATED-E2E-003.md"
       - ".github/workflows/integrated-e2e-003.yml"
   workflow_dispatch:
+    inputs:
+      allow_new_fits:
+        description: Explicit opt-in; requires a new compliant registration and live-model guard
+        type: boolean
+        required: true
+        default: false
 
 permissions:
   contents: read
@@ -37,6 +43,8 @@ jobs:
         run: python -m pytest tests/ -q
 
   arm:
+    # Historical fits are not authorized by PRs or push markers. Live gates still apply.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     needs: gate
     strategy:
       fail-fast: false

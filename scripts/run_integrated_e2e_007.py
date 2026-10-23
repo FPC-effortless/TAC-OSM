@@ -14,6 +14,9 @@ from tac_osm.integrated_e2e_007_benchmark import (
 )
 EXPERIMENT_ID="TACOSM-PLM-INTEGRATED-E2E-007"; CONTRACT_PATH=ROOT/"contracts"/f"{EXPERIMENT_ID}.json"
 SEEDS=(0,1,2,3,4);STEPS=300;BATCH_SIZE=96;EVAL_EPISODES=400;OPS=("xor","and","or","xnor")
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 def build_batch(eps):
     from scripts.run_integrated_e2e_005 import build_batch
     return build_batch(eps)
@@ -41,11 +44,11 @@ def gradient_surface_probe():
 def train_seed(seed):
     torch.manual_seed(seed);rng=random.Random(seed+120700)
     m=FunctionalMultimodalPLM(config=FunctionalConfig(hidden_dim=64,state_write_mode="residual_linear")).cpu()
-    opt=torch.optim.AdamW(m.parameters(),lr=.002,weight_decay=.0001);keys=set()
+    opt=budgeted_optimizer(m, torch.optim.AdamW, m.parameters(),lr=.002,weight_decay=.0001);keys=set()
     for _ in range(STEPS):
         eps=[sample_episode(rng) for _ in range(BATCH_SIZE)]
         keys.update(episode_key(e) for e in eps);m.train();opt.zero_grad(set_to_none=True)
-        loss=train_batch(m,build_batch(eps));loss.backward();nn.utils.clip_grad_norm_(m.parameters(),1.0);opt.step()
+        loss=train_batch(m,build_batch(eps));loss.backward();nn.utils.clip_grad_norm_(m.parameters(),1.0);checked_optimizer_step(opt)
     return m,keys
 @torch.no_grad()
 def evaluate(m,episodes,control):

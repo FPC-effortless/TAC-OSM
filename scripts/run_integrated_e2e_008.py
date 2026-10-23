@@ -39,6 +39,9 @@ BATCH_SIZE = 96
 OPS = ("xor", "and", "or", "xnor")
 
 
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 def build_batch(episodes):
     from scripts.run_integrated_e2e_005 import build_batch
     return build_batch(episodes)
@@ -84,7 +87,7 @@ def train_seed(seed: int):
     model = FunctionalMultimodalPLM(
         config=FunctionalConfig(hidden_dim=64, state_write_mode="residual_linear")
     ).cpu()
-    optimizer = torch.optim.AdamW(
+    optimizer = budgeted_optimizer(model, torch.optim.AdamW,
         model.parameters(), lr=0.002, weight_decay=0.0001
     )
     keys = set()
@@ -103,7 +106,7 @@ def train_seed(seed: int):
         loss = train_batch(model, build_batch(episodes))
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        optimizer.step()
+        checked_optimizer_step(optimizer)
     return model, keys
 
 

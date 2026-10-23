@@ -41,6 +41,9 @@ EXPERIMENT_ID = "TACOSM-PLM-INTEGRATED-E2E-005"
 CONTRACT_PATH = ROOT / "contracts" / f"{EXPERIMENT_ID}.json"
 
 
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 def primary_threshold() -> float:
     raw = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
     primaries = [e for e in raw["endpoints"] if e["primary"]]
@@ -193,7 +196,7 @@ def train_seed(seed: int, steps: int, batch_size: int):
     torch.manual_seed(seed)
     rng = random.Random(seed + 50000)
     model = FunctionalMultimodalPLM().cpu()
-    optimizer = torch.optim.AdamW(
+    optimizer = budgeted_optimizer(model, torch.optim.AdamW,
         model.parameters(),
         lr=0.002,
         weight_decay=0.0001,
@@ -209,7 +212,7 @@ def train_seed(seed: int, steps: int, batch_size: int):
         loss = train_batch(model, batch)
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        optimizer.step()
+        checked_optimizer_step(optimizer)
 
     return model, training_keys
 

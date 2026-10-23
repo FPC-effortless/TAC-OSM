@@ -50,7 +50,11 @@ TRAIN_EPOCHS = 100
 TRAIN_LR = 2e-3
 
 
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 @dataclass(frozen=True)
+
 class BridgeExample:
     structure: Structure
     inputs: tuple[float, ...]
@@ -98,7 +102,7 @@ def train_bridge(runtime: CasmSRuntime) -> dict:
         return episodes, x, y
 
     episodes, x, target = batch(train)
-    opt = torch.optim.AdamW(model.parameters(), lr=TRAIN_LR)
+    opt = budgeted_optimizer(model, torch.optim.AdamW, model.parameters(), lr=TRAIN_LR)
     history = []
     model.train()
     for epoch in range(TRAIN_EPOCHS):
@@ -107,7 +111,7 @@ def train_bridge(runtime: CasmSRuntime) -> dict:
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        opt.step()
+        checked_optimizer_step(opt)
         history.append(float(loss.detach().cpu().item()))
 
     model.eval()

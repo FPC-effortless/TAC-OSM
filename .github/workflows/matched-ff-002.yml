@@ -13,8 +13,18 @@ on:
       - ".github/workflows/matched-ff-002.yml"
 permissions:
   contents: read
+  workflow_dispatch:
+    inputs:
+      allow_new_fits:
+        description: Explicit opt-in; requires a new compliant registration and live-model guard
+        type: boolean
+        required: true
+        default: false
+
 jobs:
   confirmatory:
+    # Historical fits are not authorized by PRs or push markers. Live gates still apply.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
