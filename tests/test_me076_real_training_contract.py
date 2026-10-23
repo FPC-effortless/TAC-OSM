@@ -6,7 +6,6 @@ import pytest
 
 from scripts.me076_train_system1_real import (
     classify_members, build_batch, rollout, valid_origins, MOTION_PHYSICAL_THRESHOLD)
-from scripts.me064_mixed_real_fit import task_registration
 from scripts.validate_research_parity import check_manifest
 from tac_osm.variants.system1_native import System1FastModel
 
@@ -22,7 +21,7 @@ def test_frozen_original_real_source_registration_and_true_100k_model():
 
 
 def test_original_episodes_are_disjoint_and_task_balanced_without_opening_any_parquet():
-    plan=task_registration()
+    plan=json.loads(Path("research/mathematical-engineering/me064/TASK_LEVEL_SPLIT.json").read_text())
     fit,report=classify_members(plan)
     assert len(fit)==120 and len(report)==40
     assert len(set((t,e) for t,e,_ in fit))==120
