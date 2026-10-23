@@ -1,0 +1,40 @@
+name: ESWAM005 qualify authentic multi-agent history, source only
+# Original source-only qualification completed; no automatic re-download on updates.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publisher-source-qualification-no-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam005-authentic-multiagent-source-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Preserve original publisher bytes outside Git
+        run: |
+          curl --fail --location --retry 3 --silent --show-error \
+            -o "${{ runner.temp }}/interaction_TC_original.zip" \
+            "https://huggingface.co/datasets/INTERACTION-dataset/INTERACTION-dataset/resolve/3587152b529f26649ada0838a308eeaf77f5bdc2/INTERACTION-Dataset-TC-v1_0.zip"
+          printf '9aa78102006dc8d8a64675cf64eba5264085cfb1c006b1f4d0e856d94e657aec  %s\n' "${{ runner.temp }}/interaction_TC_original.zip" | sha256sum --check
+      - name: Audit authentic real agent identities, 256-frame natural continuity and multiagent overlap
+        run: |
+          python -m py_compile scripts/eswam005_qualify_real_multiagent.py
+          python scripts/eswam005_qualify_real_multiagent.py \
+            --archive "${{ runner.temp }}/interaction_TC_original.zip" \
+            --output research/mathematical-engineering/eswam005/SOURCE_QUALIFICATION.json
+      - name: Preserve source qualification WITHOUT republishing raw tracks or fitting models
+        env:
+          TARGET_BRANCH: research/eswam005-authentic-multiagent-source-2026-10-23
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mathematical-engineering/eswam005/SOURCE_QUALIFICATION.json
+          git commit -m 'research(eswam005): record original real multiagent source track suitability'
+          git push origin "HEAD:refs/heads/$TARGET_BRANCH"
