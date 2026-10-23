@@ -6,7 +6,7 @@ better than the physical baseline on authentic external transfer.
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import Callable
-from .contracts import finite_vector
+from .contracts import finite_vector, ForecastEvidence
 
 @dataclass(frozen=True)
 class PhysicalForecast:
@@ -22,6 +22,7 @@ class PhysicalAdvisory:
                  servo_step: Callable[[tuple[float, ...], tuple[float, ...]], tuple[float, ...]] | None = None,
                  residual_step: Callable[[tuple[float, ...], tuple[float, ...]], tuple[float, ...]] | None = None,
                  residual_real_transfer_qualified: bool = False,
+                 qualification: ForecastEvidence | None = None,
                  baseline: str = "persistence"):
         if dimension < 1 or baseline not in ("persistence", "servo"):
             raise ValueError("invalid physical dimension or FIT-registered baseline")
@@ -29,6 +30,11 @@ class PhysicalAdvisory:
             raise ValueError("servo baseline requires a recorded-law implementation")
         if residual_real_transfer_qualified and not callable(residual_step):
             raise ValueError("cannot qualify absent trained residual")
+        if residual_real_transfer_qualified and (
+                qualification is None or not qualification.authentic_outcome_qualification
+                or qualification.evidence_tier not in ("INDEPENDENT_GAIN", "TRANSFER_REPLICATED")
+        ):
+            raise ValueError("independent real-outcome checkpoint qualification required before neural correction")
         self.dimension, self.servo_step, self.residual_step = dimension, servo_step, residual_step
         self.qualified, self.baseline = residual_real_transfer_qualified, baseline
 
