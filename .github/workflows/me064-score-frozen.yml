@@ -1,0 +1,102 @@
+name: ME064 authentic five-task leave-one-OUT zero-shot frozen evaluation
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/me064-score-frozen.yml'
+      - 'scripts/me064_validate_numeric_replay.py'
+  workflow_dispatch:
+permissions: {contents: write}
+concurrency:
+  group: me064-one-time-untouched-real-target-scoring
+  cancel-in-progress: false
+jobs:
+  original-unseen-task-real-evaluation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: "${{ github.head_ref || github.ref_name }}"}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify 10 original trained Git checkpoints before loading any CAL/target
+        run: |
+          test -f research/mathematical-engineering/me064/TASK_LEVEL_SPLIT.json
+          test -f research/replay-bundles/ME064/TRAINING_RESULT.json
+          test -f research/replay-bundles/ME064/CLEAN_CHECKOUT_MODEL_REPLAY.json
+          PYTHONPATH=src:. python scripts/me064_verify_repo_checkpoints.py --check
+      - name: Score source CAL and one untouched physical target; never refit
+        run: |
+          if [ -f research/replay-bundles/ME064/REAL_WORLD_EVALUATION_SUMMARY.json ]; then
+            echo 'Already scored this task: no repeat target analysis'
+          else
+            PYTHONPATH=src:. python scripts/me064_score_frozen.py \
+              --cache "${{ runner.temp }}/me064-frozen-outcome-replay"
+          fi
+      - name: Preserve exact original source CAL/untouched target scores and risk receipts in Git
+        if: always()
+        env: {PUSH_BRANCH: "${{ github.head_ref || github.ref_name }}"}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          for file in research/replay-bundles/ME064/ORIGINAL_SOURCE_CAL_SCORES.json research/replay-bundles/ME064/ORIGINAL_UNTOUCHED_TASK_SCORES.json research/replay-bundles/ME064/REAL_WORLD_EVALUATION_SUMMARY.json; do
+            if [ -f "$file" ]; then git add -f "$file"; fi
+          done
+          if ! git diff --cached --quiet; then
+            git commit -m 'evidence(me064): original real zero-shot sixth-task and source-only CAL scores'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin "$PUSH_BRANCH"
+              git rebase "origin/$PUSH_BRANCH"
+              if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+              if [ "$attempt" -eq 5 ]; then exit 1; fi
+            done
+          fi
+  independent-original-score-replay:
+    needs: original-unseen-task-real-evaluation
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: "${{ github.head_ref || github.ref_name }}",clean: true}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Preserve original score files before independent replay
+        run: |
+          mkdir -p /tmp/me064-published
+          cp research/replay-bundles/ME064/ORIGINAL_SOURCE_CAL_SCORES.json /tmp/me064-published/
+          cp research/replay-bundles/ME064/ORIGINAL_UNTOUCHED_TASK_SCORES.json /tmp/me064-published/
+          cp research/replay-bundles/ME064/REAL_WORLD_EVALUATION_SUMMARY.json /tmp/me064-published/
+      - name: Independently recompute original real outcomes WITHOUT model refitting
+        run: |
+          PYTHONPATH=src:. python scripts/me064_score_frozen.py \
+            --cache "${{ runner.temp }}/me064-independent-public-data-source"
+      - name: Audit exact score structure and declared CPU float tolerance, not false byte parity
+        run: |
+          PYTHONPATH=src:. python scripts/me064_validate_numeric_replay.py \
+            --published /tmp/me064-published \
+            --recomputed research/replay-bundles/ME064/ \
+            --receipt research/replay-bundles/ME064/EVALUATION_REPLAY_RECEIPT.json
+      - name: Preserve independent score replay receipt in Git
+        env: {PUSH_BRANCH: "${{ github.head_ref || github.ref_name }}"}
+        run: |
+          # The replay re-computes original score JSON with tiny CPU floating
+          # differences. Keep the FROZEN published score bytes unchanged in
+          # this branch; only the exact validated tolerance receipt is new.
+          git restore -- research/replay-bundles/ME064/ORIGINAL_SOURCE_CAL_SCORES.json \
+            research/replay-bundles/ME064/ORIGINAL_UNTOUCHED_TASK_SCORES.json \
+            research/replay-bundles/ME064/REAL_WORLD_EVALUATION_SUMMARY.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/replay-bundles/ME064/EVALUATION_REPLAY_RECEIPT.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'evidence(me064): independently replay original leave-one-task-out actual real physical scores'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin "$PUSH_BRANCH"
+              git rebase "origin/$PUSH_BRANCH"
+              if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+              if [ "$attempt" -eq 5 ]; then exit 1; fi
+            done
+          fi

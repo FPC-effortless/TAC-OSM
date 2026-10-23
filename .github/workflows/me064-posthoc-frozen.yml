@@ -1,0 +1,45 @@
+name: ME064 frozen original result posthoc failure diagnosis (no fitting)
+on:
+  pull_request:
+    paths:
+      - 'scripts/me064_posthoc_failure_analysis.py'
+      - '.github/workflows/me064-posthoc-frozen.yml'
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  score-only-diagnostics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: "${{ github.head_ref || github.ref_name }}"}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Analyse original frozen error receipts only, no publisher network or models
+        run: |
+          python scripts/me064_posthoc_failure_analysis.py
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('research/replay-bundles/ME064/POSTHOC_FAILURE_DIAGNOSTIC.json').read_text())
+          assert r['no_new_trajectory_read'] and r['no_model_fitting_or_selection']
+          assert r['qualification']=='POSTHOC_EXPLORATORY_ALREADY_EXPOSED'
+          assert r['all_original_target_episodes']==80
+          assert r['strongest_baseline_gate']=='FAIL_PER_PREDECLARED_ORIGINAL_TEST'
+          print('ME064_FROZEN_SCORE_POSTHOC_DIAGNOSIS_VALID')
+          PY
+      - name: Preserve diagnostic evidence inside source Git
+        env: {PUSH_BRANCH: "${{ github.head_ref || github.ref_name }}"}
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/replay-bundles/ME064/POSTHOC_FAILURE_DIAGNOSTIC.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'evidence(me064): preserve score-only original near-stationary failure diagnosis'
+            for attempt in 1 2 3 4 5; do
+              git fetch origin "$PUSH_BRANCH"
+              git rebase "origin/$PUSH_BRANCH"
+              if git push origin "HEAD:refs/heads/$PUSH_BRANCH"; then break; fi
+              if [ "$attempt" -eq 5 ]; then exit 1; fi
+            done
+          fi
