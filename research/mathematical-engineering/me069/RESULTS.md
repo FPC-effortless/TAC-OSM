@@ -88,6 +88,13 @@ does not erase the preceding failure or establish uniform CPU portability.
 Artifact download from that run returned HTTP 403 in this environment; its
 successful check is verified through the GitHub run/step records, separately
 from the locally retrieved, bit-identical clean-checkout receipt.
+The later code-validation [run 39905869711](https://github.com/FPC-effortless/TAC-OSM/actions/runs/39905869711)
+also passed and printed a **bit-identical complete DEV/TEST evaluation**
+receipt, retained in GITHUB_REPLAY_AUDIT.json. Two numerical-failure runs are
+preserved in ORIGINAL_GITHUB_REPLAY_FAILURE.log. Run 39905753892 reports a
+1.221-millisecond difference in one waiting-time absolute error, above its
+0.226-millisecond permitted difference. Passing runners do not waive that
+registered failure or establish universal numerical reproducibility.
 
 Full repository regression: **1,005 tests passed**. Numerical fixtures are
 engineering evidence only. GitHub CI additionally loads the repository-owned

@@ -1,0 +1,73 @@
+RUN 39905268211
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	﻿2026-10-23T05:21:55.1773003Z ##[group]Run if [ -f research/replay-bundles/ME069/REAL_EVALUATION.json ]; then
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1773613Z [36;1mif [ -f research/replay-bundles/ME069/REAL_EVALUATION.json ]; then[0m
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1774226Z [36;1m  PYTHONPATH=src:. python scripts/me069_verify_workflow.py --phase restore --cache /tmp/me069-source[0m
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1774965Z [36;1m  PYTHONPATH=src:. python scripts/me069_verify_workflow.py --phase replay --cache /tmp/me069-source[0m
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1775440Z [36;1mfi[0m
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1840430Z shell: /usr/bin/bash -e {0}
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1840678Z env:
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1840948Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1841395Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1841820Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1842223Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1842613Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1843018Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:21:55.1843346Z ##[endgroup]
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:27.8790850Z ME069_SCORED_DEV
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:36.4389155Z ME069_SCORED_TEST
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9416570Z Traceback (most recent call last):
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9425024Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 142, in <module>
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9425949Z     {"restore": restore, "replay": replay}[args.phase](args.cache)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9426761Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 116, in replay
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9427363Z     compare(original, replayed)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9427876Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 97, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9428737Z     compare(original[k], restored[k], path + "." + k)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9449551Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 97, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9459631Z     compare(original[k], restored[k], path + "." + k)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9460578Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 97, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9461274Z     compare(original[k], restored[k], path + "." + k)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9462256Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 102, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9463057Z     compare(a, b, path + f"[{i}]")
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9463845Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 97, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9464697Z     compare(original[k], restored[k], path + "." + k)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9465554Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 105, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9466672Z     raise ValueError("replay float differs: " + path)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:37.9467235Z ValueError: replay float differs: root.scores.DEV.gru_world-s69005[520].wait_MAE_seconds
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:22:38.2375001Z ##[error]Process completed with exit code 1.
+
+RUN 39905753892
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	﻿2026-10-23T05:27:08.5557202Z ##[group]Run if [ -f research/replay-bundles/ME069/REAL_EVALUATION.json ]; then
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5557766Z [36;1mif [ -f research/replay-bundles/ME069/REAL_EVALUATION.json ]; then[0m
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5558344Z [36;1m  PYTHONPATH=src:. python scripts/me069_verify_workflow.py --phase restore --cache /tmp/me069-source[0m
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5559002Z [36;1m  PYTHONPATH=src:. python scripts/me069_verify_workflow.py --phase replay --cache /tmp/me069-source[0m
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5559451Z [36;1mfi[0m
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5596688Z shell: /usr/bin/bash -e {0}
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5597161Z env:
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5597437Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5597865Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5598299Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5598668Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5599045Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5599454Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:08.5599774Z ##[endgroup]
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:39.0821030Z ME069_SCORED_DEV
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:47.1447639Z ME069_SCORED_TEST
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5001854Z Traceback (most recent call last):
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5011404Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 152, in <module>
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5012362Z     {"restore": restore, "replay": replay}[args.phase](args.cache)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5013340Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 119, in replay
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5014137Z     compare(original, replayed)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5014917Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 97, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5015756Z     compare(original[k], restored[k], path + "." + k)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5016592Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 97, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5017601Z     compare(original[k], restored[k], path + "." + k)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5018447Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 97, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5019250Z     compare(original[k], restored[k], path + "." + k)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5020094Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 102, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5020871Z     compare(a, b, path + f"[{i}]")
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5021610Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 97, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5022404Z     compare(original[k], restored[k], path + "." + k)
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5023672Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me069_verify_workflow.py", line 105, in compare
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5025110Z     raise ValueError(f"replay float differs: {path}; original={original!r}, restored={restored!r}, allowed={1e-4 + 1e-5 * abs(original)!r}")
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.5026839Z ValueError: replay float differs: root.scores.DEV.gru_world-s69004[176].wait_MAE_seconds; original=12.61865234375, restored=12.619873046875, allowed=0.00022618652343750001
+workflow-math-and-scientific-preflight	Restore original Git checkpoints and recompute real held-out scores	2026-10-23T05:27:48.7999477Z ##[error]Process completed with exit code 1.
