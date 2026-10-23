@@ -1,6 +1,7 @@
 # DIAGKEY004 — original synthetic-only results
 
-**Original training and scoring complete; independent clean-checkout replay pending.**
+**Original training/scoring and fresh local-clone strict replay complete. External
+class predictions/NLL reproduce, but two raw logits fail the registered tolerance.**
 No real-world capability or full-compute-matched architectural advantage is established.
 
 Preregistered code/plan: `79b11a5e`. All25 final models and50 original640/4096-update
@@ -87,3 +88,27 @@ retention, missing observations, real enterprise/physical transfer and action
 utility remain unknown. Consider a separately preregistered interference
 curriculum; do not infer success or silently train the next ladder stage.
 Keep this candidate in a draft branch; existing real models/holdouts unchanged.
+
+
+## Completed independent verification and the preserved numerical exception
+
+A separate clean Git clone at ebdd7737 restored all25 originals/50 checkpoints,
+verified actual checkpoint hashes/live receipts/source/data schedules, and
+reproduced all50 score sets within the ORIGINAL logit/NLL limits. No refitting.
+A local AVX2 compatibility run also passed, max absolute logit error7.63e-6.
+
+GitHub run39985095618 independently verified the same originals and all50 sets:
+**ALL25,600 predicted classes and correctness bits match exactly**, and maximum
+absolute NLL difference is5.59e-8 (registered limit1e-5). However **2 of819,200
+logits** violate the registered abs/rel1e-5 comparison; maximum absolute logit
+error across all sets is3.62e-5. The failed entries belong to aligned seeds75002
+and75004 at4096. The strict external numeric gate remains **FAIL**, no tolerance
+was widened. Both hosts report AVX512; instruction-set naming alone does not
+explain it. Root backend cause and portable strict replay remain unresolved.
+
+Original external audit JSON and local compatibility evidence are Git-preserved.
+The artifact CDN returned403 to the CLI, so the external audit was recovered
+verbatim from the authorized GitHub job's printed JSON, not reconstructed from
+aggregate metrics. See `NUMERICAL_REPLAY_STATUS.md`. This is a verified synthetic
+recall result with an explicit platform-numeric exception, not a universal
+reproducibility, architecture-superiority or real-world intelligence claim.

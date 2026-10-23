@@ -2,7 +2,8 @@
   "architecture_superiority": false,
   "integrity": {
     "git_original_checkpoints": true,
-    "independent_clean_replay": false,
+    "independent_clean_replay": true,
+    "independent_replay_scope": "Fresh local clone strict PASS; GitHub classes/NLL PASS but raw-logit contract FAIL. No tolerance change.",
     "raw_case_scores_preserved": true,
     "registered_before_evaluation": true
   },
@@ -26,9 +27,9 @@
   "study_id": "DIAGKEY004",
   "synthetic_mechanism": {
     "all_five_ge90": true,
-    "independent_replay": false,
+    "independent_replay": true,
     "mean_accuracy4096": 0.9984375,
-    "status": "TRAINED_ORIGINAL_SYNTHETIC_SCORES"
+    "status": "ORIGINAL_SYNTHETIC_METRICS_REPLAYED_WITH_EXTERNAL_LOGIT_EXCEPTION"
   },
   "task": {
     "independent_cases": 0,
@@ -36,6 +37,6 @@
   },
   "tier": "ENGINEERING_VERIFIED",
   "what_improved": "Synthetic-only immediate recall: revised native97.93% at640 and99.84% at4096; all five seeds pass90%. No measured real-world improvement.",
-  "what_regressed": "No authentic-data skill tested. Transformer reference accuracy/NLL worsened at4096 versus640; all checkpoints retained.",
-  "what_remains_unknown": "Interference/delay, real task transfer, individual mechanism effects, full FLOP-matched architecture advantage."
+  "what_regressed": "External strict raw-logit replay fails2/819200 elements (all classes/NLL reproduce); Transformer reference NLL worsens at4096.",
+  "what_remains_unknown": "Interference, real-world gain, individual attribution and all-platform strict numerical portability."
 }
