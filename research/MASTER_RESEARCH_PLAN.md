@@ -17,6 +17,80 @@ The prospective claim checker is at [`scripts/validate_capability_progress.py`](
 
 **Not yet globally enforced:** the implementation is on `research/master-research-plan`, currently **not integrated into each open model-development draft branch or demonstrated as a mandatory protected-branch check**. Every new study must bring this validator/standard into its exact working branch and publish its honest scorecard; do not call the new policy universally installed, do not edit old study/checkpoint records and do not merge research drafts without a separately authorized decision.
 
+## ME078–ME079 — trained real motion capability advances; no native architecture winner
+
+Two complete integrated physical-model recipes are now trained and preserved:
+[ME078 draft PR#368](https://github.com/FPC-effortless/TAC-OSM/pull/368) and
+[ME079 draft PR#369](https://github.com/FPC-effortless/TAC-OSM/pull/369).
+**30original fits**: each recipe has native fast32/slow32/8×8associative TAC,
+GRU56 and compact causal RMSNorm Transformer, five paired seeds per family.
+Each family received both recipe opportunities, identical actual source data,
+sampling/importance weights,8causal-prefix supervision and1/4/16frame targets,
+2048updates/batch24, final-only checkpoints, no sweeps or restarts. All actual
+trainable/deployed model counts remain95k–105k; pairwise gaps<0.78%.
+Audited forward/backward/clip plus analytical AdamW scalar-operation estimates
+match within0.66%, with zero unsupported floating ops and independent matrix
+profiler confirmation. This is **estimated algorithmic work**, not hardware
+FLOP/instruction/time/energy or foundation-scale equivalence.
+
+Same original licensed robot source:120FIT/40already-exposedREPORT episodes;
+960H1queries,956H4pairs,928H16pairs. No source CAL/TEST/protected tissue-box.
+Scores are means of individual model errors, not deployment of five-model
+ensembles. Source-ending/takeover censoring is explicit.85,320raw forecast
+records across the two recipes are repeated model/seed evaluations, **not**
+85,320independent real observations or newly gathered trajectories.
+
+| Mean physical MAE | Frozen ME077 | ME078 native | ME079 native | ME079 GRU | ME079 Transformer | Persistence |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| H1,960queries | 0.066476 | 0.061221 | 0.060595 | **0.058553** | 0.059470 | 0.068668 |
+| H4,956pairs | not trained | 0.195231 | 0.185953 | **0.181330** | 0.188688 | 0.302400 |
+| H16,928pairs | not trained | 0.950255 | 0.947424 | 0.937354 | **0.923996** | 0.975966 |
+
+**Real skill gains:** ME078 native actual-moving H1MAE0.421182 versus ME077
+0.741981, persistence0.743241 and strongest tested fixed physical reference
+(clipped velocity)0.482509: **43.24%below ME077 and12.71%below velocity**.
+ME079moving0.433934 is slightly worse than ME078 but still substantially better
+than those physical references. ME079 overall improves persistence by
+**11.76%/38.51%/2.92% at1/4/16frames**. Mean individual native-fit motion AP/AUC
+rises from ME077**0.16222/0.63493** to ME078**0.61717/0.92603** and ME079
+**0.60775/0.91971** on the same84positive/876negative factual cases. This is
+actual developmental movement discrimination, not safety, policy or customer
+utility. Separate mean-probability ensemble diagnostics are not100kmodel claims.
+
+**Material failures:** stationary H1MAE regresses from ME0770.001701 to ME078
+0.026704 and ME0790.024795. ME079's added within10%stationary-preservation gate
+FAILS. Both registered dual learned-control superiority gates FAIL. ME079's
+aggregate horizon-relative error is0.822702 vs GRU0.804255 and Transformer
+0.812258; adjusted97.5%episode-cluster intervals favor controls on this exposed
+cohort. Full gates remain FAIL and evidence tier **MIXED_TRADEOFF**, not a
+superior native architecture, independent intelligence or general world model.
+ME077 remains the better stationary specialist; do not silently stack multiple
+100kmodels and advertise a single100kdeployment. No further fit is authorized
+by either completed registration; all attempts and adverse results stay visible.
+
+**Preservation:** ME078 prefitsdd824ffe, all15original checkpoints frozen0352faba
+before scoring, scores8b1dfb8c. ME079 prefits5fe54ce4, all15originals frozenaabb05b4
+before scoring, scoresd1c8e2ed. Original model/optimizer/RNG/live receipts and raw
+forecasts/targets/probabilities/intervals are Git-owned. Independent fresh remote
+clone replays PASS for all30originals and original metric summaries, without
+refits.1156local tests PASS in the final branch. **Strict external replay FAILS**
+on54ME078 and29ME079 derived interval scores. Full external audits restore all
+models and confirm every other forecast/score field meets the frozen tolerance;
+no original model/score or tolerance changed. No all-platform-green claim.
+
+Read the full[ME078 report](https://github.com/FPC-effortless/TAC-OSM/blob/research/me078-native-kinematic-world-2026-10-23/research/mathematical-engineering/me078/RESULTS.md)
+and[ME079 report](https://github.com/FPC-effortless/TAC-OSM/blob/research/me079-risk-conditioned-physical-2026-10-23/research/mathematical-engineering/me079/RESULTS.md).
+
+**Next capability priority:** a stronger integrated native predictive-state model
+that retains stationary fidelity while forecasting genuine motion and longer
+future trajectories, using authentic available context and established methods.
+No attribution campaign is a prerequisite, but no extra small-gate retry may hide
+these failures. Independent source/condition qualification remains necessary
+before broader claims; the protected target is not automatically authorized.
+Physical learning does not qualify the separate Enterprise/Temporal/Edge/
+Counterfactual lanes. All outputs remain advisory; action/control authority,
+operator benefit, investment/customer value and deployment are NOT_MEASURED.
+
 ## ME077 — native selective physical prediction, mixed authentic development result (2026-10-23)
 
 [Draft PR #364](https://github.com/FPC-effortless/TAC-OSM/pull/364) trains the next
@@ -153,8 +227,8 @@ ME076 trained the entire real native architecture, and original fitted model/opt
 
 | Lane | Responsibility and proposed mathematical specialization | Historical research that genuinely informs it | New honest empirical capability gate |
 | --- | --- | --- | --- |
-| **1 / System 1 — reactive** | Fast observation/risk readout; bounded immediate recommendation; optional fast-only recurrent candidate; no mandated multistep planner | ME054/061 short-horizon dynamics; **ME074 fast-state readout lesion** made early-age forecasts *better* when fast was zeroed, and late-age worse. This is sensitivity on exposed data, **not** evidence of sub-ms action policy | Authentic contemporaneous reactive sensor/action outcome task, baseline & missed/false action cost, confirmed real hardware p50/p95/p99, zero unauthorized policy authority |
-| **2 / Physical — robot** | Continuous original **14D** recorded state/action adapter first (not assumed universally 6D/12D); observed action-conditioned deltas, physics/persistence references, possible reliability-routed bounded learned residual | ME054/056, **ME061–ME068**; ME064/066 original real transfer **lost to persistence**; servo is **not guaranteed** strongest reference; ME067 lesions and ME068 source timing diagnostics are not contact/force oracle | Untouched authentic physical sensor/motor trajectory, real motion/contact labels when present, accurate movement under true causal actions, strongest FIT-selected physical reference and no dangerous false positives |
+| **1 / System 1 — reactive** | Fast observation/risk readout; bounded immediate recommendation; optional fast-only recurrent candidate; no mandated multistep planner | ME078/079 authentic exposed next-frame movement-discrimination gains (per-fit AP0.617/0.608), no control/safety qualification; ME054/061 short-horizon dynamics; **ME074 fast-state readout lesion** made early-age forecasts *better* when fast was zeroed, and late-age worse. This is sensitivity on exposed data, **not** evidence of sub-ms action policy | Authentic contemporaneous reactive sensor/action outcome task, baseline & missed/false action cost, confirmed real hardware p50/p95/p99, zero unauthorized policy authority |
+| **2 / Physical — robot** | Continuous original **14D** recorded state/action adapter first (not assumed universally 6D/12D); observed action-conditioned deltas, physics/persistence references, possible reliability-routed bounded learned residual | ME054/056, **ME061–ME068**; ME064/066 original real transfer **lost to persistence**; servo is **not guaranteed** strongest reference; ME078/079 beat persistence on exposed1/4/16frame tasks, but stationary preservation and native-over-control gates FAIL; ME067 lesions and ME068 source timing diagnostics are not contact/force oracle | Untouched authentic physical sensor/motor trajectory, real motion/contact labels when present, accurate movement under true causal actions, strongest FIT-selected physical reference and no dangerous false positives |
 | **3 / Enterprise — Woyengi advisory hypothesis** | Authentic categorical events/resources, timestamped fast/slow/optional associative state, direct and autoregressive multi-event/time likelihood with explicitly recorded source boundary | **ME069–ME074**: ME073 five 99,781-parameter original fitted trajectory models; ME074 exposed baseline/native-lesion results; early 2-event accuracy ≈40%, distant uncertainty unresolved | Full native candidate with earlier difficult-branch benefit, properly coupled activity/time, truthful censoring and source completion semantics, real independent heldout domain and operational warning utility |
 | **4 / Temporal — bitemporal** | Valid time and record/knowledge time, late/backdated revisions, as-known-at time travel and deterministic replay into native predictor state; Woyengi remains authoritative | Existing Woyengi request contracts, ME069/071/073 event-time context **only**; no independently qualified bitemporal neural experiment | Authorized *actual* corrective/versioned event histories, tests of as-of non-leakage and reconstructability, quantified trained forecasting improvement under late facts |
 | **5 / Edge-Lite — embedded** | Explicit frozen model export, quantization, runtime memory/energy/latency and error audit, no silent policy bypass; full scan/INT8 compute only where deployment supported | ME055/056 resource profiles and ongoing live model budget guard are computational history, **not** edge deployment qualification | Actual ARM/microcontroller/GPU evidence, verified INT8 numerical score preservation, resource power/latency distributions, lawful model export and no trained capability degradation |

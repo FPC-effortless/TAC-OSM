@@ -1,5 +1,80 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## ME078–ME079 — trained real motion capability advances; no native architecture winner
+
+Two complete integrated physical-model recipes are now trained and preserved:
+[ME078 draft PR#368](https://github.com/FPC-effortless/TAC-OSM/pull/368) and
+[ME079 draft PR#369](https://github.com/FPC-effortless/TAC-OSM/pull/369).
+**30original fits**: each recipe has native fast32/slow32/8×8associative TAC,
+GRU56 and compact causal RMSNorm Transformer, five paired seeds per family.
+Each family received both recipe opportunities, identical actual source data,
+sampling/importance weights,8causal-prefix supervision and1/4/16frame targets,
+2048updates/batch24, final-only checkpoints, no sweeps or restarts. All actual
+trainable/deployed model counts remain95k–105k; pairwise gaps<0.78%.
+Audited forward/backward/clip plus analytical AdamW scalar-operation estimates
+match within0.66%, with zero unsupported floating ops and independent matrix
+profiler confirmation. This is **estimated algorithmic work**, not hardware
+FLOP/instruction/time/energy or foundation-scale equivalence.
+
+Same original licensed robot source:120FIT/40already-exposedREPORT episodes;
+960H1queries,956H4pairs,928H16pairs. No source CAL/TEST/protected tissue-box.
+Scores are means of individual model errors, not deployment of five-model
+ensembles. Source-ending/takeover censoring is explicit.85,320raw forecast
+records across the two recipes are repeated model/seed evaluations, **not**
+85,320independent real observations or newly gathered trajectories.
+
+| Mean physical MAE | Frozen ME077 | ME078 native | ME079 native | ME079 GRU | ME079 Transformer | Persistence |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| H1,960queries | 0.066476 | 0.061221 | 0.060595 | **0.058553** | 0.059470 | 0.068668 |
+| H4,956pairs | not trained | 0.195231 | 0.185953 | **0.181330** | 0.188688 | 0.302400 |
+| H16,928pairs | not trained | 0.950255 | 0.947424 | 0.937354 | **0.923996** | 0.975966 |
+
+**Real skill gains:** ME078 native actual-moving H1MAE0.421182 versus ME077
+0.741981, persistence0.743241 and strongest tested fixed physical reference
+(clipped velocity)0.482509: **43.24%below ME077 and12.71%below velocity**.
+ME079moving0.433934 is slightly worse than ME078 but still substantially better
+than those physical references. ME079 overall improves persistence by
+**11.76%/38.51%/2.92% at1/4/16frames**. Mean individual native-fit motion AP/AUC
+rises from ME077**0.16222/0.63493** to ME078**0.61717/0.92603** and ME079
+**0.60775/0.91971** on the same84positive/876negative factual cases. This is
+actual developmental movement discrimination, not safety, policy or customer
+utility. Separate mean-probability ensemble diagnostics are not100kmodel claims.
+
+**Material failures:** stationary H1MAE regresses from ME0770.001701 to ME078
+0.026704 and ME0790.024795. ME079's added within10%stationary-preservation gate
+FAILS. Both registered dual learned-control superiority gates FAIL. ME079's
+aggregate horizon-relative error is0.822702 vs GRU0.804255 and Transformer
+0.812258; adjusted97.5%episode-cluster intervals favor controls on this exposed
+cohort. Full gates remain FAIL and evidence tier **MIXED_TRADEOFF**, not a
+superior native architecture, independent intelligence or general world model.
+ME077 remains the better stationary specialist; do not silently stack multiple
+100kmodels and advertise a single100kdeployment. No further fit is authorized
+by either completed registration; all attempts and adverse results stay visible.
+
+**Preservation:** ME078 prefitsdd824ffe, all15original checkpoints frozen0352faba
+before scoring, scores8b1dfb8c. ME079 prefits5fe54ce4, all15originals frozenaabb05b4
+before scoring, scoresd1c8e2ed. Original model/optimizer/RNG/live receipts and raw
+forecasts/targets/probabilities/intervals are Git-owned. Independent fresh remote
+clone replays PASS for all30originals and original metric summaries, without
+refits.1156local tests PASS in the final branch. **Strict external replay FAILS**
+on54ME078 and29ME079 derived interval scores. Full external audits restore all
+models and confirm every other forecast/score field meets the frozen tolerance;
+no original model/score or tolerance changed. No all-platform-green claim.
+
+Read the full[ME078 report](https://github.com/FPC-effortless/TAC-OSM/blob/research/me078-native-kinematic-world-2026-10-23/research/mathematical-engineering/me078/RESULTS.md)
+and[ME079 report](https://github.com/FPC-effortless/TAC-OSM/blob/research/me079-risk-conditioned-physical-2026-10-23/research/mathematical-engineering/me079/RESULTS.md).
+
+**Next capability priority:** a stronger integrated native predictive-state model
+that retains stationary fidelity while forecasting genuine motion and longer
+future trajectories, using authentic available context and established methods.
+No attribution campaign is a prerequisite, but no extra small-gate retry may hide
+these failures. Independent source/condition qualification remains necessary
+before broader claims; the protected target is not automatically authorized.
+Physical learning does not qualify the separate Enterprise/Temporal/Edge/
+Counterfactual lanes. All outputs remain advisory; action/control authority,
+operator benefit, investment/customer value and deployment are NOT_MEASURED.
+
+
 ## ME077 — native selective physical prediction, mixed authentic development result (2026-10-23)
 
 [Draft PR #364](https://github.com/FPC-effortless/TAC-OSM/pull/364) trains the next

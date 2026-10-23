@@ -91,3 +91,7 @@ fact. CPU time remains an efficiency outcome, not a parity veto.
 ## ME077 current physical capability evidence
 
 Read the ME077 section of the master plan before proposing another System1 fit. The integrated selective model improved exposed-development all-case prediction, but failed the registered 5% persistence/moving-state gates. Preserve all five original checkpoints and the MIXED_TRADEOFF status. Focus next on real changing-state capability; no automatic sealed-task access, tuning restart, deployment or architecture-winner claim.
+
+## Current physical model evidence — ME078/ME079
+
+Read the master-plan ME078/079 section before proposing a physical fit. Thirty original real native/GRU/Transformer models acquired stronger motion forecasting/discrimination on exposed DEV, but stationary preservation and registered learned-rival superiority failed. Existing registrations permit NO further fits. Original checkpoints and strict external interval-score exceptions remain preserved. Prioritize the next integrated real predictive capability under a new prospective registration; no default ablation campaign, silent threshold relaxation, protected TEST access, architecture-winner claim, action authority or commercial promotion.
