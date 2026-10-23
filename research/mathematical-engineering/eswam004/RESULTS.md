@@ -49,3 +49,19 @@ Complete original five final trained model+optimizer+RNG, FIT sample-order ident
 - Fair architecture superiority relative to original ESWAM003, GRU/Transformer: NOT ESTABLISHED without audited matched full compute and fitted learned-family controls.
 
 **Decision:** Preserve negative and positive evidence, keep ESWAM003 as the preferred *within-family overall physical MAE* checkpoint of v3/v4, and do not promote ESWAM004 to production. Future research requires joint motion/stationary conditional distributions with source-causal evidence and more reliable calibration, plus true multiple-entity long-horizon forecasting rather than further micro-gate tuning on the exposed robot DEV cohort. Original v4 study must not be retrained or retuned.
+
+
+## Paired source-episode uncertainty: frozen originals, no refits
+
+An additional read-only audit aligned every original ESWAM003 / ESWAM004 task, episode, frame and seed ID (five original model seeds, same 960 factual real cases/seed). It resampled the 40 ORIGINAL episode clusters, stratified within five tasks (8 episode groups/task), with 5,000 deterministic paired bootstrap draws. The 960 frame-level cases and five model seeds are NOT treated as 4,800 independent real-world episodes. Uncertainty is conditional on this already exposed single source and these original fitted checkpoints.
+
+New minus earlier frozen ESWAM003 physical source MAE; lower is better:
+- All real cases: **+0.003349**, 95% actor/task-stratified episode interval **[-0.002138,+0.008648]**. Interval includes zero; no confident total mean improvement or regression over original episodes.
+- True moving real cases: **-0.029648**, 95% interval **[-0.080320,+0.022004]**. The apparent ~5.3% moving improvement cannot be declared robust at this conditional 95% source episode level.
+- True stationary real cases: **+0.006514**, 95% interval **[+0.003645,+0.009543]**. This fully positive interval supports a reproducible detrimental stationary forecast effect on the exposed source.
+- Overall movement Brier difference: **+0.450131**, 95% **[+0.432970,+0.466237]**, robustly worse probabilistic error. Moving-case Brier improves but stationary-case Brier worsens by +0.535211; strong class imbalance makes total reliability fail.
+- Logged action-imitation L1 difference **-0.000151**, interval [-0.000162,-0.000141], a consistent tiny gain over ESWAM003 but BOTH models still lose to simple repeat-last original recorded command.
+
+Original audit artifact: research/mathematical-engineering/eswam004/PAIRED_EPISODE_AUDIT.json . No model training or modified original targets. These episode-cluster CIs do not establish a matched-architecture superiority claim, an independent site generalization claim or strong policy utility.
+
+**Updated research decision:** ESWAM004 provides a descriptive moving-state point-estimate gain but fails the combined physical, stationary, calibrated risk and action utility gates; moving improvement CI crosses zero while stationary deterioration CI is entirely positive. Retain negative evidence. Further exposed-DEV gating changes without independently prospective source qualification would compound adaptation-to-DEV risk.
