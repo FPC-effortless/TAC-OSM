@@ -1,0 +1,384 @@
+{
+  "claim_tier": "EXPOSED_DEV_DIAGNOSTIC_ONLY",
+  "episode_cluster_2000_bootstrap": {
+    "Brier_minus_hindsight_prevalence": {
+      "95pct_interval": [
+        -0.0020149544300903767,
+        -0.0003072443457294923
+      ],
+      "valid_bootstraps": 2000
+    },
+    "ROC_AUC": {
+      "95pct_interval": [
+        0.5938168868277455,
+        0.6967393100066077
+      ],
+      "valid_bootstraps": 2000
+    },
+    "average_precision": {
+      "95pct_interval": [
+        0.12424893343895743,
+        0.24211038373589194
+      ],
+      "valid_bootstraps": 2000
+    }
+  },
+  "five_original_prediction_file_SHA256": {
+    "77001": "bb675babd517e719f49573d9a13fd3722f89aefed8c27d4fe32af39bc12cadea",
+    "77002": "d14d6347456d4509394e49a6f8189fcb9192988e62756f3d693a4cf340e9b178",
+    "77003": "e11ad3d80557000489cf054eadb4816a393a4d8af048863d6e40ad4438640f46",
+    "77004": "e70bee88775ffc6c705dea5c3978b76d65a3ae2641f73c4f30c1578ff12f3bac",
+    "77005": "cce958286253198349876dbbe2f9f405fcd2f60e1161df68afe38351babe051c"
+  },
+  "fixed_calibration_bins": [
+    {
+      "lower": 0.0,
+      "mean_probability": null,
+      "n": 0,
+      "observed_motion_frequency": null,
+      "upper": 0.05
+    },
+    {
+      "lower": 0.05,
+      "mean_probability": 0.08532066896793399,
+      "n": 506,
+      "observed_motion_frequency": 0.06126482213438735,
+      "upper": 0.1
+    },
+    {
+      "lower": 0.1,
+      "mean_probability": 0.11452428178968409,
+      "n": 454,
+      "observed_motion_frequency": 0.11674008810572688,
+      "upper": 0.2
+    },
+    {
+      "lower": 0.2,
+      "mean_probability": null,
+      "n": 0,
+      "observed_motion_frequency": null,
+      "upper": 0.4
+    },
+    {
+      "lower": 0.4,
+      "mean_probability": null,
+      "n": 0,
+      "observed_motion_frequency": null,
+      "upper": 0.6
+    },
+    {
+      "lower": 0.6,
+      "mean_probability": null,
+      "n": 0,
+      "observed_motion_frequency": null,
+      "upper": 0.8
+    },
+    {
+      "lower": 0.8,
+      "mean_probability": null,
+      "n": 0,
+      "observed_motion_frequency": null,
+      "upper": 1.0
+    }
+  ],
+  "fixed_thresholds": {
+    "0.05": {
+      "FN": 0,
+      "FP": 876,
+      "TN": 0,
+      "TP": 84,
+      "false_positive_rate": 1.0,
+      "precision": 0.0875,
+      "recall": 1.0
+    },
+    "0.1": {
+      "FN": 31,
+      "FP": 401,
+      "TN": 475,
+      "TP": 53,
+      "false_positive_rate": 0.4577625570776256,
+      "precision": 0.11674008810572688,
+      "recall": 0.6309523809523809
+    },
+    "0.25": {
+      "FN": 84,
+      "FP": 0,
+      "TN": 876,
+      "TP": 0,
+      "false_positive_rate": 0.0,
+      "precision": null,
+      "recall": 0.0
+    },
+    "0.5": {
+      "FN": 84,
+      "FP": 0,
+      "TN": 876,
+      "TP": 0,
+      "false_positive_rate": 0.0,
+      "precision": null,
+      "recall": 0.0
+    }
+  },
+  "hindsight_REPORT_climatology_Brier_NOT_DEPLOYABLE": 0.07984374999999999,
+  "motion_Brier_skill_against_hindsight_REPORT_climatology": 0.01437840564428472,
+  "motion_base_rate": 0.0875,
+  "motion_rich_queries": 84,
+  "new_optimizer_updates": 0,
+  "original_5seed_mean_auxiliary_motion": {
+    "Brier": 0.07869572417433914,
+    "ROC_AUC": 0.64412100456621,
+    "average_precision": 0.1705560625277403,
+    "mean_probability_moving": 0.10840788720441714,
+    "mean_probability_stationary": 0.09824203185515996,
+    "top10_count": 96,
+    "top10_movement_recall": 0.23809523809523808,
+    "top10_precision": 0.20833333333333334,
+    "top10_true_motion": 20
+  },
+  "original_5seed_mean_coordinate_mixture_proxy": {
+    "Brier": 0.434198544508001,
+    "ROC_AUC": 0.5765111980865405,
+    "average_precision": 0.11042628558737885,
+    "mean_probability_moving": 0.7031582989894665,
+    "mean_probability_stationary": 0.6753329579275532,
+    "top10_count": 96,
+    "top10_movement_recall": 0.15476190476190477,
+    "top10_precision": 0.13541666666666666,
+    "top10_true_motion": 13
+  },
+  "original_five_individual_seed_statistics": {
+    "77001": {
+      "all_physical_MAE": 0.06646128036961348,
+      "coordinate_mixture_mean": {
+        "Brier": 0.44026060699103586,
+        "ROC_AUC": 0.6102821265492498,
+        "average_precision": 0.12033423293219828,
+        "mean_probability_moving": 0.7132795483434611,
+        "mean_probability_stationary": 0.6801076945025578,
+        "top10_count": 96,
+        "top10_movement_recall": 0.15476190476190477,
+        "top10_precision": 0.13541666666666666,
+        "top10_true_motion": 13
+      },
+      "motion": {
+        "Brier": 0.07898813880716117,
+        "ROC_AUC": 0.64632257012394,
+        "average_precision": 0.18933886307880926,
+        "mean_probability_moving": 0.119859128746958,
+        "mean_probability_stationary": 0.10842744962707775,
+        "top10_count": 96,
+        "top10_movement_recall": 0.2261904761904762,
+        "top10_precision": 0.19791666666666666,
+        "top10_true_motion": 19
+      },
+      "moving_physical_MAE": 0.7419634362727049,
+      "stationary_physical_MAE": 0.0016871010364403326
+    },
+    "77002": {
+      "all_physical_MAE": 0.06649069761977368,
+      "coordinate_mixture_mean": {
+        "Brier": 0.4336313355789419,
+        "ROC_AUC": 0.5999673842139596,
+        "average_precision": 0.16222373704474669,
+        "mean_probability_moving": 0.7078637586634124,
+        "mean_probability_stationary": 0.6736347354068838,
+        "top10_count": 96,
+        "top10_movement_recall": 0.21428571428571427,
+        "top10_precision": 0.1875,
+        "top10_true_motion": 18
+      },
+      "motion": {
+        "Brier": 0.07944591602649291,
+        "ROC_AUC": 0.64925799086758,
+        "average_precision": 0.17399958233742563,
+        "mean_probability_moving": 0.07552833105659201,
+        "mean_probability_stationary": 0.07083485775614438,
+        "top10_count": 96,
+        "top10_movement_recall": 0.2261904761904762,
+        "top10_precision": 0.19791666666666666,
+        "top10_true_motion": 19
+      },
+      "moving_physical_MAE": 0.7420108754886314,
+      "stationary_physical_MAE": 0.0017147901528969088
+    },
+    "77003": {
+      "all_physical_MAE": 0.06647456480347576,
+      "coordinate_mixture_mean": {
+        "Brier": 0.44394232697689284,
+        "ROC_AUC": 0.58382257012394,
+        "average_precision": 0.11656129356703047,
+        "mean_probability_moving": 0.7125492368517506,
+        "mean_probability_stationary": 0.681282530058496,
+        "top10_count": 96,
+        "top10_movement_recall": 0.17857142857142858,
+        "top10_precision": 0.15625,
+        "top10_true_motion": 15
+      },
+      "motion": {
+        "Brier": 0.0788914145410616,
+        "ROC_AUC": 0.6300826266579691,
+        "average_precision": 0.1745923897831962,
+        "mean_probability_moving": 0.09109202470807802,
+        "mean_probability_stationary": 0.08352700756548066,
+        "top10_count": 96,
+        "top10_movement_recall": 0.23809523809523808,
+        "top10_precision": 0.20833333333333334,
+        "top10_true_motion": 20
+      },
+      "moving_physical_MAE": 0.741968896495001,
+      "stationary_physical_MAE": 0.0017011357371651285
+    },
+    "77004": {
+      "all_physical_MAE": 0.06645652362517278,
+      "coordinate_mixture_mean": {
+        "Brier": 0.4466062677442801,
+        "ROC_AUC": 0.5440041313328985,
+        "average_precision": 0.09795425775337507,
+        "mean_probability_moving": 0.7012235921725226,
+        "mean_probability_stationary": 0.6874919655515319,
+        "top10_count": 96,
+        "top10_movement_recall": 0.047619047619047616,
+        "top10_precision": 0.041666666666666664,
+        "top10_true_motion": 4
+      },
+      "motion": {
+        "Brier": 0.07902588089677035,
+        "ROC_AUC": 0.6511062187432051,
+        "average_precision": 0.15131389206522267,
+        "mean_probability_moving": 0.13436024928731577,
+        "mean_probability_stationary": 0.1168423528489593,
+        "top10_count": 96,
+        "top10_movement_recall": 0.16666666666666666,
+        "top10_precision": 0.14583333333333334,
+        "top10_true_motion": 14
+      },
+      "moving_physical_MAE": 0.7419657266388336,
+      "stationary_physical_MAE": 0.0016816685416710425
+    },
+    "77005": {
+      "all_physical_MAE": 0.0664966650297212,
+      "coordinate_mixture_mean": {
+        "Brier": 0.40991522850543044,
+        "ROC_AUC": 0.5700424005218526,
+        "average_precision": 0.1010750979273049,
+        "mean_probability_moving": 0.6808753589161854,
+        "mean_probability_stationary": 0.6541478641182962,
+        "top10_count": 96,
+        "top10_movement_recall": 0.08333333333333333,
+        "top10_precision": 0.07291666666666667,
+        "top10_true_motion": 7
+      },
+      "motion": {
+        "Brier": 0.079709575962191,
+        "ROC_AUC": 0.5978745379430311,
+        "average_precision": 0.1218749446713508,
+        "mean_probability_moving": 0.12119970222314198,
+        "mean_probability_stationary": 0.11157849147813777,
+        "top10_count": 96,
+        "top10_movement_recall": 0.17857142857142858,
+        "top10_precision": 0.15625,
+        "top10_true_motion": 15
+      },
+      "moving_physical_MAE": 0.741997361471433,
+      "stationary_physical_MAE": 0.0017226256448995138
+    }
+  },
+  "original_real_queries": 960,
+  "original_task_statistics": {
+    "clean_stains_off_tabletop": {
+      "base_rate": 0.057291666666666664,
+      "motion": {
+        "Brier": 0.05451922691234026,
+        "ROC_AUC": 0.6303365143144148,
+        "average_precision": 0.08429831645319281,
+        "mean_probability_moving": 0.09730942581187595,
+        "mean_probability_stationary": 0.08924661558224352,
+        "top10_count": 20,
+        "top10_movement_recall": 0.0,
+        "top10_precision": 0.0,
+        "top10_true_motion": 0
+      },
+      "moving": 11,
+      "n": 192
+    },
+    "fold_and_stack_scattered_clothes_neatly": {
+      "base_rate": 0.08333333333333333,
+      "motion": {
+        "Brier": 0.0755388056475886,
+        "ROC_AUC": 0.6509232954545454,
+        "average_precision": 0.19032610870288846,
+        "mean_probability_moving": 0.1013562582898885,
+        "mean_probability_stationary": 0.0937148453879424,
+        "top10_count": 20,
+        "top10_movement_recall": 0.25,
+        "top10_precision": 0.2,
+        "top10_true_motion": 4
+      },
+      "moving": 16,
+      "n": 192
+    },
+    "hang_clothes_on_drying_rack": {
+      "base_rate": 0.11979166666666667,
+      "motion": {
+        "Brier": 0.10403908807078988,
+        "ROC_AUC": 0.6323642912271675,
+        "average_precision": 0.19185334147624572,
+        "mean_probability_moving": 0.11322811537462733,
+        "mean_probability_stationary": 0.1033782517680755,
+        "top10_count": 20,
+        "top10_movement_recall": 0.17391304347826086,
+        "top10_precision": 0.2,
+        "top10_true_motion": 4
+      },
+      "moving": 23,
+      "n": 192
+    },
+    "line_trash_can_with_trash_bag": {
+      "base_rate": 0.109375,
+      "motion": {
+        "Brier": 0.09547562323079795,
+        "ROC_AUC": 0.6649958228905597,
+        "average_precision": 0.3150949182984304,
+        "mean_probability_moving": 0.1145763606187843,
+        "mean_probability_stationary": 0.10300198214793066,
+        "top10_count": 20,
+        "top10_movement_recall": 0.47619047619047616,
+        "top10_precision": 0.5,
+        "top10_true_motion": 10
+      },
+      "moving": 21,
+      "n": 192
+    },
+    "pour_water_from_kettle_to_make_tea": {
+      "base_rate": 0.06770833333333333,
+      "motion": {
+        "Brier": 0.06390587701017901,
+        "ROC_AUC": 0.609368285345939,
+        "average_precision": 0.11751242556955979,
+        "mean_probability_moving": 0.10798526784548393,
+        "mean_probability_stationary": 0.10239277206902399,
+        "top10_count": 20,
+        "top10_movement_recall": 0.15384615384615385,
+        "top10_precision": 0.1,
+        "top10_true_motion": 2
+      },
+      "moving": 13,
+      "n": 192
+    }
+  },
+  "outcome_limits": [
+    "DEV historically exposed, not independent untouched real task or source",
+    "Only motion defined by original 0.025 mean 14D displacement threshold, no hazard/event benefits verified",
+    "Hindsight REPORT prevalence not a decision-time permitted prior",
+    "Seed ensemble is a diagnostic of previously trained models, not a new deployable fitted model",
+    "Coordinate-level mixture weights are not a global motion-event probability",
+    "No new policy/authorization/causal or Woyengi claims",
+    "No parameter/compute-matched GRU or Transformer head-to-head here"
+  ],
+  "real_episode_clusters": 40,
+  "real_source": "BodenAI original historically exposed genuine 40 episodes / 960 next-state questions",
+  "source_sha256": "095816cf45de5ff7e3e1e3a6fd9f84f0165302c72fc725f7abb0f69bf438c959",
+  "study": "ME077A_ORIGINAL_REAL_MOTION_DISCRIMINATION_NO_FIT",
+  "trained_model_count": 5,
+  "trained_new_models": 0
+}
