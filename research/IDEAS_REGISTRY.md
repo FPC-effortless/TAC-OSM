@@ -2,6 +2,22 @@
 
 This is a **starter registry in TAC-OSM**, pending creation of a separate cross-project ideas repository. The registry does not claim that proposals were implemented or evaluated.
 
+## ME076 — Actual authentic System 1 native predictive failure (2026-10-23)
+
+**Real original FIT training and replay completed, strict skill gain FAILED.** [Draft PR #360](https://github.com/FPC-effortless/TAC-OSM/pull/360) now includes **five fitted 100,476-parameter** native fast-only whole models, 160 real source optimizer updates per seed, original source FIT 120 episodes / source-exposed episode-disjoint 40 report, five original checkpoint+optimizer+RNG files and 5×960 original real per-case predictions. Independent clean-runner checkpoint+score replay **PASS all five**; independently audited original training budgets 100,476 learned parameters and 160 updates/seed **PASS**, no untrained-head camouflage. Original source 160-episode SHA `4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776`; original CAL, original TEST and the reserved protected task **never opened**.
+
+| Source-exposed REAL next-state evaluation | Original persistence MAE | FIT-identified servo lag1 | Five-seed native mean MAE | Verdict |
+| --- | ---: | ---: | ---: | --- |
+| 960 observations/seed on 40 original report episodes | **0.068668** | 0.097457 | 0.080158 | **FAIL**: native +16.7% error versus persistence, all five seeds |
+| Actual 84 motion-rich observed cases | 0.743241 | **0.704517** | 0.748786 | **FAIL** versus both practical controls |
+| 876 near-stationary observed cases | **0.003983** | 0.039245 | 0.016043 | **FAIL**: excessive corrections |
+
+See [full original real negative report](https://github.com/FPC-effortless/TAC-OSM/blob/research/me075-system1-native-gated-delta-2026-10-23/research/mathematical-engineering/me076/RESULTS.md) and its [posthoc per-real-episode uncertainty](https://github.com/FPC-effortless/TAC-OSM/blob/research/me075-system1-native-gated-delta-2026-10-23/research/mathematical-engineering/me076/POSTHOC_REAL_SCORE_DIAGNOSTIC.json). The 40-case episode-cluster posthoc 95% interval for **native minus persistence** physical MAE is **+0.011116 to +0.011862** on the **already exposed DEV** population. Worse performance was also observed for all five genuine source tasks separately. This is real negative evidence, **not** independent heldout transfer, module attribution, causal action intelligence or an investor-worthy System1 product advantage.
+
+**Next capability lane `S1-002` (not fitted or approved as a gain):** jointly learned, uncertainty-aware movement gate + sparse conditional bounded physical residual, keeping factual `x_t` persistence as an explicit candidate and accounting for realistic ∼9% genuine movement prevalence. Study early identification of actually changing states, stationary false corrections, physical proper NLL and tail/abstention risks; no target-derived movement decision feature. Five fitted original ME076 models and same-case persistence/servo are now **frozen comparisons on development data**; a truly untouched real task/source must be preregistered for `INDEPENDENT_GAIN`. Preserve owner 95–105k live model gate, genuine real source, original Git checkpoint+independent replay, and no default component-ablation cycle.
+
+**Investor policy:** distinguish authentic training/replay integrity (achieved) from physical predictive advantage (failed), device latency (unmeasured), safe action control (unverified) and willingness-to-pay (unknown). No 25k System1 extraction, hardware production or ALLOW/ABORT deployment is justified by this record.
+
 ## ME075 actual System 1 engineering status — 2026-10-23
 
 **Current owner priority:** focus the next capable-model design cycle on truthful real one-step System1 performance and a **separate** mathematically grounded Gated Delta associative memory candidate. DIAGKEY001 PR #357 guarded original synthetic recall fits (TAC 3.75/4.49/3.48% versus Transformer 99.06/98.79/98.87% at16/64/256) reveal *this fitted mechanism/recipe* did not learn the synthetic key/value task, but their ~18–21% partial FLOP budget disparity and artificial sources preclude universal architectural inferiority or real-world prediction conclusions. Do **not** block proven ability in five other domain lanes merely because random-key recall failed.
