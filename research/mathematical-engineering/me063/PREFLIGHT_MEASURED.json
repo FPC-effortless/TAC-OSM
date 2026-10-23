@@ -1,0 +1,100 @@
+{
+  "budget_if_trained": {
+    "batch_size": 8,
+    "history": 64,
+    "horizon": 16,
+    "updates": 600
+  },
+  "cal_partition_digest": "f54d4b26492b96f6ee7c4b56891dabacfea27f144f0a7661273d4a5d5e9d729c",
+  "cal_trajectory_opened": false,
+  "dev_partition_digest": "eee28e584fffa0d379ceac3fe31c36412e88f519e09931042e8ec2f728f1bd01",
+  "dev_trajectory_opened": false,
+  "fit_episode_count": 208,
+  "fit_partition_digest": "f88e19251ddba1f17ee9a3e822b859718e495062e8d65406d54a4ba13ce85b10",
+  "independent_test": false,
+  "operator_flop_relative_gap": 0.006391271731148206,
+  "optimizer_steps": 0,
+  "parameter_relative_gap": 0.006785819240736288,
+  "per_arm": {
+    "gru_world": {
+      "has_finite_gradients": {
+        "cell.bias_hh": true,
+        "cell.bias_ih": true,
+        "cell.weight_hh": true,
+        "cell.weight_ih": true,
+        "decoder.bias": true,
+        "decoder.weight": true,
+        "encoder.bias": true,
+        "encoder.weight": true,
+        "output.bias": true,
+        "output.weight": true,
+        "prior_scale.0.bias": true,
+        "prior_scale.0.weight": true,
+        "prior_scale.2.bias": true,
+        "prior_scale.2.weight": true,
+        "query.bias": true,
+        "query.weight": true,
+        "router.0.bias": true,
+        "router.0.weight": true,
+        "router.2.bias": true,
+        "router.2.weight": true
+      },
+      "initial_loss": 0.24893070757389069,
+      "parameters": 37431,
+      "profiled_forward_backward_flops": 56531772
+    },
+    "native_tac": {
+      "has_finite_gradients": {
+        "decoder.bias": true,
+        "decoder.weight": true,
+        "encoder.bias": true,
+        "encoder.weight": true,
+        "fast_map.bias": true,
+        "fast_map.weight": true,
+        "output.bias": true,
+        "output.weight": true,
+        "prior_scale.0.bias": true,
+        "prior_scale.0.weight": true,
+        "prior_scale.2.bias": true,
+        "prior_scale.2.weight": true,
+        "query.bias": true,
+        "query.weight": true,
+        "retention": true,
+        "router.0.bias": true,
+        "router.0.weight": true,
+        "router.2.bias": true,
+        "router.2.weight": true,
+        "slow_map.bias": true,
+        "slow_map.weight": true,
+        "write_map.bias": true,
+        "write_map.weight": true
+      },
+      "initial_loss": 0.24893070757389069,
+      "parameters": 37177,
+      "profiled_forward_backward_flops": 56895406
+    }
+  },
+  "profile_limitation": "torch.profiler supported operators only; optimizer and uncounted ops excluded",
+  "python": "3.12.15",
+  "pytorch": "2.14.1+cpu",
+  "real_source_fit_sha256": "b55d0e1f894072c5738ef8e45aa283a3b464c1a1dc8f60c63594666d16b30a49",
+  "repo_replay_status": "BLOCKED",
+  "schedule_sha256": {
+    "63001": "f7c4d24b49ac91ca0d7c504554abd7706337557716158325a71827f202b48645",
+    "63002": "b8ee9f85a818d6b3b1220b4004286a9fc6acf9be9fab428da2544183d6102cde",
+    "63003": "c5db75047d0e19cdc890e9ee835727d16e9653cc608a61858aa53ab3dec4ff69",
+    "63004": "8bfe2d2587839f47420e7db70ce8eef1ed8c98dad4ba5d1297becc43130767d0",
+    "63005": "63085b0dc7805eb0bf656d9991fbb5e3f27bfb22c4b26823cfca4b0b195ef791"
+  },
+  "scientific_status": "PREFLIGHT_DIAGNOSTIC_NOT_TRAINED",
+  "seeds": [
+    63001,
+    63002,
+    63003,
+    63004,
+    63005
+  ],
+  "study": "ME063_AUTHENTIC_FIT_PREFLIGHT_ONLY",
+  "test_trajectory_opened": false,
+  "training_status": "NOT_RUN"
+}
