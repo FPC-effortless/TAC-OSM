@@ -51,6 +51,10 @@ def inspect_archive(path: Path):
             if entry.is_dir():
                 continue
             name=entry.filename
+            # Skip macOS AppleDouble metadata: a binary ._vehicle_tracks.csv
+            # is not a real observation CSV and must not be decoded as one.
+            if name.startswith("__MACOSX/") or "/__MACOSX/" in name or Path(name).name.startswith("._"):
+                continue
             if name.startswith("/") or ".." in Path(name).parts:
                 raise RuntimeError("Archive path traversal encountered")
             # Maps, challenge scores and scripts are NOT substitute evidence.
