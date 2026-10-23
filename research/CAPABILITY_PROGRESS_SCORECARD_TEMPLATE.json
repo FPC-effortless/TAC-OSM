@@ -1,0 +1,71 @@
+{
+  "schema_version": "tac-osm.capability-progress.v1",
+  "study_id": "",
+  "tier": "DEV_GAIN",
+  "claim_type": "same-task complete-model developmental skill improvement; select the correct fixed tier",
+  "what_improved": "REPLACE_WITH_FACTUAL_EVIDENCE",
+  "what_regressed": "REPLACE_WITH_TRUE_NEGATIVE_METRICS_OR_EXPLICIT_NONE",
+  "what_remains_unknown": "REPLACE_WITH_SOURCE/TRANSFER/CALIBRATION/DECISION_UNCERTAINTY",
+  "source": {
+    "authentic_real_data": false,
+    "exposure": "UNKNOWN",
+    "sha256": "",
+    "eligible_ids_sha256": "",
+    "holdout_unopened_before_freeze": false
+  },
+  "task": {
+    "prediction_time_validated": false,
+    "independent_cases": 0,
+    "actual_future_targets": 0,
+    "target": "",
+    "query_and_horizon": "",
+    "same_case_ids_target_horizon_metric": false
+  },
+  "model": {
+    "prior_sha256": "",
+    "candidate_sha256": "",
+    "original_old_checkpoint_path": "",
+    "original_new_checkpoint_path": "",
+    "original_trainable_parameters": null,
+    "new_trainable_parameters": null,
+    "training_exposure_and_compute_note": ""
+  },
+  "integrity": {
+    "git_original_checkpoints": false,
+    "independent_clean_replay": false,
+    "raw_case_scores_preserved": false,
+    "registered_before_evaluation": false,
+    "independent_raw_case_audit": false,
+    "raw_case_score_artifact_path": "",
+    "independent_audit_run_url": ""
+  },
+  "primary_comparison": {
+    "name": "next-event NLL on identical original case IDs",
+    "direction": "lower_is_better",
+    "prior": null,
+    "candidate": null,
+    "minimum_useful_gain": null,
+    "paired_case_cluster_95ci_gain": null,
+    "paired_seed_count": null,
+    "beneficial_seed_count": null
+  },
+  "guardrails": [
+    {
+      "metric": "time interval empirical coverage",
+      "status": "UNKNOWN"
+    },
+    {
+      "metric": "rare-branch false predictions",
+      "status": "UNKNOWN"
+    }
+  ],
+  "practical_reference_scored": false,
+  "independent_real_distributions": 0,
+  "preregistered_small_cohort_power_justification": false,
+  "prospective_pilot": {
+    "authorized_external_customer": false,
+    "real_outcomes_and_costs_verified": false,
+    "preregistered_net_benefit_confirmed": false
+  },
+  "study_notes": "TEMPLATE ONLY. Intentionally fails promotion validation until filled with actual registered evidence. Do not commit as a claimed success."
+}
