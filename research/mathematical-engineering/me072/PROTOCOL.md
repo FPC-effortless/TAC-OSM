@@ -24,6 +24,10 @@ An h-th future original record beyond the case's recorded suffix is labeled
 trace boundary, not verified completion, cancellation, timeout, interruption
 or success. Collection censoring cannot be identified from absence alone.
 The model learns a record-availability proxy; no causal stop policy is claimed.
+EOR is a retrospective file-derived label. Its availability cannot be assigned
+to the last event's timestamp merely because no later record is present in the
+published file. Therefore temporal case cuts do not establish prospective
+business-stop prediction; boundary-head scores remain proxy development only.
 
 Include last recorded events during training rather than dropping them.
 The same observed prefix can target a real next record at h1 and EOR at h8.

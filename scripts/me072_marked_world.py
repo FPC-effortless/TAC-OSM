@@ -187,6 +187,7 @@ def metrics(p,data):
             "conditional_activity_accuracy":float((p.mark_log_probability[:,j].argmax(-1)[yes]==target[:,j][yes]).double().mean()) if n else None,
             "conditional_activity_NLL":float(mark[:,j][yes].mean()) if n else None,
             "conditional_time_NLL_seconds":float((occurrence[:,j]+(seconds[:,j]>0)*time[:,j])[yes].mean()) if n else None,
+            "conditional_zero_delay_Brier":float((p.log_zero[:,j].double().exp()-(t==0).double()).square()[yes].mean()) if n else None,
             "waiting_median_MAE_hours":float((median[yes]-t[yes]).abs().mean()/3600) if n else None,
             "conditional_time_90_coverage":float(((low<=t)&(t<=high))[yes].double().mean()) if n else None,
             "mean_interval_width_hours":float(width[yes].mean()/3600) if n else None,
