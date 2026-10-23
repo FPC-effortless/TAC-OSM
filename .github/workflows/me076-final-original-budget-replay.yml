@@ -1,0 +1,44 @@
+name: ME076 independently certify original System1 fit budgets (no refit)
+on:
+  push:
+    branches: [research/me075-system1-native-gated-delta-2026-10-23]
+    paths:
+      - "scripts/me076_finalize_original_budget.py"
+      - ".github/workflows/me076-final-original-budget-replay.yml"
+  pull_request:
+    paths:
+      - "scripts/me076_finalize_original_budget.py"
+      - ".github/workflows/me076-final-original-budget-replay.yml"
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  postfit-original-runtime-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/me075-system1-native-gated-delta-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Frozen preregistration check without new optimizer steps
+        run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me076/FAIR_COMPARISON.json --phase preflight
+      - name: Independently reconcile existing FIVE original Git model bytes, receipts, runtime live budget and actual fitted steps
+        run: PYTHONPATH=src:. python scripts/me076_finalize_original_budget.py
+      - name: Strict FINAL parity confirmation, not a fair-head-to-head architecture claim
+        run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me076/FINAL_COMPARISON.json --phase final
+      - name: Preserve final certification of originally frozen model bytes in Git
+        env: {TARGET_BRANCH: research/me075-system1-native-gated-delta-2026-10-23}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/mathematical-engineering/me076/FINAL_COMPARISON.json
+          if git diff --cached --quiet; then
+            echo "Unchanged originally verified receipts"
+          else
+            git commit -m 'audit(me076): certify all five actual guarded real fit receipts against frozen registration'
+            git push origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          fi

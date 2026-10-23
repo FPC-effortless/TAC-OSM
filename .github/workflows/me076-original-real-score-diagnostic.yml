@@ -1,0 +1,33 @@
+name: ME076 original real scores episode audit (no refit)
+on:
+  push:
+    branches: [research/me075-system1-native-gated-delta-2026-10-23]
+    paths:
+      - "scripts/me076_analyze_original_scores.py"
+      - ".github/workflows/me076-original-real-score-diagnostic.yml"
+  workflow_dispatch:
+permissions: {contents: write}
+jobs:
+  score-original-git-real-outputs-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/me075-system1-native-gated-delta-2026-10-23
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Verify script syntax without optional remote source
+        run: python -m py_compile scripts/me076_analyze_original_scores.py
+      - name: Audit 5 original real prediction arrays with actual 40-episode uncertainty, zero optimizer steps
+        run: python scripts/me076_analyze_original_scores.py
+      - name: Publish unmodified-source real posthoc diagnostics
+        env: {TARGET_BRANCH: research/me075-system1-native-gated-delta-2026-10-23}
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/mathematical-engineering/me076/POSTHOC_REAL_SCORE_DIAGNOSTIC.json
+          git commit -m 'research(me076): preserve authentic episode-cluster negative-result diagnostic'
+          git push origin "HEAD:refs/heads/${TARGET_BRANCH}"

@@ -1,0 +1,89 @@
+{
+  "schema_version": "tac-osm.parity.v2",
+  "study_id": "ME076_SYSTEM1_REAL_FIT_ONLY_ONE_STEP_CAPABILITY",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Fit exactly five whole 100476-parameter native System1 recurrent next-state predictors on authentic existing original BodenAI robot FIT episodes, reporting held-out-within-prior-FIT episode DEV one-step physical NLL/MAE and measured movement cases against FIT-only persistence/servo, not an untouched external task or action policy.",
+  "real_world_source": {
+    "name": "BodenAI/RW-RL-HIL-Dataset, frozen revision 9290f5a96dc91ea58256e81d9ce2dd9621890b51, original ME064 registered five authentic tasks previously exposed FIT 160 episodes; CC-BY-4.0 with publisher attribution",
+    "license": "CC-BY-4.0",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+    "observed_real_outcomes": true
+  },
+  "models": [
+    {
+      "seed": 76001,
+      "architecture": "system1_native_fast",
+      "trainable_parameters": 100476,
+      "deployed_parameters": 100476
+    },
+    {
+      "seed": 76002,
+      "architecture": "system1_native_fast",
+      "trainable_parameters": 100476,
+      "deployed_parameters": 100476
+    },
+    {
+      "seed": 76003,
+      "architecture": "system1_native_fast",
+      "trainable_parameters": 100476,
+      "deployed_parameters": 100476
+    },
+    {
+      "seed": 76004,
+      "architecture": "system1_native_fast",
+      "trainable_parameters": 100476,
+      "deployed_parameters": 100476
+    },
+    {
+      "seed": 76005,
+      "architecture": "system1_native_fast",
+      "trainable_parameters": 100476,
+      "deployed_parameters": 100476
+    }
+  ],
+  "training_budget": {
+    "seeds": [
+      76001,
+      76002,
+      76003,
+      76004,
+      76005
+    ],
+    "updates_per_seed": 160,
+    "batch_size": 12,
+    "observation_history_frames": 8,
+    "optimizer": "AdamW",
+    "learning_rate": 0.0007,
+    "weight_decay": 0.0001,
+    "gradient_clip_norm": 1,
+    "fit_members_per_task": 24,
+    "development_members_per_task": 8,
+    "selection": "frozen SHA256 task/episode lexicographic 24 FIT / 8 previously exposed original FIT-DEV per task",
+    "min_per_episode_scoring_origins": 1,
+    "max_per_episode_scoring_origins": 24,
+    "train_window_sampling": "seeded equal-task task round robin with half outcome-change >0.025 physical mean units and half uniform, within FIT only",
+    "checkpoint": "final optimizer update only; all original model/optimizer/RNG and source+raw predictions in Git"
+  },
+  "primary_development_measure": "mean per-episode actual normalized 14D one-step MAE converted to physical units; compare same eligible episode/time origins to FIT-only persistence, report movement-rich separately",
+  "measurable_promotion_rule": "DEV_CAPABILITY_OBSERVED only, not INDEPENDENT_GAIN. Report each seed, real episode counts, all-case and actual post-outcome movement-rich MAE, correct literal source elapsed time convention, paired episode confidence only if calculated. No new untouched robot task or commercial claims.",
+  "source_policy": {
+    "CAL_or_unopened_target_access": false,
+    "source_is_previously_exposed": true,
+    "license_verified_by_publisher": true,
+    "valid_action_alignment_causal_proof": false,
+    "log_end_is_task_success": false
+  },
+  "checkpoints": "research/replay-bundles/ME076/seed-7600X/final.pt",
+  "source_train_fit_qualification": "metadata and normalized state/action computed only from designated FIT episode members; source fingerprint includes entire original five-task FIT 160 archive but eval rows never used for normalization",
+  "guard": "Whole model pre/post update live check via budgeted_optimizer, guarded optimizer.step, save_training_checkpoint. Entire original fit/checkpoint/per-case outputs in Git; never alter existing ME054-075 results.",
+  "strict_no_claims": [
+    "no original model trained before this registration",
+    "no actual action permission",
+    "no measured millisecond device bound",
+    "no untouched external confirmation",
+    "no matched GRU superiority",
+    "no synthetic success"
+  ]
+}
