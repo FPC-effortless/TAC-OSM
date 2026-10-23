@@ -1,0 +1,37 @@
+name: ME070 authentic publisher source metadata and 256-history gate
+on:
+  pull_request:
+    paths:
+      - 'scripts/me070_acquire_official_source.py'
+      - '.github/workflows/me070-publisher-source-fallback.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-publisher-qualification-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Retrieve original 4TU dataset via publisher Figshare metadata, original checksum required
+        run: |
+          set -euo pipefail
+          python scripts/me070_acquire_official_source.py --directory /tmp/me070-publisher
+      - name: Qualify actual distinct 64,128,256 histories from source bytes
+        run: |
+          set -euo pipefail
+          python scripts/me070_qualify_long_xes.py \
+            --input "$(cat /tmp/me070-publisher/ORIGINAL_SOURCE_PATH.txt)" \
+            --output /tmp/me070-publisher/SOURCE_COHORT_QUALIFICATION.json
+          echo 'ME070_FULL_TRAINING=NOT_STARTED'
+      - name: Preserve aggregate-only measurements and publisher identities; no raw customer data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me070-publisher-source-qualification
+          path: |
+            /tmp/me070-publisher/PUBLISHER_ACQUISITION_RECEIPT.json
+            /tmp/me070-publisher/SOURCE_COHORT_QUALIFICATION.json
+          if-no-files-found: ignore
