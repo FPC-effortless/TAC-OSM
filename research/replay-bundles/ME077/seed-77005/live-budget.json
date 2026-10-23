@@ -1,0 +1,155 @@
+{
+  "architecture": "system1_selective_physical",
+  "checkpoints": [
+    {
+      "deployed_parameters": 102503,
+      "parameter_values_sha256": "4a425e9a95bbd46f576b742f740ca5703ba5cf05b4408ed514f4635733787895",
+      "path": "research/replay-bundles/ME077/seed-77005/final.pt",
+      "sha256": "07d19321ef7f55de85cf9911c2abce69deecd30f6d431578a43d195f7d461704",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 1024,
+      "trainable_parameters": 102503
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 102503,
+    "trainable_parameters": 102503
+  },
+  "last_pre_update": {
+    "deployed_parameters": 102503,
+    "successful_optimizer_steps": 1023,
+    "trainable_parameters": 102503
+  },
+  "manifest_path": "/workspace/tac-me077/research/mathematical-engineering/me077/FAIR_COMPARISON.json",
+  "manifest_sha256": "f5eff2edf8fecc9117a3af8e73ae865c16c3f1e8cc7770bafea5e904bc3070fc",
+  "model_class": "tac_osm.variants.selective_physical.SelectivePhysicalModel",
+  "preflight": {
+    "deployed_parameters": 102503,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 4128,
+        "requires_grad": true,
+        "shape": [
+          96,
+          43
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 96,
+        "requires_grad": true,
+        "shape": [
+          96
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 9216,
+        "requires_grad": true,
+        "shape": [
+          96,
+          96
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 96,
+        "requires_grad": true,
+        "shape": [
+          96
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_candidate_gate.weight",
+        "numel": 36864,
+        "requires_grad": true,
+        "shape": [
+          192,
+          192
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_candidate_gate.bias",
+        "numel": 192,
+        "requires_grad": true,
+        "shape": [
+          192
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_residual_gate.weight",
+        "numel": 36864,
+        "requires_grad": true,
+        "shape": [
+          192,
+          192
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_residual_gate.bias",
+        "numel": 192,
+        "requires_grad": true,
+        "shape": [
+          192
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.weight",
+        "numel": 10752,
+        "requires_grad": true,
+        "shape": [
+          56,
+          192
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.bias",
+        "numel": 56,
+        "requires_grad": true,
+        "shape": [
+          56
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.weight",
+        "numel": 3976,
+        "requires_grad": true,
+        "shape": [
+          71,
+          56
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.bias",
+        "numel": 71,
+        "requires_grad": true,
+        "shape": [
+          71
+        ]
+      }
+    ],
+    "trainable_parameters": 102503
+  },
+  "run_id": "e6734420eb4a42658260f54ffcefef2f",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 77005,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME077_SELECTIVE_PHYSICAL_REAL_CAPABILITY",
+  "successful_optimizer_steps": 1024
+}

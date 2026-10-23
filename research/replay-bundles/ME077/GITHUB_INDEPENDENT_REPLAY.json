@@ -1,0 +1,98 @@
+{
+  "workflow": {
+    "conclusion": "success",
+    "created_at": "2026-10-23T17:07:38Z",
+    "event": "pull_request",
+    "head_sha": "3cabf74cdaa54e391d1d2a489db7988952e0d541",
+    "html_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/39992505986",
+    "id": 39992505986,
+    "name": "ME077 original real selective-state replay (never retrain)",
+    "status": "completed",
+    "updated_at": "2026-10-23T17:10:06Z"
+  },
+  "jobs": [
+    {
+      "conclusion": "success",
+      "id": 120547551447,
+      "name": "replay",
+      "steps": [
+        {
+          "conclusion": "success",
+          "name": "Set up job",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/checkout@v4",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/setup-python@v5",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run python -m pip install 'pytest==9.1.1' 'numpy==2.3.5' 'pyarrow==21.0.0'",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run PYTHONPATH=src:. python -m pytest -q tests/test_me077_selective_physical.py",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me077/FAIR_COMPARISON.json --phase preflight",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Verify original guarded fit receipts",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Final parameter gate",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Run actions/cache@v4",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Independently restore and score original real models",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/cache@v4",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/setup-python@v5",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed"
+        },
+        {
+          "conclusion": "success",
+          "name": "Complete job",
+          "status": "completed"
+        }
+      ]
+    }
+  ],
+  "interpretation": "Actual frozen-checkpoint/source/raw-score replay PASS; no model fit; independent execution, not unseen predictive generalization"
+}

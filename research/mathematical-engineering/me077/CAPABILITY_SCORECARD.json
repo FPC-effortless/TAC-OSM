@@ -1,0 +1,70 @@
+{
+  "guardrails": [
+    {
+      "metric": "episode_CI_upper_below_zero_vs_persistence",
+      "status": "PASS"
+    },
+    {
+      "metric": "every_seed_5pct_allcase_gain_vs_old_and_persistence",
+      "status": "FAIL"
+    },
+    {
+      "metric": "moving_mean_5pct_gain_vs_persistence",
+      "status": "FAIL"
+    },
+    {
+      "metric": "no_task_10pct_regression_vs_persistence",
+      "status": "PASS"
+    }
+  ],
+  "integrity": {
+    "git_original_checkpoints": true,
+    "independent_clean_replay": true,
+    "independent_raw_case_audit": true,
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true
+  },
+  "model": {
+    "candidate_sha256": "51779984a9bf90cf71b24b9f69ad999cf1183d5927d417cbc78fe6770edd30b1",
+    "deployed_parameters": 102503,
+    "prior_sha256": "8b92c59a8d519aecb3d92c9486e4695b65ba767a95812aee2de99ead3be8191f",
+    "reported_metrics": "five model seed mean; checkpoint identifiers above first seed, all five in FIT_INDEX.json",
+    "trainable_parameters": 102503
+  },
+  "no_architecture_superiority": true,
+  "operator_value": "NOT_MEASURED",
+  "practical_reference_scored": true,
+  "primary_comparison": {
+    "beneficial_seed_count": 5,
+    "candidate": 0.06647594628955138,
+    "direction": "lower_is_better",
+    "minimum_useful_gain": 0.004007914247797696,
+    "paired_seed_count": 5,
+    "prior": 0.08015828495595391
+  },
+  "resource_disclosure": "1024*24 real targets per seed vs prior160*12; not a matched-architecture causal test",
+  "schema_version": "tac-osm.capability-progress.v1",
+  "source": {
+    "authentic_real_data": true,
+    "eligible_ids_sha256": "de074a324739ec05959baac263a51e0e0c3eb597084ba2efde9af4e5d9a3c771",
+    "exposure": "EXPOSED_DEV",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "study_id": "ME077_SELECTIVE_PHYSICAL_REAL_CAPABILITY",
+  "task": {
+    "actual_future_targets": 40,
+    "actual_query_origins": 960,
+    "count_unit": "episode-cluster, each with 24 genuine query targets",
+    "independence_limits": "episode-level clustering, previously exposed source; no operator/site-disjoint confirmation",
+    "independent_cases": 40,
+    "prediction_time_validated": true,
+    "query_and_horizon": "ME076 exact 960 origins, eight observed frames, one next frame",
+    "repeated_model_forecasts": 4800,
+    "same_case_ids_target_horizon_metric": true,
+    "target": "mean physical-unit 14-joint next-state absolute error"
+  },
+  "tier": "MIXED_TRADEOFF",
+  "what_improved": "Same real queries: mean MAE 17.07% below ME076; stationary error 89.39% lower; 3.19% below persistence overall.",
+  "what_regressed": "No full registered material-gain pass: moving-state gain vs persistence only 0.17%, both moving and all-case 5% targets failed; motion-rich error remains worse than servo.",
+  "what_remains_unknown": "Unseen task/site transfer, accurate movement anticipation, calibrated global motion probability, causal action utility, safety, operational value and architecture attribution."
+}
