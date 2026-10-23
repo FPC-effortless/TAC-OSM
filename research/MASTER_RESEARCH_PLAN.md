@@ -1,5 +1,5 @@
 # TAC-OSM — Unified Master Research Plan
-Version: 2026-10-23 (ME060/ME061 trained capability update) | Status: research proposal and evidence register; not a commercially qualified system
+Version: 2026-10-23 (ME069 authentic enterprise event-model update) | Status: research proposal and evidence register; not a commercially qualified system
 
 ## Mission and constraints
 Build a persistent action-conditioned predictive world model that learns what to remember, where to store it, how to retrieve it, how dynamics evolve, when to refine predictions, and when to correct beliefs. Retain ME-054 native and ME-056 Concept-Swarm as independently testable branches. Do not replace TAC-OSM with an LLM, Transformer, MTSK, or SSM.
@@ -13,6 +13,77 @@ Build a persistent action-conditioned predictive world model that learns what to
 **Final research gate: REPO_REPLAY=PASS**, separate from real-world validity and matched-comparison qualification. If actual checkpoint bytes, loader, exact evaluation dependencies or independent clean-checkout replay are missing, status is **NOT_PRESERVED/BLOCKED; no new completed-fit, verified-experiment, model-promotion or superiority claim**. Preserve historical studies as historical with disclosed incomplete archives, never retrofit claims. This rule covers local, GitHub Actions, Kaggle, GPUs and other external hosts equally. [Full mandatory policy and file checklist](REPOSITORY-REPLAY-AND-CHECKPOINT-RULE.md).
 
 ## Company-aligned north star and scope (2026-10-22 revision)
+
+### Current architecture-first execution: authentic enterprise workflows (ME069)
+
+The user's latest direction prioritizes making the integrated native model more
+capable for enterprise operations. ME069 therefore adds an authentic enterprise
+observation lane rather than another robot-memory diagnostic. Preserve all
+physical negatives and the untouched robot tissue-box holdout. Synthetic
+Woyengi/Veritas logs may test interfaces; they cannot qualify predictive or
+commercial ability. Claims about current revenue, valuation, fundability or
+being one pivot from commercial readiness remain unverified.
+
+[ME069 draft PR #348](https://github.com/FPC-effortless/TAC-OSM/pull/348)
+implements categorical activity/resource encoders, elapsed-time decay of native
+64D fast/64D slow/8x8 associative state, a learned repeat/empirical-transition/
+neural event mixture and a hurdle-lognormal waiting-time distribution. It
+retains TAC's native dynamics. Standard predictive-process monitoring,
+time-aware recurrence and probabilistic heads are established prior art, not
+claimed inventions. State dimensions are configurable resource choices, not
+proof that earlier 32D state was inherently inadequate.
+
+The original BPI Challenge 2012 loan-process log is publisher-hash verified:
+13,087 cases, 262,200 events; a chronological, outcome-availability split yields
+7,096 FIT, 1,850 DEV and 2,618 TEST cases. FIT-only vocabulary and priors, no case
+ID or future event features. Five paired seeds receive identical schedules,
+800 updates and dense supervision over at most 32 observed events. Native has
+80,296 parameters versus GRU 80,966; common supported-operator training FLOPs
+differ by approximately 0.284%. Final registered parity PASS under that
+profiler convention; full hardware FLOPs remain uncertified. Native mean
+optimizer CPU is 35.251s versus GRU 13.777s; CPU is an efficiency measurement.
+
+| Frozen temporal TEST | Native TAC | Matched GRU | Empirical transition/time reference |
+| --- | ---: | ---: | ---: |
+| Next-event log loss | 0.122626 | **0.119182** | 0.348946 |
+| Next-event accuracy | 94.77% | 94.77% | 84.76% |
+| Waiting-time MAE, hours | 6.3561 | 6.3618 | 6.4953 |
+| FIT-threshold long-wait proxy Brier | 0.070188 | 0.070767 | 0.077039 |
+
+The whole TAC predictor demonstrates useful next-event forecasting relative
+to the empirical reference (64.86% lower log loss, 5/5 seed wins). It does
+**not** establish native superiority: TAC log loss is 2.89% worse than GRU,
+1/5 seed wins; paired case-bootstrap TAC-minus-GRU 95% interval
+[+0.001552, +0.005243], conditional on fitted seeds. The registered joint
+superiority gate **FAILS**. Nominal 90% interval coverage is 92.28%, with a
+wide 230.12-hour mean width; useful operational uncertainty is not qualified.
+
+**Original-environment REPO_REPLAY=PASS; cross-CPU replay FAIL:** all ten original model/optimizer/RNG checkpoints were
+Git-owned at `491f085b` before scoring, restored from a separate clean checkout,
+and all 44,680 DEV/TEST case-score records were independently recomputed
+bit-identically. Original score commit `7b458208`; no retraining replacement.
+GitHub's different CPU runner subsequently failed the fixed waiting-time
+per-record tolerance at DEV / GRU seed 69005 / row 520. Preserve that numerical
+portability exception and the original tolerance; no all-environment replay
+pass or model promotion is claimed.
+The full repository regression passed 1,005 tests. See the
+[results and limits](https://github.com/FPC-effortless/TAC-OSM/blob/research/me069-authentic-workflow-world-model-2026-10-23/research/mathematical-engineering/me069/RESULTS.md)
+and [original checkpoints](https://github.com/FPC-effortless/TAC-OSM/tree/research/me069-authentic-workflow-world-model-2026-10-23/research/replay-bundles/ME069).
+
+**Next architecture objective:** improve the integrated event model's history
+representation and waiting-time sharpness using FIT/DEV only, then preregister
+qualification on an untouched authentic cohort/source. This midpoint TEST is
+now exposed and cannot supply another prospective claim. Keep a strong
+empirical process prior and matched GRU in the results table; improve the
+complete system rather than inserting a diagnostic-only stage after every
+failure. Do not assume adding width, hierarchy or reasoning loops will help.
+
+**Unchanged capability boundaries:** this bounded observational forecast does
+not establish lifetime state, learned actions, actual SLA failure, verified
+process completion, monetary benefit, causal effects, System 2 reasoning or
+Woyengi deployment. Woyengi owns authoritative state and execution permission;
+TAC emits advisory predictions. Actual operational actions/costs/outcome
+verification remain required for subsequent decision-intelligence stages.
 
 **North star:** build TAC-OSM into a reusable *learned predictive-state and decision-intelligence engine* for real operational systems and authorized autonomous software. It must maintain useful beliefs across change, forecast *observed* futures under available action contexts, recognize uncertainty and information gaps, choose or recommend cost-aware interventions, and improve after independently verified outcomes. This is a scientific target, **not a claim of current intelligence or product readiness**. The primary commercial proof is measured improvement over the best appropriate simpler solution in an independently held-out, authentic operational setting.
 
