@@ -11,7 +11,7 @@ from scripts.me070_qualify_long_xes import measure
 def score(case, correct, width=3600., loss=.5):
     return {"case_id":case,"prefix_last_index":3,"activity_correct":correct,
             "activity_NLL":loss,"interval_width_seconds":width,
-            "interval_90_covered":True}
+            "interval_90_covered":True,"positive_wait_observed":True}
 
 
 def test_exact_mcnemar_is_paired_and_two_sided():
