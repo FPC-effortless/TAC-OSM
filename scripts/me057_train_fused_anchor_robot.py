@@ -38,6 +38,8 @@ ARMS = ("native_tac", "gru_world")
 UPDATES, BATCH = 600, 2
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def sha_bytes(value):
     return hashlib.sha256(value).hexdigest()
 
@@ -194,7 +196,7 @@ def loss(model, name, source_batch, compiled):
 def fit_one(name, seed, fit, picks, identified, folder, registration_row):
     torch.manual_seed(seed); np.random.seed(seed)
     model = build(name, identified)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=.001, weight_decay=.0001)
+    optimizer = budgeted_optimizer(model, torch.optim.AdamW, model.parameters(), lr=.001, weight_decay=.0001)
     compiled = kernels(model, name)
     first = batch(fit, picks[0])
     # Compile and allocate outside the registered optimizer timer; no weight is
@@ -214,7 +216,7 @@ def fit_one(name, seed, fit, picks, identified, folder, registration_row):
         norm = torch.nn.utils.clip_grad_norm_(model.parameters(), 1.)
         if not torch.isfinite(norm):
             raise RuntimeError("nonfinite authentic training gradient")
-        optimizer.step()
+        checked_optimizer_step(optimizer)
         if step == 1 or step % 100 == 0:
             trace.append({"update": step, "loss": float(value.detach()),
                           "optimizer_cpu_seconds": time.process_time()-started})
@@ -222,7 +224,7 @@ def fit_one(name, seed, fit, picks, identified, folder, registration_row):
                 "seed": seed, "update": step, "loss": float(value.detach())}), flush=True)
     elapsed = time.process_time()-started
     target = folder/f"{name}-s{seed}.pt"
-    torch.save({"architecture": name, "seed": seed,
+    save_training_checkpoint({"architecture": name, "seed": seed,
                 "model": model.state_dict(),
                 "identified": {k: v.tolist() for k, v in identified.items()},
                 "trace": trace}, target)

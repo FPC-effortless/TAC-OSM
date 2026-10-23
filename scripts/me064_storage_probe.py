@@ -14,6 +14,8 @@ OUTPUT = Path("research/replay-bundles/ME064")
 NAME = "UNTRAINED_STORAGE_PROBE.pt"
 
 
+from tac_osm.parameter_budget import save_training_checkpoint
+
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -30,7 +32,7 @@ def write_probe():
             "weights": m.state_dict(),
         }
     path = OUTPUT / NAME
-    torch.save({"is_trained": False, "authoritative_data_included": False,
+    save_training_checkpoint({"is_trained": False, "authoritative_data_included": False,
                 "source": "tests.test_me057_training_contract.identified",
                 "models": models}, path)
     manifest = {"study": "ME064_REPLAY_STORAGE_TEST_ONLY",

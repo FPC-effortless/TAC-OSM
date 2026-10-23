@@ -5,7 +5,19 @@ fits or real-world evidence. Any failing condition disqualifies science claims.
 """
 from copy import deepcopy
 import pytest
-from scripts.validate_research_parity import check_manifest,ParityError
+from scripts.validate_research_parity import (
+    check_manifest, ParityError, check_model_parameter_target,
+    requires_100k_policy
+)
+
+@pytest.fixture(autouse=True)
+def isolate_parity_arithmetic_from_runtime_integration(monkeypatch):
+    # These pre-existing tests use declared software receipts to isolate data/
+    # compute matching. Real optimizer/checkpoint proof is exercised without
+    # mocks in test_parameter_budget_enforcement.py.
+    monkeypatch.setattr("scripts.validate_research_parity.validate_runtime_evidence",
+        lambda row: str(row.get("architecture"))+":"+str(row.get("seed")))
+
 
 def source_hash(ch):return ch*64
 
@@ -31,7 +43,8 @@ def fixture():
               "trainable_parameters":parameters,"deployed_parameters":parameters,
               "nontrainable_state_bytes":8192,"hardware_profile":"1-core CPU AVX2 pytorch2 pinned",
               **digests,"budget":b,
-              "measured":{"trainable_parameters":parameters,"deployed_parameters":parameters,"actual_steps":500,"actual_examples":32000,"actual_tokens":2048000,
+              "measured":{"trainable_parameters":parameters,"deployed_parameters":parameters,
+                  "actual_steps":500,"actual_examples":32000,"actual_tokens":2048000,
                   "training_flops":1_000_000_000,"optimizer_cpu_seconds":50.0,
                   "peak_memory_bytes":2_000_000,"flops_profiler":"torch.profiler CPU traced all kernels",
                   "checkpoint_sha256":source_hash("e"),
@@ -63,8 +76,8 @@ def test_final_requires_real_measurement_fields_and_replay_receipts():
 
 def test_preflight_rejects_parameter_mismatch_not_merely_warns():
     m=fixture()
-    m["arms"][1]["trainable_parameters"]=101500
-    m["arms"][1]["deployed_parameters"]=101500
+    m["arms"][1]["trainable_parameters"]=102000
+    m["arms"][1]["deployed_parameters"]=102000
     with pytest.raises(ParityError,match="parameters mismatch"):check_manifest(m)
 
 def test_preflight_rejects_source_or_actual_exposure_mismatch():
@@ -81,7 +94,7 @@ def test_preflight_rejects_planned_compute_inequality():
     m["arms"][1]["budget"]["max_training_flops"]=1_120_000_000
     with pytest.raises(ParityError,match="max_training_flops"):check_manifest(m)
 
-def test_v1_postfit_rejects_unmatched_training_compute_not_cpu_speed():
+def test_postfit_rejects_unmatched_training_compute_not_cpu_speed():
     m=fixture()
     m["arms"][1]["measured"]["training_flops"]=1_100_000_000
     with pytest.raises(ParityError,match="actual FLOPs"):check_manifest(m,"final")
@@ -113,14 +126,15 @@ def test_literature_gap_or_required_seed_cannot_be_omitted():
 
 def test_diagnostic_cannot_smuggle_architecture_superiority_label():
     m={"schema_version":"tac-osm.parity.v1","study_id":"REAL_DIAGNOSTIC",
-       "study_type":"noncomparative_diagnostic","scientific_purpose":"Investigate numerical replay","no_new_model_fits":True,
-       "no_architecture_superiority_claim":True}
+       "study_type":"noncomparative_diagnostic","scientific_purpose":"Investigate numerical replay",
+       "no_architecture_superiority_claim":True,
+       "no_new_model_fits":True}
     assert check_manifest(m)["status"]=="PASS_DIAGNOSTIC_ONLY"
     m["no_architecture_superiority_claim"]=False
     with pytest.raises(ParityError,match="forbid"):check_manifest(m)
 
 
-def test_v1_prefit_cpu_duration_mismatch_is_allowed_when_parameters_data_budget_match():
+def test_prefit_cpu_duration_mismatch_is_allowed_when_parameters_data_budget_match():
     m=fixture()
     m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=700.0
     m["arms"][1]["budget"]["max_optimizer_cpu_seconds"]=700
@@ -142,25 +156,101 @@ def test_identical_training_budget_can_pass_without_a_cpu_time_limit():
     assert check_manifest(m,"final")["status"]=="PASS"
 
 
-def test_v2_prefit_rejects_measured_cpu_mismatch():
+def test_new_studies_hard_gate_absolute_parameter_target_even_if_parity_matches():
     m=fixture()
-    m["schema_version"]="tac-osm.parity.v2"
-    m["arms"][1]["budget"]["prefit_profile_optimizer_cpu_seconds"]=70.0
-    with pytest.raises(ParityError,match="PROFILER prefit CPU"):
+    assert requires_100k_policy("ME073_RESEARCH_MODEL")
+    for row in m["arms"]:
+        row["trainable_parameters"]=38000
+        row["deployed_parameters"]=38000
+    with pytest.raises(ParityError,match="100k target"):
+        check_manifest(m,"preflight")
+    for row in m["arms"]:
+        row["trainable_parameters"]=123377
+        row["deployed_parameters"]=123377
+    with pytest.raises(ParityError,match="100k target"):
         check_manifest(m,"preflight")
 
 
-def test_v2_final_rejects_measured_cpu_mismatch():
-    m=fixture()
-    m["schema_version"]="tac-osm.parity.v2"
-    m["arms"][1]["measured"]["optimizer_cpu_seconds"]=58.0
-    with pytest.raises(ParityError,match="actual CPU seconds"):
+def test_new_model_size_limits_are_inclusive_and_bound_frozen_learned_capacity():
+    for amount in (95000,100000,105000):
+        check_model_parameter_target(amount,amount)
+    for amount in (94999,105001):
+        with pytest.raises(ParityError,match="100k target"):
+            check_model_parameter_target(amount)
+    with pytest.raises(ParityError,match="100k target"):
+        check_model_parameter_target(100000,120000)
+
+
+def test_recycled_historical_id_does_not_authorize_new_small_fits():
+    m=fixture();m["study_id"]="ME066_FOUR_ARM_GENUINE_ORIGINAL_ROBOT_FIT_EQUAL_BUDGET"
+    for row in m["arms"]:
+        row["trainable_parameters"]=37177;row["deployed_parameters"]=37177
+    assert requires_100k_policy(m["study_id"])
+    with pytest.raises(ParityError,match="100k target"):check_manifest(m,"preflight")
+
+
+def test_new_single_model_uses_same_absolute_100k_rule_and_final_real_count():
+    m={
+        "schema_version":"tac-osm.parity.v1",
+        "study_id":"ME073_SINGLE_MODEL",
+        "study_type":"single_model_training",
+        "registered_before_first_fit":True,
+        "real_world_source":{"name":"Authentic real source","sha256":source_hash("a"),
+                             "observed_real_outcomes":True},
+        "models":[{"seed":101,"trainable_parameters":100000,
+                   "deployed_parameters":100000}]
+    }
+    assert check_manifest(m,"preflight")["status"]=="PASS_PREFIT_SINGLE_MODEL"
+    with pytest.raises(ParityError,match="actual measurement"):
         check_manifest(m,"final")
+    m["models"][0]["measured"]={
+        "trainable_parameters":100000,"deployed_parameters":100000,
+        "checkpoint_sha256":source_hash("b")}
+    assert check_manifest(m,"final")["status"]=="PASS_SINGLE_MODEL"
+    m["models"][0]["measured"]["trainable_parameters"]=105001
+    with pytest.raises(ParityError,match="100k target"):
+        check_manifest(m,"final")
+    m["models"][0].pop("measured")
+    m["models"][0]["trainable_parameters"]=47000
+    m["models"][0]["deployed_parameters"]=47000
+    with pytest.raises(ParityError,match="100k target"):
+        check_manifest(m,"preflight")
 
 
-def test_new_absolute_scale_rejects_undersized_and_hidden_frozen_weights():
-    from scripts.validate_research_parity import check_model_parameter_target,ParityError
-    import pytest
-    check_model_parameter_target(99781,99781)
-    for trained,deployed in ((94999,94999),(105001,105001),(100000,200000),(100000,99999)):
-        with pytest.raises(ParityError):check_model_parameter_target(trained,deployed)
+def test_new_noncomparative_diagnostic_cannot_hide_new_model_fits():
+    m={
+      "schema_version":"tac-osm.parity.v1",
+      "study_id":"ME073_SOURCE_ONLY_DIAGNOSTIC",
+      "study_type":"noncomparative_diagnostic",
+      "scientific_purpose":"Read actual original event timing with zero model updates",
+      "no_architecture_superiority_claim":True,
+    }
+    with pytest.raises(ParityError,match="no-fit"):
+        check_manifest(m)
+    m["no_new_model_fits"]=True
+    assert check_manifest(m)["status"]=="PASS_DIAGNOSTIC_ONLY"
+
+
+def test_new_study_above_target_still_invalid_when_arms_match_to_1_percent():
+    m=fixture()
+    for row in m["arms"]:
+        row["trainable_parameters"]=104900
+        row["deployed_parameters"]=104900
+    assert check_manifest(m)["status"]=="PASS"
+    # Each new model could be near 110k and matched to its comparator,
+    # but the prospective 100k absolute model-size gate rejects all.
+    for row in m["arms"]:
+        row["trainable_parameters"]=109500
+        row["deployed_parameters"]=109500
+    with pytest.raises(ParityError,match="100k target"):
+        check_manifest(m)
+
+
+def test_old_schema_label_does_not_reintroduce_cpu_parity():
+    m=fixture();m['schema_version']='tac-osm.parity.v2'
+    for row in m['arms']:
+        if row['architecture']=='GRU control':
+            row['budget']['prefit_profile_optimizer_cpu_seconds']=2.0
+            row['measured']['optimizer_cpu_seconds']=200.0
+    assert check_manifest(m,'preflight')['status']=='PASS'
+    assert check_manifest(m,'final')['eligible_for_architecture_superiority']

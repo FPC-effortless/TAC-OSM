@@ -37,6 +37,9 @@ ARMS = {
 }
 
 
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 def validate_contract(arm: str) -> None:
     contract = load_contract("TACOSM-PLM-INTEGRATED-E2E-003")
     contract.require_levels((3,))
@@ -55,7 +58,7 @@ def train_seed(seed: int, write_mode: str, read_mode: str) -> AddressDiagnosisMo
     model = AddressDiagnosisModel(
         AddressDiagnosisConfig(write_mode=write_mode, read_mode=read_mode)
     ).cpu()
-    optimizer = torch.optim.AdamW(
+    optimizer = budgeted_optimizer(model, torch.optim.AdamW,
         model.parameters(), lr=0.002, weight_decay=1e-4
     )
     for _ in range(STEPS):
@@ -75,7 +78,7 @@ def train_seed(seed: int, write_mode: str, read_mode: str) -> AddressDiagnosisMo
         )
         out["loss"].backward()
         nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        optimizer.step()
+        checked_optimizer_step(optimizer)
     return model
 
 

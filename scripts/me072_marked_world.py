@@ -26,6 +26,8 @@ EPOCHS,BATCH,CHUNK=6,32,32
 AGES=(2,6,16,32,64)
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
@@ -140,7 +142,7 @@ def train(cache):
     if list(folder.glob('*.pt')):raise ValueError("never overwrite fitted originals")
     records=[]
     for seed in SEEDS:
-        torch.manual_seed(seed);model=MarkedWorldModel(pre);opt=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+        torch.manual_seed(seed);model=MarkedWorldModel(pre);opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
         order=schedules(cohorts["FIT"],seed)
         if digest(order)!=plan["schedule_sha256"][str(seed)]:raise ValueError("original schedule changed")
         steps=prefixes=0;trace=[];begin=time.process_time()
@@ -155,11 +157,11 @@ def train(cache):
                     if not torch.isfinite(loss):raise ValueError("nonfinite genuine multi-horizon loss")
                     loss.backward()
                     if not torch.isfinite(torch.nn.utils.clip_grad_norm_(model.parameters(),1.)):raise ValueError("nonfinite gradient")
-                    opt.step();belief=detach_belief(belief);prefixes+=int(data[8].sum());steps+=1;losses.append(float(loss.detach()))
+                    checked_optimizer_step(opt);belief=detach_belief(belief);prefixes+=int(data[8].sum());steps+=1;losses.append(float(loss.detach()))
             trace.append({"epoch":epoch,"loss":float(np.mean(losses)),"prefix_exposures":prefixes,"horizon_targets":prefixes*4,"updates":steps})
             print(json.dumps({"seed":seed,**trace[-1]}),flush=True)
             path=folder/f"native-s{seed}.pt"
-            torch.save({"model":model.state_dict(),"optimizer":opt.state_dict(),"torch_rng_state":torch.get_rng_state(),
+            save_training_checkpoint({"model":model.state_dict(),"optimizer":opt.state_dict(),"torch_rng_state":torch.get_rng_state(),
                 "preprocessing":pre,"seed":seed,"epoch":epoch,"trace":trace,"schedule_sha256":digest(order),"source_sha256":receipt["source_sha256"]},path)
         records.append({"seed":seed,"path":str(path),"checkpoint_sha256":sha(path),"epochs":EPOCHS,
             "actual_targets":prefixes*4,"actual_prefix_exposures":prefixes,"actual_updates":steps,"optimizer_cpu_seconds":time.process_time()-begin})
@@ -206,7 +208,7 @@ def score(cache):
         saved=torch.load(row["path"],map_location="cpu",weights_only=False)
         if saved["preprocessing"]!=pre:raise ValueError("exact frozen preprocessing differs")
         model=MarkedWorldModel(pre);model.load_state_dict(saved["model"],strict=True);model.eval()
-        opt=torch.optim.AdamW(model.parameters());opt.load_state_dict(saved["optimizer"])
+        opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters());opt.load_state_dict(saved["optimizer"])
         out[str(row["seed"]) ]={}
         with torch.no_grad():
             for age in AGES:

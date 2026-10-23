@@ -25,6 +25,8 @@ EPOCHS,BATCH,CHUNK=6,32,32
 AGES=(2,6,16,32,64)
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
@@ -149,12 +151,12 @@ def train(cache):
     if list(folder.glob('*.pt')):raise ValueError('original fit files exist; never overwrite')
     records=[]
     for seed in SEEDS:
-        torch.manual_seed(seed);model=TrajectoryModel(pre);opt=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+        torch.manual_seed(seed);model=TrajectoryModel(pre);opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
         order=schedules(cohorts['FIT'],seed)
         if digest(order)!=plan['schedule_sha256'][str(seed)]:raise ValueError('changed registered order')
         steps=prefixes=targets=0;trace=[];begin=time.process_time();path=folder/f'native-s{seed}.pt'
         def save(status):
-            torch.save({'model':model.state_dict(),'optimizer':opt.state_dict(),'torch_rng_state':torch.get_rng_state(),
+            save_training_checkpoint({'model':model.state_dict(),'optimizer':opt.state_dict(),'torch_rng_state':torch.get_rng_state(),
                         'preprocessing':pre,'seed':seed,'epoch':epoch,'trace':trace,'schedule_sha256':digest(order),
                         'source_sha256':receipt['source_sha256'],'fit_status':status,'updates':steps,'actual_targets':targets},path)
         try:
@@ -173,7 +175,7 @@ def train(cache):
                         if not torch.isfinite(loss):raise ValueError('nonfinite original real-data loss')
                         loss.backward();norm=torch.nn.utils.clip_grad_norm_(model.parameters(),1.)
                         if not torch.isfinite(norm):raise ValueError('nonfinite gradient')
-                        opt.step();belief=detach_belief(belief);steps+=1;prefixes+=int(data[8].sum());targets+=int(mask.sum());losses.append(float(loss.detach()))
+                        checked_optimizer_step(opt);belief=detach_belief(belief);steps+=1;prefixes+=int(data[8].sum());targets+=int(mask.sum());losses.append(float(loss.detach()))
                 trace.append({'epoch':epoch,'loss':float(np.mean(losses)),'prefix_exposures':prefixes,'targets':targets,'updates':steps})
                 save('epoch_complete');print(json.dumps({'seed':seed,**trace[-1]}),flush=True)
         except BaseException as error:
@@ -226,7 +228,7 @@ def score(cache):
         verify_blob(row['path'],row['checkpoint_sha256']);saved=torch.load(row['path'],map_location='cpu',weights_only=False)
         if saved['preprocessing']!=pre:raise ValueError('changed exact preprocessing')
         model=TrajectoryModel(pre);model.load_state_dict(saved['model'],strict=True)
-        opt=torch.optim.AdamW(model.parameters());opt.load_state_dict(saved['optimizer']);model.double().eval()
+        opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters());opt.load_state_dict(saved['optimizer']);model.double().eval()
         out[str(row['seed'])]={}
         for age in AGES:
             cases=[c for c in cohorts['REPORT'] if c['n']>=age];all_f=[];all_p=[];all_j=[];all_m=[]

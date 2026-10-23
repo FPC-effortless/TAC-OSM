@@ -2,6 +2,10 @@ name: ME052 actual real-robot TAC-versus-GRU five-seed training and heldout scor
 on:
   workflow_dispatch:
     inputs:
+      allow_new_fits:
+        description: Explicit opt-in; current live gates remain compulsory
+        type: boolean
+        default: false
       run_original_training:
         description: 'Explicitly rerun historical ME052 original training (not CI replay)'
         type: boolean
@@ -22,6 +26,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   genuine-data-and-training-budget-preflight:
+    # Retained historical lane; current live guards still reject incompatible new fits.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -44,7 +50,8 @@ jobs:
         run: |
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me052/FAIR_COMPARISON.json --phase preflight
   actual-original-robot-model-fit:
-    if: github.event_name == 'workflow_dispatch' && inputs.run_original_training
+    # Retained historical lane; current live guards still reject incompatible new fits.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     needs: genuine-data-and-training-budget-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 360

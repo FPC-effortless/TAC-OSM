@@ -20,13 +20,7 @@ jobs:
       - run: pip install numpy==2.3.5 pytest==9.1.1
       - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
       - run: PYTHONPATH=src:. pytest -q tests/test_me073_autoregressive_world.py
-      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me073/FAIR_COMPARISON.json --phase preflight
-      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me073/SCALE_REGISTRATION.json --phase preflight
-      - name: Restore original models and recompute generated trajectories and factual suffix scores
+      - name: Audit pinned originals and replay original code with optimizer updates blocked
         run: |
-          if [ -f research/replay-bundles/ME073/ORIGINAL_SCORES.json ]; then
-            python scripts/validate_research_parity.py --manifest research/replay-bundles/ME073/FINAL_REGISTRATION.json --phase final
-            PYTHONPATH=src:. python scripts/me073_scale_audit.py --final
-            python scripts/validate_research_parity.py --manifest research/replay-bundles/ME073/FINAL_SCALE_AUDIT.json --phase final
-            PYTHONPATH=src:. python scripts/me073_autoregressive_world.py --phase replay --cache /tmp/me073-source
-          fi
+          python scripts/verify_frozen_replay.py --all
+          python scripts/replay_frozen_research.py --study me073 --cache /tmp/me073-source

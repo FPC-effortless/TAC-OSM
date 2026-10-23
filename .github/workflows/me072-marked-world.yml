@@ -14,15 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - run: pip install numpy==2.3.5 pytest==9.1.1
       - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
       - run: PYTHONPATH=src:. pytest -q tests/test_me072_marked_world.py
-      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me072/FAIR_COMPARISON.json --phase preflight
-      - name: Restore original models and recompute all factual futures
+      - name: Audit pinned originals and replay original code with optimizer updates blocked
         run: |
-          if [ -f research/replay-bundles/ME072/ORIGINAL_SCORES.json ]; then
-            python scripts/validate_research_parity.py --manifest research/replay-bundles/ME072/FINAL_REGISTRATION.json --phase final
-            PYTHONPATH=src:. python scripts/me072_marked_world.py --phase replay --cache /tmp/me072-source
-          fi
+          python scripts/verify_frozen_replay.py --all
+          python scripts/replay_frozen_research.py --study me072 --cache /tmp/me072-source

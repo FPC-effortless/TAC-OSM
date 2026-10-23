@@ -53,6 +53,8 @@ PHYSICAL_AVAILABLE=True
 NORM_FLOOR=.05
 TUNING_TRIALS=0
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def sha_bytes(payload):
     return hashlib.sha256(payload).hexdigest()
 
@@ -205,7 +207,7 @@ def train_one(name,seed,original,picks,root,source_shas,norm,receipt):
     np.random.seed(seed)
     model=network(name)
     model.train()
-    optimizer=torch.optim.AdamW(model.parameters(),lr=LR,weight_decay=WEIGHT_DECAY)
+    optimizer=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=LR,weight_decay=WEIGHT_DECAY)
     logs=[]
     started=time.process_time()
     for step,pair in enumerate(picks,1):
@@ -230,7 +232,7 @@ def train_one(name,seed,original,picks,root,source_shas,norm,receipt):
         norm_value=torch.nn.utils.clip_grad_norm_(model.parameters(),1.0)
         if not torch.isfinite(norm_value):
             raise RuntimeError("invalid recurrent gradients")
-        optimizer.step()
+        checked_optimizer_step(optimizer)
         if step%20==0 or step==1:
             logs.append({"original_real_training_update":step,
                 "actual_joint_physical_and_takeover_training_loss":float(objective.detach()),
@@ -242,7 +244,7 @@ def train_one(name,seed,original,picks,root,source_shas,norm,receipt):
     path=root/f"{name}-s{seed}"
     path.mkdir(parents=True,exist_ok=False)
     checkpoint=path/"trained-original-robot-world-model.pt"
-    torch.save({"name":name,"seed":seed,"state_dict":model.state_dict(),
+    save_training_checkpoint({"name":name,"seed":seed,"state_dict":model.state_dict(),
        "optimizer":optimizer.state_dict(),"torch_random_state":torch.get_rng_state(),
        "numpy_random_state":np.random.get_state(),"matched_real_source_sha256":source_shas,
        "fixed_fit_only_scaling":norm,"steps":UPDATES,

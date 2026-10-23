@@ -49,6 +49,10 @@ BASE_E2E008_GENERATOR_SHA256 = (
 )
 
 
+
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 def contract_hash() -> str:
     return hashlib.sha256(CONTRACT_PATH.read_bytes()).hexdigest()
 
@@ -213,7 +217,7 @@ def train_seed(seed: int):
     torch.manual_seed(seed)
     rng = random.Random(seed + 185000)
     model = LatentOperatorPLM().cpu()
-    optimizer = torch.optim.AdamW(
+    optimizer = budgeted_optimizer(model, torch.optim.AdamW,
         model.parameters(),
         lr=0.002,
         weight_decay=0.0001,
@@ -234,7 +238,7 @@ def train_seed(seed: int):
         loss = F.cross_entropy(out["logits"], batch["q_target"])
         loss.backward()
         nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        optimizer.step()
+        checked_optimizer_step(optimizer)
 
     return model, training_keys
 

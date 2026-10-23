@@ -13,8 +13,17 @@ permissions:
 concurrency:
   group: me054-genuine-robot-physical-training-${{ github.head_ref }}
   cancel-in-progress: true
+  workflow_dispatch:
+    inputs:
+      allow_new_fits:
+        description: Explicit opt-in; current live gates remain compulsory
+        type: boolean
+        default: false
+
 jobs:
   original-mathematical-and-source-preflight:
+    # Retained historical lane; current live guards still reject incompatible new fits.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
@@ -37,6 +46,8 @@ jobs:
         run: |
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me054/FAIR_COMPARISON.json --phase preflight
   actual-original-physical-world-model-training:
+    # Retained historical lane; current live guards still reject incompatible new fits.
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.allow_new_fits == true }}
     needs: original-mathematical-and-source-preflight
     runs-on: ubuntu-latest
     timeout-minutes: 360

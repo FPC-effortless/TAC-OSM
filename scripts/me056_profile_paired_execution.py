@@ -24,6 +24,8 @@ from tac_osm.real_robot_me055_rollout import TrajectoryForecast, factual_multist
 from tac_osm.real_robot_me056_boundary import BoundaryServoRolloutTAC
 
 
+from tac_osm.parameter_budget import budgeted_optimizer
+
 def percentile_interval(values, *, seed=56001, samples=20_000):
     values=np.asarray(values,dtype=np.float64)
     if values.ndim!=1 or len(values)<5 or not np.isfinite(values).all():
@@ -85,7 +87,7 @@ def compiled_runner(model,batch,architecture):
     kernels=tuple(torch.compile(method,dynamic=False,fullgraph=True,
                                 mode="reduce-overhead")
                   for method in methods)
-    optimizer=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+    optimizer=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
     loss=(lambda: boundary_objective(model,batch,kernels)) if architecture=="native_tac" else (
         lambda: objective(model,batch,kernels,use_scan=False))
     return optimizer,loss

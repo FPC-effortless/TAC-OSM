@@ -68,6 +68,9 @@ assert len(DEV_COMBOS) == 32
 assert len(HELDOUT) == 8
 assert len(TRAIN_COMBOS) == len(ALL_COMBOS) - 48
 
+
+from tac_osm.parameter_budget import save_training_checkpoint
+
 def make_query(payload: dict[int, list[int]], combo: tuple[str,int,int], entity: int):
     op, i, j = combo
     a, b = payload[entity][i], payload[entity][j]
@@ -130,7 +133,7 @@ def episode_fingerprint(episodes: Iterable[tuple]) -> str:
             "image":[r[2].tolist() for r in obs],
             "audio":[r[3].tolist() for r in obs],
         })
-    torch.save(serial,buf)
+    save_training_checkpoint(serial,buf)
     return hashlib.sha256(buf.getvalue()).hexdigest()
 
 def generator_hash() -> str:

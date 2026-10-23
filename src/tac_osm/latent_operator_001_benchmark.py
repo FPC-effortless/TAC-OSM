@@ -36,6 +36,9 @@ BASE_E2E008_GENERATOR_SHA256 = "3be32a91191b73792b0fffb5a7b497e80aa6a46d0189e032
 SUPPORT_PAIRS = ((0, 0), (0, 1), (1, 0), (1, 1))
 
 
+
+from tac_osm.parameter_budget import save_training_checkpoint
+
 def apply_op(op: str, a: int, b: int) -> int:
     return {
         "xor": a ^ b,
@@ -133,7 +136,7 @@ def episode_fingerprint(episodes: Iterable[tuple]) -> str:
             }
         )
     b = io.BytesIO()
-    torch.save(serial, b)
+    save_training_checkpoint(serial, b)
     return hashlib.sha256(b.getvalue()).hexdigest()
 
 

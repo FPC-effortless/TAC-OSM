@@ -31,7 +31,10 @@ CASM_REPO = "FPC-effortless/cdl-attention-experiment"
 CASM_COMMIT = "c31554413301e3c9d3e6b3f8c8c6be572a74a748"
 
 
+from tac_osm.parameter_budget import save_training_checkpoint
+
 @dataclass(frozen=True)
+
 class CasmExecutionWork:
     """Mechanical work accounting for one CASM-S graph execution."""
 
@@ -171,7 +174,7 @@ class CasmSRuntime:
     def save_checkpoint(self, path: str | Path, *, metadata: dict[str, Any] | None = None) -> Path:
         destination = Path(path).expanduser().resolve()
         destination.parent.mkdir(parents=True, exist_ok=True)
-        self.torch.save(
+        save_training_checkpoint(
             {
                 "state_dict": self.model.state_dict(),
                 "casm_commit": CASM_COMMIT,

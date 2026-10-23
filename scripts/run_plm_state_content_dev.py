@@ -23,6 +23,10 @@ DEV_COMBOS=(
 TRAIN_COMBOS=tuple(c for c in ALL_COMBOS if c not in set(DEV_COMBOS)|set(SEALED_E2E005)|set(E2E006_HELDOUT))
 MODES=("linear","residual_linear","residual_mlp")
 
+
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 def build_batch(eps):
     from scripts.run_integrated_e2e_005 import build_batch
     return build_batch(eps)
@@ -50,11 +54,11 @@ def dev_stream(seed):
 def fit(seed,mode,batches):
     torch.manual_seed(seed)
     model=FunctionalMultimodalPLM(config=FunctionalConfig(hidden_dim=64,state_write_mode=mode)).cpu()
-    opt=torch.optim.AdamW(model.parameters(),lr=0.002,weight_decay=0.0001)
+    opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=0.002,weight_decay=0.0001)
     for eps in batches:
         model.train();opt.zero_grad(set_to_none=True)
         loss=train_batch(model,build_batch(eps));loss.backward()
-        nn.utils.clip_grad_norm_(model.parameters(),1.0);opt.step()
+        nn.utils.clip_grad_norm_(model.parameters(),1.0);checked_optimizer_step(opt)
     return model
 
 @torch.no_grad()

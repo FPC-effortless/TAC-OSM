@@ -38,6 +38,8 @@ ARMS=("native_tac","gru_world")
 SEEDS=(52001,52002,52003,52004,52005)
 REGISTRATION=Path("research/mathematical-engineering/me054/FAIR_COMPARISON.json")
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def network(name,scale):
     if name=="native_tac":return StableRealTAC(scale)
     if name=="gru_world":return StableRealGRU(scale)
@@ -87,7 +89,7 @@ def fit_one(name,seed,source,real_schedule,scale,model_folder):
     torch.manual_seed(seed)
     np.random.seed(seed)
     m=network(name,scale)
-    opt=torch.optim.AdamW(m.parameters(),lr=.001,weight_decay=.0001)
+    opt=budgeted_optimizer(m, torch.optim.AdamW, m.parameters(),lr=.001,weight_decay=.0001)
     start_cpu=time.process_time()
     records=[]
     for step,actual_pair in enumerate(real_schedule,1):
@@ -113,7 +115,7 @@ def fit_one(name,seed,source,real_schedule,scale,model_folder):
         gradients=torch.nn.utils.clip_grad_norm_(m.parameters(),1.0)
         if not torch.isfinite(gradients):
             raise RuntimeError("nonfinite optimizer gradients on genuine physical data")
-        opt.step()
+        checked_optimizer_step(opt)
         if step%100==0 or step==1:
             record={"genuine_real_fit_updates":step,
                 "FIT_actual_physical_joint_delta_and_takeover_loss":float(objective.detach()),
@@ -126,7 +128,7 @@ def fit_one(name,seed,source,real_schedule,scale,model_folder):
     original_path=model_folder/f"{name}-s{seed}"
     original_path.mkdir(parents=True,exist_ok=False)
     weights=original_path/"original-trained-real-robot-model.pt"
-    torch.save({"architecture":name,"seed":seed,"model":m.state_dict(),
+    save_training_checkpoint({"architecture":name,"seed":seed,"model":m.state_dict(),
         "optimizer":opt.state_dict(),"original_FIT_delta_scale":scale,
         "original_real_source_revision":base.REVISION,
         "actual_optimizer_updates":600,

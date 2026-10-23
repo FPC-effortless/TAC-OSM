@@ -25,6 +25,10 @@ STEPS=300
 EVAL_EPISODES=400
 OPS=("xor","and","or","xnor")
 
+
+
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step
+
 def contract_hash(): return hashlib.sha256(CONTRACT_PATH.read_bytes()).hexdigest()
 
 def primary_threshold():
@@ -67,14 +71,14 @@ def train_seed(seed):
     torch.manual_seed(seed)
     rng=random.Random(seed+910000)
     model=FunctionalMultimodalPLM(config=FunctionalConfig(hidden_dim=64)).cpu()
-    opt=torch.optim.AdamW(model.parameters(),lr=0.002,weight_decay=0.0001)
+    opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=0.002,weight_decay=0.0001)
     keys=set()
     for _ in range(STEPS):
         eps=[sample_episode(rng) for _ in range(BATCH_SIZE)]
         keys.update(episode_key(e) for e in eps)
         model.train(); opt.zero_grad(set_to_none=True)
         loss=train_batch(model,build_batch(eps)); loss.backward()
-        nn.utils.clip_grad_norm_(model.parameters(),1.0); opt.step()
+        nn.utils.clip_grad_norm_(model.parameters(),1.0); checked_optimizer_step(opt)
     return model,keys
 
 @torch.no_grad()

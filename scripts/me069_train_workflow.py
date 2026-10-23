@@ -21,6 +21,8 @@ BUNDLE=Path("research/replay-bundles/ME069")
 DEFAULT_CONFIG={"native_tac":[64,96],"gru_world":[80,143]}
 
 
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
+
 def sha_file(path):
     import hashlib
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
@@ -145,7 +147,7 @@ def train(cache):
             row=next(r for r in plan["arms"] if r["architecture"]==name and r["seed"]==seed)
             if digest(order)!=row["training_sample_order_sha256"]:raise ValueError("FIT sampling schedule changed")
             torch.manual_seed(seed);model=build(name,pre)
-            opt=torch.optim.AdamW(model.parameters(),lr=.001,weight_decay=.0001)
+            opt=budgeted_optimizer(model, torch.optim.AdamW, model.parameters(),lr=.001,weight_decay=.0001)
             trace=[];started=time.process_time();actual_tokens=0
             for step,picks in enumerate(order,1):
                 data=pack(cohorts["FIT"],picks);actual_tokens+=int(data[6].sum())
@@ -153,14 +155,14 @@ def train(cache):
                 if not torch.isfinite(loss):raise ValueError("nonfinite original workflow objective")
                 loss.backward()
                 if not torch.isfinite(torch.nn.utils.clip_grad_norm_(model.parameters(),1.)):raise ValueError("nonfinite model gradient")
-                opt.step()
+                checked_optimizer_step(opt)
                 if step%100==0:
                     trace.append({"update":step,"loss":float(loss.detach())});print(json.dumps({"arm":name,"seed":seed,**trace[-1]}),flush=True)
             cpu=time.process_time()-started
             # Profile on the same original first window shape convention after fitting.
             flops=reported_flops(model,pack(cohorts["FIT"],order[0]))*UPDATES
             target=folder/f"{name}-s{seed}.pt"
-            torch.save({"model":model.state_dict(),"optimizer":opt.state_dict(),"torch_rng_state":torch.get_rng_state(),
+            save_training_checkpoint({"model":model.state_dict(),"optimizer":opt.state_dict(),"torch_rng_state":torch.get_rng_state(),
                 "preprocessing":pre,"seed":seed,"architecture":name,"trace":trace,
                 "source_sha256":source["source_sha256"],"schedule_sha256":digest(order)},target)
             measured={"actual_steps":UPDATES,"actual_examples":UPDATES*BATCH,"actual_tokens":actual_tokens,
