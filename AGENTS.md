@@ -28,3 +28,8 @@ parameters, identical real training data/exposure, matched training/tuning
 budgets and equal evaluation conditions; see the latest amendment to
 `research/REAL-WORLD-EVIDENCE-RULES.md`. Historical CPU observations are
 preserved but do not make a comparison scientifically invalid by themselves.
+
+## Mandatory in-repository checkpoints and replay (2026-10-23)
+
+Before claiming **any** locally trained or externally trained (GitHub Actions/cloud/notebook) TAC-OSM study complete, require a permanent **repository-backed trained checkpoint for every arm/seed** and all lawful loader, environment, configuration, prediction, scoring, data-source and integrity materials needed to reproduce the original experiment. Use the canonical [repository replay and checkpoint policy](research/REPOSITORY-REPLAY-AND-CHECKPOINT-RULE.md). Temporary CI artifacts, local results folders, hash-only receipts, external links and "can be retrained" explanations are insufficient. Preserve optimizer/RNG and sampler states when training continuation or full training replay is claimed. Validate actual tracked/LFS bytes and independent **clean-clone restore + scoring replay** before results/promotion; explicit `REPO_REPLAY=FAIL/BLOCKED` if absent. No secrets or unlicensed raw data in Git. Existing gitignored local checkpoint scripts are historical only, not a permissible delivery mechanism for new work. This preservation rule is independent of and cumulative with real-data, data/parameter/compute parity and experimental integrity gates.
+
