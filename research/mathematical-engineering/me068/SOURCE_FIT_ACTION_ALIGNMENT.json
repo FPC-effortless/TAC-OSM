@@ -1,0 +1,357 @@
+{
+  "actual_scored_source_episode_count": 160,
+  "fitted_new_models": 0,
+  "information_leakage_policy": "Future action offsets used ONLY to diagnose retrospective publisher timestamp semantics on already-training FIT; never eligible as prediction features or basis for a superiority claim",
+  "interpretation_limits": [
+    "Original FIT-only observed action-state correlations are not independent heldout forecasting performance.",
+    "FIT-identified servo_gain learned on original FIT; any in-FIT lag ranking may be optimistically biased.",
+    "Human-free filtering and common origin windows alter the distribution; this does not identify physical actuator latency as a causal mechanism.",
+    "Near-stationary threshold groups use FUTURE movement and may only be diagnostic.",
+    "Do not change action timing without an independently preregistered fresh real-data experiment and new untouched task."
+  ],
+  "old_exposed_TEST_opened": false,
+  "optimizer_updates": 0,
+  "original_CAL_opened": false,
+  "original_fit_episode_count": 160,
+  "original_publisher_episode_counts": {
+    "clean_stains_off_tabletop": 32,
+    "fold_and_stack_scattered_clothes_neatly": 32,
+    "hang_clothes_on_drying_rack": 32,
+    "line_trash_can_with_trash_bag": 32,
+    "pour_water_from_kettle_to_make_tea": 32
+  },
+  "original_source_fit_sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+  "original_train_only_identification": {
+    "servo_gain": [
+      0.1163984015583992,
+      0.15282130241394043,
+      0.1828271597623825,
+      0.21855825185775757,
+      0.2355726957321167,
+      0.25,
+      0.033222269266843796,
+      0.20387542247772217,
+      0.15991440415382385,
+      0.19369234144687653,
+      0.20954671502113342,
+      0.19773796200752258,
+      0.25,
+      0.057612158358097076
+    ],
+    "servo_step_limit": [
+      0.11658591032028198,
+      0.08144665509462357,
+      0.07867398113012314,
+      0.08706839382648468,
+      0.11034572124481201,
+      0.0686081200838089,
+      0.3845403790473938,
+      0.1047409400343895,
+      0.07809509336948395,
+      0.10158942639827728,
+      0.0864458754658699,
+      0.13102944195270538,
+      0.08947592973709106,
+      0.39310982823371887
+    ],
+    "state_scale": [
+      0.30823370814323425,
+      0.8926849961280823,
+      0.5595902800559998,
+      0.6328374147415161,
+      0.2556716501712799,
+      0.35014569759368896,
+      38.9736328125,
+      0.36838042736053467,
+      0.8722543716430664,
+      0.4749898910522461,
+      0.6458548903465271,
+      0.18498188257217407,
+      0.3682324290275574,
+      40.460567474365234
+    ]
+  },
+  "overall_original_FIT": {
+    "best_FIT_observational_causal_action_lag": 1,
+    "best_FIT_observational_hindsight_action_lag": 1,
+    "best_lag_is_not_heldout_validated": true,
+    "genuine_original_fit_episode_count": 160,
+    "near_stationary_origin_fraction_threshold_is_diagnostic_only": 0.9122692085544499,
+    "one_step_persistence_MAE": 0.07019513195284516,
+    "per_action_offset": {
+      "-1": {
+        "lagged_action_is_causally_available": false,
+        "original_frame_weighted_servo_minus_persistence_MAE": 0.05205048097124734,
+        "original_frame_weighted_servo_physical_MAE": 0.1222456129240925
+      },
+      "-2": {
+        "lagged_action_is_causally_available": false,
+        "original_frame_weighted_servo_minus_persistence_MAE": 0.05386226365222703,
+        "original_frame_weighted_servo_physical_MAE": 0.12405739560507219
+      },
+      "0": {
+        "lagged_action_is_causally_available": true,
+        "original_frame_weighted_servo_minus_persistence_MAE": 0.05026581088673804,
+        "original_frame_weighted_servo_physical_MAE": 0.1204609428395832
+      },
+      "1": {
+        "lagged_action_is_causally_available": true,
+        "original_frame_weighted_servo_minus_persistence_MAE": 0.04894678172407833,
+        "original_frame_weighted_servo_physical_MAE": 0.11914191367692348
+      },
+      "2": {
+        "lagged_action_is_causally_available": true,
+        "original_frame_weighted_servo_minus_persistence_MAE": 0.04999844643116379,
+        "original_frame_weighted_servo_physical_MAE": 0.12019357838400895
+      },
+      "4": {
+        "lagged_action_is_causally_available": true,
+        "original_frame_weighted_servo_minus_persistence_MAE": 0.05570681999336358,
+        "original_frame_weighted_servo_physical_MAE": 0.12590195194620873
+      },
+      "8": {
+        "lagged_action_is_causally_available": true,
+        "original_frame_weighted_servo_minus_persistence_MAE": 0.06604767992540694,
+        "original_frame_weighted_servo_physical_MAE": 0.1362428118782521
+      }
+    },
+    "valid_autonomous_transitions": 257971
+  },
+  "per_task": {
+    "clean_stains_off_tabletop": {
+      "best_FIT_observational_causal_action_lag": 1,
+      "best_FIT_observational_hindsight_action_lag": 1,
+      "best_lag_is_not_heldout_validated": true,
+      "genuine_original_fit_episode_count": 32,
+      "near_stationary_origin_fraction_threshold_is_diagnostic_only": 0.9228504122497054,
+      "one_step_persistence_MAE": 0.06256998267295949,
+      "per_action_offset": {
+        "-1": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.06245646744485149,
+          "original_frame_weighted_servo_physical_MAE": 0.12502645011781097
+        },
+        "-2": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.06394714707198933,
+          "original_frame_weighted_servo_physical_MAE": 0.12651712974494883
+        },
+        "0": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.061049723732563205,
+          "original_frame_weighted_servo_physical_MAE": 0.1236197064055227
+        },
+        "1": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.059958273904300856,
+          "original_frame_weighted_servo_physical_MAE": 0.12252825657726035
+        },
+        "2": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.061288922477375406,
+          "original_frame_weighted_servo_physical_MAE": 0.12385890515033487
+        },
+        "4": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.06672053919771245,
+          "original_frame_weighted_servo_physical_MAE": 0.12929052187067194
+        },
+        "8": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.07563576569005676,
+          "original_frame_weighted_servo_physical_MAE": 0.13820574836301625
+        }
+      },
+      "valid_autonomous_transitions": 37356
+    },
+    "fold_and_stack_scattered_clothes_neatly": {
+      "best_FIT_observational_causal_action_lag": 1,
+      "best_FIT_observational_hindsight_action_lag": 1,
+      "best_lag_is_not_heldout_validated": true,
+      "genuine_original_fit_episode_count": 32,
+      "near_stationary_origin_fraction_threshold_is_diagnostic_only": 0.8985087786552174,
+      "one_step_persistence_MAE": 0.087784616576166,
+      "per_action_offset": {
+        "-1": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.02259167704031942,
+          "original_frame_weighted_servo_physical_MAE": 0.11037629361648542
+        },
+        "-2": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.024550948954545366,
+          "original_frame_weighted_servo_physical_MAE": 0.11233556553071138
+        },
+        "0": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.020914757149478082,
+          "original_frame_weighted_servo_physical_MAE": 0.10869937372564409
+        },
+        "1": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.019024391677290933,
+          "original_frame_weighted_servo_physical_MAE": 0.10680900825345693
+        },
+        "2": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.01955200259698768,
+          "original_frame_weighted_servo_physical_MAE": 0.10733661917315368
+        },
+        "4": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.024999364156212324,
+          "original_frame_weighted_servo_physical_MAE": 0.11278398073237833
+        },
+        "8": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.035895685532417274,
+          "original_frame_weighted_servo_physical_MAE": 0.12368030210858327
+        }
+      },
+      "valid_autonomous_transitions": 52172
+    },
+    "hang_clothes_on_drying_rack": {
+      "best_FIT_observational_causal_action_lag": 1,
+      "best_FIT_observational_hindsight_action_lag": 1,
+      "best_lag_is_not_heldout_validated": true,
+      "genuine_original_fit_episode_count": 32,
+      "near_stationary_origin_fraction_threshold_is_diagnostic_only": 0.9114123945614914,
+      "one_step_persistence_MAE": 0.06658654887594218,
+      "per_action_offset": {
+        "-1": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.04685701430467247,
+          "original_frame_weighted_servo_physical_MAE": 0.11344356318061466
+        },
+        "-2": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.04809470402412307,
+          "original_frame_weighted_servo_physical_MAE": 0.11468125290006524
+        },
+        "0": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.0458642635271527,
+          "original_frame_weighted_servo_physical_MAE": 0.11245081240309487
+        },
+        "1": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.045123881504698045,
+          "original_frame_weighted_servo_physical_MAE": 0.11171043038064021
+        },
+        "2": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.04637020073601416,
+          "original_frame_weighted_servo_physical_MAE": 0.11295674961195634
+        },
+        "4": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.0516921183678808,
+          "original_frame_weighted_servo_physical_MAE": 0.11827866724382298
+        },
+        "8": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.06320010836312616,
+          "original_frame_weighted_servo_physical_MAE": 0.12978665723906835
+        }
+      },
+      "valid_autonomous_transitions": 51926
+    },
+    "line_trash_can_with_trash_bag": {
+      "best_FIT_observational_causal_action_lag": 1,
+      "best_FIT_observational_hindsight_action_lag": 1,
+      "best_lag_is_not_heldout_validated": true,
+      "genuine_original_fit_episode_count": 32,
+      "near_stationary_origin_fraction_threshold_is_diagnostic_only": 0.865425804699991,
+      "one_step_persistence_MAE": 0.10123311010210852,
+      "per_action_offset": {
+        "-1": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.0164281065306749,
+          "original_frame_weighted_servo_physical_MAE": 0.11766121663278342
+        },
+        "-2": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.01821528149112692,
+          "original_frame_weighted_servo_physical_MAE": 0.11944839159323543
+        },
+        "0": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.01403996344382139,
+          "original_frame_weighted_servo_physical_MAE": 0.11527307354592992
+        },
+        "1": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.011952470572508693,
+          "original_frame_weighted_servo_physical_MAE": 0.11318558067461722
+        },
+        "2": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.012474531665807958,
+          "original_frame_weighted_servo_physical_MAE": 0.11370764176791648
+        },
+        "4": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.020033759885085503,
+          "original_frame_weighted_servo_physical_MAE": 0.121266869987194
+        },
+        "8": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.03648259591310942,
+          "original_frame_weighted_servo_physical_MAE": 0.13771570601521793
+        }
+      },
+      "valid_autonomous_transitions": 33149
+    },
+    "pour_water_from_kettle_to_make_tea": {
+      "best_FIT_observational_causal_action_lag": 1,
+      "best_FIT_observational_hindsight_action_lag": 1,
+      "best_lag_is_not_heldout_validated": true,
+      "genuine_original_fit_episode_count": 32,
+      "near_stationary_origin_fraction_threshold_is_diagnostic_only": 0.9352989156510891,
+      "one_step_persistence_MAE": 0.05251050274155121,
+      "per_action_offset": {
+        "-1": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.08322216229304367,
+          "original_frame_weighted_servo_physical_MAE": 0.1357326650345949
+        },
+        "-2": {
+          "lagged_action_is_causally_available": false,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.08545288737219203,
+          "original_frame_weighted_servo_physical_MAE": 0.13796339011374326
+        },
+        "0": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.08094742364451987,
+          "original_frame_weighted_servo_physical_MAE": 0.13345792638607107
+        },
+        "1": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.0798291103008886,
+          "original_frame_weighted_servo_physical_MAE": 0.13233961304243985
+        },
+        "2": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.08117306236362559,
+          "original_frame_weighted_servo_physical_MAE": 0.13368356510517682
+        },
+        "4": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.08667355252229947,
+          "original_frame_weighted_servo_physical_MAE": 0.1391840552638507
+        },
+        "8": {
+          "lagged_action_is_causally_available": true,
+          "original_frame_weighted_servo_minus_persistence_MAE": 0.09414998885105515,
+          "original_frame_weighted_servo_physical_MAE": 0.14666049159260636
+        }
+      },
+      "valid_autonomous_transitions": 83368
+    }
+  },
+  "reserved_tissue_box_task_opened": false,
+  "source_profile": "Original 14D robot joint qpos observation and 14D absolute action.qpos, real takeover flags; five original robot tasks",
+  "status": "FIT_ONLY_OBSERVATIONAL_DIAGNOSTIC_NOT_INDEPENDENT",
+  "study": "ME068_ORIGINAL_REAL_FIT_ACTION_STATE_TIME_ALIGNMENT",
+  "temporal_lag_sign_rule": "positive k uses action at t-k, 0 uses action at t, negative uses logged action from after t, never legitimate input for deployed model"
+}
