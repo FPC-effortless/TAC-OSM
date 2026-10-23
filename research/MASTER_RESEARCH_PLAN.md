@@ -17,6 +17,35 @@ The prospective claim checker is at [`scripts/validate_capability_progress.py`](
 
 **Not yet globally enforced:** the implementation is on `research/master-research-plan`, currently **not integrated into each open model-development draft branch or demonstrated as a mandatory protected-branch check**. Every new study must bring this validator/standard into its exact working branch and publish its honest scorecard; do not call the new policy universally installed, do not edit old study/checkpoint records and do not merge research drafts without a separately authorized decision.
 
+## ME080 — native mixtures and reusable state: mixed real capability
+
+[Draft PR #371](https://github.com/FPC-effortless/TAC-OSM/pull/371) trains **five original models with 99,816 parameters each**, retaining native 32D fast state, 32D slow state and an 8×8 associative matrix. The integrated model learns quiet/movement Laplace mixtures at 1, 4 and 16 frames; medians and marginal intervals come from the same CDF. Observation-only projections are shared within chunks, and explicit caller-owned state reuses prior computation. TAC's nonlinear dynamics remain intact. No SSM conversion, associative scan, fused GPU kernel or category-theoretic novelty is claimed.
+
+The same licensed source supplies 120 FIT and 40 **already exposed** REPORT episodes: 960, 956 and 928 actual query–target pairs at the three horizons per seed. Each cold start receives 2,048 updates, batches of 24 windows and eight supervised causal prefixes. One fixed likelihood/BCE recipe, no search, restart or warm start. This is single-architecture capability development, **not** a matched-compute architecture comparison or a five-model deployment. No protected tissue-box, source CAL or TEST access.
+
+| Physical MAE, lower is better | Frozen ME079 native | ME080 native | Persistence |
+| --- | ---: | ---: | ---: |
+| 1 frame | 0.060595 | 0.059393 | 0.068668 |
+| 4 frames | 0.185953 | 0.219619 | 0.302400 |
+| 16 frames | 0.947424 | 0.883994 | 0.975966 |
+
+**Improved:** relative to ME079, one-frame mean MAE falls 1.98%, 16-frame MAE falls 6.69%, stationary one-frame MAE falls 43.79% (0.024795 → 0.013938), and 16-frame proper interval score falls 12.62%. Mean errors are 13.51%, 27.37% and 9.42% below persistence at the three horizons.
+
+**Regressed:** four-frame error rises 18.10%; actual-moving one-frame error rises 22.93% (0.433934 → 0.533420); risk AP/AUC falls to 0.53443/0.89689 from 0.60775/0.91971; one/four-frame interval scores worsen. Stationary error remains 8.19 times ME077 and 3.50 times persistence. Overall one-frame error also remains slightly worse than clipped velocity. Nominal 90% coordinate coverage of 93.46%, 91.96% and 91.91% does not establish sharp calibration.
+
+The paired 40-episode bootstrap 95% interval for one-frame new-minus-ME079 MAE is **[−0.009942, +0.006327]**, including zero. Four of five seeds improve, but the registered 5% mean threshold and several guardrails fail. **Full gate: FAIL. Tier: MIXED_TRADEOFF. No further fits under ME080.**
+
+**Reuse scope:** the trained models' raw outputs agree for full eight-frame, split 3+5 and one-observation execution on all original 960 queries per seed on the local host. State tensor payload is 628 bytes per entity, excluding weights, activations and container/allocator overhead. Actual training and accuracy scoring reset after eight frames; 40-step software equivalence is **not** long-history prediction qualification. Callers supply identity/known commands and invalidate caches when weights or preprocessing change. Policy, causal action, safety, enterprise transfer and customer value remain unqualified.
+
+**Preservation:** prefit `4c7309ff`; all five original model/optimizer/RNG and live receipts frozen at `e37a4b88` **before** scoring; original scores at `ea6cdd5e`. A fresh remote clone restored all five models, replayed 14,220 raw forecast records and recomputed the entire summary exactly locally. These are repeated forecasts over 40 episode clusters. Strict external replay `40005926076` **fails at seed 80002's lower quantile**; the full read-only census is recorded separately without changing tolerance or original outputs. No all-platform-green claim. A separate helper repairs the missing original-registration reference in final delivery metadata; original model bytes, registration, runner and forecasts remain unchanged, and the initial failure remains documented.
+
+[Full results](https://github.com/FPC-effortless/TAC-OSM/blob/research/me080-streaming-mixture-world-2026-10-23/research/mathematical-engineering/me080/RESULTS.md) · [Original checkpoints](https://github.com/FPC-effortless/TAC-OSM/tree/research/me080-streaming-mixture-world-2026-10-23/research/replay-bundles/ME080).
+
+
+Full external census [40006593903](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40006593903) restored all five models and 14,220 forecasts. **Three lower-quantile records and one interval score exceed the original tolerance; every other recorded field passes**, including point predictions, actual targets, physical MAE, NLL, risk probabilities/Brier, upper quantiles, widths and coverage. Max lower drift is 8.3226e-6; max interval-score drift is 1.09736e-4. Counts can overlap. The audit process completed, but strict full replay remains FAIL. Original outputs and tolerances stay unchanged. The final local suite passes 1,161 tests.
+
+**Next requirement:** develop a complete model that preserves quiet precision **and** changing-state/mid-horizon skill. Any additional fitting needs a new substantive prospective registration; no hidden retry, default attribution campaign or protected TEST tuning. Independent-source qualification and operator usefulness remain outstanding. Enterprise, Temporal, Edge and Counterfactual evidence stays separate.
+
 ## ME078–ME079 — trained real motion capability advances; no native architecture winner
 
 Two complete integrated physical-model recipes are now trained and preserved:
