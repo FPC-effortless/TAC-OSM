@@ -82,7 +82,7 @@ capability/deferred `completed_model_records` row) includes:
 Paths resolve from the validation working directory; use repository-relative
 paths for portable evidence. Run normal `--phase final`. The validator requires
 proof preceding update zero, completed guarded updates, matching seed/arm and
-prefit digest, separate receipts per fit, actual checkpoint hashes, named tensor
+prefit digest, declared/budgeted optimizer-step consistency, separate receipts per fit, actual checkpoint hashes, named tensor
 shapes/dtypes/counts and weights matching the runtime snapshot. Parameter checks
 alone never qualify architecture superiority or validate source data semantics.
 

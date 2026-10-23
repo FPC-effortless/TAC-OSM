@@ -508,6 +508,16 @@ def validate_runtime_evidence(row):
     for k in ("trainable_parameters", "deployed_parameters"):
         if row.get(k) != pre[k] or receipt.get("last_post_update", {}).get(k) != pre[k]:
             raise ParameterBudgetError("registered/runtime pre/post counts differ")
+    expected_steps = row.get("_expected_optimizer_steps")
+    if expected_steps is not None:
+        if (
+            isinstance(expected_steps, bool)
+            or not isinstance(expected_steps, int)
+            or expected_steps != receipt["successful_optimizer_steps"]
+        ):
+            raise ParameterBudgetError(
+                "runtime optimizer step count differs from the final training budget/receipt"
+            )
     inventory = pre.get("parameter_inventory", [])
     if (
         not inventory

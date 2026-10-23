@@ -8,7 +8,7 @@ Executed locally on the default-branch implementation:
 
 | Check | Observed result |
 |---|---|
-| `python -m pytest -q` | 978 passed, 14.46 seconds |
+| `python -m pytest -q` | 981 passed, 14.75 seconds |
 | `python scripts/audit_training_budget.py` | PASS, 88 Python files audited |
 | `python scripts/verify_frozen_replay.py --all` | PASS, six pinned registrations, 15 distinct original checkpoints (each checked for prefit/final) |
 | `python scripts/sync_test_count.py --check` | PASS |
@@ -35,7 +35,7 @@ lane. No original registrations, source receipts, forecast arrays or checkpoint
 bytes changed. Current guarded fitting rejects incomplete historical manifests;
 no new training is authorized by their old IDs or their replay records.
 
-Executed locally on this overlay: **1,103 tests passed in 19.09 seconds** and
+Executed locally on this overlay: **1,105 tests passed in 19.08 seconds** and
 **164 Python source/entrypoint files passed the guard audit**. Counts differ
 because the default baseline has 924 tests and ME073 has 1,043 before this work;
 these are different branch suites, not a deletion of scientific tests. Original
@@ -56,3 +56,6 @@ The working branch's old numerical registrations are never relabeled as newly
 qualified. Older experimental qualification/fitting lanes require explicit
 manual opt-in and cannot bypass the new live guard. Automatic root and policy
 checks remain active.
+
+Final update-count/deployed-count consistency regressions also passed. Runtime
+steps must match any declared actual update count and the fixed comparison budget.
