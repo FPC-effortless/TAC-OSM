@@ -1,0 +1,63 @@
+{
+  "architecture_superiority_claim": false,
+  "guardrails": [
+    {
+      "metric": "stationary preservation",
+      "status": "FAIL"
+    },
+    {
+      "metric": "registered dual learned-rival superiority",
+      "status": "FAIL"
+    },
+    {
+      "metric": "physical utility gates",
+      "status": "PASS"
+    }
+  ],
+  "integrity": {
+    "external_strict_numerical_contract": "FAIL_RECORDED",
+    "git_original_checkpoints": true,
+    "independent_clean_replay": true,
+    "independent_raw_case_audit": true,
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true
+  },
+  "model": {
+    "candidate_sha256": "23a03e7d9482a277511a2e9d63eb70e442fcdb5b9009c217d89ad99b249bb6cc",
+    "deployed_parameters": 100158,
+    "prior_sha256": "51779984a9bf90cf71b24b9f69ad999cf1183d5927d417cbc78fe6770edd30b1",
+    "scope": "native first-seed identifier; all5native and10controls indexed separately",
+    "trainable_parameters": 100158
+  },
+  "operator_value": "NOT_MEASURED",
+  "practical_reference_scored": true,
+  "primary_comparison": {
+    "candidate": 0.061221104948617724,
+    "direction": "lower_is_better",
+    "minimum_useful_gain": 0.003323797314477569,
+    "prior": 0.06647594628955138
+  },
+  "schema_version": "tac-osm.capability-progress.v1",
+  "source": {
+    "authentic_real_data": true,
+    "eligible_ids_sha256": "de074a324739ec05959baac263a51e0e0c3eb597084ba2efde9af4e5d9a3c771",
+    "exposure": "EXPOSED_DEV",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "study_id": "ME078_NATIVE_KINEMATIC_MULTI_HORIZON_COMPARISON",
+  "task": {
+    "actual_future_targets": 40,
+    "actual_query_origins": 960,
+    "count_unit": "episode clusters, not verified operator/site independent samples",
+    "future_query_target_pairs": 2844,
+    "independent_cases": 40,
+    "prediction_time_validated": true,
+    "query_and_horizon": "same original ME077 H1queries; registered additional H4/H16future-valid pairs",
+    "same_case_ids_target_horizon_metric": true,
+    "target": "recorded physical14Dnext-state MAE"
+  },
+  "tier": "MIXED_TRADEOFF",
+  "what_improved": "Real exposed H1moving MAE43.24%lower vsME077; native beats persistence at1/4/16frames; per-fit motion AP0.617 vs0.162.",
+  "what_regressed": "Stationary H1error15.7times ME077; learned-rival aggregate gates failed; external strict interval-score replay exception remains.",
+  "what_remains_unknown": "Independent site/session transfer, broader architectural superiority, persistent long memory, causal control, safety, calibrated operational risk and customer value."
+}
