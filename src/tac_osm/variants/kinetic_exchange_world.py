@@ -55,7 +55,7 @@ class KineticExchangeWorldModel(SelectiveExchangeWorldModel):
             nn.Linear(4 * dimension, 8), nn.SiLU(), nn.Linear(8, 1))
         self.log_kinetic_gain = nn.Parameter(torch.tensor(2.0))
         self.prior_velocity_logits = nn.Parameter(torch.full((dimension,), -0.5))
-        nn.init.zeros_(self.kinetic_event[-1].weight)
+        nn.init.normal_(self.kinetic_event[-1].weight, mean=0.0, std=0.01)
         nn.init.zeros_(self.kinetic_event[-1].bias)
 
     def initial_kinetic(self, batch: int, *, device=None, dtype=None) -> KineticState:
