@@ -1,0 +1,54 @@
+name: ME070 original BPI2018 long-history source qualification
+# The original 4TU file endpoint timed out on GitHub Actions run 39920980632.
+# Do not repeatedly consume CI minutes on every PR sync. Relaunch manually when
+# lawful byte source access is restored, preserving original recorded failure.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  measure-actual-longitudinal-trace-support:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Download original public 4TU BPIC2018 source to runner only (never upload raw)
+        run: |
+          set -euo pipefail
+          curl --fail --location --show-error --silent --retry 2 --connect-timeout 30 \
+            --max-time 300 \
+            'https://data.4tu.nl/file/443451fd-d38a-4464-88b4-0fc641552632/cd4fd2b8-6c95-47ae-aad9-dc1a085db364' \
+            -o /tmp/ME070-original-BPI2018-download
+          test -s /tmp/ME070-original-BPI2018-download
+          file /tmp/ME070-original-BPI2018-download
+          python - <<'PY'
+          from pathlib import Path
+          src = Path("/tmp/ME070-original-BPI2018-download")
+          magic = src.open("rb").read(8)
+          if magic[:2] == bytes.fromhex("1f8b"):
+              target = Path("/tmp/ME070-original-BPI2018.xes.gz")
+          elif magic.startswith(b"<?xml") or magic.startswith(b"<log"):
+              target = Path("/tmp/ME070-original-BPI2018.xes")
+          else:
+              raise SystemExit("SOURCE_BLOCKED: unknown format from publisher; not treating HTML/ZIP as original XES")
+          src.rename(target)
+          Path("/tmp/ME070-source-path").write_text(str(target))
+          print("ORIGINAL_FILE", target, "BYTES", target.stat().st_size)
+          PY
+      - name: Measure 64/128/256 original history support before ME070 fits
+        run: |
+          set -euo pipefail
+          python scripts/me070_qualify_long_xes.py \
+            --input "$(cat /tmp/ME070-source-path)" \
+            --output /tmp/ME070-original-source-qualification.json
+          echo 'Original source output is case-aggregate only; no raw cases.'
+          cat /tmp/ME070-original-source-qualification.json
+      - name: Preserve aggregate-only eligibility receipts, never raw XES
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me070-original-4tu-source-eligibility-only
+          path: /tmp/ME070-original-source-qualification.json
+          if-no-files-found: ignore
