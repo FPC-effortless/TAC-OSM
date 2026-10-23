@@ -240,6 +240,7 @@ def test_new_study_above_target_still_invalid_when_arms_match_to_1_percent():
         check_manifest(m)
 
 
+# The prospective 100k limit is independent of the 1% between-arm parity check.
 def test_new_study_ids_and_unknown_studies_cannot_escape_100k_training_gate():
     for name in ("ME073_NEXT_PHYSICAL_MODEL", "DEV062_NEW_MODEL", "NEW_RECURRENT_WORLD_MODEL"):
         assert requires_100k_policy(name)
