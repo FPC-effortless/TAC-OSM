@@ -3,6 +3,12 @@
 For substantive engineering, product or research tasks, read `.agents/skills/fpc-universal/SKILL.md` and then the relevant repository-local instructions, specs, README, workflows and tests. Repository-specific safety, release, data, science and architecture requirements always override general skill guidance. Never assume a skill grants permission to access secrets, incur compute costs, deploy, merge or make external changes. Use a task branch and verify before submitting a PR.
 
 
+## TAC-OSM capability priority — owner direction 2026-10-23
+
+**Develop real learned abilities first; attribution is optional diagnosis, not the goal.** For the next TAC model iteration, prefer one **integrated native world model** that is actually trained, independently replayed and evaluated on authentic observed outcomes for *new useful capabilities*: multi-horizon prediction, uncertain timing, carried and corrected entity state, missingness resilience, and later action/outcome consequences if factual intervention records exist. Use proven mathematical techniques and existing research rather than many tiny diagnostic experiments. Prioritize genuine end-to-end ability over proving which memory cell caused it, CPU micro-optimization, or a new GRU comparison every iteration.
+
+A single-architecture `capability_development` preregistration **may train and report its own authentic developmental scores** without a matched ablation/comparator matrix, but **may not claim architecture superiority or memory-module attribution**. Only require equal parameter/data/exposure/compute and matched competitors when asserting a comparative winner. The prior 64-event kill rule concerns a narrow TAC-memory-*superiority* claim, not permission to abandon full-model capability development. Never call an implementation unit test a learned skill, use synthetics to claim real-world success, open a sealed TEST for tuning, or skip in-repository original checkpoints and independent clean-clone replay. See `research/MASTER_RESEARCH_PLAN.md` owner-priority section.
+
 ## Mandatory TAC-OSM real-research gateway (new model work)
 
 For any proposed TAC-OSM model-training or architecture-comparison experiment,
