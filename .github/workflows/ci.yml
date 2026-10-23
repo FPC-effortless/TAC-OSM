@@ -10,8 +10,8 @@ on:
       - "docs/TACOSM-BASELINE-001.md"
       - "pyproject.toml"
       - ".github/workflows/ci.yml"
+  # Research-to-research PRs need the same full software suite as master PRs.
   pull_request:
-    branches: [main, master]
 
 permissions:
   contents: read
