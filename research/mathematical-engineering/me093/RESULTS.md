@@ -17,3 +17,7 @@ Failed gates: H1stationary_within10pct_ME077, family99_58333pct_CI_upper_below0.
 [Original complete scores](CAPABILITY_RESULTS.json), [actual guarded optimizer/parameter audit](FINAL_COMPARISON.json), [frozen registration](FAIR_COMPARISON.json), [source](SOURCE_QUALIFICATION.json). Original weights, optimizer/RNG, receipts and all point/distribution forecasts are tracked in the study replay folder. Same authenticated real recordings and past/current information only; future commands/capture times and protected tissue-box/CAL/TEST remain closed.
 
 Reference inference uses the whole forward graph in float64, promoted from exact original float32 trained values. Independent restoration must retain original rtol1e-5/atol1e-6. Compiled fixed-profile engineering evidence, when present, is separate from full original forecast replay and predictive performance. No architecture-winner, policy control, general intelligence, independent site proof, deployed product or customer-value claim is unlocked.
+
+Independent original27,600forecast replay and both normalized/physical compiled
+restores PASS in run40112348639, head efc5e625. This verifies reproducibility;
+full predictive gate remainsFAIL. All60ME082–ME093versions are preserved.
