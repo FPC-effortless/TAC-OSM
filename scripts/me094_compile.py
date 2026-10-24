@@ -6,7 +6,8 @@ from torch import nn
 import scripts.me094_train_world as R
 from tac_osm.variants.median_anchored_world import MedianAnchoredWorld
 from tac_osm.variants.clock_value_world import ClockValueState
-from tac_osm.variants.median_anchored_distribution import mixture_quantiles
+from tac_osm.variants.median_anchored_execution import execution_quantiles as mixture_quantiles
+from tac_osm.variants.median_anchored_distribution import mixture_quantiles as original_quantiles
 
 
 class CompleteGraph(nn.Module):
@@ -35,6 +36,9 @@ def main():
                 traced=torch.jit.trace(wrapper,inputs,strict=True,check_trace=True)
             compiled=torch.jit.freeze(traced.eval())
             expected=wrapper(*inputs);actual=compiled(*inputs)
+            raw,state=model.visual_tensor_graph(*inputs[:4],ClockValueState(*inputs[4]),last_only=True)
+            original=(*original_quantiles(raw),raw['motion_logit'].sigmoid(),*tuple(state))
+            for u,v in zip(original,expected):torch.testing.assert_close(u,v,rtol=1e-5,atol=1e-6)
             for u,v in zip(expected,actual):torch.testing.assert_close(u,v,rtol=1e-5,atol=1e-6)
             # Different actual FIT observations at the same profile, not just the
             # trace values, must execute through the compiled tensor program.

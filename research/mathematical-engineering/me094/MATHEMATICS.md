@@ -85,3 +85,10 @@ paired interval for13declared recipes and strict independent original replay.
 This is adaptive exposed development, not an independent architecture-winner or
 real action-policy/customer/general-intelligence claim. Direct horizon marginals
 remain distinct from a joint future trajectory or a closed-loop simulator.
+
+Derived inference optimization (not a training/source-hash change): reuse explicit
+m for the median and invert only .05/.95tails. Tests compare against the frozen
+three-level score helper and exact original physical preprocessing/state outputs.
+The trained graph and original score code remain unchanged. First-original actual
+FIT compiled export must additionally compare optimized outputs to frozen original
+quantiles at1e-5/1e-6; no new numerical tolerance or learned weights.
