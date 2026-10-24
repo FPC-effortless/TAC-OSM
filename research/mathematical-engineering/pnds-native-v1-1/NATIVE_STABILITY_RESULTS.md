@@ -35,3 +35,21 @@ Valid unit-address/unit-value counterexample: initial M[0,0]=4; new k=e1, old q=
 Prioritize a protected, source-authorized entity-memory budget that prevents global projection from weakening unrelated verified facts. Before training, establish clear source-consistent memory semantics and a falsifiable retention/error certificate. To claim a trained improvement, require authentic longitudinal observations, matched parameters/training data/training compute, actual original checkpoints, preserved negative results, and realistic held-out entity/site/time splits. Equal CPU wall time is NOT a fairness requirement.
 
 Still OPEN: global whole-native Jacobian/ISS certificate, operator-to-full-tensor Lean proof, independently useful 256-distractor retention, and real-world predictive advantage. The 17-variant mirrored historical registry is unchanged.
+
+
+## Finite-memory capacity imposes a real tradeoff
+
+The source-memory example is not fixed simply by renaming the global clip to
+"per-entity projection". A norm-bounded store with two orthogonal components
+already carrying old squared norm R² cannot preserve that old component and
+admit additional nonzero orthogonal squared norm b² while retaining the *same*
+total radius: R²+b²<=R² forces b=0. The PNDS Lean theorem
+NativeInvariant.saturated_budget_forbids_nonzero_orthogonal_write proves this
+exact statement. Protecting old verified memories therefore requires a
+falsifiable **admission/replacement policy, reserved capacity, controlled
+compression or explicit budget reallocation**, not a free no-interference
+guarantee at fixed saturated storage. An 8D address space also cannot store
+65 mutually orthogonal nonzero key vectors; useful capacity is empirically
+conditional on learned key structure and temporal task demands.
+
+No architecture is changed or fit by this mathematical observation.
