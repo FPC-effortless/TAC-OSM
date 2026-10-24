@@ -44,3 +44,6 @@ jobs:
       - name: Restore raw physical and pixel input-to-output boundary
         if: hashFiles('research/mathematical-engineering/me093/PHYSICAL_BOUNDARY_GRAPH_AUDIT.json') != '' && hashFiles('research/replay-bundles/ME093/ORIGINAL_SCORE_INDEX.json') != ''
         run: PYTHONPATH=src:. python scripts/me093_physical_boundary.py --verify --cache "${{ runner.temp }}/clock-value-source"
+      - name: Verify actual restored projection reuse
+        if: hashFiles('research/mathematical-engineering/me093/GRAPH_OPERATION_CENSUS.json') != '' && hashFiles('research/replay-bundles/ME093/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/me093_graph_census.py --verify
