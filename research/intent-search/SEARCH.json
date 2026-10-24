@@ -1,0 +1,14 @@
+{
+ "registered_before_first_new_fit":true,
+ "study":"ME090",
+ "architecture":"native_joint_reference_world",
+ "question":"Can joint prediction of future logged robot references and physical state improve the SAME-input quiet/moving forecasts? Future references are supervised labels, never supplied to inference.",
+ "initialization":"ALL5fixed ME087 final originals, index-paired90001..90005to87001..87005; no best-seed selection or ensemble.99731base weights plus5155new local-routing/reference weights,104886total ALLtrainable.4096old+2048new=6144baseupdates; new5155weights2048updates.",
+ "budget":"2048new AdamW lr0.0003 wd0.0001 clip1,B24,T32,final only; new optimizer/RNG, at most2independent one-thread workers. No hidden restart or additional fit under this ID.",
+ "input_contract":"Same known state/lag1reference/capture elapsed history. Future action.qpos[origin+h-1] is a real FIT target only. No true future command, state, timestamp, task/episode ID enters model.",
+ "new_graph":"Shared horizon latent predicts future logged-reference delta/change probability and learned physical lead coefficient. Predicted reference features feed parallel local evidence routing and bounded servo proposal. Original native memory and coherent physical mixture remain. This is joint multi-target training, not a joint generative action/trajectory distribution or causal controller.",
+ "objective":"CRPS+0.2physicalNLL+0.2globalmotionBCE+1implicit-medianMAE+1coordinate change-above3FITpredictive-unit BCE+1quietH1median precision+0.5Huber in asinh reference-delta space+0.2recorded-reference-change BCE. Added real supervised signals and all lineage compute disclosed.",
+ "evaluation":"Every original physical gate unchanged; add99.4444%CI for9declared attempts. New reference error/change-Brier scored descriptively against known-reference persistence on the same cases, no automatic skill claim. All5originals frozen before scoring, original rtol1e-5/atol1e-6 and whole-forward float64.",
+ "previous_attempts":"ME082..ME089 full gatesFAIL, all originals preserved. ExposedDEV adaptation remains development, not prospective confirmation.",
+ "protected_tissue_box_CAL_TEST":"CLOSED"
+}
