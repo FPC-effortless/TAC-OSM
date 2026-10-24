@@ -81,6 +81,22 @@ def full_time_parallel_native_candidate(model, kind, keys, values,
     state_at_each_step=scan_source_schedules(
         addresses,contents,retention,strength,writable)
 
+    # Exact bitwise *read-only* trace identity in floating point:
+    # even mathematically neutral identity-matrix matmul can round the
+    # associative prefix by a ULP if its grouping changes. Gather each
+    # read-only timestep from the last actual write (or initial zero)
+    # using a parallel prefix-maximum over write indices. This does not
+    # change writable memory states or introduce any time-step loop.
+    write_indices=torch.arange(T,device=kind.device).view(1,T).expand(B,T)
+    last_write=torch.cummax(torch.where(
+        writable.squeeze(-1),write_indices,
+        torch.full_like(write_indices,-1)),dim=1).values
+    pick=last_write.clamp_min(0).unsqueeze(-1).unsqueeze(-1).expand(B,T,8,8)
+    state_at_each_step=state_at_each_step.gather(1,pick)
+    state_at_each_step=torch.where(
+        (last_write>=0).view(B,T,1,1),state_at_each_step,
+        state_at_each_step.new_zeros(B,T,8,8))
+
     old_states=torch.cat(
         (state_at_each_step.new_zeros(B,1,8,8),state_at_each_step[:,:-1]),dim=1)
     old_read=(old_states@addresses.unsqueeze(-1)).squeeze(-1)
