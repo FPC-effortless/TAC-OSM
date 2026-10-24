@@ -115,6 +115,24 @@ def verify():
             raise RuntimeError("orthogonal source-writes did not exhibit compulsory decay")
         cases += 1
 
+        # Orthogonal keys are not sufficient for exact old-read preservation
+        # when an otherwise admissible unit-value write triggers global
+        # Frobenius projection. The old q=e1 read becomes smaller even after
+        # accounting for the explicit alpha decay. This is an actual source
+        # counterexample to overpromising "orthogonal write preserves facts".
+        saturated=torch.zeros(1,8,8,dtype=dtype)
+        saturated[0,0,0]=4.
+        orthogonal=torch.zeros(1,8,dtype=dtype);orthogonal[0,1]=1.
+        unit_value=torch.zeros(1,8,dtype=dtype);unit_value[0,0]=1.
+        keep=torch.full((1,1),.9999,dtype=dtype)
+        strength=torch.ones(1,1,dtype=dtype)
+        old_dropped=source.gated_write(
+            saturated,orthogonal,unit_value,keep,strength,writable)
+        if not (old_dropped[0,0,0] < (4*keep[0,0]) and
+                torch.linalg.vector_norm(old_dropped.reshape(1,-1),dim=-1).item() <= 4+1e-6):
+            raise RuntimeError("Frobenius projection did not couple orthogonal reads")
+        cases += 1
+
         # An old memory read differs even on a new unit key after strong
         # overlap. A finite matrix has no universal zero-interference theorem.
         old=torch.zeros(1,8,8,dtype=dtype)
