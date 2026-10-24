@@ -1,0 +1,17 @@
+{
+  "registered_before_first_new_fit": true,
+  "study": "ME088",
+  "architecture": "native_precision_clock_value_world",
+  "capability": "Preserve quiet precision alongside actual movement and multi-horizon forecasting in one jointly fine-tuned native model",
+  "initialization": "ALL five fixed final ME087 originals (seed87001..87005), one-to-one index pairing to88001..88005; no best model/seed selection, no ensemble; all99731weights remain trainable",
+  "source_originals_git_commit": "526a14ae",
+  "source_original_scores_git_commit": "cac5aad9",
+  "budget": "2048NEW AdamW updates,B24,T32,lr0.0003,wd0.0001,clip1,final only. New optimizer and RNG.4096old+2048new=6144total updates per lineage; source original weights/optimizer/RNG retained. No optimizer-resume or equal-compute superiority claim.",
+  "architecture_changes": "Separate predictive-noise units max(observed_FITquiet_noise,0.01FITdelta_scale), learned scales active; nonlinear residual trust1-0.9exp(-(h-1)); retain noise-bounded quiet mean, native elapsed-rate memory and parallel filters",
+  "objective": "CRPS+0.2physicalNLL+0.2global factual motionBCE+1.0implicit-median physicalMAE+0.5per-coordinate change-above-FIT-noise BCE+8.0one-step factual-quiet median precision penalty. Group/coordinate future outcomes are FIT labels only, never inference inputs. This is an explicit quiet-preservation multiobjective, not a claim of universally optimal unweighted calibration.",
+  "gate": "All original ME081 and additional ME082 requirements stay fixed; add99.2857%pairedCI for these7declared attempts. ExposedDEV adaptation is not independent qualification. All original point/distribution fields retained.",
+  "selection": "one prospectively fixed fine-tune recipe, five final originals frozen before REPORT, no extra retries or restarts under this ID",
+  "prior_attempts": "ME082..ME087 all original gates failed, all negative originals preserved; no future source/test opened",
+  "protected_tissue_box_CAL_TEST": "CLOSED",
+  "execution": "Two independent one-thread seed processes maximum, fixed5seeds, no shared RNG/gradients; same fixed2048new updates each; parent verifies all5 receipts before portfolio freeze and REPORT"
+}
