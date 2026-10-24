@@ -1408,3 +1408,37 @@ declared attempts are disclosed; additional99.2857%CI is descriptive of those
 attempts, not independent historical-adaptation correction. Protected tissue-box/
 CAL/TESTstay CLOSED. ME088 is training and has no REPORT score at this update.
 No architecture-winner, causal action, production, merge or customer-value claim.
+
+### ME088–ME090 completed negative joint gates; visual source qualification — 2026-10-24
+
+All 15 original fixed-parent fine-tunes completed, five per registration, each
+from its corresponding ME087 original. Every fit used 2048 additional updates
+(new optimizer/RNG; base lineage 4096+2048); no best-seed selection. Original
+weights were committed before REPORT scoring. Exposed DEV only; sealed sources
+remain closed. None passed the unchanged full joint predictive gate.
+
+| Study | H1 MAE | Moving H1 | Quiet H1 | H4 MAE | H16 MAE |
+|---|---:|---:|---:|---:|---:|
+| ME088 | .06462415 | .72320615 | .00147245 | .14623004 | .60987751 |
+| ME089 | .05846031 | .62616197 | .00402316 | .15295355 | .62642236 |
+| ME090 | .05521041 | .53075936 | .00960983 | .15017947 | .61691413 |
+
+ME088 meets quiet precision but loses moving accuracy. ME089 adds a causal
+coordinate-local router. ME090 additionally predicts future recorded references
+from past information; its reference MAE is worse than last-reference persistence
+at every scored horizon. This is a preserved negative capability result, not
+causal action intelligence. ME090 originals frozen at327593b3; original forecasts
+and complete compiled graph at889f71ae. All 45 trained versions ME082–ME090 remain
+preserved. Independent strict original/compiled replay passed for ME088
+[40087528374](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40087528374)
+and ME089 [40087528353](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40087528353).
+ME090 independent score replay remains pending at this update.
+
+The next substantive capability direction is authentic synchronized visual
+observations, if source alignment/acquisition qualify. Pinned publisher metadata
+lists overhead and both wrist cameras, each360x640 RGB video. Camera existence
+is verified; usable alignment, exact source hashes, role-limited access and
+resource feasibility must be established before any visual training. Contact or
+stopping information absent from qpos is a hypothesis, not an established cause.
+No new visual model has trained and no gate has been relaxed. Added modalities
+would preclude an information-matched architecture-superiority claim.

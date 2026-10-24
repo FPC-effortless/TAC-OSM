@@ -467,3 +467,13 @@ See [ME070 draft PR #349](https://github.com/FPC-effortless/TAC-OSM/pull/349), [
 
 | CAP-BOUNDED-VALUE-087 outcome | Five guarded originals completed, H1/H4/H16MAE0.050888/0.148123/0.682106; movingH1 0.363536. Original95%pairedCIcleared but quiet0.020909 and stronger repeated-attemptCI failed. FullFAIL; independent original and compiled restorationPASS. | No extra fits under ME087. Preserve all original fields and cohort exposure; no memory attribution required to continue native capability development. |
 | CAP-PRECISION-088 — coordinated precision/movement fine tuning | Fixed ALL5ME087 warm starts, all99731weights trainable;2048new+4096priorupdates per lineage, two independent seed processes. Predictive noise units, near-step residual trust, factual coordinate routing and explicit quiet precision objective; no REPORT score yet. | Frozenbbf30a57; all prior gates unchanged, all7attempts visible, all5new originals before scoring. Explicitly cost-sensitive development, not automatic probability calibration or independent general intelligence. |
+
+### Native visual predictive-state capability — source qualification, 2026-10-24
+
+ME088–ME090 full joint gates FAIL, originals and all attempts preserved. Quiet
+precision and moving accuracy remain in conflict. Qualify synchronized current/past
+RGB observations from the existing licensed FIT/REPORT episodes before building
+an integrated <=105k native visual world model. Preserve native fast/slow/delta
+memory, causal cutoff, fixed physical gate and original replay. No future images,
+new sealed episodes, causal policy, architecture-winner or customer-value claims.
+This is a capability direction, not evidence of a trained visual ability.
