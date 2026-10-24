@@ -121,3 +121,12 @@ quiet-value/implicit-median complete-model study is training, not yet scored;
 read its frozen registration in draftPR377. Keep all original gates, all6attempts
 and prior failures visible. No inference of capability from exported graph or
 passing derivative/software checks; protected source cohorts remain closed.
+
+ME086 and ME087 subsequently completed and failed their full predictive gates;
+strict original replayPASS for both. No more fits under either ID. ME088 is a
+separately fixed all-five ME087 weight-only fine-tune stage (all99731weights
+trainable,2048new/6144total updates per lineage), currently unscored. Read its
+frozen bbf30a57 registration in draftPR377. Keep original gates, exact numeric
+contract, every failed attempt and protected source closure; no best-seed
+selection, hidden restart or calibrated/general intelligence claim from the
+quiet-weighted objective alone.

@@ -1368,3 +1368,43 @@ fixed; additional99.1667%paired CI includes all6declared attempts, not arbitrary
 historical adaptation. Both currently scheduled studies remain **UNSCORED**
 at this update; no new gate pass is claimed. No additional fit under completed
 ME085; no protected source use, winner, control, deployment or customer claim.
+
+### ME086/087 completed; ME088 fixed-index native fine tuning — 2026-10-24
+
+ME086 also completed all five originals, frozen atd9780695, and failed its full
+predictive gate: H1/H4/H16MAE0.05168648/0.15890228/0.68835176; quietH1
+0.02097012 and both original95%/additional99%paired CI conditions failed.
+Independent strict original27600forecast replay passed40068971618.
+
+ME087's five originals completed4096updates each, frozen at526a14ae before
+REPORT, raw scores frozen atcac5aad9. **Full gateFAIL/MIXED_TRADEOFF**:
+H1/H4/H16MAE0.05088844/0.14812261/0.68210592; actual-movingH1 0.36353597,
+quietH1 0.02090854. Original95%episode CI(new−ME080) is
+[-0.01673979,-0.00027164], but the additional99.1667%CI includeszero. Quiet
+precision remains far above the unchanged1.10*ME077target (~0.00187161).
+Every other numerical original/stronger forecast gate passed. Independent
+whole original replay and derived compiled-profile restoration passed
+[40070245236](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40070245236).
+This is useful development progress, not a full qualification or unseen-site
+intelligence. No further fits under ME086 or ME087.
+
+A **single separately registered ME088 fine-tuning recipe** now starts from
+ALL5fixed ME087 final originals, one-to-one seed-index pairing; no best-seed
+selection or ensemble. Every99731weight remains trainable; new optimizer/RNG,
+2048additional updates each,4096old+2048new=6144total lineage updates. Original
+weights/optimizer/RNG remain unchanged. At most two independent one-thread seed
+processes run; no shared gradients/RNG, no extra seeds, no performance-based
+scheduling. Final-only weights and all5originals before REPORT remain compulsory.
+Source code, warm-start SHA and objective were Git-frozen atbbf30a57 before fit.
+
+The model separates predictive innovation units from quantized-observation noise
+(max(FITquiet_noise,0.01FITdelta_scale)), uses a smaller known-horizon nonlinear
+trust factor at one step, adds factual coordinate-change routing supervision,
+and an explicit8xone-step quiet-median precision penalty alongside prior proper
+scores/implicit median. These are training labels, never future inference inputs.
+The quiet-preservation multiobjective does not guarantee unweighted posterior
+calibration: unchanged NLL/coverage/proper interval gates still apply. All seven
+declared attempts are disclosed; additional99.2857%CI is descriptive of those
+attempts, not independent historical-adaptation correction. Protected tissue-box/
+CAL/TESTstay CLOSED. ME088 is training and has no REPORT score at this update.
+No architecture-winner, causal action, production, merge or customer-value claim.
