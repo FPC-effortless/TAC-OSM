@@ -132,7 +132,7 @@
       "deps": [
         "affine_pairs"
       ],
-      "parallel": "O(logT) stages O(TlogT*8^3) batched",
+      "parallel": "O(logT) balanced stages, O(T*8^3) total small-matrix work, batch-parallel",
       "causal": "inclusive past-and-present"
     },
     {
@@ -223,6 +223,7 @@
     "candidate_structural_checks": 230,
     "pnds_lean_proof_scope": "arbitrary finite 8x8 square-matrix right-affine chronology plus scalar conditional radius budget",
     "training_steps": 0,
-    "real_skill": "NOT_ESTABLISHED"
+    "real_skill": "NOT_ESTABLISHED",
+    "work_efficient_scan": "BLELLOCH_UPSWEEP_DOWNSWEEP_O_T_WORK"
   }
 }
