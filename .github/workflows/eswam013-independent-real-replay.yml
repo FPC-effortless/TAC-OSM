@@ -1,9 +1,6 @@
 name: ESWAM013 independent original trained real-source replay
+# Original fitted checkpoint and independent replay are frozen; no automatic reruns.
 on:
-  pull_request:
-    paths:
-      - "scripts/eswam013_independent_original_real_replay.py"
-      - ".github/workflows/eswam013-independent-real-replay.yml"
   workflow_dispatch:
 permissions:
   contents: write
