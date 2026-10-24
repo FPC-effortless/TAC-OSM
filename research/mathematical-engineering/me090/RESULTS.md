@@ -1,0 +1,23 @@
+# ME090 — frozen complete native capability result
+
+**Full predictive gate FAIL / MIXED_TRADEOFF.** Exposed development only.
+No extra fits under this completed registration. All five originals were Git-frozen
+before REPORT scoring; no best-checkpoint or ensemble selection.
+
+| Same original8frame task | MAE | Coverage | Interval score | Physical marginal NLL |
+|---|---:|---:|---:|---:|
+| 1 retained frames | 0.05521041 | 0.892604 | 0.35140691 | -5.65589606 |
+| 4 retained frames | 0.15017947 | 0.917932 | 1.48310201 | -4.32699416 |
+| 16 retained frames | 0.61691413 | 0.894935 | 4.30466851 | -2.71103691 |
+
+H1actual-moving MAE0.53075936; H1near-stationary MAE0.00960983. Forty exposed recording episodes,960primary H1origins,2844total primary future pairs; both history readouts are preserved. Five seeds do not add independent episodes. Original95%paired episode CI(new−ME080): [-0.011707787908642865, 0.003640065379862749].
+
+Failed gates: H1at_least5pct_below_ME081, H1moving_within5pct_ME078, H1stationary_within10pct_ME077, family99_4444pct_CI_upper_below0, long32_H1moving_beats_velocity, paired_episode95CI_upper_below0.
+
+[Original complete scores](CAPABILITY_RESULTS.json), [actual guarded optimizer/parameter audit](FINAL_COMPARISON.json), [frozen registration](FAIR_COMPARISON.json), [source](SOURCE_QUALIFICATION.json). Original weights, optimizer/RNG, receipts and all point/distribution forecasts are tracked in the study replay folder. Same authenticated real recordings and past/current information only; future commands/capture times and protected tissue-box/CAL/TEST remain closed.
+
+Reference inference uses the whole forward graph in float64, promoted from exact original float32 trained values. Independent restoration must retain original rtol1e-5/atol1e-6. Compiled fixed-profile engineering evidence, when present, is separate from full original forecast replay and predictive performance. No architecture-winner, policy control, general intelligence, independent site proof, deployed product or customer-value claim is unlocked.
+
+## Joint reference prediction — negative result
+
+The additional logged-reference head did not beat last-reference persistence: H1 MAE 0.096984 vs 0.085600; H4 0.351191 vs 0.335874; H16 1.195497 vs 1.169408. These are recorded reference forecasts, not causal torque or autonomous action selection. The physical quiet/moving gate remains failed. All five fixed ME087 parents received 2048 new updates; new weights were not trained for the parents' original 4096 updates.
