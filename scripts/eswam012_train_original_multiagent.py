@@ -350,7 +350,12 @@ def fit(archive:Path, output:Path):
             model=models()[arm]
             if sum(p.numel() for p in model.parameters())!=param_counts[arm]:
                 raise RuntimeError("live model changed after registered preflight")
-            opt=budgeted_optimizer(model.parameters(),lr=LEARNING_RATE,weight_decay=.00001)
+            opt=budgeted_optimizer(
+                model, torch.optim.AdamW, model.parameters(),
+                lr=LEARNING_RATE, weight_decay=.00001,
+                budget_manifest=GUARD_MANIFEST, budget_seed=seed,
+                budget_architecture=arm,
+                budget_receipt=output/f"{arm}-{seed}-LIVE-GUARD.json")
             model.train()
             losses=[]
             start=time.perf_counter()
