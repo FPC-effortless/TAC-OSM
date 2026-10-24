@@ -1482,3 +1482,44 @@ fixed joint quiet/moving/multi-horizon gate remains compulsory, plus original95%
 and additional99.5%paired intervals for ten declared recipes; adaptive exposed
 DEV is not independent confirmation. All original models must be Git-frozen
 before scoring, then independently replayed at unchanged tolerances.
+
+### ME091 full negative result; ME092 shared-gradient refinement — 2026-10-24
+
+ME091's ALL5 originals frozen at925c8c5f, all original forecasts0aaa8cd4.
+**Full gateFAIL/REGRESSION**. H1/H4/H16MAE0.06244503/0.14998120/0.62834285;
+H1moving0.66996371, quiet0.00418982;0/5paired H1wins againstME080. Original95%
+episode CI[-0.00506261,+0.01176421], additional99.5%CI[-0.00878291,+0.01544684].
+NLL also worsens againstME081 at every horizon. Images/common-location therefore
+do not establish useful added visual intelligence. No extra fits under ME091.
+
+Independent original27,600forecast replay, normalized compiled program replay
+and raw physical/pixel-to-physical-output boundary restoration all PASS
+[40092527317](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40092527317).
+Fixed-profile physical graph3904prefill/1590stepnodes; first-original shared-CPU
+speedups1.606x/1.593x, not all-shape or rival speed evidence. Local1193testsPASS.
+Every previous outcome is preserved; ME082–ME091 now total50trained versions.
+
+ME092 is ONE new integrated optimization recipe, Git-frozen at0ca5ed1d before
+fits. Same104225parameter visual/native architecture and exact same observed
+image/numeric inputs; no new episodes, future inputs or protected source access.
+ALL5fixed pairs donate94907native values fromME087 and7792learned visual values
+fromME091;1526common-location values start atzero. No best-seed choice or ensemble.
+2048new updates each, all trainable; root4096+visual-pretraining4096+new2048=
+10240pipeline updates. Retained native and visual values each receive6144updates
+along their own lineage; fresh location2048. All discarded parent training is
+still charged and originals retained.
+
+The original importance-weighted CRPS+0.2physicalNLL+medianMAE+0.2globalmotionBCE
+score is partitioned into quietH1/movingH1/long-horizon tasks, exactly once per
+valid label. Coordinate-component BCE and extra quiet penalty are removed;
+a mixture component is not an observed movement class. One shared forward and
+one batched3task VJP provide PCGrad directions (Yu etalNeurIPS2020), with rotating
+deterministic projection order,clip1,AdamWlr0.0001. Three-task projections/AdamW
+do not guarantee joint descent, calibration or success. Actual CPU cost is retained.
+
+Real-FIT preflight verifies the scalar/gradient partition against the independent
+original proper-score function, within original1e-5/1e-6gradient tolerances.
+1196local testsPASS. All5fits are running; no ME092REPORT score at this update.
+Every unchanged full predictive gate plus original95%/additional99.54545%paired
+intervals and strict independent original replay remain compulsory. No frozen
+TEST, architecture winner, autonomous control, deployment or customer claim.

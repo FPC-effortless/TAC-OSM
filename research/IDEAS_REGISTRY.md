@@ -488,3 +488,13 @@ passed for160episodes. All29parameter tensors active in a real-FIT graph. Five
 fixed-parent fits running, no REPORT result or gate pass yet. Existing quiet/
 moving/multi-horizon gate and protected sources unchanged; no model restarts,
 matched winner, policy control, site transfer or customer-value claim.
+
+### ME092 — train the integrated model against compatible task gradients
+
+ME091 full gateFAIL, all five originals/replays retained. New104225parameter
+whole-model recipe uses fixed paired native/visual initializers, shared proper
+forecast terms, factual quietH1/movingH1/long-horizon loss partition and batched
+VJP/PCGrad. No extra task models/forward passes, no model reset or winner claim.
+One registered2048update recipe per five seeds, no REPORT yet. All50prior trained
+versions remain visible; same protected sources and joint gate unchanged. This
+is an optimization/capability attempt, not proof of a gradient-conflict cause.
