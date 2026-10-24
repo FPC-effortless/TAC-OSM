@@ -29,9 +29,15 @@ jobs:
         with:
           path: /tmp/me091-visual-source
           key: me091-pinned-gray32-overhead-v1
+      - name: Verify and restore Git-owned exact observed image pixels
+        if: hashFiles('research/replay-bundles/ME091/ORIGINAL_SCORE_INDEX.json') != ''
+        run: python scripts/me091_restore_pixels.py
       - name: Strict original visual forecast replay without fitting
         if: hashFiles('research/replay-bundles/ME091/ORIGINAL_SCORE_INDEX.json') != ''
         run: PYTHONPATH=src:. python scripts/me091_train_world.py replay --study me091 --cache "${{ runner.temp }}/clock-value-source"
       - name: Full original numerical census
         if: always() && hashFiles('research/replay-bundles/ME091/ORIGINAL_SCORE_INDEX.json') != ''
         run: PYTHONPATH=src:. python scripts/me091_cross_cpu_audit.py --study me091 --cache "${{ runner.temp }}/clock-value-source"
+      - name: Restore complete compiled visual programs
+        if: hashFiles('research/mathematical-engineering/me091/COMPILED_GRAPH_AUDIT.json') != '' && hashFiles('research/replay-bundles/ME091/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/me091_compiled_verify.py --study me091 --cache "${{ runner.temp }}/clock-value-source"
