@@ -87,3 +87,20 @@ class VectorizedExchangeWorldActionModel(ExchangeWorldActionModel):
                  memory_width=16, slots=8, state_scale=None):
         super().__init__(dimension, action_dim, width, memory_width, slots, state_scale)
         self.memory = VectorizedExchangeMemory(memory_width, slots)
+
+
+from tac_osm.variants.selective_exchange_world import SelectiveExchangeWorldModel
+
+
+class VectorizedSelectiveExchangeWorldModel(SelectiveExchangeWorldModel):
+    """Actual preferred ESWAM003 model: only its memory ops are batched.
+
+    Retains its movement head, causal measured velocity and shrinkage math.
+    Original trained ESWAM003 state_dict keys and shapes are unchanged.
+    """
+    architecture = "eswam011_eswam003_selective_vectorized_equivalent_candidate"
+
+    def __init__(self, dimension=14, action_dim=14, width=90,
+                 memory_width=16, slots=8, state_scale=None):
+        super().__init__(dimension, action_dim, width, memory_width, slots, state_scale)
+        self.memory = VectorizedExchangeMemory(memory_width, slots)
