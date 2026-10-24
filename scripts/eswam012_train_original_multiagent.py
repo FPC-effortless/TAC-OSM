@@ -27,6 +27,7 @@ from scripts.eswam005_qualify_real_multiagent import (
     EXPECTED_ARCHIVE_SHA256, sha256_file,
 )
 from tac_osm.variants.eswam012_multiagent import Native, GRU, Transformer
+from tac_osm.parameter_budget import budgeted_optimizer, checked_optimizer_step, save_training_checkpoint
 
 SEEDS = (86001, 86002)
 HISTORY = 256
@@ -37,6 +38,7 @@ BATCH = 8
 LEARNING_RATE = 0.001
 MAX_AGENTS = 4
 BUNDLE = Path("research/replay-bundles/ESWAM012")
+GUARD_MANIFEST = Path("research/mathematical-engineering/eswam012/FAIR_COMPARISON.json")
 
 
 def models():
@@ -348,7 +350,7 @@ def fit(archive:Path, output:Path):
             model=models()[arm]
             if sum(p.numel() for p in model.parameters())!=param_counts[arm]:
                 raise RuntimeError("live model changed after registered preflight")
-            opt=torch.optim.AdamW(model.parameters(),lr=LEARNING_RATE,weight_decay=.00001)
+            opt=budgeted_optimizer(model.parameters(),lr=LEARNING_RATE,weight_decay=.00001)
             model.train()
             losses=[]
             start=time.perf_counter()
@@ -361,7 +363,7 @@ def fit(archive:Path, output:Path):
                     raise RuntimeError(f"nonfinite real training loss {arm}/{seed}/{step}")
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-                opt.step()
+                checked_optimizer_step(opt)
                 losses.append(loss.item())
             elapsed=time.perf_counter()-start
             ckpt={
@@ -375,7 +377,7 @@ def fit(archive:Path, output:Path):
                 "python_sampler_rng_after_schedule":rng.getstate(),
             }
             ckfile=output/f"{arm}-{seed}.pt"
-            torch.save(ckpt,ckfile)
+            save_training_checkpoint(ckpt,ckfile)
             ckhash=hashlib.sha256(ckfile.read_bytes()).hexdigest()
             scored=all_original_case_rows(model,dev_rows,arm)
             (output/f"{arm}-{seed}-ORIGINAL_DEV_CASES.json").write_text(
