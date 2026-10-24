@@ -1,0 +1,63 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ESWAM014_QUADRATIC_STATIONARY_PRESERVING_NATIVE_REAL_TRAFFIC",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Prospectively test quadratic O(v^2) near-zero physical residual response on real original observed history to avoid ESWAM013 stationary degradation. Identical full source/optimizer/parameter seed budgets; do not mislabel exposed DEV independent.",
+  "real_world_source": {
+    "name": "Publisher-original recorded INTERACTION TC_BGR_Intersection_VA four original real vehicle recordings",
+    "sha256": "9aa78102006dc8d8a64675cf64eba5264085cfb1c006b1f4d0e856d94e657aec",
+    "observed_real_outcomes": true,
+    "license": "CC-BY-4.0",
+    "one_physical_site_only": true
+  },
+  "models": [
+    {
+      "seed": 87001,
+      "architecture": "eswam014_quadratic_kinetic_relevance_native",
+      "trainable_parameters": 101057,
+      "deployed_parameters": 101057
+    },
+    {
+      "seed": 87002,
+      "architecture": "eswam014_quadratic_kinetic_relevance_native",
+      "trainable_parameters": 101057,
+      "deployed_parameters": 101057
+    }
+  ],
+  "training_budget": {
+    "seeds": [
+      87001,
+      87002
+    ],
+    "optimizer": "AdamW",
+    "steps": 320,
+    "batch_size": 8,
+    "original_FIT_recordings": [
+      0,
+      1,
+      2
+    ],
+    "original_EXPOSED_DEV_recording": 3,
+    "original_history_frames": 256,
+    "original_future_frames": [
+      10,
+      30
+    ],
+    "original_anchor_frame_stride": 20,
+    "learning_rate": 0.001,
+    "weight_decay": 0.00001,
+    "gradient_norm_clip": 1,
+    "tuning_trials": 0,
+    "same_real_anchor_sample_order_by_seed": true,
+    "identical_FIT_sampler_seeds_as_ESWAM013": true,
+    "no_DEV_threshold_tuning": true,
+    "quadratic_gate_fixed_c_m_per_s": 0.5
+  },
+  "primary_development_measure": "Original real source +10-frame forecast Euclidean xy error vs original measured instantaneous velocity prior; actor cluster bootstrap excludes zero and stationary-regime error must not degrade.",
+  "independent_test_status": "EXPOSED_DEV 003 only; this experiment is not an unexposed independent site assessment.",
+  "source_policy": "No artificial/synthetic training results, no future target in inputs, no causal action intervention or robot outcome claims",
+  "comparative_fairness": "Same active architecture and two same seeded original source observation samples as ESWAM013 but different input-conditioned gate; old native vs newer candidate same data/updates/weights count, actual training compute parity not certified. No fair comparative superiority or fresh unseen location.",
+  "repository_storage_plan": "All two checkpoints, source-case original real labels/predictions, optimizer/RNG and independently verified live-budget receipts must be Git-frozen without overwriting the ESWAM012 original negative evidence."
+}

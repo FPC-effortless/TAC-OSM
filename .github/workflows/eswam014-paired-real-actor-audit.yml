@@ -1,0 +1,36 @@
+name: ESWAM014 independent paired real source actor-bootstrap audit
+on:
+  pull_request:
+    paths:
+      - "scripts/eswam014_paired_source_audit.py"
+      - ".github/workflows/eswam014-paired-real-actor-audit.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  independent-original-paired-actor-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam014-quadratic-physical-relevance-2026-10-24
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Analyze only Git-owned original true real-case predictions, NO optimizer
+        run: |
+          python scripts/eswam014_paired_source_audit.py             --output research/mathematical-engineering/eswam014/PAIRED_REAL_CASE_AUDIT.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eswam014-original-source-paired-bootstrap
+          path: research/mathematical-engineering/eswam014/PAIRED_REAL_CASE_AUDIT.json
+      - name: Freeze independently recomputable paired real actor audit in Git
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/mathematical-engineering/eswam014/PAIRED_REAL_CASE_AUDIT.json
+          git commit -m 'audit(eswam014): freeze 5000 source-actor cluster resamples of guarded native corrections'
+          git push origin HEAD:refs/heads/research/eswam014-quadratic-physical-relevance-2026-10-24
