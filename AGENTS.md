@@ -130,3 +130,10 @@ frozen bbf30a57 registration in draftPR377. Keep original gates, exact numeric
 contract, every failed attempt and protected source closure; no best-seed
 selection, hidden restart or calibrated/general intelligence claim from the
 quiet-weighted objective alone.
+
+
+## Compulsory cross-repository mathematical-engineering rule — 2026-10-24
+
+For **every** TAC-OSM variant or new computational-graph research candidate, first read [research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md](research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md), the canonical [PNDS mathematics/formulation policy](https://github.com/FPC-effortless/pnds-lean/blob/research/unified-tac-osm-mathematical-foundation-v1-2026-10-24/foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md) and the source-pinned reciprocal [research/pnds-variant-math-links.json](research/pnds-variant-math-links.json). The PNDS model/math record must contain **both Lean 4 and executable Python mathematical formulations** matched to this repository's exact variant, implementation commit and model input-to-output computation graph.
+
+Do not present Lean compilation, shared operator bounds or Python reference tests as source-equivalent full TAC-OSM behavior without full actual-source forward/backward, state, shape, time, mask, precision and gradient verification. Declare incomplete properties OPEN. Keep immutable original data/checkpoints, authentic research scores, failed gates, matching parameter/data/training-compute comparative controls and capability-first priorities. This is **not** a mandate to stop real-capability research for numerous small ablations.
