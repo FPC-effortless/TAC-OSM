@@ -39,7 +39,7 @@ v - Uk = (1-beta)(v-alpha Mk).
 
 These are exact real-algebra statements with Lean two-key-coordinate row proofs. The finite-size 8x8 Python reference tests the generalized identity. The Lean results do not yet establish 8x8 torch/FP semantics, because actual implementation normalizes with an epsilon floor and applies clipping; a zero embedding is not a unit address. The source also clamps retention to a maximum of 0.9999 for writable events.
 
-For orthogonal later writes with no projection and no refreshing, an old query obeys the conditional relation r_T = (product_t alpha_t) r_0. The maximum retention contribution after 8192 such writable steps is 0.9999^8192, approximately 0.4406, even with no direct corrective contamination. This is a mathematical *conditional attenuation* observation, not an observed recall score.
+For orthogonal later writes with no projection and no refreshing, an old query obeys the conditional relation r_T = (product_t alpha_t) r_0. The maximum retention contribution after 8192 such writable steps is 0.9999^8192, approximately 0.4408, even with no direct corrective contamination. This is a mathematical *conditional attenuation* observation, not an observed recall score.
 
 For nonorthogonal writes, with e_j = v_j - alpha_j M_(j-1) k_j, the exact unprojected recurrence at q unrolls to:
 
@@ -77,3 +77,7 @@ For each next model version: (1) immutable source SHA and original checkpoint/ev
 Level S0 means source/shape recorded; S1 means exact conditional theorem kernel checked; S2 means source-operator numerical correspondence; S3 requires full source-to-proof/gradient/stability contracts; S4 requires independent authentic demonstrated skill and decision utility. **No escalation between levels without its own evidence.**
 
 Original source/negative artifacts, including ME069 loss to GRU, ME076 loss to persistence, ME094 quiet regression, ESWAM014 low-speed regression, and DIAGKEY004 strict-logit mismatch, are untouched. The prior 17-variant reciprocal register remains unchanged. This addition is a source-grounded proof-and-verification improvement, not a trained model update.
+
+## Current source-operator verification (GitHub Actions)
+
+[Actual gated-write pinned-source CI run #40134348524](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40134348524) PASS: 26 source-to-PNDS tests, including FP32/FP64, read-only/source-role masking, with/without radius projection and selected analytic and numerical gradient checks. Exact Git blob digests were checked before importing the original source and PNDS math. This is one operator on generated numerical inputs; no whole-model checkpoint, real-data training or new capability result is claimed.
