@@ -93,7 +93,10 @@ theorem unit_relevance_selects_slow (fast slow : Rat) :
   unfold relevanceMix
   rw [Rat.one_mul]
   rw [Rat.add_comm fast (slow - fast)]
-  exact Rat.sub_add_cancel
+  calc
+    (slow - fast) + fast = (slow + -fast) + fast := by rw [Rat.sub_eq_add_neg]
+    _ = slow + (-fast + fast) := by rw [Rat.add_assoc]
+    _ = slow := by rw [Rat.neg_add_cancel, Rat.add_zero]
 
 def physicalMotionGate (measuredSpeed positiveOffset : Rat) : Rat :=
   measuredSpeed / (measuredSpeed + positiveOffset)
