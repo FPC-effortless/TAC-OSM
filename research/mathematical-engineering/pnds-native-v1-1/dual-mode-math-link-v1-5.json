@@ -1,0 +1,111 @@
+{
+  "schema": "pnds.tac_osm.dual_mode_evidence_v1.5",
+  "research_date": "2026-10-25",
+  "status": "DRAFT_MATHEMATICAL_ENGINEERING_WITH_EXPOSED_REAL_DATA_PILOT",
+  "source_native_commit": "081e534a074001c6a3b2251b3ff31ad20ec4fca8",
+  "historical_17_variant_registry_unchanged": true,
+  "historical_registry_blobs": {
+    "tac": "92c18a10a7dd9a27cf506a32076f3eb433b0c0cd",
+    "pnds": "1a9f6baafe3fdb81c60df90197534d55b4dedd2f"
+  },
+  "original_categorical_source_params": 101527,
+  "continuous_real_TAC_params": 93324,
+  "continuous_real_GRU_params": 93454,
+  "trainable_parameter_gap_percent": 0.1391,
+  "streaming_state": {
+    "fast_sum_values": 88,
+    "memory_values": 64,
+    "int_count": 1,
+    "fp32_values_per_sample": 152,
+    "fp32_bytes_excluding_count_and_weights": 608
+  },
+  "independent_streaming_checks": {
+    "categorical": 334,
+    "continuous": 146,
+    "max_abs_trace_categorical": 3.2782554626464844e-7,
+    "max_abs_trace_real": 2.384185791015625e-7,
+    "streaming_2048_events": true,
+    "source_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40142256798"
+  },
+  "step_cpu": {
+    "batch": 4,
+    "dtype": "fp32",
+    "threads": 1,
+    "median_ms_history_0": 0.65279,
+    "median_ms_history_128": 0.656021,
+    "median_ms_history_2048": 0.654352,
+    "hardware_qualified": false
+  },
+  "original_aloha": {
+    "dataset_id": "lerobot/aloha_mobile_cabinet",
+    "revision": "7a752b39f7e69de7e38aee485a6bab07528a061a",
+    "parquet_sha256": "a3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a",
+    "episodes": 85,
+    "frames": 127500,
+    "observed_action_state_dimensions": 14,
+    "train_windows": 590,
+    "validation_windows": 130,
+    "heldout_windows": 130,
+    "optimizer_updates": 64,
+    "original_direct_prediction_test_mse": {
+      "TAC": 0.13621579,
+      "GRU": 0.11862875,
+      "persistence": 0.00043685
+    },
+    "residual_development_reused_test_mse": {
+      "TAC": 0.00036728,
+      "GRU": 0.00036988,
+      "persistence": 0.00043685
+    },
+    "residual_validation_mse": {
+      "TAC": 0.00042043,
+      "GRU": 0.00042542
+    },
+    "original_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40141901322",
+    "residual_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40142256755",
+    "exposed_test_fresh_skill_qualification": false,
+    "matched_training_flops": false,
+    "fair_architecture_superiority": false,
+    "real_robot_controller_certified": false
+  },
+  "entity_admission": {
+    "evidence_origin": "previously exposed real INTERACTION original actor DEV cases",
+    "source_commit": "d9db3a0ac68d2bbabe3febe6cfe3d40bf322ea1d",
+    "source_case_sha256": "280efc0f79f4f54f6d6ee75fcedc9ba8f11b415b2847ed1721831a28a08603e7",
+    "distinct_actor_clusters": 37,
+    "observed_cases": 266,
+    "slots": 8,
+    "accepted": 61,
+    "rejected": 205,
+    "evicted": 4,
+    "future_labels_as_inputs": false,
+    "training_done": false,
+    "real_outcome_forecast_gain": false,
+    "dynamic_eviction_compatible_with_parallel_scan": false,
+    "mechanism_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40142606195"
+  },
+  "formal": {
+    "exact_real_affine_parallel_stream_equivalence": "LEAN_PASS",
+    "exact_real_admission_identity_isolation": "LEAN_PASS",
+    "full_tensor_fp_nonlinear_equivalence": "OPEN",
+    "global_useful_memory_certificate": "OPEN",
+    "full_17_model_source_theorems": "OPEN",
+    "original_recurrent_semantics_preserved_by_new_parallel_candidate": false,
+    "source_model_real_skill": "UNQUALIFIED"
+  },
+  "artifact_blobs": {
+    "TAC/src/tac_osm/variants/streaming_parallel_native.py": "a24868e71691ac9eba9f0cee16e195ba5c98e3c6",
+    "TAC/src/tac_osm/variants/streaming_continuous_world.py": "60d809b11c5e2efb892c77b412c3d4e05b3228c9",
+    "TAC/src/tac_osm/variants/bounded_entity_admission.py": "30b01fd70f6dc958e1ba24514e5faff8b7f3433e",
+    "TAC/src/tac_osm/variants/parallel_continuous_world.py": "7ff51cefb5a71077c1fbc4de834ffd6e630c2f1c",
+    "TAC/research/mathematical-engineering/pnds-native-v1-1/DUAL_MODE_RESULTS_V1_5.md": "f445d250e1045249309affbc2303d4b4b4cb9ce1",
+    "PNDS/PNDS/DualModeMemory.lean": "9b2df7fefc56e12500f7c8e8fad12aff8e2192f1",
+    "PNDS/PNDS/EntityAdmission.lean": "0f0bb9cb4ce7d03c5de264d7df60d9e84a626016",
+    "PNDS/foundation/v1/DUAL_MODE_STREAMING_V1_5.md": "c1d7ceabdb0f7fd2c0625125d2fb0328616bd156"
+  },
+  "original_repository_prs": {
+    "tac": "https://github.com/FPC-effortless/TAC-OSM/pull/389",
+    "pnds": "https://github.com/FPC-effortless/pnds-lean/pull/7"
+  },
+  "training_and_merging_gate": "DO_NOT_PROMOTE_NO_FULL_COMPUTE_PARITY_NO_FRESH_INDEPENDENT_REAL_TEST"
+}
