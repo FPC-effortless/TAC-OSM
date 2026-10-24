@@ -17,7 +17,3 @@ Failed gates: H1at_least5pct_below_ME081, H1moving_within5pct_ME078, H1stationar
 [Original complete scores](CAPABILITY_RESULTS.json), [actual guarded optimizer/parameter audit](FINAL_COMPARISON.json), [frozen registration](FAIR_COMPARISON.json), [source](SOURCE_QUALIFICATION.json). Original weights, optimizer/RNG, receipts and all point/distribution forecasts are tracked in the study replay folder. Same authenticated real recordings and past/current information only; future commands/capture times and protected tissue-box/CAL/TEST remain closed.
 
 Reference inference uses the whole forward graph in float64, promoted from exact original float32 trained values. Independent restoration must retain original rtol1e-5/atol1e-6. Compiled fixed-profile engineering evidence, when present, is separate from full original forecast replay and predictive performance. No architecture-winner, policy control, general intelligence, independent site proof, deployed product or customer-value claim is unlocked.
-
-## Joint reference prediction — negative result
-
-The additional logged-reference head did not beat last-reference persistence: H1 MAE 0.096984 vs 0.085600; H4 0.351191 vs 0.335874; H16 1.195497 vs 1.169408. These are recorded reference forecasts, not causal torque or autonomous action selection. The physical quiet/moving gate remains failed. All five fixed ME087 parents received 2048 new updates; new weights were not trained for the parents' original 4096 updates.
