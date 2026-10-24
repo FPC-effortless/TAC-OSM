@@ -117,4 +117,14 @@ def step {α : Type} {d a w slots m : Nat}
     observationWritten := factualWritten, predictionWritten := slot.isSome
   }
 
+
+-- Unlike a standalone role-write lemma, this covers the complete composed
+-- encoder -> recurrent -> factual read/write -> decoder -> predictive write
+-- transition. Operators are pure abstract functions and cannot mutate Memory.
+theorem whole_step_cannot_rewrite_verified {α : Type} {d a w slots m : Nat}
+    (op : Operators α d a w slots m) (input : Input α d a)
+    (old : State α w slots m) :
+    (step op input old).nextState.memory.verified = old.memory.verified := by
+  simp [step, storeObserved, storePredicted]
+
 end ESWAM
