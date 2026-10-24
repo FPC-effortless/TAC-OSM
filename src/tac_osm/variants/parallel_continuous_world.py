@@ -30,6 +30,15 @@ class ParallelTACWorld(nn.Module):
         self.memory_gates=nn.Linear(48+2*width,2)
         self.readout=nn.Sequential(nn.Linear(2*width+8+48,decoder),
                                    nn.SiLU(),nn.Linear(decoder,state_dim))
+        # Empirical state changes are small. Set this buffer from TRAIN only,
+        # never from a held-out outcome or future-state oracle.
+        self.register_buffer("delta_scale",torch.full((state_dim,),.02))
+
+    def set_train_delta_scale(self,scale):
+        if scale.shape!=(self.state_dim,) or not torch.isfinite(scale).all():
+            raise ValueError("TRAIN-only scale must be finite [state_dim]")
+        with torch.no_grad():
+            self.delta_scale.copy_(scale.clamp_min(1e-5))
 
     def forward(self,obs,action,*,return_trace=False):
         if (obs.ndim!=3 or action.ndim!=3 or obs.shape[:2]!=action.shape[:2]
@@ -61,7 +70,8 @@ class ParallelTACWorld(nn.Module):
         f=torch.lerp(pf,f.tanh(),fg.sigmoid())
         d,g=self.slow_map(torch.cat((f,ps,r),-1)).chunk(2,-1)
         s=torch.lerp(ps,(ps+d.tanh()).tanh(),.25*g.sigmoid())
-        prediction=self.readout(torch.cat((f,s,r,e),-1))
+        correction=self.readout(torch.cat((f,s,r,e),-1)).tanh()
+        prediction=obs+self.delta_scale*correction
         if return_trace:
             return prediction,{"memory":memory,"old_read":r,"fast":f,
                                "slow":s,"sum_basis":basis.cumsum(dim=1)}
@@ -73,8 +83,16 @@ class RealGRUWorld(nn.Module):
         super().__init__()
         self.gru=nn.GRU(state_dim+action_dim,hidden,batch_first=True)
         self.readout=nn.Linear(hidden,state_dim)
+        self.state_dim=state_dim
+        self.register_buffer("delta_scale",torch.full((state_dim,),.02))
+
+    def set_train_delta_scale(self,scale):
+        if scale.shape!=(self.state_dim,) or not torch.isfinite(scale).all():
+            raise ValueError("TRAIN-only scale must be finite [state_dim]")
+        with torch.no_grad():
+            self.delta_scale.copy_(scale.clamp_min(1e-5))
 
     def forward(self,obs,action):
         z=torch.cat((obs,action),-1)
         y,_=self.gru(z)
-        return self.readout(y)
+        return obs+self.delta_scale*self.readout(y).tanh()
