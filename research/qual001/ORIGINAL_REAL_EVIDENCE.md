@@ -41,11 +41,10 @@ Paired native-256 **minus native-8** (positive = long-history worse):
 | 86002, H+30 | +0.080196 | [+0.050036, +0.112814] |
 
 These values were recomputed independently from each original stored source-case
-L2 error, using 5,000 paired original-track bootstrap resamples. The exact
-interval endpoints produced by the checked-in Python runner may differ slightly
-from the original JS audit because the pseudorandom sample stream is reset for
-each comparison (both use deterministic actor-resampling and the same source
-cases). The scientific sign and the exact paired means must be preserved.
+L2 error, using 5,000 paired original-track bootstrap resamples. The confidence intervals were independently recomputed from the
+original rows using the Python runner's reproducible xorshift32 actor-cluster
+bootstrap and verified to match the reported endpoints (shown rounded).
+The two seeds repeat the same 37 actor tracks and are not independent sites.
 
 Both low-speed (<0.2m/s) and moving (>=0.2m/s) source regimes also favor
 native-8 over native-256 at both horizons in both seeds.
