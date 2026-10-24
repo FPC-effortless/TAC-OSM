@@ -28,3 +28,7 @@ horizon. No visual-capability advantage or general intelligence is established.
 Originals, source pixels, all predictions and the explicit failed gates remain
 preserved. No further fits under ME091. Full regression1193PASS; original-score
 independent replay is pending separately, not replaced by graph tests.
+
+Independent original27,600forecast restoration and both normalized/physical-unit
+compiled boundaries passed GitHub Actions40092527317. The predictive gate remains
+FAIL/REGRESSION; successful restoration does not reverse the negative result.

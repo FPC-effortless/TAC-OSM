@@ -1,0 +1,15 @@
+{
+ "study":"ME092",
+ "candidate_recipes":1,
+ "status":"prospective_no_fits",
+ "prior_attempts":"ME082-ME091:50 original trained versions; every full gateFAIL, all preserved",
+ "seeds":[92001,92002,92003,92004,92005],
+ "initialization":"ALL5 fixed paired donors: ME087 native values94907 plus ME091 learned visual values7792 plus zero initialized common-location values1526; no best seed or ensemble",
+ "new_updates":2048,
+ "model_parameters":104225,
+ "objective":"Shared forward; proper CRPS+0.2physical NLL+1implicit median MAE+0.2factual global motion BCE. Partition into quietH1, movingH1 and longer-horizon factual losses. Raw sum equals original importance-weighted unsplit objective before PCGrad. No coordinate-component BCE or extra quiet penalty.",
+ "optimization":"Deterministic rotating-order PCGrad,one batched VJP for3shared-graph task sensitivities; AdamW lr0.0001 wd0.0001,clip1. No empirical gate guarantee.",
+ "gates":"Every original ME081 condition plus existing ME081 gain/NLL conditions, original95percent and additional99.54545percent episode intervals, strict original replay; no relaxation",
+ "selection":"Final only; ALL5 Git frozen before REPORT, no extra fits/restarts under this registration",
+ "data":"Same original120FIT/40exposedREPORT numeric and observed overhead inputs; protected sources unchanged"
+}
