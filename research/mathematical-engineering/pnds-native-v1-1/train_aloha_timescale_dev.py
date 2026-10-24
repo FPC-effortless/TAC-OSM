@@ -101,7 +101,7 @@ def main(steps=64,seeds=(20261025,20261026),length=64):
         init=copy.deepcopy(baseline.state_dict())
         batch_indices=torch.randint(0,len(train_records),(steps,8),
              generator=torch.Generator().manual_seed(seed))
-        digest=hashlib.sha256(batch_indices.numpy().tobytes()).hexdigest()
+        digest=hashlib.sha256(json.dumps(batch_indices.tolist(),separators=(',',':')).encode()).hexdigest()
         base_scores,loss_b=train_one(
             baseline,init,train_data,val_data,batch_indices,scale,threshold)
         candidate_scores,loss_c=train_one(
