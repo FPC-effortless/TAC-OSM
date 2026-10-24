@@ -88,7 +88,9 @@ def stream_step(model, state: TACStreamState,
     raw_alpha,beta=model.memory_gates(
         torch.cat((event,provisional_f,provisional_s),-1)).sigmoid().chunk(2,-1)
     alpha=raw_alpha*(1-beta/radius)
-    writable=kinds.ne(2)
+    # Explicit [B,1,1] mask: [B,1] would broadcast incorrectly as
+    # [B,B,1] against the per-batch [B,1,1] gates.
+    writable=kinds.ne(2).unsqueeze(-1)
     old_m=state.memory
     # Read from previous memory before the current write.
     old_read=(old_m.unsqueeze(1)@k.unsqueeze(-1)).squeeze(-1)
