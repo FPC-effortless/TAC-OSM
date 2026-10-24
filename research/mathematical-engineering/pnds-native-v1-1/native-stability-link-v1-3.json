@@ -1,0 +1,63 @@
+{
+  "schema": "pnds.tac_osm.native_state_certificate.v1.3",
+  "research_id": "PNDS-NATIVE-FORWARD-001",
+  "date": "2026-10-24",
+  "original_tac_source": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "commit": "081e534a074001c6a3b2251b3ff31ad20ec4fca8",
+    "file": "src/tac_osm/aligned_associative_tac.py",
+    "variant_id": "CORE-DIAGKEY004",
+    "trained_params": 101527
+  },
+  "paired_proposals": {
+    "pnds_pr": "https://github.com/FPC-effortless/pnds-lean/pull/7",
+    "tac_pr": "https://github.com/FPC-effortless/TAC-OSM/pull/389"
+  },
+  "formulation": {
+    "repo": "FPC-effortless/pnds-lean",
+    "path": "PNDS/NativeInvariant.lean",
+    "git_blob": "071d7105aa96cb9ee228f5b73531c2382f83a14c",
+    "status": "LEAN_PROVED_CONDITIONAL",
+    "assumptions": [
+      "bounded_fast_slow_candidates_from_tanh",
+      "gate_values_between_zero_and_one",
+      "valid_radius_four_projection_postcondition",
+      "finite_tensor_operands",
+      "original_zero_initial_state"
+    ]
+  },
+  "source_verification": {
+    "repo": "FPC-effortless/TAC-OSM",
+    "tests": [
+      {
+        "path": "research/mathematical-engineering/pnds-native-v1-1/verify_native_forward_envelope.py",
+        "git_blob": "65738e5b9ec7bef0fbed49f640952ed601f801c3",
+        "run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40137008967",
+        "status": "PASS_1100_SOURCE_MECHANISM_CASES"
+      },
+      {
+        "path": "research/mathematical-engineering/pnds-native-v1-1/verify_original_full_recurrence.py",
+        "git_blob": "bea0a446192ead0760020a341dff3c1935e5c3ca",
+        "run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40137008967",
+        "status": "PASS_40_NUMERICAL_WHOLE_GRAPH_CHECKS"
+      }
+    ]
+  },
+  "theorems": {
+    "fast_slow_infinity_norm": "BOUNDED_LE_ONE_CONDITIONAL",
+    "memory_frobenius_norm": "BOUNDED_LE_FOUR_CONDITIONAL_ON_ACTUAL_RADIUS_PROJECTION",
+    "norm_radial_scaling": "LEAN_PROVED_EXACT_REAL",
+    "multistep_envelope": "LEAN_PROVED_UNDER_PRESERVING_STEP_ASSUMPTION",
+    "uniform_whole_state_strict_contraction": "RULED_OUT_BY_EXACT_READ_ONLY_MEMORY_IDENTITY",
+    "unprojected_orthogonal_memory_protection": "FALSE_WITH_DECAY_UNLESS_ALPHA_ONE",
+    "projected_orthogonal_memory_protection": "FALSE_COUNTEREXAMPLE_WITH_UNIT_KEYS_AND_UNIT_VALUES",
+    "full_source_equivalence_proved_in_Lean": false,
+    "global_incremental_ISS_certificate": "OPEN",
+    "real_long_memory_skill": "NOT_ESTABLISHED",
+    "trained_real_world_gain": "NOT_ESTABLISHED"
+  },
+  "original_evidence_unchanged": true,
+  "historical_17_variant_registry_unchanged": true,
+  "no_training_new_optimizer_steps": true,
+  "source_level_only": true
+}
