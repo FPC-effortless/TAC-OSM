@@ -1,0 +1,185 @@
+{
+  "no_fit": true,
+  "profiles": {
+    "PHYSICAL_INCREMENTAL_STEP": {
+      "executable_sha256": "7a00ac389decae9edfa430778c4560660331019f9a4c85469a8cd1683f5d8bf3",
+      "nodes": 1452,
+      "operator_counts": {
+        "aten::__and__": 1,
+        "aten::__or__": 1,
+        "aten::_convolution": 3,
+        "aten::adaptive_avg_pool2d": 1,
+        "aten::add": 66,
+        "aten::amax": 1,
+        "aten::amin": 1,
+        "aten::arange": 1,
+        "aten::asinh": 4,
+        "aten::cat": 16,
+        "aten::chunk": 3,
+        "aten::clamp": 1,
+        "aten::clamp_min": 2,
+        "aten::cummax": 1,
+        "aten::cumsum": 1,
+        "aten::div": 101,
+        "aten::eq": 2,
+        "aten::exp": 83,
+        "aten::expand": 3,
+        "aten::expand_as": 1,
+        "aten::expm1": 2,
+        "aten::flatten": 1,
+        "aten::ge": 40,
+        "aten::lerp": 2,
+        "aten::linear": 10,
+        "aten::log1p": 2,
+        "aten::log_sigmoid": 3,
+        "aten::lt": 80,
+        "aten::maximum": 1,
+        "aten::median": 1,
+        "aten::mul": 158,
+        "aten::ne": 1,
+        "aten::neg": 47,
+        "aten::ones_like": 3,
+        "aten::permute": 1,
+        "aten::reshape": 4,
+        "aten::rsub": 41,
+        "aten::select": 19,
+        "aten::sigmoid": 5,
+        "aten::silu": 7,
+        "aten::size": 5,
+        "aten::slice": 85,
+        "aten::softmax": 2,
+        "aten::softplus": 3,
+        "aten::split_with_sizes": 1,
+        "aten::sqrt": 2,
+        "aten::square": 2,
+        "aten::stack": 3,
+        "aten::sub": 56,
+        "aten::sum": 46,
+        "aten::tanh": 9,
+        "aten::to": 11,
+        "aten::unbind": 3,
+        "aten::unfold": 4,
+        "aten::unsqueeze": 66,
+        "aten::where": 201,
+        "aten::zeros_like": 41,
+        "prim::Constant": 93,
+        "prim::ListConstruct": 89,
+        "prim::ListUnpack": 7,
+        "prim::TupleConstruct": 1,
+        "prim::TupleUnpack": 1
+      },
+      "single_combined_distribution_projection_constants": [
+        {
+          "consumers": [
+            "aten::linear"
+          ],
+          "dtype": "torch.float64",
+          "shape": [
+            141
+          ]
+        },
+        {
+          "consumers": [
+            "aten::linear"
+          ],
+          "dtype": "torch.float64",
+          "shape": [
+            141,
+            108
+          ]
+        }
+      ]
+    },
+    "PHYSICAL_PREFILL32": {
+      "executable_sha256": "b4b14e52f8ae05ff542e960dac0f9d42de9bf90ecadecc326f869307bcf9c75a",
+      "nodes": 3890,
+      "operator_counts": {
+        "aten::__and__": 1,
+        "aten::__or__": 1,
+        "aten::_convolution": 3,
+        "aten::adaptive_avg_pool2d": 1,
+        "aten::add": 190,
+        "aten::amax": 1,
+        "aten::amin": 1,
+        "aten::arange": 1,
+        "aten::asinh": 4,
+        "aten::cat": 78,
+        "aten::chunk": 65,
+        "aten::clamp": 1,
+        "aten::clamp_min": 33,
+        "aten::cummax": 1,
+        "aten::cumsum": 1,
+        "aten::div": 194,
+        "aten::eq": 2,
+        "aten::exp": 114,
+        "aten::expand": 3,
+        "aten::expand_as": 1,
+        "aten::expm1": 64,
+        "aten::flatten": 1,
+        "aten::ge": 40,
+        "aten::lerp": 64,
+        "aten::linear": 72,
+        "aten::log1p": 2,
+        "aten::log_sigmoid": 96,
+        "aten::lt": 80,
+        "aten::maximum": 32,
+        "aten::median": 1,
+        "aten::mul": 375,
+        "aten::ne": 1,
+        "aten::neg": 171,
+        "aten::ones_like": 65,
+        "aten::permute": 1,
+        "aten::reshape": 4,
+        "aten::rsub": 41,
+        "aten::select": 112,
+        "aten::sigmoid": 36,
+        "aten::silu": 7,
+        "aten::size": 5,
+        "aten::slice": 426,
+        "aten::softmax": 2,
+        "aten::softplus": 3,
+        "aten::split_with_sizes": 32,
+        "aten::sqrt": 64,
+        "aten::square": 64,
+        "aten::stack": 3,
+        "aten::sub": 118,
+        "aten::sum": 139,
+        "aten::tanh": 133,
+        "aten::to": 11,
+        "aten::unbind": 3,
+        "aten::unfold": 4,
+        "aten::unsqueeze": 190,
+        "aten::where": 201,
+        "aten::zeros_like": 41,
+        "prim::Constant": 113,
+        "prim::ListConstruct": 275,
+        "prim::ListUnpack": 100,
+        "prim::TupleConstruct": 1,
+        "prim::TupleUnpack": 1
+      },
+      "single_combined_distribution_projection_constants": [
+        {
+          "consumers": [
+            "aten::linear"
+          ],
+          "dtype": "torch.float64",
+          "shape": [
+            141
+          ]
+        },
+        {
+          "consumers": [
+            "aten::linear"
+          ],
+          "dtype": "torch.float64",
+          "shape": [
+            141,
+            108
+          ]
+        }
+      ]
+    }
+  },
+  "scope": "Actual first-original restored fixed-profile physical input-to-output graphs. Folded141x108constant has one linear consumer. Restored graph canonicalization changes node representation: counts differ from pre-save frozen graph; do not interpret the difference as arithmetic work. Native serial32step operators remain. Node count is not FLOPs, latency, SRAM residency or learned skill.",
+  "status": "PASS"
+}

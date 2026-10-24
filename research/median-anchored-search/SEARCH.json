@@ -1,0 +1,20 @@
+{
+  "study": "ME094",
+  "candidate_recipes": 1,
+  "status": "prospective_no_fits",
+  "prior_attempts": "ME082-ME093:60original models, every full gateFAIL",
+  "seeds": [
+    94001,
+    94002,
+    94003,
+    94004,
+    94005
+  ],
+  "initialization": "ALL5indexedME093parents,retain96595values+4578newdecisionvalues;no selection",
+  "updates": 4096,
+  "parameters": 101173,
+  "objective": "CRPS+0.2NLL+20explicitmedianMAE+0.2factualmotionBCE,original3taskPCGrad",
+  "architecture": "Independent learned pointmedian and causal robust8value retrieval; coherent implicit-median recentering of full multimodal shape",
+  "gates": "Every original condition plus original95%and additional99.61538%CI; strict original replay",
+  "sealed_source_access": false
+}

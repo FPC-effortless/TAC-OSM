@@ -1,0 +1,2596 @@
+{
+  "adaptation_ledger": {
+    "ME082-ME090": "45 original model versions, every full gateFAIL, all originals preserved",
+    "ME091": "one integrated visual-native recipe; no further fit or hyperparameter retries under this registration"
+  },
+  "capability_to_value": {
+    "business_stage": "research only; no actions, deployment or commercial qualification",
+    "customer_value": "UNKNOWN",
+    "external_pilot": "NOT_MEASURED",
+    "operator_question": "Could a read-only physical forecast help a human notice genuine movement without jitter?",
+    "skill": "Integrated native multimodal physical-state forecasting from observed qpos, lagged reference, capture elapsed and overhead imagery"
+  },
+  "evaluation": {
+    "all_eligible_origins": true,
+    "decision": "Full gate requires every unchangedME081condition plus99.5pctupper(new-ME080 H1)<0, H1>=5pctbetterME081 and NLLno worseME081at each horizon, exactqualifiedreplay. Adaptive sequential search is exposeddevelopment tuning, NOT independent proof; after pass stop, after this one candidate full failure the new registration is exhausted, no extra hidden fits.",
+    "exposure": "EXPOSED_DEV",
+    "guardrails": "H4/H16see primary; secondary32frame H1/H4/H16mean MAE must beat persistence, movingH1<=velocity;  no task H1>1.10*persistence; nominal90%coordinate coverage >=.85 and proper interval score <=ME080 at each horizon",
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "models_Git_frozen_before_REPORT": true,
+    "numeric": "original training tensors float32; qualified reference forward ALSO float64 from exact original weight values, float64 quantile inversion40iterations/scoring; old rtol1e-5/atol1e-6 unchanged. No claims of FP32fast-path equivalence or memory reduction",
+    "old_frozen_full_models": [
+      "ME077",
+      "ME078",
+      "ME079",
+      "ME080",
+      "ME081"
+    ],
+    "primary": "same original8frame query H1MAE <=0.95*ME080, movingH1 <=1.05*ME078, stationaryH1 <=1.10*ME077; all simultaneous. H4 <=0.95*ME079 and H16<=1.05*ME080. Also score all causally eligible32frame original query prefixes separately; no differing-input old/new winner claim",
+    "protected_tissue_box_opened": false,
+    "queries": {
+      "REPORT_episode_count": 40,
+      "REPORT_selected_query_sha256": "de074a324739ec05959baac263a51e0e0c3eb597084ba2efde9af4e5d9a3c771",
+      "REPORT_selected_real_queries": 960,
+      "original_REPORT_all_autonomous_windows": 67797
+    },
+    "runtime_scope": "functional step/chunk equivalence and actual stored cache; trained32frame full gradients; primary8frame and secondary32frame factual forecasts; arbitrary-history or memory superiority NOT established",
+    "sealed_TEST_opened": false,
+    "statistics": "5000 paired episode bootstrap seed80080; unchanged95% condition plus99.5% interval for ten declared ME082..ME091 recipes. Adaptive exposed DEV, not prospective familywise proof."
+  },
+  "execution": "two independent one-thread seed processes, at most2concurrent, fixed5seeds, no shared gradients or RNG; parent assembles ALL5receipt index before freeze/scoring",
+  "implementation_sha256": {
+    "research/bounded-value-search/SEARCH.json": "e6bd460dbdc431a50afa07ac8d6e9d1560f8f51f9b8b9848b1f60f972515b5d1",
+    "research/clock-value-search/SEARCH.json": "319eb6216060c4a2b4d0840faabf81ed7c87131f6fa383e4f7bdc6778e07360c",
+    "research/replay-bundles/ME087/seed-87001/final.pt": "8e5794368f6ed9ebf4acdb37e6cc1f6b80adfc83d9770130e1c5fdab1d027d05",
+    "research/replay-bundles/ME087/seed-87002/final.pt": "63fadb83f10df6469273e50de1e2b1a3b584b92c4ab389afd5c26a544de5c80e",
+    "research/replay-bundles/ME087/seed-87003/final.pt": "115444bbabd8cd300b63dfab152a4c72b0128b3fcc1a08c4038bdbf40c04ac22",
+    "research/replay-bundles/ME087/seed-87004/final.pt": "be4c56ed40870599129822f823d16cc01a3fabc5bd37510e73e77ff25e56f7e0",
+    "research/replay-bundles/ME087/seed-87005/final.pt": "97094640f67b52b35a7c7816270f081bf65150233c6ba755687c35917e43a491",
+    "research/visual-world-search/SEARCH.json": "4a7871d4ff1e6d960ef22cebfd17f599e10614e2e42a3f3fb73c32112d4ce1b5",
+    "scripts/clock_value_train.py": "13033c5e522267b594316faaaca2c04196ac9bb0ac32f83172cd006a8467d367",
+    "scripts/equilibrium_parallel_train.py": "e627338caf734b8decd4c839166e4c041d5b30fe4c0a518756d93beecd341ade",
+    "scripts/me057_train_fused_anchor_robot.py": "f086f1daa27060695be4d17ac7d98b285bb07d410f18ddcbaf5ecb2fccbf613e",
+    "scripts/me064_mixed_real_fit.py": "d17695f761b2788074aaf2402a99dc49dcb15c4e28ed78c44b42b26cce4f33dc",
+    "scripts/me076_train_system1_real.py": "e3910ec1c42fe80b5300db6d9bb789ef4d11ee38e6f2b20a607d0adbf5f18767",
+    "scripts/me079_train_world.py": "b1ba79af549c0056c49634714294e7aff2c681b40f5d2d128a78cac1f3450f1b",
+    "scripts/me081_train_world.py": "d6d58c8e6df1beb29b44fa81f1ea9ba92d02e520a0f931631ea63f6eebbe09d8",
+    "scripts/me091_parallel_fit.py": "b804836d968ec80473346fc9e876ea42a0d0516300e3979a40e0f2b161621a09",
+    "scripts/me091_train_world.py": "2a66ea49b8b5525466c2d3015a13f0dc5871e89a6bc9399ef0cac873fc6759bd",
+    "scripts/me091_visual_source.py": "3e2f7fb5017bf836d9ca05ae6858d4db50a5b67cdf05459e8798194d704efa58",
+    "scripts/validate_research_parity.py": "ec690df6d0c2a4f13aeceb3804bfc974cc58189c66ada923fe0006fd39e829ff",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "src/tac_osm/variants/bounded_value_world.py": "7f66b18fe8ae6c6f24c9d2ea2b4549bcb45e95fce57af885ba9a69424164fe37",
+    "src/tac_osm/variants/clock_value_world.py": "52e29bb18f3c0fc708bbcdacec1974d049cffe66a5958e5e326f9ed917186b8f",
+    "src/tac_osm/variants/equilibrium_parallel_world.py": "9da950e246d54d433051c23cb8a2c559b61fbcb2d04d668214cc8ac6169cd8b9",
+    "src/tac_osm/variants/horizon_query_world.py": "5f1360b79b4e69236ac00da915ee9c915d950c8fa038e6be0791aff4696a50ca",
+    "src/tac_osm/variants/implicit_quantile.py": "f5869e20a38b3e3b3a24a8dbca790f6bf50ae57860bd1ecd61c2c19f6f01f2cc",
+    "src/tac_osm/variants/kinematic_world.py": "a5a252c4dccba1843e4beb4cec112a60804c6033513553776d2f3064d73728d1",
+    "src/tac_osm/variants/reusable_execution.py": "0079bef8d479853f626fcce877d2ec932cc1bd56ff8459cd7ae0b4dbd7fda283",
+    "src/tac_osm/variants/streaming_mixture_world.py": "23d10cb5258528c2e56e6d4a72197fbd0bea4b5c02290f1c63db8d74eb3f6539",
+    "src/tac_osm/variants/visual_world.py": "9ac0426aa2512c781ecd0580ed7b8620b69b1cd42ad15550b7b6458f46326b24"
+  },
+  "initialization": {
+    "91001": {
+      "all_parameters_trainable": true,
+      "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+      "new_updates": 4096,
+      "new_visual_and_location_parameters": 9318,
+      "new_visual_updates": 4096,
+      "optimizer_reset": true,
+      "path": "research/replay-bundles/ME087/seed-87001/final.pt",
+      "retained_original_values": 94907,
+      "selection": "ALL5 fixed index parents, no selection",
+      "sha256": "8e5794368f6ed9ebf4acdb37e6cc1f6b80adfc83d9770130e1c5fdab1d027d05",
+      "source_parameters": 99731,
+      "source_updates": 4096,
+      "total_lineage_updates": 8192
+    },
+    "91002": {
+      "all_parameters_trainable": true,
+      "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+      "new_updates": 4096,
+      "new_visual_and_location_parameters": 9318,
+      "new_visual_updates": 4096,
+      "optimizer_reset": true,
+      "path": "research/replay-bundles/ME087/seed-87002/final.pt",
+      "retained_original_values": 94907,
+      "selection": "ALL5 fixed index parents, no selection",
+      "sha256": "63fadb83f10df6469273e50de1e2b1a3b584b92c4ab389afd5c26a544de5c80e",
+      "source_parameters": 99731,
+      "source_updates": 4096,
+      "total_lineage_updates": 8192
+    },
+    "91003": {
+      "all_parameters_trainable": true,
+      "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+      "new_updates": 4096,
+      "new_visual_and_location_parameters": 9318,
+      "new_visual_updates": 4096,
+      "optimizer_reset": true,
+      "path": "research/replay-bundles/ME087/seed-87003/final.pt",
+      "retained_original_values": 94907,
+      "selection": "ALL5 fixed index parents, no selection",
+      "sha256": "115444bbabd8cd300b63dfab152a4c72b0128b3fcc1a08c4038bdbf40c04ac22",
+      "source_parameters": 99731,
+      "source_updates": 4096,
+      "total_lineage_updates": 8192
+    },
+    "91004": {
+      "all_parameters_trainable": true,
+      "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+      "new_updates": 4096,
+      "new_visual_and_location_parameters": 9318,
+      "new_visual_updates": 4096,
+      "optimizer_reset": true,
+      "path": "research/replay-bundles/ME087/seed-87004/final.pt",
+      "retained_original_values": 94907,
+      "selection": "ALL5 fixed index parents, no selection",
+      "sha256": "be4c56ed40870599129822f823d16cc01a3fabc5bd37510e73e77ff25e56f7e0",
+      "source_parameters": 99731,
+      "source_updates": 4096,
+      "total_lineage_updates": 8192
+    },
+    "91005": {
+      "all_parameters_trainable": true,
+      "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+      "new_updates": 4096,
+      "new_visual_and_location_parameters": 9318,
+      "new_visual_updates": 4096,
+      "optimizer_reset": true,
+      "path": "research/replay-bundles/ME087/seed-87005/final.pt",
+      "retained_original_values": 94907,
+      "selection": "ALL5 fixed index parents, no selection",
+      "sha256": "97094640f67b52b35a7c7816270f081bf65150233c6ba755687c35917e43a491",
+      "source_parameters": 99731,
+      "source_updates": 4096,
+      "total_lineage_updates": 8192
+    }
+  },
+  "input_contract": {
+    "absolute_epoch_or_episode_id_features": false,
+    "action": "same original lag1 known command",
+    "future_capture_time": false,
+    "observed_capture_elapsed": true,
+    "qualification": "source frame count, LFS SHA256 and decoded pixel SHA256 compulsory; retained-frame alignment does not independently prove sub-frame physical synchronization",
+    "targets": "same retained-frame endpoints; future wall-clock gaps unknown",
+    "visual": "same recorded retained frame at each observed prefix index; gray32 overhead only; no future image; not input-matched to old numeric-only models"
+  },
+  "literature": [
+    {
+      "paper": "An Empirical Evaluation of Generic Convolutional and Recurrent Networks for Sequence Modeling, Bai/Kolter/Koltun2018",
+      "reuse": "causal dilated temporal convolutions; not a new TAC invention",
+      "url": "https://arxiv.org/abs/1803.01271"
+    },
+    {
+      "paper": "Strictly Proper Scoring Rules, Prediction, and Estimation; Gneiting and Raftery2007",
+      "reuse": "CRPS and logarithmic scoring as proper distributional objectives",
+      "url": "https://doi.org/10.1198/016214506000001437"
+    },
+    {
+      "paper": "DeepAR: Probabilistic forecasting with autoregressive recurrent networks,2020",
+      "reuse": "shared conditional probabilistic forecasting across sequences; not a new TAC discovery",
+      "url": "https://doi.org/10.1016/j.ijforecast.2019.07.001"
+    },
+    {
+      "paper": "Implicit Reparameterization Gradients, Figurnov/Mohamed/Mnih2018",
+      "reuse": "implicit CDF derivative; not a new TAC theorem. Training median point score derives from the SAME proper mixture distribution",
+      "url": "https://arxiv.org/abs/1805.08498"
+    },
+    {
+      "paper": "Deep Sets, Zaheer et al2017",
+      "reuse": "shared per-element neural processing, conditioned here on known coordinate identities; no new equivariance or memory theorem claimed",
+      "url": "https://arxiv.org/abs/1703.06114"
+    },
+    {
+      "paper": "Mixture Density Networks, Bishop1994",
+      "reuse": "conditional mixture likelihood and distributional predictions",
+      "url": "https://publications.aston.ac.uk/id/eprint/373/"
+    },
+    {
+      "paper": "Gated Delta Networks",
+      "reuse": "gated error-correcting associative updates, not invented here",
+      "url": "https://arxiv.org/abs/2412.06464"
+    },
+    {
+      "paper": "R2D2, ICLR2019",
+      "reuse": "explicit recurrent state and state staleness cautions; no claim this eight-frame study proves long retention",
+      "url": "https://willdabney.com/publication/r2d2/"
+    },
+    {
+      "paper": "Mamba-2/SSD, ICML2024",
+      "reuse": "hardware-aware stateful computation motivation; native nonlinear TAC is NOT a linear scan",
+      "url": "https://proceedings.mlr.press/v235/dao24a.html"
+    },
+    {
+      "paper": "Mastering Diverse Domains through World Models (DreamerV3), Hafner etal",
+      "reuse": "learned visual encoder and recurrent predictive representation; this study does not implement Dreamer policy/RL or inherit its results",
+      "url": "https://arxiv.org/abs/2301.04104"
+    },
+    {
+      "paper": "TD-MPC2, Hansen etal, ICLR2024",
+      "reuse": "shared visual/state representations and latent modeling motivation; no planning/control claim",
+      "url": "https://arxiv.org/abs/2310.16828"
+    }
+  ],
+  "models": [
+    {
+      "architecture": "native_causal_visual_world",
+      "deployed_parameters": 104225,
+      "measured": {
+        "actual_steps": 4096,
+        "checkpoint_sha256": "2cab4a12b8b1b7cb470041b2baf31c81fef6526f87b125f949da31c2f4f2f37c",
+        "deployed_parameters": 104225,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME091/seed-91001/final.pt",
+          "checkpoint_sha256": "2cab4a12b8b1b7cb470041b2baf31c81fef6526f87b125f949da31c2f4f2f37c",
+          "receipt_path": "research/replay-bundles/ME091/seed-91001/live-budget.json",
+          "receipt_sha256": "be99e905ac6f9d98da4d678374181078c752abb601d6100b23336fac0895ec22"
+        },
+        "trainable_parameters": 104225,
+        "training_receipt": {
+          "actual_examples": 98304,
+          "actual_observed_prefixes": 3145728,
+          "actual_steps": 4096,
+          "checkpoint_sha256": "2cab4a12b8b1b7cb470041b2baf31c81fef6526f87b125f949da31c2f4f2f37c",
+          "deployed_parameters": 104225,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104225,
+          "sampling": {
+            "importance_sha256": "c9abcaeabddde3e97f3418be932306a770d3f317fef5a0e43ffa0e647383ef07",
+            "sample_order_sha256": "b8253909d29ea8d5933a066eab397dc98d86dde7b3fad7f20ab6391a6a1a4d7c",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 91001,
+          "total_lineage_optimizer_updates": 8192,
+          "trace": [
+            {
+              "FIT_loss": 1.8828237819283367,
+              "step": 1
+            },
+            {
+              "FIT_loss": 0.9011398342096423,
+              "step": 256
+            },
+            {
+              "FIT_loss": 0.7681759402409742,
+              "step": 512
+            },
+            {
+              "FIT_loss": 1.1925255821717637,
+              "step": 768
+            },
+            {
+              "FIT_loss": 0.8363354546124341,
+              "step": 1024
+            },
+            {
+              "FIT_loss": 1.1776784534478757,
+              "step": 1280
+            },
+            {
+              "FIT_loss": 0.6812117747012572,
+              "step": 1536
+            },
+            {
+              "FIT_loss": 1.3760322646695853,
+              "step": 1792
+            },
+            {
+              "FIT_loss": 0.1404959832982467,
+              "step": 2048
+            },
+            {
+              "FIT_loss": 0.4303716502771466,
+              "step": 2304
+            },
+            {
+              "FIT_loss": 0.8901249040261444,
+              "step": 2560
+            },
+            {
+              "FIT_loss": 0.6782327622004191,
+              "step": 2816
+            },
+            {
+              "FIT_loss": 0.6543495382946222,
+              "step": 3072
+            },
+            {
+              "FIT_loss": 0.7919843580895348,
+              "step": 3328
+            },
+            {
+              "FIT_loss": 1.47814065488641,
+              "step": 3584
+            },
+            {
+              "FIT_loss": 1.3962948548334018,
+              "step": 3840
+            },
+            {
+              "FIT_loss": 0.40501286729793406,
+              "step": 4096
+            }
+          ],
+          "training_cpu_seconds": 484.340985971,
+          "training_lineage": {
+            "all_parameters_trainable": true,
+            "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+            "new_updates": 4096,
+            "new_visual_and_location_parameters": 9318,
+            "new_visual_updates": 4096,
+            "optimizer_reset": true,
+            "path": "research/replay-bundles/ME087/seed-87001/final.pt",
+            "retained_original_values": 94907,
+            "selection": "ALL5 fixed index parents, no selection",
+            "sha256": "8e5794368f6ed9ebf4acdb37e6cc1f6b80adfc83d9770130e1c5fdab1d027d05",
+            "source_parameters": 99731,
+            "source_updates": 4096,
+            "total_lineage_updates": 8192
+          },
+          "valid_dense_target_presentations": 9417370
+        }
+      },
+      "seed": 91001,
+      "trainable_parameters": 104225
+    },
+    {
+      "architecture": "native_causal_visual_world",
+      "deployed_parameters": 104225,
+      "measured": {
+        "actual_steps": 4096,
+        "checkpoint_sha256": "5cd9805d8fa07ee647a6dfdf3c16309f2b3eb837265bbad6a93b3aafacc64842",
+        "deployed_parameters": 104225,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME091/seed-91002/final.pt",
+          "checkpoint_sha256": "5cd9805d8fa07ee647a6dfdf3c16309f2b3eb837265bbad6a93b3aafacc64842",
+          "receipt_path": "research/replay-bundles/ME091/seed-91002/live-budget.json",
+          "receipt_sha256": "f0086bd2ab23a7b1e5ca680a1fd44390494544ad0db444dc35bed144ed9a1796"
+        },
+        "trainable_parameters": 104225,
+        "training_receipt": {
+          "actual_examples": 98304,
+          "actual_observed_prefixes": 3145728,
+          "actual_steps": 4096,
+          "checkpoint_sha256": "5cd9805d8fa07ee647a6dfdf3c16309f2b3eb837265bbad6a93b3aafacc64842",
+          "deployed_parameters": 104225,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104225,
+          "sampling": {
+            "importance_sha256": "1afb3ec79b4139830e8a7a355411448767b5054e6c2f28c9594a827a7aa0e763",
+            "sample_order_sha256": "788656a73afc3074d1ae0802d574224cf05f9903fd67fe1ca4209d7140905125",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 91002,
+          "total_lineage_optimizer_updates": 8192,
+          "trace": [
+            {
+              "FIT_loss": 1.7084386588577765,
+              "step": 1
+            },
+            {
+              "FIT_loss": 0.7271584333749083,
+              "step": 256
+            },
+            {
+              "FIT_loss": 0.7913804186325922,
+              "step": 512
+            },
+            {
+              "FIT_loss": 0.7798646533497959,
+              "step": 768
+            },
+            {
+              "FIT_loss": 1.8113306248991223,
+              "step": 1024
+            },
+            {
+              "FIT_loss": 0.4381254334668036,
+              "step": 1280
+            },
+            {
+              "FIT_loss": 1.2290113194133152,
+              "step": 1536
+            },
+            {
+              "FIT_loss": 1.05492328165138,
+              "step": 1792
+            },
+            {
+              "FIT_loss": 1.251773489852878,
+              "step": 2048
+            },
+            {
+              "FIT_loss": 1.0537168889882473,
+              "step": 2304
+            },
+            {
+              "FIT_loss": 0.8483502487249391,
+              "step": 2560
+            },
+            {
+              "FIT_loss": 0.48541312237393813,
+              "step": 2816
+            },
+            {
+              "FIT_loss": 1.402412989038777,
+              "step": 3072
+            },
+            {
+              "FIT_loss": 1.0161186620016813,
+              "step": 3328
+            },
+            {
+              "FIT_loss": 0.6783482037589131,
+              "step": 3584
+            },
+            {
+              "FIT_loss": 0.7865886480078554,
+              "step": 3840
+            },
+            {
+              "FIT_loss": 0.6438506417121036,
+              "step": 4096
+            }
+          ],
+          "training_cpu_seconds": 486.900052206,
+          "training_lineage": {
+            "all_parameters_trainable": true,
+            "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+            "new_updates": 4096,
+            "new_visual_and_location_parameters": 9318,
+            "new_visual_updates": 4096,
+            "optimizer_reset": true,
+            "path": "research/replay-bundles/ME087/seed-87002/final.pt",
+            "retained_original_values": 94907,
+            "selection": "ALL5 fixed index parents, no selection",
+            "sha256": "63fadb83f10df6469273e50de1e2b1a3b584b92c4ab389afd5c26a544de5c80e",
+            "source_parameters": 99731,
+            "source_updates": 4096,
+            "total_lineage_updates": 8192
+          },
+          "valid_dense_target_presentations": 9417929
+        }
+      },
+      "seed": 91002,
+      "trainable_parameters": 104225
+    },
+    {
+      "architecture": "native_causal_visual_world",
+      "deployed_parameters": 104225,
+      "measured": {
+        "actual_steps": 4096,
+        "checkpoint_sha256": "b8e5f1325b72fb704ad4e3c6f9cd985b960ff3f83484186d7f563e031f4ebea3",
+        "deployed_parameters": 104225,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME091/seed-91003/final.pt",
+          "checkpoint_sha256": "b8e5f1325b72fb704ad4e3c6f9cd985b960ff3f83484186d7f563e031f4ebea3",
+          "receipt_path": "research/replay-bundles/ME091/seed-91003/live-budget.json",
+          "receipt_sha256": "83f16e6ad9d915ccd94d2ca3458cbe199053142d38f29bc90c9ff146036ae5c6"
+        },
+        "trainable_parameters": 104225,
+        "training_receipt": {
+          "actual_examples": 98304,
+          "actual_observed_prefixes": 3145728,
+          "actual_steps": 4096,
+          "checkpoint_sha256": "b8e5f1325b72fb704ad4e3c6f9cd985b960ff3f83484186d7f563e031f4ebea3",
+          "deployed_parameters": 104225,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104225,
+          "sampling": {
+            "importance_sha256": "1b8ac951a24d486865678eb87ca59e5b7d2b5bb276e4643417037f45a3eef676",
+            "sample_order_sha256": "2a2b78acc4e80ece6ce27e781eba24fea520cb283fd0c8886110508d9ac32ec2",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 91003,
+          "total_lineage_optimizer_updates": 8192,
+          "trace": [
+            {
+              "FIT_loss": 2.2184732877845303,
+              "step": 1
+            },
+            {
+              "FIT_loss": 1.2773089553025108,
+              "step": 256
+            },
+            {
+              "FIT_loss": 0.13586108722753346,
+              "step": 512
+            },
+            {
+              "FIT_loss": 1.1726261599946515,
+              "step": 768
+            },
+            {
+              "FIT_loss": 1.2469062932432247,
+              "step": 1024
+            },
+            {
+              "FIT_loss": 0.990468330084934,
+              "step": 1280
+            },
+            {
+              "FIT_loss": 1.7716936025931782,
+              "step": 1536
+            },
+            {
+              "FIT_loss": 0.5113154816401227,
+              "step": 1792
+            },
+            {
+              "FIT_loss": 0.6855866132677296,
+              "step": 2048
+            },
+            {
+              "FIT_loss": 0.9704479189754497,
+              "step": 2304
+            },
+            {
+              "FIT_loss": 1.6951639464529522,
+              "step": 2560
+            },
+            {
+              "FIT_loss": 0.597514148791951,
+              "step": 2816
+            },
+            {
+              "FIT_loss": 0.8107828756091862,
+              "step": 3072
+            },
+            {
+              "FIT_loss": 1.8684633316817099,
+              "step": 3328
+            },
+            {
+              "FIT_loss": 0.3100885494687314,
+              "step": 3584
+            },
+            {
+              "FIT_loss": 0.7119164286659562,
+              "step": 3840
+            },
+            {
+              "FIT_loss": 0.18237857370516283,
+              "step": 4096
+            }
+          ],
+          "training_cpu_seconds": 489.753588882,
+          "training_lineage": {
+            "all_parameters_trainable": true,
+            "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+            "new_updates": 4096,
+            "new_visual_and_location_parameters": 9318,
+            "new_visual_updates": 4096,
+            "optimizer_reset": true,
+            "path": "research/replay-bundles/ME087/seed-87003/final.pt",
+            "retained_original_values": 94907,
+            "selection": "ALL5 fixed index parents, no selection",
+            "sha256": "115444bbabd8cd300b63dfab152a4c72b0128b3fcc1a08c4038bdbf40c04ac22",
+            "source_parameters": 99731,
+            "source_updates": 4096,
+            "total_lineage_updates": 8192
+          },
+          "valid_dense_target_presentations": 9418098
+        }
+      },
+      "seed": 91003,
+      "trainable_parameters": 104225
+    },
+    {
+      "architecture": "native_causal_visual_world",
+      "deployed_parameters": 104225,
+      "measured": {
+        "actual_steps": 4096,
+        "checkpoint_sha256": "7d661226b472cf157da3b7939de85ef7c18b014310867362bdc8125fcfd0ff53",
+        "deployed_parameters": 104225,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME091/seed-91004/final.pt",
+          "checkpoint_sha256": "7d661226b472cf157da3b7939de85ef7c18b014310867362bdc8125fcfd0ff53",
+          "receipt_path": "research/replay-bundles/ME091/seed-91004/live-budget.json",
+          "receipt_sha256": "e2185a5535d3849a261b32636f0ebb51ba721b30cae3c93be07665389f95b7b4"
+        },
+        "trainable_parameters": 104225,
+        "training_receipt": {
+          "actual_examples": 98304,
+          "actual_observed_prefixes": 3145728,
+          "actual_steps": 4096,
+          "checkpoint_sha256": "7d661226b472cf157da3b7939de85ef7c18b014310867362bdc8125fcfd0ff53",
+          "deployed_parameters": 104225,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104225,
+          "sampling": {
+            "importance_sha256": "f8c9727a306d16975b226a191a507d2dfc54090d5c68b47d95d949094233ec50",
+            "sample_order_sha256": "2838c62d2415c4991a0417001d4fda8f74bff28f219b632ab796c3f7d2d2454a",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 91004,
+          "total_lineage_optimizer_updates": 8192,
+          "trace": [
+            {
+              "FIT_loss": 1.0173911125093935,
+              "step": 1
+            },
+            {
+              "FIT_loss": 1.1249038588581282,
+              "step": 256
+            },
+            {
+              "FIT_loss": 0.5197470917722103,
+              "step": 512
+            },
+            {
+              "FIT_loss": 1.614204873753554,
+              "step": 768
+            },
+            {
+              "FIT_loss": 0.4206831429500579,
+              "step": 1024
+            },
+            {
+              "FIT_loss": 0.6294284241189715,
+              "step": 1280
+            },
+            {
+              "FIT_loss": 1.0124740163831731,
+              "step": 1536
+            },
+            {
+              "FIT_loss": 1.3612577765533214,
+              "step": 1792
+            },
+            {
+              "FIT_loss": 0.8531305499953229,
+              "step": 2048
+            },
+            {
+              "FIT_loss": 0.6701793931886693,
+              "step": 2304
+            },
+            {
+              "FIT_loss": 1.508809368320483,
+              "step": 2560
+            },
+            {
+              "FIT_loss": 0.6038874109240161,
+              "step": 2816
+            },
+            {
+              "FIT_loss": 0.8639052600466547,
+              "step": 3072
+            },
+            {
+              "FIT_loss": 0.5401155772620864,
+              "step": 3328
+            },
+            {
+              "FIT_loss": 0.5821030006545019,
+              "step": 3584
+            },
+            {
+              "FIT_loss": 0.6171037939928453,
+              "step": 3840
+            },
+            {
+              "FIT_loss": 0.8261238849642084,
+              "step": 4096
+            }
+          ],
+          "training_cpu_seconds": 490.196342091,
+          "training_lineage": {
+            "all_parameters_trainable": true,
+            "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+            "new_updates": 4096,
+            "new_visual_and_location_parameters": 9318,
+            "new_visual_updates": 4096,
+            "optimizer_reset": true,
+            "path": "research/replay-bundles/ME087/seed-87004/final.pt",
+            "retained_original_values": 94907,
+            "selection": "ALL5 fixed index parents, no selection",
+            "sha256": "be4c56ed40870599129822f823d16cc01a3fabc5bd37510e73e77ff25e56f7e0",
+            "source_parameters": 99731,
+            "source_updates": 4096,
+            "total_lineage_updates": 8192
+          },
+          "valid_dense_target_presentations": 9417680
+        }
+      },
+      "seed": 91004,
+      "trainable_parameters": 104225
+    },
+    {
+      "architecture": "native_causal_visual_world",
+      "deployed_parameters": 104225,
+      "measured": {
+        "actual_steps": 4096,
+        "checkpoint_sha256": "7596303ebca21282ff68e81159d69905ff228537f9a74bc73effec32fe9e6dce",
+        "deployed_parameters": 104225,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME091/seed-91005/final.pt",
+          "checkpoint_sha256": "7596303ebca21282ff68e81159d69905ff228537f9a74bc73effec32fe9e6dce",
+          "receipt_path": "research/replay-bundles/ME091/seed-91005/live-budget.json",
+          "receipt_sha256": "494cc6f3dc5a76fd2543bc11c536bf676484a2e98e147c58ff68fda407e6d8f5"
+        },
+        "trainable_parameters": 104225,
+        "training_receipt": {
+          "actual_examples": 98304,
+          "actual_observed_prefixes": 3145728,
+          "actual_steps": 4096,
+          "checkpoint_sha256": "7596303ebca21282ff68e81159d69905ff228537f9a74bc73effec32fe9e6dce",
+          "deployed_parameters": 104225,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104225,
+          "sampling": {
+            "importance_sha256": "04f162e92b5846d3054abba74714ccb2714bacc8d79141555cf1ccf8dc4c14d3",
+            "sample_order_sha256": "7e05c953c934110885240bc34c63f2f330f342baa29903c7f233b7ee3ed62db7",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 91005,
+          "total_lineage_optimizer_updates": 8192,
+          "trace": [
+            {
+              "FIT_loss": 2.055836981272024,
+              "step": 1
+            },
+            {
+              "FIT_loss": 0.9013431782207788,
+              "step": 256
+            },
+            {
+              "FIT_loss": 1.0647026257188361,
+              "step": 512
+            },
+            {
+              "FIT_loss": 0.5243704649077562,
+              "step": 768
+            },
+            {
+              "FIT_loss": 2.0127662162624187,
+              "step": 1024
+            },
+            {
+              "FIT_loss": 0.7688997085365536,
+              "step": 1280
+            },
+            {
+              "FIT_loss": 1.0319993817287436,
+              "step": 1536
+            },
+            {
+              "FIT_loss": 0.716102510892742,
+              "step": 1792
+            },
+            {
+              "FIT_loss": 0.7841180622163693,
+              "step": 2048
+            },
+            {
+              "FIT_loss": 1.6231849595838792,
+              "step": 2304
+            },
+            {
+              "FIT_loss": 0.9588417655941335,
+              "step": 2560
+            },
+            {
+              "FIT_loss": 0.11508356939484998,
+              "step": 2816
+            },
+            {
+              "FIT_loss": 0.8550896026459519,
+              "step": 3072
+            },
+            {
+              "FIT_loss": 0.6952165424489287,
+              "step": 3328
+            },
+            {
+              "FIT_loss": 0.423739985021571,
+              "step": 3584
+            },
+            {
+              "FIT_loss": 0.5381279870521233,
+              "step": 3840
+            },
+            {
+              "FIT_loss": 0.7888819777685452,
+              "step": 4096
+            }
+          ],
+          "training_cpu_seconds": 486.290057007,
+          "training_lineage": {
+            "all_parameters_trainable": true,
+            "mapping": "shared SwiGLU width116->108, first108 paired value/gate units and matching head columns; append14 zero-initialized common-location rows. Other source tensors exact; visual branch new.",
+            "new_updates": 4096,
+            "new_visual_and_location_parameters": 9318,
+            "new_visual_updates": 4096,
+            "optimizer_reset": true,
+            "path": "research/replay-bundles/ME087/seed-87005/final.pt",
+            "retained_original_values": 94907,
+            "selection": "ALL5 fixed index parents, no selection",
+            "sha256": "97094640f67b52b35a7c7816270f081bf65150233c6ba755687c35917e43a491",
+            "source_parameters": 99731,
+            "source_updates": 4096,
+            "total_lineage_updates": 8192
+          },
+          "valid_dense_target_presentations": 9418227
+        }
+      },
+      "seed": 91005,
+      "trainable_parameters": 104225
+    }
+  ],
+  "no_architecture_superiority_claim": true,
+  "prefit_registration_sha256": "f76b4dc0703a0ed8a3f3ee61c764034d69e4f3518410a64d49aabcc9b219e906",
+  "real_world_source": {
+    "license": "CC-BY-4.0; BodenAI and RW-RL attribution",
+    "name": "BodenAI/RW-RL-HIL-Dataset original160 episode subset; revision9290f5a96dc91ea58256e81d9ce2dd9621890b51;120FIT/40previously exposedREPORT",
+    "observed_real_outcomes": true,
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "recipe": {
+    "nll_weight": 0.2,
+    "registered_search_family": "ME091_CAUSAL_VISUAL_NATIVE_PREDICTIVE_STATE",
+    "study": "me091"
+  },
+  "registered_before_first_fit": true,
+  "schedules": {
+    "91001": {
+      "importance_sha256": "c9abcaeabddde3e97f3418be932306a770d3f317fef5a0e43ffa0e647383ef07",
+      "sample_order_sha256": "b8253909d29ea8d5933a066eab397dc98d86dde7b3fad7f20ab6391a6a1a4d7c",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "91002": {
+      "importance_sha256": "1afb3ec79b4139830e8a7a355411448767b5054e6c2f28c9594a827a7aa0e763",
+      "sample_order_sha256": "788656a73afc3074d1ae0802d574224cf05f9903fd67fe1ca4209d7140905125",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "91003": {
+      "importance_sha256": "1b8ac951a24d486865678eb87ca59e5b7d2b5bb276e4643417037f45a3eef676",
+      "sample_order_sha256": "2a2b78acc4e80ece6ce27e781eba24fea520cb283fd0c8886110508d9ac32ec2",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "91004": {
+      "importance_sha256": "f8c9727a306d16975b226a191a507d2dfc54090d5c68b47d95d949094233ec50",
+      "sample_order_sha256": "2838c62d2415c4991a0417001d4fda8f74bff28f219b632ab796c3f7d2d2454a",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "91005": {
+      "importance_sha256": "04f162e92b5846d3054abba74714ccb2714bacc8d79141555cf1ccf8dc4c14d3",
+      "sample_order_sha256": "7e05c953c934110885240bc34c63f2f330f342baa29903c7f233b7ee3ed62db7",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    }
+  },
+  "schema_version": "tac-osm.parity.v2",
+  "secondary32_queries": 904,
+  "secondary32_queries_sha256": "09ad7b3bebe10a7ed8f2638eb143480cab017e501d82c604360f5f9c5b0b8ef9",
+  "source_qualification_sha256": "bf135f28148e7d470cafffe6ffc1e909a3f59e9eb3b83ce7780d3eaca311d0c8",
+  "study_id": "ME091_CLOCK_VALUE_WORLD",
+  "study_type": "single_model_training",
+  "training_budget": {
+    "batch_size": 24,
+    "compute": "4096 additional updates,98304 windows,3145728 observed numeric/image prefixes per seed; shared CNN applied across batch/time. Base source4096 charged separately. Added authentic image modality; no information/data/compute-matched architecture claim.",
+    "dense_prefixes": 32,
+    "history": 32,
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "loss": "Proper physical CRPS +0.2physical NLL +0.2factual motion BCE +1implicit median absolute error +1per-coordinate factual change BCE (3FITpredictive-noise threshold) +2quietH1median precision; all valid factual targets only. No image reconstruction or synthetic auxiliary label. A14D common bounded translation moves both mixture means coherently without extra memory rollout.",
+    "optimizer": "AdamW lr0.0003 wd0.0001 clip1",
+    "sampling": "same nominal 50%uniform+50%movement proposal and balance importance as ME078/079; finite task round-robin counts differ by at most1/component",
+    "seeds": [
+      91001,
+      91002,
+      91003,
+      91004,
+      91005
+    ],
+    "selection": "Final4096 new updates only; five fixed ME087 parents; 8192 cumulative base updates; new visual/location weights4096; no restarts, best seeds, ensembles or hidden fits. All ten ME082-ME091 candidates preserved.",
+    "updates": 4096
+  },
+  "unresolved_capability": "Can synchronized observed overhead images improve the integrated native physical predictor on the unchanged quiet/moving/multi-horizon gate, without future imagery, commands or new episode access?",
+  "visual_source": {
+    "camera": "observation.images.cam_high",
+    "canonical_sha256": "d0351d3fd5ea1040e845f73bb49827a36ceef3cc967339ecfecbd68f831b66cb",
+    "credit": "BodenAI / RW-RL",
+    "license": "CC-BY-4.0",
+    "records": {
+      "clean_stains_off_tabletop:12": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1147,
+        "pixel_sha256": "137ad301d1e4ed9aa3cafb036fdebfac817b047ad7729c7bdcfb773ee49c3904",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000012.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "faef29e5b2db97e118ce4866825b9ba200f8da62bd61997c42987f898df54639"
+      },
+      "clean_stains_off_tabletop:13": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1093,
+        "pixel_sha256": "bf6b2b151a2f5a23245980277fe8f7414c10a7817b74e10a89424faf96326a6f",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000013.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "3b7e683f04b72c90bfa3992c484aeae6ae777b294cb2dd40f6bcdb253dbbc682"
+      },
+      "clean_stains_off_tabletop:14": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1114,
+        "pixel_sha256": "e5994abe04c3007e589a3278df0379f533f918322d63c33955853120be0db245",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000014.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "15181b8fb295c93864cf8371265f2ec0bd767b941f93e1f38837e915216c0af3"
+      },
+      "clean_stains_off_tabletop:15": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1308,
+        "pixel_sha256": "d9aa2e748d363e86682d276ea3d6aa2474308c61bcc037d2787397801e45bcea",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000015.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "7df0ae9bedc6236e2b3e4b910ce9d044edadd6476287861db987389ebd4c8671"
+      },
+      "clean_stains_off_tabletop:16": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1347,
+        "pixel_sha256": "86910191419b9e5a3e3acd17a1e9d989cf7237c5f33c3272c1b5b68a662e325a",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000016.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "3cbe4171e8b72707786039bc99a05052ced2b4c03c129073e8154174c2e77fdc"
+      },
+      "clean_stains_off_tabletop:164": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1610,
+        "pixel_sha256": "0e34e02505f9d27fe8404628ad0ae6c906de2949c84a957f8cd8bd9f4b79bf45",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000164.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "875042d3b5f968de91e5d12b7fbb1b3fb5ba124e62eda2ada23bcc9996190f37"
+      },
+      "clean_stains_off_tabletop:165": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1429,
+        "pixel_sha256": "a964d8f7dbd600aba396e86397f9688106d0d6d33cbc6e3e3fd063cd7c3fe083",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000165.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "3fb9f4ea0adb4818615856bcaa62fbb29888bcf6df847ff5d209403f72e06b71"
+      },
+      "clean_stains_off_tabletop:166": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1864,
+        "pixel_sha256": "4b3c1d896b47c80909f559f6f21d5d9716c36ce067489a93d6aae22fff8d894c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000166.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "e36c9c5b970d4a9781bd1695cc9987b161ca4c60d1df09ee535c40bbc1a04d12"
+      },
+      "clean_stains_off_tabletop:167": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1506,
+        "pixel_sha256": "44aaab2d8f43d9ab9b6f48e82ebb818a2ecd274c51374b16539080532096dc33",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000167.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "b6f174ccb612537bbe5dfd559397172a85f03f3b59a8be4d1598971d8791adef"
+      },
+      "clean_stains_off_tabletop:17": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1169,
+        "pixel_sha256": "b4ee01aaf022ce34a24d10e768fbcb81aa98c54e0681a5a4738e50e3e9de4216",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000017.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "9b3245f5a6e9c02c6c8931ac009b62b78aee438577f2b2661dd0032f60eb8461"
+      },
+      "clean_stains_off_tabletop:18": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1201,
+        "pixel_sha256": "ff3f90876931293c875391a83b311d8fa4f9575e81835e75220f2848645b3513",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000018.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "7a0dd503d7df72feb661f0482f7957dc96074a52dd8d6e1105ace48edf407fb5"
+      },
+      "clean_stains_off_tabletop:188": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1562,
+        "pixel_sha256": "0462e4898dc395c09dd73ec085fcb99efc2b8e86358381bd508f557008e2585d",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000188.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "f35e938c87e2a6318dbe3bccc537ce7904db6a520498ba0937bc54aea1786e96"
+      },
+      "clean_stains_off_tabletop:189": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1710,
+        "pixel_sha256": "6296e65713500dba1680daa9e2056857143104093f9b2ce59ecbac882f52f46e",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000189.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "5f975055ed972e2bfbde14fe46f17496437631f457b5d8df8ef91eecc181d6ba"
+      },
+      "clean_stains_off_tabletop:19": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1339,
+        "pixel_sha256": "5b93a32ef70f07ad866c27a977a089fb8ad122fd2da61d6318c66721036aba62",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000019.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "7a70224fc0a3885050fd57bd994f1ffd30be43435a940dc2560753d278512d06"
+      },
+      "clean_stains_off_tabletop:190": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1463,
+        "pixel_sha256": "2cb0041ae4e3eef8064a5dc794f460c4415f86c9bd647242689af08bc8c86895",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000190.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "462d047ea7aa76a15c17c5787897ca8f31ba7ff0a75838ac8656e2025344a12d"
+      },
+      "clean_stains_off_tabletop:191": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1389,
+        "pixel_sha256": "c275b3ad2cc0e437f1f5afe1a206852011f222b36efae0372a0005612541d64f",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000191.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "90da436f9350678928f37203ba2706410ce81f4c32e1478ae690587a2a627406"
+      },
+      "clean_stains_off_tabletop:272": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1635,
+        "pixel_sha256": "5b3c4e7c43df334f8dd2fbb0ac68508c4e8ff7ca3ea8f6db14e320993eafabd6",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000272.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "8255ee95d78945dc44a7ccf18ef4fcb687201c6b13c8e5e6ddae78f61ce3f2a0"
+      },
+      "clean_stains_off_tabletop:273": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1792,
+        "pixel_sha256": "44ae650d59c13504f4830f0c43554a1d09e8598019d1fdad63ee10b0e0db4ba4",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000273.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "87c663e2b447b6c3faa9d8d0284272c99d2667eb135a83dcdbfdb13cdd3f3279"
+      },
+      "clean_stains_off_tabletop:274": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1604,
+        "pixel_sha256": "3d2b6f072dca4dfc57b98a09a4b3d371316d12ad8a6c1dbfb12e0dde407c40cd",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000274.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "0fd5a6861916805d6cbe939eaef886246e4bb36a29e2560410b9ff751dabc830"
+      },
+      "clean_stains_off_tabletop:275": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1532,
+        "pixel_sha256": "0a4409815bdad26759e5b2069d6eb7bdbf4dcf2a016107fb0624615b0faca88e",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000275.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "bac3b8c8e06745e377f7bd4f11075acfe37205e6f73f460ec1cf66b24b90a14b"
+      },
+      "clean_stains_off_tabletop:340": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1525,
+        "pixel_sha256": "ab540d6aff04cba334cb4f98139bb2ae3abb18db1198d3dac572484f618a0fee",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000340.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "cd7b13bf8341c86866756ef9563cd2e3cca4c4285ee6db0850ccb03acc1e2f2f"
+      },
+      "clean_stains_off_tabletop:341": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1471,
+        "pixel_sha256": "ae9efdeed18746cda660ed8c104132462745dc28c4904f1ad60bc55ed1fe5842",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000341.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "49464f5853e219bcc37354a7afb0424db9031a10878b384338c5b494a717e101"
+      },
+      "clean_stains_off_tabletop:342": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1778,
+        "pixel_sha256": "9718d385f287673dc54d84733f8fae2401da111243cf0ece34055fdee3a8ffb9",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000342.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "32855ffbd2c88ce9ed0a8e93a02c1de314a71bec80d59f589c99a820a1e911c1"
+      },
+      "clean_stains_off_tabletop:343": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1763,
+        "pixel_sha256": "90583fe68dc3e73321b0ce6735c1d0aff882d46ed3ca763226915d1bb891d3f1",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000343.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "6a5fd6cd163961551d3e092721828832014dc7d564e1af046abe8bda3e297d73"
+      },
+      "clean_stains_off_tabletop:344": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1391,
+        "pixel_sha256": "34e339be5e4272a3a78fca464a54c6a4062318238b80cdfaa37687ef520fb709",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000344.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "6c7913495af7b46669a20762beb35e2bbb06d20b293b1f7f221bfa0f30ecf8a4"
+      },
+      "clean_stains_off_tabletop:345": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1492,
+        "pixel_sha256": "09514b43f22e581d418e349f7a3a89a83d013055117b33638ef6afc025a8651e",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000345.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "50a73a30672e2903c6341458f1ec2646cda80844c2f632738d2687c7950e671b"
+      },
+      "clean_stains_off_tabletop:346": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1556,
+        "pixel_sha256": "115122d795248508b0b4e3557bd8365bf624c41136e1688f35cba25c2002002c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000346.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "78de6a4e49e46d55fc2cfd470b70fa28ee1bfc78d44477eb6486705139b5ac4b"
+      },
+      "clean_stains_off_tabletop:347": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1573,
+        "pixel_sha256": "acf18ad411feb02c1fbd9caa81af8ddb1693580ff7a70c0c3401b7244ca20c37",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000347.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "f4f3db621f24a88b15fc81c879b5067cd224ba1ea310ea41dac3afdc9eaa80d9"
+      },
+      "clean_stains_off_tabletop:372": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1495,
+        "pixel_sha256": "6ecb870accfdd02b88be586002f7a5a3597c6811b09a83751e5023db6083dc06",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000372.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "da4502ad08c264a88054799f95169af476c4bff7493a4841262dc0e565178627"
+      },
+      "clean_stains_off_tabletop:373": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1514,
+        "pixel_sha256": "302c9b6105426fa9a81f9b08d27dea2ef55b543e5ea0dd3b4034dc0c563bc61e",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000373.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "31878436863f3985615931f789b336686972ad35064557782ba8ba23aa2e05a4"
+      },
+      "clean_stains_off_tabletop:374": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1587,
+        "pixel_sha256": "576d9b40d796f295d21eaf4746a225da7d6318ee1b4a38cffdb3f03791e18e36",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000374.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "411cb8b852fe568acb5a53db2c3b27dac7cf1c0c94ffbac4b8f5a4267b414b33"
+      },
+      "clean_stains_off_tabletop:375": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1426,
+        "pixel_sha256": "c5e179798dba33815fd9baf46ff1c51d75d4e606aefe829a05d48eb2e5b4f70f",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "clean_stains_off_tabletop/videos/chunk-000/observation.images.cam_high/episode_000375.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "c536b8293cdabcbf223c1d5e8b8fa3665b9543e25ecfb26b1c5af37bfcfb3414"
+      },
+      "fold_and_stack_scattered_clothes_neatly:12": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2155,
+        "pixel_sha256": "d3a8c2b4828ae2d3372784db7cff40e8b781052dfb29d29ff8bb2a3b8519a2b0",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000012.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "7b5bfbb47c85a781a4099b4bfaf45c8b4a8a3d615a0a536fee4b5b4730f15c47"
+      },
+      "fold_and_stack_scattered_clothes_neatly:13": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1787,
+        "pixel_sha256": "308718c2ac521989afb146d0859606a7ba7b9e640c5441f9212266e184385f07",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000013.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ddc938a37a41d30386b6f938ad1786a3f5c495a5265f6f4e5ad320afd9ce93dd"
+      },
+      "fold_and_stack_scattered_clothes_neatly:14": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2370,
+        "pixel_sha256": "8d7252196f5026fc8783763f9cfdb826fad9939114522f8b241fe7604fd1ff71",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000014.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "c7465916a008efdf4105a9954721ef41b96d6996c81735cc701bd42246b2687a"
+      },
+      "fold_and_stack_scattered_clothes_neatly:15": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1783,
+        "pixel_sha256": "cc882b7251d2ec43b9a72ba38cee5382bac0e0dc7f4804e5be17dc183b5cccb7",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000015.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "030fa493e4016bf06ec20f687abb1a30c49cdfa183449e5ca2de600bda66436a"
+      },
+      "fold_and_stack_scattered_clothes_neatly:180": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1613,
+        "pixel_sha256": "41748af7a64224b106aabe4593861131152b615f3da6fab0b46f9cd9a0775232",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000180.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "a1459067955b699f7e5504bcee9887291cc31d24f9cfcc98aa8a606127addf5f"
+      },
+      "fold_and_stack_scattered_clothes_neatly:181": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1538,
+        "pixel_sha256": "24b7e353c33304fda22cd38671e14e0b9de9bb47cf4726e27e6763c1e5db0d74",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000181.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "b33ba1d9395091d959b4c6f97d83f5705ef1e4262a9cfff9b361c9c48c454788"
+      },
+      "fold_and_stack_scattered_clothes_neatly:182": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1632,
+        "pixel_sha256": "4634e50a588ac0d0f70a58a5eaaeb11e1b8154e7611bf2b54303635fe2c3bd16",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000182.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "681fd03b10bef87490c459efd9e00f7f7926feb36906dd04ecc079a52f6ec1ac"
+      },
+      "fold_and_stack_scattered_clothes_neatly:183": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1644,
+        "pixel_sha256": "00e058791a85c07cd9c1ea1301e451c3d2046085a5b4dc25606ca3cc9aca1e99",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000183.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "9a59f2407be94aa6b7bfabe31b1ba687ec42eca28f174dde644fdaf35b1a5711"
+      },
+      "fold_and_stack_scattered_clothes_neatly:200": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1540,
+        "pixel_sha256": "4473b16809d5132f705a7f25f3e8274e10cb10ea1ad379071682fc82154bc93f",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000200.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "93df2195bf2f59aabffa562d73d954eaad5e8584c865c8fdeffedc935acc5987"
+      },
+      "fold_and_stack_scattered_clothes_neatly:201": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1625,
+        "pixel_sha256": "75e5b64890587570d44b715b2963a534a1f9921de6dc42afb03d46dfde3ad0a0",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000201.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "86ed964a1e2fbfb6036e4b78c260b9ea0a242d0f6c278aab3610b5fb0d60940a"
+      },
+      "fold_and_stack_scattered_clothes_neatly:202": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1578,
+        "pixel_sha256": "ae1c1b1196c1e934ab7c05a90d87859495864215edd8084cff568a2d7db7faad",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000202.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "a689e29e30c54bde8d51c0ffaada0608718c14dc42254ef81db5bdf9094a304f"
+      },
+      "fold_and_stack_scattered_clothes_neatly:203": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2008,
+        "pixel_sha256": "a0d966cb528366e40565d28adfa424d833dc586af4c71815217f111fc55bd2a5",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000203.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "057a7e192aab036c17fc76e5203d3b0c1226a72b8b9cc5470b57f3dac25cfa7d"
+      },
+      "fold_and_stack_scattered_clothes_neatly:256": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1799,
+        "pixel_sha256": "6c3f1aba87f7a84504ade0f4479168a57293ff4f35062b632a886b2b893d1ea5",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000256.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "126674ef5c3d506a7000a4eb815dfb03cd20adb92cc93f95a6cb53a1a7c553ed"
+      },
+      "fold_and_stack_scattered_clothes_neatly:257": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1637,
+        "pixel_sha256": "d46306a2ee3ef5d620236cd2c06efbab7e16fa7fe8bc091f3a1332fa355a6981",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000257.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "192dce14d7daae1a31c036d192d9d6a0555bc0f4069ceb687cc53d6ed506ba20"
+      },
+      "fold_and_stack_scattered_clothes_neatly:258": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1855,
+        "pixel_sha256": "35e29d8d297cb0470b8e7513c954dd751d97dad33f83582cb8bbf20a82105251",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000258.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "1d3c7b56f2ab550b7299cb8bb9d18d815161af0d038f15ec3d2222dec85aa864"
+      },
+      "fold_and_stack_scattered_clothes_neatly:259": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1939,
+        "pixel_sha256": "97d90775eb93efa1292b5a100c7a299122e6c1e0fadacf90eda5c68fd45e6eb5",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000259.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "e2a52386d32871ca88c0108eb333bada4e6b9bd7490c7f87d65e6b607918d91a"
+      },
+      "fold_and_stack_scattered_clothes_neatly:272": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1541,
+        "pixel_sha256": "f4607f814025dda260c06429aa5805d3a6fc6615a18f207890f415ffa4e18947",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000272.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "d4539e1326a457ae6e61be2a4db9d324619dfd9c8ee4afe0b695efe70e9c6d12"
+      },
+      "fold_and_stack_scattered_clothes_neatly:273": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1702,
+        "pixel_sha256": "55d4b3cee91c2b049b04a6b0562883b297782079688195f8e4181acfc5104b6d",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000273.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "5c863795f76a6c08d1a5f8d6847e73d2ed89b91a0a9a709f7a5982ab6e7da04a"
+      },
+      "fold_and_stack_scattered_clothes_neatly:274": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1415,
+        "pixel_sha256": "79e517a47ea695d345da8d92eda5e0c108db400035c6dcf16a481949451b5ba0",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000274.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "285f69facf2ebcf81d0a522fa9a6a9692b21cf616c0112c1b6decdf03f153a49"
+      },
+      "fold_and_stack_scattered_clothes_neatly:275": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1700,
+        "pixel_sha256": "a31434ee063c0f7f4a61ceaec43abfe95a68329feb40a091711211863694e160",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000275.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ae633f05a7a79672ebb8b2d4d965d19d3ab28438d326a8652c918a5afe4872a4"
+      },
+      "fold_and_stack_scattered_clothes_neatly:304": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2078,
+        "pixel_sha256": "206ae476556633920839188137d202a26de2828842d8deaa621efec903d8af0d",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000304.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "d091317670cfe7f1d5d5d21579bae8f9861d9ab73c34e5ae00f272c1792bef99"
+      },
+      "fold_and_stack_scattered_clothes_neatly:305": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2173,
+        "pixel_sha256": "6bcdc70887af7a6aecfaeafbfee11da0e2201a8354f4a78810ac5d33d913f786",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000305.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "354128d758e4e3b9bb5775fb67c87543adc106acac9b6e581bec584d86ca3b05"
+      },
+      "fold_and_stack_scattered_clothes_neatly:306": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2183,
+        "pixel_sha256": "0f94157e5e4b5378cc6da0442193d5e71bd73309e71237854bcb0cb8170628ae",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000306.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "2a93621bd746d68ee7219e76d137a221a4c6a64cbf52134a2698d2cd504037e0"
+      },
+      "fold_and_stack_scattered_clothes_neatly:307": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1468,
+        "pixel_sha256": "e3348bb4fae6453e6b7bbb63f7e1917f9ef2f548df79a9165e86bfd78df95f0a",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000307.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "d49892ee3e8f5cb9078c2fa659749828456ef42539752dc482f68eb6e5733bed"
+      },
+      "fold_and_stack_scattered_clothes_neatly:32": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1859,
+        "pixel_sha256": "0b3f23e2f1daf053831089202b5a7c207181120bbed39cb22ab34d200cabccd8",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000032.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "35708fe03f409bcb7869b49d0c91512428341fcc5ed39b229a7be675b6b9d15e"
+      },
+      "fold_and_stack_scattered_clothes_neatly:33": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2127,
+        "pixel_sha256": "7e27b297d560c2d844190e9bd0d6cf5c6d60fb200144142c27f1b195e3a39b44",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000033.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "9845457bb5cb990e766ed88b48e426efa250957ce23aa5343c8a6139ae286569"
+      },
+      "fold_and_stack_scattered_clothes_neatly:34": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1683,
+        "pixel_sha256": "843b55ca99e2b1716bdc752d0dfb9f142bb705430b94718b2376976257360c8d",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000034.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "038d2018cd1f334c1e14ed8c812d48ff960bde94f93272c97b874f92799a93fa"
+      },
+      "fold_and_stack_scattered_clothes_neatly:35": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1667,
+        "pixel_sha256": "898b602b980931716f6ab7cda264361479e0cfd4118db9a3f5d882aa9117faad",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000035.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ce54b2112f67bc6b29eac2a55b39e0c6e3c51b82347a96fc640a390104631805"
+      },
+      "fold_and_stack_scattered_clothes_neatly:40": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2064,
+        "pixel_sha256": "f5b4cbe2419648850343acd1c514aba5a6b25acf2b339c16f8a49aa5b6370925",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000040.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "796e618a53612d51cc03740b597fea0ff190fbaf8736abde67e898d2b6a9bd93"
+      },
+      "fold_and_stack_scattered_clothes_neatly:41": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1867,
+        "pixel_sha256": "3fc9a2069e6957b23f26bd61ba485856ed6b2238ef7ed49d7ded5d339c28f833",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000041.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "406b588af390e4f055de940f89db250e92256e3caf85433e6e5d88c744c15541"
+      },
+      "fold_and_stack_scattered_clothes_neatly:42": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1804,
+        "pixel_sha256": "b8c41b5bcff4498bb202e75467fb165a1f3e8bbc7a91882426fd7cfa86a81589",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000042.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "c9fe150da664f02e2f946eab6b23a83d4ae905173059a8578dd50d6c70262ff0"
+      },
+      "fold_and_stack_scattered_clothes_neatly:43": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1744,
+        "pixel_sha256": "9e15c5dd1827b26313cff1a61487f4c1f30376e960deb2e9b9c6464ef3b955b1",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "fold_and_stack_scattered_clothes_neatly/videos/chunk-000/observation.images.cam_high/episode_000043.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ef1c42b8bde4ed81e4575b24094a64541cd5d9303a8e9e7f72a1501bcfb93f4f"
+      },
+      "hang_clothes_on_drying_rack:108": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1867,
+        "pixel_sha256": "2932eec5afb7c0b07de9748d157a98f5faa0102a5f3f6355027c3a302457b32c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000108.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "caca2fa18efcc4eb107489dcb74d60c03cf3aa0dc7fe83e0fb6f9b7e2e1e1546"
+      },
+      "hang_clothes_on_drying_rack:109": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1901,
+        "pixel_sha256": "04ba8795653d0ab1e187aed51b657144f8130ac1c80528faf62efc07cffe2200",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000109.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "9647e6ccf1c83f35ffc7bd59a27e2873d3ce8938ee0751ed20cbbd0837fca792"
+      },
+      "hang_clothes_on_drying_rack:110": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1759,
+        "pixel_sha256": "9a162c4540b49b3ab6bfc788f4973b5ee842ee36c5ec392a85d8adfdf5ae358d",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000110.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "5a3e68963e0634a6685e1248569f871c08e6eb71fe4f98bd47d11958277f6263"
+      },
+      "hang_clothes_on_drying_rack:111": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1975,
+        "pixel_sha256": "daf3d6df808e62700b20525e58dd2a64ea93bb73f23cff466542530c6e40d4d4",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000111.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "200684a577362d95ce674aa053866d7752e85cb34ce87fd30fd291d14c381766"
+      },
+      "hang_clothes_on_drying_rack:148": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1712,
+        "pixel_sha256": "cf04f13a364aec6242c281697ad97d209387394eec84680732c27c22581d4e7d",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000148.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "c2f979b82834eb9683c89340b23abc7b685d8adecb95ba0ddb04c38bf50f919a"
+      },
+      "hang_clothes_on_drying_rack:149": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1689,
+        "pixel_sha256": "fb09412ec801fbab8e4d36376e7fc212ce8c45aaa2e1d641c284956cec801972",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000149.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "0e39ae20c106efadb27e166762bab88afce5a1175710b33278cf85e4d161fa8a"
+      },
+      "hang_clothes_on_drying_rack:150": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2354,
+        "pixel_sha256": "9a192bc2ee14bbe8d58119b943147c04b60db55fedebd644b641ff025334425e",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000150.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "f3e6ad11dd3b9b4b274eaceef8fcc5370bdce5e26ccadb50432b3cf116e6e885"
+      },
+      "hang_clothes_on_drying_rack:151": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1654,
+        "pixel_sha256": "9d6d1d037a48e120b947d9d99ba50fedf6544fba0035252af851d2b643e86472",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000151.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "30910e21d06295df10121155c9093b2b8f0ebcce583808a401e5a346b62248c9"
+      },
+      "hang_clothes_on_drying_rack:164": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1702,
+        "pixel_sha256": "789725fc7955aa71bcaee5433dc7bc1533d29f3bb7207b840531af296c10d054",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000164.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "0c5124b7a3a87fd421cad5d378924aeba74439a753e5e12aac2979f46c2f0dec"
+      },
+      "hang_clothes_on_drying_rack:165": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1735,
+        "pixel_sha256": "4bae104cb8c4e5b1828d26af50a0a5671b77cdb6cb219f4a23d89ca3d1711b94",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000165.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "e0d7598ff7358a3eba2d29502e9faec5069d73748587256bb6c70c9ef771627e"
+      },
+      "hang_clothes_on_drying_rack:166": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2149,
+        "pixel_sha256": "f9745322fc105e0e749173385de4d4c6f84d2e461b1f49e64a1decbe41e0afee",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000166.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "d34a874752678efc334b18d6a10d90a81f3f78ad690dbff7e065f2d81afa7410"
+      },
+      "hang_clothes_on_drying_rack:167": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2132,
+        "pixel_sha256": "8c5c4e972e9134bf7b7c5ccceb4a2a4a9c345bd33a4c5d35b7b405375b55c812",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000167.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "bb227a8de810b1c9297598f20612ceef870ba63fdb449b9a7654fcda7dbfb605"
+      },
+      "hang_clothes_on_drying_rack:172": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1849,
+        "pixel_sha256": "afa3454fbb9e3ab6ff69c22e57244a23b013c3883133175801d144fdc8590d7c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000172.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "cfcfde0c42a6247126889727f92d525e974a8285f77ea6aed5bc3face4483411"
+      },
+      "hang_clothes_on_drying_rack:173": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1937,
+        "pixel_sha256": "118584cea04bf3d6f6bfadc1964800f1c960b2c667bdad631d6b34aeaa4db441",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000173.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "224c636b77348b81776941e7d326b04602f7835fef0f19a6680b4af4eff8d6ed"
+      },
+      "hang_clothes_on_drying_rack:174": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1872,
+        "pixel_sha256": "360cfdb4d1737bf26d7eebc31da7ae7a64736583205c281463a79bd187e1072e",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000174.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "0d4cdbe48f853a81e7e4f0f22fbcf4227a81e4d85543fe910004c8be4d498edf"
+      },
+      "hang_clothes_on_drying_rack:175": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1849,
+        "pixel_sha256": "79ec7196c60e7f8412c53261daf966a09c2f42092f6ed3394bb159a27d8fdd66",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000175.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "11ca92e1dda1a0c866887306ced7f5b1ff8080efc2fcb30a28fc5736829b204b"
+      },
+      "hang_clothes_on_drying_rack:216": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2846,
+        "pixel_sha256": "548e8e89073b2f556ad2eaca5c8e0f13cd9dfc94712adb4a3f8108b471b394a7",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000216.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "b04a7459a7ca6d161308a1648ea8f20cc20fe3bd1dccc28a3509eae1f499adab"
+      },
+      "hang_clothes_on_drying_rack:217": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2049,
+        "pixel_sha256": "df74b2bc3630e7492eafe88ff9a3b0f241e97af6f867d2853a1525d071e8b5e8",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000217.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "bcfa0d103fa50ed3e5d8fee7d9fde568b55f4bf32ed569804561188b793f5089"
+      },
+      "hang_clothes_on_drying_rack:218": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2432,
+        "pixel_sha256": "056b31d989f077f722795d462476cbe3ade03466874dd1721321acf34472c262",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000218.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "36d98d756b84f6e82c2caf86bbd852b71a8cc9d9f75f26780412b21fde2db4e3"
+      },
+      "hang_clothes_on_drying_rack:219": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1925,
+        "pixel_sha256": "091bea7b6cc4d4c808d962707f1ca647c13a3888c75cdf4e389f6d4cfab385cf",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000219.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "b06a16ab2c1ffc1e3ed539ab10e62d87afbce564e070dcf248c14313c5a6b08a"
+      },
+      "hang_clothes_on_drying_rack:264": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2039,
+        "pixel_sha256": "6df8bdeb91c7ced1cac71d193b1b4caec4fafd516df62bab70cfbd3e6781121b",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000264.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "d835e9abe462b0ee5633f0e2b79d2f52a7026200977de4ef20b8f8765e8a30b9"
+      },
+      "hang_clothes_on_drying_rack:265": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1812,
+        "pixel_sha256": "c126108c4a3fdc658aea70fd47cfe0bc04e57ed0d7625c00b901e8fb266af8d3",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000265.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "017d3eaad0c48cc6b58a20b9922492b19409c7ed90bec2cac42a295e9a6cd7d2"
+      },
+      "hang_clothes_on_drying_rack:266": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2059,
+        "pixel_sha256": "f0faa61add5ec17dfdb913db48aaaf0ec3298b728cdb6c215c535cbed2519cb4",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000266.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "be90a86630a5fdcd8eccf2dba82bba40fd97f35a7075cf3c7be4095931bc7111"
+      },
+      "hang_clothes_on_drying_rack:267": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2326,
+        "pixel_sha256": "0128e0a647a83452c7ff6111bfa10cd71a19a871607d770ed9350012f502767f",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000267.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "cf23abd5bea6fef0321455a17e37819799086e0cbf1a4065b27df081c0113be9"
+      },
+      "hang_clothes_on_drying_rack:276": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1578,
+        "pixel_sha256": "79f2cf41ca48303ce8d20c7d8af9917c040fcc4ed00853394450d94a71ba9cbb",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000276.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "51504a7e7473f105ba092d0bf00e886bca3706b53ac158f8a23f5edd5b161f7c"
+      },
+      "hang_clothes_on_drying_rack:277": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1900,
+        "pixel_sha256": "dc502426b8f13da1caa57dcbd4eda239176adbac0a5f74105cf8729de976d3b2",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000277.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "d212497f0b060a44d52d7a175a10f1e90613408eb12074c93a14e4e3ac7b3398"
+      },
+      "hang_clothes_on_drying_rack:278": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1668,
+        "pixel_sha256": "4360dd4425d8b7eee7b17b159580f8c1d6081b12b99e2f8f64637c700259580a",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000278.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "4f2923a7000f0e616f933bba3a0f770c8a1744263361414d90f4f3008ea629d9"
+      },
+      "hang_clothes_on_drying_rack:279": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1911,
+        "pixel_sha256": "dbf198cb7ebce98c12b5532d7fcce698cfae89260bfda25586ad8b2c4fb1951c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000279.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "4a3b42800ca812317dac82e0df5acb3cce9f117d4f076fd46d8967ae041fd3e5"
+      },
+      "hang_clothes_on_drying_rack:64": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2769,
+        "pixel_sha256": "30b4023cd6ef5c8610e8932ef8262c6be3e1df3130da9a0edd1292736f966ad1",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000064.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "12221cea749050204fb61b1f071f7b91c0f3dbb5a3f049113163fb30b1f8572f"
+      },
+      "hang_clothes_on_drying_rack:65": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1980,
+        "pixel_sha256": "5307b8822beb057b8a94f5902e9a4bcf454738e59b3ffcf871653c34f4eae2dd",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000065.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "35eda1f0735c5b4210f161ceb2a0376415049a7aa2d8d72e3b7d7c9df41a028d"
+      },
+      "hang_clothes_on_drying_rack:66": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1858,
+        "pixel_sha256": "a95fbc28d209ba388e59df3b0727210eae6c8bd8ddfc65d1d69514a1e2cde221",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000066.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "4db3bea693cd110cb35630382d8f8ae84f2db2031c2465da7bd8f23f35f49d7b"
+      },
+      "hang_clothes_on_drying_rack:67": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1815,
+        "pixel_sha256": "9b43994bdbebb462e8007d4e75461a9ed39910225ebfc3b07ea3fb7f9fdf7dd2",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "hang_clothes_on_drying_rack/videos/chunk-000/observation.images.cam_high/episode_000067.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "2d3e2b0d781e3ac49994ca8cf4e7f510fb0a7024eabcc9efc056e9dae576c20a"
+      },
+      "line_trash_can_with_trash_bag:148": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1140,
+        "pixel_sha256": "6dc7cc955490ace8abcfbd0632149df2081eabce1fbd385114c0f82ba9405a22",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000148.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "c052d69a7f7fc3da4ffe0419b793b31a0bfa69faa2365bbae669126f3c90de6e"
+      },
+      "line_trash_can_with_trash_bag:149": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1040,
+        "pixel_sha256": "854f046970f2dae22f2ed12a86a90a64600219a94393b052425101d433db4cc0",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000149.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "e22666a34737408d9d293cb8557d16d718ef867e41a9a8b397404c0c7d433dae"
+      },
+      "line_trash_can_with_trash_bag:150": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1014,
+        "pixel_sha256": "12b8ea328da8a9295b12e94737709311c8207967cd12f0119868cf934dc1a532",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000150.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "8b2996fb08d2e4b356b3d018719626d9325da6b012f6b956070c22a5ba518ced"
+      },
+      "line_trash_can_with_trash_bag:151": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1079,
+        "pixel_sha256": "797b05c988dc326863694a33dcd54bf27edcc65e79702ceb65750b8faa9e7715",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000151.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "4a1cbda68841d81ff304880a33c63f71ca0b50cacd82561691fd720ee0b1181e"
+      },
+      "line_trash_can_with_trash_bag:196": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1386,
+        "pixel_sha256": "0d34bc15a8cb4b53559a75b52925695ba65a0bcc72e7bf34ebbc0161296e357e",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000196.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "fdd25d79611b7e0d10fd168c28098324a67f50fd91902517e6ab958a2374a553"
+      },
+      "line_trash_can_with_trash_bag:197": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1317,
+        "pixel_sha256": "28bb9c972241291c2935cca9b2b3496b3cc879beb27e3f20fa89ee22c5ec7a0c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000197.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "81a57e030477df0886ce77a5388bcc12ba9ccc85c465a779a42942aa9f814dc1"
+      },
+      "line_trash_can_with_trash_bag:198": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1062,
+        "pixel_sha256": "469380c5a99be24d6777bec3bb8ff5c0949840cbb9e75a15ef599f52d892c1ab",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000198.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "23671845825e3f6f51c57643720616f5d2484d1b2874e9ec61d8b5488d12c74c"
+      },
+      "line_trash_can_with_trash_bag:199": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1347,
+        "pixel_sha256": "c1a9b06ba56cb7ee58909fc89dc21457847abda806444c1f4f0fcafe34eecc11",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000199.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "b461c62665bd571219eae830ec090c375c4fb2a68bf2eec247514d1f28687b49"
+      },
+      "line_trash_can_with_trash_bag:268": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1061,
+        "pixel_sha256": "9c63d92bfe34a78917902b6dfa490137aa96601964315d10c7b69120eab34d24",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000268.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "b537a8a9e506fa36aa347c06785cd90608939f84afa4d25f597c09a4ffe7ce60"
+      },
+      "line_trash_can_with_trash_bag:269": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1196,
+        "pixel_sha256": "d7d025749acc626dc62bd37047f797932e0e5bae42fcd9179f4470a1898afd3c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000269.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ea9694d88160fcede4265e9f3fcdef51c104166186437e2005e6566efcef6afb"
+      },
+      "line_trash_can_with_trash_bag:270": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1324,
+        "pixel_sha256": "a2cb004a904107cb00e23816b4d8aaa3aeb43eb8a74887e02d05777c77e02b66",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000270.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "2ea2cc9d86f227e9372013f932b1d3670bca7c230cccb4f86419b14b09f7d834"
+      },
+      "line_trash_can_with_trash_bag:271": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1250,
+        "pixel_sha256": "5776a2987afc1cb43acace71dbac7e5dba65b0a564fa5b269f17aed9a60a52c2",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000271.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "98c84350758b0028a2ed48475978cbd96dd15c32a5b0a99d64e978fcb625de3a"
+      },
+      "line_trash_can_with_trash_bag:288": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1199,
+        "pixel_sha256": "80a3f1905b44a54f329e569188bb57cbf69fd5f34e41dfbce1d337c9a7ac4e59",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000288.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "c73c0df4ec017610d72cde7fd2842820d78f15463d5c0b0ac07da6134cd8ece8"
+      },
+      "line_trash_can_with_trash_bag:289": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1312,
+        "pixel_sha256": "f7b46841756c2f7834c63c7cc161f247cba65515df3d1c487dbf1ac0adcd6e27",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000289.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "2bae65cf11e3b00c579bc18867016b0b87f617900ecead82f19cf000a59df7e1"
+      },
+      "line_trash_can_with_trash_bag:290": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 991,
+        "pixel_sha256": "a68011b407aa327faba180a0a9ed4c373fbe8e3bc0da72d3ea1c01ea46afad68",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000290.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "851e1a0f2c714f87f4a4669a12e2c131a562fac1b78ef75c0f25d716e9b08b6a"
+      },
+      "line_trash_can_with_trash_bag:291": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1046,
+        "pixel_sha256": "a06128185884b0dbb613bf7226791ab125ae80349f71f3862447d17a48d48662",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000291.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ffd9e9d9ceea9ea8f351a600d26309a9c4187f6249d8df129edc8bf631850247"
+      },
+      "line_trash_can_with_trash_bag:32": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1075,
+        "pixel_sha256": "40fca987294976aae0a98daec0b33ab04943ee3d23bb0e62cf3c6ad8091ddf1c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000032.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "d93321b6fdcc986276b83dbb328d627f059982c89c64cb4412fb02bfdd860749"
+      },
+      "line_trash_can_with_trash_bag:33": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 968,
+        "pixel_sha256": "0d7fb8937fe293cca737662e720516c67b8a4a28d4fd7e7c754cbbcf692e10eb",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000033.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "a8c5ce06c68fd4a486915048f1eafcbae735834460dff6c3daf75412c60f17f2"
+      },
+      "line_trash_can_with_trash_bag:34": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1226,
+        "pixel_sha256": "c008dec611e305f6ae73fe2398b7d34f2f24e87c3f9740b7b64c5b1414f52902",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000034.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "1428cd84187ebaa3494b65725bb06cd30f1bf37f693995fbc90b3480e8c57f12"
+      },
+      "line_trash_can_with_trash_bag:35": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 956,
+        "pixel_sha256": "feeb914c7283a5f9dd9664f836425cb3db9541f3b5d61bb5789501a00f14a811",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000035.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "387d8300ccccb3eafbb269b277822e68736db6438fde12a40e26ea8f9b0b42d4"
+      },
+      "line_trash_can_with_trash_bag:408": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1210,
+        "pixel_sha256": "750184932f6eb6ae9d8844ab22020d596ba55c30dc9040816a03f319cac7d367",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000408.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "879da5b0a846a8d99f51453779214b1b954d58dc7195a71485be91c8b163b046"
+      },
+      "line_trash_can_with_trash_bag:409": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1024,
+        "pixel_sha256": "d28ab9480777ec09ed8e3f3243c12c5b67c776f1032957d7192abfd6f2eaf865",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000409.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "6a15839b584ab07d1b9178770c99debd5e5966116ea82fb5b1532038f3fbd356"
+      },
+      "line_trash_can_with_trash_bag:410": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1791,
+        "pixel_sha256": "2e934eda728602e1cbf5c86c7de4ebeb279335b086ace51a46f2c996f39f0838",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000410.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "1a64b39baf0039fc838484d3d2ae8fb8c19a09fe0cf0ce0970df1bba1ef7c253"
+      },
+      "line_trash_can_with_trash_bag:411": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1175,
+        "pixel_sha256": "cc57050c9ea509cab5e09e1cc5b5c2209c435d9a2e8e452643b56b6cd92b87d0",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000411.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "cce89908f709c55dd3cbd94d06a547ce7e6706791b14bf6a599bd0228968815a"
+      },
+      "line_trash_can_with_trash_bag:436": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 995,
+        "pixel_sha256": "031db57db10b7e386f7eb16a8274a744aa30c5ba3698bca8bad4de22189c7595",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000436.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "7f65f2d5893539f24e230eccb86cb1b81099684876fa7c8965a0d11de2fa2612"
+      },
+      "line_trash_can_with_trash_bag:437": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1347,
+        "pixel_sha256": "7333460566b0fe3871e8d0f2f9d7989e0c4b70277734c86b963b8583a594ff72",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000437.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "725f3337017959d1600fd2b947e33a577d6443799270c935af2e5d136edc23d3"
+      },
+      "line_trash_can_with_trash_bag:438": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1087,
+        "pixel_sha256": "b39827e18d9647ba11eafda60b00dda09601f73da55becffe0db6563ddc7e2d2",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000438.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "210b5e495bb4ed66642b96beb06153b24b4ca7ea3f826d9657988f8be37da774"
+      },
+      "line_trash_can_with_trash_bag:439": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1008,
+        "pixel_sha256": "5825fb4f993327da2253aae4a7ab7b6899dfa6f9f9a3517aecbcf99a2c3cf3ce",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000439.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "d15cd3d9a93153c4e63c367a485c5f338a3b4cbf286d9f798fb80c05c203dd83"
+      },
+      "line_trash_can_with_trash_bag:448": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2077,
+        "pixel_sha256": "8dab94c3276d6dbc52a2205ea62def76f88d7c5154feaca06b15005865c00970",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000448.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "6a4980ce95e2c21cce28ae5bdddfdb3cba4b0b8712be61cebf75585976f79e33"
+      },
+      "line_trash_can_with_trash_bag:449": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1654,
+        "pixel_sha256": "c00db7a21acfbf0c150f7b537a7524e0f0a8e85c88b82c0b82d9f2062dfae573",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000449.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "5ba9cceb0e320c3d2ed3745a1daf7489ce548400fce8103a30bd826d054b5b6b"
+      },
+      "line_trash_can_with_trash_bag:450": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1484,
+        "pixel_sha256": "7fc0075511cc69201a5bdae876ef1c1fbc850024d55fdd408e5fd6ac65332261",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000450.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "af2289d3c72c35fbb606b1e5ef740b3896b05af8a8ee90f6088c7e2062ed9263"
+      },
+      "line_trash_can_with_trash_bag:451": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 1278,
+        "pixel_sha256": "7be0d40efd7404e0e39eecc95f05af7547ac4fd72e1b4ba08d32f35e542664af",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "line_trash_can_with_trash_bag/videos/chunk-000/observation.images.cam_high/episode_000451.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "6e0a804ba469302e0db21f5e277abac641c76000cb5c04b566c90baa5d698a31"
+      },
+      "pour_water_from_kettle_to_make_tea:108": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2960,
+        "pixel_sha256": "6dee83b35624541e95ee084b3b6d57fb88e8761099cf00f7931fbd2cd8463753",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000108.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ae972056e996d2bd97a0a650bdade467e0ef87ff90e14aca0ff59a81423d32e3"
+      },
+      "pour_water_from_kettle_to_make_tea:109": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2837,
+        "pixel_sha256": "ce5df15f398853125c88174c69971d5b83cc3633eb9b939eca07d8ce2af4044a",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000109.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "2b2fdd4915b88b13da308d324c2a1f034cbba98e670a7f762ac88eae45fb763e"
+      },
+      "pour_water_from_kettle_to_make_tea:110": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2732,
+        "pixel_sha256": "0df56833faee5dbc8d462bf76b3aeb70a388075b1224a050a04de875b82189f0",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000110.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "35a7bbc3b81986aec59006b9d47dd0a599ed0b2c247f95cc3471dfe5463bc1b2"
+      },
+      "pour_water_from_kettle_to_make_tea:111": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2658,
+        "pixel_sha256": "04d84248b6ab98b41997bb30a80a90736407e4bf9ff57ee44b08125fde618902",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000111.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "4ff20610f093e60bb8391a384a42960655141b1b9f17f3e2a8312645c9f21222"
+      },
+      "pour_water_from_kettle_to_make_tea:116": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2962,
+        "pixel_sha256": "560b0aa51f6d6c2ea3fda160660456cf298579ec3050893400a37c1dd48d0ea2",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000116.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "e9f4b725a602b8d4749b1c846ff10051a8d1b0424dd9a2447b74b1d07ceb0001"
+      },
+      "pour_water_from_kettle_to_make_tea:117": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2650,
+        "pixel_sha256": "12f1ea96500204d0ce53717d80261e81a5fec81affcba920401010c49810d785",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000117.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "adf59f503e0b1c67133f8d3c0db71f33b8082b0255cb35675109a0de232c9a56"
+      },
+      "pour_water_from_kettle_to_make_tea:118": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2833,
+        "pixel_sha256": "b722e2f1614cf6079c1292a83b353704933828565e8c6875457fdb55cb8982f0",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000118.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ffd0a24d05d0045eb6f5ab3d5de069c5ad655520bd9683a9e54f6c9496baf3d5"
+      },
+      "pour_water_from_kettle_to_make_tea:119": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2350,
+        "pixel_sha256": "707021db1bdbecfc1b7bcf328dfce9a2dd59eb9e9ca398c33f8fe526dc78860f",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000119.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "eebbf28d2a5d22300e63eccda3e92ada26998e5f177ec093bdb56bab83987267"
+      },
+      "pour_water_from_kettle_to_make_tea:136": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2510,
+        "pixel_sha256": "4d7206c4e644d1c707ebd92babcc539fab29b24bad26136f6d21979c87d1f508",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000136.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "35796c3edfd7b448ca5e3e845f6fde0c05f03b73913b6f983dd0069500a9a463"
+      },
+      "pour_water_from_kettle_to_make_tea:137": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2825,
+        "pixel_sha256": "641276281e3ada9ff6b6be000fbad31d3d51203124e38016f74c7006eaf27f01",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000137.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "82389991bdba855b0e92f252d4d1fa586fc6faaa4add8af506fa63770e9dacc0"
+      },
+      "pour_water_from_kettle_to_make_tea:138": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2637,
+        "pixel_sha256": "59cb09c9cda4ea8c84b9e75ede5a6b770042ea0b4445f435d1e61456432d2133",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000138.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "bafbdebbee241e0b4c6745217e08df08661a2e9667333c5e41ba1329b3cc726f"
+      },
+      "pour_water_from_kettle_to_make_tea:139": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2520,
+        "pixel_sha256": "5e57520af2ea8616cca2c4baf211f68c141a41682022632234ff4f27ea59416d",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000139.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "e5715c90c73c01dcec148e609e68469220b174a7fd5c0134c65cd5f39e426855"
+      },
+      "pour_water_from_kettle_to_make_tea:16": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 3680,
+        "pixel_sha256": "b5254181a5c0b0297a61e97818cb759a5bb2eacb5b9c3110c86826b642def2f8",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000016.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "1f920b107e9bf3350b554a2dfb8b69446e9492569ed2e7b40e76578f8790aee0"
+      },
+      "pour_water_from_kettle_to_make_tea:17": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 3727,
+        "pixel_sha256": "f2754e6acaa0a3d7c311c7a760a683c2fdc39b0d71eddd63b3c432c5e94c6644",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000017.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "eb1b37ff493b16a80bf4ca12824f25915d0e16b64cb75b1d502fd55c85d0b089"
+      },
+      "pour_water_from_kettle_to_make_tea:18": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 3611,
+        "pixel_sha256": "b31a1712cf481cdf8d09475faeb167126fe502611f353bb61c3100afc27e5d80",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000018.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ce22ceca98f39d04e04fa02bcfe05a489437d7b2bc0a1b035c40d784dad77be0"
+      },
+      "pour_water_from_kettle_to_make_tea:19": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 3673,
+        "pixel_sha256": "703502e439663b2ff7094f8552ad764f09d71bb712280745a013fde9b993512c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000019.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "43b967ef8e3be9d4ace94b12bf958d1262be54ece71d5c62091401a5e9e7153f"
+      },
+      "pour_water_from_kettle_to_make_tea:32": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2873,
+        "pixel_sha256": "bf14884710a6c0dace1af13e7784e6e1ed02694e676ce8143ecb445489d332e6",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000032.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "5af0ebce438dd4813f27ec788d57f80462456424e8a33ff74f9d98db333504f7"
+      },
+      "pour_water_from_kettle_to_make_tea:33": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2710,
+        "pixel_sha256": "752ea3f188e6d5910cd6e01b3848ffd9d5d7d2660bf8ba77ea948d83230d9b7e",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000033.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "405baea0d20acff1d3ba73f553251b6d3f8aa42d5c98e46cf9a3c584fc3cca91"
+      },
+      "pour_water_from_kettle_to_make_tea:34": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 3189,
+        "pixel_sha256": "1cd78115a676c2e25fe624dfc15c0f50223e237be1c5038dbfe48550fe931347",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000034.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "ce37d4ed89125283382d0150b7d913fe84f832187b890a79705816e3702b7f60"
+      },
+      "pour_water_from_kettle_to_make_tea:35": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 3186,
+        "pixel_sha256": "7ca0ca7d3edd209b94d2fdeeebbb9c5196262b6d4b9a265d1e1ec9794ebe1fea",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000035.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "e07f860367eea7b476e74d65a141f16c5c69b09a4204f2cec9fde27ba93057b7"
+      },
+      "pour_water_from_kettle_to_make_tea:36": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2866,
+        "pixel_sha256": "1e37499949d3683618753c584b3756199cccce4d64822bc807d5574e702fea9e",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000036.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "a91132dfbe356388413dc9297612588c87e286b13bf94b730e35492848262986"
+      },
+      "pour_water_from_kettle_to_make_tea:37": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 3434,
+        "pixel_sha256": "29bf540ef3aaf1f5fd7f8688e238a03bb7cd1b408de89d3474b8c0b07825f78f",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000037.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "c04b8af62fa98d384acfa15c411574df0e2b024c45a201b80766dd62a60a6d44"
+      },
+      "pour_water_from_kettle_to_make_tea:38": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2872,
+        "pixel_sha256": "8e00aba9002e68807a1794b76b9e190b18081362af0fb6582ce396d9069bb48a",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000038.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "794c5aca354e66728dbead952494bb5f86612a606179e822e5e3e6a758c1771c"
+      },
+      "pour_water_from_kettle_to_make_tea:39": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2586,
+        "pixel_sha256": "66fd3632a2e15006a51b6e20120b3ac4fcebe7806a419f0ca20306ac91f75098",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000039.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "84d84d698a88d1c8eb41e256fba3353f8824c9c509b7d3cbd59184a633396359"
+      },
+      "pour_water_from_kettle_to_make_tea:84": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2658,
+        "pixel_sha256": "f959eed990b5bd2c3e2692a61c9cf49a51b6a34e93d145c7241f850c242592b7",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000084.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "bc4a7112aeb1fc929cbfd75c0fd7a85806a218e8ccdf4581a34c2a5ed3b72d97"
+      },
+      "pour_water_from_kettle_to_make_tea:85": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2890,
+        "pixel_sha256": "901394695813a53362fe5e60c4336d8cbb22f63f88cc21975c2dfef5b2c8685c",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000085.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "3d8e055c183a6f12f6073e0b2fc83724764eb212b7d8522aa17602140d539f9d"
+      },
+      "pour_water_from_kettle_to_make_tea:86": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2754,
+        "pixel_sha256": "924b99b8a7a3fa4ea8618083f5f7b7f482caceed687ba77a355424bede4f976d",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000086.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "151041905d39d403c334ca621adb618286fa389750ed5669164b624e5aeefb19"
+      },
+      "pour_water_from_kettle_to_make_tea:87": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2685,
+        "pixel_sha256": "e15bc6113219f5df0a11018231caceb121a48b94d8d024f0a3dda5c17700c810",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "REPORT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000087.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "86a4bfc513bcf26e03889b7730aa769933a8f7a777b5e96a4ae2754f953ff111"
+      },
+      "pour_water_from_kettle_to_make_tea:88": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2623,
+        "pixel_sha256": "60c37108dc49e8a4e7672be3eb130f83dd648dcdae3f04bdb671d5fdfeef2431",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000088.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "29f3e041950f8bfcf4c96e97db0d7c8d00cb81c18bfe2edffa500632da935027"
+      },
+      "pour_water_from_kettle_to_make_tea:89": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2631,
+        "pixel_sha256": "7fc107d441570e9156c2a0c0f6a990d45362b272406a36eaadecfe264dbe7cde",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000089.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "c671b3e6a2a5c2f05cc5477782373d4fbc57fc05278ffa2d279237166201a27b"
+      },
+      "pour_water_from_kettle_to_make_tea:90": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2778,
+        "pixel_sha256": "ed3bd917db14aebeec1620e0c7fe6138550b01319135ddf933185c9fffb15b7b",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000090.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "a3cc50f3170e0e6a6f7500d06b70a0af4a0b450aa5cd1b84af5d4145454b4f30"
+      },
+      "pour_water_from_kettle_to_make_tea:91": {
+        "alignment": "frame_index i to retained video frame i; 15Hz retained grid; no future frame in causal query",
+        "frames": 2847,
+        "pixel_sha256": "5b4c365eb1191b6418c62f434beaf4c3ca21d810e5ff09d51816f3c892435d47",
+        "pixels": "uint8 gray 32x32, area resize, no augmentation",
+        "role": "FIT",
+        "source_path": "pour_water_from_kettle_to_make_tea/videos/chunk-000/observation.images.cam_high/episode_000091.mp4",
+        "source_revision": "9290f5a96dc91ea58256e81d9ce2dd9621890b51",
+        "source_sha256": "b47ec37c2186c62211cc52bedec8d74fad294eebf2b4bc01dcc84ff7e7f2e5ef"
+      }
+    },
+    "source_bytes": 4633584032
+  }
+}

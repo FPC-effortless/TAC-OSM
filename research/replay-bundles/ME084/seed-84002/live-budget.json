@@ -1,0 +1,233 @@
+{
+  "architecture": "native_equilibrium_parallel",
+  "checkpoints": [
+    {
+      "deployed_parameters": 104539,
+      "parameter_values_sha256": "06151a85a572cc60b897cdd25dca6f5fdfa0c042b818e2f8ce0cad35a9189b05",
+      "path": "research/replay-bundles/ME084/seed-84002/final.pt",
+      "sha256": "f08517c776a87c93545c5f5259010cca3df6f1637e89cb44f57aa215ea72dbd3",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 2048,
+      "trainable_parameters": 104539
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 104539,
+    "trainable_parameters": 104539
+  },
+  "last_pre_update": {
+    "deployed_parameters": 104539,
+    "successful_optimizer_steps": 2047,
+    "trainable_parameters": 104539
+  },
+  "manifest_path": "/workspace/tac-me082/research/mathematical-engineering/me084/FAIR_COMPARISON.json",
+  "manifest_sha256": "73ab618c907746818ab3e5670a7232e362693bec1c24afa5cb4d91f89a912411",
+  "model_class": "tac_osm.variants.equilibrium_parallel_world.EquilibriumParallelWorld",
+  "preflight": {
+    "deployed_parameters": 104539,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 5440,
+        "requires_grad": true,
+        "shape": [
+          64,
+          85
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.weight",
+        "numel": 8192,
+        "requires_grad": true,
+        "shape": [
+          64,
+          128
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.weight",
+        "numel": 1152,
+        "requires_grad": true,
+        "shape": [
+          18,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.bias",
+        "numel": 18,
+        "requires_grad": true,
+        "shape": [
+          18
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.weight",
+        "numel": 4608,
+        "requires_grad": true,
+        "shape": [
+          64,
+          72
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.weight",
+        "numel": 60600,
+        "requires_grad": true,
+        "shape": [
+          300,
+          202
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.bias",
+        "numel": 300,
+        "requires_grad": true,
+        "shape": [
+          300
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.weight",
+        "numel": 14850,
+        "requires_grad": true,
+        "shape": [
+          99,
+          150
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.bias",
+        "numel": 99,
+        "requires_grad": true,
+        "shape": [
+          99
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "local_fast.weight",
+        "numel": 320,
+        "requires_grad": true,
+        "shape": [
+          64,
+          1,
+          5
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "local_fast.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "local_slow.weight",
+        "numel": 320,
+        "requires_grad": true,
+        "shape": [
+          64,
+          1,
+          5
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "local_slow.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      }
+    ],
+    "trainable_parameters": 104539
+  },
+  "run_id": "83b171eaeb604c00a5898e1f1eb17498",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 84002,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME084_EQUILIBRIUM_PARALLEL_WORLD",
+  "successful_optimizer_steps": 2048
+}

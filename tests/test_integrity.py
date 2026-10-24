@@ -424,3 +424,12 @@ def test_the_frozen_baseline_reports_the_current_test_count():
         "the canonical test-count gate failed:\n"
         f"{r.stdout}\n{r.stderr}"
     )
+
+
+def test_live_test_counter_rejects_partial_collection(monkeypatch):
+    from types import SimpleNamespace
+    from scripts import sync_test_count
+    import pytest
+    monkeypatch.setattr(sync_test_count.subprocess, "run", lambda *a, **k: SimpleNamespace(returncode=2, stdout="803 tests collected / 24 errors", stderr="collection failed"))
+    with pytest.raises(RuntimeError, match="refusing a partial test count"):
+        sync_test_count.live_test_count()

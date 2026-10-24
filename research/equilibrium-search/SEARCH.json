@@ -1,0 +1,18 @@
+{
+  "family": "ME082_ME083_ME084",
+  "operation": "prospective_sequential_development_search",
+  "date": "2026-10-24",
+  "architecture": "native_equilibrium_parallel",
+  "actual_parameters": 104539,
+  "ordered_candidates": [
+    {"study": "me082", "nll_weight": 0.2, "seeds": [82001,82002,82003,82004,82005]},
+    {"study": "me083", "nll_weight": 1.0, "seeds": [83001,83002,83003,83004,83005]},
+    {"study": "me084", "nll_weight": 0.02, "seeds": [84001,84002,84003,84004,84005]}
+  ],
+  "budget_each": {"updates": 2048, "batch": 24, "history": 32, "optimizer": "AdamW lr0.0007 wd0.0001 clip1", "selection": "final checkpoint only; all5originalsfrozen before exposedREPORT"},
+  "required_gate": "Every ME081 preregistered primary+secondary+quiet+coverage+interval gate unchanged, plus family-adjusted98.3333pctpaired episodeCIupper(new-ME080 H1)<0, H1>=5pctbelowME081 and NLLno worseME081all horizons, independent original-model strict replay",
+  "confidence": "two-sided alpha0.05/3 per candidate across3plannedattempts; original95pctgate also displayed; repeatedDEV remains exploratory even after mechanicalPASS",
+  "stop": "Stop on first candidate passing the full unchanged and additional gates; remaining registrations NOT_STARTED_GATE_PASSED. At most3candidates; no unpublished or unauthorized hidden trials. If exhausted, report inability to pass; no false guarantee.",
+  "source": "same authenticated licensed120FIT/40exposedREPORT robot episodes; no protectedtissuebox/CAL/TEST",
+  "claims": "single-native capability search, not a fair architecture winner or independent gain. All failures remain immutable. Native nonlinear recurrence remains sequential; other branches vectorized across batch/time/channel/horizon."
+}

@@ -1,0 +1,33 @@
+name: ME084 native equilibrium-parallel original replay (no training)
+on:
+  pull_request:
+    paths: ['src/tac_osm/variants/equilibrium_parallel_world.py', 'scripts/equilibrium_parallel*', 'tests/test_equilibrium_parallel_world.py', 'research/equilibrium-search/**', 'research/mathematical-engineering/me084/**', 'research/replay-bundles/ME084/**', '.github/workflows/me084-equilibrium-replay.yml']
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install 'pytest==9.1.1' 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - run: PYTHONPATH=src:. python -m pytest tests/test_equilibrium_parallel_world.py -q
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me084/FAIR_COMPARISON.json --phase preflight
+      - name: Validate every original whole model and actual optimizer receipt
+        if: hashFiles('research/replay-bundles/ME084/FIT_INDEX.json') != ''
+        run: |
+          PYTHONPATH=src:. python scripts/equilibrium_parallel_train.py finalize --study me084
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me084/FINAL_COMPARISON.json --phase final
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/equilibrium-source
+          key: equilibrium-original-source-v1
+      - name: Strict original reference replay without fitting
+        if: hashFiles('research/replay-bundles/ME084/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/equilibrium_parallel_train.py replay --study me084 --cache "${{ runner.temp }}/equilibrium-source"
+      - name: Full numerical census; strict failures remain failed
+        if: always() && hashFiles('research/replay-bundles/ME084/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/equilibrium_parallel_audit.py --study me084 --cache "${{ runner.temp }}/equilibrium-source"

@@ -1,0 +1,181 @@
+{
+  "actual_parameters": 99731,
+  "data_dependent_Python_in_pure_graph": false,
+  "exported_nodes": 2579,
+  "full_export_output_equivalence": "PASS",
+  "input_shape": [
+    2,
+    32,
+    14
+  ],
+  "known_command_shape": [
+    2,
+    32,
+    14
+  ],
+  "no_learned_intelligence_claim": true,
+  "no_optimizer_updates": true,
+  "operators": {
+    "<built-in function getitem>": 266,
+    "aten.__and__.Tensor": 1,
+    "aten.__or__.Tensor": 1,
+    "aten.add.Tensor": 140,
+    "aten.arange.default": 1,
+    "aten.asinh.default": 4,
+    "aten.cat.default": 110,
+    "aten.chunk.default": 65,
+    "aten.clamp.Tensor": 1,
+    "aten.clamp_min.default": 33,
+    "aten.clone.default": 1,
+    "aten.cummax.default": 1,
+    "aten.cumsum.default": 1,
+    "aten.div.Tensor": 111,
+    "aten.eq.Scalar": 2,
+    "aten.exp.default": 34,
+    "aten.expand.default": 3,
+    "aten.expm1.default": 64,
+    "aten.lerp.Tensor": 64,
+    "aten.linear.default": 102,
+    "aten.log1p.default": 2,
+    "aten.log_sigmoid.default": 96,
+    "aten.maximum.default": 33,
+    "aten.mul.Tensor": 252,
+    "aten.ne.Tensor": 1,
+    "aten.neg.default": 132,
+    "aten.new_zeros.default": 8,
+    "aten.ones_like.default": 66,
+    "aten.permute.default": 1,
+    "aten.reshape.default": 16,
+    "aten.select.int": 109,
+    "aten.sigmoid.default": 34,
+    "aten.silu.default": 4,
+    "aten.slice.Tensor": 113,
+    "aten.softmax.int": 2,
+    "aten.softplus.default": 2,
+    "aten.split_with_sizes.default": 32,
+    "aten.sqrt.default": 64,
+    "aten.square.default": 64,
+    "aten.stack.default": 1,
+    "aten.sub.Tensor": 77,
+    "aten.sum.dim_IntList": 100,
+    "aten.tanh.default": 131,
+    "aten.unbind.int": 1,
+    "aten.unfold.default": 4,
+    "aten.unsqueeze.default": 190,
+    "aten.where.self": 1,
+    "aten.zeros_like.default": 4
+  },
+  "parallel_axes": [
+    "batch",
+    "observation_encoder_time",
+    "depthwise_causal_filters_time_and_channel",
+    "observed_change_prefix_max",
+    "horizon_query",
+    "distribution_quantile"
+  ],
+  "parameter_gradient_coverage": {
+    "model.core.address.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 0.00017637359269428998,
+      "parameters": 18
+    },
+    "model.core.address.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 0.0002071421331493184,
+      "parameters": 1152
+    },
+    "model.core.fast_map.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 0.005245506763458252,
+      "parameters": 64
+    },
+    "model.core.fast_map.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 0.00683875335380435,
+      "parameters": 8192
+    },
+    "model.core.project.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 0.001186650013551116,
+      "parameters": 64
+    },
+    "model.core.project.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 0.004756768234074116,
+      "parameters": 4608
+    },
+    "model.core.slow_map.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 0.013652142137289047,
+      "parameters": 64
+    },
+    "model.core.slow_map.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 0.01995951309800148,
+      "parameters": 4096
+    },
+    "model.encoder.0.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 0.0006188015104271472,
+      "parameters": 64
+    },
+    "model.encoder.0.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 0.005532705225050449,
+      "parameters": 6336
+    },
+    "model.encoder.2.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 0.002371492562815547,
+      "parameters": 64
+    },
+    "model.encoder.2.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 0.0042639235034585,
+      "parameters": 4096
+    },
+    "model.gated_readout.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 0.003449920564889908,
+      "parameters": 232
+    },
+    "model.gated_readout.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 0.022146936506032944,
+      "parameters": 46864
+    },
+    "model.heads.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 2.7349956035614014,
+      "parameters": 197
+    },
+    "model.heads.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 0.6595770120620728,
+      "parameters": 22852
+    },
+    "model.local_fast.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 6.016482802806422e-05,
+      "parameters": 64
+    },
+    "model.local_fast.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 2.651762042660266e-05,
+      "parameters": 320
+    },
+    "model.local_slow.bias": {
+      "finite_gradient": true,
+      "gradient_norm": 6.143118662294e-05,
+      "parameters": 64
+    },
+    "model.local_slow.weight": {
+      "finite_gradient": true,
+      "gradient_norm": 2.6810379495145753e-05,
+      "parameters": 320
+    }
+  },
+  "sequential_dependency": "native nonlinear fast/slow/associative recurrence; not an SSM conversion or parallel-scan claim",
+  "source_sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+  "stage": "UNFITTED_REAL_FIT_INPUT_ENGINEERING_TRACE"
+}

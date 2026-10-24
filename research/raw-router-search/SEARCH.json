@@ -1,0 +1,15 @@
+{
+ "registered_before_first_new_fit":true,
+ "study":"ME089",
+ "architecture":"native_raw_coordinate_router_world",
+ "hypothesis":"A parallel coordinate-shared evidence path retaining raw temporal state/control features can resolve the quiet/movement tradeoff left by the global compressed context, while preserving stronger native movement forecasts. Not a new-information or module-attribution theorem.",
+ "initialization":"ALL5fixed final ME087 models, index-paired89001..89005to87001..87005, no best-seed selection or ensemble.99731base learned weights plus2233new coordinate-routing/embedding weights,101964total, ALL trainable. Base4096old+2048new=6144updates; new routing weights2048updates only.",
+ "budget":"Exactly2048new AdamW lr0.0003 wd0.0001 clip1,B24,T32,final only, new optimizer/RNG, at most2independent one-thread seed workers. All source training cost disclosed; no matched-architecture-winner claim.",
+ "input_contract":"Same actual known8/32frame histories, lag1command and observed capture elapsed. Coordinate32Dfeatures:8relative raw positions,8observed ages,8current local state/control/innovation features,4known horizon features,4learned known-coordinate ID values. NO future action/state/capture time, task or episode IDs as model features.",
+ "structure":"Retain native fast/slow/8x8 state, parallel time-decayed filters, shared horizon head and noise-bounded quiet anchor. Restore full original native movement residual; predictive-noise units max(FITquiet_noise,0.01FITdelta_scale). Add shared32to64to1MLP local evidence to existing native mixture logits. No extra rolling state beyond1331values/entity.",
+ "objective":"CRPS+0.2physicalNLL+0.2global factual-motionBCE+1implicit-medianMAE+1coordinate change-above3FITpredictive-unit*sqrt(h)BCE+2one-step factual-quiet median precision. Future outcomes are FIT labels only. This is explicitly multiobjective; calibration must be measured under unchanged guards.",
+ "prior_attempts":"ME082..ME087 full gatesFAIL; ME088 clears quiet gate but loses motion/overall/CI. All original checkpoints, negative scores and source/lineage are preserved. No hidden retry.",
+ "gate":"Every original ME081 and stronger ME082 condition unchanged; add99.375%pairedCI for8declared attempts. Adaptive exposedDEV remains development, not independent confirmation.",
+ "preservation":"All5originals/optimizer/RNG/actual step receipts Git-frozen before REPORT; whole-forward float64 reference, original rtol1e-5/atol1e-6; protected tissue-box/CAL/TEST CLOSED",
+ "selection":"one fixed five-seed fine-tune, no further fitting under this registration"
+}

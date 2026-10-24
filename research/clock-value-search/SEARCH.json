@@ -1,0 +1,41 @@
+{
+  "registered_before_first_fit": true,
+  "family": "ME085_ME086_CLOCK_VALUE",
+  "activation": "All three ME082-ME084 original full gates FAIL, preserved before this registration",
+  "previous_source_commit": "94763983b3edf9303ba7db686d6f98ff475a3fbc",
+  "candidates": [
+    {
+      "study": "me085",
+      "NLL_weight": 1.0,
+      "seeds": [
+        85001,
+        85002,
+        85003,
+        85004,
+        85005
+      ]
+    },
+    {
+      "study": "me086",
+      "NLL_weight": 0.2,
+      "seeds": [
+        86001,
+        86002,
+        86003,
+        86004,
+        86005
+      ]
+    }
+  ],
+  "updates_each": 4096,
+  "batch": 24,
+  "history": 32,
+  "cold_starts": true,
+  "selection": "final only; freeze all five originals before REPORT; stop at first full gate pass plus independent unchanged strict replay",
+  "statistics": "retain original95%paired cluster gate; also99%CI accounts for these2 plus3previous declared candidates, exposedDEV adaptation, not independent qualification",
+  "unchanged_gate": "All ME081 original point/quiet/moving/horizon/coverage/interval/seed/CI/secondary conditions, plus ME082 stronger H1/ME081-NLL conditions",
+  "no_other_fits_under_this_registration": true,
+  "protected_tissue_box_CAL_TEST": "CLOSED",
+  "new_inputs": "Actual past/current capture elapsed from same original authenticated bytes; no future capture/commands, absolute epoch or episode identities",
+  "architecture": "Native time-rate fast/slow/8x8 associative update, parallel time-decayed local filters, raw8observation convex retrieval and native bounded movement distribution;99731learned parameters"
+}

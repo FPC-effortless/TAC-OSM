@@ -1,0 +1,23 @@
+{
+  "no_fit": true,
+  "profiles": {
+    "PHYSICAL_INCREMENTAL_STEP": {
+      "executable_sha256": "7a00ac389decae9edfa430778c4560660331019f9a4c85469a8cd1683f5d8bf3",
+      "native_64x72_representation_projection_constant_consumers": [
+        [
+          "aten::linear"
+        ]
+      ]
+    },
+    "PHYSICAL_PREFILL32": {
+      "executable_sha256": "b4b14e52f8ae05ff542e960dac0f9d42de9bf90ecadecc326f869307bcf9c75a",
+      "native_64x72_representation_projection_constant_consumers": [
+        [
+          "aten::linear"
+        ]
+      ]
+    }
+  },
+  "scope": "Actual restored32frame last-only graph retains one native representation projection; intermediate representation projections do not feed state and are eliminated. Necessary32native state updates remain. Does not prune dense-prefix training or establish predictive skill.",
+  "status": "PASS"
+}
