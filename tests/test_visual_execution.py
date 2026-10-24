@@ -30,3 +30,19 @@ def test_visual_interleaved_entities_match_isolated_execution_and_invalidate_on_
     with torch.no_grad():m.visual_gain.add_(.01)
     with pytest.raises(RuntimeError,match='model changed'):shared.step('a',3,x,x,elapsed=dt,image=im)
     assert not shared._entries
+
+
+def test_raw_physical_boundary_preserves_original_preprocessing_and_quantile_units():
+    from tac_osm.variants.visual_execution import PhysicalVisualGraph
+    from tac_osm.variants.reusable_execution import mixture_quantiles
+    torch.set_num_threads(1);m=VisualWorld().double().eval()
+    with torch.no_grad():
+        m.state_mean.copy_(torch.arange(14,dtype=torch.float64));m.state_scale.fill_(2.)
+        m.action_mean.fill_(.5);m.action_scale.fill_(3.)
+    x=torch.rand(2,3,14);a=torch.rand_like(x);dt=torch.full((2,3,1),1/15);im=torch.randint(0,256,(2,3,1,32,32),dtype=torch.uint8)
+    xn=((x-m.state_mean.float())/m.state_scale.float()).double();an=((a-m.action_mean.float())/m.action_scale.float()).double()
+    initial=m.initial_state(xn[:,0]);raw,final=m.visual_tensor_graph(xn,an,dt.double(),(im.float()/255).double(),initial,last_only=True)
+    expected=tuple(v*m.state_scale+m.state_mean for v in mixture_quantiles(raw))+(raw['motion_logit'].sigmoid(),*tuple(final))
+    actual=PhysicalVisualGraph(m)(x,a,dt,im,tuple(initial))
+    assert sum(p.numel() for p in PhysicalVisualGraph(m).parameters())==104225
+    for u,v in zip(expected,actual):torch.testing.assert_close(u,v,rtol=0,atol=0)

@@ -84,3 +84,36 @@ without another recurrence, a second model, future inputs or a nonprobabilistic
 point override. It can also worsen predictions; unchanged full gates decide.
 The104508-parameter no-fit draft is preserved separately; neither version was
 trained or REPORT-scored before the prospective source/model registration.
+
+Translation equivariance gives `Q_tau(p_shifted)=Q_tau(p)+d_h`, hence the exact
+direct quantile derivative with respect to the location logit is
+`FIT_delta_scale*h*(1-tanh(location_h)^2)`. This is an ordinary location-family
+identity, not a new theorem. It provides a direct point/quantile gradient path
+independent of which mixture component dominates. Empirical benefit still
+requires the unchanged full forecast gates; the identity alone proves no skill.
+
+```mermaid
+flowchart LR
+  X[Observed qpos and lagged reference] --> N[Fixed FIT normalization]
+  P[Observed gray32 pixels] --> V[Shared batched CNN]
+  N --> E[Numeric features and encoding]
+  E --> U[Shared encoded observation]
+  V --> U
+  U --> C[Causal multiscale features]
+  U --> A[Batched addresses and input projections]
+  A --> S[Native fast slow associative update]
+  OLD[Explicit prior state] --> S
+  S --> NEXT[Explicit next state and reusable history]
+  S --> H[Shared horizon readout]
+  C --> H
+  H --> D[Proper mixture with common location translation]
+  D --> Q[Shared quantile inversion]
+  Q --> O[Physical-unit forecasts]
+```
+
+`PhysicalVisualGraph` includes the frozen float32 observation/image preprocessing,
+float64 normative model, quantiles, physical-unit conversion and all13normalized
+state outputs in one pure tensor boundary. Fixed-profile derived executables
+verify actual FIT inputs through this boundary. Pixel decoding/area resize,
+storage/network, caller authority and cache hash/revision checks remain explicit
+runtime effects outside the learned tensor graph, not hidden measured costs.
