@@ -1,0 +1,53 @@
+name: ESWAM013 independent original trained real-source replay
+on:
+  pull_request:
+    paths:
+      - "scripts/eswam013_independent_original_real_replay.py"
+      - ".github/workflows/eswam013-independent-real-replay.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eswam013-independent-no-training-replay
+  cancel-in-progress: false
+jobs:
+  independent-original-real:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam013-motion-relevance-native-2026-10-24
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install identical exact PyTorch and parser dependencies, WITHOUT a training job
+        run: |
+          python -m pip install 'numpy==2.3.5'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/interaction_TC_original.zip
+          key: eswam012-interaction-tc-publisher-original-sha9aa7810
+      - name: Independently confirm exact original real publisher recording bytes
+        run: |
+          if test ! -f "${{ runner.temp }}/interaction_TC_original.zip"; then
+            curl --fail --location --retry 3 --silent --show-error -o "${{ runner.temp }}/interaction_TC_original.zip"               "https://huggingface.co/datasets/INTERACTION-dataset/INTERACTION-dataset/resolve/3587152b529f26649ada0838a308eeaf77f5bdc2/INTERACTION-Dataset-TC-v1_0.zip"
+          fi
+          printf '9aa78102006dc8d8a64675cf64eba5264085cfb1c006b1f4d0e856d94e657aec  %s\n' "${{ runner.temp }}/interaction_TC_original.zip" | sha256sum --check
+      - name: Independently replay two original genuine world-model checkpoints with zero optimizer steps
+        run: |
+          PYTHONPATH=src:. python scripts/eswam013_independent_original_real_replay.py             --archive "${{ runner.temp }}/interaction_TC_original.zip"             --output research/mathematical-engineering/eswam013/INDEPENDENT_ORIGINAL_SOURCE_REPLAY.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eswam013-independent-source-real-replay-receipt
+          path: research/mathematical-engineering/eswam013/INDEPENDENT_ORIGINAL_SOURCE_REPLAY.json
+      - name: Preserve independently verified no-fit original scores in research branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/mathematical-engineering/eswam013/INDEPENDENT_ORIGINAL_SOURCE_REPLAY.json
+          git commit -m 'audit(eswam013): independent no-fit real source prediction and checkpoint replay'
+          git push origin HEAD:refs/heads/research/eswam013-motion-relevance-native-2026-10-24
