@@ -1,0 +1,23 @@
+name: QUAL001 read-only real source audit
+on:
+  pull_request:
+    paths:
+      - 'scripts/qual001_eswam012_original_headroom.py'
+      - 'research/qual001/**'
+      - '.github/workflows/qual001-real-headroom.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Python mathematical/source integrity self-test
+        run: python scripts/qual001_eswam012_original_headroom.py --self-test
+      - name: Frozen publisher-original DEV case audit (ZERO fits)
+        run: python scripts/qual001_eswam012_original_headroom.py --verify-frozen-means --output /tmp/qual001_original_case_audit.json
