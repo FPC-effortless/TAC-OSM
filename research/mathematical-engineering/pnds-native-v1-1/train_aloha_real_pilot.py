@@ -156,6 +156,11 @@ def pilot(steps=64,batch_size=8,seed=20261025):
     indices=torch.randint(0,len(raw["train"]),(steps,batch_size),generator=gen)
     models={"parallel_TAC_world":ParallelTACWorld(),
             "GRU_world":RealGRUWorld()}
+    # Train-only measured state-change RMS; not a target/test-fitted gate.
+    delta=(tensors["train"][2]-tensors["train"][0])
+    scale=delta.square().mean(dim=(0,1)).sqrt().clamp_min(1e-5)
+    for model in models.values():
+        model.set_train_delta_scale(scale)
     counts={k:sum(p.numel() for p in m.parameters()) for k,m in models.items()}
     gap=abs(counts["parallel_TAC_world"]-counts["GRU_world"])/counts["GRU_world"]
     if gap>.01:
@@ -181,7 +186,11 @@ def pilot(steps=64,batch_size=8,seed=20261025):
                      "validation_untrained":initial,
                      "validation_after_steps":valid,
                      "heldout_real_test":heldout}
-    result={"status":"REAL_ROBOT_PILOT_RUN_NO_COMPUTE_PARITY_CLAIM",
+    result={"status":"REAL_ROBOT_TRAIN_ANCHORED_RESIDUAL_DEV_NO_COMPUTE_PARITY_CLAIM",
+       "architecture_revision":"v2_state_anchored_residual",
+       "test_cohort_status":"EXPOSED_IN_PREVIOUS_V1_PILOT; DESCRIPTIVE_ONLY",
+       "delta_scale_fit_source":"TRAIN_EPISODES_ONLY",
+       "train_only_residual_scale":scale.tolist(),
        "data":source,
        "split_episode_ids":split_ids,
        "real_windows_per_split":{k:len(v) for k,v in raw.items()},
