@@ -64,7 +64,8 @@ def balanced_elementwise_affine_prefix(P,Q):
 
 class StableTimescaleTACWorld(ParallelTACWorld):
     """Explicit four-timescale TAC continuous predictor, same learned weights."""
-    def forward(self,obs,action,*,return_trace=False):
+    def forward(self,obs,action,*,return_trace=False,
+                ablate_memory=False,ablate_context=False):
         if (obs.ndim!=3 or action.ndim!=3 or
             obs.shape[:2]!=action.shape[:2] or
             obs.shape[-1]!=self.state_dim or
@@ -85,6 +86,8 @@ class StableTimescaleTACWorld(ParallelTACWorld):
         # Read only PAST observed event summaries, never current/future.
         context=torch.cat((summary.new_zeros(B,1,self.width),
                            summary[:,:-1]),1)
+        if ablate_context:
+            context=torch.zeros_like(context)
         pf,fg=self.fast_map(torch.cat((e,context,zr),-1)).chunk(2,-1)
         pf=torch.lerp(context,pf.tanh(),fg.sigmoid())
         ds,gs=self.slow_map(torch.cat((pf,context,zr),-1)).chunk(2,-1)
@@ -96,6 +99,8 @@ class StableTimescaleTACWorld(ParallelTACWorld):
         memory=work_efficient_affine_prefix(P,Q)
         old=torch.cat((memory.new_zeros(B,1,8,8),memory[:,:-1]),1)
         r=(old@k.unsqueeze(-1)).squeeze(-1)
+        if ablate_memory:
+            r=torch.zeros_like(r)
         f,fg=self.fast_map(torch.cat((e,pf,r),-1)).chunk(2,-1)
         f=torch.lerp(pf,f.tanh(),fg.sigmoid())
         ds,gs=self.slow_map(torch.cat((f,ps,r),-1)).chunk(2,-1)
