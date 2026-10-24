@@ -1,0 +1,36 @@
+name: ESWAM012 exact original multi-actor history eligibility
+on:
+  pull_request:
+    paths:
+      - "scripts/eswam012_original_joint_history_eligibility.py"
+      - ".github/workflows/eswam012-original-joint-history.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  genuine-overlap-counts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Cache original publisher recording outside Git
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/interaction_TC_original.zip
+          key: eswam012-interaction-tc-publisher-original-sha9aa7810
+      - name: Verify exact original recording
+        run: |
+          if test ! -f "${{ runner.temp }}/interaction_TC_original.zip"; then
+            curl --fail --location --retry 3 --silent --show-error -o "${{ runner.temp }}/interaction_TC_original.zip"               "https://huggingface.co/datasets/INTERACTION-dataset/INTERACTION-dataset/resolve/3587152b529f26649ada0838a308eeaf77f5bdc2/INTERACTION-Dataset-TC-v1_0.zip"
+          fi
+          printf '9aa78102006dc8d8a64675cf64eba5264085cfb1c006b1f4d0e856d94e657aec  %s\n' "${{ runner.temp }}/interaction_TC_original.zip" | sha256sum --check
+      - name: Count only actual co-visible real 256-history actors with original future
+        run: |
+          PYTHONPATH=src:. python scripts/eswam012_original_joint_history_eligibility.py             --archive "${{ runner.temp }}/interaction_TC_original.zip"             --output "eswam012-original-overlap-results.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eswam012-original-joint-histories
+          path: eswam012-original-overlap-results.json
