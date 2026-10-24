@@ -498,3 +498,15 @@ VJP/PCGrad. No extra task models/forward passes, no model reset or winner claim.
 One registered2048update recipe per five seeds, no REPORT yet. All50prior trained
 versions remain visible; same protected sources and joint gate unchanged. This
 is an optimization/capability attempt, not proof of a gradient-conflict cause.
+
+### ME093 — integrated local-noise and transition distribution (2026-10-24)
+
+Motivation: ME092 improved movement/long forecasts but quiet accuracy and paired
+intervals failed. Frozen output trace suggests a narrowhold/broadtransition mixture
+may conflate small observation noise with actual movement; descriptive hypothesis,
+not established cause. Build one three-Laplace native visual predictive distribution
+with causal robust local center, ordered scales, exact proper scoring and shared
+quantile inversion.96,595active parameters, ALL5indexedME092parents,3,072newsteps,
+whole-model training, unchanged gate and source cutoffs. Registered51120067;
+training underway, no skill-success claim. Attribution secondary; no extra fits
+under exhaustedME092. Commercial/customer evidence remains NOT_MEASURED.

@@ -1523,3 +1523,45 @@ original proper-score function, within original1e-5/1e-6gradient tolerances.
 Every unchanged full predictive gate plus original95%/additional99.54545%paired
 intervals and strict independent original replay remain compulsory. No frozen
 TEST, architecture winner, autonomous control, deployment or customer claim.
+
+### ME092 completed; ME093 three-regime predictive architecture — 2026-10-24
+
+ME092's five originals were frozen at d3665d4e before REPORT scoring at01b55060.
+Full joint gate **FAIL/MIXED_TRADEOFF**: H1/H4/H16MAE
+0.05126858/0.13945950/0.61481598; H1moving0.35612416, quiet0.02203585.
+All NLL/coverage/interval/task/seed and secondary32forecast conditions pass,
+but quiet error and both paired confidence-interval conditions fail. Original95%
+H1difference CI[-0.01670057,+0.00032829], additional99.54545%
+[-0.02104607,+0.00407439]. No extra ME092 fits;55versions ME082–ME092 now preserved.
+Independent strict original27,600forecast replay, normalized compiled restoration
+and raw physical/pixel boundary restore completed successfully in
+[40095957627](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40095957627),
+head01b55060. REST named-step receipts preserved; signed Azure stdout downloads
+were403, so no unobserved per-field log measurements are claimed.
+
+ME093 is a new integrated native architecture recipe, frozen **51120067** before
+training. It retains native fast/slow/associative recurrence, real observed elapsed,
+shared causal numeric encoder and CNN, and one shared SwiGLU horizon readout.
+It replaces two competing modes with a **single proper hold/local-noise/transition
+Laplace mixture**. Current observation anchors hold, a learned convex combination
+of current and causal3value median centers local noise, and the retained native
+physical predictor centers transitions. Positive ordered scales permit exact
+finite-mixture CRPS and stable likelihood; all quantiles invert that same CDF.
+No independent point-forecast averaging, component-class labels or hardcoded
+future movement. Normative means, gradients and densities are independently tested.
+
+Actual96,595active learned values:82,699native,7,792visual,1,526dynamic-location
+retained from ALL5fixed indexedME092parents;4,578newlocal-noise values. Remove112old
+lag-logit rows; no dummy parameters or frozen learned encoders.3,072new updates/seed,
+retainedLR0.0001/newLR0.0003, whole-model AdamW and original proper3task PCGrad.
+All5originals/optimizer/RNG must enter Git before REPORT. Pipeline13,312updates,
+retainednative/visual9,216ownlineage,dynamic-location5,120,newfields3,072.
+1201local tests and real-FIT active-gradient/loss-partition preflight PASS.
+Five original fits are running at this update; **no ME093 result yet**.
+
+All original predictive thresholds remain compulsory, with original95%and additional
+99.58333%paired intervals for12declared recipes. Same120FIT/40exposedREPORT,
+exact Git-owned licensed overhead pixels; protected CAL/TEST/tissue-box unopened.
+No new independent generalization, architecture winner, policy intelligence,
+customer value or deployment claimed. Full mathematics/input-to-output graph:
+[ME093](https://github.com/FPC-effortless/TAC-OSM/blob/research/me082-equilibrium-parallel-2026-10-24/research/mathematical-engineering/me093/MATHEMATICS.md).
