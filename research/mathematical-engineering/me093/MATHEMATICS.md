@@ -116,3 +116,31 @@ on different actual FIT inputs and an independent clean restore are compulsory.
 Compilation speed at one fixed shape/shared CPU is not a general latency claim.
 No video/network decode, authorization or authoritative state mutation is inside
 this learned tensor graph. No autonomous policy or customer-value claim.
+
+## Computational reuse rules
+
+A functional event operator is (forecast_t,z_t)=F_theta(z_(t-1),event_t), with
+explicit model/preprocessing revisions. Reuse requires equality of the entity,
+contiguous event index, exact numeric/capture inputs, image content hash and model
+revision. The existing VisualValueCache supports the new distribution without
+changing its mathematical fields: exact retries return cloned forecasts, changed
+inputs reject reuse, entities retain isolated state, ordinary parameter/buffer
+mutation invalidates cached state. Corrected history requires explicit reset and
+verified replay; no silent stale prediction.
+
+Training does not memoize learned encoder activations across optimizer updates:
+those would become stale as theta changes. Reuse within the one shared forward
+is valid; the3task VJP shares that computational graph. Fixed source pixel decoding
+is reusable because it has no learned weights. Quantile inversion computes mixture
+weights once before its40iterations and vectorizes independent coordinates,
+horizons, query levels and batch items. The bisection iterations themselves remain
+ordered and are not described as a parallel scan.
+
+For fixed widths and horizon count, native inference work and stored tensor state
+per new event are O(1) in total past stream length. Full Tframe prefill/training
+work is O(T), with a serial native-state critical path of lengthT; batching and
+compilation reduce overhead but do not erase that dependency. A Transformer KV
+cache instead stores O(Td) values and typically needs O(Td) attention work for a
+new query; caching does not make all attention or generation linear-cost overall.
+Hardware fusion/CSE are measured on actual exported graphs, never inferred simply
+from the phrase 'tensor DAG'. No claim that all operations stay in SRAM/registers.
