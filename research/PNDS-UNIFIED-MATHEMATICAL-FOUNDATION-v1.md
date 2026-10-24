@@ -44,3 +44,10 @@ Do not conflate computational correctness with predictive intelligence: state bo
 4. Both repositories remain draft/unmerged until individually reviewed. **Cross-linking does not imply source/Lean semantic equivalence or full historical archive completeness.**
 
 The original TAC-OSM master plan and its negative result histories remain intact. This document adds a mathematical-engineering provenance interface, not a replacement history.
+
+
+## Compulsory paired-formulation policy extension (2026-10-24)
+
+[PNDS MATHEMATICAL_ENGINEERING_RULE.md](https://github.com/FPC-effortless/pnds-lean/blob/research/unified-tac-osm-mathematical-foundation-v1-2026-10-24/foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md) and [TAC-OSM source counterpart](PNDS-MATHEMATICAL-ENGINEERING-RULE.md) are now mandatory for every new or revised variant. The [source-side 17-variant manifest](pnds-variant-math-links.json) maps each original TAC SHA/PR to Lean and Python reference formulations and **PARTIAL** status. Run `python3 research/scripts/check_pnds_math_links.py` on any amendment, and verify the reciprocal [PNDS manifest](https://github.com/FPC-effortless/pnds-lean/blob/research/unified-tac-osm-mathematical-foundation-v1-2026-10-24/foundation/v1/variant-math-links.json) together with this repository's original model source.
+
+A theorem about one shared operator does not prove the entire trained network, its finite-precision implementation, gradient or real-world advantage. New *mathematical-completion* claims require full source-to-equation verification in both languages; existing truthful historical capability results remain preserved.
