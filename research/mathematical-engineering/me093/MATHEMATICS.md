@@ -3,6 +3,33 @@
 Prospective architecture development on the same licensed real inputs as ME091/092.
 Not an architectural winner claim. The complete predictive gate is unchanged.
 
+## Compact architecture notation
+
+Let $\chi_t$ encode the observed numeric features and image, $\ell_t$ be its
+causal local-filter context, and $z_t=(f_t,s_t,M_t)$ the native learned state.
+The remaining ten explicit state fields carry observed values, clocks and finite
+filter buffers. With positive observed elapsed $\delta_t$, the core graph is
+
+$$
+\chi_{1:T}=E_\theta(\phi(x_{1:T},a_{0:T-1},\delta_{1:T}))
+ +\operatorname{sigmoid}(g_I)\odot C_\theta(I_{1:T}),
+\qquad z_t=F_\theta(z_{t-1},\chi_t,\delta_t).
+$$
+
+The first expression exposes independent batch/frame encoding; the second retains
+its actual recurrent dependency. Shared conditional readout and distribution are
+
+$$
+u_{t,h}=G_\theta(\ell_t,z_t,c_t,\eta(h)),\qquad
+p_\theta(y_{t+h}\mid H_t)=\sum_{j=0}^2w_{t,h,j}
+\operatorname{Laplace}(y_{t+h};\mu_{t,h,j},b_{t,h,j}),
+\qquad \hat y^{(\alpha)}_{t,h}=F^{-1}_{t,h}(\alpha).
+$$
+
+These are coordinate marginals conditioned on the same observed history, not a
+joint future trajectory. The functional runtime consumes explicit state and emits
+new state plus forecasts; a separate revision-bound entity cache handles reuse.
+
 ## Input-to-output contract
 
 At recorded origin t, only observed qpos x[<=t], recorded reference a[<=t-1],
