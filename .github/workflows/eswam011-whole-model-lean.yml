@@ -1,0 +1,21 @@
+name: ESWAM011 whole-model Lean kernel check
+on:
+  pull_request:
+    paths:
+      - "research/mathematical-engineering/eswam011/**"
+      - ".github/workflows/eswam011-whole-model-lean.yml"
+  workflow_dispatch:
+jobs:
+  lean-full-graph:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install exact Lean toolchain
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: research/mathematical-engineering/eswam011
+          auto-config: false
+          use-github-cache: false
+      - name: Verify typed full-model graph and role safety
+        run: lean research/mathematical-engineering/eswam011/WholeModelStep.lean
