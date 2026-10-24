@@ -97,3 +97,21 @@ It is neither a rival speed comparison nor an inference SLA, GPU/fusion result,
 or constant-time-history accuracy claim. Original raw measurements are in
 ME085/EFFICIENCY.json. The entity-cache adapter stores only caller-owned state;
 it rejects stale model versions, conflicting elapsed-time retries and gaps.
+
+## Optional compiled complete workflow
+
+`clock_value_compile.py` traces and freezes the **complete** original-weight
+input/state-to-quantile/state DAG using TorchScript. Dead graph work and Python
+operator dispatch can then be removed; no native state equation or learned
+value changes. The two derived executable profiles are explicitly **B2,T32** and
+**B2,T1**; no variable-shape export or full original REPORT qualification is
+implied. Exact profile matching and validated inputs remain caller duties.
+
+Original first-model real FIT outputs and all13updated state tensors agree
+under the unchanged tolerance, including serialized-program round-trip. In
+alternating31repeat CPU measurements: prefill8.10→4.43ms(1.83x), incremental
+2.63→1.63ms(1.61x). These are **B2**, distinct from the earlierB24decoder benchmark.
+Both are shared-workspace, concurrent-training measurements with unpinned
+CPU affinity; no hardware-general or rival efficiency claim. Compiled originals
+and a no-fit independent restoration script are preserved separately. They do
+not replace original complete-model forecast quality gates or normative replay.

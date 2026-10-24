@@ -31,3 +31,6 @@ jobs:
       - name: Full numerical census; strict failures remain failed
         if: always() && hashFiles('research/replay-bundles/ME085/ORIGINAL_SCORE_INDEX.json') != ''
         run: PYTHONPATH=src:. python scripts/clock_value_audit.py --study me085 --cache "${{ runner.temp }}/clock-value-source"
+      - name: Restore original derived compiled input-to-quantiles programs
+        if: hashFiles('research/mathematical-engineering/me085/COMPILED_GRAPH_AUDIT.json') != '' && hashFiles('research/replay-bundles/ME085/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/clock_value_compiled_verify.py --study me085 --cache "${{ runner.temp }}/clock-value-source"
