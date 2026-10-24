@@ -21,4 +21,5 @@ jobs:
           python -m pip install --quiet torch
       - name: Verify true pinned source and independent PNDS math
         run: |
+          python research/mathematical-engineering/pnds-native-v1-1/validate_graph.py
           python research/mathematical-engineering/pnds-native-v1-1/verify_pinned_source.py
