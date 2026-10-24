@@ -1,0 +1,35 @@
+name: TAC real-robot exploratory world-model pilot
+on:
+  pull_request:
+    paths:
+      - "src/tac_osm/variants/parallel_continuous_world.py"
+      - "research/mathematical-engineering/pnds-native-v1-1/train_aloha_real_pilot.py"
+      - ".github/workflows/real-aloha-pilot.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authentic-next-state:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install authentic parquet, source and inference dependencies
+        run: |
+          python -m pip install --quiet torch pyarrow huggingface_hub
+      - name: Train on actual pinned LeRobot dataset episode data or fail closed
+        env:
+          HF_HUB_DISABLE_XET: "1"
+          TAC_REAL_STEPS: "64"
+        run: |
+          python research/mathematical-engineering/pnds-native-v1-1/train_aloha_real_pilot.py | tee real_aloha_pilot.json
+      - name: Preserve full real pilot evidence including failed gates
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-real-aloha-pilot-output
+          path: real_aloha_pilot.json
+          if-no-files-found: ignore
