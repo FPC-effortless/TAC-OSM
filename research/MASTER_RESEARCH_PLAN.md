@@ -1629,3 +1629,49 @@ available; no new smaller trained arm, parameter-budget exception or equal-outpu
 rival comparison. Independent clean restoration remains pending all5frozen models
 and original scores. Numerical and replay qualification stay separate from learned
 capability success. Full1,207local testsPASS; all training-source hashes unchanged.
+
+### ME094 completed negative; ME095 selective context/state architecture — 2026-10-24
+
+ME094all5originals182b3397/postfit907afd48 preceded original scores1ad5e625.
+Full gate **FAIL/MIXED_TRADEOFF**. H1/H4/H16MAE
+0.05005783/0.14339711/0.63722543; movingH1 0.36156072,quietH1 0.02018769.
+QuietH1 and additional99.61538%CI fail. Original95%CI
+[-0.01764886,-0.00102579]passes; stricter[-0.02172001,+0.00241638]doesnot.
+No more ME094fits;65originalME082–ME094models preserved. Independent27,600forecast,
+normalized/physical compiled and point-query restore PASS
+[40118547708](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40118547708).
+This verifies reproducibility, not full predictive success.
+
+ME095 registered **00295abc** before fitting: one104,689parameter native model,
+ALL5indexedME094parents101,173retained+3,516newlearnedvalues. Add known requested
+operation context (five types), current capture-clock sin/cos at fixed1/4/16second
+periods, and a bounded selective physical observation filter. No episodeID,
+curator-relative age, total duration, ending, future clocks or same-frame command.
+Task/context is an information advantage over old models, so no equal-information,
+parameter- or compute-matched architecture superiority claim is eligible.
+
+For input-only encoded event e and observed positive rho, retention
+A=exp(-softplus(W e+b)*rho), filter k'=A*k+(1-A)*[observedlevel;rawvelocity].
+28filter scalars carry level/velocity. Affine segments compose associatively as
+(A2*A1,B2+A2*B1); a causal prefix scan exposes logarithmic branch depth without
+unstable division. Its values/gradients match independent serial computation.
+The native coupled fast/slow/associative recurrence remains nonlinear/serialT.
+A filter-evidence projection enriches its input; filtered velocity enters the
+physical expert. Complete state15fields/1,359scalars. Global model bounds are not
+physical-safety or useful-long-memory proofs.
+
+2,048newupdates perseed, alltrainable; retainedLR.0001/newLR.0003, original proper
+ME094objective/3taskPCGrad. Pipeline19,456updates; native/visual15,360ownlineage,
+location11,264,oldlocalnoise9,216,decision6,144,new3,516values2,048. Full1,214local
+testsPASS and realFIT all40parameter tensors finite/nonzero gradients. Earlier
+maxabsolute gradient-partition difference7.248e-5passes unchanged relative1e-5/
+absolute1e-6contract; not an absolute-error-below1e-6 claim.
+
+Fits underway; **no ME095REPORT score yet**. All original numerical requirements
+plus original95%/additional99.64286%paired intervals for14recipes and strict
+independent replay remain compulsory. Allfive original bytes beforeREPORT.
+Same120FIT/40exposedREPORT and exact licensed pixels; protectedsourcesunchanged.
+Typed cache now keys clock/operation context as well as observed numeric/image
+inputs and model revisions; raw physical execution includes clock preprocessing
+and task-conditioned state initializer. No new policy, deployment/customer,
+independent generalization or general-intelligence claim.

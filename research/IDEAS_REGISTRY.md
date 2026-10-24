@@ -528,3 +528,13 @@ same complete median-anchored model, prune unused probability roots by compilati
 FixedB2incremental0.74ms vs3.43msfulloutput, sharedCPU; no new learned arm or added
 skill/superiority claim. Full probabilistic query remains available and model still
 training. Exact original score replay and joint predictive gate remain compulsory.
+
+### ME095 — bounded selective state and known context
+
+Whole model registered00295abc,104,689params,5fixedME094parents,2,048newupdates.
+Adds input-selective affine level/velocity memory with a verified parallel prefix
+scan alongside unchanged nonlinear native fast/slow/M, known operation priors and
+current clock phases. Real-source causality/gradient/stream/cache checks pass;
+training underway, no predictive result. Same fixed numerical gate, stricterfamily
+interval, no protected data or future commands. Extra known context/cost disclosed;
+not a controlled architecture win or proof that a particular memory block helps.
