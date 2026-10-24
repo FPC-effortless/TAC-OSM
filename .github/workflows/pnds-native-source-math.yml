@@ -22,6 +22,7 @@ jobs:
       - name: Verify true pinned source and independent PNDS math
         run: |
           python research/mathematical-engineering/pnds-native-v1-1/validate_graph.py
+          python research/mathematical-engineering/pnds-native-v1-1/validate_parallel_full_graph.py
           python research/mathematical-engineering/pnds-native-v1-1/verify_pinned_source.py
           python research/mathematical-engineering/pnds-native-v1-1/verify_original_full_recurrence.py
           python research/mathematical-engineering/pnds-native-v1-1/verify_native_forward_envelope.py
