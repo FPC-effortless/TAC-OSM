@@ -41,11 +41,11 @@ structure Forecast (α : Type) (d a w slots m : Nat) where
 
 def storeObserved {α : Type} {s m : Nat} (memory : Memory α s m)
     (slot : Fin s) (value : Vec α m) : Memory α s m :=
-  { memory with observed := Function.update memory.observed slot (some value) }
+  { memory with observed := (fun i => if i == slot then some value else memory.observed i) }
 
 def storePredicted {α : Type} {s m : Nat} (memory : Memory α s m)
     (slot : Fin s) (value : Vec α m) : Memory α s m :=
-  { memory with predicted := Function.update memory.predicted slot (some value) }
+  { memory with predicted := (fun i => if i == slot then some value else memory.predicted i) }
 
 theorem predicted_write_preserves_observed {α : Type} {s m : Nat}
     (memory : Memory α s m) (slot : Fin s) (value : Vec α m) :
