@@ -81,3 +81,19 @@ gated delta memory; these mechanisms are not inventions of TAC-OSM. The
 experiment concerns whether their native integration improves actual learned
 forecasts. See manifest literature links and the original preserved attempt
 ledger. Parameters99731; no padding or inactive learned tensors.
+
+## Trained original reference execution audit
+
+The first original ME085 checkpoint's actual FIT-input-to-quantiles export has
+3723nodes for32-frame prefill and1491nodes for one incremental step, including
+all13state outputs. Per-entity cache has1331tensor values,10648bytes float64
+excluding weights/container overhead. Equivalent outputs were checked, not
+inferred from symbolic shape alone.
+
+An alternating31-repeat same-model CPU measurement found a1.75x median reduction
+by skipping unrequested historical forecast heads (25.90ms to14.82ms,B24,T32,
+float64). Concurrent training and unpinned CPU affinity limit this observation.
+It is neither a rival speed comparison nor an inference SLA, GPU/fusion result,
+or constant-time-history accuracy claim. Original raw measurements are in
+ME085/EFFICIENCY.json. The entity-cache adapter stores only caller-owned state;
+it rejects stale model versions, conflicting elapsed-time retries and gaps.
