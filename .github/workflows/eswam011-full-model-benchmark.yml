@@ -1,0 +1,29 @@
+name: ESWAM011 full-model batched versus serial CPU diagnostic
+on:
+  pull_request:
+    paths:
+      - "src/tac_osm/variants/vectorized_exchange_world.py"
+      - "scripts/eswam011_benchmark_whole_model.py"
+      - ".github/workflows/eswam011-full-model-benchmark.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  measured-forward:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install one shared pinned benchmark environment
+        run: |
+          python -m pip install 'numpy==2.3.3' torch
+      - name: Confirm identical outputs and measure repeated two-step inference
+        run: |
+          PYTHONPATH=src:. python scripts/eswam011_benchmark_whole_model.py --repeats 20 | tee eswam011-cpu-results.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eswam011-cpu-original-vs-batched
+          path: eswam011-cpu-results.json
