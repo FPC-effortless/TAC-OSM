@@ -1,0 +1,421 @@
+{
+  "architecture": "eswam014_quadratic_kinetic_relevance_native",
+  "checkpoints": [
+    {
+      "deployed_parameters": 101057,
+      "parameter_values_sha256": "6fd9bef12b2ff9669ff7bb1962a04891e4248ae2052f12b0ef70d06813d15872",
+      "path": "research/replay-bundles/ESWAM014/seed-87001.pt",
+      "sha256": "a903288eacedf56d36b809bb61fb3fbb1f1f3ec6b3d66f8a7402ed0da4fab23c",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 320,
+      "trainable_parameters": 101057
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 101057,
+    "trainable_parameters": 101057
+  },
+  "last_pre_update": {
+    "deployed_parameters": 101057,
+    "successful_optimizer_steps": 319,
+    "trainable_parameters": 101057
+  },
+  "manifest_path": "/home/runner/work/TAC-OSM/TAC-OSM/research/mathematical-engineering/eswam014/FAIR_COMPARISON.json",
+  "manifest_sha256": "d2a7da00a50eb2b7e9812d1b5ef4aa7a5288adc82e8f82d95f12ed88c28ab477",
+  "model_class": "tac_osm.variants.eswam014_quadratic_motion.QuadraticMotionNative",
+  "preflight": {
+    "deployed_parameters": 101057,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "embed.0.weight",
+        "numel": 528,
+        "requires_grad": true,
+        "shape": [
+          66,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "embed.0.bias",
+        "numel": 66,
+        "requires_grad": true,
+        "shape": [
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "embed.2.weight",
+        "numel": 4356,
+        "requires_grad": true,
+        "shape": [
+          66,
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "embed.2.bias",
+        "numel": 66,
+        "requires_grad": true,
+        "shape": [
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_score.weight",
+        "numel": 66,
+        "requires_grad": true,
+        "shape": [
+          1,
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_score.bias",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": [
+          1
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_score.weight",
+        "numel": 66,
+        "requires_grad": true,
+        "shape": [
+          1,
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_score.bias",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": [
+          1
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "key.weight",
+        "numel": 2112,
+        "requires_grad": true,
+        "shape": [
+          32,
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "key.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "value.weight",
+        "numel": 2112,
+        "requires_grad": true,
+        "shape": [
+          32,
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "value.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.weight",
+        "numel": 2112,
+        "requires_grad": true,
+        "shape": [
+          32,
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fuse.0.weight",
+        "numel": 21648,
+        "requires_grad": true,
+        "shape": [
+          132,
+          164
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fuse.0.bias",
+        "numel": 132,
+        "requires_grad": true,
+        "shape": [
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fuse.2.weight",
+        "numel": 17424,
+        "requires_grad": true,
+        "shape": [
+          132,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fuse.2.bias",
+        "numel": 132,
+        "requires_grad": true,
+        "shape": [
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_slow.weight",
+        "numel": 17424,
+        "requires_grad": true,
+        "shape": [
+          132,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_slow.bias",
+        "numel": 132,
+        "requires_grad": true,
+        "shape": [
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "compress.weight",
+        "numel": 8712,
+        "requires_grad": true,
+        "shape": [
+          66,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "compress.bias",
+        "numel": 66,
+        "requires_grad": true,
+        "shape": [
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "head.actor_fusion.0.weight",
+        "numel": 8712,
+        "requires_grad": true,
+        "shape": [
+          66,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "head.actor_fusion.0.bias",
+        "numel": 66,
+        "requires_grad": true,
+        "shape": [
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "head.actor_fusion.2.weight",
+        "numel": 4356,
+        "requires_grad": true,
+        "shape": [
+          66,
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "head.actor_fusion.2.bias",
+        "numel": 66,
+        "requires_grad": true,
+        "shape": [
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "head.proj.0.weight",
+        "numel": 4884,
+        "requires_grad": true,
+        "shape": [
+          66,
+          74
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "head.proj.0.bias",
+        "numel": 66,
+        "requires_grad": true,
+        "shape": [
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "head.proj.2.weight",
+        "numel": 792,
+        "requires_grad": true,
+        "shape": [
+          12,
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "head.proj.2.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_code.0.weight",
+        "numel": 256,
+        "requires_grad": true,
+        "shape": [
+          32,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_code.0.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_code.2.weight",
+        "numel": 1024,
+        "requires_grad": true,
+        "shape": [
+          32,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_code.2.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_to_fast.weight",
+        "numel": 2112,
+        "requires_grad": true,
+        "shape": [
+          66,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "motion_to_fast.bias",
+        "numel": 66,
+        "requires_grad": true,
+        "shape": [
+          66
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "long_trust.0.weight",
+        "numel": 1312,
+        "requires_grad": true,
+        "shape": [
+          8,
+          164
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "long_trust.0.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "long_trust.2.weight",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          1,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "long_trust.2.bias",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": [
+          1
+        ]
+      }
+    ],
+    "trainable_parameters": 101057
+  },
+  "run_id": "17c7d508c9504bbe898baac79d224c0e",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 87001,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ESWAM014_QUADRATIC_STATIONARY_PRESERVING_NATIVE_REAL_TRAFFIC",
+  "successful_optimizer_steps": 320
+}
