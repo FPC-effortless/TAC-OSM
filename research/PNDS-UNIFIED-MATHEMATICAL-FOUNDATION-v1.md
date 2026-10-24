@@ -9,6 +9,10 @@
 | [PNDS](https://github.com/FPC-effortless/pnds-lean) `foundation/v1` | Versioned architecture variants, exact operator math, assumptions, Lean mathematical proofs, computational-graph contracts, experimental-evidence classification, retrospective source pointers | That Lean proof implies trained prediction/retention/causality; that every earlier research version has been individually inventoried |
 | [TAC-OSM](https://github.com/FPC-effortless/TAC-OSM) | Actual per-lane PyTorch implementation, source/model/version SHA, guarded fits, numerical equivalence, authentic heldouts, matched comparisons, operational evidence | That success on an isolated synthetic mechanism qualifies real-world intelligence; that missing source evidence is present |
 
+## Historical preservation and exact operator contracts
+
+The [PNDS original PR snapshot](https://github.com/FPC-effortless/pnds-lean/blob/research/unified-tac-osm-mathematical-foundation-v1-2026-10-24/foundation/v1/original-pr-snapshot.jsonl) pins **375 TAC-OSM PR records** as of October 24, 2026 with original head commit SHAs, branches, titles and statuses. The [ten source-mapped operator contracts](https://github.com/FPC-effortless/pnds-lean/blob/research/unified-tac-osm-mathematical-foundation-v1-2026-10-24/foundation/v1/operator-contracts.json) say precisely which equations have candidate Lean proofs and which remain paper-only/source-tested/open. PR metadata is not a copy of original trained experiments, which retain their original bytes here. Individual older DEV/ME/ESWAM/DIAGKEY result enumeration remains an explicit archival gap rather than being silently replaced by a headline.
+
 ## Current indexed lanes and governance
 
 - **Core native/DIAGKEY004:** fast/slow and 8×8 aligned gated-delta mathematics; 99.84% synthetic immediate recall is real mechanism evidence but original strict raw-logit replay still has 2/819,200 failures; no proven 256-distractor *repaired* memory or real success.
