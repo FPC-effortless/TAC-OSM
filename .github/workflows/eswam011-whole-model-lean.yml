@@ -1,0 +1,22 @@
+name: ESWAM011 whole-model Lean kernel check
+on:
+  pull_request:
+    paths:
+      - "research/mathematical-engineering/eswam011/**"
+      - ".github/workflows/eswam011-whole-model-lean.yml"
+  workflow_dispatch:
+jobs:
+  lean-full-graph:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Lean 4 without a Lake package
+        shell: bash
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain leanprover/lean4:v4.25.0
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Verify whole-model typed graph in the Lean kernel
+        run: |
+          lean --version
+          lean research/mathematical-engineering/eswam011/WholeModelStep.lean
