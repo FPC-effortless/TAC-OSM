@@ -1,0 +1,105 @@
+{
+  "schema": "pnds.tac_osm.parallel_computation_certificate.v1.4",
+  "research_id": "PARALLEL-NATIVE-001",
+  "date": "2026-10-24",
+  "parent_original_model": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "commit": "081e534a074001c6a3b2251b3ff31ad20ec4fca8",
+    "file": "src/tac_osm/aligned_associative_tac.py",
+    "id": "CORE-DIAGKEY004",
+    "parameters": 101527
+  },
+  "candidate": {
+    "id": "PARALLEL-NATIVE-EXPERIMENTAL-001",
+    "status": "UNTRAINED_SEMANTICALLY_DISTINCT_CANDIDATE",
+    "full_sequence_parallel_algorithm": true,
+    "original_output_equality": false,
+    "original_native_fast_slow_recurrence_preserved": false,
+    "parameter_count": 101527,
+    "parameters_added": 0,
+    "training_steps": 0,
+    "authentic_research_evidence": "NO_SKILL_CLAIM",
+    "physical_or_decision_qualification": "NOT_EVALUATED",
+    "native_time_parallel_source_equivalence": "ORIGINAL_PARTITIONED_PATH_ONLY"
+  },
+  "reference_files": {
+    "pnds_lean": {
+      "repo": "FPC-effortless/pnds-lean",
+      "path": "PNDS/ParallelMemory.lean",
+      "git_blob": "59619df401889df5075a0dbe44daf841eb94d894"
+    },
+    "pnds_formulation": {
+      "repo": "FPC-effortless/pnds-lean",
+      "path": "foundation/v1/PARALLEL_COMPUTATIONAL_GRAPH_V1_4.md",
+      "git_blob": "8bd6a23325ff844a2b5a5efdcffe3f633e08445a"
+    },
+    "original_equivalent_partition": {
+      "repo": "FPC-effortless/TAC-OSM",
+      "path": "src/tac_osm/variants/parallel_partitioned_native.py",
+      "git_blob": "90dfa09ec884fbd20ea060c1a2316aa0f1145844"
+    },
+    "balanced_affine_scan": {
+      "repo": "FPC-effortless/TAC-OSM",
+      "path": "src/tac_osm/variants/parallel_affine_memory.py",
+      "git_blob": "8bcd917b3b84e4cdc3df647aed6278e1ecfbe155"
+    },
+    "parallel_candidate": {
+      "repo": "FPC-effortless/TAC-OSM",
+      "path": "src/tac_osm/variants/full_time_parallel_native.py",
+      "git_blob": "6c9383fe13a6e1f57005e1cb1b688fadbd20276d"
+    },
+    "complete_graph": {
+      "repo": "FPC-effortless/TAC-OSM",
+      "path": "research/mathematical-engineering/pnds-native-v1-1/PARALLEL_FULL_GRAPH_CONTRACT.json",
+      "git_blob": "5557d9dfac03b2dad479ad7a6486e36853f2a403"
+    },
+    "verified_results": {
+      "repo": "FPC-effortless/TAC-OSM",
+      "path": "research/mathematical-engineering/pnds-native-v1-1/PARALLEL_GRAPH_RESULTS_V1_4.md",
+      "git_blob": "54582a49c117501eec496710416f34e092a12b29"
+    }
+  },
+  "source_tests": {
+    "torch_github_actions": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40140051455",
+    "original_partitioned_forward_and_gradients": 184,
+    "two_affine_prefix_algorithms_and_gradients": 130,
+    "complete_parallel_candidate_structural": 230,
+    "results": "PASSED",
+    "exact_model_same_weights": true,
+    "real_skill": "NOT_EVALUATED"
+  },
+  "formal": {
+    "github_actions": "https://github.com/FPC-effortless/pnds-lean/actions/runs/40140048668",
+    "matrix_affine_semantics": "LEAN_PROVED",
+    "chronological_associativity": "LEAN_PROVED",
+    "identity_and_chunk_composition": "LEAN_PROVED",
+    "norm_budget_scalar_inequality": "LEAN_PROVED_CONDITIONAL",
+    "rank_one_eight_dim_spectral_norm": "ANALYTICALLY_DERIVED_NOT_LEAN_PROVED",
+    "entire_original_native_graph_leansource_equivalence": "OPEN",
+    "all_historic_17_variant_mathematics_completed": false
+  },
+  "cpu_forward_illustrative": {
+    "device": "single-thread CPU; B4 FP32; two warmups, five repetitions",
+    "torch_version": "2.14.1+cu130",
+    "original_median_ms": {
+      "T32": 7.16668,
+      "T128": 27.79708,
+      "T256": 55.27422
+    },
+    "candidate_median_ms": {
+      "T32": 2.11094,
+      "T128": 5.26069,
+      "T256": 12.49601
+    },
+    "performance_threshold": false,
+    "training_compute_or_learning_matched": false,
+    "no_skill_inferred": true
+  },
+  "governance": {
+    "original_historical_17_variants_manifest_unchanged": true,
+    "authentic_real_data_required_for_skill_claim": true,
+    "matched_parameters_exposure_data_training_compute_required": true,
+    "cpu_walltime_equality_not_required": true,
+    "no_merge_of_untrained_architecture_without_explicit_qualification": true
+  }
+}
