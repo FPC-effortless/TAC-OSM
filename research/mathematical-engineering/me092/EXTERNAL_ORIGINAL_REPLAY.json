@@ -1,115 +1,292 @@
 {
-  "study": "ME092",
-  "github_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40095957627",
-  "head_sha": "01b550607e6fbc600e844b1bebcf7a589b79a14a",
-  "status": "PASS",
-  "original_models": 5,
-  "original_forecasts": 27600,
-  "rtol": 1e-05,
-  "atol": 1e-06,
-  "evidence": "GitHub REST completed job and named steps; strict replay exits on any outside-contract field. Signed Azure log download403, no per-field stdout claimed.",
-  "job_id": 120878154611,
-  "job_conclusion": "success",
-  "steps": [
+  "atol": 0.000001,
+  "audit_completed": true,
+  "environment": {
+    "python": "3.12.15",
+    "threads": 1,
+    "torch": "2.14.1+cpu"
+  },
+  "maximum_absolute_difference_per_field": {
+    "coverage": 0,
+    "interval_score": 4.2338539896213945e-9,
+    "lower": 1.982253250432109e-10,
+    "mae": 6.558842358117545e-10,
+    "motion_brier": 2.285366340615269e-11,
+    "motion_probability": 2.122735320853053e-11,
+    "persistence_mae": 0,
+    "physical_marginal_nll": 6.189759815811158e-11,
+    "physical_movement": 0,
+    "prediction": 2.359696882336948e-10,
+    "servo_mae": 0,
+    "target": 0,
+    "upper": 4.90417040310831e-10,
+    "velocity_mae": 0,
+    "width": 1.6305051753207067e-9
+  },
+  "model_history_conditions": 10,
+  "models": [
     {
-      "name": "Set up job",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "1b14aa01d70e8afae3959dc21d55ea9e69e9d1a35f513b535a9cb74d442e7700",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 1.4400871606312649e-9,
+        "lower": 8.566380937935492e-11,
+        "mae": 2.1528379079427395e-10,
+        "motion_brier": 1.5908552253307562e-11,
+        "motion_probability": 1.6424084314792253e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 4.249889329344114e-11,
+        "physical_movement": 0,
+        "prediction": 5.894618126944806e-11,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 4.781552931376609e-11,
+        "velocity_mae": 0,
+        "width": 2.441487012561083e-10
+      },
+      "observed_history": 8,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2844,
+      "seed": 92001
     },
     {
-      "name": "Run actions/checkout@v4",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "5e90fe216734e12ed6894267a21108b06a3832f372f515e3839ac1cefccb9f39",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 3.1713724979454128e-9,
+        "lower": 5.889899679090149e-11,
+        "mae": 1.385244453866452e-10,
+        "motion_brier": 1.0258335847446176e-11,
+        "motion_probability": 1.9395707262503947e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 2.205879923167231e-11,
+        "physical_movement": 0,
+        "prediction": 5.0289772346445716e-11,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 8.994227584935288e-11,
+        "velocity_mae": 0,
+        "width": 3.517568458732967e-10
+      },
+      "observed_history": 8,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2844,
+      "seed": 92002
     },
     {
-      "name": "Run actions/setup-python@v5",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "b441b7966769f6266cddd23c99046470381a3cd4a2ab2d24dc1d81b9b606f5b0",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 4.2338539896213945e-9,
+        "lower": 8.018319341829283e-11,
+        "mae": 2.556611589099589e-10,
+        "motion_brier": 2.285366340615269e-11,
+        "motion_probability": 2.122735320853053e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 4.827716004740523e-11,
+        "physical_movement": 0,
+        "prediction": 1.0474565659279733e-10,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 6.574529809455498e-11,
+        "velocity_mae": 0,
+        "width": 2.3095708678866345e-10
+      },
+      "observed_history": 8,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2844,
+      "seed": 92003
     },
     {
-      "name": "Run python -m pip install 'pytest==9.1.1' 'numpy==2.3.5' 'pyarrow==21.0.0'",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "93e55af99e21188a77518bca8c148d957d63614f684cea39e2f08b214adc3913",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 2.2263151322476915e-9,
+        "lower": 4.861833158287254e-11,
+        "mae": 2.7625191023616935e-10,
+        "motion_brier": 2.2363111362722066e-11,
+        "motion_probability": 1.615607647664774e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 5.011924208986329e-11,
+        "physical_movement": 0,
+        "prediction": 9.11462016972564e-11,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 5.684364090541294e-11,
+        "velocity_mae": 0,
+        "width": 2.2171153801764376e-10
+      },
+      "observed_history": 8,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2844,
+      "seed": 92004
     },
     {
-      "name": "Run python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "c2dccc7b816a441accb6ba116375bd1337789336e7acccdf138f861404ee8ffb",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 2.3564901141526207e-9,
+        "lower": 1.982253250432109e-10,
+        "mae": 6.558842358117545e-10,
+        "motion_brier": 1.2797485293702948e-11,
+        "motion_probability": 1.1865286531076435e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 3.993694264181613e-11,
+        "physical_movement": 0,
+        "prediction": 2.359696882336948e-10,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 4.90417040310831e-10,
+        "velocity_mae": 0,
+        "width": 1.6305051753207067e-9
+      },
+      "observed_history": 8,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2844,
+      "seed": 92005
     },
     {
-      "name": "Run PYTHONPATH=src:. python -m pytest tests/test_gradient_surgery.py tests/test_visual_world.py tests/test_visual_execution.py tests/test_clock_value_world.py tests/test_clock_value_execution.py -q",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "1b14aa01d70e8afae3959dc21d55ea9e69e9d1a35f513b535a9cb74d442e7700",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 2.806802734678371e-9,
+        "lower": 6.544842445777022e-11,
+        "mae": 5.042952722078553e-10,
+        "motion_brier": 1.453770437365165e-11,
+        "motion_probability": 1.863942333812929e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 6.189759815811158e-11,
+        "physical_movement": 0,
+        "prediction": 2.1414858775159473e-10,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 2.1049428866604103e-10,
+        "velocity_mae": 0,
+        "width": 5.960520965686555e-10
+      },
+      "observed_history": 32,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2676,
+      "seed": 92001
     },
     {
-      "name": "Run python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me092/FAIR_COMPARISON.json --phase preflight",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "5e90fe216734e12ed6894267a21108b06a3832f372f515e3839ac1cefccb9f39",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 4.112798768218795e-9,
+        "lower": 1.0886513912566897e-10,
+        "mae": 1.2105605406986797e-10,
+        "motion_brier": 1.1613598971393913e-11,
+        "motion_probability": 2.0290547020351823e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 2.404654253496119e-11,
+        "physical_movement": 0,
+        "prediction": 4.351963234228151e-11,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 9.223133368152503e-11,
+        "velocity_mae": 0,
+        "width": 4.007354448276601e-10
+      },
+      "observed_history": 32,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2676,
+      "seed": 92002
     },
     {
-      "name": "Validate every original whole model and actual optimizer receipt",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "b441b7966769f6266cddd23c99046470381a3cd4a2ab2d24dc1d81b9b606f5b0",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 1.0684608753308567e-9,
+        "lower": 7.343048391561524e-11,
+        "mae": 3.5997160807710316e-10,
+        "motion_brier": 2.2401580590525327e-11,
+        "motion_probability": 1.999123089291288e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 5.757216925417197e-11,
+        "physical_movement": 0,
+        "prediction": 1.276481143008823e-10,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 6.081135595081832e-11,
+        "velocity_mae": 0,
+        "width": 2.871871629395173e-10
+      },
+      "observed_history": 32,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2676,
+      "seed": 92003
     },
     {
-      "name": "Run actions/cache@v4",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "93e55af99e21188a77518bca8c148d957d63614f684cea39e2f08b214adc3913",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 2.5952324733680143e-9,
+        "lower": 6.301381638706971e-11,
+        "mae": 2.0187584937048086e-10,
+        "motion_brier": 2.0010437751238896e-11,
+        "motion_probability": 1.901909185697548e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 5.115441403802379e-11,
+        "physical_movement": 0,
+        "prediction": 1.1628076279635025e-10,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 5.861133800522111e-11,
+        "velocity_mae": 0,
+        "width": 2.3295143591894885e-10
+      },
+      "observed_history": 32,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2676,
+      "seed": 92004
     },
     {
-      "name": "Run actions/cache@v4",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Verify and restore Git-owned exact observed image pixels",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Strict original visual forecast replay without fitting",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Full original numerical census",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Restore complete compiled visual programs",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Restore raw physical and pixel input-to-output boundary",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Post Run actions/cache@v4",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Post Run actions/cache@v4",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Post Run actions/setup-python@v5",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Post Run actions/checkout@v4",
-      "status": "completed",
-      "conclusion": "success"
-    },
-    {
-      "name": "Complete job",
-      "status": "completed",
-      "conclusion": "success"
+      "checkpoint_sha256": "c2dccc7b816a441accb6ba116375bd1337789336e7acccdf138f861404ee8ffb",
+      "examples": [],
+      "maximum_absolute_difference_per_field": {
+        "coverage": 0,
+        "interval_score": 3.2912118030914428e-9,
+        "lower": 1.186785114626332e-10,
+        "mae": 1.965634321976495e-10,
+        "motion_brier": 1.4684475857507095e-11,
+        "motion_probability": 1.1626033469269714e-11,
+        "persistence_mae": 0,
+        "physical_marginal_nll": 3.8912872923901887e-11,
+        "physical_movement": 0,
+        "prediction": 7.199518758937984e-11,
+        "servo_mae": 0,
+        "target": 0,
+        "upper": 7.717548822228082e-11,
+        "velocity_mae": 0,
+        "width": 3.6496972111166315e-10
+      },
+      "observed_history": 32,
+      "outside_original_tolerance_per_field": {},
+      "rows": 2676,
+      "seed": 92005
     }
-  ]
+  ],
+  "no_fit": true,
+  "no_original_outputs_weights_or_tolerance_changed": true,
+  "original_forecasts": 27600,
+  "original_models": 5,
+  "outside_original_tolerance_per_field": {},
+  "rtol": 0.00001,
+  "scope": "Full original field audit, not a replacement PASS for the failed strict replay. Rows may fail more than one field; no unique-failed-row inference from summed fields.",
+  "source_sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+  "strict_original_contract": "PASS",
+  "study": "me092",
+  "github_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40095957627",
+  "log_source": "Connected GitHub app original job120878154611 decoded log; signed-blob shell retrieval403 resolved through approved connector",
+  "status": "PASS"
 }

@@ -22,3 +22,9 @@ Originals were frozen atd3665d4e before REPORT. Full gateFAIL: stationaryH1,
 original95%CI and additional99.54545%CI fail. MovingH1, H4/H16, every NLL,
 coverage/interval/task/seed and secondary32frame condition pass. The unsatisfied
 conditions cannot be replaced by the favorable columns. No extra ME092fits.
+
+Independent clean-checkout original replay PASS:27,600forecasts, no fields outside
+original1e-5/1e-6contract in run40095957627. Normalized compiled and physical/pixel
+boundary restores alsoPASS. Original decoded logs were retrieved through the
+connected GitHub app after direct signed-blob downloads returned403; exact raw
+audit payloads are preserved alongside this report. Replay does not change gateFAIL.
