@@ -56,3 +56,13 @@ ME082 stronger conditions stay fixed. Additional99.1667%clusterCI describes
 these6declared attempts only; repeated exposed-DEV tuning remains adaptive,
 not independent statistical confirmation. Keep unchanged strict reference
 replay at rtol1e-5/atol1e-6 and whole-forward float64 from original learned values.
+
+The first trained original also has derived, serialized B2,T32 and B2,T1 complete
+quantile/state executables. Actual FIT profile outputs and round-trip restore
+agree under the unchanged tolerance. Alternating31-repeat within-process timing
+measured1.87xprefill and1.59xincremental speedups versus the SAME eager model.
+Both native training studies were sharing the workspace; these are unpinned CPU
+profile observations, not rival comparisons, variable-shape qualification or
+production latency guarantees. Independent derived-program verification is
+separate from original complete forecast replay. All original weights remain
+preserved as the canonical model, without changes from compilation.
