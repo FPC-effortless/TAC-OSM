@@ -73,7 +73,7 @@ def parallel_affine_prefix(P,Q, initial=None):
     hardware speedup guarantee). No per-timestep Python loop exists except
     across log2(T) stages. Output [B,T,8,8].
     """
-    if P.ndim != 4 or P.shape[-2:] != (8,8) or Q.shape != P or P.shape[1] < 1:
+    if P.ndim != 4 or P.shape[-2:] != (8,8) or Q.shape != P.shape or P.shape[1] < 1:
         raise ValueError("P/Q must be [B,T,8,8] with nonempty T")
     if not all(x.device==P.device and x.dtype==P.dtype for x in (Q,)):
         raise ValueError("P/Q dtype or device mismatch")
@@ -98,7 +98,7 @@ def parallel_affine_prefix(P,Q, initial=None):
 
 def sequential_affine_reference(P,Q, initial=None):
     """Independent time-ordered affine reference, projection absent."""
-    if P.ndim != 4 or Q.shape != P or P.shape[-2:] != (8,8):
+    if P.ndim != 4 or Q.shape != P.shape or P.shape[-2:] != (8,8):
         raise ValueError("P/Q dimension mismatch")
     memory=P.new_zeros(P.shape[0],8,8) if initial is None else initial
     out=[]
