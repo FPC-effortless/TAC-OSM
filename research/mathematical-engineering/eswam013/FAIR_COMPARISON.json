@@ -1,0 +1,60 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ESWAM013_MOTION_RELEVANCE_NATIVE_AUTHENTIC_256_HISTORY",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Prospective single native architecture capability improvement on authentic 256-frame multiagent traffic; avoid falsely qualifying unequal FLOP comparative arms.",
+  "real_world_source": {
+    "name": "Publisher-original recorded INTERACTION TC_BGR_Intersection_VA four original real vehicle recordings",
+    "sha256": "9aa78102006dc8d8a64675cf64eba5264085cfb1c006b1f4d0e856d94e657aec",
+    "observed_real_outcomes": true,
+    "license": "CC-BY-4.0",
+    "one_physical_site_only": true
+  },
+  "models": [
+    {
+      "seed": 87001,
+      "architecture": "eswam013_kinetic_relevance_parallel_native",
+      "trainable_parameters": 101057,
+      "deployed_parameters": 101057
+    },
+    {
+      "seed": 87002,
+      "architecture": "eswam013_kinetic_relevance_parallel_native",
+      "trainable_parameters": 101057,
+      "deployed_parameters": 101057
+    }
+  ],
+  "training_budget": {
+    "seeds": [
+      87001,
+      87002
+    ],
+    "optimizer": "AdamW",
+    "steps": 320,
+    "batch_size": 8,
+    "original_FIT_recordings": [
+      0,
+      1,
+      2
+    ],
+    "original_EXPOSED_DEV_recording": 3,
+    "original_history_frames": 256,
+    "original_future_frames": [
+      10,
+      30
+    ],
+    "original_anchor_frame_stride": 20,
+    "learning_rate": 0.001,
+    "weight_decay": 0.00001,
+    "gradient_norm_clip": 1,
+    "tuning_trials": 0,
+    "same_real_anchor_sample_order_by_seed": true
+  },
+  "primary_development_measure": "Original real source +10-frame forecast Euclidean xy error vs original measured instantaneous velocity prior; actor cluster bootstrap excludes zero and stationary-regime error must not degrade.",
+  "independent_test_status": "NOT AVAILABLE: original DEVELOPMENT member 003 previously exposed, single physical intersection only",
+  "source_policy": "No artificial/synthetic training results, no future target in inputs, no causal action intervention or robot outcome claims",
+  "comparative_fairness": "Single architecture candidate; previous ESWAM012 GRU/attention original runs were exploratory with failed mandatory training guard and unverified FLOP equality. Historical comparisons can be contextual only; no architecture superiority claim.",
+  "repository_storage_plan": "All two checkpoints, source-case original real labels/predictions, optimizer/RNG and independently verified live-budget receipts must be Git-frozen without overwriting the ESWAM012 original negative evidence."
+}

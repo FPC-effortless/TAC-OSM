@@ -1,0 +1,62 @@
+name: ESWAM013 guarded native source-causal real fitting
+# Original fitted checkpoint and independent replay are frozen; no automatic reruns.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: eswam013-original-fits-and-live-guards
+  cancel-in-progress: false
+jobs:
+  full-model-guarded-real-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/eswam013-motion-relevance-native-2026-10-24
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned real fit and software gate environment
+        run: |
+          python -m pip install 'pytest==9.1.1' 'numpy==2.3.5'
+          python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - name: Compulsory raw optimizer/checkpoint AST gate and live model preregistration BEFORE FIT
+        run: |
+          set -euo pipefail
+          python scripts/audit_training_budget.py
+          python -m py_compile scripts/eswam012_train_original_multiagent.py scripts/eswam013_guarded_original_real.py src/tac_osm/variants/eswam013_motion_relevance.py
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/eswam013/FAIR_COMPARISON.json --phase preflight
+          PYTHONPATH=src:. python scripts/eswam013_guarded_original_real.py preflight
+      - name: Cache exact original published real source zip OUTSIDE Git
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/interaction_TC_original.zip
+          key: eswam012-interaction-tc-publisher-original-sha9aa7810
+      - name: Verify SHA-pinned genuine publisher source, not fabricated traffic
+        run: |
+          if test ! -f "${{ runner.temp }}/interaction_TC_original.zip"; then
+            curl --fail --location --retry 3 --silent --show-error -o "${{ runner.temp }}/interaction_TC_original.zip"               "https://huggingface.co/datasets/INTERACTION-dataset/INTERACTION-dataset/resolve/3587152b529f26649ada0838a308eeaf77f5bdc2/INTERACTION-Dataset-TC-v1_0.zip"
+          fi
+          printf '9aa78102006dc8d8a64675cf64eba5264085cfb1c006b1f4d0e856d94e657aec  %s\n' "${{ runner.temp }}/interaction_TC_original.zip" | sha256sum --check
+      - name: Train two guarded native models on authentic 256-frame multi-entity source and score only actual future outcomes
+        run: |
+          PYTHONPATH=src:. python -u scripts/eswam013_guarded_original_real.py fit             --archive "${{ runner.temp }}/interaction_TC_original.zip"             --out research/replay-bundles/ESWAM013
+      - name: Keep original weights, optimizer RNG, per-real-case scores and GUARD receipts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eswam013-two-live-guarded-real-native-checkpoints
+          path: research/replay-bundles/ESWAM013/
+          retention-days: 90
+      - name: Preserve original fitted guarded checkpoint bytes and real case evidence in the research branch
+        if: success()
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f research/replay-bundles/ESWAM013
+          git commit -m 'research(eswam013): freeze two genuine source trained verified native weights and original outcomes'
+          git push origin HEAD:refs/heads/research/eswam013-motion-relevance-native-2026-10-24
