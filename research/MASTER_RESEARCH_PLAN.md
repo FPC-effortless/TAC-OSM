@@ -1286,3 +1286,50 @@ The 0/1/2/4/8 challenges were NOT present during fit of the original models. Eve
 **System 1 lane state as of ME077A:** Original ME077 integrated selective physical predictor itself improved exposed all-state MAE from ME076 0.080158 to0.066476 and improved 3.19% over last-state persistence0.068668 on same actual 960 queries, with original 40-episode paired MAE advantage. BUT **original preregistered >=5% all-five and moving subgroup primary gain gates remain FAILED**: movement-rich MAE ME0770.741981 vs persistence0.743241 (~0.17% relative), FIT servo0.704517 substantially better in that outcome-conditioned stratum; gross 90% coordinate interval coverage93.96% with mean original 0.30094 physical width. New ME077A aux event rank audit confirms subtle movement-state limitation despite physical stationary forecast gains; report as `MIXED_TRADEOFF`, never general intelligence or safe reflex.
 
 **Next System 1 capability test, not another reflexive no-fit cosmetic tweak:** Train new pre-registered original ~100k physical model to distinguish **when change is likely** and **how much conditional residual matters**, with a real decision-time prior FIT-derived event probability (no hindsight REPORT prevalence), genuinely observed actual dynamics, a calibrated global change risk, and physical state median/uncertainty from one consistent distribution. Evaluate actual precision/recall and false-alarm burden as prospective primary objectives alongside movement-rich and stationary MAE; compare original practical physical persistence and servo, old ME077 on exact same exposed DEV case IDs first, and reserve independent untouched source for confirmation. If wanting an ARCHITECTURE superiority claim, add strictly parameter+training-data+compute-matched GRU/SSM controls at 95–105k and original five seeds. Preserve training no-policy rule and noncausal logged command timing disclosure. The fully independent enterprise lane requires its own appropriate authentic event source and equal-input GRU/Transformer/direct horizon evaluation, and cannot be counted as qualified based on ME077A.
+
+## 2026-10-24 — native computational-graph development, ME082–ME086
+
+Owner priority remains improving the **trained complete model**, not attribution.
+[Draft PR377](https://github.com/FPC-effortless/TAC-OSM/pull/377) implements the
+native graph continuation. ME082,ME083,ME084 each completed five cold-start real
+fits,2048updates,B24,T32,104539learned parameters. All15 originals, optimizer/RNG,
+sampler receipts and8/32-frame scores are Git-owned and frozen before scoring.
+They all **FAIL the full unchanged predictive gate / MIXED_TRADEOFF**. Primary
+H1 MAE0.0530266/0.0527303/0.0544514 versus ME0800.0593931; actual-moving
+H1 0.408234/0.397165/0.390429, but stationary H1 0.018966/0.019702/0.022234
+remains far worse than ME0770.001701. Strict four-frame and paired cluster-CI
+requirements also fail. No successful general intelligence or architecture
+superiority is inferred from improved averages. See the [complete attempt
+ledger](https://github.com/FPC-effortless/TAC-OSM/blob/research/me082-equilibrium-parallel-2026-10-24/research/equilibrium-search/RESULTS.md).
+
+Full float64 reference inference using original trained float32 values resolves
+strict external original replay for ME082/083 at original rtol1e-5/atol1e-6:
+27600forecast records each. This is a new qualified numerical path, not a
+retroactive change to any earlier failed tolerance or FP32 throughput claim.
+ME084's independent receipt is preserved in the same study branch.
+
+A separately prospective bounded ME085/086 search is now training the
+99731-parameter **ClockValueWorld**: native elapsed-rate fast/slow/8x8 memory,
+parallel time-decayed local filters, a shared horizon head and learned convex
+retrieval of recent *raw observed values*. Same actual source and protected
+cohorts; only past/current capture elapsed is added. Future labels, future
+commands/capture times, absolute epoch, task/episode IDs are not features.
+Publisher nominal retained-frame timestamps differ from recorded capture time;
+FIT contains325capture gaps, but only138/180324eligible training windows contain
+a gap, so clock aliasing is **not proven to explain the prior failures**.
+
+Two4096-update five-seed cold-start recipes were fixed before fitting: NLL
+weight1.0 then0.2, stop at first complete gate plus original independent replay.
+Keep every ME081 gate and the stronger ME082 conditions; additional99%paired
+CI addresses these2+3declared attempts, not all historical adaptive research.
+Exposed DEV tuning remains exposed. At this update **no ME085 REPORT score or
+ME086 fit exists**; do not claim a learned gain from graph engineering.
+
+The real-FIT pure tensor export has2579nodes, all20parameter tensors receive
+finite nonzero training gradients, and chunk/step/causal-prefix equivalence
+passes. Encoder, time features, local filters, retrieval and horizon queries
+expose parallel axes; native nonlinear recurrent state remains sequential.
+The explicit caller-owned inference cache verifies entity separation and
+idempotent retries without changing model weights. This is execution correctness,
+not long-history prediction, autonomous policy intelligence or Woyengi deployment.
+Protected tissue-box/CAL/TEST remains CLOSED; no merge/deployment/customer contact.

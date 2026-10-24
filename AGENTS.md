@@ -103,3 +103,13 @@ Read the ME080 master-plan/results section before another physical fit. Five new
 ## ME081 learned predictive capability boundary
 
 Read the ME081 master-plan/results section before another fit. Five 100,165-parameter native models trained on actual 32-frame histories improve primary eight-frame-task mean MAE by 5.77/24.36/16.52% at 1/4/16 frames vs ME080 and improve interval scores. Stationary errors and NLL regress; episode CI includes zero. Full gate FAIL / MIXED_TRADEOFF; no further ME081 fits. Actual 32-frame forecasts are recorded but do not prove memory superiority. Original Git checkpoints/optimizer/RNG and both history readouts are preserved. Local fresh-checkout replay passes; strict external numerical replay fails on some point/uncertainty fields. Preserve every failure and unchanged tolerance. Continue integrated capability-first development under a new substantive registration; no default ablation campaign, protected TEST use, architecture-winner, general intelligence, causal control, deployment or customer-value claim.
+
+## 2026-10-24 current native computational graph research
+
+Read the master-plan ME082–ME086 section and draftPR377 before new physical
+fits. All ME082/083/084 full predictive gatesFAIL; no more fits under those
+registrations. ME085/086 is a separately fixed two-recipe capability search
+with native elapsed-rate memory and raw-observation retrieval. Original gates
+remain unchanged; no sealed tissue-box/CAL/TEST tuning, implicit model restart,
+architecture-winner, general intelligence or commercial claims. Traced graph
+parallel axes do not make nonlinear TAC recurrence an associative scan.
