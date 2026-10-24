@@ -48,12 +48,12 @@ def verify():
                 model,kind,keys,values,return_trace=True)
             output,final_state,ref=streaming_unroll(
                 model,kind,keys,values,return_trace=True)
-            compare(output[:,-1],result,dtype,"final full-parallel vs stream logits")
-            checks+=1
             for name in ("memory","old_read","fast","slow","gates","past_context"):
                 compare(ref[name],trace[name],dtype,f"B{B}T{T} {name}")
                 checks+=1
                 max_abs=max(max_abs,(ref[name]-trace[name]).abs().max().item())
+            compare(output[:,-1],result,dtype,f"B{B}T{T} final full-parallel vs stream logits")
+            checks+=1
             assert final_state.step_count==T
             assert final_state.sum_fast.shape==(B,88)
             assert final_state.memory.shape==(B,8,8)
