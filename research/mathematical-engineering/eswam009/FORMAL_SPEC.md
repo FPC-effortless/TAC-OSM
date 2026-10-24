@@ -1,0 +1,7 @@
+# ESWAM009 Python/Lean formalization
+
+Exact executable Python and Lean files accompany this study under `research/mathematical-engineering/eswam009/`. The Python reference is tested locally against loop retrieval for all three roles, missing and requested identities, variable batch and gradient propagation. Lean 4 establishes abstract admission safety propositions (disabled, collision refusal, identity reuse and free slot); **Lean kernel execution has not been verified** because Lean is not installed in the current environment. The actual neural exchange-gated write, all model heads, full gradient equivalence and authentic training gates remain unproven. This is not an improved trained checkpoint.
+
+Math: for query q_i and slot j, valid v_ij=occupied_ijr ∧ (id_ij>=0) ∧ (requested_id absent ∨ id_ij=requested_id_i). Similarity s_ij=dot(k_ij, normalize(q_i)); weights w_ij=softmax over valid slots only (zero if none). Retrieved r_i=Σ_j w_ij value_ijr. Admission is enabled ∧ (existing matching slot ∨ free slot); use matching slot first, otherwise lowest free, otherwise reject. Role is explicit and predictions never silently become verified facts.
+
+Source proof requirements: train/evaluate real 256-step multi-actor trajectories with parameter/data/budget-matched GRU and causal attention; do not claim a scientific pass from software tests.
