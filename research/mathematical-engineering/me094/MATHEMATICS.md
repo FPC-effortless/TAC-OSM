@@ -92,3 +92,11 @@ three-level score helper and exact original physical preprocessing/state outputs
 The trained graph and original score code remain unchanged. First-original actual
 FIT compiled export must additionally compare optimized outputs to frozen original
 quantiles at1e-5/1e-6; no new numerical tolerance or learned weights.
+
+Interpretation boundaries: after translation, a base 'hold' component need not
+remain centered on the observation. The translated components describe latent
+uncertainty shape; their weights are not observed physical regime probabilities.
+The point interpolation coefficient is also not a calibrated motion probability.
+Only the separate factual motion head has that supervised event target. 'Decision'
+in the added head names an internal predictive interpolation, not an autonomous
+external action or controller.
