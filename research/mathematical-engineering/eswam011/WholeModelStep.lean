@@ -125,6 +125,14 @@ theorem whole_step_cannot_rewrite_verified {α : Type} {d a w slots m : Nat}
     (op : Operators α d a w slots m) (input : Input α d a)
     (old : State α w slots m) :
     (step op input old).nextState.memory.verified = old.memory.verified := by
-  simp [step, storeObserved, storePredicted]
+  cases hslot : op.admit old.memory input.sourceId with
+  | none =>
+      simp [step, hslot, storeObserved, storePredicted]
+  | some slot =>
+      cases hknown : hasObservation input with
+      | false =>
+          simp [step, hslot, hknown, storeObserved, storePredicted]
+      | true =>
+          simp [step, hslot, hknown, storeObserved, storePredicted]
 
 end ESWAM
