@@ -1565,3 +1565,41 @@ exact Git-owned licensed overhead pixels; protected CAL/TEST/tissue-box unopened
 No new independent generalization, architecture winner, policy intelligence,
 customer value or deployment claimed. Full mathematics/input-to-output graph:
 [ME093](https://github.com/FPC-effortless/TAC-OSM/blob/research/me082-equilibrium-parallel-2026-10-24/research/mathematical-engineering/me093/MATHEMATICS.md).
+
+### ME093 complete negative; ME094 explicit median architecture — 2026-10-24
+
+ME093ALL5originals5ec26e40/postfit e5a2f36b, original scores efc5e625.
+Full gate **FAIL/MIXED_TRADEOFF**: H1/H4/H16MAE
+0.05053248/0.13904939/0.59860214; H1moving0.36073998,quiet0.02078656.
+Only quietH1 and additional99.58333%paired interval fail. Original95%CI
+[-0.01717568,-0.00049938] passes, stricter interval[-0.02099906,+0.00287236]
+does not. No extra ME093fits. All60ME082–ME093versions are preserved.
+Independent27,600forecast original replay, normalized compiled and raw physical
+restores PASS [40112348639](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40112348639),
+head efc5e625; exact audit payloads retrieved with connected GitHub app. ME092's
+previous signed-blob log403 was similarly resolved; exact original full audit is
+now retained. Reproducibility does not change either predictive failure.
+
+ME094 registered **c87dc63c** before fits: one new101,173parameter integrated
+native model, ALL5indexedME093parents,96,595retained+4,578new decision/retrieval
+values, alltrainable. Add time/content relevance over the causal eight-value bank
+and an independent learned point median m. For proper multimodal base CDF B and
+its median q, translate every component by m-q: P(y)=B(y-m+q), so P(m)=.5.
+Preserve implicit derivatives through q; do not detach shape-centering gradients.
+Probability weights/scales no longer directly determine the point; shared physical
+means still participate in both. No missing uncertainty or separate unrelated bounds.
+
+Complete objective CRPS+0.2physicalNLL+20medianMAE+0.2factualglobalmotionBCE;
+pointweight increases for BOTH quiet and moving examples. Same3taskPCGrad,
+retainedLR.0001/newLR.0003,AdamWclip1.4,096newupdates/seed;17,408chargedpipeline,
+retainednative/visual13,312ownlineage,location9,216,oldlocalnoise7,168,new4,578values
+4,096updates.1206local tests and real-FIT all33activeparameter-gradient preflight
+PASS. Maximum absolute partition-gradient difference9.155e-5 passes unchanged
+relative1e-5/absolute1e-6contract; it is not an absolute-error-below1e-6 claim.
+
+Five fits are running; **no ME094REPORT result yet**. Same120FIT/40exposedREPORT,
+exactlicensedpixels, protectedsourcesunopened. All old predictive conditions plus
+original95%/additional99.61538%paired intervals for13declaredrecipes and strict
+original replay remain. Scoring uses numerically checked final-only decode to
+avoid discarded prefix readouts/centering roots; dense-prefix training unchanged.
+No independent/site, architecture-winner, policy/control or customer claim.

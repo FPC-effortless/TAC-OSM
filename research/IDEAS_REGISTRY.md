@@ -510,3 +510,13 @@ quantile inversion.96,595active parameters, ALL5indexedME092parents,3,072newstep
 whole-model training, unchanged gate and source cutoffs. Registered51120067;
 training underway, no skill-success claim. Attribution secondary; no extra fits
 under exhaustedME092. Commercial/customer evidence remains NOT_MEASURED.
+
+### ME094 — explicit median and coherent multimodal shape (2026-10-24)
+
+ME093's extra noise regime did not meet quietH1/stricterCI gates. New whole model
+separates a learned predictive median from shape mixing/scales, translates the full
+multimodal CDF with correct implicit derivative, and adds causal eight-value time/
+content relevance.101,173parameters,4,096newupdates, ALL5fixedME093parents,
+unchangedgate; registered c87dc63c, fits underway, no result yet. Standard quantile/
+mixture/retrieval mathematics reused, no new theorem, extra ablation campaign or
+architectural-superiority claim. Genuine customer/decision value NOT_MEASURED.
