@@ -1,0 +1,160 @@
+{
+  "architecture_superiority_claim": false,
+  "guardrails": [
+    {
+      "metric": "H16_MAEwithin5pct_ME080",
+      "status": "PASS"
+    },
+    {
+      "metric": "H16_NLLno_worse_ME081",
+      "status": "PASS"
+    },
+    {
+      "metric": "H16_coverage_at_least85pct",
+      "status": "PASS"
+    },
+    {
+      "metric": "H16_interval_score_no_worse_ME080",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1_NLLno_worse_ME081",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1_coverage_at_least85pct",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1_interval_score_no_worse_ME080",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1at_least5pct_below_ME080",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1at_least5pct_below_ME081",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1moving_within5pct_ME078",
+      "status": "PASS"
+    },
+    {
+      "metric": "H1stationary_within10pct_ME077",
+      "status": "FAIL"
+    },
+    {
+      "metric": "H4_MAEwithin5pct_ME080",
+      "status": "PASS"
+    },
+    {
+      "metric": "H4_NLLno_worse_ME081",
+      "status": "PASS"
+    },
+    {
+      "metric": "H4_coverage_at_least85pct",
+      "status": "PASS"
+    },
+    {
+      "metric": "H4_interval_score_no_worse_ME080",
+      "status": "PASS"
+    },
+    {
+      "metric": "H4at_least5pct_below_ME079",
+      "status": "PASS"
+    },
+    {
+      "metric": "at_least4of5paired_seed_H1wins",
+      "status": "PASS"
+    },
+    {
+      "metric": "family99pct_CI_upper_below0",
+      "status": "FAIL"
+    },
+    {
+      "metric": "long32_H16_beats_persistence",
+      "status": "PASS"
+    },
+    {
+      "metric": "long32_H1_beats_persistence",
+      "status": "PASS"
+    },
+    {
+      "metric": "long32_H1moving_beats_velocity",
+      "status": "PASS"
+    },
+    {
+      "metric": "long32_H4_beats_persistence",
+      "status": "PASS"
+    },
+    {
+      "metric": "no_task_H1over10pct_persistence",
+      "status": "PASS"
+    },
+    {
+      "metric": "paired_episode95CI_upper_below0",
+      "status": "FAIL"
+    }
+  ],
+  "independent_real_distributions": 0,
+  "integrity": {
+    "external_replay_status": "PENDING",
+    "git_original_checkpoints": true,
+    "independent_audit_run_url": "NOT_YET_RECORDED",
+    "independent_clean_replay": false,
+    "independent_raw_case_audit": true,
+    "raw_case_score_artifact_path": "research/replay-bundles/ME086",
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true
+  },
+  "model": {
+    "candidate_sha256": "e546d306f51c2af018adabecac82917d615451a1110a4cc3cc1dfb4f5b6c1437",
+    "deployed_parameters": 99731,
+    "prior_sha256": "0b62cc22fff71d01635d7952e7d508c06cc0841026f9c1e2d1c09e00ee92df8c",
+    "scope": "first seed identities; all five originals indexed; no ensemble deployment",
+    "trainable_parameters": 99731,
+    "training_exposure_and_compute_note": "4096updates,B24,T32; five cold starts, known capture elapsed added, all original targets. No compute/information-matched architecture claim; full original exposure and all attempted studies preserved."
+  },
+  "operator_value": "NOT_MEASURED",
+  "practical_reference_scored": true,
+  "primary_comparison": {
+    "beneficial_seed_count": 5,
+    "candidate": 0.05168648081306805,
+    "direction": "lower_is_better",
+    "minimum_useful_gain": 0.002969656686698009,
+    "name": "same8frame H1physical MAE vsME080",
+    "paired_case_cluster_95ci_new_minus_old": [
+      -0.01566758182729531,
+      2.5074498685328638e-05
+    ],
+    "paired_seed_count": 5,
+    "prior": 0.05939313373396018
+  },
+  "schema_version": "tac-osm.capability-progress.v1",
+  "source": {
+    "authentic_real_data": true,
+    "eligible_ids_sha256": "de074a324739ec05959baac263a51e0e0c3eb597084ba2efde9af4e5d9a3c771",
+    "exposure": "EXPOSED_DEV",
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "study_id": "ME086_CLOCK_VALUE_WORLD",
+  "task": {
+    "actual_future_targets": 40,
+    "actual_query_origins": 960,
+    "count_unit": "episode clusters; no verified operator/session/site independence; seeds/histories do not add cases",
+    "future_query_target_pairs": 2844,
+    "independent_cases": 40,
+    "prediction_time_validated": true,
+    "query_and_horizon": "same original8frame primary queries,1/4/16frames; separately actual32frame cohort",
+    "same_case_ids_target_horizon_metric": true,
+    "secondary32_future_pairs": 2676,
+    "secondary32_query_origins": 904,
+    "target": "original14Dphysical-state MAE"
+  },
+  "tier": "MIXED_TRADEOFF",
+  "what_improved": "Actual primary8frame and secondary32frame frozen whole-model forecasts are fully retained. H1/H4/H16mean MAE 0.05168648/0.15890228/0.68835176. See proper uncertainty, motion and quiet scores; no general-intelligence implication.",
+  "what_regressed": "Fixed full predictive gate FAIL; failed conditions: H1stationary_within10pct_ME077,family99pct_CI_upper_below0,paired_episode95CI_upper_below0",
+  "what_remains_unknown": "Independent new-source qualification, arbitrary-history accuracy, causal action intelligence, architecture superiority, enterprise/operator/customer value, general intelligence and accelerated variable-shape inference."
+}
