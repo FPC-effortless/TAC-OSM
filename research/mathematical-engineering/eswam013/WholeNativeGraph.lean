@@ -54,8 +54,8 @@ structure Operators (α : Type) where
   recordedSpeed : SourceFrames α → Fin 4 → α
   sourceMotionOpen : α → α
 
-def wholeNativeStep {α : Type} (ops : Operators α)
-    (input : ObservedInput α) : WorldForecast α := Id.run do
+def wholeNativeStep (ops : Operators Rat)
+    (input : ObservedInput Rat) : WorldForecast Rat := Id.run do
   let encoded := ops.encodeParallel input.sourceRecordedFrames
   let fast := ops.recentFast encoded
   let observedMotion := ops.causalMotionDifference input.sourceRecordedFrames
@@ -84,11 +84,16 @@ def relevanceMix (fast slow trust : Rat) : Rat :=
 
 theorem zero_relevance_selects_fast (fast slow : Rat) :
     relevanceMix fast slow 0 = fast := by
-  simp [relevanceMix]
+  unfold relevanceMix
+  rw [Rat.zero_mul]
+  exact Rat.add_zero fast
 
 theorem unit_relevance_selects_slow (fast slow : Rat) :
     relevanceMix fast slow 1 = slow := by
-  simp [relevanceMix]
+  unfold relevanceMix
+  rw [Rat.one_mul]
+  rw [Rat.add_comm fast (slow - fast)]
+  exact Rat.sub_add_cancel
 
 def physicalMotionGate (measuredSpeed positiveOffset : Rat) : Rat :=
   measuredSpeed / (measuredSpeed + positiveOffset)
@@ -102,7 +107,12 @@ theorem zero_measured_speed_exact_physical_prior
     (sourceMeasuredVelocityPrior correction offset : Rat) :
     physicalResidual sourceMeasuredVelocityPrior correction 0 offset =
       sourceMeasuredVelocityPrior := by
-  simp [physicalResidual, physicalMotionGate]
+  unfold physicalResidual physicalMotionGate
+  rw [Rat.zero_add]
+  rw [Rat.div_def]
+  rw [Rat.zero_mul]
+  rw [Rat.zero_mul]
+  exact Rat.add_zero sourceMeasuredVelocityPrior
 
 -- Actor index is a source-authorized array address; there is no learned
 -- ID-classification theorem. Model has no do(action) input or inferred action
