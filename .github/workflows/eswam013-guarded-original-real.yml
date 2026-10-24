@@ -1,10 +1,6 @@
 name: ESWAM013 guarded native source-causal real fitting
+# Original fitted checkpoint and independent replay are frozen; no automatic reruns.
 on:
-  pull_request:
-    paths:
-      - "src/tac_osm/variants/eswam013_motion_relevance.py"
-      - "scripts/eswam013_guarded_original_real.py"
-      - ".github/workflows/eswam013-guarded-original-real.yml"
   workflow_dispatch:
 permissions:
   contents: write
