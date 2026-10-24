@@ -14,8 +14,13 @@ H1actual-moving MAE0.36156072; H1near-stationary MAE0.02018769. Forty exposed re
 
 Failed gates: H1stationary_within10pct_ME077, family99_61538pct_CI_upper_below0.
 
-Independent original replay: PENDING. Delivered capability tier: BLOCKED.
+Independent original replay: PASS. Delivered capability tier: MIXED_TRADEOFF.
 
 [Original complete scores](CAPABILITY_RESULTS.json), [actual guarded optimizer/parameter audit](FINAL_COMPARISON.json), [frozen registration](FAIR_COMPARISON.json), [source](SOURCE_QUALIFICATION.json). Original weights, optimizer/RNG, receipts and all point/distribution forecasts are tracked in the study replay folder. Same authenticated real recordings and past/current information only; future commands/capture times and protected tissue-box/CAL/TEST remain closed.
 
 Reference inference uses the whole forward graph in float64, promoted from exact original float32 trained values. Independent restoration must retain original rtol1e-5/atol1e-6. Compiled fixed-profile engineering evidence, when present, is separate from full original forecast replay and predictive performance. No architecture-winner, policy control, general intelligence, independent site proof, deployed product or customer-value claim is unlocked.
+
+All5originals182b3397/postfit907afd48 were frozen before original score1ad5e625.
+Independent27,600forecast replay, full compiled/physical boundary and point-query
+restores PASS run40118547708. Full predictive gate staysFAIL: quietH1 and stricterCI.
+All65ME082–ME094original model versions and negative findings remain preserved.
