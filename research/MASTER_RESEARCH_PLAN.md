@@ -1333,3 +1333,38 @@ The explicit caller-owned inference cache verifies entity separation and
 idempotent retries without changing model weights. This is execution correctness,
 not long-history prediction, autonomous policy intelligence or Woyengi deployment.
 Protected tissue-box/CAL/TEST remains CLOSED; no merge/deployment/customer contact.
+
+### ME085 frozen outcome and ME087 substantive correction — 2026-10-24 continuation
+
+ME085's five99731-parameter originals completed4096guarded updates each and
+were Git-frozen atf869884e before all REPORT scoring. **Full gateFAIL /
+MIXED_TRADEOFF**, with H1/H4/H16 MAE0.05338952/0.15759004/0.68190478.
+Actual-movingH1 is0.38013820 but near-stationaryH1 remains0.02205745. Four
+conditions fail: quiet precision, stronger ME081 H1target, original95%episode
+CI and additional99%CI. Physical marginal NLL and interval-score guardrails
+pass at all horizons. Exact original scores/weights remain in draftPR377.
+Independent GitHub replay40067423426 passed27600original forecast records;
+committed B2,T32/B2,T1 compiled reference programs also restored and agreed on
+actual FIT inputs. Same-model compiled timing1.83xprefill/1.61xstep is scoped to
+those profiles and shared-workspace measurements, not a production SLA.
+
+The separately frozen ME086 recipe is executing unchanged. ME087 was registered
+before any of its updates as a **new integrated architecture/training objective**,
+not a hidden replacement:99731active/deployed parameters; quiet raw-value
+borrowing softsign-bounded by FIT noise*sqrt(h), every coordinate; same native
+elapsed-rate state/filter/associative dynamics; same coherent mixture; actual
+median directly trained through the implicit CDF derivative dq/dtheta=-F_theta/f.
+The original ME085 error-location audit finds95.18%of quiet absolute error in
+the two gripper coordinates; this is location, not proof of mechanistic cause.
+No gripper-specific inference condition or future-outcome router was added.
+
+The implicit derivative's initial zero-CDF derivative draft failed a software
+check before fitting; its no-fit registration is preserved and the corrected
+safe piecewise derivative passed independent finite differences before v2
+source freeze. Real-FIT export2593nodes, all20parameter tensors finite nonzero
+gradients. Five cold starts,4096updates,B24,T32, proper CRPS+0.2NLL+0.2motionBCE
++1.0proper median absolute error, final-only weights. All prior gates stay
+fixed; additional99.1667%paired CI includes all6declared attempts, not arbitrary
+historical adaptation. Both currently scheduled studies remain **UNSCORED**
+at this update; no new gate pass is claimed. No additional fit under completed
+ME085; no protected source use, winner, control, deployment or customer claim.

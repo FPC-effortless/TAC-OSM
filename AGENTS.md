@@ -113,3 +113,11 @@ with native elapsed-rate memory and raw-observation retrieval. Original gates
 remain unchanged; no sealed tissue-box/CAL/TEST tuning, implicit model restart,
 architecture-winner, general intelligence or commercial claims. Traced graph
 parallel axes do not make nonlinear TAC recurrence an associative scan.
+
+ME085 subsequently completed and failed its full predictive gate despite improved
+H4/H16 forecasts and strict original replayPASS. No more ME085 fits. ME086's
+fixed second recipe continues unchanged. A separately prospective ME087 bounded
+quiet-value/implicit-median complete-model study is training, not yet scored;
+read its frozen registration in draftPR377. Keep all original gates, all6attempts
+and prior failures visible. No inference of capability from exported graph or
+passing derivative/software checks; protected source cohorts remain closed.
