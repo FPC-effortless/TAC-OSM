@@ -174,3 +174,11 @@ Absent here: natural language generation, symbolic proof/search, autonomous acti
 selection, causal intervention identification or certified long-horizon planning.
 The horizon distributions are direct marginal forecasts, not a sampled coherent
 joint future trajectory or a closed-loop physical simulator.
+
+The actual restored fixed-profile graph also proves final-only elimination: the
+64x72native representation projection constant has one linear consumer in both
+32frame prefill and1frame step graphs. Intermediate representation projections
+do not feed future state and are pruned; all necessary state updates remain.
+Dense-prefix training still needs all prefix representations. Restored graph
+canonicalization changes node counts relative to pre-save frozen graphs, so those
+counts must not be interpreted as saved arithmetic or compared interchangeably.
