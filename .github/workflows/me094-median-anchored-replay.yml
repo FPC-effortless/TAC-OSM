@@ -44,3 +44,6 @@ jobs:
       - name: Restore raw physical and pixel input-to-output boundary
         if: hashFiles('research/mathematical-engineering/me094/PHYSICAL_BOUNDARY_GRAPH_AUDIT.json') != '' && hashFiles('research/replay-bundles/ME094/ORIGINAL_SCORE_INDEX.json') != ''
         run: PYTHONPATH=src:. python scripts/me094_physical_boundary.py --verify --cache "${{ runner.temp }}/clock-value-source"
+      - name: Restore explicit point-query execution view
+        if: hashFiles('research/mathematical-engineering/me094/POINT_QUERY_GRAPH_AUDIT.json') != '' && hashFiles('research/replay-bundles/ME094/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/me094_point_query.py --verify --cache "${{ runner.temp }}/clock-value-source"

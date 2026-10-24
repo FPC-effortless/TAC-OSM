@@ -1,0 +1,75 @@
+{
+  "bootstrap_draws": 5000,
+  "no_fit": true,
+  "profiles": {
+    "incremental_step": {
+      "compiled_median_ms": 3.634602,
+      "eager_median_ms": 5.924231,
+      "median_speedup": 1.6299531558063303,
+      "paired_round_bootstrap95interval": [
+        1.5906498153030235,
+        1.6649733518427179
+      ],
+      "rounds": 31
+    },
+    "physical_incremental_step": {
+      "compiled_median_ms": 3.463949,
+      "eager_median_ms": 5.742373,
+      "median_speedup": 1.6577533329734357,
+      "paired_round_bootstrap95interval": [
+        1.61744868684148,
+        1.6867425011165003
+      ],
+      "rounds": 31
+    },
+    "physical_prefill32": {
+      "compiled_median_ms": 9.013506,
+      "eager_median_ms": 14.525146,
+      "median_speedup": 1.6114868065767083,
+      "paired_round_bootstrap95interval": [
+        1.5577578787015567,
+        1.7860257389489844
+      ],
+      "rounds": 31
+    },
+    "point_query_incremental_step": {
+      "complete_median_ms": 3.434416,
+      "different_output_scope_not_architecture_comparison": true,
+      "median_speedup_for_requested_subset": 4.642821801585993,
+      "paired_round_bootstrap95interval": [
+        4.476286593752047,
+        4.87438829153089
+      ],
+      "point_only_median_ms": 0.739726,
+      "rounds": 31
+    },
+    "point_query_prefill32": {
+      "complete_median_ms": 8.259853,
+      "different_output_scope_not_architecture_comparison": true,
+      "median_speedup_for_requested_subset": 1.5511123137974834,
+      "paired_round_bootstrap95interval": [
+        1.4835282665350389,
+        1.6254136410361701
+      ],
+      "point_only_median_ms": 5.325116,
+      "rounds": 31
+    },
+    "prefill32": {
+      "compiled_median_ms": 8.69914,
+      "eager_median_ms": 13.970765,
+      "median_speedup": 1.6059938108824552,
+      "paired_round_bootstrap95interval": [
+        1.567837749166236,
+        1.6427198819337936
+      ],
+      "rounds": 31
+    }
+  },
+  "rng_seed": 94094,
+  "scope": "Descriptive conditional31alternating within-process rounds on shared/unpinned CPU during training; autocorrelation, thermal/load changes, hardware/site variability are not modeled. No architecture-rival or hardware-general latency claim.",
+  "source_sha256": {
+    "research/mathematical-engineering/me094/COMPILED_GRAPH_AUDIT.json": "8fce96442bf4a8b545bbd037e8089850801a49b8ec1e87c7d4bb879f04378130",
+    "research/mathematical-engineering/me094/PHYSICAL_BOUNDARY_GRAPH_AUDIT.json": "0730c3a071a53edd2eac36e82b5a39b2a6fb49f750891ae5e5fc72e8274b3f93",
+    "research/mathematical-engineering/me094/POINT_QUERY_GRAPH_AUDIT.json": "e3eb9636b7446748076c5a49db453e934515301205cc939e6b0d65f63ac27e2e"
+  }
+}

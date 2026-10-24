@@ -100,3 +100,24 @@ The point interpolation coefficient is also not a calibrated motion probability.
 Only the separate factual motion head has that supervised event target. 'Decision'
 in the added head names an internal predictive interpolation, not an autonomous
 external action or controller.
+
+## Query-selective derived execution
+
+Because m is explicit, a caller requesting only median/risk/new-state does not
+need either centering or interval CDF roots. The PointQuery view takes the SAME
+full physical tensor function and selects those15outputs; tracing/freezing removes
+unused probability work by dead-code elimination. The model still has its complete
+101,173parameter probabilistic path and is trained/evaluated as that full model.
+This is not a smaller newly trained arm, parameter-budget exception, ensemble or
+learned adaptive-compute policy. Never compare this workload to a rival's full
+uncertainty workload and call it equal-output speed superiority.
+
+First-original actual FIT fixedB2T1point/risk/state median0.739726ms versus
+3.434416msforcompleteoutput,4.64xwhenonlythoseoutputsareasked; B2T32prefill
+5.325116vs8.259853ms,1.55x. Complete physical inputs/preprocessing are included;
+video decode, entity-handler hashing, network and authority are excluded. CPU
+shared/unpinned, concurrent fits; these are conditional31alternating timings,
+not single-entity/all-hardware/end-to-end latency promises. Exact original point,
+risk and all13state tensors match1e-5/1e-6. Clean original restoration of this
+view must still pass before qualification. All numerical predictive gates and
+full original uncertainty scoring use the unchanged complete model.
