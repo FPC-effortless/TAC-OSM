@@ -54,7 +54,47 @@ def metrics(model,tensors,*,ablate=None,early=32,threshold=None):
         }
 
 
-def train_one(model,init_state,source_train,source_val,indices,scale,threshold):
+def gate_trace_on_real_development(model,validation):
+    """Source-real observed input gate diagnostic, not a trained skill score.
+
+    Record actual memory-gate outputs AFTER training, plus the effective
+    10-frame retention product. In this affine store, retentions compound;
+    short memory half-life cannot be disguised by long input context.
+    """
+    obs,act,_=validation
+    capture=[]
+    def read_gate(_mod,_args,out):
+        capture.append(out.detach())
+    h=model.memory_gates.register_forward_hook(read_gate)
+    try:
+        model.eval()
+        with torch.no_grad():
+            _,tr=model(obs,act,return_trace=True)
+    finally:
+        h.remove()
+    if len(capture)!=1:
+        raise RuntimeError("memory gates not uniquely captured")
+    alpha_raw,beta=capture[0].sigmoid().chunk(2,-1)
+    alpha=alpha_raw*(1-beta/4.)
+    read=tr["old_read"]
+    mem=tr["memory"]
+    # All observed data are from development inputs only.
+    return {
+      "alpha_eff_mean":round(alpha.mean().item(),8),
+      "alpha_eff_q10":round(torch.quantile(alpha.flatten(),.1).item(),8),
+      "alpha_eff_median":round(alpha.median().item(),8),
+      "alpha_eff_q90":round(torch.quantile(alpha.flatten(),.9).item(),8),
+      "write_strength_beta_mean":round(beta.mean().item(),8),
+      "last_10_retention_product_mean":round(
+          alpha[:,-10:].prod(dim=1).mean().item(),10),
+      "old_read_l2_mean":round(torch.linalg.vector_norm(read,dim=-1).mean().item(),8),
+      "memory_frobenius_mean":round(
+          torch.linalg.vector_norm(mem.flatten(-2),dim=-1).mean().item(),8)
+    }
+
+
+def train_one(model,init_state,source_train,source_val,indices,scale,threshold,*,snapshot):
+
     model.load_state_dict(copy.deepcopy(init_state),strict=True)
     model.set_train_delta_scale(scale)
     opt=torch.optim.AdamW(model.parameters(),lr=.0006,weight_decay=.001)
@@ -72,7 +112,20 @@ def train_one(model,init_state,source_train,source_val,indices,scale,threshold):
         last_loss=float(loss.detach().item())
     score=metrics(model,source_val,threshold=threshold,
                   early=source_val[0].shape[1]//2)
-    return score,last_loss
+    gate_diagnostics=gate_trace_on_real_development(model,source_val)
+    snapshot.parent.mkdir(parents=True,exist_ok=True)
+    torch.save({
+        "model":copy.deepcopy(model.state_dict()),
+        "optimizer":opt.state_dict(),
+        "training_sample_schedule":indices.clone(),
+        "rng_state":torch.get_rng_state(),
+        "trained_steps":len(indices),
+        "source_dataset_revision":DATA_REV,
+        "source_parquet_sha256":DATA_SHA256,
+        "training_episode_ids":list(range(59)),
+        "development_only_no_test":True},snapshot)
+    checkpoint_hash=hashlib.sha256(snapshot.read_bytes()).hexdigest()
+    return score,last_loss,gate_diagnostics,checkpoint_hash
 
 
 def main(steps=64,seeds=(20261025,20261026),length=64):
@@ -102,10 +155,12 @@ def main(steps=64,seeds=(20261025,20261026),length=64):
         batch_indices=torch.randint(0,len(train_records),(steps,8),
              generator=torch.Generator().manual_seed(seed))
         digest=hashlib.sha256(json.dumps(batch_indices.tolist(),separators=(',',':')).encode()).hexdigest()
-        base_scores,loss_b=train_one(
-            baseline,init,train_data,val_data,batch_indices,scale,threshold)
-        candidate_scores,loss_c=train_one(
-            candidate,init,train_data,val_data,batch_indices,scale,threshold)
+        base_scores,loss_b,base_gates,base_ck=train_one(
+            baseline,init,train_data,val_data,batch_indices,scale,threshold,
+            snapshot=Path("tac_timescale_checkpoints")/f"mean-{seed}.pt")
+        candidate_scores,loss_c,candidate_gates,candidate_ck=train_one(
+            candidate,init,train_data,val_data,batch_indices,scale,threshold,
+            snapshot=Path("tac_timescale_checkpoints")/f"timescale-{seed}.pt")
         ablate_mem=metrics(candidate,val_data,ablate="memory",
             threshold=threshold,early=length//2)
         ablate_ctx=metrics(candidate,val_data,ablate="context",
@@ -125,6 +180,10 @@ def main(steps=64,seeds=(20261025,20261026),length=64):
           "source_train_windows_used":len(train_records),
           "mean_tac_validation":base_scores,
           "timescale_tac_validation":candidate_scores,
+          "mean_tac_memory_gates":base_gates,
+          "timescale_tac_memory_gates":candidate_gates,
+          "mean_checkpoint_sha256":base_ck,
+          "timescale_checkpoint_sha256":candidate_ck,
           "timescale_memory_disabled_validation":ablate_mem,
           "timescale_context_disabled_validation":ablate_ctx,
           "observed_persistence_validation":pers,
