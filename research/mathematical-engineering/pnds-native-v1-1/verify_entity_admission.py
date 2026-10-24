@@ -3,7 +3,7 @@
 import sys,json
 from pathlib import Path
 import torch
-ROOT=Path(__file__).resolve().parents[2]
+ROOT=Path(__file__).resolve().parents[3]
 sys.path.insert(0,str(ROOT/"src"))
 from tac_osm.variants.bounded_entity_admission import (
     init_entity_state,entity_admit_step,entity_read,entity_protect)
