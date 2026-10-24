@@ -77,31 +77,29 @@ def wholeNativeStep {α : Type} (ops : Operators α)
         input.measuredVelocityPrior actor horizon coordinate)
   return {predictedPhysical := masked, predictedScale := proposal.predictedScale}
 
--- Algebra shared by the implemented motion-aware physical fallback.
-def relevanceMix {α : Type} [Ring α] (fast slow trust : α) : α :=
+-- Rat is a concrete exact field already available in Lean core (no mathlib
+-- dependency), so the algebra below can be kernel-checked independently.
+def relevanceMix (fast slow trust : Rat) : Rat :=
   fast + trust * (slow - fast)
 
-theorem zero_relevance_selects_fast {α : Type} [Ring α]
-    (fast slow : α) :
+theorem zero_relevance_selects_fast (fast slow : Rat) :
     relevanceMix fast slow 0 = fast := by
   simp [relevanceMix]
 
-theorem unit_relevance_selects_slow {α : Type} [Ring α]
-    (fast slow : α) :
+theorem unit_relevance_selects_slow (fast slow : Rat) :
     relevanceMix fast slow 1 = slow := by
   simp [relevanceMix]
 
-def physicalMotionGate {α : Type} [Field α]
-    (measuredSpeed positiveOffset : α) : α :=
+def physicalMotionGate (measuredSpeed positiveOffset : Rat) : Rat :=
   measuredSpeed / (measuredSpeed + positiveOffset)
 
-def physicalResidual {α : Type} [Field α]
-    (originalMeasuredVelocityPrior predictedCorrection measuredSpeed positiveOffset : α) : α :=
+def physicalResidual
+    (originalMeasuredVelocityPrior predictedCorrection measuredSpeed positiveOffset : Rat) : Rat :=
   originalMeasuredVelocityPrior +
     physicalMotionGate measuredSpeed positiveOffset * predictedCorrection
 
-theorem zero_measured_speed_exact_physical_prior {α : Type} [Field α]
-    (sourceMeasuredVelocityPrior correction offset : α) :
+theorem zero_measured_speed_exact_physical_prior
+    (sourceMeasuredVelocityPrior correction offset : Rat) :
     physicalResidual sourceMeasuredVelocityPrior correction 0 offset =
       sourceMeasuredVelocityPrior := by
   simp [physicalResidual, physicalMotionGate]
