@@ -28,7 +28,7 @@ Read-only source events preserve memory M exactly while fast and slow registers 
 
 For an unprojected write, Uq = alpha*M*q + beta*(v-alpha*M*k)*(k^T*q). Orthogonal key k and query q eliminate the direct correction but not retention decay. Crucially the **actual global Frobenius projection** can also attenuate unrelated old reads when the new write increases total matrix norm beyond 4.
 
-Valid unit-address/unit-value counterexample: initial M[0,0]=4; new k=e1, old q=e0, v=e0, alpha=0.9999 and beta=1. Before projection, old read=3.9996 and memory norm=sqrt(3.9996²+1)=4.1227176. After radius-four projection, old read=3.8805472, an additional 0.1190528 loss from a perfectly orthogonal new write. The original source's operator test reproduces this. Thus a preprojection orthogonal-query theorem does not justify projected memory retention.
+Valid unit-address/unit-value counterexample: initial M[0,0]=4; new k=e1, old q=e0, v=e0, alpha=0.9999 and beta=0.5. Before projection, old read=3.9996 and memory norm=sqrt(3.9996²+0.25)=4.0307320. After radius-four projection, old read=3.9691054, an additional 0.0304946 loss from a perfectly orthogonal new write. The original source's operator test reproduces this. Thus a preprojection orthogonal-query theorem does not justify projected memory retention.
 
 ## Research decision
 
