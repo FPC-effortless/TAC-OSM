@@ -25,6 +25,7 @@ jobs:
           TAC_TIMESCALE_LENGTH: "64"
           HF_HUB_DISABLE_XET: "1"
         run: |
+          set -o pipefail
           python research/mathematical-engineering/pnds-native-v1-1/train_aloha_timescale_dev.py | tee aloha_timescale_dev.json
       - name: Upload raw DEV-only results if available
         if: always()
