@@ -100,7 +100,11 @@ def entity_admit_step(
     new_id=state.entity_ids.clone()
     new_id=torch.where(write_mask,entity_id[:,None].expand_as(new_id),new_id)
     existing_mask=write_mask & found[:,None]
-    updated_value=(1-beta)*state.values+beta*observed_value[:,None,:]
+    # A replaced entity must NEVER inherit the old entity's value.
+    # This is a strict identity-isolation guarantee for admitted slots.
+    prior=torch.where(existing_mask.unsqueeze(-1),
+                      state.values,torch.zeros_like(state.values))
+    updated_value=(1-beta)*prior+beta*observed_value[:,None,:]
     new_values=torch.where(write_mask.unsqueeze(-1),updated_value,state.values)
     new_scores=torch.where(
         write_mask,torch.where(existing_mask,
