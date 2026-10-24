@@ -34,3 +34,10 @@ jobs:
           name: aloha-timescale-genuine-dev-only
           path: aloha_timescale_dev.json
           if-no-files-found: ignore
+      - name: Archive genuine source-fitted two-seed checkpoints and optimizer schedules
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-timescale-authentic-train-dev-checkpoints
+          path: tac_timescale_checkpoints/*.pt
+          if-no-files-found: error
