@@ -1,0 +1,35 @@
+name: TAC factual ALOHA timescale development (never test)
+on:
+  pull_request:
+    paths:
+      - "src/tac_osm/variants/stable_timescale_world.py"
+      - "research/mathematical-engineering/pnds-native-v1-1/train_aloha_timescale_dev.py"
+      - ".github/workflows/aloha-timescale-dev.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-train-dev-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install real-data and model dependencies
+        run: python -m pip install --quiet torch pyarrow huggingface_hub
+      - name: Run pinned-source 2-seed matching data and update schedule
+        env:
+          TAC_TIMESCALE_STEPS: "64"
+          TAC_TIMESCALE_LENGTH: "64"
+          HF_HUB_DISABLE_XET: "1"
+        run: |
+          python research/mathematical-engineering/pnds-native-v1-1/train_aloha_timescale_dev.py | tee aloha_timescale_dev.json
+      - name: Upload raw DEV-only results if available
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aloha-timescale-genuine-dev-only
+          path: aloha_timescale_dev.json
+          if-no-files-found: ignore
