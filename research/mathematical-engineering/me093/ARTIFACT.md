@@ -36,3 +36,9 @@ scripts/me093_physical_boundary.py. Programs are derived from the first original
 not extra learned models. Source-camera decode, authority, network and handler
 hashing are outside their timing. All originals, failures and numerical exceptions
 remain immutable; compiled paths cannot silently replace original replay.
+
+Completion: all5originals frozen5ec26e40, final live counts/optimizer audit frozen
+e5a2f36b before REPORT. Actual35,316,679dense supervised target presentations across
+five fits; these are repeated real observations, not unique independent data.
+Numerical full gateFAIL: quietH1 and additional99.58333%CI. No further ME093fits.
+Independent original score replay remains pending at this update.
