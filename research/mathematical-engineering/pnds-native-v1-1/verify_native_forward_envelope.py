@@ -125,7 +125,8 @@ def verify():
         orthogonal=torch.zeros(1,8,dtype=dtype);orthogonal[0,1]=1.
         unit_value=torch.zeros(1,8,dtype=dtype);unit_value[0,0]=1.
         keep=torch.full((1,1),.9999,dtype=dtype)
-        strength=torch.ones(1,1,dtype=dtype)
+        # beta=0.5 is attained by a finite sigmoid logit of zero.
+        strength=torch.full((1,1),.5,dtype=dtype)
         old_dropped=source.gated_write(
             saturated,orthogonal,unit_value,keep,strength,writable)
         if not (old_dropped[0,0,0] < (4*keep[0,0]) and
