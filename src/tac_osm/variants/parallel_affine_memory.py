@@ -108,6 +108,61 @@ def sequential_affine_reference(P,Q, initial=None):
     return torch.stack(out,1)
 
 
+
+def work_efficient_affine_prefix(P,Q,initial=None):
+    """Inclusive Blelloch-style hierarchical scan for right-affine pairs.
+
+    O(T) 8x8 matrix-multiplication *work* and O(log T) parallel depth over
+    chronological affine transforms, with out-of-place batched tensors
+    supporting autograd. Time is padded to a power of two with identity
+    operators and cropped afterward. The ordering of noncommuting matrices
+    is always preserved; only parentheses are regrouped.
+
+    Real-number equivalence to sequential follows from affine monoid
+    associativity. Float operations can be differently rounded. Exactly
+    preserving read-only source bytes in a full model still requires the
+    separate last-written-prefix gather used by full_time_parallel_native.
+    """
+    if (P.ndim != 4 or P.shape[-2:] != (8,8) or
+        Q.shape != P.shape or P.shape[1] < 1 or
+        P.dtype != Q.dtype or P.device != Q.device):
+        raise ValueError("P/Q must be same dtype/device [B,T,8,8] with T>=1")
+    B,T=P.shape[:2]
+    padded=1 << (T-1).bit_length()
+    eye=torch.eye(8,dtype=P.dtype,device=P.device).view(1,1,8,8)
+    if padded>T:
+        P=torch.cat((P,eye.expand(B,padded-T,8,8)),1)
+        Q=torch.cat((Q,Q.new_zeros(B,padded-T,8,8)),1)
+
+    # Parallel UPSWEEP: each next level summarizes pairs of contiguous
+    # chronological blocks. Total blocks processed < T across all levels.
+    levels=[(P,Q)]
+    while levels[-1][0].shape[1]>1:
+        prevP,prevQ=levels[-1]
+        evenP,oddP=prevP[:,0::2],prevP[:,1::2]
+        evenQ,oddQ=prevQ[:,0::2],prevQ[:,1::2]
+        levels.append((evenP@oddP,evenQ@oddP+oddQ))
+
+    # Parallel DOWNSWEEP: incoming transform for left child is its parent
+    # prefix, for right child it is (parent prefix THEN left block).
+    exclP=eye.expand(B,1,8,8)
+    exclQ=Q.new_zeros(B,1,8,8)
+    for level in range(len(levels)-2,-1,-1):
+        childP,childQ=levels[level]
+        leftP,leftQ=childP[:,0::2],childQ[:,0::2]
+        rightExclP=exclP@leftP
+        rightExclQ=exclQ@leftP+leftQ
+        exclP=torch.stack((exclP,rightExclP),dim=2).reshape(B,-1,8,8)
+        exclQ=torch.stack((exclQ,rightExclQ),dim=2).reshape(B,-1,8,8)
+
+    inclP=exclP@P
+    inclQ=exclQ@P+Q
+    if initial is None:
+        return inclQ[:,:T]
+    if initial.shape!=(B,8,8) or initial.dtype!=P.dtype or initial.device!=P.device:
+        raise ValueError("initial must be matching [B,8,8]")
+    return (initial[:,None]@inclP+inclQ)[:,:T]
+
 def scan_source_schedules(key,value,retention,strength,writable,initial=None):
     P,Q=associative_affine_schedule(key,value,retention,strength,writable)
     return parallel_affine_prefix(P,Q,initial)
