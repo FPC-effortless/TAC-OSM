@@ -35,7 +35,7 @@ multiplications, but memory/work and actual CPU/GPU time require measurement.
 from __future__ import annotations
 import torch
 from torch.nn import functional as F
-from .parallel_affine_memory import scan_source_schedules
+from .parallel_affine_memory import associative_affine_schedule, work_efficient_affine_prefix
 
 
 def full_time_parallel_native_candidate(model, kind, keys, values,
@@ -78,8 +78,9 @@ def full_time_parallel_native_candidate(model, kind, keys, values,
     # without projection, provided normalized k and v.
     retention=raw_retention*(1-strength/radius)
     writable=kind.ne(2).unsqueeze(-1)
-    state_at_each_step=scan_source_schedules(
+    pair_P,pair_Q=associative_affine_schedule(
         addresses,contents,retention,strength,writable)
+    state_at_each_step=work_efficient_affine_prefix(pair_P,pair_Q)
 
     # Exact bitwise *read-only* trace identity in floating point:
     # even mathematically neutral identity-matrix matmul can round the
