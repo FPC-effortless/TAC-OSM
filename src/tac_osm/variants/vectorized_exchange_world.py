@@ -61,10 +61,17 @@ class VectorizedExchangeMemory(ExchangeMemory):
                                state.keys)
         old = state.values[torch.arange(b, device=values.device), slot, role]
         present = state.occupied[torch.arange(b, device=values.device), slot, role]
-        symmetric, antisymmetric = self.exchange(old, values)
-        gate = self.merge_gate(torch.cat((old + symmetric, values + antisymmetric), -1)).sigmoid()
-        merged = torch.lerp(old, values, gate)
-        proposed = torch.where(present[:, None], merged, values)
+        # A fully empty merge batch must NOT connect exchange parameters to
+        # the autograd graph: original loop leaves their grad=None. Explicit
+        # zero gradients change AdamW/weight-decay and momentum semantics.
+        # One batch-level decision replaces O(batch) host-side branches.
+        if bool((present & admitted).any()):
+            symmetric, antisymmetric = self.exchange(old, values)
+            gate = self.merge_gate(torch.cat((old + symmetric, values + antisymmetric), -1)).sigmoid()
+            merged = torch.lerp(old, values, gate)
+            proposed = torch.where(present[:, None], merged, values)
+        else:
+            proposed = values
         role_mask = F.one_hot(torch.tensor(role, device=values.device), self.roles).bool()
         touched = selected[:, :, None] & role_mask[None, None, :]
         new_values = torch.where(touched[..., None], proposed[:, None, None, :], state.values)
