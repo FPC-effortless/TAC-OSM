@@ -477,3 +477,14 @@ an integrated <=105k native visual world model. Preserve native fast/slow/delta
 memory, causal cutoff, fixed physical gate and original replay. No future images,
 new sealed episodes, causal policy, architecture-winner or customer-value claims.
 This is a capability direction, not evidence of a trained visual ability.
+
+### ME091 — integrated observed vision and native predictive location (training)
+
+One whole-model recipe,104225active weights; shared overhead-image CNN, native
+fast/slow/association and parallel horizon readout. Shared bounded translation
+moves both conditional mixture means together without new state rollout. All
+licensed same-role input pixels are Git-owned; source/frame SHA verification
+passed for160episodes. All29parameter tensors active in a real-FIT graph. Five
+fixed-parent fits running, no REPORT result or gate pass yet. Existing quiet/
+moving/multi-horizon gate and protected sources unchanged; no model restarts,
+matched winner, policy control, site transfer or customer-value claim.

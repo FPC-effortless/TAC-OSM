@@ -1442,3 +1442,43 @@ resource feasibility must be established before any visual training. Contact or
 stopping information absent from qpos is a hypothesis, not an established cause.
 No new visual model has trained and no gate has been relaxed. Added modalities
 would preclude an information-matched architecture-superiority claim.
+
+### ME091 integrated causal visual/native candidate — training, 2026-10-24
+
+ME090 original and compiled replay now independently PASS
+[40089178025](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40089178025),
+without changing its failed predictive gate. ME082–ME090 preserve45 fitted
+versions and every negative outcome.
+
+ME091 is a new complete multimodal capability recipe, frozen before fitting
+at14cd30e5, with exact licensed input pixels/runtime effects added at0acab771.
+**104225 active trainable/deployed weights**: retain94907 original values via
+explicit paired SwiGLU width116→108 mapping; initialize7792 shared visual weights
+and1526 common-location weights. All five fixed ME087 parents are used without
+selection. Each gets4096 new AdamW updates (8192 cumulative retained-base updates;
+new visual/location weights get4096), final-only, at most two independent workers.
+No selected original scores have been computed at this update.
+
+All160 overhead videos from the SAME120FIT/40exposedREPORT episode roles passed
+publisher SHA256 and retained frame-count checks. Full source size4633584032bytes;
+exact32x32 grayscale observed inputs114832136bytes are now Git-owned withCCBY4.0
+BodenAI/RW-RL attribution. No CAL/TEST/tissue-box, new episode or future image was
+opened as an inference input. Recorded frame alignment does not prove sub-frame
+physical synchronization. Added images preclude an information-matched winner claim.
+
+The complete graph shares batch/time image encoding and numeric projections,
+retains elapsed-time bounded native fast/slow/delta memory, batches horizon
+readouts, and adds a shared bounded location translation to BOTH mixture means.
+The translation preserves one coherent proper distribution while allowing point
+location to change without forcing probabilities/shape to perform that role.
+No extra memory rollout, generated observation or action selection is used.
+The unfitted104508-parameter draft is separately retained; no fits under it.
+
+Real-FIT export2804nodes, all29learned tensors finite/nonzero gradients. Full
+local regression1192PASS. Functional chunk/step/prefix causality and explicit
+camera-aware cache retry/revision/entity isolation passed. These are software/
+execution evidence, not predictive gate success or validated intelligence. The
+fixed joint quiet/moving/multi-horizon gate remains compulsory, plus original95%
+and additional99.5%paired intervals for ten declared recipes; adaptive exposed
+DEV is not independent confirmation. All original models must be Git-frozen
+before scoring, then independently replayed at unchanged tolerances.
