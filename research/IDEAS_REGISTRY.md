@@ -520,3 +520,11 @@ content relevance.101,173parameters,4,096newupdates, ALL5fixedME093parents,
 unchangedgate; registered c87dc63c, fits underway, no result yet. Standard quantile/
 mixture/retrieval mathematics reused, no new theorem, extra ablation campaign or
 architectural-superiority claim. Genuine customer/decision value NOT_MEASURED.
+
+### ME094 query-selective computation reuse — ENGINEERING only
+
+Implemented and first-original real-FIT checked: request point/risk/state from the
+same complete median-anchored model, prune unused probability roots by compilation.
+FixedB2incremental0.74ms vs3.43msfulloutput, sharedCPU; no new learned arm or added
+skill/superiority claim. Full probabilistic query remains available and model still
+training. Exact original score replay and joint predictive gate remain compulsory.

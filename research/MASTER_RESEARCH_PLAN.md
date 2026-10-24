@@ -1603,3 +1603,29 @@ original95%/additional99.61538%paired intervals for13declaredrecipes and strict
 original replay remain. Scoring uses numerically checked final-only decode to
 avoid discarded prefix readouts/centering roots; dense-prefix training unchanged.
 No independent/site, architecture-winner, policy/control or customer claim.
+
+### ME094 derived computation reuse, predictive result pending — 2026-10-24
+
+Two originals completed4,096updates each; remaining portfolio still training at
+this update. No ME094REPORT forecasts or predictive-success claim yet. Same101,173
+parameter full model; all original thresholds and five-model Git freeze remain.
+
+First-original real-FIT normalized and physical-input compiled graphs reproduce
+the original quantile/state calculation under unchanged1e-5/1e-6. Physical fixed
+B2T32prefill9.013506ms, B2T1incremental3.463949ms,1.61–1.66xversus their own eager
+paths. This is MOREabsolute computation thanME093, not an across-model speed win.
+Actual restored complete graph has4,927/2,489nodes; serialization canonicalization
+changes counts versus pre-save graphs, not arithmetic work. One folded183x108
+projection and final-only native representation projection are verified.
+
+The explicit median permits a query-selective derived view: if a caller requests
+only median/risk/newstate, compiler dead-code elimination removes the CDF solves.
+The SAMEpoint/risk/all13state outputs match the complete original calculation.
+Actual first-FIT fixedB2T1point-view0.739726ms vscomplete3.434416ms(4.64x);
+B2T32prefill5.325116vs8.259853ms(1.55x),31alternating shared/unpinnedCPUrounds.
+Video decode/handler/network costs excluded. Not single-entity/all-shape/hardware
+promises or learned adaptive computation. Complete probabilistic capability stays
+available; no new smaller trained arm, parameter-budget exception or equal-output
+rival comparison. Independent clean restoration remains pending all5frozen models
+and original scores. Numerical and replay qualification stay separate from learned
+capability success. Full1,207local testsPASS; all training-source hashes unchanged.
