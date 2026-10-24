@@ -15,7 +15,8 @@ ROOT=HERE.parents[2]
 sys.path.insert(0,str(ROOT/"src"))
 from tac_osm.variants.parallel_affine_memory import (
     associative_affine_schedule,parallel_affine_prefix,
-    sequential_affine_reference,scan_source_schedules)
+    sequential_affine_reference,scan_source_schedules,
+    work_efficient_affine_prefix)
 from tac_osm.variants.parallel_partitioned_native import parallel_partitioned_forward
 from verify_pinned_source import modules
 
@@ -86,6 +87,10 @@ def scan_reference_and_native_schedule():
             nonzero_ref=sequential_affine_reference(P,Q,initial)
             check_close(nonzero_scan,nonzero_ref,dtype,"prefix_nonzero_start")
             checks+=1
+            balanced=work_efficient_affine_prefix(P,Q,initial)
+            check_close(balanced,nonzero_ref,dtype,
+                        "work_efficient_ordered_affine_scan")
+            checks+=1
 
             # Test each chronological step against original PINNED PyTorch
             # no-projection writer, not only against the algebra reference.
@@ -101,11 +106,14 @@ def scan_reference_and_native_schedule():
 
             g1=torch.autograd.grad(nonzero_scan.square().sum(),(k,v,a,beta),
                                   retain_graph=True)
+            gbalanced=torch.autograd.grad(balanced.square().sum(),(k,v,a,beta),
+                                          retain_graph=True)
             g2=torch.autograd.grad(native.square().sum(),(k,v,a,beta),
                                   retain_graph=False)
-            for lhs,rhs in zip(g1,g2):
+            for lhs,rhs,work in zip(g1,g2,gbalanced):
                 check_close(lhs,rhs,dtype,"source_gate_value_key_gradient")
-                checks+=1
+                check_close(work,rhs,dtype,"balanced_scan_backward_vs_source")
+                checks+=2
 
             # Expose the noncommutative schedule: swapping order changes
             # result in general even though associative grouping is legal.
