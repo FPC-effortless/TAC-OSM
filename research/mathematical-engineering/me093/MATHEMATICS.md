@@ -144,3 +144,33 @@ cache instead stores O(Td) values and typically needs O(Td) attention work for a
 new query; caching does not make all attention or generation linear-cost overall.
 Hardware fusion/CSE are measured on actual exported graphs, never inferred simply
 from the phrase 'tensor DAG'. No claim that all operations stay in SRAM/registers.
+
+## Native state equations and computation types
+
+For elapsed ratio rho=15*observed_elapsed>0, the input projection yields a
+normalized key k, value v, retention logit l and write logit b. Let
+D=exp(logsigmoid(l)*rho)M and r=Dk. With shared learned affine maps producing
+candidate c and gate g, fast state is
+f'=lerp(f,tanh(c),1-exp(logsigmoid(-g)*rho)).
+The slow map of[f'-s;s] yields innovation j and rate a; then
+s'=lerp(s,tanh(s+tanh(j)),1-exp(logsigmoid(-a)*rho)).
+The associative correction is M*=D+sigmoid(b)(tanh(v)-r)k^T,
+followed by radial projection M'=M*/max(1,||M*||F/4).
+Representation=W[f';s';r]+bias. The read r is from decayed pre-write memory,
+exactly as in the inherited implementation; this document does not silently move
+that read or claim independent retrieval superiority. Keys use denominator
+sqrt(sum(k_raw^2)+1e-6); normalization stabilizes scale, not semantic alignment.
+
+From bounded initialization, f/s remain within[-1,1] by convex updates and
+||M||F<=4 by projection. These are numerical state bounds, not useful-memory or
+forecast-accuracy theorems. Positive observed elapsed is compulsory.
+
+Computation families actually present: spatial convolutional perception; causal
+differences/elapsed integration; parallel local temporal filtering; conditional
+nonlinear recurrence; rank-one associative error correction and matrix retrieval;
+gated nonlinear horizon queries; probabilistic mixture density and quantile root
+solving; shared-graph reverse differentiation and gradient conflict projection.
+Absent here: natural language generation, symbolic proof/search, autonomous action
+selection, causal intervention identification or certified long-horizon planning.
+The horizon distributions are direct marginal forecasts, not a sampled coherent
+joint future trajectory or a closed-loop physical simulator.
