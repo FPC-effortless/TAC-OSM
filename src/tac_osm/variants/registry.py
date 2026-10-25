@@ -62,7 +62,7 @@ VARIANTS: Mapping[Variant, VariantSpec] = {
                            "tac_osm.variants.point_priority_sensor_world"),
         "persistent sensor histories; proposed as-known-at/as-valid-at corrections",
         "six-pollutant sensor distribution; separate proposed governance dual-clock input",
-        "ME105 primary gap coverage passes15/15;4/15fullseedgates but noall5recipe qualifies; multichannel calibration and bitemporal correction remain unqualified",
+        "ME106 primary gap coverage passes15/15;5/15fullseedgates but noall5recipe qualifies; multichannel calibration and bitemporal correction remain unqualified",
         ("ME069", "ME071", "ME073", "ME100", "ME101", "ME102", "ME103", "ME104", "ME105", "ME106"),
     ),
     Variant.EDGE_LITE: VariantSpec(

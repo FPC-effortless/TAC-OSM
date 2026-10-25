@@ -113,3 +113,13 @@ intelligence claim. Next substantive candidate should improve conditional
 representations/distribution expressivity (for example source-conditioned forecast
 regimes) under a fresh protocol, rather than another point-weight sweep. This is
 a proposal, not an implemented success or proved explanation of the failure.
+
+Clean detached checkoute812f655 replayed every original score/gate, all30 fitted
+source+training-gradient audits and publisher-label summaries without retraining.
+All67 original bundle payload SHA256 checks pass. GitHub original-source replay
+40220362323 is in progress at this metadata write; earlier source-only checks
+do not substitute for this replay.
+
+Strongest-point candidate gap MAE change -0.24128, conditional posthoc95%week
+bootstrap interval[-3.19990,+2.34032], includeszero. This is not independent
+evidence or an acceptance gate; allother intervals remain in PANEL_SUMMARY.

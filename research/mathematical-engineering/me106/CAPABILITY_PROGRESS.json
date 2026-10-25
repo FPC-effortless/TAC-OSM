@@ -1,7 +1,7 @@
 {
   "schema_version": "tac-osm.capability-progress.v1",
   "study_id": "ME106-POINT-PRIORITY-SENSOR",
-  "tier": "TRAINED",
+  "tier": "TRAINED_REPLAY_VERIFIED",
   "capability_outcome": "MIXED_TRADEOFF",
   "decision": "FAIL",
   "claim_type": "same forward architecture with explicit role/priority training; no independent superiority",
@@ -360,13 +360,18 @@
   },
   "integrity": {
     "git_original_checkpoints": true,
-    "independent_clean_replay": false,
+    "independent_clean_replay": true,
     "raw_case_scores_preserved": true,
     "registered_before_evaluation": true,
     "source_commit": "adb71873a8ddf9939f9c185b47e24a68927b5122",
     "models_frozen_before_report": "6ae491e7a3608190ac70085b24c4b9705d1eb8ba",
     "all30fitted_dtype_audits": true,
-    "retraining": false
+    "retraining": false,
+    "original_scores_and_clean_checkout": "e812f6551eb75f6bbfc404e1aec0dba5680ec653",
+    "all15score_replay": true,
+    "source_label_replay": true,
+    "github_original_replay": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40220362323",
+    "github_original_replay_status": "IN_PROGRESS_AT_METADATA_WRITE"
   },
   "planned_primary": "Everyseed: coverage90\u201398%, point/NLL guardrails, at least10%intervalscore gain and preserved ME101guards; every5seed in recipe required.",
   "guardrails": [
