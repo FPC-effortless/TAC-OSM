@@ -1,5 +1,98 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## 2026-10-25 — ME106: point-priority training verified; full predictive gate fails
+
+[Draft TAC PR408](https://github.com/FPC-effortless/TAC-OSM/pull/408),
+[PNDS PR19](https://github.com/FPC-effortless/pnds-lean/pull/19),
+[original full results](https://github.com/FPC-effortless/TAC-OSM/blob/research/me106-point-priority-training-2026-10-25/research/mathematical-engineering/me106/RESULTS.md).
+Completed15 authentic-data fits, not a diagnostic-only proposal. No promotion,
+merge or deployment; this result does not establish greater general intelligence.
+
+The complete100,349-parameter/33-tensor ME105 forward graph, native parallel
+source/evidence/8x8 memory and uncertainty floors are unchanged. ME106 adds a
+training-role interface: NLL/interval prediction uses
+`mu-(correction-correction.detach())`, preserving primal values while removing
+the new median-head contribution to that gradient. Point and log-location losses
+retain the live correction. ADtangent(c-detach(c)) is dc, notzero; cancellation
+occurs because dmu=dbase+dc. Independent Python and corrected Lean semantics agree.
+
+For P=weighted raw-medianMAE/FITstd and
+U=NLL+.1log-locationMSE+.3masked-currentGaussianNLL+.25proper90intervalscore/FITstd,
+compute both parameter gradients. If <gP,gU><0, remove the opposing component
+`gU'=gU-<gP,gU>/||gP||²*gP`, then applygP+gU'. Exact-real directional bounds are
+proved, inspired by established PCGrad (Yu etal.,NeurIPS2020), not new theory.
+AdamW preconditioning, group rates and finite steps do NOT inherit a loss-descent
+or coverage theorem. FP64 reductions/correction precede projected-array rounding.
+
+Three fixed complete recipes with point weights .5/1/2 ×allfive ME103 strong
+parents102001..5, sampling indices106001..5. These are warm-started lineages, not15
+new independent root initializations. Everymodel gets1,536 freshAdamW updates,
+batch16, contexts8/64/256; inherited weights lr3e-6, four new-head tensors3e-4.
+All33 are active. Same plans/masks/initializations/profiled graphs and dense FLOP
+estimates per seed; unsupported pointwise/reduction/optimizer/hardware work stays
+partial. Training CPU1450.273s, two one-thread workers; no cloud training. Extra
+backward work is training-only. No ME105 fit/replay was changed or repeated.
+
+Source/registration/math freeze preceded optimization: TACadb71873, PNDS72388e9d.
+All15 model/optimizer/RNG/gradient/resource artifacts were Git-frozen at6ae491e7
+BEFORE REPORT; original scores ate812f655. No retries, favorable-seed selection,
+threshold changes or additional ME106 fits. Cross-study inputs/orders and gradient
+work differ; no old/new controlled architectural-superiority claim is eligible.
+
+| Five-seed means, primary PM2.5 | Gap MAE | Gap90%coverage | Gap six-channel NLL | Gap interval score | Ordinary MAE | Full seed gates |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| ME103 strong parents |37.5242|95.66%|5.1510|379.6232|33.4031|1/5 old gates|
+| ME105 balanced |40.0881|94.69%|5.1491|260.6768|31.0666|2/5|
+| ME106 balanced |38.6675|95.10%|5.1548|304.6523|33.4309|2/5|
+| ME106 point_guard |38.0435|95.38%|5.1504|315.5035|33.5522|2/5|
+| ME106 point_strong |37.2829|95.52%|5.1441|332.0939|33.6224|1/5|
+
+**Full qualification FAIL: no recipe passes every gate in allfive seeds.** Five
+individual models pass allgates; that cannot override the allfive rule. Primary
+coverage remains15/15. Stronger point weighting trades interval quality for gap
+point accuracy, while ME105's ordinary/sharpness gains are not retained. Strongest
+point recipe improves gap MAE only0.64% vs parent mean; ordinary MAE worsens0.66%,
+interval score improves12.52%. Its gap change -0.24128 has conditional posthoc95%
+week-bootstrap interval[-3.19990,+2.34032], includingzero. This is not independent
+confirmation. Other pollutant coverage remains below90% for several channels.
+Allper-channel/seed errors, width tails and bootstrap estimates are preserved.
+
+Unmatched practical references, not padded neural competitors: LOCF gap56.0769,
+ordinary34.5156; FIT-ridge gap43.9151, ordinary32.7674. New models improve over LOCF
+and gap ridge, but allthree have worse ordinary meanMAE than ridge. Benefits over
+simple gap references already existed in this parent sequence; no new controller,
+customer utility or general intelligence follows from them.
+
+Authentic UCI501 CC-BY-4.0 archive SHA256
+`d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8`.
+FIT2013–2014, already exposed2015:143 gap queries/21 calendar-week clusters,
+4,288 ordinary queries/53 overlapping clusters; six-hour targets/256-hour histories.
+Only recorded FIT labels supervise artificial hiding. Protected2016–2017 numerical
+outcomes remain unparsed/unscored; repeated studies/seeds do not add independent
+observations. Original ME105 and EWA physical-cache findings remain preserved.
+
+**Engineering/reproducibility PASS:**1,027 local tests,13 pinned actual-source
+PNDS tests,13 NEW limited Lean role/projection theorems and all30 fittedFP32/64
+forward/state/input+weight-gradient/chunk/distribution AND new loss/projected-
+training-gradient checks. Maximum projected-gradient discrepancy1.1920929e-6;
+raw median0.0008544922 original units, within original relative/absolute limits.
+Whole-neural/IEEE/Gaussian-law and optimizer-descent proof remain OPEN. The
+inherited full forward graph is explicitly defined, not wholly Lean-refined.
+Clean detached checkoute812f655 replays all15 scores/gates, all30 fitted checks and
+publisher-label summaries without retraining;67 payload hashes checked.
+[Original GitHub replay40220362323](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40220362323)
+PASS; PNDSbuild/source-math at72388e9d PASS. These do not overturn gate failure.
+
+**Next substantial architecture hypothesis:** richer source-conditioned forecast
+regimes/conditional predictive distributions, keeping native state and source-gap
+bounds. Do not continue point-weight sweeps as a claimed intelligence solution.
+A multi-regime predictive head would be a NEW protocol and forward graph with full
+parameter/source/math checks, not a trained result here. Attribution stays
+secondary; authentic capability, independent qualification and six-family task
+expansion remain outstanding. No new active family or authority is introduced.
+
+---
+
 ## 2026-10-25 — ME105: explicit neural graph, primary gap coverage recovered; full gate still fails
 
 [Draft TAC PR406](https://github.com/FPC-effortless/TAC-OSM/pull/406),
