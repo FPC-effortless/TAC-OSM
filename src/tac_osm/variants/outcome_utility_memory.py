@@ -200,6 +200,7 @@ class OnlineMemory:
             queries=self.queries,matching_candidate_scores=self.candidates_scored,
             candidate_scores_per_query=self.candidates_scored/max(1,self.queries),
             bucket_probes_per_query=self.buckets_probed/max(1,self.queries),
+            hits=self.hits,
             fraction_with_candidates=self.hits/max(1,self.queries),
             top8_exact_reference_recall=self.recall_sum/self.recall_trials if self.recall_trials else None,
             measured_lookup_cpu_seconds=self.lookup_cpu,measured_write_cpu_seconds=self.build_cpu,
