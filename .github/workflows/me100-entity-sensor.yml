@@ -1,0 +1,33 @@
+name: ME100 original sensor model replay (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/me100*'
+      - 'src/tac_osm/variants/entity_sensor_world.py'
+      - 'tests/test_entity_sensor_world.py'
+      - 'research/mathematical-engineering/me100/**'
+      - 'research/replay-bundles/ME100/**'
+      - '.github/workflows/me100-entity-sensor.yml'
+permissions:
+  contents: read
+jobs:
+  original-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pytest
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me100/FAIR_COMPARISON.json --phase preflight
+      - run: PYTHONPATH=src:. python -m pytest tests/test_entity_sensor_world.py -q
+      - run: |
+          set -e
+          if test -f research/replay-bundles/ME100/RESULTS.json; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me100/POSTFIT.json --phase final
+            PYTHONPATH=src:. python scripts/me100_entity_sensor.py replay
+          else
+            echo 'ME100_REPLAY=BLOCKED original trained portfolio not yet available'
+          fi

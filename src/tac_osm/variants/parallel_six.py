@@ -77,3 +77,11 @@ def require_qualified_domain_head(name: str | Variant) -> None:
         raise RuntimeError(
             f"{p.family.value}: domain head/independent real-world skill OPEN"
         )
+
+
+def instantiate_entity_sensor_core(name: str | Variant):
+    """Unqualified typed sensor candidate, within the existing Temporal family."""
+    if parallel_family(name).family != Variant.TEMPORAL:
+        raise ValueError('entity-sensor candidate belongs to Temporal research lane')
+    from .entity_sensor_world import EntitySensorWorld
+    return EntitySensorWorld()
