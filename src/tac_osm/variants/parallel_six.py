@@ -60,6 +60,8 @@ def instantiate_untrained_core(
         from .evidence_retrieval_world import EvidenceRetrievalWorld as Core
     elif candidate == "coherent_trajectory":
         from .coherent_trajectory_world import CoherentTrajectoryWorld as Core
+    elif candidate == "regime_trajectory":
+        from .regime_trajectory_world import RegimeTrajectoryWorld as Core
     else:
         raise ValueError("unknown shared-core candidate")
     return Core(
