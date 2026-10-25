@@ -1,5 +1,17 @@
 # EDGE-ACTION-001 — Shared physical/sensor world-state code and real action-query preflight
 
+## Latest: EDGEACTION001 completed original real FIT-only five-seed training, full gate FAIL (2026-10-25)
+
+**Later result supersedes earlier UNTRAINED candidate status below but does not erase it.** Original new five 99,760-param action-query models trained **256 guarded updates / seed** on 49 ALOHA real FIT episodes, source SHA `a3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a`. All saved checkpoint, optimizer/RNG, sample-schedule and receipt bytes were frozen in Git before scoring. The one internal original FIT-only score uses 10 other episodes 49..58, 1,840 actual observed joint transitions. Historical old DEV59..71 and protected TEST>=72 remain unscored. This is genuine observational next-state training conditioned on recorded joint-position targets, NOT causal `do(action)` or a real robot/vehicle controller.
+
+**MSE lower better, measured original real FIT-only score:** constant-velocity **4.872019e-6**, FIT-only servo **2.120930e-5**, TAC five-seed mean **4.849510e-5**, persistence **8.789590e-5**. Every seed FAILS the registered capability gate vs strongest FIT velocity: TAC is 9.95× worse, despite 44.83% MSE improvement over persistence. No best-seed promotion, changed thresholds, additional fits, or architectural superiority. Original [real original trained and failed result report](../mathematical-engineering/edgeaction001/RESULTS.md), [GitHub one original scoring and replay run 40188456161](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40188456161), [full five-checkpoint original freeze proof 40188397507](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40188397507). Separate cold checkout exact aggregate equality is runtime-sensitive; only report individual replay runs as PASS after confirming their actual logs and source/metric tolerances. All numerical gate decisions, source provenance and original outputs remain unchanged.
+
+**Next hypothesis:** use causal FIT-only velocity and/or servo as the preserved physical prior and train only a residual correction, with **new separate preregistration**, authentic validated executed commands, actual matched model/data/training compute for neural comparisons and independent outcomes. Do not repurpose the synthetic MuJoCo SIM001, previously exposed DEV or internal FIT holdout as an independent intelligence win.
+
+---
+
+
+
 **2026-10-25 — UNTRAINED NEW ACTION-QUERY MODEL / REAL FIT SOURCE AUDIT ONLY / ENGINEERING TESTS ONLY.** Stacked on ME101's source branch (existing six-family source tree), with architecture-priority proposal [PR400](https://github.com/FPC-effortless/TAC-OSM/pull/400) held separately on the master-plan branch. Neither branch is merged. There is no new action-trained checkpoint, numerical capability score, identified intervention effect, policy, physical hardware benchmark, autonomous control, CARLA/real-car qualification, sixth-to-seventh family, or transfer success.
 
 ## SIM001 negative evidence incorporated without relabeling
