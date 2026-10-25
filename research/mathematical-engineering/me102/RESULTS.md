@@ -75,8 +75,13 @@ reloaded every original model, recomputed all fifteen model scores and gates,
 replayed the panel summary and publisher-row labels, and repeated all30dtype
 fitted graph checks successfully. No retraining or checkpoint changes.
 [Independent GitHub original15 score replay40189256081](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40189256081)
-passed. Expanded graph/summary/source workflow40189416852 was still running when
-this receipt was written; its final status is independently inspectable.
+passed. Expanded graph/summary/source workflow40189416852 failed only its exact audit-JSON
+comparison after all live tensor checks passed. The checker mistakenly required
+hardware-dependent maximum-error diagnostics to be bit-identical across CPUs.
+A no-fit correction compares provenance/check identities exactly, preserves all
+original tensor tolerances and reports each run's error maxima separately. The
+original saved audit and failed workflow remain unchanged; corrected CI is a
+separate run, never a replacement training or original-score artifact.
 `SHA256SUMS` covers all67payload files including15original checkpoints.
 The capability scorecard declares TRAINED_REPLAY_VERIFIED with mixed trade-offs
 and a failed full gate; its structural validator is not a scientific-gain test.
