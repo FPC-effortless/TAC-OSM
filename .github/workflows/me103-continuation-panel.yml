@@ -1,0 +1,34 @@
+name: ME103 original fifteen-model continuation replay (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/me103*'
+      - 'tests/test_me103*'
+      - 'research/mathematical-engineering/me103/**'
+      - 'research/replay-bundles/ME103/**'
+      - '.github/workflows/me103-continuation-panel.yml'
+permissions:
+  contents: read
+jobs:
+  original-panel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pytest
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me103/FAIR_COMPARISON.json --phase preflight
+      - run: PYTHONPATH=src:. python -m pytest tests/test_me103_continuation.py -q
+      - run: |
+          set -e
+          if test -f research/replay-bundles/ME103/RESULTS.json; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me103/POSTFIT.json --phase final
+            PYTHONPATH=src:. python scripts/me103_continuation_panel.py replay
+            PYTHONPATH=src:. python scripts/me103_fitted_graph_audit.py replay
+            PYTHONPATH=src:. python scripts/me103_panel_summary.py
+          else
+            echo 'ME103_ORIGINAL_PANEL_REPLAY=BLOCKED not trained/scored yet'
+          fi
