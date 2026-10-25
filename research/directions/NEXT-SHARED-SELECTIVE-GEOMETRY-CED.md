@@ -84,3 +84,8 @@ The candidate qualifies only if (A) original source/provenance and policy gates 
 - Original trained composed trajectory/uncertainty: draft [TAC #392](https://github.com/FPC-effortless/TAC-OSM/pull/392), [TAC #393](https://github.com/FPC-effortless/TAC-OSM/pull/393), PNDS #10/#11
 - Original ES-WAM negative real-history audit: [QUAL001 draft #386](https://github.com/FPC-effortless/TAC-OSM/pull/386)
 - All older original outcomes remain stored in their branches and historical evidence ledger; this document adds no fitted model or claim of capabilities.
+
+
+## 7. Dependent research extension: causally useful representations and verified experience
+
+The unified selective-geometry/CED program now includes an **optional, downstream capability work package**, [NEXT-REPRESENT-ADAPT](NEXT-REPRESENT-ADAPT-WORLD-STATE-EXPERIENCE.md), for real-data learned latent state, intervention-based causal usefulness, verified world-dynamics and planner experience memory, candidate-controlled MPPI-inspired weighting, and prequential frozen-weight correction. The original **authentic delayed entity-memory headroom / qualified admission** experiment remains **first**. This new work is **not** a competing core, seventh portfolio variant, trained result, claim of emergent general intelligence, or a relaxation of input-only scan causality and source/evidence/parameter gates.
