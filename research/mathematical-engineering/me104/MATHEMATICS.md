@@ -1,10 +1,10 @@
 # ME104 — MedianSplitSensor
 
-**Status:** PARTIAL exact-real scalar kernel; source and whole-model correspondence OPEN.  
-**Variant:** `median_split_sensor` (ME104, descended from the inherited forecasting model).  
-**Formal source:** `PNDS/MedianSplitSensor.lean`.  
-**TAC source pin:** pending immutable source commit and path; `SOURCE_COMMIT` is a placeholder, not a pin.  
-**Python reference:** pending source-aligned serial reference and tests.
+**Status:** PARTIAL exact-real scalar kernel; actual-source numerical refinement tested; whole-neural/IEEE proof OPEN.
+**Variant:** `median_split_sensor` (ME104, descended from the inherited forecasting model).
+**Formal source:** `PNDS/MedianSplitSensor.lean`.
+**TAC source pin:** `89d756d5235ddd4fd8128bfa5388eb53ef849db6`, `src/tac_osm/variants/median_split_sensor_world.py`.
+**Python reference:** `foundation/v1/median_split_sensor_reference.py`, byte-identical to pinned TAC `scripts/me104_graph_reference.py`; `tests/test_median_split_sensor_source.py`.
 
 ## Representation and model boundary
 
@@ -25,7 +25,7 @@ The two side scales are positive whenever the inherited `sigma` is positive. At 
 
 Source-age capping at 256 hours remains an implementation-level condition to verify against the pinned source. A side-scale lower bound of `old_sigma/4` would imply a side variance of at least `old_variance/16`, under a positive inherited scale. That conditional bound does not establish preservation of the old full variance floor. Whole-network and IEEE invariance, calibration, and the precise source correspondence remain OPEN.
 
-The Python serial reference, forward/backward and finite-precision comparison, source pin, and source-to-Lean declaration mapping are pending. Until those artifacts are installed and audited, this entry is not a whole-model mathematical completion or an empirical result.
+The Python serial reference and actual-source FP32/FP64 output/state/input+parameter-gradient checks pass at the source pin, including quantile/CDF/NLL/zero-censoring and chunk behavior. All997TAC local tests and7PNDS source tests pass. Six Lean scalar theorems compile and use only core axioms. This is numerical source correspondence plus partial exact-real kernels, not whole-neural/IEEE completion, normalization/calibration proof or an empirical capability result.
 
 ## Exact implementation tensor graph (ME104)
 
@@ -67,3 +67,5 @@ score. Gradients reach all31parameter tensors on authentic FIT batches. Joint
 training may change shared state/median; the fixed-weight median invariance does
 not establish trained point preservation. Statistical coverage and sharpness
 remain empirical gates, and whole neural/IEEE correctness remains OPEN.
+
+PNDS scalar/reference/source mapping frozen before fitting: `84cd7027f48fec9af70fe3f17d400f30cd77a26a`.
