@@ -1,0 +1,355 @@
+{
+  "architecture": "likelihood",
+  "checkpoints": [
+    {
+      "deployed_parameters": 100349,
+      "parameter_values_sha256": "112d17c1f0dee20d4a5891ff118c6dedcbe4ad6e4e5a09c98ec6ecbc0394ee3f",
+      "path": "/tmp/tac-me105/research/replay-bundles/ME105/likelihood/seed-105005/final.pt",
+      "sha256": "bea95705ed2564e90395d8408f9f23c9fe7f1041483e1b250794f6cb2f79cbe1",
+      "state_key_path": [
+        "model"
+      ],
+      "successful_optimizer_steps": 1536,
+      "trainable_parameters": 100349
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 100349,
+    "trainable_parameters": 100349
+  },
+  "last_pre_update": {
+    "deployed_parameters": 100349,
+    "successful_optimizer_steps": 1535,
+    "trainable_parameters": 100349
+  },
+  "manifest_path": "/tmp/tac-me105/research/mathematical-engineering/me105/FAIR_COMPARISON.json",
+  "manifest_sha256": "a8a8101d184a1202dc0a94892325f5b0b28ab577278e95e53b8fb9d8b74880e2",
+  "model_class": "tac_osm.variants.protected_sensor_world.ProtectedSensorWorld",
+  "preflight": {
+    "deployed_parameters": 100349,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "state_noise",
+        "numel": 18,
+        "requires_grad": true,
+        "shape": [
+          3,
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "state_response",
+        "numel": 6,
+        "requires_grad": true,
+        "shape": [
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "station.weight",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          12,
+          4
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.weight",
+        "numel": 2352,
+        "requires_grad": true,
+        "shape": [
+          48,
+          49
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.bias",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "source_admission.weight",
+        "numel": 624,
+        "requires_grad": true,
+        "shape": [
+          13,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "source_admission.bias",
+        "numel": 13,
+        "requires_grad": true,
+        "shape": [
+          13
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.weight",
+        "numel": 25344,
+        "requires_grad": true,
+        "shape": [
+          176,
+          144
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.weight",
+        "numel": 32384,
+        "requires_grad": true,
+        "shape": [
+          176,
+          184
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.weight",
+        "numel": 448,
+        "requires_grad": true,
+        "shape": [
+          2,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.bias",
+        "numel": 2,
+        "requires_grad": true,
+        "shape": [
+          2
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.weight",
+        "numel": 1792,
+        "requires_grad": true,
+        "shape": [
+          8,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.weight",
+        "numel": 30624,
+        "requires_grad": true,
+        "shape": [
+          132,
+          232
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.bias",
+        "numel": 132,
+        "requires_grad": true,
+        "shape": [
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.weight",
+        "numel": 1584,
+        "requires_grad": true,
+        "shape": [
+          12,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.weight",
+        "numel": 256,
+        "requires_grad": true,
+        "shape": [
+          32,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_head.weight",
+        "numel": 1224,
+        "requires_grad": true,
+        "shape": [
+          12,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_head.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_head.weight",
+        "numel": 1224,
+        "requires_grad": true,
+        "shape": [
+          12,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_head.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_head.weight",
+        "numel": 612,
+        "requires_grad": true,
+        "shape": [
+          6,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_head.bias",
+        "numel": 6,
+        "requires_grad": true,
+        "shape": [
+          6
+        ]
+      }
+    ],
+    "trainable_parameters": 100349
+  },
+  "run_id": "177f8ba7822241c6bd09ff5c1c5b43d6",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 105005,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME105-PROTECTED-SENSOR",
+  "successful_optimizer_steps": 1536
+}
