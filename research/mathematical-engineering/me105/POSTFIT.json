@@ -1,0 +1,3279 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME105-PROTECTED-SENSOR",
+  "study_type": "architecture_comparison",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "name": "UCI501 BeijingMultiSite",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "license": "CC-BY-4.0",
+    "observed_real_outcomes": true
+  },
+  "arms": [
+    {
+      "architecture": "likelihood",
+      "seed": 105001,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "faba5f8d1d6c1f7ede69b28bd9f104e6710d0bad8c1adf0026464afd6162a37f",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "likelihood",
+        "seed": 105001,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "cf70c0c63e5dec8f7faf5783d389431cf54875eb4c9dfc2eb780dcf4affb9a7d",
+        "parent_checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+        "actual_sample_order_sha256": "faba5f8d1d6c1f7ede69b28bd9f104e6710d0bad8c1adf0026464afd6162a37f",
+        "augmented_inputs_sha256": "170032b6d3a2ed273d680f630707c3ea105cf59f6179f7b2653e2a9974c2f79b",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.03682322800159454,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.007276821415871382,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.07645752280950546,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 1.2889869213104248,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.29235970973968506,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.21276506781578064,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.06360282003879547,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.48261693120002747,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.1863439679145813,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.060631003230810165,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.027126934379339218,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 0.7321094870567322,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.23230843245983124,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.07429797202348709,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.021953150629997253,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.05737321823835373,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.019779931753873825,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.19202303886413574,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.046026404947042465,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.3985968232154846,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.09390037506818771,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 0.9665217399597168,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.32568836212158203,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.020270423963665962,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.05384698137640953,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.20005153119564056,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.32568836212158203,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 1.9304865598678589,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.46090996265411377,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 0.6628227233886719,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.17952831089496613,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.39722830057144165,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.08744099736213684,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "b51c1acb1cf0ba4a18e71ee7568b360039a264bbf774be8b5978cc5c9d90a974",
+          "64": "16fb081cb580011ee7b1b45ba50fd3baf0bf2c698da3f229b0cd5a7408ba6187",
+          "256": "44b80d7365741bea0e5f14fcb246d1ab1c5bebb79b2f11ed9470a7f74afde766"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 69.636024612,
+        "wall_seconds": 92.48065277899877,
+        "peak_memory_bytes": 547782656,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "balanced",
+      "seed": 105001,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "faba5f8d1d6c1f7ede69b28bd9f104e6710d0bad8c1adf0026464afd6162a37f",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "balanced",
+        "seed": 105001,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "4c3ed537732b1a3d4a09913ed1ab1f9d2346b8b385c019a96acc84115f8e82f5",
+        "parent_checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+        "actual_sample_order_sha256": "faba5f8d1d6c1f7ede69b28bd9f104e6710d0bad8c1adf0026464afd6162a37f",
+        "augmented_inputs_sha256": "170032b6d3a2ed273d680f630707c3ea105cf59f6179f7b2653e2a9974c2f79b",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.03897734731435776,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.03159898892045021,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.08208853006362915,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 2.817157030105591,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.8150572776794434,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.25365105271339417,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.08147873729467392,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.8598809242248535,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.5293632745742798,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.08899327367544174,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.04351077228784561,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.21578848361969,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.5213140249252319,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.1881646364927292,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.06813346594572067,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.04528730362653732,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.003712861333042383,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.32613542675971985,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.09135734289884567,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.7749763131141663,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.24013033509254456,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 2.557422637939453,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.9714614152908325,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.01868579164147377,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.12066912651062012,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.549243688583374,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.9714614152908325,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 3.0109922885894775,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.8737377524375916,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 1.9329603910446167,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.6049049496650696,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.9260997772216797,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.2713000178337097,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "b51c1acb1cf0ba4a18e71ee7568b360039a264bbf774be8b5978cc5c9d90a974",
+          "64": "16fb081cb580011ee7b1b45ba50fd3baf0bf2c698da3f229b0cd5a7408ba6187",
+          "256": "44b80d7365741bea0e5f14fcb246d1ab1c5bebb79b2f11ed9470a7f74afde766"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 70.29305011599999,
+        "wall_seconds": 94.11420764600189,
+        "peak_memory_bytes": 542711808,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "point_guard",
+      "seed": 105001,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "faba5f8d1d6c1f7ede69b28bd9f104e6710d0bad8c1adf0026464afd6162a37f",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "point_guard",
+        "seed": 105001,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "bc6dd5033c7e4b31a35dc6c4b2b2fb46d8346217f2a9096e5da386e0232b5f70",
+        "parent_checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+        "actual_sample_order_sha256": "faba5f8d1d6c1f7ede69b28bd9f104e6710d0bad8c1adf0026464afd6162a37f",
+        "augmented_inputs_sha256": "170032b6d3a2ed273d680f630707c3ea105cf59f6179f7b2653e2a9974c2f79b",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.03897734731435776,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.02987082488834858,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.08600081503391266,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 3.018643379211426,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.8606955409049988,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.2793102264404297,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.09031715244054794,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.8763988018035889,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.5071310997009277,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.09674854576587677,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.04780592769384384,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.3091775178909302,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.5513449311256409,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.19826070964336395,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.0706748217344284,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.05055737495422363,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.006732906214892864,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.3629932701587677,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.10027927905321121,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.8354264497756958,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.2516002655029297,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 2.814910650253296,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 1.0034037828445435,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.02549293264746666,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.11030838638544083,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.5757561326026917,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 1.0034037828445435,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 3.21439528465271,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.9364051222801208,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 1.9329603910446167,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.6049049496650696,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.9955955743789673,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.2846733629703522,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "b51c1acb1cf0ba4a18e71ee7568b360039a264bbf774be8b5978cc5c9d90a974",
+          "64": "16fb081cb580011ee7b1b45ba50fd3baf0bf2c698da3f229b0cd5a7408ba6187",
+          "256": "44b80d7365741bea0e5f14fcb246d1ab1c5bebb79b2f11ed9470a7f74afde766"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 61.352958023000014,
+        "wall_seconds": 71.68391083800088,
+        "peak_memory_bytes": 572997632,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "likelihood",
+      "seed": 105002,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "40ea05242a5b4545217de1d77eccf9f6efb08418658d8051624766c245fcbde0",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "likelihood",
+        "seed": 105002,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "150780ecc2ce410e1a7dd6043e34f473c9d8f7625075e950d2adfa9615dab669",
+        "parent_checkpoint_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+        "actual_sample_order_sha256": "40ea05242a5b4545217de1d77eccf9f6efb08418658d8051624766c245fcbde0",
+        "augmented_inputs_sha256": "2d52bea94d86eb894d47206fff6464a7aa5460c759cb9d4e582171f664ec7489",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.024748319759964943,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.030557697638869286,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.08647323399782181,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 1.5090219974517822,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.4276086390018463,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.12306301295757294,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.04010976478457451,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.7335600256919861,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.40350469946861267,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.045378729701042175,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.014329257421195507,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 0.6198194622993469,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.276352196931839,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.07847641408443451,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.02365041710436344,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.08993322402238846,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.026031585410237312,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.08418942987918854,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.014278599061071873,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.3092612624168396,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.0761270523071289,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 0.7924039959907532,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.2436555176973343,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.015687642619013786,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.030317040160298347,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.14702147245407104,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.2436555176973343,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 1.6106290817260742,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.41740620136260986,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 0.661041796207428,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.18789029121398926,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.2662198543548584,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.06228358671069145,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "098e17bc643e3a6adc44da93291a2bf261ab509e41c252c60694a7339ef0b3de",
+          "64": "5dabe3e569b6020bf27f67a1bcc2b9bf23244a59e02991c5a00eb290e4052f56",
+          "256": "c89b18d23fe4c2fd7ee8f2312af28a7e28a0b681e9c0c836779735662b1f8a97"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 61.075452657,
+        "wall_seconds": 70.87661529800243,
+        "peak_memory_bytes": 576049152,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "balanced",
+      "seed": 105002,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "40ea05242a5b4545217de1d77eccf9f6efb08418658d8051624766c245fcbde0",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "balanced",
+        "seed": 105002,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "e35aaaac6ee477ede2fc89abd7fe7420e5bc915644319a7e9e174754ab8a777a",
+        "parent_checkpoint_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+        "actual_sample_order_sha256": "40ea05242a5b4545217de1d77eccf9f6efb08418658d8051624766c245fcbde0",
+        "augmented_inputs_sha256": "2d52bea94d86eb894d47206fff6464a7aa5460c759cb9d4e582171f664ec7489",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.030610578134655952,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.06402729451656342,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.14886093139648438,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 3.29150652885437,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 1.0212246179580688,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.3062015771865845,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.09502702206373215,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 1.5039440393447876,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.895969808101654,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.07419172674417496,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.03176359087228775,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.2489351034164429,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.6348719596862793,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.2342107892036438,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.08464988321065903,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.13665184378623962,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.04538187012076378,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.2755495011806488,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.0772947296500206,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.7698402404785156,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.24408480525016785,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 2.0370805263519287,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.9400762915611267,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.04242071509361267,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.12417630106210709,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.5027480125427246,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.9400762915611267,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 3.008568048477173,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.9204641580581665,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 2.096128225326538,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.7053731679916382,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.7389690279960632,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.23488537967205048,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "098e17bc643e3a6adc44da93291a2bf261ab509e41c252c60694a7339ef0b3de",
+          "64": "5dabe3e569b6020bf27f67a1bcc2b9bf23244a59e02991c5a00eb290e4052f56",
+          "256": "c89b18d23fe4c2fd7ee8f2312af28a7e28a0b681e9c0c836779735662b1f8a97"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 63.978666637,
+        "wall_seconds": 86.31426203100273,
+        "peak_memory_bytes": 599064576,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "point_guard",
+      "seed": 105002,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "40ea05242a5b4545217de1d77eccf9f6efb08418658d8051624766c245fcbde0",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "point_guard",
+        "seed": 105002,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "a9394b81ed882657014618f28175f8d0b99e65156d537d325fef14df7b8f4b2e",
+        "parent_checkpoint_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+        "actual_sample_order_sha256": "40ea05242a5b4545217de1d77eccf9f6efb08418658d8051624766c245fcbde0",
+        "augmented_inputs_sha256": "2d52bea94d86eb894d47206fff6464a7aa5460c759cb9d4e582171f664ec7489",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.030610578134655952,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.07122845947742462,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.17525598406791687,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 3.6059961318969727,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 1.1037954092025757,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.35362714529037476,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.10300417989492416,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 1.713171362876892,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.9916200041770935,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.07485920935869217,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.030680740252137184,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.3863182067871094,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.6742823719978333,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.26342904567718506,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.0935305804014206,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.14792469143867493,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.04890955239534378,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.3202294409275055,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.08884602040052414,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.8933232426643372,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.27286627888679504,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 2.205364942550659,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 1.0469238758087158,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.05397555232048035,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.1469130665063858,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.5585871934890747,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 1.0469238758087158,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 3.100278615951538,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.9419249296188354,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 2.096128225326538,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.7053731679916382,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.8475433588027954,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.2611028850078583,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "098e17bc643e3a6adc44da93291a2bf261ab509e41c252c60694a7339ef0b3de",
+          "64": "5dabe3e569b6020bf27f67a1bcc2b9bf23244a59e02991c5a00eb290e4052f56",
+          "256": "c89b18d23fe4c2fd7ee8f2312af28a7e28a0b681e9c0c836779735662b1f8a97"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 63.70876738800001,
+        "wall_seconds": 87.46383101399988,
+        "peak_memory_bytes": 597643264,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "likelihood",
+      "seed": 105003,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "d6596a85e56765c4a9e55fa9a231f46ec2c4377b180ec4f9b56c1769f9579112",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "likelihood",
+        "seed": 105003,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "5e9f0d6c6c19e0bc0c550642829986887bf596fdcea5067b388d52fd8f704c96",
+        "parent_checkpoint_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+        "actual_sample_order_sha256": "d6596a85e56765c4a9e55fa9a231f46ec2c4377b180ec4f9b56c1769f9579112",
+        "augmented_inputs_sha256": "412a9d6e95d06475abdaa7419f99363425ae58b29be302cd9da493a399bd722d",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.01944306492805481,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.00843463558703661,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.03373856469988823,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 1.7389073371887207,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.2636096775531769,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.16258388757705688,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.042026013135910034,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.8926099538803101,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.24291130900382996,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.0458960086107254,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.014390749856829643,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 0.6146273612976074,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.16945290565490723,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.0697379857301712,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.015903132036328316,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.022846242412924767,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.00594025943428278,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.08774576336145401,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.011631856672465801,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.31570106744766235,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.05689632147550583,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 0.7070377469062805,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.1034175381064415,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.009484249167144299,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.032531801611185074,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.07186777889728546,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.1034175381064415,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 1.5403833389282227,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.295999139547348,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 0.7332531809806824,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.20173463225364685,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.2384248971939087,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.03248041868209839,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "f6da5bd32c0bf9b998c5f1efdf3a093904c353e45a7f998e9e79225c3ca2e65c",
+          "64": "825e2d93fef4c5c2de54207e91f4dd8d3850a7cc59834f04ac004ec8af004b34",
+          "256": "960194cd1f344f2563cc18e7237159ea8936f2f46c5be8a7b23edeecdafa93d0"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 64.61742307800003,
+        "wall_seconds": 67.42886929700035,
+        "peak_memory_bytes": 599064576,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "balanced",
+      "seed": 105003,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "d6596a85e56765c4a9e55fa9a231f46ec2c4377b180ec4f9b56c1769f9579112",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "balanced",
+        "seed": 105003,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "cf9e50f54a789c8f28c75c004a609ed89575b43435b7630d56e349d3f185ba2f",
+        "parent_checkpoint_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+        "actual_sample_order_sha256": "d6596a85e56765c4a9e55fa9a231f46ec2c4377b180ec4f9b56c1769f9579112",
+        "augmented_inputs_sha256": "412a9d6e95d06475abdaa7419f99363425ae58b29be302cd9da493a399bd722d",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.02285837195813656,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.025594158098101616,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.07231292873620987,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 3.872410297393799,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.9280595183372498,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.2951725125312805,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.0651051253080368,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 2.431087017059326,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.8818024396896362,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.07606974244117737,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.02261948771774769,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.5987279415130615,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.6314586400985718,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.2900962829589844,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.10856366157531738,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.04879331961274147,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.014019652269780636,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.25068509578704834,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.07063297182321548,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.9673607349395752,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.29950132966041565,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 2.5754311084747314,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.9827046990394592,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.04812987148761749,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.189564049243927,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.5760663747787476,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.9827046990394592,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 2.357030153274536,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.5861364006996155,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 3.0693087577819824,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.9840343594551086,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.8378925323486328,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.267385333776474,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "f6da5bd32c0bf9b998c5f1efdf3a093904c353e45a7f998e9e79225c3ca2e65c",
+          "64": "825e2d93fef4c5c2de54207e91f4dd8d3850a7cc59834f04ac004ec8af004b34",
+          "256": "960194cd1f344f2563cc18e7237159ea8936f2f46c5be8a7b23edeecdafa93d0"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 64.659967567,
+        "wall_seconds": 68.56931608000014,
+        "peak_memory_bytes": 599085056,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "point_guard",
+      "seed": 105003,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "d6596a85e56765c4a9e55fa9a231f46ec2c4377b180ec4f9b56c1769f9579112",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "point_guard",
+        "seed": 105003,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "c0935db7842046953bd2d6beeb6272b2f207accda20133f94ae650b25a6ce761",
+        "parent_checkpoint_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+        "actual_sample_order_sha256": "d6596a85e56765c4a9e55fa9a231f46ec2c4377b180ec4f9b56c1769f9579112",
+        "augmented_inputs_sha256": "412a9d6e95d06475abdaa7419f99363425ae58b29be302cd9da493a399bd722d",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.02285837195813656,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.03072156384587288,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.07833164185285568,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 4.168457508087158,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.9858680367469788,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.3495766222476959,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.08327605575323105,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 2.636389970779419,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.9366204738616943,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.08552989363670349,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.025488652288913727,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.7429333925247192,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.6658876538276672,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.3107067346572876,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.11416786909103394,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.05667215958237648,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.016360146924853325,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.2922915816307068,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.07804901152849197,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 1.051818609237671,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.3121713697910309,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 2.8651282787323,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 1.0042879581451416,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.04831890016794205,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.19691875576972961,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.5911229252815247,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 1.0042879581451416,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 2.5907223224639893,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.6478163003921509,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 3.0693087577819824,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.9840343594551086,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.8676673173904419,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.2652024030685425,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "f6da5bd32c0bf9b998c5f1efdf3a093904c353e45a7f998e9e79225c3ca2e65c",
+          "64": "825e2d93fef4c5c2de54207e91f4dd8d3850a7cc59834f04ac004ec8af004b34",
+          "256": "960194cd1f344f2563cc18e7237159ea8936f2f46c5be8a7b23edeecdafa93d0"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 64.43448569899999,
+        "wall_seconds": 66.80183384699922,
+        "peak_memory_bytes": 603111424,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "likelihood",
+      "seed": 105004,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "d5f23fb26e49230f75a03b4b611d47f2227c02cd21b9df8ef4ecdd18fc95cfef",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "likelihood",
+        "seed": 105004,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "3b6b697a3f3a6339fed5bad0f8df9aebeb65bee6f059b4263ed8c9e29bdcc61e",
+        "parent_checkpoint_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+        "actual_sample_order_sha256": "d5f23fb26e49230f75a03b4b611d47f2227c02cd21b9df8ef4ecdd18fc95cfef",
+        "augmented_inputs_sha256": "55dcde7fdad1e4ac2735af03bd4911174cd7361f8f79e2be24d49c3373a8dcaa",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.020444754511117935,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.012119868770241737,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.06052560731768608,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 1.3669723272323608,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.3050575256347656,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.22254039347171783,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.05147940292954445,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.7649297118186951,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.2993221879005432,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.03869893029332161,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.01665869541466236,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 0.5896643400192261,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.20356890559196472,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.1240924820303917,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.043544791638851166,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.01643655076622963,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.0006739772506989539,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.20698565244674683,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.05247744172811508,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.3776411712169647,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.09683799743652344,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 0.8847348093986511,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.36708346009254456,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.014069899916648865,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.07828916609287262,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.221383735537529,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.36708346009254456,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 1.171404480934143,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.3599707782268524,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 0.6204861998558044,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.1969885379076004,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.33016109466552734,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.09843709319829941,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "75b9e9bf6617e0d8fb370fd037319711d1a5443f498e5677025caefec8f47d74",
+          "64": "27c16b55a1757b8471c06d29490e27458854e744b4ce60f4b7114c783604c77a",
+          "256": "36b9e89899b5376b76b316be8feadfb5150856666cdeb1a89c23ab5d4c5c67fc"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 63.447591719,
+        "wall_seconds": 64.73487327900511,
+        "peak_memory_bytes": 599085056,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "balanced",
+      "seed": 105004,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "d5f23fb26e49230f75a03b4b611d47f2227c02cd21b9df8ef4ecdd18fc95cfef",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "balanced",
+        "seed": 105004,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "9f4eba687cafd31f8f1f036d9addcb148a09b8e2c43454e4f60b0a20e3e4438d",
+        "parent_checkpoint_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+        "actual_sample_order_sha256": "d5f23fb26e49230f75a03b4b611d47f2227c02cd21b9df8ef4ecdd18fc95cfef",
+        "augmented_inputs_sha256": "55dcde7fdad1e4ac2735af03bd4911174cd7361f8f79e2be24d49c3373a8dcaa",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.02311556786298752,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.018485063686966896,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.27166688442230225,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 7.618289470672607,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 1.5578134059906006,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.6664257049560547,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.22823406755924225,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 2.9049692153930664,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 1.1669032573699951,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.20052997767925262,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.0722508504986763,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 3.1512258052825928,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 1.166297435760498,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.7278129458427429,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.2146400660276413,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.05861850827932358,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.013516757637262344,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.6800367832183838,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.14660781621932983,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 1.9770904779434204,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.47415319085121155,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 7.506527423858643,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 1.8822622299194336,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.04692312330007553,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.2550944983959198,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 1.1828488111495972,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 1.8822622299194336,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 8.046250343322754,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 1.8978228569030762,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 16.58124542236328,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 4.0801191329956055,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 2.0777010917663574,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.4766029715538025,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "75b9e9bf6617e0d8fb370fd037319711d1a5443f498e5677025caefec8f47d74",
+          "64": "27c16b55a1757b8471c06d29490e27458854e744b4ce60f4b7114c783604c77a",
+          "256": "36b9e89899b5376b76b316be8feadfb5150856666cdeb1a89c23ab5d4c5c67fc"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 62.75453433000001,
+        "wall_seconds": 67.51771480499883,
+        "peak_memory_bytes": 603111424,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "point_guard",
+      "seed": 105004,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "d5f23fb26e49230f75a03b4b611d47f2227c02cd21b9df8ef4ecdd18fc95cfef",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "point_guard",
+        "seed": 105004,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "7ca9af32161bad743ef03ea28ecd9c794b955f2ba19c4ca6cd9d89e493db7af2",
+        "parent_checkpoint_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+        "actual_sample_order_sha256": "d5f23fb26e49230f75a03b4b611d47f2227c02cd21b9df8ef4ecdd18fc95cfef",
+        "augmented_inputs_sha256": "55dcde7fdad1e4ac2735af03bd4911174cd7361f8f79e2be24d49c3373a8dcaa",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.02311556786298752,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.022301051765680313,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.27915501594543457,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 7.518847465515137,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 1.4132603406906128,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.6641560196876526,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.21758416295051575,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 2.8311033248901367,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 1.0013452768325806,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.1999531388282776,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.0720551609992981,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 3.11852765083313,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 1.1113629341125488,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.6934036016464233,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.19191280007362366,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.059497278183698654,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.013196718879044056,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.6530841588973999,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.13155053555965424,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 1.9408371448516846,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.43957003951072693,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 7.368182182312012,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 1.7612873315811157,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.04969387501478195,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.22459113597869873,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 1.1144299507141113,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 1.7612873315811157,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 7.948454856872559,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 1.8225884437561035,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 16.58124542236328,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 4.0801191329956055,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 2.041964054107666,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.44194409251213074,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "75b9e9bf6617e0d8fb370fd037319711d1a5443f498e5677025caefec8f47d74",
+          "64": "27c16b55a1757b8471c06d29490e27458854e744b4ce60f4b7114c783604c77a",
+          "256": "36b9e89899b5376b76b316be8feadfb5150856666cdeb1a89c23ab5d4c5c67fc"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 62.497339046000036,
+        "wall_seconds": 67.26221276199794,
+        "peak_memory_bytes": 599085056,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "likelihood",
+      "seed": 105005,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "5400892019eafd12721217d78aff61ebb2d1b1cb57cb2d97fc687e438e85f1ee",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "likelihood",
+        "seed": 105005,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "bea95705ed2564e90395d8408f9f23c9fe7f1041483e1b250794f6cb2f79cbe1",
+        "parent_checkpoint_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+        "actual_sample_order_sha256": "5400892019eafd12721217d78aff61ebb2d1b1cb57cb2d97fc687e438e85f1ee",
+        "augmented_inputs_sha256": "63044d62a9bc33c7d2c4001e79def9c5375934a456a1f4b52272ef8d90cf0c48",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.01677645370364189,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.01818172261118889,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.08295074105262756,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 1.7249590158462524,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.3250712454319,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.214125394821167,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.059499140828847885,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.7103678584098816,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.3078075051307678,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.06981836259365082,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.03470859304070473,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 0.7170842289924622,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.18519125878810883,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.10523657500743866,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.030482811853289604,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.027819663286209106,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.008545002900063992,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.1656533032655716,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.03187877684831619,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.3989684283733368,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.0806141272187233,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 1.2261992692947388,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.2216506153345108,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.008505266159772873,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.03837142512202263,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.13922524452209473,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.2216506153345108,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 1.1534032821655273,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.3150045573711395,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 0.5039051175117493,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.12143024802207947,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.3692808747291565,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.06768689304590225,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "e68f6d4a972d9cc6a9740414e875bbf79ee7af57d214a0cae847c7bd10f84e18",
+          "64": "f64922de06b8a8c18a064521ce30b3080f75f8475bc9f9615e89c6e08505d6f4",
+          "256": "b01ad5a734056e5ae689540da3eda6afac68a60823f61d4ad558d917ad484310"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 60.411203099999966,
+        "wall_seconds": 60.512715107994154,
+        "peak_memory_bytes": 605208576,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "balanced",
+      "seed": 105005,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "5400892019eafd12721217d78aff61ebb2d1b1cb57cb2d97fc687e438e85f1ee",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "balanced",
+        "seed": 105005,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "88a12b51b9028ef47bc564fd42392e8890784e51baf8c9977424bb55538d16f9",
+        "parent_checkpoint_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+        "actual_sample_order_sha256": "5400892019eafd12721217d78aff61ebb2d1b1cb57cb2d97fc687e438e85f1ee",
+        "augmented_inputs_sha256": "63044d62a9bc33c7d2c4001e79def9c5375934a456a1f4b52272ef8d90cf0c48",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.017470771446824074,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.03695252537727356,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.11331116408109665,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 3.2350449562072754,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.803433358669281,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.42988964915275574,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.15258413553237915,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.9316766858100891,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.2852954864501953,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.0904853567481041,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.01559207309037447,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.676419734954834,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.6102437376976013,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.29469773173332214,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.10504089295864105,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.09718159586191177,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.03683214262127876,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.6211763620376587,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.14736495912075043,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.9786806702613831,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.26465165615081787,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 3.1900079250335693,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.9749805927276611,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.02806955948472023,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.06921646744012833,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.6285947561264038,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.9749805927276611,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 2.2192800045013428,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.6177523136138916,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 2.3608238697052,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.7950187921524048,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 0.998896062374115,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.2856515944004059,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "e68f6d4a972d9cc6a9740414e875bbf79ee7af57d214a0cae847c7bd10f84e18",
+          "64": "f64922de06b8a8c18a064521ce30b3080f75f8475bc9f9615e89c6e08505d6f4",
+          "256": "b01ad5a734056e5ae689540da3eda6afac68a60823f61d4ad558d917ad484310"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 61.201714200000026,
+        "wall_seconds": 61.30845949600189,
+        "peak_memory_bytes": 601837568,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "point_guard",
+      "seed": 105005,
+      "trainable_parameters": 100349,
+      "deployed_parameters": 100349,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "5400892019eafd12721217d78aff61ebb2d1b1cb57cb2d97fc687e438e85f1ee",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "7f6fe5181853c69ec6cebe309de8de28a9ea7724881bebd036aaa109b99014fa",
+      "target_contract_sha256": "a6b06a50d8447894ad96e26010a89de0ecc697588c74aecf36c5bfd1e072d8d2",
+      "optimizer_schedule_sha256": "a3401ff8ff12e06a8284ad7907ecc5f791ab7c99c659a9e3bdd79d258bd270e7",
+      "tuning_policy_sha256": "d87467f44cd074518e8e1cb25dccbce505c8ebcf6693087cedf275ec27e82183",
+      "selection_policy_sha256": "090d2dbf8b500997b50eb6c75c592820ef0cfb0290346d812a7cfc5c2fa499ff",
+      "evaluation_contract_sha256": "c95484fcbf75e487facb930630b9327be850ed05a9c3a422cb1f28a60e7ab64c",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483414935040,
+        "max_training_flops": 1498249084390.4,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature parity; unsupported scalar and optimizer FLOPs are partial",
+        "prefit_profile_training_flops": 1483414935040
+      },
+      "measured": {
+        "architecture": "point_guard",
+        "seed": 105005,
+        "trainable_parameters": 100349,
+        "deployed_parameters": 100349,
+        "actual_steps": 1536,
+        "checkpoint_sha256": "cfe70161540b8220c25986f7d88c21f902b0adbc4f77de1f63b773d214fe793a",
+        "parent_checkpoint_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+        "actual_sample_order_sha256": "5400892019eafd12721217d78aff61ebb2d1b1cb57cb2d97fc687e438e85f1ee",
+        "augmented_inputs_sha256": "63044d62a9bc33c7d2c4001e79def9c5375934a456a1f4b52272ef8d90cf0c48",
+        "optimizer_state_tensors": 33,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "parameter_tensors": 33,
+        "nonzero_gradient_tensors_step1": 33,
+        "gradient_receipt": {
+          "state_noise": {
+            "norm": 0.017470771446824074,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.04494594782590866,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.12263059616088867,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 3.5758886337280273,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.8783871531486511,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.4880048632621765,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.1749589741230011,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.979644238948822,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.29560431838035583,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.09793909639120102,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.018087387084960938,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.8642183542251587,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.6609071493148804,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.3292725682258606,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.11443465948104858,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.10309247672557831,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.039744336158037186,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.6521709561347961,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.15329132974147797,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 1.1138826608657837,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.2886907458305359,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 3.7523193359375,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 1.0694509744644165,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.030989933758974075,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.07384388148784637,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.6898579597473145,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 1.0694509744644165,
+            "nonzero": true
+          },
+          "current_head.weight": {
+            "norm": 2.422231435775757,
+            "nonzero": true
+          },
+          "current_head.bias": {
+            "norm": 0.6625531315803528,
+            "nonzero": true
+          },
+          "width_head.weight": {
+            "norm": 2.3608238697052,
+            "nonzero": true
+          },
+          "width_head.bias": {
+            "norm": 0.7950187921524048,
+            "nonzero": true
+          },
+          "median_head.weight": {
+            "norm": 1.1490920782089233,
+            "nonzero": true
+          },
+          "median_head.bias": {
+            "norm": 0.31619831919670105,
+            "nonzero": true
+          }
+        },
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79205273,
+            "aten_signature": "762321b38007f4d444a5e2e767b37659c029d98eda0c2db1a57b69c9aa3c0343",
+            "aten_calls": 5328
+          },
+          "64": {
+            "dense_flops": 569146137,
+            "aten_signature": "2acd3ee98598985bb3584a6788dbea4e26b1d564497019666db6cbb27baa1472",
+            "aten_calls": 6353
+          },
+          "256": {
+            "dense_flops": 2248943385,
+            "aten_signature": "ce5f5ad437788b7bf1f9e4108e2f89a9adf68a386d7fae41f05a6951095a825d",
+            "aten_calls": 7056
+          }
+        },
+        "profile_inputs_sha256": {
+          "8": "e68f6d4a972d9cc6a9740414e875bbf79ee7af57d214a0cae847c7bd10f84e18",
+          "64": "f64922de06b8a8c18a064521ce30b3080f75f8475bc9f9615e89c6e08505d6f4",
+          "256": "b01ad5a734056e5ae689540da3eda6afac68a60823f61d4ad558d917ad484310"
+        },
+        "training_flops": 1483414935040,
+        "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+        "optimizer_cpu_seconds": 61.61690096799998,
+        "wall_seconds": 61.62474133900105,
+        "peak_memory_bytes": 605208576,
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    }
+  ],
+  "literature_gap": {
+    "unresolved_TAConly_question": "Can source-gap scale protection, a fast bounded median innovation and slower inherited-weight adaptation jointly improve sharpness without losing coverage or ordinary point accuracy?",
+    "what_is_not_being_rediscovered": "Discriminative fine tuning, scale floors, bounded residual heads, quantile laws and proper scoring are established; application to integrated native TAC, not novel probability theory.",
+    "established_work": [
+      {
+        "paper": "Koenker and Bassett1978 Regression Quantiles",
+        "url": "https://doi.org/10.2307/1913643",
+        "established_result": "conditional quantile objectives and quantile forecasting"
+      },
+      {
+        "paper": "Gneiting and Raftery2007 Strictly Proper Scoring Rules, Prediction, and Estimation",
+        "url": "https://doi.org/10.1198/016214506000001437",
+        "established_result": "proper probability and interval scoring"
+      },
+      {
+        "paper": "Howard and Ruder2018 Universal Language Model Fine-tuning for Text Classification",
+        "url": "https://aclanthology.org/P18-1031/",
+        "established_result": "discriminative learning rates for pretrained representations"
+      }
+    ]
+  },
+  "protocol": {
+    "seeds": [
+      105001,
+      105002,
+      105003,
+      105004,
+      105005
+    ],
+    "updates": 1536,
+    "batch": 16,
+    "contexts": [
+      8,
+      64,
+      256
+    ],
+    "parent_selection": "ALLfiveME103strong_reconstruction checkpoint parents; exposed-development recipe selection disclosed; no individual seed selection",
+    "optimizer": "new AdamW per model; inherited group lr=0.000003, width_head+median_head group lr=0.0003, weight_decay=0.001; no parent optimizer state",
+    "gates": "all5seedseachrecipe: gapcoverage[.90,.98],gappoint<=min(1.05ME101,1.05ME103parent),daily<=min(1.05LOCF,1.05ME103parent),NLL<=min(6.234504261016846,1.05ME103parent),intervalscore<=min(1.05ME101,.90ME103parent)",
+    "fit_attempts": 1,
+    "max_concurrent_fits": 2,
+    "cpu_threads": 1,
+    "stop_rule": "Exactly15fits, no retries or extra fits after scoring; recordall; newproposalneedsnewprotocol",
+    "claim_scope": "Exposed2015 complete integrated recipe panel; no independent qualification or old/new equalresource claim",
+    "replay_rtol": 1e-05,
+    "replay_atol": 1e-06,
+    "parent": "all five ME103 strong_reconstruction final checkpoints (102001..102005); load all parent model tensors and zero-initialize new width_head and median_head",
+    "plan": "one default_rng(seed) plan per new seed, eight halfgap and eight halfgeneral origins per batch, shared byte-for-byte across recipes"
+  },
+  "recipes": {
+    "likelihood": {
+      "point": 0.1,
+      "interval": 0.0
+    },
+    "balanced": {
+      "point": 0.5,
+      "interval": 0.25
+    },
+    "point_guard": {
+      "point": 1.0,
+      "interval": 0.25
+    }
+  },
+  "source_files": {
+    "scripts/me102_reconstruction_panel.py": "7ef36d9195ff4b040f6300994f20ef061e16f69260d43666a258e74ec3ebfadc",
+    "scripts/me102_graph_reference.py": "5d8babb005d28877f3e01cd46d32f4b79b9af055b518a09a4690468457d92918",
+    "scripts/me102_gap_data.py": "fff07eface039eff6458399ff1ab33db4b268a71d2adcc6e1ebca6b451cac324",
+    "scripts/me100_sensor_data.py": "57f4d9086251d6dd8f12feb675ebe96de1223b3016906ad867cf3795fd0c74cc",
+    "scripts/me101_graph_reference.py": "ab4f70a83aa28f9ba0fd05749d2cf8cd6c3ff7880dcc3d25ec0728d955bba9d3",
+    "scripts/me100_graph_reference.py": "5923f55cf718aee6d73723dfc60bf82162880fbeb41c462d4575cdc91f4f64ff",
+    "src/tac_osm/variants/reconstruction_sensor_world.py": "55855ed04835af42758bcbd1170b384841e8d17ea5c0dbe7916cca0892987593",
+    "src/tac_osm/variants/belief_sensor_world.py": "618fa4a6dd53c0c3128081d4990fcd66f40593e9b875ca8983b475035245fb88",
+    "src/tac_osm/variants/entity_sensor_world.py": "c26c2b15e99c5f8238bc49dc4eb0a6ebdfb4b62dfe566ee400a044cebead6282",
+    "src/tac_osm/variants/parallel_affine_memory.py": "e3a0732b17acfa7505952b5229573099edc7f1dbe65604f4f3f516e05652baeb",
+    "src/tac_osm/variants/retention_controlled_world.py": "eead543fc0d87d0c77d4f36758115168beb591b31e53e3d251714c076da0e970",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "scripts/me101_belief_sensor.py": "c51c03ed7cd4db0ee721daa339d42ede34afe8d5242d61fed07995eba701b14f",
+    "src/tac_osm/variants/median_split_sensor_world.py": "c7d71d7a0fc23e8849e69edf35b5e555dbc0e567ad93406a0e4bcc2186ccd0ad",
+    "src/tac_osm/variants/protected_sensor_world.py": "9fbfa64878daf48189786d50ea975571f4832bea95b00f3bdf3444075b022a20",
+    "scripts/me104_graph_reference.py": "930a117e2b0d5198e6666be639c613020a1ef8570cbaeab778d43176c4da3a62",
+    "scripts/me105_graph_reference.py": "775c13a7437f99c353911105f21afb23ce4e7478b51d5968c56aa4978c60ca45",
+    "scripts/me105_protected_panel.py": "239d19936ce88e06cea5c4946893032b32b09567a18ed72b44a8b2a0a76f2c62"
+  },
+  "parent_artifacts": {
+    "105001": {
+      "checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+      "fit_receipt_sha256": "2792536b25f413c5fdcc1c48743472bacb5d7eda954e46f6a0a781968128af6f",
+      "runtime_receipt_sha256": "abacedf7111096da4ab62063fa8af88d392cb64457b774270a1fd406c5fb80a8"
+    },
+    "105002": {
+      "checkpoint_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+      "fit_receipt_sha256": "ea56790b026e13565c5462e9b1a73e3745af8b224ad053120705035a413408d0",
+      "runtime_receipt_sha256": "d2261664208a718280a7dfbef8d86c6fc281385329f7ce9728731ee3b1d4136c"
+    },
+    "105003": {
+      "checkpoint_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+      "fit_receipt_sha256": "b7e795a4efc11bdc4d4f603e8f25aeafdd15c1aa9b4bfcebfcde46fc060170e8",
+      "runtime_receipt_sha256": "9cd4b3a42fd245524595407a5e90e9797780d58ebcf1f8c63c03f36ff4b31885"
+    },
+    "105004": {
+      "checkpoint_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+      "fit_receipt_sha256": "d11af0dd0d02a9a2f20a971d90c50a1a0d23b9f07adfddbc92dc357902d3082d",
+      "runtime_receipt_sha256": "6cd25da21625241dcdf58bd783cf489dabf0879aa6c4bc4757977364a31e6492"
+    },
+    "105005": {
+      "checkpoint_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+      "fit_receipt_sha256": "cd6a1ef9f2a51161d9f7d830878e462566ecf2661f705ea5d41577ba2e4468a3",
+      "runtime_receipt_sha256": "f888ecf110a805a4b7af8601df6fe9d4f505d83c4d26e79892e3b9a00afaaca0"
+    }
+  },
+  "parent_fit_index_sha256": "586218572938a9a9da96607be371e258c86fb45833558d23b445e97bc9e6814e",
+  "parent_registration_sha256": "583da81703becdbcc52e59757e04e3eb6a94081de10d1d5af403ebd3d41007b7",
+  "prefit_design_sha256": "362391e3630f6febab105868cdf0669d571970ef0ba0e01c9c8f54f194c0f3ac",
+  "fit_plans_sha256": "a7a7add0bc8789cb2da45dde300e4cf129b6df62c9e91d67272aef1e3a2b001c",
+  "prefit_profiles_sha256": "e85a6c40e0fde17715dfed2ca98b983643a19ffc4ee1ccdab1814369e7e0967f"
+}

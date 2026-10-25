@@ -1,0 +1,2009 @@
+{
+  "kind": "ME105_NO_STEP_OBJECTIVE_FLOW_TRACE",
+  "source": "FIT partition only; matched ME103 parents; ME104 registered first batches",
+  "optimizer_steps": 0,
+  "uses_report_or_test_data": false,
+  "component_names": [
+    "nll",
+    "point",
+    "location_mse",
+    "reconstruction_nll",
+    "interval"
+  ],
+  "block_definition": {
+    "core": "all named model parameters except current_head, width_head, median_head",
+    "pairwise_cosines": "cosines of flattened gradients over common core parameters only"
+  },
+  "matched_parents": [
+    {
+      "parent_seed": 102001,
+      "me104_seed": 104001,
+      "me105_seed": 105001,
+      "batch_sha256": "b1f2df3d723778152536daf82c76ae4a8b70fb870f6d58bbf6b75fdd16bcc576",
+      "batch_size": 16,
+      "context_length": 8,
+      "models": {
+        "ME104": {
+          "objective_values": {
+            "nll": 5.057366847991943,
+            "point": 0.413215309381485,
+            "location_mse": 0.44782429933547974,
+            "reconstruction_nll": 0.6850419640541077,
+            "interval": 21.791852951049805
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 2.0010983908902102,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.48879014936944554,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 1.5569366587676392,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.4044795079045602,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.72552460763417,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.6705950836567371,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.6538355069785176,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 1.4717068917021239,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 2.753501921451155,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 205.1131554761179,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 121.63506502113061,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 460.2476225336591,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.32810600196456413,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.5442465139407303,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": -0.10718304983836043,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": 0.027406705814132386,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.506337108216002,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": -0.04851654853438341,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": 0.6159218146198809,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": -0.045621287300121924,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": 0.05623040712204383,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": 0.008584605139266906,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        },
+        "ME105": {
+          "objective_values": {
+            "nll": 5.057366847991943,
+            "point": 0.413215309381485,
+            "location_mse": 0.44782429933547974,
+            "reconstruction_nll": 0.6850419640541077,
+            "interval": 21.791852951049805
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 2.0010983908902102,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.48879014936944554,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 1.493236696705293,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.45202886870634895,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.4044795079045602,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.72552460763417,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.27511897568154053,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.6705950836567371,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.6538355069785176,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.27007957826550355,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 1.4717068917021239,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 2.753501921451155,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 205.1131554761179,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 121.63506502113061,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 230.6396772280601,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 39.212920563287256,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.32810600196456413,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.5442465139407303,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": -0.10718304983836043,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": 0.027406705814132386,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.506337108216002,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": -0.04851654853438341,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": 0.6159218146198809,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": -0.045621287300121924,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": 0.05623040712204383,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": 0.008584605139266906,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        }
+      }
+    },
+    {
+      "parent_seed": 102002,
+      "me104_seed": 104002,
+      "me105_seed": 105002,
+      "batch_sha256": "ae080fad438b86c90057360819e46e921effd934c8e22b2d94f435d937af6c7a",
+      "batch_size": 16,
+      "context_length": 8,
+      "models": {
+        "ME104": {
+          "objective_values": {
+            "nll": 4.935666084289551,
+            "point": 0.35751110315322876,
+            "location_mse": 0.3525344431400299,
+            "reconstruction_nll": 0.6971164345741272,
+            "interval": 5.355123996734619
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 1.5667681545668755,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.7185206271389264,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.8900864498883483,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.8031681254919194,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.945250730066856,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.9730375611077424,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 1.1269850356662028,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 0.9700081036852092,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 1.5825628147238198,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 24.787136635045346,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 13.576941310347165,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 22.97278899137565,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.48850397705335313,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.7949850998328037,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": -0.3640110559922209,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": 0.5499715471856548,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.6285468345181452,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": -0.22192762191664966,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": 0.1788934719415244,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": -0.43394789823086605,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": 0.6404091375490216,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": -0.4741359571994432,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        },
+        "ME105": {
+          "objective_values": {
+            "nll": 4.935666084289551,
+            "point": 0.35751110315322876,
+            "location_mse": 0.3525344431400299,
+            "reconstruction_nll": 0.6971164345741272,
+            "interval": 5.355123996734619
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 1.5667681545668755,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.7185206271389264,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.7047152449003699,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.37677976088704096,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.8031681254919194,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.945250730066856,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.2615015261744326,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.9730375611077424,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 1.1269850356662028,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.3589588412566864,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 0.9700081036852092,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 1.5825628147238198,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 24.787136635045346,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 13.576941310347165,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 12.641320872808324,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 4.61161901106605,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.48850397705335313,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.7949850998328037,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": -0.3640110559922209,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": 0.5499715471856548,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.6285468345181452,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": -0.22192762191664966,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": 0.1788934719415244,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": -0.43394789823086605,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": 0.6404091375490216,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": -0.4741359571994432,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        }
+      }
+    },
+    {
+      "parent_seed": 102003,
+      "me104_seed": 104003,
+      "me105_seed": 105003,
+      "batch_sha256": "9754df6636782c49d973ea63b724fc23e4d49aa1ce633b281bf0a9281c9096eb",
+      "batch_size": 16,
+      "context_length": 8,
+      "models": {
+        "ME104": {
+          "objective_values": {
+            "nll": 4.794436931610107,
+            "point": 0.3656896948814392,
+            "location_mse": 0.3208179175853729,
+            "reconstruction_nll": 0.8986287713050842,
+            "interval": 5.078410625457764
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 1.6749814486488954,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.41266000331281627,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.9681509065507492,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.4646733975019428,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.7095257687003437,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.2400579360570996,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.41692724821063654,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 2.9834742790516744,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 2.8124409164255466,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 34.97801704172696,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 27.53279516954358,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 106.41079554197123,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.6276340591953632,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.8211261837642658,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": 0.31904709892251093,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": 0.029607594382554225,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.5203606905863432,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": 0.29604330384308747,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": 0.08391035123042845,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": 0.40525153378483547,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": -0.09671968198873518,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": -0.3092958271780178,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        },
+        "ME105": {
+          "objective_values": {
+            "nll": 4.794436931610107,
+            "point": 0.3656896948814392,
+            "location_mse": 0.3208179175853729,
+            "reconstruction_nll": 0.8986287713050842,
+            "interval": 5.078410625457764
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 1.6749814486488954,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.41266000331281627,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.9276089878163061,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.3991094559088789,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.4646733975019428,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.7095257687003437,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.32529024052326766,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.2400579360570996,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.41692724821063654,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.25786560282900206,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 2.9834742790516744,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 2.8124409164255466,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 34.97801704172696,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 27.53279516954358,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 53.65526299767904,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 7.695347736979252,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.6276340591953632,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.8211261837642658,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": 0.31904709892251093,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": 0.029607594382554225,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.5203606905863432,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": 0.29604330384308747,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": 0.08391035123042845,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": 0.40525153378483547,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": -0.09671968198873518,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": -0.3092958271780178,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        }
+      }
+    },
+    {
+      "parent_seed": 102004,
+      "me104_seed": 104004,
+      "me105_seed": 105004,
+      "batch_sha256": "2dd65f1bbe999f23fbe3e0a38cf2c78509852423b2f6b0569887ee2567dcc484",
+      "batch_size": 16,
+      "context_length": 8,
+      "models": {
+        "ME104": {
+          "objective_values": {
+            "nll": 4.744880199432373,
+            "point": 0.342125803232193,
+            "location_mse": 0.3151058256626129,
+            "reconstruction_nll": 0.8390190005302429,
+            "interval": 2.9544012546539307
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 1.082748704115454,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.3871820621084275,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.7412987022733926,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.039029757647716,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.43585501078228056,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.2216260211689696,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.5186036432731376,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 2.225775116671702,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 2.713711086155262,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 12.649332833571163,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 6.413604359932516,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 9.153262654630796,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.44524957774883517,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.8307570361863764,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": 0.09925534680658078,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": 0.11065513057894247,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.3666600355963258,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": 0.28727885778719203,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": -0.22585521432670985,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": -0.014183497733146345,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": 0.33053893973476545,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": -0.3693298752648956,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        },
+        "ME105": {
+          "objective_values": {
+            "nll": 4.744880199432373,
+            "point": 0.342125803232193,
+            "location_mse": 0.3151058256626129,
+            "reconstruction_nll": 0.8390190005302429,
+            "interval": 2.9544012546539307
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 1.082748704115454,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.3871820621084275,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.6005962996733741,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.27992774129391906,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.039029757647716,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.43585501078228056,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.1839309862235572,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.2216260211689696,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.5186036432731376,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.24301253521369234,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 2.225775116671702,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 2.713711086155262,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 12.649332833571163,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 6.413604359932516,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 6.132710853769011,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 2.25054238038141,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.44524957774883517,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.8307570361863764,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": 0.09925534680658078,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": 0.11065513057894247,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.3666600355963258,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": 0.28727885778719203,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": -0.22585521432670985,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": -0.014183497733146345,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": 0.33053893973476545,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": -0.3693298752648956,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        }
+      }
+    },
+    {
+      "parent_seed": 102005,
+      "me104_seed": 104005,
+      "me105_seed": 105005,
+      "batch_sha256": "13559eebef1820ccf6d2704da3cc392ec69b801ec623d3a56127814caa1a3f1d",
+      "batch_size": 16,
+      "context_length": 8,
+      "models": {
+        "ME104": {
+          "objective_values": {
+            "nll": 5.3268890380859375,
+            "point": 0.4459083080291748,
+            "location_mse": 0.37152552604675293,
+            "reconstruction_nll": 0.6750603318214417,
+            "interval": 5.8915276527404785
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 1.2815855448510125,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.4320398470612023,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 1.359181050873265,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.636533195248908,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.9167827612175747,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.2243392892818095,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.7487085084541412,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 2.6246875455912813,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 6.437988024643946,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 28.404687995498318,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 13.27717059069187,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 27.76256757528055,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.38345272176591727,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.6664820643085388,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": 0.14559640520971986,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": -0.2861065074875109,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.6999753113993972,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": 0.21110418195158412,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": -0.6949870132411355,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": 0.2702638673522286,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": -0.5942741460057571,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": -0.2286549832333721,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        },
+        "ME105": {
+          "objective_values": {
+            "nll": 5.3268890380859375,
+            "point": 0.4459083080291748,
+            "location_mse": 0.37152552604675293,
+            "reconstruction_nll": 0.6750603318214417,
+            "interval": 5.8915276527404785
+          },
+          "gradient_norms": {
+            "nll": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 1.2815855448510125,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.4320398470612023,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 1.2691817233550433,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.23834703226128562,
+                "finite": true
+              }
+            },
+            "point": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 26,
+                "norm": 1.636533195248908,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.9167827612175747,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.35686585904369517,
+                "finite": true
+              }
+            },
+            "location_mse": {
+              "core": {
+                "gradient_tensors": 26,
+                "nonzero_tensors": 26,
+                "norm": 1.2243392892818095,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.7487085084541412,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 0.23897423315219848,
+                "finite": true
+              }
+            },
+            "reconstruction_nll": {
+              "core": {
+                "gradient_tensors": 16,
+                "nonzero_tensors": 16,
+                "norm": 2.6246875455912813,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 6.437988024643946,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 0,
+                "nonzero_tensors": 0,
+                "norm": 0.0,
+                "finite": true
+              }
+            },
+            "interval": {
+              "core": {
+                "gradient_tensors": 27,
+                "nonzero_tensors": 27,
+                "norm": 28.404687995498318,
+                "finite": true
+              },
+              "current_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 13.27717059069187,
+                "finite": true
+              },
+              "width_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 15.698404531342808,
+                "finite": true
+              },
+              "median_head": {
+                "gradient_tensors": 2,
+                "nonzero_tensors": 2,
+                "norm": 4.4362314907825615,
+                "finite": true
+              }
+            }
+          },
+          "shared_core_pairwise_cosines": {
+            "nll|point": {
+              "cosine": 0.38345272176591727,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|location_mse": {
+              "cosine": 0.6664820643085388,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|reconstruction_nll": {
+              "cosine": 0.14559640520971986,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "nll|interval": {
+              "cosine": -0.2861065074875109,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|location_mse": {
+              "cosine": 0.6999753113993972,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|reconstruction_nll": {
+              "cosine": 0.21110418195158412,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "point|interval": {
+              "cosine": -0.6949870132411355,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|reconstruction_nll": {
+              "cosine": 0.2702638673522286,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "location_mse|interval": {
+              "cosine": -0.5942741460057571,
+              "defined": true,
+              "shared_parameter_count": 97259
+            },
+            "reconstruction_nll|interval": {
+              "cosine": -0.2286549832333721,
+              "defined": true,
+              "shared_parameter_count": 97259
+            }
+          },
+          "finite_losses": true
+        }
+      }
+    }
+  ]
+}
