@@ -98,3 +98,16 @@ Next prospective architecture/training target: separate median-learning gradient
 from uncertainty-shaping gradients and address channel-specific calibration. The
 FIT trace confirms active paths and batch-specific conflicts, not a universal
 causal explanation. No more ME105 fits; keep alloriginals and unchanged gates.
+
+Clean detached checkoutd2a8bc96 replay passed: all15 original scores/gates,
+30 fitted FP32/64 graph audits and allsource-label/summary checks, no retraining.
+67 original bundle payload SHA256 values recorded and checked. Original-source
+GitHub replay40216493230 was in progress at this metadata write; it is not
+claimed passed from earlier source-only CI. PNDS fullbuild/source-math passed.
+See RESTORATION_RECEIPT.json and CAPABILITY_PROGRESS.json for exact status.
+
+State-byte audit:632 bytes/sample of actual state tensors (608 FP32 +24 integer),
+plus72 model-buffer bytes. The registered736-byte value is an inherited budget
+convention, not measured total runtime memory. Python metadata, parameter-version
+tuples, allocator, activations and weights are separate. STATE_PAYLOAD.json
+supersedes the loose initial MATHEMATICS.md includes-buffers wording.

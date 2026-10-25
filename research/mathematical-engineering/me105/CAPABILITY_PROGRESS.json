@@ -1,7 +1,7 @@
 {
   "schema_version": "tac-osm.capability-progress.v1",
   "study_id": "ME105-PROTECTED-SENSOR",
-  "tier": "TRAINED",
+  "tier": "TRAINED_REPLAY_VERIFIED",
   "capability_outcome": "MIXED_TRADEOFF",
   "decision": "FAIL",
   "claim_type": "same-task capability development with new per-channel predictive distribution; no architectural superiority or independent gain",
@@ -360,13 +360,18 @@
   },
   "integrity": {
     "git_original_checkpoints": true,
-    "independent_clean_replay": false,
+    "independent_clean_replay": true,
     "raw_case_scores_preserved": true,
     "registered_before_evaluation": true,
     "source_commit": "573f81cb9f2f421d141ddb722525ecce25972edc",
     "models_frozen_before_report": "640cafca55be9b27375fb147e2ae206c7bfb1391",
     "all30fitted_dtype_replay": true,
-    "retraining": false
+    "retraining": false,
+    "original_scores_and_clean_checkout": "d2a8bc96eadf3bf5515f703284992e5b3677ee7f",
+    "all15score_replay": true,
+    "source_label_replay": true,
+    "github_original_replay": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40216493230",
+    "github_original_replay_status": "IN_PROGRESS_AT_METADATA_WRITE"
   },
   "planned_primary": "Everyseed: coverage90\u201398%, point/NLL guardrails, at least10%intervalscore gain and preserved ME101guards; every5seed in recipe required.",
   "guardrails": [
