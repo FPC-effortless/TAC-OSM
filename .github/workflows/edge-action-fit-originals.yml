@@ -1,10 +1,7 @@
 name: EDGEACTION001 original five-seed real FIT train and freeze (NO REPORT)
+# Original fit was completed and all checkpoint bytes were frozen.
+# Never auto-start a new fitting attempt from a later research push.
 on:
-  push:
-    paths:
-      - "scripts/edge_action_logged_fit.py"
-      - "research/mathematical-engineering/edgeaction001/FAIR_COMPARISON.json"
-      - ".github/workflows/edge-action-fit-originals.yml"
   workflow_dispatch:
 permissions:
   contents: write
