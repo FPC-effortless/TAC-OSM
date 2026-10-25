@@ -1,0 +1,77 @@
+{
+  "schema_version": "tac-osm.capability-progress.v1",
+  "study_id": "ME101-BELIEF-SENSOR",
+  "tier": "MIXED_TRADEOFF",
+  "claim_type": "integrated capability development; same-task descriptive complete-system changes; not architecture superiority",
+  "what_improved": "Daily6channelMAE improves; PM35.6890335 to32.7708725, all5seedparents improve. Mean gapPM38.9869 to37.7470 but3of5seeds regress.",
+  "what_regressed": "All5 fullgatesFAIL;gapPM90coverage68.67%<85;gapdensityNLL5.769106 to6.234504;gapPMintervalscore279.3473 to301.2206. No verified uncertainty fix.",
+  "what_remains_unknown": "calibratedmissing-stateposterior, independent/sitegeneralization, matchedarchitectures, action/customerutility, wholeNNIEEEproof",
+  "source": {
+    "authentic_real_data": true,
+    "exposure": "EXPOSED_DEV",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "eligible_ids_sha256": "981a65ae81f4162dac2f7a4769a8b189df29f986a1e1e38691dd24e9027386d1",
+    "holdout_unopened_before_freeze": false
+  },
+  "task": {
+    "prediction_time_validated": true,
+    "independent_cases": 53,
+    "actual_future_targets": 53,
+    "target": "53globalcalendarweekclusters with4288dailyqueries;separategap143queries in21clusters; no IIDquery/seedcount claim",
+    "query_and_horizon": "6hours ahead, sixactualpollutants, maskedavailableinput, suppliedstationidentities",
+    "same_case_ids_target_horizon_metric": true
+  },
+  "model": {
+    "prior_sha256": "9d097b905159b7b1dcecbe8ddfd18276d528cdfe99cbe57bf2c592b64ef058e9",
+    "candidate_sha256": "bacb93eb1874f8433d94031c2f09c95b520358b73ce2826f269c38cd32482024",
+    "original_old_checkpoint_path": "research/replay-bundles/ME100/seed-100001/final.pt",
+    "original_new_checkpoint_path": "research/replay-bundles/ME101/seed-101001/final.pt",
+    "original_trainable_parameters": 97235,
+    "new_trainable_parameters": 97259,
+    "training_exposure_and_compute_note": "fresh5seeds3072updates vsME1001536;newloss;noarchitectural,dataefficiencyorcomputematchedclaim"
+  },
+  "integrity": {
+    "git_original_checkpoints": true,
+    "independent_clean_replay": true,
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true,
+    "independent_raw_case_audit": false,
+    "raw_case_score_artifact_path": "research/replay-bundles/ME101/FORECASTS.npz",
+    "independent_audit_run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40178388335"
+  },
+  "primary_comparison": {
+    "name": "Descriptive registered dailyPMguard statistic; secondary to failedprimary gapuncertaintygates",
+    "direction": "lower_is_better",
+    "prior": 35.68903350830078,
+    "candidate": 32.77087249755859,
+    "minimum_useful_gain": 0.0,
+    "paired_case_cluster_95ci_gain": null,
+    "paired_seed_count": 5,
+    "beneficial_seed_count": 5
+  },
+  "guardrails": [
+    {
+      "metric": "EVERYseed history gate",
+      "status": "PASS"
+    },
+    {
+      "metric": "EVERYseed daily practical guard",
+      "status": "PASS"
+    },
+    {
+      "metric": "EVERYseed gap practical guard",
+      "status": "FAIL"
+    },
+    {
+      "metric": "EVERYseed gapcoverage",
+      "status": "FAIL"
+    },
+    {
+      "metric": "EVERYseed intervalscore anddensity",
+      "status": "FAIL"
+    }
+  ],
+  "practical_reference_scored": true,
+  "independent_real_distributions": 0,
+  "study_notes": "Complete original clean-checkout score, fittedgraph and sharpness replaysPASS. Fullprimarygate0/5; no newfits or changedgates. Parentseeds are mapped by index only, not identical initializations/schedules. Descriptive same-cohort daily gain is secondary to failed gapuncertainty. Source2015alreadyexposed;2016-2017closed."
+}

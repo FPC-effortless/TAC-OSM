@@ -1,0 +1,75 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME101-BELIEF-SENSOR",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "observed_real_outcomes": true,
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "name": "UCI501 Beijing multi-site air quality",
+    "license": "CC-BY-4.0"
+  },
+  "models": [
+    {
+      "architecture": "belief_sensor",
+      "seed": 101001,
+      "trainable_parameters": 97259,
+      "deployed_parameters": 97259
+    },
+    {
+      "architecture": "belief_sensor",
+      "seed": 101002,
+      "trainable_parameters": 97259,
+      "deployed_parameters": 97259
+    },
+    {
+      "architecture": "belief_sensor",
+      "seed": 101003,
+      "trainable_parameters": 97259,
+      "deployed_parameters": 97259
+    },
+    {
+      "architecture": "belief_sensor",
+      "seed": 101004,
+      "trainable_parameters": 97259,
+      "deployed_parameters": 97259
+    },
+    {
+      "architecture": "belief_sensor",
+      "seed": 101005,
+      "trainable_parameters": 97259,
+      "deployed_parameters": 97259
+    }
+  ],
+  "protocol": {
+    "updates": 3072,
+    "batch_size": 16,
+    "contexts": [
+      8,
+      64,
+      256
+    ],
+    "context_schedule": "fixed repeating8,64,256",
+    "sampling": "8FITnatural-gap+8FITgeneral origins uniformly with replacement",
+    "seeds": 5,
+    "optimizer": "AdamW lr.0006 wd.001 clipnorm1",
+    "loss": "proper censoredGaussian raw-density NLL +.1 standardizedlogMSE +.1 proper90intervalscore on censored standardizedlog quantiles",
+    "init": "fresh randomseed; no inherited fitted weights",
+    "data": "immutable ME100 source/preprocessing; FIT2013-2014;2015REPORTexposed development;2016-2017numerical outcomes closed",
+    "new_state": "none:152FP32 corevalues;24bytes integer provenance+104bytes external age+Python overhead separately",
+    "fit_attempts": 1,
+    "max_parallel_fits": 2,
+    "cpu_threads_per_fit": 1,
+    "tuning_trials": 1,
+    "report_access": "only after all5original models/optimizer/RNG/sample schedules committed",
+    "gates": "EVERYseed:gapPM MAE<=.95short8;<=.97bestLOCF/ridge;dailyPM MAE<=1.05LOCF; gap90coverage[.85,.98];gapPM properintervalscore<=1.05corresponding ME100parent;gap6channelNLL<=1.05ME100mean5.769106244984462",
+    "history_bootstrap": "2000globalcalendarweekcluster samples conditional on fitted5seeds; descriptive not multiplicityadjusted",
+    "replay_rtol": 1e-05,
+    "replay_atol": 1e-06,
+    "stop_rule": "one5seedregisteredrun; no furtherfits, posthocvarianceinflation, changedgates orTESTscoring",
+    "architecture_superiority": false,
+    "causal_intervention": false,
+    "attribution_ablations_deferred": true,
+    "exposure_difference": "twice ME100 updatebudget; no compute/data-efficiency or architectural superiority comparison"
+  }
+}
