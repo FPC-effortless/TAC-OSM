@@ -556,3 +556,23 @@ ME0954completed+1interrupted/noREPORT retainedb30b5aaf; no hidden retries.
 Next capability: coherent multi-step outcomes/uncertainty and independently
 qualified source-supported delayed/identity-aware forecasting on this shared
 engine. Do not simply lengthen retention again. Full neural Lean refinement OPEN.
+
+
+### ME098 / ME099 — composed trajectory forecasts and latent uncertainty regimes (2026-10-25)
+
+Implemented/trained: one shared TAC conditioning graph, fixed-coefficient future
+mean semigroup, response-Gram joint scale, shared uncertainty regime and proper
+interval objective.103,322/103,380parameters;10original real-data fits preserved.
+TACPR392/393, PNDS10/11. ME099 MSE39.36/40.67/41.95%below persistence at1/4/16frames
+on13exposedDEVepisodes; interval scores21–25%better thanME098, widths45–53%wider.
+Four/fiveseeds fullpass; seed99001H4coverage84.192562<85 =>FULLGATEFAIL.
+No morefits/changedgates in this correction protocol. Independent originalreplay
+and actual-source values/gradientsPASS. FullNNLean/IEEE, independent cohorts,
+otherdomainheads, usefullongmemory and action/customerutility remainOPEN.
+
+Proposed NEXT-SHARED-NOISE: nonnegative state-conditioned future-noise envelope
+within the response Gram; test middle-horizon reliability on new real data.
+Proposed NEXT-SHARED-CLOCK: actual elapsed-time/entity corrections and typed
+workflow time/lifecycle heads, no false completion or missingness claims.
+Proposed NEXT-SHARED-QUERY: reusable coherent path sampling, square-root density
+kernels and measured chunk/hardware processing. No new implemented skill claimed.

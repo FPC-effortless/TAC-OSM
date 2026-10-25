@@ -1,6 +1,116 @@
 # TAC-OSM — Unified Master Research Plan
 
 
+## Latest: structured future trajectories and uncertainty regimes — ME098/ME099 (2026-10-25)
+
+**Status: learned capability observed / MIXED_TRADEOFF; full gate FAILED.**
+The next shared-core development phase follows the owner's request for mathematical
+engineering comparable in discipline to SSM/Mamba: define the actual state and
+operators, derive legal composition and parallel execution, analyze stability and
+precision, verify independent equations/gradients, then train real complete models.
+This is a standard of engineering, **not demonstrated Mamba-level performance or
+whole-network formal verification**.
+
+### Implemented, trained and preserved
+
+[ME098 draft PR392](https://github.com/FPC-effortless/TAC-OSM/pull/392) adds a
+103,322-parameter coherent trajectory decoder to the shared TAC engine. One
+conditioned stable-velocity law predicts1/4/16recorded frames, with one response-
+Gram uncertainty structure and proper joint Student-t likelihood. Five originals
+improve mean forecasts but all fail the coverage guard. This negative result stays.
+
+[ME099 draft PR393](https://github.com/FPC-effortless/TAC-OSM/pull/393) is the
+single preregistered correction:103,380parameters,58new uncertainty-regime values,
+all inherited weights still trained. A latent narrow/broad regime is shared across
+the complete future trajectory; one Cholesky is reused. Proper interval-score
+training supplements the likelihood; analytic marginal CDF/root derivatives
+avoid empirical DEV inflation. Both iterations retain one shared engine and
+exactly six active families; only the physical lane is trained here.
+
+| Recorded future horizon | Persistence MSE | ME099 mean MSE | Reduction | Nominal90%coverage |
+| --- | ---: | ---: | ---: | ---: |
+| 1frame | 0.000493550 | 0.000299312 | 39.36% | 89.42% |
+| 4frames | 0.007526495 | 0.004465788 | 40.67% | 85.77% |
+| 16frames | 0.094477579 | 0.054845821 | 41.95% | 87.44% |
+
+All five ME099 models pass forecasting, same-case H1parent preservation and proper
+interval-score criteria. **Four of five pass every gate. Seed99001 H4coverage is
+84.192562%, below the unchanged85%minimum: FULLGATEFAIL.** No rounding, favorable-
+seed selection, threshold change or further fits under this bounded protocol.
+
+Against complete frozen ME098parents on the exact same cases, mean point MSE
+improves1.14/1.52/2.08%; interval scores improve20.75/25.32/21.71%. However,
+interval widths increase44.97/47.41/52.60%. This repairs some underdispersion,
+not sharper intervals. JointNLL improves(-6.61269to-6.78332percoordinate) but
+still loses to the FIT-moment reference(-6.89786). No uniformly improved
+calibration, architectural superiority or independent intelligence claim.
+
+### What is mathematically engineered
+
+Explicit observed state:88prefix values,8x8associative memory and count. The
+input-conditioned write schedule remains independent of its memory read, allowing
+ordered affine scan; fast/slow maps refine the retrieved representation. These
+are the consolidated parallel graph's actual semantics, not a claim of lossless
+conversion of the original nonlinear DIAGKEYrecurrence.
+
+Future mean: x(h)=x0+g_h(r)v0+(h-g_h(r))u, g_h=sum(r^j). Its fixed-coefficient
+flow composes exactly; bounded retention gives a velocity-deviation bound. A
+shared innovation-response Gram yields a valid exact-real scale matrix. A latent
+uncertainty regime preserves horizon marginal consistency. Future queries do
+not update observed-world evidence. No future neural rollout is needed; observed
+conditioning can be reused for multiple horizon requests.
+
+[PNDS PR10](https://github.com/FPC-effortless/pnds-lean/pull/10) and
+[PR11](https://github.com/FPC-effortless/pnds-lean/pull/11) contain compiled Lean
+semigroup/stability/Gram and conditional CDF-mixture statements, typed interfaces,
+source-pinned Python equations and independent actual-source FP32/FP64/mask/
+gradient checks. StandardLean axioms are audited; no sorry. All5ME099fitted models
+also pass actual-FIT reference checks. Full concrete NN/IEEE refinement,
+probabilistic calibration and hardware throughput remain OPEN. Kernel proofs
+and code tests do not establish empirical capability.
+
+### Evidence scope and integrity
+
+Same source revision7a752b39f7e69de7e38aee485a6bab07528a061a, publisherApache-2.0,
+parquetSHAa3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a.
+59FITepisodes;13previously exposedDEVepisodes/104windows, prefixes1..64,
+19,968window-target positions permodel. Overlap and seeds do not create additional
+independent episodes. No TEST scoring in these studies. Currentunits are recorded
+frames and standardized state, not qualified elapsed-time/SI forecasting.
+
+Five ME098originals freeze36e8371b before scoresde167f43; five ME099originals
+freeze12d72fde before scoresa2e58687. All weights/optimizer/RNG/schedules/live
+parameter receipts/raw probabilistic forecasts and episode scores remain inGit.
+Independent original replay40165990316(ME098) and40166817604(ME099)PASS.
+962local tests PASS on the ME099 branch. The two new studies total10original fits.
+ME099oldcore lineage1,280updates versus768forME098; no equal-training-compute
+architecture win. Validated honest scorecards report MIXED_TRADEOFF, not
+independent gain. Earlier ME096archive-order and ME095interruption records remain.
+
+### Prioritized next ideas — proposals, not implemented gains
+
+1. **Learned nonnegative future-noise envelopes.** Permit middle-horizon process
+   uncertainty to vary through a response factor while preserving PSD and horizon
+   consistency. The remaining H4miss motivates the capability question, not a
+   proven mechanism. Freeze the next model and qualify on a genuinely new cohort;
+   do not continue tuning these13episodes until a threshold passes.
+2. **Authentic elapsed time, entities and corrections.** Extend the transition
+   law to real irregular observation clocks and stable entity histories. For
+   Enterprise/Temporal, build typed event-time/lifecycle heads on qualified real
+   logs; neither physical frames nor log endings prove workflow completion.
+3. **Reusable future-path queries and square-root kernels.** Implement coherent
+   trajectory-noise sampling that never overwrites observed evidence; investigate
+   factor-space/QR likelihoods and hardware-aware chunk kernels under the same
+   numerical/gradient contract. Current graph work/depth is analyzed, but custom
+   GPU fusion, edge latency and actual action selection are not established.
+
+Useful independent predictive state, real action consequences, authority-safe
+Woyengi integration, customer benefit and commercial qualification remain separate
+open goals. All original17historical mappings and the six-family identity remain.
+No draft was merged or model promoted.
+
+
+
 ## Current shared-core capability update — ME097 (2026-10-25)
 
 **One shared parallel/streaming architecture; exactly six active families.**
