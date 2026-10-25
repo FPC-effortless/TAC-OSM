@@ -210,7 +210,7 @@ def report():
         }
 
     gap_origins, gap_truth, gap_observed = cohort_inputs['gap']
-    bootstrap = {recipe: _bootstrap_gap_delta(recipe, f102, f101['gap_truth'],
+    bootstrap = {recipe: _bootstrap_gap_delta(recipe, {**{k: f102[k] for k in f102.files}, **{k: f101[k] for k in f101.files}}, f101['gap_truth'],
                                                 f101['gap_observed'].astype(bool), gap_origins)
                  for recipe in RECIPES}
     summary = {
