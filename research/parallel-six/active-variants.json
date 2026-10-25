@@ -1,0 +1,350 @@
+{
+  "schema": "tac_osm.pnds.parallel_six.v1",
+  "created": "2026-10-25",
+  "purpose": "Six prospective model families sharing native-derived parallel/streaming information core; historical research retained without scientific promotion",
+  "canonical": {
+    "implementation": "FPC-effortless/TAC-OSM",
+    "mathematics": "FPC-effortless/pnds-lean"
+  },
+  "governance": {
+    "active_model_count": 6,
+    "legacy_variants_indexed": 17,
+    "archive_append_only": true,
+    "original_checkpoints_unchanged": true,
+    "all_six_trained": false,
+    "full_lean_formalization_complete": false,
+    "real_world_superiority_established": false,
+    "production_authorized": false,
+    "parameter_min": 95000,
+    "parameter_max": 105000,
+    "comparator_relative_parameter_gap_max": 0.01,
+    "training_data_and_compute_match_required": true,
+    "cpu_wallclock_parity_required": false
+  },
+  "shared_core": {
+    "id": "TAC-PARALLEL-DUAL-MODE-V1.7",
+    "status": "experimental_unqualified",
+    "architecture": "causal input-only evidence, provisional fast/slow, read-before-write 8x8 keyed matrix affine prefix with parallel Blelloch scan + fixed-state streaming",
+    "batch": "src/tac_osm/variants/parallel_continuous_world.py",
+    "stream": "src/tac_osm/variants/streaming_continuous_world.py",
+    "memory": "src/tac_osm/variants/parallel_affine_memory.py",
+    "conditional_retention": "src/tac_osm/variants/retention_controlled_world.py",
+    "source_branch": "research/native-math-audit-to-ssm-rigor-2026-10-24",
+    "source_commit": "2b5e9104ad070fc4d8541c2ad3ccc0749b627012",
+    "mathematical_counterpart": "foundation/v1/DUAL_MODE_STREAMING_V1_5.md",
+    "fast_state_width": 88,
+    "memory_shape": [
+      8,
+      8
+    ],
+    "stream_fp32_scalar_count": 152,
+    "per_sample_stream_FP32_bytes_excluding_counter_and_weights": 608,
+    "ordered_affine_scan": "O(T) fixed-dimension work, O(log T) theoretical depth",
+    "step_memory_work": "O(8^2) per event",
+    "limits": [
+      "source original nonlinear native state is not fully scan equivalent",
+      "fixed-size state is not infinite retention or intelligence",
+      "dynamic entity replacement does not automatically commute/scan",
+      "authentic ALOHA DEV timescale/retention variants did not improve outcome and equal training FLOPs not certified"
+    ]
+  },
+  "active_models": [
+    {
+      "id": "system1",
+      "name": "TAC-System1",
+      "role": "reactive observed-state risk/prediction",
+      "adapter": "src/tac_osm/variants/system1.py",
+      "core_id": "TAC-PARALLEL-DUAL-MODE-V1.7",
+      "core_execution_modes": [
+        "causal_parallel_batch",
+        "fixed_state_stream"
+      ],
+      "head_and_data_qualification": "OPEN",
+      "training_and_deployment_status": "UNTRAINED_ON_THIS_CONSOLIDATED_FAMILY",
+      "required_work": "task-specific risk classification and action labels OPEN",
+      "historical_sources": [
+        "CORE-DIAGKEY004",
+        "SYSTEM1-ME076",
+        "SYSTEM1-ME077A",
+        "SYSTEM1-ME079",
+        "QUAL-001"
+      ]
+    },
+    {
+      "id": "physical",
+      "name": "TAC-Physical",
+      "role": "action-conditioned real physical/multiagent states",
+      "adapter": "src/tac_osm/variants/physical.py",
+      "core_id": "TAC-PARALLEL-DUAL-MODE-V1.7",
+      "core_execution_modes": [
+        "causal_parallel_batch",
+        "fixed_state_stream"
+      ],
+      "head_and_data_qualification": "OPEN",
+      "training_and_deployment_status": "UNTRAINED_ON_THIS_CONSOLIDATED_FAMILY",
+      "required_work": "real observed next-state pilot exists, multiagent entity memory integration OPEN",
+      "historical_sources": [
+        "CORE-DIAGKEY004",
+        "PHYSICAL-ME080",
+        "PHYSICAL-ME094",
+        "PHYSICAL-ME095",
+        "ESWAM-ESWAM010",
+        "ESWAM-ESWAM012",
+        "ESWAM-ESWAM013",
+        "ESWAM-ESWAM014",
+        "QUAL-001"
+      ]
+    },
+    {
+      "id": "enterprise",
+      "name": "TAC-Enterprise",
+      "role": "event, duration and process-state prediction",
+      "adapter": "src/tac_osm/variants/enterprise.py",
+      "core_id": "TAC-PARALLEL-DUAL-MODE-V1.7",
+      "core_execution_modes": [
+        "causal_parallel_batch",
+        "fixed_state_stream"
+      ],
+      "head_and_data_qualification": "OPEN",
+      "training_and_deployment_status": "UNTRAINED_ON_THIS_CONSOLIDATED_FAMILY",
+      "required_work": "categorical event/duration distribution from shared scan core OPEN",
+      "historical_sources": [
+        "CORE-DIAGKEY004",
+        "ENTERPRISE-ME069",
+        "ENTERPRISE-ME073",
+        "QUAL-001"
+      ]
+    },
+    {
+      "id": "temporal",
+      "name": "TAC-Temporal",
+      "role": "bitemporal versioned evidence and delayed corrections",
+      "adapter": "src/tac_osm/variants/temporal.py",
+      "core_id": "TAC-PARALLEL-DUAL-MODE-V1.7",
+      "core_execution_modes": [
+        "causal_parallel_batch",
+        "fixed_state_stream"
+      ],
+      "head_and_data_qualification": "OPEN",
+      "training_and_deployment_status": "UNTRAINED_ON_THIS_CONSOLIDATED_FAMILY",
+      "required_work": "valid-time/record-time causal data encoding and replay under scan OPEN",
+      "historical_sources": [
+        "CORE-DIAGKEY004",
+        "TEMPORAL-V1",
+        "QUAL-001"
+      ]
+    },
+    {
+      "id": "edge_lite",
+      "name": "TAC-Edge",
+      "role": "deployment on measured resource constrained hardware",
+      "adapter": "src/tac_osm/variants/edge_lite.py",
+      "core_id": "TAC-PARALLEL-DUAL-MODE-V1.7",
+      "core_execution_modes": [
+        "causal_parallel_batch",
+        "fixed_state_stream"
+      ],
+      "head_and_data_qualification": "OPEN",
+      "training_and_deployment_status": "UNTRAINED_ON_THIS_CONSOLIDATED_FAMILY",
+      "required_work": "parallel-stream export, quantization and real device benchmarking OPEN",
+      "historical_sources": [
+        "CORE-DIAGKEY004",
+        "EDGE-V1",
+        "QUAL-001"
+      ]
+    },
+    {
+      "id": "counterfactual",
+      "name": "TAC-Counterfactual",
+      "role": "observed-action scenarios and decision cost",
+      "adapter": "src/tac_osm/variants/counterfactual.py",
+      "core_id": "TAC-PARALLEL-DUAL-MODE-V1.7",
+      "core_execution_modes": [
+        "causal_parallel_batch",
+        "fixed_state_stream"
+      ],
+      "head_and_data_qualification": "OPEN",
+      "training_and_deployment_status": "UNTRAINED_ON_THIS_CONSOLIDATED_FAMILY",
+      "required_work": "causal identification/intervention and policy head OPEN",
+      "historical_sources": [
+        "CORE-DIAGKEY004",
+        "COUNTERFACTUAL-V1",
+        "QUAL-001"
+      ]
+    }
+  ],
+  "archival_policy": {
+    "tac_historical_registry": "research/pnds-variant-math-links.json",
+    "pnds_historical_registry": "foundation/v1/registry.json",
+    "pnds_math_links": "foundation/v1/variant-math-links.json",
+    "pnds_open_archive_gaps": "foundation/v1/archive-gaps.json",
+    "keep_prior_draft_prs": true,
+    "never_rewrite_original_results": true,
+    "never_delete_original_checkpoints": true
+  },
+  "historical_crosswalk": [
+    {
+      "historical_id": "CORE-DIAGKEY004",
+      "source_commit": "081e534a074001c6a3b2251b3ff31ad20ec4fca8",
+      "evidence_status": "gate_pass_with_numeric_exception",
+      "archived_lane": "core",
+      "active_families": [
+        "system1",
+        "physical",
+        "enterprise",
+        "temporal",
+        "edge_lite",
+        "counterfactual"
+      ]
+    },
+    {
+      "historical_id": "SYSTEM1-ME076",
+      "source_commit": "9690bba1e226a8bc0de139dadb6225933e322875",
+      "evidence_status": "failed_practical_baseline",
+      "archived_lane": "system1",
+      "active_families": [
+        "system1"
+      ]
+    },
+    {
+      "historical_id": "SYSTEM1-ME077A",
+      "source_commit": "971f302f2cfb5d2f43c02884f111ebbacf2bff62",
+      "evidence_status": "mixed_tradeoff",
+      "archived_lane": "system1",
+      "active_families": [
+        "system1"
+      ]
+    },
+    {
+      "historical_id": "SYSTEM1-ME079",
+      "source_commit": "40433af2493e6c64f254e5ef49d3eedac448c5da",
+      "evidence_status": "qualified_architecture_superiority_not_shown",
+      "archived_lane": "system1",
+      "active_families": [
+        "system1"
+      ]
+    },
+    {
+      "historical_id": "PHYSICAL-ME080",
+      "source_commit": "afea4dd91830e32c3aec8881d5213e52d853dc2d",
+      "evidence_status": "mixed_tradeoff",
+      "archived_lane": "physical",
+      "active_families": [
+        "physical"
+      ]
+    },
+    {
+      "historical_id": "PHYSICAL-ME094",
+      "source_commit": "f1d5fd08cb89044a1838eddc55315ab11e7085f6",
+      "evidence_status": "full_predictive_gate_failed",
+      "archived_lane": "physical",
+      "active_families": [
+        "physical"
+      ]
+    },
+    {
+      "historical_id": "PHYSICAL-ME095",
+      "source_commit": "f1d5fd08cb89044a1838eddc55315ab11e7085f6",
+      "evidence_status": "training_result_unverified",
+      "archived_lane": "physical",
+      "active_families": [
+        "physical"
+      ]
+    },
+    {
+      "historical_id": "ENTERPRISE-ME069",
+      "source_commit": "65a41dd9b8aa34bc29a570e72c9c7117abcbf74d",
+      "evidence_status": "failed_matched_gru",
+      "archived_lane": "enterprise",
+      "active_families": [
+        "enterprise"
+      ]
+    },
+    {
+      "historical_id": "ENTERPRISE-ME073",
+      "source_commit": "166d60d8d897f1f8be5f48410e7d90b8af46048c",
+      "evidence_status": "capability_only_no_matched_neural_comparator",
+      "archived_lane": "enterprise",
+      "active_families": [
+        "enterprise"
+      ]
+    },
+    {
+      "historical_id": "TEMPORAL-V1",
+      "source_commit": "a09b9e21c91cb6c8ed96d5846545aeffe63b3e01",
+      "evidence_status": "no_trained_model",
+      "archived_lane": "temporal",
+      "active_families": [
+        "temporal"
+      ]
+    },
+    {
+      "historical_id": "EDGE-V1",
+      "source_commit": "a09b9e21c91cb6c8ed96d5846545aeffe63b3e01",
+      "evidence_status": "unqualified_hardware",
+      "archived_lane": "edge",
+      "active_families": [
+        "edge_lite"
+      ]
+    },
+    {
+      "historical_id": "COUNTERFACTUAL-V1",
+      "source_commit": "a09b9e21c91cb6c8ed96d5846545aeffe63b3e01",
+      "evidence_status": "causal_identification_not_shown",
+      "archived_lane": "counterfactual",
+      "active_families": [
+        "counterfactual"
+      ]
+    },
+    {
+      "historical_id": "ESWAM-ESWAM010",
+      "source_commit": "14e8686ad78b1081532f2735bb98b31d24a8eb7e",
+      "evidence_status": "partial_formalization",
+      "archived_lane": "eswam",
+      "active_families": [
+        "physical"
+      ]
+    },
+    {
+      "historical_id": "ESWAM-ESWAM012",
+      "source_commit": "d9db3a0ac68d2bbabe3febe6cfe3d40bf322ea1d",
+      "evidence_status": "mixed_tradeoff",
+      "archived_lane": "eswam",
+      "active_families": [
+        "physical"
+      ]
+    },
+    {
+      "historical_id": "ESWAM-ESWAM013",
+      "source_commit": "cfb2e25cb87112281243dcc48e5ebd4d52c88d83",
+      "evidence_status": "stationarity_gate_failed",
+      "archived_lane": "eswam",
+      "active_families": [
+        "physical"
+      ]
+    },
+    {
+      "historical_id": "ESWAM-ESWAM014",
+      "source_commit": "3117a77ee57d3aca4d7cc27c691ac46d6f7fca7c",
+      "evidence_status": "low_speed_gate_failed",
+      "archived_lane": "eswam",
+      "active_families": [
+        "physical"
+      ]
+    },
+    {
+      "historical_id": "QUAL-001",
+      "source_commit": "01735e2929449b949db9c83da53fce51e75fd88b",
+      "evidence_status": "observational_diagnostic_only",
+      "archived_lane": "qualification",
+      "active_families": [
+        "system1",
+        "physical",
+        "enterprise",
+        "temporal",
+        "edge_lite",
+        "counterfactual"
+      ]
+    }
+  ]
+}
