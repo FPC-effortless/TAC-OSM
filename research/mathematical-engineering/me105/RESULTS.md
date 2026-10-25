@@ -111,3 +111,7 @@ plus72 model-buffer bytes. The registered736-byte value is an inherited budget
 convention, not measured total runtime memory. Python metadata, parameter-version
 tuples, allocator, activations and weights are separate. STATE_PAYLOAD.json
 supersedes the loose initial MATHEMATICS.md includes-buffers wording.
+
+Update: original-score GitHub replay40216493230 completed successfully on
+commitd2a8bc96. Allsource/model/score/fitted-graph/summary steps passed. This is
+reproducibility PASS, not predictive full qualification.
