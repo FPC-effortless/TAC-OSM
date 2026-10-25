@@ -18,6 +18,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy
       - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me096/FAIR_COMPARISON.json --phase preflight
       - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me096/POSTFIT.json --phase final
       - run: python scripts/audit_shared_evidence_originals.py me096
