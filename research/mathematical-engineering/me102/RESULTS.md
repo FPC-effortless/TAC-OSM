@@ -67,3 +67,16 @@ Original artifacts: `research/replay-bundles/ME102/`. Replay command:
 `PYTHONPATH=src:. python scripts/me102_reconstruction_panel.py replay`.
 Run `me102_panel_summary.py` and `me102_source_receipt.py` for saved-score and
 publisher-row audits. These commands do not train or overwrite original scores.
+
+## Original artifact restoration
+
+A separate clean detached checkout of93ecebd41122b15be5957f87d4d72d37e71d0e59
+reloaded every original model, recomputed all fifteen model scores and gates,
+replayed the panel summary and publisher-row labels, and repeated all30dtype
+fitted graph checks successfully. No retraining or checkpoint changes.
+[Independent GitHub original15 score replay40189256081](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40189256081)
+passed. Expanded graph/summary/source workflow40189416852 was still running when
+this receipt was written; its final status is independently inspectable.
+`SHA256SUMS` covers all67payload files including15original checkpoints.
+The capability scorecard declares TRAINED_REPLAY_VERIFIED with mixed trade-offs
+and a failed full gate; its structural validator is not a scientific-gain test.

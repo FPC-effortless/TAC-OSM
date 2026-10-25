@@ -1,0 +1,795 @@
+{
+  "schema_version": "tac-osm.capability-progress.v1",
+  "study_id": "ME102-RECONSTRUCTION-PANEL",
+  "tier": "TRAINED_REPLAY_VERIFIED",
+  "outcome": "FAIL",
+  "claim_type": "capability development; descriptive complete-training-recipe panel; no architecture superiority claim",
+  "what_improved": "Mean gap coverage and gap six-channel likelihood improve in all three recipes vs historical ME101; light_floor and physical_score improve mean PM2.5 interval score. All15 originals replay.",
+  "what_regressed": "Every recipe worsens mean gap and ordinary PM2.5 point error vs ME101; strong_reconstruction worsens mean interval score. Full-gate seeds2/5,2/5,1/5 respectively; no recipe passes every seed.",
+  "what_remains_unknown": "Independent qualification, combined point/uncertainty reliability, memory attribution, whole-neural/IEEE proof, embedded hardware and customer utility remain unverified. Protected2016\u20132017 not scored.",
+  "source": {
+    "authentic_real_data": true,
+    "exposure": "EXPOSED_DEV",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "eligible_ids_sha256": "981a65ae81f4162dac2f7a4769a8b189df29f986a1e1e38691dd24e9027386d1",
+    "source_name": "UCI501 BeijingMultiSite",
+    "license": "CC-BY-4.0",
+    "cohort_hashes": {
+      "gap": {
+        "query_count": 143,
+        "truth_sha256": "905d09f383181f9250c42927a10bb0c9783f03028d20dbb585db70ccf0191b61"
+      },
+      "general": {
+        "query_count": 4288,
+        "truth_sha256": "b0b0bd27ab072661cb55dc8309159cdf26171e55338a17fe4a79474634a9a8f4"
+      }
+    },
+    "protected_2016_2017_scored": false,
+    "holdout_unopened_before_freeze": false,
+    "split_hashes": {
+      "fit": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "exposed_2015_dev": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "protected_2016_2017": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+    }
+  },
+  "task": {
+    "prediction_time_validated": true,
+    "independent_cases": 53,
+    "actual_future_targets": 53,
+    "target": "Actual six-channel pollutant observations at the registered six-hour forecast target. Query counts are 143 gap queries and 4,288 general queries; independent cluster units are 21 gap and 53 ordinary/global-week clusters, which overlap and are not summed or treated as IID queries.",
+    "query_and_horizon": "Six-hour-ahead forecasts for six actual Beijing Multi-Site pollutant channels, using the registered masked inputs and supplied station identities; exposed 2015 cohorts only.",
+    "same_case_ids_target_horizon_metric": true,
+    "independent_cluster_units": {
+      "gap": 21,
+      "ordinary": 53,
+      "overlap": "overlapping cohorts; do not add to 74"
+    },
+    "actual_query_counts": {
+      "gap": 143,
+      "ordinary": 4288
+    },
+    "cluster_independence_caveat": "53 distinct calendar-week resampling units, not proven independent;21gapweeks are a subset. No independent gain claimed."
+  },
+  "model": {
+    "prior_sha256": "bacb93eb1874f8433d94031c2f09c95b520358b73ce2826f269c38cd32482024",
+    "candidate_sha256": "c90449b06d7328534aaf23479629f0b8f7a8c2888fa0be1435996dc2e40ebe95",
+    "original_old_checkpoint_path": "research/replay-bundles/ME101/seed-101001/final.pt",
+    "original_new_checkpoint_path": "research/replay-bundles/ME102/light_floor/seed-102001/final.pt",
+    "original_trainable_parameters": 97259,
+    "new_trainable_parameters": 98495,
+    "candidate_sha_role": "Fixed representative first light_floor seed (102001), chosen by recipe/seed order, not by best score; panel summary below carries all 15 checkpoint hashes.",
+    "training_exposure_and_compute_note": "15 original ME102 fits; three fixed recipes x five shared seed indices; 1,536 updates x batch 16 per model (24,576 examples per model), no extra tuning. ME101 references are seed-index mappings, not same initialization or matched training budgets; no architecture or data-efficiency claim.",
+    "panel_checkpoints": [
+      {
+        "recipe": "light_floor",
+        "seed": 102001,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/light_floor/seed-102001/final.pt",
+        "candidate_sha256": "c90449b06d7328534aaf23479629f0b8f7a8c2888fa0be1435996dc2e40ebe95",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.04597176,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101001/final.pt",
+        "mapped_ME101_reference_sha256": "bacb93eb1874f8433d94031c2f09c95b520358b73ce2826f269c38cd32482024",
+        "ME102_gap_PM_MAE": 37.14024353027344,
+        "ME102_gap_PM90_coverage": 0.8531468531468531,
+        "ME102_gap_density_NLL": 5.148063356636544,
+        "ME102_gap_PM_interval_score": 203.7550811767578,
+        "ME102_general_daily_PM_MAE": 36.105525970458984,
+        "full_gate": {
+          "recipe": "light_floor",
+          "seed": 102001,
+          "gates": {
+            "coverage": false,
+            "gap_point": false,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102001,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/strong_reconstruction/seed-102001/final.pt",
+        "candidate_sha256": "a6099c6312615b6779b7fca890b8e8e96230df64c116929f5cc390db28ae8f51",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.836138199000004,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101001/final.pt",
+        "mapped_ME101_reference_sha256": "bacb93eb1874f8433d94031c2f09c95b520358b73ce2826f269c38cd32482024",
+        "ME102_gap_PM_MAE": 37.181060791015625,
+        "ME102_gap_PM90_coverage": 0.958041958041958,
+        "ME102_gap_density_NLL": 5.1385217965707275,
+        "ME102_gap_PM_interval_score": 316.6395263671875,
+        "ME102_general_daily_PM_MAE": 34.38127517700195,
+        "full_gate": {
+          "recipe": "strong_reconstruction",
+          "seed": 102001,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "density": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102001,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/physical_score/seed-102001/final.pt",
+        "candidate_sha256": "c727e348ed3f10ed083717904de70fc86805df680af4458888d65f67e0a6d35e",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.396303371,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101001/final.pt",
+        "mapped_ME101_reference_sha256": "bacb93eb1874f8433d94031c2f09c95b520358b73ce2826f269c38cd32482024",
+        "ME102_gap_PM_MAE": 43.19456100463867,
+        "ME102_gap_PM90_coverage": 0.916083916083916,
+        "ME102_gap_density_NLL": 5.179689063122992,
+        "ME102_gap_PM_interval_score": 240.58676147460938,
+        "ME102_general_daily_PM_MAE": 34.2056770324707,
+        "full_gate": {
+          "recipe": "physical_score",
+          "seed": 102001,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "density": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "light_floor",
+        "seed": 102002,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/light_floor/seed-102002/final.pt",
+        "candidate_sha256": "c509c1afff25227e2ac50f2db991e34da91b87ecca318ee971fb1d13c5a4310a",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 58.763680284,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101002/final.pt",
+        "mapped_ME101_reference_sha256": "1b0d8fed78206078f27c199375b6f0b366b5205b13096dc2614e8a72b7db646c",
+        "ME102_gap_PM_MAE": 40.89167785644531,
+        "ME102_gap_PM90_coverage": 0.8601398601398601,
+        "ME102_gap_density_NLL": 5.1519104985795785,
+        "ME102_gap_PM_interval_score": 242.2401123046875,
+        "ME102_general_daily_PM_MAE": 36.27864074707031,
+        "full_gate": {
+          "recipe": "light_floor",
+          "seed": 102002,
+          "gates": {
+            "coverage": false,
+            "gap_point": false,
+            "daily_point": false,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102002,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/strong_reconstruction/seed-102002/final.pt",
+        "candidate_sha256": "952f2896d5ec900e28edccd7ffca797876f0402668b34e35335e8cfcfb72ecec",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.36557885799999,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101002/final.pt",
+        "mapped_ME101_reference_sha256": "1b0d8fed78206078f27c199375b6f0b366b5205b13096dc2614e8a72b7db646c",
+        "ME102_gap_PM_MAE": 41.265052795410156,
+        "ME102_gap_PM90_coverage": 0.958041958041958,
+        "ME102_gap_density_NLL": 5.119864864462226,
+        "ME102_gap_PM_interval_score": 307.8075866699219,
+        "ME102_general_daily_PM_MAE": 34.96449279785156,
+        "full_gate": {
+          "recipe": "strong_reconstruction",
+          "seed": 102002,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "density": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102002,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/physical_score/seed-102002/final.pt",
+        "candidate_sha256": "b028f9d531c69fb9b76211b6151b3329e7a50ffb5069addf4575138d342c9241",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.751893611000014,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101002/final.pt",
+        "mapped_ME101_reference_sha256": "1b0d8fed78206078f27c199375b6f0b366b5205b13096dc2614e8a72b7db646c",
+        "ME102_gap_PM_MAE": 46.613712310791016,
+        "ME102_gap_PM90_coverage": 0.9440559440559441,
+        "ME102_gap_density_NLL": 5.174044433006873,
+        "ME102_gap_PM_interval_score": 201.0395965576172,
+        "ME102_general_daily_PM_MAE": 34.82905960083008,
+        "full_gate": {
+          "recipe": "physical_score",
+          "seed": 102002,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "light_floor",
+        "seed": 102003,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/light_floor/seed-102003/final.pt",
+        "candidate_sha256": "ec754d046f8f56db4c761b931f14696834b390f6d0257de735da32ff85fac830",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 58.357609467,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101003/final.pt",
+        "mapped_ME101_reference_sha256": "874110393c0c0a0f26069c62d3cac87b9fd11f2f01a1bb8eed7ce48935291e6a",
+        "ME102_gap_PM_MAE": 38.16490936279297,
+        "ME102_gap_PM90_coverage": 0.8951048951048951,
+        "ME102_gap_density_NLL": 5.069782038129999,
+        "ME102_gap_PM_interval_score": 246.4641571044922,
+        "ME102_general_daily_PM_MAE": 32.899322509765625,
+        "full_gate": {
+          "recipe": "light_floor",
+          "seed": 102003,
+          "gates": {
+            "coverage": false,
+            "gap_point": false,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102003,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/strong_reconstruction/seed-102003/final.pt",
+        "candidate_sha256": "7ee91040216c5fe4eb2eb6d93a39a9d696af6ade14643d65cf8545bafc3fc166",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 58.850368891000016,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101003/final.pt",
+        "mapped_ME101_reference_sha256": "874110393c0c0a0f26069c62d3cac87b9fd11f2f01a1bb8eed7ce48935291e6a",
+        "ME102_gap_PM_MAE": 40.98948287963867,
+        "ME102_gap_PM90_coverage": 0.972027972027972,
+        "ME102_gap_density_NLL": 5.079604493654691,
+        "ME102_gap_PM_interval_score": 279.43951416015625,
+        "ME102_general_daily_PM_MAE": 33.109676361083984,
+        "full_gate": {
+          "recipe": "strong_reconstruction",
+          "seed": 102003,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "density": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102003,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/physical_score/seed-102003/final.pt",
+        "candidate_sha256": "161fba00d8328d7f2337e2192951ec8a88625df29ab0d18b916ea773320a4d1d",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.592598874999965,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101003/final.pt",
+        "mapped_ME101_reference_sha256": "874110393c0c0a0f26069c62d3cac87b9fd11f2f01a1bb8eed7ce48935291e6a",
+        "ME102_gap_PM_MAE": 44.4625358581543,
+        "ME102_gap_PM90_coverage": 0.9440559440559441,
+        "ME102_gap_density_NLL": 5.121112975848497,
+        "ME102_gap_PM_interval_score": 204.3951873779297,
+        "ME102_general_daily_PM_MAE": 32.223175048828125,
+        "full_gate": {
+          "recipe": "physical_score",
+          "seed": 102003,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "light_floor",
+        "seed": 102004,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/light_floor/seed-102004/final.pt",
+        "candidate_sha256": "cc391b9d25479b7143342162beab012477abe29598995f8cca4d088fe83b7912",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.98913897999995,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101004/final.pt",
+        "mapped_ME101_reference_sha256": "244a71547e24ddea7f34012b1f960c8120b581e2c24ba47f57b33a972868ebb9",
+        "ME102_gap_PM_MAE": 40.75869369506836,
+        "ME102_gap_PM90_coverage": 0.9090909090909091,
+        "ME102_gap_density_NLL": 5.257246309201393,
+        "ME102_gap_PM_interval_score": 214.78480529785156,
+        "ME102_general_daily_PM_MAE": 33.07760238647461,
+        "full_gate": {
+          "recipe": "light_floor",
+          "seed": 102004,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102004,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/strong_reconstruction/seed-102004/final.pt",
+        "candidate_sha256": "7731fcb7eaa13b10ef94c162b091707a4fabb23395a2dfc7b6055cdb8b7f6991",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.053129309999974,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101004/final.pt",
+        "mapped_ME101_reference_sha256": "244a71547e24ddea7f34012b1f960c8120b581e2c24ba47f57b33a972868ebb9",
+        "ME102_gap_PM_MAE": 41.43074417114258,
+        "ME102_gap_PM90_coverage": 0.965034965034965,
+        "ME102_gap_density_NLL": 5.215036085794663,
+        "ME102_gap_PM_interval_score": 359.6298522949219,
+        "ME102_general_daily_PM_MAE": 34.25325012207031,
+        "full_gate": {
+          "recipe": "strong_reconstruction",
+          "seed": 102004,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102004,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/physical_score/seed-102004/final.pt",
+        "candidate_sha256": "44f9e0b9554e02a4994f9fb5c734817941e47ce7d91444c2d2cac8f5a834ab5b",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.24592815099999,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101004/final.pt",
+        "mapped_ME101_reference_sha256": "244a71547e24ddea7f34012b1f960c8120b581e2c24ba47f57b33a972868ebb9",
+        "ME102_gap_PM_MAE": 43.475894927978516,
+        "ME102_gap_PM90_coverage": 0.9300699300699301,
+        "ME102_gap_density_NLL": 5.2083978669883235,
+        "ME102_gap_PM_interval_score": 238.40614318847656,
+        "ME102_general_daily_PM_MAE": 32.9259033203125,
+        "full_gate": {
+          "recipe": "physical_score",
+          "seed": 102004,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "light_floor",
+        "seed": 102005,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/light_floor/seed-102005/final.pt",
+        "candidate_sha256": "a844dd00087cbe731d7f0f063df1ba0a21fbd62859a5b7caab6a976a40476a2c",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 56.578807308999956,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101005/final.pt",
+        "mapped_ME101_reference_sha256": "cb1dc6e72cd6583ec2b9164ac67f50fdd175cb5522ef8923f8be774bd9c1e0ac",
+        "ME102_gap_PM_MAE": 36.95169448852539,
+        "ME102_gap_PM90_coverage": 0.9090909090909091,
+        "ME102_gap_density_NLL": 5.095976473452777,
+        "ME102_gap_PM_interval_score": 238.8105926513672,
+        "ME102_general_daily_PM_MAE": 33.17624282836914,
+        "full_gate": {
+          "recipe": "light_floor",
+          "seed": 102005,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102005,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/strong_reconstruction/seed-102005/final.pt",
+        "candidate_sha256": "84258e7cf3c2cfe279bfe843204a85a4f7577bcc35a92e6cde3ccbe3ff491338",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 57.686554272999956,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101005/final.pt",
+        "mapped_ME101_reference_sha256": "cb1dc6e72cd6583ec2b9164ac67f50fdd175cb5522ef8923f8be774bd9c1e0ac",
+        "ME102_gap_PM_MAE": 37.84960174560547,
+        "ME102_gap_PM90_coverage": 0.951048951048951,
+        "ME102_gap_density_NLL": 5.110271543017506,
+        "ME102_gap_PM_interval_score": 320.0132141113281,
+        "ME102_general_daily_PM_MAE": 32.773014068603516,
+        "full_gate": {
+          "recipe": "strong_reconstruction",
+          "seed": 102005,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102005,
+        "candidate_checkpoint_path": "research/replay-bundles/ME102/physical_score/seed-102005/final.pt",
+        "candidate_sha256": "72edc6bc485728e87cbbd7652cc97bf2af5440b07faf85db7bb711e52c1c91ef",
+        "candidate_trainable_parameters": 98495,
+        "candidate_updates": 1536,
+        "candidate_examples": 24576,
+        "candidate_training_flops_estimate": 1483140983296,
+        "candidate_cpu_seconds": 55.57271768200002,
+        "mapped_ME101_reference_checkpoint_path": "research/replay-bundles/ME101/seed-101005/final.pt",
+        "mapped_ME101_reference_sha256": "cb1dc6e72cd6583ec2b9164ac67f50fdd175cb5522ef8923f8be774bd9c1e0ac",
+        "ME102_gap_PM_MAE": 42.8643798828125,
+        "ME102_gap_PM90_coverage": 0.9370629370629371,
+        "ME102_gap_density_NLL": 5.20602713985556,
+        "ME102_gap_PM_interval_score": 223.9441375732422,
+        "ME102_general_daily_PM_MAE": 32.569454193115234,
+        "full_gate": {
+          "recipe": "physical_score",
+          "seed": 102005,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "density": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      }
+    ]
+  },
+  "integrity": {
+    "git_original_checkpoints": true,
+    "independent_clean_replay": true,
+    "independent_clean_replay_status": "PASS original15scores, summary, raw labels, fitted graph; no retraining",
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true,
+    "independent_raw_case_audit": false,
+    "raw_case_score_artifact_path": "research/replay-bundles/ME102/FORECASTS.npz",
+    "fit_index_path": "research/replay-bundles/ME102/FIT_INDEX.json",
+    "original_results_path": "research/replay-bundles/ME102/RESULTS.json",
+    "main_verification_required_before_tier_promotion": true,
+    "independent_clean_replay_commit": "93ecebd41122b15be5957f87d4d72d37e71d0e59"
+  },
+  "primary_comparison": {
+    "name": "Descriptive fixed-anchor gap density NLL; not a panel winner or independent gain",
+    "direction": "lower_is_better",
+    "prior": 5.988746759313098,
+    "candidate": 5.148063356636544,
+    "minimum_useful_gain": 0.0,
+    "paired_case_cluster_95ci_gain": null,
+    "paired_seed_count": 5,
+    "beneficial_seed_count": null,
+    "all_panel_per_seed_metrics_and_hashes_in": "model.panel_checkpoints",
+    "role": "descriptive secondary only; does not replace registered full gate"
+  },
+  "fixed_gates": {
+    "source_protocol": "research/mathematical-engineering/me102/FAIR_COMPARISON.json",
+    "all_15_scored_on_same_exposed_2015_cohorts": true,
+    "rules": [
+      {
+        "metric": "gap PM 90% coverage",
+        "criterion": "0.90 <= coverage <= 0.98",
+        "panel_status": "FAIL"
+      },
+      {
+        "metric": "gap PM MAE",
+        "criterion": "<= 1.05 * same-index ME101 seed context-256 PM MAE",
+        "panel_status": "FAIL"
+      },
+      {
+        "metric": "general daily PM MAE",
+        "criterion": "<= 1.05 * LOCF daily PM MAE",
+        "panel_status": "FAIL"
+      },
+      {
+        "metric": "gap density NLL",
+        "criterion": "<= 6.234504261016846",
+        "panel_status": "PASS_FOR_ALL15"
+      },
+      {
+        "metric": "gap PM interval score",
+        "criterion": "<= 1.05 * same-index ME101 seed context-256 PM interval score",
+        "panel_status": "FAIL"
+      }
+    ],
+    "all_recipe_all_seed_gates": {
+      "light_floor": false,
+      "strong_reconstruction": false,
+      "physical_score": false
+    },
+    "full_gate_per_model": [
+      {
+        "recipe": "light_floor",
+        "seed": 102001,
+        "gates": {
+          "coverage": false,
+          "gap_point": false,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102001,
+        "gates": {
+          "coverage": true,
+          "gap_point": false,
+          "daily_point": true,
+          "density": true,
+          "interval_score": false
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102001,
+        "gates": {
+          "coverage": true,
+          "gap_point": false,
+          "daily_point": true,
+          "density": true,
+          "interval_score": false
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "light_floor",
+        "seed": 102002,
+        "gates": {
+          "coverage": false,
+          "gap_point": false,
+          "daily_point": false,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102002,
+        "gates": {
+          "coverage": true,
+          "gap_point": false,
+          "daily_point": true,
+          "density": true,
+          "interval_score": false
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102002,
+        "gates": {
+          "coverage": true,
+          "gap_point": false,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "light_floor",
+        "seed": 102003,
+        "gates": {
+          "coverage": false,
+          "gap_point": false,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102003,
+        "gates": {
+          "coverage": true,
+          "gap_point": false,
+          "daily_point": true,
+          "density": true,
+          "interval_score": false
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102003,
+        "gates": {
+          "coverage": true,
+          "gap_point": false,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "light_floor",
+        "seed": 102004,
+        "gates": {
+          "coverage": true,
+          "gap_point": true,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": true
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102004,
+        "gates": {
+          "coverage": true,
+          "gap_point": true,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": true
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102004,
+        "gates": {
+          "coverage": true,
+          "gap_point": false,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": false
+      },
+      {
+        "recipe": "light_floor",
+        "seed": 102005,
+        "gates": {
+          "coverage": true,
+          "gap_point": true,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": true
+      },
+      {
+        "recipe": "strong_reconstruction",
+        "seed": 102005,
+        "gates": {
+          "coverage": true,
+          "gap_point": true,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": true
+      },
+      {
+        "recipe": "physical_score",
+        "seed": 102005,
+        "gates": {
+          "coverage": true,
+          "gap_point": true,
+          "daily_point": true,
+          "density": true,
+          "interval_score": true
+        },
+        "full_gate": true
+      }
+    ],
+    "all_five_seed_recipe_outcome": "FAIL for light_floor, strong_reconstruction, and physical_score"
+  },
+  "guardrails": [
+    {
+      "metric": "all three recipes pass every unchanged full gate for all five seeds",
+      "status": "FAIL"
+    },
+    {
+      "metric": "gap PM 90% coverage within registered [0.90, 0.98] for every model",
+      "status": "FAIL"
+    },
+    {
+      "metric": "gap PM MAE within 1.05 same-index ME101 reference for every model",
+      "status": "FAIL"
+    },
+    {
+      "metric": "general daily PM MAE within 1.05 LOCF for every model",
+      "status": "FAIL"
+    },
+    {
+      "metric": "gap density NLL <= 6.234504261016846 for every model",
+      "status": "PASS"
+    },
+    {
+      "metric": "gap PM interval score within 1.05 same-index ME101 reference for every model",
+      "status": "FAIL"
+    },
+    {
+      "metric": "protected 2016-2017 cohort remains closed",
+      "status": "PASS"
+    }
+  ],
+  "practical_reference_scored": true,
+  "independent_real_distributions": 0,
+  "study_notes": "Fixed15model panel, exposed2015 only; no selection or architecture win. Original-score/summary/raw-row/fitted-graph clean replay passed. GitHub original-score replay40189256081 passed; expanded math CI pending.",
+  "capability_outcome": "MIXED_TRADEOFF",
+  "decision": "FAIL",
+  "planned_primary": "Every seed meets gap coverage90\u201398% and all registered point/density/interval guardrails."
+}
