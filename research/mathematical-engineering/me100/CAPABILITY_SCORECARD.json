@@ -1,7 +1,7 @@
 {
   "schema_version": "tac-osm.capability-progress.v1",
   "study_id": "ME100-ENTITY-SENSOR",
-  "tier": "INCONCLUSIVE",
+  "tier": "TRAINED_REPLAY_VERIFIED",
   "claim_type": "new trained sensor-gap forecasting pilot; not independent architecture qualification",
   "what_improved": "Within-model long256 PM2.5 gap MAE38.9869 vs short8 46.0731; five-seed mean; all5 directional history gates pass",
   "what_regressed": "No overall gain: primary intervalcoverage67.69% below85; dailyPM MAE35.689>LOCF34.516; historyCI includeszero; all5 fullgates fail",
@@ -29,14 +29,14 @@
   },
   "integrity": {
     "git_original_checkpoints": true,
-    "independent_clean_replay": false,
+    "independent_clean_replay": true,
     "raw_case_scores_preserved": true,
     "registered_before_evaluation": true,
     "independent_raw_case_audit": false,
     "raw_case_score_artifact_path": "research/replay-bundles/ME100/FORECASTS.npz",
-    "independent_audit_run_url": "PENDING_FINAL_REPLAY"
+    "independent_audit_run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40173945086"
   },
   "practical_reference_scored": true,
   "independent_real_distributions": 0,
-  "study_notes": "Pending independent clean replay; no reliable intelligence increase or generality promotion. Five original models frozen1d721082 before firstREPORT scoring. Public source is not a private blinded trial."
+  "study_notes": "Original five models freeze1d721082 before REPORT scoreseca5f8ab; clean detached checkout and GitHub original replay PASS. Full gateFAIL all5; no reliable overall intelligence increase or architectural promotion. Public temporal pilot, not independent-site qualification."
 }

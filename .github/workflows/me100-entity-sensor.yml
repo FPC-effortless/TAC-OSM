@@ -28,6 +28,8 @@ jobs:
           if test -f research/replay-bundles/ME100/RESULTS.json; then
             python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me100/POSTFIT.json --phase final
             PYTHONPATH=src:. python scripts/me100_entity_sensor.py replay
+            PYTHONPATH=src:. python scripts/me100_fitted_graph_audit.py
+            python scripts/validate_capability_progress.py research/mathematical-engineering/me100/CAPABILITY_SCORECARD.json
           else
             echo 'ME100_REPLAY=BLOCKED original trained portfolio not yet available'
           fi
