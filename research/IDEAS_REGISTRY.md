@@ -604,3 +604,37 @@ registration before training; retain all original models and ME100 failed gates.
 Do not use the protected cohort for model selection. This is an unimplemented,
 untrained hypothesis with no gain promised. Geometry, CED and sparse lookup remain
 draft PR394 proposals, not prerequisites for this step.
+
+
+### ME101 / NEXT-SHARED-BELIEF — implemented and trained; MIXED_TRADEOFF
+
+TAC draft PR397 / PNDS draft PR13. Five fresh 97,259-parameter models; source-age
+belief variance marginalized through a conditional affine emission; unchanged
+native scan and 608-byte FP32 state. Ordinary PM2.5 MAE35.689→32.771 (8.18% lower),
+with lower ordinary mean error for all six pollutants. Gap PM2.5 MAE38.987→37.747,
+but gap density and interval scores worsen; coverage68.67% below85%. Full gate
+FAIL0/5. All originals frozen3752a98e before scores5430d4b1; clean/GitHub replay
+PASS40178388335; PNDS source/math PASS40177277628. 970 local tests. Protected
+2016–2017 unscored. No further ME101 fits or changed gates.
+
+### Capability idea queue — implemented advisory research workflow
+
+PR397 adds scripts/research_idea_queue.py, CAPABILITY_QUEUE.json and a fast-loop
+guide. It lists all preflight-valid registrations, excludes completed trials from
+next-fit candidates, recommends bounded concurrent compute and keeps missing future
+registrations distinct. It executes no fit or arbitrary shell. Live source, math,
+resource and data-access gates are separate; a queue entry is not authorization.
+Two lower-cost delegated tasks and two CPU fit workers were used in ME101; no
+speedup or dollar-saving claim. Attribution remains deferred.
+
+### NEXT-SHARED-BELIEF-LEARNING — proposed complete-model development
+
+ME101 did not establish calibrated missing-state beliefs. Consider jointly learning
+current-state representations and future outcomes, with authentic observed-label
+reconstruction and coherent uncertainty regimes. Any generated observation masking
+must be explicitly registered training augmentation over genuine labels, never
+sold as independent natural-gap evidence. Use a bounded FIT-only selection budget
+before the frozen complete-model study. Keep source-specific channel selection,
+multi-horizon sensor paths, typed enterprise event heads and optional useful CED
+in the shared queue. These are proposals, not new trained capabilities. Do not
+consume protected TEST in selection or rerun the failed ME101 protocol.

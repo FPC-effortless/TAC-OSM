@@ -1,5 +1,81 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-25 — ME101 integrated belief memory: forecasting gain, uncertainty failure
+
+[TAC draft PR397](https://github.com/FPC-effortless/TAC-OSM/pull/397) and
+[PNDS draft PR13](https://github.com/FPC-effortless/pnds-lean/pull/13) implement
+NEXT-SHARED-BELIEF within the existing Temporal family. Five fresh 97,259-parameter
+models train the complete native graph: masked source traces, associative memory,
+forecast decoder and source-aware conditional uncertainty. No attribution campaign
+or extra trained competitor was required for this capability-development cycle.
+Exactly six active model families remain; PNDS remains the mathematical foundation.
+
+The model declares a latent current-state variance conditioned on real observation
+age and admitted evidence mass. A diagonal conditional affine emission propagates
+that uncertainty into the same forecast distribution used for likelihood and
+quantiles. Strict positive future noise supplies positive marginal variance; a sum
+of PSD terms alone would not guarantee it. No extra persistent tensors are added:
+608 FP32 bytes plus separately counted integer/provenance/staleness/runtime memory.
+This is a model assumption, not identified Bayesian epistemic uncertainty or a
+proved posterior over truly missing current observations.
+
+| Exposed-2015 result, five-model mean | ME100 | ME101 |
+|---|---:|---:|
+| Ordinary PM2.5 MAE |35.689034|32.770872|
+| Natural-gap PM2.5 MAE |38.986917|37.747018|
+| Ordinary six-channel density NLL |5.010164|4.963346|
+| Natural-gap six-channel density NLL |5.769106|6.234504|
+| Ordinary PM2.5 proper interval score |228.490656|188.780493|
+| Natural-gap PM2.5 proper interval score |279.347305|301.220560|
+| Gap nominal90% coverage |67.69%|68.67%|
+
+Ordinary PM2.5 error improves 8.18%; ordinary mean errors improve for all six
+pollutants. All five new models beat ordinary LOCF, with mean error 5.06% lower;
+mean performance is approximately tied with FIT-only ridge. Gap PM2.5 error improves
+only 3.18% in the mean and three of five mapped parent comparisons regress. Gap
+coverage remains below the unchanged 85% gate; density and proper interval scores
+worsen. **Full capability gate FAIL: 0/5. Evidence tier MIXED_TRADEOFF.** The belief
+formula did not fix uncertainty. There is no overall intelligence, architecture,
+independent-site or company-deployment qualification.
+
+There are 4,288 daily queries in 53 calendar-week clusters and 143 gap queries in
+21 clusters. The within-model long-minus-short gap MAE interval is
+[-17.187783,-0.438010], conditional on the fitted models and already exposed cohort,
+without selection/multiplicity or retraining uncertainty. It is not independent
+confirmation. ME101 uses twice ME100's updates and a changed loss; no matched
+architecture/data-efficiency claim. FIT 2013–2014; protected 2016–2017 numerical
+outcomes remain closed.
+
+Original models/optimizers/RNGs/schedules/live receipts freeze3752a98e before
+scores5430d4b1. All five have 27 finite nonzero parameter-tensor gradients in the
+recorded check. 970 local tests pass, along with FP32/FP64 complete serial/parallel
+outputs/state/gradients and actual fitted-weight chunk checks. Clean original
+forecast, score and width replays PASS; [GitHub replay40178388335](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40178388335) PASS.
+[PNDS source/math40177277628](https://github.com/FPC-effortless/pnds-lean/actions/runs/40177277628)
+and build40177277596 PASS. Full-network IEEE refinement remains OPEN. Original
+artifacts and failed gates are directly repository-owned; both PRs remain drafts.
+
+### Faster capability engineering, without bypassing evidence
+
+The advisory capability queue and fast experiment loop are implemented in PR397.
+Two lower-cost delegated tasks handled mathematical review and the queue while the
+owner integrated and verified the model. At most two single-threaded CPU fit workers
+ran; no wall-clock speedup or billing claim is inferred. Independently registered
+studies may proceed in parallel; missing design registrations do not block others,
+and the queue itself never authorizes a fit or protected-data access.
+
+Prioritize complete-model bundles and bounded, registered FIT-only selection over
+repeated diagnostic studies. Next ideas include better conditional current-state
+representations, authentic observed-label reconstruction and coherent uncertainty
+regimes; source-specific channel representations and multi-horizon sensor paths;
+and typed event heads on qualified enterprise data. Geometry/CED remain possible
+later components when they serve an explicit useful capability, not mandatory
+attribution milestones. Selection ceilings, actual active parameters, source/math
+checks, original checkpoint freezing and independent replay remain compulsory.
+No further fits, interval inflation or changed gates are allowed under ME101.
+
+
+
 ## 2026-10-25 — ME100 source-aligned sensor world-state capability pilot
 
 [ME100 draft PR395](https://github.com/FPC-effortless/TAC-OSM/pull/395) and
