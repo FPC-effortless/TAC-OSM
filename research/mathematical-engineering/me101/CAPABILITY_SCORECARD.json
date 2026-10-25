@@ -1,7 +1,7 @@
 {
   "schema_version": "tac-osm.capability-progress.v1",
   "study_id": "ME101-BELIEF-SENSOR",
-  "tier": "INCONCLUSIVE",
+  "tier": "MIXED_TRADEOFF",
   "claim_type": "integrated capability development; same-task descriptive complete-system changes; not architecture superiority",
   "what_improved": "Daily6channelMAE improves; PM35.6890335 to32.7708725, all5seedparents improve. Mean gapPM38.9869 to37.7470 but3of5seeds regress.",
   "what_regressed": "All5 fullgatesFAIL;gapPM90coverage68.67%<85;gapdensityNLL5.769106 to6.234504;gapPMintervalscore279.3473 to301.2206. No verified uncertainty fix.",
@@ -32,12 +32,12 @@
   },
   "integrity": {
     "git_original_checkpoints": true,
-    "independent_clean_replay": false,
+    "independent_clean_replay": true,
     "raw_case_scores_preserved": true,
     "registered_before_evaluation": true,
     "independent_raw_case_audit": false,
     "raw_case_score_artifact_path": "research/replay-bundles/ME101/FORECASTS.npz",
-    "independent_audit_run_url": "PENDING"
+    "independent_audit_run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40178388335"
   },
   "primary_comparison": {
     "name": "Descriptive registered dailyPMguard statistic; secondary to failedprimary gapuncertaintygates",
@@ -73,5 +73,5 @@
   ],
   "practical_reference_scored": true,
   "independent_real_distributions": 0,
-  "study_notes": "Pending cleanoriginalreplay; fullprimarygate0/5. All original models freeze3752a98e beforeME101REPORT. Nochangedgates,fitsorTESTaccess."
+  "study_notes": "Complete original clean-checkout score, fittedgraph and sharpness replaysPASS. Fullprimarygate0/5; no newfits or changedgates. Parentseeds are mapped by index only, not identical initializations/schedules. Descriptive same-cohort daily gain is secondary to failed gapuncertainty. Source2015alreadyexposed;2016-2017closed."
 }
