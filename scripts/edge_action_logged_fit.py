@@ -73,7 +73,7 @@ def read_fit(path):
     ds=np.sqrt(np.mean(np.square(xz[:49,1:]-xz[:49,:-1]),axis=(0,1))).clip(.00001)
     raw_gain=(actions[:49,32:-1]-xs[:49,32:-1])
     raw_delta=xs[:49,33:]-xs[:49,32:-1]
-    servo=np.clip((raw_gain*raw_delta).sum((0,1))/(np.square(raw_gain).sum((0,1))+1e-12),0,1).astype(np.float32)
+    servo=np.clip((raw_gain*raw_delta).sum((0,1))/(raw_gain.square().sum((0,1))+1e-12),0,1).astype(np.float32)
     threshold=float(np.quantile(np.sqrt(np.mean(np.square(xz[:49,1:]-xz[:49,:-1]),-1)),.90))
     prep=dict(state_mean=xm,state_scale=xsd,action_mean=am,action_scale=asd,delta_scale=ds,servo_gain=servo,moving_threshold=threshold)
     return dict(xraw=xs,uraw=actions,xz=xz,uz=uz,episode_length=n,prep=prep)
@@ -207,27 +207,7 @@ def score(path,replay=False):
        note="Logged joint target means observational conditional-on-action only; no source independent outcome or causal effect")
     if replay:
         frozen=json.loads((OUT/"RESULTS.json").read_text())
-        # Metadata, cohort and gates must match exactly; floating aggregates
-        # may round slightly across CPU runners. Original file is NEVER changed.
-        def compare_replayed(original,computed,field="result"):
-            if isinstance(original,dict):
-                if not isinstance(computed,dict) or original.keys()!=computed.keys():
-                    raise RuntimeError(f"original replay field mismatch: {field}")
-                for key in original:
-                    compare_replayed(original[key],computed[key],field+"."+str(key))
-            elif isinstance(original,list):
-                if not isinstance(computed,list) or len(original)!=len(computed):
-                    raise RuntimeError(f"original replay list mismatch: {field}")
-                for i,(a,b) in enumerate(zip(original,computed)):
-                    compare_replayed(a,b,field+f"[{i}]")
-            elif type(original) is float:
-                if type(computed) is not float:
-                    raise RuntimeError(f"original replay numeric type mismatch: {field}")
-                np.testing.assert_allclose(computed,original,rtol=1e-5,atol=1e-9,
-                    err_msg=f"original replay numeric mismatch: {field}")
-            elif original!=computed:
-                raise RuntimeError(f"original replay metadata/gate mismatch: {field}")
-        compare_replayed(frozen,result)
+        if result!=frozen:raise RuntimeError("original score replay mismatch")
         np.testing.assert_allclose(np.stack(outputs),
             np.load(OUT/"FORECASTS.npz")["models"],rtol=1e-5,atol=1e-6)
         print("ORIGINAL_ACTION_QUERY_SCORE_REPLAY=PASS")
