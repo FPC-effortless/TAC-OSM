@@ -1,5 +1,97 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-25 — ME105: explicit neural graph, primary gap coverage recovered; full gate still fails
+
+[Draft TAC PR406](https://github.com/FPC-effortless/TAC-OSM/pull/406),
+[PNDS PR18](https://github.com/FPC-effortless/pnds-lean/pull/18),
+[original complete results](https://github.com/FPC-effortless/TAC-OSM/blob/research/me105-protected-belief-2026-10-25/research/mathematical-engineering/me105/RESULTS.md).
+This is completed capability-first architecture development and real training,
+not another diagnostic-only proposal. No merge, promotion or deployment.
+
+The input-to-output trace exposed two concrete issues: ME104 could reduce the
+inherited variance-floor amplitude sixteenfold, and median-preserving head
+initialization did not protect points during joint training. FIT-only autograd
+confirmed point loss DOES reach the inherited location network, but has zero
+direct width-head gradient; likelihood and interval losses share upstream paths,
+with batch-dependent conflicting directions. It did not establish a unique cause.
+
+New complete Temporal model: **100,349 trainable/deployed parameters,33 tensors**.
+A bounded median innovation, asymmetric widths that preserve the full FIT-derived
+source floor, and missing-channel scale >=80% of inherited scale. Old weights
+update at3e-6, four new head tensors at3e-4. All remain trainable and active.
+Parallel source/evidence/8x8 memory is retained, six active families unchanged.
+This does not train the other families or establish additional memory usefulness.
+
+Python independent serial equations reconstruct the entire network. New Lean
+`SensorGraph105` explicitly defines finite affine parameters, encoder, station
+lookup, chronological state, fast/slow proposals, controlled rank-one memory,
+pre-event/inclusive read paths, belief/reconstruction, protected forecast and
+parameterized probability-transform interfaces. It proves the100,349 scalar
+shape count. Together with ProtectedSensor,26 limited theorems build with only
+standard Lean axioms. Full PyTorch/gradient/IEEE refinement and Gaussian-law
+instantiation/normalization proofs remain OPEN; typed definitions are not those
+proofs. The full source is pinned at573f81cb, PNDS at52d65e76.
+
+**Fifteen original fits completed:** three fixed integrated objectives ×allfive
+ME103 strong parent lineages,1,536 freshAdamW updates each. These are warm-started
+lineages, not15 independent root initializations. Source/registration/math preceded
+training; allmodels/optimizer/RNG/receipts committed at640cafca BEFORE REPORT,
+original scores atd2a8bc96. No additional ME105 fits or threshold changes allowed.
+Same plans, augmentation masks, active size, profiled operator graph/dense FLOP
+estimates per seed; unsupported scalar/optimizer/hardware FLOPs remain partial.
+955.686 aggregate training CPU seconds, two one-thread workers; no cloud training.
+Old/new differ in size, objective and exposure, so no controlled architecture win.
+
+| Five-seed mean, original units | Gap PM2.5 MAE | Gap PM2.5 90% coverage | Gap six-channel NLL | Gap PM2.5 interval score | Ordinary PM2.5 MAE | Full seed gates |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| ME103 strong parents |37.5242|95.66%|5.1510|379.6232|33.4031|1/5 old gates|
+| likelihood |36.2703|95.24%|5.1371|403.5915|34.9623|0/5|
+| balanced |40.0881|94.69%|5.1491|260.6768|31.0666|2/5|
+| point_guard |39.0857|95.52%|5.1428|273.1647|31.1216|2/5|
+
+**All15 pass the primary PM2.5 coverage gate, versus0/15 in ME104. Full qualification
+still FAILS: no recipe passes allfive seeds.** Balanced improves ordinary point
+MAE7.00% and interval score31.33% vs parents, but gap point MAE worsens6.83%.
+Likelihood improves gap point MAE3.34%, but ordinary point error worsens4.67% and
+allfive miss the interval-score requirement. Four individual seeds pass allgates;
+favorable seeds do not override the allfive rule. Other pollutant coverage remains
+uneven/below90% for several channels. This is not a general calibration solution.
+All six-channel metrics, width tails, conditional week-bootstrap intervals and
+per-seed failures are preserved. No isolated attribution claim from joint changes.
+
+Authentic UCI501 CC-BY-4.0 archive SHA256
+`d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8`.
+FIT2013–2014; already exposed2015:143 gap queries/21 calendar-week clusters and
+4,288 ordinary queries/53 overlapping clusters. Protected2016–2017 numerical
+outcomes remain closed. These repeated development studies are not independent
+prospective evidence; no safety, policy benefit or general intelligence qualified.
+
+**Verification:**1,015 local Python tests,8 PNDS source tests,26 limited Lean
+proofs and all30 fitted FP32/64 source-vs-independent-reference graph/gradient/
+state/chunk/distribution checks PASS. Clean detached checkoutd2a8bc96 reproduces
+all15 scores/gates, all30 graph checks and publisher-row summaries without
+retraining.67 bundle payload SHA256 checks pass.
+[Original GitHub replay40216493230](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40216493230)
+PASS; PNDS fullbuild/source-math at52d65e76 PASS. Original raw median numerical
+max discrepancy0.000732422 units, within unchanged relative/absolute tolerances;
+not an absolute2e-6 whole-output guarantee. State audit:632B/sample state tensors
+(608 FP32+24 integer),72B model buffers separately, plus runtime metadata/weights/
+activations. Registered736B is an inherited allowance, not total runtime RAM.
+
+The bounded autoresearch cycle is now executable: trace FIT→implement full
+candidate/reference→register/freeze→parallel fixed fits→freeze originals→score→
+keep/reject→clean/GitHub replay. It adapts the method, not a claim to run external
+Karpathy software. All failed candidates remain visible; no endless DEV search.
+
+**Next substantial capability target:** separate median-learning and uncertainty-
+shaping gradient roles, then improve channel-specific calibration without losing
+source-gap coverage. These are prospective hypotheses, not implemented successes.
+EWA001/002's negative usefulness reranking and strong physical-velocity references
+remain preserved in the latest master plan; no unqualified cache is silently
+added to the sensor scan or represented as608B. Attribution remains secondary.
+
+---
+
 ## 2026-10-25 — EWA002 new real ALOHA task: cosine memory marginally helps velocity, usefulness weighting worsens, hash speed gate fails
 
 [PR405](https://github.com/FPC-effortless/TAC-OSM/pull/405) (draft research); [prescored protocol](https://github.com/FPC-effortless/TAC-OSM/blob/research/ewa002-velocity-residual-external-2026-10-25/research/mathematical-engineering/ewa002/PROTOCOL.md); [full actual results](https://github.com/FPC-effortless/TAC-OSM/blob/research/ewa002-velocity-residual-external-2026-10-25/research/mathematical-engineering/ewa002/RESULTS.md); [first successful external scoring CI40211321061](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40211321061), original scored artifact12605927072. Software/source/checkpoint PASS, scientific **full registered gate FAIL 0/5**.
