@@ -538,3 +538,21 @@ current clock phases. Real-source causality/gradient/stream/cache checks pass;
 training underway, no predictive result. Same fixed numerical gate, stricterfamily
 interval, no protected data or future commands. Extra known context/cost disclosed;
 not a controlled architecture win or proof that a particular memory block helps.
+
+
+### SHARED-EVIDENCE-ME097 — trained contextual retrieval candidate (2026-10-25)
+
+Status: EXPOSED_DEV_GATE_PASS; INDEPENDENT_QUALIFICATION_OPEN. TACPR391/PNDSPR9.
+One95,874parameter core shared by six family configurations; one physical lane
+trained. Separate context-conditioned query + direct retrieved correction;
+input-only affine schedule preserves scan/stream equivalence. Five original
+replication seeds clear5%whole/late persistence criteria and moving no-regression:
+meanMSE0.000301391vs0.000467679, moving0.001496158vs0.002507034. Original archive
+freeze1901d395 before scoresaaa58ad5; independent replay40163334508PASS.
+No component attribution, compute-matched architecture winner, independent-site,
+long-memory, control or customer utility claim. All10ME096/097 originals remain;
+ME096 archive-order exceptionBLOCKED, ME097 unchanged new-seed replication.
+ME0954completed+1interrupted/noREPORT retainedb30b5aaf; no hidden retries.
+Next capability: coherent multi-step outcomes/uncertainty and independently
+qualified source-supported delayed/identity-aware forecasting on this shared
+engine. Do not simply lengthen retention again. Full neural Lean refinement OPEN.

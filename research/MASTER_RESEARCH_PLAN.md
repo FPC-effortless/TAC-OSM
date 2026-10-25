@@ -1,4 +1,75 @@
 # TAC-OSM — Unified Master Research Plan
+
+
+## Current shared-core capability update — ME097 (2026-10-25)
+
+**One shared parallel/streaming architecture; exactly six active families.**
+System1, Physical, Enterprise, Temporal, Edge-Lite and Counterfactual use the same
+prospective core by configuration. PNDS is their mathematical authority, not a
+seventh model. [TAC #390](https://github.com/FPC-effortless/TAC-OSM/pull/390) and
+[PNDS #8](https://github.com/FPC-effortless/pnds-lean/pull/8) preserve the17 indexed
+historical mappings. Older "separate lanes" sections remain historical; they do
+not authorize duplicated memory engines or imply six independently trained heads.
+
+[Draft TAC #391](https://github.com/FPC-effortless/TAC-OSM/pull/391) develops one
+**95,874-parameter physical candidate** within that shared architecture: a causal
+context-conditioned retrieval query, original bounded input-only affine write
+schedule, and a direct retrieved-evidence prediction path. Valid masks preserve
+stored state; batch scan, carried chunks and streaming share equations. This is
+not another retention-only gate change, an SSM replacement or a seventh model.
+The new candidate meets95k–105k; the prior93,324parameter pilots are preserved
+as reported and are not retroactively treated as policy-compliant new fits.
+
+### Measured learned development capability
+
+ME097:5new original seeds,256updates each,59 authentic ALOHA FIT episodes;
+104previously exposed DEV windows from13episodes,64observations per window.
+Next-state standardized MSE **0.000301391 vs persistence0.000467679 (35.56% lower)**.
+Late-half MSE0.000261363vs0.000438049(40.33%lower); movement-rich MSE
+0.001496158vs0.002507034(40.32%lower), threshold from FIT90thpercentile.
+**Every seed passed** the preregistered5%whole/late improvement and no movement
+regression criteria. Originalweights/optimizer/RNG/schedules were committed at
+1901d395 BEFORE original scoringaaa58ad5. Clean-checkout local and independent
+[GitHub original replay40163334508](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40163334508)
+PASS. Full local suite947testsPASS. This is **DEV_GAIN**, not independent-site,
+long-memory, learned-rival superiority, causal control or customer intelligence.
+Window positions/seed repeats are not independent new episodes.
+
+Exact data revision7a752b39f7e69de7e38aee485a6bab07528a061a; publisher Apache-2.0,
+parquetSHAa3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a.
+Observed x[t] plus recorded action[t-1]; FIT-only normalization/scales. Original
+TEST periods were not scored. No controlled before/after architectural win is
+claimed: old93krecipes used different action alignment, windows and4×fewer updates.
+
+### Full audit trail and formal boundary
+
+ME096's5original models also passed numerical thresholds, but a sparse-checkout
+Git-add failure let scoring run before archive commit. **ME096 promotion BLOCKED**;
+all originals and exception preserved. ME097 was an openly registered unchanged
+replication with5NEWseeds and a hard committed-byte pre-score guard, not a hidden
+retry or changed criterion. Both5-fit sets count. ME097's initial self-hash loader
+path failed before any model/update; corrected and committed before first fit.
+ME095 remains **4completed originals+1interrupted after last1,024-step log**, no
+recoverable fifth model and no REPORT scoring; archived b30b5aaf inPR377. Earlier
+"ME095 running" entries below are historical; no silent retry or passed old gate.
+
+[PNDS #9](https://github.com/FPC-effortless/pnds-lean/pull/9) includes typed whole
+pipeline and independently executable serial neural equations. FP32/FP64 actual
+source outputs/state/input+weight gradients pass; all5fitted models on real FIT
+also pass (maxoutputerror1.1921e-7,maxgradienterror4.6567e-9). Lean padding,
+read-before-write and query-nonmutation statements compile without axioms.
+**Full concrete neural/finite-precision Lean refinement remains OPEN**. These
+checks do not attribute the measured gain to memory or prove general intelligence.
+
+**Next development priority:** build on the successful shared trained candidate
+for useful multi-step outcomes and coherent uncertainty, source-supported delayed
+observations and stable entity state; qualify on a genuinely new real cohort
+under a separate frozen protocol. Preserve originals and failed gates; do not
+replace capability training with another retention-only diagnostic campaign.
+Other domain-specific encoders/heads, action selection, independent useful memory,
+external pilots, authorized production integration and commercial value stay OPEN.
+No PR merged or model promoted.
+
 Version: 2026-10-23 (integrated capability and investor-readiness guiding objectives; ME071–ME073 trained and independently replayed; drafts unmerged) | Status: research proposal/evidence register; not a commercially qualified product
 
 ## Hard proof gate: when TAC-OSM may be called more capable or intelligent (2026-10-23)
