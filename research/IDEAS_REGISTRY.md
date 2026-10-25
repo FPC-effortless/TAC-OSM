@@ -1,5 +1,17 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## NEXT-SHARED-SELECTIVE — source-causal selective geometry/CED (2026-10-25)
+
+**Unified proposal; zero training, no implementation, no new capability result.** Fuse authentic entity-aware time/authority, prediction-damage relevance and bounded admission, optional versioned static-site lookup, mHC-inspired postscan geometry, six 16D concept slots with four postscan depth refinements, and optional sparse evidence reads / 32-event triggered replay. Build on the real native input-only affine scan and ME098/099 coherent trajectory distribution. Remain **six** active families, one shared core. DeepSeek V3 load bias, V4 CSA/HCA/mHC/Muon, V4.1-Flash encoder-final global cache/CSA2/bounded replay, and Engram static knowledge lookup are prior art, not proof of gain. The original TAC PR331 CED is untrained, distinct from DeepSeek's causal encoder-decoder.
+
+**Primary gate:** prospective, external real-source long-history headroom. Does source-authorized genuinely old entity information improve **independent** future-state prediction beyond causal short context, GRU/Transformer, structured state and physical baselines, under equal active parameters/data/training-compute and independent replay? Do not set a headline 15% rejection target or fabricate hazards. Input-only memory schedule preserves affine scan; CED/mHC are postscan and four refinements are sequential in depth. Full system memory counts static tables, cache and ring buffer separately from the 608-byte core. If the newest task lacks long-memory signal, report NO HEADROOM rather than another engineering-only model.
+
+**Formal obligations:** PNDS causality, scan operator associativity, identity/mask/write authority, geometry non-expansion assumptions, concept-query purity, replay checkpoint/finite-buffer semantics, gradient/FP reference; whole-network and finite-precision mathematical proof remains open. **Empirical status:** untrained and unqualified; original ME099 full gate FAIL, original ESWAM012 256 vs 8 negative, PR331 untrained and DIAGKEY004 immediate-only evidence preserved.
+
+Detailed [research direction](directions/NEXT-SHARED-SELECTIVE-GEOMETRY-CED.md) and [master research plan](MASTER_RESEARCH_PLAN.md).
+
+---
+
 ## ME081 — learned horizon-query forecasting: stronger averages, quiet-state trade-off
 
 [Draft PR #375](https://github.com/FPC-effortless/TAC-OSM/pull/375) trains **five complete 100,165-parameter native models**. Fast/slow/8×8 associative dynamics remain intact. New training uses 32 actual observation frames with full gradient credit, a shared horizon-query distribution decoder, and properly scored CRPS plus a small log score and factual motion supervision. This is actual end-to-end learning, not an execution-only result or attribution study.
