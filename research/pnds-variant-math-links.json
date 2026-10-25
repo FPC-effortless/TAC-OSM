@@ -658,6 +658,28 @@
       "real_world_capability_at_registration": "NOT_TRAINED",
       "trained_and_deployed_parameters": 97259,
       "active_model_families_added": 0
+    },
+    {
+      "id": "SHARED-RECONSTRUCTION-ME102",
+      "family": "temporal",
+      "parent_id": "SHARED-BELIEF-SENSOR-ME101",
+      "tac_source_commit": "bd7fe3c08f9979d34483d27dcd048eb5cec984e3",
+      "tac_source_path": "src/tac_osm/variants/reconstruction_sensor_world.py",
+      "tac_spec": "research/mathematical-engineering/me102/MATHEMATICS.md",
+      "lean_path": "PNDS/ReconstructionSensor.lean",
+      "lean_symbols": [
+        "PNDS.ReconstructionSensor.totalVariance_ge_modeled",
+        "PNDS.ReconstructionSensor.totalVariance_ge_floor"
+      ],
+      "python_path": "foundation/v1/reconstruction_sensor_reference.py",
+      "python_symbol": "serial;reconstruction_loss",
+      "source_parity_test": "tests/test_reconstruction_sensor_source.py",
+      "formalization_status": "PARTIAL_EXACT_MAXIMUM_VARIANCE_AND_READ_ONLY_KERNEL",
+      "full_neural_float_refinement": "OPEN",
+      "actual_source_forward_backward": "FP32_FP64_FORWARD_STATE_TRACE_LOSS_AND_GRADIENT_TESTED",
+      "real_world_capability_at_registration": "NOT_TRAINED",
+      "trained_and_deployed_parameters": 98495,
+      "active_model_families_added": 0
     }
   ]
 }
