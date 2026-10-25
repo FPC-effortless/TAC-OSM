@@ -28,11 +28,13 @@ jobs:
           python -m pip install --quiet numpy mujoco==3.3.6
       - name: Evaluate original frozen ME099 on two simulation proxies
         run: |
-          PYTHONPATH=src python scripts/me099_mujoco_robot_car_diagnostic.py --seed 99003 --steps 160
+          for seed in 99001 99002 99003 99004 99005; do
+            PYTHONPATH=src python scripts/me099_mujoco_robot_car_diagnostic.py --seed "$seed" --steps 160 --output "research/diagnostics/me099_mujoco_${seed}.json"
+          done
       - name: Save diagnostics as separate simulation-only artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: me099-simulation-only-robot-car-json
-          path: research/diagnostics/me099_mujoco_results.json
+          path: research/diagnostics/me099_mujoco_*.json
           if-no-files-found: warn
