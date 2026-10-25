@@ -1,0 +1,48 @@
+name: EDGEACTION001 original five-seed real FIT train and freeze (NO REPORT)
+on:
+  push:
+    paths:
+      - "scripts/edge_action_logged_fit.py"
+      - "research/mathematical-engineering/edgeaction001/FAIR_COMPARISON.json"
+      - ".github/workflows/edge-action-fit-originals.yml"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original-five-fits:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pyarrow
+      - name: Frozen original real-data preflight
+        run: |
+          set -e
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/edgeaction001/FAIR_COMPARISON.json --phase preflight
+          test ! -e research/replay-bundles/EDGEACTION001
+      - name: Fit all five original complete models using FIT episodes 0-48 only
+        env:
+          PYTHONPATH: "src:."
+        run: python scripts/edge_action_logged_fit.py fit
+      - name: Commit all five new original models BEFORE any internal score
+        run: |
+          set -e
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add research/replay-bundles/EDGEACTION001
+          git commit -m "Freeze EDGEACTION001 five original genuine-FIT action-target checkpoints prior to score"
+          git push origin HEAD:refs/heads/research/shared-edge-action-implementation-2026-10-25
+      - name: Immutable fallback if branch push is unavailable
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edgeaction001-original-fit-only
+          path: research/replay-bundles/EDGEACTION001/
+          if-no-files-found: ignore
+          retention-days: 14
