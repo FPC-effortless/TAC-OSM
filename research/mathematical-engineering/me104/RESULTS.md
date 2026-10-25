@@ -27,7 +27,7 @@ registered90–98%per seed. Each new row uses all5models, not an ensemble foreca
 
 Mean gap point error improves1.48%,3.50%,3.78%; proper gap interval scores improve
 43.42%,41.38%,41.04%; mean gap NLL improves slightly. However **ALL15models fail
-the unchanged coverage gate**. Ordinary point error worsens6.14%,6.11%,3.72%
+the unchanged coverage gate**. Ordinary point error worsens6.14%,6.11%,3.73%
 on average; only2of5seeds in each recipe pass the daily-point guardrail. No recipe
 passes all5seeds, and0of15individual models pass every gate. This is not calibrated
 predictive intelligence, overall capability qualification, safe uncertainty or a
@@ -105,3 +105,13 @@ without allowing width flexibility to erase the missing-evidence floor. Differen
 optimization/gradient roles plus an explicit source uncertainty floor are future
 hypotheses, not proven explanations or fixes. Continue integrated capability
 training, preserving negative evidence and deferring attribution studies.
+
+## Original restoration
+
+A separate clean detached checkout of6d684f07reloaded all15original models and
+recomputed original forecasts/raw-density scores/gates, all30fitted numerical
+audits, and the complete paired summary/publisher-row audit. No retraining or
+altered originals. All67payload SHA256checks pass. Independent GitHub original
+replay40195130742passed. The capability scorecard declares TRAINED_REPLAY_VERIFIED,
+MIXED_TRADEOFF outcome and full-gate FAIL; its structure validator is not proof
+of a predictive gain. Latest metadata-only CI is separate from this source replay.
