@@ -1,0 +1,93 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "EDGEACTION001-LOGGED-SETPOINT-PREDICTION",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "observed_real_outcomes": true,
+    "sha256": "a3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a",
+    "name": "LeRobot ALOHA mobile cabinet logged joint setpoints and measured state",
+    "license": "Apache-2.0",
+    "revision": "7a752b39f7e69de7e38aee485a6bab07528a061a",
+    "source_card": "https://huggingface.co/datasets/lerobot/aloha_mobile_cabinet",
+    "action_semantics": "14 published logged joint-position action targets, same 50Hz frame; exact actuator response/latency and intervention identifiability unverified"
+  },
+  "models": [
+    {
+      "seed": 91001,
+      "architecture": "edge_action_query",
+      "trainable_parameters": 99760,
+      "deployed_parameters": 99760
+    },
+    {
+      "seed": 91002,
+      "architecture": "edge_action_query",
+      "trainable_parameters": 99760,
+      "deployed_parameters": 99760
+    },
+    {
+      "seed": 91003,
+      "architecture": "edge_action_query",
+      "trainable_parameters": 99760,
+      "deployed_parameters": 99760
+    },
+    {
+      "seed": 91004,
+      "architecture": "edge_action_query",
+      "trainable_parameters": 99760,
+      "deployed_parameters": 99760
+    },
+    {
+      "seed": 91005,
+      "architecture": "edge_action_query",
+      "trainable_parameters": 99760,
+      "deployed_parameters": 99760
+    }
+  ],
+  "protocol": {
+    "role": "FIT-only internal point-forecast development, not independent qualification",
+    "fit_episodes": "original FIT episode 0-48 only, 49 real episodes",
+    "internal_report_episodes": "original FIT episode 49-58 only, 10 real episodes; separate within-FIT heldout; historical source exposed to earlier training, not independent source qualification",
+    "original_dev_episodes": "original old DEV episode 59-71 remains unopened by this study",
+    "protected_test_episodes": "original TEST >=72 remains unopened by this study",
+    "target": "measured 14-joint state[t+1] from genuine logged state[t], action[t] target and source history of action[t-1]",
+    "action_scope": "observational conditional-on-logged-setpoint, never do(action), torque law, motor policy or safety controller",
+    "history": 32,
+    "training_updates": 256,
+    "batch_size": 8,
+    "sampling": "Uniform fit episode index 0-48 and valid t index 32..1498 with replacement, fixed per-seed saved schedule",
+    "training_exposure": "2,048 real sampled FIT origins per model, 65,536 original observation context presentations per model",
+    "optimizer": "AdamW lr0.0006, weight decay0.001, clipped gradient norm1",
+    "seeds": [
+      91001,
+      91002,
+      91003,
+      91004,
+      91005
+    ],
+    "loss": "mean squared state-delta error standardized by FIT-only per-joint RMS transition",
+    "preprocessing": "FIT 49 episodes only, source state/action mean/std, delta RMS, original chronological frame/episode IDs",
+    "references": [
+      "persistence x_t",
+      "raw logged action target u_t",
+      "FIT-only channelwise servo gain x_t+g(u_t-x_t), gain in [0,1]",
+      "last-delta x_t+(x_t-x_(t-1))"
+    ],
+    "bounded_fits": 1,
+    "no_refitting_after_report": true,
+    "code_and_registration_committed_before_fit": true,
+    "complete_original_checkpoints_frozen_before_any_report_score": true,
+    "report_metric": "all14 joint mean-square error and mean-absolute error; each joint and movement-rich strata separately",
+    "report_schedule": "every 8th eligible measured FIT holdout transition from t>=32 and t+1 in same source episode",
+    "movement_threshold": "90th quantile FIT-only per-sample average squared standardized step",
+    "full_capability_gate": "every seed average MSE <= 95% of strongest FIXED FIT-only practical reference and moving MSE <= reference; internal report only, no independent score qualification",
+    "comparison_claim": "not a matched learned architecture comparison; source-factual pilot versus practical deterministic references",
+    "confidence": "episode-cluster paired bootstrap on 10 actual holdout episodes, descriptive and conditional on five trained models",
+    "original_score_replay_required": true,
+    "data_and_training_compute_audited": true,
+    "training_wallclock_parity_requirement": false,
+    "inference_policy_authorized": false,
+    "simulator_scores_not_used": true,
+    "stop_rule": "one five-seed FIT-only fit, all originals freeze, one internal source holdout score, no changed gates/restarts/favorable-seed selection/DEV or protected TEST"
+  }
+}
