@@ -137,24 +137,39 @@ def episode(model,prep,task,controller_kind,sensor_gap,steps):
     errors=[];covered=[];widths=[];tracking=[];used=0;fallback=0;nan_predictions=0
     t0=time.perf_counter()
     gap_start=60;gap_end=110  # exactly 50 consecutive physics steps
+    gap_cache=None
     for t in range(steps):
         true=phys(task,d)
         drop=sensor_gap and gap_start<=t<gap_end
         if not drop:
             observed=true.copy()
-        raw=observation(prep,task,observed)
-        obs=(raw-prep["obs_mean"])/prep["obs_scale"]
-        action=(prev_action-prep["action_mean"])/prep["action_scale"]
-        ot=torch.from_numpy(obs).reshape(1,1,14)
-        at=torch.from_numpy(action).reshape(1,1,14)
-        # Source-compliant: no new observation is committed during blackout;
-        # invalid input explicitly cannot update the original associative state.
-        valid=torch.tensor([[not drop]],dtype=torch.bool)
-        pred,state=model(ot,at,horizons=(1,),valid=valid,state=state)
-        lo,hi=marginal_intervals(pred)
-        pred_world=pred.mean[0,0,0].cpu().numpy()*prep["obs_scale"]+prep["obs_mean"]
-        lower=lo[0,0,0].cpu().numpy()*prep["obs_scale"]+prep["obs_mean"]
-        upper=hi[0,0,0].cpu().numpy()*prep["obs_scale"]+prep["obs_mean"]
+            raw=observation(prep,task,observed)
+            obs=(raw-prep["obs_mean"])/prep["obs_scale"]
+            action=(prev_action-prep["action_mean"])/prep["action_scale"]
+            ot=torch.from_numpy(obs).reshape(1,1,14)
+            at=torch.from_numpy(action).reshape(1,1,14)
+            prior_state=state
+            # Only actual observed events enter the original recurrent memory.
+            pred,state=model(ot,at,horizons=(1,),state=state)
+            lo,hi=marginal_intervals(pred)
+            pred_world=pred.mean[0,0,0].cpu().numpy()*prep["obs_scale"]+prep["obs_mean"]
+            lower=lo[0,0,0].cpu().numpy()*prep["obs_scale"]+prep["obs_mean"]
+            upper=hi[0,0,0].cpu().numpy()*prep["obs_scale"]+prep["obs_mean"]
+            if sensor_gap and t==gap_start-1:
+                # Forecast all missing-time horizons at the LAST true source cut.
+                # The original model sees no invented observations/actions later.
+                bundle,_=model(ot,at,horizons=tuple(range(1,52)),state=prior_state)
+                l,h=marginal_intervals(bundle)
+                gap_cache=(bundle.mean[0,0].cpu().numpy()*prep["obs_scale"]+prep["obs_mean"],
+                           l[0,0].cpu().numpy()*prep["obs_scale"]+prep["obs_mean"],
+                           h[0,0].cpu().numpy()*prep["obs_scale"]+prep["obs_mean"])
+        else:
+            if gap_cache is None:
+                raise RuntimeError("missing last-observed predictive distribution")
+            # At t=60, score t+1 (horizon 2 from the last true t=59 cut).
+            # Do NOT score valid=False padding; that output is intentionally invalid.
+            i=t-gap_start+1
+            pred_world,lower,upper=(x[i].copy() for x in gap_cache)
         if not (np.isfinite(pred_world).all() and np.isfinite(lower).all() and np.isfinite(upper).all()):
             nan_predictions+=1
             raise RuntimeError("nonfinite pretrained forecast; no silent replacement")
