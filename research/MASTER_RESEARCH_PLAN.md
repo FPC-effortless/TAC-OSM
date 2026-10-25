@@ -1,5 +1,60 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-25 — ME102: fifteen trained belief-reconstruction models, mixed capability result
+
+[Draft TAC PR398](https://github.com/FPC-effortless/TAC-OSM/pull/398) and
+[PNDS PR14](https://github.com/FPC-effortless/pnds-lean/pull/14) extend the existing
+Temporal shared architecture, keeping exactly six active model families. Three
+complete training recipes, five shared seeds each, test masked current-state
+reconstruction, source-aware associative retrieval and non-cancellable FIT-derived
+staleness variance floors. These are actual integrated training experiments, not
+a component-ablation campaign. Each original model has98,495learned parameters
+and1,536updates. Same-seed initial weights, real training orders and actual
+augmented-input checksums match across recipes; profiled operator graphs and
+dense FLOP estimates match, with unsupported hardware/pointwise accounting
+explicitly excluded. CPU runtime remains an outcome, not a parity gate.
+
+| Five-seed mean | Gap PM2.5 MAE | Gap90%coverage | Gap six-channel NLL | PM2.5 interval score | Full-gate seeds |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| ME101 historical reference |37.7470|68.67%|6.2345|301.2206|historical|
+| ME102 light_floor |38.7814|88.53%|5.1446|229.2109|2/5|
+| ME102 strong_reconstruction |39.7432|96.08%|5.1327|316.7059|2/5|
+| ME102 physical_score |44.1222|93.43%|5.1779|221.6744|1/5|
+
+**No recipe passes the registered full gate in every seed.** Coverage and gap
+likelihood improve; average point accuracy regresses. Strong reconstruction also
+worsens interval score. No favorable-seed selection, blanket safety/calibration
+claim, model promotion or independent architectural superiority is justified.
+The full15original model/optimizer/RNG/budget receipts were committed at4a0e75a9
+before REPORT; original scores and all failures were committed at93ecebd4.
+Actual-source FP32/FP64 fitted graph, state, chunk and gradient checks pass;
+Lean supplies partial scalar kernels, not full-neural/IEEE or safety proof.
+
+Authentic UCI501 FIT2013–2014; REPORT2015 already exposed:143natural-gap queries
+in21calendar-week clusters and4,288ordinary queries in53clusters. Repeated seeds
+do not add independent observations. Protected2016–2017 numerical outcomes stay
+closed. Training masks are augmentation, not new real evidence. No embedded
+hardware benchmark, action intelligence, customer utility or commercial-readiness
+percentage is established. Full original reports and per-seed distributions are
+[repository-owned](https://github.com/FPC-effortless/TAC-OSM/tree/research/me102-reconstruction-panel-2026-10-25/research/replay-bundles/ME102).
+
+**Next fixed hypothesis:** ME103 is a proposal to continue every15original model
+equally for1,536additionalupdates (3,072lineage), preserving exact optimizer/RNG,
+with a new source-frozen preflight and unchanged gates. This would test budget
+sufficiency after ME102 point regressions. It is not registered or trained yet;
+no continuation is claimed. The recipe/seed search ledger remains fully visible.
+
+**Owner-supplied ALOHA update:** the owner reports5models,49FIT training episodes,
+10FIT-only internal evaluation episodes,1,840next-state predictions and clean
+replay, with every TACseed failing the strongest constant-velocity reference
+(about one-tenth neural MSE). No oldDEV/protectedTEST was reportedly scored. The
+exact original study/checkpoint/score/replay references have not yet been located
+in the inspected records: retain this as attributed evidence pending verification,
+not a new independently audited result or an overwrite of earlier ALOHA studies.
+Physical development must account for velocity/dynamics references, without
+interpreting command-conditioned prediction as a trained robot controller.
+
+
 ## 2026-10-25 — ME101 integrated belief memory: forecasting gain, uncertainty failure
 
 [TAC draft PR397](https://github.com/FPC-effortless/TAC-OSM/pull/397) and
