@@ -1,6 +1,22 @@
 # TAC-OSM — Unified Master Research Plan
 
 
+## Latest unified direction — selective geometric world-state and asymmetric concept refinement (2026-10-25)
+
+**Status: RESEARCH DESIGN ONLY; zero new fits, zero new capability claims; the existing ME099 full gate remains FAILED.** The principal next scientific objective is to show that authentic *source-authorized delayed evidence* improves physical/operational future-state prediction and decisions beyond strong short-context baselines, while retaining the shared 8×8 affine associative prefix scan and its stepwise streaming semantics. DeepSeek mechanisms are **prior art and architectural inspiration**, not copied proofs or evidence of TAC capability.
+
+**One unified core hypothesis, not another variant:** join source-timestamped entity selection, prediction-damage-based memory admission, geometric cross-state mixing, optional as-of static lookup, and a **postscan** six-concept K=4 CED refinement head. Keep the existing six active families and archival histories. Optional sparse retrieval, ring-buffer repair, Muon and high-performance square-root/path sampling remain separate ablation/engineering layers **after** memory headroom qualification. Freeze ME097/098/099 and PR331 as separate original evidence; do not reuse the 13 ME099 exposed episodes as a development tuning target.
+
+**Mathematical boundary:** schedule memory updates from causally available input/context BEFORE reading the previous associative memory. Thus M_(t+1)=M_t P_t+Q_t remains an associative scan; geometry-mixing and CED refinement consume **postscan** causal state and do not feed back into the same input-only schedule. Any read-dependent/evicting writes or exception replay constitute additional sequential stages and must be costed honestly. Never project final training-sequence Z_T into earlier per-time queries (future leakage). Persistent streaming core remains 608 FP32 bytes *excluding event count*, but external maps, the proposed six-by-16 concept slots and 32-event ring buffer have separate capacity footprints; no claim that all memory stays 608 bytes.
+
+**Research priority:** (0) source truth/headroom and external-site eligibility; (1) PNDS causal/shape/scan/provenance/geometry/ring algebra and independent Python equivalence; (2) ONE preregistered authentic longitudinal selective-memory experiment with equal active parameters, real data and matched training compute vs native old core, GRU, Transformer 8/256, structured state and physical controls; (3) movement/stationarity, delayed retrieval, calibration and useful-event admission ablations; (4) optional CED/mHC/static lookup/replay/Muon latency studies; (5) real decision and customer utility only when authentic logged actions and outcomes permit identification. Avoid a fixed 85% admission target or contrived obstacle task: higher write volume is not by itself intelligence.
+
+**Status guard:** user's 205/266 (~77%) write-rejection premise and 3.4–5.3× CPU-speed claim require original receipts before becoming measured baseline facts. The DeepSeek V4.1-Flash Causal Encoder–Decoder and TAC PR331 Concept Exchange Decoder are distinct systems; 1M tokens/890-byte token cache are DeepSeek settings, not TAC performance. Source-preregistered original real outcomes, fixed compute/data/parameters and independent unexposed evaluation are required for any new TAC claim; no CPU-time equality requirement.
+
+**Full mathematical plan, hypotheses, studies, nulls, source citations and acceptance:** [NEXT-SHARED-SELECTIVE — Geometry-Constrained, Entity-Selective Parallel World-State Intelligence](directions/NEXT-SHARED-SELECTIVE-GEOMETRY-CED.md). This direction subsumes the three earlier proposals for future-noise envelopes, elapsed-time/entity corrections and reusable square-root/path kernels without losing them: selective entity evidence is first, coherent ME099 dynamics stays the probabilistic forecast base, future-noise profiles are a secondary calibration hypothesis and square-root kernels are independently measured optimization work.
+
+---
+
 ## Latest: structured future trajectories and uncertainty regimes — ME098/ME099 (2026-10-25)
 
 **Status: learned capability observed / MIXED_TRADEOFF; full gate FAILED.**
