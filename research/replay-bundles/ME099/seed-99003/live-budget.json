@@ -1,0 +1,295 @@
+{
+  "architecture": "regime_trajectory",
+  "checkpoints": [
+    {
+      "deployed_parameters": 103380,
+      "parameter_values_sha256": "167d17733f814ba6806f439dd9e0ff653643928adccf80cafd03ed601f45c617",
+      "path": "/tmp/tac-evidence/research/replay-bundles/ME099/seed-99003/final.pt",
+      "sha256": "96e70b4a3c5a4df0f88655f0088cb2eac076342041263d77e2da5356b98c4e90",
+      "state_key_path": [
+        "model"
+      ],
+      "successful_optimizer_steps": 512,
+      "trainable_parameters": 103380
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 103380,
+    "trainable_parameters": 103380
+  },
+  "last_pre_update": {
+    "deployed_parameters": 103380,
+    "successful_optimizer_steps": 511,
+    "trainable_parameters": 103380
+  },
+  "manifest_path": "/tmp/tac-evidence/research/mathematical-engineering/me099/FAIR_COMPARISON.json",
+  "manifest_sha256": "c8338b844c3d7f0b37027692406f23bb8946a5e5b7b8dc0925338aa35ae871f3",
+  "model_class": "tac_osm.variants.regime_trajectory_world.RegimeTrajectoryWorld",
+  "preflight": {
+    "deployed_parameters": 103380,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "raw_broadening",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": []
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.weight",
+        "numel": 1344,
+        "requires_grad": true,
+        "shape": [
+          48,
+          28
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.bias",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.weight",
+        "numel": 25344,
+        "requires_grad": true,
+        "shape": [
+          176,
+          144
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.weight",
+        "numel": 32384,
+        "requires_grad": true,
+        "shape": [
+          176,
+          184
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.weight",
+        "numel": 448,
+        "requires_grad": true,
+        "shape": [
+          2,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.bias",
+        "numel": 2,
+        "requires_grad": true,
+        "shape": [
+          2
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.weight",
+        "numel": 30624,
+        "requires_grad": true,
+        "shape": [
+          132,
+          232
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.bias",
+        "numel": 132,
+        "requires_grad": true,
+        "shape": [
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.weight",
+        "numel": 1848,
+        "requires_grad": true,
+        "shape": [
+          14,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.bias",
+        "numel": 14,
+        "requires_grad": true,
+        "shape": [
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.weight",
+        "numel": 1792,
+        "requires_grad": true,
+        "shape": [
+          8,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.weight",
+        "numel": 256,
+        "requires_grad": true,
+        "shape": [
+          32,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.weight",
+        "numel": 448,
+        "requires_grad": true,
+        "shape": [
+          14,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.bias",
+        "numel": 14,
+        "requires_grad": true,
+        "shape": [
+          14
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "trajectory_head.weight",
+        "numel": 7392,
+        "requires_grad": true,
+        "shape": [
+          56,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "trajectory_head.bias",
+        "numel": 56,
+        "requires_grad": true,
+        "shape": [
+          56
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "regime_gate.weight",
+        "numel": 56,
+        "requires_grad": true,
+        "shape": [
+          1,
+          56
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "regime_gate.bias",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": [
+          1
+        ]
+      }
+    ],
+    "trainable_parameters": 103380
+  },
+  "run_id": "39a89fb9f3b746ddb49413d42ed02542",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 99003,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME099-REGIME-TRAJECTORY",
+  "successful_optimizer_steps": 512
+}
