@@ -73,7 +73,7 @@ def read_fit(path):
     ds=np.sqrt(np.mean(np.square(xz[:49,1:]-xz[:49,:-1]),axis=(0,1))).clip(.00001)
     raw_gain=(actions[:49,32:-1]-xs[:49,32:-1])
     raw_delta=xs[:49,33:]-xs[:49,32:-1]
-    servo=np.clip((raw_gain*raw_delta).sum((0,1))/(raw_gain.square().sum((0,1))+1e-12),0,1).astype(np.float32)
+    servo=np.clip((raw_gain*raw_delta).sum((0,1))/(np.square(raw_gain).sum((0,1))+1e-12),0,1).astype(np.float32)
     threshold=float(np.quantile(np.sqrt(np.mean(np.square(xz[:49,1:]-xz[:49,:-1]),-1)),.90))
     prep=dict(state_mean=xm,state_scale=xsd,action_mean=am,action_scale=asd,delta_scale=ds,servo_gain=servo,moving_threshold=threshold)
     return dict(xraw=xs,uraw=actions,xz=xz,uz=uz,episode_length=n,prep=prep)
