@@ -1,0 +1,195 @@
+{
+  "actual_trainable_parameters": 104225,
+  "exported_raw_whole_graph_nodes": 2804,
+  "gradient_census": {
+    "core.address.bias": {
+      "elements": 18,
+      "finite": true,
+      "gradient_norm": 0.11998000741004944,
+      "nonzero": true
+    },
+    "core.address.weight": {
+      "elements": 1152,
+      "finite": true,
+      "gradient_norm": 0.3291603624820709,
+      "nonzero": true
+    },
+    "core.fast_map.bias": {
+      "elements": 64,
+      "finite": true,
+      "gradient_norm": 0.1581486463546753,
+      "nonzero": true
+    },
+    "core.fast_map.weight": {
+      "elements": 8192,
+      "finite": true,
+      "gradient_norm": 0.9765481352806091,
+      "nonzero": true
+    },
+    "core.project.bias": {
+      "elements": 64,
+      "finite": true,
+      "gradient_norm": 0.6014044284820557,
+      "nonzero": true
+    },
+    "core.project.weight": {
+      "elements": 4608,
+      "finite": true,
+      "gradient_norm": 3.613107681274414,
+      "nonzero": true
+    },
+    "core.slow_map.bias": {
+      "elements": 64,
+      "finite": true,
+      "gradient_norm": 0.022909868508577347,
+      "nonzero": true
+    },
+    "core.slow_map.weight": {
+      "elements": 4096,
+      "finite": true,
+      "gradient_norm": 0.1073678582906723,
+      "nonzero": true
+    },
+    "encoder.0.bias": {
+      "elements": 64,
+      "finite": true,
+      "gradient_norm": 0.240508034825325,
+      "nonzero": true
+    },
+    "encoder.0.weight": {
+      "elements": 6336,
+      "finite": true,
+      "gradient_norm": 2.280311107635498,
+      "nonzero": true
+    },
+    "encoder.2.bias": {
+      "elements": 64,
+      "finite": true,
+      "gradient_norm": 0.41161030530929565,
+      "nonzero": true
+    },
+    "encoder.2.weight": {
+      "elements": 4096,
+      "finite": true,
+      "gradient_norm": 1.0425689220428467,
+      "nonzero": true
+    },
+    "gated_readout.bias": {
+      "elements": 216,
+      "finite": true,
+      "gradient_norm": 0.5940889120101929,
+      "nonzero": true
+    },
+    "gated_readout.weight": {
+      "elements": 43632,
+      "finite": true,
+      "gradient_norm": 2.8712451457977295,
+      "nonzero": true
+    },
+    "heads.bias": {
+      "elements": 211,
+      "finite": true,
+      "gradient_norm": 3.076472520828247,
+      "nonzero": true
+    },
+    "heads.weight": {
+      "elements": 22788,
+      "finite": true,
+      "gradient_norm": 22.225414276123047,
+      "nonzero": true
+    },
+    "local_fast.bias": {
+      "elements": 64,
+      "finite": true,
+      "gradient_norm": 0.03068557009100914,
+      "nonzero": true
+    },
+    "local_fast.weight": {
+      "elements": 320,
+      "finite": true,
+      "gradient_norm": 0.015541392378509045,
+      "nonzero": true
+    },
+    "local_slow.bias": {
+      "elements": 64,
+      "finite": true,
+      "gradient_norm": 0.033909544348716736,
+      "nonzero": true
+    },
+    "local_slow.weight": {
+      "elements": 320,
+      "finite": true,
+      "gradient_norm": 0.015853971242904663,
+      "nonzero": true
+    },
+    "visual_encoder.0.bias": {
+      "elements": 8,
+      "finite": true,
+      "gradient_norm": 1.8187889509135857e-05,
+      "nonzero": true
+    },
+    "visual_encoder.0.weight": {
+      "elements": 72,
+      "finite": true,
+      "gradient_norm": 2.9172213544370607e-05,
+      "nonzero": true
+    },
+    "visual_encoder.2.bias": {
+      "elements": 16,
+      "finite": true,
+      "gradient_norm": 7.874869334045798e-05,
+      "nonzero": true
+    },
+    "visual_encoder.2.weight": {
+      "elements": 1152,
+      "finite": true,
+      "gradient_norm": 0.00012069226067978889,
+      "nonzero": true
+    },
+    "visual_encoder.4.bias": {
+      "elements": 16,
+      "finite": true,
+      "gradient_norm": 0.00029201406869105995,
+      "nonzero": true
+    },
+    "visual_encoder.4.weight": {
+      "elements": 2304,
+      "finite": true,
+      "gradient_norm": 0.0002478752576280385,
+      "nonzero": true
+    },
+    "visual_encoder.8.bias": {
+      "elements": 64,
+      "finite": true,
+      "gradient_norm": 0.06994879245758057,
+      "nonzero": true
+    },
+    "visual_encoder.8.weight": {
+      "elements": 4096,
+      "finite": true,
+      "gradient_norm": 0.018435204401612282,
+      "nonzero": true
+    },
+    "visual_gain": {
+      "elements": 64,
+      "finite": true,
+      "gradient_norm": 1.5979980162228458e-05,
+      "nonzero": true
+    }
+  },
+  "input_source_sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776",
+  "no_optimizer_step": true,
+  "parallel": "shared CNN, numeric input projections, causal convolutions, and shared horizon/coordinate readouts are batched; nonlinear native state evolution remains sequential",
+  "parameter_tensors": 29,
+  "profile": {
+    "batch": 2,
+    "history": 32,
+    "image": [
+      1,
+      32,
+      32
+    ]
+  },
+  "reuse": "one CNN embedding per observed frame, encoded-history cache reused in incremental mode; no future frame, autoregressive invented observation or hidden mutable input",
+  "visual_source_sha256": "d0351d3fd5ea1040e845f73bb49827a36ceef3cc967339ecfecbd68f831b66cb"
+}

@@ -71,6 +71,8 @@ def live_test_count() -> int:
         capture_output=True,
         text=True,
     )
+    if r.returncode != 0:
+        raise RuntimeError("pytest collection failed; refusing a partial test count. Run with the complete test environment (including PYTHONPATH=src:.).\n" + r.stdout + "\n" + r.stderr)
     for line in r.stdout.splitlines():
         # pytest's summary line: "648 tests collected in 0.32s"
         if "tests collected" in line:

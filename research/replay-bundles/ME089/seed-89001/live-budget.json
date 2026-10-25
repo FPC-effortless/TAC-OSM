@@ -1,0 +1,281 @@
+{
+  "architecture": "native_raw_coordinate_router_world",
+  "checkpoints": [
+    {
+      "deployed_parameters": 101964,
+      "parameter_values_sha256": "e1848cb1ea7b78273d73176fec4ea7da3ad16d3a8e0b66cd0dfef46233c33fb7",
+      "path": "research/replay-bundles/ME089/seed-89001/final.pt",
+      "sha256": "f7f8dd12f7e5fe5aaac4b766d0116c8554edd6ba9215f39ee4623748af513f83",
+      "state_key_path": [
+        "weights"
+      ],
+      "successful_optimizer_steps": 2048,
+      "trainable_parameters": 101964
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 101964,
+    "trainable_parameters": 101964
+  },
+  "last_pre_update": {
+    "deployed_parameters": 101964,
+    "successful_optimizer_steps": 2047,
+    "trainable_parameters": 101964
+  },
+  "manifest_path": "/workspace/tac-me082/research/mathematical-engineering/me089/FAIR_COMPARISON.json",
+  "manifest_sha256": "9da378a73f9b753b98d57e7696d8e70597bb7950a5d4a372a67cd30e19622c22",
+  "model_class": "tac_osm.variants.raw_router_world.RawRouterWorld",
+  "preflight": {
+    "deployed_parameters": 101964,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.weight",
+        "numel": 6336,
+        "requires_grad": true,
+        "shape": [
+          64,
+          99
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.0.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.2.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.weight",
+        "numel": 8192,
+        "requires_grad": true,
+        "shape": [
+          64,
+          128
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.fast_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.weight",
+        "numel": 4096,
+        "requires_grad": true,
+        "shape": [
+          64,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.slow_map.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.weight",
+        "numel": 1152,
+        "requires_grad": true,
+        "shape": [
+          18,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.address.bias",
+        "numel": 18,
+        "requires_grad": true,
+        "shape": [
+          18
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.weight",
+        "numel": 4608,
+        "requires_grad": true,
+        "shape": [
+          64,
+          72
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "core.project.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.weight",
+        "numel": 46864,
+        "requires_grad": true,
+        "shape": [
+          232,
+          202
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "gated_readout.bias",
+        "numel": 232,
+        "requires_grad": true,
+        "shape": [
+          232
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.weight",
+        "numel": 22852,
+        "requires_grad": true,
+        "shape": [
+          197,
+          116
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "heads.bias",
+        "numel": 197,
+        "requires_grad": true,
+        "shape": [
+          197
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "local_fast.weight",
+        "numel": 320,
+        "requires_grad": true,
+        "shape": [
+          64,
+          1,
+          5
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "local_fast.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "local_slow.weight",
+        "numel": 320,
+        "requires_grad": true,
+        "shape": [
+          64,
+          1,
+          5
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "local_slow.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "coordinate_embedding.weight",
+        "numel": 56,
+        "requires_grad": true,
+        "shape": [
+          14,
+          4
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "coordinate_router.0.weight",
+        "numel": 2048,
+        "requires_grad": true,
+        "shape": [
+          64,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "coordinate_router.0.bias",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "coordinate_router.2.weight",
+        "numel": 64,
+        "requires_grad": true,
+        "shape": [
+          1,
+          64
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "coordinate_router.2.bias",
+        "numel": 1,
+        "requires_grad": true,
+        "shape": [
+          1
+        ]
+      }
+    ],
+    "trainable_parameters": 101964
+  },
+  "run_id": "fdec5ab9205542f196c6007068e0956d",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 89001,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME089_CLOCK_VALUE_WORLD",
+  "successful_optimizer_steps": 2048
+}

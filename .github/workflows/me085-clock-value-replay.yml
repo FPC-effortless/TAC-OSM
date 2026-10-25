@@ -1,0 +1,36 @@
+name: ME085 native clock-value-parallel original replay (no training)
+on:
+  pull_request:
+    paths: ['src/tac_osm/variants/clock_value_world.py', 'scripts/clock_value*', 'tests/test_clock_value_world.py', 'tests/test_clock_value_execution.py', 'src/tac_osm/variants/clock_value_execution.py', 'research/clock-value-search/**', 'research/mathematical-engineering/me085/**', 'research/replay-bundles/ME085/**', '.github/workflows/me085-clock-value-replay.yml']
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python -m pip install 'pytest==9.1.1' 'numpy==2.3.5' 'pyarrow==21.0.0'
+      - run: python -m pip install 'torch==2.14.1+cpu' --index-url https://download.pytorch.org/whl/cpu
+      - run: PYTHONPATH=src:. python -m pytest tests/test_clock_value_world.py tests/test_clock_value_execution.py -q
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me085/FAIR_COMPARISON.json --phase preflight
+      - name: Validate every original whole model and actual optimizer receipt
+        if: hashFiles('research/replay-bundles/ME085/FIT_INDEX.json') != ''
+        run: |
+          PYTHONPATH=src:. python scripts/clock_value_train.py finalize --study me085
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me085/FINAL_COMPARISON.json --phase final
+      - uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/clock-value-source
+          key: clock-value-original-source-v1
+      - name: Strict original reference replay without fitting
+        if: hashFiles('research/replay-bundles/ME085/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/clock_value_train.py replay --study me085 --cache "${{ runner.temp }}/clock-value-source"
+      - name: Full numerical census; strict failures remain failed
+        if: always() && hashFiles('research/replay-bundles/ME085/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/clock_value_audit.py --study me085 --cache "${{ runner.temp }}/clock-value-source"
+      - name: Restore original derived compiled input-to-quantiles programs
+        if: hashFiles('research/mathematical-engineering/me085/COMPILED_GRAPH_AUDIT.json') != '' && hashFiles('research/replay-bundles/ME085/ORIGINAL_SCORE_INDEX.json') != ''
+        run: PYTHONPATH=src:. python scripts/clock_value_compiled_verify.py --study me085 --cache "${{ runner.temp }}/clock-value-source"

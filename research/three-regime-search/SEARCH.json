@@ -1,0 +1,21 @@
+{
+  "study": "ME093",
+  "candidate_recipes": 1,
+  "status": "prospective_no_fits",
+  "prior_attempts": "ME082-ME092:55 original models; every full gateFAIL",
+  "seeds": [
+    93001,
+    93002,
+    93003,
+    93004,
+    93005
+  ],
+  "initialization": "ALL5 fixed indexed ME092parents; retain92017 meaningful values, add4578 local-noise fields. No selection.",
+  "new_updates": 3072,
+  "model_parameters": 96595,
+  "objective": "Proper three-Laplace CRPS+0.2NLL+implicitmedianMAE+0.2factualmotionBCE; unchanged three-task PCGrad.",
+  "optimization": "Retainedlr0.0001/newlr0.0003,AdamW,clip1,alltrainable,3072updates",
+  "gates": "Every unchanged condition plus original95%and additional99.58333%paired intervals and strict original replay",
+  "selection": "Final only; ALL5 Git frozen before REPORT, no extra fits/restarts under this registration",
+  "data": "Same original120FIT/40exposedREPORT numeric and observed overhead inputs; protected sources unchanged"
+}

@@ -1,0 +1,621 @@
+{
+  "capability_to_value": {
+    "business_stage": "research only; no actions, deployment or commercial qualification",
+    "customer_value": "UNKNOWN",
+    "external_pilot": "NOT_MEASURED",
+    "operator_question": "Could a read-only physical forecast help a human notice genuine movement without jitter?",
+    "skill": "native parallel multirate/event-clock observed state with quiet-precision and actual-motion distributional forecasts"
+  },
+  "evaluation": {
+    "all_eligible_origins": true,
+    "decision": "Full gate requires every unchangedME081condition plus98.3333pctupper(new-ME080 H1)<0, H1>=5pctbetterME081 and NLLno worseME081at each horizon, exactqualifiedreplay. Sequential search is exposeddevelopment tuning, NOT independent proof; after pass stop, after3failures search exhausted, no extra hidden fits.",
+    "exposure": "EXPOSED_DEV",
+    "guardrails": "H4/H16see primary; secondary32frame H1/H4/H16mean MAE must beat persistence, movingH1<=velocity;  no task H1>1.10*persistence; nominal90%coordinate coverage >=.85 and proper interval score <=ME080 at each horizon",
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "models_Git_frozen_before_REPORT": true,
+    "numeric": "original training tensors float32; qualified reference forward ALSO float64 from exact original weight values, float64 quantile inversion40iterations/scoring; old rtol1e-5/atol1e-6 unchanged. No claims of FP32fast-path equivalence or memory reduction",
+    "old_frozen_full_models": [
+      "ME077",
+      "ME078",
+      "ME079",
+      "ME080",
+      "ME081"
+    ],
+    "primary": "same original8frame query H1MAE <=0.95*ME080, movingH1 <=1.05*ME078, stationaryH1 <=1.10*ME077; all simultaneous. H4 <=0.95*ME079 and H16<=1.05*ME080. Also score all causally eligible32frame original query prefixes separately; no differing-input old/new winner claim",
+    "protected_tissue_box_opened": false,
+    "queries": {
+      "REPORT_episode_count": 40,
+      "REPORT_selected_query_sha256": "de074a324739ec05959baac263a51e0e0c3eb597084ba2efde9af4e5d9a3c771",
+      "REPORT_selected_real_queries": 960,
+      "original_REPORT_all_autonomous_windows": 67797
+    },
+    "runtime_scope": "functional step/chunk equivalence and actual stored cache; trained32frame full gradients; primary8frame and secondary32frame factual forecasts; arbitrary-history or memory superiority NOT established",
+    "sealed_TEST_opened": false,
+    "statistics": "5000paired episode-cluster bootstrap seed82082; retain unchanged95pctME081gate and ALSO98.3333pctfamily-adjustedCI for3registeredattempts; record all candidates, fixed fitted models,40exposedepisodeclusters; no independent confirmation"
+  },
+  "implementation_sha256": {
+    "research/equilibrium-search/SEARCH.json": "f473d170edf1351e3d06adc7aacceb5d9a28c04fb17e270fcedd2ade6f28a8aa",
+    "scripts/equilibrium_parallel_train.py": "e627338caf734b8decd4c839166e4c041d5b30fe4c0a518756d93beecd341ade",
+    "scripts/me057_train_fused_anchor_robot.py": "f086f1daa27060695be4d17ac7d98b285bb07d410f18ddcbaf5ecb2fccbf613e",
+    "scripts/me064_mixed_real_fit.py": "d17695f761b2788074aaf2402a99dc49dcb15c4e28ed78c44b42b26cce4f33dc",
+    "scripts/me076_train_system1_real.py": "e3910ec1c42fe80b5300db6d9bb789ef4d11ee38e6f2b20a607d0adbf5f18767",
+    "scripts/me079_train_world.py": "b1ba79af549c0056c49634714294e7aff2c681b40f5d2d128a78cac1f3450f1b",
+    "scripts/me081_train_world.py": "d6d58c8e6df1beb29b44fa81f1ea9ba92d02e520a0f931631ea63f6eebbe09d8",
+    "scripts/validate_research_parity.py": "ec690df6d0c2a4f13aeceb3804bfc974cc58189c66ada923fe0006fd39e829ff",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "src/tac_osm/variants/equilibrium_parallel_world.py": "9da950e246d54d433051c23cb8a2c559b61fbcb2d04d668214cc8ac6169cd8b9",
+    "src/tac_osm/variants/horizon_query_world.py": "5f1360b79b4e69236ac00da915ee9c915d950c8fa038e6be0791aff4696a50ca",
+    "src/tac_osm/variants/kinematic_world.py": "a5a252c4dccba1843e4beb4cec112a60804c6033513553776d2f3064d73728d1",
+    "src/tac_osm/variants/reusable_execution.py": "0079bef8d479853f626fcce877d2ec932cc1bd56ff8459cd7ae0b4dbd7fda283",
+    "src/tac_osm/variants/streaming_mixture_world.py": "23d10cb5258528c2e56e6d4a72197fbd0bea4b5c02290f1c63db8d74eb3f6539"
+  },
+  "literature": [
+    {
+      "paper": "An Empirical Evaluation of Generic Convolutional and Recurrent Networks for Sequence Modeling, Bai/Kolter/Koltun2018",
+      "reuse": "causal dilated temporal convolutions; not a new TAC invention",
+      "url": "https://arxiv.org/abs/1803.01271"
+    },
+    {
+      "paper": "Strictly Proper Scoring Rules, Prediction, and Estimation; Gneiting and Raftery2007",
+      "reuse": "CRPS and logarithmic scoring as proper distributional objectives",
+      "url": "https://doi.org/10.1198/016214506000001437"
+    },
+    {
+      "paper": "DeepAR: Probabilistic forecasting with autoregressive recurrent networks,2020",
+      "reuse": "shared conditional probabilistic forecasting across sequences; not a new TAC discovery",
+      "url": "https://doi.org/10.1016/j.ijforecast.2019.07.001"
+    },
+    {
+      "paper": "Mixture Density Networks, Bishop1994",
+      "reuse": "conditional mixture likelihood and distributional predictions",
+      "url": "https://publications.aston.ac.uk/id/eprint/373/"
+    },
+    {
+      "paper": "Gated Delta Networks",
+      "reuse": "gated error-correcting associative updates, not invented here",
+      "url": "https://arxiv.org/abs/2412.06464"
+    },
+    {
+      "paper": "R2D2, ICLR2019",
+      "reuse": "explicit recurrent state and state staleness cautions; no claim this eight-frame study proves long retention",
+      "url": "https://willdabney.com/publication/r2d2/"
+    },
+    {
+      "paper": "Mamba-2/SSD, ICML2024",
+      "reuse": "hardware-aware stateful computation motivation; native nonlinear TAC is NOT a linear scan",
+      "url": "https://proceedings.mlr.press/v235/dao24a.html"
+    }
+  ],
+  "models": [
+    {
+      "architecture": "native_equilibrium_parallel",
+      "deployed_parameters": 104539,
+      "measured": {
+        "actual_steps": 2048,
+        "checkpoint_sha256": "d857369157abc1b696b366cd3e2745c4dd89d291ced99ff7733ead3815832870",
+        "deployed_parameters": 104539,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME082/seed-82001/final.pt",
+          "checkpoint_sha256": "d857369157abc1b696b366cd3e2745c4dd89d291ced99ff7733ead3815832870",
+          "receipt_path": "research/replay-bundles/ME082/seed-82001/live-budget.json",
+          "receipt_sha256": "cd81702525660b948f2be33e2deb95321142d707ed646235f8bd54546c2c9d17"
+        },
+        "trainable_parameters": 104539,
+        "training_receipt": {
+          "actual_examples": 49152,
+          "actual_observed_prefixes": 1572864,
+          "actual_steps": 2048,
+          "checkpoint_sha256": "d857369157abc1b696b366cd3e2745c4dd89d291ced99ff7733ead3815832870",
+          "deployed_parameters": 104539,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104539,
+          "sampling": {
+            "importance_sha256": "995c0e7c02618ee8a8f1d15f75ef461be9de157a75d2e696db422fc46a26320b",
+            "sample_order_sha256": "dbe4eab985c6a2774d0599d867f41b3a516f700cd0c93077fbc2bb174f920fd4",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 82001,
+          "trace": [
+            {
+              "FIT_loss": 0.45723414421081543,
+              "step": 1
+            },
+            {
+              "FIT_loss": -0.2030254751443863,
+              "step": 256
+            },
+            {
+              "FIT_loss": -0.137118861079216,
+              "step": 512
+            },
+            {
+              "FIT_loss": -0.4386322498321533,
+              "step": 768
+            },
+            {
+              "FIT_loss": 0.07882726937532425,
+              "step": 1024
+            },
+            {
+              "FIT_loss": -0.47119948267936707,
+              "step": 1280
+            },
+            {
+              "FIT_loss": -0.17778532207012177,
+              "step": 1536
+            },
+            {
+              "FIT_loss": -0.4845384359359741,
+              "step": 1792
+            },
+            {
+              "FIT_loss": -0.6236969828605652,
+              "step": 2048
+            }
+          ],
+          "training_cpu_seconds": 104.87028664500001,
+          "valid_dense_target_presentations": 4709046
+        }
+      },
+      "seed": 82001,
+      "trainable_parameters": 104539
+    },
+    {
+      "architecture": "native_equilibrium_parallel",
+      "deployed_parameters": 104539,
+      "measured": {
+        "actual_steps": 2048,
+        "checkpoint_sha256": "2b3daf5d9ccd1723c2d436309f3b8176a79a181f35933e1d5cb9e69b07fc292a",
+        "deployed_parameters": 104539,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME082/seed-82002/final.pt",
+          "checkpoint_sha256": "2b3daf5d9ccd1723c2d436309f3b8176a79a181f35933e1d5cb9e69b07fc292a",
+          "receipt_path": "research/replay-bundles/ME082/seed-82002/live-budget.json",
+          "receipt_sha256": "7c7f08ef0ac4daf18abe9520621466c06429fa31a93499506eaeeb3830de76bf"
+        },
+        "trainable_parameters": 104539,
+        "training_receipt": {
+          "actual_examples": 49152,
+          "actual_observed_prefixes": 1572864,
+          "actual_steps": 2048,
+          "checkpoint_sha256": "2b3daf5d9ccd1723c2d436309f3b8176a79a181f35933e1d5cb9e69b07fc292a",
+          "deployed_parameters": 104539,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104539,
+          "sampling": {
+            "importance_sha256": "af2448fc9ed35f4e394941be257a1d313d331b20269ba419a2c54ee35306bdcc",
+            "sample_order_sha256": "3466f520cae9daf179ca367117e636a16e5d44031e9774c94ba79799ce568f3d",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 82002,
+          "trace": [
+            {
+              "FIT_loss": 0.17842666804790497,
+              "step": 1
+            },
+            {
+              "FIT_loss": 0.026494741439819336,
+              "step": 256
+            },
+            {
+              "FIT_loss": -0.17633819580078125,
+              "step": 512
+            },
+            {
+              "FIT_loss": -0.2731265127658844,
+              "step": 768
+            },
+            {
+              "FIT_loss": -0.43310117721557617,
+              "step": 1024
+            },
+            {
+              "FIT_loss": -0.20717303454875946,
+              "step": 1280
+            },
+            {
+              "FIT_loss": -0.6032123565673828,
+              "step": 1536
+            },
+            {
+              "FIT_loss": -0.37277355790138245,
+              "step": 1792
+            },
+            {
+              "FIT_loss": -0.30101075768470764,
+              "step": 2048
+            }
+          ],
+          "training_cpu_seconds": 105.474021855,
+          "valid_dense_target_presentations": 4708564
+        }
+      },
+      "seed": 82002,
+      "trainable_parameters": 104539
+    },
+    {
+      "architecture": "native_equilibrium_parallel",
+      "deployed_parameters": 104539,
+      "measured": {
+        "actual_steps": 2048,
+        "checkpoint_sha256": "36207514c73945bedf3a016937ea485d8f09ec588abc73ad7b05442e63e63d53",
+        "deployed_parameters": 104539,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME082/seed-82003/final.pt",
+          "checkpoint_sha256": "36207514c73945bedf3a016937ea485d8f09ec588abc73ad7b05442e63e63d53",
+          "receipt_path": "research/replay-bundles/ME082/seed-82003/live-budget.json",
+          "receipt_sha256": "c2aa4391509d4da00bafa90e3e8dba96a097689d5bdd92bf5f27b48e89c1cc4d"
+        },
+        "trainable_parameters": 104539,
+        "training_receipt": {
+          "actual_examples": 49152,
+          "actual_observed_prefixes": 1572864,
+          "actual_steps": 2048,
+          "checkpoint_sha256": "36207514c73945bedf3a016937ea485d8f09ec588abc73ad7b05442e63e63d53",
+          "deployed_parameters": 104539,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104539,
+          "sampling": {
+            "importance_sha256": "ff94bcedf2219bc48b9a16a17ec12efb7c8485f38edfe2ddcead5b8788aeded1",
+            "sample_order_sha256": "a44bc9d604d08643f8a2bc7c2a88bdfc19716062b3d20d978dd10fd3ace3ae75",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 82003,
+          "trace": [
+            {
+              "FIT_loss": 0.8353113532066345,
+              "step": 1
+            },
+            {
+              "FIT_loss": -0.13694237172603607,
+              "step": 256
+            },
+            {
+              "FIT_loss": -0.14098654687404633,
+              "step": 512
+            },
+            {
+              "FIT_loss": 0.08725261688232422,
+              "step": 768
+            },
+            {
+              "FIT_loss": 0.2400934100151062,
+              "step": 1024
+            },
+            {
+              "FIT_loss": -0.058072954416275024,
+              "step": 1280
+            },
+            {
+              "FIT_loss": -0.1754883974790573,
+              "step": 1536
+            },
+            {
+              "FIT_loss": -0.3369233310222626,
+              "step": 1792
+            },
+            {
+              "FIT_loss": -0.47977814078330994,
+              "step": 2048
+            }
+          ],
+          "training_cpu_seconds": 105.24345406200001,
+          "valid_dense_target_presentations": 4709050
+        }
+      },
+      "seed": 82003,
+      "trainable_parameters": 104539
+    },
+    {
+      "architecture": "native_equilibrium_parallel",
+      "deployed_parameters": 104539,
+      "measured": {
+        "actual_steps": 2048,
+        "checkpoint_sha256": "2dcc134e621e86fe8e25b87a6a82ba19d55ce1dc8dd6b74694d5d73c5b9e3126",
+        "deployed_parameters": 104539,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME082/seed-82004/final.pt",
+          "checkpoint_sha256": "2dcc134e621e86fe8e25b87a6a82ba19d55ce1dc8dd6b74694d5d73c5b9e3126",
+          "receipt_path": "research/replay-bundles/ME082/seed-82004/live-budget.json",
+          "receipt_sha256": "61c8abfc7a2f71d50f6d2786c45656125849690f93ba737a213d64ffaf87738f"
+        },
+        "trainable_parameters": 104539,
+        "training_receipt": {
+          "actual_examples": 49152,
+          "actual_observed_prefixes": 1572864,
+          "actual_steps": 2048,
+          "checkpoint_sha256": "2dcc134e621e86fe8e25b87a6a82ba19d55ce1dc8dd6b74694d5d73c5b9e3126",
+          "deployed_parameters": 104539,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104539,
+          "sampling": {
+            "importance_sha256": "86df900a47c2720b5d23db44548c885166c6dde0a7a67c40e723c26fc0c42977",
+            "sample_order_sha256": "19e21bad8958422a032946c88c08ebd71859e2892375d3f3890212941e07eb81",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 82004,
+          "trace": [
+            {
+              "FIT_loss": 1.0205148458480835,
+              "step": 1
+            },
+            {
+              "FIT_loss": 0.08580101281404495,
+              "step": 256
+            },
+            {
+              "FIT_loss": -0.010193069465458393,
+              "step": 512
+            },
+            {
+              "FIT_loss": 0.026113098487257957,
+              "step": 768
+            },
+            {
+              "FIT_loss": 0.07852304726839066,
+              "step": 1024
+            },
+            {
+              "FIT_loss": -0.4578268826007843,
+              "step": 1280
+            },
+            {
+              "FIT_loss": -0.20537321269512177,
+              "step": 1536
+            },
+            {
+              "FIT_loss": -0.1601148098707199,
+              "step": 1792
+            },
+            {
+              "FIT_loss": -0.6396719813346863,
+              "step": 2048
+            }
+          ],
+          "training_cpu_seconds": 105.21356026399997,
+          "valid_dense_target_presentations": 4708545
+        }
+      },
+      "seed": 82004,
+      "trainable_parameters": 104539
+    },
+    {
+      "architecture": "native_equilibrium_parallel",
+      "deployed_parameters": 104539,
+      "measured": {
+        "actual_steps": 2048,
+        "checkpoint_sha256": "f69f1344f91546319e04d5108cbb94128482ba362ebcc980c5b4402889cb34cd",
+        "deployed_parameters": 104539,
+        "runtime_evidence": {
+          "checkpoint_path": "research/replay-bundles/ME082/seed-82005/final.pt",
+          "checkpoint_sha256": "f69f1344f91546319e04d5108cbb94128482ba362ebcc980c5b4402889cb34cd",
+          "receipt_path": "research/replay-bundles/ME082/seed-82005/live-budget.json",
+          "receipt_sha256": "1055521451d5fc9cc82c0e69fe60711003ba0b81fe05b9789c7ed38fbb9454b0"
+        },
+        "trainable_parameters": 104539,
+        "training_receipt": {
+          "actual_examples": 49152,
+          "actual_observed_prefixes": 1572864,
+          "actual_steps": 2048,
+          "checkpoint_sha256": "f69f1344f91546319e04d5108cbb94128482ba362ebcc980c5b4402889cb34cd",
+          "deployed_parameters": 104539,
+          "environment": {
+            "python": "3.12.14",
+            "threads": 1,
+            "torch": "2.14.1+cpu"
+          },
+          "parameters": 104539,
+          "sampling": {
+            "importance_sha256": "77fec595c71002923881457ef2fadd90c3ebb03e4284e84ff0e2b6ffdfb9b936",
+            "sample_order_sha256": "c3327b39b07eefc50aa00097c4d29bb489e79d02ecf3b4be711f06098781e19d",
+            "task_motion_prevalence": {
+              "clean_stains_off_tabletop": 0.07567714186073546,
+              "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+              "hang_clothes_on_drying_rack": 0.07929478609625669,
+              "line_trash_can_with_trash_bag": 0.13668676325024745,
+              "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+            },
+            "unique_FIT_eligible_origins": 180324
+          },
+          "seed": 82005,
+          "trace": [
+            {
+              "FIT_loss": 0.39245930314064026,
+              "step": 1
+            },
+            {
+              "FIT_loss": 0.19832415878772736,
+              "step": 256
+            },
+            {
+              "FIT_loss": 0.08935708552598953,
+              "step": 512
+            },
+            {
+              "FIT_loss": -0.2965100109577179,
+              "step": 768
+            },
+            {
+              "FIT_loss": -0.18003350496292114,
+              "step": 1024
+            },
+            {
+              "FIT_loss": -0.2706482708454132,
+              "step": 1280
+            },
+            {
+              "FIT_loss": -0.3418382704257965,
+              "step": 1536
+            },
+            {
+              "FIT_loss": -0.555138349533081,
+              "step": 1792
+            },
+            {
+              "FIT_loss": -0.1774192601442337,
+              "step": 2048
+            }
+          ],
+          "training_cpu_seconds": 106.34336750899996,
+          "valid_dense_target_presentations": 4708913
+        }
+      },
+      "seed": 82005,
+      "trainable_parameters": 104539
+    }
+  ],
+  "no_architecture_superiority_claim": true,
+  "prefit_registration_sha256": "cc1c5222cb9214ff01619c2b518e7c789fc716c7ad19c4ce0c8a7d13e15726b2",
+  "real_world_source": {
+    "license": "CC-BY-4.0; BodenAI and RW-RL attribution",
+    "name": "BodenAI/RW-RL-HIL-Dataset original160 episode subset; revision9290f5a96dc91ea58256e81d9ce2dd9621890b51;120FIT/40previously exposedREPORT",
+    "observed_real_outcomes": true,
+    "sha256": "4d01753b2de68ef2eb863b94aeb790f6b2f98c6068aede3bf60e315f72a8b776"
+  },
+  "recipe": {
+    "nll_weight": 0.2,
+    "registered_search_family": "ME082_ME083_ME084",
+    "study": "me082"
+  },
+  "registered_before_first_fit": true,
+  "schedules": {
+    "82001": {
+      "importance_sha256": "995c0e7c02618ee8a8f1d15f75ef461be9de157a75d2e696db422fc46a26320b",
+      "sample_order_sha256": "dbe4eab985c6a2774d0599d867f41b3a516f700cd0c93077fbc2bb174f920fd4",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "82002": {
+      "importance_sha256": "af2448fc9ed35f4e394941be257a1d313d331b20269ba419a2c54ee35306bdcc",
+      "sample_order_sha256": "3466f520cae9daf179ca367117e636a16e5d44031e9774c94ba79799ce568f3d",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "82003": {
+      "importance_sha256": "ff94bcedf2219bc48b9a16a17ec12efb7c8485f38edfe2ddcead5b8788aeded1",
+      "sample_order_sha256": "a44bc9d604d08643f8a2bc7c2a88bdfc19716062b3d20d978dd10fd3ace3ae75",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "82004": {
+      "importance_sha256": "86df900a47c2720b5d23db44548c885166c6dde0a7a67c40e723c26fc0c42977",
+      "sample_order_sha256": "19e21bad8958422a032946c88c08ebd71859e2892375d3f3890212941e07eb81",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    },
+    "82005": {
+      "importance_sha256": "77fec595c71002923881457ef2fadd90c3ebb03e4284e84ff0e2b6ffdfb9b936",
+      "sample_order_sha256": "c3327b39b07eefc50aa00097c4d29bb489e79d02ecf3b4be711f06098781e19d",
+      "task_motion_prevalence": {
+        "clean_stains_off_tabletop": 0.07567714186073546,
+        "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+        "hang_clothes_on_drying_rack": 0.07929478609625669,
+        "line_trash_can_with_trash_bag": 0.13668676325024745,
+        "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+      },
+      "unique_FIT_eligible_origins": 180324
+    }
+  },
+  "schema_version": "tac-osm.parity.v2",
+  "secondary32_queries": 904,
+  "secondary32_queries_sha256": "09ad7b3bebe10a7ed8f2638eb143480cab017e501d82c604360f5f9c5b0b8ef9",
+  "source_qualification_sha256": "4e5bbe6c7200e12776aea5f9b2b5a0764da831b8ad6be8bce4cc336c832531cf",
+  "study_id": "ME082_EQUILIBRIUM_PARALLEL_WORLD",
+  "study_type": "single_model_training",
+  "training_budget": {
+    "batch_size": 24,
+    "compute": "actual2048updates/49152windows/1572864observed prefix presentations per seed; NO FLOP-matched comparison or exact hardware FLOP claim",
+    "dense_prefixes": 32,
+    "history": 32,
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "loss": "proper physical CRPS +0.2physical NLL +0.2factual motion BCE; learned quiet center, local-increment moving center; all actual valid32prefixes",
+    "optimizer": "AdamW lr0.0007 wd0.0001 clip1",
+    "sampling": "same nominal 50%uniform+50%movement proposal and balance importance as ME078/079; finite task round-robin counts differ by at most1/component",
+    "seeds": [
+      82001,
+      82002,
+      82003,
+      82004,
+      82005
+    ],
+    "selection": "final2048 only; five cold starts; preregistered sequential3recipe search(.2,1,.02); stop search only on full unchanged gate plus stronger family-adjustedCI; no model restarts or hidden trials",
+    "updates": 2048
+  },
+  "unresolved_capability": "Can parallel causal local filtering, observed change clocks and increment-bounded learned quiet/motion means recover quiet precision while preserving actual motion and multi-horizon forecasts in native TAC?"
+}

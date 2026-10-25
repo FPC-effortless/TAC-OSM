@@ -1,0 +1,161 @@
+{
+  "actual_examples": 49152,
+  "actual_observed_prefixes": 1572864,
+  "actual_steps": 2048,
+  "checkpoint_sha256": "5e90fe216734e12ed6894267a21108b06a3832f372f515e3839ac1cefccb9f39",
+  "deployed_parameters": 104225,
+  "environment": {
+    "python": "3.12.14",
+    "threads": 1,
+    "torch": "2.14.1+cpu"
+  },
+  "location_weight_updates": 2048,
+  "parameters": 104225,
+  "pipeline_optimizer_updates": 10240,
+  "retained_native_updates": 6144,
+  "sampling": {
+    "importance_sha256": "cdb50add6691e7fba60966e30b4b088c38c08913628a05c9ce6bd3c614708ef7",
+    "sample_order_sha256": "37ab5c5c081818ea8cf3447e563367c68ea4f356022c00b6193d269e208d2da8",
+    "task_motion_prevalence": {
+      "clean_stains_off_tabletop": 0.07567714186073546,
+      "fold_and_stack_scattered_clothes_neatly": 0.10383633074385443,
+      "hang_clothes_on_drying_rack": 0.07929478609625669,
+      "line_trash_can_with_trash_bag": 0.13668676325024745,
+      "pour_water_from_kettle_to_make_tea": 0.06678685011649858
+    },
+    "unique_FIT_eligible_origins": 180324
+  },
+  "seed": 92002,
+  "trace": [
+    {
+      "FIT_loss": 0.6046885990264662,
+      "projected_conflicting_pairs": 3,
+      "projected_total_norm": 12.659599180496025,
+      "raw_task_gradient_norms": [
+        6.537053919382775,
+        3.3567188837755575,
+        8.269159418708096
+      ],
+      "step": 1,
+      "tasks": 3
+    },
+    {
+      "FIT_loss": -0.028074015338090556,
+      "projected_conflicting_pairs": 0,
+      "projected_total_norm": 215.2932664390092,
+      "raw_task_gradient_norms": [
+        98.55633005942738,
+        4.846843835873328,
+        139.5451098451667
+      ],
+      "step": 256,
+      "tasks": 3
+    },
+    {
+      "FIT_loss": 0.47917351029799515,
+      "projected_conflicting_pairs": 0,
+      "projected_total_norm": 146.55680468347543,
+      "raw_task_gradient_norms": [
+        71.87084804862799,
+        5.9049623053128455,
+        94.30869602035519
+      ],
+      "step": 512,
+      "tasks": 3
+    },
+    {
+      "FIT_loss": 0.26706304160905026,
+      "projected_conflicting_pairs": 0,
+      "projected_total_norm": 118.50377760288774,
+      "raw_task_gradient_norms": [
+        59.314686411863676,
+        5.02238703638087,
+        70.23030625817164
+      ],
+      "step": 768,
+      "tasks": 3
+    },
+    {
+      "FIT_loss": 0.2598756883310742,
+      "projected_conflicting_pairs": 2,
+      "projected_total_norm": 142.71227121034576,
+      "raw_task_gradient_norms": [
+        82.01781738759662,
+        7.125313504488915,
+        109.41251080495854
+      ],
+      "step": 1024,
+      "tasks": 3
+    },
+    {
+      "FIT_loss": 0.043138741414453986,
+      "projected_conflicting_pairs": 0,
+      "projected_total_norm": 116.32796018414228,
+      "raw_task_gradient_norms": [
+        67.09392982987065,
+        5.511788223386223,
+        65.69819903787477
+      ],
+      "step": 1280,
+      "tasks": 3
+    },
+    {
+      "FIT_loss": 0.10381127645100433,
+      "projected_conflicting_pairs": 2,
+      "projected_total_norm": 98.79850897010667,
+      "raw_task_gradient_norms": [
+        66.10424078431839,
+        4.578084565025567,
+        49.91777440731025
+      ],
+      "step": 1536,
+      "tasks": 3
+    },
+    {
+      "FIT_loss": 0.3140219107165772,
+      "projected_conflicting_pairs": 0,
+      "projected_total_norm": 98.31986006143212,
+      "raw_task_gradient_norms": [
+        54.29622817368451,
+        5.08266875328832,
+        57.368310257294056
+      ],
+      "step": 1792,
+      "tasks": 3
+    },
+    {
+      "FIT_loss": -0.30018089866436015,
+      "projected_conflicting_pairs": 0,
+      "projected_total_norm": 136.26427881147478,
+      "raw_task_gradient_norms": [
+        78.82375779707675,
+        2.365371555738866,
+        72.20782246802584
+      ],
+      "step": 2048,
+      "tasks": 3
+    }
+  ],
+  "training_cpu_seconds": 482.622590796,
+  "training_lineage": {
+    "all_parameters_trainable": true,
+    "location_updates": 2048,
+    "mapping": "Load full fixed ME091 donor then same paired native mapping from fixed ME087; all native94907values restored, visual7792 retained, location1526zero. No parent/seed performance selection.",
+    "new_updates": 2048,
+    "optimizer_reset": true,
+    "path": "research/replay-bundles/ME087/seed-87002/final.pt",
+    "pipeline_updates": 10240,
+    "retained_native_new_total_updates": 6144,
+    "retained_native_values": 94907,
+    "retained_visual_new_total_updates": 6144,
+    "retained_visual_values": 7792,
+    "sha256": "63fadb83f10df6469273e50de1e2b1a3b584b92c4ab389afd5c26a544de5c80e",
+    "source_native_updates": 4096,
+    "source_visual_updates": 4096,
+    "visual_path": "research/replay-bundles/ME091/seed-91002/final.pt",
+    "visual_sha256": "5cd9805d8fa07ee647a6dfdf3c16309f2b3eb837265bbad6a93b3aafacc64842",
+    "zero_initialized_location_values": 1526
+  },
+  "valid_dense_target_presentations": 4708728,
+  "visual_weight_updates": 6144
+}

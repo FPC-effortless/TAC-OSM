@@ -1,0 +1,3 @@
+# ME095 interrupted original portfolio
+
+Four original models completed 2,048 updates. Seed 95005 was interrupted by an environment restart after its last preserved 1,024-update log. Its weights and optimizer state are unavailable. No REPORT scoring occurred, no full portfolio gate is evaluated, and no independent five-model replay is claimed. The original protocol is not silently retried. See repository-owned original bytes and INTERRUPruption evidence in `research/replay-bundles/ME095/INTERRUPTION.json`. Derived execution artifacts cover the first original on FIT only; they are not predictive qualification.
