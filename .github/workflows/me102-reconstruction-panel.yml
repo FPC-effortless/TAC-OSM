@@ -29,6 +29,9 @@ jobs:
           if test -f research/replay-bundles/ME102/RESULTS.json; then
             python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me102/POSTFIT.json --phase final
             PYTHONPATH=src:. python scripts/me102_reconstruction_panel.py replay
+            PYTHONPATH=src:. python scripts/me102_fitted_graph_audit.py replay
+            PYTHONPATH=src:. python scripts/me102_panel_summary.py
+            PYTHONPATH=src:. python scripts/me102_source_receipt.py
           else
             echo 'ME102_ORIGINAL_PANEL_REPLAY=BLOCKED fifteen original models not scored yet'
           fi
