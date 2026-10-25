@@ -1,5 +1,22 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-25 — ARCHITECTURE PRIORITY: One edge-physical world-state engine, not six compulsory neural models
+
+**Proposed master-priority decision (research-only; not trained or merged):** elevate **General-Purpose Edge Physical Intelligence** to the first integrated capability track. Consolidate the current System1 reactive forecasts + Physical/ES-WAM trajectory dynamics + Temporal ME100/ME101 sensor evidence/missing-current-state forecasting under **ONE causal parallel/streaming operator engine** with source/units/identity/mask-aware **task-specific adapters and mathematical dynamics heads**. Do not invent a universal x+v law for pollutant/event domains, and do not assume a single checkpoint already performs across domains. Reuse established PNDS scan/source-trace mathematical contracts.
+
+The six active legacy *names/contracts* remain (System1, Physical, Enterprise, Temporal, Edge-Lite, Counterfactual) with original immutable source mapping; **they are not six compulsory independently trained neural models**. Reorganize future capability work into A: edge physical + sensor world-state (top priority), B: typed enterprise event/time forecasting (retain distinct output semantics), C: optional prospective action/counterfactual advisory (only with real identification). Treat Edge-Lite as cross-cutting hardware export/benchmark and Temporal valid/known-at reconstruction as external source-governance infrastructure, not mandatory distinct predictive cores. System1 is a short-horizon **read-only** physical risk head, not certified autonomous actuation. Six-family registry/code stays intact until an independently verified refactor justifies changing it.
+
+**Evidence driving this priority:** ME098/099 trained physical multi-horizon uncertainty but full gate FAILED and not transferred; ESWAM012 longer 256 history failed versus eight on exposed original traffic; ME100 long sensor gap MAE improved descriptively but full gate 0/5; ME101 ordinary PM2.5 MAE 32.7709 vs ME100 35.6890 with 2x original training updates, yet natural-gap 90% coverage only 68.67%, gap NLL and interval score worse, **full gate 0/5**. These are **not** independent cross-domain or fair compute-matched architecture wins. Existing Enterprise real trained models are a separate event family and do not imply successful transfer into the shared core.
+
+**Falsifiable next route:** independently audit genuine long-history information in real stationary/irregular sensor and robot/traffic outcomes; build source-aware masks/age/owner and source-conditioned state uncertainty without future leakage; fit complete new real models with 95k–105k actual active/deployed params and <=1% head-to-head param mismatch, identical real source/data exposure and matched training compute (NOT equal CPU wall time), preserve strong persistence/ridge/servo and matched GRU/SSM/Transformer reference arms, same independent time/site qualification, immutable original fits and replay. Next, optionally preregister an actual multi-task shared-weight experiment against separate matched single-domain fit baselines—measure positive and negative transfer. Do not reopen 2015 sensor DEV as an iterative selection cohort or 2016–17 protected observations prematurely.
+
+**Reality of the resource/verification claims:** current shared core's 152 FP32 state values = 608 bytes **per entity excluding counters/metadata/model weights**; the 97,259-param ME101 model alone requires roughly 389 kB FP32 weights. Parallel ordered-affine scan has O(log T) algebraic span at fixed dimension, **not a proven submillisecond, microcontroller, arbitrary end-to-end depth or hardware speed SLA**. Lean proves selected kernels, **not autonomous system safety or complete neural model equivalence**. Car/robot/drone safety-critical control remains gated behind genuine measured device and authorized outcome studies, not inferred from a virtual test or a physical forecast. Keep prior Concept-Swarm CED, source-aware geometry, lookup, MoE and Muon as **optional** measured headroom hypotheses—not compulsory model subgraphs.
+
+[Full six-family fusion decision, proposed typed graph and empirical milestones](directions/SHARED-EDGE-PHYSICAL-PRIORITY.md). The detailed original six-family and ME101 historical evidence below remains authoritative and unchanged.
+
+---
+
+
 ## 2026-10-25 — ME101 integrated belief memory: forecasting gain, uncertainty failure
 
 [TAC draft PR397](https://github.com/FPC-effortless/TAC-OSM/pull/397) and
