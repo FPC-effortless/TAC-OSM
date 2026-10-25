@@ -1,0 +1,90 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME098-COHERENT-TRAJECTORY",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "observed_real_outcomes": true,
+    "sha256": "a3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a",
+    "name": "lerobot/aloha_mobile_cabinet",
+    "license": "Apache-2.0"
+  },
+  "models": [
+    {
+      "architecture": "coherent_trajectory",
+      "seed": 98001,
+      "trainable_parameters": 103322,
+      "deployed_parameters": 103322,
+      "parent_seed": 97001,
+      "parent_checkpoint_sha256": "12aacd301ebafb543aac00aa3b4c660734ebcc1819623de1adefefb9c0582715"
+    },
+    {
+      "architecture": "coherent_trajectory",
+      "seed": 98002,
+      "trainable_parameters": 103322,
+      "deployed_parameters": 103322,
+      "parent_seed": 97002,
+      "parent_checkpoint_sha256": "1187f6ff576d04c5d6d23ba11b5d136e027d18ba7a1e3c834028a37546a7b11f"
+    },
+    {
+      "architecture": "coherent_trajectory",
+      "seed": 98003,
+      "trainable_parameters": 103322,
+      "deployed_parameters": 103322,
+      "parent_seed": 97003,
+      "parent_checkpoint_sha256": "92633bb5a4e7a1b32c41e2dddb3d6196d6c6615b872ab42e22ba1ba88f05b1c5"
+    },
+    {
+      "architecture": "coherent_trajectory",
+      "seed": 98004,
+      "trainable_parameters": 103322,
+      "deployed_parameters": 103322,
+      "parent_seed": 97004,
+      "parent_checkpoint_sha256": "548dbe8d9d5cdc949ed7847dde2b35a4d8bd045d7c367de5abd7e91907373624"
+    },
+    {
+      "architecture": "coherent_trajectory",
+      "seed": 98005,
+      "trainable_parameters": 103322,
+      "deployed_parameters": 103322,
+      "parent_seed": 97005,
+      "parent_checkpoint_sha256": "ab9cfb31ccd08e57f8d53d45f41613869c42464fcd995f313724a10ada5a6030"
+    }
+  ],
+  "protocol": {
+    "updates": 512,
+    "batch_size": 8,
+    "history": 64,
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "seeds": 5,
+    "parents": [
+      97001,
+      97002,
+      97003,
+      97004,
+      97005
+    ],
+    "initialization": "fixed corresponding ME097 original, all old weights trainable; new7448headvalues",
+    "learning_rates": {
+      "retained": 0.0001,
+      "trajectory_head": 0.0006
+    },
+    "weight_decay": 0.001,
+    "clip_norm": 1,
+    "tuning_trials": 1,
+    "loss": ".6H1+.2H4+.2H16 FIT-RMS-normalized MSE +.05 joint Student-t NLL/3",
+    "future_inputs": "none; previous-frame observed command only",
+    "normalization": "unchanged ME097 FIT statistics",
+    "distribution": "df4 joint t percoordinate, horizons coupled by shared process response Gram",
+    "gate": "EVERY seed and horizon MSE<=.95persistence; H1<=1.05frozenME097 samecases; coordinate90coverage>=.85; intervalscore<=1.05FIT-second-moment-t reference",
+    "replay_rtol": 1e-05,
+    "replay_atol": 1e-06,
+    "protected_test_evaluations": 0,
+    "independent_site_qualification": false,
+    "architecture_superiority": false
+  }
+}

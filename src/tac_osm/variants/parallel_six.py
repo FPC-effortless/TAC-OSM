@@ -58,6 +58,8 @@ def instantiate_untrained_core(
         from .parallel_continuous_world import ParallelTACWorld as Core
     elif candidate == "evidence_retrieval":
         from .evidence_retrieval_world import EvidenceRetrievalWorld as Core
+    elif candidate == "coherent_trajectory":
+        from .coherent_trajectory_world import CoherentTrajectoryWorld as Core
     else:
         raise ValueError("unknown shared-core candidate")
     return Core(
