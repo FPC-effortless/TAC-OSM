@@ -25,3 +25,9 @@ All10 ME096/097 original fits remain preserved. ME096 numeric thresholds passed 
 Verification:947 local tests PASS; all5 fitted models match independent PNDS serial full neural equations on first2 real FIT windows (FP32 max prediction discrepancy1.1921e-7; max gradient discrepancy4.6567e-9). Lean graph padding, pre-write retrieval and query-nonmutation statements compile with no axioms. Full concrete neural/finite-precision Lean refinement remains OPEN; no whole-network proof, benchmark-wide intelligence or causality claim.
 
 Operational relevance: a read-only predictive advisory candidate. Customer/pilot/decision benefit, autonomous policy, Woyengi deployment and ROI NOT_MEASURED. All PRs remain draft and unmerged.
+
+Dedicated study-named budget-audit workflows were added after fitting when the
+repository integration check found their naming/hooks missing. They restore
+original pre-update runtime guards and saved tensors; they do not train or
+retroactively constitute prefit CI. The launcher manifest preflight and actual
+live guards did run before updates. This integration exception remains recorded.

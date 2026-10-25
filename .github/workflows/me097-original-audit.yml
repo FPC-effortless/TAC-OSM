@@ -1,0 +1,23 @@
+name: ME097 original budget audit (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/me097/**'
+      - 'research/replay-bundles/ME097/**'
+      - 'scripts/audit_shared_evidence_originals.py'
+      - '.github/workflows/me097-original-audit.yml'
+permissions:
+  contents: read
+jobs:
+  original-budget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me097/FAIR_COMPARISON.json --phase preflight
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me097/POSTFIT.json --phase final
+      - run: python scripts/audit_shared_evidence_originals.py me097
