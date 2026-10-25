@@ -1,5 +1,29 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## 2026-10-25 — EWA002 new real ALOHA task: cosine memory marginally helps velocity, usefulness weighting worsens, hash speed gate fails
+
+[PR405](https://github.com/FPC-effortless/TAC-OSM/pull/405) (draft research); [prescored protocol](https://github.com/FPC-effortless/TAC-OSM/blob/research/ewa002-velocity-residual-external-2026-10-25/research/mathematical-engineering/ewa002/PROTOCOL.md); [full actual results](https://github.com/FPC-effortless/TAC-OSM/blob/research/ewa002-velocity-residual-external-2026-10-25/research/mathematical-engineering/ewa002/RESULTS.md); [first successful external scoring CI40211321061](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40211321061), original scored artifact12605927072. Software/source/checkpoint PASS, scientific **full registered gate FAIL 0/5**.
+
+Built on EWA001 negative utility reinforcement without rewriting EWA001: five original checksum-verified, FROZEN ME097 95,874-parameter trained checkpoints provide source-causal 8D memory matching keys. The main physical prediction is **measured constant velocity**, not the worse out-of-domain neural forecast. Identical 256-slot outside-memory FIFO records are compared with (a) exhaustive cosine, (b) 11-bit LSH cosine, (c) the SAME indexed memory with strictly later-verified outcome ensemble leave-one-out utility reranking. Record retention identical across arms, thereby isolating usefulness-ranking effects. Original input-only exact parallel affine scan and 608-byte native primary FP32 state unchanged. The extension needs minimum23,552 MORE FP32 external memory payload bytes plus hash/identity/source/runtime overhead; conditional feedback cache itself is sequential, not a globally associative scan.
+
+**New authentic source/task:** pinned MIT LeRobot ALOHA static candy source commit6728831ef9674b74f3ce20bf517890e9ee20b0d9, actual publisher consolidated v3 path data/chunk-000/file-000.parquet. The publisher card gave stale v2 per-episode paths, which was found and source-parser corrected before any scoring, preserving original failed preflight logs and exactly preregistered arms and gates. 25 real FIT experience episodes; later 25 new-task episodes,256 actual next-state transitions each, 6,400 genuine new-task records per source-model checkpoint; all five checkpoint seeds use the SAME 25 episodes. No original ALOHA-cabinet protected TEST numerical outcomes were opened. New task was never used for original ME097 fit, but causal prequential cache may learn from each earlier test episode after scoring; new-task transfer diagnostic, NOT independent safety or robotics policy qualification.
+
+| Real heldout new-task standardized14D one-step MSE (5 model seed mean) | Result |
+| --- | ---: |
+| Measured constant velocity | **0.000017434** |
+| Velocity + full similarity cache | 0.000017314 |
+| Velocity + LSH similarity cache | **0.000017295** |
+| Velocity + LSH utility reranking | 0.000017346 |
+| Frozen pretrained model direct output | 0.000210494 |
+| Persistence | 0.000183784 |
+
+Full similarity improves velocity mean error only0.687%, below >=1% per-seed H1 requirement. Indexed similarity mean improvement0.795% vs velocity, not enough for gate. Utility adds a **0.298% ERROR REGRESSION against matched hashed cosine, in ALL five original checkpoints**, H2 fails. Raw hash candidate recall@8 **97.96%**, but average number of actual neural-key cosine candidates scored was **157.93 / 256 per query**, vs prereg <32 budget; H3 fails. Original all gates **FAIL 0/5**. Output does not show trained architecture superiority, usefulness-learning success, true actuator counterfactuals, safety or general autonomous intelligence. Current measured real velocity remains the strong physical reference.
+
+Next work must preregister on a FRESH source rather than retune EWA002 on exposed candy; test motion-regime-specific memory novelty, bounded verified ensemble damage and correct source identity/provenance. Separate index candidate hit/recall from cosine+utility reranking, compare physical velocity/servo/Kalman residual models, and count CPU/RAM; no extrapolation of simple unit tests to learned physical intelligence. Preserve all original checkpoints, all six proposed research families, original negative results and compulsory equal trained parameters/data/training-compute budgets for actual new architecture comparisons.
+
+---
+
+
 ## EWA001: tested verified-outcome memory utility + 8-bit LSH retrieval (2026-10-25)
 
 **IMPLEMENTED AND SCORED, NOT QUALIFIED.** [PR404](https://github.com/FPC-effortless/TAC-OSM/pull/404) trains no new neural model, preserving five original trained ME097 weights. It adds 256-slot external learned-key/residual memory, real source-lagged event comparison by 8-bit/9-bucket-probe LSH, and updates utility only after the genuine future outcome is observed; utility optionally governs future retrieval ordering/eviction. Same-size similarity-only memory is the matched control. This is 23,552 extra float payload bytes minimum PLUS dynamic metadata/index, outside primary 608B memory.
