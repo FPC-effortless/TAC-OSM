@@ -1,0 +1,50 @@
+name: EDGEACTION001 source-original internal-FIT score (NO DEV OR TEST)
+on:
+  push:
+    paths:
+      - "research/mathematical-engineering/edgeaction001/SCORE_REQUEST.md"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  score-originals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pyarrow
+      - name: Refuse scoring before FIT originals committed
+        run: |
+          test -f research/replay-bundles/EDGEACTION001/FIT_INDEX.json
+          test -f research/replay-bundles/EDGEACTION001/seed-91001/final.pt
+          test ! -f research/replay-bundles/EDGEACTION001/RESULTS.json
+      - name: Score only original FIT episodes 49-58 after original freeze
+        env:
+          PYTHONPATH: "src:."
+        run: |
+          python scripts/edge_action_logged_fit.py score
+          python scripts/edge_action_logged_fit.py replay
+      - name: Commit immutable original FIT-only score outputs
+        run: |
+          set -e
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add research/replay-bundles/EDGEACTION001/RESULTS.json research/replay-bundles/EDGEACTION001/FORECASTS.npz
+          git commit -m "Preserve EDGEACTION001 FIT-only original real next-state scores and forecasts"
+          git push origin HEAD:refs/heads/research/shared-edge-action-implementation-2026-10-25
+      - name: Keep a fallback score artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: edgeaction001-fit-only-original-score
+          path: |
+            research/replay-bundles/EDGEACTION001/RESULTS.json
+            research/replay-bundles/EDGEACTION001/FORECASTS.npz
+          if-no-files-found: ignore
+          retention-days: 14
