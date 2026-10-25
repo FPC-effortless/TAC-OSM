@@ -9,15 +9,15 @@ PR394 remains unmerged; its geometry/CED/sparse-lookup/Muon proposals are not
 claimed as implemented or qualified by this pilot. No ALOHA refit, historical
 checkpoint replacement, new active family or architecture promotion occurred.
 
-Five new97,235-parameter TAC-Temporal models forecast six authentic UCI501
+Five new 97,235-parameter TAC-Temporal models forecast six authentic UCI501
 station pollutant measurements six hours ahead. Learned observed-only per-channel
 sum/mass traces feed the native causal affine associative scan; a coherent
 censored-lognormal decoder shares location/scale across likelihood and quantiles.
 The complete graph is documented from masked observation to final distribution.
-The source has12station identities and genuine missing measurements; it does NOT
+The source has 12 station identities and genuine missing measurements; it does NOT
 verify late arrivals, source authority, action consequences or entity discovery.
-FIT2013–2014; all five originals Git-frozen1d721082 before first2015REPORT scoring;
-2016–2017numerical outcomes remain closed for later matched qualification.
+FIT 2013–2014; all five originals Git-frozen 1d721082 before first 2015 REPORT scoring;
+2016–2017 numerical outcomes remain closed for later matched qualification.
 
 | PM2.5 raw MAE, lower is better | Natural sensor gaps | Ordinary daily queries |
 |---|---:|---:|
@@ -26,19 +26,19 @@ FIT2013–2014; all five originals Git-frozen1d721082 before first2015REPORT sco
 | Trained model, recent8h |46.073106|35.477731|
 | Same trained model, long256h |38.986917|35.689034|
 
-Long access improves gap MAE15.38% over short access in the five-seed mean, with
+Long access improves gap MAE 15.38% over short access in the five-seed mean, with
 all five directional history gates passing. However the global-week-clustered
-95% long-minus-short interval[-15.369833,+1.868555] includeszero. There are143gap
-queries in21calendar-week clusters, not715independent seed-query cases. Gap90%
-coverage averages67.69%, below the85% gate, and daily performance does not beat
-LOCF/ridge on average. **Full registered capability gateFAIL0/5.** This is trained,
+95% long-minus-short interval [-15.369833,+1.868555] includes zero. There are 143 gap
+queries in 21 calendar-week clusters, not 715 independent seed-query cases. Gap 90%
+coverage averages 67.69%, below the 85% gate, and daily performance does not beat
+LOCF/ridge on average. **Full registered capability gate FAIL: 0/5 pass.** This is trained,
 replay-verified new-source development evidence, not an overall intelligence gain,
 a matched neural superiority result or NEXT-SHARED-SELECTIVE Phase2 qualification.
 
-967local tests pass. FP32/FP64 full graph/state/all25parameter-tensor gradient
+967 local tests pass. FP32/FP64 full graph/state/all 25 parameter-tensor gradient
 refinement passes on all five fitted models using real FIT queries; full/chunk
 predictions agree. Lean source-trace bounds, missing identity and affine action
-compile; fullNNIEEEproof remainsOPEN. Independent clean original-score replay and
+compile; full-network IEEE proof remains OPEN. Independent clean original-score replay and
 [GitHub replay40173945086](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40173945086) PASS.
 Original models/optimizers/RNG/schedules, forecasts, results, live parameter receipts
 and checksums are repository-owned in ME100. No further fits or gate changes are
@@ -51,11 +51,12 @@ source anchor as known. In mathematical terms, learn a coherent predictive mixtu
 Source age, admitted evidence mass and causal innovations can condition that belief;
 none alone guarantees calibrated uncertainty. A bounded second-moment trace or
 coherent latent-regime mixture is a proposal, not a new result. Retain native
-parallel memory and genuine fixed-state streaming. Enforce actual95k–105kparameter
+parallel memory and genuine fixed-state streaming. Enforce actual 95k–105k parameter
 counts and count every additional covariance/codebook/state byte. Train a complete
 new model under a newly frozen protocol; do not posthoc inflate these intervals or
 spend protected outcomes on iterative DEV selection. Detailed attribution remains
 secondary to better useful end-to-end predictions with trustworthy uncertainty.
+
 
 
 

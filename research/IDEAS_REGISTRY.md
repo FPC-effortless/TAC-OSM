@@ -580,22 +580,27 @@ kernels and measured chunk/hardware processing. No new implemented skill claimed
 
 ### ME100 / NEXT-SHARED-SELECTIVE — implemented sensor admission pilot
 
-TAC draftPR395 and PNDS draftPR12. Five97,235-parameter original models trained on
-UCI501 FIT2013–2014; saved before2015REPORT. Native Temporal masked source sum/mass
-trace plus affine associative scan and six-pollutant coherent forecast implemented.
-Long256 gapPM2.5MAE38.986917 vs recent8 46.073106; all5directional gatesPASS, clustered
-CIincludeszero. FullgateFAIL0/5 due gapcoverage67.69%<85 and otherguardrails. General
-PM2.5MAE35.689>LOCF34.516.967localtests; originalclean/GitHubreplayPASS. Protected
-2016–2017unscored. No seventhfamily, action intelligence, broadgain or Phase2claim.
+[TAC draft PR395](https://github.com/FPC-effortless/TAC-OSM/pull/395) and
+[PNDS draft PR12](https://github.com/FPC-effortless/pnds-lean/pull/12). Five
+97,235-parameter original models trained on UCI501 FIT 2013–2014 and were saved
+before 2015 REPORT scoring. Native Temporal masked source sum/mass traces,
+affine associative memory and six-pollutant coherent forecasts are implemented.
+Long-context gap PM2.5 MAE is 38.986917 versus 46.073106 with recent history.
+All five directional history gates pass, but the clustered interval includes zero.
+Full gate FAIL: 0/5 pass, including gap coverage 67.69% below 85%. General PM2.5
+MAE is 35.689 versus LOCF 34.516. The 967 local tests and original clean/GitHub
+replay pass. Protected 2016–2017 outcomes remain unscored. No seventh family,
+action intelligence, broad gain or Phase2 qualification is claimed.
 
-### NEXT-SHARED-BELIEF — proposed integrated uncertainty over missing world state
+### NEXT-SHARED-BELIEF — proposed uncertainty over missing world state
 
-Motivation: ME100 source retention improves gap point forecasts but fails uncertainty
-on the very cases needing retained observations. Learn a coherent latent belief over
-unobserved current state and future change, conditioned on causal source age,
-evidence mass and innovations. Consider bounded second-moment traces and a jointly
-trained latent-regime emission mixture; count state/covariance bytes and preserve
-input-conditioned scan scheduling. Actual95k–105kparameters; newregistration before
-training, all original models retained, nochangedME100gates or protected-cohort
-selection. Unimplemented/untrained hypothesis; no expected gain promised. Geometry,
-CED and sparse lookup remain draftPR394 proposals, not prerequisites for this step.
+ME100 source retention improves gap point forecasts but fails uncertainty on the
+cases needing retained observations. Learn a coherent latent belief over unobserved
+current state and future change, conditioned on causal source age, evidence mass
+and innovations. Consider bounded second-moment traces and a jointly trained
+latent-regime emission mixture. Count state/covariance bytes and preserve
+input-conditioned scan scheduling. Require actual 95k–105k parameters and a new
+registration before training; retain all original models and ME100 failed gates.
+Do not use the protected cohort for model selection. This is an unimplemented,
+untrained hypothesis with no gain promised. Geometry, CED and sparse lookup remain
+draft PR394 proposals, not prerequisites for this step.
