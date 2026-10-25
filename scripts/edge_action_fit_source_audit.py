@@ -33,7 +33,7 @@ def audit(path:Path):
         raise RuntimeError("source bytes mismatch: refuse action eligibility claim")
     # Predicate restricts all returned numerical rows to the OLD original FIT
     # episode partition. No DEV or TEST outcome, calibration or score is read.
-    data=pq.read_table(path,columns=FIELDS,filters=[("episode_index","<",FIT_EPISODE_STOP)]).to_pydict()
+    data=pq.read_table(path,columns=list(FIELDS),filters=[("episode_index","<",FIT_EPISODE_STOP)]).to_pydict()
     if not data["episode_index"]:raise RuntimeError("missing original FIT")
     groups={}
     for ep,frame,t,x,a in zip(*(data[k] for k in FIELDS)):
