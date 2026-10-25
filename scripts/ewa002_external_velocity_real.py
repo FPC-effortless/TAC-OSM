@@ -121,13 +121,13 @@ def advance(events,memory,threshold,report):
                 "hashed_cosine":token.hashed,
                 "hashed_utility":token.utility}
             label=y[t]
-            if report:
+            if report is not None:
                 for name,prediction in forecasts.items():
                     perarm[name].append(float(np.mean((prediction-label)**2)))
                 motion.append(float(np.mean((label-x[t])**2)))
             memory.observe(token,label,key[t],
                 f"ALOHA_STATIC_CANDY:{episode['episode_id']}:{episode['frames'][t]}")
-        if report:
+        if report is not None:
             m=np.asarray(motion)>=threshold
             after=memory.counters()
             report.append(dict(episode_id=int(episode["episode_id"]),count=len(y),
@@ -141,7 +141,7 @@ def advance(events,memory,threshold,report):
                 exact_top8_recall_after_hash=(after["hash_raw_top8_recall"]*after["executed_queries"]-
                      counters_before["hash_raw_top8_recall"]*counters_before["executed_queries"])/len(y),
                 nonempty_index_reads=(after["hashed_nonempty_rate"]*after["executed_queries"]-
-                     counters_before["hashed_nonempty_rate"]*counters_before["executed_queries"])}))
+                     counters_before["hashed_nonempty_rate"]*counters_before["executed_queries"])))
 
 def main():
     args=argparse.ArgumentParser()
