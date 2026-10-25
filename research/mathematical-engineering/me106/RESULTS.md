@@ -123,3 +123,7 @@ do not substitute for this replay.
 Strongest-point candidate gap MAE change -0.24128, conditional posthoc95%week
 bootstrap interval[-3.19990,+2.34032], includeszero. This is not independent
 evidence or an acceptance gate; allother intervals remain in PANEL_SUMMARY.
+
+Update: original GitHub replay40220362323 completed successfully on
+original-score commite812f655. Source/model/score/gradient/summary replay PASS;
+full predictive qualification remains FAIL.
