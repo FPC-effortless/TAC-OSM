@@ -93,6 +93,9 @@ def instantiate_entity_sensor_core(name: str | Variant, *, candidate: str = "sou
     if candidate == "reconstruction":
         from .reconstruction_sensor_world import ReconstructionSensorWorld
         return ReconstructionSensorWorld()
+    if candidate == "point_priority":
+        from .point_priority_sensor_world import PointPrioritySensorWorld
+        return PointPrioritySensorWorld()
     if candidate == "protected":
         from .protected_sensor_world import ProtectedSensorWorld
         return ProtectedSensorWorld()
