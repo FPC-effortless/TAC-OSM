@@ -1,5 +1,30 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-25 — EWA001 implemented useful-history feedback and fast event lookup; full registered gate FAIL
+
+[Draft implementation/research PR404](https://github.com/FPC-effortless/TAC-OSM/pull/404); [preregistered full real-source protocol](https://github.com/FPC-effortless/TAC-OSM/blob/research/ewa001-usefulness-feedback-2026-10-25/research/mathematical-engineering/ewa001/PROTOCOL.md); [verified full negative results](https://github.com/FPC-effortless/TAC-OSM/blob/research/ewa001-usefulness-feedback-2026-10-25/research/mathematical-engineering/ewa001/RESULTS.md); original first complete [CI40209655856](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40209655856) **PASS software / FAIL capability**.
+
+Following owner direction to reward *previously useful* memories and rapidly compare new events with existing memories, EWA001 implemented a separate bounded 256-slot 8D learned-source-query LSH memory with 14D verified-real-residual values and priority. The utility arm updates an item's reward ONLY after real next-observation truth arrives: clipped relative squared-loss advantage of a candidate correction versus same native prediction, EMA0.05; utility changes retrieval ordering and capacity eviction. A same-size memory arm uses only similarity, with identical source episodes, hash planes, 8-item topK, residual cap and output correction. The **original ME097 weights/checkpoints (five source-authenticated,95,874 learned parameters), original 8x8 input-only associative scan and original forecast/score gates are UNCHANGED**. This is online nonparametric memory adaptation, **NOT new neural training**. The 23,552B additional cache float payload plus index, identity and runtime costs is OUTSIDE the 608B original FP32 primary recurrent core.
+
+Authentic original SHA-pinned LeRobot ALOHA mobile-cabinet recordings: 59 FIT episodes/15,104 chronological cache-learning transitions per seed, 13 previously EXPOSED DEV episodes/3,328 prequential predictions per seed, five pretrained model seeds; source original TEST outcomes not opened. Real observed labels always arrive AFTER every relevant prediction, with lagged recorded actions rather than a do(action) counterfactual. Preserved original experiment compares no external memory, similarity-only and delayed-utility memories plus strong measured velocity and persistence references.
+
+| Standardized 14D exposed DEV one-step MSE (five-original mean) | Result |
+| --- | ---: |
+| Real constant velocity | **0.000031119** |
+| Frozen ME097 + similarity-only external memory | **0.000339658** |
+| Frozen ME097 + verified-outcome utility memory | 0.000371861 |
+| Original frozen ME097 unchanged | 0.000512171 |
+| Persistence | 0.000616392 |
+
+Neutral similarity-only memory lowers ME097 model-only error33.68% on *already exposed DEV*, but still loses to velocity by10.9x in error. Adding utility **worsens error9.48% relative to similarity-only in ALL FIVE original seeds**, despite improving vs the frozen no-cache model. Hash lookup scored102.67candidate slots/query on average (neutral) and87.31 (utility) versus registered <32 efficiency gate; 9 bucket probes/query. Original complete real-source utility+speed gate **FAIL 0/5**. The "exact top8 overlap" audit is measured AFTER utility reranking, so a low utility-vs-cosine overlap must NOT be called a hash retrieval miss rate. No claimed speed win, general causal learned utility, independent test qualification or useful robotic control follows.
+
+Integrity audit: original pretrained SHA256 checks and outcome-delayed software tests pass; original result in CI artifact12605049012. Early unit test and raw hit-metric reporting failures [40209426834](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40209426834), [40209527278](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40209527278) are preserved as initial PRE-COMPLETE-score failures, not hidden. All final scores negative and original ME097/ME104 historical results retained unchanged. The utility cache is a causally sequential **post-output** stage and does not make the original scan nonparallel; its stored key/utility is not an identified real-world causal effect. Mathematical source-equivalence/Lean update proofs for this extension remain OPEN.
+
+**Next falsifiable direction:** a newly registered experiment should isolate hash candidate recall before score reranking, more faithful attribution to verified future reduction in loss, nonstationary utility/expiry and robust physically structured residual controls. Test with a truly untouched real source/time and matched strong mechanical models. Never tune EWA001 after scoring, choose favorable seeds, expand 608B claims to external cache, or promote from already exposed DEV. Retain six family names, parameter/training/data-matching comparisons and sealed evaluation rules.
+
+---
+
+
 ## 2026-10-25 — ME104 trained asymmetric distributions: sharper, severely undercovered
 
 [Draft TAC PR403](https://github.com/FPC-effortless/TAC-OSM/pull/403) and
