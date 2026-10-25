@@ -1,0 +1,45 @@
+name: EWA001 authentic ALOHA frozen-model memory utility diagnostic
+on:
+  push:
+    branches:
+      - research/ewa001-usefulness-feedback-2026-10-25
+    paths:
+      - 'src/tac_osm/variants/outcome_utility_memory.py'
+      - 'tests/test_outcome_utility_memory.py'
+      - 'scripts/ewa001_outcome_utility_real_eval.py'
+      - 'research/mathematical-engineering/ewa001/PROTOCOL.md'
+      - '.github/workflows/ewa001-real-memory-utility.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-frozen-memory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU-only original source dependencies
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+      - name: Verify utility memory delayed feedback and bucket invariants
+        run: |
+          PYTHONPATH=src python -m unittest tests.test_outcome_utility_memory -v
+      - name: Evaluate all five exact original ME097 models on authentic source FIT and exposed DEV
+        run: |
+          PYTHONPATH=src python scripts/ewa001_outcome_utility_real_eval.py --data /tmp/aloha-original.parquet --seeds 97001,97002,97003,97004,97005
+      - name: Archive research-only original result and source receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ewa001-original-five-checkpoint-exposed-real-result
+          path: research/diagnostics/ewa001_original_exposed_dev.json
+          if-no-files-found: warn
