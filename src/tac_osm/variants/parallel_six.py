@@ -90,4 +90,7 @@ def instantiate_entity_sensor_core(name: str | Variant, *, candidate: str = "sou
     if candidate == "belief":
         from .belief_sensor_world import BeliefSensorWorld
         return BeliefSensorWorld()
+    if candidate == "reconstruction":
+        from .reconstruction_sensor_world import ReconstructionSensorWorld
+        return ReconstructionSensorWorld()
     raise ValueError("unknown typed sensor candidate")

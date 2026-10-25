@@ -1,0 +1,38 @@
+name: ME102 original fifteen-model panel replay (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/me102*'
+      - 'src/tac_osm/variants/reconstruction_sensor_world.py'
+      - 'tests/test_reconstruction_sensor_world.py'
+      - 'tests/test_me102_gap_data.py'
+      - 'tests/test_me102_audit_metadata.py'
+      - 'research/mathematical-engineering/me102/**'
+      - 'research/replay-bundles/ME102/**'
+      - '.github/workflows/me102-reconstruction-panel.yml'
+permissions:
+  contents: read
+jobs:
+  original-panel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pytest
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me102/FAIR_COMPARISON.json --phase preflight
+      - run: PYTHONPATH=src:. python -m pytest tests/test_reconstruction_sensor_world.py tests/test_me102_gap_data.py tests/test_me102_audit_metadata.py -q
+      - run: |
+          set -e
+          if test -f research/replay-bundles/ME102/RESULTS.json; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me102/POSTFIT.json --phase final
+            PYTHONPATH=src:. python scripts/me102_reconstruction_panel.py replay
+            PYTHONPATH=src:. python scripts/me102_fitted_graph_audit.py replay
+            PYTHONPATH=src:. python scripts/me102_panel_summary.py
+            PYTHONPATH=src:. python scripts/me102_source_receipt.py
+          else
+            echo 'ME102_ORIGINAL_PANEL_REPLAY=BLOCKED fifteen original models not scored yet'
+          fi
