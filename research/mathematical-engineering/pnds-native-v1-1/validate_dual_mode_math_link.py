@@ -30,3 +30,30 @@ assert count>=5
 print(json.dumps({"status":"PASS_FALSE_PROMOTION_GUARD",
   "source_files_exact_blob_checked":count,
   "real_skill_claim":"OPEN","source_historical_17_variants_preserved":True},sort_keys=True))
+
+# Reciprocal v1.7 negative real evidence and exact source blob guard.
+v17=json.loads((Path(__file__).with_name("temporal-retention-link-v1-7.json")).read_text())
+assert v17["schema"]=="pnds.tac_osm.temporal_memory_retention_v1.7"
+assert v17["architecture_status"]=="NATIVE_INSPIRED_EXPERIMENTAL_UNPROMOTED"
+assert v17["stable_timescale"]["parameter_count"]==93324
+assert v17["controlled_retention"]["parameter_count"]==93324
+assert v17["controlled_retention"]["useful_factual_recall_guaranteed"] is False
+assert v17["authentic_data"]["flop_parity_certified"] is False
+assert v17["authentic_data"]["independent_real_skill_qualified"] is False
+assert v17["caveats"]["real_world_superiority"] is False
+assert v17["caveats"]["all_historical_variant_registry_untouched"] is True
+for baseline,trial in [
+    (v17["authentic_data"]["baseline_all_mean_dev_mse"],
+     v17["authentic_data"]["timescale_dev_mse"]),
+    (v17["authentic_data"]["baseline_all_mean_dev_mse"],
+     v17["authentic_data"]["controlled_gate_dev_mse"])]:
+    assert all(b<t for b,t in zip(baseline,trial))
+for path,blob in {
+    "src/tac_osm/variants/stable_timescale_world.py":v17["stable_timescale"]["source_git_blob"],
+    "src/tac_osm/variants/retention_controlled_world.py":v17["controlled_retention"]["source_git_blob"],
+    "research/mathematical-engineering/pnds-native-v1-1/TIMESCALE_RETENTION_RESULTS_V1_7.md":
+      v17["evidence"]["tac_report_blob"]
+}.items():
+    actual=subprocess.check_output(["git","hash-object",str(root/path)],text=True).strip()
+    assert actual==blob, "v1.7 source drift: "+path
+
