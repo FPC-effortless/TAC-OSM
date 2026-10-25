@@ -684,6 +684,32 @@
       "real_world_capability_at_registration": "NOT_TRAINED",
       "trained_and_deployed_parameters": 98495,
       "active_model_families_added": 0
+    },
+    {
+      "id": "SHARED-MEDIAN-SPLIT-ME104",
+      "family": "temporal",
+      "parent_id": "SHARED-RECONSTRUCTION-ME102",
+      "tac_source_commit": "89d756d5235ddd4fd8128bfa5388eb53ef849db6",
+      "tac_source_path": "src/tac_osm/variants/median_split_sensor_world.py",
+      "tac_spec": "research/mathematical-engineering/me104/MATHEMATICS.md",
+      "lean_path": "PNDS/MedianSplitSensor.lean",
+      "lean_symbols": [
+        "PNDS.MedianSplitSensor.leftScale_positive",
+        "PNDS.MedianSplitSensor.rightScale_positive",
+        "PNDS.MedianSplitSensor.medianLocation_unchanged",
+        "PNDS.MedianSplitSensor.leftScale_modifier_zero",
+        "PNDS.MedianSplitSensor.rightScale_modifier_zero",
+        "PNDS.MedianSplitSensor.exponentialScale_lower_bound"
+      ],
+      "python_path": "foundation/v1/median_split_sensor_reference.py",
+      "python_symbol": "serial",
+      "source_parity_test": "tests/test_median_split_sensor_source.py",
+      "formalization_status": "PARTIAL_EXACT_SCALAR_SCALES_AND_FIXED_LOCATION",
+      "full_neural_float_refinement": "OPEN",
+      "actual_source_forward_backward": "FP32_FP64_FORWARD_STATE_INPUT_AND_PARAMETER_GRADIENT_QUANTILE_CDF_NLL_TESTED",
+      "real_world_capability_at_registration": "NOT_TRAINED",
+      "trained_and_deployed_parameters": 99731,
+      "active_model_families_added": 0
     }
   ]
 }

@@ -1,0 +1,169 @@
+{
+  "architecture": "balanced",
+  "seed": 104001,
+  "trainable_parameters": 99731,
+  "deployed_parameters": 99731,
+  "actual_steps": 1536,
+  "checkpoint_sha256": "51b018544f480f9f60cd613787afdd92740cb43cfa5195992a14170259f5297a",
+  "parent_checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+  "actual_sample_order_sha256": "5402f8e5d34cdbb3e5eb5b4e57b685e93115801ea3437103404f2b05c62c847b",
+  "augmented_inputs_sha256": "59f44199a149d81c4843c93bd8e3215843bc0e8353e50dbb603ed10988d39134",
+  "optimizer_state_tensors": 31,
+  "actual_examples": 24576,
+  "actual_tokens": 2686976,
+  "parameter_tensors": 31,
+  "nonzero_gradient_tensors_step1": 31,
+  "gradient_receipt": {
+    "state_noise": {
+      "norm": 0.01801403798162937,
+      "nonzero": true
+    },
+    "state_response": {
+      "norm": 0.4899294078350067,
+      "nonzero": true
+    },
+    "station.weight": {
+      "norm": 0.2966727614402771,
+      "nonzero": true
+    },
+    "encoder.weight": {
+      "norm": 25.20234489440918,
+      "nonzero": true
+    },
+    "encoder.bias": {
+      "norm": 5.4269232749938965,
+      "nonzero": true
+    },
+    "address.weight": {
+      "norm": 1.108431100845337,
+      "nonzero": true
+    },
+    "address.bias": {
+      "norm": 0.32688525319099426,
+      "nonzero": true
+    },
+    "content.weight": {
+      "norm": 9.143805503845215,
+      "nonzero": true
+    },
+    "content.bias": {
+      "norm": 3.7025067806243896,
+      "nonzero": true
+    },
+    "source_admission.weight": {
+      "norm": 0.9675716757774353,
+      "nonzero": true
+    },
+    "source_admission.bias": {
+      "norm": 0.34098300337791443,
+      "nonzero": true
+    },
+    "fast_map.weight": {
+      "norm": 11.481612205505371,
+      "nonzero": true
+    },
+    "fast_map.bias": {
+      "norm": 3.7136645317077637,
+      "nonzero": true
+    },
+    "slow_map.weight": {
+      "norm": 1.634162425994873,
+      "nonzero": true
+    },
+    "slow_map.bias": {
+      "norm": 0.4645291864871979,
+      "nonzero": true
+    },
+    "memory_gates.inner_linear.weight": {
+      "norm": 1.6252762079238892,
+      "nonzero": true
+    },
+    "memory_gates.inner_linear.bias": {
+      "norm": 0.3811001181602478,
+      "nonzero": true
+    },
+    "query.weight": {
+      "norm": 1.6213903427124023,
+      "nonzero": true
+    },
+    "query.bias": {
+      "norm": 0.3615497946739197,
+      "nonzero": true
+    },
+    "readout.0.weight": {
+      "norm": 8.180588722229004,
+      "nonzero": true
+    },
+    "readout.0.bias": {
+      "norm": 1.786299705505371,
+      "nonzero": true
+    },
+    "readout.2.weight": {
+      "norm": 39.548519134521484,
+      "nonzero": true
+    },
+    "readout.2.bias": {
+      "norm": 7.568532466888428,
+      "nonzero": true
+    },
+    "retrieved_delta.0.weight": {
+      "norm": 0.2054828405380249,
+      "nonzero": true
+    },
+    "retrieved_delta.0.bias": {
+      "norm": 0.6044747829437256,
+      "nonzero": true
+    },
+    "retrieved_delta.2.weight": {
+      "norm": 4.32656717300415,
+      "nonzero": true
+    },
+    "retrieved_delta.2.bias": {
+      "norm": 7.568532466888428,
+      "nonzero": true
+    },
+    "current_head.weight": {
+      "norm": 29.978546142578125,
+      "nonzero": true
+    },
+    "current_head.bias": {
+      "norm": 7.539290904998779,
+      "nonzero": true
+    },
+    "width_head.weight": {
+      "norm": 111.81993865966797,
+      "nonzero": true
+    },
+    "width_head.bias": {
+      "norm": 27.86002540588379,
+      "nonzero": true
+    }
+  },
+  "postfit_profiles": {
+    "8": {
+      "dense_flops": 79146041,
+      "aten_signature": "9d2476dc50a170dafb94fa6ea672026accb2a5bad7776df20474b0794712fd19",
+      "aten_calls": 5123
+    },
+    "64": {
+      "dense_flops": 569086905,
+      "aten_signature": "87b629dbe9cdf2eebc633b085ce182217447c4f82db6eebcd0d0156083d7d63c",
+      "aten_calls": 6148
+    },
+    "256": {
+      "dense_flops": 2248884153,
+      "aten_signature": "9c6b21559f78b11b71c2ee237dfec8a8e757130ab8eb02d5b458084e27b77c59",
+      "aten_calls": 6851
+    }
+  },
+  "profile_inputs_sha256": {
+    "8": "4c99f3db591456c43070b84ed5b807c8bd6dde8f49ff462123c0d4c5ef1b893b",
+    "64": "276a96dbea84ca4f0cbb72da25a401d02da90dbd01410a0c404aea5e703c0c7a",
+    "256": "9d10c74cff02fd1da31b0d0767c814aadfc59b3e1e2247fb2a1323218cf4000c"
+  },
+  "training_flops": 1483323954688,
+  "flops_profiler": "torch.profiler dense forward/backward estimate plus exact ATen operation/shape signature audit; unsupported scalar/optimizer FLOPs remain partial",
+  "optimizer_cpu_seconds": 58.682151449,
+  "wall_seconds": 58.87276093199762,
+  "peak_memory_bytes": 546996224
+}

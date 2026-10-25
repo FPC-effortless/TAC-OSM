@@ -1,0 +1,36 @@
+name: ME104 original median-split model panel replay (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/me104*'
+      - 'src/tac_osm/variants/median_split_sensor_world.py'
+      - 'tests/test_median_split_sensor_world.py'
+      - 'tests/test_me104*'
+      - 'research/mathematical-engineering/me104/**'
+      - 'research/replay-bundles/ME104/**'
+      - '.github/workflows/me104-median-split-panel.yml'
+permissions:
+  contents: read
+jobs:
+  original-panel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pytest
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me104/FAIR_COMPARISON.json --phase preflight
+      - run: PYTHONPATH=src:. python -m pytest tests/test_median_split_sensor_world.py tests/test_me104_split_panel.py -q
+      - run: |
+          set -e
+          if test -f research/replay-bundles/ME104/RESULTS.json; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me104/POSTFIT.json --phase final
+            PYTHONPATH=src:. python scripts/me104_split_panel.py replay
+            PYTHONPATH=src:. python scripts/me104_fitted_graph_audit.py replay
+            PYTHONPATH=src:. python scripts/me104_panel_summary.py
+          else
+            echo 'ME104_ORIGINAL_PANEL_REPLAY=BLOCKED not trained/scored yet'
+          fi
