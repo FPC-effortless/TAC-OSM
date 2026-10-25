@@ -5,7 +5,9 @@ on:
     paths:
       - 'src/tac_osm/variants/evidence_retrieval_world.py'
       - 'scripts/me096_evidence_training.py'
+      - 'scripts/me097_evidence_replication.py'
       - 'research/replay-bundles/ME096/**'
+      - 'research/replay-bundles/ME097/**'
       - 'tests/test_evidence_retrieval_world.py'
       - '.github/workflows/evidence-retrieval-replay.yml'
 permissions:
@@ -18,12 +20,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install torch==2.9.0 --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
       - run: pip install numpy pyarrow pytest
       - run: PYTHONPATH=src:. python -m pytest tests/test_evidence_retrieval_world.py tests/test_parallel_six_contract.py tests/test_six_variant_adapters.py -q
       - name: Restore original five models and scores (never train in CI)
         run: |
-          if test -f research/replay-bundles/ME096/RESULTS.json; then
+          if test -f research/replay-bundles/ME097/RESULTS.json; then
+            PYTHONPATH=src:. python scripts/me097_evidence_replication.py replay
             PYTHONPATH=src:. python scripts/me096_evidence_training.py replay
           else
             echo 'REPO_REPLAY=BLOCKED originals or original scoring not yet present'

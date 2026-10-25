@@ -41,7 +41,7 @@ def parallel_family(name: str | Variant) -> ParallelFamily:
 
 def instantiate_untrained_core(
     name: str | Variant, *, state_dim: int, action_dim: int,
-    width: int = 88, decoder: int = 132,
+    width: int = 88, decoder: int = 132, candidate: str = "original",
 ):
     """Construct common neural *research core*, not a fitted family predictor.
 
@@ -54,8 +54,13 @@ def instantiate_untrained_core(
     if any(type(n) is not int or n < 1 for n in
            (state_dim, action_dim, width, decoder)):
         raise ValueError("positive integer dimensions required")
-    from .parallel_continuous_world import ParallelTACWorld
-    return ParallelTACWorld(
+    if candidate == "original":
+        from .parallel_continuous_world import ParallelTACWorld as Core
+    elif candidate == "evidence_retrieval":
+        from .evidence_retrieval_world import EvidenceRetrievalWorld as Core
+    else:
+        raise ValueError("unknown shared-core candidate")
+    return Core(
         state_dim=state_dim, action_dim=action_dim,
         width=width, decoder=decoder,
     )

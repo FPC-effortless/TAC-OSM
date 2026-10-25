@@ -35,3 +35,12 @@ def test_padding_identity_and_state_checks():
     assert torch.equal(y,x) and torch.equal(z.memory,s.memory)
     assert torch.equal(z.count,s.count) and torch.equal(z.basis_sum,s.basis_sum)
     with pytest.raises(ValueError):m(x,u,valid=torch.ones(2,7))
+
+
+def test_one_candidate_for_all_six_families():
+    from tac_osm.variants.parallel_six import instantiate_untrained_core, PARALLEL_FAMILIES, require_qualified_domain_head
+    for name in PARALLEL_FAMILIES:
+        m=instantiate_untrained_core(name,state_dim=14,action_dim=14,candidate='evidence_retrieval')
+        assert type(m) is EvidenceRetrievalWorld
+        assert sum(p.numel() for p in m.parameters())==95874
+        with pytest.raises(RuntimeError):require_qualified_domain_head(name)
