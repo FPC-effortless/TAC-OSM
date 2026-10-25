@@ -38,6 +38,11 @@ hardware benchmark, action intelligence, customer utility or commercial-readines
 percentage is established. Full original reports and per-seed distributions are
 [repository-owned](https://github.com/FPC-effortless/TAC-OSM/tree/research/me102-reconstruction-panel-2026-10-25/research/replay-bundles/ME102).
 
+Original15-model score, graph, publisher-row and summary replay passed from a
+clean checkout of93ecebd4. GitHub original-score replay
+[40189256081](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40189256081)
+also passed. Checkpoint replay establishes reproduction, not qualification.
+
 **Next fixed hypothesis:** ME103 is a proposal to continue every15original model
 equally for1,536additionalupdates (3,072lineage), preserving exact optimizer/RNG,
 with a new source-frozen preflight and unchanged gates. This would test budget
@@ -46,7 +51,7 @@ no continuation is claimed. The recipe/seed search ledger remains fully visible.
 
 **Owner-supplied ALOHA update:** the owner reports5models,49FIT training episodes,
 10FIT-only internal evaluation episodes,1,840next-state predictions and clean
-replay, with every TACseed failing the strongest constant-velocity reference
+replay, with neural MSE below persistence but every TACseed failing the strongest constant-velocity reference
 (about one-tenth neural MSE). No oldDEV/protectedTEST was reportedly scored. The
 exact original study/checkpoint/score/replay references have not yet been located
 in the inspected records: retain this as attributed evidence pending verification,
