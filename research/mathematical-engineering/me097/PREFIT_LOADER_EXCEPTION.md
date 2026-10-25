@@ -1,0 +1,1 @@
+The initial launcher failed while hashing a nonexistent renamed script before any model construction/optimizer update or seed directory. Zero fits occurred. Corrected the registered entrypoint path before the first fit and committed the correction. No scores or hyperparameters changed.

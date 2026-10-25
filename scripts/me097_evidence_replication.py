@@ -52,7 +52,7 @@ def fit(path):
     check_manifest(json.loads(REG.read_text()),'preflight')
     tr,_,prep=data(path);OUT.mkdir(parents=True,exist_ok=True)
     if any((OUT/f'seed-{s}').exists() for s in SEEDS):raise RuntimeError('original fit directory exists; no retry')
-    source_paths=['scripts/me097_evidence_training.py','src/tac_osm/parameter_budget.py',
+    source_paths=['scripts/me097_evidence_replication.py','src/tac_osm/parameter_budget.py',
        'src/tac_osm/variants/evidence_retrieval_world.py','src/tac_osm/variants/parallel_continuous_world.py',
        'src/tac_osm/variants/retention_controlled_world.py','src/tac_osm/variants/parallel_affine_memory.py']
     source={p:digest(ROOT/p) for p in source_paths}
