@@ -41,7 +41,11 @@ percentage is established. Full original reports and per-seed distributions are
 Original15-model score, graph, publisher-row and summary replay passed from a
 clean checkout of93ecebd4. GitHub original-score replay
 [40189256081](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40189256081)
-also passed. Checkpoint replay establishes reproduction, not qualification.
+also passed. Expanded original-model/graph/summary/publisher-row GitHub replay
+[40189770334](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40189770334)
+passed after correcting a cross-CPU diagnostic-metadata equality bug, without
+changing tensor tolerances or saved evidence. All982local tests pass.
+Checkpoint replay establishes reproduction, not qualification.
 
 **Next fixed hypothesis:** ME103 is a proposal to continue every15original model
 equally for1,536additionalupdates (3,072lineage), preserving exact optimizer/RNG,
