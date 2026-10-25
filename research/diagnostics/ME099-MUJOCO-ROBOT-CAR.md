@@ -13,7 +13,7 @@ Reference: [ME099 original FIT index](../replay-bundles/ME099/FIT_INDEX.json) an
 
 The frozen ALOHA model receives shape-compatible, deliberately **untrained mappings** of two simulator environments into its original 14D inputs. All other original-domain dimensions are held at original FIT means. This creates an **out-of-distribution diagnostic**, not proof the original physics task generalizes. The simulator runs baseline versus bounded, supervised neural-advisory feedback and clean versus exactly 50 consecutive artificially missing sensor observations. The advisory is accepted only under conservative magnitude controls; if absent/out-of-distribution it falls back to classic control. The model never acts as a trained control policy.
 
-Input semantics are crucial: only the **past executed action** goes into the trained model. It cannot select the best hypothetical current command: that requires new action-conditioned training. During the gap the model receives source-invalid observations with a carried recurrent state and no invented physical measurements; ground truth is accessed for scoring only after advancing MuJoCo. The model's invalid-observation path may produce degenerate distributions, and this must be reported rather than silently repaired.
+Input semantics are crucial: only the **past executed action** goes into the trained model. It cannot select the best hypothetical current command: that requires new action-conditioned training. During the gap the model receives **no new observations**: at the last genuine observation it forecasts all required future horizons, caches this distribution, carries memory unchanged, and scores horizons 2–51 against subsequent simulator states. It never evaluates padded or valid=False output as a forecast. Ground truth is accessed for scoring only after physics advances. The original model was not trained for missing-control action sequences.
 
 ## Run without hardware
 
@@ -28,3 +28,7 @@ The associated GitHub Actions workflow installs dependencies in a Linux runner, 
 Report actual original SHA256, model parameter count, clean/gap prediction MAE versus persistence, nominal-90% interval coverage, interval widths, goal tracking and advisory usage/fallback, CPU wall time and step count. Simulation-only performance is neither an independent authentic-data comparison nor evidence of trained robotic or automotive control.
 
 To test an authentic robotic/vehicle brain properly, fit a source-authorized real action-conditioned model for each domain; independently validate calibration and horizons, zero-shot physical transfer, logged command authority and physical safety, then qualify with genuine held-out real outcomes and appropriate hardware supervision. **No autonomous vehicle or real-device action is authorized.**
+
+## Original executed results
+
+The completed, corrected five-checkpoint physics run is documented in [SIM001 original simulation findings](SIM001_ME099_MUJOCO_RESULTS.md) with all eight conditions and negative calibration/control outcomes, runner ID 40185878515 and simulation-only artifact. Earlier gap-width-zero figures came from incorrectly scoring padding and are explicitly withdrawn as calibration evidence. The original real-trained weights and real-world gates are unchanged.
