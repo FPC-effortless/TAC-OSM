@@ -49,8 +49,10 @@ checks pass. The existing ME102Lean/Python formulation is inherited byte-unchang
 PNDSPR16build passes. Full-neural/IEEE and calibration guarantees remain OPEN.
 Clean detached checkoute85268a0replayed all15models/forecasts/scores/gates, all30
 fitted dtype checks and the summary/publisher-row audit with no retraining.
-All52bundle payload checksums pass. GitHub original replay40191654367 is pending
-at this record; its outcome must be checked before claiming final CI success.
+All52bundle payload checksums pass.
+[GitHub original replay40191654367](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40191654367)
+passed all original model/score/graph/summary/source-label checks. Source replay
+is separate from latest metadata-only commit CI and from predictive qualification.
 
 **Next integrated capability direction:** preserve strong point predictions while
 learning a coherent source/channel-conditioned predictive distribution with useful
