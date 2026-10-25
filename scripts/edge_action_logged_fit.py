@@ -178,7 +178,6 @@ def score(path,replay=False):
                 out.append(y)
             outputs.append(np.concatenate(out))
     for i in range(0,len(samples),64):
-        _,(xprev,xx,cmd,obs)=None,(None,None,None,None) # overwritten below
         (_,_,_,_,_,_),raw=batch(data,samples[i:i+64])
         x,prev,cmd,y=raw
         ids.extend(samples[i:i+64].tolist());truth.append(y)
