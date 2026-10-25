@@ -1,0 +1,45 @@
+name: EWA002 one-shot real ALOHA external task memory comparison
+on:
+  push:
+    branches:
+      - research/ewa002-velocity-residual-external-2026-10-25
+    paths:
+      - 'research/mathematical-engineering/ewa002/PROTOCOL.md'
+      - 'scripts/ewa002_external_velocity_real.py'
+      - 'src/tac_osm/variants/ewa002_velocity_memory.py'
+      - 'tests/test_ewa002_velocity_memory.py'
+      - '.github/workflows/ewa002-external-real-velocity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  external-source-original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU PyTorch and real publisher parquet readers
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+      - name: Verify delayed-outcome memory + hash bounds
+        run: |
+          PYTHONPATH=src python -m unittest tests.test_ewa002_velocity_memory tests.test_outcome_utility_memory -v
+      - name: Execute locked original checkpoints on pinned external ALOHA candy recordings
+        run: |
+          PYTHONPATH=src:. python scripts/ewa002_external_velocity_real.py --seed-list 97001,97002,97003,97004,97005
+      - name: Upload original independent external real-task score artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ewa002-aloha-candy-first-external-scoring
+          path: research/diagnostics/ewa002_external_robot_original.json
+          if-no-files-found: warn
