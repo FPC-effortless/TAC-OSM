@@ -1,0 +1,116 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME097-SHARED-EVIDENCE-REPLICATION",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "observed_real_outcomes": true,
+    "sha256": "a3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a",
+    "name": "lerobot/aloha_mobile_cabinet",
+    "license": "Apache-2.0"
+  },
+  "models": [
+    {
+      "architecture": "shared_evidence",
+      "seed": 97001,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874,
+      "measured": {
+        "seed": 97001,
+        "trainable_parameters": 95874,
+        "deployed_parameters": 95874,
+        "checkpoint_sha256": "12aacd301ebafb543aac00aa3b4c660734ebcc1819623de1adefefb9c0582715",
+        "optimizer_cpu_seconds": 4.2420958859999995,
+        "steps": 256,
+        "examples": 2048,
+        "supervised_transitions": 131072
+      }
+    },
+    {
+      "architecture": "shared_evidence",
+      "seed": 97002,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874,
+      "measured": {
+        "seed": 97002,
+        "trainable_parameters": 95874,
+        "deployed_parameters": 95874,
+        "checkpoint_sha256": "1187f6ff576d04c5d6d23ba11b5d136e027d18ba7a1e3c834028a37546a7b11f",
+        "optimizer_cpu_seconds": 4.349522045999999,
+        "steps": 256,
+        "examples": 2048,
+        "supervised_transitions": 131072
+      }
+    },
+    {
+      "architecture": "shared_evidence",
+      "seed": 97003,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874,
+      "measured": {
+        "seed": 97003,
+        "trainable_parameters": 95874,
+        "deployed_parameters": 95874,
+        "checkpoint_sha256": "92633bb5a4e7a1b32c41e2dddb3d6196d6c6615b872ab42e22ba1ba88f05b1c5",
+        "optimizer_cpu_seconds": 4.286007681000001,
+        "steps": 256,
+        "examples": 2048,
+        "supervised_transitions": 131072
+      }
+    },
+    {
+      "architecture": "shared_evidence",
+      "seed": 97004,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874,
+      "measured": {
+        "seed": 97004,
+        "trainable_parameters": 95874,
+        "deployed_parameters": 95874,
+        "checkpoint_sha256": "548dbe8d9d5cdc949ed7847dde2b35a4d8bd045d7c367de5abd7e91907373624",
+        "optimizer_cpu_seconds": 4.202488129999999,
+        "steps": 256,
+        "examples": 2048,
+        "supervised_transitions": 131072
+      }
+    },
+    {
+      "architecture": "shared_evidence",
+      "seed": 97005,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874,
+      "measured": {
+        "seed": 97005,
+        "trainable_parameters": 95874,
+        "deployed_parameters": 95874,
+        "checkpoint_sha256": "ab9cfb31ccd08e57f8d53d45f41613869c42464fcd995f313724a10ada5a6030",
+        "optimizer_cpu_seconds": 4.271132799,
+        "steps": 256,
+        "examples": 2048,
+        "supervised_transitions": 131072
+      }
+    }
+  ],
+  "protocol": {
+    "updates": 256,
+    "batch": 8,
+    "history": 64,
+    "optimizer": "AdamW lr=.0006 wd=.001 clip=1",
+    "tuning_trials": 1,
+    "seeds": 5,
+    "source_revision": "7a752b39f7e69de7e38aee485a6bab07528a061a",
+    "fit_episodes": "sorted first 70%; never DEV labels",
+    "evaluation": "next15% already exposed DEV only; final15% never scored here",
+    "action_input": "strictly previous-frame recorded action",
+    "gate": "EVERY seed MSE and late-half MSE <=.95 persistence; moving-top-FIT-decile MSE <=persistence; independent replay required",
+    "protected_test_accesses": 0,
+    "old_me094_me095_gate": "NOT PASSED; different data/task cannot satisfy it",
+    "no_architecture_superiority_claim": true
+  },
+  "replication_reason": "ME096 sparse-checkout commit failed and original scoring occurred before archive commit. Preserve all five originals and results; no numerical, model, data, optimizer or gate changes. This new separately budgeted five-seed run uses an enforced Git-byte freeze before scoring.",
+  "prior_attempts": {
+    "ME096": 5,
+    "ME095_completed": 4,
+    "ME095_interrupted": 1
+  }
+}
