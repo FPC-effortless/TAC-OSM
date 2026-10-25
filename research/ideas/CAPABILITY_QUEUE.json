@@ -1,0 +1,140 @@
+{
+  "schema_version": "tac-osm.capability-queue.v1",
+  "updated": "2026-10-25",
+  "active_model_families": 6,
+  "queue_policy": {
+    "advisory_queue": true,
+    "recommended_max_concurrent_fits": 2,
+    "missing_registration_status": "BLOCKED/DESIGN_ONLY",
+    "fit_requires_valid_preflight": true,
+    "preflight_does_not_authorize_fit": true,
+    "live_source_math_and_runtime_gates": "tracked separately and must be verified for each study",
+    "architecture_ranking_requires_matched_trained_arms": true,
+    "trained_model_parameters": "95000-105000 inclusive per fitted model",
+    "protected_test_access": "prohibited unless separately authorized and registered"
+  },
+  "ideas": [
+    {
+      "id": "ME101",
+      "title": "Source-aware belief sensor model",
+      "capability_objective": "Estimate a calibrated belief over the current latent state from source-authorized sensor evidence, then forecast coherent future outcomes while representing uncertainty in stale or missing observations.",
+      "source": "UCI501 licensed sensor source; source SHA-256 d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8; FIT 2013-2014, exposed DEV 2015, protected TEST 2016-2017 closed.",
+      "status": "ACTIVE_PREREGISTRATION_PENDING",
+      "fit_ceilings": {
+        "trainable_parameters_per_model": [95000, 105000],
+        "deployed_learned_parameters_per_model": [95000, 105000],
+        "protected_test_access": false,
+        "fit_authorized_by_queue": false
+      },
+      "preregistration_path": "research/mathematical-engineering/me101/FAIR_COMPARISON.json",
+      "scope_and_unknowns": [
+        "The ME101 preregistration is forthcoming; its actual fit, source, mathematics, and runtime gates remain independent of this queue declaration.",
+        "2015 DEV outcomes were previously exposed; use only under the registered bounded screening role, and keep 2016-2017 TEST closed.",
+        "The belief representation and calibrated uncertainty must be specified against the complete source-to-output graph.",
+        "No claim of source authority, late-arrival handling, action utility, independent intelligence, or superiority follows from this objective alone."
+      ],
+      "priority": 1
+    },
+    {
+      "id": "NEXT-SHARED-SELECTIVE",
+      "title": "Geometry-constrained, entity-selective parallel world-state intelligence",
+      "capability_objective": "Improve authenticated delayed-state retrieval and future-state prediction through source-authorized entity-selective memory while preserving the exact associative input-only scan, bounded primary dynamic state, and reliable streaming.",
+      "source": "NEXT-SHARED-SELECTIVE direction dated 2026-10-25; prior art pointers include DeepSeek-V3, mHC, Conditional Memory via Scalable Lookup, and Native Sparse Attention. A qualified new longitudinal source is still required.",
+      "status": "DESIGN_ONLY",
+      "fit_ceilings": {
+        "trainable_parameters_per_model": [95000, 105000],
+        "deployed_learned_parameters_per_model": [95000, 105000],
+        "protected_test_access": false,
+        "fit_authorized_by_queue": false
+      },
+      "preregistration_path": "research/mathematical-engineering/next-shared-selective/FAIR_COMPARISON.json",
+      "scope_and_unknowns": [
+        "Entity authority, natural delay/occlusion, map provenance, and useful old-information headroom require source audit.",
+        "Admission, geometry, static lookup, and CED are integrated candidate mechanisms, not established gains; attribution studies are later and conditional.",
+        "All six existing model families share one candidate core; this is not a seventh family.",
+        "No ALOHA exposed DEV retuning or protected TEST access is allowed."
+      ],
+      "priority": 2
+    },
+    {
+      "id": "CAP-CHANNEL-SELECTIVE",
+      "title": "Channel-selective representations",
+      "capability_objective": "Preserve and retrieve the sensor or feature channels that carry predictive value at the target horizon, with explicit missingness and source validity.",
+      "source": "Candidate extension to source-qualified longitudinal real sensor records; channel utility and missingness must be observed in that source.",
+      "status": "DESIGN_ONLY",
+      "fit_ceilings": {
+        "trainable_parameters_per_model": [95000, 105000],
+        "deployed_learned_parameters_per_model": [95000, 105000],
+        "protected_test_access": false,
+        "fit_authorized_by_queue": false
+      },
+      "preregistration_path": "research/mathematical-engineering/channel-selective/FAIR_COMPARISON.json",
+      "scope_and_unknowns": [
+        "Must remain integrated with the shared core and source-aware belief objective.",
+        "Predictive channel selection, calibration effects, and compute benefit are unmeasured.",
+        "Do not claim a feature-importance or causal explanation from attention or learned gates alone."
+      ],
+      "priority": 3
+    },
+    {
+      "id": "CAP-MULTIHORIZON",
+      "title": "Coherent multi-horizon sensor forecasting",
+      "capability_objective": "Forecast multiple future horizons from one consistent predictive distribution, preserving cross-horizon coherence and useful calibrated uncertainty.",
+      "source": "Authentic sensor sequences with actual future measurements across registered horizons; prior ME098/ME099 trajectory evidence is mixed and its full gate failed.",
+      "status": "DESIGN_ONLY",
+      "fit_ceilings": {
+        "trainable_parameters_per_model": [95000, 105000],
+        "deployed_learned_parameters_per_model": [95000, 105000],
+        "protected_test_access": false,
+        "fit_authorized_by_queue": false
+      },
+      "preregistration_path": "research/mathematical-engineering/multihorizon-sensor/FAIR_COMPARISON.json",
+      "scope_and_unknowns": [
+        "The known ME098/ME099 evidence remains immutable; four-of-five ME099 full-gate passes do not qualify the study.",
+        "Future horizon definitions, source sampling clocks, and calibration targets require prospective specification.",
+        "No additional fit is implied by this queue entry."
+      ],
+      "priority": 4
+    },
+    {
+      "id": "CAP-TYPED-EVENT-HEADS",
+      "title": "Entity/event multimodal typed heads",
+      "capability_objective": "Represent source-identified entities and typed events across available modalities, then predict observed state transitions without leaking future identity or event information.",
+      "source": "Qualified longitudinal event records with source-authorized identity, timestamps, typed event definitions, and aligned observed outcomes across modalities.",
+      "status": "DESIGN_ONLY",
+      "fit_ceilings": {
+        "trainable_parameters_per_model": [95000, 105000],
+        "deployed_learned_parameters_per_model": [95000, 105000],
+        "protected_test_access": false,
+        "fit_authorized_by_queue": false
+      },
+      "preregistration_path": "research/mathematical-engineering/typed-event-heads/FAIR_COMPARISON.json",
+      "scope_and_unknowns": [
+        "Modality availability, event ontology, entity continuity, and source authority have not been established.",
+        "All additional encoders and heads count toward the 95k-105k trained and deployed model budget.",
+        "Forecasting observed events does not identify causal action effects or workflow completion."
+      ],
+      "priority": 5
+    },
+    {
+      "id": "CAP-CED-USEFULNESS",
+      "title": "CED refinement only when useful",
+      "capability_objective": "Determine whether bounded Concept Exchange Decoder refinement improves a preregistered real capability objective enough to justify its parameters, inference depth, and state costs.",
+      "source": "Original PR331 CED design (untrained) and a future qualified real cohort with measurable outcomes; no real capability gain currently established.",
+      "status": "DESIGN_ONLY",
+      "fit_ceilings": {
+        "trainable_parameters_per_model": [95000, 105000],
+        "deployed_learned_parameters_per_model": [95000, 105000],
+        "protected_test_access": false,
+        "fit_authorized_by_queue": false
+      },
+      "preregistration_path": "research/mathematical-engineering/ced-usefulness/FAIR_COMPARISON.json",
+      "scope_and_unknowns": [
+        "PR331 remains an untrained historical design; its name and proposed refinement depth are not evidence of useful reasoning.",
+        "CED is conditional on a capability question and source cohort, not an automatic architecture requirement.",
+        "Any later attribution comparison requires preregistered, trained, parameter-matched arms and complete budget parity."
+      ],
+      "priority": 6
+    }
+  ]
+}

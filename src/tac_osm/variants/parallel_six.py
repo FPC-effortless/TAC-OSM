@@ -79,9 +79,15 @@ def require_qualified_domain_head(name: str | Variant) -> None:
         )
 
 
-def instantiate_entity_sensor_core(name: str | Variant):
+def instantiate_entity_sensor_core(name: str | Variant, *, candidate: str = "source"):
+
     """Unqualified typed sensor candidate, within the existing Temporal family."""
     if parallel_family(name).family != Variant.TEMPORAL:
         raise ValueError('entity-sensor candidate belongs to Temporal research lane')
-    from .entity_sensor_world import EntitySensorWorld
-    return EntitySensorWorld()
+    if candidate == "source":
+        from .entity_sensor_world import EntitySensorWorld
+        return EntitySensorWorld()
+    if candidate == "belief":
+        from .belief_sensor_world import BeliefSensorWorld
+        return BeliefSensorWorld()
+    raise ValueError("unknown typed sensor candidate")
