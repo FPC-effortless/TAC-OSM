@@ -1,0 +1,317 @@
+{
+  "architecture": "strong_reconstruction",
+  "checkpoints": [
+    {
+      "deployed_parameters": 98495,
+      "parameter_values_sha256": "e4030bbffec94928d92fabdebc5257fa400ca4454f485e2144c365d093e3ca90",
+      "path": "/tmp/tac-evidence/research/replay-bundles/ME102/strong_reconstruction/seed-102005/final.pt",
+      "sha256": "84258e7cf3c2cfe279bfe843204a85a4f7577bcc35a92e6cde3ccbe3ff491338",
+      "state_key_path": [
+        "model"
+      ],
+      "successful_optimizer_steps": 1536,
+      "trainable_parameters": 98495
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 98495,
+    "trainable_parameters": 98495
+  },
+  "last_pre_update": {
+    "deployed_parameters": 98495,
+    "successful_optimizer_steps": 1535,
+    "trainable_parameters": 98495
+  },
+  "manifest_path": "/tmp/tac-evidence/research/mathematical-engineering/me102/FAIR_COMPARISON.json",
+  "manifest_sha256": "299583b98999b8d6b1d6644a0fae4b8ec366ddfcabce8443358066dc377c022f",
+  "model_class": "tac_osm.variants.reconstruction_sensor_world.ReconstructionSensorWorld",
+  "preflight": {
+    "deployed_parameters": 98495,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "state_noise",
+        "numel": 18,
+        "requires_grad": true,
+        "shape": [
+          3,
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "state_response",
+        "numel": 6,
+        "requires_grad": true,
+        "shape": [
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "station.weight",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          12,
+          4
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.weight",
+        "numel": 2352,
+        "requires_grad": true,
+        "shape": [
+          48,
+          49
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.bias",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "source_admission.weight",
+        "numel": 624,
+        "requires_grad": true,
+        "shape": [
+          13,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "source_admission.bias",
+        "numel": 13,
+        "requires_grad": true,
+        "shape": [
+          13
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.weight",
+        "numel": 25344,
+        "requires_grad": true,
+        "shape": [
+          176,
+          144
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.weight",
+        "numel": 32384,
+        "requires_grad": true,
+        "shape": [
+          176,
+          184
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.weight",
+        "numel": 448,
+        "requires_grad": true,
+        "shape": [
+          2,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.bias",
+        "numel": 2,
+        "requires_grad": true,
+        "shape": [
+          2
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.weight",
+        "numel": 1792,
+        "requires_grad": true,
+        "shape": [
+          8,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.weight",
+        "numel": 30624,
+        "requires_grad": true,
+        "shape": [
+          132,
+          232
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.bias",
+        "numel": 132,
+        "requires_grad": true,
+        "shape": [
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.weight",
+        "numel": 1584,
+        "requires_grad": true,
+        "shape": [
+          12,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.weight",
+        "numel": 256,
+        "requires_grad": true,
+        "shape": [
+          32,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_head.weight",
+        "numel": 1224,
+        "requires_grad": true,
+        "shape": [
+          12,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_head.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      }
+    ],
+    "trainable_parameters": 98495
+  },
+  "run_id": "b6fc77699a5c4dd6b5f0f96f285adbba",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 102005,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME102-RECONSTRUCTION-PANEL",
+  "successful_optimizer_steps": 1536
+}
