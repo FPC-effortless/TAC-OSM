@@ -1,0 +1,60 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME096-SHARED-EVIDENCE",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "observed_real_outcomes": true,
+    "sha256": "a3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a",
+    "name": "lerobot/aloha_mobile_cabinet",
+    "license": "Apache-2.0"
+  },
+  "models": [
+    {
+      "architecture": "shared_evidence",
+      "seed": 96001,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874
+    },
+    {
+      "architecture": "shared_evidence",
+      "seed": 96002,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874
+    },
+    {
+      "architecture": "shared_evidence",
+      "seed": 96003,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874
+    },
+    {
+      "architecture": "shared_evidence",
+      "seed": 96004,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874
+    },
+    {
+      "architecture": "shared_evidence",
+      "seed": 96005,
+      "trainable_parameters": 95874,
+      "deployed_parameters": 95874
+    }
+  ],
+  "protocol": {
+    "updates": 256,
+    "batch": 8,
+    "history": 64,
+    "optimizer": "AdamW lr=.0006 wd=.001 clip=1",
+    "tuning_trials": 1,
+    "seeds": 5,
+    "source_revision": "7a752b39f7e69de7e38aee485a6bab07528a061a",
+    "fit_episodes": "sorted first 70%; never DEV labels",
+    "evaluation": "next15% already exposed DEV only; final15% never scored here",
+    "action_input": "strictly previous-frame recorded action",
+    "gate": "EVERY seed MSE and late-half MSE <=.95 persistence; moving-top-FIT-decile MSE <=persistence; independent replay required",
+    "protected_test_accesses": 0,
+    "old_me094_me095_gate": "NOT PASSED; different data/task cannot satisfy it",
+    "no_architecture_superiority_claim": true
+  }
+}

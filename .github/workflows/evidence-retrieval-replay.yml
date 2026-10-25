@@ -1,0 +1,30 @@
+name: Shared evidence retrieval original replay
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/tac_osm/variants/evidence_retrieval_world.py'
+      - 'scripts/me096_evidence_training.py'
+      - 'research/replay-bundles/ME096/**'
+      - 'tests/test_evidence_retrieval_world.py'
+      - '.github/workflows/evidence-retrieval-replay.yml'
+permissions:
+  contents: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.9.0 --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pyarrow pytest
+      - run: PYTHONPATH=src:. python -m pytest tests/test_evidence_retrieval_world.py tests/test_parallel_six_contract.py tests/test_six_variant_adapters.py -q
+      - name: Restore original five models and scores (never train in CI)
+        run: |
+          if test -f research/replay-bundles/ME096/RESULTS.json; then
+            PYTHONPATH=src:. python scripts/me096_evidence_training.py replay
+          else
+            echo 'REPO_REPLAY=BLOCKED originals or original scoring not yet present'
+          fi
