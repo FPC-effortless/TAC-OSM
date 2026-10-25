@@ -1,0 +1,42 @@
+{
+  "schema_version": "tac-osm.capability-progress.v1",
+  "study_id": "ME100-ENTITY-SENSOR",
+  "tier": "TRAINED_REPLAY_VERIFIED",
+  "claim_type": "new trained sensor-gap forecasting pilot; not independent architecture qualification",
+  "what_improved": "Within-model long256 PM2.5 gap MAE38.9869 vs short8 46.0731; five-seed mean; all5 directional history gates pass",
+  "what_regressed": "No overall gain: primary intervalcoverage67.69% below85; dailyPM MAE35.689>LOCF34.516; historyCI includeszero; all5 fullgates fail",
+  "what_remains_unknown": "matched neural architectures, independent sites, delayed-arrival/source authority, action consequences, CED, wholeNNIEEELean",
+  "source": {
+    "authentic_real_data": true,
+    "exposure": "UNTOUCHED_REAL",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "eligible_ids_sha256": "9134e3beb01e20020e2f70aa416f4806ff0205e7dd1137f27c760ec88898b338",
+    "holdout_unopened_before_freeze": true
+  },
+  "task": {
+    "prediction_time_validated": true,
+    "independent_cases": 21,
+    "actual_future_targets": 21,
+    "target": "21globalcalendar-week clusters with143natural-gapPM2.5forecast queries; repeated seeds are not independent cases",
+    "query_and_horizon": "actual current missingPM2.5, staleness8..255h, measured target6h ahead",
+    "same_case_ids_target_horizon_metric": true
+  },
+  "model": {
+    "candidate_sha256": "9d097b905159b7b1dcecbe8ddfd18276d528cdfe99cbe57bf2c592b64ef058e9",
+    "original_new_checkpoint_path": "research/replay-bundles/ME100/seed-100001/final.pt",
+    "new_trainable_parameters": 97235,
+    "training_exposure_and_compute_note": "five newfits;1536updates,batch16,mixed8/64/256;singlemodelpilot, no neural architecture comparator"
+  },
+  "integrity": {
+    "git_original_checkpoints": true,
+    "independent_clean_replay": true,
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true,
+    "independent_raw_case_audit": false,
+    "raw_case_score_artifact_path": "research/replay-bundles/ME100/FORECASTS.npz",
+    "independent_audit_run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40173945086"
+  },
+  "practical_reference_scored": true,
+  "independent_real_distributions": 0,
+  "study_notes": "Original five models freeze1d721082 before REPORT scoreseca5f8ab; clean detached checkout and GitHub original replay PASS. Full gateFAIL all5; no reliable overall intelligence increase or architectural promotion. Public temporal pilot, not independent-site qualification."
+}

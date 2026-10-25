@@ -53,11 +53,12 @@ VARIANTS: Mapping[Variant, VariantSpec] = {
         ("ME069", "ME070", "ME071", "ME072", "ME073", "ME074"),
     ),
     Variant.TEMPORAL: VariantSpec(
-        Variant.TEMPORAL, ("tac_osm.woyengi_forecast_contract",),
-        "as-known-at/as-valid-at state reconstruction and delayed corrections",
-        "governance-replay advisory feature input with dual clocks",
-        "bitemporal engineering proposal: no qualified real-data model improvement",
-        ("ME069", "ME071", "ME073"),
+        Variant.TEMPORAL, ("tac_osm.woyengi_forecast_contract",
+                           "tac_osm.variants.entity_sensor_world"),
+        "persistent sensor histories; proposed as-known-at/as-valid-at corrections",
+        "six-pollutant sensor distribution; separate proposed governance dual-clock input",
+        "ME100 five sensor fits: gap history mean improves, CI includeszero, all fullgatesFAIL; bitemporal correction remains unqualified",
+        ("ME069", "ME071", "ME073", "ME100"),
     ),
     Variant.EDGE_LITE: VariantSpec(
         Variant.EDGE_LITE, ("tac_osm.parameter_budget",),

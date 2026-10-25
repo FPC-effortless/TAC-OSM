@@ -1,0 +1,143 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME100-ENTITY-SENSOR",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "observed_real_outcomes": true,
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "name": "UCI501 Beijing multi-site air quality",
+    "license": "CC-BY-4.0"
+  },
+  "models": [
+    {
+      "architecture": "entity_sensor",
+      "seed": 100001,
+      "trainable_parameters": 97235,
+      "deployed_parameters": 97235,
+      "measured": {
+        "seed": 100001,
+        "trainable_parameters": 97235,
+        "deployed_parameters": 97235,
+        "steps": 1536,
+        "checkpoint_sha256": "9d097b905159b7b1dcecbe8ddfd18276d528cdfe99cbe57bf2c592b64ef058e9",
+        "cpu_seconds": 56.849176926,
+        "wall_seconds": 57.04410983100024,
+        "forecast_origin_exposures": 24576,
+        "history_event_exposures": 2686976,
+        "nonzero_gradient_tensors_step2": 25,
+        "gradient_tensors": 25
+      }
+    },
+    {
+      "architecture": "entity_sensor",
+      "seed": 100002,
+      "trainable_parameters": 97235,
+      "deployed_parameters": 97235,
+      "measured": {
+        "seed": 100002,
+        "trainable_parameters": 97235,
+        "deployed_parameters": 97235,
+        "steps": 1536,
+        "checkpoint_sha256": "9ac98da3a4fd5a6be1049bafb3df73426be5a8ed74e8f0fda16b6cc46476740e",
+        "cpu_seconds": 56.578965218,
+        "wall_seconds": 56.58643858200048,
+        "forecast_origin_exposures": 24576,
+        "history_event_exposures": 2686976,
+        "nonzero_gradient_tensors_step2": 25,
+        "gradient_tensors": 25
+      }
+    },
+    {
+      "architecture": "entity_sensor",
+      "seed": 100003,
+      "trainable_parameters": 97235,
+      "deployed_parameters": 97235,
+      "measured": {
+        "seed": 100003,
+        "trainable_parameters": 97235,
+        "deployed_parameters": 97235,
+        "steps": 1536,
+        "checkpoint_sha256": "b74d30e9fe8e30a810988d53c72f96bdeed4e14c8df848a94a9ac605db937580",
+        "cpu_seconds": 58.26372357700001,
+        "wall_seconds": 58.26843709700006,
+        "forecast_origin_exposures": 24576,
+        "history_event_exposures": 2686976,
+        "nonzero_gradient_tensors_step2": 25,
+        "gradient_tensors": 25
+      }
+    },
+    {
+      "architecture": "entity_sensor",
+      "seed": 100004,
+      "trainable_parameters": 97235,
+      "deployed_parameters": 97235,
+      "measured": {
+        "seed": 100004,
+        "trainable_parameters": 97235,
+        "deployed_parameters": 97235,
+        "steps": 1536,
+        "checkpoint_sha256": "5c9e4803f54ed974e3a2cb5285e3f0f5cb991c30b66d44596c1e8536503a34c6",
+        "cpu_seconds": 57.834748504000004,
+        "wall_seconds": 57.84100997299902,
+        "forecast_origin_exposures": 24576,
+        "history_event_exposures": 2686976,
+        "nonzero_gradient_tensors_step2": 25,
+        "gradient_tensors": 25
+      }
+    },
+    {
+      "architecture": "entity_sensor",
+      "seed": 100005,
+      "trainable_parameters": 97235,
+      "deployed_parameters": 97235,
+      "measured": {
+        "seed": 100005,
+        "trainable_parameters": 97235,
+        "deployed_parameters": 97235,
+        "steps": 1536,
+        "checkpoint_sha256": "cb77bc8412e4314c86fc88010637f0ba2f4d2d49e7525379f8c16317d5e98ca5",
+        "cpu_seconds": 57.438390827000006,
+        "wall_seconds": 57.44215345699922,
+        "forecast_origin_exposures": 24576,
+        "history_event_exposures": 2686976,
+        "nonzero_gradient_tensors_step2": 25,
+        "gradient_tensors": 25
+      }
+    }
+  ],
+  "protocol": {
+    "updates": 1536,
+    "batch_size": 16,
+    "contexts": [
+      8,
+      64,
+      256
+    ],
+    "context_schedule": "fixed repeating 8,64,256; all seeds",
+    "origins": "8 uniformly drawn FIT natural-gap origins plus8 uniformly drawn FIT general origins per update; with replacement",
+    "optimizer": "AdamW",
+    "lr": 0.0006,
+    "weight_decay": 0.001,
+    "clip_norm": 1,
+    "loss": "masked censored Gaussian raw-density NLL + .1 observed standardized-log target MSE",
+    "tuning_trials": 1,
+    "seeds": 5,
+    "fit": "2013-03-01 through2014-12-31; all12stations",
+    "report": "2015 only; no numeric loading before original5model Git freeze",
+    "test": "2016-2017 protected; unavailable in this pilot",
+    "primary": "6hour PM2.5 raw median MAE on natural missing current observations age8..255hours and observed target",
+    "general": "eligible daily noon queries; all6pollutants reported separately",
+    "gates": "EVERYseed long256 MAE<=.95short8 on primary; <=.97best registered practical reference on primary; generalPM MAE<=1.05LOCF; primary90coverage>=.85; failure retained, no rerun",
+    "uncertainty": "global calendar-week clustered paired bootstrap2000 replicates acrossallstations; conditional on five fitted seeds; descriptive unadjusted",
+    "practical_references": [
+      "LOCF within256hours;zero normalized fallback",
+      "FIT-only ridge lambda100 with same current clocks/masks/ages/site/last256values"
+    ],
+    "replay_rtol": 1e-05,
+    "replay_atol": 1e-06,
+    "stop_rule": "one5seedrun,no model/tuning/budget/gate changes after scoring; noTESTqualification",
+    "architecture_superiority": false,
+    "phase2_matched_qualification": false
+  }
+}
