@@ -37,8 +37,8 @@ ARM_XML = """
     </body>
   </worldbody>
   <actuator>
-    <motor name="motor1" joint="joint1" gear="1" ctrllimited="true" ctrlrange="-1 1"/>
-    <motor name="motor2" joint="joint2" gear="1" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="motor1" joint="joint1" gear="8" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="motor2" joint="joint2" gear="8" ctrllimited="true" ctrlrange="-1 1"/>
   </actuator>
 </mujoco>
 """
