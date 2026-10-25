@@ -1,0 +1,73 @@
+{
+  "schema_version": "tac-osm.capability-progress.v1",
+  "study_id": "ME099-REGIME-TRAJECTORY",
+  "tier": "MIXED_TRADEOFF",
+  "claim_type": "descriptive same-task complete-model development; full guardrail still failed",
+  "what_improved": "PointMSE, properintervalscore and coverage vs frozen same-case ME098parents",
+  "what_regressed": "Intervals45\u201353%wider; seed99001H4coverage84.1926<85; jointNLLstillworse thanFITreference",
+  "what_remains_unknown": "independent/site, long-memory, causalcontrol, customerutility, wholeNNIEEEproof",
+  "source": {
+    "authentic_real_data": true,
+    "exposure": "EXPOSED_DEV",
+    "sha256": "a3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a",
+    "eligible_ids_sha256": "880995ac512a5ee6364a95ad3ceaf857caa4cccfe1c41ddc3b5a96e3a24ad987",
+    "holdout_unopened_before_freeze": false
+  },
+  "task": {
+    "prediction_time_validated": true,
+    "independent_cases": 13,
+    "actual_future_targets": 13,
+    "target": "real future state outcomes in13episodeclusters;19968windowtargetpositions are repeated within these clusters",
+    "query_and_horizon": "1,4,16recordedframes from prefixes1..64",
+    "same_case_ids_target_horizon_metric": true
+  },
+  "model": {
+    "prior_sha256": "ad9bc214515134c4fee8157a44bfdfb48a4967103c5f167221eae98912cae889",
+    "candidate_sha256": "42609ed42d9aa33aee3c5f62a7417b2e7b46650af8e12dba22d8b0533ab60917",
+    "original_old_checkpoint_path": "research/replay-bundles/ME098/seed-98001/final.pt",
+    "original_new_checkpoint_path": "research/replay-bundles/ME099/seed-99001/final.pt",
+    "original_trainable_parameters": 103322,
+    "new_trainable_parameters": 103380,
+    "training_exposure_and_compute_note": "fivepairedparents;768vs1280lineageupdates, not equal-compute architecture competition"
+  },
+  "integrity": {
+    "git_original_checkpoints": true,
+    "independent_clean_replay": true,
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true,
+    "independent_raw_case_audit": false,
+    "raw_case_score_artifact_path": "research/replay-bundles/ME099/CASE_SCORES.json",
+    "independent_audit_run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40166817604"
+  },
+  "primary_comparison": {
+    "name": "fourframe properintervalscore, all five models; descriptive",
+    "direction": "lower_is_better",
+    "prior": 0.336589504368323,
+    "candidate": 0.2513598083796058,
+    "minimum_useful_gain": 0.0,
+    "paired_case_cluster_95ci_gain": null,
+    "paired_seed_count": 5,
+    "beneficial_seed_count": 5
+  },
+  "guardrails": [
+    {
+      "metric": "EVERYseed/horizonMSE<=.95persistence",
+      "status": "PASS"
+    },
+    {
+      "metric": "one-step frozen-parent preservation",
+      "status": "PASS"
+    },
+    {
+      "metric": "EVERYseed/horizon90coverage>=.85",
+      "status": "FAIL"
+    },
+    {
+      "metric": "properintervalscore<=1.05FITreference",
+      "status": "PASS"
+    }
+  ],
+  "practical_reference_scored": true,
+  "independent_real_distributions": 0,
+  "study_notes": "No independent/Mamba/winner/intelligencepromotion; comparison is same-case descriptive; thirteen actualepisodeclusters not forecasts/seeds. Widthauditposthoc. Five representative modelhashes are indexed inoriginalFITINDEX."
+}

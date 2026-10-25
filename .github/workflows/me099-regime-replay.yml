@@ -1,0 +1,35 @@
+name: ME099 coherent trajectory original replay (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/me099/**'
+      - 'research/replay-bundles/ME099/**'
+      - 'scripts/me099_regime_trajectory.py'
+      - 'src/tac_osm/variants/regime_trajectory_world.py'
+      - 'tests/test_regime_trajectory_world.py'
+      - '.github/workflows/me099-regime-replay.yml'
+permissions:
+  contents: read
+jobs:
+  coherent-graph:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pyarrow pytest
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me099/FAIR_COMPARISON.json --phase preflight
+      - run: PYTHONPATH=src:. python -m pytest tests/test_regime_trajectory_world.py tests/test_evidence_retrieval_world.py tests/test_capability_progress_truth_gate.py -q
+      - name: Restore originals, never launch new fits
+        run: |
+          set -e
+          if test -f research/replay-bundles/ME099/RESULTS.json; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me099/POSTFIT.json --phase final
+            PYTHONPATH=src:. python scripts/me099_regime_trajectory.py replay
+            python scripts/validate_capability_progress.py research/mathematical-engineering/me099/CAPABILITY_SCORECARD.json
+          else
+            echo 'REPO_REPLAY=BLOCKED original model portfolio or scores not yet present'
+          fi

@@ -1,0 +1,149 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME099-REGIME-TRAJECTORY",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "observed_real_outcomes": true,
+    "sha256": "a3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a",
+    "name": "lerobot/aloha_mobile_cabinet",
+    "license": "Apache-2.0"
+  },
+  "models": [
+    {
+      "architecture": "regime_trajectory",
+      "seed": 99001,
+      "trainable_parameters": 103380,
+      "deployed_parameters": 103380,
+      "parent_seed": 98001,
+      "parent_checkpoint_sha256": "ad9bc214515134c4fee8157a44bfdfb48a4967103c5f167221eae98912cae889",
+      "measured": {
+        "seed": 99001,
+        "trainable_parameters": 103380,
+        "deployed_parameters": 103380,
+        "checkpoint_sha256": "42609ed42d9aa33aee3c5f62a7417b2e7b46650af8e12dba22d8b0533ab60917",
+        "parent_sha256": "ad9bc214515134c4fee8157a44bfdfb48a4967103c5f167221eae98912cae889",
+        "optimizer_cpu_seconds": 20.917189285000003,
+        "steps": 512,
+        "history_event_exposures": 262144,
+        "future_target_exposures": 786432
+      }
+    },
+    {
+      "architecture": "regime_trajectory",
+      "seed": 99002,
+      "trainable_parameters": 103380,
+      "deployed_parameters": 103380,
+      "parent_seed": 98002,
+      "parent_checkpoint_sha256": "9b472f80cdc4cf5a629af1f260fe3dc83e308284c094bd8911c262befe88ffcc",
+      "measured": {
+        "seed": 99002,
+        "trainable_parameters": 103380,
+        "deployed_parameters": 103380,
+        "checkpoint_sha256": "6ede7be028f7dd3588db05fcdcbf1226e98b1feda4e9d90ac11c61c29103e35a",
+        "parent_sha256": "9b472f80cdc4cf5a629af1f260fe3dc83e308284c094bd8911c262befe88ffcc",
+        "optimizer_cpu_seconds": 20.770384383000003,
+        "steps": 512,
+        "history_event_exposures": 262144,
+        "future_target_exposures": 786432
+      }
+    },
+    {
+      "architecture": "regime_trajectory",
+      "seed": 99003,
+      "trainable_parameters": 103380,
+      "deployed_parameters": 103380,
+      "parent_seed": 98003,
+      "parent_checkpoint_sha256": "69543c260e2e9347e3c041a4217b5124f2d621a29eae741e94de453d83426cf9",
+      "measured": {
+        "seed": 99003,
+        "trainable_parameters": 103380,
+        "deployed_parameters": 103380,
+        "checkpoint_sha256": "96e70b4a3c5a4df0f88655f0088cb2eac076342041263d77e2da5356b98c4e90",
+        "parent_sha256": "69543c260e2e9347e3c041a4217b5124f2d621a29eae741e94de453d83426cf9",
+        "optimizer_cpu_seconds": 21.125278854999998,
+        "steps": 512,
+        "history_event_exposures": 262144,
+        "future_target_exposures": 786432
+      }
+    },
+    {
+      "architecture": "regime_trajectory",
+      "seed": 99004,
+      "trainable_parameters": 103380,
+      "deployed_parameters": 103380,
+      "parent_seed": 98004,
+      "parent_checkpoint_sha256": "979cac28767408920c87fcd147a38d7da0adbe4cd0fd69177b6911ecdc161648",
+      "measured": {
+        "seed": 99004,
+        "trainable_parameters": 103380,
+        "deployed_parameters": 103380,
+        "checkpoint_sha256": "40a1ca88b9b7c107cd45fb58f234a75736d533f7eccaa142bc388e5596e7e0f6",
+        "parent_sha256": "979cac28767408920c87fcd147a38d7da0adbe4cd0fd69177b6911ecdc161648",
+        "optimizer_cpu_seconds": 20.904849350999996,
+        "steps": 512,
+        "history_event_exposures": 262144,
+        "future_target_exposures": 786432
+      }
+    },
+    {
+      "architecture": "regime_trajectory",
+      "seed": 99005,
+      "trainable_parameters": 103380,
+      "deployed_parameters": 103380,
+      "parent_seed": 98005,
+      "parent_checkpoint_sha256": "873f6901413089c6581884b902eff0b9773569288b1a5b6704da2b1acbeb9432",
+      "measured": {
+        "seed": 99005,
+        "trainable_parameters": 103380,
+        "deployed_parameters": 103380,
+        "checkpoint_sha256": "781f7202999636732b75f82e87ddaacdbca1f2ddc01891360a564732b6424cc7",
+        "parent_sha256": "873f6901413089c6581884b902eff0b9773569288b1a5b6704da2b1acbeb9432",
+        "optimizer_cpu_seconds": 20.99613773099999,
+        "steps": 512,
+        "history_event_exposures": 262144,
+        "future_target_exposures": 786432
+      }
+    }
+  ],
+  "protocol": {
+    "updates": 512,
+    "batch_size": 8,
+    "history": 64,
+    "horizons": [
+      1,
+      4,
+      16
+    ],
+    "seeds": 5,
+    "parents": [
+      98001,
+      98002,
+      98003,
+      98004,
+      98005
+    ],
+    "initialization": "fixed corresponding ME098 original; new58parameters, all inherited parameters remain active",
+    "learning_rates": {
+      "retained": 5e-05,
+      "trajectory_head": 0.0002,
+      "new_regime": 0.0006
+    },
+    "weight_decay": 0.001,
+    "clip_norm": 1,
+    "tuning_trials": 1,
+    "loss": ".6H1+.2H4+.2H16 FIT-RMS MSE +.05global-regime jointNLL/42 +.1proper90intervalscore/FIT-RMS",
+    "future_inputs": "none; previous-frame observed command only",
+    "normalization": "unchanged ME097 FIT statistics",
+    "distribution": "one shared global two-regime mixture of coordinate-factorized joint-horizon df4Student-t; derived marginal quantiles",
+    "gate": "EVERY seed/horizon MSE<=.95persistence; H1<=1.05frozenME098 samecases; coordinate90coverage>=.85; intervalscore<=1.05sameFIT-moment-t reference",
+    "replay_rtol": 1e-05,
+    "replay_atol": 1e-06,
+    "protected_test_evaluations": 0,
+    "independent_site_qualification": false,
+    "architecture_superiority": false,
+    "quantile_root": "48FP64 bisections within analytic bracket; implicit first-order gradient; no posthoc calibration",
+    "stop_rule": "one corrected5seed study; no further fits or changed gates in this continuation after scoring"
+  },
+  "motivation": "ME098 all5seeds pass forecast/parent/intervalscore but failcoverage; jointNLL worse thanstaticFITreference. Preserve originalfailure. New coherently shared regime+properintervalobjective, noDEV-derived inflation factor."
+}

@@ -39,3 +39,26 @@ For EVERY future trained TAC-OSM neural model or comparator (including event/rob
 For **every** TAC-OSM variant or new computational-graph research candidate, first read [research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md](research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md), the canonical [PNDS mathematics/formulation policy](https://github.com/FPC-effortless/pnds-lean/blob/main/foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md) and the source-pinned reciprocal [research/pnds-variant-math-links.json](research/pnds-variant-math-links.json). The PNDS model/math record must contain **both Lean 4 and executable Python mathematical formulations** matched to this repository's exact variant, implementation commit and model input-to-output computation graph.
 
 Do not present Lean compilation, shared operator bounds or Python reference tests as source-equivalent full TAC-OSM behavior without full actual-source forward/backward, state, shape, time, mask, precision and gradient verification. Declare incomplete properties OPEN. Keep immutable original data/checkpoints, authentic research scores, failed gates, matching parameter/data/training-compute comparative controls and capability-first priorities. This is **not** a mandate to stop real-capability research for numerous small ablations.
+
+
+## Current shared-core trajectory evidence — 2026-10-25
+
+Read the master-plan branch and ME098/ME099 original results before selecting the
+next architecture study. Six active families share one candidate factory; only
+continuous physical forecasting was trained in these two studies. ME098 learns
+coherent 1/4/16-frame means but fails uncertainty coverage in every seed. ME099
+adds a shared uncertainty regime and proper interval training: four of five seeds
+pass, but seed 99001 has 84.192562% four-frame coverage versus the unchanged 85%
+minimum. FULL GATE FAIL. Do not select favorable seeds, round into a pass, alter
+thresholds, overwrite originals or silently repeat either protocol. This bounded
+correction cycle authorizes no additional fits after scoring.
+
+The source-pinned PNDS PR10/11 references and kernel proofs pass; full neural and
+IEEE refinement, independent cohorts, useful long memory and action/customer
+utility remain OPEN. Both studies preserve original Git models/optimizer/RNG and
+independent score replay. Capability scorecards report MIXED_TRADEOFF. Continue
+substantial capability development under a new prospective protocol on qualified
+real evidence, following the current master plan; attribution and CPU tuning are
+secondary. The current primitive mean law uses recorded frame counts, not proven
+irregular-time physics. No Mamba performance equivalence, whole-network proof,
+new active family, authority, deployment or automatic merge is established.
