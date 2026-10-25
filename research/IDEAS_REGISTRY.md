@@ -1,5 +1,18 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## PRIORITY-A SHARED-EDGE-PHYSICAL — one engine, task-adaptable physical and sensor predictions (2026-10-25)
+
+**Status: prioritized RESEARCH DESIGN only; no new fits or code registry changes.** The six original family identifiers remain for compatibility/provenance, but six independent learned cores are NOT compulsory. Physical+ESWAM trajectory intelligence, Temporal ME100/ME101 sensor/missing-source evidence, and System1 short-horizon risk/forecast share one mathematical parallel/streaming core and use domain-specific truthful observation, units, dynamics and probabilistic heads. Edge-Lite is a hardware export profile, valid/known-at Temporal provenance a deterministic authority service, Enterprise retains specialized event-time semantics, and Counterfactual remains gated nonexecuting scenario research. Exactly six documented family identities persist; PNDS remains mathematical foundation, not a seventh model.
+
+**Compulsory evidence:** genuine different-domain trained capability, not model/weight transfer by assertion. ME099 and ME101 original full gates stay FAILED; ESWAM012 long-history negative, ME100/101 gap uncertainty and poorer NLL remain central blockers. Complete neural models must have 95k–105k real active/deployed parameters; architecture comparisons additionally require <=1% param mismatch, same observed data, matched training budget/FLOPs and untouched source/time/site cohorts. CPU runtime is an efficiency outcome only. Formal Lean kernel checks do NOT prove whole-system safety. The 608-byte core is not the device total (model weights, source clocks and optional external caches count).
+
+**Primary research order:** sensor gap+ordinary forecast with reliable beliefs, genuine robot/contact motion forecast, traffic actor memory with independent evidence, then optional actual shared-weights transfer test versus matched specialist training and real edge hardware p50/p95/p99/energy/flash/RAM. Autonomous vehicle/drone safety, microsecond speed and hardware deployment remain unqualified. Existing enterprise and counterfactual research is archived and independently pursued only where data/outcomes justify it. CED/geometry/MoE/lookup/Muon are optional controlled mechanisms, never automatic compulsory additions.
+
+[Master-priority decision](directions/SHARED-EDGE-PHYSICAL-PRIORITY.md) · [Master plan](MASTER_RESEARCH_PLAN.md).
+
+---
+
+
 ## ME081 — learned horizon-query forecasting: stronger averages, quiet-state trade-off
 
 [Draft PR #375](https://github.com/FPC-effortless/TAC-OSM/pull/375) trains **five complete 100,165-parameter native models**. Fast/slow/8×8 associative dynamics remain intact. New training uses 32 actual observation frames with full gradient credit, a shared horizon-query distribution decoder, and properly scored CRPS plus a small log score and factual motion supervision. This is actual end-to-end learning, not an execution-only result or attribution study.
