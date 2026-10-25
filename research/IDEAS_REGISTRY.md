@@ -576,3 +576,26 @@ Proposed NEXT-SHARED-CLOCK: actual elapsed-time/entity corrections and typed
 workflow time/lifecycle heads, no false completion or missingness claims.
 Proposed NEXT-SHARED-QUERY: reusable coherent path sampling, square-root density
 kernels and measured chunk/hardware processing. No new implemented skill claimed.
+
+
+### ME100 / NEXT-SHARED-SELECTIVE — implemented sensor admission pilot
+
+TAC draftPR395 and PNDS draftPR12. Five97,235-parameter original models trained on
+UCI501 FIT2013–2014; saved before2015REPORT. Native Temporal masked source sum/mass
+trace plus affine associative scan and six-pollutant coherent forecast implemented.
+Long256 gapPM2.5MAE38.986917 vs recent8 46.073106; all5directional gatesPASS, clustered
+CIincludeszero. FullgateFAIL0/5 due gapcoverage67.69%<85 and otherguardrails. General
+PM2.5MAE35.689>LOCF34.516.967localtests; originalclean/GitHubreplayPASS. Protected
+2016–2017unscored. No seventhfamily, action intelligence, broadgain or Phase2claim.
+
+### NEXT-SHARED-BELIEF — proposed integrated uncertainty over missing world state
+
+Motivation: ME100 source retention improves gap point forecasts but fails uncertainty
+on the very cases needing retained observations. Learn a coherent latent belief over
+unobserved current state and future change, conditioned on causal source age,
+evidence mass and innovations. Consider bounded second-moment traces and a jointly
+trained latent-regime emission mixture; count state/covariance bytes and preserve
+input-conditioned scan scheduling. Actual95k–105kparameters; newregistration before
+training, all original models retained, nochangedME100gates or protected-cohort
+selection. Unimplemented/untrained hypothesis; no expected gain promised. Geometry,
+CED and sparse lookup remain draftPR394 proposals, not prerequisites for this step.
