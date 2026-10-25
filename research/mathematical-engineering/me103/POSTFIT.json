@@ -1,0 +1,1329 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME103-ME102-CONTINUATION",
+  "study_type": "architecture_comparison",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "name": "UCI501 BeijingMultiSite",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "license": "CC-BY-4.0",
+    "observed_real_outcomes": true
+  },
+  "literature_gap": {
+    "unresolved_TAConly_question": "For these same 15 fixed ME102 lineages, does one preregistered equal 1536-update continuation change the unchanged all-seed full-gate outcomes, consistent with update-budget sensitivity?",
+    "what_is_not_being_rediscovered": "Denoising reconstruction and proper scoring rules are established mechanisms reused unchanged. This exploratory continuation does not introduce a new architecture or establish undertraining generally.",
+    "established_work": [
+      {
+        "paper": "Vincent et al. 2008 denoising autoencoders",
+        "url": "https://doi.org/10.1145/1390156.1390294",
+        "established_result": "reconstruct authentic inputs from corrupted observations"
+      },
+      {
+        "paper": "Gneiting and Raftery 2007 proper scoring rules",
+        "url": "https://doi.org/10.1198/016214506000001437",
+        "established_result": "evaluate probability and interval forecasts with proper scores"
+      }
+    ]
+  },
+  "arms": [
+    {
+      "architecture": "light_floor",
+      "seed": 102001,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "85ed8c345f726b5828dd0d89e4450c4f3c5f9a74b25894049f3ec8c986c6b883",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "light_floor",
+        "seed": 102001,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "3978fd4da3190e9f5204310bffa9d2e111f607d94cb58590e646b58098217027",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "85ed8c345f726b5828dd0d89e4450c4f3c5f9a74b25894049f3ec8c986c6b883",
+        "augmented_inputs_sha256": "46f23af08242a9ecbc0b148861b54ef6f61e9af2187a9abc13e0cc440ab9429f",
+        "parent_checkpoint_sha256": "c90449b06d7328534aaf23479629f0b8f7a8c2888fa0be1435996dc2e40ebe95",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "27bb1edbf1d8efc3ef4d905297e04ef105d0514fe01d1157d41210107af9da2d",
+          "64": "6e5d006cce5332e3a6485ad04f0679118e590f3cbbcc9b317cf126ea7f2e7963",
+          "256": "fa5280b9358d508779aec294a17500c96abb84d11f02ad4dabaadfa39edb5283"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 56.588619544,
+        "wall_seconds": 61.79840555199917,
+        "peak_memory_bytes": 547061760,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "strong_reconstruction",
+      "seed": 102001,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "85ed8c345f726b5828dd0d89e4450c4f3c5f9a74b25894049f3ec8c986c6b883",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "strong_reconstruction",
+        "seed": 102001,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "85ed8c345f726b5828dd0d89e4450c4f3c5f9a74b25894049f3ec8c986c6b883",
+        "augmented_inputs_sha256": "46f23af08242a9ecbc0b148861b54ef6f61e9af2187a9abc13e0cc440ab9429f",
+        "parent_checkpoint_sha256": "a6099c6312615b6779b7fca890b8e8e96230df64c116929f5cc390db28ae8f51",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "27bb1edbf1d8efc3ef4d905297e04ef105d0514fe01d1157d41210107af9da2d",
+          "64": "6e5d006cce5332e3a6485ad04f0679118e590f3cbbcc9b317cf126ea7f2e7963",
+          "256": "fa5280b9358d508779aec294a17500c96abb84d11f02ad4dabaadfa39edb5283"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 56.383906995000004,
+        "wall_seconds": 61.61633575099768,
+        "peak_memory_bytes": 542670848,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "physical_score",
+      "seed": 102001,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "85ed8c345f726b5828dd0d89e4450c4f3c5f9a74b25894049f3ec8c986c6b883",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "physical_score",
+        "seed": 102001,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "5d8115241be60df7d0da7d8d0cfc19fa4782d89e25251df878ed5ff1be0c5098",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "85ed8c345f726b5828dd0d89e4450c4f3c5f9a74b25894049f3ec8c986c6b883",
+        "augmented_inputs_sha256": "46f23af08242a9ecbc0b148861b54ef6f61e9af2187a9abc13e0cc440ab9429f",
+        "parent_checkpoint_sha256": "c727e348ed3f10ed083717904de70fc86805df680af4458888d65f67e0a6d35e",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "27bb1edbf1d8efc3ef4d905297e04ef105d0514fe01d1157d41210107af9da2d",
+          "64": "6e5d006cce5332e3a6485ad04f0679118e590f3cbbcc9b317cf126ea7f2e7963",
+          "256": "fa5280b9358d508779aec294a17500c96abb84d11f02ad4dabaadfa39edb5283"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 56.592823061000004,
+        "wall_seconds": 75.62342610699852,
+        "peak_memory_bytes": 571727872,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "light_floor",
+      "seed": 102002,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "f3eccd95414e6d05021441101d50c25216a7ac821f26d6018ba1f9848be67251",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "light_floor",
+        "seed": 102002,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "5ce2e48340abdcdb8beaad85901c061c5ed8f236e18b5b1c38dc828f93762475",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "f3eccd95414e6d05021441101d50c25216a7ac821f26d6018ba1f9848be67251",
+        "augmented_inputs_sha256": "7abd4d988532924c6a77d599e830fd0b52ca1ea1b95ee1c0a427e967d2c75372",
+        "parent_checkpoint_sha256": "c509c1afff25227e2ac50f2db991e34da91b87ecca318ee971fb1d13c5a4310a",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "62a40b839e69ac7bfcc72bebbdab5743da70f2d4b9051a6b7e5d3b6317a24115",
+          "64": "9a6c1db2065276901522510dc7363f15979b824c03897c3e0d44f7b73698a981",
+          "256": "4524a150037e955d3e282dc7608e3318ce18eae54d381bd8c26c9eb489e203a6"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 56.819348144,
+        "wall_seconds": 75.22708795499784,
+        "peak_memory_bytes": 585105408,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "strong_reconstruction",
+      "seed": 102002,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "f3eccd95414e6d05021441101d50c25216a7ac821f26d6018ba1f9848be67251",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "strong_reconstruction",
+        "seed": 102002,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "f3eccd95414e6d05021441101d50c25216a7ac821f26d6018ba1f9848be67251",
+        "augmented_inputs_sha256": "7abd4d988532924c6a77d599e830fd0b52ca1ea1b95ee1c0a427e967d2c75372",
+        "parent_checkpoint_sha256": "952f2896d5ec900e28edccd7ffca797876f0402668b34e35335e8cfcfb72ecec",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "62a40b839e69ac7bfcc72bebbdab5743da70f2d4b9051a6b7e5d3b6317a24115",
+          "64": "9a6c1db2065276901522510dc7363f15979b824c03897c3e0d44f7b73698a981",
+          "256": "4524a150037e955d3e282dc7608e3318ce18eae54d381bd8c26c9eb489e203a6"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 57.70022361600002,
+        "wall_seconds": 69.47924699500072,
+        "peak_memory_bytes": 588779520,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "physical_score",
+      "seed": 102002,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "f3eccd95414e6d05021441101d50c25216a7ac821f26d6018ba1f9848be67251",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "physical_score",
+        "seed": 102002,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "78ee787dc9ae706ffe0a9b7bb5e14a222a8ba4a7bc8ad7b78244e0a10db9cb91",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "f3eccd95414e6d05021441101d50c25216a7ac821f26d6018ba1f9848be67251",
+        "augmented_inputs_sha256": "7abd4d988532924c6a77d599e830fd0b52ca1ea1b95ee1c0a427e967d2c75372",
+        "parent_checkpoint_sha256": "b028f9d531c69fb9b76211b6151b3329e7a50ffb5069addf4575138d342c9241",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "62a40b839e69ac7bfcc72bebbdab5743da70f2d4b9051a6b7e5d3b6317a24115",
+          "64": "9a6c1db2065276901522510dc7363f15979b824c03897c3e0d44f7b73698a981",
+          "256": "4524a150037e955d3e282dc7608e3318ce18eae54d381bd8c26c9eb489e203a6"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 57.17702479500001,
+        "wall_seconds": 68.49836829000196,
+        "peak_memory_bytes": 585375744,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "light_floor",
+      "seed": 102003,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "ef8c10076f73485478216de933652c39c82d00c15a82d93270434d8f77b7770d",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "light_floor",
+        "seed": 102003,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "0239cf79eae2dd065c3a75b75ad6ab2cfd8fb3b7839fc610f060d5071aa003ae",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "ef8c10076f73485478216de933652c39c82d00c15a82d93270434d8f77b7770d",
+        "augmented_inputs_sha256": "47e3b4c6dbec55bc57957aebb6ecb88eb4790775d3196ebce636684c4fa339d0",
+        "parent_checkpoint_sha256": "ec754d046f8f56db4c761b931f14696834b390f6d0257de735da32ff85fac830",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "e6ae2911425fd0c3fd4110ef02af9d75761af50bfa4ae326aa6371ff38d8cbe2",
+          "64": "7b15509fbcd40bef6900ed5f086031f88207851050aadb86bb184447a07d02db",
+          "256": "60a62a1ac04488937c5c40acb4125ab78c9bb678ea52358e4eb867c5eeefec39"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 57.72899165499999,
+        "wall_seconds": 59.59287131799647,
+        "peak_memory_bytes": 598384640,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "strong_reconstruction",
+      "seed": 102003,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "ef8c10076f73485478216de933652c39c82d00c15a82d93270434d8f77b7770d",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "strong_reconstruction",
+        "seed": 102003,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "ef8c10076f73485478216de933652c39c82d00c15a82d93270434d8f77b7770d",
+        "augmented_inputs_sha256": "47e3b4c6dbec55bc57957aebb6ecb88eb4790775d3196ebce636684c4fa339d0",
+        "parent_checkpoint_sha256": "7ee91040216c5fe4eb2eb6d93a39a9d696af6ade14643d65cf8545bafc3fc166",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "e6ae2911425fd0c3fd4110ef02af9d75761af50bfa4ae326aa6371ff38d8cbe2",
+          "64": "7b15509fbcd40bef6900ed5f086031f88207851050aadb86bb184447a07d02db",
+          "256": "60a62a1ac04488937c5c40acb4125ab78c9bb678ea52358e4eb867c5eeefec39"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 57.697391829,
+        "wall_seconds": 59.537748364000436,
+        "peak_memory_bytes": 595333120,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "physical_score",
+      "seed": 102003,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "ef8c10076f73485478216de933652c39c82d00c15a82d93270434d8f77b7770d",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "physical_score",
+        "seed": 102003,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "79c5f9a7332bd8b1ad5eeb90a0ce84798f55c9f95de78282205acac87b62b66e",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "ef8c10076f73485478216de933652c39c82d00c15a82d93270434d8f77b7770d",
+        "augmented_inputs_sha256": "47e3b4c6dbec55bc57957aebb6ecb88eb4790775d3196ebce636684c4fa339d0",
+        "parent_checkpoint_sha256": "161fba00d8328d7f2337e2192951ec8a88625df29ab0d18b916ea773320a4d1d",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "e6ae2911425fd0c3fd4110ef02af9d75761af50bfa4ae326aa6371ff38d8cbe2",
+          "64": "7b15509fbcd40bef6900ed5f086031f88207851050aadb86bb184447a07d02db",
+          "256": "60a62a1ac04488937c5c40acb4125ab78c9bb678ea52358e4eb867c5eeefec39"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 57.541932489000004,
+        "wall_seconds": 59.372671657001774,
+        "peak_memory_bytes": 598384640,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "light_floor",
+      "seed": 102004,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "9a24f7bf656127c8e743b921743111789f7fddeabebeac172711bdb0cccde55a",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "light_floor",
+        "seed": 102004,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "641c54fe9eb7942ba13a28838e93b5b84328cc6ace0c51141cf6fef194ccdcad",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "9a24f7bf656127c8e743b921743111789f7fddeabebeac172711bdb0cccde55a",
+        "augmented_inputs_sha256": "cb2a54c2a5bd9953bf032f6ba05a99954b5d3dc6df17fcf3f3d5bea9fbb722d6",
+        "parent_checkpoint_sha256": "cc391b9d25479b7143342162beab012477abe29598995f8cca4d088fe83b7912",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "1482ecdf695be78ff4bdb4bbb3a2b1eaa3e32262910f84589b0638fcb486acbe",
+          "64": "d45aeba451b08b85b03061e7685c182d9e2f0029724b906f1300c445b358cbbf",
+          "256": "d4693bd8c4800076eca0bcc6947658cae212a4aba6da3de26eafbbc6fc6c3762"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 58.107611244,
+        "wall_seconds": 60.02846310099994,
+        "peak_memory_bytes": 598216704,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "strong_reconstruction",
+      "seed": 102004,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "9a24f7bf656127c8e743b921743111789f7fddeabebeac172711bdb0cccde55a",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "strong_reconstruction",
+        "seed": 102004,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "9a24f7bf656127c8e743b921743111789f7fddeabebeac172711bdb0cccde55a",
+        "augmented_inputs_sha256": "cb2a54c2a5bd9953bf032f6ba05a99954b5d3dc6df17fcf3f3d5bea9fbb722d6",
+        "parent_checkpoint_sha256": "7731fcb7eaa13b10ef94c162b091707a4fabb23395a2dfc7b6055cdb8b7f6991",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "1482ecdf695be78ff4bdb4bbb3a2b1eaa3e32262910f84589b0638fcb486acbe",
+          "64": "d45aeba451b08b85b03061e7685c182d9e2f0029724b906f1300c445b358cbbf",
+          "256": "d4693bd8c4800076eca0bcc6947658cae212a4aba6da3de26eafbbc6fc6c3762"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 57.30964466199998,
+        "wall_seconds": 59.1382047900006,
+        "peak_memory_bytes": 605872128,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "physical_score",
+      "seed": 102004,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "9a24f7bf656127c8e743b921743111789f7fddeabebeac172711bdb0cccde55a",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "physical_score",
+        "seed": 102004,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "32363e813d50218f0c00e10cd885d95faceb001c93d3840eb84c1bd0fea2a04b",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "9a24f7bf656127c8e743b921743111789f7fddeabebeac172711bdb0cccde55a",
+        "augmented_inputs_sha256": "cb2a54c2a5bd9953bf032f6ba05a99954b5d3dc6df17fcf3f3d5bea9fbb722d6",
+        "parent_checkpoint_sha256": "44f9e0b9554e02a4994f9fb5c734817941e47ce7d91444c2d2cac8f5a834ab5b",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "1482ecdf695be78ff4bdb4bbb3a2b1eaa3e32262910f84589b0638fcb486acbe",
+          "64": "d45aeba451b08b85b03061e7685c182d9e2f0029724b906f1300c445b358cbbf",
+          "256": "d4693bd8c4800076eca0bcc6947658cae212a4aba6da3de26eafbbc6fc6c3762"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 57.472739580999985,
+        "wall_seconds": 59.14214492899919,
+        "peak_memory_bytes": 603459584,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "light_floor",
+      "seed": 102005,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "446359aa399a8f34ee84b6fe1737230368b6113578876b128f45e362e17b106e",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "light_floor",
+        "seed": 102005,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "6951b9ea608304d5f52ebf59f44f8c96a5dc56a31638c3a19fe7b99ee1676441",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "446359aa399a8f34ee84b6fe1737230368b6113578876b128f45e362e17b106e",
+        "augmented_inputs_sha256": "09a480933cc251dc091c6a5d8ef441c569dc8719305509ff5c850af092a8f570",
+        "parent_checkpoint_sha256": "a844dd00087cbe731d7f0f063df1ba0a21fbd62859a5b7caab6a976a40476a2c",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "4e354b057c7f82dd7df0f1b5af82fd37735ae98d0473e81b64a006602f7d64fe",
+          "64": "883deb4ae285c6d80ec06f31e6ed34c26274f44afb5c88dcf59022255f15b411",
+          "256": "feb3834a3577646764b2480632f1ac05204133e8132e3562aad65291d2bdaf60"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 57.17639525200002,
+        "wall_seconds": 59.015405610000016,
+        "peak_memory_bytes": 605872128,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "strong_reconstruction",
+      "seed": 102005,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "446359aa399a8f34ee84b6fe1737230368b6113578876b128f45e362e17b106e",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "strong_reconstruction",
+        "seed": 102005,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "446359aa399a8f34ee84b6fe1737230368b6113578876b128f45e362e17b106e",
+        "augmented_inputs_sha256": "09a480933cc251dc091c6a5d8ef441c569dc8719305509ff5c850af092a8f570",
+        "parent_checkpoint_sha256": "84258e7cf3c2cfe279bfe843204a85a4f7577bcc35a92e6cde3ccbe3ff491338",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "4e354b057c7f82dd7df0f1b5af82fd37735ae98d0473e81b64a006602f7d64fe",
+          "64": "883deb4ae285c6d80ec06f31e6ed34c26274f44afb5c88dcf59022255f15b411",
+          "256": "feb3834a3577646764b2480632f1ac05204133e8132e3562aad65291d2bdaf60"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 56.613908412,
+        "wall_seconds": 58.409243823,
+        "peak_memory_bytes": 609882112,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    },
+    {
+      "architecture": "physical_score",
+      "seed": 102005,
+      "trainable_parameters": 98495,
+      "deployed_parameters": 98495,
+      "nontrainable_state_bytes": 736,
+      "training_sample_order_sha256": "446359aa399a8f34ee84b6fe1737230368b6113578876b128f45e362e17b106e",
+      "dataset_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+      "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+      "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+      "test_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d",
+      "feature_contract_sha256": "bbe0f16a28a24a60f2c7941c3ef758f0828ab3ca2ef204979c450888e2cf5981",
+      "target_contract_sha256": "d4b9bfde212235de7f3857af7c4e06b17c7640c04bd8c91d89b6f6f4b3d6ba85",
+      "optimizer_schedule_sha256": "f37782b43f324f98859aa2181a1dd0ed4f85270de356d4daaa3f5b315f779c25",
+      "tuning_policy_sha256": "e5abe185a893ad2a2142748f4fa502350865d9a3566a7359d09fae5b284ea17f",
+      "selection_policy_sha256": "f5550eb90bfec33c738d2e4398e4b63ce91376ddfebab01b2b7d25ea3cd2dfb3",
+      "evaluation_contract_sha256": "5e57354d3abbd6c8180a745ca7e679f5b84038614cdddcd1f006af819d22ff1d",
+      "hardware_profile": "same managed CPU,onePyTorchthread/model,max2workers",
+      "budget": {
+        "steps": 1536,
+        "examples_seen": 24576,
+        "tokens_seen": 2686976,
+        "batch_size": 16,
+        "history_events": 256,
+        "planned_training_flops": 1483140983296,
+        "max_training_flops": 1497972393128.96,
+        "tuning_trials": 1,
+        "tuning_flops": 0,
+        "prefit_profile_method": "torch.profiler denseforward/backward estimate plus exact ATen operation/shape signature equality; unsupported scalar FLOPs not separately quantified",
+        "prefit_profile_training_flops": 1483140983296
+      },
+      "measured": {
+        "architecture": "physical_score",
+        "seed": 102005,
+        "trainable_parameters": 98495,
+        "deployed_parameters": 98495,
+        "checkpoint_sha256": "3bb36678128de4b884fdc85dd7caa5828f252e0505d6584506dcc4f6170a0c18",
+        "actual_steps": 1536,
+        "additional_optimizer_steps": 1536,
+        "actual_examples": 24576,
+        "actual_tokens": 2686976,
+        "actual_sample_order_sha256": "446359aa399a8f34ee84b6fe1737230368b6113578876b128f45e362e17b106e",
+        "augmented_inputs_sha256": "09a480933cc251dc091c6a5d8ef441c569dc8719305509ff5c850af092a8f570",
+        "parent_checkpoint_sha256": "72edc6bc485728e87cbbd7652cc97bf2af5440b07faf85db7bb711e52c1c91ef",
+        "optimizer_parent_steps": 1536,
+        "optimizer_final_steps": 3072,
+        "cumulative_optimizer_steps": 3072,
+        "profile_inputs_sha256": {
+          "8": "4e354b057c7f82dd7df0f1b5af82fd37735ae98d0473e81b64a006602f7d64fe",
+          "64": "883deb4ae285c6d80ec06f31e6ed34c26274f44afb5c88dcf59022255f15b411",
+          "256": "feb3834a3577646764b2480632f1ac05204133e8132e3562aad65291d2bdaf60"
+        },
+        "training_flops": 1483140983296,
+        "flops_profiler": "ME102 torch.profiler dense forward/backward estimate; unsupported pointwise FLOPs are partial; exact ATen signature audited",
+        "optimizer_cpu_seconds": 56.763024445999974,
+        "wall_seconds": 58.37330356899838,
+        "peak_memory_bytes": 612110336,
+        "postfit_profiles": {
+          "8": {
+            "dense_flops": 79026919,
+            "aten_signature": "17dcbac9ba5ef0b94e410a53e488f6750d90a688628469f380fb986421132700",
+            "aten_calls": 4856
+          },
+          "64": {
+            "dense_flops": 568967783,
+            "aten_signature": "4fb53454d407e7503d8f6bb4c01ee4d2fe99d8a3e4f0ef641b34014e6754eb8d",
+            "aten_calls": 5881
+          },
+          "256": {
+            "dense_flops": 2248765031,
+            "aten_signature": "b698891df788d7dfdee49bc82d91ef232c83d78369a545d462c52db9f121af04",
+            "aten_calls": 6584
+          }
+        },
+        "evaluation_split_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+      }
+    }
+  ],
+  "recipes": {
+    "light_floor": {
+      "aux": 0.3,
+      "floor": 0.25,
+      "logscore": 0.1,
+      "rawscore": 0.0
+    },
+    "strong_reconstruction": {
+      "aux": 1.0,
+      "floor": 1.0,
+      "logscore": 0.1,
+      "rawscore": 0.0
+    },
+    "physical_score": {
+      "aux": 0.3,
+      "floor": 1.0,
+      "logscore": 0.0,
+      "rawscore": 0.1
+    }
+  },
+  "protocol": {
+    "seeds": [
+      102001,
+      102002,
+      102003,
+      102004,
+      102005
+    ],
+    "updates": 1536,
+    "batch": 16,
+    "contexts": [
+      8,
+      64,
+      256
+    ],
+    "augmentation": "50percent clean; remainingeligibleorigins .65all6/.35singlepollutant blocks4/8/16/32/64clippedhistory, genuinecurrentlabels only; causalages; naturalprimaryunchanged",
+    "gates": "EVERYseed: gapPM90coverage[.90,.98];gapPM MAE<=1.05ME101same-indexparent;dailyPM MAE<=1.05LOCF;gapNLL<=ME101mean6.234504261016846;gapPMintervalscore<=1.05ME101same-indexparent",
+    "fit_attempts": 1,
+    "max_concurrent_fits": 2,
+    "cpu_threads": 1,
+    "stop_rule": "exactly 15 fixed continuations; no interim scoring, replacement, retry, tuning or further fit; cumulative 3072 optimizer updates per lineage",
+    "claim_scope": "exploratory update-budget sensitivity for the unchanged ME102 graph on exposed 2015 cohorts; no novelty or general undertraining claim",
+    "replay_rtol": 1e-05,
+    "replay_atol": 1e-06,
+    "cumulative_updates": 3072,
+    "continuation_of": "ME102-RECONSTRUCTION-PANEL",
+    "lineage": "restore all 15 exact parent weights, optimizer moments, augmentation RNG and torch RNG; one fixed 1536-step continuation for every lineage",
+    "no_architecture_changes": true
+  },
+  "parent_artifacts": {
+    "light_floor/102001": {
+      "checkpoint_sha256": "c90449b06d7328534aaf23479629f0b8f7a8c2888fa0be1435996dc2e40ebe95",
+      "runtime_receipt_sha256": "575b2be0efca4e0482dc99e96a85a82e5cfefc9d64d468117f184673f56cf698",
+      "fit_receipt_sha256": "f92857e820b482ec432f519893c2726bd30b02d9a59eaa187252ff65b55eae19"
+    },
+    "light_floor/102002": {
+      "checkpoint_sha256": "c509c1afff25227e2ac50f2db991e34da91b87ecca318ee971fb1d13c5a4310a",
+      "runtime_receipt_sha256": "2ccbe3182886b1994b5dcfc718ae31cc1a38b4c5140dfa98d62a086e2eeeb803",
+      "fit_receipt_sha256": "61e741fc7414e38aff46b266148c1f2e3d60c3320cfb47ebb49028cd14272601"
+    },
+    "light_floor/102003": {
+      "checkpoint_sha256": "ec754d046f8f56db4c761b931f14696834b390f6d0257de735da32ff85fac830",
+      "runtime_receipt_sha256": "fa2950ea45efda4ddb73dcd9412a182db10d110ca0d4ebd1a0f93216d8200027",
+      "fit_receipt_sha256": "66bf2bb02b7507432e8ba8203136b99e1fcc4f269003936474621b3f7e07f184"
+    },
+    "light_floor/102004": {
+      "checkpoint_sha256": "cc391b9d25479b7143342162beab012477abe29598995f8cca4d088fe83b7912",
+      "runtime_receipt_sha256": "e6634af726bb8be431e18c61d55224f1e9fc231598f0ee6ab71333fb0190bf58",
+      "fit_receipt_sha256": "76f12ca778afe600e5d9500e4be55d3c2c39c9751151af438969887e93e50e7c"
+    },
+    "light_floor/102005": {
+      "checkpoint_sha256": "a844dd00087cbe731d7f0f063df1ba0a21fbd62859a5b7caab6a976a40476a2c",
+      "runtime_receipt_sha256": "36b1bffdd41defd262f5b95b1cd1ff3a2d3f67b028c7596beb69a5c8eeef30ec",
+      "fit_receipt_sha256": "28ceebf07e95364857e7b7905635e6feb00bf599364bde2b6c4352d0753180dc"
+    },
+    "strong_reconstruction/102001": {
+      "checkpoint_sha256": "a6099c6312615b6779b7fca890b8e8e96230df64c116929f5cc390db28ae8f51",
+      "runtime_receipt_sha256": "6f08a7150d65f36366712245b12a3eb2a181fb3d171f098f46f542ca1d939aee",
+      "fit_receipt_sha256": "a97ebf890fe38987e03cb8fe21f115e38c48979553e4c6a7d343e8d3318fb368"
+    },
+    "strong_reconstruction/102002": {
+      "checkpoint_sha256": "952f2896d5ec900e28edccd7ffca797876f0402668b34e35335e8cfcfb72ecec",
+      "runtime_receipt_sha256": "6651693a588f1efc8672b090ab85981f9d58d11839a24b699855025af6d3b321",
+      "fit_receipt_sha256": "bc1e244ed9ca3f0d6b335cda1fb21e85086d08abf6842a224d341871b945887e"
+    },
+    "strong_reconstruction/102003": {
+      "checkpoint_sha256": "7ee91040216c5fe4eb2eb6d93a39a9d696af6ade14643d65cf8545bafc3fc166",
+      "runtime_receipt_sha256": "d4b138e1c478138a7466d7af434a6783f5b076610e894a89602317b8a4685adf",
+      "fit_receipt_sha256": "e19aa9ceb0b053d61ec091f66973724b4e7726259ee5f01992ed43d799a92b5a"
+    },
+    "strong_reconstruction/102004": {
+      "checkpoint_sha256": "7731fcb7eaa13b10ef94c162b091707a4fabb23395a2dfc7b6055cdb8b7f6991",
+      "runtime_receipt_sha256": "9cc1da88c22d14b60291098be5269ee5e110fb4b8f4030d8f95da41afd44dcec",
+      "fit_receipt_sha256": "05b0a087d66dc380d0ca34978661c64416a168a5b074ad65d49153f8e4134ae1"
+    },
+    "strong_reconstruction/102005": {
+      "checkpoint_sha256": "84258e7cf3c2cfe279bfe843204a85a4f7577bcc35a92e6cde3ccbe3ff491338",
+      "runtime_receipt_sha256": "3c01f458f87c4f50d12fd9a2160c6ce8c035f9c04139506a400e8dcc55eeabd5",
+      "fit_receipt_sha256": "4d34722e42ebd803ae1fe852f1d9300b3ffe29b0e896af8a080493f0c86911f0"
+    },
+    "physical_score/102001": {
+      "checkpoint_sha256": "c727e348ed3f10ed083717904de70fc86805df680af4458888d65f67e0a6d35e",
+      "runtime_receipt_sha256": "371969de5e7cebf4bda6def7c16c7fac825a780e5eea5ab613adea7abe7822d5",
+      "fit_receipt_sha256": "48fcb640d2e113e86066a03275e6c42c3ffdd2dcacbd52180e39087b7846635e"
+    },
+    "physical_score/102002": {
+      "checkpoint_sha256": "b028f9d531c69fb9b76211b6151b3329e7a50ffb5069addf4575138d342c9241",
+      "runtime_receipt_sha256": "d2fbf249f68fe5070d2e19abf9d8d35fc6dd30e43a3498f80a7c229b2f759c08",
+      "fit_receipt_sha256": "189d5cabaee0669321c318b13b4fea52e55bb405db77cb76ab00439e087834b0"
+    },
+    "physical_score/102003": {
+      "checkpoint_sha256": "161fba00d8328d7f2337e2192951ec8a88625df29ab0d18b916ea773320a4d1d",
+      "runtime_receipt_sha256": "d8dc8e31fdd672c43eb0dbefc30abff6e0348ba33bb3a6e6cbe904e399022ced",
+      "fit_receipt_sha256": "53cf1a07f00aecfd44c1269dd94a462d2a0b4e0380e155fa91d215cf33e86a0b"
+    },
+    "physical_score/102004": {
+      "checkpoint_sha256": "44f9e0b9554e02a4994f9fb5c734817941e47ce7d91444c2d2cac8f5a834ab5b",
+      "runtime_receipt_sha256": "fc2914b8a8b26a4320faaa03eba26c0f820a9ae2c338b9b88bf3a0d1d28f426f",
+      "fit_receipt_sha256": "9609a9bf74f10f23880b9532f82b8e211413999534f861714291f385ebc084c3"
+    },
+    "physical_score/102005": {
+      "checkpoint_sha256": "72edc6bc485728e87cbbd7652cc97bf2af5440b07faf85db7bb711e52c1c91ef",
+      "runtime_receipt_sha256": "a19d4da7a67be50215217ed9bfe98d69748be996fb071e42193205d5cffe23cb",
+      "fit_receipt_sha256": "ca4fdfb67791a4c9cfdf3fef3d72468d0c1542ad8933649497aebd18892d26a9"
+    }
+  },
+  "parent_registration_sha256": "299583b98999b8d6b1d6644a0fae4b8ec366ddfcabce8443358066dc377c022f",
+  "parent_fit_index_sha256": "06327106d0ecac9656f816f14a30e88a60c106119a3d9bf9528310a203902bbe",
+  "restore_prefit_sha256": "792e2b549bb823ac4382082523689e236c51cfc8eaa490ef2f0a61dfdee60bdb",
+  "source_files": {
+    "scripts/me102_reconstruction_panel.py": "7ef36d9195ff4b040f6300994f20ef061e16f69260d43666a258e74ec3ebfadc",
+    "scripts/me102_graph_reference.py": "5d8babb005d28877f3e01cd46d32f4b79b9af055b518a09a4690468457d92918",
+    "scripts/me102_gap_data.py": "fff07eface039eff6458399ff1ab33db4b268a71d2adcc6e1ebca6b451cac324",
+    "scripts/me100_sensor_data.py": "57f4d9086251d6dd8f12feb675ebe96de1223b3016906ad867cf3795fd0c74cc",
+    "scripts/me101_graph_reference.py": "ab4f70a83aa28f9ba0fd05749d2cf8cd6c3ff7880dcc3d25ec0728d955bba9d3",
+    "scripts/me100_graph_reference.py": "5923f55cf718aee6d73723dfc60bf82162880fbeb41c462d4575cdc91f4f64ff",
+    "src/tac_osm/variants/reconstruction_sensor_world.py": "55855ed04835af42758bcbd1170b384841e8d17ea5c0dbe7916cca0892987593",
+    "src/tac_osm/variants/belief_sensor_world.py": "618fa4a6dd53c0c3128081d4990fcd66f40593e9b875ca8983b475035245fb88",
+    "src/tac_osm/variants/entity_sensor_world.py": "c26c2b15e99c5f8238bc49dc4eb0a6ebdfb4b62dfe566ee400a044cebead6282",
+    "src/tac_osm/variants/parallel_affine_memory.py": "e3a0732b17acfa7505952b5229573099edc7f1dbe65604f4f3f516e05652baeb",
+    "src/tac_osm/variants/retention_controlled_world.py": "eead543fc0d87d0c77d4f36758115168beb591b31e53e3d251714c076da0e970",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "scripts/me103_continuation_panel.py": "0492fd40a98e7e340ea8093149c2c3742cd710581e158b3ab9553ff47631444f"
+  }
+}
