@@ -62,7 +62,7 @@ def load_new_task(cache):
     for ep in range(50):
         path=f"data/chunk-000/episode_{ep:06d}.parquet"
         if path not in sibling:
-            raise RuntimeError("pinned dataset missing original expected episode: "+path)
+            raise RuntimeError("pinned dataset missing original expected episode: "+path+"; revision="+full_sha+"; actual source parquet names="+repr(sorted(p for p in sibling if p.endswith(".parquet"))[:60]))
         f=cache/f"episode_{ep:06d}.parquet"
         if not f.exists():
             f.write_bytes(retrieve(f"https://huggingface.co/datasets/{DATASET}/resolve/{full_sha}/{path}"))
