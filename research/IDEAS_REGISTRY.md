@@ -1,5 +1,16 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## EWA001: tested verified-outcome memory utility + 8-bit LSH retrieval (2026-10-25)
+
+**IMPLEMENTED AND SCORED, NOT QUALIFIED.** [PR404](https://github.com/FPC-effortless/TAC-OSM/pull/404) trains no new neural model, preserving five original trained ME097 weights. It adds 256-slot external learned-key/residual memory, real source-lagged event comparison by 8-bit/9-bucket-probe LSH, and updates utility only after the genuine future outcome is observed; utility optionally governs future retrieval ordering/eviction. Same-size similarity-only memory is the matched control. This is 23,552 extra float payload bytes minimum PLUS dynamic metadata/index, outside primary 608B memory.
+
+[Executed real-source EWA001 five-seed results](https://github.com/FPC-effortless/TAC-OSM/blob/research/ewa001-usefulness-feedback-2026-10-25/research/mathematical-engineering/ewa001/RESULTS.md): exposed authentic 13 DEV episodes, 3,328 predictions/seed, original FIT-trained checkpoint and original TEST untouched. Mean standardized MSE frozen model0.000512171; neutral similarity cache0.000339658 (33.68% lower); learned-usefulness cache0.000371861 (**9.48% worse than neutral, all5seeds**); strong velocity0.000031119 (**10.9× better than neutral**). LSH 102.67 or87.31 candidate scores/query vs <32 registered budget. Full EWA registered capability gate **FAIL 0/5**, original JSON in [CI40209655856](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40209655856). Utility ranking changes cosine top8 overlap; that is NOT an isolated LSH collision metric. Early failed pre-result runs retained. Do not retune or claim independent qualification, safety, whole-neural Lean proof, additional trained family, or that external cache fits inside native 608B.
+
+**Required next:** separate source-authorized true retrieval contribution versus false reinforcement, sparse lookup recall before utility reranking, and velocity/servo-residual comparisons on new untouched genuine data. Preserve all original results, six families, global input-only scan and matched parameter/source/training budget rules.
+
+---
+
+
 ## 2026-10-25 — ME104 trained asymmetric distributions: sharper, severely undercovered
 
 [Draft TAC PR403](https://github.com/FPC-effortless/TAC-OSM/pull/403) and
