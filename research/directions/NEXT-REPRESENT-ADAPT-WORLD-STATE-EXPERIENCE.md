@@ -128,3 +128,8 @@ Produce a source-pinned **R0/R1 pre-registration** with the actual current share
 ## 8. Source provenance
 
 Original inputs for this review: user-supplied transcripts **"Predictive World Models for Self Learning AI Multi-memory.txt"** and **"Is It Just a Fancy Dictionary, or Is Something Emerging.txt"**. Primary sources linked above supersede narrator conjecture where the transcripts describe mathematical novelty, emergence or empirical scope. No uploaded transcript is itself an implementation or original TAC experimental receipt.
+
+
+## 9. Transformer/SSD-inspired belief-state and channel-routing extension
+
+The companion [NEXT-SELECTIVE-BELIEF-SSD](NEXT-SELECTIVE-BELIEF-SSD.md) is a **dependent mathematical capability proposal** specifying a scan-compatible multi-head write/read recurrence, credible alternative source-aware content lookup, genuine missing-observation covariance (rather than attention entropy/decay heuristics), measured cross-channel conditional sharing, exact 608-byte core accounting and complete real-data qualification. It preserves this document's latent-state causal intervention, distinct verified planner/world experience and future-action evaluation gates. ME101's 68.67% gap coverage remains a failed real-world gate; neither "belief state" nor "SSD" implies reliable calibration or emergent intelligence.
