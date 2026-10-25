@@ -207,7 +207,27 @@ def score(path,replay=False):
        note="Logged joint target means observational conditional-on-action only; no source independent outcome or causal effect")
     if replay:
         frozen=json.loads((OUT/"RESULTS.json").read_text())
-        if result!=frozen:raise RuntimeError("original score replay mismatch")
+        # Metadata, cohort and gates must match exactly; floating aggregates
+        # may round slightly across CPU runners. Original file is NEVER changed.
+        def compare_replayed(original,computed,field="result"):
+            if isinstance(original,dict):
+                if not isinstance(computed,dict) or original.keys()!=computed.keys():
+                    raise RuntimeError(f"original replay field mismatch: {field}")
+                for key in original:
+                    compare_replayed(original[key],computed[key],field+"."+str(key))
+            elif isinstance(original,list):
+                if not isinstance(computed,list) or len(original)!=len(computed):
+                    raise RuntimeError(f"original replay list mismatch: {field}")
+                for i,(a,b) in enumerate(zip(original,computed)):
+                    compare_replayed(a,b,field+f"[{i}]")
+            elif type(original) is float:
+                if type(computed) is not float:
+                    raise RuntimeError(f"original replay numeric type mismatch: {field}")
+                np.testing.assert_allclose(computed,original,rtol=1e-5,atol=1e-9,
+                    err_msg=f"original replay numeric mismatch: {field}")
+            elif original!=computed:
+                raise RuntimeError(f"original replay metadata/gate mismatch: {field}")
+        compare_replayed(frozen,result)
         np.testing.assert_allclose(np.stack(outputs),
             np.load(OUT/"FORECASTS.npz")["models"],rtol=1e-5,atol=1e-6)
         print("ORIGINAL_ACTION_QUERY_SCORE_REPLAY=PASS")
