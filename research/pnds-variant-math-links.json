@@ -633,6 +633,31 @@
       "real_world_capability_at_registration": "NOT_TRAINED",
       "trained_and_deployed_parameters": 97235,
       "active_model_families_added": 0
+    },
+    {
+      "id": "SHARED-BELIEF-SENSOR-ME101",
+      "family": "temporal",
+      "parent_id": "SHARED-ENTITY-SENSOR-ME100",
+      "tac_source_commit": "493032ff7210604d6123a923d0d1a786607552ea",
+      "tac_source_path": "src/tac_osm/variants/belief_sensor_world.py",
+      "tac_spec": "research/mathematical-engineering/me101/MATHEMATICS.md",
+      "lean_path": "PNDS/BeliefSensor.lean",
+      "lean_symbols": [
+        "PNDS.BeliefSensor.latentVariance_observed_zero",
+        "PNDS.BeliefSensor.latentVariance_nonneg",
+        "PNDS.BeliefSensor.latentVariance_monotone_age",
+        "PNDS.BeliefSensor.marginalizedVariance_positive",
+        "PNDS.BeliefSensor.readTrace_preserves_trace"
+      ],
+      "python_path": "foundation/v1/belief_sensor_reference.py",
+      "python_symbol": "serial",
+      "source_parity_test": "tests/test_belief_sensor_source.py",
+      "formalization_status": "PARTIAL_EXACT_CONDITIONAL_BELIEF_VARIANCE_KERNEL",
+      "full_neural_float_refinement": "OPEN",
+      "actual_source_forward_backward": "FP32_FP64_FULL_GRAPH_GRADIENT_AND_CHUNK_TESTED",
+      "real_world_capability_at_registration": "NOT_TRAINED",
+      "trained_and_deployed_parameters": 97259,
+      "active_model_families_added": 0
     }
   ]
 }
