@@ -1,0 +1,30 @@
+name: EDGEACTION001 independent original FIT-only result replay (no fits)
+on:
+  push:
+    paths:
+      - ".github/workflows/edge-action-independent-replay.yml"
+      - "research/replay-bundles/EDGEACTION001/RESULTS.json"
+      - "research/replay-bundles/EDGEACTION001/FIT_INDEX.json"
+  pull_request:
+    paths:
+      - ".github/workflows/edge-action-independent-replay.yml"
+      - "research/replay-bundles/EDGEACTION001/RESULTS.json"
+      - "research/replay-bundles/EDGEACTION001/FIT_INDEX.json"
+permissions:
+  contents: read
+jobs:
+  cold-original-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pyarrow
+      - name: Check complete frozen manifest
+        run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/edgeaction001/FAIR_COMPARISON.json --phase preflight
+      - name: Reconstruct 1,840 original FIT cases from five exact Git models
+        env:
+          PYTHONPATH: "src:."
+        run: python scripts/edge_action_logged_fit.py replay
