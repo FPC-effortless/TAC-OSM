@@ -1,5 +1,89 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## 2026-10-25 — ME104 trained asymmetric distributions: sharper, severely undercovered
+
+[Draft TAC PR403](https://github.com/FPC-effortless/TAC-OSM/pull/403) and
+[PNDS PR17](https://github.com/FPC-effortless/pnds-lean/pull/17) implement and train
+a new native Temporal candidate with99,731trainable/deployed parameters. A
+zero-initialized1,236parameter102→12head predicts separate lower/upper scales
+around the inherited median, reusing the source/evidence/memory read. Native
+fast/slow/8×8parallel scan and persistent state are unchanged. Exactly six active
+families remain; this does not train the other domain heads or establish useful
+associative-memory attribution. No attribution campaign blocked development.
+
+Fifteen original warm-started fits: three fixed complete objectives ×five sampling
+seed indices104001–104005. ALLfive ME103strong_reconstruction parents are used
+in every recipe; they are not fifteen new independent root initializations. Each
+receives1,536fresh-AdamW updates (.0003/.001), batch16, contexts8/64/256. Old weights
+reach4,608lineage updates; new head1,536. Source89d756d5, reciprocalmanifest6021a05f
+and PNDSbindingd81bad75preceded optimization. All15model/optimizer/RNG/receipts
+were committed ata163708eBEFORE REPORT, original scores/forecasts at6d684f07.
+No old source/weights/results were replaced, no retries or post-score extra fits.
+
+| Five-seed means | Gap PM2.5 MAE | Gap90%coverage | Gap six-channel NLL | Gap PM2.5 interval score | Ordinary PM2.5 MAE | Full gates |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| ME103strong parents |37.5242|95.66%|5.1510|379.6232|33.4031|1/5oldgates|
+| likelihood |36.9680|76.36%|5.1439|214.7926|35.4530|0/5|
+| balanced |36.2121|74.41%|5.1359|222.5394|35.4438|0/5|
+| point_guard |36.1055|74.27%|5.1253|223.8236|34.6475|0/5|
+
+**Qualification FAIL: every one of15models misses the unchanged90%coverage floor.**
+Gap point means improve1.48–3.78%, interval scores41.04–43.42%, and mean gap NLL
+improves slightly. But ordinary point error worsens3.73–6.14%; only2of5seeds per
+recipe meet its daily point guardrail. No recipe passes allfive, and0of15pass
+every gate. New per-seed interval requirements additionally require10%material
+improvement versus ownparent, but the failure is not merely a stricter new gate:
+all15also fail the original coverage criterion. Mathematical coherence, sharper
+intervals and lower average proper scores do not establish adequate calibration.
+
+The output law is an equal-half Gaussian quantile transform in standardizedlog1p
+coordinates, followed by the original zero-censored positive transform. One CDF,
+proper density/zero atom and quantiles agree, including either side of the zero
+threshold. It is not the standard continuous-density two-piece normal. At fixed
+backbone weights the head preserves the median, not arithmeticmean; initialization
+reproduces parent forecasts exactly, but end-to-end updates may move the backbone
+and points. Scales may shrink to onequarterofoldscale, reducing the inherited
+variance-floor amplitude to a conditional old_floor/16lower bound. No preserved
+old floor amplitude,90%coverage guarantee or absolute72hour cap was claimed.
+Source age remains capped256hours. These are conditional per-channel laws at one
+horizon, not identified latent posteriors or coherent action trajectories.
+
+Same authentic UCI501 FIT2013–2014, CC-BY-4.0 archive SHA
+d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8.
+2015was already exposed:143natural-gap queries/21calendar-week clusters and
+4,288ordinary queries/53overlapping clusters. Artificial training masks use actual
+recorded labels only. Protected2016–2017 numerical outcomes remain closed; repeated
+models do not add independent cases. All raw per-channel/seed scores, width tails
+and conditional posthoc paired intervals are preserved in
+[original evidence](https://github.com/FPC-effortless/TAC-OSM/tree/research/me104-median-split-belief-2026-10-25/research/replay-bundles/ME104).
+
+Per model24,576sampled examples/2,686,976history exposures; records repeat. New
+recipe parameters/initializations/dataorders/masks/profiled graphs/dense FLOPs
+match.897.529aggregate CPU seconds, max2one-thread workers; CPU is an outcome.
+Unsupported pointwise/optimizer/hardware FLOPs are unquantified. Old/new differ
+in parameters, optimizer/objective and exposure, so no controlled architectural
+superiority is eligible. All31parameter tensors have finite nonzero FIT gradients.
+All997local tests,7PNDS source tests and six core-axiom-only Lean scalar proofs
+pass; PNDSbuild/source-mathCIpasses. Every fitted network passes30combinedFP32/64
+source/reference state/output/input+weight-gradient/CDF/NLL/chunk checks at the
+original tolerances. Whole-neural/IEEE, Gaussian integration Lean, calibration,
+hardware latency, customer value and safe control remain OPEN.
+Clean detached checkout6d684f07replayed all15original models/forecasts/scores/gates,
+all30fitted dtype audits and the summary/publisher-row audit without retraining.
+All67bundle payload SHA256checks pass.
+[Independent GitHub replay40195130742](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40195130742)
+passed all model/score/graph/summary/source checks. Latest metadata-only commitCI
+is separate from original-source replay and from predictive qualification.
+
+**Next integrated capability target:** separate point-learning and uncertainty
+updates, while retaining and learning adequate source-gap uncertainty floors.
+Differential optimization/gradient roles and stronger source-floor preservation
+are hypotheses for a new source-pinned real-data protocol, not proven causes or
+implemented fixes. Do not run more ME104fits, select favorable seeds, widen gates
+or open protected data to tune. Preserve all negative evidence; no model promoted,
+merged, deployed or represented as generally intelligent or commercially ready.
+
+
 ## 2026-10-25 — ME103 completed: more training improves points, full gate still fails
 
 [Draft TAC PR402](https://github.com/FPC-effortless/TAC-OSM/pull/402) and
