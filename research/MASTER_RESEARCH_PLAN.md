@@ -1,5 +1,69 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-25 — ME103 completed: more training improves points, full gate still fails
+
+[Draft TAC PR402](https://github.com/FPC-effortless/TAC-OSM/pull/402) and
+[PNDS continuation PR16](https://github.com/FPC-effortless/pnds-lean/pull/16)
+complete the registered one-time continuation of EVERY15original ME102 model.
+Three fixed complete recipes ×five shared seed indices; these are continued
+lineages, not15new independently initialized seeds. Exact model/AdamW moments,
+augmentation RNG and sampling-stream suffixes were preserved. Each model receives
+1,536new guarded updates, reaching3,072cumulative, with the unchanged98,495parameter
+graph. Source/registrationfb50159b and mathematical-link330526b6 were frozen before
+updates. All15child checkpoints/optimizer/RNG/receipts were committed at1a728fdb
+BEFORE any REPORT; original scores/forecasts were committed ate85268a0.
+
+| Five-seed mean | ME102→ME103 gap PM2.5 MAE | ME103 gap90%coverage | ME102→ME103 gap interval score | Full-gate seeds old→new |
+| --- | ---: | ---: | ---: | ---: |
+| light_floor |38.7814→38.2721|82.80%|229.2109→224.0540|2/5→0/5|
+| strong_reconstruction |39.7432→37.5242|95.66%|316.7059→379.6232|2/5→1/5|
+| physical_score |44.1222→41.8294|93.29%|221.6744→225.6172|1/5→2/5|
+
+Mean gap point error improves1.31%,5.58%,5.20%; ordinary PM2.5MAE improves from
+34.3075/33.8963/33.3507 to33.1687/33.4031/32.5165. Every model now passes the
+ordinary-point guardrail. But mean gapNLL worsens in all three recipes, light-floor
+coverage fails every seed, strong reconstruction's interval-score gate fails4/5,
+and physical-score's gap-point gate fails3/5. **No recipe passes all five seeds;
+only3of15individual models pass every gate**, compared with5of15ME102parents.
+This is a real same-task point-fitting improvement with substantial uncertainty
+trade-offs, not overall qualification, architectural superiority or intelligence
+readiness. Keep every model/failure; no favorable-seed selection or promotion.
+
+Authentic UCI501 FIT2013–2014, original CC-BY-4.0 archive SHA d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8.
+2015was already exposed:143natural-gap queries/21calendar-week clusters and
+4,288ordinary queries/53overlapping clusters. Repeated models do not multiply
+independent observations. Protected2016–2017 numerical outcomes remain closed.
+The posthoc paired bootstrap conditions on fitted models and is not multiplicity
+adjusted or independent confirmation. All original per-channel/seed metrics,
+width/tail summaries, natural missing masks and publisher-row replay checks are
+[repository-owned](https://github.com/FPC-effortless/TAC-OSM/tree/research/me103-equal-continuation-2026-10-25/research/replay-bundles/ME103).
+
+New exposure24,576sampled examples/model and2,686,976history-event exposures/model;
+records repeat. Same-seed augmented-input/order checksums and profiled ATen graphs
+match across recipes. Dense forward/backward estimates match, but optimizer/
+pointwise/hardware FLOPs are not fully accounted for; CPU is an efficiency outcome.
+The new stage used857.674aggregate CPU seconds with two one-thread workers. The
+before/after doubles training exposure, so it is not an equal-compute architecture
+comparison. All984local tests and all30fitted FP32/FP64 graph/state/chunk/gradient
+checks pass. The existing ME102Lean/Python formulation is inherited byte-unchanged;
+PNDSPR16build passes. Full-neural/IEEE and calibration guarantees remain OPEN.
+Clean detached checkoute85268a0replayed all15models/forecasts/scores/gates, all30
+fitted dtype checks and the summary/publisher-row audit with no retraining.
+All52bundle payload checksums pass. GitHub original replay40191654367 is pending
+at this record; its outcome must be checked before claiming final CI success.
+
+**Next integrated capability direction:** preserve strong point predictions while
+learning a coherent source/channel-conditioned predictive distribution with useful
+sharpness under missing observations. A fixed floor alone does not guarantee
+coverage. A mean-preserving distributional decoder/warm start is a hypothesis for
+a new mathematical/source-pinned protocol, not an implemented or verified fix.
+No further ME103continuation is authorized by this fixed protocol; no default
+attribution campaign, protected-cohort tuning, unsafe variance cap or favorable
+seed selection. Exactly six active families remain; only the Temporal candidate
+was trained here. No robot-controller, customer ROI, embedded-hardware or
+commercial-readiness claim follows. Historical failures/weights remain unchanged.
+
+
 ## 2026-10-25 — ME102: fifteen trained belief-reconstruction models, mixed capability result
 
 [Draft TAC PR398](https://github.com/FPC-effortless/TAC-OSM/pull/398) and
