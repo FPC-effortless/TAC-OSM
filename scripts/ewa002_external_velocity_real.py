@@ -58,34 +58,40 @@ def load_new_task(cache):
               "source":"real recorded bimanual joint states/actions; different task from fitted mobile cabinet",
               "fit_only_episodes":list(FIRST_FIT),"untouched_external_eval_episodes":list(EVAL_IDS),
               "publisher_parquet_sha256":{}}
-    episodes={}
-    for ep in range(50):
-        path=f"data/chunk-000/episode_{ep:06d}.parquet"
-        if path not in sibling:
-            raise RuntimeError("pinned dataset missing original expected episode: "+path+"; revision="+full_sha+"; actual source parquet names="+repr(sorted(p for p in sibling if p.endswith(".parquet"))[:60]))
-        f=cache/f"episode_{ep:06d}.parquet"
-        if not f.exists():
-            f.write_bytes(retrieve(f"https://huggingface.co/datasets/{DATASET}/resolve/{full_sha}/{path}"))
-        blob=f.read_bytes()
-        if not blob:
-            raise RuntimeError("empty publisher source")
-        manifest["publisher_parquet_sha256"][path]=sha(blob)
-        table=pq.read_table(f,columns=[
-            "episode_index","frame_index","timestamp","observation.state","action"])
-        d=table.to_pydict()
-        rows=[]
-        for idx,frame,timestamp,x,a in zip(*(d[k] for k in [
-            "episode_index","frame_index","timestamp","observation.state","action"])):
-            if int(idx)!=ep or len(x)!=14 or len(a)!=14 or not np.isfinite(x+a+[timestamp]).all():
-                raise RuntimeError("source data mismatch/finite/identity contract")
-            rows.append((int(frame),float(timestamp),x,a))
+    # The REAL immutable revision uses consolidated LeRobot v3 Parquet, though
+    # the publisher dataset card still describes an older v2 per-episode layout.
+    path="data/chunk-000/file-000.parquet"
+    if path not in sibling:
+        raise RuntimeError("pinned publisher consolidated data path missing; actual="+
+                           repr(sorted(p for p in sibling if p.endswith(".parquet"))))
+    source=cache/"file-000.parquet"
+    if not source.exists():
+        source.write_bytes(retrieve(
+            f"https://huggingface.co/datasets/{DATASET}/resolve/{full_sha}/{path}"))
+    blob=source.read_bytes()
+    if not blob:
+        raise RuntimeError("empty publisher source")
+    manifest["publisher_parquet_sha256"][path]=sha(blob)
+    table=pq.read_table(source,columns=[
+        "episode_index","frame_index","timestamp","observation.state","action"])
+    d=table.to_pydict()
+    episodes={ep:[] for ep in range(50)}
+    for idx,frame,timestamp,x,a in zip(*(d[k] for k in [
+        "episode_index","frame_index","timestamp","observation.state","action"])):
+        ep=int(idx)
+        if (ep not in episodes or len(x)!=14 or len(a)!=14 or
+            not np.isfinite(x+a+[timestamp]).all()):
+            raise RuntimeError("source data mismatch/finite/identity contract")
+        episodes[ep].append((int(frame),float(timestamp),x,a))
+    for ep,rows in episodes.items():
         if len(rows)<MAX_EVENTS+2:
             raise RuntimeError("insufficient authentic chronological source episode")
-        if not all(b[0]==a[0]+1 and 0<b[1]-a[1]<.2 for a,b in zip(rows[:MAX_EVENTS+2],rows[1:MAX_EVENTS+2])):
+        if not all(b[0]==a[0]+1 and 0<b[1]-a[1]<.2
+                   for a,b in zip(rows[:MAX_EVENTS+2],rows[1:MAX_EVENTS+2])):
             raise RuntimeError("timestamp/frame discontinuity")
-        episodes[ep]=rows
-    manifest["publisher_files"]=50
-    manifest["all_50_source_files_pinned_before_score"]=True
+    manifest["publisher_files"]=1
+    manifest["publisher_actual_snapshot_layout"]="v3 consolidated file-000.parquet"
+    manifest["all_50_source_episodes_pinned_before_score"]=True
     manifest["training_source_test_2016_2017_opened"]=False
     return episodes,manifest
 
