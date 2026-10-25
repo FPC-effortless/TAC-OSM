@@ -77,3 +77,12 @@ compare FP32/FP64 outputs, state, new variances, gradients, masks and chunks.
 Real fitted-source checks are required after training, not inferred from unit
 examples. This candidate implements the NEXT-SHARED-BELIEF hypothesis without
 claiming that ME100 proved cross-channel interference or a unique failure cause.
+
+## Interpretation limit
+
+The state/future variance decomposition is part of the declared generative model.
+Future-only supervision does not separately identify a true posterior over a
+missing current measurement and true process noise; their contributions can trade
+while giving the same marginalized prediction. This is not demonstrated Bayesian
+parameter uncertainty, optimal filtering or a guarantee of calibrated latent state.
+The directly testable outcome is the forecast distribution on authentic futures.
