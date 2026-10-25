@@ -1,0 +1,41 @@
+name: PNDS pinned native math source verification
+on:
+  pull_request:
+    paths:
+      - "research/mathematical-engineering/pnds-native-v1-1/**"
+      - ".github/workflows/pnds-native-source-math.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-operator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install deterministic source verification dependencies
+        run: |
+          python -m pip install --quiet torch
+      - name: Verify true pinned source and independent PNDS math
+        run: |
+          python research/mathematical-engineering/pnds-native-v1-1/validate_graph.py
+          python research/mathematical-engineering/pnds-native-v1-1/validate_parallel_full_graph.py
+          python research/mathematical-engineering/pnds-native-v1-1/validate_dual_mode_math_link.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_pinned_source.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_original_full_recurrence.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_native_forward_envelope.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_parallel_computational_graph.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_full_time_parallel_candidate.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_stream_parallel_parity.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_entity_admission.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_continuous_world_stream.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_stable_timescale_world.py
+          python research/mathematical-engineering/pnds-native-v1-1/verify_retention_controlled_world.py
+          python research/mathematical-engineering/pnds-native-v1-1/audit_actual_actor_admission.py
+      - name: Measure exploratory single-thread CPU resource use without asserting superiority
+        run: |
+          python research/mathematical-engineering/pnds-native-v1-1/benchmark_parallel_graph_cpu.py
+          python research/mathematical-engineering/pnds-native-v1-1/benchmark_stream_step_cpu.py

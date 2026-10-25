@@ -1,0 +1,229 @@
+{
+  "schema": "tac_osm.native_parallel_candidate.input_output_dag.v1.4",
+  "source": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "pinned_commit": "081e534a074001c6a3b2251b3ff31ad20ec4fca8",
+    "source_model": "AlignedAssociativeTAC",
+    "source_parameter_count": 101527
+  },
+  "candidate": {
+    "path": "src/tac_osm/variants/full_time_parallel_native.py",
+    "function": "full_time_parallel_native_candidate",
+    "status": "NEW_UNTRAINED_ARCHITECTURE",
+    "parameters_added": 0,
+    "trainable_parameter_count": 101527,
+    "source_outputs_equivalent": false,
+    "whole_time_sequence_parallel_algorithms": true,
+    "all_17_Tac_variants_engineered": false,
+    "real_world_capability_claim": "NONE"
+  },
+  "tensor_contract": {
+    "batch": "B>=1",
+    "history": "T>=1",
+    "input_kind": "Long[B,T]; role=2 read-only",
+    "key_ids": "Long[B,T] in codebook",
+    "value_ids": "Long[B,T] in codebook",
+    "event": "Real[B,T,48]",
+    "key_value": "Real[B,T,8]",
+    "fast_slow": "Real[B,T,88]",
+    "memory": "Real[B,T,8,8]",
+    "logits": "Real[B,32]",
+    "memory_radius": "R>=1"
+  },
+  "nodes": [
+    {
+      "id": "input",
+      "op": "validated kind,key,value IDs",
+      "shape": "B,T",
+      "deps": [],
+      "parallel": "batch-and-time-input",
+      "causal": "observed"
+    },
+    {
+      "id": "embeddings",
+      "op": "source embedding sums, tanh encoder; normalize addresses and values",
+      "shape": "B,T,48 and B,T,8",
+      "deps": [
+        "input"
+      ],
+      "parallel": "B,T",
+      "causal": "present event"
+    },
+    {
+      "id": "fast_basis",
+      "op": "source fast_map proposal with zero previous fast/read",
+      "shape": "B,T,88",
+      "deps": [
+        "embeddings"
+      ],
+      "parallel": "B,T",
+      "causal": "present event"
+    },
+    {
+      "id": "prefix_context",
+      "op": "exclusive causal prefix sum fast_basis / max(t,1)",
+      "shape": "B,T,88",
+      "deps": [
+        "fast_basis"
+      ],
+      "parallel": "prefix-reduction, logarithmic-depth possible",
+      "causal": "strictly earlier events"
+    },
+    {
+      "id": "provisional_fast",
+      "op": "source fast_map gate/target with prefix context",
+      "shape": "B,T,88",
+      "deps": [
+        "prefix_context",
+        "embeddings"
+      ],
+      "parallel": "B,T",
+      "causal": "past-and-present"
+    },
+    {
+      "id": "provisional_slow",
+      "op": "source slow_map gate/target with provisional fast",
+      "shape": "B,T,88",
+      "deps": [
+        "provisional_fast",
+        "prefix_context"
+      ],
+      "parallel": "B,T",
+      "causal": "past-and-present"
+    },
+    {
+      "id": "input_gates",
+      "op": "sigmoid source memory_gates(e,provisional_fast,provisional_slow)",
+      "shape": "B,T,1",
+      "deps": [
+        "embeddings",
+        "provisional_fast",
+        "provisional_slow"
+      ],
+      "parallel": "B,T",
+      "causal": "past-and-present"
+    },
+    {
+      "id": "norm_budget_gate",
+      "op": "alpha_eff=raw_alpha*(1-beta/4); read-only mask",
+      "shape": "B,T,1",
+      "deps": [
+        "input_gates",
+        "input"
+      ],
+      "parallel": "B,T",
+      "causal": "past-and-present"
+    },
+    {
+      "id": "affine_pairs",
+      "op": "P=alpha_eff*(I-beta*k kT); Q=beta*v kT; read-only P=I Q=0",
+      "shape": "B,T,8,8 pairs",
+      "deps": [
+        "norm_budget_gate",
+        "embeddings"
+      ],
+      "parallel": "B,T",
+      "causal": "past-and-present"
+    },
+    {
+      "id": "associative_prefix",
+      "op": "chronological scan (Pa,Qa) diamond (Pb,Qb)=(PaPb,QaPb+Qb)",
+      "shape": "B,T,8,8",
+      "deps": [
+        "affine_pairs"
+      ],
+      "parallel": "O(logT) balanced stages, O(T*8^3) total small-matrix work, batch-parallel",
+      "causal": "inclusive past-and-present"
+    },
+    {
+      "id": "readonly_exact_trace",
+      "op": "parallel prefix-max last write index plus gather and zero initial memory",
+      "shape": "B,T,8,8",
+      "deps": [
+        "associative_prefix",
+        "norm_budget_gate"
+      ],
+      "parallel": "prefix-max O(logT) parallelizable",
+      "causal": "inclusive past-and-present"
+    },
+    {
+      "id": "old_read",
+      "op": "shift memory by one event; M_(t-1)@key_t",
+      "shape": "B,T,8",
+      "deps": [
+        "readonly_exact_trace",
+        "embeddings"
+      ],
+      "parallel": "B,T",
+      "causal": "strict past memory"
+    },
+    {
+      "id": "refined_fast",
+      "op": "original fast-map gated refinement with old_read",
+      "shape": "B,T,88",
+      "deps": [
+        "old_read",
+        "provisional_fast",
+        "embeddings"
+      ],
+      "parallel": "B,T",
+      "causal": "past-and-present"
+    },
+    {
+      "id": "refined_slow",
+      "op": "original slow-map gated refinement with refined_fast,old_read",
+      "shape": "B,T,88",
+      "deps": [
+        "refined_fast",
+        "old_read",
+        "provisional_slow"
+      ],
+      "parallel": "B,T",
+      "causal": "past-and-present"
+    },
+    {
+      "id": "final_read",
+      "op": "last memory@last key",
+      "shape": "B,8",
+      "deps": [
+        "readonly_exact_trace",
+        "embeddings"
+      ],
+      "parallel": "B",
+      "causal": "past-and-present"
+    },
+    {
+      "id": "readout_logits",
+      "op": "original MLP plus original normalized content codebook similarity",
+      "shape": "B,32",
+      "deps": [
+        "refined_fast",
+        "refined_slow",
+        "final_read",
+        "embeddings"
+      ],
+      "parallel": "B and class dimension",
+      "causal": "past-and-present"
+    }
+  ],
+  "invariants": [
+    "No graph edge from refined representation back into memory gate schedule",
+    "All time prefix operations preserve causal order; group, never permute keys",
+    "Unit-ball key/value and 0<=beta<=1, R>=1 bound memory norm under budget alpha_eff",
+    "Read-only events preserve entire 8x8 memory exactly via last-write gather",
+    "Fast and slow representations remain in unit coordinate box from bounded interpolation",
+    "Original source weights reused, but native learned recurrent-state dynamics changed",
+    "Finite precision associative regrouping is tested with tolerances, not asserted bit-exact",
+    "No causal do(a) or physical motion variable in DIAGKEY004 input schema",
+    "No simulated/diagnostic success promoted to real-world model skill"
+  ],
+  "verification": {
+    "original_partitioned_executed_checks": 184,
+    "conditioned_prefix_source_and_gradient_checks": 80,
+    "candidate_structural_checks": 230,
+    "pnds_lean_proof_scope": "arbitrary finite 8x8 square-matrix right-affine chronology plus scalar conditional radius budget",
+    "training_steps": 0,
+    "real_skill": "NOT_ESTABLISHED",
+    "work_efficient_scan": "BLELLOCH_UPSWEEP_DOWNSWEEP_O_T_WORK"
+  }
+}

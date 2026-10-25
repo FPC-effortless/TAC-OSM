@@ -1,0 +1,43 @@
+name: TAC real ALOHA retention budget research (DEV only)
+on:
+  pull_request:
+    paths:
+      - "src/tac_osm/variants/retention_controlled_world.py"
+      - "research/mathematical-engineering/pnds-native-v1-1/train_aloha_retention_dev.py"
+      - ".github/workflows/aloha-retention-dev.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-records-development-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install actual dataset and trainable model dependencies
+        run: python -m pip install --quiet torch pyarrow huggingface_hub
+      - name: Compare slow retention and source gates on real TRAIN/DEV only
+        env:
+          TAC_RETENTION_STEPS: "64"
+          TAC_RETENTION_LENGTH: "64"
+          HF_HUB_DISABLE_XET: "1"
+        run: |
+          set -o pipefail
+          python research/mathematical-engineering/pnds-native-v1-1/train_aloha_retention_dev.py | tee aloha_retention_dev.json
+      - name: Archive authentic fitted checkpoints and optimizer schedules
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-retention-aloha-original-train-dev-checkpoints
+          path: tac_retention_checkpoints/*.pt
+          if-no-files-found: error
+      - name: Archive authentic source DEV metrics including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-retention-aloha-original-dev-results
+          path: aloha_retention_dev.json
+          if-no-files-found: ignore

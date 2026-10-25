@@ -1,0 +1,92 @@
+{
+  "schema": "pnds.tac_osm.temporal_memory_retention_v1.7",
+  "created_date": "2026-10-25",
+  "tac_original_diagsource": "081e534a074001c6a3b2251b3ff31ad20ec4fca8",
+  "architecture_status": "NATIVE_INSPIRED_EXPERIMENTAL_UNPROMOTED",
+  "stable_timescale": {
+    "parameter_count": 93324,
+    "streaming_fp32_state_bytes": 608,
+    "checks": 294,
+    "source_git_blob": "83f2688bfe5d3fc61f7c637b3fb28c30d2a6176c",
+    "same_real_skill_as_original": false
+  },
+  "controlled_retention": {
+    "parameter_count": 93324,
+    "streaming_fp32_state_bytes": 608,
+    "checks": 162,
+    "gate_max_beta": 0.25,
+    "lower_scalar_alpha": 0.91875,
+    "source_git_blob": "207531ed6bace6a9981ee5e15caa6d6f4609dd03",
+    "useful_factual_recall_guaranteed": false
+  },
+  "formal": {
+    "timescale_source_blob": "bbf47d6b5bd080d0c0983a824a5cdb55025ca482",
+    "joint_schedule_source_blob": "97d4e51d057ca2d684f5d43e6027bc6b7327047f",
+    "retention_math_source_blob": "1339d3e28d29bf6a3951a44a6cdfbe550c055bf3",
+    "proof_compiled_ci": "https://github.com/FPC-effortless/pnds-lean/actions/runs/40144751519",
+    "full_original_fp32_neural_tensor_proof": false,
+    "all_seventeen_variant_proofs_complete": false,
+    "conditional_joint_scan_stream_proven": true
+  },
+  "authentic_data": {
+    "dataset": "lerobot/aloha_mobile_cabinet",
+    "immutable_sha": "7a752b39f7e69de7e38aee485a6bab07528a061a",
+    "tabular_sha256": "a3409d3282b2cf9a94d32b301756fbd15dca5862cc1c32973c7316dd8853c57a",
+    "train_windows": 472,
+    "dev_windows": 104,
+    "train_episodes": 59,
+    "previously_exposed_dev_episodes": 13,
+    "test_episodes_rescored": 0,
+    "source_equal_across_arms": true,
+    "init_weights_equal_per_seed": true,
+    "updates_per_arm": 64,
+    "flop_parity_certified": false,
+    "independent_real_skill_qualified": false,
+    "seeds": [
+      20261025,
+      20261026
+    ],
+    "baseline_all_mean_dev_mse": [
+      0.000391491,
+      0.00038206
+    ],
+    "timescale_dev_mse": [
+      0.000409109,
+      0.000404562
+    ],
+    "controlled_gate_dev_mse": [
+      0.000392125,
+      0.000382458
+    ],
+    "baseline_memory_ten_update_alpha_products": [
+      0.000414791,
+      0.0029869734
+    ],
+    "controlled_memory_ten_update_alpha_products": [
+      0.6551933885,
+      0.6406611204
+    ],
+    "conclusions": [
+      "TIMESCALE_DEV_LOSS_BOTH_SEEDS",
+      "RETENTION_DEV_LOSS_BOTH_SEEDS",
+      "ASSOCIATIVE_FACTUAL_MEMORY_USE_NOT_ESTABLISHED"
+    ]
+  },
+  "evidence": {
+    "mechanism_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40144539674",
+    "timescale_real_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40144243923",
+    "retention_real_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40144539727",
+    "tac_report_blob": "da1e6801dd14706f016f3d5540d8985bbfc3645b",
+    "pnds_report_blob": "c54c9364428f8c73036d1820df4a96ae0f76c762"
+  },
+  "caveats": {
+    "real_world_superiority": false,
+    "physical_controller_certified": false,
+    "synthetic_diagnostics_not_skill": true,
+    "full_train_flops_matched": false,
+    "cpu_wallclock_parity_required": false,
+    "prior_negative_ESWAM_QUAL_evidence_unchanged": true,
+    "all_historical_variant_registry_untouched": true,
+    "both_pull_requests_still_draft": true
+  }
+}

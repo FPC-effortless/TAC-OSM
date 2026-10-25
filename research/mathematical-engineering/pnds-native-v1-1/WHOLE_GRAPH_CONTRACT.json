@@ -1,0 +1,154 @@
+{
+  "schema": "tac_osm.native_operator_dag.v1.1",
+  "source": {
+    "commit": "081e534a074001c6a3b2251b3ff31ad20ec4fca8",
+    "path": "src/tac_osm/aligned_associative_tac.py",
+    "class": "AlignedAssociativeTAC",
+    "function": "forward",
+    "trainable_params_reference": 101527
+  },
+  "state": {
+    "fast": "[B,88]",
+    "slow": "[B,88]",
+    "associative": "[B,8,8]",
+    "init": "zeros(B,88), zeros(B,88), zeros(B,8,8)",
+    "memory_orientation": "value-by-key",
+    "observed_roles": "kind=2 is read_only for associative memory; not a no-op for fast/slow",
+    "temporal_semantics": "causal history loop; old memory read before each fast/slow and correction write",
+    "action_conditioning": "NONE in this synthetic DIAGKEY004 source; no causal do(a)"
+  },
+  "inputs": {
+    "kind": "[B,T] integers 0..2",
+    "keys": "[B,T] IDs for learned key codebook",
+    "values": "[B,T] IDs for learned content codebook"
+  },
+  "nodes": [
+    {
+      "id": "encoded",
+      "op": "tanh(Linear(kind_embed(kind)+key_embed(keys)+value_embed(values)))",
+      "shape": "[B,T,48]",
+      "dependencies": [
+        "kind",
+        "keys",
+        "values"
+      ],
+      "parallel": "B,T"
+    },
+    {
+      "id": "addresses",
+      "op": "normalize(address_embedding(keys),eps=1e-6)",
+      "shape": "[B,T,8]",
+      "dependencies": [
+        "keys"
+      ],
+      "parallel": "B,T"
+    },
+    {
+      "id": "contents",
+      "op": "normalize(content_embedding(values),eps=1e-6)",
+      "shape": "[B,T,8]",
+      "dependencies": [
+        "values"
+      ],
+      "parallel": "B,T"
+    },
+    {
+      "id": "old_memory_read_t",
+      "op": "M_(t-1) @ k_t",
+      "shape": "[B,8]",
+      "dependencies": [
+        "addresses",
+        "memory_prev"
+      ],
+      "parallel": "B"
+    },
+    {
+      "id": "fast_t",
+      "op": "lerp(f_prev,tanh(proposal_f(event,f_prev,read)),sigmoid(gate_f(...)))",
+      "shape": "[B,88]",
+      "dependencies": [
+        "encoded",
+        "fast_prev",
+        "old_memory_read_t"
+      ],
+      "parallel": "B; serial T"
+    },
+    {
+      "id": "slow_t",
+      "op": "lerp(s_prev,tanh(s_prev+tanh(delta_s(f_new,s_prev,read))),.25*sigmoid(gate_s(...)))",
+      "shape": "[B,88]",
+      "dependencies": [
+        "fast_t",
+        "slow_prev",
+        "old_memory_read_t"
+      ],
+      "parallel": "B; serial T"
+    },
+    {
+      "id": "write_gates_t",
+      "op": "retention, strength = sigmoid(memory_gates(cat(event,fast_new,slow_new))); retention=min(retention,1-1e-4)",
+      "shape": "[B,1] each",
+      "dependencies": [
+        "encoded",
+        "fast_t",
+        "slow_t"
+      ],
+      "parallel": "B; serial T"
+    },
+    {
+      "id": "memory_t",
+      "op": "if kind_t!=2: Project_radius4(alpha*M_prev+beta*(v_t-alpha*M_prev*k_t)outer(k_t)); else exactly M_prev",
+      "shape": "[B,8,8]",
+      "dependencies": [
+        "write_gates_t",
+        "contents",
+        "addresses",
+        "memory_prev",
+        "kind"
+      ],
+      "parallel": "B,8x8; serial T"
+    },
+    {
+      "id": "final_read",
+      "op": "M_(T) @ k_(T)",
+      "shape": "[B,8]",
+      "dependencies": [
+        "memory_t",
+        "addresses"
+      ],
+      "parallel": "B"
+    },
+    {
+      "id": "codebook",
+      "op": "normalize(content.weight[1:],eps=1e-6)",
+      "shape": "[32,8]",
+      "dependencies": [
+        "parameters"
+      ],
+      "parallel": "32"
+    },
+    {
+      "id": "class_logits",
+      "op": "readout(cat(f_T,s_T,final_read,encoded_T)) + exp(clamp(read_gain,-2,4))*final_read@codebook.T",
+      "shape": "[B,32]",
+      "dependencies": [
+        "fast_t",
+        "slow_t",
+        "final_read",
+        "encoded",
+        "codebook"
+      ],
+      "parallel": "B,32"
+    }
+  ],
+  "certification": {
+    "source_structure_traced_from_pinned_original": true,
+    "source_operator_actual_torch_FP32_FP64_test": "PASS_26_CHECKS",
+    "native_full_graph_semantic_Learn_proof": "OPEN",
+    "native_full_graph_PyTorch_forward_backward_reference": "OPEN",
+    "old_key_long_history_retention": "OPEN",
+    "independent_real_skill": "NONE_ESTABLISHED",
+    "legally_scan_parallel_whole_graph": false,
+    "categorical_source_task": "synthetic_immediate_key_value_recall_only"
+  }
+}

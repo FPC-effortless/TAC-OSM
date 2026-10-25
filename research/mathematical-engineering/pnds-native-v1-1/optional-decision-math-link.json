@@ -1,0 +1,54 @@
+{
+  "schema": "pnds.tac_osm.optional_math_component.v1",
+  "component_id": "OPTIONAL-PLANAR-CBF-QP-V1",
+  "revision": "2026-10-24-v1.2",
+  "type": "UNTRAINED_OPTIONAL_CIVILIAN_DECISION_MATH_ADAPTER",
+  "registered_trained_variant": false,
+  "replaces_native_TAC_OSM_memory": false,
+  "exact_models": {
+    "pnds": "planar single-integrator constant measured and obstacle velocity for one interval; scalar KKT and planar sampled barrier",
+    "tac": "unbounded 2D Euclidean differentiable halfspace projection only; no motor/box control",
+    "bounded_reference": "planar one-halfspace actuator-box candidate enumeration with explicit infeasibility"
+  },
+  "files": {
+    "tac_torch": {
+      "repo": "FPC-effortless/TAC-OSM",
+      "path": "src/tac_osm/variants/planar_constraint_adapter.py",
+      "git_blob_sha": "b73e476b3dae4a01bbba93fab972011ee33d86d4"
+    },
+    "pnds_lean": {
+      "repo": "FPC-effortless/pnds-lean",
+      "path": "PNDS/ConstraintAdapter.lean",
+      "git_blob_sha": "f87e26cffbc2df3866a4a8d112d51980f21e733f"
+    },
+    "pnds_python": {
+      "repo": "FPC-effortless/pnds-lean",
+      "path": "foundation/v1/planar_constraint_math.py",
+      "git_blob_sha": "a73e972d0710214ffae2c5aa45b673b610b15624"
+    }
+  },
+  "source_pull_requests": {
+    "tac": "https://github.com/FPC-effortless/TAC-OSM/pull/389",
+    "pnds": "https://github.com/FPC-effortless/pnds-lean/pull/7"
+  },
+  "proofs": {
+    "conditional_scalar_kkt": "formal_proof_subject_to_Lean_CI",
+    "planar_constant_velocity_interval": "formal_proof_subject_to_Lean_CI",
+    "box_constrained_closed_form": "Python_mechanism_test_only",
+    "torch_autograd": "PyTorch_mechanism_test_only",
+    "nonlinear_full_graph": "OPEN",
+    "real_physical_controller": "NOT_CERTIFIED",
+    "authentic_training": "NOT_RUN"
+  },
+  "safety_guards": [
+    "no safe zero fallback",
+    "infeasible is non-action",
+    "validated initial safety",
+    "gamma times sample period <= 1",
+    "unknown obstacle velocity bounded by measured external envelope",
+    "constant single-integrator dynamics assumption",
+    "unbounded differentiable source cannot be deployed",
+    "no full-model or real capability promotion"
+  ],
+  "research_usage": "candidate decision interface only; no synthetic performance promotion"
+}
