@@ -1,5 +1,16 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## NEXT-REPRESENT-ADAPT — emergent causal world representations and verified predictive experience (2026-10-25)
+
+**Dependent research work package; zero TAC training, zero implementation, zero independent improvement claim.** Based on [Lu et al. 2026](https://arxiv.org/abs/2610.28945) dual planner/world-model experience memory and MPPI-style one-step predictions, [Li et al. 2023](https://arxiv.org/abs/2210.13382)/[Nanda et al. 2023](https://arxiv.org/abs/2309.00941) Othello representation/interventions, [Anthropic 2025](https://www.anthropic.com/research/tracing-thoughts-language-model) anticipatory internal features and [Schaeffer et al. 2023](https://arxiv.org/abs/2304.15004) metric-artifact caution. **Literature is prior art, not TAC evidence.** A decodable probe is not a causal world representation; changing model forecasts by latent surgery is not real-world do(a) identification; frozen-model experience memory is not parametric self-training.
+
+**Priority:** attach to NEXT-SHARED-SELECTIVE's authentic source-authorized delayed-memory **headroom first**. Study genuine latent state recovery versus shortcut/control probes, model-internal interventions with off-target controls, optional world dynamics versus planner experience with matched memory budgets and negative-transfer tests, same-candidate MPPI/Gibbs versus argmin/no-weight controllers, and prequential actual-observation correction with frozen weights. Score authentic later prediction, calibration, uncertainty, actual decision cost only when identifiable, memory bytes and inference latency; continuous measurements accompany threshold/exact success. No new seventh variant or revised historical claim.
+
+**Boundaries:** six shared families and exact input-only prefix scan intact, memory admission source/time verified, CED only postscan, actual streaming state/storage counted fully, no hallucination-to-ground-truth promotion. Matched 95k–105k active parameters / ≤1% model parity, equal real data/compute/tuning, sealed independent evaluation, CPU measured but not equalized. Prior ME099 full gate FAILED and PR331 CED UNTRAINED remain unchanged. Full [registered hypothesis, mathematics, studies, nulls and sources](directions/NEXT-REPRESENT-ADAPT-WORLD-STATE-EXPERIENCE.md); [unified master plan](MASTER_RESEARCH_PLAN.md).
+
+---
+
+
 ## NEXT-SHARED-SELECTIVE — source-causal selective geometry/CED (2026-10-25)
 
 **Unified proposal; zero training, no implementation, no new capability result.** Fuse authentic entity-aware time/authority, prediction-damage relevance and bounded admission, optional versioned static-site lookup, mHC-inspired postscan geometry, six 16D concept slots with four postscan depth refinements, and optional sparse evidence reads / 32-event triggered replay. Build on the real native input-only affine scan and ME098/099 coherent trajectory distribution. Remain **six** active families, one shared core. DeepSeek V3 load bias, V4 CSA/HCA/mHC/Muon, V4.1-Flash encoder-final global cache/CSA2/bounded replay, and Engram static knowledge lookup are prior art, not proof of gain. The original TAC PR331 CED is untrained, distinct from DeepSeek's causal encoder-decoder.
