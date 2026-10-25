@@ -1,5 +1,22 @@
 # TAC-OSM — Unified Master Research Plan
 
+## Standing company strategy and daily research operating rule — 2026-10-25
+
+**Owner direction, strategic guidance (not capability evidence):** [Company Strategy and Daily Operating System](COMPANY_STRATEGY_AND_DAILY_OPERATING_SYSTEM.md) is the binding, living **prioritization and company-development companion** to this master research plan. It guides what to research, implement, qualify, package, document, and commercially validate across daily work. Where technical evidence, safety, parameter authorization, licensing or experimental gates differ, the existing master plan, AGENTS.md, PNDS requirements, and original immutable records take precedence. This addition does **not** revise or promote any old result.
+
+**Mission and portfolio:** build an open-source AI research/engineering company for **efficient, reliable, stateful predictive and decision-making intelligence**. Maintain exactly six active TAC-OSM research families—**System 1, Physical, Enterprise, Temporal, Edge-Lite, Counterfactual**—on a shared, source-backed native memory/dynamics/CED foundation where implemented. PNDS remains responsible for exact end-to-end mathematical specification and bounded formal verification. Specialized heads for memory retrieval/usefulness, event prediction, uncertainty, decision ranking and verification are components, **not** extra research families. Keep historic checkpoints, variants, results, negative findings, PRs and proof limitations immutable and discoverable.
+
+**Products and adoption:** pursue independent developer value from **Forge** (data provenance/cleaning), **TrainLab** (reproducible fair experiments), **Veritas** (agent state/outcome qualification), **Woyengi** (authorized operational state/execution) and SDKs, while avoiding claims that unverified proposed products are already implemented. Validate **Veritas agent qualification** and **Enterprise operational advisory forecasting** as competing initial market hypotheses; customer demand, revenue and pilot effectiveness require actual evidence. Commercial packaging and licensing must preserve useful open access and responsible distribution.
+
+**Daily operating rule:** review the most recent verified branches, PRs, CI, trained checkpoint/evaluation evidence, scientific blockers, and product commitments; select **three observable daily outcomes**—normally (1) substantive authentic-data capability research, (2) useful developer-product delivery, (3) customer/operational validation. For each record the branch/source, exact work, expected artifact, objective pass/fail gate and unresolved dependencies. Prioritize evidence/safety blockers first; do **not** divert into unrelated models or research publicity while critical qualifications remain failed. Close each day with DONE/IN PROGRESS/BLOCKED, exact links/hashes/results, regressions, and the next falsifiable task. Weekly, revisit scientific bottlenecks, developer adoption and buyer evidence. A scheduled morning briefing is **planning**, not authorization to train, deploy, spend, merge or claim unseen work complete.
+
+**Compulsory research integrity unchanged:** original real-world time-ordered data and outcome truth; protected TEST isolation; prospective 95k–105k total/trainable neural scale unless explicitly amended; ≤1% parameter parity plus same original data, exposure, training-compute budget and tuning privileges for architectural superiority claims; no mandatory CPU wall-time parity; exact Python/Lean mathematical scope; preregistration, original checkpoint+replay bundles, clean-checkout verification, and honest negative results. Simulation/synthetic tasks are diagnostics, not proof of real-world qualification. The latest ME105 and EWA002 failed full gates and remain failures.
+
+**Cross-repo boundary:** this strategy in TAC-OSM is guidance only; PNDS, Veritas and Woyengi source repositories are **not** automatically modified by this entry. Update their separate plans through their own review and approval paths when needed.
+
+---
+
+
 ## 2026-10-25 — ME105: explicit neural graph, primary gap coverage recovered; full gate still fails
 
 [Draft TAC PR406](https://github.com/FPC-effortless/TAC-OSM/pull/406),
