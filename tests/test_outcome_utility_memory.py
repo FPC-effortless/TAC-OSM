@@ -61,7 +61,11 @@ class TestDelayedUtilityMemory(unittest.TestCase):
         t=m.predict(key(1),value(0))
         with self.assertRaises(ValueError):
             m.observe(t,value(1),key(1),"")
-        self.assertEqual(m.stats()["occupied"],0)
+        # Source-rejected output still has a pending prediction; do not permit
+        # snapshots or another query until a legitimate outcome is committed.
+        with self.assertRaises(RuntimeError):
+            m.stats()
+        self.assertTrue(all(x is None for x in m.slots))
         m.observe(t,value(.1),key(1),"ok")
 
     def test_hash_bucket_membership_after_replacement(self):
