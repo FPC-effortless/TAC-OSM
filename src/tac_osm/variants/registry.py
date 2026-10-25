@@ -59,8 +59,8 @@ VARIANTS: Mapping[Variant, VariantSpec] = {
                            "tac_osm.variants.reconstruction_sensor_world"),
         "persistent sensor histories; proposed as-known-at/as-valid-at corrections",
         "six-pollutant sensor distribution; separate proposed governance dual-clock input",
-        "ME102 gap coverage/density improve, point accuracy regresses; no recipe passes all five seeds; bitemporal correction remains unqualified",
-        ("ME069", "ME071", "ME073", "ME100", "ME101", "ME102"),
+        "ME103 extra training improves point means but uncertainty regresses; no recipe passes all five seeds; bitemporal correction remains unqualified",
+        ("ME069", "ME071", "ME073", "ME100", "ME101", "ME102", "ME103"),
     ),
     Variant.EDGE_LITE: VariantSpec(
         Variant.EDGE_LITE, ("tac_osm.parameter_budget",),

@@ -82,3 +82,13 @@ problem. The next integrated architecture should preserve a strong point forecas
 while learning a coherent, source/channel-conditioned predictive distribution;
 that requires a separate source-pinned prospective protocol, not another silent
 budget extension or an attribution campaign. Protected cohorts remain closed.
+
+## Original restoration
+
+A separate clean detached checkout ofe85268a0 reloaded and replayed all15original
+checkpoints, their forecasts/raw-density metrics/gates, all30dtype fitted graph
+checks and the paired summary/publisher-row audit without retraining. All52bundle
+payload SHA256checks pass. RESTORATION_RECEIPT.json records the exact commits.
+The capability declaration is TRAINED_REPLAY_VERIFIED with MIXED_TRADEOFF outcome
+and full-gate FAIL; its structural validator is not a gain test. GitHub original
+replay40191654367 was still in progress at this receipt; consult its final status.
