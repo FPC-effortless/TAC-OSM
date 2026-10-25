@@ -29,6 +29,7 @@ jobs:
           if test -f research/replay-bundles/ME099/RESULTS.json; then
             python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me099/POSTFIT.json --phase final
             PYTHONPATH=src:. python scripts/me099_regime_trajectory.py replay
+            python scripts/validate_capability_progress.py research/mathematical-engineering/me099/CAPABILITY_SCORECARD.json
           else
             echo 'REPO_REPLAY=BLOCKED original model portfolio or scores not yet present'
           fi
