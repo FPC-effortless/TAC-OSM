@@ -67,3 +67,11 @@ def test_shared_conditioning_reuse_and_extreme_rates():
     for family in PARALLEL_FAMILIES:
         z=instantiate_untrained_core(family,state_dim=14,action_dim=14,candidate='coherent_trajectory')
         assert type(z) is CoherentTrajectoryWorld
+
+def test_student_density_matches_standard_scalar_distribution():
+    m=CoherentTrajectoryWorld().double();x=torch.randn(2,4,14,dtype=torch.float64)
+    f,_=m(x,torch.randn_like(x),horizons=(1,));truth=f.mean.detach()+.013
+    marginal=torch.distributions.StudentT(df=4.,loc=f.mean[:,:,0],
+        scale=f.scale_matrix[...,0,0].sqrt())
+    torch.testing.assert_close(joint_student_nll(f,truth),-marginal.log_prob(truth[:,:,0]),rtol=1e-10,atol=1e-11)
+    torch.testing.assert_close(marginal.variance,2*f.scale_matrix[...,0,0],rtol=1e-12,atol=1e-12)
