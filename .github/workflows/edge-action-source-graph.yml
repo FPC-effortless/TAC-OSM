@@ -1,0 +1,47 @@
+name: Shared edge action-query source and graph verification
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "src/tac_osm/variants/action_query_edge_world.py"
+      - "src/tac_osm/variants/parallel_six.py"
+      - "scripts/edge_action_fit_source_audit.py"
+      - "tests/test_action_query_edge_world.py"
+      - "research/directions/EDGE-ACTION-IMPLEMENTATION.md"
+      - ".github/workflows/edge-action-source-graph.yml"
+  pull_request:
+    paths:
+      - "src/tac_osm/variants/action_query_edge_world.py"
+      - "src/tac_osm/variants/parallel_six.py"
+      - "scripts/edge_action_fit_source_audit.py"
+      - "tests/test_action_query_edge_world.py"
+      - "research/directions/EDGE-ACTION-IMPLEMENTATION.md"
+      - ".github/workflows/edge-action-source-graph.yml"
+permissions:
+  contents: read
+jobs:
+  source-math-no-fit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install source audit dependencies
+        run: pip install numpy pyarrow
+      - name: Audit original real ALOHA FIT source timestamps and action indices
+        run: python scripts/edge_action_fit_source_audit.py
+  shared-action-graph:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Torch CPU
+        run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pytest
+      - name: Execute source authority, memory purity, chunk and gradient tests
+        run: PYTHONPATH=src:. python -m pytest tests/test_action_query_edge_world.py -q
+      - name: Confirm original trained ME101 eligibility remains gated
+        run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me101/FAIR_COMPARISON.json --phase preflight

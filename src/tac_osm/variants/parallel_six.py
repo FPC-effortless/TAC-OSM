@@ -91,3 +91,25 @@ def instantiate_entity_sensor_core(name: str | Variant, *, candidate: str = "sou
         from .belief_sensor_world import BeliefSensorWorld
         return BeliefSensorWorld()
     raise ValueError("unknown typed sensor candidate")
+
+
+def instantiate_edge_physical_research_candidate(
+    name: str | Variant, *, task: str, state_dim: int = 14,
+    action_dim: int = 14,
+):
+    """One parallel-memory mathematics lineage with source-specific heads.
+
+    This is a typed construction factory, not a trained shared-weights model.
+    Proposed commands NEVER authorize motor actuation or identify causal
+    effects. Only the supported sensor schema invokes original ME101.
+    """
+    family = parallel_family(name).family
+    if family == Variant.TEMPORAL and task == "sensor_observation":
+        from .belief_sensor_world import BeliefSensorWorld
+        if (state_dim, action_dim) != (14, 14):
+            raise ValueError("ME101 schema fixed; actuator dims not applicable")
+        return BeliefSensorWorld()
+    if family in (Variant.PHYSICAL, Variant.SYSTEM1) and task == "observed_action_query":
+        from .action_query_edge_world import ActionQueryEdgeWorld
+        return ActionQueryEdgeWorld(state_dim=state_dim, action_dim=action_dim)
+    raise ValueError("no source-qualified shared edge head for this family/task")

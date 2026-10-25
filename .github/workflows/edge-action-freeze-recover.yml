@@ -1,0 +1,57 @@
+name: EDGEACTION001 restore EXACT original FIT artifacts (NO RETRAIN)
+on:
+  push:
+    paths:
+      - ".github/workflows/edge-action-freeze-recover.yml"
+permissions:
+  contents: write
+  actions: read
+jobs:
+  freeze-original-bytes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Retrieve already trained ORIGINAL five-fit artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          test ! -e research/replay-bundles/EDGEACTION001
+          mkdir -p research/replay-bundles/EDGEACTION001
+          gh run download 40188210109 --repo FPC-effortless/TAC-OSM --name edgeaction001-original-fit-only --dir research/replay-bundles/EDGEACTION001
+      - name: Verify exact source-frozen original model bytes before any scoring
+        run: |
+          set -e
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          root=Path("research/replay-bundles/EDGEACTION001")
+          j=json.loads((root/"FIT_INDEX.json").read_text())
+          expected={
+            91001:"1cc2d93e5fed6c263d6250683a3cb05be22984a19c59a18ccf175ace6ab8d99d",
+            91002:"af5f96802053104db8e04e1888fd3fd9a3ab67f8644533a1f03226c518580d26",
+            91003:"50fa5b40bd65e05c320faca3d5ca25aac0f4c2666218b2d9095a9741292ff946",
+            91004:"0d46281764ae107384ec838435d7a75cce1d6cb44881ee399cceebf2500d7359",
+            91005:"40c983119dd95d2a3fd62969d63120e2b757180e09004866e73ddf1b83a31123"
+          }
+          assert j["historical_DEV_scored"] is False and j["original_TEST_scored"] is False
+          assert {r["seed"] for r in j["models"]}==set(expected)
+          for r in j["models"]:
+            n=r["seed"]
+            p=root/f"seed-{n}"/"final.pt"
+            d=hashlib.sha256(p.read_bytes()).hexdigest()
+            assert d==expected[n]==r["checkpoint_sha256"],(n,d)
+            assert r["steps"]==256 and r["trainable_parameters"]==99760
+            assert (root/f"seed-{n}"/"live-budget.json").exists()
+          print("ORIGINAL_SAVED_ARTIFACT_SHA256_REPLAY=PASS, NO NEW FITS, NO REPORT",flush=True)
+          PY
+      - name: Commit original models verbatim before any score
+        run: |
+          set -e
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add research/replay-bundles/EDGEACTION001
+          git commit -m "Freeze unmodified EDGEACTION001 five original real FIT checkpoints from successful trained artifact"
+          git push origin HEAD:refs/heads/research/shared-edge-action-implementation-2026-10-25
