@@ -1,0 +1,400 @@
+{
+  "schema_version": "tac-osm.capability-progress.v1",
+  "study_id": "ME106-POINT-PRIORITY-SENSOR",
+  "tier": "TRAINED_REPLAY_VERIFIED",
+  "capability_outcome": "MIXED_TRADEOFF",
+  "decision": "FAIL",
+  "claim_type": "same forward architecture with explicit role/priority training; no independent superiority",
+  "what_improved": "Primary gap coverage remains15/15. Point_strong gap MAE0.64%lower and intervalscore12.52%lower vsparentmeans, fiveindividualfullpasses; learninggraph/referenceagree.",
+  "what_regressed": "Noallfive recipepasses. Ordinarypointmeansworse0.08\u20130.66% vsparents; ME105balanced ordinary/sharpness gainsnotretained; severalotherchannelsundercovered.",
+  "what_remains_unknown": "Independent qualification, combined calibrated predictive skill, memory attribution, full-neural/IEEE proof, device performance and customer/control intelligence remain unknown.",
+  "source": {
+    "authentic_real_data": true,
+    "exposure": "EXPOSED_DEV",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "eligible_ids_sha256": "66c98cc9ca7b71934a5236b9c689189ab877a9386c0cff5c586614ba0bc38683",
+    "license": "CC-BY-4.0",
+    "fit": "UCI5012013\u20132014",
+    "evaluation": "2015alreadyexposed",
+    "protected_2016_2017_scored": false,
+    "train_split_sha256": "df1df933a3c6126bdf0f06bf8aef1e6e1da473ce6453852b9a4242c806772226",
+    "dev_split_sha256": "f2bddff3fba70fa60fbd641de10a5a9b5298710442eeb3b88dce6e79e5fe4503",
+    "evaluation_contract_sha256": "6b4eb3294ffdf2769962d1fc91079b98ad4142ded143cfa40e7a5aad9a517d5d"
+  },
+  "task": {
+    "prediction_time_validated": true,
+    "independent_cases": 21,
+    "actual_future_targets": 21,
+    "target": "Actual six-hour pollutant labels grouped in21primary gap calendar-week resampling units,143queries; ordinary4288queries/53overlappingweeks. Denominator fields describe labeled clusters, not IID claims.",
+    "query_and_horizon": "Original six-hour future targets,256hour histories,6channels; native record missing masks.",
+    "same_case_ids_target_horizon_metric": true,
+    "query_counts": {
+      "gap": 143,
+      "general": 4288
+    },
+    "resampling_clusters": {
+      "gap": 21,
+      "general": 53
+    },
+    "independence_caveat": "Weeks are resampling units, not proven independent. Seeds/repeatedqueries do not add cases; no independent gain."
+  },
+  "model": {
+    "prior_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+    "candidate_sha256": "63c82ebc627d3604b44847068b7e54b9ce83390c6fa40916c45cc30bd6e1dac4",
+    "representative_role": "First recipe/seed in fixed registration order, not best selected; all15 hashes/gates below.",
+    "trainable_parameters": 100349,
+    "deployed_parameters": 100349,
+    "parameter_tensors": 33,
+    "panel": [
+      {
+        "recipe": "balanced",
+        "seed": 106001,
+        "candidate_sha256": "63c82ebc627d3604b44847068b7e54b9ce83390c6fa40916c45cc30bd6e1dac4",
+        "parent_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "balanced",
+          "seed": 106001,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": false,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "point_guard",
+        "seed": 106001,
+        "candidate_sha256": "54ae688205872fe32a1363a4bb16f84cc9d833b88caf16d8601382dc60f5b129",
+        "parent_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_guard",
+          "seed": 106001,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": false,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "point_strong",
+        "seed": 106001,
+        "candidate_sha256": "6c7489e8d324d68d9cd18ff7f5a40049d7f675df10a85e047c5e75b6c39807ad",
+        "parent_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_strong",
+          "seed": 106001,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": false,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "balanced",
+        "seed": 106002,
+        "candidate_sha256": "ad754294261f4570a857ea4b0e784f42f31528457ecaa489fa8df9c8c917584c",
+        "parent_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "balanced",
+          "seed": 106002,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "point_guard",
+        "seed": 106002,
+        "candidate_sha256": "ddcd709f0627a8606c55ee71e7c345e34e1d78f50365843aa2572875d6c9a6b3",
+        "parent_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_guard",
+          "seed": 106002,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "point_strong",
+        "seed": 106002,
+        "candidate_sha256": "de7c40ec5b456144641b2c2d8c036f819a3e2001f784f17b1f0a6c8350757500",
+        "parent_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_strong",
+          "seed": 106002,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "balanced",
+        "seed": 106003,
+        "candidate_sha256": "3e27f5e06aaf4b6f304da9b067f9aa35e680ed31f1ac2ffce96a158abf887f7d",
+        "parent_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "balanced",
+          "seed": 106003,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "point_guard",
+        "seed": 106003,
+        "candidate_sha256": "501b93fe2301d0c76a623119d09882a5c006b5e98c5593f8f31d552e1e08fefe",
+        "parent_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_guard",
+          "seed": 106003,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "point_strong",
+        "seed": 106003,
+        "candidate_sha256": "b1d76ca0e3552d03b6cd38a90d2784eec1a36e0a4e1d9a2d7306b879100c4ec1",
+        "parent_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_strong",
+          "seed": 106003,
+          "gates": {
+            "coverage": true,
+            "gap_point": false,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "balanced",
+        "seed": 106004,
+        "candidate_sha256": "120ac279f1080c7022daa6152caebe2a47d4f16ef51134a4352c3fb97b94b61b",
+        "parent_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "balanced",
+          "seed": 106004,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      },
+      {
+        "recipe": "point_guard",
+        "seed": 106004,
+        "candidate_sha256": "26166fdde6f1fa759f1f8be4f33f63cb3df31424cef753ae7d8fb115248440cf",
+        "parent_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_guard",
+          "seed": 106004,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      },
+      {
+        "recipe": "point_strong",
+        "seed": 106004,
+        "candidate_sha256": "a7bb8a2ef0e19d6fe54787be1b6972adffd8ebec0c29e2d565df080b5ebbc78b",
+        "parent_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_strong",
+          "seed": 106004,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": false
+          },
+          "full_gate": false
+        }
+      },
+      {
+        "recipe": "balanced",
+        "seed": 106005,
+        "candidate_sha256": "fbc5439cde7280b1b371bb02d5cba070b572bfc34b137e0425326dee42218a60",
+        "parent_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "balanced",
+          "seed": 106005,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      },
+      {
+        "recipe": "point_guard",
+        "seed": 106005,
+        "candidate_sha256": "d04f51178f71ff43fd94f7e964165387a350cb8c31716b4e0a33587b53a3555a",
+        "parent_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_guard",
+          "seed": 106005,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      },
+      {
+        "recipe": "point_strong",
+        "seed": 106005,
+        "candidate_sha256": "250a9d995dfbc9d2b130249a0b10dc68cd05ee26e010dcc650390decfc56403f",
+        "parent_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+        "trainable_parameters": 100349,
+        "new_updates": 1536,
+        "gates": {
+          "recipe": "point_strong",
+          "seed": 106005,
+          "gates": {
+            "coverage": true,
+            "gap_point": true,
+            "daily_point": true,
+            "gap_nll": true,
+            "interval_score": true
+          },
+          "full_gate": true
+        }
+      }
+    ],
+    "parent_recipe_selection": "All5ME103strong parents, disclosed selection from exposed development; new runseeds are not new independent roots.",
+    "new_optimizer_steps": 1536,
+    "parent_weight_lineage_steps": 4608,
+    "new_head_weight_steps": 1536,
+    "optimizer": "freshAdamW.0003wd.001",
+    "new_examples_per_model": 24576,
+    "new_history_event_exposures_per_model": 2686976,
+    "old_new_comparison_note": "Different parameters, optimizer/objective and exposure; no controlled architecture superiority.",
+    "density": "Censored equal-half Gaussian quantile transform; per-channel, not joint multi-horizon law.",
+    "floor": "Side variance lower boundold_floor/16 under scalar bounds, not original full amplitude."
+  },
+  "integrity": {
+    "git_original_checkpoints": true,
+    "independent_clean_replay": true,
+    "raw_case_scores_preserved": true,
+    "registered_before_evaluation": true,
+    "source_commit": "adb71873a8ddf9939f9c185b47e24a68927b5122",
+    "models_frozen_before_report": "6ae491e7a3608190ac70085b24c4b9705d1eb8ba",
+    "all30fitted_dtype_audits": true,
+    "retraining": false,
+    "original_scores_and_clean_checkout": "e812f6551eb75f6bbfc404e1aec0dba5680ec653",
+    "all15score_replay": true,
+    "source_label_replay": true,
+    "github_original_replay": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40220362323",
+    "github_original_replay_status": "PASS"
+  },
+  "planned_primary": "Everyseed: coverage90\u201398%, point/NLL guardrails, at least10%intervalscore gain and preserved ME101guards; every5seed in recipe required.",
+  "guardrails": [
+    {
+      "metric": "balanced all5fullgates",
+      "status": "FAIL"
+    },
+    {
+      "metric": "point_guard all5fullgates",
+      "status": "FAIL"
+    },
+    {
+      "metric": "point_strong all5fullgates",
+      "status": "FAIL"
+    }
+  ],
+  "full_gate_seed_count": 5,
+  "recipe_all_seed_gates": {
+    "balanced": false,
+    "point_guard": false,
+    "point_strong": false
+  },
+  "practical_reference_scored": true,
+  "measured_summary": "research/replay-bundles/ME106/PANEL_SUMMARY.json",
+  "next_target": "New source-conditioned forecast-regime/conditional-distribution architecture hypothesis, notanotherpointweightsweep; nofurtherME106fits."
+}

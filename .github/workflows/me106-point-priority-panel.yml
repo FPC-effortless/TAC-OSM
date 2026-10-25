@@ -1,0 +1,36 @@
+name: ME106 original protected model panel replay (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/me106*'
+      - 'src/tac_osm/variants/point_priority_sensor_world.py'
+      - 'tests/test_point_priority_sensor_world.py'
+      - 'tests/test_me106*'
+      - 'research/mathematical-engineering/me106/**'
+      - 'research/replay-bundles/ME106/**'
+      - '.github/workflows/me106-point-priority-panel.yml'
+permissions:
+  contents: read
+jobs:
+  original-panel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pytest
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me106/FAIR_COMPARISON.json --phase preflight
+      - run: PYTHONPATH=src:. python -m pytest tests/test_point_priority_sensor_world.py tests/test_me106_priority_panel.py -q
+      - run: |
+          set -e
+          if test -f research/replay-bundles/ME106/RESULTS.json; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me106/POSTFIT.json --phase final
+            PYTHONPATH=src:. python scripts/me106_priority_panel.py replay
+            PYTHONPATH=src:. python scripts/me106_fitted_graph_audit.py replay
+            PYTHONPATH=src:. python scripts/me106_panel_summary.py
+          else
+            echo 'ME106_ORIGINAL_PANEL_REPLAY=BLOCKED not trained/scored yet'
+          fi
