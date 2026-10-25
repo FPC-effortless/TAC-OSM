@@ -1,0 +1,38 @@
+name: ME099 MuJoCo robot and planar-car checkpoint diagnostic
+on:
+  push:
+    branches:
+      - research/me099-robot-car-simulator-eval-2026-10-25
+    paths:
+      - 'scripts/me099_mujoco_robot_car_diagnostic.py'
+      - 'research/diagnostics/ME099-MUJOCO-ROBOT-CAR.md'
+      - '.github/workflows/me099-mujoco-robot-car.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  sim-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU PyTorch and MuJoCo Python (no GPU or hardware)
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet numpy mujoco==3.3.6
+      - name: Evaluate original frozen ME099 on two simulation proxies
+        run: |
+          PYTHONPATH=src python scripts/me099_mujoco_robot_car_diagnostic.py --seed 99003 --steps 160
+      - name: Save diagnostics as separate simulation-only artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me099-simulation-only-robot-car-json
+          path: research/diagnostics/me099_mujoco_results.json
+          if-no-files-found: warn
