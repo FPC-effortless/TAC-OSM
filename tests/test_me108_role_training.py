@@ -21,6 +21,15 @@ def test_fixed_single_candidate_protocol():
     assert runner.CONTEXTS == (8, 64, 256)
 
 
+def test_real_origin_pair_geometry_is_checked_before_optimizer_loop():
+    data={'gap':[(0,300),(1,400)],'general':[(2,500),(3,600)]}
+    plan=runner.make_plan(108001,data)
+    assert plan.shape==(4096,16,2)
+    runner.validate_plan(plan)
+    import pytest
+    with pytest.raises(RuntimeError):runner.validate_plan(plan[:,:,0])
+
+
 def test_plan_is_seeded_and_uses_eight_origins_from_each_partition():
     data = {"gap": list(range(100, 140)), "general": list(range(200, 240))}
     first = runner.make_plan(108001, data)

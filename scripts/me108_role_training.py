@@ -90,6 +90,11 @@ def make_plan(seed, d):
     return np.asarray(rows, dtype=np.int64)
 
 
+def validate_plan(plan):
+    if plan.shape != (STEPS, BATCH, 2) or not np.issubdtype(plan.dtype,np.integer):
+        raise RuntimeError('plan must contain4096x16 integer [station,hour] origins')
+
+
 def initialize(d, seed):
     torch.manual_seed(seed)
     model = RoleSpecializedSensorWorld(torch.tensor(gap.floor_rates(d)["rates"], dtype=torch.float32))
@@ -200,6 +205,7 @@ def prepare():
         raise RuntimeError("ME108 preregistered models must bind exactly the five fixed role_guarded seeds")
     d = fit_data()
     plans = {str(seed): make_plan(seed, d) for seed in SEEDS}
+    for plan in plans.values(): validate_plan(plan)
     np.savez_compressed(DOC / "FIT_PLANS.npz", **plans)
     plan_hashes = {str(s): hashlib.sha256(plans[str(s)].tobytes()).hexdigest() for s in SEEDS}
     rawscale = torch.tensor(np.nanstd(d["raw"][..., :6].astype(np.float64), axis=(0, 1)).clip(1e-4), dtype=torch.float32)
@@ -281,7 +287,7 @@ def fit_one(seed):
     if optimizer.state:
         raise RuntimeError("fresh ME108 AdamW must start without inherited optimizer state")
     plan = np.load(DOC / "FIT_PLANS.npz")[str(seed)]
-    if plan.shape != (STEPS, BATCH): raise RuntimeError("registered ME108 plan must contain 4096 batches of 16 origins")
+    validate_plan(plan)
     rng = np.random.default_rng(seed + 10000)
     rawscale = torch.tensor(np.nanstd(d["raw"][..., :6].astype(np.float64), axis=(0, 1)).clip(1e-4), dtype=torch.float32)
     input_hash, losses, first_grad = hashlib.sha256(), [], None
