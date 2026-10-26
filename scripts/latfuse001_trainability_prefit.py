@@ -10,6 +10,7 @@ import argparse
 import datetime
 import hashlib
 import json
+from pathlib import Path
 import math
 import torch
 from tac_osm.latent_fusion_001 import FusedLatentCandidate
@@ -98,6 +99,6 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--source",required=True)
     args=ap.parse_args()
-    print("LATFUSE001_100K_PREFIT_JSON="+json.dumps(run(args.source),sort_keys=True))
+    print("LATFUSE001_100K_PREFIT_JSON="+json.dumps(run(Path(args.source)),sort_keys=True))
 if __name__=="__main__":
     main()
