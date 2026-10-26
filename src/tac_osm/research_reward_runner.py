@@ -173,3 +173,34 @@ def verify_reward_attestation(
         "evidence_sha256": hashlib.sha256(_canonical(payload)).hexdigest(),
         "qualification": "signed_auditor_receipt_not_independently_proven_causality",
     }
+
+
+
+def verify_stage_continuity(preflight: Mapping[str, Any],
+                            postfit: Mapping[str, Any]) -> dict[str, Any]:
+    """Freeze independent judge/scorer/ACL/policy across the fitted run.
+
+    Call this *after* each signed envelope has been separately verified using
+    the SAME independently pinned public key and original run registration.
+    Signed but changed reward rules must never silently count as improvement.
+    """
+    a = _signing_payload(preflight)
+    b = _signing_payload(postfit)
+    if a.get("phase") != "preflight" or b.get("phase") != "final":
+        raise RewardEvidenceError("reward stage order wrong")
+    if a.get("schema") != SCHEMA or b.get("schema") != SCHEMA:
+        raise RewardEvidenceError("reward evidence schema changed")
+    for field in ("binding", "source_authority", "reward_scorer_sha256",
+                  "goal_evaluator_sha256", "access_policy_sha256",
+                  "protected_assets_sha256", "evaluation_policy_sha256"):
+        if a.get(field) != b.get(field):
+            raise RewardEvidenceError("reward/goal/source/ACL/policy changed across fit: " + field)
+    if a.get("evaluator_executed_outside_actor") is not True or b.get(
+            "evaluator_executed_outside_actor") is not True:
+        raise RewardEvidenceError("evaluator isolation not confirmed across stages")
+    return {"status": "PASS_UNCHANGED_INDEPENDENT_SCORING_CONTRACT",
+            "frozen_contract_digest": hashlib.sha256(_canonical({
+                field: a[field] for field in (
+                    "binding", "reward_scorer_sha256", "goal_evaluator_sha256",
+                    "access_policy_sha256", "protected_assets_sha256",
+                    "evaluation_policy_sha256")})).hexdigest()}
