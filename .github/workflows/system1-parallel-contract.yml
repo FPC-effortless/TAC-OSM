@@ -1,0 +1,26 @@
+name: System1 parallel observational-head contracts (no fit)
+on:
+  push:
+    branches:
+      - 'research/system1-observational-parallel-2026-10-26'
+  pull_request:
+    paths:
+      - 'src/tac_osm/variants/system1_parallel.py'
+      - 'tests/test_system1_parallel.py'
+      - '.github/workflows/system1-parallel-contract.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  system1-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU tensor runtime
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Run causal, gradient and stream-parity engineering checks
+        run: PYTHONPATH=src:. python -m unittest discover -s tests -p 'test_system1_parallel.py' -v
