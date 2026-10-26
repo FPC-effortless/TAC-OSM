@@ -163,3 +163,40 @@ required entrypoint and separately enforce branch protection, least-privilege
 evaluator storage and verifier-key custody. The final signed evaluator receipt
 must be created by an independently permissioned source-authenticated service
 after the actual evaluation, not by the model process or test fixture.
+
+
+### Integration with actual original FIT robot source qualification
+
+The genuine-source GitHub Actions workflow
+\`.github/workflows/full-real-robot-fit-source-qualification.yml\` now feeds
+its original 325-episode FIT receipt to
+\`scripts/check_real_robot_reward_readiness.py\`, then publishes
+\`results/real-robot-reward-readiness-blocker.json\` in the existing source
+audit artifact. This source-only negative gate requires all actual publisher
+FIT source hashes and the exact "no scalar reward/verified task success" flag.
+It refuses a source receipt reclassified as success, and explicitly reports
+\`reward_checkpoint_promotion_eligible=false\`.
+
+This is genuine empirical source evidence but **negative reward readiness**:
+logged commanded actions, next physical qpos and observed human takeover
+are valid supervised real-world prediction targets, NOT an independently
+verified policy reward or counterfactual intervention benefit. The workflow
+does not open DEV/TEST, train, sign, or promote checkpoints. When a real
+publisher task-success source and independent audit service are available,
+the next run must use those new original source records and an independently
+signed reward/goal contract; it cannot silently treat takeover as success.
+
+### Scorer freeze and actor environment isolation
+
+The guarded launcher checks that external signed prefit/final contracts agree
+on reward scorer, independent goal judge, protected asset digest, evaluator
+policy, and access policy. It also compares the full preregistration between
+stages, permitting only measured postfit receipt changes. A scorer/goal/ACL
+swap or modified original model budget after fitting BLOCKS qualification.
+
+The actor subprocess inherits a minimal explicit environment variable allowlist,
+excluding GitHub tokens, cloud secrets, signing material and evaluator
+credentials. This prevents ordinary environment inheritance, **not** a
+privilege breach in a shared filesystem, malicious parent process, or an
+actor supplied its own credentials. Production runtime must still use
+actual isolated filesystem mount permissions and separate identities.
