@@ -23,7 +23,7 @@ def replay(original:Path,cache:Path,out:Path):
     scores=json.loads((original/"FIRST-ORIGINAL-REAL-DEV-SCORES.json").read_text())
     if (not before["all_nine_original_model_optimizer_rng_SHA_frozen_before_DEV"]
         or before["source_revision"]!=source["revision_sha"]
-        or scores["complete_original_gate_pass"]
+        or scores["complete_original_gate_pass"]!=(l["original_scientific_gate"]=="PASS")
         or before["TEST_40_to_54_NEVER_DOWNLOADED"] is not True):
         raise RuntimeError("original frozen research integrity/gate mismatch")
     torch.set_num_threads(1)
@@ -90,14 +90,14 @@ def replay(original:Path,cache:Path,out:Path):
     out.mkdir(parents=True,exist_ok=True)
     receipt=dict(study="S1TEMP007",original_fit_run=40297263363,
         original_9_model_SHA_verified=True,
-        original_dev_source_SHA_verified=True,full_original_gate="FAIL",
+        original_dev_source_SHA_verified=True,full_original_gate=l["original_scientific_gate"],
         no_training_optimizer_calls=True,source_TEST_never_downloaded=True,
         independent_external_robot_site=False,
         original_27_arm_seed_horizon_scores_verified=verified)
     (out/"READONLY-ORIGINAL-REPLAY.json").write_text(
         json.dumps(receipt,indent=2,sort_keys=True)+"\n")
-    print("S1TEMP007_ORIGINAL_TWELVE_SCORES_COLD_REPLAY=PASS",flush=True)
-    print("S1TEMP007_SCIENTIFIC_ORIGINAL_GATE=FAIL",flush=True)
+    print("S1TEMP007_ORIGINAL_27_SCORES_COLD_REPLAY=PASS",flush=True)
+    print("S1TEMP007_SCIENTIFIC_ORIGINAL_GATE="+l["original_scientific_gate"],flush=True)
 
 if __name__=="__main__":
     p=argparse.ArgumentParser()
