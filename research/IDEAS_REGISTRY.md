@@ -40,13 +40,27 @@ persistent state, native parallel scan, loss weights or neural family.
   Reconstruction has no path through the separate future query; angle conflicts
   with very small norms must not be overinterpreted.
 
-Independent clean detached-checkout180-probe replayPASS,1031full Python testsPASS,
-4diagnostic unit testsPASS. Read-only independent cheaper-agent review found no
+Independent local clean detached-checkout180-probe replayPASS;1036full Python
+testsPASS, including9diagnostic/replay/precision unit tests. Read-only independent cheaper-agent review found no
 blocking defect. PNDS adds4compiled exact-real counterexample declarations and an
 exact-rational Python test: positive Euclidean dot can reverse under unequal
 coordinate rates. This possibility is not claimed as observed group-rate failure
 here. Standard Lean axioms only; whole-neural/Gaussian/IEEE refinement remainsOPEN.
-GitHub dedicated replay and math CI status must be checked separately.
+PNDS GitHub math and general Lean CI pass on de75865. Initial FP32 GitHub
+replay fails: one rounding-sign histogram differs47vs48; a later runner also
+exceeds the original raw-dot tolerance (-0.932906 vs -0.932928). These failures
+are preserved and FP32 cross-host replay remains unqualified; no original
+tolerance is widened. A separately registered FP64 supplement (358860dc before
+measurement) repeats all180 frozen FIT probes with its own1e-9/1e-10 contract.
+It reproduces0/180 NLL/point conflicts,139/180 point/interval conflicts and34/180
+AdamW locally-uphill directions; projected residual cosine is about-4.25e-16.
+FP64 is a separate numerical diagnostic, not a replacement of original FP32
+artifacts, a new fit, proof of FP32 identity, or improved predictive capability.
+Independent local and pinned-environment GitHub FP64 replay40249198749PASS
+at1e-9/1e-10 (source68c48886). Initial FP64 remote run40248912057 stopped on an
+input checksum mismatch with NumPy2.5.4; matching original NumPy2.3.5 resolves
+that environment mismatch. Both failed attempts remain recorded. No FP32
+tolerance, predictive gate, original input or model artifact was changed.
 
 **Next training candidate, not yet trained:** protect point directions blockwise
 in the proposed optimizer displacement, including preconditioning/momentum/decay,
