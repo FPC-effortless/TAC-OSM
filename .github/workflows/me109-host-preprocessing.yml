@@ -1,0 +1,26 @@
+name: ME109 fieldwise source preprocessing diagnosis (no fit)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/me109_observatory_inputs.py'
+      - 'research/replay-bundles/ME109/OBSERVATORY_FIT_INPUTS*'
+      - '.github/workflows/me109-host-preprocessing.yml'
+permissions:
+  contents: read
+jobs:
+  source-producer-difference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy==2.3.5
+      - run: PYTHONPATH=src:. python scripts/me109_observatory_inputs.py diagnose > me109-preprocessing-diagnostics.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: me109-source-preprocessing-diagnostics
+          path: me109-preprocessing-diagnostics.json
+          retention-days: 14

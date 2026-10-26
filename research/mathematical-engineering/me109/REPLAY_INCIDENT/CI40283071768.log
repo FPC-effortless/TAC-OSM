@@ -1,0 +1,35 @@
+original-model-contract	Run set -e	﻿2026-10-26T07:00:58.0052668Z ##[group]Run set -e
+original-model-contract	Run set -e	2026-10-26T07:00:58.0053014Z [36;1mset -e[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0053799Z [36;1mpython scripts/validate_research_parity.py --manifest research/mathematical-engineering/me109/FAIR_COMPARISON.json --phase preflight[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0054794Z [36;1mif test -f research/replay-bundles/ME109/RESULTS.json; then[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0055704Z [36;1m  python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me109/POSTFIT.json --phase final[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0056630Z [36;1m  PYTHONPATH=src:. python scripts/me109_fitted_audit.py replay[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0057262Z [36;1m  PYTHONPATH=src:. python scripts/me109_residual_training.py replay[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0057863Z [36;1m  PYTHONPATH=src:. python scripts/me109_summary.py[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0058468Z [36;1m  if test -f research/replay-bundles/ME109/OBSERVATORY_ANTICHEAT.json; then[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0059647Z [36;1m    PYTHONPATH=src:. python scripts/me109_observatory_adapter.py replay[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0060270Z [36;1m  fi[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0060512Z [36;1melse[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0060967Z [36;1m  echo 'Original five-model scores not yet available; no training or new scoring performed.'[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0061485Z [36;1mfi[0m
+original-model-contract	Run set -e	2026-10-26T07:00:58.0124271Z shell: /usr/bin/bash -e {0}
+original-model-contract	Run set -e	2026-10-26T07:00:58.0124587Z env:
+original-model-contract	Run set -e	2026-10-26T07:00:58.0124920Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+original-model-contract	Run set -e	2026-10-26T07:00:58.0125492Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+original-model-contract	Run set -e	2026-10-26T07:00:58.0126050Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-model-contract	Run set -e	2026-10-26T07:00:58.0147973Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-model-contract	Run set -e	2026-10-26T07:00:58.0148472Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-model-contract	Run set -e	2026-10-26T07:00:58.0148917Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+original-model-contract	Run set -e	2026-10-26T07:00:58.0149621Z ##[endgroup]
+original-model-contract	Run set -e	2026-10-26T07:00:58.0626481Z {"eligible_for_architecture_superiority": false, "phase": "preflight", "status": "PASS_PREFIT_SINGLE_MODEL", "study_id": "ME109-IDENTITY-PRESERVING-RESIDUAL-ROLES"}
+original-model-contract	Run set -e	2026-10-26T07:00:58.1074388Z {"eligible_for_architecture_superiority": false, "phase": "final", "status": "PASS_SINGLE_MODEL", "study_id": "ME109-IDENTITY-PRESERVING-RESIDUAL-ROLES"}
+original-model-contract	Run set -e	2026-10-26T07:01:09.9506106Z ME109_FITTED_GRAPH_AND_PROPOSAL_REPLAY_PASS
+original-model-contract	Run set -e	2026-10-26T07:02:11.1177144Z ME109_SUMMARY_REPLAY_PASS
+original-model-contract	Run set -e	2026-10-26T07:02:19.4402108Z Traceback (most recent call last):
+original-model-contract	Run set -e	2026-10-26T07:02:19.4410995Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me109_observatory_adapter.py", line 167, in <module>
+original-model-contract	Run set -e	2026-10-26T07:02:19.4411835Z     execute(p.parse_args().mode == 'replay')
+original-model-contract	Run set -e	2026-10-26T07:02:19.4412653Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me109_observatory_adapter.py", line 82, in execute
+original-model-contract	Run set -e	2026-10-26T07:02:19.4414165Z     assert run.digest([run.sha_tensor(v) for v in x]) == batch['input_sha256']
+original-model-contract	Run set -e	2026-10-26T07:02:19.4414790Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+original-model-contract	Run set -e	2026-10-26T07:02:19.4415253Z AssertionError
+original-model-contract	Run set -e	2026-10-26T07:02:19.7338004Z ##[error]Process completed with exit code 1.

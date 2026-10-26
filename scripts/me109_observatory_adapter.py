@@ -79,7 +79,19 @@ def execute(replay=False):
         # Original recorded RNG consumed gap/general index draws first.
         rng.integers(len(d['gap']), size=16); rng.integers(len(d['general']), size=16)
         x = run.tensor_batch(d, origins, 256, rng)
-        assert run.digest([run.sha_tensor(v) for v in x]) == batch['input_sha256']
+        rebuilt_digest = run.digest([run.sha_tensor(v) for v in x])
+        if rebuilt_digest != batch['input_sha256']:
+            # Diagnose against authenticated ORIGINAL exports before retaining
+            # the original strict rejection. No hash/gate normalization here.
+            from scripts import me109_observatory_inputs as frozen_inputs
+            arrays, _ = frozen_inputs.load()
+            diagnostics = [frozen_inputs.compare_field('batch0_' + name, value,
+                            arrays['batch0_' + name])
+                           for name, value in zip(frozen_inputs.FIELDS, x)]
+            print(json.dumps(dict(status='ORIGINAL_INPUT_DIGEST_MISMATCH', seed=seed,
+                current_input_sha256=rebuilt_digest, original_input_sha256=batch['input_sha256'],
+                fields=diagnostics), indent=2), flush=True)
+        assert rebuilt_digest == batch['input_sha256']
         path = run.OUT/'residual_guarded'/f'seed-{seed}'/'final.pt'
         digest = run.sha(path)
         assert digest == identity['checkpoint_sha256']
