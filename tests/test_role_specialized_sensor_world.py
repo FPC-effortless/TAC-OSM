@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 import torch
 
-from tac_osm.variants.role_specialized_sensor_world import RoleSpecializedSensorWorld, RoleFFN
+from tac_osm.variants.role_specialized_sensor_world import RoleSpecializedSensorWorld, RoleFFN, ComputationRole
 from tac_osm.role_update_contract import protect_displacement
 from scripts.me107_graph_reference import serial
 from tests.test_protected_sensor_world import sample
@@ -16,6 +16,11 @@ def test_live_budget_and_hard_assigned_outputs():
     assert sum(p.numel() for p in model.parameters()) == 102713
     assert sum(p.numel() for p in model.parameters() if p.requires_grad) == 102713
     assert len(list(model.parameters())) == 39
+    assert model.current_head.role == ComputationRole.RECONSTRUCT
+    assert model.width_head.role == ComputationRole.WIDTH
+    assert model.median_head.role == ComputationRole.MEDIAN
+    owned=[{id(p) for p in h.parameters()} for h in (model.current_head,model.width_head,model.median_head)]
+    assert all(not owned[i].intersection(owned[j]) for i in range(3) for j in range(i+1,3))
     x = torch.randn(2,102)
     assert [h(x).shape[-1] for h in (model.current_head,model.width_head,model.median_head)] == [12,12,6]
     with pytest.raises(ValueError):
