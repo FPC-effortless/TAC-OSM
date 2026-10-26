@@ -49,3 +49,17 @@ G2: projected MSE <= .99×velocity AND <= both original TAC controls; G3: high-m
 
 ## Next research constraint (NOT a retrained result)
 The next task is to address **multiobjective event signal retention** without relying on opened Screw Driver DEV scores or treating a retrospective budget adjustment as a prospective success. Expand with authentic measured adverse/action costs, strict source/time provenance, independent task/robot, honest FLOPs, and full PNDS finite-precision and gradient-refinement. Previous TEST episodes35–49 remain sealed. Keep PR draft/unmerged.
+
+
+## Post-hoc, source-respecting paired episode diagnostic (not original promotion gate)
+
+Read only the **already frozen first DEV per-episode scores** from the original model artifact. For each actual DEV episode ID 25–34, retain exact same episode ID and the three original seed checkpoints across every comparator; resample 10 episode IDs **with replacement**, 50,000 replicates, numpy PCG64 generator seed **29005**, source-unit MSE averaged jointly across the three original seeds and the sampled episode IDs, paired relative improvement `100*(baseline_MSE - projected_MSE)/baseline_MSE`. Weights across episodes are uniform because exactly 255 authentic next-frame observations were scored per episode. This is conditional single-task source evidence, NOT inferential evidence about independent unseen robots or trials.
+
+| Projected TAC gain compared with | Original mean MSE gain | Paired episode-bootstrap percentile 2.5–97.5% | DEV episode IDs with improvement (mean over 3 seeds) |
+|:--|--:|--:|--:|
+| Constant velocity | **+3.133%** | **+2.652% to +3.498%** | **10/10** |
+| TAC fully isolated | **+0.317%** | **+0.256% to +0.379%** | **10/10** |
+| TAC fully shared | **+6.197%** | **+5.549% to +6.796%** | **10/10** |
+| GRU fully isolated | **−0.077%** | **−0.650% to +0.343%** | not a qualified advantage |
+
+Bootstrap draws do NOT make the ten episodes independent robots, the three seeds independent tasks, or prior analyzed data novel. A 0.317% within-TAC projected-vs-isolated mean gain is small despite stable episode ordering, and a point forecast does not stand in for actual model intelligence, intervention outcomes, or risk calibration. Original classifier guard for seed29001 still **FAIL**; original complete qualification unchanged **2/3 seeds pass**.
