@@ -2,6 +2,10 @@
 **Date:** 2026-10-26. **Status:** proposed owner-directed research/product prioritization, not a qualified checkpoint, architectural-superiority finding, formal whole-model proof, product release, or customer validation.
 **Authority:** [Unified Master Research Plan](MASTER_RESEARCH_PLAN.md), [Company Strategy and Daily Operating System](COMPANY_STRATEGY_AND_DAILY_OPERATING_SYSTEM.md), [Real-World Evidence Rules](REAL-WORLD-EVIDENCE-RULES.md), [PNDS Mathematical Engineering Rule](PNDS-MATHEMATICAL-ENGINEERING-RULE.md), and repository AGENTS.md. Technical/evidence/release rules and original experimental artifacts override strategic objectives where they conflict.
 
+## First-class ecosystem design dependency — 2026-10-26
+
+The [source-grounded ecosystem interoperability and evidence contract](ECOSYSTEM_INTEROPERABILITY_AND_EVIDENCE_BOUNDARIES_2026-10-26.md) is a required companion to future TAC-OSM state, memory, typed-decision and verification research. Existing Woyengi state/reconstruction/authority/effects semantics and Veritas's qualification distinctions shape model interfaces at design time. Do not implement a competing mutable "truth store" in TAC-OSM, bypass Woyengi authorization or claim Veritas attestation from a model score. Forge, TrainLab and PNDS provide authentic legal input, reproducible run evidence and mathematical specifications. A constructed boundary validator can enforce only structural nonpromotion and as-of access; genuine interop must be separately source-authorized and independently tested.
+
 ## 0. Binding company direction, scope, and distinctive hypothesis
 
 **Research mission:** develop efficient, stateful, predictive and probabilistic intelligence that maintains useful representations of changing world state, tracks authorized identities, forecasts genuine future outcomes, and emits calibrated machine-readable decisions. Design for fixed-size **neural working state**, parallelizable sequence learning where mathematically valid, fast recurrent online execution, and mobile/edge devices as first-class deployment targets.

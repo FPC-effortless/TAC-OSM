@@ -1,0 +1,54 @@
+{
+  "contract_version": 1,
+  "study_id": "CONSTRUCTED_NO_FIT_DEMONSTRATION",
+  "split": "FIT",
+  "source_artifact_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "source_rights_reference": "fixture:operator-claim-not-independently-verified",
+  "as_of_at": "2026-10-26T08:00:00+01:00",
+  "observations": [
+    {
+      "id": "observation:1",
+      "entity_id": "entity:demo-1",
+      "valid_at": "2026-10-26T06:55:00+01:00",
+      "recorded_at": "2026-10-26T07:01:00+01:00",
+      "available_at": "2026-10-26T07:02:00+01:00",
+      "source_record_id": "source:sample-1",
+      "record_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "conflicts_count": 0,
+      "conflicts_preserved": true,
+      "features": {
+        "measured_value": 4
+      }
+    }
+  ],
+  "predictions": [
+    {
+      "id": "prediction:1",
+      "observation_ids": [
+        "observation:1"
+      ],
+      "checkpoint_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "predicted_at": "2026-10-26T08:00:00+01:00",
+      "horizon_seconds": 3600,
+      "target_id": "target:demo-change",
+      "output": {
+        "kind": "predicate",
+        "probability": 0.35
+      },
+      "authority": "advisory"
+    }
+  ],
+  "outcomes": [
+    {
+      "id": "outcome:1",
+      "prediction_id": "prediction:1",
+      "observed_at": "2026-10-26T08:30:00+01:00",
+      "recorded_at": "2026-10-26T09:00:00+01:00",
+      "available_at": "2026-10-26T09:00:00+01:00",
+      "source_record_id": "source:future-1",
+      "record_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "target_value": false
+    }
+  ],
+  "verification_status": "UNATTESTED"
+}

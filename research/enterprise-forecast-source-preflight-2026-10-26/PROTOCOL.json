@@ -1,0 +1,98 @@
+{
+  "schema": "tac-osm.enterprise-source-preflight.v1",
+  "proposal_id": "ENTERPRISE-SOURCE-PREFLIGHT-2026-10-26",
+  "lane": "Enterprise",
+  "tier": "DESIGN_ONLY",
+  "status": "BLOCKED",
+  "activated_training_registration": false,
+  "fit_authorized": false,
+  "protected_test_access_authorized": false,
+  "source": {
+    "preferred": "NYC311/erm2-nwe9",
+    "archival_replica_data_version": 194240,
+    "visible_archive_data_version": 187190,
+    "archive_revision_seq": 37,
+    "archive_bytes_acquired": false,
+    "historical_field_visibility_verified": false,
+    "rights_privacy_reviewed": false,
+    "alternative": "BPI2017/original/version1",
+    "alternative_bytes_acquired": false,
+    "metadata_receipts": "metadata-acquisition-receipts.json"
+  },
+  "task": {
+    "primary_target": "publisher_reported_closed_at_7_day_horizon",
+    "landmarks_per_case": 1,
+    "horizons_days": [
+      1,
+      3,
+      7
+    ],
+    "primary_horizon_days": 7,
+    "unknown_outcome_is_negative": false,
+    "actual_resolution_verified": false,
+    "intervention_claim_allowed": false,
+    "horizon_observation_tolerance_hours": null,
+    "minimum_label_completeness": null
+  },
+  "split": {
+    "unit": "case_identity",
+    "assignment": "chronological_by_first_eligible_observation",
+    "fit_end_utc": null,
+    "dev_start_utc": null,
+    "dev_end_utc": null,
+    "report_start_utc": null,
+    "report_end_utc": null,
+    "case_id_sha256": null,
+    "embargo_days_minimum": 7,
+    "embargo_adds_observation_tolerance": true,
+    "report_exposure": "NOT_ACQUIRED",
+    "minimum_report_independent_cases_floor": 100,
+    "power_precision_target": null
+  },
+  "models": {
+    "candidate_source_commit": null,
+    "candidate_model_symbol": null,
+    "new_variant_implemented": false,
+    "native_model_family": "Enterprise",
+    "practical_references": [
+      "global_fit_rate",
+      "smoothed_agency_category_age_fit_rate",
+      "regularized_logistic"
+    ],
+    "optional_neural_comparator": "matched_GRU_requires_separate_frozen_comparison_track",
+    "neural_parameter_range": [
+      95000,
+      105000
+    ],
+    "architecture_claim_max_relative_parameter_gap": 0.01,
+    "equal_cpu_time_required": false,
+    "seeds": null,
+    "training_update_budget": null,
+    "training_flop_budget": null,
+    "tuning_budget": null,
+    "pnds_source_record": null
+  },
+  "decision": {
+    "primary_metric": "case_mean_brier_7_day",
+    "direction": "lower_is_better",
+    "paired_case_comparison": true,
+    "seed_count": 5,
+    "beneficial_seed_minimum": 4,
+    "confidence_level": 0.95,
+    "minimum_practical_gain": null,
+    "guardrail_margins": null,
+    "bootstrap_calendar_block_days": null,
+    "independent_gain_eligible": false
+  },
+  "replay": {
+    "git_original_checkpoints": "NOT_RUN",
+    "independent_clean_clone": "NOT_RUN",
+    "REPO_REPLAY": "BLOCKED"
+  },
+  "value": {
+    "operator_decision": "human_review_prioritization_hypothesis",
+    "authorized_customer": false,
+    "customer_value": "NOT_MEASURED"
+  },
+  "activation_requires": "Separate immutable addendum completing all null fields and independent source/outcome/rights/split/model/math/budget evidence before any fit or REPORT outcome access. This JSON is descriptive; it is not an executable training authorization."
+}

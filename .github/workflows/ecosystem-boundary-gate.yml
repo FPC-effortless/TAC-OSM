@@ -1,0 +1,149 @@
+name: Ecosystem evidence boundary contract (no fit)
+
+on:
+  push:
+    branches:
+      - research/ecosystem-first-class-boundaries-2026-10-26
+  pull_request:
+    paths:
+      - "contracts/TACOSM-ECOSYSTEM-BOUNDARY-v1.json"
+      - "scripts/validate_ecosystem_boundary.py"
+      - "tests/test_ecosystem_boundary.py"
+      - "scripts/woyengi_projection_adapter.py"
+      - "tests/test_woyengi_projection_adapter.py"
+      - "scripts/validate_woyengi_predictive_export.py"
+      - "tests/test_woyengi_predictive_export.py"
+      - "research/ECOSYSTEM_INTEROPERABILITY_AND_EVIDENCE_BOUNDARIES_2026-10-26.md"
+      - "research/ECOSYSTEM_INTEROPERABILITY_AND_EVIDENCE_BOUNDARIES_2026-10-26.md"
+      - ".github/workflows/ecosystem-boundary-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-time-and-authority-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate constructed boundary reference
+        run: python scripts/validate_ecosystem_boundary.py contracts/TACOSM-ECOSYSTEM-BOUNDARY-v1.json
+      - name: Test hostile source and verification fixtures
+        run: python -m unittest discover -s tests -p "test_ecosystem_boundary.py" -v
+      - name: Test real Woyengi projection shape adapter with constructed native records
+        run: python -m unittest discover -s tests -p "test_woyengi_projection_adapter.py" -v
+      - name: Validate Woyengi-owned predictive export structure and fail closed
+        run: python -m unittest discover -s tests -p "test_woyengi_predictive_export.py" -v
+      - name: Compile interop validator and unit tests
+        run: python -m py_compile scripts/validate_ecosystem_boundary.py tests/test_ecosystem_boundary.py scripts/woyengi_projection_adapter.py tests/test_woyengi_projection_adapter.py scripts/validate_woyengi_predictive_export.py tests/test_woyengi_predictive_export.py
+
+  cross-repository-woyengi-source-fixture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out TAC-OSM consumer
+        uses: actions/checkout@v4
+      - name: Check out exact Woyengi producer source
+        uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/Woyengi
+          ref: c2a93c5534878cab616ac298d37e63343c345c46
+          path: woyengi-source
+          persist-credentials: false
+      - name: Check out exact Forge source
+        uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b6d4261ce3eee7b78197c8d4087c6e2b29ec2599
+          path: veritas-forge-source
+          persist-credentials: false
+      - name: Set up pinned Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.12.0"
+      - name: Set up Python consumer
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Generate Woyengi read using actual ClaimLedger and CapabilityEngine
+        run: node woyengi-source/packages/predictive-export/interop/generate-fixture.ts /tmp/woyengi-source-constructed.json
+      - name: Independently reject untrusted source and model authority in Python consumer
+        run: |
+          python scripts/validate_woyengi_predictive_export.py /tmp/woyengi-source-constructed.json > /tmp/tac-woyengi-read-result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path("/tmp/tac-woyengi-read-result.json").read_text())
+          assert r["status"] == "STRUCTURAL_ONLY"
+          assert r["observation_count"] == 2
+          assert r["conflicting_claim_ids"] == ["claim:fixture-first"]
+          assert r["selected_claim_id"] == "claim:fixture-second"
+          assert r["authorization_provenance"] == "HOST_ASSERTED_NOT_INDEPENDENTLY_AUTHENTICATED"
+          assert r["source_rights"] == "UNVERIFIED_BY_THIS_CONSUMER"
+          assert r["woyengi_action_authority"] == "NOT_GRANTED"
+          print("PASS: actual Woyengi source -> TAC structural consumer; CONSTRUCTED fixture only")
+          PY
+      - name: Negative source-path check - tampered authority always fails
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s = json.loads(Path("/tmp/woyengi-source-constructed.json").read_text())
+          s["actionAuthority"] = "AUTHORIZED"
+          Path("/tmp/woyengi-source-forged.json").write_text(json.dumps(s))
+          PY
+          if python scripts/validate_woyengi_predictive_export.py /tmp/woyengi-source-forged.json; then
+            echo "FAIL: fake source authority accepted"; exit 1
+          fi
+          echo "PASS: forged source authority rejected"
+
+      - name: Same Woyengi fixture through TAC consumer and Forge with release hard-stop
+        env:
+          PYTHONPATH: veritas-forge-source/integrations/forge/src
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import sys
+          import tempfile
+          from forge_data.woyengi import convert_export_candidate
+          from forge_data.core import point_in_time, ForgeError, release
+          sys.path.insert(0, str(Path("scripts").resolve()))
+          from validate_woyengi_predictive_export import adapt_predictive_read_export
+          src = json.loads(Path("/tmp/woyengi-source-constructed.json").read_text())
+          tac = adapt_predictive_read_export(src)
+          forge = convert_export_candidate(src, source_id="constructed-software-integration-only")
+          assert tac["status"] == "STRUCTURAL_ONLY"
+          assert forge["conversion"] == "STRUCTURAL_ONLY"
+          assert tac["observation_count"] == len(forge["rows"]) == 2
+          assert all(r["outcome"]["status"] == "unknown" for r in forge["rows"])
+          assert all(point_in_time(r, "2026-02-14T23:59:59Z") is None for r in forge["rows"])
+          assert all(point_in_time(r, "2026-02-15T00:00:00Z") is not None for r in forge["rows"])
+          # An operator cannot launder this constructed projection into a Forge dataset release
+          # merely by asserting rights/spec booleans.
+          with tempfile.TemporaryDirectory() as d:
+              root = Path(d)
+              input_rows = root / "input.jsonl"
+              input_rows.write_text("".join(json.dumps(x) + "\n" for x in forge["rows"]))
+              spec = root / "spec.json"
+              spec.write_text(json.dumps({
+                  "dataset_id":"CONSTRUCTED_NOT_REAL","source_id":"constructed-software-integration-only",
+                  "source_version":"constructed-v1","license_id":"fixture-only",
+                  "provenance_uri":"fixture://woyengi", "ai_use_allowed":True,
+                  "redistribution_allowed":True,"privacy_reviewed":True,
+                  "adapter":"operations-jsonl","split_salt":"constructed-only"
+              }))
+              try:
+                  release(input_rows, spec, root / "release")
+              except ForgeError as error:
+                  assert "UNATTESTED" in str(error)
+              else:
+                  raise AssertionError("Untrusted Woyengi candidate was released")
+              assert not (root / "release").exists()
+          print("PASS Woyengi -> TAC + Forge with as-of protection and release hard stop")
+          print("EVIDENCE TIER: constructed software only; NOT model, publisher, or real reward evidence")
+          PY

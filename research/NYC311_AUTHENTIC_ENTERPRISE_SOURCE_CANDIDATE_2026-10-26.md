@@ -1,0 +1,75 @@
+# Authentic operational data candidate: NYC 311 service requests (2026-10-26)
+**Status as of 2026-10-26 22:46 UTC:** PUBLIC SOURCE IDENTIFIED AND LIMITED ORIGINAL API SNAPSHOT ACQUIRED, NOT SCIENTIFICALLY QUALIFIED. No historical as-of eligibility, independently verified publisher revisions, train/DEV/TEST release, verified outcomes, training/scoring/checkpoints, or legal/privacy signoff.
+
+## First controlled publisher-byte capture — authentic source, not trainable
+
+- Original NYC API endpoint: https://data.cityofnewyork.us/resource/erm2-nwe9.json.
+- Capturing code: [Forge NYC311 snapshot module](https://github.com/FPC-effortless/veritas/blob/feature/forge-woyengi-asof-handoff-2026-10-26/integrations/forge/src/forge_data/nyc311_snapshot.py) in [draft PR #422](https://github.com/FPC-effortless/veritas/pull/422).
+- **Original publisher-byte capture:** [GitHub Actions run #40415024422](https://github.com/FPC-effortless/veritas/actions/runs/40415024422), acquisition complete 2026-10-26T22:46:49.993605Z; 25 public source rows, minimal six fields (case ID, created/closed dates, agency, complaint type and current status).
+- Original response bytes SHA-256: **79f8aebfea1c389f82d5c94468fb1e91f6e53413249d9ecdf98375026488ad23**; [source bytes and receipt artifact #12694317198](https://github.com/FPC-effortless/veritas/actions/runs/40415024422/artifacts/12694317198). Artifact retention is initially 14 days, so this is not guaranteed permanent storage.
+- **Second independently timed public API acquisition**: [GitHub Actions run #40415302656](https://github.com/FPC-effortless/veritas/actions/runs/40415302656) completed 2026-10-26T22:49:05.477351Z, again 25 original public rows and the **same response SHA-256** (`79f8aebfea1c389f82d5c94468fb1e91f6e53413249d9ecdf98375026488ad23`). Its [new raw-bytes/receipt artifact #12695630608](https://github.com/FPC-effortless/veritas/actions/runs/40415302656/artifacts/12695630608) is configured for **90-day retention**. Two matching captures minutes apart are reproducibility evidence for that narrow public query only, not longitudinal field/version evolution, independent original publisher identity attestation, or permissible historical model inputs.
+- The workflow passed 15 constructed negative/source-integrity tests and a genuine public API acquisition. The receipt forces flags for historical field availability, privacy/rights, outcome verification, and training/scoring eligibility to remain **false**.
+- This is **actual publisher-source data** but a contemporary record snapshot. It does not prove how a case's status or agency looked at any historic creation date; a late correction may overwrite history. Do not infer interventions or mark the observed closure automatically independent-verified.
+- **NO TRAIN / NO SCORE / NO SOURCE-QUALIFIED RELEASE.** A prospective qualification requires independently preserved longitudinal snapshots or immutable publisher events with observation/knowledge clocks, source rights and independent outcomes, protected chronological/groups split, and Veritas evaluation separation.
+
+---
+
+## Publisher and authoritative public references
+
+- Publisher: New York City Open Data, official [311 Service Requests from 2020 to Present](https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2020-to-Present/erm2-nwe9) dataset (Socrata ID `erm2-nwe9`); daily-updated operational source. The October 26 source review found created/closed dates, unique request key, agency and complaint-type fields documented.
+- [Official dataset changes](https://www.nyc.gov/opendata/news/all-news/311-Service-Requests-Updates) note a December 2025 split between 2010–2019 and 2020–present and updated labels. API field identifiers do not necessarily change when display labels do.
+- [NYC Open Data terms](https://data.cityofnewyork.us/stories/s/Terms-of-Use/k9k7-3cje) warn providers retain data version control, and public rows may be **corrected, overwritten or refreshed at any time; older versions are not retained**. The dataset source must therefore NOT be portrayed as an immutable history of what was visible at a historical cutoff.
+- [Official Open Data FAQ](https://www.nyc.gov/opendata/get-started/FAQs) describes open data as usable without general restrictions, but check any provider-specific terms and actual privacy/redistribution conditions before a Forge release. Official open/public listing does not alone establish provenance of each snapshot or timestamped field change.
+
+## Candidate task and scope
+
+Enterprise subproblem: source-grounded forecast of **time to actual case closure** or open-request nonclosure risk conditional on information verifiably available before each decision cutoff.
+
+- Candidate independent operational outcome: `closed_date` when original source supports it; requests remaining open at the observation cutoff must be represented as censored/unknown, **not closed=0 ground truth**. Changes/reopens/revisions require special handling.
+- Eligible input time: `created_date` for case creation **only after source availability has been observed/verified**. Current `agency`, `complaint_type`, `status`, descriptors and geo fields might have been corrected later and must **not** be assumed present at creation without authentic historical snapshots or publisher documentation confirming immutable field semantics.
+- Case identity: `unique_key`; other repeat-observation groupings by geography or agency may need separate evidence and leakage risk assessment. NYC 311 is a public service-request task, **not proof of an action-conditioned world model**, authorized agent control or actual intervention benefit.
+- Models/baselines: time-to-event survival methods and empirical agency/category base rates, last-known status, matched GRU/SSM and proposed TAC entity/temporal model, with genuine equal parameters/data/training compute where neural superiority is claimed and separately reported unmatched classical baselines.
+- Evaluation: temporal holdout with protected future cohorts and group/area/agency checks, missingness, changes/reopenings, observed censoring mechanism, C-index and proper survival likelihood/Brier, uncertainty/calibration, false alarms and operational intervention cost where independently known. Avoid choosing hyperparameters after viewing untouched validation/test results.
+
+## Hard prerequisites before authorizing a Forge or TrainLab study
+
+1. Resolve **real as-of input visibility**. Prefer pinned periodic original publisher extracts and independently recorded acquisition timestamps; ideally verifiable agency event logs or snapshots. A single current-row dump whose `status` was updated in 2026 cannot prove historical features known in 2022. A new scrape made today provides a legitimate **today-known** snapshot, not retroactively available data in the past.
+2. Pin original legally obtained source bytes with digest, source URL/API query, retrieval UTC, data version, explicit rate/terms/privacy scope and generated checksums. Independently review column-sensitive details and avoid unnecessary free text/geocoordinates if privacy/exposure rules require.
+3. Distinguish true `closed_date` observed outcomes from open/missing/censored cases; independently validate source correctness including reopenings and data revisions. Never manufacture actions, rewards or completeness.
+4. Require sufficiently diverse independent case/site groups and time cohorts so Forge's actual grouped splits do not put essentially all cases into one group or leak near duplicates across subject identities; write and freeze the split plan before training.
+5. Obtain original held-out outcomes through a separate allowed evaluation path, with Veritas independent recomputation and no hidden target through Woyengi/Forge/TrainLab/TAC feature, cache, normalizer or UI.
+6. Preflight registered seed/compute/parameter gates and immutable checkpoints and meaningful baseline/uncertainty thresholds. **Existing S1 and ME110 full scientific failures remain unchanged**.
+
+## Current decision
+
+**NO TRAIN / NOT QUALIFIED**. Continue software integration CI using constructed cases only. NYC311 is a viable authentic operational *candidate*, not an already released, independently temporally reconstructable TAC training/evaluation dataset. A trustworthy 311-as-of archive/source event log is the gating artifact, alongside Veritas/Forge security review.
+
+## Desired independently verifiable source receipt
+
+```text
+source_id: NYC311/erm2-nwe9
+publisher: NYC Open Data
+source_bytes_sha256: <computed by actual acquisition>
+retrieved_at_utc: <actual source retrieval instant>
+publisher_asof_or_snapshot_id: <real publisher or archived snapshot identifier>
+row_version: <proven source metadata, otherwise UNKNOWN>
+rights_and_privacy_review: PENDING
+eligible_feature_proof: PENDING
+outcome_verifier: PENDING
+source_groups_and_frozen_splits: PENDING
+trained_model: NOT RUN
+independent_test_result: NOT RUN
+```
+
+These fields are intended to be filled from actual published/retrieved evidence. Do not fabricate source hashes or timestamps to satisfy the contract.
+
+## Follow-up: actual archival enrollment discovered
+
+Live official metadata now reports an active archival replica and a visible version
+187190 (revision 37, December 2025). A read-only status request reports a completed
+archive with refSize 3,476,668,601; no full export or case rows were acquired. This
+qualifies the earlier broad no-history assumption: optional archives exist, but
+recoverable coverage, release clocks, rights and per-field visibility remain
+unverified. See the [original metadata receipts, recovery procedure and blocked
+Enterprise protocol](enterprise-forecast-source-preflight-2026-10-26/PROTOCOL.md).
+No training or scoring eligibility is granted.
