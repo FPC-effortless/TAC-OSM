@@ -214,3 +214,50 @@ def test_cli_pinned_input_and_checkpoint_rejects_wrong_hash(tmp_path):
                          capture_output=True, text=True)
     assert run.returncode == 2
     assert json.loads(run.stdout)["status"] == "BLOCKED"
+
+
+
+def test_same_entities_batched_and_individually_are_nearly_identical():
+    from tac_osm.research_observatory import entity_isolation_probe
+    m, history, actions = case()
+    probe = entity_isolation_probe(m, history, actions)
+    assert probe["entities"] == 2
+    assert probe["within_tolerance"], probe
+
+
+def test_entity_isolation_flags_deliberate_cross_batch_information():
+    from tac_osm.research_observatory import entity_isolation_probe
+    from tac_osm.predictive_state_agent import Belief
+    class Leaky(PredictiveStateAgent):
+        def observe(self, belief, context):
+            s = super().observe(belief, context)
+            # Constructed adversarial fixture: one entity accesses the entire
+            # batch's mean. This is not an actual TAC-OSM bug.
+            return Belief(s.fast + context.mean(dim=0).mean(), s.slow, s.memory)
+    _, history, actions = case()
+    leaky = Leaky(5, 3, 1)
+    result = entity_isolation_probe(leaky, history, actions, tolerance=1e-6)
+    assert not result["within_tolerance"]
+    assert result["max_absolute_difference"] > 1e-6
+
+
+def test_entity_probe_fails_for_single_entity_or_invalid_tolerance():
+    from tac_osm.research_observatory import entity_isolation_probe
+    m, h, a = case()
+    with pytest.raises(ValueError, match="independent"):
+        entity_isolation_probe(m, h[:1], a[:1])
+    with pytest.raises(ValueError, match="tolerance"):
+        entity_isolation_probe(m, h, a, tolerance=-.01)
+
+
+def test_cpu_runtime_probe_has_nonfabricated_measurements_and_state_bytes():
+    from tac_osm.research_observatory import profile_native_runtime
+    m, history, actions = case()
+    result = profile_native_runtime(m, history, actions, warmups=0, repeats=2)
+    assert result["repeats"] == 2
+    assert result["history_events"] == history.shape[1]
+    assert result["end_to_end_ms_min"] >= 0
+    assert result["end_to_end_ms_max"] >= result["end_to_end_ms_min"]
+    assert result["state_bytes_batch"] == 2 * (32 + 32 + 8 * 8) * 4
+    with pytest.raises(ValueError, match="repeats"):
+        profile_native_runtime(m, history, actions, repeats=1)
