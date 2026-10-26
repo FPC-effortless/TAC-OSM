@@ -1,0 +1,42 @@
+name: S1MOTION005 original 15-model real-source gradient budget experiment
+# A deliberate one-shot marker; no rerun on tests, docs or model edits.
+on:
+  push:
+    branches: [research/s1motion005-gradient-budget-2026-10-26]
+    paths: ['research/parallel-six/S1MOTION005-FIT-001.marker']
+permissions:
+  contents: read
+jobs:
+  original-authentic-fifteen-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: CPU PyTorch and genuine per-episode Parquet reader
+        run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate source-lock, projection and true point AdamW diagnostics before first fitting
+        run: |
+          python -m py_compile scripts/s1motion005_real_screwdriver_fit.py
+          PYTHONPATH=src:. python -m unittest tests.test_s1motion005_real_source_fit -v
+          PYTHONPATH=src:. python -m unittest tests.test_s1motion005_gradient_budget -v
+      - name: FIT 15 models only on 25 source-pinned training files, freeze all before DEV fetch
+        run: |
+          PYTHONPATH=src:. python scripts/s1motion005_real_screwdriver_fit.py
+      - name: Preserve original signed-budget gradients, checkpoint SHA, optimizer/RNG and first DEV results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1motion005-original-15-checkpoint-real-first-score
+          path: research/diagnostics/s1motion005-original/**
+          if-no-files-found: warn
+          retention-days: 90
