@@ -14,6 +14,7 @@ on:
       - "scripts/validate_woyengi_predictive_export.py"
       - "tests/test_woyengi_predictive_export.py"
       - "research/ECOSYSTEM_INTEROPERABILITY_AND_EVIDENCE_BOUNDARIES_2026-10-26.md"
+      - "research/ECOSYSTEM_INTEROPERABILITY_AND_EVIDENCE_BOUNDARIES_2026-10-26.md"
       - ".github/workflows/ecosystem-boundary-gate.yml"
   workflow_dispatch:
 
@@ -39,3 +40,56 @@ jobs:
         run: python -m unittest discover -s tests -p "test_woyengi_predictive_export.py" -v
       - name: Compile interop validator and unit tests
         run: python -m py_compile scripts/validate_ecosystem_boundary.py tests/test_ecosystem_boundary.py scripts/woyengi_projection_adapter.py tests/test_woyengi_projection_adapter.py scripts/validate_woyengi_predictive_export.py tests/test_woyengi_predictive_export.py
+
+  cross-repository-woyengi-source-fixture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out TAC-OSM consumer
+        uses: actions/checkout@v4
+      - name: Check out exact Woyengi producer source
+        uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/Woyengi
+          ref: c2a93c5534878cab616ac298d37e63343c345c46
+          path: woyengi-source
+          persist-credentials: false
+      - name: Set up pinned Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24.12.0"
+      - name: Set up Python consumer
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Generate Woyengi read using actual ClaimLedger and CapabilityEngine
+        run: node woyengi-source/packages/predictive-export/interop/generate-fixture.ts /tmp/woyengi-source-constructed.json
+      - name: Independently reject untrusted source and model authority in Python consumer
+        run: |
+          python scripts/validate_woyengi_predictive_export.py /tmp/woyengi-source-constructed.json > /tmp/tac-woyengi-read-result.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r = json.loads(Path("/tmp/tac-woyengi-read-result.json").read_text())
+          assert r["status"] == "STRUCTURAL_ONLY"
+          assert r["observation_count"] == 2
+          assert r["conflicting_claim_ids"] == ["claim:fixture-first"]
+          assert r["selected_claim_id"] == "claim:fixture-second"
+          assert r["authorization_provenance"] == "HOST_ASSERTED_NOT_INDEPENDENTLY_AUTHENTICATED"
+          assert r["source_rights"] == "UNVERIFIED_BY_THIS_CONSUMER"
+          assert r["woyengi_action_authority"] == "NOT_GRANTED"
+          print("PASS: actual Woyengi source -> TAC structural consumer; CONSTRUCTED fixture only")
+          PY
+      - name: Negative source-path check - tampered authority always fails
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          s = json.loads(Path("/tmp/woyengi-source-constructed.json").read_text())
+          s["actionAuthority"] = "AUTHORIZED"
+          Path("/tmp/woyengi-source-forged.json").write_text(json.dumps(s))
+          PY
+          if python scripts/validate_woyengi_predictive_export.py /tmp/woyengi-source-forged.json; then
+            echo "FAIL: fake source authority accepted"; exit 1
+          fi
+          echo "PASS: forged source authority rejected"
