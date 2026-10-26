@@ -55,7 +55,7 @@ class GradientBudgetContract(unittest.TestCase):
             m.load_state_dict(state,strict=True)
             models[arm]=m
         for arm,m in models.items():
-            point,aux,grad,info=compute_gradients(m,batch,arm=arm)
+            point,aux,grad,info,point_grad=compute_gradients(m,batch,arm=arm)
             self.assertTrue(torch.isfinite(point+aux).item())
             self.assertTrue(torch.isfinite(torch.stack([t.abs().max() for t in grad.values()])).all())
             if arm=="tac_isolated":
@@ -65,7 +65,7 @@ class GradientBudgetContract(unittest.TestCase):
             _,out=step_model(m,opt,batch,arm=arm)
             self.assertTrue(out["optimizer_preconditioned_step_verified_finite"])
             self.assertTrue(torch.isfinite(torch.tensor(out["post_point_fit"])).item())
-            self.assertIn("actual_grad_dot_parameter_delta",out)
+            self.assertIn("actual_point_gradient_dot_parameter_delta",out)
         self.assertEqual(sum(p.numel() for p in models["tac_projected"].parameters()),95907)
         # Same loss forward, same starting weights, different trained gradient only.
         self.assertLessEqual(models["tac_projected"].carried_fp32_bytes,664)
