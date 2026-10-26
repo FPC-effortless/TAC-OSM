@@ -1,5 +1,95 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-26 — ME108 trained role models: ordinary/interval gains, gap-point failure
+
+[Draft TAC PR411](https://github.com/FPC-effortless/TAC-OSM/pull/411),
+[PNDS PR22](https://github.com/FPC-effortless/pnds-lean/pull/22),
+[complete results](https://github.com/FPC-effortless/TAC-OSM/blob/research/me108-role-trained-2026-10-26/research/mathematical-engineering/me108-role-trained-2026-10-26/RESULTS.md),
+[all5 original checkpoints and replay](https://github.com/FPC-effortless/TAC-OSM/tree/research/me108-role-trained-2026-10-26/research/replay-bundles/ME108).
+
+The ME107 specialized FFN prototype is now genuinely trained as an integrated
+native TAC model: five fixed lineages108001–108005,102713active trainable/deployed
+parameters/39tensors,4096new optimizer updates each. Allfive original ME103 strong
+backbones102001–102005 retained; their current linear head discarded and three
+nonlinear FFNs initialized freshly. This is not exact parent-function warmstart.
+No Transformer/SSM replacement, new family or extra primary recurrent payload.
+
+Native encoder/fast/slow/8x8 memory, input-conditioned parallel scan and source
+floors remain unchanged. BlockProtectedAdamW protects the complete proposed
+rate/momentum/preconditioned/decay displacement, rechecks after displacement and
+parameter rounding, and rejects residual opposing protected-coordinate moves.
+Raw clipped combined gradients advance the moments even if weight moves reject.
+The point snapshot is the same-batch unclipped .5six-channel normalizedMAE
+VJP; other loss roles retain ME106's explicit uncertainty-gradient view.
+
+Eight limited exact-real Lean declarations and source-pinned independent tensor
+optimizer equations are committed. Full-neural/AD/normal-law/IEEE refinements
+remainOPEN; a nonpositive local point dot is not finite-step/population safety.
+An initial launch aborted BEFORE any optimizer update because its plan validator
+expected2D instead of4096x16x2 station/hour pairs. Original registration/log and
+zero-step incident preserved; v2sourceeb40cd1c corrects only that check before
+real training. Initial optimizer source95cfd29e remains byte-identical. No fit
+retry, held-out feedback or budget change was hidden in this correction.
+
+All5 original model/optimizer/RNG/plan/runtime receipts frozen5e4b0ad9 BEFORE
+REPORT. Fitted graph/proposal verification e8fe84f1 preceded scores674682f1.
+Source/reference fwd/state/parameter gradients, read-only next proposals and
+moments match FP32/64; additional normalized value/age/calendar-input gradients
+checked. No audit optimizer step. Independent clean checkout25917e9d restored
+all5weights, scores/gates, input/parameter/proposal assertions and summary; PASS.
+1059full Python testsPASS,14dedicated optimizer/runner testsPASS. Original-model
+GitHub replay40257702125PASS; code/integrity verification is not predictive gain.
+
+Authentic UCI501 CC-BY-4.0 archiveSHA256
+`d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8`.
+Weights/statistics only2013–2014FIT; exposed2015 evaluation143natural-gap and
+4288general queries,6channels,6h targets,256h histories. Future PM availability
+conditions the scored cohort; unobserved future values are not invented labels.
+Protected2016–2017 numerical rows remain closed. Each model65536sampled examples
+and7163648repeated history events, not that many independent observations.
+Retained weights3072parent+4096new=7168lineage steps; fresh FFNs4096.
+
+| Five-seed means | ME103 strong parents | ME108 role models |
+| --- | ---: | ---: |
+| Gap PM2.5MAE ↓ |37.524168|41.132003|
+| Ordinary PM2.5MAE ↓ |33.403120|31.572055|
+| Gap mean marginal NLL ↓ |5.151004|5.138193|
+| Gap PM90interval score ↓ |379.623199|241.566815|
+| Gap PM90mean width ↓ |369.90933|229.90420|
+| Gap PM90coverage |95.66%|96.64%|
+| Ordinary PM90coverage |89.86%|88.67%|
+
+Ordinary point error improves5.48%, gap interval score36.37% and width37.85%,
+but gap point error worsens9.61%. **Full predictive gate FAIL,0/5full seedpasses:**
+allfive fail gap-point; coverage4/5 (10800198.60%exceeds98%maximum), ordinary-point,
+gap-density and interval-score gates5/5. Ordinary coverage is below nominal90%
+and worsened. Same original seed-specific thresholds retained, no rounding into
+pass or favorable-seed selection. Parent98495parameters versusnew102713(+4.28%)
+and extra training make this a systems-development trade-off, not a matched
+architectural advantage or independently confirmed gain.
+
+Frozen practical point references: gapLOCF56.076923/ridge43.915070;
+ordinaryLOCF34.515625/ridge32.767415. Allfive models beat both references on both
+point cohorts. That descriptive exposed-data capability does not erase the
+stronger parent-gap failure or establish efficiency/control/customer utility.
+
+20480actual updates×13blocks=266240computed applied-point checks, maximumdot0;
+79632projections and20645final-rounding rejections. New-update CPU1487.231s
+aggregate with atmost2one-thread workers; earlier pretraining/preprocessing and
+unsupported optimizer FLOPs are not silently included. Protection of a shared
+minibatch mean can coexist with worse per-channel/per-regime generalization.
+The invariant ledger now records that limitation instead of declaring conflict
+or uncertainty mathematically solved. Calibration/useful memory remainOPEN.
+
+**Next architectural hypothesis, not another ME108fit:** identity-preserving
+residual FFNs around validated affine predictors, with corrections conditioned
+on causally known availability/age. Preserve the parent's function at
+initialization while learning more expressive corrections, rather than making a
+narrow nonlinear head relearn it. This is motivated by the trade-off, not a
+proved explanation of it. Require a new source/math/prospective training record,
+live parameter budget and alloriginal real-data gates; do not tune against the
+protected cohort. No extra ME108fits, parameter/loss/gate changes or promotion.
+
 ## 2026-10-26 — ME107: typed role FFNs and a mathematical failure ledger
 
 [Draft TAC PR410](https://github.com/FPC-effortless/TAC-OSM/pull/410),
