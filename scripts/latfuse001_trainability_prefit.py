@@ -13,7 +13,7 @@ import json
 import math
 import torch
 from tac_osm.latent_fusion_001 import FusedLatentCandidate
-from scripts.latfuse001_source_diagnostic import load_first_real_fit
+from latfuse001_source_diagnostic import load_first_real_fit
 
 def known_calendar(hour):
     dt=datetime.datetime(2013,3,1)+datetime.timedelta(hours=int(hour))
