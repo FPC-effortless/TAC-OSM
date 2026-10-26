@@ -122,7 +122,7 @@ def profile(model, x, rawscale):
     ops = sorted((e.key, e.count, str(e.input_shapes)) for e in events if e.key.startswith('aten::'))
     return dict(dense_flops=sum(e.flops for e in events), aten_signature=old.digest(ops),
                 aten_calls=sum(e.count for e in events if e.key.startswith('aten::')),
-                flops_scope='partial actual forward and routed two-VJP; optimizer and unsupported operations excluded')
+                flops_scope='partial actual forward and routed three-VJP; optimizer and unsupported operations excluded')
 
 
 def auxiliary_preservation(model, x):
@@ -317,7 +317,7 @@ def fit_one(seed):
         training_history_sha256=sha(folder/'TRAINING_HISTORY.json'),
         peak_memory_bytes=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024,
         training_flops=sum(int(profiles[str(c)]['dense_flops'])*n for c,n in counts.items()),
-        flops_scope='partial actual forward/routed two-VJP profiler estimate; optimizer and unsupported operations excluded')
+        flops_scope='partial actual forward/routed three-VJP profiler estimate; optimizer and unsupported operations excluded')
     write(folder/'FIT_RECEIPT.json',row)
     return row
 

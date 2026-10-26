@@ -57,5 +57,5 @@ def examine(d,seed,origins,rawscale):
     return dict(seed=seed,parent_checkpoint_sha256=old.sha(path),routing=receipt,
         architecture=architecture_inventory(model),gradient_atlas=atlas,activations=activations,
         ledger=report,auxiliary_coordinate_perturbation=.01,median_bit_unchanged=median_unchanged,
-        native_tensor_state_bit_unchanged=state_unchanged,zero_initial_hidden_gradients='expected from zero residual output maps',
+        native_tensor_state_bit_unchanged=state_unchanged,residual_hidden_gradient_scope='trained ME110 residual outputs inherited; use actual reported gradients, no zero-output assumption',
         no_optimizer_steps=True,normalization_cache_fixed_during_poison=True)

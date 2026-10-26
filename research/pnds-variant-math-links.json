@@ -872,6 +872,37 @@
       "real_world_capability_at_registration": "NOT_TRAINED",
       "trained_and_deployed_parameters": 104663,
       "active_model_families_added": 0
+    },
+    {
+      "id": "SHARED-COHERENT-CONDITIONAL-BELIEF-ME111",
+      "family": "temporal",
+      "parent_id": "SHARED-TYPED-ROLE-TRAINING-ME110",
+      "tac_source_commit": "b0f6d8ea0ad119e40ba1d503f6f9a01e39b1d477",
+      "tac_source_path": "src/tac_osm/variants/conditional_belief_sensor_world.py",
+      "tac_training_source_path": "src/tac_osm/conditional_belief_learning.py",
+      "tac_objective_path": "scripts/me111_objective.py",
+      "tac_spec": "research/mathematical-engineering/me111/MATHEMATICS.md",
+      "lean_path": "PNDS/CoherentConditionalBelief.lean",
+      "lean_symbols": [
+        "PNDS.CoherentConditionalBeliefReal.variance_positive",
+        "PNDS.CoherentConditionalBeliefReal.sigma_positive",
+        "PNDS.CoherentConditionalBeliefReal.quantile_order",
+        "PNDS.CoherentConditionalBeliefReal.mean_supervised"
+      ],
+      "lean_standalone_path": "PNDS/CoherentConditionalBeliefStandalone.lean",
+      "python_path": "foundation/v1/coherent_conditional_belief_reference.py",
+      "python_symbol": "scale;scale_vjp;semantic_masks;route_gradients",
+      "source_parity_test": "tests/test_coherent_conditional_belief_source.py",
+      "formalization_status": "LIMITED_EXACT_REAL_SCALAR_AND_ROLE_THEOREMS_CI_KERNEL_AUDIT_PENDING",
+      "full_neural_float_refinement": "OPEN",
+      "actual_source_forward_backward": "FP32_FP64_SCALAR_SIDES_ALL_INPUT_VJPS_ALL104663_MASK_AND_ROUTED_GRADIENT_COORDINATES_TESTED; FULL_NEURAL_PARITY_OWNED_BY_TAC",
+      "real_world_capability_at_registration": "NOT_TRAINED; PRESERVES_PRIOR_ME110_QUALIFICATION_FAILURE",
+      "trained_and_deployed_parameters": 104663,
+      "active_model_families_added": 0,
+      "point_coordinates": 100253,
+      "uncertainty_coordinates": 4410,
+      "reconstruction_mean_coordinates": 696,
+      "source_pin_policy": "SOURCE_AND_OPERATOR_COMMIT; LATER_DOCUMENTATION_COMMITS_DO_NOT_MOVE_PIN"
     }
   ]
 }
