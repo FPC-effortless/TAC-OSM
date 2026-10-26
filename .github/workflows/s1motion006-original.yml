@@ -1,0 +1,37 @@
+name: S1MOTION006 original real Coffee velocity-head controlled trial
+on:
+  push:
+    branches: [research/s1motion006-velocity-event-ablation-2026-10-26]
+    paths: ['research/parallel-six/S1MOTION006-FIT-001.marker']
+permissions:
+  contents: read
+jobs:
+  original-sealed-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Pretrain anti-cheat and exact paired graph parity contract
+        run: |
+          PYTHONPATH=src:. python -m unittest tests.test_s1motion006_real_coffee_prefit -v
+          PYTHONPATH=src:. python -m unittest tests.test_s1motion006_velocity_feature -v
+      - name: Original real model fit and checkpoint SHA freeze BEFORE DEV file release
+        run: PYTHONPATH=src:. python scripts/s1motion006_real_coffee_fit.py
+      - name: Retain first 6 model optimizer RNG SHA receipts and untouched DEV scores
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1motion006-original-first-real-coffee-6-trained-models
+          path: research/diagnostics/s1motion006-original/**
+          if-no-files-found: warn
+          retention-days: 90
