@@ -1,0 +1,40 @@
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	﻿2026-10-26T07:45:49.3823074Z ##[group]Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3824097Z [36;1mPYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay[0m
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3908953Z shell: /usr/bin/bash -e {0}
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3909363Z env:
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3909800Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3910547Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3911292Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3911964Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3912632Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3913303Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:45:49.3913883Z ##[endgroup]
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8403471Z Traceback (most recent call last):
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8413482Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/diagtrain001_training_audit.py", line 119, in <module>
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8414677Z     main(parser.parse_args().replay)
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8415253Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/diagtrain001_training_audit.py", line 111, in main
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8415855Z     run._compare_numeric(result,json.loads(OUT.read_text()))
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8416895Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me109_residual_training.py", line 529, in _compare_numeric
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8417607Z     for key in actual: _compare_numeric(actual[key], expected[key], f"{path}.{key}")
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8418069Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8418795Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me109_residual_training.py", line 532, in _compare_numeric
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8419853Z     for i, (a, b) in enumerate(zip(actual, expected)): _compare_numeric(a, b, f"{path}[{i}]")
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8420361Z                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8420998Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me109_residual_training.py", line 529, in _compare_numeric
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8422013Z     for key in actual: _compare_numeric(actual[key], expected[key], f"{path}.{key}")
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8422480Z                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8423075Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me109_residual_training.py", line 534, in _compare_numeric
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8423751Z     np.testing.assert_allclose(actual, expected, rtol=1e-5, atol=1e-6, err_msg=path)
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8424572Z   File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/numpy/testing/_private/utils.py", line 1711, in assert_allclose
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8425307Z     assert_array_compare(compare, actual, desired, err_msg=str(err_msg),
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8426041Z   File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/numpy/testing/_private/utils.py", line 919, in assert_array_compare
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8426868Z     raise AssertionError(msg)
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8427125Z AssertionError: 
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8427368Z Not equal to tolerance rtol=1e-05, atol=1e-06
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8427687Z result.checks[1].guarded_displacement_norm
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8427976Z Mismatched elements: 1 / 1 (100%)
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8428279Z Max absolute difference among violations: 0.00044741
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8428628Z Max relative difference among violations: 0.12858526
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8428966Z  ACTUAL: array(0.003032)
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:02.8429196Z  DESIRED: array(0.003479)
+original-fit-diagnosis	Run PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay	2026-10-26T07:46:03.2444220Z ##[error]Process completed with exit code 1.

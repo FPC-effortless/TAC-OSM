@@ -34,7 +34,7 @@ def scalars(values):
     return {name: float(value.detach()) for name,value in values.items()}
 
 
-def main(replay=False):
+def main(replay=False, observed_output=None):
     if OUT.exists() and not replay:
         raise RuntimeError('Immutable diagnostic output exists')
     torch.set_num_threads(1)
@@ -107,7 +107,24 @@ def main(replay=False):
         training_sufficiency='UNRESOLVED: no intermediate validation checkpoints or budget-controlled continuation',
         no_optimizer_steps=True,no_checkpoint_writes=True,no_report_or_protected_access=True,
         original_optimizer_steps=4096,checks=rows,summary=summary)
+    if observed_output is not None:
+        observed_output=Path(observed_output)
+        if observed_output.exists(): raise RuntimeError('current-host output already exists')
+        run.write(observed_output,result)
     if replay:
+        expected=json.loads(OUT.read_text())
+        discrepancies=[]
+        def compare(a,b,path='result'):
+            if isinstance(a,dict):
+                for key in a: compare(a[key],b[key],path+'.'+key)
+            elif isinstance(a,list):
+                for i,(x,y) in enumerate(zip(a,b)): compare(x,y,path+f'[{i}]')
+            else:
+                try: run._compare_numeric(a,b,path)
+                except (AssertionError,ValueError): discrepancies.append(dict(path=path,actual=a,original=b))
+        compare(result,expected)
+        print('CURRENT_HOST_SUMMARY',json.dumps(summary,sort_keys=True),flush=True)
+        print('CROSS_HOST_DISCREPANCIES',json.dumps(discrepancies,sort_keys=True),flush=True)
         run._compare_numeric(result,json.loads(OUT.read_text()))
     else: run.write(OUT,result)
     print(json.dumps(summary,indent=2))
@@ -115,5 +132,5 @@ def main(replay=False):
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--replay',action='store_true')
-    main(parser.parse_args().replay)
+    parser=argparse.ArgumentParser();parser.add_argument('--replay',action='store_true');parser.add_argument('--observed-output',type=Path)
+    args=parser.parse_args();main(args.replay,args.observed_output)

@@ -100,3 +100,16 @@ and CURVES.json exactly on this host.81relevant tests pass. Original actual-mode
 Observatory replay also passes with its full-integrity INCONCLUSIVE unchanged.
 Draft PR#425 and master-plan commitea966c5424da377dd3d5d77b4e9ed314a5ce4369
 preserve the findings. GitHub replay status is recorded separately.
+
+## Cross-host replay failure — do not treat proposal counts as portable
+
+GitHub40287673335 FAILS the unchanged numerical contract at
+checks[1].guarded_displacement_norm: CI0.003032 versus original0.003479,
+absolute difference0.00044741, relative12.858526%. Original failure log preserved.
+Clean same-host replay success does not establish cross-host reproducibility.
+The table above describes original-host probes; portable agreement is OPEN.
+Potential near-boundary projection/rounding branch sensitivity is a hypothesis,
+not an established primitive cause. No threshold or original result is changed.
+A versioned diagnostic now exports current-host reports and lists every failed
+field before still failing strict replay. This is additional instrumentation,
+not a replay pass or model fix.
