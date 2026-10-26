@@ -6,9 +6,60 @@ fits or real-world evidence. Any failing condition disqualifies science claims.
 from copy import deepcopy
 import pytest
 from scripts.validate_research_parity import (
-    check_manifest, ParityError, check_model_parameter_target,
+    check_manifest as _actual_check_manifest,
+    _check_manifest_parity_only, ParityError, check_model_parameter_target,
     requires_100k_policy
 )
+from tac_osm.research_reward_runner import binding, SCHEMA
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
+import json
+
+# Fixture-only generated signer: NOT a real independent evaluator or dataset.
+_FAKE_AUDITOR = Ed25519PrivateKey.generate()
+_FAKE_TRUSTED_KEY = _FAKE_AUDITOR.public_key().public_bytes(
+    Encoding.Raw, PublicFormat.Raw).hex()
+
+
+def _constructed_signed_receipt(m, phase):
+    b = binding(m)
+    checks = (("protected_assets", "source_provenance", "goal_evaluator_separation",
+               "actor_access_isolation") if phase == "preflight" else
+              ("protected_assets", "reward_recomputation", "goal_recomputation",
+               "reward_noninterference", "proxy_goal_alignment"))
+    p = {
+        "schema": SCHEMA, "phase": phase, "binding": b,
+        "source_authority": "independently_verified_real_source",
+        "evaluator_executed_outside_actor": True,
+        "reward_scorer_sha256": "1" * 64,
+        "goal_evaluator_sha256": "2" * 64,
+        "access_policy_sha256": "3" * 64,
+        "protected_assets_sha256": "4" * 64,
+        "evaluation_policy_sha256": "5" * 64,
+        "checks": {k: "PASS" for k in checks},
+    }
+    if phase == "final":
+        rows = m.get("models") if m["study_type"] == "single_model_training" else m["arms"]
+        p["evaluated"] = [
+            {"variant": row.get("architecture", row.get("variant")),
+             "seed": row["seed"],
+             "checkpoint_sha256": row.get("measured", {}).get("checkpoint_sha256", "f" * 64),
+             "outcome_evidence_sha256": "6" * 64, "observation_count": 4}
+            for row in rows]
+        p["evaluated"].sort(key=lambda r: (r["variant"], r["seed"]))
+    encoded = json.dumps(p, sort_keys=True, separators=(",", ":")).encode()
+    return {"payload": p, "signature_hex": _FAKE_AUDITOR.sign(encoded).hex()}
+
+
+def check_manifest(m, phase="preflight"):
+    # Invalid resource manifests must fail their original gate first.
+    _check_manifest_parity_only(m, phase)
+    if m["study_type"] == "noncomparative_diagnostic" or not requires_100k_policy(m["study_id"]):
+        return _actual_check_manifest(m, phase)
+    return _actual_check_manifest(
+        m, phase, reward_attestation=_constructed_signed_receipt(m, phase),
+        trusted_reward_public_key_hex=_FAKE_TRUSTED_KEY)
+
 
 def source_hash(ch):return ch*64
 
@@ -191,7 +242,7 @@ def test_new_single_model_uses_same_absolute_100k_rule_and_final_real_count():
         "registered_before_first_fit":True,
         "real_world_source":{"name":"Authentic real source","sha256":source_hash("a"),
                              "observed_real_outcomes":True},
-        "models":[{"seed":101,"trainable_parameters":100000,
+        "models":[{"variant":"System 1","seed":101,"trainable_parameters":100000,
                    "deployed_parameters":100000}]
     }
     assert check_manifest(m,"preflight")["status"]=="PASS_PREFIT_SINGLE_MODEL"
