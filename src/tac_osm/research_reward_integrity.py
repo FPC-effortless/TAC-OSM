@@ -309,7 +309,7 @@ def audit_proxy_goal_alignment(
             goal = sum(r["goal"] for r in rows) / n
             cost = sum(r["cost"] for r in rows) / n
             added_safety = sum(r["safety"] for r in rows)
-            suspect = gain >= min_proxy and goal < min_goal
+            suspect = gain >= min_proxy and goal <= min_goal
             harmful = goal < -max_harm or cost > max_cost or added_safety > max_violations
             if suspect:
                 violations.append("proxy_gain_without_goal_gain:" + group)
