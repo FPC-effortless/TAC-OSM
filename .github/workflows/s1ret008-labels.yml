@@ -1,0 +1,30 @@
+name: S1RET008 original FIT real drive +7day source outcome feasibility
+on:
+  push:
+    branches: [research/s1ret008-entity-source-admission-2026-10-26]
+    paths: ['research/parallel-six/S1RET008-LABELS-001.marker']
+permissions:
+  contents: read
+jobs:
+  truly-observed-source-no-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --quiet 'numpy<2'
+      - name: Verify observation-only trust and complete future label censor code
+        run: |
+          PYTHONPATH=src:. python -m unittest tests.test_s1ret008_backblaze_source -v
+          python -m py_compile scripts/s1ret008_backblaze_fit_7day_labels.py
+      - name: Authenticate all original FIT daily source bytes and only genuine 2013 +7day labels
+        run: PYTHONPATH=src:. python -u scripts/s1ret008_backblaze_fit_7day_labels.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: s1ret008-first-authentic-2013-future7day-censored-FIT-labels
+          path: research/diagnostics/s1ret008-first-FIT-7d-label-audit/**
+          if-no-files-found: warn
+          retention-days: 90
