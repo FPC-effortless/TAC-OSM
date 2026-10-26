@@ -1,0 +1,16 @@
+name: S1TEMP007 choose novel long real source from metadata ONLY
+on:
+  push:
+    branches: [research/s1temp007-multiscale-state-2026-10-26]
+    paths: ['research/parallel-six/S1TEMP007-META-*.marker']
+permissions:
+  contents: read
+jobs:
+  metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -u scripts/s1temp007_source_candidates_metadata_only.py
