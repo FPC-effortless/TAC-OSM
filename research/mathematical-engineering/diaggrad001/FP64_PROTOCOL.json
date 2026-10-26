@@ -1,0 +1,10 @@
+{
+  "study_id": "DIAGGRAD001-PRECISION-SUPPLEMENT",
+  "registered_before_supplement_measurement": true,
+  "no_new_model_fits": true,
+  "purpose": "Check whether the frozen-model gradient-conflict findings survive a separately declared FP64 evaluation and cross-host replay. Motivated by preserved FP32 replay exceptions, not by held-out predictive results.",
+  "source": "Same unchanged all15 ME106 checkpoints, original 180 FIT batches and loss components. Input float32 records are promoted to float64 after original augmentation; existing saved weights promoted to float64. No new labels or optimizer steps.",
+  "numerical_contract": {"relative_tolerance": 1e-9, "absolute_tolerance": 1e-10},
+  "stopping": "One original FP64 panel plus replay; never overwrite FP32 data, waive its exception, tune coefficients, alter gates or train.",
+  "limitation": "Higher-precision diagnostic is not proof that original FP32 training or inference is bit-identical across hosts. It does not establish predictive improvement. Original FP32 raw-dot replay failure at GitHub40248483108 remains recorded."
+}
