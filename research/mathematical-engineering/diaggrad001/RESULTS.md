@@ -59,8 +59,9 @@ natural gaps. The original augmentation may additionally hide recorded values.
 
 All five raw objective gradients, coefficient-weighted norms and ten pairwise
 cosines are measured in 13 exhaustive parameter blocks. Zero-norm cosines are
-undefined/null. Additional point/NLL cosines separate currently observed and
-missing target channels. No statistical independence is assigned to repeated
+undefined/null. Additional point/NLL cosines stratify supervised targets by the
+corresponding last-input channel's observation status, not target missingness.
+No statistical independence is assigned to repeated
 origins, the same batches across seeds, overlapping windows or warm-start lineages.
 
 ## Observed conflicts and magnitudes
@@ -98,8 +99,9 @@ inclusive reconstruction uses the shared write key rather than that query.
 
 Point versus combined auxiliary dot is negative before projection in96/180
 whole-model probes. After projection its worst global cosine is -6.59e-9,
-consistent with small array-rounding residuals. The raw JSON's sign-only
-`opposing_aux_after=48` is **not 48 substantive failures**: those global residuals
+consistent with small array-rounding residuals. The raw JSON's thresholded
+`opposing_aux_after=48` (dot < -1e-10; 49 dots are strictly negative) is
+**not 48 substantive failures**: those global residuals
 are tiny, and no global cosine is below -1e-6. Do not interpret a fixed absolute
 dot threshold as a numerically robust proof failure.
 
