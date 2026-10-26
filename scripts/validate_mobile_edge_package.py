@@ -55,7 +55,7 @@ def _relative_file(root: Path, filename: object, label: str) -> Path:
     if relative.is_absolute() or ".." in relative.parts or text.startswith("~"):
         raise PackageError(f"{label} must stay inside package root")
     file_path = root / relative
-    if any(part.is_symlink() for part in [root, *list(file_path.parents)[: len(relative.parts)], file_path]]):
+    if any(part.is_symlink() for part in [root, *list(file_path.parents)[: len(relative.parts)], file_path]):
         raise PackageError(f"{label} must not follow symlinks")
     resolved = file_path.resolve()
     if not resolved.is_relative_to(root.resolve()) or not resolved.is_file():
