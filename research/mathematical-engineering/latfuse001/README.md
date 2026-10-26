@@ -36,7 +36,7 @@ Corrections: tanh embedding is nonlinear though shallow; a learned fusion projec
 
 ## LOCAL engineering falsifiers and evidence (not scientific advancement)
 
-Local Python 3.13 / PyTorch no-fit suite (constructed tensors) ran 12 tests total: 8 model/memory/scan invariants, 4 independently implemented PNDS scalar-reference comparisons. All 12 passed. The first run had one too-strict bit-equality check on a fully addressed floating slot; repaired to numerical tolerance while retaining exact untouched-slot checks. Tests exercise scan serial/prefix forward+gradient parity, associative update, authorized-slot isolation, NaN masking, nonnegative time, read-only candidate permutation, finite backpropagation, and reference correspondence. Local Lean compiler unavailable: **Lean compilation and theorem axiom audit OPEN until PNDS CI**. Cross-repo source checkout and actual trained model forward/backward/parity OPEN. Real-data training/evaluation, counterfactual validity and numerical stability over long timelines OPEN.
+Local Python 3.13 / PyTorch no-fit suite (constructed tensors) ran 12 tests total: 8 model/memory/scan invariants, 4 independently implemented PNDS scalar-reference comparisons. All 12 passed. The first run had one too-strict bit-equality check on a fully addressed floating slot; repaired to numerical tolerance while retaining exact untouched-slot checks. Tests exercise scan serial/prefix forward+gradient parity, associative update, authorized-slot isolation, NaN masking, nonnegative time, read-only candidate permutation, finite backpropagation, and reference correspondence. Local Lean compiler unavailable; **PNDS Lean full-root build and theorem axiom-audit CI PASS** at https://github.com/FPC-effortless/pnds-lean/actions/runs/40411154929 (only the declared local theorems; full graph remains OPEN). TAC source-operator no-fit GitHub CI PASS at https://github.com/FPC-effortless/TAC-OSM/actions/runs/40411255165. Cross-repo source checkout and actual trained model forward/backward/parity OPEN. Real-data training/evaluation, counterfactual validity and numerical stability over long timelines OPEN.
 
 ## Required study protocol before any training
 
@@ -62,8 +62,8 @@ Local Python 3.13 / PyTorch no-fit suite (constructed tensors) ran 12 tests tota
 |---|---|
 | Local PyTorch constructed operator tests | PASS (8) |
 | Local independent PNDS scalar comparisons | PASS (4) |
-| PNDS standalone Python CI | PENDING |
-| PNDS Lean build / axiom audit | OPEN |
+| PNDS standalone Python CI | PASS (4 constructed scalar checks; run 40411154929) |
+| PNDS Lean build / axiom audit | PASS for exact-real local operators only (run 40411154929) |
 | Source-pinned full neural+AD+FP32/FP64/probability proof | OPEN |
 | Six-family real source adapters and research-probe registrations | OPEN |
 | Matched 100k-capacity/compute real FIT protocol | NOT REGISTERED: STOP |
