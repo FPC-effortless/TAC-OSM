@@ -62,3 +62,14 @@ independent_test_result: NOT RUN
 ```
 
 These fields are intended to be filled from actual published/retrieved evidence. Do not fabricate source hashes or timestamps to satisfy the contract.
+
+## Follow-up: actual archival enrollment discovered
+
+Live official metadata now reports an active archival replica and a visible version
+187190 (revision 37, December 2025). A read-only status request reports a completed
+archive with refSize 3,476,668,601; no full export or case rows were acquired. This
+qualifies the earlier broad no-history assumption: optional archives exist, but
+recoverable coverage, release clocks, rights and per-field visibility remain
+unverified. See the [original metadata receipts, recovery procedure and blocked
+Enterprise protocol](enterprise-forecast-source-preflight-2026-10-26/PROTOCOL.md).
+No training or scoring eligibility is granted.

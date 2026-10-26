@@ -1,3 +1,16 @@
+## 2026-10-26 — Enterprise source recovery and blocked prospective protocol
+
+[Original metadata and protocol](enterprise-forecast-source-preflight-2026-10-26/PROTOCOL.md)
+identify actual NYC311 archival enrollment and visible archive 187190, plus original
+BPI2017 version-1 metadata. No historical case rows/export acquired. This refines
+the earlier no-history assumption without qualifying as-of features or outcomes.
+The Enterprise seven-day publisher-status forecasting proposal freezes task,
+controls, denominator and isolation principles; dates, model/math identities,
+rights, source/outcome verification, budgets and practical thresholds remain
+BLOCKED. DESIGN_ONLY; not an activated fit registration. No new model family,
+protected evaluation, training, scoring, merge, deployment or customer claim.
+All original negative model evidence is retained.
+
 # TAC-OSM — Unified Master Research Plan
 
 ## 2026-10-26 — First-class ecosystem architecture and independently verifiable state/outcome boundaries
