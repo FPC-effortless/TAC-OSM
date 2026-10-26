@@ -38,73 +38,7 @@ def _summary(t: torch.Tensor) -> dict[str, Any]:
             "mean_abs": float(t.detach().abs().mean().item()) if t.numel() else 0.}
 
 
-def architecture_inventory(
-    model: nn.Module,
-    *,
-    invocations: Mapping[str, Callable[[nn.Module], Any]] | None = None,
-) -> dict[str, Any]:
-    """Actual instantiated module/parameter inventory and per-phase call trace.
-
-    A list of sequential calls is NOT a dataflow DAG. No guessed edges or
-    source-equivalent mathematical proof are emitted. Each invocation operates
-    on an independent cloned, eval-mode model with no optimizer or feedback.
-    """
-    rows: dict[str, dict[str, Any]] = defaultdict(
-        lambda: {"trainable": 0, "deployed_learned": 0, "tensors": 0})
-    names = set()
-    for name, p in model.named_parameters(remove_duplicate=True):
-        group = name.split(".")[0]
-        rows[group]["trainable"] += p.numel() if p.requires_grad else 0
-        rows[group]["deployed_learned"] += p.numel()
-        rows[group]["tensors"] += 1
-        names.add(name)
-    declared = {name: type(module).__name__ for name, module in model.named_modules()}
-    phases = {}
-    for phase, invocation in (invocations or {}).items():
-        replica = copy.deepcopy(model).eval()
-        seen: list[dict[str, Any]] = []
-        handles = []
-
-        def register(path: str, layer: nn.Module) -> None:
-            def hook(_module: nn.Module, _args: Any, output: Any) -> None:
-                tensors = []
-
-                def visit(x: Any) -> None:
-                    if isinstance(x, torch.Tensor):
-                        tensors.append({"shape": list(x.shape), "finite": _finite(x)})
-                    elif isinstance(x, (tuple, list)):
-                        for v in x:
-                            visit(v)
-                    elif isinstance(x, Mapping):
-                        for v in x.values():
-                            visit(v)
-                visit(output)
-                seen.append({"module": path, "output_tensors": tensors})
-            handles.append(layer.register_forward_hook(hook))
-        for path, layer in replica.named_modules():
-            if path and not list(layer.children()):
-                register(path, layer)
-        try:
-            with torch.no_grad():
-                invocation(replica)
-        finally:
-            for h in handles:
-                h.remove()
-        phases[phase] = {
-            "ordered_leaf_calls": seen,
-            "meaning": "runtime call order only; not a computational DAG",
-            "unobserved_modules": sorted(set(declared) - {""} -
-                                         {x["module"] for x in seen}),
-        }
-    return {
-        "schema": "tac-osm-observatory/architecture-v1",
-        "module_type": type(model).__name__,
-        "total_trainable": sum(x["trainable"] for x in rows.values()),
-        "total_deployed_learned": sum(x["deployed_learned"] for x in rows.values()),
-        "component_parameters": dict(sorted(rows.items())),
-        "module_types": declared, "phases": phases,
-        "qualification": "inspection_only_not_trained_or_proven",
-    }
+from .research_torch_basics import architecture_inventory
 
 
 def _native_inputs(model: nn.Module, history: torch.Tensor,
@@ -227,62 +161,7 @@ def input_dependency_map(model: nn.Module, history: torch.Tensor,
             "qualification": "local_gradient_not_global_structural_noninterference"}
 
 
-def gradient_conflict_atlas(model: nn.Module,
-                            losses: Mapping[str, torch.Tensor]) -> dict[str, Any]:
-    """Compare *actual provided* differentiable loss gradients without stepping.
-
-    Caller supplies the genuine loss terms and targets for an authorized
-    FIT/DEV batch. No loss targets are made up here. Cosines are calculated
-    only across parameters reached by BOTH losses in each named component;
-    no overlapping live gradients => cosine=null (INCONCLUSIVE).
-    """
-    if len(losses) < 2:
-        raise ValueError("two or more genuine differentiable losses required")
-    named = [(name, p) for name, p in model.named_parameters()
-             if p.requires_grad]
-    if not named:
-        raise ValueError("no trainable model parameters")
-    values = {}
-    for label, loss in losses.items():
-        if loss.numel() != 1 or not bool(loss.requires_grad) or not _finite(loss):
-            raise ValueError(f"loss {label} must be finite differentiable scalar")
-        gradients = torch.autograd.grad(
-            loss, [p for _, p in named], retain_graph=True, allow_unused=True)
-        values[label] = {name: g.detach().float() if g is not None else None
-                         for (name, _), g in zip(named, gradients)}
-    labels = list(values)
-    pairs = []
-    for i, left in enumerate(labels):
-        for right in labels[i + 1:]:
-            group_rows = {}
-            groups = sorted({name.split(".")[0] for name, _ in named})
-            for group in [*groups, "<all_shared>"]:
-                names = [name for name, _ in named if group == "<all_shared>"
-                         or name.split(".")[0] == group]
-                common = [(values[left][n], values[right][n]) for n in names
-                          if values[left][n] is not None and
-                          values[right][n] is not None]
-                if any(not _finite(x) or not _finite(y) for x, y in common):
-                    group_rows[group] = {"cosine": None, "status": "NONFINITE_GRADIENT"}
-                    continue
-                if not common:
-                    group_rows[group] = {"cosine": None, "status": "NO_SHARED_GRADIENT"}
-                    continue
-                dot = sum(float((a * b).sum().item()) for a, b in common)
-                na = math.sqrt(sum(float((a * a).sum().item()) for a, _ in common))
-                nb = math.sqrt(sum(float((b * b).sum().item()) for _, b in common))
-                cosine = max(-1., min(1., dot / (na * nb))) if na and nb else None
-                group_rows[group] = {
-                    "cosine": cosine,
-                    "status": ("CONFLICT_AT_THIS_POINT" if cosine is not None and cosine < 0
-                               else "NO_LOCAL_CONFLICT" if cosine is not None
-                               else "ZERO_GRADIENT"),
-                    "shared_parameter_tensors": len(common),
-                    "left_l2": na, "right_l2": nb,
-                }
-            pairs.append({"left": left, "right": right, "components": group_rows})
-    return {"schema": "tac-osm-observatory/gradient-conflicts-v1",
-            "pairs": pairs, "qualification": "local_gradients_not_training_outcome"}
+from .research_torch_basics import gradient_conflict_atlas
 
 
 def interpret_snapshot(report: Mapping[str, Any]) -> dict[str, Any]:
