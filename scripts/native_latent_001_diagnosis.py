@@ -152,6 +152,7 @@ def memory_block_probe(m,inputs):
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--phase",default="fit",choices=("fit",))
+    ap.add_argument("--output",type=Path)
     args=ap.parse_args()
     torch.set_num_threads(1)
     d=new.fit_data()
@@ -191,6 +192,11 @@ def main():
       "causal_claim":False,"qualified_architecture_superiority":False,
       "anti_cheat_full_independent_proof":"OPEN",
       "models":evidence}
+    if args.output is not None:
+        if args.output.exists():
+            raise RuntimeError("original diagnostic report exists; do not overwrite")
+        args.output.parent.mkdir(parents=True,exist_ok=True)
+        args.output.write_text(json.dumps(out,sort_keys=True,indent=2,allow_nan=False)+"\n")
     print("NATIVE_LATENT_RESULT_JSON="+json.dumps(out,sort_keys=True),flush=True)
 
 if __name__=="__main__":
