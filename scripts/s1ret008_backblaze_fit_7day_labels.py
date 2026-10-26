@@ -82,7 +82,7 @@ def run():
         raise RuntimeError("FIT source rows or original failure prevalence changed")
     # Bound labels by calendar +7 days on THIS SAME drive, excluding
     # failure-day samples. Negative only if 7 later calendar days observed.
-    positive=negative=censored=failed_today=0
+    positive=negative=censored=failed_today=postfailure_excluded=0
     relevance_positive=relevance_negative=0
     positive_unique=0
     eligible_long_drive=0
@@ -90,12 +90,16 @@ def run():
         fail=failed.get(serial,0);high=flagged.get(serial,0)
         if presence.bit_count()>=64:eligible_long_drive+=1
         had_positive=False
+        first_failed_index=((fail&-fail).bit_length()-1) if fail else None
         while presence:
             low=presence & -presence
             day_index=low.bit_length()-1
             presence-=low
-            if (fail>>day_index)&1:
-                failed_today+=1
+            if first_failed_index is not None and day_index>=first_failed_index:
+                if day_index==first_failed_index:
+                    failed_today+=1
+                else:
+                    postfailure_excluded+=1
                 continue
             future_fail=(fail>>(day_index+1))&0x7f
             current_relevance=bool((high>>day_index)&1)
@@ -119,6 +123,7 @@ def run():
         unique_drives_with_at_least_64_calendar_observations=eligible_long_drive,
         original_true_failure_day_rows=all_fails,
         not_prediction_input_failure_day_rows=failed_today,
+        records_after_first_failure_excluded=postfailure_excluded,
         known_future_7day_positive=positive,
         known_future_7day_healthy_negative=negative,
         unknown_or_source_censored=censored,
