@@ -1,0 +1,71 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME110-TYPED-ROLE-DIVERSE-TRAINING",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "name": "UCI501 Beijing Multi-Site Air Quality",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "license": "CC-BY-4.0",
+    "observed_real_outcomes": true
+  },
+  "models": [
+    {
+      "architecture": "typed_roles",
+      "seed": 110001,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    },
+    {
+      "architecture": "typed_roles",
+      "seed": 110002,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    },
+    {
+      "architecture": "typed_roles",
+      "seed": 110003,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    },
+    {
+      "architecture": "typed_roles",
+      "seed": 110004,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    },
+    {
+      "architecture": "typed_roles",
+      "seed": 110005,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    }
+  ],
+  "protocol": {
+    "question": "Can coordinate-typed objectives and availability-balanced source-diverse learning improve gap/ordinary point accuracy without losing uncertainty qualification, and what do fixed1024/2048/4096 monitoring curves show?",
+    "fit": "Authentic2013-2014FIT only;4096updates B16 contexts8/64/256;2natural-gap+14general perupdate; disjointsourcepools; shuffled withoutreplacement cycles. Fixed64gap+256general monitor origins excluded from new update targets; ancestors/normalizers have seen FIT, so monitor is NOT fresh/independent and overlapping history events remain.",
+    "parent": "Five ME103strong_reconstruction102001..102005, retained entirely; originalME109forward104663parameters. Threezero-output residualFFNs andzero width/median heads preserve parent initial forecast/state. No fittedME109weights reused.",
+    "point_objective": "Mean of present six-channel x actualcurrentavailability group MAE/FITstd +.1 equally-grouped standardizedloglocationMSE. Groups determined by actual post-augmentation masks, never drawposition; emptygroups excluded.",
+    "uncertainty_objective": "Predictive censoredNLL+.25proper90intervalscore/FITstd+.3current reconstructionNLL. Gradients restricted to4410declared uncertaintycoordinates; point/shared100253coordinates receive onlypointobjective. This routed update is not claimed as gradientofone totalscalar.",
+    "roles": "Uncertainty: allstate_noise,width_head,width_residual; outputrows6:ofreadout.2,retrieved_delta.2,current_head,current_residual.output. Everythingelsepoint. Separate role-normclip1 beforecomposition. FreshTypedRoleAdamW(original rates3e-5retained/3e-4newFFNs,betas.9/.999,eps1e-8,decay.001), fullrawproposal thenprecision-derived inward pointguard13blocks. Mean-independentuncertainty tangent testedactualsource, fullLeanIEEEproofOPEN.",
+    "updates": 4096,
+    "batch_size": 16,
+    "seeds": [
+      110001,
+      110002,
+      110003,
+      110004,
+      110005
+    ],
+    "supervised_examples_per_model": 65536,
+    "history_events_per_model": 7163648,
+    "monitoring": "Store fulloriginalmodel+optimizer+RNG at1024/2048/4096; fixedFITmonitor320queries at0/1024/2048/4096, no modelselection/earlystopping. Saveevery trainingcomponent, separatepreclipnorms, coordinateisolation andguardcounts. Curve stages differ in exposure; no matched equal-budget winner claim.",
+    "report": "Only final4096 models scored once on original already-exposed2015,143natural-gap+4288general queries; all5originalcheckpoints+receipts must beGitfrozen beforeREPORT. Same historicalreferencegates mappedseedME101minus9000 andME103minus8000.",
+    "protected": "2016-2017numeric rowsclosed; no parsing/scoring. No new independent/counterfactual/control/customerclaims.",
+    "gates": "Exactly ME106 perseed gates with mappedME101andME103 references: gapPM90coverage[.90,.98]; gapPMMAE<=min(1.05ME101,1.05ownparent); ordinaryPMMAE<=min(1.05LOCF,1.05ownparent); gap6chNLL<=min(6.234504261016846,1.05ownparent); gapPMintervalscore<=min(1.05ME101,.90ownparent). Allfive seeds must pass allgates.",
+    "stop": "Exactly five4096update fits under this newregistration. No retries, seedselection, thresholdchanges, extraepochs or protectedaccess. Anyfailed gate remainsFAIL.",
+    "compute": "Max2one-thread localworkers; no externalpaidtraining. Record actualCPU, inherited3072parentupdates and new4096; partialmodelprofile FLOPs excludesoptimizer/unsupportedops; newroleupdate overhead not treatedasmatchedtrainingwithhistoricalmodels.",
+    "prior_art": "GradNorm(ChenetalICML2018 https://proceedings.mlr.press/v80/chen18a.html) motivatesobjective-magnitude control; gradient-surgery(YuetalNeurIPS2020 https://arxiv.org/abs/2001.06782) motivatesexplicitsharedtaskconstraints; task-specificheads(Caruana1997),residualidentity(HeetalCVPR2016),AdamW. Reuseestablishedmath, no newarchitecture-superiorityclaim.",
+    "prediction_boundary": "Actualsixmodelinputs: causalvalues,observedmask,sourceage,calendar,stationowner,sourcehour. Futuretargets only losses. FITnormalizers/floorratesfixed. Futuretargetpoison beforeaugmentation withcachesfixed, gradients/roleisolation/activations/checkpoints tested; uninstrumented fullCSV/fittransform/nuisancepaths remainINCONCLUSIVE, neverPASS."
+  }
+}
