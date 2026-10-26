@@ -1,6 +1,14 @@
 # Company strategy and daily operating system
 **Adopted:** 2026-10-25. **Status:** binding research/product prioritization guidance, not an experimental result, deployment claim, or authorization to merge or spend money. **Authority:** [Unified Master Research Plan](MASTER_RESEARCH_PLAN.md), all existing research/evidence rules, and original immutable experimental artifacts take precedence over this strategy where technical gates differ.
 
+## Current architectural company decision — 2026-10-26
+
+The [Company Architecture and Capabilities Charter](COMPANY_ARCHITECTURE_CAPABILITIES_CHARTER_2026-10-26.md) and the [master plan's 2026-10-26 company-capability section](MASTER_RESEARCH_PLAN.md) govern **prospective** research and product prioritization. Company inspirations: Desert Ant's compact offline-specialist model catalog/SDK mindset, TypeSafe's typed machine-native multiquestion decisions, and Liquid/SSM hardware-efficiency research; **do not import marketing claims, third-party protected assets or model-specific methods as proven TAC capabilities**.
+
+Architecture north star: **Remember / Understand / Predict / Decide / Verify / Deploy**, on the preserved exactly-six-family portfolio. P0: genuinely useful entity/long-history memory, valid parallel+stream computation, correctly calibrated future distributions and typed decision primitives; P1: factual correction, deferral, real mobile hardware and specialized perception; P2: identifiable counterfactual consequences. Near-term flagship hypothesis is a source-aware stateful typed decision/forecast SDK, **not yet a qualified model or shipped product**; independent utility models and Forge/Veritas can deliver developer value sooner.
+
+Daily work must use the evidence gates in the full charter: authentic licensed datasets, true observation/availability time, untouched test, original checkpoint+replay, equal budgets for neural superiority claims, PNDS exact operator/probability/IEEE scope, trusted reward/outcome evidence and physical on-device tests before hardware claims. Negative ME110/S1/EWA gates remain failures. No authorization for new training, merge, deployment or customer action is implied.
+
 ## Mission and positioning
 Build an open-source AI research and engineering company focused on **reliable, efficient, stateful predictive intelligence**: systems that maintain useful changing-world representations, forecast consequential outcomes, propose bounded decisions and verify what actually happened. Pursue scientifically distinctive TAC-OSM/PNDS model capabilities and commercially useful tools **in parallel**, not by pretending unqualified research is a product. Initial market hypothesis: dependable stateful agents and operational decision support; validate buyers, jobs, use cases, willingness to pay, data rights, deployment and outcomes rather than asserting traction.
 
