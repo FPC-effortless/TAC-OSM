@@ -1,0 +1,25 @@
+name: S1MOTION006 first FIT-only real coffee source lock
+on:
+  push:
+    branches: [research/s1motion006-velocity-event-ablation-2026-10-26]
+    paths: ['research/parallel-six/S1MOTION006-SOURCE-*.marker']
+permissions:
+  contents: read
+jobs:
+  verified-no-fit-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+      - name: Parse 25 authentic FIT files only (full episodes)
+        run: python scripts/s1motion006_coffee_source_audit.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: s1motion006-source-only-original-coffee
+          path: research/diagnostics/s1motion006-source-original/**
+          if-no-files-found: warn
+          retention-days: 90
