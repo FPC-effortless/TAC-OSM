@@ -1,0 +1,45 @@
+name: S1TEMP006 independent original full real-source cold replay (NO TRAIN)
+on:
+  push:
+    branches: [research/s1temp006-fixed-state-slow-memory-2026-10-26]
+    paths: ['research/parallel-six/S1TEMP006-REPLAY-*.marker']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  genuine-no-fit-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify replay Python syntax before source/weights
+        run: python -m py_compile scripts/s1temp006_original_cold_replay.py
+      - name: Download EXACT original six model/optimizer/RNG checkpoint assets
+        run: |
+          gh run download 40291636780 --repo FPC-effortless/TAC-OSM \
+            --name s1temp006-original-real-512-history-6-checkpoints \
+            --dir /tmp/s1temp006-original-frozen
+      - name: Verify SHA and re-evaluate already-opened original DEV using zero optimizer steps
+        run: |
+          MANIFEST="$(find /tmp/s1temp006-original-frozen -name BEFORE-DEV-SHA-FREEZE.json -print -quit)"
+          test -n "$MANIFEST"
+          PYTHONPATH=src:. python scripts/s1temp006_original_cold_replay.py \
+            --original-dir "$(dirname "$MANIFEST")"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: s1temp006-12-original-scores-frozen-cold-replay
+          path: research/diagnostics/s1temp006-cold-replay/**
+          if-no-files-found: warn
+          retention-days: 90
