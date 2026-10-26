@@ -314,3 +314,60 @@ def test_privileged_final_recomputes_real_fields_and_binds_all_checkpoints():
     kw["actual_reward_rows"][0]["recorded_reward"] = 1.
     with pytest.raises(RewardEvidenceError, match="reward_recomputation"):
         issue(phase="final", **kw)
+
+
+
+def test_guarded_launcher_fails_before_training_without_independent_prefit(tmp_path):
+    m = make_manifest()
+    signer = Ed25519PrivateKey.generate()
+    pre, pub, _ = receipt(m, "preflight", signer=signer)
+    final, _, _ = receipt(m, "final", signer=signer)
+    inputs = []
+    for filename, value in (("prefit.json", m), ("final.json", m),
+                            ("pre.json", pre), ("post.json", final)):
+        path = tmp_path / filename
+        path.write_text(json.dumps(value))
+        inputs.append(path)
+    sentinel = tmp_path / "trained.flag"
+    cmd = [sys.executable, str(ROOT / "scripts/run_qualified_research.py"),
+           "--prefit-manifest", str(inputs[0]), "--final-manifest", str(inputs[1]),
+           "--prefit-evidence", str(inputs[2]), "--final-evidence", str(inputs[3]),
+           "--", sys.executable, "-c", f"from pathlib import Path;Path({str(sentinel)!r}).write_text('fit')"]
+    import os
+    env = dict(os.environ)
+    env.pop("TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX", None)
+    denied = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, env=env)
+    assert denied.returncode == 2
+    assert not sentinel.exists(), "no optimizer command may launch before signed prefit"
+    assert json.loads(denied.stdout)["status"] == "BLOCKED"
+
+    env["TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX"] = pub
+    accepted = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, env=env)
+    assert accepted.returncode == 0, accepted.stdout + accepted.stderr
+    assert sentinel.read_text() == "fit"
+    assert json.loads(accepted.stdout)["registered_variant_seeds"] == 6
+
+
+def test_guarded_launcher_never_promotes_when_final_audit_missing(tmp_path):
+    m = make_manifest()
+    pre, pub, _ = receipt(m, "preflight")
+    p = tmp_path / "prefit.json"
+    p.write_text(json.dumps(m))
+    f = tmp_path / "final.json"
+    f.write_text(json.dumps(m))
+    pre_path = tmp_path / "pre.json"
+    pre_path.write_text(json.dumps(pre))
+    sentinel = tmp_path / "ran.flag"
+    import os
+    env = dict(os.environ, TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX=pub)
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/run_qualified_research.py"),
+         "--prefit-manifest", str(p), "--final-manifest", str(f),
+         "--prefit-evidence", str(pre_path),
+         "--final-evidence", str(tmp_path / "unsigned.json"),
+         "--", sys.executable, "-c",
+         f"from pathlib import Path;Path({str(sentinel)!r}).write_text('fit')"],
+        cwd=ROOT, capture_output=True, text=True, env=env)
+    assert sentinel.exists()
+    assert result.returncode == 2
+    assert json.loads(result.stdout)["status"] == "BLOCKED"
