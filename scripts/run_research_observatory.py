@@ -27,7 +27,7 @@ import torch  # noqa: E402
 from tac_osm.predictive_state_agent import PredictiveStateAgent  # noqa: E402
 from tac_osm.research_observatory import (  # noqa: E402
     architecture_inventory, memory_tomography, input_dependency_map,
-    interpret_snapshot,
+    interpret_snapshot, entity_isolation_probe, profile_native_runtime,
 )
 from tac_osm.research_evidence import compare_evidence  # noqa: E402
 
@@ -41,7 +41,7 @@ def pinned_bytes(path: Path, expected: str) -> bytes:
     return payload
 
 
-def snapshot(model, history, candidates, run_id):
+def snapshot(model, history, candidates, run_id, *, profile=False, isolation=False):
     if history.ndim != 3 or candidates.ndim != 3:
         raise ValueError("expected source BxTxC and candidate BxAxD arrays")
     def observe_phase(m):
@@ -66,6 +66,13 @@ def snapshot(model, history, candidates, run_id):
         },
         "qualification": "diagnostics_only_not_evidence_of_world_model_intelligence",
     }
+    if isolation:
+        result["entity_isolation"] = (
+            entity_isolation_probe(model, history, candidates)
+            if len(history) >= 2 else
+            {"status": "INCONCLUSIVE_ONE_ENTITY", "reason": "need >=2 independent source entities"})
+    if profile:
+        result["runtime"] = profile_native_runtime(model, history, candidates)
     result["interpretation"] = interpret_snapshot(result)
     return result
 
@@ -80,6 +87,10 @@ def main(argv=None):
     ap.add_argument("--checkpoint", type=Path)
     ap.add_argument("--expected-checkpoint-sha256")
     ap.add_argument("--run-id", default="no-fit-diagnostic")
+    ap.add_argument("--profile", action="store_true",
+                    help="measure local replay-and-query timing on this host")
+    ap.add_argument("--entity-isolation", action="store_true",
+                    help="compare batched and per-entity forecasts (requires B>=2)")
     ap.add_argument("--output", type=Path)
     args = ap.parse_args(argv)
     try:
@@ -122,7 +133,8 @@ def main(argv=None):
                 model.load_state_dict(state, strict=True)
                 model.eval()
                 provenance = "caller_pinned_input_and_checkpoint_only_not_authenticated_publisher"
-            result = snapshot(model, history, candidates, args.run_id)
+            result = snapshot(model, history, candidates, args.run_id,
+                              profile=args.profile, isolation=args.entity_isolation)
             result["source_provenance"] = provenance
             exitcode = 0
         output = json.dumps(result, sort_keys=True, indent=2, allow_nan=False) + "\n"
