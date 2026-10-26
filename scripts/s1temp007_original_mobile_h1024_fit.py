@@ -2,7 +2,7 @@
 """S1TEMP007 ORIGINAL authentic 2000-frame Mobile ALOHA Chair memory evaluation.
 
 FIT-only real per-episode data before all 9 original optimizer/RNG/model SHAs.
-Open DEV Parquet ep30..39 only AFTER all 6 checkpoint hashes are written.
+Open DEV Parquet ep30..39 only AFTER all 9 checkpoint hashes are written.
 Actual TEST ep40..54 is forbidden regardless of caller arguments.
 NO simulator, action authority, incident or hazard labels.
 """
@@ -15,7 +15,7 @@ import torch
 from torch.nn import functional as F
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/"src")]
-from tac_osm.variants.s1temp007_persistent_slow import VelocityAnchoredSlowSystem1
+from tac_osm.variants.s1temp006_persistent_slow import VelocityAnchoredSlowSystem1
 from tac_osm.variants.s1motion005_gradient_budget import step_model
 
 LOCK=ROOT/"research/parallel-six/S1TEMP007-MOBILE-SOURCE-LOCK.json"
@@ -44,7 +44,7 @@ def lock():
 
 def download(url):
     with urllib.request.urlopen(urllib.request.Request(url,headers={
-      "User-Agent":"S1TEMP007-original-1500-frame-source-test/1.0"}),
+      "User-Agent":"S1TEMP007-original-2000-frame-source-test/1.0"}),
       timeout=120) as r:return r.read()
 
 def get_episode(ep,locked,cache,*,released_dev=False):
@@ -296,7 +296,7 @@ def main():
         causal_action_policy=False,
         independent_robot_site_qualification=False)
     (out/"FIRST-ORIGINAL-REAL-DEV-SCORES.json").write_text(
-        json.dumps(report,indent=2,sort_keys=True)+"\\n")
+        json.dumps(report,indent=2,sort_keys=True)+"\n")
     print("S1TEMP007_ORIGINAL_GATE="+("PASS" if report["complete_original_gate_pass"] else "FAIL"),flush=True)
     print("S1TEMP007_REAL_SCORES_COMPLETE=YES",flush=True)
 
