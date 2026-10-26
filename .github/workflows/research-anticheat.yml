@@ -1,17 +1,12 @@
 name: TAC-OSM research anticheat gates
 
+# These are independent mandatory no-fit CI checks for every PR and
+# every mainline push, including changes outside the anti-cheat package.
 on:
   pull_request:
     branches: [main, master]
-    paths:
-      - "src/tac_osm/research_anticheat.py"
-      - "src/tac_osm/robot_anticheat.py"
-      - "src/tac_osm/real_robot_transition_contract.py"
-      - "scripts/run_robot_anticheat.py"
-      - "tests/test_research_anticheat.py"
-      - "tests/test_robot_anticheat.py"
-      - "research/ANTICHEAT-DIAGNOSTICS-PROTOCOL-2026-10-26.md"
-      - ".github/workflows/research-anticheat.yml"
+  push:
+    branches: [main, master]
   workflow_dispatch:
 
 permissions:
@@ -28,12 +23,24 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install no-fit test dependencies
-        run: python -m pip install --quiet 'pytest>=8' 'torch'
+        run: python -m pip install --quiet 'pytest>=8' 'numpy==2.3.3' 'torch'
       - name: Reject known answer side-channels and dead paths
-        run: python -m pytest -q tests/test_research_anticheat.py tests/test_robot_anticheat.py
-      - name: Audit actual real-robot input constructor with diagnostic fixtures
-        run: python scripts/run_robot_anticheat.py --fixture
-      - name: Never promote fixture or unverified source to scientific evidence
+        run: |
+          mkdir -p ci-artifacts
+          python -m pytest -q tests/test_research_anticheat.py tests/test_robot_anticheat.py \
+            --junitxml=ci-artifacts/anticheat-tests.xml
+      - name: Exercise physical input-contract poison probes with fixture-only evidence
+        run: |
+          python scripts/run_robot_anticheat.py --fixture \
+            --output ci-artifacts/anticheat-fixture.json > /dev/null
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("ci-artifacts/anticheat-fixture.json").read_text())
+          assert report["status"] == "PASS"
+          assert report["source_provenance"] == "constructed_fixture_not_capability"
+          PY
+      - name: Prevent promotion of fixture results to capability evidence
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -41,3 +48,11 @@ jobs:
           assert "constructed records ONLY" in text
           assert "Every uninstrumented boundary must remain UNKNOWN/INCONCLUSIVE" in text
           PY
+      - name: Publish downloadable diagnostic and test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: anticheat-no-fit-ci
+          path: ci-artifacts/
+          if-no-files-found: warn
+          retention-days: 14
