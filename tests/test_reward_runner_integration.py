@@ -401,7 +401,7 @@ def _launch_signed_fixture(tmp_path, *, final_manifest_mutator=None,
         + f"Path({str(result_path)!r}).write_text(json.dumps({{"
         + "'private':os.environ.get('TAC_OSM_REWARD_SIGNING_PRIVATE_KEY'),"
         + "'gh':os.environ.get('GH_TOKEN'),"
-        + "'allowed':os.environ.get('OMP_NUM_THREADS')}}))")
+        + "'allowed':os.environ.get('OMP_NUM_THREADS')}))")
     cmd = [sys.executable, str(ROOT / "scripts/run_qualified_research.py"),
            "--prefit-manifest", str(paths[0]), "--final-manifest", str(paths[1]),
            "--prefit-evidence", str(paths[2]), "--final-evidence", str(paths[3]),
