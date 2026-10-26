@@ -285,7 +285,7 @@ def probe_entity_isolation(model: nn.Module, sample: Any,
     return {"schema": "tac-osm-observatory/model-agnostic-isolation-v1",
             "adapter": adapter.name, "status": "PASS" if maximum <= tolerance else "FAIL",
             "entities": batch, "max_absolute_difference": maximum,
-            "tolerance": tolerance,
+            "tolerance": tolerance, "within_tolerance": maximum <= tolerance,
             "qualification": "model_batch_isolation_not_source_identity_authentication"}
 
 
