@@ -16,6 +16,14 @@ def test_geometry_zero_vectors_are_not_fabricated_cosines():
     assert geometry([torch.ones(2)], [-torch.ones(2)])['cosine'] == -1.
 
 
+def test_positive_euclidean_dot_can_reverse_under_group_rates():
+    p, u = torch.ones(2), torch.tensor([2., -2.])
+    g = p+u
+    assert torch.dot(p, u) == 0
+    assert torch.dot(p, g) == 2
+    assert torch.dot(p, -torch.tensor([1., 100.])*g) == 97
+
+
 def test_shadow_adamw_matches_torch_without_mutating_inputs():
     # Two toy parameters, not a TAC fit. Exercise moments, rates, clipping, decay.
     p = torch.nn.Parameter(torch.tensor([.4, -.8], dtype=torch.float64))

@@ -1,0 +1,5594 @@
+{
+  "study_id": "DIAGGRAD001",
+  "no_new_model_fits": true,
+  "no_optimizer_updates": true,
+  "source_commit": "e6ac736a",
+  "original_fit_index_sha256": "7a362adec81470338d21eff900576bd29a14ed1da8a0b0b36981f4ea26a962ea",
+  "source_files": {
+    "scripts/me102_reconstruction_panel.py": "7ef36d9195ff4b040f6300994f20ef061e16f69260d43666a258e74ec3ebfadc",
+    "scripts/me102_graph_reference.py": "5d8babb005d28877f3e01cd46d32f4b79b9af055b518a09a4690468457d92918",
+    "scripts/me102_gap_data.py": "fff07eface039eff6458399ff1ab33db4b268a71d2adcc6e1ebca6b451cac324",
+    "scripts/me100_sensor_data.py": "57f4d9086251d6dd8f12feb675ebe96de1223b3016906ad867cf3795fd0c74cc",
+    "scripts/me101_graph_reference.py": "ab4f70a83aa28f9ba0fd05749d2cf8cd6c3ff7880dcc3d25ec0728d955bba9d3",
+    "scripts/me100_graph_reference.py": "5923f55cf718aee6d73723dfc60bf82162880fbeb41c462d4575cdc91f4f64ff",
+    "src/tac_osm/variants/reconstruction_sensor_world.py": "55855ed04835af42758bcbd1170b384841e8d17ea5c0dbe7916cca0892987593",
+    "src/tac_osm/variants/belief_sensor_world.py": "618fa4a6dd53c0c3128081d4990fcd66f40593e9b875ca8983b475035245fb88",
+    "src/tac_osm/variants/entity_sensor_world.py": "c26c2b15e99c5f8238bc49dc4eb0a6ebdfb4b62dfe566ee400a044cebead6282",
+    "src/tac_osm/variants/parallel_affine_memory.py": "e3a0732b17acfa7505952b5229573099edc7f1dbe65604f4f3f516e05652baeb",
+    "src/tac_osm/variants/retention_controlled_world.py": "eead543fc0d87d0c77d4f36758115168beb591b31e53e3d251714c076da0e970",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "scripts/me101_belief_sensor.py": "c51c03ed7cd4db0ee721daa339d42ede34afe8d5242d61fed07995eba701b14f",
+    "src/tac_osm/variants/median_split_sensor_world.py": "c7d71d7a0fc23e8849e69edf35b5e555dbc0e567ad93406a0e4bcc2186ccd0ad",
+    "src/tac_osm/variants/protected_sensor_world.py": "9fbfa64878daf48189786d50ea975571f4832bea95b00f3bdf3444075b022a20",
+    "src/tac_osm/variants/point_priority_sensor_world.py": "34ce48400a462f40aa3f1023ef9c21d52389a8754fd54cbb4c59f34bc2c0d8e7",
+    "scripts/me105_protected_panel.py": "239d19936ce88e06cea5c4946893032b32b09567a18ed72b44a8b2a0a76f2c62",
+    "scripts/me105_graph_reference.py": "775c13a7437f99c353911105f21afb23ce4e7478b51d5968c56aa4978c60ca45",
+    "scripts/me106_gradient_roles.py": "9dea6fb17d473f686672f5a225ccbb08a3a7845c35b93305fcb42a441401ae73",
+    "scripts/me104_graph_reference.py": "930a117e2b0d5198e6666be639c613020a1ef8570cbaeab778d43176c4da3a62",
+    "scripts/me106_graph_reference.py": "fde76eb9dc9a72618b3c7813017051176ec4f681fbaf3d6c087508204e6274ae",
+    "scripts/me106_priority_panel.py": "c1a5abfa2c9aa20da6e41012bbf204e41fd542526991cbb868630fbc90ac4bad",
+    "scripts/diaggrad001_loss_flow.py": "28ad2943f132a475e9ff7e61099a428896fc0aed485ac8a0cedacea2b3d705fa"
+  },
+  "registration_sha256": "2d379d4636b781dc5d4fd1a7867fd78f995a8e8542ad309d7a422aa96d36d42f",
+  "cohort": "2013-2014 FIT only; natural origin selection plus original causal artificial masking",
+  "summary": {
+    "source_encoder": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.7254114152806413
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.7398310203315726
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 39,
+          "median_cosine": 0.1732783090572846
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 101,
+          "median_cosine": -0.07001687045166508
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.7605444492230105
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 26,
+          "median_cosine": 0.27482993170667847
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 145,
+          "median_cosine": -0.3926607324519602
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 29,
+          "median_cosine": 0.29206544715215155
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 122,
+          "median_cosine": -0.37669724226988477
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 102,
+          "median_cosine": -0.10070152494136819
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 1.199730903959257,
+        "point": 1.145896428302101,
+        "location_mse": 0.13400599317570266,
+        "reconstruction_nll": 0.5516886691744236,
+        "interval": 3.5510650747048453
+      },
+      "opposing_aux_before": 97,
+      "opposing_aux_after": 37,
+      "locally_uphill_group_sgd": 9,
+      "locally_uphill_saved_adamw": 90,
+      "probes": 180
+    },
+    "source_admission": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.6066571163191448
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.7162928313878569
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 38,
+          "median_cosine": 0.1663092953734573
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 84,
+          "median_cosine": 0.02013458798302603
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 1,
+          "median_cosine": 0.6033695241303882
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 36,
+          "median_cosine": 0.2686000627749221
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 124,
+          "median_cosine": -0.24754209616022202
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 24,
+          "median_cosine": 0.2877202183589936
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 103,
+          "median_cosine": -0.16108172841836582
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 85,
+          "median_cosine": -0.03189033841089668
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.043825706190385026,
+        "point": 0.03472789437336041,
+        "location_mse": 0.004663664867588126,
+        "reconstruction_nll": 0.03533974684005665,
+        "interval": 0.10312807573331606
+      },
+      "opposing_aux_before": 78,
+      "opposing_aux_after": 34,
+      "locally_uphill_group_sgd": 11,
+      "locally_uphill_saved_adamw": 56,
+      "probes": 180
+    },
+    "fast": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 1,
+          "median_cosine": 0.6737150954603359
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.683307785517545
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 28,
+          "median_cosine": 0.10924567286709089
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 96,
+          "median_cosine": -0.03477871890927105
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.6858708016834998
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 26,
+          "median_cosine": 0.12302457746612937
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 138,
+          "median_cosine": -0.29433526380023695
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 19,
+          "median_cosine": 0.19021021867419766
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 117,
+          "median_cosine": -0.28815701880071976
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 95,
+          "median_cosine": -0.058461536340633655
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.5664069240657323,
+        "point": 0.5246331130831856,
+        "location_mse": 0.05662490965980324,
+        "reconstruction_nll": 0.23100004188748793,
+        "interval": 1.4852194520525164
+      },
+      "opposing_aux_before": 87,
+      "opposing_aux_after": 27,
+      "locally_uphill_group_sgd": 4,
+      "locally_uphill_saved_adamw": 95,
+      "probes": 180
+    },
+    "slow": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 4,
+          "median_cosine": 0.7104604369068741
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 4,
+          "median_cosine": 0.7274553058129805
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 105,
+          "median_cosine": -0.038377258303823256
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 109,
+          "median_cosine": -0.13097011773855421
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.7224423226432128
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 109,
+          "median_cosine": -0.04540398578040977
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 138,
+          "median_cosine": -0.4635637006930806
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 111,
+          "median_cosine": -0.0470132097306386
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 123,
+          "median_cosine": -0.4038184685904961
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 74,
+          "median_cosine": 0.007414372812960499
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.10146288706049406,
+        "point": 0.0965646763449656,
+        "location_mse": 0.010625523547949371,
+        "reconstruction_nll": 0.0014952363861255144,
+        "interval": 0.27609925514718564
+      },
+      "opposing_aux_before": 101,
+      "opposing_aux_after": 54,
+      "locally_uphill_group_sgd": 16,
+      "locally_uphill_saved_adamw": 108,
+      "probes": 180
+    },
+    "address": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.7663384314904814
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.7986634557200751
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 62,
+          "median_cosine": 0.05130849475836242
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 82,
+          "median_cosine": 0.12340234048955787
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 2,
+          "median_cosine": 0.6994139113484837
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 68,
+          "median_cosine": 0.053907342446836544
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 124,
+          "median_cosine": -0.20295151942251213
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 56,
+          "median_cosine": 0.09472588825690237
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 96,
+          "median_cosine": -0.07861811788536152
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 83,
+          "median_cosine": -0.0020880898528584176
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.25668542664447364,
+        "point": 0.23568881082408422,
+        "location_mse": 0.027244520972060173,
+        "reconstruction_nll": 0.03972405101586165,
+        "interval": 0.5037018868911903
+      },
+      "opposing_aux_before": 60,
+      "opposing_aux_after": 9,
+      "locally_uphill_group_sgd": 2,
+      "locally_uphill_saved_adamw": 26,
+      "probes": 180
+    },
+    "content": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 1,
+          "median_cosine": 0.8310475238867159
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.8599105746445204
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 40,
+          "median_cosine": 0.2605877277573524
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 114,
+          "median_cosine": -0.28515738087185005
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.8702417285846403
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 28,
+          "median_cosine": 0.3224206701820476
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 149,
+          "median_cosine": -0.5713486461453834
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 33,
+          "median_cosine": 0.37150097130188814
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 138,
+          "median_cosine": -0.43202413524694344
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 101,
+          "median_cosine": -0.1074599077465936
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.4773729872664962,
+        "point": 0.5285933024896888,
+        "location_mse": 0.06599736751474913,
+        "reconstruction_nll": 0.2890087212015472,
+        "interval": 1.8559886526917497
+      },
+      "opposing_aux_before": 113,
+      "opposing_aux_after": 66,
+      "locally_uphill_group_sgd": 37,
+      "locally_uphill_saved_adamw": 98,
+      "probes": 180
+    },
+    "memory_gates": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 12,
+          "median_cosine": 0.8100918953418927
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 8,
+          "median_cosine": 0.8396070234588786
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 58,
+          "median_cosine": 0.28116744446948777
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 67,
+          "median_cosine": 0.24505594948784254
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 8,
+          "median_cosine": 0.752348001995782
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 54,
+          "median_cosine": 0.3370953217288479
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 107,
+          "median_cosine": -0.28747143890112264
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 53,
+          "median_cosine": 0.26662226350751955
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 97,
+          "median_cosine": -0.0620781310241085
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 89,
+          "median_cosine": -0.15944040932068262
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.016359212597558286,
+        "point": 0.015069056113019844,
+        "location_mse": 0.002356900812677004,
+        "reconstruction_nll": 0.015663365750874694,
+        "interval": 0.04441069021551379
+      },
+      "opposing_aux_before": 76,
+      "opposing_aux_after": 50,
+      "locally_uphill_group_sgd": 30,
+      "locally_uphill_saved_adamw": 72,
+      "probes": 180
+    },
+    "query": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 1,
+          "median_cosine": 0.7711759264355547
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.8434456875416007
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 94,
+          "median_cosine": -0.056562938715001176
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 3,
+          "median_cosine": 0.7557405827370715
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 123,
+          "median_cosine": -0.3658249803997213
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 105,
+          "median_cosine": -0.1466132254161232
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.24503832954667054,
+        "point": 0.23862511160596067,
+        "location_mse": 0.028480711279609515,
+        "reconstruction_nll": 0.0,
+        "interval": 0.5581236211667764
+      },
+      "opposing_aux_before": 81,
+      "opposing_aux_after": 27,
+      "locally_uphill_group_sgd": 7,
+      "locally_uphill_saved_adamw": 50,
+      "probes": 180
+    },
+    "future_decoder": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 2,
+          "median_cosine": 0.5939667244493594
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.6320525867558215
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 88,
+          "median_cosine": 0.01127427170095453
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.5786410489886011
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 128,
+          "median_cosine": -0.1825116660218415
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 112,
+          "median_cosine": -0.18123781821858426
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 1.0867123199542679,
+        "point": 1.0308172040836892,
+        "location_mse": 0.11311021725321199,
+        "reconstruction_nll": 0.0,
+        "interval": 2.997153548647435
+      },
+      "opposing_aux_before": 86,
+      "opposing_aux_after": 52,
+      "locally_uphill_group_sgd": 29,
+      "locally_uphill_saved_adamw": 103,
+      "probes": 180
+    },
+    "belief": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 35,
+          "median_cosine": 0.4953349483509695
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 11,
+          "median_cosine": 0.7540618247932258
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 44,
+          "median_cosine": 0.04735093848864916
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 78,
+          "median_cosine": 0.06024585053518734
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 10,
+          "median_cosine": 0.600751851282068
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 0,
+          "median_cosine": 0.0
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 134,
+          "median_cosine": -0.5349085369329758
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 0,
+          "median_cosine": 0.0
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 125,
+          "median_cosine": -0.2558668149256773
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 51,
+          "median_cosine": 0.003348611965743111
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.015462512447778468,
+        "point": 0.01114702168312587,
+        "location_mse": 0.0016726541021702325,
+        "reconstruction_nll": 0.023103144264138148,
+        "interval": 0.040134520339070265
+      },
+      "opposing_aux_before": 119,
+      "opposing_aux_after": 81,
+      "locally_uphill_group_sgd": 49,
+      "locally_uphill_saved_adamw": 109,
+      "probes": 180
+    },
+    "reconstruction": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 2,
+          "median_cosine": 0.6494780198654602
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.8611361016857288
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 16,
+          "median_cosine": 0.3780077383562026
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 105,
+          "median_cosine": -0.09477485030185988
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.6550660399302146
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 37,
+          "median_cosine": 0.40060531601008703
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 143,
+          "median_cosine": -0.3688246446683192
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 19,
+          "median_cosine": 0.4143561773970007
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 133,
+          "median_cosine": -0.2607850001211882
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 92,
+          "median_cosine": -0.11428380369850669
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.7828210477242796,
+        "point": 0.7968386241100603,
+        "location_mse": 0.10280110496307808,
+        "reconstruction_nll": 0.7628755572767112,
+        "interval": 3.0487876159854492
+      },
+      "opposing_aux_before": 100,
+      "opposing_aux_after": 76,
+      "locally_uphill_group_sgd": 24,
+      "locally_uphill_saved_adamw": 124,
+      "probes": 180
+    },
+    "width": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 9,
+          "median_cosine": 0.5687119635548503
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "point__interval": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.6144707293927314,
+        "point": 0.0,
+        "location_mse": 0.0,
+        "reconstruction_nll": 0.0,
+        "interval": 0.6890016776932921
+      },
+      "opposing_aux_before": 0,
+      "opposing_aux_after": 0,
+      "locally_uphill_group_sgd": 0,
+      "locally_uphill_saved_adamw": 0,
+      "probes": 180
+    },
+    "median": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "nll__interval": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 1,
+          "median_cosine": 0.46180286512049823
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "point__interval": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 0,
+          "negative": 0,
+          "median_cosine": null
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 0.0,
+        "point": 0.1751687916598501,
+        "location_mse": 0.0185362662146948,
+        "reconstruction_nll": 0.0,
+        "interval": 0.0
+      },
+      "opposing_aux_before": 1,
+      "opposing_aux_after": 1,
+      "locally_uphill_group_sgd": 0,
+      "locally_uphill_saved_adamw": 5,
+      "probes": 180
+    },
+    "all": {
+      "pairs": {
+        "nll__point": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.629045918484423
+        },
+        "nll__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.6601428832339392
+        },
+        "nll__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 19,
+          "median_cosine": 0.15292992193252689
+        },
+        "nll__interval": {
+          "nonzero_pairs": 180,
+          "negative": 88,
+          "median_cosine": 0.014000647925765108
+        },
+        "point__location_mse": {
+          "nonzero_pairs": 180,
+          "negative": 0,
+          "median_cosine": 0.6894226584795831
+        },
+        "point__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 27,
+          "median_cosine": 0.24698342001712922
+        },
+        "point__interval": {
+          "nonzero_pairs": 180,
+          "negative": 139,
+          "median_cosine": -0.3297049391236123
+        },
+        "location_mse__reconstruction_nll": {
+          "nonzero_pairs": 165,
+          "negative": 21,
+          "median_cosine": 0.2576746025087219
+        },
+        "location_mse__interval": {
+          "nonzero_pairs": 180,
+          "negative": 117,
+          "median_cosine": -0.2644355025444741
+        },
+        "reconstruction_nll__interval": {
+          "nonzero_pairs": 165,
+          "negative": 92,
+          "median_cosine": -0.0857479557327996
+        }
+      },
+      "median_weighted_norm": {
+        "nll": 2.1921021092726187,
+        "point": 2.1235621124294277,
+        "location_mse": 0.2322325391088571,
+        "reconstruction_nll": 1.0714015582509324,
+        "interval": 7.109708563424057
+      },
+      "opposing_aux_before": 96,
+      "opposing_aux_after": 48,
+      "locally_uphill_group_sgd": 0,
+      "locally_uphill_saved_adamw": 34,
+      "probes": 180
+    }
+  },
+  "by_history": {
+    "8": {
+      "source_encoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7425315822526299
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7476091554562685
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 13,
+            "median_cosine": 0.07971746795034851
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 33,
+            "median_cosine": -0.09097700284655023
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7363245526098736
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 12,
+            "median_cosine": 0.10645167402999171
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 40,
+            "median_cosine": -0.34006871838764474
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 15,
+            "median_cosine": 0.24971119391024968
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": -0.04160687496646567
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 7,
+            "median_cosine": 0.11848292193701573
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 1.2818941443542657,
+          "point": 0.9081129844961964,
+          "location_mse": 0.11381295594643387,
+          "reconstruction_nll": 0.5099013717191423,
+          "interval": 3.7439849059480172
+        },
+        "opposing_aux_before": 30,
+        "opposing_aux_after": 14,
+        "locally_uphill_group_sgd": 7,
+        "locally_uphill_saved_adamw": 33,
+        "probes": 60
+      },
+      "source_admission": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5957327020310059
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.602801952175388
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 3,
+            "median_cosine": 0.30024599415083425
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 21,
+            "median_cosine": 0.1653398462085247
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.6448684807353489
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 10,
+            "median_cosine": 0.1811733961421307
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 29,
+            "median_cosine": 0.05109866938968116
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 6,
+            "median_cosine": 0.2899728114058192
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 31,
+            "median_cosine": -0.13689851560865013
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 9,
+            "median_cosine": 0.22041105989583584
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.03290062599104633,
+          "point": 0.02367280260596009,
+          "location_mse": 0.002919207381710214,
+          "reconstruction_nll": 0.020457264819994492,
+          "interval": 0.09018682849641801
+        },
+        "opposing_aux_before": 22,
+        "opposing_aux_after": 12,
+        "locally_uphill_group_sgd": 2,
+        "locally_uphill_saved_adamw": 15,
+        "probes": 60
+      },
+      "fast": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6673567137153877
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6644553019959559
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 4,
+            "median_cosine": 0.13184130856768939
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 31,
+            "median_cosine": -0.013391292071206859
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6963736694774652
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 11,
+            "median_cosine": 0.08239802662794836
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 37,
+            "median_cosine": -0.21234711651510882
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 12,
+            "median_cosine": 0.18525945906770042
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": 0.014210036681204956
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 3,
+            "median_cosine": 0.08690075053863751
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.6262141259310554,
+          "point": 0.46120589692055,
+          "location_mse": 0.05376106926036906,
+          "reconstruction_nll": 0.2414434601240089,
+          "interval": 1.728265453628393
+        },
+        "opposing_aux_before": 30,
+        "opposing_aux_after": 17,
+        "locally_uphill_group_sgd": 2,
+        "locally_uphill_saved_adamw": 32,
+        "probes": 60
+      },
+      "slow": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6752739603329327
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6752339959754972
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 38,
+            "median_cosine": -0.05558253498535163
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 29,
+            "median_cosine": 0.013026338854757805
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6701339538862003
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 40,
+            "median_cosine": -0.09984892776037604
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 39,
+            "median_cosine": -0.10971611980232722
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 29,
+            "median_cosine": -0.03893685761108083
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": -0.007186978290208556
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 23,
+            "median_cosine": -0.015735755001946503
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.09109194098984788,
+          "point": 0.07421729848065375,
+          "location_mse": 0.008891661021556007,
+          "reconstruction_nll": 0.0016223812655302922,
+          "interval": 0.26504211295526814
+        },
+        "opposing_aux_before": 29,
+        "opposing_aux_after": 18,
+        "locally_uphill_group_sgd": 7,
+        "locally_uphill_saved_adamw": 27,
+        "probes": 60
+      },
+      "address": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8024470057627419
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8353660740297728
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 12,
+            "median_cosine": 0.09428091132336117
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 17,
+            "median_cosine": 0.20255380899882053
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7622164441305495
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 15,
+            "median_cosine": 0.11858082781672799
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 37,
+            "median_cosine": -0.104054477748588
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 15,
+            "median_cosine": 0.16627654172579612
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 24,
+            "median_cosine": 0.32067984156225054
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 24,
+            "median_cosine": -0.07519874218481278
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.25345017018644356,
+          "point": 0.1880177893977189,
+          "location_mse": 0.02228963802558117,
+          "reconstruction_nll": 0.027403285032610573,
+          "interval": 0.41656061715513526
+        },
+        "opposing_aux_before": 12,
+        "opposing_aux_after": 2,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 9,
+        "probes": 60
+      },
+      "content": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8559201412022037
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8707755640999089
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 12,
+            "median_cosine": 0.2719594410676193
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 29,
+            "median_cosine": 0.017603531630774036
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8410395167526483
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 15,
+            "median_cosine": 0.21521675398206638
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 36,
+            "median_cosine": -0.48378302438144744
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 21,
+            "median_cosine": 0.3386217724004756
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 33,
+            "median_cosine": -0.3409478414978311
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 6,
+            "median_cosine": 0.19157517340828095
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.4613165960887842,
+          "point": 0.40098885817182905,
+          "location_mse": 0.04852163039054759,
+          "reconstruction_nll": 0.23426840365437268,
+          "interval": 1.2425369035228746
+        },
+        "opposing_aux_before": 30,
+        "opposing_aux_after": 15,
+        "locally_uphill_group_sgd": 13,
+        "locally_uphill_saved_adamw": 26,
+        "probes": 60
+      },
+      "memory_gates": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.9039678183829474
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 2,
+            "median_cosine": 0.9305156934913874
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 2,
+            "median_cosine": 0.5541848103218037
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 17,
+            "median_cosine": 0.4536810358838978
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8512006885860399
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 5,
+            "median_cosine": 0.5478361269428649
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 26,
+            "median_cosine": 0.16989036180506809
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 7,
+            "median_cosine": 0.4689927382980998
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 27,
+            "median_cosine": 0.08425907094635851
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 12,
+            "median_cosine": 0.3936877033987027
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.02017638384536935,
+          "point": 0.021850270679211393,
+          "location_mse": 0.003524085741617905,
+          "reconstruction_nll": 0.02004554143112841,
+          "interval": 0.05991395065798236
+        },
+        "opposing_aux_before": 16,
+        "opposing_aux_after": 9,
+        "locally_uphill_group_sgd": 7,
+        "locally_uphill_saved_adamw": 9,
+        "probes": 60
+      },
+      "query": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.798691421960096
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8513893826998473
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 24,
+            "median_cosine": 0.3376845823910267
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.768707596598893
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": -0.01672772197644945
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 22,
+            "median_cosine": 0.1917092048433755
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.20920461208609004,
+          "point": 0.20372286571343215,
+          "location_mse": 0.02040007006333499,
+          "reconstruction_nll": 0.0,
+          "interval": 0.5808689671172668
+        },
+        "opposing_aux_before": 18,
+        "opposing_aux_after": 1,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 11,
+        "probes": 60
+      },
+      "future_decoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6044758672307509
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6106816144999672
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 21,
+            "median_cosine": 0.17004385610636918
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5805085173079392
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 40,
+            "median_cosine": -0.12240539404175513
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": -0.06336753995517184
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 1.2220458718949847,
+          "point": 0.9963139367140671,
+          "location_mse": 0.11369793631551557,
+          "reconstruction_nll": 0.0,
+          "interval": 3.7384237008088377
+        },
+        "opposing_aux_before": 30,
+        "opposing_aux_after": 18,
+        "locally_uphill_group_sgd": 2,
+        "locally_uphill_saved_adamw": 26,
+        "probes": 60
+      },
+      "belief": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 8,
+            "median_cosine": 0.5704676957984044
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7848133491539634
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 16,
+            "median_cosine": 0.05614159014613797
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 32,
+            "median_cosine": -0.0318407193582037
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.5968676569973174
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 37,
+            "median_cosine": -0.16366799560078288
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 42,
+            "median_cosine": -0.19855746391828671
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 19,
+            "median_cosine": 0.007275810775316783
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.01852473967266257,
+          "point": 0.011057734702155177,
+          "location_mse": 0.0013758464716319904,
+          "reconstruction_nll": 0.020700806878733546,
+          "interval": 0.041376631742727626
+        },
+        "opposing_aux_before": 35,
+        "opposing_aux_after": 17,
+        "locally_uphill_group_sgd": 8,
+        "locally_uphill_saved_adamw": 37,
+        "probes": 60
+      },
+      "reconstruction": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7124878675448856
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.9185179211080825
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 3,
+            "median_cosine": 0.3780077383562026
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 23,
+            "median_cosine": 0.0977343241428277
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6572242951915046
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 23,
+            "median_cosine": -0.01644182279410577
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 39,
+            "median_cosine": -0.23503736549732604
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 15,
+            "median_cosine": 0.388628585687277
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": -0.11677671022039725
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 4,
+            "median_cosine": 0.19555019877110638
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.632849119831308,
+          "point": 0.6988348477884276,
+          "location_mse": 0.08520311683789678,
+          "reconstruction_nll": 0.7006344280945718,
+          "interval": 2.905436849227242
+        },
+        "opposing_aux_before": 30,
+        "opposing_aux_after": 22,
+        "locally_uphill_group_sgd": 10,
+        "locally_uphill_saved_adamw": 38,
+        "probes": 60
+      },
+      "width": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 6,
+            "median_cosine": 0.4968444116837023
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.5571027808102123,
+          "point": 0.0,
+          "location_mse": 0.0,
+          "reconstruction_nll": 0.0,
+          "interval": 0.8855146185615252
+        },
+        "opposing_aux_before": 0,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 0,
+        "probes": 60
+      },
+      "median": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.39126261413841346
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.0,
+          "point": 0.15490634763680278,
+          "location_mse": 0.016646420490446574,
+          "reconstruction_nll": 0.0,
+          "interval": 0.0
+        },
+        "opposing_aux_before": 0,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 1,
+        "probes": 60
+      },
+      "all": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6393589214008786
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6444363405748166
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 3,
+            "median_cosine": 0.10638375913686986
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 25,
+            "median_cosine": 0.0649634375765939
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6669462079570361
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 15,
+            "median_cosine": 0.03172725088508162
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 38,
+            "median_cosine": -0.2364472805731086
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 45,
+            "negative": 15,
+            "median_cosine": 0.20355032489663571
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": -0.02910295824360526
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 45,
+            "negative": 3,
+            "median_cosine": 0.10784221488657496
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 2.241259411835335,
+          "point": 1.6633904850816554,
+          "location_mse": 0.2021182672369292,
+          "reconstruction_nll": 0.9828331163193349,
+          "interval": 6.677776265131747
+        },
+        "opposing_aux_before": 30,
+        "opposing_aux_after": 19,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 10,
+        "probes": 60
+      }
+    },
+    "64": {
+      "source_encoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7401409065232021
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7630962211943206
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 12,
+            "median_cosine": 0.2444442199567149
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 43,
+            "median_cosine": -0.24113566436753242
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7860647463331711
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 12,
+            "median_cosine": 0.33221155260692203
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 58,
+            "median_cosine": -0.5240364083463782
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 11,
+            "median_cosine": 0.3839443154233871
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 53,
+            "median_cosine": -0.45231739332275234
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 47,
+            "median_cosine": -0.25950625225685914
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 1.1748083439692532,
+          "point": 1.1231542344490686,
+          "location_mse": 0.144021456673034,
+          "reconstruction_nll": 0.4712139868585459,
+          "interval": 3.5510650747048453
+        },
+        "opposing_aux_before": 40,
+        "opposing_aux_after": 16,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 35,
+        "probes": 60
+      },
+      "source_admission": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6073840285327647
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7650736193917745
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 24,
+            "median_cosine": 0.09097938149440704
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 41,
+            "median_cosine": -0.16963640132091878
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5808459691806054
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 26,
+            "median_cosine": 0.047115455925757874
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 58,
+            "median_cosine": -0.4070476395480707
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 15,
+            "median_cosine": 0.24003203211522295
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 48,
+            "median_cosine": -0.19999158757235955
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 34,
+            "median_cosine": -0.04423779324845376
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.0413198886784771,
+          "point": 0.04143800900105665,
+          "location_mse": 0.005267179399968458,
+          "reconstruction_nll": 0.03672663931954223,
+          "interval": 0.10283755446105075
+        },
+        "opposing_aux_before": 34,
+        "opposing_aux_after": 6,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 16,
+        "probes": 60
+      },
+      "fast": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7174976214506299
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7334607044016015
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 13,
+            "median_cosine": 0.1254448049069412
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 44,
+            "median_cosine": -0.19240111286626038
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7101350705936385
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 15,
+            "median_cosine": 0.1052364725596435
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 56,
+            "median_cosine": -0.39147257996112816
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 7,
+            "median_cosine": 0.18720885804546467
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 57,
+            "median_cosine": -0.39686045896339317
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 44,
+            "median_cosine": -0.14952868197127106
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.565612013538844,
+          "point": 0.5246331130831856,
+          "location_mse": 0.06039765924327715,
+          "reconstruction_nll": 0.17981527857201535,
+          "interval": 1.577058053568103
+        },
+        "opposing_aux_before": 36,
+        "opposing_aux_after": 3,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 39,
+        "probes": 60
+      },
+      "slow": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8022503272704967
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8127693587809046
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 41,
+            "median_cosine": -0.061732441692471704
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 57,
+            "median_cosine": -0.355358238040278
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8297979725945875
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 36,
+            "median_cosine": -0.03161870760194063
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 56,
+            "median_cosine": -0.5423287170823541
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 43,
+            "median_cosine": -0.07809749297713335
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 59,
+            "median_cosine": -0.4901607175880866
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 17,
+            "median_cosine": 0.07144868684582475
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.11463004869894686,
+          "point": 0.101105320564246,
+          "location_mse": 0.012743336498571227,
+          "reconstruction_nll": 0.0017532192691482357,
+          "interval": 0.3045028785752456
+        },
+        "opposing_aux_before": 40,
+        "opposing_aux_after": 12,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 49,
+        "probes": 60
+      },
+      "address": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.763758010901717
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7999933492791828
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 20,
+            "median_cosine": 0.04824176645072925
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 40,
+            "median_cosine": -0.1335983095016043
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 2,
+            "median_cosine": 0.7351514860728343
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 17,
+            "median_cosine": 0.11045547050697582
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 53,
+            "median_cosine": -0.32688490665825964
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 9,
+            "median_cosine": 0.12248913526120017
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 45,
+            "median_cosine": -0.2807576014643396
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 31,
+            "median_cosine": -0.002452473432310925
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.28570656132548766,
+          "point": 0.23946977856739077,
+          "location_mse": 0.030463929069746775,
+          "reconstruction_nll": 0.039476078082817265,
+          "interval": 0.524457833625009
+        },
+        "opposing_aux_before": 27,
+        "opposing_aux_after": 1,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 10,
+        "probes": 60
+      },
+      "content": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7849058724911884
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8622777694138999
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 14,
+            "median_cosine": 0.2967787347920203
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 49,
+            "median_cosine": -0.3628108059145836
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8945268538675188
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 10,
+            "median_cosine": 0.388875777748099
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 57,
+            "median_cosine": -0.6683757319622663
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 11,
+            "median_cosine": 0.38910462024465453
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 52,
+            "median_cosine": -0.6017881312080916
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 51,
+            "median_cosine": -0.24688152436406524
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.49944066553515576,
+          "point": 0.5285933024896888,
+          "location_mse": 0.08596586650481743,
+          "reconstruction_nll": 0.26965993756276996,
+          "interval": 1.970207644354694
+        },
+        "opposing_aux_before": 45,
+        "opposing_aux_after": 26,
+        "locally_uphill_group_sgd": 15,
+        "locally_uphill_saved_adamw": 44,
+        "probes": 60
+      },
+      "memory_gates": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 3,
+            "median_cosine": 0.7488742393814187
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.8031123610899659
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 25,
+            "median_cosine": 0.21569598130552403
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 24,
+            "median_cosine": 0.24505594948784254
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.7124751691695759
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 27,
+            "median_cosine": 0.02562726507323463
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 41,
+            "median_cosine": -0.382851710040579
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 22,
+            "median_cosine": 0.17452451285905007
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 31,
+            "median_cosine": -0.006513077751937569
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 41,
+            "median_cosine": -0.424834759642833
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.016311318826913564,
+          "point": 0.013734720871882255,
+          "location_mse": 0.002106835527642694,
+          "reconstruction_nll": 0.016056504165684316,
+          "interval": 0.044101174145313296
+        },
+        "opposing_aux_before": 31,
+        "opposing_aux_after": 12,
+        "locally_uphill_group_sgd": 3,
+        "locally_uphill_saved_adamw": 33,
+        "probes": 60
+      },
+      "query": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7990790940193194
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8206079744864483
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 42,
+            "median_cosine": -0.33892413426632123
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 2,
+            "median_cosine": 0.8133257862134868
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 50,
+            "median_cosine": -0.49173925190528334
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 51,
+            "median_cosine": -0.5849746882340461
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.2667927735196013,
+          "point": 0.24554562513369543,
+          "location_mse": 0.031048899543702522,
+          "reconstruction_nll": 0.0,
+          "interval": 0.5854887699936271
+        },
+        "opposing_aux_before": 33,
+        "opposing_aux_after": 9,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 21,
+        "probes": 60
+      },
+      "future_decoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6465432934420232
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7051111763806295
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 42,
+            "median_cosine": -0.12949639224312015
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6365721053400578
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 54,
+            "median_cosine": -0.3281446773745932
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 52,
+            "median_cosine": -0.20134815093298358
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 1.152228915961651,
+          "point": 1.0576371721866218,
+          "location_mse": 0.12410173162074689,
+          "reconstruction_nll": 0.0,
+          "interval": 3.7722746022415956
+        },
+        "opposing_aux_before": 33,
+        "opposing_aux_after": 21,
+        "locally_uphill_group_sgd": 15,
+        "locally_uphill_saved_adamw": 45,
+        "probes": 60
+      },
+      "belief": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 21,
+            "median_cosine": 0.4937295226366319
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 8,
+            "median_cosine": 0.7949048826017862
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 24,
+            "median_cosine": 0.004965464718416943
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 27,
+            "median_cosine": 0.025340030868458388
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 8,
+            "median_cosine": 0.635882392751961
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 58,
+            "median_cosine": -0.6697384384872552
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 45,
+            "median_cosine": -0.37982648262638397
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 31,
+            "median_cosine": -0.003267913967480298
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.014559162436136905,
+          "point": 0.013631792527224035,
+          "location_mse": 0.0019662810150741753,
+          "reconstruction_nll": 0.017827292583856368,
+          "interval": 0.04474631161742458
+        },
+        "opposing_aux_before": 46,
+        "opposing_aux_after": 27,
+        "locally_uphill_group_sgd": 16,
+        "locally_uphill_saved_adamw": 28,
+        "probes": 60
+      },
+      "reconstruction": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5981996983574487
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8419195708286124
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 12,
+            "median_cosine": 0.44101950296875175
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 52,
+            "median_cosine": -0.3442945644323836
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.715498767298991
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 14,
+            "median_cosine": 0.3165780987128069
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 59,
+            "median_cosine": -0.5675930578581456
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 4,
+            "median_cosine": 0.43645587091034993
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 59,
+            "median_cosine": -0.34090160263856156
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 43,
+            "median_cosine": -0.39648718501570923
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.8210030040049178,
+          "point": 0.9208419685518521,
+          "location_mse": 0.11994705943193115,
+          "reconstruction_nll": 0.7343464807501825,
+          "interval": 3.415107514446721
+        },
+        "opposing_aux_before": 40,
+        "opposing_aux_after": 27,
+        "locally_uphill_group_sgd": 7,
+        "locally_uphill_saved_adamw": 49,
+        "probes": 60
+      },
+      "width": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5728732490090006
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.6144707293927314,
+          "point": 0.0,
+          "location_mse": 0.0,
+          "reconstruction_nll": 0.0,
+          "interval": 0.5357086607507683
+        },
+        "opposing_aux_before": 0,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 0,
+        "probes": 60
+      },
+      "median": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.47729098676353054
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.0,
+          "point": 0.14377283824046394,
+          "location_mse": 0.018560158252700586,
+          "reconstruction_nll": 0.0,
+          "interval": 0.0
+        },
+        "opposing_aux_before": 1,
+        "opposing_aux_after": 1,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 1,
+        "probes": 60
+      },
+      "all": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6511002308496596
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7470251860175738
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 12,
+            "median_cosine": 0.2111496574901344
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 40,
+            "median_cosine": -0.2224446088737025
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7307766392596091
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 12,
+            "median_cosine": 0.24858547446587986
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 57,
+            "median_cosine": -0.5266935926806307
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 6,
+            "median_cosine": 0.3044460237830625
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 54,
+            "median_cosine": -0.3509883892091216
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 42,
+            "median_cosine": -0.23149293945822572
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 2.1409497885967053,
+          "point": 2.0634549808009854,
+          "location_mse": 0.25846546536867654,
+          "reconstruction_nll": 0.9521094662232539,
+          "interval": 7.4124800098602215
+        },
+        "opposing_aux_before": 40,
+        "opposing_aux_after": 18,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 11,
+        "probes": 60
+      }
+    },
+    "256": {
+      "source_encoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6849869001623873
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7032412816834899
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 14,
+            "median_cosine": 0.14687738989844248
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 25,
+            "median_cosine": 0.07899354018846974
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7379499499466752
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 2,
+            "median_cosine": 0.27990806038746147
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 47,
+            "median_cosine": -0.2776341887036986
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 3,
+            "median_cosine": 0.245352212147116
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 39,
+            "median_cosine": -0.21011647147999812
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 48,
+            "median_cosine": -0.2307576964492365
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 1.245051359338284,
+          "point": 1.51625907544872,
+          "location_mse": 0.14633223039059157,
+          "reconstruction_nll": 0.6952066252973046,
+          "interval": 2.9311255179329176
+        },
+        "opposing_aux_before": 27,
+        "opposing_aux_after": 7,
+        "locally_uphill_group_sgd": 2,
+        "locally_uphill_saved_adamw": 22,
+        "probes": 60
+      },
+      "source_admission": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6225460569780072
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.7434551048286975
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 11,
+            "median_cosine": 0.3170801360423382
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 22,
+            "median_cosine": 0.21994652735398537
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5294287428563088
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.3783001726344959
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 37,
+            "median_cosine": -0.18567274813428628
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 3,
+            "median_cosine": 0.47765889778397863
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 24,
+            "median_cosine": 0.08832015614250921
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 42,
+            "median_cosine": -0.13534967560480637
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.04956535762851076,
+          "point": 0.04272184321875476,
+          "location_mse": 0.00680103423263266,
+          "reconstruction_nll": 0.05755584280978468,
+          "interval": 0.10884333107776406
+        },
+        "opposing_aux_before": 22,
+        "opposing_aux_after": 16,
+        "locally_uphill_group_sgd": 9,
+        "locally_uphill_saved_adamw": 25,
+        "probes": 60
+      },
+      "fast": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.6491353918747766
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6358316215216681
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 11,
+            "median_cosine": 0.09744119242457355
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 21,
+            "median_cosine": 0.12968909448896962
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5875902209972353
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.15565396168086582
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 45,
+            "median_cosine": -0.24614881979672942
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.20939719870763535
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": 0.0028028921512664867
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 48,
+            "median_cosine": -0.20669413550248483
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.5562109428473232,
+          "point": 0.5907651634985998,
+          "location_mse": 0.05861606636606295,
+          "reconstruction_nll": 0.29583732055688405,
+          "interval": 1.053887698139004
+        },
+        "opposing_aux_before": 21,
+        "opposing_aux_after": 7,
+        "locally_uphill_group_sgd": 2,
+        "locally_uphill_saved_adamw": 24,
+        "probes": 60
+      },
+      "slow": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 4,
+            "median_cosine": 0.5724032838450914
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 4,
+            "median_cosine": 0.6771013146176792
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 26,
+            "median_cosine": 0.009864579524658653
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 23,
+            "median_cosine": 0.10613967688768437
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6330164959703143
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 33,
+            "median_cosine": -0.019158243258865868
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 43,
+            "median_cosine": -0.4388940976833004
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 39,
+            "median_cosine": -0.07165203245095095
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 34,
+            "median_cosine": -0.2867830052485648
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 34,
+            "median_cosine": -0.016013992647727217
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.09483586742424327,
+          "point": 0.10887842972712419,
+          "location_mse": 0.011788364212359705,
+          "reconstruction_nll": 0.000824353047314103,
+          "interval": 0.25547337364477307
+        },
+        "opposing_aux_before": 32,
+        "opposing_aux_after": 24,
+        "locally_uphill_group_sgd": 9,
+        "locally_uphill_saved_adamw": 32,
+        "probes": 60
+      },
+      "address": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.730175716732234
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.768667478166727
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": -0.0001357474266159668
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 25,
+            "median_cosine": 0.23139965735139406
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.6037610362109538
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 36,
+            "median_cosine": -0.02005140089412101
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 34,
+            "median_cosine": -0.02451387457629451
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 32,
+            "median_cosine": -0.0030032144216277454
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 27,
+            "median_cosine": 0.11679449608229286
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 28,
+            "median_cosine": 0.005458585117553082
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.2618858235812284,
+          "point": 0.25865960389241305,
+          "location_mse": 0.03474953257795074,
+          "reconstruction_nll": 0.04265271373186521,
+          "interval": 0.5057846131924963
+        },
+        "opposing_aux_before": 21,
+        "opposing_aux_after": 6,
+        "locally_uphill_group_sgd": 2,
+        "locally_uphill_saved_adamw": 7,
+        "probes": 60
+      },
+      "content": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.7976238278790131
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.843291794628562
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 14,
+            "median_cosine": 0.2220998222297821
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 36,
+            "median_cosine": -0.14535193739710195
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8601457248568412
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 3,
+            "median_cosine": 0.30009987217517137
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 56,
+            "median_cosine": -0.48216656268180874
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.32301993088415415
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 53,
+            "median_cosine": -0.2843405360281983
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 44,
+            "median_cosine": -0.22484130885089337
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.4615589659548168,
+          "point": 0.691781765728251,
+          "location_mse": 0.09229764713649609,
+          "reconstruction_nll": 0.4762631940640464,
+          "interval": 1.4980828740174332
+        },
+        "opposing_aux_before": 38,
+        "opposing_aux_after": 25,
+        "locally_uphill_group_sgd": 9,
+        "locally_uphill_saved_adamw": 28,
+        "probes": 60
+      },
+      "memory_gates": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 8,
+            "median_cosine": 0.6313197454147725
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 5,
+            "median_cosine": 0.7623208384261257
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 31,
+            "median_cosine": -0.02246712863976263
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 26,
+            "median_cosine": 0.13605722631118677
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 7,
+            "median_cosine": 0.7116047849170355
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 22,
+            "median_cosine": 0.29960104115615327
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 40,
+            "median_cosine": -0.5226226489182724
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 24,
+            "median_cosine": 0.12580863250769642
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 39,
+            "median_cosine": -0.2793331628678578
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 36,
+            "median_cosine": -0.23716093124175733
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.01458970853121674,
+          "point": 0.011920256647073073,
+          "location_mse": 0.0016055798666789979,
+          "reconstruction_nll": 0.012592980851309228,
+          "interval": 0.03299530452625214
+        },
+        "opposing_aux_before": 29,
+        "opposing_aux_after": 29,
+        "locally_uphill_group_sgd": 20,
+        "locally_uphill_saved_adamw": 30,
+        "probes": 60
+      },
+      "query": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.7152316789209812
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8498713624324556
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 28,
+            "median_cosine": 0.14298436424304262
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.6430836627404484
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 43,
+            "median_cosine": -0.22342429239814593
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 32,
+            "median_cosine": -0.04346341701737727
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.2421821629823056,
+          "point": 0.2884974520966847,
+          "location_mse": 0.03379924518053675,
+          "reconstruction_nll": 0.0,
+          "interval": 0.5558478750966847
+        },
+        "opposing_aux_before": 30,
+        "opposing_aux_after": 17,
+        "locally_uphill_group_sgd": 7,
+        "locally_uphill_saved_adamw": 18,
+        "probes": 60
+      },
+      "future_decoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 2,
+            "median_cosine": 0.4735830316374575
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5213781046061425
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 25,
+            "median_cosine": 0.10691980756864697
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.48527778683264583
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 34,
+            "median_cosine": -0.10204448258041268
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": 0.08070557344087168
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.990672938820164,
+          "point": 1.2249996290924645,
+          "location_mse": 0.10643610970722722,
+          "reconstruction_nll": 0.0,
+          "interval": 2.4676034000274907
+        },
+        "opposing_aux_before": 23,
+        "opposing_aux_after": 13,
+        "locally_uphill_group_sgd": 12,
+        "locally_uphill_saved_adamw": 32,
+        "probes": 60
+      },
+      "belief": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 6,
+            "median_cosine": 0.3444908805229092
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 3,
+            "median_cosine": 0.6489542273888147
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 4,
+            "median_cosine": 0.07315662697441361
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 19,
+            "median_cosine": 0.34222378515378726
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.5699804351191535
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 39,
+            "median_cosine": -0.5742608645443334
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 38,
+            "median_cosine": -0.2841713524195675
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.01076890960756234
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.01612944200606726,
+          "point": 0.009825623854378789,
+          "location_mse": 0.0016639707952252807,
+          "reconstruction_nll": 0.028287518924485538,
+          "interval": 0.034793150744803956
+        },
+        "opposing_aux_before": 38,
+        "opposing_aux_after": 37,
+        "locally_uphill_group_sgd": 25,
+        "locally_uphill_saved_adamw": 44,
+        "probes": 60
+      },
+      "reconstruction": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 2,
+            "median_cosine": 0.5934386725346319
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.8283100957354579
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 1,
+            "median_cosine": 0.34913100686514054
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 30,
+            "median_cosine": -0.0006791571845609318
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5951249941560832
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.45081832398326993
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 45,
+            "median_cosine": -0.2803503820461031
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.30504894280535233
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 44,
+            "median_cosine": -0.18942921606431617
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 45,
+            "median_cosine": -0.1731408396998302
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.7775484150601221,
+          "point": 0.8762002089073345,
+          "location_mse": 0.1232356790459762,
+          "reconstruction_nll": 1.2454716592501143,
+          "interval": 2.454625015846516
+        },
+        "opposing_aux_before": 30,
+        "opposing_aux_after": 27,
+        "locally_uphill_group_sgd": 7,
+        "locally_uphill_saved_adamw": 37,
+        "probes": 60
+      },
+      "width": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 3,
+            "median_cosine": 0.6276594925689998
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.7325180835627767,
+          "point": 0.0,
+          "location_mse": 0.0,
+          "reconstruction_nll": 0.0,
+          "interval": 0.6460477844118329
+        },
+        "opposing_aux_before": 0,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 0,
+        "probes": 60
+      },
+      "median": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.4867713641538815
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.0,
+          "point": 0.23435590847156285,
+          "location_mse": 0.020834149553626516,
+          "reconstruction_nll": 0.0,
+          "interval": 0.0
+        },
+        "opposing_aux_before": 0,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 3,
+        "probes": 60
+      },
+      "all": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5436398922174407
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.5932715766615093
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 4,
+            "median_cosine": 0.13556111323018488
+          },
+          "nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 23,
+            "median_cosine": 0.08656456142799596
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.659809080292884
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.26277541833836227
+          },
+          "point__interval": {
+            "nonzero_pairs": 60,
+            "negative": 44,
+            "median_cosine": -0.24148888109517777
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 60,
+            "negative": 0,
+            "median_cosine": 0.23666161146301493
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 60,
+            "negative": 33,
+            "median_cosine": -0.10938999033872343
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 60,
+            "negative": 47,
+            "median_cosine": -0.15251186610941664
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 2.3847046449889886,
+          "point": 2.4620378588593965,
+          "location_mse": 0.2523357921151459,
+          "reconstruction_nll": 1.5689326655764166,
+          "interval": 5.148372397948075
+        },
+        "opposing_aux_before": 26,
+        "opposing_aux_after": 11,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 13,
+        "probes": 60
+      }
+    }
+  },
+  "by_population": {
+    "general": {
+      "source_encoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6892031604009285
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7777531905572215
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 5,
+            "median_cosine": 0.27066517205809804
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 19,
+            "median_cosine": 0.19592643633697698
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7379499499466752
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 1,
+            "median_cosine": 0.34782343462263604
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 55,
+            "median_cosine": -0.08433797405725577
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 3,
+            "median_cosine": 0.4108619983844528
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 32,
+            "median_cosine": 0.1424340001711532
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 55,
+            "median_cosine": -0.04812675836321619
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 1.3458978385342344,
+          "point": 0.8353201026692232,
+          "location_mse": 0.10789848434723498,
+          "reconstruction_nll": 0.5878612478694496,
+          "interval": 1.7414419377515906
+        },
+        "opposing_aux_before": 16,
+        "opposing_aux_after": 12,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 23,
+        "probes": 90
+      },
+      "source_admission": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6233332483385459
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.799936701841099
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 3,
+            "median_cosine": 0.3857857239810477
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 20,
+            "median_cosine": 0.3443544485620726
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6474685411250738
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 4,
+            "median_cosine": 0.3920271987312086
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 44,
+            "median_cosine": 0.0445345648614187
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.5065524920207665
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 21,
+            "median_cosine": 0.2729499144776963
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 37,
+            "median_cosine": 0.08319276460174328
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.051765460092763046,
+          "point": 0.027383764514104212,
+          "location_mse": 0.004302316910822112,
+          "reconstruction_nll": 0.035687454838401717,
+          "interval": 0.07034865552145758
+        },
+        "opposing_aux_before": 15,
+        "opposing_aux_after": 5,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 11,
+        "probes": 90
+      },
+      "fast": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6611296620567559
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7152613537737633
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 10,
+            "median_cosine": 0.15526470959886315
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 18,
+            "median_cosine": 0.2684587459770015
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6592366107716925
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 3,
+            "median_cosine": 0.1792025943132995
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 51,
+            "median_cosine": -0.06966121486290103
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 2,
+            "median_cosine": 0.2106624962489428
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 27,
+            "median_cosine": 0.2688464738735211
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 50,
+            "median_cosine": -0.04650354470577583
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.6755850479601608,
+          "point": 0.38860440036381494,
+          "location_mse": 0.05375845927669175,
+          "reconstruction_nll": 0.23100004188748793,
+          "interval": 0.8531145260714381
+        },
+        "opposing_aux_before": 13,
+        "opposing_aux_after": 1,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 28,
+        "probes": 90
+      },
+      "slow": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7310905841883202
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7574427760969638
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 62,
+            "median_cosine": -0.043281731347122494
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 34,
+            "median_cosine": 0.12899693257101524
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6656111308625867
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 59,
+            "median_cosine": -0.041397813811854596
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 52,
+            "median_cosine": -0.07253653211421957
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 61,
+            "median_cosine": -0.04392350106823013
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 33,
+            "median_cosine": 0.13282118877271332
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 34,
+            "median_cosine": 0.02257322041689108
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.10983325698794388,
+          "point": 0.07202185286639445,
+          "location_mse": 0.009922310646182196,
+          "reconstruction_nll": 0.0017803720174152144,
+          "interval": 0.16105376212290012
+        },
+        "opposing_aux_before": 21,
+        "opposing_aux_after": 14,
+        "locally_uphill_group_sgd": 1,
+        "locally_uphill_saved_adamw": 30,
+        "probes": 90
+      },
+      "address": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8128748323693441
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8042415942848229
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 32,
+            "median_cosine": 0.05058482846562869
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 21,
+            "median_cosine": 0.4010658466538565
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7472127119026365
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 31,
+            "median_cosine": 0.11758222384231895
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 43,
+            "median_cosine": 0.04074975518959544
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 25,
+            "median_cosine": 0.12172266785786859
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 24,
+            "median_cosine": 0.3728227407517592
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 58,
+            "median_cosine": -0.07551463897150322
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.32645914719276403,
+          "point": 0.2239330116219243,
+          "location_mse": 0.027669533161719145,
+          "reconstruction_nll": 0.05147704170911119,
+          "interval": 0.3777152497703523
+        },
+        "opposing_aux_before": 8,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 16,
+        "probes": 90
+      },
+      "content": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8419756022464152
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8678902990580355
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 12,
+            "median_cosine": 0.44287802457001413
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 29,
+            "median_cosine": 0.16023155141454953
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8727589214338173
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 5,
+            "median_cosine": 0.49576211386340363
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 59,
+            "median_cosine": -0.23129183535723996
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 6,
+            "median_cosine": 0.517519674922086
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 48,
+            "median_cosine": -0.04377938391038337
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 54,
+            "median_cosine": -0.17384048069299962
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.5260819640061694,
+          "point": 0.33256146660210095,
+          "location_mse": 0.04575734375905831,
+          "reconstruction_nll": 0.3355656997416284,
+          "interval": 0.7078459409973554
+        },
+        "opposing_aux_before": 24,
+        "opposing_aux_after": 24,
+        "locally_uphill_group_sgd": 16,
+        "locally_uphill_saved_adamw": 35,
+        "probes": 90
+      },
+      "memory_gates": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 3,
+            "median_cosine": 0.8730719024969833
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 1,
+            "median_cosine": 0.8863252769956345
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 26,
+            "median_cosine": 0.4161508983992328
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 14,
+            "median_cosine": 0.5608845084006375
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 1,
+            "median_cosine": 0.7562070715661611
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 26,
+            "median_cosine": 0.48638328511133555
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 39,
+            "median_cosine": 0.18932583284197785
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 22,
+            "median_cosine": 0.43941569624943433
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 34,
+            "median_cosine": 0.35945053182202535
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 32,
+            "median_cosine": 0.3852549881009616
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.020993283660942406,
+          "point": 0.01201983424663921,
+          "location_mse": 0.0015751762237065277,
+          "reconstruction_nll": 0.020552701126543883,
+          "interval": 0.018330030609817256
+        },
+        "opposing_aux_before": 21,
+        "opposing_aux_after": 18,
+        "locally_uphill_group_sgd": 5,
+        "locally_uphill_saved_adamw": 31,
+        "probes": 90
+      },
+      "query": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8022191668915064
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8484671037680984
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 29,
+            "median_cosine": 0.4557278065825733
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7663641165060502
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 48,
+            "median_cosine": -0.09592324470324376
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 30,
+            "median_cosine": 0.31555700985275037
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.2820200215968189,
+          "point": 0.19613507228288873,
+          "location_mse": 0.02813217935302033,
+          "reconstruction_nll": 0.0,
+          "interval": 0.3887106793929647
+        },
+        "opposing_aux_before": 16,
+        "opposing_aux_after": 12,
+        "locally_uphill_group_sgd": 2,
+        "locally_uphill_saved_adamw": 21,
+        "probes": 90
+      },
+      "future_decoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.5787695151124364
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6382132666969225
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 18,
+            "median_cosine": 0.2762832996325961
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.5647200543172233
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 47,
+            "median_cosine": -0.022749047615870165
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 22,
+            "median_cosine": 0.2856508907582769
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 1.2768176255440633,
+          "point": 0.83032481773801,
+          "location_mse": 0.10191915295185934,
+          "reconstruction_nll": 0.0,
+          "interval": 1.893109975089927
+        },
+        "opposing_aux_before": 11,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 23,
+        "probes": 90
+      },
+      "belief": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 28,
+            "median_cosine": 0.3091259457163721
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 11,
+            "median_cosine": 0.7153837707921158
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 31,
+            "median_cosine": 0.06072222958450377
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 21,
+            "median_cosine": 0.4504226087534533
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 5,
+            "median_cosine": 0.4967276327686064
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 50,
+            "median_cosine": -0.18124409579718953
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 52,
+            "median_cosine": -0.17542381053032075
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 37,
+            "median_cosine": 0.007027734596175546
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.016515056406822846,
+          "point": 0.006741132583521341,
+          "location_mse": 0.001236174441391833,
+          "reconstruction_nll": 0.021470619433652777,
+          "interval": 0.017233448508430997
+        },
+        "opposing_aux_before": 41,
+        "opposing_aux_after": 41,
+        "locally_uphill_group_sgd": 21,
+        "locally_uphill_saved_adamw": 46,
+        "probes": 90
+      },
+      "reconstruction": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.645523741509176
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.9217390036489972
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.4338088034748734
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 28,
+            "median_cosine": 0.1225777363627272
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6724874775275721
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 10,
+            "median_cosine": 0.5571411167723903
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 57,
+            "median_cosine": -0.15663909063304327
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.466517212206058
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 43,
+            "median_cosine": 0.03441357569423002
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 48,
+            "median_cosine": -0.10089098654472531
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.878828140111398,
+          "point": 0.5453884694980633,
+          "location_mse": 0.07411231908449531,
+          "reconstruction_nll": 0.751924961406989,
+          "interval": 1.3566448296647242
+        },
+        "opposing_aux_before": 17,
+        "opposing_aux_after": 13,
+        "locally_uphill_group_sgd": 1,
+        "locally_uphill_saved_adamw": 48,
+        "probes": 90
+      },
+      "width": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.5855368683676363
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.8740438310297879,
+          "point": 0.0,
+          "location_mse": 0.0,
+          "reconstruction_nll": 0.0,
+          "interval": 0.8891953053976934
+        },
+        "opposing_aux_before": 0,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 0,
+        "probes": 90
+      },
+      "median": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.4708986078358398
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.0,
+          "point": 0.19361902729032726,
+          "location_mse": 0.026082552181832787,
+          "reconstruction_nll": 0.0,
+          "interval": 0.0
+        },
+        "opposing_aux_before": 0,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 2,
+        "probes": 90
+      },
+      "all": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.5825595960583179
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6595719264057891
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.22811163668144208
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 12,
+            "median_cosine": 0.2626848941899279
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6602192288929437
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 2,
+            "median_cosine": 0.2995936758725116
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 51,
+            "median_cosine": -0.03575773703662128
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.32993803021953294
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 27,
+            "median_cosine": 0.21121501846656549
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 50,
+            "median_cosine": -0.08001500827021733
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 2.6424849440342433,
+          "point": 1.4706631790006561,
+          "location_mse": 0.1846721387180677,
+          "reconstruction_nll": 1.0714015582509324,
+          "interval": 3.3874028201763022
+        },
+        "opposing_aux_before": 17,
+        "opposing_aux_after": 7,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 4,
+        "probes": 90
+      }
+    },
+    "gap": {
+      "source_encoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7418136903241134
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7220882911664135
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 34,
+            "median_cosine": 0.06387466947853225
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 82,
+            "median_cosine": -0.36520588888281647
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7792611559498652
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 25,
+            "median_cosine": 0.1765566930778948
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 90,
+            "median_cosine": -0.6191357826966573
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 26,
+            "median_cosine": 0.09927972826002575
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 90,
+            "median_cosine": -0.6468907033345345
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 47,
+            "median_cosine": -0.10112540805814987
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.9435096890033762,
+          "point": 1.5761445602849733,
+          "location_mse": 0.14471191372478365,
+          "reconstruction_nll": 0.43492717605316034,
+          "interval": 7.740196831439402
+        },
+        "opposing_aux_before": 81,
+        "opposing_aux_after": 25,
+        "locally_uphill_group_sgd": 9,
+        "locally_uphill_saved_adamw": 67,
+        "probes": 90
+      },
+      "source_admission": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.5849442867438667
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6563871984325151
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 35,
+            "median_cosine": 0.02286386138163197
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 64,
+            "median_cosine": -0.19675502510418275
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 1,
+            "median_cosine": 0.5294287428563088
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 32,
+            "median_cosine": 0.056595774076267445
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 80,
+            "median_cosine": -0.37072230994919997
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 24,
+            "median_cosine": 0.11559486972792711
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 82,
+            "median_cosine": -0.4865621773642925
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 48,
+            "median_cosine": -0.11862267385826651
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.035067118866441885,
+          "point": 0.044886014131487274,
+          "location_mse": 0.005267179399968458,
+          "reconstruction_nll": 0.033399691563834044,
+          "interval": 0.22549410179465795
+        },
+        "opposing_aux_before": 63,
+        "opposing_aux_after": 29,
+        "locally_uphill_group_sgd": 11,
+        "locally_uphill_saved_adamw": 45,
+        "probes": 90
+      },
+      "fast": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 1,
+            "median_cosine": 0.6897749762855069
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6458092610753152
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 18,
+            "median_cosine": 0.060560360666226803
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 78,
+            "median_cosine": -0.20945370083509848
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7032911371388789
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 23,
+            "median_cosine": 0.089007689325274
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 87,
+            "median_cosine": -0.5342205341705333
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 17,
+            "median_cosine": 0.12460285415696606
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 90,
+            "median_cosine": -0.5605638859814409
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 45,
+            "median_cosine": -0.1493747430687492
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.4202658476528949,
+          "point": 0.6611700977115658,
+          "location_mse": 0.059210254809455284,
+          "reconstruction_nll": 0.2186311869660812,
+          "interval": 3.6835272784993642
+        },
+        "opposing_aux_before": 74,
+        "opposing_aux_after": 26,
+        "locally_uphill_group_sgd": 4,
+        "locally_uphill_saved_adamw": 67,
+        "probes": 90
+      },
+      "slow": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 4,
+            "median_cosine": 0.7072269846416818
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 4,
+            "median_cosine": 0.6917265833297916
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 43,
+            "median_cosine": -0.024155834147551864
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 75,
+            "median_cosine": -0.27080002807267717
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7525408748393326
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 50,
+            "median_cosine": -0.060690449657591676
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 86,
+            "median_cosine": -0.6109084112354601
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 50,
+            "median_cosine": -0.062214545278136336
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 90,
+            "median_cosine": -0.6283469557085928
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 40,
+            "median_cosine": -0.026432493153842336
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.07989797234025098,
+          "point": 0.13202904525802933,
+          "location_mse": 0.01215525377814759,
+          "reconstruction_nll": 0.0007232881973444016,
+          "interval": 0.6704015904354111
+        },
+        "opposing_aux_before": 80,
+        "opposing_aux_after": 40,
+        "locally_uphill_group_sgd": 15,
+        "locally_uphill_saved_adamw": 78,
+        "probes": 90
+      },
+      "address": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6394910295574403
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7775955694979807
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 30,
+            "median_cosine": 0.0538937979192524
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 61,
+            "median_cosine": -0.10350104315067077
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 2,
+            "median_cosine": 0.6484481165754952
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 37,
+            "median_cosine": 0.0020502768317555275
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 81,
+            "median_cosine": -0.31175602169740513
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 31,
+            "median_cosine": 0.047662991606382654
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 72,
+            "median_cosine": -0.3513053301333272
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 25,
+            "median_cosine": 0.04514426255551875
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.22167320386973322,
+          "point": 0.2523993259641476,
+          "location_mse": 0.027244520972060173,
+          "reconstruction_nll": 0.014772872267670715,
+          "interval": 0.8434406067429843
+        },
+        "opposing_aux_before": 52,
+        "opposing_aux_after": 9,
+        "locally_uphill_group_sgd": 2,
+        "locally_uphill_saved_adamw": 10,
+        "probes": 90
+      },
+      "content": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 1,
+            "median_cosine": 0.8134040905819102
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8334786755236124
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 28,
+            "median_cosine": 0.05784257489928917
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 85,
+            "median_cosine": -0.5022492785140104
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8696989893542735
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 23,
+            "median_cosine": 0.2195787909667345
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 90,
+            "median_cosine": -0.7073824104798752
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 27,
+            "median_cosine": 0.11812909221383393
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 90,
+            "median_cosine": -0.701713042501159
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 47,
+            "median_cosine": -0.06444783587919126
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.4637534448057965,
+          "point": 0.8095208265635048,
+          "location_mse": 0.08010751321672317,
+          "reconstruction_nll": 0.2041342069859973,
+          "interval": 4.0664726629320365
+        },
+        "opposing_aux_before": 89,
+        "opposing_aux_after": 42,
+        "locally_uphill_group_sgd": 21,
+        "locally_uphill_saved_adamw": 63,
+        "probes": 90
+      },
+      "memory_gates": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 9,
+            "median_cosine": 0.7428091437488626
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 7,
+            "median_cosine": 0.7555035213304808
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 32,
+            "median_cosine": 0.1837811878010709
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 53,
+            "median_cosine": -0.16180095582955287
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 7,
+            "median_cosine": 0.7502327894436551
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 28,
+            "median_cosine": 0.31313135509835793
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 68,
+            "median_cosine": -0.47403452648969635
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 31,
+            "median_cosine": 0.09230056432019332
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 63,
+            "median_cosine": -0.6712660995482778
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 57,
+            "median_cosine": -0.4700141525108372
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.014684227117016585,
+          "point": 0.022118596477205345,
+          "location_mse": 0.002484804729703179,
+          "reconstruction_nll": 0.011765028653919056,
+          "interval": 0.10786696642888809
+        },
+        "opposing_aux_before": 55,
+        "opposing_aux_after": 32,
+        "locally_uphill_group_sgd": 25,
+        "locally_uphill_saved_adamw": 41,
+        "probes": 90
+      },
+      "query": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 1,
+            "median_cosine": 0.7329741889768152
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.8108173527599616
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 65,
+            "median_cosine": -0.34029374318460937
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 3,
+            "median_cosine": 0.7481260630800477
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 75,
+            "median_cosine": -0.5424202994281204
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 75,
+            "median_cosine": -0.5887962870082115
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.20861576323481087,
+          "point": 0.28481891660245784,
+          "location_mse": 0.028971576500136223,
+          "reconstruction_nll": 0.0,
+          "interval": 0.982096047549195
+        },
+        "opposing_aux_before": 65,
+        "opposing_aux_after": 15,
+        "locally_uphill_group_sgd": 5,
+        "locally_uphill_saved_adamw": 29,
+        "probes": 90
+      },
+      "future_decoder": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 2,
+            "median_cosine": 0.5978026648406747
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.5834601159705968
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 70,
+            "median_cosine": -0.16017170625203808
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6183529820340167
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 81,
+            "median_cosine": -0.5524216505320585
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 90,
+            "median_cosine": -0.49488194605406033
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.9615325852579901,
+          "point": 1.162602822159697,
+          "location_mse": 0.1257496297212281,
+          "reconstruction_nll": 0.0,
+          "interval": 8.464505200146284
+        },
+        "opposing_aux_before": 75,
+        "opposing_aux_after": 52,
+        "locally_uphill_group_sgd": 29,
+        "locally_uphill_saved_adamw": 80,
+        "probes": 90
+      },
+      "belief": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 7,
+            "median_cosine": 0.5889994503853612
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.7859987551827815
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 13,
+            "median_cosine": 0.01733267262788463
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 57,
+            "median_cosine": -0.12043390602103551
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 5,
+            "median_cosine": 0.7131306821451633
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 84,
+            "median_cosine": -0.7581583327689776
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 0,
+            "median_cosine": 0.0
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 73,
+            "median_cosine": -0.3776119177719356
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 14,
+            "median_cosine": 0.0030694936612701484
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.015084531234678894,
+          "point": 0.017549184531078676,
+          "location_mse": 0.002130583453941124,
+          "reconstruction_nll": 0.02727912077045308,
+          "interval": 0.06430701141790313
+        },
+        "opposing_aux_before": 78,
+        "opposing_aux_after": 40,
+        "locally_uphill_group_sgd": 28,
+        "locally_uphill_saved_adamw": 63,
+        "probes": 90
+      },
+      "reconstruction": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 2,
+            "median_cosine": 0.6572309583390501
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.797590748227565
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 16,
+            "median_cosine": 0.32236614824740395
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 77,
+            "median_cosine": -0.43342238848050263
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.644660075100292
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 27,
+            "median_cosine": 0.18982826282707904
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 86,
+            "median_cosine": -0.5919779752426628
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 19,
+            "median_cosine": 0.21457657476455144
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 90,
+            "median_cosine": -0.5978967490904467
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 44,
+            "median_cosine": -0.11428380369850669
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.6792070617505501,
+          "point": 1.2287301759352274,
+          "location_mse": 0.1116339590804829,
+          "reconstruction_nll": 0.8760936662278536,
+          "interval": 7.115978062333202
+        },
+        "opposing_aux_before": 83,
+        "opposing_aux_after": 63,
+        "locally_uphill_group_sgd": 23,
+        "locally_uphill_saved_adamw": 76,
+        "probes": 90
+      },
+      "width": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 9,
+            "median_cosine": 0.48519988342830983
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.325238204734976,
+          "point": 0.0,
+          "location_mse": 0.0,
+          "reconstruction_nll": 0.0,
+          "interval": 0.21649843999747712
+        },
+        "opposing_aux_before": 0,
+        "opposing_aux_after": 0,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 0,
+        "probes": 90
+      },
+      "median": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 1,
+            "median_cosine": 0.4519592165701185
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "point__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 0,
+            "negative": 0,
+            "median_cosine": null
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 0.0,
+          "point": 0.15007759354518035,
+          "location_mse": 0.013725852138700402,
+          "reconstruction_nll": 0.0,
+          "interval": 0.0
+        },
+        "opposing_aux_before": 1,
+        "opposing_aux_after": 1,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 3,
+        "probes": 90
+      },
+      "all": {
+        "pairs": {
+          "nll__point": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6723661838606312
+          },
+          "nll__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.6637813927459016
+          },
+          "nll__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 19,
+            "median_cosine": 0.10638375913686986
+          },
+          "nll__interval": {
+            "nonzero_pairs": 90,
+            "negative": 76,
+            "median_cosine": -0.2804332586718646
+          },
+          "point__location_mse": {
+            "nonzero_pairs": 90,
+            "negative": 0,
+            "median_cosine": 0.715674105153085
+          },
+          "point__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 25,
+            "median_cosine": 0.1740841465748846
+          },
+          "point__interval": {
+            "nonzero_pairs": 90,
+            "negative": 88,
+            "median_cosine": -0.578479144028139
+          },
+          "location_mse__reconstruction_nll": {
+            "nonzero_pairs": 75,
+            "negative": 21,
+            "median_cosine": 0.165136327546517
+          },
+          "location_mse__interval": {
+            "nonzero_pairs": 90,
+            "negative": 90,
+            "median_cosine": -0.5626248015928413
+          },
+          "reconstruction_nll__interval": {
+            "nonzero_pairs": 75,
+            "negative": 42,
+            "median_cosine": -0.11007844593067445
+          }
+        },
+        "median_weighted_norm": {
+          "nll": 1.7226177717885442,
+          "point": 2.846969229617783,
+          "location_mse": 0.25034855579347565,
+          "reconstruction_nll": 1.0797931607623739,
+          "interval": 15.028316627606644
+        },
+        "opposing_aux_before": 79,
+        "opposing_aux_after": 41,
+        "locally_uphill_group_sgd": 0,
+        "locally_uphill_saved_adamw": 30,
+        "probes": 90
+      }
+    }
+  }
+}
