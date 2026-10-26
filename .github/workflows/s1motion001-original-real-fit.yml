@@ -1,0 +1,44 @@
+name: S1MOTION001 frozen first real ALOHA System1 training
+# Explicit run-marker commits only: never retrain on report/code/doc pushes.
+on:
+  push:
+    branches:
+      - research/system1-real-motion-proxy-2026-10-26
+    paths:
+      - 'research/parallel-six/S1MOTION001-RUN-*.marker'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned readers and CPU tensor runtime
+        run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Run engineering diagnostics only
+        run: |
+          PYTHONPATH=src:. python -m unittest tests.test_s1motion001_real_aloha -v
+          PYTHONPATH=src:. python -m unittest discover -s tests -p test_system1_parallel.py -v
+      - name: Train real source three seeds and freeze original checkpoints before DEV
+        run: |
+          PYTHONPATH=src:. python scripts/s1motion001_real_aloha_fit.py
+      - name: Preserve original trained checkpoint and raw first-score artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1motion001-original-real-aloha-first-fit
+          path: research/diagnostics/s1motion001-original/**
+          if-no-files-found: warn
+          retention-days: 90

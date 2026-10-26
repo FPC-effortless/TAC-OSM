@@ -1,0 +1,85 @@
+{
+  "study": "S1MOTION001",
+  "original_run_id": 40274339695,
+  "original_run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40274339695",
+  "original_run_head_commit": "005695ffe71b49d3727b17cc1ae0086782522ba7",
+  "original_artifact_id": 12629442926,
+  "original_artifact_sha256_zip_from_log": "6ddf2684d8445a5835496080e20dde2dc7a0edba202873a9b751eee064c81e90",
+  "original_failure": "After all original checkpoint freezes, first DEV scoring and partial profiler; TypeError: dict() got multiple values for keyword argument 'fit_records' in final JSON packaging.",
+  "source_of_numbers": "Original GitHub Actions job log: S1MOTION001_FIT_FROZEN and S1MOTION001_DEV_SCORE records. Not a reconstructed/refitted experiment.",
+  "original_conditions": {
+    "fit_episodes": "0-24",
+    "dev_episodes": "25-34",
+    "protected_unused_episodes": "35-49",
+    "real_targets_per_seed_per_arm": 2550,
+    "observed_motion_proxy_positive_rate": 0.08666666666666667,
+    "full_predictive_gate_pass": false,
+    "passed_seeds": 0,
+    "true_adverse_outcome_labels": false,
+    "flops_match_verified": false
+  },
+  "original_observations": [
+    {
+      "seed": 26001,
+      "system1": {
+        "model_sha256": "6091485f3cb48e8e3b180a611189f301e40ba1ca7a441f9a6927dc294c7aad96",
+        "MSE": 0.000024004385180451685,
+        "high_motion_MSE": 0.00007548741495583286,
+        "proxy_AUPRC": 0.2551007907665557,
+        "proxy_AUROC": 0.7842800495037001,
+        "proxy_Brier": 0.0745390773596702
+      },
+      "gru": {
+        "model_sha256": "333c567aff9825408cf90fb0f8e3b0044b9ce19f42ced581f52f0030fc2a2274",
+        "MSE": 0.00002064640702785849,
+        "high_motion_MSE": 0.00009086169585966721,
+        "proxy_AUPRC": 0.46767024283555314,
+        "proxy_AUROC": 0.8676533730709974,
+        "proxy_Brier": 0.0641922105640393
+      }
+    },
+    {
+      "seed": 26002,
+      "system1": {
+        "model_sha256": "71f807b5f706136b214ef011ad17e8cca69a6544fa52eea4c17e684562b7eb18",
+        "MSE": 0.000029993420567169715,
+        "high_motion_MSE": 0.00006347779319145776,
+        "proxy_AUPRC": 0.2080667252319518,
+        "proxy_AUROC": 0.7412596243702753,
+        "proxy_Brier": 0.07613692846908701
+      },
+      "gru": {
+        "model_sha256": "695e90bf0607a2147d8624eb3162227bb1ad81638c139ca06ecf37899091fbdc",
+        "MSE": 0.00001959884244811656,
+        "high_motion_MSE": 0.00006744944266777877,
+        "proxy_AUPRC": 0.46471186025815536,
+        "proxy_AUROC": 0.8633227707306459,
+        "proxy_Brier": 0.06229184747262319
+      }
+    },
+    {
+      "seed": 26003,
+      "system1": {
+        "model_sha256": "14032a29adfd7b05365f67295655313b6e98aeaa1e28e5efee94e69103136c2d",
+        "MSE": 0.000020899513203931328,
+        "high_motion_MSE": 0.00006767436055698821,
+        "proxy_AUPRC": 0.21992408882096112,
+        "proxy_AUROC": 0.7392584936342671,
+        "proxy_Brier": 0.07549086657559835
+      },
+      "gru": {
+        "model_sha256": "9ce61481468d228b93d64cbfb7ba9a592da60e0f3430139c53785048ee6f20d0",
+        "MSE": 0.000017488694126404093,
+        "high_motion_MSE": 0.00007060181310606861,
+        "proxy_AUPRC": 0.3435314068192141,
+        "proxy_AUROC": 0.8581101165901509,
+        "proxy_Brier": 0.06967787843389836
+      }
+    }
+  ],
+  "constant_baselines": {
+    "velocity_joint_MSE": 0.0000030590803459462826,
+    "velocity_high_motion_MSE": 0.000007326103241630556,
+    "persistence_joint_MSE": 0.0000350745031815522
+  }
+}

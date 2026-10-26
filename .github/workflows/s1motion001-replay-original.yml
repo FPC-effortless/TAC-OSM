@@ -1,0 +1,51 @@
+name: S1MOTION001 checkpoint-only original replay and audit
+# Never launches fitting; consumes original completed checkpoint artifact.
+on:
+  push:
+    branches:
+      - research/system1-real-motion-proxy-2026-10-26
+    paths:
+      - 'research/parallel-six/S1MOTION001-REPLAY-*.marker'
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: read
+jobs:
+  cold-replay-original:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install real source readers and CPU runtime
+        run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Download exact original failed-packaging run artifact (NO fitting)
+        run: |
+          gh run download 40274339695 --repo FPC-effortless/TAC-OSM \
+            --name s1motion001-original-real-aloha-first-fit --dir /tmp/s1motion001-original
+          find /tmp/s1motion001-original -maxdepth 4 -type f -printf '%P\n'
+      - name: Replay original six SHA-pinned trained checkpoints and preserve per-episode evidence
+        run: |
+          SOURCE_MANIFEST="$(find /tmp/s1motion001-original -name before-dev-score.json -print -quit)"
+          test -n "$SOURCE_MANIFEST"
+          ORIGINAL_DIR="$(dirname "$SOURCE_MANIFEST")"
+          PYTHONPATH=src:. python scripts/s1motion001_original_replay.py \
+            --original-dir "$ORIGINAL_DIR"
+      - name: Preserve independent original frozen-checkpoint cold replay
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1motion001-checkpoint-only-cold-replay
+          path: research/diagnostics/s1motion001-recovery/**
+          if-no-files-found: warn
+          retention-days: 90
