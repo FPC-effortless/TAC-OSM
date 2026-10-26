@@ -90,6 +90,17 @@ proved explanation of it. Require a new source/math/prospective training record,
 live parameter budget and alloriginal real-data gates; do not tune against the
 protected cohort. No extra ME108fits, parameter/loss/gate changes or promotion.
 
+Verification/indexing addendum: initial repository-wide scanner did not discover
+the dated registration directory. Canonical me108/FAIR_COMPARISON.json and
+POSTFIT.json are now byte-identical aliases of the preserved originals, with
+post-scoring INDEX_PROVENANCE. The original direct preflight and live model
+pre/post guards passed before training; this was a discovery/wiring correction,
+not a new backdated registration or relaxed gate. Science preflight40260231748
+and original-model replay40260231715PASS on04befd7d. Future studies should use
+canonical meNNN/registration paths and verify --check-changed as well as the
+direct --manifest preflight before launch. The real4096x16x2 station/hour plan
+geometry regression is retained. No additional ME108 fits or promotion.
+
 ## 2026-10-26 — ME107: typed role FFNs and a mathematical failure ledger
 
 [Draft TAC PR410](https://github.com/FPC-effortless/TAC-OSM/pull/410),
