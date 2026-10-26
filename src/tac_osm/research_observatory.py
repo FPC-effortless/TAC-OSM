@@ -64,13 +64,19 @@ def _observe(model: nn.Module, history: torch.Tensor) -> Belief:
 
 
 def memory_tomography(model: nn.Module, history: torch.Tensor,
-                      candidates: torch.Tensor) -> dict[str, Any]:
-    """Quantify recurrent state motion and prediction sensitivity to state edits.
+                      candidates: torch.Tensor | None = None, *,
+                      adapter=None) -> dict[str, Any]:
+    """Quantify state motion with a generic adapter; retain legacy native API.
 
     Lesion/zero-patch interventions leave the real history and candidates
     unchanged. These states may be out-of-distribution: deltas are local
     dependence diagnostics, NOT feature importance or causal world dynamics.
     """
+    if adapter is not None:
+        from .research_probe import probe_memory
+        if candidates is not None:
+            raise ValueError("pass adapter sample as history parameter; omit native candidates")
+        return probe_memory(model, history, adapter)
     replica = copy.deepcopy(model).eval()
     _native_inputs(replica, history, candidates)
     timeline = []
@@ -126,13 +132,18 @@ def memory_tomography(model: nn.Module, history: torch.Tensor,
 
 
 def input_dependency_map(model: nn.Module, history: torch.Tensor,
-                         candidates: torch.Tensor) -> dict[str, Any]:
+                         candidates: torch.Tensor | None = None, *, adapter=None) -> dict[str, Any]:
     """Local autograd sensitivity, separately for outcome and future heads.
 
     An unconnected input produces 'connected': False. Zero gradient when
     connected means only this input/head/checkpoint/point had zero derivative;
     it is never a proof that the pathway does not exist globally.
     """
+    if adapter is not None:
+        from .research_probe import probe_dependencies
+        if candidates is not None:
+            raise ValueError("pass adapter sample as history parameter; omit native candidates")
+        return probe_dependencies(model, history, adapter)
     replica = copy.deepcopy(model).eval()
     _native_inputs(replica, history, candidates)
     with torch.no_grad():
@@ -196,14 +207,19 @@ def interpret_snapshot(report: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def entity_isolation_probe(model: nn.Module, history: torch.Tensor,
-                           candidates: torch.Tensor, *,
-                           tolerance: float = 1e-5) -> dict[str, Any]:
+                           candidates: torch.Tensor | None = None, *,
+                           tolerance: float = 1e-5, adapter=None) -> dict[str, Any]:
     """Detect cross-entity influence from batching identical causal histories.
 
     Compare per-entity state and outputs when processed together versus alone.
     Does not test caller identity routing, source joins or global caches outside
     the model clone. Numerical kernel differences can require calibrated tol.
     """
+    if adapter is not None:
+        from .research_probe import probe_entity_isolation
+        if candidates is not None:
+            raise ValueError("pass adapter sample as history parameter; omit native candidates")
+        return probe_entity_isolation(model, history, adapter, tolerance=tolerance)
     replica = copy.deepcopy(model).eval()
     _native_inputs(replica, history, candidates)
     if history.shape[0] < 2:
@@ -230,14 +246,19 @@ def entity_isolation_probe(model: nn.Module, history: torch.Tensor,
 
 
 def profile_native_runtime(model: nn.Module, history: torch.Tensor,
-                           candidates: torch.Tensor, *,
-                           warmups: int = 2, repeats: int = 8) -> dict[str, Any]:
+                           candidates: torch.Tensor | None = None, *,
+                           warmups: int = 2, repeats: int = 8, adapter=None) -> dict[str, Any]:
     """Replay exactly the same source input and candidate query, no optimizer.
 
     Measures end-to-end local inference through ALL history updates followed
     by one action query. It is NOT a controlled architecture speed comparison.
     CPU/GPU clocks, thermal state, thread count and I/O can alter results.
     """
+    if adapter is not None:
+        from .research_probe import probe_runtime
+        if candidates is not None:
+            raise ValueError("pass adapter sample as history parameter; omit native candidates")
+        return probe_runtime(model, history, adapter, warmups=warmups, repeats=repeats)
     import statistics
     import time
 
