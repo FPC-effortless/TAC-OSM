@@ -175,35 +175,7 @@ def input_dependency_map(model: nn.Module, history: torch.Tensor,
 from .research_torch_basics import gradient_conflict_atlas
 
 
-def interpret_snapshot(report: Mapping[str, Any]) -> dict[str, Any]:
-    """Deterministic investigation suggestions; no diagnosis asserted as fact."""
-    warnings = []
-    memory = report.get("memory")
-    if isinstance(memory, Mapping):
-        if not memory.get("query_does_not_write_state", True):
-            warnings.append({"area": "prediction", "priority": "high",
-                             "hypothesis": "candidate query unexpectedly writes state"})
-        if memory.get("candidate_permutation_max_abs_error", 0) > 1e-5:
-            warnings.append({"area": "action_order", "priority": "high",
-                             "hypothesis": "candidate order changes corresponding output"})
-        edits = memory.get("interventions", {})
-        if (all(k in edits for k in ("fast", "slow", "memory", "all_state"))
-                and all(edits[k]["outcome_mean_absolute_change"] == 0 and
-                        edits[k]["future_mean_absolute_change"] == 0
-                        for k in ("fast", "slow", "memory", "all_state"))):
-            warnings.append({"area": "memory", "priority": "review",
-                             "hypothesis": "none of the state lesions affected this particular prediction; check task relevance, gradients and trained checkpoints"})
-    grads = report.get("gradients")
-    if isinstance(grads, Mapping):
-        for pair in grads.get("pairs", []):
-            for name, status in pair["components"].items():
-                if status["status"] == "CONFLICT_AT_THIS_POINT":
-                    warnings.append({"area": "losses", "priority": "review",
-                                     "hypothesis": f"local competing gradients for {pair['left']}/{pair['right']} in {name}"})
-    return {"schema": "tac-osm-observatory/interpretation-v1",
-            "alerts": warnings,
-            "rule": "hypotheses only; corroborate on authentic FIT/DEV trajectories"}
-
+from .research_interpretation import interpret_snapshot
 
 
 def entity_isolation_probe(model: nn.Module, history: torch.Tensor,
