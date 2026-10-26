@@ -165,3 +165,21 @@ No candidate is trained by this diagnostic. Any follow-up requires fresh
 registration, live100k checks, original matched data/exposure/compute when making
 a comparison, all five lineages and unchanged evaluation gates. ME106 remains a
 failed qualification; no model has been promoted.
+
+## Replay verification exception and correction
+
+Local detached-checkout replay passed. Initial GitHub run40248231036 reproduced
+all180 underlying row measurements at the original relative1e-5/absolute1e-6
+tolerances, then failed on the redundant global `opposing_aux_after` histogram:
+47 instead of48 dots below -1e-10. Both correspond to the tiny residual cosines
+described above, not meaningful global negative alignment. The original result
+and failed run are preserved.
+
+The separate `scripts/diaggrad001_replay.py` verifier excludes ONLY this derived
+global rounding-sign counter in whole/history/population summaries, prints both
+original and replay counts, and still compares every raw dot, cosine, gradient
+norm, loss, shadow direction, input/source hash, block statistic and scientific
+conflict count with the unchanged tolerances. It never changes original data,
+registered measurements, source training code, predictive gates or model bytes.
+Regression tests reject mismatches in raw gradients and substantive counts.
+This is an explicitly post-original replay-infrastructure correction.

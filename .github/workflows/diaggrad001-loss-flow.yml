@@ -4,7 +4,9 @@ on:
   pull_request:
     paths:
       - 'scripts/diaggrad001_loss_flow.py'
+      - 'scripts/diaggrad001_replay.py'
       - 'tests/test_diaggrad001_loss_flow.py'
+      - 'tests/test_diaggrad001_replay.py'
       - 'research/mathematical-engineering/diaggrad001/**'
       - 'research/replay-bundles/DIAGGRAD001/**'
       - '.github/workflows/diaggrad001-loss-flow.yml'
@@ -20,5 +22,5 @@ jobs:
           python-version: '3.12'
       - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
       - run: pip install numpy pytest
-      - run: PYTHONPATH=src:. pytest -q tests/test_diaggrad001_loss_flow.py
-      - run: PYTHONPATH=src:. python scripts/diaggrad001_loss_flow.py replay
+      - run: PYTHONPATH=src:. pytest -q tests/test_diaggrad001_loss_flow.py tests/test_diaggrad001_replay.py
+      - run: PYTHONPATH=src:. python scripts/diaggrad001_replay.py
