@@ -1,5 +1,35 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-26 — ME109 identity-preserving residual TAC: real training underway
+
+ME108's original full qualification remains FAIL0/5; no originals or thresholds
+changed. [Draft TAC PR419](https://github.com/FPC-effortless/TAC-OSM/pull/419)
+builds one integrated native candidate that retains every ME103 learned tensor,
+including current-state affine predictions, and adds three zero-output residual
+FFNs conditioned on actual current-observation masks and source age. The shared
+native recurrent scan and six families are unchanged; no Transformer/SSM switch.
+
+104,663 live trainable/deployed parameters;45tensors; no added recurrent payload.
+Five seeds109001–109005 x4096updates, same6h targets,8/64/256history,B16,original
+loss weights and full per-seed gates. No new trained rival or architectural
+superiority claim. All5 initial parent forward/state predictions are bit-exact;
+10independent real-FIT FP32/64 graph/45parameter/input-gradient checks and1087local
+tests pass. Setup-index/workflow/count failures were fixed and preserved before
+any fit. Source452a1a977275823d21b3f04265a26ff836518ce6; prefit6cbcd6c3.
+
+[PNDS draft PR27](https://github.com/FPC-effortless/pnds-lean/pull/27) provides
+source-pinned independent Python equations and seven limited Lean residual
+identity/role/bound/count contracts. Entire neural/AD/IEEE/probability source
+refinement and calibration remain OPEN. Parent identity is at initialization,
+not a promise that training preserves every old forecast. Actual mathematical
+updates protect a minibatch average, not per-channel/population capability.
+
+Training launched on authentic2013–2014FIT; no ME109REPORT result yet. All5original
+models,optimizer,RNG,receipts must be Git-frozen before exposed2015REPORT scores.
+Protected2016–2017 numerical rows remain closed. Exactlyfive bounded fits, no
+retry/best-seed selection/gate changes. Current status is implementation and
+training progress, not intelligence, control, product or independent qualification.
+
 ## 2026-10-26 — ME108 source head complete joint-adjoint proof + physical CDF/atom event bridge: formally checked PARTIAL refinement
 
 Following [PNDS draft PR23](https://github.com/FPC-effortless/pnds-lean/pull/23) and [TAC draft PR412](https://github.com/FPC-effortless/TAC-OSM/pull/412), NEW incremental [PNDS draft PR25](https://github.com/FPC-effortless/pnds-lean/pull/25) and [TAC draft PR414](https://github.com/FPC-effortless/TAC-OSM/pull/414) formalize and verify a larger same-model boundary, without altering six proposed model-family contracts, trained model weights or any historical negative evidence.
