@@ -136,3 +136,30 @@ scorer execution, protected-file read-back, verified ACL enforcement,
 closed-loop reward poisoning, signed run/seed/checkpoint receipt production,
 and PR/release status protections against bypass. No self-reported registry
 can substitute for these independent checks.
+
+
+### One-command guarded launcher for actual training runners
+
+For each variant / seed training program, use the shared executable:
+
+    python scripts/run_qualified_research.py \
+      --prefit-manifest /frozen/FAIR_COMPARISON.json \
+      --final-manifest /trusted-postfit/MEASURED_COMPARISON.json \
+      --prefit-evidence /trusted-evaluator/prefit-signed.json \
+      --final-evidence /trusted-evaluator/postfit-signed.json \
+      -- python scripts/YOUR_AUTHORIZED_TRAIN_RUNNER.py --source real-FIT-data
+
+The launcher checks signed source, goal-evaluator and access-control evidence
+**before executing** its provided training command, without invoking a shell.
+It checks that the frozen preregistration did not change during the run and
+that the final document has the identical study/source/variant/seed matrix.
+It checks the final scientific resource manifest plus independently signed
+reward, goal, safety and checkpoint outcome evidence **after the command**.
+Any missing/failed final report yields nonzero exit and no qualification.
+
+This does not make the optimization itself safe or keep the actor from
+deliberately bypassing the launcher. Authorized CI must use it as the
+required entrypoint and separately enforce branch protection, least-privilege
+evaluator storage and verifier-key custody. The final signed evaluator receipt
+must be created by an independently permissioned source-authenticated service
+after the actual evaluation, not by the model process or test fixture.
