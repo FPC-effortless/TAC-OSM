@@ -9,6 +9,10 @@ Architecture north star: **Remember / Understand / Predict / Decide / Verify / D
 
 Daily work must use the evidence gates in the full charter: authentic licensed datasets, true observation/availability time, untouched test, original checkpoint+replay, equal budgets for neural superiority claims, PNDS exact operator/probability/IEEE scope, trusted reward/outcome evidence and physical on-device tests before hardware claims. Negative ME110/S1/EWA gates remain failures. No authorization for new training, merge, deployment or customer action is implied.
 
+## Ecosystem architectural integration priority — 2026-10-26
+
+Treat existing [Woyengi, Veritas, PNDS, Forge and TrainLab source interfaces](ECOSYSTEM_INTEROPERABILITY_AND_EVIDENCE_BOUNDARIES_2026-10-26.md) as **first-class dependencies** of TAC-OSM's research design, not merely eventual application integrations. Daily work should prioritize source-valid/knowledge-time evidence, versioned observation → prediction → independent outcome → verification contracts, canonical authority separation and genuine matched real-data end-to-end tests. The present no-fit interop validator does not certify source rights, real trained model capability, trusted reward, Woyengi acceptance or a shipped product. Preserve existing independent security/reviewer, consent and release gates.
+
 ## Mission and positioning
 Build an open-source AI research and engineering company focused on **reliable, efficient, stateful predictive intelligence**: systems that maintain useful changing-world representations, forecast consequential outcomes, propose bounded decisions and verify what actually happened. Pursue scientifically distinctive TAC-OSM/PNDS model capabilities and commercially useful tools **in parallel**, not by pretending unqualified research is a product. Initial market hypothesis: dependable stateful agents and operational decision support; validate buyers, jobs, use cases, willingness to pay, data rights, deployment and outcomes rather than asserting traction.
 
