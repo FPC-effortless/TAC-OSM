@@ -76,6 +76,30 @@ training contract, not an implemented/fittedME110 or a guaranteed fix. Preserve
 all negative results, source-boundaries, real-data gates, checkpoint/independent
 replay and source-pinned PNDS Python/Lean obligations; no moreME109fits.
 
+### Diagnostic replay V2 — original failures preserved; cross-host drift measured
+
+V1diagnostic input-digest replay failed in40283071768/40284177624 while original
+model/forecast/score replay passed. Normalized batch0 values differ across hosts
+up to1.430511474609375e-6; current normalized labels up to1.1920928955078125e-7;
+other8fields exact. Both changed fields satisfy the existing combined relative
+1e-5/absolute1e-6 contract; primitive cause remainsOPEN, not presumedlibm.
+
+Authenticated original FIT tensor exports preserve exact previously committed
+input identities. V2replays model/atlas on original tensors, separately validates
+39fresh producer fields and actual fresh/frozen model outputs, and retains exact
+within-run poison invariance. Both producer digests/differences are disclosed;
+original inputs, weights, JSON, scores, scientific gates and forecast tolerances
+are unchanged. Full anti-cheat ledger remainsINCONCLUSIVE. CI40284891806 on
+fa186595 and independent clean V2replay PASS;1151local testsPASS. Extended bundle
+now26payload hashes. This reproduction repair is not a cause or cure of the
+18.42%gap-point regression. Source-pinned Python/Lean/full-IEEE obligations remain.
+
+Default-master merged-tool post-push runs40281108276anti-cheat,
+40281108278Observatory and40281108326fullCI are verifiedPASS; branch-protection
+required-status enforcement is not asserted. Future capability training should
+freeze exact FIT preprocessing provenance and test current-source reconstruction
+as well as typed per-task/per-regime optimization boundaries.
+
 ## 2026-10-26 — ME108 trained role models: ordinary/interval gains, gap-point failure
 
 [Draft TAC PR411](https://github.com/FPC-effortless/TAC-OSM/pull/411),
