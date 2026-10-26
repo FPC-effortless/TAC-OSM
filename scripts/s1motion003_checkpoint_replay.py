@@ -150,7 +150,7 @@ def replay(original_dir,cache,outdir):
                 ("proxy_AUROC",actual["proxy_AUROC"]),
                 ("proxy_Brier",actual["proxy_Brier"])]:
                 if not np.isclose(value,expected[key],rtol=1e-6,atol=1e-11):
-                    raise RuntimeError(f"original score mismatch {seed}:{arm}:{key}")
+                    raise RuntimeError(f"original score mismatch {seed}:{arm}:{key}: replay={value:.17g}, original={expected[key]:.17g}, delta={value-expected[key]:.17g}")
             roles=gradient_roles(model,fit,seed)
             per=correction_diagnostics(model,dev,norm)
             report[arm]=dict(checkpoint_sha256=digest,
