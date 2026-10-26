@@ -33,3 +33,20 @@ jobs:
           name: diagtrain001-current-host
           path: /tmp/diagtrain001-current.json
           retention-days: 14
+  inward-guard-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy==2.3.5 pytest
+      - run: PYTHONPATH=src:. pytest -q tests/test_inward_role_guard.py
+      - run: PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --inward --replay --observed-output /tmp/inward-current.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inward-guard-current-host
+          path: /tmp/inward-current.json
+          retention-days: 14

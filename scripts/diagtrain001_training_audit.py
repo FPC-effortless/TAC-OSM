@@ -34,8 +34,9 @@ def scalars(values):
     return {name: float(value.detach()) for name,value in values.items()}
 
 
-def main(replay=False, observed_output=None):
-    if OUT.exists() and not replay:
+def main(replay=False, observed_output=None, inward=False):
+    out=OUT.parent/'INWARD_RESULTS.json' if inward else OUT
+    if out.exists() and not replay:
         raise RuntimeError('Immutable diagnostic output exists')
     torch.set_num_threads(1)
     arrays, receipt = authenticated_inputs()
@@ -70,6 +71,9 @@ def main(replay=False, observed_output=None):
             guarded,_,guard=opt.propose(point)
             # A zero protected gradient leaves the identical AdamW proposal intact.
             raw,_,_=opt.propose([torch.zeros_like(p) for p in params])
+            if inward:
+                from tac_osm.inward_role_guard import inward_candidates
+                guarded,guard=inward_candidates(params,point,raw,list(blockmap.values()))
             def magnitude(candidate):
                 return sum(float((c.double()-p.detach().double()).square().sum()) for c,p in zip(candidate,params))**.5
             effects={}
@@ -102,8 +106,8 @@ def main(replay=False, observed_output=None):
                 decreased=sum(r['effects'][which][label]['delta'][k]<0 for r in rows),
                 mean_delta=sum(r['effects'][which][label]['delta'][k] for r in rows)/len(rows))
                 for k in ('total','whole_point','gap_pm','general_pm')}
-    result=dict(study='DIAGTRAIN001',scope='POSTHOC_FIT_ONLY_NO_MODEL_FITS',
-        protocol_sha256=run.sha(OUT.parent/'PROTOCOL.json'),
+    result=dict(study='DIAGTRAIN001-INWARD001' if inward else 'DIAGTRAIN001',scope='POSTHOC_FIT_ONLY_NO_MODEL_FITS',
+        protocol_sha256=run.sha(OUT.parent/('INWARD_PROTOCOL_V1.json' if inward else 'PROTOCOL.json')),
         training_sufficiency='UNRESOLVED: no intermediate validation checkpoints or budget-controlled continuation',
         no_optimizer_steps=True,no_checkpoint_writes=True,no_report_or_protected_access=True,
         original_optimizer_steps=4096,checks=rows,summary=summary)
@@ -112,7 +116,7 @@ def main(replay=False, observed_output=None):
         if observed_output.exists(): raise RuntimeError('current-host output already exists')
         run.write(observed_output,result)
     if replay:
-        expected=json.loads(OUT.read_text())
+        expected=json.loads(out.read_text())
         discrepancies=[]
         def compare(a,b,path='result'):
             if isinstance(a,dict):
@@ -125,12 +129,12 @@ def main(replay=False, observed_output=None):
         compare(result,expected)
         print('CURRENT_HOST_SUMMARY',json.dumps(summary,sort_keys=True),flush=True)
         print('CROSS_HOST_DISCREPANCIES',json.dumps(discrepancies,sort_keys=True),flush=True)
-        run._compare_numeric(result,json.loads(OUT.read_text()))
-    else: run.write(OUT,result)
+        run._compare_numeric(result,json.loads(out.read_text()))
+    else: run.write(out,result)
     print(json.dumps(summary,indent=2))
     print('DIAGTRAIN001_REPLAY_PASS' if replay else 'DIAGTRAIN001_AUDIT_PASS')
 
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('--replay',action='store_true');parser.add_argument('--observed-output',type=Path)
-    args=parser.parse_args();main(args.replay,args.observed_output)
+    parser=argparse.ArgumentParser();parser.add_argument('--replay',action='store_true');parser.add_argument('--observed-output',type=Path);parser.add_argument('--inward',action='store_true')
+    args=parser.parse_args();main(args.replay,args.observed_output,args.inward)
