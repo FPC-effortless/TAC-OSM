@@ -15,8 +15,8 @@ jobs:
         with: {python-version: '3.11'}
       - name: Validate source chronology/offer-slot schema without reading original records
         run: |
-          python -m unittest tests.test_s1temp008_source_asof -v
           python -m py_compile scripts/s1temp008_bpi_source_partition_audit.py
+          python -m unittest tests.test_s1temp008_source_asof -v
       - name: Download publisher MD5 original complete XES into trusted source partitioner
         run: python -u scripts/s1temp008_bpi_source_partition_audit.py
       - name: Emit ONLY aggregate FIT eligibility; NEVER original XES, IDs or labels
