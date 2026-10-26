@@ -1,0 +1,39 @@
+name: TAC-OSM no-fit architecture research observatory
+on:
+  pull_request:
+    branches: [main, master]
+    paths:
+      - "src/tac_osm/research_observatory.py"
+      - "src/tac_osm/research_evidence.py"
+      - "scripts/run_research_observatory.py"
+      - "tests/test_research_observatory.py"
+      - "research/ARCHITECTURE-OBSERVATORY-2026-10-26.md"
+      - ".github/workflows/research-observatory.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  instrumentation:
+    name: native-architecture-memory-gradient-evidence-falsifiers
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install no-fit dependencies
+        run: python -m pip install --quiet 'pytest>=8' 'torch'
+      - name: Audit all new research observation mechanisms
+        run: python -m pytest -q tests/test_research_observatory.py
+      - name: Emit untrained fixture-only diagnostic report
+        run: |
+          python scripts/run_research_observatory.py --fixture --output observatory-fixture.json > /dev/null
+          python - <<'PY'
+          import json
+          r=json.load(open("observatory-fixture.json"))
+          assert r["source_provenance"]=="constructed_untrained_fixture_no_capability"
+          assert r["gradient_conflicts"]["status"]=="NOT_RUN_NO_AUTHENTIC_SUPERVISED_LOSSES"
+          assert r["architecture"]["total_trainable"] > 0
+          assert r["memory"]["query_does_not_write_state"]
+          PY
