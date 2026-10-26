@@ -73,6 +73,7 @@ The same untrained LATFUSE001 graph, configured as H80, key16, value16, 16 entit
 | Legal future calendar conditioning | deterministic 2013 hour325 (+6), not intervention |
 | Future targets | 156 actually observed FIT-only channels accessed **after** forecast |
 | Instantiated trainable/deployed parameters | **96,199/96,199** |
+| H80 carried state (16 slots, 16×16 associative) | **1,696 floats +16 flags =6,800 nominal FP32 bytes/stream** |
 | Absolute 100k target 95k–105k | **PASS (size only)** |
 | Active autograd tensors | **32/32**, all finite measured source gradients |
 | Weights before/after probe | **bit-exact unchanged**, no optimizer |
