@@ -14,7 +14,7 @@ Provide a directory containing:
 
 Minimal manifest shape (PLACEHOLDERS MUST BE REPLACED with genuine bytes/hashes/metadata):
 
-\`\`\`json
+```json
 {
   "schema_version": 1,
   "model": {
@@ -44,17 +44,17 @@ Minimal manifest shape (PLACEHOLDERS MUST BE REPLACED with genuine bytes/hashes/
     "evidence_ref": "Exact original research PR / study result URI"
   }
 }
-\`\`\`
+```
 
 These names and shapes are **illustrative**, not an exported real System 1 signature. The real source graph may require actions, normalizer buffers, as-of masks and more state tensors, which must all be reflected in the manifest.
 
 ## Run the package preflight
 
-\`\`\`sh
+```sh
 python scripts/validate_mobile_edge_package.py /path/to/package
 python scripts/validate_mobile_edge_package.py /path/to/package --require-device
 python -m unittest discover -s tests -p 'test_mobile_edge_package.py' -v
-\`\`\`
+```
 
 Exit 0 checks only manifest structure, fixed parameter policy, file integrity, and (when requested) the format of an optional hash-checked device report. Exit 2 is invalid or blocked. It never certifies trained-model correctness, scientifically beneficial skill, signed real-device provenance, batch/stream parity, action authority or actual mobile execution.
 
