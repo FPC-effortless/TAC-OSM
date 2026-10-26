@@ -1549,3 +1549,40 @@ all-channelcalibration, independentmemory/decision/customerqualification remainO
 Scopedanti-cheat/activation/poison/gradientchecksPASS; completeintegrityINCONCLUSIVE.
 Originalnegative results, all17legacy mappings and setupincidents remainvisible.
 No merge/deployment. Modeloriginals are repository-owned, not a local-only archive.
+
+### DIAGBELIEF001 — no-fit mathematical and leakage audit of ME110 (2026-10-26)
+
+Original5ME110models/fixed320FITorigins, no parameter edits, optimizer or new
+REPORT/protected numeric scoring. MissingPM2.5count66: fixed source variance
+floor dominates87.8788–92.4242%of cases/seed; upper width is floored96.9697–100%.
+At fixed recorded locations, minimum/actual meanwidth99.6807–99.8673%. This is a
+measured sharpness constraint, not a causal decomposition of all gate failures.
+A pooled24hour observed-pair squared difference linearly extrapolated with age
+is not a universal conditional-variance lower bound (stationaryAR(1)counterexample).
+Numerical positivity must be distinguished from statistical coverage.
+
+Reconstruction current-mean gradients are nonzero (.272151–.321097norm), but
+ME110typedrouting drops their P-coordinate update: reconstruction can tune
+variance but cannot directly supervise its mean. RetainedU NLL/intervalcosines
++.598815to+.762008on the fixed16originbatch/all5models; apparent fullshared
+reconstruction conflicts mostly occur on discarded coordinates. No conclusion
+of globally conflict-free learning or proof of finite-step calibration. Prioritize
+coherent current-belief/future-residual semantics, controlled reconstructionmean
+learning and conditional-tail/availability training over genericPCGrad/largerstate.
+
+ActualFITloader instrumented4,400,584numericfield accesses before2015,12cutoffrows
+without protectednumeric parsing, and independently reproduced FITmean/std bitwise.
+ActualCSVfixture REPORTpoison leavesFITstats/earlierinputs unchanged; direct+6target
+poison preserves augmentedforwardinputs. No forbiddenleakage detected at named
+boundaries; fullsource/cache/ancestor/REPORTtruthjoins/nuisancecontrols remain
+INCONCLUSIVE. FITmonitorancestor/history exposure and repeatedlyused2015REPORT
+remain retrospective. Phase strings alone do not authenticate rawarrayprovenance.
+
+Tenprimarypapers reviewed, with fulltextassumptionchecks forCQR/ACI/PCGrad/NeuralCDE.
+CQR needsexchangeability and offersmarginal, notconditional, coverage; ACIlongrun
+coverage can requireinfiniteintervals; bidirectional/cubicspline methods needcausal
+cutoffs; likelihoods/SSMs/MoEs supplyno automatic uncertainty/retention/isolation
+proof. NoTransformer/SSMconversion, newactivefamily, newtraining or gatewaiver.
+ME110fullqualificationFAIL0/5remains. Alloriginalsourceclosurehashes unchanged.
+
+[Draft audit PR#433](https://github.com/FPC-effortless/TAC-OSM/pull/433). Full1178localtests and76targetedchecksPASS; original76ME110payloadhashes/sourceclosurePASS. DedicatedremoteCIstatuspending; no newmodelqualification.
