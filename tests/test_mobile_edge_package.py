@@ -64,7 +64,8 @@ class MobileEdgePackageTests(unittest.TestCase):
         self.assertEqual(code, 0)
         self.assertEqual(result["package_integrity"], "PASS")
         self.assertEqual(result["hardware_evidence"], "BLOCKED_NO_DEVICE_REPORT")
-        self.assertEqual(result["scientific_qualification"], "FAILED")
+        self.assertEqual(result["scientific_claim_declared"], "FAILED")
+        self.assertEqual(result["scientific_qualification"], "NOT_VERIFIED_BY_THIS_TOOL")
         self.assertEqual(result["deployment_qualification"], "NOT_ESTABLISHED")
 
     def test_no_device_is_blocking_when_requested(self):
