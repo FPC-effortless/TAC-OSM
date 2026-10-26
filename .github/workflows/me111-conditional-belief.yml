@@ -1,0 +1,32 @@
+name: ME111 conditional belief source and original replay (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/me111*'
+      - 'src/tac_osm/conditional_belief_learning.py'
+      - 'src/tac_osm/variants/conditional_belief_sensor_world.py'
+      - 'tests/test_me111*'
+      - 'research/mathematical-engineering/me111/**'
+      - 'research/replay-bundles/ME111/**'
+      - '.github/workflows/me111-conditional-belief.yml'
+permissions:
+  contents: read
+jobs:
+  conditional-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy==2.3.5 pytest
+      - run: PYTHONPATH=src:. pytest -q tests/test_me111_conditional_belief.py tests/test_me110_sampling.py tests/test_inward_role_guard.py tests/test_research_anticheat.py tests/test_research_observatory.py tests/test_diagbelief001_boundary.py
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me111/FAIR_COMPARISON.json --phase preflight
+      - run: PYTHONPATH=src:. python -c 'from scripts.me111_conditional_training import verify_prefit; verify_prefit()'
+      - run: |
+          if test -f research/replay-bundles/ME111/RESULTS.json; then
+            PYTHONPATH=src:. python scripts/me111_conditional_training.py replay
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me111/POSTFIT.json --phase final
+          fi
