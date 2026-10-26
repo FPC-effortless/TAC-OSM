@@ -9,6 +9,9 @@ relevance differs only in write-admission (entity_all vs entity_priority).
 Source slot is not internally invented or hashed. A provenance/audit layer
 must map approved identifiers to exactly eight stable cohort slots before
 each run, and verify current observation date, entity and future cutoff.
+For interleaved cross-drive telemetry use forecast_anchor="persistence", because
+previous stream event may belong to a DIFFERENT drive; do not invent its
+velocity. All real drive arms, including global and no-memory, use same anchor.
 The GLOBAL legacy comparator can ignore identity; it has unequal semantic
 side information and cannot establish fully input-matched superiority.
 
@@ -137,18 +140,22 @@ class SourceEntitySystem1Core(System1ParallelWorld):
         return self._project(p,t["fast"],t["slow"],t["old_read"]),next_state
 
 class SourceEntitySystem1(VelocityAnchoredSystem1):
-    def __init__(self,*,entity_mode="entity_priority"):
+    def __init__(self,*,entity_mode="entity_priority",forecast_anchor="velocity"):
+        if forecast_anchor not in ("velocity","persistence"):
+            raise ValueError("explicit causal physical forecast prior required")
         super().__init__()
         self.core=SourceEntitySystem1Core(entity_mode)
         self.entity_mode=entity_mode
+        self.forecast_anchor=forecast_anchor
     def forward(self,observed,prior_logged_action,*,source_slot,
                 observed_priority,initial_previous_observation=None):
         check_entity_inputs(source_slot,observed_priority,observed,sequence=True)
         forecast=self.core(observed,prior_logged_action,
             source_slot=source_slot,observed_priority=observed_priority)
         previous=self._prior(observed,initial_previous_observation)
-        physical=2*observed-previous+self.correction_gain*(
-            forecast.next_observation-observed)
+        anchor=(2*observed-previous if self.forecast_anchor=="velocity"
+                else observed)
+        physical=anchor+self.correction_gain*(forecast.next_observation-observed)
         return replace(forecast,next_observation=physical)
     def step(self,state,observed,prior_logged_action,*,source_slot,observed_priority):
         if not isinstance(state,MotionStreamState):
@@ -160,6 +167,8 @@ class SourceEntitySystem1(VelocityAnchoredSystem1):
         previous=state.previous_observation if state.has_previous else observed
         if previous.shape!=observed.shape or not torch.isfinite(previous).all().item():
             raise ValueError("untrusted previous source observation")
-        p=2*observed-previous+self.correction_gain*(f.next_observation-observed)
+        anchor=(2*observed-previous if self.forecast_anchor=="velocity"
+                else observed)
+        p=anchor+self.correction_gain*(f.next_observation-observed)
         return replace(f,next_observation=p),MotionStreamState(
             next_state,observed.detach().clone(),True)
