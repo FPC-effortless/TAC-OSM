@@ -1,5 +1,68 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## 2026-10-26 — DIAGGRAD001: measured interval/point conflict and optimizer-direction limits
+
+[Draft TAC PR409](https://github.com/FPC-effortless/TAC-OSM/pull/409),
+[PNDS PR20](https://github.com/FPC-effortless/pnds-lean/pull/20),
+[full trace/results](https://github.com/FPC-effortless/TAC-OSM/blob/research/diaggrad001-loss-flow-2026-10-26/research/mathematical-engineering/diaggrad001/RESULTS.md).
+User requested direct input-to-output and per-objective tracing before selecting
+another remedy. This is a bounded no-fit diagnostic, not another trained-model
+success. ME104's static weighted sum is historical; ME106 already implemented
+selective median-head routing and global point-priority gradient projection.
+
+Registered code2d5edb8c, originals d9099acc. All15 frozen ME106 checkpoints,
+100,349parameters unchanged, 180 FIT-only probes: contexts8/64/256h, natural-gap
+and general origins, two batches16 each. Original causal masking and allfive
+objective terms;13 exhaustive parameter blocks. No optimizer steps, REPORT or
+protected2016–2017 numerical access. No modified models, scores, thresholds,
+persistent state, native parallel scan, loss weights or neural family.
+
+**Measured, rather than inferred from performance:**
+
+- NLL/point whole-model gradients oppose in0/180 probes; median cosine+0.629.
+  Stratifying supervised coordinates by corresponding last-input channel
+  observation status also yields0/180 negatives for both observed/missing groups.
+- Point/interval gradients oppose in139/180, including88/90 natural-gap-origin
+  probes; global median cosine-0.330. NLL/interval oppose88/180. Median weighted
+  norms interval7.110, NLL2.192, point2.124, reconstruction1.071, location0.232.
+- Global projection retains alignment within rounding: minimum after-cosine
+  -6.59e-9, not a substantive theorem failure. It still leaves local block
+  opposition (content66/180, slow54, reconstruction76, belief81).
+- Read-only next-step algebra using saved AdamW moments/rates/decay predicts a
+  locally point-uphill displacement in34/180 (30/90 gap-origin,4/90 general).
+  Group-rate SGD alone reverses globally in0/180 on these actual probes.
+  This is a hypothetical FP64 direction, NOT an executed update, historical
+  training causal attribution or finite-step loss increase.
+- Missing-channel scale floors bind7549/11175 left outputs and10270/11175 right
+  outputs across repeated slots/models. When scale shrinkage is blocked, raw
+  interval width can still decrease by lowering median location. This is a
+  specific decoder-coupling hypothesis; the floors remain required and intact.
+  Reconstruction has no path through the separate future query; angle conflicts
+  with very small norms must not be overinterpreted.
+
+Independent clean detached-checkout180-probe replayPASS,1031full Python testsPASS,
+4diagnostic unit testsPASS. Read-only independent cheaper-agent review found no
+blocking defect. PNDS adds4compiled exact-real counterexample declarations and an
+exact-rational Python test: positive Euclidean dot can reverse under unequal
+coordinate rates. This possibility is not claimed as observed group-rate failure
+here. Standard Lean axioms only; whole-neural/Gaussian/IEEE refinement remainsOPEN.
+GitHub dedicated replay and math CI status must be checked separately.
+
+**Next training candidate, not yet trained:** protect point directions blockwise
+in the proposed optimizer displacement, including preconditioning/momentum/decay,
+rather than relying on global Euclidean projection. Preserve dedicated width
+learning and shared reconstruction, the protected distribution, source floors,
+allfive lineages and fixed-size native scan. A proposed block correction
+`delta -= max(0,<g_point,delta>)/||g_point||²*g_point` needs explicit zero-norm,
+clipping/decay/moment semantics, reference/Lean engineering and a NEW prospective
+matched-budget protocol before real training. It supplies only a first-order
+bound, not calibration, capability or gate-pass guarantees. A source-conditioned
+multi-regime predictive law remains another untested architectural direction.
+
+No new capability claim or model promotion. ME106's full qualification remains
+FAIL. Do not retune weights, repeat ME106 fits, weaken floors, select favorable
+seeds or open protected data to turn this diagnostic into a success story.
+
 ## 2026-10-25 — ME106: point-priority training verified; full predictive gate fails
 
 [Draft TAC PR408](https://github.com/FPC-effortless/TAC-OSM/pull/408),
