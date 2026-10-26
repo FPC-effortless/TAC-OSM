@@ -1493,3 +1493,37 @@ well as regime-specific learning and fixed intermediate validation. No further
 ME109fits, newtrainedmodel or protectedcohort access. Reproducible script and
 EXPOSURE_COVERAGE.json live in draftTACPR425. PNDS inward source/math CI40290225913
 and Lean40290225790PASS; original guard replay failure stays preserved.
+
+### ME110 — coordinate-typed learning and measured training curves (2026-10-26)
+
+[Draft TAC PR#431](https://github.com/FPC-effortless/TAC-OSM/pull/431) proceeds
+from DIAGTRAIN001 to actual capability training. Same104663parameter native
+ME109forward graph: noTransformer/SSM or newfamilies/parameters.100253point/state
+coordinates receive availability-balanced point gradients;4410variance/width
+coordinates receive likelihood/interval/reconstruction gradients. Separate
+roleclipping prevents uncertaintymagnitudes rescaling pointgradients. Full raw
+AdamW proposals use the source-verified inward conditional certificate.
+
+Five4096update runs preregistered with2natural-gap+14general B16draws, original
+causal artificial-gap augmentation and8/64/256histories.57344distinctgeneral
+updateorigins/model; fixed64gap+256general FITmonitor targets excluded fromnew
+updates butancestor/stats-exposed, withoverlappinghistories: NOTindependent.
+Full original optimizer/RNG/models saved at1024/2048/4096, fixedmonitor0/1024/2048/
+4096, noselection/earlystopping. Onlyfinal models may score exposed2015 afterall
+five originals areGitfrozen. Protected2016–2017numericrows stayclosed.
+
+[Draft PNDS PR#35](https://github.com/FPC-effortless/pnds-lean/pull/35) provides
+binary-mask routing/conditional decoder congruence and source-pinned Python;
+CI40374187754PASS includes3actual-source paritytests, Leanbuild andaxiomaudit.
+Fiveactualpreflight parent forecasts/native states preservebitidentity;
+uncertainty-only changes leave medians unchanged. Full1171localtestsPASS.
+Scopedanti-cheat/gradient/activation/poisonchecksPASS; fullintegrityINCONCLUSIVE.
+Alloldnegativegates, snapshotsand17legacyrecords preserved. Fullneural/AD/IEEE,
+calibration, independentmemory/capability andcommercialqualification remainOPEN.
+
+Trainingunderway atthisregistration update; nofinalME110REPORTscoreornew
+predictivesuccessclaim yet. Exactlyfivefits, noretries/thresholdchanges/additional
+ME110updates. Preserveworkspace-reset/sparse-checkout/Leaninitialization/download
+andPNDSancestry-correction incidents; allactualfitting source/registration/preflight
+receipts frozenbeforefirstupdate. Supplementaloperationalmetadata waspost-start
+and isexplicitlynot a retrospectively claimedprefit gate.
