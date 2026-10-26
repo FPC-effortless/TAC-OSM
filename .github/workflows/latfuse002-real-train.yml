@@ -1,0 +1,137 @@
+name: LATFUSE002 original real FIT training, Git-owned checkpoint and clean replay
+
+on:
+  push:
+    branches:
+      - research/latfuse002-fixed-state-training-2026-10-26
+    paths:
+      - ".github/workflows/latfuse002-real-train.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: latfuse002-exact-registered-fit-one-time
+  cancel-in-progress: false
+
+jobs:
+  trained-original-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: CPU-only original FIT dependencies
+        run: |
+          python -m pip install --quiet pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Fail closed if any original bundle already exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -e research/replay-bundles/LATFUSE002
+          git status --porcelain
+      - name: Exact original source provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse002-archive
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse002-archive/PRSA2017_original.zip
+          echo "SHA verified independently in original-source loader."
+      - name: Mathematical engineering and instantiated fixed-FP32 model tests
+        env:
+          PYTHONPATH: src
+        run: python -m pytest -q tests/test_latent_fusion_001.py tests/test_latent_fusion_002.py
+      - name: Enforce original preregistration, actual parameters and real input before optimizer
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+        run: |
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse002/FAIR_COMPARISON.json \
+            --phase preflight
+          python scripts/latfuse002_real_fit.py --mode prefit \
+            --source /tmp/latfuse002-archive/PRSA2017_original.zip
+      - name: Train exactly the two preregistered original real FIT seeds
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse002_real_fit.py --mode fit \
+            --source /tmp/latfuse002-archive/PRSA2017_original.zip
+      - name: Generate strict postfit parity receipt without modifying preregistration
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path("research/mathematical-engineering/latfuse002/FAIR_COMPARISON.json").read_text())
+          report=json.loads(Path("research/replay-bundles/LATFUSE002/RESULTS.json").read_text())
+          seen={r["seed"]:r for r in report["results"]}
+          assert set(seen)==set(m["seed"] for m in x["models"])
+          for m in x["models"]:
+              receipt=seen[m["seed"]]
+              state=receipt["live_state"]
+              assert state["dtype"]=="torch.float32"
+              assert state["nominal_fp32_bytes"]==6800
+              assert state["trainable_parameters"]==m["trainable_parameters"]
+              assert receipt["steps"]==x["protocol"]["updates"]
+              m["measured"]={"trainable_parameters":state["trainable_parameters"],
+                             "deployed_parameters":state["deployed_learned_parameters"],
+                             "checkpoint_sha256":receipt["original_checkpoint_sha256"]}
+          out=Path("research/replay-bundles/LATFUSE002/POSTFIT_PARITY.json")
+          out.write_text(json.dumps(x,indent=2,sort_keys=True)+"\n")
+          PY
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE002/POSTFIT_PARITY.json \
+            --phase final
+      - name: Verify original persisted weights/optimizer/score arrays without fitting
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+        run: |
+          python scripts/latfuse002_real_fit.py --mode replay \
+            --source /tmp/latfuse002-archive/PRSA2017_original.zip
+      - name: Publish exact original checkpoint bytes only on isolated research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = "research/latfuse002-fixed-state-training-2026-10-26"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/replay-bundles/LATFUSE002/
+          git diff --cached --quiet && { echo "No original checkpoint files"; exit 1; }
+          git commit -m "research: preserve original LATFUSE002 trained weights, states, replay and 2015 DEV"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Independently verify committed bytes from a clean branch checkout
+        shell: bash
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --single-branch --branch "$GITHUB_REF_NAME" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/latfuse002-clean
+          cd /tmp/latfuse002-clean
+          PYTHONPATH=src python scripts/latfuse002_real_fit.py --mode replay \
+            --source /tmp/latfuse002-archive/PRSA2017_original.zip
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE002/POSTFIT_PARITY.json \
+            --phase final
+          echo "Clean source/weights replay passes from original Git branch."
+      - name: No unsupported capability promotion
+        run: |
+          echo "All model bytes + read-only DEV forecasts preserved. Only original real development cohort."
+          echo "No matched neural comparator, no independent protected TEST, no causal or commercial claim."
