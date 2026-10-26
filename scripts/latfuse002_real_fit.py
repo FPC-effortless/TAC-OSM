@@ -54,7 +54,10 @@ def hour(date):
     return int((date-START).total_seconds()//3600)
 
 
-def source_frames(path):
+def source_frames(path, phase='fit'):
+    if phase not in ('fit','report'):
+        raise ValueError('source phase must be fit or already-exposed report')
+    stop_year=2015 if phase=='fit' else 2016
     if hashlib.sha256(path.read_bytes()).hexdigest()!=SOURCE_SHA:
         raise RuntimeError("original source SHA mismatch")
     records=[]
@@ -67,7 +70,7 @@ def source_frames(path):
                 rdr=csv.DictReader(io.TextIOWrapper(fp,encoding="utf-8-sig"))
                 for row in rdr:
                     # CUT OFF BEFORE parsing protected 2016-2017 numeric fields.
-                    if int(row["year"])>=2016:break
+                    if int(row["year"])>=stop_year:break
                     if row["station"]!=site:raise RuntimeError("source station spoof")
                     when=dt.datetime(*(int(row[k]) for k in ("year","month","day","hour")))
                     if hour(when)!=len(vals):raise RuntimeError("source chronological order/gap mismatch")
@@ -83,10 +86,10 @@ def source_frames(path):
                     if any(q<0 for q in x[:6] if math.isfinite(q)):
                         raise RuntimeError("invalid negative pollutant observation")
                     vals.append(x)
-            if len(vals)!=hour(DEV_END):raise RuntimeError("unexpected original source truncation")
+            if len(vals)!=hour(VAL_END if phase=="fit" else DEV_END):raise RuntimeError("unexpected original source truncation")
             records.append(vals)
     raw=torch.tensor(records,dtype=torch.float32)
-    if raw.shape!=(12,hour(DEV_END),13):raise RuntimeError("source contract changed")
+    if raw.shape!=(12,hour(VAL_END if phase=="fit" else DEV_END),13):raise RuntimeError("source contract changed")
     x=raw.clone()
     x[:,:,:6]=torch.where(torch.isfinite(raw[:,:,:6]),
                           torch.log1p(raw[:,:,:6].clamp_min(0)),raw[:,:,:6])
@@ -239,7 +242,7 @@ def run_fit(source):
     if OUT.exists():
         raise RuntimeError("FIT artifact directory already exists: no overwrites/retries")
     t0=time.monotonic()
-    d=source_frames(source)
+    d=source_frames(source,phase="fit")
     val=eval_origins(hour(TRAIN_END),hour(VAL_END))
     dev=eval_origins(hour(VAL_END),hour(DEV_END))
     OUT.mkdir(parents=True,exist_ok=False)
@@ -307,14 +310,27 @@ def run_fit(source):
                          train_loss_first=losses[0],train_loss_last=losses[-1],
                          changed_param_tensors=changed,training_finished_before_DEV=True)
         (folder/"FIT_RECEIPT.json").write_text(json.dumps(fit_receipt,indent=2,sort_keys=True)+"\n")
-        # 2014 internal out-of-time validation; 2015 exposed DEV only after original bytes frozen.
+        # 2014 FIT-only validation. Do NOT load 2015 numeric source before ALL
+        # original trained checkpoint bytes for BOTH seeds are frozen.
         validation=evaluate(model,d,val)
-        development,arrays=evaluate(model,d,dev,store=True)
+        results.append(dict(**fit_receipt,validation_2014=validation))
+        print("LATFUSE002_FIT_SEED_JSON="+json.dumps(results[-1],sort_keys=True),flush=True)
+    # All original final.pt and FIT_RECEIPT.json files now exist and are SHA-pinned.
+    # Only now may the already-exposed 2015 DEV numeric source be parsed/scored.
+    report_source=source_frames(source,phase="report")
+    for row in results:
+        folder=OUT/f"seed-{row['seed']}"
+        pt=folder/"final.pt"
+        if hashlib.sha256(pt.read_bytes()).hexdigest()!=row["original_checkpoint_sha256"]:
+            raise RuntimeError("checkpoint corrupted before report")
+        saved=torch.load(pt,map_location="cpu",weights_only=False)
+        model=FusedLatentFixedState()
+        model.load_state_dict(saved["model"],strict=True)
+        development,arrays=evaluate(model,report_source,dev,store=True)
         torch.save(arrays,folder/"DEV_PREDICTIONS.pt")
-        results.append(dict(**fit_receipt,validation_2014=validation,
-                            development_2015=development,
-                            scored_DEV_persisted_original=True))
-        print("LATFUSE002_SEED_JSON="+json.dumps(results[-1],sort_keys=True),flush=True)
+        row["development_2015"]=development
+        row["scored_DEV_persisted_original"]=True
+        print("LATFUSE002_SEED_JSON="+json.dumps(row,sort_keys=True),flush=True)
     result=dict(study_id="LATFUSE002-REAL-PREDICTION-SINGLE",phase="exposed_2015_DEV_only",
                 original_source_sha256=SOURCE_SHA,source_files_sha256=src_hashes,
                 research_category="real-world observational forecasting; no causal policy",
@@ -329,7 +345,7 @@ def run_fit(source):
 
 
 def replay(source):
-    d=source_frames(source)
+    d=source_frames(source,phase="report")
     dev=eval_origins(hour(VAL_END),hour(DEV_END))
     report=json.loads((OUT/"RESULTS.json").read_text())
     original_source=report["original_source_sha256"]
