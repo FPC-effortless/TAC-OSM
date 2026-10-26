@@ -1,0 +1,26 @@
+name: S1RET008 real Backblaze 2013 FIT-only source integrity audit
+on:
+  push:
+    branches: [research/s1ret008-entity-source-admission-2026-10-26]
+    paths: ['research/parallel-six/S1RET008-SOURCE-*.marker']
+permissions:
+  contents: read
+jobs:
+  authentic-drive-source-before-any-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Read and digest only original 2013 FIT Drive Stats annual archive
+        run: python -u scripts/s1ret008_backblaze_2013_fit_source_audit.py
+      - name: Archive per-day hash, schema and actual outcome prevalence receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1ret008-original-backblaze-2013-fit-source-identity-audit
+          path: research/diagnostics/s1ret008-original-2013-FIT-source/**
+          if-no-files-found: warn
+          retention-days: 90
