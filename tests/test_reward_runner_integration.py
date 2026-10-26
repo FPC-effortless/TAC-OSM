@@ -371,3 +371,87 @@ def test_guarded_launcher_never_promotes_when_final_audit_missing(tmp_path):
     assert sentinel.exists()
     assert result.returncode == 2
     assert json.loads(result.stdout)["status"] == "BLOCKED"
+
+
+
+def _launch_signed_fixture(tmp_path, *, final_manifest_mutator=None,
+                           final_evidence_mutator=None, private_env=False):
+    """Constructed-only end-to-end guarded launch. No real FIT/model fit."""
+    import os
+    m = make_manifest()
+    signer = Ed25519PrivateKey.generate()
+    pre, key, _ = receipt(m, "preflight", signer=signer)
+    final_m = deepcopy(m)
+    if final_manifest_mutator:
+        final_manifest_mutator(final_m)
+    final, _, sign = receipt(final_m, "final", signer=signer)
+    if final_evidence_mutator:
+        value = deepcopy(final["payload"])
+        final_evidence_mutator(value)
+        final = sign(value)
+    paths = []
+    for name, doc in (("prefit.json", m), ("final.json", final_m),
+                      ("pre.json", pre), ("post.json", final)):
+        p = tmp_path / name
+        p.write_text(json.dumps(doc))
+        paths.append(p)
+    result_path = tmp_path / "observed-env.json"
+    program = (
+        "import json,os;from pathlib import Path;"
+        + f"Path({str(result_path)!r}).write_text(json.dumps({{"
+        + "'private':os.environ.get('TAC_OSM_REWARD_SIGNING_PRIVATE_KEY'),"
+        + "'gh':os.environ.get('GH_TOKEN'),"
+        + "'allowed':os.environ.get('OMP_NUM_THREADS')}}))")
+    cmd = [sys.executable, str(ROOT / "scripts/run_qualified_research.py"),
+           "--prefit-manifest", str(paths[0]), "--final-manifest", str(paths[1]),
+           "--prefit-evidence", str(paths[2]), "--final-evidence", str(paths[3]),
+           "--", sys.executable, "-c", program]
+    env = dict(os.environ,
+               TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX=key,
+               TAC_OSM_REWARD_SIGNING_PRIVATE_KEY="should-not-exist",
+               GH_TOKEN="should-not-exist",
+               OMP_NUM_THREADS="1")
+    process = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, env=env)
+    return process, result_path
+
+
+def test_guarded_runner_rejects_reward_scorer_swapped_between_signed_stages(tmp_path):
+    process, file = _launch_signed_fixture(
+        tmp_path, final_evidence_mutator=lambda row: row.__setitem__(
+            "reward_scorer_sha256", "9" * 64))
+    assert file.exists(), "runner is permitted to execute after authentic prefit"
+    assert process.returncode == 2
+    assert json.loads(process.stdout)["status"] == "BLOCKED"
+
+
+def test_guarded_runner_rejects_changed_budget_even_when_final_signed(tmp_path):
+    def mutate(m):
+        m["models"][0]["trainable_parameters"] = 100100
+        m["models"][0]["measured"]["trainable_parameters"] = 100100
+    process, file = _launch_signed_fixture(tmp_path, final_manifest_mutator=mutate)
+    assert file.exists()
+    assert process.returncode == 2
+    assert json.loads(process.stdout)["status"] == "BLOCKED"
+
+
+def test_default_deny_actor_environment_hides_auditor_signing_and_host_token(tmp_path):
+    process, file = _launch_signed_fixture(tmp_path)
+    assert process.returncode == 0, process.stdout + process.stderr
+    observed = json.loads(file.read_text())
+    assert observed == {"private": None, "gh": None, "allowed": "1"}
+
+
+@pytest.mark.parametrize("field", [
+    "goal_evaluator_sha256", "access_policy_sha256",
+    "protected_assets_sha256", "evaluation_policy_sha256",
+])
+def test_signed_postfit_cannot_change_independent_judge_or_acl(field):
+    from tac_osm.research_reward_runner import verify_stage_continuity
+    m = make_manifest()
+    signer = Ed25519PrivateKey.generate()
+    pre, _, _ = receipt(m, "preflight", signer=signer)
+    final, _, sign = receipt(m, "final", signer=signer)
+    final_payload = deepcopy(final["payload"])
+    final_payload[field] = "0" * 64
+    with pytest.raises(RewardEvidenceError, match="changed across fit"):
+        verify_stage_continuity(pre, sign(final_payload))
