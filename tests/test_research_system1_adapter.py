@@ -116,6 +116,36 @@ class ExactSystem1AdapterTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             patch_state(state,"no_authority",torch.zeros(2,14))
 
+    def test_order_sensitive_history_resides_in_associative_state_not_fast_sum(self):
+        # Reorder old observational pairs while preserving last two genuine
+        # steps. Constructed architecture perturbation, NOT valid data.
+        clean=sample(batch=2,frames=8)
+        changed={k:v.clone() for k,v in clean.items()}
+        perm=[4,3,2,1,0,5,6,7]
+        for key in ("observation_history","prior_logged_action_history"):
+            changed[key]=changed[key][:,perm]
+        def replay(s):
+            state=start(self.model,s)
+            for t in range(s["observation_history"].shape[1]-1):
+                state=advance(self.model,state,s,t)
+            return state
+        with torch.no_grad():
+            a=replay(clean);b=replay(changed)
+            torch.testing.assert_close(
+                a.core_state.fast_sum,b.core_state.fast_sum,
+                atol=2e-6,rtol=2e-6)
+            torch.testing.assert_close(a.previous_observation,
+                                       b.previous_observation,atol=0,rtol=0)
+            a_zero=patch_state(a,"associative_memory",
+                               torch.zeros_like(a.core_state.memory))
+            b_zero=patch_state(b,"associative_memory",
+                               torch.zeros_like(b.core_state.memory))
+            out1=forecast(self.model,a_zero,clean)
+            out2=forecast(self.model,b_zero,changed)
+            for head in out1:
+                torch.testing.assert_close(out1[head],out2[head],
+                                           atol=2e-6,rtol=2e-6)
+
     def test_profiling_reports_explicit_runtime_not_hardware_guarantee(self):
         result=probe_runtime(self.model,self.sample,
                              system1_velocity_adapter,warmups=0,repeats=2)
