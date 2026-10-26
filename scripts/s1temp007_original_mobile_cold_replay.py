@@ -55,7 +55,7 @@ def replay(original:Path,cache:Path,out:Path):
         for arm in ARMS:
             filename=original/f"{arm}-{seed}.pt"
             real_digest=hashlib.sha256(filename.read_bytes()).hexdigest()
-            original_sha=next(x for x in l["original_9_frozen_model_optimizer_rng_hashes"]
+            original_sha=next(x for x in l["all_nine_original_model_optim_rng_checkpoint_sha_receipts"]
                  if x["seed"]==seed and x["arm"]==arm)["model_optimizer_rng_SHA256"]
             if real_digest!=original_sha:
                 raise RuntimeError("original checkpoint tampering/digest mismatch")
@@ -89,6 +89,7 @@ def replay(original:Path,cache:Path,out:Path):
                 print("S1TEMP007_FROZEN_COLD_REPLAY",json.dumps(row,sort_keys=True),flush=True)
     out.mkdir(parents=True,exist_ok=True)
     receipt=dict(study="S1TEMP007",original_fit_run=40297263363,
+        original_source_metadata_only_revision="7249d8a935db04f846f9e669b788f26c3a19b645",
         original_9_model_SHA_verified=True,
         original_dev_source_SHA_verified=True,full_original_gate=l["original_scientific_gate"],
         no_training_optimizer_calls=True,source_TEST_never_downloaded=True,
