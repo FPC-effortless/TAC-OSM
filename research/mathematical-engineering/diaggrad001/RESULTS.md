@@ -183,3 +183,21 @@ conflict count with the unchanged tolerances. It never changes original data,
 registered measurements, source training code, predictive gates or model bytes.
 Regression tests reject mismatches in raw gradients and substantive counts.
 This is an explicitly post-original replay-infrastructure correction.
+
+A later runner (40248483108) also failed a raw FP32 dot at row22:
+-0.932906 versus -0.932928, absolute difference2.2171e-5, exceeding the original
+relative1e-5/absolute1e-6 diagnostic tolerance. **Cross-host FP32 replay is NOT
+qualified.** That failure and the strict checker remain; no tolerance is widened.
+
+To distinguish the scientific finding from hardware-sensitive FP32 reductions,
+the separate precision supplement was registered at358860dc BEFORE measurement.
+It reevaluates all180 probes in FP64, promoting the original checkpoint weights
+and augmented inputs; FIT normalization arithmetic uses FP64. It has its own
+original record and stricter relative1e-9/absolute1e-10 replay contract.
+
+The FP64 original preserves the central results: NLL/point opposition0/180,
+point/interval139/180, opposing auxiliary before projection96/180, hypothetical
+AdamW uphill34/180, group-rate SGD uphill0/180. Worst projected global cosine is
+-4.25e-16; no global dot is below -1e-10. This supports the diagnosis's precision
+robustness, not bit-identical FP32 execution or a new trained capability. The
+original FP32 JSON and all its replay exceptions remain authoritative records.

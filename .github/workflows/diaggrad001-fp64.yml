@@ -1,0 +1,24 @@
+name: DIAGGRAD001 separate FP64 gradient diagnostic
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/diaggrad001_precision.py'
+      - 'tests/test_diaggrad001_precision.py'
+      - 'research/mathematical-engineering/diaggrad001/FP64_PROTOCOL.json'
+      - 'research/replay-bundles/DIAGGRAD001/FP64_DIAGNOSTIC.json'
+      - '.github/workflows/diaggrad001-fp64.yml'
+permissions:
+  contents: read
+jobs:
+  fp64-diagnostic-only:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy pytest
+      - run: PYTHONPATH=src:. pytest -q tests/test_diaggrad001_precision.py
+      - run: PYTHONPATH=src:. python scripts/diaggrad001_precision.py replay
