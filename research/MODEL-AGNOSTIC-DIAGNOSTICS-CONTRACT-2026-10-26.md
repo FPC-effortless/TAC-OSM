@@ -22,6 +22,9 @@ Core tools:
 - src/tac_osm/research_anticheat.py — reusable data boundary, source target
   poisoning, partition checks, gradient/activation traces and leaf/functional
   first-divergence probes. Independent of model names and tensor widths.
+- src/tac_osm/research_interpretation.py — version-independent hypotheses based
+  on arbitrary state lesions, head names, gradient conflicts and missing
+  diagnostic coverage; no fast/slow/matrix name assumptions.
 - src/tac_osm/research_evidence.py — paired receipt comparer independent
   of model, architecture and target name.
 - src/tac_osm/research_probe_adapters.py — the explicitly *native-specific*
