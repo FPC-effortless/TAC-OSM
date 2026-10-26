@@ -94,3 +94,9 @@ from original checkpoints. `PYTHONPATH=src:. python scripts/diagtrain001_trainin
 replays the fixed finite-proposal probe against RESULTS.json under the original
 relative1e-5/absolute1e-6 contract. Exact input/checkpoint hashes and immutability
 checks remain compulsory. Neither command trains or scores protected data.
+
+Independent detached-checkout replay at bbd056e3 reproduced all15 finite probes
+and CURVES.json exactly on this host.81relevant tests pass. Original actual-model
+Observatory replay also passes with its full-integrity INCONCLUSIVE unchanged.
+Draft PR#425 and master-plan commitea966c5424da377dd3d5d77b4e9ed314a5ce4369
+preserve the findings. GitHub replay status is recorded separately.
