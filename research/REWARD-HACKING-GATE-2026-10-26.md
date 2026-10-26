@@ -42,8 +42,8 @@ The research system must be able to answer:
 | Manipulation of reward model, harness, scoring script, heldout outcomes | \`audit_protected_assets\` | Verify actual bytes against separately controlled hash pins, restrict write domains |
 | Historical outcome or reward slipped into decision time | \`probe_reward_noninterference\` plus existing research anti-cheat | Change reward-only fields; fail or investigate if predictions change |
 | Proxy reward increases but true outcome does not | \`audit_proxy_goal_alignment\` | Predeclare minimum improvement and fail on one-sided optimization |
-| Easy strata hiding hard-horizon degradation | Per-group and horizon matched episode IDs | Required groups / minimum samples / subgroup-specific harm triggers |
-| Safety incidents or excessive action/sensing costs obscured by success | Goal + safety + decision-cost paired receipts | Bound tolerated new safety violations and excess real decision costs |
+| Easy strata hiding hard-horizon degradation | Per-group, per-episode and horizon matched episode IDs | Required groups / minimum samples / individual and subgroup-specific harm triggers |
+| Safety incidents or excessive action/sensing costs obscured by success | Goal + safety + decision-cost paired receipts | Count newly introduced safety incidents without offset from improved episodes; bound worst individual and aggregate decision costs |
 | Silent diagnostic disablement | \`RewardIntegrityGate\` via \`reward_audit_ledger\` | Missing, failed or inconclusive required checks block score promotion |
 
 All trust boundaries are enforced outside the reward-optimizing model. A
