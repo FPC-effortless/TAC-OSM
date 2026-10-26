@@ -1,5 +1,11 @@
 # TAC-OSM v0.1
 
+## Current research/company direction — October 2026
+
+The original v0.1 instrument described below is historical and has not established the aspirational core claims. The **current company research direction** is practical, stateful and probabilistic specialist models for either **real offline/device inference** or **fast, cost-efficient cloud inference**. Long-term [ARC-AGI-3 interactive adaptation research](https://github.com/FPC-effortless/TAC-OSM/issues/451) is a separate benchmark-specific challenge, not a superintelligence claim or a seventh TAC model family. See the [master research plan](research/MASTER_RESEARCH_PLAN.md), [company operating strategy](research/COMPANY_STRATEGY_AND_DAILY_OPERATING_SYSTEM.md), [catalog roadmap #450](https://github.com/FPC-effortless/TAC-OSM/issues/450) and [Edge #440](https://github.com/FPC-effortless/TAC-OSM/issues/440). No ARC result, real mobile/cloud inference or qualified product is claimed from these policy documents.
+
+---
+
 > **A controlled experimental environment for studying persistent-state-
 > conditioned relevance routing and selective computation.**
 
