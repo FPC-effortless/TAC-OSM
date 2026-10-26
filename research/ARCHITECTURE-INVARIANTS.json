@@ -1,0 +1,87 @@
+{
+  "schema": "tac-osm.invariants.v1",
+  "purpose": "Explicit failure ledger: distinguish enforced structural contracts, limited real theorems, numerical tests and empirical claims. No promise to prevent every statistical failure mathematically.",
+  "current_candidate": "ME107 untrained role-specialized Temporal head; six families unchanged",
+  "issues": [
+    {
+      "id": "GRAD-001",
+      "failure": "Global gradient projection can leave local opposition and AdamW can rotate the update.",
+      "evidence": "DIAGGRAD001 point/interval139of180; shadow AdamW uphill34of180",
+      "contract": "Guard complete proposed displacement per exhaustive block; recheck after rounding; fail closed.",
+      "implementation": "src/tac_osm/role_update_contract.py",
+      "proof": "PNDS.RoleSpecializedFFN.protected_dot_nonpos",
+      "status": "PROTOTYPE_TESTED_LIMITED_REAL_THEOREM",
+      "open": "Not trained or integrated with optimizer moments; no finite-step loss theorem."
+    },
+    {
+      "id": "ROLE-001",
+      "failure": "Decoder quantities and shared ancestors couple competing objectives.",
+      "contract": "Independent typed FFNs for current belief12, uncertainty shape12 and point innovation6; explicit output transforms and uncertainty gradient view.",
+      "implementation": "src/tac_osm/variants/role_specialized_sensor_world.py",
+      "tests": "tests/test_role_specialized_sensor_world.py",
+      "status": "STRUCTURAL_BOUNDARIES_TESTED",
+      "open": "Shared ancestors still receive multiple objectives; learned specialization and predictive gains untested."
+    },
+    {
+      "id": "UNC-001",
+      "failure": "Missing-data overconfidence; blind scale shrinkage previously broke coverage.",
+      "evidence": "ME100/101/104 failures, ME105/106 protected-floor recovery",
+      "contract": "Retain nonnegative FIT-derived source floors and missing-current scale floor; positive scales and coherent censored marginal law.",
+      "status": "EXACT_SCALE_BOUND_PROVED_NOT_COVERAGE",
+      "open": "Scale floors do not prove nominal coverage, sharpness or every-channel qualification.",
+      "proof": "PNDS.RoleSpecializedFFN.roleProtect_left_floor_lower_bound; right and missing-floor analogues"
+    },
+    {
+      "id": "UNC-002",
+      "failure": "Floor binding can push interval objectives to change location instead of scale.",
+      "evidence": "DIAGGRAD001 missing-slot floor binding left67.55percent/right91.90percent",
+      "contract": "Keep floors; expose branch activity and gradient geometry. Test protected applied updates prospectively.",
+      "status": "TRACKED_NOT_RESOLVED",
+      "open": "A richer conditional probability law may be necessary. Do not waive floor or interval gates."
+    },
+    {
+      "id": "MEM-001",
+      "failure": "Retention is not useful information storage or retrieval; learned reads can be ignored.",
+      "contract": "Preserve native keys/writes/queries; require authentic delayed-history capability evidence separately from state survival proofs.",
+      "status": "OPEN_EMPIRICAL",
+      "open": "FFNs and long retention do not establish useful associative memory."
+    },
+    {
+      "id": "SCAN-001",
+      "failure": "State-conditioned scheduling or decoder feedback can invalidate a claimed parallel scan.",
+      "contract": "Input-only affine schedule; chronological associative composition; no role-to-same-scan feedback; streaming/source reference tests.",
+      "proof": "Inherited PNDS scan contracts under explicit input-schedule assumptions",
+      "status": "INHERITED_LIMITED_PROOF_AND_TESTS",
+      "open": "Not a proof of the complete neural IEEE implementation or Mamba-equivalent speed."
+    },
+    {
+      "id": "NUM-001",
+      "failure": "Cross-host floating arithmetic and preprocessing drift can break replay.",
+      "evidence": "DIAGGRAD001 FP32 raw-dot exception; separate FP64 replay passed with pinned NumPy2.3.5/Torch2.14.1+cpu",
+      "contract": "Pin environment, preserve failures and immutable artifacts/tolerances; independent precision-specific reference tests.",
+      "status": "PARTIAL_NUMERICAL_VERIFICATION",
+      "open": "No universal FP32 cross-host equivalence or overflow theorem."
+    },
+    {
+      "id": "STATE-001",
+      "failure": "Fixed storage size is not bounded values or unlimited exact history.",
+      "contract": "Report608B float payload separately from metadata/model/activations; causal owner/time guards; unchanged source normalization.",
+      "status": "PARTIAL_TESTED",
+      "open": "Evidence sums/counts can grow; age is capped256h; indefinite integer/float overflow and unbounded-age belief are not proven safe."
+    },
+    {
+      "id": "DATA-001",
+      "failure": "Leakage, task mismatch and exposed-cohort tuning can look like intelligence.",
+      "contract": "FIT-only this prototype; preserve2015 exposure labels and closed2016-2017 numerical cohort; no causal/control claims from sensor prediction.",
+      "status": "ENFORCED_BY_SCOPE_AND_SOURCE_CHECKS",
+      "open": "Independent capability qualification still required."
+    },
+    {
+      "id": "BUDGET-001",
+      "failure": "Parameter padding or unmatched models can create false architectural wins.",
+      "contract": "Live trainable/deployed95k-105k; matched trained alternatives within1percent, identical data/exposure/compute/tuning. New training needs new validated registration.",
+      "status": "PROTOTYPE_LIVE_COUNT_102713_NO_FITS",
+      "open": "No matched comparison, training checkpoint or capability gate for ME107."
+    }
+  ]
+}
