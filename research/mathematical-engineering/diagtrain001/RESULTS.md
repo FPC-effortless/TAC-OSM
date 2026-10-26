@@ -138,3 +138,22 @@ INWARD_CI40289990676.json. Full1156local regression tests PASS; PNDSsource-refer
 3tests, limited Lean projection/conditional-certificate proofs and axiom audit
 PASS. Reciprocal source-pinned mathematical manifests match; full IEEE/neural
 refinement remains OPEN. Draft PNDS PR#30 accompanies TAC PR#425. No merges.
+
+## Qualified FIT-pool coverage
+
+Source-only audit (reproducible by scripts/diagtrain001_exposure.py --replay):
+there are371eligible natural-gap origins and186,071eligible general origins.
+Every model drew32,768times from each pool. All371gap origins were visited,
+with88.3235draws per gap origin on average; general draws visited29,983–30,079
+unique origins,16.11–16.17% of the eligible general pool. These are origin draws,
+not independent events/episodes or identical augmented examples. Pool overlap
+is present: the general pool includes some natural-gap origins. The two draws
+must not be described as disjoint source partitions or independent evidence.
+Diagnostic first-half/second-half groups are sampling strata; availability-based
+future guards must classify actual runtime masks/ages, not rely only on position.
+
+This exposes a sampling-diversity concern alongside objective conflicts. It does
+not prove overfitting or that longer training solves the problem. Any next
+registered budget study should include source-diverse sampling, actual source
+availability strata, and fixed internal validation checkpoints, rather than
+simply repeating rare targets longer.
