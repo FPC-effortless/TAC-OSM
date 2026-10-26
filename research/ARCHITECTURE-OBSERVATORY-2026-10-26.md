@@ -30,6 +30,8 @@ architectural variant.
 | Memory Tomography | memory_tomography | time-indexed fast/slow/matrix norms and changes, patched-state readout differences, read-only candidate test | Zero patch is out-of-distribution; effect is NOT causal real-world importance or learned long-term recall |
 | Dependency Microscope | input_dependency_map | autograd gradient and connectivity between current context/candidates/memory and outcome/future heads | A locally zero gradient does NOT mean universally unused |
 | Gradient Conflict Atlas | gradient_conflict_atlas | per-shared-module pairwise loss gradient norms/cosines and missing shared pathways | Gradients alone don't establish training improvement or recommend reweighting |
+| Entity Isolation | entity_isolation_probe | batched-vs-single entity state/output differences; flags cross-entity contamination inside model | Does not prove source entity IDs or joins are correct |
+| Runtime Microscope | profile_native_runtime | per-host replay+query median/p95/min/max milliseconds, state bytes, torch threads | No matched model speed comparison, safety latency guarantee or hardware normalization |
 | Evidence Comparator | compare_evidence | exact paired sample match, hashes, resource and seed checks, per-group error changes, blocked/compatible status | Matching self-reported receipts is NOT independent validation, significance, capability or architectural superiority |
 | Interpretation Rules | interpret_snapshot | narrow investigation hypotheses when probes reveal suspected issues | Heuristic hypotheses, not causal diagnoses |
 | CLI | scripts/run_research_observatory.py | reproducible JSON reports with no raw observations or weights | Never auto-opens TEST, authenticates publisher or trains |
@@ -55,7 +57,7 @@ can inspect whether source behavior matches these intended pathways.
 ## Commands
 
     python -m pytest -q tests/test_research_observatory.py
-    python scripts/run_research_observatory.py --fixture
+    python scripts/run_research_observatory.py --fixture --entity-isolation --profile
 
 Fixture data and weights are constructed/untrained and can validate only
 the instrumentation, never real training behavior.
@@ -70,6 +72,8 @@ containing exactly history and candidates:
       --expected-checkpoint-sha256 PREPINNED_CHECKPOINT_DIGEST \
       --run-id STUDY_NATIVE_SOURCE_FIT_AUDIT \
       --output diagnostics.json
+
+Optional --entity-isolation checks B>=2 independently sourced entities for batched versus individual agreement. Optional --profile measures local end-to-end runtime (including full history replay), records thread count and state bytes, and **must never** serve as an equal-hardware efficiency ranking without a separate matched protocol.
 
 The input digest is a caller-provided integrity assertion, not evidence of
 independent publisher authenticity. Keep the original data source, original
