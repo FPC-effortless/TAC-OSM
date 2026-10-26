@@ -1,0 +1,14 @@
+{
+  "study_id": "DIAGTRAIN001",
+  "study_type": "no_fit_diagnostic",
+  "question": "Does ME109 show ongoing learning or blocked useful updates at its fixed training endpoint?",
+  "models": "All five original ME109 final checkpoints, hash authenticated",
+  "inputs": "Three authenticated original FIT-only B32 context256 tensors; no REPORT or protected source access",
+  "operations": ["Summarize all 4096 recorded losses by context and disjoint endpoint windows", "Read-only original AdamW proposal with and without average-point projection", "Functional evaluate each candidate on its originating batch and the next fixed batch modulo3"],
+  "candidate_policy": "Exactly one original-rate guarded and one original-rate unguarded proposal. No rate sweep, step, checkpoint save, winner selection or training continuation.",
+  "metrics": ["full objective", "six-channel point loss", "gap PM normalized MAE", "general PM normalized MAE", "proposal norm retained", "training curve endpoint means and slopes", "unique target origins and exposures"],
+  "checks": ["Original checkpoint hashes unchanged", "Model values and tensor versions unchanged", "All optimizer moments and step counters unchanged", "No optimizer.step call", "Functional current-state results reproduce ordinary forward"],
+  "interpretation": "Local finite-step diagnosis and nonstationary FIT curves cannot establish validation convergence, sufficient training, causal explanation of held-out failure or model superiority. Full anti-cheat scope remains INCONCLUSIVE. New training requires a new prospective protocol.",
+  "no_training": true,
+  "sealed_test_access": false
+}
