@@ -1,0 +1,64 @@
+{
+  "models": [
+    {
+      "architecture": "LATFUSE002-fixed-state-conditional-forecast",
+      "deployed_parameters": 98775,
+      "measured": {
+        "checkpoint_sha256": "7b05fbd3226167b4f31b81cf3d235fd0dbbc2a33637957df6da3f872f70d215d",
+        "deployed_parameters": 98775,
+        "trainable_parameters": 98775
+      },
+      "seed": 202601,
+      "trainable_parameters": 98775
+    },
+    {
+      "architecture": "LATFUSE002-fixed-state-conditional-forecast",
+      "deployed_parameters": 98775,
+      "measured": {
+        "checkpoint_sha256": "5fd3e162653ccdc23ca9bb343e5ab4262c149953e00b548e5e80e0eedd30f0a0",
+        "deployed_parameters": 98775,
+        "trainable_parameters": 98775
+      },
+      "seed": 202602,
+      "trainable_parameters": 98775
+    }
+  ],
+  "protocol": {
+    "actual_target": "13 measured original source channels at actual origin+6; missing observations excluded by boolean mask. No fabricated labels, no fabricated actions or counterfactual reward.",
+    "anti_cheat": "Prediction reads only original past source inputs, missingness masks, chronological last observed values, station ID, future-known calendar. Future observed numeric targets are read inside loss only after model forecast, never in candidate input. Automated source boundary checks are scoped; full independent access/reward/outcome attestation remains INCONCLUSIVE and blocks scientific promotion.",
+    "batch_size": 8,
+    "calendar": "six deterministic future-known sine/cosine features hour/day-of-week/day-of-year at origin+6; exogenous time context, NOT a physical candidate intervention or source measurement.",
+    "checkpoint": "Commit original trained final.pt, optimizer, torch RNG, normalizer, original source/version and train-order hashes, FIT_RECEIPT and DEV_PREDICTIONS to Git-owned research/replay-bundles/LATFUSE002/ on isolated branch. Re-evaluate from immutable model bytes in clean checkout without refit. If self-push denied, STOP and report unqualified artifact.",
+    "claim_rules": "No matched trained comparator here. Never claim architectural superiority, commercially meaningful risk or action ability, independent heldout generalization, or full calibration/probability correctness. No automated TEST access.",
+    "development": "Fixed same station-hour rule every 336 hours throughout previously exposed 2015 DEV, scored once after original checkpoint bytes are written. Report all two seeds, no picking a winner.",
+    "history": 24,
+    "horizon": 6,
+    "input_source": "12 original Beijing air monitoring stations, 13 real channels; input mask, preceding last observed value and exact elapsed-age computed chronologically without future lookahead; time-typed station owner.",
+    "limitations": "Single model training is not matched neural architecture comparison or real-world qualification. Both 2014 validation and 2015 DEV remain research evidence only; no protected 2016-17 access or counterfactual action claim.",
+    "normalization": "Per-channel FIT-train-only mean/standard deviation on original observed 13D source (log1p of first six measured nonnegative pollutants). No validation/development stats used in preprocessing. Missing original sensor values never invented as true targets.",
+    "question": "Can a 96-99k FP32 fixed-state fusion with high-retention gated delta, multirate slow channels and belief-conditioned associative retrieval learn authentic future pollutant/sensor observations after 6 hours?",
+    "recurrent_state": "H80 fast80 +slow80 +key/value matrix16x16 +16 slots x80=1,696 FP32 scalars plus16 bool flags; exactly 6,800 nominal FP32 bytes per independent stream. No extra recurrent state allocations.",
+    "retention_fix": "Retention and write maps fully trainable; retention bias initializes sigmoid to 0.995, write to 0.1. Multi-rate slow channels 0.90..0.99999 and belief-informed content query reuse original state bytes.",
+    "source_cutoffs": {
+      "FIT_train": "2013-03-01 inclusive through 2014-08-31 inclusive",
+      "development": "2015-01-01 inclusive through 2015-12-31 inclusive",
+      "protected": "2016-01-01 onward: numeric lines not parsed; sealed",
+      "validation": "2014-09-01 inclusive through 2014-12-31 inclusive"
+    },
+    "stop": "Exactly two predeclared seeds x128 actual original-data optimizer steps; no retrospective repetitions or hyperparameter tuning on 2015 DEV. Stop on count/input/gradient/nonfinite/SourceSHA or runtime integrity failure. No protected years.",
+    "train_selection": "Two original real station-hour IDs independently sampled with fixed Python random.Random seeds 202601 and 202602, 8 source-authorized cases/update, sampled uniformly independent of target availability; every origin has preceding 24 chronological physical hours and +6 real target within FIT-train cutoff.",
+    "training": "Fresh FP32 98,775 active and deployed parameters per seed; original source observational windows; AdamW lr 0.0005, wd0.001, forward 0.8 Gaussian NLL +0.2 normalized absolute error; clip global norm1. No pretrained encoder or zero dummy parameters.",
+    "updates": 128,
+    "validation": "Fixed chronological stations and every 336 hours starting at 2014-09-01+history, excluding any FIT training targets, standard Gaussian normalized NLL, MAE, 90% nominal coverage, raw PM2.5 MAE; compare unmatched practical persistence reference only."
+  },
+  "real_world_source": {
+    "license": "CC-BY-4.0",
+    "name": "UCI501 Beijing Multi-Site Air Quality original archive (12 physically recorded stations)",
+    "observed_real_outcomes": true,
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8"
+  },
+  "registered_before_first_fit": true,
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE002-REAL-PREDICTION-SINGLE",
+  "study_type": "single_model_training"
+}

@@ -1,0 +1,44 @@
+name: LATFUSE002 read-only trained memory tomography (no fit, original FIT)
+
+on:
+  push:
+    branches:
+      - research/latfuse002-fixed-state-training-2026-10-26
+    paths:
+      - scripts/latfuse002_frozen_memory_probe.py
+      - .github/workflows/latfuse002-memory-probe.yml
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-original-memory-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: CPU only no-update diagnostic dependencies
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Read immutable original FIT source from exact pinned prior commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse002-frozen-inputs
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse002-frozen-inputs/PRSA2017_original.zip
+      - name: Source-boundary read-only original checkpoint memory tomography
+        env:
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONPATH: src
+        run: |
+          python scripts/latfuse002_frozen_memory_probe.py \
+            --source /tmp/latfuse002-frozen-inputs/PRSA2017_original.zip
+      - name: No independent capability inference
+        run: echo "Local latent lesions are NOT learned recall accuracy, source independence or causal world model intelligence."
