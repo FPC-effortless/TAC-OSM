@@ -86,7 +86,7 @@ class ExactSystem1AdapterTests(unittest.TestCase):
         self.assertEqual(prior["motion_proxy_logit"],0)
         self.assertEqual(prior["motion_proxy_score"],0)
 
-    def test_future_only_does_not_modify earlier_stream_estimates(self):
+    def test_future_only_does_not_modify_earlier_stream_estimates(self):
         clean=self.sample
         modified={k:v.clone() for k,v in clean.items()}
         modified["observation_history"][:,4]+=800
