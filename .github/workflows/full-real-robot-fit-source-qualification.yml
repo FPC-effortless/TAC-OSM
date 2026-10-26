@@ -29,7 +29,7 @@ jobs:
       - name: Validate entire-training-cohort receipt logic and factual real-target mask
         run: |
           python -m py_compile scripts/audit_full_real_robot_fit.py
-          PYTHONPATH=src python -m pytest -q tests/test_full_real_robot_fit_audit.py
+          PYTHONPATH=src python -m pytest -q tests/test_full_real_robot_fit_audit.py tests/test_real_robot_reward_readiness.py
   original-real-physical-training-source:
     needs: real-source-mathematical-safeguards
     runs-on: ubuntu-latest
