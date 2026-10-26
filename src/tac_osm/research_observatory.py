@@ -296,10 +296,11 @@ def interpret_snapshot(report: Mapping[str, Any]) -> dict[str, Any]:
         if memory.get("candidate_permutation_max_abs_error", 0) > 1e-5:
             warnings.append({"area": "action_order", "priority": "high",
                              "hypothesis": "candidate order changes corresponding output"})
-        if all(v["outcome_mean_absolute_change"] == 0 and
-               v["future_mean_absolute_change"] == 0
-               for k, v in memory.get("interventions", {}).items()
-               if k in ("fast", "slow", "memory", "all_state")):
+        edits = memory.get("interventions", {})
+        if (all(k in edits for k in ("fast", "slow", "memory", "all_state"))
+                and all(edits[k]["outcome_mean_absolute_change"] == 0 and
+                        edits[k]["future_mean_absolute_change"] == 0
+                        for k in ("fast", "slow", "memory", "all_state"))):
             warnings.append({"area": "memory", "priority": "review",
                              "hypothesis": "none of the state lesions affected this particular prediction; check task relevance, gradients and trained checkpoints"})
     grads = report.get("gradients")
