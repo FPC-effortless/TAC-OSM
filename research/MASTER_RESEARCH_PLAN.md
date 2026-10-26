@@ -2886,3 +2886,17 @@ sufficiency remainsUNRESOLVED: no intermediatevalidationmodels were saved. Next
 substantivestudy must jointly evaluate regime-specific optimization and fixed
 learning curves atregisteredbudgets, retaining native TAC parallel state and role
 FFNs. Do not claim predictive improvement or silently repeat ME109.
+
+### DIAGTRAIN001 source-diversity finding (2026-10-26)
+
+Original FIT-only pool/plan audit finds371natural-gap origins and186,071general
+origins. Each original model drew32,768fromeachpool: all371gap origins repeated
+88.3235timesonaverage; generaldraws cover29,983–30,079origins(16.11–16.17%pool).
+Pools overlap; they are samplingstrata, not disjoint partitions. Different
+augmentations/historylengths are not identicalexamples or independentoutcomes.
+This is a concrete diversity limitation, not overfitting/insufficienttrainingproof.
+Nextbudget study should improve source-diverse actual-availability sampling as
+well as regime-specific learning and fixed intermediate validation. No further
+ME109fits, newtrainedmodel or protectedcohort access. Reproducible script and
+EXPOSURE_COVERAGE.json live in draftTACPR425. PNDS inward source/math CI40290225913
+and Lean40290225790PASS; original guard replay failure stays preserved.
