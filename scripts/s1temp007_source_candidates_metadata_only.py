@@ -3,6 +3,8 @@
 from __future__ import annotations
 import json,urllib.request
 SOURCES=(
+ "lerobot/aloha_mobile_chair",
+ "lerobot/aloha_mobile_cabinet",
  "lerobot/aloha_static_thread_velcro",
  "lerobot/aloha_static_battery",
  "lerobot/aloha_static_fork_pick_up",
