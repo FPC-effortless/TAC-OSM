@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""S1TEMP007 prospective new real ALOHA coffee source-only authorization.
+"""S1TEMP007 prospective new real ALOHA fork_pick_up source-only authorization.
 
 No optimizer, no model, no DEV/TEST rows accessed: only publisher metadata
-and FIT episodes0..24. Source git revision is frozen as an OUTPUT receipt
+and FIT episodes0..49. Source git revision is frozen as an OUTPUT receipt
 and must be COMMITTED in Git-owned lock before ANY study optimizer step.
 """
 from __future__ import annotations
@@ -65,7 +65,7 @@ def audit():
     if (historical_license not in ("","apache-2.0") or current_license!="apache-2.0"):
         raise RuntimeError("license conflict; abort")
     license_id="apache-2.0"
-    license_evidence=("historical_v2_AND_current" if historical_license=="mit"
+    license_evidence=("historical_v2_AND_current" if historical_license=="apache-2.0"
                      else "current_publisher_card_only_historical_missing")
     known={x["rfilename"] for x in historical.get("siblings",[])}
     receipts=[]
@@ -95,10 +95,10 @@ def audit():
         license_evidence_scope=license_evidence,license_current_publisher=license_id,
         source_live_head_sha=live_sha,source_revision_schema_audit=examined,
         codebase_version=info["codebase_version"],fps=50,
-        source_publisher_episodes=50,source_publisher_total_frames=60000,
+        source_publisher_episodes=100,source_publisher_total_frames=60000,
         FIT=list(FIT),DEV=list(DEV),TEST=list(TEST),
         expected_frames_each=600,FIT_receipts=receipts,
-        FIT_episodes_downloaded=25,DEV_episode_files_downloaded=0,
+        FIT_episodes_downloaded=50,DEV_episode_files_downloaded=0,
         TEST_episode_files_downloaded=0,
         no_optimizer_steps=True,no_model_eval=True,
         source_revision_FROZEN_BEFORE_NEXT_STAGE=True)
