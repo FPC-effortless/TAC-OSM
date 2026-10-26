@@ -162,7 +162,9 @@ def main():
     origins=[(sid,ORIGIN) for sid in range(12)]
     ix=checked_index(new)
     evidence=[]
-    with torch.inference_mode():
+    # Native state ownership relies on parameter._version; inference_mode
+    # disables version counters. no_grad preserves source guards without AD/fit.
+    with torch.no_grad():
         for seed in SEEDS:
             m,cp,sha=model_for(new,d,seed,ix[seed])
             original_versions=m.versions()
