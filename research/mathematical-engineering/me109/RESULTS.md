@@ -111,3 +111,10 @@ and finding statuses exactly, and requires exact clean-vs-poison output hash
 equality within each run. Only four runtime prediction digest fields are
 normalized across runs; all numerical summaries retain the existing1e-5/1e-6
 contract. Saved original JSON/model/score bytes are not overwritten.
+
+Extended clean restoration at5b2f5fb2 independently reran original forecasts,
+all10fitted audits, summary, new observatory/poison probes and all15FIT regime
+proposals; all recorded results reproduce under their declared contracts, with
+no optimizer step and clean worktree. Full1151local tests PASS after integration
+and registry metadata update. Replay does not upgrade INCONCLUSIVE full-integrity
+status or FAIL0/5 predictive qualification.
