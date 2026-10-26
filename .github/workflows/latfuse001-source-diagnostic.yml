@@ -5,6 +5,7 @@ on:
     branches: [research/latfuse001-unified-latent-2026-10-26]
     paths:
       - "scripts/latfuse001_source_diagnostic.py"
+      - "scripts/latfuse001_trainability_prefit.py"
       - "research/mathematical-engineering/latfuse001/FAIR_COMPARISON.json"
       - ".github/workflows/latfuse001-source-diagnostic.yml"
       - "src/tac_osm/latent_fusion_001.py"
@@ -56,6 +57,14 @@ jobs:
           MKL_NUM_THREADS: "1"
         run: |
           python scripts/latfuse001_source_diagnostic.py \
+            --source /tmp/latfuse001-data/PRSA2017_original.zip
+      - name: Probe live 100k source graph and FIT-only gradients without optimizer
+        env:
+          PYTHONPATH: src
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+        run: |
+          python scripts/latfuse001_trainability_prefit.py \
             --source /tmp/latfuse001-data/PRSA2017_original.zip
       - name: Disclose evidence limits
         run: |
