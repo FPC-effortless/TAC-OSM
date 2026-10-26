@@ -1,0 +1,42 @@
+name: ME108 all role source joint directional and parameter VJP audit
+on:
+  push:
+    branches:
+      - research/me108-full-vjp-refinement-2026-10-26
+    paths:
+      - 'scripts/me108_joint_directional_source_audit.py'
+      - '.github/workflows/me108-full-vjp-source-audit.yml'
+  pull_request:
+    paths:
+      - 'scripts/me108_joint_directional_source_audit.py'
+      - '.github/workflows/me108-full-vjp-source-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  joint-fit-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pinned existing original CPU model environment
+        run: |
+          pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+          pip install numpy==2.3.5 pytest
+      - name: Verify joint source gradient/directional derivative with frozen real trained models
+        run: |
+          PYTHONPATH=src:. python scripts/me108_joint_directional_source_audit.py
+      - name: Archive first completed original source audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me108-fifteen-joint-input-parameter-vjp-real-fit
+          path: research/mathematical-engineering/neural-refinement/ME108_JOINT_AD_RECEIPT.json
+          if-no-files-found: warn
