@@ -113,9 +113,12 @@ def run(original_dir:Path, cache:Path, out:Path, *, seeds):
         training[ep]=encode_source_episode(records,first["normalization_FIT_only"])
     norm=first["normalization_FIT_only"]
     scale=torch.tensor(norm["train_delta_scale_normalized"],dtype=torch.float32)
+    first=real_sample(training[0])
+    second=real_sample(training[1])
+    paired={k:torch.cat((first[k],second[k]),dim=0) for k in first}
     samples={
-        "first_genuine_FIT_episode":real_sample(training[0]),
-        "second_genuine_FIT_episode":real_sample(training[1]),
+        "paired_genuine_FIT_episodes_0_and_1":paired,
+        "single_genuine_FIT_episode_0":first,
     }
     ledger_audit=AuditLedger("S1OBS001:source-real-frozen-2026-10-26",[
         "source_prior_only","fit_dev_test_episode_identifiers","source_future_noninterference",
@@ -161,13 +164,15 @@ def run(original_dir:Path, cache:Path, out:Path, *, seeds):
             for id_,sample in samples.items():
                 probe=inspect_variant(model,sample,system1_velocity_adapter,
                                       isolation=True,profile=True)
-                grad_ep=training[0 if id_=="first_genuine_FIT_episode" else 1]
                 length=sample["observation_history"].shape[1]
-                x=grad_ep["x"][:length][None]
-                u=grad_ep["prior_u"][:length][None]
-                y=grad_ep["y"][:length][None]
-                event=grad_ep["event"][:length][None]
-                prev=grad_ep["previous_x"][:1]
+                episode_ids=(0,1) if id_.startswith("paired_") else (0,)
+                x=sample["observation_history"]
+                u=sample["prior_logged_action_history"]
+                y=torch.cat((training[e]["y"][:length][None]
+                             for e in episode_ids),dim=0)
+                event=torch.cat((training[e]["event"][:length][None]
+                                 for e in episode_ids),dim=0)
+                prev=sample["preceding_measured_observation"]
                 gradients=loss_gradient_diagnosis(model,x,u,y,event,prev)
                 # Meaningfully separate point forecast from trivially strong
                 # deterministic velocity baseline. Look for memory sensitivity
@@ -183,9 +188,15 @@ def run(original_dir:Path, cache:Path, out:Path, *, seeds):
                     velocity_err=float(real_residual.double().square().mean())
                 if any(not torch.equal(v,before[k]) for k,v in model.state_dict().items()):
                     raise RuntimeError("diagnostics modified checkpoint model weights or buffers")
+                iso_status=probe["entity_isolation"]["status"]
+                allowed_status="PASS" if len(episode_ids)==2 else "INCONCLUSIVE_ONE_ENTITY"
                 if (not probe["memory"]["query_does_not_write_state"]
-                    or probe["entity_isolation"]["status"]!="PASS"):
-                    raise RuntimeError("generic observable state purity or entity isolation failed")
+                    or iso_status!=allowed_status):
+                    raise RuntimeError(
+                        f"unexpected state purity/entity isolation: {id_}, "
+                        f"status={iso_status}, expected={allowed_status}")
+                # INCONCLUSIVE_ONE_ENTITY is a coverage limit, NOT a passed
+                # isolation check. The B=2 authentic replay MUST pass.
                 row=dict(seed=seed,arm=arm,authentic_FIT_episode=id_,
                          original_checkpoint_SHA256=digest,
                          generic_probe=probe,
@@ -202,6 +213,7 @@ def run(original_dir:Path, cache:Path, out:Path, *, seeds):
                 m=lambda k: memory[k]["head_mean_absolute_change"]
                 print("S1OBS001_ACTUAL_CHECKPOINT_DIAGNOSTIC",json.dumps(
                     dict(seed=seed,arm=arm,source_FIT_episode=id_,
+                         entity_isolation_coverage=iso_status,
                       lesion_deltas={
                           k:m(k) for k in ("fast_running_sum",
                          "associative_memory","previous_measured_observation")},
