@@ -1,0 +1,29 @@
+name: S1TEMP008 original BPIC2017 FIT-asof case and offer eligibility audit
+on:
+  push:
+    branches: [research/s1temp008-source-entity-retention-2026-10-26]
+    paths: ['research/parallel-six/S1TEMP008-FIT-*.marker']
+permissions:
+  contents: read
+jobs:
+  trusted-partitioner-no-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Validate source chronology/offer-slot schema without reading original records
+        run: |
+          python -m py_compile scripts/s1temp008_bpi_source_partition_audit.py
+          python -m unittest tests.test_s1temp008_source_asof -v
+      - name: Download publisher MD5 original complete XES into trusted source partitioner
+        run: python -u scripts/s1temp008_bpi_source_partition_audit.py
+      - name: Emit ONLY aggregate FIT eligibility; NEVER original XES, IDs or labels
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1temp008-publisher-md5-true-case-offer-FIT-only-aggregate
+          path: research/diagnostics/s1temp008-source-audit/**
+          retention-days: 90
+          if-no-files-found: warn
