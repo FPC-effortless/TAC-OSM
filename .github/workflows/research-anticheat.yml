@@ -29,7 +29,7 @@ jobs:
           mkdir -p ci-artifacts
           python -m pytest -q tests/test_research_anticheat.py tests/test_robot_anticheat.py \
             tests/test_research_reward_integrity.py tests/test_run_reward_integrity.py \
-            tests/test_reward_runner_integration.py \
+            tests/test_reward_runner_integration.py tests/test_real_robot_reward_readiness.py \
             --junitxml=ci-artifacts/anticheat-tests.xml
       - name: Exercise physical input-contract poison probes with fixture-only evidence
         run: |
