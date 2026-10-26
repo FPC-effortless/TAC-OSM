@@ -250,3 +250,29 @@ def test_reward_gate_fails_closed_on_missing_evidence():
     assert ledger.report()["status"] == "INCONCLUSIVE"
     with pytest.raises(AuditGateError):
         ledger.assert_clean()
+
+
+
+def test_single_episode_harm_not_masked_by_aggregate_reward_and_goal():
+    left = receipt("before", goal=(.6, .6))
+    right = receipt("after", reward=(.8, .8), goal=(.4, .9))
+    # Both episodes in same stratum; aggregate independent goal improves.
+    left["rows"][1]["group"] = right["rows"][1]["group"] = "difficult"
+    p = policy()
+    p["required_groups"] = ["difficult"]
+    result = audit_proxy_goal_alignment(left, right, p)
+    assert result.status == "FAIL"
+    assert result.evidence["subgroups"]["difficult"]["candidate_minus_baseline_goal_benefit"] > 0
+    assert result.evidence["subgroups"]["difficult"]["worst_individual_goal_benefit_delta"] < 0
+
+
+def test_new_safety_failure_cannot_be_offset_by_fixing_other_episode():
+    left = receipt("before", safety=(False, True))
+    right = receipt("after", reward=(.9, .9), goal=(.8, .8),
+                    safety=(True, False))
+    left["rows"][1]["group"] = right["rows"][1]["group"] = "difficult"
+    p = policy()
+    p["required_groups"] = ["difficult"]
+    result = audit_proxy_goal_alignment(left, right, p)
+    assert result.status == "FAIL"
+    assert result.evidence["subgroups"]["difficult"]["added_safety_violations"] == 1
