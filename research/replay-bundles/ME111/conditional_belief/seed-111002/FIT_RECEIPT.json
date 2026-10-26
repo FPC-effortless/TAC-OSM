@@ -1,0 +1,632 @@
+{
+  "architecture": "conditional_belief",
+  "seed": 111002,
+  "trainable_parameters": 104663,
+  "deployed_parameters": 104663,
+  "actual_steps": 1536,
+  "actual_examples": 24576,
+  "actual_tokens": 2686976,
+  "checkpoint_sha256": "445558b5aae9e67b8c3227a935517a3c9bfe484916f4eae20619465e46975f40",
+  "checkpoint_hashes": {
+    "512": "77a83aa5c4e3680db92a8b5109a9c96f2718d1ca0b73e82a15540ca1a1bd55ca",
+    "1024": "85c512ae83dabb25fea0d06f837f20bf89dab12d28fff61041eb165c2fdcfe32",
+    "1536": "445558b5aae9e67b8c3227a935517a3c9bfe484916f4eae20619465e46975f40"
+  },
+  "parent_checkpoint_sha256": "f2b022411dfb8719b1c3658795442a65e06be12eaa6dd3c7a21fb0263d25eb4f",
+  "dropped_parent_tensors": [],
+  "actual_sample_order_sha256": "7afebfe0e5cfb6c74a4584a8173c4ce280c60eb274f0afe1d278594815a21dff",
+  "augmented_inputs_sha256": "c24f5f75637488da02dc61adfbd6da39f2f59027fae090b6ab5dab1bed34f7a3",
+  "optimizer_state_tensors": 45,
+  "parameter_tensors": 45,
+  "first_gradient_receipt": {
+    "parameters": {
+      "state_noise": {
+        "norm": 0.01638740301132202,
+        "nonzero": true
+      },
+      "state_response": {
+        "norm": 0.005455642472952604,
+        "nonzero": true
+      },
+      "station.weight": {
+        "norm": 0.014351008459925652,
+        "nonzero": true
+      },
+      "encoder.weight": {
+        "norm": 0.42903730273246765,
+        "nonzero": true
+      },
+      "encoder.bias": {
+        "norm": 0.09875936061143875,
+        "nonzero": true
+      },
+      "address.weight": {
+        "norm": 0.08809789270162582,
+        "nonzero": true
+      },
+      "address.bias": {
+        "norm": 0.036050714552402496,
+        "nonzero": true
+      },
+      "content.weight": {
+        "norm": 0.09356918931007385,
+        "nonzero": true
+      },
+      "content.bias": {
+        "norm": 0.037471331655979156,
+        "nonzero": true
+      },
+      "source_admission.weight": {
+        "norm": 0.014018109999597073,
+        "nonzero": true
+      },
+      "source_admission.bias": {
+        "norm": 0.005225387867540121,
+        "nonzero": true
+      },
+      "fast_map.weight": {
+        "norm": 0.20573946833610535,
+        "nonzero": true
+      },
+      "fast_map.bias": {
+        "norm": 0.06576138734817505,
+        "nonzero": true
+      },
+      "slow_map.weight": {
+        "norm": 0.034012675285339355,
+        "nonzero": true
+      },
+      "slow_map.bias": {
+        "norm": 0.011019864119589329,
+        "nonzero": true
+      },
+      "memory_gates.inner_linear.weight": {
+        "norm": 0.009316857904195786,
+        "nonzero": true
+      },
+      "memory_gates.inner_linear.bias": {
+        "norm": 0.002276970073580742,
+        "nonzero": true
+      },
+      "query.weight": {
+        "norm": 0.09615352004766464,
+        "nonzero": true
+      },
+      "query.bias": {
+        "norm": 0.02436584047973156,
+        "nonzero": true
+      },
+      "readout.0.weight": {
+        "norm": 0.1621665358543396,
+        "nonzero": true
+      },
+      "readout.0.bias": {
+        "norm": 0.041965506970882416,
+        "nonzero": true
+      },
+      "readout.2.weight": {
+        "norm": 0.40038323402404785,
+        "nonzero": true
+      },
+      "readout.2.bias": {
+        "norm": 0.20036767423152924,
+        "nonzero": true
+      },
+      "retrieved_delta.0.weight": {
+        "norm": 0.005875461269170046,
+        "nonzero": true
+      },
+      "retrieved_delta.0.bias": {
+        "norm": 0.024144867435097694,
+        "nonzero": true
+      },
+      "retrieved_delta.2.weight": {
+        "norm": 0.10873930156230927,
+        "nonzero": true
+      },
+      "retrieved_delta.2.bias": {
+        "norm": 0.20036767423152924,
+        "nonzero": true
+      },
+      "current_head.weight": {
+        "norm": 0.6364709734916687,
+        "nonzero": true
+      },
+      "current_head.bias": {
+        "norm": 0.12449083477258682,
+        "nonzero": true
+      },
+      "width_head.weight": {
+        "norm": 0.8154528737068176,
+        "nonzero": true
+      },
+      "width_head.bias": {
+        "norm": 0.2402220070362091,
+        "nonzero": true
+      },
+      "median_head.weight": {
+        "norm": 0.17679496109485626,
+        "nonzero": true
+      },
+      "median_head.bias": {
+        "norm": 0.0516071617603302,
+        "nonzero": true
+      },
+      "current_residual.input.weight": {
+        "norm": 0.039955850690603256,
+        "nonzero": true
+      },
+      "current_residual.input.bias": {
+        "norm": 0.009999311529099941,
+        "nonzero": true
+      },
+      "current_residual.output.weight": {
+        "norm": 0.160302996635437,
+        "nonzero": true
+      },
+      "current_residual.output.bias": {
+        "norm": 0.12449083477258682,
+        "nonzero": true
+      },
+      "width_residual.input.weight": {
+        "norm": 0.09183724224567413,
+        "nonzero": true
+      },
+      "width_residual.input.bias": {
+        "norm": 0.028351297602057457,
+        "nonzero": true
+      },
+      "width_residual.output.weight": {
+        "norm": 0.3943408131599426,
+        "nonzero": true
+      },
+      "width_residual.output.bias": {
+        "norm": 0.2402220070362091,
+        "nonzero": true
+      },
+      "median_residual.input.weight": {
+        "norm": 0.010998320765793324,
+        "nonzero": true
+      },
+      "median_residual.input.bias": {
+        "norm": 0.0026887599378824234,
+        "nonzero": true
+      },
+      "median_residual.output.weight": {
+        "norm": 0.04408455267548561,
+        "nonzero": true
+      },
+      "median_residual.output.bias": {
+        "norm": 0.0516071617603302,
+        "nonzero": true
+      }
+    },
+    "point": {
+      "source_encoder": {
+        "tensors": 3,
+        "nonzero": 3,
+        "norm": 0.9728371870187814
+      },
+      "source_admission": {
+        "tensors": 2,
+        "nonzero": 2,
+        "norm": 0.03304036367629118
+      },
+      "fast": {
+        "tensors": 2,
+        "nonzero": 2,
+        "norm": 0.47702888247178576
+      },
+      "slow": {
+        "tensors": 2,
+        "nonzero": 2,
+        "norm": 0.0789623537065269
+      },
+      "address": {
+        "tensors": 2,
+        "nonzero": 2,
+        "norm": 0.21022701709269218
+      },
+      "content": {
+        "tensors": 2,
+        "nonzero": 2,
+        "norm": 0.22260494540325934
+      },
+      "memory_gates": {
+        "tensors": 2,
+        "nonzero": 2,
+        "norm": 0.021182130429434478
+      },
+      "query": {
+        "tensors": 2,
+        "nonzero": 2,
+        "norm": 0.2190699379623844
+      },
+      "future_decoder": {
+        "tensors": 8,
+        "nonzero": 8,
+        "norm": 1.1061654990584933
+      },
+      "belief": {
+        "tensors": 2,
+        "nonzero": 1,
+        "norm": 0.012048942861072503
+      },
+      "reconstruction": {
+        "tensors": 6,
+        "nonzero": 6,
+        "norm": 0.7486576948749656
+      },
+      "width": {
+        "tensors": 6,
+        "nonzero": 0,
+        "norm": 0.0
+      },
+      "median": {
+        "tensors": 6,
+        "nonzero": 6,
+        "norm": 0.43421435473234316
+      }
+    },
+    "routing": {
+      "point_and_reconstruction_preclip_norm": 2.208527690181201,
+      "uncertainty_preclip_norm": 2.0914042282928884,
+      "point_on_uncertainty_nonzero": 0,
+      "auxiliary_on_point_nonzero": 0,
+      "reconstruction_mean_gradient_norm": 1.006918145400757,
+      "reconstruction_mean_coordinates": 696,
+      "point_coordinates": 100253,
+      "uncertainty_coordinates": 4410
+    }
+  },
+  "guard_aggregate": {
+    "guard_seconds": 30.65712363089915,
+    "source_encoder.fallbacks": 0,
+    "source_encoder.projections": 14,
+    "source_encoder.checks": 1536,
+    "source_encoder.max_certified_upper_dot": -1.5519662406794596e-06,
+    "source_admission.fallbacks": 0,
+    "source_admission.projections": 7,
+    "source_admission.checks": 1536,
+    "source_admission.max_certified_upper_dot": -2.7315660647108547e-08,
+    "fast.fallbacks": 0,
+    "fast.projections": 10,
+    "fast.checks": 1536,
+    "fast.max_certified_upper_dot": -1.2325673873859576e-06,
+    "slow.fallbacks": 0,
+    "slow.projections": 14,
+    "slow.checks": 1536,
+    "slow.max_certified_upper_dot": -2.117931544350503e-07,
+    "address.fallbacks": 0,
+    "address.projections": 53,
+    "address.checks": 1536,
+    "address.max_certified_upper_dot": -1.1276441371541834e-07,
+    "content.fallbacks": 0,
+    "content.projections": 58,
+    "content.checks": 1536,
+    "content.max_certified_upper_dot": -1.0477021824975522e-07,
+    "memory_gates.fallbacks": 0,
+    "memory_gates.projections": 198,
+    "memory_gates.checks": 1536,
+    "memory_gates.max_certified_upper_dot": -3.6802597763373155e-09,
+    "query.fallbacks": 0,
+    "query.projections": 65,
+    "query.checks": 1536,
+    "query.max_certified_upper_dot": -9.50146543794302e-08,
+    "future_decoder.fallbacks": 0,
+    "future_decoder.projections": 3,
+    "future_decoder.checks": 1536,
+    "future_decoder.max_certified_upper_dot": -2.1676375987988215e-06,
+    "belief.fallbacks": 0,
+    "belief.projections": 320,
+    "belief.checks": 1536,
+    "belief.max_certified_upper_dot": -1.3035303177124729e-09,
+    "reconstruction.fallbacks": 0,
+    "reconstruction.projections": 61,
+    "reconstruction.checks": 1536,
+    "reconstruction.max_certified_upper_dot": -4.138363178449523e-07,
+    "width.fallbacks": 0,
+    "width.projections": 0,
+    "width.checks": 1536,
+    "width.max_certified_upper_dot": 0.0,
+    "median.fallbacks": 0,
+    "median.projections": 63,
+    "median.checks": 1536,
+    "median.max_certified_upper_dot": -3.35724844010044e-08
+  },
+  "optimizer_cpu_seconds": 127.55643145299987,
+  "fit_pipeline_cpu_seconds_excluding_monitors_and_checkpoint_io": 127.55643145299987,
+  "monitor_cpu_seconds": 2.069681133999981,
+  "total_cpu_seconds": 130.20526332999998,
+  "wall_seconds": 130.41498574800062,
+  "fit_pipeline_wall_seconds": 127.75545653495283,
+  "monitor_scope": "original FIT internal monitor; ancestor-exposed, not fresh or independent",
+  "monitor_steps": [
+    0,
+    512,
+    1024,
+    1536
+  ],
+  "monitor_metrics": [
+    {
+      "step": 0,
+      "context": 256,
+      "scope": "original FIT internal monitor; ancestor-exposed, not fresh or independent",
+      "cohorts": {
+        "gap": {
+          "count": 64,
+          "pm_mae": 21.509265899658203,
+          "mae_by_channel": [
+            21.509265899658203,
+            29.488780975341797,
+            6.4414963722229,
+            12.783032417297363,
+            295.9007873535156,
+            27.211109161376953
+          ],
+          "coverage_by_channel": [
+            0.96875,
+            0.9375,
+            0.9482758620689655,
+            0.9655172413793104,
+            0.9607843137254902,
+            0.9152542372881356
+          ],
+          "interval_score_by_channel": [
+            203.24900817871094,
+            260.43670654296875,
+            47.40847396850586,
+            86.60478210449219,
+            2787.216064453125,
+            202.71343994140625
+          ],
+          "raw_density_nll": 4.854527218867156
+        },
+        "general": {
+          "count": 256,
+          "pm_mae": 30.32292938232422,
+          "mae_by_channel": [
+            30.32292938232422,
+            43.02134323120117,
+            8.558700561523438,
+            17.263338088989258,
+            456.2495422363281,
+            20.046756744384766
+          ],
+          "coverage_by_channel": [
+            0.875,
+            0.8671875,
+            0.8690476190476191,
+            0.8780487804878049,
+            0.875,
+            0.9186991869918699
+          ],
+          "interval_score_by_channel": [
+            184.0718231201172,
+            277.8486328125,
+            58.848304748535156,
+            99.82137298583984,
+            2701.619384765625,
+            112.76349639892578
+          ],
+          "raw_density_nll": 4.9953669832352015
+        }
+      },
+      "arrays_sha256": "31914b8207371515639c1caa81ecb17ff9f2fd2ae2cd73f33f8a958566d2d084",
+      "cpu_seconds": 0.511444043,
+      "wall_seconds": 0.5115036239985784,
+      "no_checkpoint_selection": true
+    },
+    {
+      "step": 512,
+      "context": 256,
+      "scope": "original FIT internal monitor; ancestor-exposed, not fresh or independent",
+      "cohorts": {
+        "gap": {
+          "count": 64,
+          "pm_mae": 23.394386291503906,
+          "mae_by_channel": [
+            23.394386291503906,
+            31.282461166381836,
+            6.80558443069458,
+            13.488910675048828,
+            309.9319152832031,
+            27.656829833984375
+          ],
+          "coverage_by_channel": [
+            0.96875,
+            0.9375,
+            0.9310344827586207,
+            0.9482758620689655,
+            0.9607843137254902,
+            0.864406779661017
+          ],
+          "interval_score_by_channel": [
+            158.08462524414062,
+            218.15765380859375,
+            45.13751983642578,
+            78.52281188964844,
+            2659.18603515625,
+            168.24713134765625
+          ],
+          "raw_density_nll": 4.823635378799869
+        },
+        "general": {
+          "count": 256,
+          "pm_mae": 30.504613876342773,
+          "mae_by_channel": [
+            30.504613876342773,
+            43.0435905456543,
+            8.636594772338867,
+            17.354305267333984,
+            464.0041198730469,
+            20.16085433959961
+          ],
+          "coverage_by_channel": [
+            0.87109375,
+            0.8671875,
+            0.8650793650793651,
+            0.8658536585365854,
+            0.8666666666666667,
+            0.9186991869918699
+          ],
+          "interval_score_by_channel": [
+            182.84188842773438,
+            274.8436279296875,
+            58.73675537109375,
+            100.37968444824219,
+            2711.864013671875,
+            113.16121673583984
+          ],
+          "raw_density_nll": 4.991642315757466
+        }
+      },
+      "arrays_sha256": "2c2d2e903788689168a07f14fc95ac09d7136d76fdd1ed41110b676644e23f56",
+      "cpu_seconds": 0.4978697979999964,
+      "wall_seconds": 0.4978755519987317,
+      "no_checkpoint_selection": true
+    },
+    {
+      "step": 1024,
+      "context": 256,
+      "scope": "original FIT internal monitor; ancestor-exposed, not fresh or independent",
+      "cohorts": {
+        "gap": {
+          "count": 64,
+          "pm_mae": 23.294471740722656,
+          "mae_by_channel": [
+            23.294471740722656,
+            31.483028411865234,
+            5.9093546867370605,
+            13.695310592651367,
+            313.86944580078125,
+            26.26605987548828
+          ],
+          "coverage_by_channel": [
+            0.96875,
+            0.9375,
+            0.9482758620689655,
+            0.9482758620689655,
+            0.9607843137254902,
+            0.864406779661017
+          ],
+          "interval_score_by_channel": [
+            168.09645080566406,
+            235.23626708984375,
+            43.88486099243164,
+            75.4979019165039,
+            2674.83935546875,
+            159.01589965820312
+          ],
+          "raw_density_nll": 4.8287337594113104
+        },
+        "general": {
+          "count": 256,
+          "pm_mae": 30.272085189819336,
+          "mae_by_channel": [
+            30.272085189819336,
+            42.876434326171875,
+            8.52413558959961,
+            17.29384994506836,
+            460.2332763671875,
+            20.302385330200195
+          ],
+          "coverage_by_channel": [
+            0.87109375,
+            0.8671875,
+            0.8650793650793651,
+            0.8658536585365854,
+            0.875,
+            0.9146341463414634
+          ],
+          "interval_score_by_channel": [
+            181.36065673828125,
+            271.7340087890625,
+            58.0990104675293,
+            100.42706298828125,
+            2716.676025390625,
+            112.82292938232422
+          ],
+          "raw_density_nll": 4.994032945862428
+        }
+      },
+      "arrays_sha256": "1ba8e4fc6159490fe1e65b6c8b89d61490b46786652e4c141ce4cdf831710fa2",
+      "cpu_seconds": 0.5031713669999931,
+      "wall_seconds": 0.5032330180001736,
+      "no_checkpoint_selection": true
+    },
+    {
+      "step": 1536,
+      "context": 256,
+      "scope": "original FIT internal monitor; ancestor-exposed, not fresh or independent",
+      "cohorts": {
+        "gap": {
+          "count": 64,
+          "pm_mae": 21.395790100097656,
+          "mae_by_channel": [
+            21.395790100097656,
+            29.715682983398438,
+            6.426926136016846,
+            13.36719036102295,
+            312.7898254394531,
+            26.316211700439453
+          ],
+          "coverage_by_channel": [
+            0.96875,
+            0.921875,
+            0.9310344827586207,
+            0.9655172413793104,
+            0.9607843137254902,
+            0.864406779661017
+          ],
+          "interval_score_by_channel": [
+            162.71932983398438,
+            226.5359649658203,
+            42.73876953125,
+            77.65090942382812,
+            2646.972412109375,
+            167.98178100585938
+          ],
+          "raw_density_nll": 4.822258590978418
+        },
+        "general": {
+          "count": 256,
+          "pm_mae": 30.885372161865234,
+          "mae_by_channel": [
+            30.885372161865234,
+            43.56808853149414,
+            8.557541847229004,
+            17.35216522216797,
+            461.3047790527344,
+            20.311063766479492
+          ],
+          "coverage_by_channel": [
+            0.87109375,
+            0.8515625,
+            0.8650793650793651,
+            0.8699186991869918,
+            0.85,
+            0.9065040650406504
+          ],
+          "interval_score_by_channel": [
+            182.68499755859375,
+            278.5740661621094,
+            58.716705322265625,
+            100.67363739013672,
+            2745.2060546875,
+            113.30805969238281
+          ],
+          "raw_density_nll": 4.990782220733357
+        }
+      },
+      "arrays_sha256": "0fac49a65eef506802164db5ec9b54a8ec44d2eb3f3c124aa228a8a87a808c60",
+      "cpu_seconds": 0.5571959259999915,
+      "wall_seconds": 0.5681786599998304,
+      "no_checkpoint_selection": true
+    }
+  ],
+  "training_history_sha256": "ff422beef36f6a905b5b9c66f8739a14b7760ffcab60747937d467bd648e913a",
+  "peak_memory_bytes": 581464064,
+  "training_flops": 2464446357504,
+  "flops_scope": "partial actual forward/routed three-VJP profiler estimate; optimizer and unsupported operations excluded"
+}

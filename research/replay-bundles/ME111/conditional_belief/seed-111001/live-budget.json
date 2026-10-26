@@ -1,0 +1,491 @@
+{
+  "architecture": "conditional_belief",
+  "checkpoints": [
+    {
+      "deployed_parameters": 104663,
+      "parameter_values_sha256": "81c0a5b72a23499bb3ccb9387da05e7d564a2edccf6bcac2bf6183ea476a4229",
+      "path": "/tmp/tac-me110/research/replay-bundles/ME111/conditional_belief/seed-111001/checkpoint-512.pt",
+      "sha256": "a7fefaec55b44fbdbdd18a09f7c805dc350ed62c4ab85215acedb45d6cc61623",
+      "state_key_path": [
+        "model"
+      ],
+      "successful_optimizer_steps": 512,
+      "trainable_parameters": 104663
+    },
+    {
+      "deployed_parameters": 104663,
+      "parameter_values_sha256": "b5177ce9fd4d492c2bdcfa17c324fdb59623aa761a9e86865f80c7e6003d670b",
+      "path": "/tmp/tac-me110/research/replay-bundles/ME111/conditional_belief/seed-111001/checkpoint-1024.pt",
+      "sha256": "d630862e3b3534611271f1cfc04316347db292523e7eeb23e63fe49d7c353015",
+      "state_key_path": [
+        "model"
+      ],
+      "successful_optimizer_steps": 1024,
+      "trainable_parameters": 104663
+    },
+    {
+      "deployed_parameters": 104663,
+      "parameter_values_sha256": "f2be7f70b320ac4871170e5f17dba47698ede131a5f41b09dd4cfcca612f1143",
+      "path": "/tmp/tac-me110/research/replay-bundles/ME111/conditional_belief/seed-111001/final.pt",
+      "sha256": "337b882e9a10631dc85700846ef2b15ca8908699499668186ad3a248dc108449",
+      "state_key_path": [
+        "model"
+      ],
+      "successful_optimizer_steps": 1536,
+      "trainable_parameters": 104663
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 104663,
+    "trainable_parameters": 104663
+  },
+  "last_pre_update": {
+    "deployed_parameters": 104663,
+    "successful_optimizer_steps": 1535,
+    "trainable_parameters": 104663
+  },
+  "manifest_path": "/tmp/tac-me110/research/mathematical-engineering/me111/FAIR_COMPARISON.json",
+  "manifest_sha256": "190d1adafff7beeeb4771a8b27b15a755072791103b7a29ddc548ab320c4be9c",
+  "model_class": "tac_osm.variants.conditional_belief_sensor_world.ConditionalBeliefSensorWorld",
+  "preflight": {
+    "deployed_parameters": 104663,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "state_noise",
+        "numel": 18,
+        "requires_grad": true,
+        "shape": [
+          3,
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "state_response",
+        "numel": 6,
+        "requires_grad": true,
+        "shape": [
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "station.weight",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          12,
+          4
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.weight",
+        "numel": 2352,
+        "requires_grad": true,
+        "shape": [
+          48,
+          49
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.bias",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "source_admission.weight",
+        "numel": 624,
+        "requires_grad": true,
+        "shape": [
+          13,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "source_admission.bias",
+        "numel": 13,
+        "requires_grad": true,
+        "shape": [
+          13
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.weight",
+        "numel": 25344,
+        "requires_grad": true,
+        "shape": [
+          176,
+          144
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.weight",
+        "numel": 32384,
+        "requires_grad": true,
+        "shape": [
+          176,
+          184
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.weight",
+        "numel": 448,
+        "requires_grad": true,
+        "shape": [
+          2,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.bias",
+        "numel": 2,
+        "requires_grad": true,
+        "shape": [
+          2
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.weight",
+        "numel": 1792,
+        "requires_grad": true,
+        "shape": [
+          8,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.weight",
+        "numel": 30624,
+        "requires_grad": true,
+        "shape": [
+          132,
+          232
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.bias",
+        "numel": 132,
+        "requires_grad": true,
+        "shape": [
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.weight",
+        "numel": 1584,
+        "requires_grad": true,
+        "shape": [
+          12,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.weight",
+        "numel": 256,
+        "requires_grad": true,
+        "shape": [
+          32,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_head.weight",
+        "numel": 1224,
+        "requires_grad": true,
+        "shape": [
+          12,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_head.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_head.weight",
+        "numel": 1224,
+        "requires_grad": true,
+        "shape": [
+          12,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_head.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_head.weight",
+        "numel": 612,
+        "requires_grad": true,
+        "shape": [
+          6,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_head.bias",
+        "numel": 6,
+        "requires_grad": true,
+        "shape": [
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_residual.input.weight",
+        "numel": 1296,
+        "requires_grad": true,
+        "shape": [
+          12,
+          108
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_residual.input.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_residual.output.weight",
+        "numel": 144,
+        "requires_grad": true,
+        "shape": [
+          12,
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_residual.output.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_residual.input.weight",
+        "numel": 1296,
+        "requires_grad": true,
+        "shape": [
+          12,
+          108
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_residual.input.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_residual.output.weight",
+        "numel": 144,
+        "requires_grad": true,
+        "shape": [
+          12,
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_residual.output.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_residual.input.weight",
+        "numel": 1296,
+        "requires_grad": true,
+        "shape": [
+          12,
+          108
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_residual.input.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_residual.output.weight",
+        "numel": 72,
+        "requires_grad": true,
+        "shape": [
+          6,
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_residual.output.bias",
+        "numel": 6,
+        "requires_grad": true,
+        "shape": [
+          6
+        ]
+      }
+    ],
+    "trainable_parameters": 104663
+  },
+  "run_id": "80345e33af704dbc8cd4769eb769378b",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 111001,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME111-CONDITIONAL-BELIEF-RECONSTRUCTION",
+  "successful_optimizer_steps": 1536
+}
