@@ -24,6 +24,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT))
 
 from tac_osm.research_reward_runner import binding  # noqa: E402
 from scripts.validate_research_parity import check_manifest  # noqa: E402
