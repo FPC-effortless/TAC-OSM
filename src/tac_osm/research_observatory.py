@@ -312,3 +312,95 @@ def interpret_snapshot(report: Mapping[str, Any]) -> dict[str, Any]:
     return {"schema": "tac-osm-observatory/interpretation-v1",
             "alerts": warnings,
             "rule": "hypotheses only; corroborate on authentic FIT/DEV trajectories"}
+
+
+
+def entity_isolation_probe(model: nn.Module, history: torch.Tensor,
+                           candidates: torch.Tensor, *,
+                           tolerance: float = 1e-5) -> dict[str, Any]:
+    """Detect cross-entity influence from batching identical causal histories.
+
+    Compare per-entity state and outputs when processed together versus alone.
+    Does not test caller identity routing, source joins or global caches outside
+    the model clone. Numerical kernel differences can require calibrated tol.
+    """
+    replica = copy.deepcopy(model).eval()
+    _native_inputs(replica, history, candidates)
+    if history.shape[0] < 2:
+        raise ValueError("entity isolation requires >=2 independent trajectories")
+    if not math.isfinite(tolerance) or tolerance < 0:
+        raise ValueError("nonnegative numerical tolerance required")
+    with torch.no_grad():
+        batch_state = _observe(replica, history)
+        batched = replica.predict(batch_state, history[:, -1], candidates)
+        max_diff = 0.
+        for i in range(history.shape[0]):
+            only_history = history[i:i + 1]
+            only_candidates = candidates[i:i + 1]
+            one_state = _observe(replica, only_history)
+            one_out = replica.predict(one_state, only_history[:, -1], only_candidates)
+            for left, right in zip(batch_state, one_state):
+                max_diff = max(max_diff, float((left[i:i + 1] - right).abs().max().item()))
+            for left, right in zip(batched, one_out):
+                max_diff = max(max_diff, float((left[i:i + 1] - right).abs().max().item()))
+    return {"schema": "tac-osm-observatory/entity-isolation-v1",
+            "entities": history.shape[0], "max_absolute_difference": max_diff,
+            "tolerance": tolerance, "within_tolerance": max_diff <= tolerance,
+            "qualification": "batching_invariance_not_source_identity_verification"}
+
+
+def profile_native_runtime(model: nn.Module, history: torch.Tensor,
+                           candidates: torch.Tensor, *,
+                           warmups: int = 2, repeats: int = 8) -> dict[str, Any]:
+    """Replay exactly the same source input and candidate query, no optimizer.
+
+    Measures end-to-end local inference through ALL history updates followed
+    by one action query. It is NOT a controlled architecture speed comparison.
+    CPU/GPU clocks, thermal state, thread count and I/O can alter results.
+    """
+    import statistics
+    import time
+
+    replica = copy.deepcopy(model).eval()
+    _native_inputs(replica, history, candidates)
+    if not isinstance(warmups, int) or not isinstance(repeats, int) or (
+            isinstance(warmups, bool) or isinstance(repeats, bool) or
+            warmups < 0 or repeats < 2 or repeats > 1000):
+        raise ValueError("warmups>=0 and 2<=repeats<=1000 required")
+    device = history.device
+    if next(replica.parameters()).device != device or candidates.device != device:
+        raise ValueError("model and source inputs must share one device")
+    def synchronize() -> None:
+        if device.type == "cuda":
+            torch.cuda.synchronize(device)
+    def timed_once() -> tuple[float, int]:
+        synchronize()
+        start = time.perf_counter()
+        state = _observe(replica, history)
+        replica.predict(state, history[:, -1], candidates)
+        synchronize()
+        elapsed_ms = (time.perf_counter() - start) * 1000
+        state_bytes = sum(x.numel() * x.element_size() for x in state)
+        return elapsed_ms, state_bytes
+    with torch.no_grad():
+        for _ in range(warmups):
+            timed_once()
+        samples = []
+        state_bytes = 0
+        for _ in range(repeats):
+            ms, state_bytes = timed_once()
+            samples.append(ms)
+    samples.sort()
+    ix95 = math.ceil(.95 * len(samples)) - 1
+    return {
+        "schema": "tac-osm-observatory/runtime-v1",
+        "device": str(device), "torch_version": str(torch.__version__),
+        "threads": torch.get_num_threads(), "warmups": warmups,
+        "repeats": repeats, "history_events": history.shape[1],
+        "batch": history.shape[0], "candidate_count": candidates.shape[1],
+        "end_to_end_ms_median": statistics.median(samples),
+        "end_to_end_ms_p95": samples[ix95],
+        "end_to_end_ms_min": samples[0], "end_to_end_ms_max": samples[-1],
+        "state_bytes_batch": state_bytes,
+        "interpretation": "local replay+query timing; not matched benchmark or real-time guarantee",
+    }
