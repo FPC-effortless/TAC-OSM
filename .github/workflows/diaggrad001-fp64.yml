@@ -19,6 +19,6 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
-      - run: pip install numpy pytest
+      - run: pip install numpy==2.3.5 pytest
       - run: PYTHONPATH=src:. pytest -q tests/test_diaggrad001_precision.py
       - run: PYTHONPATH=src:. python scripts/diaggrad001_precision.py replay

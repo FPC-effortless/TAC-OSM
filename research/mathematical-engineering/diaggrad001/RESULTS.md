@@ -201,3 +201,10 @@ AdamW uphill34/180, group-rate SGD uphill0/180. Worst projected global cosine is
 -4.25e-16; no global dot is below -1e-10. This supports the diagnosis's precision
 robustness, not bit-identical FP32 execution or a new trained capability. The
 original FP32 JSON and all its replay exceptions remain authoritative records.
+
+The first remote FP64 attempt40248912057 stopped on an input checksum mismatch
+before its numeric replay assertion. Inspection found local NumPy2.3.5 versus
+unconstrained remote NumPy2.5.4. Replay workflows now pin NumPy2.3.5, matching the
+original preprocessing environment; Torch remains2.14.1+cpu. This is environment
+reproduction, not a tolerance change or replacement of recorded inputs/results.
+The failed attempt is retained; a rerun on the pinned environment is required.
