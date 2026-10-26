@@ -16,7 +16,7 @@ future labels. Slot0 global, slots1-7 assigned by FIRST chronological
 appearance of a real same-case OfferID. More than seven => excluded and counted.
 """
 from __future__ import annotations
-import datetime as dt,gzip,hashlib,io,json,urllib.request,xml.etree.ElementTree as ET
+import datetime as dt,gzip,hashlib,io,json,time,urllib.request,urllib.error,xml.etree.ElementTree as ET
 from collections import Counter
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
@@ -84,10 +84,25 @@ def audit():
         or lock["original_MD5"]!=MD5
         or lock["source_eligibility_run"]!=40307617155):
         raise RuntimeError("pinned original metadata chain mismatched")
-    with urllib.request.urlopen(urllib.request.Request(URL,headers={
-          "User-Agent":"S1TEMP008-trusted-source-case-partitioner/1.0"}),
-          timeout=120) as response:
-        original=response.read()
+    # The original publisher's ndownloader may temporarily return 504.
+    # Retry only the same official file-ID, retaining exact pinned MD5/bytes.
+    # Do NOT switch to an unverified mirror or third-party CSV.
+    original=None
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(urllib.request.Request(URL,headers={
+                  "User-Agent":"S1TEMP008-trusted-source-case-partitioner/1.0"}),
+                  timeout=135) as response:
+                original=response.read()
+            break
+        except (urllib.error.HTTPError,urllib.error.URLError,TimeoutError) as exc:
+            if attempt==3:
+                raise RuntimeError(
+                    f"official 4TU original archive inaccessible after 4 tries; "
+                    f"real-data gate BLOCKED ({type(exc).__name__})") from exc
+            time.sleep((3,7,15)[attempt])
+    if original is None:
+        raise RuntimeError("original publisher source not obtained")
     if len(original)!=EXPECTED_BYTES or hashlib.md5(original).hexdigest()!=MD5:
         raise RuntimeError("download differs from publisher locked original MD5")
     counts=Counter()
