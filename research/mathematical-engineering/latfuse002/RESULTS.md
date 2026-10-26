@@ -47,3 +47,23 @@ The previous initial no-fit source preflights rejected an outdated test-count pr
 Measure trained checkpoint alpha/beta gates, key effective rank, real FIT time-lag memory probes, state-lesion output sensitivity, original specific per-channel DEV NLL/coverage/outlier errors, and readout dependence on contextual query versus recorded future-known calendar, using READ-ONLY original weights. Do not explain the seed202601 NLL spike without evidence. Any new corrective model must have a new source-pinned preregistered study and genuine comparison budgets before any fit.
 
 **Return to original native TAC latent-space diagnosis** in https://github.com/FPC-effortless/TAC-OSM/issues/444 when this exploratory candidate has been honestly assessed. LATFUSE002 is not native TAC, not a qualified controller and does not change historical ME110 FAIL0/5 or any checkpoint. Drafts remain unmerged.
+
+
+## Subsequent source-authentic original-trained memory diagnosis (READ ONLY)
+
+[GitHub Actions #40418497414](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40418497414) **PASS**. Actual SHA-verified original seed202601 and202602 trained checkpoints were restored; genuine, chronological original source 2014-06 256 FIT hourly observations ×12 sites was used. **No optimizer step, no checkpoint mutation, no held-out scores or 2015–17 numeric target use**.
+
+| Frozen FIT-only local property | Seed202601 | Seed202602 |
+|---|---:|---:|
+| Learned retention gate alpha mean | **0.99768448** | **0.99888873** |
+| Learned write gate beta mean | 0.15818049 | 0.28782359 |
+| Mean recent 32-key absolute off-diagonal cosine similarity | **0.8275125** | **0.87052739** |
+| Approximate associative matrix rank (SVD 0.1% max cutoff), mean | 14.83/16 | 13.75/16 |
+| Mean absolute forecast change if associative matrix zeroed | 0.03854 | 0.08538 |
+| Corresponding fast-state zero-lesion change | 0.39888 | 0.33428 |
+| Corresponding slow-state zero-lesion change | 0.09708 | 0.16631 |
+| Corresponding entity-slot zero-lesion change | 0.13082 | 0.21155 |
+
+**What has and has not been fixed:** The initial random gated retention measured ~0.278 for LATFUSE001 was repaired: original LATFUSE002 models now exhibit trained retention near0.998 on *these FIT source inputs*, with no recurrent state increase. The matrix is active and its lesion affects forecasts, but highly aligned/aliased write keys reveal an OPEN addressing/interference problem. SVD rank near16 is not evidence of precise individual-pair recall, and lesion output sensitivity is not a causal world-state attribution or proof of utility. The recent-key similarity is a *local trained checkpoint observed fact*, not a global theorem for all sources or long lags.
+
+**Next work before another fit:** instrument source-time-key labels and genuine distinct historical event retrieval, assess key representation collapse, measure long-delay survival when similar events intervene, and evaluate whether source-authorized key-decorrelation/admission or partitioned addressing is a defensible remedial mechanism. Independently register any changed graph as a NEW variant, same 6,800 FP32 recurrent bytes, genuine source/matched resource preflight and untouched evaluation. This original LATFUSE002 single-model registered training budget is exhausted and must not be silently retried.
