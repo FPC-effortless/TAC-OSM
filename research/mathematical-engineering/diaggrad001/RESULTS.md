@@ -208,3 +208,11 @@ unconstrained remote NumPy2.5.4. Replay workflows now pin NumPy2.3.5, matching t
 original preprocessing environment; Torch remains2.14.1+cpu. This is environment
 reproduction, not a tolerance change or replacement of recorded inputs/results.
 The failed attempt is retained; a rerun on the pinned environment is required.
+
+Final verification: **1,036 full Python tests PASS**,9 diagnostic/replay/precision
+unit tests included; original and FP64 detached-checkout replayPASS; all four
+bundle payload digestsPASS. PNDS general Lean and dedicated4-theorem/reference
+CI40248233842/40248233849PASS. Pinned-environment GitHub FP64 replay
+[40249198749](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40249198749)
+**PASS at1e-9/1e-10**, exact source68c48886. Original FP32 cross-host numerical
+exception remains; no claim that every CI criterion or predictive gate passed.
