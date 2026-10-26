@@ -93,3 +93,22 @@ any FAIL, INCONCLUSIVE or missing check BLOCKS promotion. Fix the scorer,
 leakage or harm before rerunning. Never claim no reward hacking from synthetic
 CI fixtures; actual source-verified real FIT/DEV audit integration remains
 a distinct prerequisite. Keep sealed TEST unopened for iterative debugging.
+
+### Independent verifier required for ALL prospective reward-based study runners
+
+The prospective `scripts/validate_research_parity.py --phase preflight` and
+`--phase final` gates now require `--reward-evidence` plus an operator-injected
+`TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX`. This applies to single-model and
+architecture-comparison registrations **for any TAC-OSM family or seed**.
+Each registered model/seed must have signed, externally verified outcome
+evidence tied to its exact trained checkpoint. Before fit, independently
+verify original source, separated goal evaluator, protected scorer artifacts
+and actual trainer-vs-evaluator ACL boundaries. After fit, independently
+recompute proxy reward AND factual goals and check leakage, harm and costs,
+then have an access-separated evaluator sign the complete findings. Missing
+trusted signatures, real original outcomes, denied assessor access, changed
+checkpoint, or incomplete family/seed coverage must BLOCK training/promotion.
+Never sign inside the trainer or put the signing private key in repo secrets
+visible to model agents. See
+`research/REWARD-INDEPENDENT-RUNNER-GATE-2026-10-26.md`. No synthetic test
+signature implies any of six variants has achieved real-world qualification.
