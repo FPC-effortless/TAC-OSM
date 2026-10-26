@@ -1,0 +1,4465 @@
+{
+  "study": "DIAGBELIEF001",
+  "scope": "FIT_ONLY_NO_UPDATES",
+  "loader": {
+    "numeric_fields": 4400584,
+    "cutoff_year_rows": 12,
+    "fit_hours": 16104,
+    "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "actual_fit_transform_bit_equal": true,
+    "protected_numeric_accesses": 0,
+    "float64_reference_mean_max_abs": 5.457683869281027e-06,
+    "scope": "actual FIT loader and transform only; not full REPORT/cache/ancestor provenance"
+  },
+  "models": [
+    {
+      "seed": 110001,
+      "checkpoint_sha256": "953f71bf32c2b9b150fdf054170937c56d0c3fd941cadcaccfd9041597cf4463",
+      "floors": {
+        "floor_dominates_total": [
+          0.8787878787878788,
+          0.8363636363636363,
+          0.6833333333333333,
+          0.819672131147541,
+          0.7922077922077922,
+          0.7
+        ],
+        "left_floor_active": [
+          0.4696969696969697,
+          0.45454545454545453,
+          0.6666666666666666,
+          0.5409836065573771,
+          0.5584415584415584,
+          0.4
+        ],
+        "right_floor_active": [
+          1.0,
+          1.0,
+          0.8166666666666667,
+          0.9672131147540983,
+          0.8701298701298701,
+          1.0
+        ],
+        "width": [
+          1053.9888046727035,
+          1169.1197925914419,
+          143.36061089833578,
+          223.152874243064,
+          16510.332437094155,
+          2065.628800430298
+        ],
+        "minimum_width": [
+          1050.6234362053149,
+          1165.1321255770597,
+          140.9408369700114,
+          222.37961556481534,
+          16456.708427924616,
+          2063.7453928375244
+        ],
+        "missing_channel_counts": [
+          66,
+          55,
+          60,
+          61,
+          77,
+          50
+        ],
+        "actual_to_nominal_latent_variance_ratio": [
+          0.9885709953034798,
+          0.9871468734553062,
+          0.9043774498163768,
+          0.9776815204472489,
+          0.9974329669781671,
+          0.8298026490217387
+        ]
+      },
+      "reconstruction_current_mean_gradient_norm": 0.31144559383392334,
+      "objective_gradient_roles": {
+        "nll": {
+          "point_coordinate_l2": 1.4941380018430308,
+          "uncertainty_coordinate_l2": 0.7476445974770926
+        },
+        "interval": {
+          "point_coordinate_l2": 44.49879554456748,
+          "uncertainty_coordinate_l2": 2.6167611268817565
+        },
+        "reconstruction_nll": {
+          "point_coordinate_l2": 4.066384189740031,
+          "uncertainty_coordinate_l2": 0.4029680410653163
+        }
+      },
+      "gradient_atlas": {
+        "schema": "tac-osm-observatory/gradient-conflicts-v1",
+        "pairs": [
+          {
+            "left": "point",
+            "right": "nll",
+            "components": {
+              "address": {
+                "cosine": 0.7982654558122357,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.3859021350163322,
+                "right_l2": 0.25485034622582037
+              },
+              "content": {
+                "cosine": 0.7287783849224488,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7679685541232258,
+                "right_l2": 0.43232798758898244
+              },
+              "current_head": {
+                "cosine": 0.7682701503618763,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.251639203305976,
+                "right_l2": 0.7925510363323178
+              },
+              "current_residual": {
+                "cosine": 0.785888615369631,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.37302023389316136,
+                "right_l2": 0.23683530004580086
+              },
+              "encoder": {
+                "cosine": 0.6880516397553873,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.2872903346432283,
+                "right_l2": 0.7283786281809893
+              },
+              "fast_map": {
+                "cosine": 0.5749491302945958,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5259207617662554,
+                "right_l2": 0.3553593737144287
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5355681092750024,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.16215053203396673,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.8781634396008693,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.028862733035001885,
+                "right_l2": 0.024922482925979
+              },
+              "query": {
+                "cosine": 0.582437837627594,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.2732912822174795,
+                "right_l2": 0.17387308887996547
+              },
+              "readout": {
+                "cosine": 0.49311790489968665,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.453796939568679,
+                "right_l2": 0.7823379390579124
+              },
+              "retrieved_delta": {
+                "cosine": 0.02300926978844688,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.3690686667440744,
+                "right_l2": 0.20000052010514666
+              },
+              "slow_map": {
+                "cosine": 0.42394153571923454,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.07691026202787969,
+                "right_l2": 0.04608089820777062
+              },
+              "source_admission": {
+                "cosine": 0.7065966390518769,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.054972322949532,
+                "right_l2": 0.0377326311718334
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.003050566381101846
+              },
+              "state_response": {
+                "cosine": -0.20030816963704995,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0061124869812689804,
+                "right_l2": 0.005590772016912196
+              },
+              "station": {
+                "cosine": 0.8773169304622289,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.05002787081465448,
+                "right_l2": 0.04074022671030888
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.6506862884790876
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.2949148948088924
+              },
+              "<all_shared>": {
+                "cosine": 0.5644805825578963,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.6510397386175146,
+                "right_l2": 1.6707545641276838
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": 0.29458104233426474,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.3859021350163322,
+                "right_l2": 4.077364591248125
+              },
+              "content": {
+                "cosine": 0.42070777411493926,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7679685541232258,
+                "right_l2": 12.116985543177167
+              },
+              "current_head": {
+                "cosine": 0.428061089248829,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.251639203305976,
+                "right_l2": 26.145825787020097
+              },
+              "current_residual": {
+                "cosine": 0.41949080624209917,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.37302023389316136,
+                "right_l2": 7.561734724338297
+              },
+              "encoder": {
+                "cosine": 0.4385630583944931,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.2872903346432283,
+                "right_l2": 21.695720862452465
+              },
+              "fast_map": {
+                "cosine": 0.4813735595306953,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5259207617662554,
+                "right_l2": 9.121164743935433
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5355681092750024,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.16215053203396673,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.8626404059774667,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.028862733035001885,
+                "right_l2": 1.2723677828717395
+              },
+              "query": {
+                "cosine": 0.5468873202702128,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.2732912822174795,
+                "right_l2": 4.8046176936343175
+              },
+              "readout": {
+                "cosine": 0.15925484102916318,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.453796939568679,
+                "right_l2": 20.7926160204486
+              },
+              "retrieved_delta": {
+                "cosine": 0.6066741482125462,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.3690686667440744,
+                "right_l2": 7.804289854456941
+              },
+              "slow_map": {
+                "cosine": 0.7230626614645498,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.07691026202787969,
+                "right_l2": 1.9988861558641164
+              },
+              "source_admission": {
+                "cosine": 0.10283795738037096,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.054972322949532,
+                "right_l2": 0.8876970289022809
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.0137615900441057
+              },
+              "state_response": {
+                "cosine": 0.00469955030185221,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0061124869812689804,
+                "right_l2": 0.23597089707927604
+              },
+              "station": {
+                "cosine": 0.4179588400252322,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.05002787081465448,
+                "right_l2": 0.30523062251381305
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 2.2624941272554
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.9303065193717509
+              },
+              "<all_shared>": {
+                "cosine": 0.3517029917533696,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.6510397386175146,
+                "right_l2": 44.57566892413573
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": -0.03731579016097811,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.3859021350163322,
+                "right_l2": 0.32008723880538403
+              },
+              "content": {
+                "cosine": -0.1765326008274589,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7679685541232258,
+                "right_l2": 0.8423114098037081
+              },
+              "current_head": {
+                "cosine": -0.3713029142559088,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.251639203305976,
+                "right_l2": 3.45849108719184
+              },
+              "current_residual": {
+                "cosine": -0.45392404827671595,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.37302023389316136,
+                "right_l2": 0.9820367748466222
+              },
+              "encoder": {
+                "cosine": -0.28112752409736874,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.2872903346432283,
+                "right_l2": 1.5603377687916744
+              },
+              "fast_map": {
+                "cosine": -0.16047231090313183,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5259207617662554,
+                "right_l2": 0.6996953181945519
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.665966625958404,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.028862733035001885,
+                "right_l2": 0.05816776178206733
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": 0.40605412730769974,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.07691026202787969,
+                "right_l2": 0.007008317632523435
+              },
+              "source_admission": {
+                "cosine": -0.20052215427397815,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.054972322949532,
+                "right_l2": 0.09725014946952583
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.050168151037723666
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.7991023123222903,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.05002787081465448,
+                "right_l2": 0.143971519206768
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.29476499795559674,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 2.0953336229138415,
+                "right_l2": 4.086301935516897
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": 0.19790155882279198,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.25485034622582037,
+                "right_l2": 4.077364591248125
+              },
+              "content": {
+                "cosine": 0.2446980520099761,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.43232798758898244,
+                "right_l2": 12.116985543177167
+              },
+              "current_head": {
+                "cosine": 0.12520898239894768,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7925510363323178,
+                "right_l2": 26.145825787020097
+              },
+              "current_residual": {
+                "cosine": 0.14384295274332043,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.23683530004580086,
+                "right_l2": 7.561734724338297
+              },
+              "encoder": {
+                "cosine": 0.3329928248994406,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7283786281809893,
+                "right_l2": 21.695720862452465
+              },
+              "fast_map": {
+                "cosine": 0.3017520740110058,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.3553593737144287,
+                "right_l2": 9.121164743935433
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.9291427034554558,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.024922482925979,
+                "right_l2": 1.2723677828717395
+              },
+              "query": {
+                "cosine": 0.25901202199168044,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.17387308887996547,
+                "right_l2": 4.8046176936343175
+              },
+              "readout": {
+                "cosine": 0.006994510081878548,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.7823379390579124,
+                "right_l2": 20.7926160204486
+              },
+              "retrieved_delta": {
+                "cosine": -0.4372656315395332,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.20000052010514666,
+                "right_l2": 7.804289854456941
+              },
+              "slow_map": {
+                "cosine": 0.2581458245487364,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.04608089820777062,
+                "right_l2": 1.9988861558641164
+              },
+              "source_admission": {
+                "cosine": -0.1869594158704877,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0377326311718334,
+                "right_l2": 0.8876970289022809
+              },
+              "state_noise": {
+                "cosine": 0.8530172049993086,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.003050566381101846,
+                "right_l2": 0.0137615900441057
+              },
+              "state_response": {
+                "cosine": 0.3405762331601225,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.005590772016912196,
+                "right_l2": 0.23597089707927604
+              },
+              "station": {
+                "cosine": 0.4072712901129773,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.04074022671030888,
+                "right_l2": 0.30523062251381305
+              },
+              "width_head": {
+                "cosine": 0.6052941551429937,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6506862884790876,
+                "right_l2": 2.2624941272554
+              },
+              "width_residual": {
+                "cosine": 0.6218548985107738,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.2949148948088924,
+                "right_l2": 0.9303065193717509
+              },
+              "<all_shared>": {
+                "cosine": 0.152290126665839,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 1.6707545641276838,
+                "right_l2": 44.57566892413573
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": 0.019315308962255105,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.25485034622582037,
+                "right_l2": 0.32008723880538403
+              },
+              "content": {
+                "cosine": -0.33812661715269604,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.43232798758898244,
+                "right_l2": 0.8423114098037081
+              },
+              "current_head": {
+                "cosine": -0.31933585399448183,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7925510363323178,
+                "right_l2": 3.45849108719184
+              },
+              "current_residual": {
+                "cosine": -0.43621714174835646,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.23683530004580086,
+                "right_l2": 0.9820367748466222
+              },
+              "encoder": {
+                "cosine": -0.34997718651818654,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7283786281809893,
+                "right_l2": 1.5603377687916744
+              },
+              "fast_map": {
+                "cosine": -0.20239735245032853,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.3553593737144287,
+                "right_l2": 0.6996953181945519
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.8025826884785118,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.024922482925979,
+                "right_l2": 0.05816776178206733
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": 0.06544941698087503,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.04608089820777062,
+                "right_l2": 0.007008317632523435
+              },
+              "source_admission": {
+                "cosine": -0.0725100321596148,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0377326311718334,
+                "right_l2": 0.09725014946952583
+              },
+              "state_noise": {
+                "cosine": -0.21123252096205805,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.003050566381101846,
+                "right_l2": 0.050168151037723666
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.7587042457590187,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.04074022671030888,
+                "right_l2": 0.143971519206768
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.300437392904013,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 1.264411881333982,
+                "right_l2": 4.086301935516897
+              }
+            }
+          },
+          {
+            "left": "interval",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": -0.2813588522191351,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 4.077364591248125,
+                "right_l2": 0.32008723880538403
+              },
+              "content": {
+                "cosine": -0.058246055402060466,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 12.116985543177167,
+                "right_l2": 0.8423114098037081
+              },
+              "current_head": {
+                "cosine": -0.31424617189921755,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 26.145825787020097,
+                "right_l2": 3.45849108719184
+              },
+              "current_residual": {
+                "cosine": -0.31342592971869504,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 7.561734724338297,
+                "right_l2": 0.9820367748466222
+              },
+              "encoder": {
+                "cosine": -0.27963906089206203,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 21.695720862452465,
+                "right_l2": 1.5603377687916744
+              },
+              "fast_map": {
+                "cosine": -0.2739253267889026,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 9.121164743935433,
+                "right_l2": 0.6996953181945519
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.7039290608693004,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.2723677828717395,
+                "right_l2": 0.05816776178206733
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": 0.4014113214129376,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.9988861558641164,
+                "right_l2": 0.007008317632523435
+              },
+              "source_admission": {
+                "cosine": 0.10491852301012468,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8876970289022809,
+                "right_l2": 0.09725014946952583
+              },
+              "state_noise": {
+                "cosine": -0.19284756554433644,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0137615900441057,
+                "right_l2": 0.050168151037723666
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.34870631036366534,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.30523062251381305,
+                "right_l2": 0.143971519206768
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.27478734098805224,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 38.270433177400285,
+                "right_l2": 4.086301935516897
+              }
+            }
+          }
+        ],
+        "qualification": "local_gradients_not_training_outcome"
+      },
+      "hidden_reconstruction_labels": 24,
+      "no_optimizer_created": true
+    },
+    {
+      "seed": 110002,
+      "checkpoint_sha256": "f2b022411dfb8719b1c3658795442a65e06be12eaa6dd3c7a21fb0263d25eb4f",
+      "floors": {
+        "floor_dominates_total": [
+          0.8787878787878788,
+          0.7818181818181819,
+          0.7333333333333333,
+          0.8032786885245902,
+          0.7662337662337663,
+          0.66
+        ],
+        "left_floor_active": [
+          0.5606060606060606,
+          0.509090909090909,
+          0.6333333333333333,
+          0.45901639344262296,
+          0.6363636363636364,
+          0.38
+        ],
+        "right_floor_active": [
+          0.9848484848484849,
+          0.9818181818181818,
+          0.8833333333333333,
+          0.9508196721311475,
+          0.8831168831168831,
+          1.0
+        ],
+        "width": [
+          1040.8099966338186,
+          1133.3460390957919,
+          146.78173262278239,
+          218.09649805162775,
+          14567.670632102272,
+          2053.4132956695557
+        ],
+        "minimum_width": [
+          1038.2227875680635,
+          1130.869075983221,
+          145.87388248443602,
+          216.92605112419753,
+          14534.37388709923,
+          2051.2747693634033
+        ],
+        "missing_channel_counts": [
+          66,
+          55,
+          60,
+          61,
+          77,
+          50
+        ],
+        "actual_to_nominal_latent_variance_ratio": [
+          0.9364919893744599,
+          0.9040475439026191,
+          0.9115501248211989,
+          0.9854734188008915,
+          0.9483321968040135,
+          0.8831372057292513
+        ]
+      },
+      "reconstruction_current_mean_gradient_norm": 0.3021850287914276,
+      "objective_gradient_roles": {
+        "nll": {
+          "point_coordinate_l2": 1.8886767826406603,
+          "uncertainty_coordinate_l2": 1.165339139696616
+        },
+        "interval": {
+          "point_coordinate_l2": 49.873352740151596,
+          "uncertainty_coordinate_l2": 2.6986272725587632
+        },
+        "reconstruction_nll": {
+          "point_coordinate_l2": 3.599257330063247,
+          "uncertainty_coordinate_l2": 0.33029455118936907
+        }
+      },
+      "gradient_atlas": {
+        "schema": "tac-osm-observatory/gradient-conflicts-v1",
+        "pairs": [
+          {
+            "left": "point",
+            "right": "nll",
+            "components": {
+              "address": {
+                "cosine": 0.5159607061967946,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.2445305038172638,
+                "right_l2": 0.18500297535939397
+              },
+              "content": {
+                "cosine": 0.7482374994107546,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5293190025968861,
+                "right_l2": 0.46616221422222426
+              },
+              "current_head": {
+                "cosine": 0.5588742361774254,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.1651771300523046,
+                "right_l2": 0.9279327461579275
+              },
+              "current_residual": {
+                "cosine": 0.6156322213051084,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.3413530340923533,
+                "right_l2": 0.278521940746899
+              },
+              "encoder": {
+                "cosine": 0.5470123683763659,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.5105600500013157,
+                "right_l2": 0.9439803428353841
+              },
+              "fast_map": {
+                "cosine": 0.502201987544328,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.71507265772147,
+                "right_l2": 0.5165796491594036
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6374543247269115,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.1994157680977136,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": -0.21177321622532613,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.009705801893177799,
+                "right_l2": 0.009848756895948257
+              },
+              "query": {
+                "cosine": 0.6162836393653375,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.22503194656669517,
+                "right_l2": 0.16782974001627735
+              },
+              "readout": {
+                "cosine": 0.31236114878639526,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.675963135998821,
+                "right_l2": 1.126642529396922
+              },
+              "retrieved_delta": {
+                "cosine": -0.001792372561705617,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.5020027653435782,
+                "right_l2": 0.3174533290195221
+              },
+              "slow_map": {
+                "cosine": 0.2721021547948397,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.10008671136658813,
+                "right_l2": 0.07358401916480302
+              },
+              "source_admission": {
+                "cosine": 0.5827326343533593,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.03996533618294716,
+                "right_l2": 0.04797439174197396
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.002745983104836784
+              },
+              "state_response": {
+                "cosine": -0.00880517339777376,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.008715284321703704,
+                "right_l2": 0.009054830233562435
+              },
+              "station": {
+                "cosine": 0.23534451530357395,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.039931857406315115,
+                "right_l2": 0.02505395006866023
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.9750887335997986
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.4684011900022971
+              },
+              "<all_shared>": {
+                "cosine": 0.38641442644034574,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.859763368490275,
+                "right_l2": 2.2192600803486657
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": 0.4521779345620139,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.2445305038172638,
+                "right_l2": 6.339717654550761
+              },
+              "content": {
+                "cosine": 0.26918843241425855,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5293190025968861,
+                "right_l2": 8.188306812398977
+              },
+              "current_head": {
+                "cosine": 0.470221843695455,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.1651771300523046,
+                "right_l2": 32.673802731679864
+              },
+              "current_residual": {
+                "cosine": 0.43048254869535524,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.3413530340923533,
+                "right_l2": 9.593945386307297
+              },
+              "encoder": {
+                "cosine": 0.3865902790645988,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.5105600500013157,
+                "right_l2": 21.2127473006391
+              },
+              "fast_map": {
+                "cosine": 0.40450653445951607,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.71507265772147,
+                "right_l2": 10.796326641284642
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6374543247269115,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.1994157680977136,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": -0.29471298429538717,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.009705801893177799,
+                "right_l2": 0.2940984585226205
+              },
+              "query": {
+                "cosine": 0.4754199350145914,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.22503194656669517,
+                "right_l2": 4.084969736008148
+              },
+              "readout": {
+                "cosine": 0.246918122384362,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.675963135998821,
+                "right_l2": 23.40276384048223
+              },
+              "retrieved_delta": {
+                "cosine": 0.6692862007823102,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.5020027653435782,
+                "right_l2": 9.097556450240319
+              },
+              "slow_map": {
+                "cosine": 0.5432840588041563,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.10008671136658813,
+                "right_l2": 2.5736255454292074
+              },
+              "source_admission": {
+                "cosine": 0.0840251431801512,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.03996533618294716,
+                "right_l2": 0.8203478657955378
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.01124795945895817
+              },
+              "state_response": {
+                "cosine": 0.6548561216417497,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.008715284321703704,
+                "right_l2": 0.14387932226216013
+              },
+              "station": {
+                "cosine": 0.5654556981634161,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.039931857406315115,
+                "right_l2": 0.6011796947067345
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 2.3052619185915786
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 1.0048367919685235
+              },
+              "<all_shared>": {
+                "cosine": 0.35022465253627155,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.859763368490275,
+                "right_l2": 49.946310495890096
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": -0.3143127861610126,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.2445305038172638,
+                "right_l2": 0.23484297513913274
+              },
+              "content": {
+                "cosine": -0.21313401323525807,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5293190025968861,
+                "right_l2": 0.6864356558666519
+              },
+              "current_head": {
+                "cosine": -0.34028000541378756,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.1651771300523046,
+                "right_l2": 3.204880558970692
+              },
+              "current_residual": {
+                "cosine": -0.4349243587033054,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.3413530340923533,
+                "right_l2": 0.9228752236638069
+              },
+              "encoder": {
+                "cosine": -0.13694129740000568,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.5105600500013157,
+                "right_l2": 0.9830310214717521
+              },
+              "fast_map": {
+                "cosine": -0.09150478955417067,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.71507265772147,
+                "right_l2": 0.6596822108856782
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": 0.23838608760233926,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.009705801893177799,
+                "right_l2": 0.03169183186260463
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": 0.013391087828440106,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.10008671136658813,
+                "right_l2": 0.0032288253909818093
+              },
+              "source_admission": {
+                "cosine": 0.16915380621098539,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.03996533618294716,
+                "right_l2": 0.07349319778377589
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.05088881873807064
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.33362342176690846,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.039931857406315115,
+                "right_l2": 0.06251922699110317
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.22524156851702398,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 2.1495481656115065,
+                "right_l2": 3.614380747808638
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": 0.5109793130202559,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.18500297535939397,
+                "right_l2": 6.339717654550761
+              },
+              "content": {
+                "cosine": 0.16384266621158036,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.46616221422222426,
+                "right_l2": 8.188306812398977
+              },
+              "current_head": {
+                "cosine": 0.1796589341416355,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.9279327461579275,
+                "right_l2": 32.673802731679864
+              },
+              "current_residual": {
+                "cosine": 0.21305328284448657,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.278521940746899,
+                "right_l2": 9.593945386307297
+              },
+              "encoder": {
+                "cosine": 0.1816867084434802,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.9439803428353841,
+                "right_l2": 21.2127473006391
+              },
+              "fast_map": {
+                "cosine": 0.1756607178839767,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5165796491594036,
+                "right_l2": 10.796326641284642
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.8341028493518771,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.009848756895948257,
+                "right_l2": 0.2940984585226205
+              },
+              "query": {
+                "cosine": 0.41990868846262147,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.16782974001627735,
+                "right_l2": 4.084969736008148
+              },
+              "readout": {
+                "cosine": -0.061770922977815564,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.126642529396922,
+                "right_l2": 23.40276384048223
+              },
+              "retrieved_delta": {
+                "cosine": -0.39527959275875996,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.3174533290195221,
+                "right_l2": 9.097556450240319
+              },
+              "slow_map": {
+                "cosine": -0.007271103761902207,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.07358401916480302,
+                "right_l2": 2.5736255454292074
+              },
+              "source_admission": {
+                "cosine": -0.255801664718952,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.04797439174197396,
+                "right_l2": 0.8203478657955378
+              },
+              "state_noise": {
+                "cosine": 0.7947947895080185,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.002745983104836784,
+                "right_l2": 0.01124795945895817
+              },
+              "state_response": {
+                "cosine": 0.2813745409663974,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.009054830233562435,
+                "right_l2": 0.14387932226216013
+              },
+              "station": {
+                "cosine": 0.2321835924402291,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.02505395006866023,
+                "right_l2": 0.6011796947067345
+              },
+              "width_head": {
+                "cosine": 0.6452798058880671,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.9750887335997986,
+                "right_l2": 2.3052619185915786
+              },
+              "width_residual": {
+                "cosine": 0.6437971515326193,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.4684011900022971,
+                "right_l2": 1.0048367919685235
+              },
+              "<all_shared>": {
+                "cosine": 0.10036582053504897,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.2192600803486657,
+                "right_l2": 49.946310495890096
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": 0.19287677402427372,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.18500297535939397,
+                "right_l2": 0.23484297513913274
+              },
+              "content": {
+                "cosine": -0.040925592866266604,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.46616221422222426,
+                "right_l2": 0.6864356558666519
+              },
+              "current_head": {
+                "cosine": -0.14681803212578248,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.9279327461579275,
+                "right_l2": 3.204880558970692
+              },
+              "current_residual": {
+                "cosine": -0.26290588956887956,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.278521940746899,
+                "right_l2": 0.9228752236638069
+              },
+              "encoder": {
+                "cosine": 0.07505177320139607,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.9439803428353841,
+                "right_l2": 0.9830310214717521
+              },
+              "fast_map": {
+                "cosine": 0.02536732702551007,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5165796491594036,
+                "right_l2": 0.6596822108856782
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.7959477938738224,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.009848756895948257,
+                "right_l2": 0.03169183186260463
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": -0.17623017094774404,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.07358401916480302,
+                "right_l2": 0.0032288253909818093
+              },
+              "source_admission": {
+                "cosine": 0.2577812938933611,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.04797439174197396,
+                "right_l2": 0.07349319778377589
+              },
+              "state_noise": {
+                "cosine": -0.012226945026605233,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.002745983104836784,
+                "right_l2": 0.05088881873807064
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.051084542236312536,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.02505395006866023,
+                "right_l2": 0.06251922699110317
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.07751511547451022,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 1.5351119745166404,
+                "right_l2": 3.614380747808638
+              }
+            }
+          },
+          {
+            "left": "interval",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": -0.09416086740417934,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 6.339717654550761,
+                "right_l2": 0.23484297513913274
+              },
+              "content": {
+                "cosine": -0.020123241035186805,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 8.188306812398977,
+                "right_l2": 0.6864356558666519
+              },
+              "current_head": {
+                "cosine": -0.1356192032023331,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 32.673802731679864,
+                "right_l2": 3.204880558970692
+              },
+              "current_residual": {
+                "cosine": -0.12648115336053342,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 9.593945386307297,
+                "right_l2": 0.9228752236638069
+              },
+              "encoder": {
+                "cosine": -0.1583565915812315,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 21.2127473006391,
+                "right_l2": 0.9830310214717521
+              },
+              "fast_map": {
+                "cosine": -0.13993705541400692,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 10.796326641284642,
+                "right_l2": 0.6596822108856782
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.9090124807119129,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.2940984585226205,
+                "right_l2": 0.03169183186260463
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": 0.16372595662940057,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 2.5736255454292074,
+                "right_l2": 0.0032288253909818093
+              },
+              "source_admission": {
+                "cosine": 0.04904521526410381,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8203478657955378,
+                "right_l2": 0.07349319778377589
+              },
+              "state_noise": {
+                "cosine": 0.3587395429104785,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.01124795945895817,
+                "right_l2": 0.05088881873807064
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.4407166320628755,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.6011796947067345,
+                "right_l2": 0.06251922699110317
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.12827528898322324,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 42.90859395177019,
+                "right_l2": 3.614380747808638
+              }
+            }
+          }
+        ],
+        "qualification": "local_gradients_not_training_outcome"
+      },
+      "hidden_reconstruction_labels": 24,
+      "no_optimizer_created": true
+    },
+    {
+      "seed": 110003,
+      "checkpoint_sha256": "b8a273948147f95d596f6922ed15a20a15350bb8feeeb857a82004cde1168242",
+      "floors": {
+        "floor_dominates_total": [
+          0.8939393939393939,
+          0.8181818181818182,
+          0.6666666666666666,
+          0.8032786885245902,
+          0.7272727272727273,
+          0.68
+        ],
+        "left_floor_active": [
+          0.6212121212121212,
+          0.2909090909090909,
+          0.6833333333333333,
+          0.45901639344262296,
+          0.7142857142857143,
+          0.64
+        ],
+        "right_floor_active": [
+          1.0,
+          1.0,
+          0.8833333333333333,
+          0.9180327868852459,
+          0.935064935064935,
+          0.98
+        ],
+        "width": [
+          930.7566482081558,
+          949.5955891002308,
+          123.05292956034343,
+          224.21389573519346,
+          13456.545080407874,
+          1682.0942079544068
+        ],
+        "minimum_width": [
+          929.5217026219224,
+          946.787564086914,
+          122.41841176350911,
+          223.42156479006908,
+          13436.392219840705,
+          1680.1371028518677
+        ],
+        "missing_channel_counts": [
+          66,
+          55,
+          60,
+          61,
+          77,
+          50
+        ],
+        "actual_to_nominal_latent_variance_ratio": [
+          0.888150495420819,
+          0.9370732761325187,
+          0.8420069135220791,
+          0.9693414710353124,
+          0.9097230928710589,
+          0.8746309545522074
+        ]
+      },
+      "reconstruction_current_mean_gradient_norm": 0.2721509039402008,
+      "objective_gradient_roles": {
+        "nll": {
+          "point_coordinate_l2": 1.5351930558528242,
+          "uncertainty_coordinate_l2": 0.8602742517650703
+        },
+        "interval": {
+          "point_coordinate_l2": 46.055486825047524,
+          "uncertainty_coordinate_l2": 2.6059446239154056
+        },
+        "reconstruction_nll": {
+          "point_coordinate_l2": 3.413981371710071,
+          "uncertainty_coordinate_l2": 0.36575233395463946
+        }
+      },
+      "gradient_atlas": {
+        "schema": "tac-osm-observatory/gradient-conflicts-v1",
+        "pairs": [
+          {
+            "left": "point",
+            "right": "nll",
+            "components": {
+              "address": {
+                "cosine": 0.5819560569885581,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.2801510064947595,
+                "right_l2": 0.15407933747548835
+              },
+              "content": {
+                "cosine": 0.7406478438469344,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5687490304084519,
+                "right_l2": 0.44101294363809973
+              },
+              "current_head": {
+                "cosine": 0.5441118142353971,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8828467071286266,
+                "right_l2": 0.6568575867695905
+              },
+              "current_residual": {
+                "cosine": 0.636220702038196,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.2955351394451074,
+                "right_l2": 0.23311467888901224
+              },
+              "encoder": {
+                "cosine": 0.6103820980011946,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.5347412946310928,
+                "right_l2": 0.840862307457904
+              },
+              "fast_map": {
+                "cosine": 0.5873917127385697,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7453675055849173,
+                "right_l2": 0.4566586240854734
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6475202337646724,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.19246634674471458,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": -0.19480703321455928,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.021275926110135256,
+                "right_l2": 0.007774237831301576
+              },
+              "query": {
+                "cosine": 0.27110289767654944,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.20925920510643126,
+                "right_l2": 0.1246464108307125
+              },
+              "readout": {
+                "cosine": 0.4318333483739205,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.6206567792938669,
+                "right_l2": 0.8326824045690719
+              },
+              "retrieved_delta": {
+                "cosine": 0.2755164983991875,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.5694897616243035,
+                "right_l2": 0.2988680027162345
+              },
+              "slow_map": {
+                "cosine": 0.37871625390291375,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.12978729656383542,
+                "right_l2": 0.06743786049500577
+              },
+              "source_admission": {
+                "cosine": 0.7322577231011047,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.04535456989844025,
+                "right_l2": 0.03525751267076692
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.002752360583258654
+              },
+              "state_response": {
+                "cosine": 0.4499134435535031,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.00581451875559027,
+                "right_l2": 0.008641286291408168
+              },
+              "station": {
+                "cosine": 0.4251439268653888,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.03153433194329998,
+                "right_l2": 0.022483700123136347
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.7476418658719413
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.33710454647464533
+              },
+              "<all_shared>": {
+                "cosine": 0.45183422381510385,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.7660563529068205,
+                "right_l2": 1.75979814557436
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": -0.007913209544313344,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.2801510064947595,
+                "right_l2": 4.707719985149115
+              },
+              "content": {
+                "cosine": 0.5675738354096611,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5687490304084519,
+                "right_l2": 10.049710503958753
+              },
+              "current_head": {
+                "cosine": 0.2197935445306712,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8828467071286266,
+                "right_l2": 29.7584579369735
+              },
+              "current_residual": {
+                "cosine": 0.18709836061714413,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.2955351394451074,
+                "right_l2": 8.936190255771521
+              },
+              "encoder": {
+                "cosine": 0.23904031586394892,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.5347412946310928,
+                "right_l2": 19.113904040442296
+              },
+              "fast_map": {
+                "cosine": 0.2856736815560942,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7453675055849173,
+                "right_l2": 9.866331375929004
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6475202337646724,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.19246634674471458,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.30539487715085356,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.021275926110135256,
+                "right_l2": 0.12739345102849103
+              },
+              "query": {
+                "cosine": -0.5420803629214033,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.20925920510643126,
+                "right_l2": 3.124779559943495
+              },
+              "readout": {
+                "cosine": 0.14471856489627977,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.6206567792938669,
+                "right_l2": 21.851516063478545
+              },
+              "retrieved_delta": {
+                "cosine": 0.4113480412368526,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.5694897616243035,
+                "right_l2": 8.800938604432199
+              },
+              "slow_map": {
+                "cosine": 0.1904818759728625,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.12978729656383542,
+                "right_l2": 2.3035986833766016
+              },
+              "source_admission": {
+                "cosine": 0.048348640339708225,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.04535456989844025,
+                "right_l2": 0.8032071190348763
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.014839398399533936
+              },
+              "state_response": {
+                "cosine": -0.6015050621177972,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.00581451875559027,
+                "right_l2": 0.10884769664211266
+              },
+              "station": {
+                "cosine": 0.26891767596138266,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.03153433194329998,
+                "right_l2": 0.19154301447812858
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 2.2426816747958807
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.936225005494302
+              },
+              "<all_shared>": {
+                "cosine": 0.19991547411039473,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.7660563529068205,
+                "right_l2": 46.12915348122652
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": 0.12341930645411081,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.2801510064947595,
+                "right_l2": 0.15765163945896354
+              },
+              "content": {
+                "cosine": -0.36838648214086045,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5687490304084519,
+                "right_l2": 0.8203426991308082
+              },
+              "current_head": {
+                "cosine": 0.01609767127560836,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8828467071286266,
+                "right_l2": 2.8850949821918674
+              },
+              "current_residual": {
+                "cosine": -0.018589655678521347,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.2955351394451074,
+                "right_l2": 1.022915890590023
+              },
+              "encoder": {
+                "cosine": -0.24818108152888968,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.5347412946310928,
+                "right_l2": 1.1960989695957744
+              },
+              "fast_map": {
+                "cosine": -0.017013340372608966,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7453675055849173,
+                "right_l2": 0.5298519883433587
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.8186787266856704,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.021275926110135256,
+                "right_l2": 0.026838382113286586
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": 0.028774118647523935,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.12978729656383542,
+                "right_l2": 0.002915794441239643
+              },
+              "source_admission": {
+                "cosine": -0.2400350046378209,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.04535456989844025,
+                "right_l2": 0.07461195354287423
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.044177678156961615
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.3545871820255961,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.03153433194329998,
+                "right_l2": 0.03813549326789812
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.0845633920661102,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 2.0494076683949585,
+                "right_l2": 3.4335176948529575
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": 0.2546861741565822,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.15407933747548835,
+                "right_l2": 4.707719985149115
+              },
+              "content": {
+                "cosine": 0.4971867051953439,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.44101294363809973,
+                "right_l2": 10.049710503958753
+              },
+              "current_head": {
+                "cosine": 0.09344178352051949,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6568575867695905,
+                "right_l2": 29.7584579369735
+              },
+              "current_residual": {
+                "cosine": 0.1436377573263432,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.23311467888901224,
+                "right_l2": 8.936190255771521
+              },
+              "encoder": {
+                "cosine": 0.2357977994569557,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.840862307457904,
+                "right_l2": 19.113904040442296
+              },
+              "fast_map": {
+                "cosine": 0.09985077366726898,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.4566586240854734,
+                "right_l2": 9.866331375929004
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.3664038366755162,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.007774237831301576,
+                "right_l2": 0.12739345102849103
+              },
+              "query": {
+                "cosine": 0.47533851779044073,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.1246464108307125,
+                "right_l2": 3.124779559943495
+              },
+              "readout": {
+                "cosine": -0.1460381280353639,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.8326824045690719,
+                "right_l2": 21.851516063478545
+              },
+              "retrieved_delta": {
+                "cosine": -0.3871847423491778,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.2988680027162345,
+                "right_l2": 8.800938604432199
+              },
+              "slow_map": {
+                "cosine": -0.3834660845863378,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.06743786049500577,
+                "right_l2": 2.3035986833766016
+              },
+              "source_admission": {
+                "cosine": -0.26542795807369807,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.03525751267076692,
+                "right_l2": 0.8032071190348763
+              },
+              "state_noise": {
+                "cosine": 0.8065993754850813,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.002752360583258654,
+                "right_l2": 0.014839398399533936
+              },
+              "state_response": {
+                "cosine": -0.1314263591359992,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.008641286291408168,
+                "right_l2": 0.10884769664211266
+              },
+              "station": {
+                "cosine": 0.4867194145953976,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.022483700123136347,
+                "right_l2": 0.19154301447812858
+              },
+              "width_head": {
+                "cosine": 0.691900354950424,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7476418658719413,
+                "right_l2": 2.2426816747958807
+              },
+              "width_residual": {
+                "cosine": 0.6937005340035985,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.33710454647464533,
+                "right_l2": 0.936225005494302
+              },
+              "<all_shared>": {
+                "cosine": 0.08102610674289458,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 1.75979814557436,
+                "right_l2": 46.12915348122652
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": 0.10519564536160876,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.15407933747548835,
+                "right_l2": 0.15765163945896354
+              },
+              "content": {
+                "cosine": -0.43716768507311904,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.44101294363809973,
+                "right_l2": 0.8203426991308082
+              },
+              "current_head": {
+                "cosine": -0.22176213793594185,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6568575867695905,
+                "right_l2": 2.8850949821918674
+              },
+              "current_residual": {
+                "cosine": -0.3147992686807354,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.23311467888901224,
+                "right_l2": 1.022915890590023
+              },
+              "encoder": {
+                "cosine": -0.3218220815387361,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.840862307457904,
+                "right_l2": 1.1960989695957744
+              },
+              "fast_map": {
+                "cosine": -0.01209414618259487,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.4566586240854734,
+                "right_l2": 0.5298519883433587
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": 0.29066341614076885,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.007774237831301576,
+                "right_l2": 0.026838382113286586
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": -0.018160832898013648,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.06743786049500577,
+                "right_l2": 0.002915794441239643
+              },
+              "source_admission": {
+                "cosine": -0.12333813243800142,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.03525751267076692,
+                "right_l2": 0.07461195354287423
+              },
+              "state_noise": {
+                "cosine": 0.16270321806233135,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.002752360583258654,
+                "right_l2": 0.044177678156961615
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": 0.05027209356687904,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.022483700123136347,
+                "right_l2": 0.03813549326789812
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.22331782556509824,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 1.2751424268764378,
+                "right_l2": 3.4335176948529575
+              }
+            }
+          },
+          {
+            "left": "interval",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": 0.3382448172193855,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 4.707719985149115,
+                "right_l2": 0.15765163945896354
+              },
+              "content": {
+                "cosine": -0.22546877112151245,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 10.049710503958753,
+                "right_l2": 0.8203426991308082
+              },
+              "current_head": {
+                "cosine": -0.27569540647337265,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 29.7584579369735,
+                "right_l2": 2.8850949821918674
+              },
+              "current_residual": {
+                "cosine": -0.22909903698614245,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 8.936190255771521,
+                "right_l2": 1.022915890590023
+              },
+              "encoder": {
+                "cosine": -0.2767758508477044,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 19.113904040442296,
+                "right_l2": 1.1960989695957744
+              },
+              "fast_map": {
+                "cosine": -0.15891510248537422,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 9.866331375929004,
+                "right_l2": 0.5298519883433587
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.3562025901536222,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.12739345102849103,
+                "right_l2": 0.026838382113286586
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": 0.08152464746436434,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 2.3035986833766016,
+                "right_l2": 0.002915794441239643
+              },
+              "source_admission": {
+                "cosine": 0.06760654222716835,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8032071190348763,
+                "right_l2": 0.07461195354287423
+              },
+              "state_noise": {
+                "cosine": 0.1939307858286893,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.014839398399533936,
+                "right_l2": 0.044177678156961615
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.36466019269279215,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.19154301447812858,
+                "right_l2": 0.03813549326789812
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.254841900393813,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 39.46227683279848,
+                "right_l2": 3.4335176948529575
+              }
+            }
+          }
+        ],
+        "qualification": "local_gradients_not_training_outcome"
+      },
+      "hidden_reconstruction_labels": 24,
+      "no_optimizer_created": true
+    },
+    {
+      "seed": 110004,
+      "checkpoint_sha256": "17300b9a1454c0eaece66f859ac8373db374ce0d503d4d319f2a7eeea79bd874",
+      "floors": {
+        "floor_dominates_total": [
+          0.9242424242424242,
+          0.8909090909090909,
+          0.7166666666666667,
+          0.7868852459016393,
+          0.7662337662337663,
+          0.68
+        ],
+        "left_floor_active": [
+          0.48484848484848486,
+          0.4727272727272727,
+          0.6833333333333333,
+          0.26229508196721313,
+          0.4805194805194805,
+          0.46
+        ],
+        "right_floor_active": [
+          0.9696969696969697,
+          0.9818181818181818,
+          0.6333333333333333,
+          0.9180327868852459,
+          0.8831168831168831,
+          0.94
+        ],
+        "width": [
+          1082.3575642903645,
+          1069.4298137318003,
+          140.01084582010904,
+          224.7315833920338,
+          15916.782461191153,
+          1812.2390670776367
+        ],
+        "minimum_width": [
+          1079.3765073834043,
+          1066.2836489590732,
+          138.89287293752034,
+          223.21683927442206,
+          15867.761170226258,
+          1809.8180126953125
+        ],
+        "missing_channel_counts": [
+          66,
+          55,
+          60,
+          61,
+          77,
+          50
+        ],
+        "actual_to_nominal_latent_variance_ratio": [
+          1.0315746358556077,
+          1.0102700074730506,
+          0.8861402923764156,
+          1.0228951475987855,
+          0.9775646281678515,
+          0.9058592350397885
+        ]
+      },
+      "reconstruction_current_mean_gradient_norm": 0.295697957277298,
+      "objective_gradient_roles": {
+        "nll": {
+          "point_coordinate_l2": 1.7593701143915756,
+          "uncertainty_coordinate_l2": 1.0183178546239848
+        },
+        "interval": {
+          "point_coordinate_l2": 53.03091579224432,
+          "uncertainty_coordinate_l2": 2.0565935524552845
+        },
+        "reconstruction_nll": {
+          "point_coordinate_l2": 3.606083685074733,
+          "uncertainty_coordinate_l2": 0.379532424583342
+        }
+      },
+      "gradient_atlas": {
+        "schema": "tac-osm-observatory/gradient-conflicts-v1",
+        "pairs": [
+          {
+            "left": "point",
+            "right": "nll",
+            "components": {
+              "address": {
+                "cosine": 0.9113188347261173,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6525984712221776,
+                "right_l2": 0.5614810877876664
+              },
+              "content": {
+                "cosine": 0.8202059659586354,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5049464224435366,
+                "right_l2": 0.3907864499232318
+              },
+              "current_head": {
+                "cosine": 0.6565105898299832,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.3165261443239074,
+                "right_l2": 0.7873998915151424
+              },
+              "current_residual": {
+                "cosine": 0.7191689502686575,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.38880970726820485,
+                "right_l2": 0.2331991947594083
+              },
+              "encoder": {
+                "cosine": 0.7012684568515778,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.7141705540665664,
+                "right_l2": 0.9539793906574842
+              },
+              "fast_map": {
+                "cosine": 0.5642733980580482,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8982900788806747,
+                "right_l2": 0.4687388160483992
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7035936555368901,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.23563502124447783,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.9530918621158541,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.01881588236393164,
+                "right_l2": 0.010661718472479
+              },
+              "query": {
+                "cosine": 0.7711441605301544,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.509834126002567,
+                "right_l2": 0.38573804804838324
+              },
+              "readout": {
+                "cosine": 0.3479320932601615,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.7738952770597711,
+                "right_l2": 0.832846028246173
+              },
+              "retrieved_delta": {
+                "cosine": 0.16296685051580143,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.6465602903833344,
+                "right_l2": 0.25696788511750956
+              },
+              "slow_map": {
+                "cosine": 0.29411831401607536,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.1739222233015858,
+                "right_l2": 0.07113642408221073
+              },
+              "source_admission": {
+                "cosine": 0.5873802164530273,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.050909813231261904,
+                "right_l2": 0.036530633900482584
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.0035256631373052462
+              },
+              "state_response": {
+                "cosine": 0.3378068535811231,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.007071012157638497,
+                "right_l2": 0.007614335456935156
+              },
+              "station": {
+                "cosine": 0.8992258201125091,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.047328924223806586,
+                "right_l2": 0.02990233809553924
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.8899102417248539
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.3902998199586014
+              },
+              "<all_shared>": {
+                "cosine": 0.49952105390518936,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 3.2743401919457593,
+                "right_l2": 2.032819325274782
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": -0.05715450058932476,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6525984712221776,
+                "right_l2": 9.390182916324173
+              },
+              "content": {
+                "cosine": 0.7452749261762944,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5049464224435366,
+                "right_l2": 8.556792090041244
+              },
+              "current_head": {
+                "cosine": 0.4615836917820758,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.3165261443239074,
+                "right_l2": 32.367553149051744
+              },
+              "current_residual": {
+                "cosine": 0.5064197909765713,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.38880970726820485,
+                "right_l2": 9.132860175433347
+              },
+              "encoder": {
+                "cosine": 0.30675316495530386,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.7141705540665664,
+                "right_l2": 24.251361061519447
+              },
+              "fast_map": {
+                "cosine": 0.46019530442932366,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8982900788806747,
+                "right_l2": 13.073918220888656
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7035936555368901,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.23563502124447783,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.8327575929821772,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.01881588236393164,
+                "right_l2": 0.4954647221397015
+              },
+              "query": {
+                "cosine": -0.0269227142999918,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.509834126002567,
+                "right_l2": 7.214334466842315
+              },
+              "readout": {
+                "cosine": 0.29808438298560275,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.7738952770597711,
+                "right_l2": 24.68570841795168
+              },
+              "retrieved_delta": {
+                "cosine": 0.6124585724618731,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.6465602903833344,
+                "right_l2": 9.324969766046229
+              },
+              "slow_map": {
+                "cosine": 0.5113469266279733,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.1739222233015858,
+                "right_l2": 3.2315435593473
+              },
+              "source_admission": {
+                "cosine": 0.31188217505039884,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.050909813231261904,
+                "right_l2": 1.44711702950767
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.014427591537002453
+              },
+              "state_response": {
+                "cosine": -0.13576390383805875,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.007071012157638497,
+                "right_l2": 0.11130417599657234
+              },
+              "station": {
+                "cosine": 0.15501048615528032,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.047328924223806586,
+                "right_l2": 0.5009325986016755
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 1.737136382366319
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.7351301217288007
+              },
+              "<all_shared>": {
+                "cosine": 0.34218725895712376,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 3.2743401919457593,
+                "right_l2": 53.070779983385854
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": 0.18676765480088225,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6525984712221776,
+                "right_l2": 0.1981913843265606
+              },
+              "content": {
+                "cosine": -0.1822611364350378,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5049464224435366,
+                "right_l2": 0.8181954130830803
+              },
+              "current_head": {
+                "cosine": -0.24917055130091548,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.3165261443239074,
+                "right_l2": 3.073260282712308
+              },
+              "current_residual": {
+                "cosine": -0.28035854476306576,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.38880970726820485,
+                "right_l2": 0.7913178274302557
+              },
+              "encoder": {
+                "cosine": -0.24625796815572193,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.7141705540665664,
+                "right_l2": 1.35517356252767
+              },
+              "fast_map": {
+                "cosine": -0.1501606489210734,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8982900788806747,
+                "right_l2": 0.7163256283680264
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.8720599897877008,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.01881588236393164,
+                "right_l2": 0.03127854689926583
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": -0.0931965768288492,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.1739222233015858,
+                "right_l2": 0.002943223224264109
+              },
+              "source_admission": {
+                "cosine": -0.15039773070631582,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.050909813231261904,
+                "right_l2": 0.0868928302724664
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.050794384248168976
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.6670819833456937,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.047328924223806586,
+                "right_l2": 0.08551239947636682
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.19904613206662025,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 2.5191288769964633,
+                "right_l2": 3.6260010800460782
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": 0.021763413066921682,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5614810877876664,
+                "right_l2": 9.390182916324173
+              },
+              "content": {
+                "cosine": 0.7661542893946918,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.3907864499232318,
+                "right_l2": 8.556792090041244
+              },
+              "current_head": {
+                "cosine": 0.19615302167127838,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7873998915151424,
+                "right_l2": 32.367553149051744
+              },
+              "current_residual": {
+                "cosine": 0.24483183839145717,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.2331991947594083,
+                "right_l2": 9.132860175433347
+              },
+              "encoder": {
+                "cosine": 0.3829778209370189,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.9539793906574842,
+                "right_l2": 24.251361061519447
+              },
+              "fast_map": {
+                "cosine": 0.393796987607896,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.4687388160483992,
+                "right_l2": 13.073918220888656
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.907778383888507,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.010661718472479,
+                "right_l2": 0.4954647221397015
+              },
+              "query": {
+                "cosine": 0.07539080178583799,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.38573804804838324,
+                "right_l2": 7.214334466842315
+              },
+              "readout": {
+                "cosine": 0.000812802624440155,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.832846028246173,
+                "right_l2": 24.68570841795168
+              },
+              "retrieved_delta": {
+                "cosine": -0.2536023945574555,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.25696788511750956,
+                "right_l2": 9.324969766046229
+              },
+              "slow_map": {
+                "cosine": 0.08555990212768218,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.07113642408221073,
+                "right_l2": 3.2315435593473
+              },
+              "source_admission": {
+                "cosine": 0.013460108822643153,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.036530633900482584,
+                "right_l2": 1.44711702950767
+              },
+              "state_noise": {
+                "cosine": 0.5894945277168799,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0035256631373052462,
+                "right_l2": 0.014427591537002453
+              },
+              "state_response": {
+                "cosine": -0.2044500985412121,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.007614335456935156,
+                "right_l2": 0.11130417599657234
+              },
+              "station": {
+                "cosine": 0.33834122096042096,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.02990233809553924,
+                "right_l2": 0.5009325986016755
+              },
+              "width_head": {
+                "cosine": 0.7672271719916427,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8899102417248539,
+                "right_l2": 1.737136382366319
+              },
+              "width_residual": {
+                "cosine": 0.7629584547773227,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.3902998199586014,
+                "right_l2": 0.7351301217288007
+              },
+              "<all_shared>": {
+                "cosine": 0.19024988581963037,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.032819325274782,
+                "right_l2": 53.070779983385854
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": 0.1590263535820434,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5614810877876664,
+                "right_l2": 0.1981913843265606
+              },
+              "content": {
+                "cosine": -0.3019500399916766,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.3907864499232318,
+                "right_l2": 0.8181954130830803
+              },
+              "current_head": {
+                "cosine": -0.2313203632099679,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.7873998915151424,
+                "right_l2": 3.073260282712308
+              },
+              "current_residual": {
+                "cosine": -0.33245880946219575,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.2331991947594083,
+                "right_l2": 0.7913178274302557
+              },
+              "encoder": {
+                "cosine": -0.23844846203885567,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.9539793906574842,
+                "right_l2": 1.35517356252767
+              },
+              "fast_map": {
+                "cosine": -0.17015620456305894,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.4687388160483992,
+                "right_l2": 0.7163256283680264
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.8916611840171407,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.010661718472479,
+                "right_l2": 0.03127854689926583
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": -0.15643738996653808,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.07113642408221073,
+                "right_l2": 0.002943223224264109
+              },
+              "source_admission": {
+                "cosine": 0.14245188922427718,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.036530633900482584,
+                "right_l2": 0.0868928302724664
+              },
+              "state_noise": {
+                "cosine": -0.057894226021980265,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0035256631373052462,
+                "right_l2": 0.050794384248168976
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.699423560918319,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.02990233809553924,
+                "right_l2": 0.08551239947636682
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.19490781071068192,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 1.5098223077105124,
+                "right_l2": 3.6260010800460782
+              }
+            }
+          },
+          {
+            "left": "interval",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": 0.04661434515440091,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 9.390182916324173,
+                "right_l2": 0.1981913843265606
+              },
+              "content": {
+                "cosine": -0.1654946587394239,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 8.556792090041244,
+                "right_l2": 0.8181954130830803
+              },
+              "current_head": {
+                "cosine": -0.20779848801361467,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 32.367553149051744,
+                "right_l2": 3.073260282712308
+              },
+              "current_residual": {
+                "cosine": -0.2435725886907973,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 9.132860175433347,
+                "right_l2": 0.7913178274302557
+              },
+              "encoder": {
+                "cosine": -0.10951190906126498,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 24.251361061519447,
+                "right_l2": 1.35517356252767
+              },
+              "fast_map": {
+                "cosine": -0.1534188314363777,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 13.073918220888656,
+                "right_l2": 0.7163256283680264
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.8500482954636247,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.4954647221397015,
+                "right_l2": 0.03127854689926583
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": -0.1414159633851733,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 3.2315435593473,
+                "right_l2": 0.002943223224264109
+              },
+              "source_admission": {
+                "cosine": 0.09615342504505023,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.44711702950767,
+                "right_l2": 0.0868928302724664
+              },
+              "state_noise": {
+                "cosine": 0.5937186648457137,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.014427591537002453,
+                "right_l2": 0.050794384248168976
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.3780163650320443,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.5009325986016755,
+                "right_l2": 0.08551239947636682
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.17332797237591605,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 45.437334398985875,
+                "right_l2": 3.6260010800460782
+              }
+            }
+          }
+        ],
+        "qualification": "local_gradients_not_training_outcome"
+      },
+      "hidden_reconstruction_labels": 24,
+      "no_optimizer_created": true
+    },
+    {
+      "seed": 110005,
+      "checkpoint_sha256": "0470a00c9cf6ebcc1aac502eac9a2526180b1f97806929b873716e617146e0bf",
+      "floors": {
+        "floor_dominates_total": [
+          0.9090909090909091,
+          0.8181818181818182,
+          0.7333333333333333,
+          0.8524590163934426,
+          0.7662337662337663,
+          0.66
+        ],
+        "left_floor_active": [
+          0.7121212121212122,
+          0.4,
+          0.6833333333333333,
+          0.5573770491803278,
+          0.7532467532467533,
+          0.56
+        ],
+        "right_floor_active": [
+          1.0,
+          1.0,
+          0.85,
+          0.9344262295081968,
+          0.922077922077922,
+          0.98
+        ],
+        "width": [
+          970.9724874785452,
+          967.1033377907493,
+          131.80792684555053,
+          202.89409456096712,
+          14782.332617821632,
+          1784.3038973236085
+        ],
+        "minimum_width": [
+          969.6143775708748,
+          964.7354572642934,
+          123.57623278299967,
+          202.32223635814228,
+          14762.419836267249,
+          1782.7482961273192
+        ],
+        "missing_channel_counts": [
+          66,
+          55,
+          60,
+          61,
+          77,
+          50
+        ],
+        "actual_to_nominal_latent_variance_ratio": [
+          0.8565820807401507,
+          0.8832134536092628,
+          0.9219738253129305,
+          0.9357628117360987,
+          0.8956645457138716,
+          0.8099618832203526
+        ]
+      },
+      "reconstruction_current_mean_gradient_norm": 0.3210974335670471,
+      "objective_gradient_roles": {
+        "nll": {
+          "point_coordinate_l2": 1.5090652244775016,
+          "uncertainty_coordinate_l2": 0.8019425721488054
+        },
+        "interval": {
+          "point_coordinate_l2": 46.65047656975699,
+          "uncertainty_coordinate_l2": 2.8938374254745294
+        },
+        "reconstruction_nll": {
+          "point_coordinate_l2": 3.98281260284653,
+          "uncertainty_coordinate_l2": 0.3930702930110507
+        }
+      },
+      "gradient_atlas": {
+        "schema": "tac-osm-observatory/gradient-conflicts-v1",
+        "pairs": [
+          {
+            "left": "point",
+            "right": "nll",
+            "components": {
+              "address": {
+                "cosine": 0.4047729435576921,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.23458975251611858,
+                "right_l2": 0.14119945191860034
+              },
+              "content": {
+                "cosine": 0.749343363659231,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5891906425622516,
+                "right_l2": 0.3722005313370402
+              },
+              "current_head": {
+                "cosine": 0.7300471725120491,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.1248530384607003,
+                "right_l2": 0.8167407432033919
+              },
+              "current_residual": {
+                "cosine": 0.7448896076363278,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.32193694928358807,
+                "right_l2": 0.2442834168327961
+              },
+              "encoder": {
+                "cosine": 0.5663876071973875,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.3593724760492505,
+                "right_l2": 0.8027277120141976
+              },
+              "fast_map": {
+                "cosine": 0.4460507517650027,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6255902662076844,
+                "right_l2": 0.38279393209463375
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5243695389371748,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.17890959335010573,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.8466957626478256,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.010018773185673485,
+                "right_l2": 0.00544424325842125
+              },
+              "query": {
+                "cosine": 0.5209091764461872,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.31835993447868943,
+                "right_l2": 0.14797564150981465
+              },
+              "readout": {
+                "cosine": 0.34381832227453685,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.287872286250344,
+                "right_l2": 0.7469615221284699
+              },
+              "retrieved_delta": {
+                "cosine": -0.4459116586819321,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.417812005166471,
+                "right_l2": 0.25899086927277887
+              },
+              "slow_map": {
+                "cosine": 0.06286109645149462,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.098727521890116,
+                "right_l2": 0.05697166051454643
+              },
+              "source_admission": {
+                "cosine": 0.7808720595254592,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.060178277894972466,
+                "right_l2": 0.03875800999462736
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.004379846247854779
+              },
+              "state_response": {
+                "cosine": -0.37134609790917067,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.010180691978018382,
+                "right_l2": 0.007705804852277275
+              },
+              "station": {
+                "cosine": 0.41250323381225856,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.03124508222985462,
+                "right_l2": 0.024404402252159042
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.6973184130157999
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.325033984193447
+              },
+              "<all_shared>": {
+                "cosine": 0.4538276140016847,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.5032834957113326,
+                "right_l2": 1.7089147700036478
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": 0.41607731153988603,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.23458975251611858,
+                "right_l2": 3.329261173932782
+              },
+              "content": {
+                "cosine": 0.6788905005383564,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5891906425622516,
+                "right_l2": 8.16628405265067
+              },
+              "current_head": {
+                "cosine": 0.39722644016876546,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.1248530384607003,
+                "right_l2": 29.765060715820887
+              },
+              "current_residual": {
+                "cosine": 0.39646958265467097,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.32193694928358807,
+                "right_l2": 8.999365900139587
+              },
+              "encoder": {
+                "cosine": 0.5073514502165046,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.3593724760492505,
+                "right_l2": 20.22270227684544
+              },
+              "fast_map": {
+                "cosine": 0.4877299672892276,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6255902662076844,
+                "right_l2": 11.846601480130422
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5243695389371748,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.17890959335010573,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.8052219254140441,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.010018773185673485,
+                "right_l2": 0.25982047923368595
+              },
+              "query": {
+                "cosine": 0.752134866258472,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.31835993447868943,
+                "right_l2": 4.354026384542668
+              },
+              "readout": {
+                "cosine": 0.11792153137664502,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 1.287872286250344,
+                "right_l2": 22.00629426041117
+              },
+              "retrieved_delta": {
+                "cosine": 0.6394020962265263,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.417812005166471,
+                "right_l2": 8.519920902532853
+              },
+              "slow_map": {
+                "cosine": 0.7129859594840001,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.098727521890116,
+                "right_l2": 2.514022624835811
+              },
+              "source_admission": {
+                "cosine": 0.08901675125697564,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.060178277894972466,
+                "right_l2": 0.9639537814895561
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.016929123618732327
+              },
+              "state_response": {
+                "cosine": 0.12532768867275434,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.010180691978018382,
+                "right_l2": 0.11619770551731014
+              },
+              "station": {
+                "cosine": 0.546132838393684,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.03124508222985462,
+                "right_l2": 0.2234940744015603
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 2.483224998474997
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 1.1185900615365267
+              },
+              "<all_shared>": {
+                "cosine": 0.36281272811806814,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 2.5032834957113326,
+                "right_l2": 46.74014603950201
+              }
+            }
+          },
+          {
+            "left": "point",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": -0.09485255275962552,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.23458975251611858,
+                "right_l2": 0.2478230153320604
+              },
+              "content": {
+                "cosine": -0.4261231085511545,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.5891906425622516,
+                "right_l2": 0.8497695596457783
+              },
+              "current_head": {
+                "cosine": -0.2249060664006986,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.1248530384607003,
+                "right_l2": 3.4381712171495575
+              },
+              "current_residual": {
+                "cosine": -0.36223710481143406,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.32193694928358807,
+                "right_l2": 0.9666756130041227
+              },
+              "encoder": {
+                "cosine": -0.4046344604335084,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 1.3593724760492505,
+                "right_l2": 1.4186507915058468
+              },
+              "fast_map": {
+                "cosine": -0.12110963889368125,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6255902662076844,
+                "right_l2": 0.664256628495877
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.9077424764212545,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.010018773185673485,
+                "right_l2": 0.01997192522328385
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": 0.07417995525898372,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.098727521890116,
+                "right_l2": 0.0021669009292316897
+              },
+              "source_admission": {
+                "cosine": -0.10099667877166425,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.060178277894972466,
+                "right_l2": 0.10458174659914819
+              },
+              "state_noise": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.0,
+                "right_l2": 0.058409851292054074
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.15917886867471018,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.03124508222985462,
+                "right_l2": 0.09865279986620287
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.25324734565587614,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 2.006194809139811,
+                "right_l2": 4.0021618592968204
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "interval",
+            "components": {
+              "address": {
+                "cosine": 0.2109301488016976,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.14119945191860034,
+                "right_l2": 3.329261173932782
+              },
+              "content": {
+                "cosine": 0.4476734276625634,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.3722005313370402,
+                "right_l2": 8.16628405265067
+              },
+              "current_head": {
+                "cosine": 0.08021179624473077,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8167407432033919,
+                "right_l2": 29.765060715820887
+              },
+              "current_residual": {
+                "cosine": 0.08263999534923215,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.2442834168327961,
+                "right_l2": 8.999365900139587
+              },
+              "encoder": {
+                "cosine": 0.3111467677638973,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8027277120141976,
+                "right_l2": 20.22270227684544
+              },
+              "fast_map": {
+                "cosine": 0.11668514467548498,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.38279393209463375,
+                "right_l2": 11.846601480130422
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "ZERO_GRADIENT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.0,
+                "right_l2": 0.0
+              },
+              "memory_gates": {
+                "cosine": 0.8150307902877515,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.00544424325842125,
+                "right_l2": 0.25982047923368595
+              },
+              "query": {
+                "cosine": 0.5332804021657951,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.14797564150981465,
+                "right_l2": 4.354026384542668
+              },
+              "readout": {
+                "cosine": -0.14017028452320293,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.7469615221284699,
+                "right_l2": 22.00629426041117
+              },
+              "retrieved_delta": {
+                "cosine": -0.5614454451306606,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.25899086927277887,
+                "right_l2": 8.519920902532853
+              },
+              "slow_map": {
+                "cosine": -0.11655239068463687,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.05697166051454643,
+                "right_l2": 2.514022624835811
+              },
+              "source_admission": {
+                "cosine": -0.12307927153587517,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.03875800999462736,
+                "right_l2": 0.9639537814895561
+              },
+              "state_noise": {
+                "cosine": 0.9375833248075801,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.004379846247854779,
+                "right_l2": 0.016929123618732327
+              },
+              "state_response": {
+                "cosine": 0.001557713746384535,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.007705804852277275,
+                "right_l2": 0.11619770551731014
+              },
+              "station": {
+                "cosine": 0.5226044691181693,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.024404402252159042,
+                "right_l2": 0.2234940744015603
+              },
+              "width_head": {
+                "cosine": 0.5928733384153604,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.6973184130157999,
+                "right_l2": 2.483224998474997
+              },
+              "width_residual": {
+                "cosine": 0.5859686535612944,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.325033984193447,
+                "right_l2": 1.1185900615365267
+              },
+              "<all_shared>": {
+                "cosine": 0.09007407099385684,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 45,
+                "left_l2": 1.7089147700036478,
+                "right_l2": 46.74014603950201
+              }
+            }
+          },
+          {
+            "left": "nll",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": -0.180779078426765,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.14119945191860034,
+                "right_l2": 0.2478230153320604
+              },
+              "content": {
+                "cosine": -0.6015282481484727,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.3722005313370402,
+                "right_l2": 0.8497695596457783
+              },
+              "current_head": {
+                "cosine": -0.2135539139206047,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8167407432033919,
+                "right_l2": 3.4381712171495575
+              },
+              "current_residual": {
+                "cosine": -0.34294270961498946,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 0.2442834168327961,
+                "right_l2": 0.9666756130041227
+              },
+              "encoder": {
+                "cosine": -0.5079929705994328,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.8027277120141976,
+                "right_l2": 1.4186507915058468
+              },
+              "fast_map": {
+                "cosine": -0.10800653024161831,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.38279393209463375,
+                "right_l2": 0.664256628495877
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.8301662775203711,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.00544424325842125,
+                "right_l2": 0.01997192522328385
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": 0.15657559137508276,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.05697166051454643,
+                "right_l2": 0.0021669009292316897
+              },
+              "source_admission": {
+                "cosine": 0.023162037367036852,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.03875800999462736,
+                "right_l2": 0.10458174659914819
+              },
+              "state_noise": {
+                "cosine": -0.33512889274505386,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.004379846247854779,
+                "right_l2": 0.058409851292054074
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.513937432159706,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.024404402252159042,
+                "right_l2": 0.09865279986620287
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.28604708273154184,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 1.2967288364609109,
+                "right_l2": 4.0021618592968204
+              }
+            }
+          },
+          {
+            "left": "interval",
+            "right": "reconstruction",
+            "components": {
+              "address": {
+                "cosine": 0.12142992770724698,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 3.329261173932782,
+                "right_l2": 0.2478230153320604
+              },
+              "content": {
+                "cosine": -0.2007190087773093,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 8.16628405265067,
+                "right_l2": 0.8497695596457783
+              },
+              "current_head": {
+                "cosine": -0.2784943617935503,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 29.765060715820887,
+                "right_l2": 3.4381712171495575
+              },
+              "current_residual": {
+                "cosine": -0.2914162176326183,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 4,
+                "left_l2": 8.999365900139587,
+                "right_l2": 0.9666756130041227
+              },
+              "encoder": {
+                "cosine": -0.34427724229907897,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 20.22270227684544,
+                "right_l2": 1.4186507915058468
+              },
+              "fast_map": {
+                "cosine": -0.21199571765534123,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 11.846601480130422,
+                "right_l2": 0.664256628495877
+              },
+              "median_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "median_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "memory_gates": {
+                "cosine": -0.8273111650719145,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.25982047923368595,
+                "right_l2": 0.01997192522328385
+              },
+              "query": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "readout": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "retrieved_delta": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "slow_map": {
+                "cosine": -0.05252147515846943,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 2.514022624835811,
+                "right_l2": 0.0021669009292316897
+              },
+              "source_admission": {
+                "cosine": 0.07493586000310187,
+                "status": "NO_LOCAL_CONFLICT",
+                "shared_parameter_tensors": 2,
+                "left_l2": 0.9639537814895561,
+                "right_l2": 0.10458174659914819
+              },
+              "state_noise": {
+                "cosine": -0.17215238847435063,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.016929123618732327,
+                "right_l2": 0.058409851292054074
+              },
+              "state_response": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "station": {
+                "cosine": -0.3281926632216645,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 1,
+                "left_l2": 0.2234940744015603,
+                "right_l2": 0.09865279986620287
+              },
+              "width_head": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "width_residual": {
+                "cosine": null,
+                "status": "NO_SHARED_GRADIENT"
+              },
+              "<all_shared>": {
+                "cosine": -0.27396980301805224,
+                "status": "CONFLICT_AT_THIS_POINT",
+                "shared_parameter_tensors": 22,
+                "left_l2": 40.017327681266686,
+                "right_l2": 4.0021618592968204
+              }
+            }
+          }
+        ],
+        "qualification": "local_gradients_not_training_outcome"
+      },
+      "hidden_reconstruction_labels": 24,
+      "no_optimizer_created": true
+    }
+  ],
+  "integrity_clearance": "INCONCLUSIVE",
+  "report_scored": false,
+  "protected_numeric_access": false,
+  "note": "Local gradients and floor activity do not prove causal explanation of qualification failures"
+}
