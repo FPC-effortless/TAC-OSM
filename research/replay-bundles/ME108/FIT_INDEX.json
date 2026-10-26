@@ -1,0 +1,1565 @@
+{
+  "models": [
+    {
+      "architecture": "role_guarded",
+      "seed": 108001,
+      "trainable_parameters": 102713,
+      "deployed_parameters": 102713,
+      "actual_steps": 4096,
+      "checkpoint_sha256": "da1cb424859592770141e1b52593c3717f2b2baf7e498ee64409c3aa231b6446",
+      "parent_checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+      "dropped_parent_tensors": [
+        "current_head.bias",
+        "current_head.weight"
+      ],
+      "actual_sample_order_sha256": "b9679da87b87205bf096c288d6afa8984ade45b29b0aebecac74a348c2e35727",
+      "augmented_inputs_sha256": "3ef47935ffb2c7dc3d2f52cdd3907107fd8f0191ff62c7b28e1971be63052f9a",
+      "optimizer_state_tensors": 39,
+      "parameter_tensors": 39,
+      "first_gradient_receipt": {
+        "parameters": {
+          "state_noise": {
+            "norm": 0.02203327976167202,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.05010060593485832,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.10753744840621948,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 3.8722188472747803,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.8338262438774109,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.4461672008037567,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.14424674212932587,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 1.1484140157699585,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.639385461807251,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.07857911288738251,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.025830818340182304,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.882189393043518,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.7302340865135193,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.26974615454673767,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.08777520060539246,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.10846027731895447,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.035590481013059616,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.5733107924461365,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.13800135254859924,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 1.2754957675933838,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.3494685888290405,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 3.9861278533935547,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 1.113620638847351,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.05145004764199257,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.16216273605823517,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.6476755142211914,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 1.113620638847351,
+            "nonzero": true
+          },
+          "current_head.input.weight": {
+            "norm": 1.8307318687438965,
+            "nonzero": true
+          },
+          "current_head.input.bias": {
+            "norm": 0.5154639482498169,
+            "nonzero": true
+          },
+          "current_head.output.weight": {
+            "norm": 0.9701443910598755,
+            "nonzero": true
+          },
+          "current_head.output.bias": {
+            "norm": 1.1222394704818726,
+            "nonzero": true
+          },
+          "width_head.input.weight": {
+            "norm": 1.9356006383895874,
+            "nonzero": true
+          },
+          "width_head.input.bias": {
+            "norm": 0.6328683495521545,
+            "nonzero": true
+          },
+          "width_head.output.weight": {
+            "norm": 0.6136400103569031,
+            "nonzero": true
+          },
+          "width_head.output.bias": {
+            "norm": 0.932244598865509,
+            "nonzero": true
+          },
+          "median_head.input.weight": {
+            "norm": 0.11890844255685806,
+            "nonzero": true
+          },
+          "median_head.input.bias": {
+            "norm": 0.023604951798915863,
+            "nonzero": true
+          },
+          "median_head.output.weight": {
+            "norm": 0.04091156646609306,
+            "nonzero": true
+          },
+          "median_head.output.bias": {
+            "norm": 0.03684680908918381,
+            "nonzero": true
+          }
+        },
+        "point": {
+          "source_encoder": {
+            "tensors": 3,
+            "nonzero": 3,
+            "norm": 0.5439009703195045
+          },
+          "source_admission": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.010594482777971835
+          },
+          "fast": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.26259757369176834
+          },
+          "slow": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.03762778509379272
+          },
+          "address": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.1021813226414722
+          },
+          "content": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.12099238058801183
+          },
+          "memory_gates": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.007352423003926101
+          },
+          "query": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.07204458283274254
+          },
+          "future_decoder": {
+            "tensors": 8,
+            "nonzero": 8,
+            "norm": 0.6610263131197762
+          },
+          "belief": {
+            "tensors": 2,
+            "nonzero": 1,
+            "norm": 0.0027978967771140795
+          },
+          "reconstruction": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.23418123606976207
+          },
+          "width": {
+            "tensors": 4,
+            "nonzero": 0,
+            "norm": 0.0
+          },
+          "median": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.11847170617897229
+          }
+        }
+      },
+      "guard_aggregate": {
+        "source_encoder.projected": 1239,
+        "source_encoder.rounding_fallback": 634,
+        "source_encoder.applied_rounding_fallback": 297,
+        "source_encoder.max_applied_dot": 0.0,
+        "source_admission.projected": 930,
+        "source_admission.rounding_fallback": 434,
+        "source_admission.applied_rounding_fallback": 233,
+        "source_admission.max_applied_dot": 0.0,
+        "fast.projected": 1054,
+        "fast.rounding_fallback": 540,
+        "fast.applied_rounding_fallback": 269,
+        "fast.max_applied_dot": 0.0,
+        "slow.projected": 1027,
+        "slow.rounding_fallback": 509,
+        "slow.applied_rounding_fallback": 312,
+        "slow.max_applied_dot": 0.0,
+        "address.projected": 723,
+        "address.rounding_fallback": 355,
+        "address.applied_rounding_fallback": 182,
+        "address.max_applied_dot": 0.0,
+        "content.projected": 1522,
+        "content.rounding_fallback": 766,
+        "content.applied_rounding_fallback": 399,
+        "content.max_applied_dot": 0.0,
+        "memory_gates.projected": 1273,
+        "memory_gates.rounding_fallback": 664,
+        "memory_gates.applied_rounding_fallback": 321,
+        "memory_gates.max_applied_dot": 0.0,
+        "query.projected": 792,
+        "query.rounding_fallback": 371,
+        "query.applied_rounding_fallback": 211,
+        "query.max_applied_dot": 0.0,
+        "future_decoder.projected": 1187,
+        "future_decoder.rounding_fallback": 601,
+        "future_decoder.applied_rounding_fallback": 324,
+        "future_decoder.max_applied_dot": 0.0,
+        "belief.projected": 3029,
+        "belief.rounding_fallback": 1542,
+        "belief.applied_rounding_fallback": 746,
+        "belief.max_applied_dot": 0.0,
+        "reconstruction.projected": 1840,
+        "reconstruction.rounding_fallback": 906,
+        "reconstruction.applied_rounding_fallback": 482,
+        "reconstruction.max_applied_dot": 0.0,
+        "width.projected": 0,
+        "width.rounding_fallback": 0,
+        "width.applied_rounding_fallback": 0,
+        "width.max_applied_dot": 0.0,
+        "median.projected": 453,
+        "median.rounding_fallback": 225,
+        "median.applied_rounding_fallback": 107,
+        "median.max_applied_dot": 0.0,
+        "guard_seconds": 50.02410783826781
+      },
+      "optimizer_cpu_seconds": 297.801447554,
+      "wall_seconds": 298.02887362698675,
+      "peak_memory_bytes": 500293632,
+      "actual_examples": 65536,
+      "actual_tokens": 7163648,
+      "training_flops": 6591195258368,
+      "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+    },
+    {
+      "architecture": "role_guarded",
+      "seed": 108002,
+      "trainable_parameters": 102713,
+      "deployed_parameters": 102713,
+      "actual_steps": 4096,
+      "checkpoint_sha256": "8975eb98582731ad05b1d59703a3a9f15845affcd173d23590add7eead9a1987",
+      "parent_checkpoint_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+      "dropped_parent_tensors": [
+        "current_head.bias",
+        "current_head.weight"
+      ],
+      "actual_sample_order_sha256": "9bf24d08fcfaa4e4acc0efca663768bb7b624c73b7ed6502a794ed689b89df29",
+      "augmented_inputs_sha256": "e7772e11142d7b87eb3345b658a3ff87046afc93c2b4ca219d53202e7aad3091",
+      "optimizer_state_tensors": 39,
+      "parameter_tensors": 39,
+      "first_gradient_receipt": {
+        "parameters": {
+          "state_noise": {
+            "norm": 0.07483839243650436,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.13031989336013794,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.06949257850646973,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 1.910291075706482,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.4526432752609253,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.5092570781707764,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.22833864390850067,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.605974018573761,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.26954320073127747,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.050025954842567444,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.01767401024699211,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 1.1280198097229004,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.5214510560035706,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.16794562339782715,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.05010249838232994,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.06588557362556458,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.024406783282756805,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.4353761672973633,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.11479029059410095,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 0.76863032579422,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.20853853225708008,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 2.223694086074829,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 0.8894369602203369,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.031079521402716637,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.09493347257375717,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.4863317906856537,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 0.8894369602203369,
+            "nonzero": true
+          },
+          "current_head.input.weight": {
+            "norm": 1.7081279754638672,
+            "nonzero": true
+          },
+          "current_head.input.bias": {
+            "norm": 0.50569748878479,
+            "nonzero": true
+          },
+          "current_head.output.weight": {
+            "norm": 0.6682436466217041,
+            "nonzero": true
+          },
+          "current_head.output.bias": {
+            "norm": 0.9477689862251282,
+            "nonzero": true
+          },
+          "width_head.input.weight": {
+            "norm": 2.3138442039489746,
+            "nonzero": true
+          },
+          "width_head.input.bias": {
+            "norm": 0.7370336055755615,
+            "nonzero": true
+          },
+          "width_head.output.weight": {
+            "norm": 0.9127132892608643,
+            "nonzero": true
+          },
+          "width_head.output.bias": {
+            "norm": 1.3420686721801758,
+            "nonzero": true
+          },
+          "median_head.input.weight": {
+            "norm": 0.10694076865911484,
+            "nonzero": true
+          },
+          "median_head.input.bias": {
+            "norm": 0.02719854936003685,
+            "nonzero": true
+          },
+          "median_head.output.weight": {
+            "norm": 0.029166007414460182,
+            "nonzero": true
+          },
+          "median_head.output.bias": {
+            "norm": 0.03382426127791405,
+            "nonzero": true
+          }
+        },
+        "point": {
+          "source_encoder": {
+            "tensors": 3,
+            "nonzero": 3,
+            "norm": 0.35030397618786885
+          },
+          "source_admission": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.00675636631076407
+          },
+          "fast": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.16329860537662097
+          },
+          "slow": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.03166480292080315
+          },
+          "address": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.08569723223036241
+          },
+          "content": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.17531284548036208
+          },
+          "memory_gates": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.0075436527937870045
+          },
+          "query": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.09127824807673732
+          },
+          "future_decoder": {
+            "tensors": 8,
+            "nonzero": 8,
+            "norm": 0.38520856923365593
+          },
+          "belief": {
+            "tensors": 2,
+            "nonzero": 1,
+            "norm": 0.0023253048490176464
+          },
+          "reconstruction": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.16845214208353762
+          },
+          "width": {
+            "tensors": 4,
+            "nonzero": 0,
+            "norm": 0.0
+          },
+          "median": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.0975935748529452
+          }
+        }
+      },
+      "guard_aggregate": {
+        "source_encoder.projected": 1333,
+        "source_encoder.rounding_fallback": 667,
+        "source_encoder.applied_rounding_fallback": 353,
+        "source_encoder.max_applied_dot": 0.0,
+        "source_admission.projected": 971,
+        "source_admission.rounding_fallback": 510,
+        "source_admission.applied_rounding_fallback": 229,
+        "source_admission.max_applied_dot": 0.0,
+        "fast.projected": 1298,
+        "fast.rounding_fallback": 633,
+        "fast.applied_rounding_fallback": 377,
+        "fast.max_applied_dot": 0.0,
+        "slow.projected": 1388,
+        "slow.rounding_fallback": 712,
+        "slow.applied_rounding_fallback": 373,
+        "slow.max_applied_dot": 0.0,
+        "address.projected": 1129,
+        "address.rounding_fallback": 553,
+        "address.applied_rounding_fallback": 292,
+        "address.max_applied_dot": 0.0,
+        "content.projected": 1141,
+        "content.rounding_fallback": 577,
+        "content.applied_rounding_fallback": 269,
+        "content.max_applied_dot": 0.0,
+        "memory_gates.projected": 1130,
+        "memory_gates.rounding_fallback": 564,
+        "memory_gates.applied_rounding_fallback": 297,
+        "memory_gates.max_applied_dot": 0.0,
+        "query.projected": 1263,
+        "query.rounding_fallback": 651,
+        "query.applied_rounding_fallback": 306,
+        "query.max_applied_dot": 0.0,
+        "future_decoder.projected": 1183,
+        "future_decoder.rounding_fallback": 590,
+        "future_decoder.applied_rounding_fallback": 331,
+        "future_decoder.max_applied_dot": 0.0,
+        "belief.projected": 2979,
+        "belief.rounding_fallback": 1500,
+        "belief.applied_rounding_fallback": 755,
+        "belief.max_applied_dot": 0.0,
+        "reconstruction.projected": 1743,
+        "reconstruction.rounding_fallback": 925,
+        "reconstruction.applied_rounding_fallback": 422,
+        "reconstruction.max_applied_dot": 0.0,
+        "width.projected": 0,
+        "width.rounding_fallback": 0,
+        "width.applied_rounding_fallback": 0,
+        "width.max_applied_dot": 0.0,
+        "median.projected": 478,
+        "median.rounding_fallback": 233,
+        "median.applied_rounding_fallback": 114,
+        "median.max_applied_dot": 0.0,
+        "guard_seconds": 49.346341714510345
+      },
+      "optimizer_cpu_seconds": 297.925818053,
+      "wall_seconds": 298.2004313780053,
+      "peak_memory_bytes": 496680960,
+      "actual_examples": 65536,
+      "actual_tokens": 7163648,
+      "training_flops": 6591195258368,
+      "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+    },
+    {
+      "architecture": "role_guarded",
+      "seed": 108003,
+      "trainable_parameters": 102713,
+      "deployed_parameters": 102713,
+      "actual_steps": 4096,
+      "checkpoint_sha256": "e17a17c9ccc2413c56e106a4aa5a5287de8e594a39478bc55aaf6ed72905d89a",
+      "parent_checkpoint_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+      "dropped_parent_tensors": [
+        "current_head.bias",
+        "current_head.weight"
+      ],
+      "actual_sample_order_sha256": "2392f97a264240151171e01c40ea374c5f168ad664fe1bf5ddef084ebca0e5ab",
+      "augmented_inputs_sha256": "9283c730f894c8df0890e924534d1fb74a3c626e0dc67f3263f5a98556899582",
+      "optimizer_state_tensors": 39,
+      "parameter_tensors": 39,
+      "first_gradient_receipt": {
+        "parameters": {
+          "state_noise": {
+            "norm": 0.05163019895553589,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.09960010647773743,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 3.0140552520751953,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 85.36842346191406,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 18.741247177124023,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 8.642437934875488,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 1.9014439582824707,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 58.24892044067383,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 19.92583465576172,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 6.047218322753906,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 2.0918781757354736,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 96.63265991210938,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 32.41044998168945,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 9.932642936706543,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 2.7996814250946045,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 1.28767728805542,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.33282431960105896,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 3.435276746749878,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.7254961729049683,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 31.525577545166016,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 6.745541095733643,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 150.51539611816406,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 28.554780960083008,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 1.0821843147277832,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 2.947706460952759,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 15.778562545776367,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 28.554780960083008,
+            "nonzero": true
+          },
+          "current_head.input.weight": {
+            "norm": 69.76953125,
+            "nonzero": true
+          },
+          "current_head.input.bias": {
+            "norm": 17.639375686645508,
+            "nonzero": true
+          },
+          "current_head.output.weight": {
+            "norm": 15.261433601379395,
+            "nonzero": true
+          },
+          "current_head.output.bias": {
+            "norm": 27.471881866455078,
+            "nonzero": true
+          },
+          "width_head.input.weight": {
+            "norm": 293.53973388671875,
+            "nonzero": true
+          },
+          "width_head.input.bias": {
+            "norm": 73.10521697998047,
+            "nonzero": true
+          },
+          "width_head.output.weight": {
+            "norm": 132.2084503173828,
+            "nonzero": true
+          },
+          "width_head.output.bias": {
+            "norm": 145.61537170410156,
+            "nonzero": true
+          },
+          "median_head.input.weight": {
+            "norm": 0.08664018660783768,
+            "nonzero": true
+          },
+          "median_head.input.bias": {
+            "norm": 0.0209641270339489,
+            "nonzero": true
+          },
+          "median_head.output.weight": {
+            "norm": 0.03960580751299858,
+            "nonzero": true
+          },
+          "median_head.output.bias": {
+            "norm": 0.04607291519641876,
+            "nonzero": true
+          }
+        },
+        "point": {
+          "source_encoder": {
+            "tensors": 3,
+            "nonzero": 3,
+            "norm": 0.43096027042823165
+          },
+          "source_admission": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.009581493348388013
+          },
+          "fast": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.2825821025950284
+          },
+          "slow": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.05362073465443518
+          },
+          "address": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.0545229919010166
+          },
+          "content": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.25960367102072485
+          },
+          "memory_gates": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.007873254722113681
+          },
+          "query": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.04747391385954352
+          },
+          "future_decoder": {
+            "tensors": 8,
+            "nonzero": 8,
+            "norm": 0.4391789286844898
+          },
+          "belief": {
+            "tensors": 2,
+            "nonzero": 1,
+            "norm": 0.0015633391845896148
+          },
+          "reconstruction": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.20043189476843287
+          },
+          "width": {
+            "tensors": 4,
+            "nonzero": 0,
+            "norm": 0.0
+          },
+          "median": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.08777099375450842
+          }
+        }
+      },
+      "guard_aggregate": {
+        "source_encoder.projected": 1376,
+        "source_encoder.rounding_fallback": 646,
+        "source_encoder.applied_rounding_fallback": 386,
+        "source_encoder.max_applied_dot": 0.0,
+        "source_admission.projected": 780,
+        "source_admission.rounding_fallback": 401,
+        "source_admission.applied_rounding_fallback": 184,
+        "source_admission.max_applied_dot": 0.0,
+        "fast.projected": 1224,
+        "fast.rounding_fallback": 618,
+        "fast.applied_rounding_fallback": 362,
+        "fast.max_applied_dot": 0.0,
+        "slow.projected": 1288,
+        "slow.rounding_fallback": 658,
+        "slow.applied_rounding_fallback": 361,
+        "slow.max_applied_dot": 0.0,
+        "address.projected": 953,
+        "address.rounding_fallback": 437,
+        "address.applied_rounding_fallback": 248,
+        "address.max_applied_dot": 0.0,
+        "content.projected": 2007,
+        "content.rounding_fallback": 1031,
+        "content.applied_rounding_fallback": 483,
+        "content.max_applied_dot": 0.0,
+        "memory_gates.projected": 849,
+        "memory_gates.rounding_fallback": 420,
+        "memory_gates.applied_rounding_fallback": 209,
+        "memory_gates.max_applied_dot": 0.0,
+        "query.projected": 984,
+        "query.rounding_fallback": 477,
+        "query.applied_rounding_fallback": 249,
+        "query.max_applied_dot": 0.0,
+        "future_decoder.projected": 1119,
+        "future_decoder.rounding_fallback": 593,
+        "future_decoder.applied_rounding_fallback": 299,
+        "future_decoder.max_applied_dot": 0.0,
+        "belief.projected": 2971,
+        "belief.rounding_fallback": 1473,
+        "belief.applied_rounding_fallback": 711,
+        "belief.max_applied_dot": 0.0,
+        "reconstruction.projected": 1944,
+        "reconstruction.rounding_fallback": 942,
+        "reconstruction.applied_rounding_fallback": 515,
+        "reconstruction.max_applied_dot": 0.0,
+        "width.projected": 0,
+        "width.rounding_fallback": 0,
+        "width.applied_rounding_fallback": 0,
+        "width.max_applied_dot": 0.0,
+        "median.projected": 418,
+        "median.rounding_fallback": 204,
+        "median.applied_rounding_fallback": 110,
+        "median.max_applied_dot": 0.0,
+        "guard_seconds": 49.76681654510321
+      },
+      "optimizer_cpu_seconds": 297.31582239,
+      "wall_seconds": 297.523601384004,
+      "peak_memory_bytes": 500293632,
+      "actual_examples": 65536,
+      "actual_tokens": 7163648,
+      "training_flops": 6591195258368,
+      "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+    },
+    {
+      "architecture": "role_guarded",
+      "seed": 108004,
+      "trainable_parameters": 102713,
+      "deployed_parameters": 102713,
+      "actual_steps": 4096,
+      "checkpoint_sha256": "be5a24b43f15e58b3a7accece773b6281d7950b5b943570df179d61158370ddb",
+      "parent_checkpoint_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+      "dropped_parent_tensors": [
+        "current_head.bias",
+        "current_head.weight"
+      ],
+      "actual_sample_order_sha256": "00232f28e6d218017bc3733b56b021618921f4052f35779e49ff7ee1f93c1eb3",
+      "augmented_inputs_sha256": "c8c8fb0d20c4ff39eac25e172149461a564c3e55c6dc30b5273340c197f90904",
+      "optimizer_state_tensors": 39,
+      "parameter_tensors": 39,
+      "first_gradient_receipt": {
+        "parameters": {
+          "state_noise": {
+            "norm": 0.0850641205906868,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.12557418644428253,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.14416682720184326,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 8.36638355255127,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 1.6987797021865845,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.745162844657898,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.25277021527290344,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 5.495743751525879,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 1.7851592302322388,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.5541523098945618,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.2254243940114975,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 4.960846424102783,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 1.9374182224273682,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.7441089749336243,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.2253265380859375,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.03477760776877403,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.007075104862451553,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.7583897709846497,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.15489667654037476,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 2.754750967025757,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.7137488722801208,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 8.551034927368164,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 2.980663776397705,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.08682361990213394,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.22761216759681702,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 1.8460983037948608,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 2.980663776397705,
+            "nonzero": true
+          },
+          "current_head.input.weight": {
+            "norm": 5.097311496734619,
+            "nonzero": true
+          },
+          "current_head.input.bias": {
+            "norm": 1.5257986783981323,
+            "nonzero": true
+          },
+          "current_head.output.weight": {
+            "norm": 2.3415682315826416,
+            "nonzero": true
+          },
+          "current_head.output.bias": {
+            "norm": 2.508176326751709,
+            "nonzero": true
+          },
+          "width_head.input.weight": {
+            "norm": 10.863119125366211,
+            "nonzero": true
+          },
+          "width_head.input.bias": {
+            "norm": 3.3263704776763916,
+            "nonzero": true
+          },
+          "width_head.output.weight": {
+            "norm": 3.7762646675109863,
+            "nonzero": true
+          },
+          "width_head.output.bias": {
+            "norm": 5.8471598625183105,
+            "nonzero": true
+          },
+          "median_head.input.weight": {
+            "norm": 0.10720153152942657,
+            "nonzero": true
+          },
+          "median_head.input.bias": {
+            "norm": 0.03229373320937157,
+            "nonzero": true
+          },
+          "median_head.output.weight": {
+            "norm": 0.041252102702856064,
+            "nonzero": true
+          },
+          "median_head.output.bias": {
+            "norm": 0.06157056987285614,
+            "nonzero": true
+          }
+        },
+        "point": {
+          "source_encoder": {
+            "tensors": 3,
+            "nonzero": 3,
+            "norm": 0.5348753786866541
+          },
+          "source_admission": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.008582594734676341
+          },
+          "fast": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.2798993694445574
+          },
+          "slow": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.061123773156989254
+          },
+          "address": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.09444171851752774
+          },
+          "content": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.35720319689638375
+          },
+          "memory_gates": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.008190132645026589
+          },
+          "query": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.10505031248285822
+          },
+          "future_decoder": {
+            "tensors": 8,
+            "nonzero": 8,
+            "norm": 0.5405325395008569
+          },
+          "belief": {
+            "tensors": 2,
+            "nonzero": 1,
+            "norm": 0.004693204949755854
+          },
+          "reconstruction": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.35460972269489943
+          },
+          "width": {
+            "tensors": 4,
+            "nonzero": 0,
+            "norm": 0.0
+          },
+          "median": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.122185205399322
+          }
+        }
+      },
+      "guard_aggregate": {
+        "source_encoder.projected": 1480,
+        "source_encoder.rounding_fallback": 748,
+        "source_encoder.applied_rounding_fallback": 394,
+        "source_encoder.max_applied_dot": 0.0,
+        "source_admission.projected": 930,
+        "source_admission.rounding_fallback": 487,
+        "source_admission.applied_rounding_fallback": 207,
+        "source_admission.max_applied_dot": 0.0,
+        "fast.projected": 1442,
+        "fast.rounding_fallback": 736,
+        "fast.applied_rounding_fallback": 400,
+        "fast.max_applied_dot": 0.0,
+        "slow.projected": 1502,
+        "slow.rounding_fallback": 749,
+        "slow.applied_rounding_fallback": 417,
+        "slow.max_applied_dot": 0.0,
+        "address.projected": 706,
+        "address.rounding_fallback": 359,
+        "address.applied_rounding_fallback": 162,
+        "address.max_applied_dot": 0.0,
+        "content.projected": 2106,
+        "content.rounding_fallback": 1063,
+        "content.applied_rounding_fallback": 549,
+        "content.max_applied_dot": 0.0,
+        "memory_gates.projected": 1128,
+        "memory_gates.rounding_fallback": 574,
+        "memory_gates.applied_rounding_fallback": 291,
+        "memory_gates.max_applied_dot": 0.0,
+        "query.projected": 767,
+        "query.rounding_fallback": 397,
+        "query.applied_rounding_fallback": 198,
+        "query.max_applied_dot": 0.0,
+        "future_decoder.projected": 1269,
+        "future_decoder.rounding_fallback": 631,
+        "future_decoder.applied_rounding_fallback": 373,
+        "future_decoder.max_applied_dot": 0.0,
+        "belief.projected": 3002,
+        "belief.rounding_fallback": 1489,
+        "belief.applied_rounding_fallback": 740,
+        "belief.max_applied_dot": 0.0,
+        "reconstruction.projected": 1903,
+        "reconstruction.rounding_fallback": 999,
+        "reconstruction.applied_rounding_fallback": 479,
+        "reconstruction.max_applied_dot": 0.0,
+        "width.projected": 0,
+        "width.rounding_fallback": 0,
+        "width.applied_rounding_fallback": 0,
+        "width.max_applied_dot": 0.0,
+        "median.projected": 470,
+        "median.rounding_fallback": 226,
+        "median.applied_rounding_fallback": 125,
+        "median.max_applied_dot": 0.0,
+        "guard_seconds": 49.48041665482742
+      },
+      "optimizer_cpu_seconds": 298.168769618,
+      "wall_seconds": 298.4702975849941,
+      "peak_memory_bytes": 496680960,
+      "actual_examples": 65536,
+      "actual_tokens": 7163648,
+      "training_flops": 6591195258368,
+      "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+    },
+    {
+      "architecture": "role_guarded",
+      "seed": 108005,
+      "trainable_parameters": 102713,
+      "deployed_parameters": 102713,
+      "actual_steps": 4096,
+      "checkpoint_sha256": "d7308b456ce91abf16341c78e07528e37f9186c0299025a09b8f2829960eb982",
+      "parent_checkpoint_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+      "dropped_parent_tensors": [
+        "current_head.bias",
+        "current_head.weight"
+      ],
+      "actual_sample_order_sha256": "c12e9cea3fc8227944a8cc112b28d6246e705769a64f10d0098468a479d88acf",
+      "augmented_inputs_sha256": "6cc53ccf7f64b1f1ceb9e1f692adc62f1b95e60d91dcb64c28d3ee2d37722f45",
+      "optimizer_state_tensors": 39,
+      "parameter_tensors": 39,
+      "first_gradient_receipt": {
+        "parameters": {
+          "state_noise": {
+            "norm": 0.06394712626934052,
+            "nonzero": true
+          },
+          "state_response": {
+            "norm": 0.12906509637832642,
+            "nonzero": true
+          },
+          "station.weight": {
+            "norm": 0.1023225337266922,
+            "nonzero": true
+          },
+          "encoder.weight": {
+            "norm": 3.4195871353149414,
+            "nonzero": true
+          },
+          "encoder.bias": {
+            "norm": 0.7269045114517212,
+            "nonzero": true
+          },
+          "address.weight": {
+            "norm": 0.31604230403900146,
+            "nonzero": true
+          },
+          "address.bias": {
+            "norm": 0.08390305936336517,
+            "nonzero": true
+          },
+          "content.weight": {
+            "norm": 0.814659595489502,
+            "nonzero": true
+          },
+          "content.bias": {
+            "norm": 0.27207738161087036,
+            "nonzero": true
+          },
+          "source_admission.weight": {
+            "norm": 0.09536591917276382,
+            "nonzero": true
+          },
+          "source_admission.bias": {
+            "norm": 0.03807259351015091,
+            "nonzero": true
+          },
+          "fast_map.weight": {
+            "norm": 2.5514659881591797,
+            "nonzero": true
+          },
+          "fast_map.bias": {
+            "norm": 0.8250969648361206,
+            "nonzero": true
+          },
+          "slow_map.weight": {
+            "norm": 0.47078320384025574,
+            "nonzero": true
+          },
+          "slow_map.bias": {
+            "norm": 0.14536452293395996,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.weight": {
+            "norm": 0.038618460297584534,
+            "nonzero": true
+          },
+          "memory_gates.inner_linear.bias": {
+            "norm": 0.0015470264479517937,
+            "nonzero": true
+          },
+          "query.weight": {
+            "norm": 0.3978617489337921,
+            "nonzero": true
+          },
+          "query.bias": {
+            "norm": 0.06897923350334167,
+            "nonzero": true
+          },
+          "readout.0.weight": {
+            "norm": 1.4953118562698364,
+            "nonzero": true
+          },
+          "readout.0.bias": {
+            "norm": 0.35579830408096313,
+            "nonzero": true
+          },
+          "readout.2.weight": {
+            "norm": 5.401909828186035,
+            "nonzero": true
+          },
+          "readout.2.bias": {
+            "norm": 1.21212637424469,
+            "nonzero": true
+          },
+          "retrieved_delta.0.weight": {
+            "norm": 0.04937785491347313,
+            "nonzero": true
+          },
+          "retrieved_delta.0.bias": {
+            "norm": 0.10681910812854767,
+            "nonzero": true
+          },
+          "retrieved_delta.2.weight": {
+            "norm": 0.8056196570396423,
+            "nonzero": true
+          },
+          "retrieved_delta.2.bias": {
+            "norm": 1.21212637424469,
+            "nonzero": true
+          },
+          "current_head.input.weight": {
+            "norm": 3.191472291946411,
+            "nonzero": true
+          },
+          "current_head.input.bias": {
+            "norm": 0.8976055383682251,
+            "nonzero": true
+          },
+          "current_head.output.weight": {
+            "norm": 1.0275062322616577,
+            "nonzero": true
+          },
+          "current_head.output.bias": {
+            "norm": 1.4233440160751343,
+            "nonzero": true
+          },
+          "width_head.input.weight": {
+            "norm": 1.7799195051193237,
+            "nonzero": true
+          },
+          "width_head.input.bias": {
+            "norm": 0.5662533640861511,
+            "nonzero": true
+          },
+          "width_head.output.weight": {
+            "norm": 0.9155566692352295,
+            "nonzero": true
+          },
+          "width_head.output.bias": {
+            "norm": 1.1072440147399902,
+            "nonzero": true
+          },
+          "median_head.input.weight": {
+            "norm": 0.07460979372262955,
+            "nonzero": true
+          },
+          "median_head.input.bias": {
+            "norm": 0.014417864382266998,
+            "nonzero": true
+          },
+          "median_head.output.weight": {
+            "norm": 0.03660820797085762,
+            "nonzero": true
+          },
+          "median_head.output.bias": {
+            "norm": 0.03236144781112671,
+            "nonzero": true
+          }
+        },
+        "point": {
+          "source_encoder": {
+            "tensors": 3,
+            "nonzero": 3,
+            "norm": 0.29522071938417277
+          },
+          "source_admission": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.006742745254980534
+          },
+          "fast": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.20543730716405087
+          },
+          "slow": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.03344030407560355
+          },
+          "address": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.030358966376175883
+          },
+          "content": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.08038477792031029
+          },
+          "memory_gates": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.002816370233904655
+          },
+          "query": {
+            "tensors": 2,
+            "nonzero": 2,
+            "norm": 0.02825100849607293
+          },
+          "future_decoder": {
+            "tensors": 8,
+            "nonzero": 8,
+            "norm": 0.4650366342073605
+          },
+          "belief": {
+            "tensors": 2,
+            "nonzero": 1,
+            "norm": 0.003571760243449723
+          },
+          "reconstruction": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.2458792747096311
+          },
+          "width": {
+            "tensors": 4,
+            "nonzero": 0,
+            "norm": 0.0
+          },
+          "median": {
+            "tensors": 4,
+            "nonzero": 4,
+            "norm": 0.07486784096859911
+          }
+        }
+      },
+      "guard_aggregate": {
+        "source_encoder.projected": 1285,
+        "source_encoder.rounding_fallback": 642,
+        "source_encoder.applied_rounding_fallback": 361,
+        "source_encoder.max_applied_dot": 0.0,
+        "source_admission.projected": 857,
+        "source_admission.rounding_fallback": 424,
+        "source_admission.applied_rounding_fallback": 226,
+        "source_admission.max_applied_dot": 0.0,
+        "fast.projected": 1352,
+        "fast.rounding_fallback": 698,
+        "fast.applied_rounding_fallback": 386,
+        "fast.max_applied_dot": 0.0,
+        "slow.projected": 1321,
+        "slow.rounding_fallback": 633,
+        "slow.applied_rounding_fallback": 360,
+        "slow.max_applied_dot": 0.0,
+        "address.projected": 908,
+        "address.rounding_fallback": 435,
+        "address.applied_rounding_fallback": 217,
+        "address.max_applied_dot": 0.0,
+        "content.projected": 1235,
+        "content.rounding_fallback": 626,
+        "content.applied_rounding_fallback": 291,
+        "content.max_applied_dot": 0.0,
+        "memory_gates.projected": 847,
+        "memory_gates.rounding_fallback": 418,
+        "memory_gates.applied_rounding_fallback": 230,
+        "memory_gates.max_applied_dot": 0.0,
+        "query.projected": 1506,
+        "query.rounding_fallback": 728,
+        "query.applied_rounding_fallback": 396,
+        "query.max_applied_dot": 0.0,
+        "future_decoder.projected": 1265,
+        "future_decoder.rounding_fallback": 621,
+        "future_decoder.applied_rounding_fallback": 377,
+        "future_decoder.max_applied_dot": 0.0,
+        "belief.projected": 3009,
+        "belief.rounding_fallback": 1458,
+        "belief.applied_rounding_fallback": 761,
+        "belief.max_applied_dot": 0.0,
+        "reconstruction.projected": 1890,
+        "reconstruction.rounding_fallback": 929,
+        "reconstruction.applied_rounding_fallback": 472,
+        "reconstruction.max_applied_dot": 0.0,
+        "width.projected": 0,
+        "width.rounding_fallback": 0,
+        "width.applied_rounding_fallback": 0,
+        "width.max_applied_dot": 0.0,
+        "median.projected": 434,
+        "median.rounding_fallback": 225,
+        "median.applied_rounding_fallback": 115,
+        "median.max_applied_dot": 0.0,
+        "guard_seconds": 49.624690277676564
+      },
+      "optimizer_cpu_seconds": 296.019106092,
+      "wall_seconds": 296.0414744009904,
+      "peak_memory_bytes": 500293632,
+      "actual_examples": 65536,
+      "actual_tokens": 7163648,
+      "training_flops": 6591195258368,
+      "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+    }
+  ],
+  "source_files": {
+    "scripts/me102_reconstruction_panel.py": "7ef36d9195ff4b040f6300994f20ef061e16f69260d43666a258e74ec3ebfadc",
+    "scripts/me102_graph_reference.py": "5d8babb005d28877f3e01cd46d32f4b79b9af055b518a09a4690468457d92918",
+    "scripts/me102_gap_data.py": "fff07eface039eff6458399ff1ab33db4b268a71d2adcc6e1ebca6b451cac324",
+    "scripts/me100_sensor_data.py": "57f4d9086251d6dd8f12feb675ebe96de1223b3016906ad867cf3795fd0c74cc",
+    "scripts/me101_graph_reference.py": "ab4f70a83aa28f9ba0fd05749d2cf8cd6c3ff7880dcc3d25ec0728d955bba9d3",
+    "scripts/me100_graph_reference.py": "5923f55cf718aee6d73723dfc60bf82162880fbeb41c462d4575cdc91f4f64ff",
+    "src/tac_osm/variants/reconstruction_sensor_world.py": "55855ed04835af42758bcbd1170b384841e8d17ea5c0dbe7916cca0892987593",
+    "src/tac_osm/variants/belief_sensor_world.py": "618fa4a6dd53c0c3128081d4990fcd66f40593e9b875ca8983b475035245fb88",
+    "src/tac_osm/variants/entity_sensor_world.py": "c26c2b15e99c5f8238bc49dc4eb0a6ebdfb4b62dfe566ee400a044cebead6282",
+    "src/tac_osm/variants/parallel_affine_memory.py": "e3a0732b17acfa7505952b5229573099edc7f1dbe65604f4f3f516e05652baeb",
+    "src/tac_osm/variants/retention_controlled_world.py": "eead543fc0d87d0c77d4f36758115168beb591b31e53e3d251714c076da0e970",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "scripts/me101_belief_sensor.py": "c51c03ed7cd4db0ee721daa339d42ede34afe8d5242d61fed07995eba701b14f",
+    "src/tac_osm/variants/median_split_sensor_world.py": "c7d71d7a0fc23e8849e69edf35b5e555dbc0e567ad93406a0e4bcc2186ccd0ad",
+    "src/tac_osm/variants/protected_sensor_world.py": "9fbfa64878daf48189786d50ea975571f4832bea95b00f3bdf3444075b022a20",
+    "src/tac_osm/variants/point_priority_sensor_world.py": "34ce48400a462f40aa3f1023ef9c21d52389a8754fd54cbb4c59f34bc2c0d8e7",
+    "scripts/me105_protected_panel.py": "239d19936ce88e06cea5c4946893032b32b09567a18ed72b44a8b2a0a76f2c62",
+    "scripts/me105_graph_reference.py": "775c13a7437f99c353911105f21afb23ce4e7478b51d5968c56aa4978c60ca45",
+    "scripts/me106_gradient_roles.py": "9dea6fb17d473f686672f5a225ccbb08a3a7845c35b93305fcb42a441401ae73",
+    "scripts/me104_graph_reference.py": "930a117e2b0d5198e6666be639c613020a1ef8570cbaeab778d43176c4da3a62",
+    "scripts/me106_graph_reference.py": "fde76eb9dc9a72618b3c7813017051176ec4f681fbaf3d6c087508204e6274ae",
+    "scripts/me106_priority_panel.py": "c1a5abfa2c9aa20da6e41012bbf204e41fd542526991cbb868630fbc90ac4bad",
+    "scripts/me108_role_training.py": "139ba95e61b3359c1a085a00b716b00502cb1fa5db1fa57d67bb9a17f604d689",
+    "scripts/me108_optimizer_reference.py": "d3ea41f844e257323ec67b8ad82b7d7cf03c81e19bae8787f64eefbe86a7e705",
+    "src/tac_osm/role_optimizer.py": "27140502225513db4523df893f6e1a5c8c52f9e3147c361a7aed23f280f928ee",
+    "src/tac_osm/role_update_contract.py": "88c01a49f4ad324b4c37b44026591461d8b236b90856618657ede38ea6e61f27",
+    "scripts/diaggrad001_loss_flow.py": "28ad2943f132a475e9ff7e61099a428896fc0aed485ac8a0cedacea2b3d705fa",
+    "scripts/me107_graph_reference.py": "3f25718ff6a9adcae62799c60e86fc08da113bb2260bf6a8d015d4714f8de2eb",
+    "src/tac_osm/variants/role_specialized_sensor_world.py": "b06ae295ebd0fcd13d709c34dce3b4e66baa58ca7d5e4e4d2a9e16289a7314dc"
+  }
+}
