@@ -217,3 +217,55 @@ def test_forward_trace_identifies_nan_origin_and_removes_hooks():
 def test_digests_are_repeatable_but_not_source_authentication():
     assert fingerprint({"a": [1, 2]}) == fingerprint({"a": [1, 2]})
     assert fingerprint({"a": [1, 2]}) != fingerprint({"a": [1, 3]})
+
+
+def test_graph_probe_ignores_unused_forbidden_metadata():
+    from tac_osm.research_anticheat import trace_torch_noninterference
+    m = torch.nn.Linear(1, 1)
+    def forward(network, row):
+        return network(row["legit"])
+    a = {"legit": torch.tensor([[2.0]]), "forbidden_label": 0}
+    b = {"legit": torch.tensor([[2.0]]), "forbidden_label": 1}
+    f = trace_torch_noninterference(m, forward, a, b)
+    assert f.status == "PASS", f
+
+
+def test_graph_probe_names_first_illicit_consumer_module():
+    from tac_osm.research_anticheat import trace_torch_noninterference
+    class Illicit(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.good = torch.nn.Linear(1, 1, bias=False)
+            self.oracle_reader = torch.nn.Linear(1, 1, bias=False)
+            with torch.no_grad():
+                self.oracle_reader.weight.fill_(1.0)
+        def forward(self, x):
+            return self.good(x["sensor"]) + self.oracle_reader(x["hidden"])
+    m = Illicit()
+    a = {"sensor": torch.tensor([[1.0]]), "hidden": torch.tensor([[0.0]])}
+    b = {"sensor": torch.tensor([[1.0]]), "hidden": torch.tensor([[1.0]])}
+    f = trace_torch_noninterference(m, lambda network, x: network(x), a, b)
+    assert f.status == "FAIL", f
+    assert f.evidence["first_changed_module"] == "oracle_reader"
+
+
+def test_graph_probe_reports_pure_functional_or_external_dependency():
+    from tac_osm.research_anticheat import trace_torch_noninterference
+    class Functional(torch.nn.Module):
+        def forward(self, x):
+            return x["hidden"] * 2
+    a = {"hidden": torch.tensor([1.0])}
+    b = {"hidden": torch.tensor([2.0])}
+    f = trace_torch_noninterference(Functional(), lambda network, x: network(x), a, b)
+    assert f.status == "FAIL"
+    assert f.evidence["first_changed_module"] == "<untraced_functional_or_external_path>"
+
+
+def test_graph_probe_does_not_greenlight_external_randomness():
+    from tac_osm.research_anticheat import trace_torch_noninterference
+    import random
+    class Randomized(torch.nn.Module):
+        def forward(self, _):
+            return torch.tensor([random.random()])
+    f = trace_torch_noninterference(Randomized(), lambda network, x: network(x), {}, {})
+    assert f.status == "INCONCLUSIVE"
