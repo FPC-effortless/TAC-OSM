@@ -39,6 +39,12 @@ Common *structural research preflight* files:
 - [No-fit tests](../tests/test_ecosystem_boundary.py) exercise constructed valid and malicious cases only; zero real-world qualification.
 - [CI](../.github/workflows/ecosystem-boundary-gate.yml) enforces the validator tests independently of actual training, hidden evaluation, source access, external effects and cloud credentials.
 
+### Native Woyengi state projection shape adapter — 2026-10-26 incremental implementation
+
+A new [TAC-OSM native projection adapter](../scripts/woyengi_projection_adapter.py) now reads the actual `ClaimLedger.projectAt` StateProjection shape (ClaimRecord with validTime/transactionTime, candidate, selected, conflicting records and source trace). It uses the source's real bitemporal clocks, retains all eligible competing candidates, rejects future-known records, and requires a **host-provided, principal-and-purpose-scoped read-authorizer** to approve the complete claimed record set and a separate allowlisted feature mapper. It creates no canonical write and returns `STRUCTURAL_ONLY`, `NOT_VERIFIED_BY_ADAPTER`, `NOT_EVALUATED`, and `NOT_GRANTED` trust markers. The adapter's derived claim-content SHA256 does **not** authenticate the original publisher, lawful use, Woyengi authorization provenance, or an upstream sensor's exact availability time.
+
+The [constructed native-shape regression suite](../tests/test_woyengi_projection_adapter.py) and [no-fit CI workflow](../.github/workflows/ecosystem-boundary-gate.yml) validate the shape transformation, knowledge-time eligibility, retained conflicts, withheld features and callback denial; none establish a live Woyengi host integration. The Woyengi-owned read-only permission/feature export port is **proposed**, not implemented, in [Woyengi draft PR #55](https://github.com/FPC-effortless/Woyengi/pull/55), with its constitutional active tickets and canonical kernel unchanged. Its independent trusted read/record authorization, local-only privacy, source-rights, and read-only semantics must pass prior to processing lawful real data.
+
 ## 4. Required source-to-outcome sequence
 
 1. **Woyengi projection or actual publisher:** consented/legally authorized, principal-and-purpose-scoped snapshot with full actual validAt + recordedAt, source identity, candidates/conflicts and locality policy. Reject a projection that hides contradictory claims without reason.
