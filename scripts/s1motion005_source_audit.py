@@ -29,9 +29,17 @@ def audit(source_cache:Path):
         raise ValueError("specific approved immutable v2 revision unavailable")
     if len(sha)!=40 or any(ch not in "0123456789abcdef" for ch in sha):
         raise ValueError("unresolved publisher immutable revision")
-    license_id=str(api.get("cardData",{}).get("license","")).lower()
-    if license_id!="mit":
-        raise ValueError("unexpected license; abort")
+    historical_license=str((api.get("cardData") or {}).get("license","")).lower()
+    current_publisher=json.loads(download(f"https://huggingface.co/api/datasets/{SOURCE}"))
+    publisher_current_license=str(
+        (current_publisher.get("cardData") or {}).get("license","")).lower()
+    if (historical_license not in ("","mit") or publisher_current_license!="mit"):
+        raise ValueError("historical license conflict or current publisher MIT card unavailable")
+    # The v2 commit may lack a license card field: do not pretend it did.
+    license_id="mit"
+    license_evidence_scope=(
+        "historical_revision_card_and_current_card" if historical_license=="mit"
+        else "current_publisher_card_ONLY_historical_revision_metadata_missing")
     info=json.loads(download(f"https://huggingface.co/datasets/{SOURCE}/resolve/{sha}/meta/info.json"))
     if (info.get("total_episodes")!=50 or info.get("total_frames")!=20000
         or info.get("fps")!=50 or info.get("data_path")!=
@@ -64,6 +72,8 @@ def audit(source_cache:Path):
                              observed_state_dim=14,recorded_action_dim=14))
     manifest=dict(study="S1MOTION005",dataset=SOURCE,license=license_id,
         revision_sha=sha,source_codebase=info.get("codebase_version"),
+        license_evidence_scope=license_evidence_scope,
+        historical_revision_license_field=historical_license or None,
         historical_v2_release_explicitly_pinned=True,
         original_live_source_revision_rejected_as_unapproved_v3=True,
         publisher_frames=20000,publisher_episodes=50,
