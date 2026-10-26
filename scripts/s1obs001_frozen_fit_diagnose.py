@@ -107,9 +107,11 @@ def run(original_dir:Path, cache:Path, out:Path, *, seeds):
     # TWO only original FIT episodes. Other FIT normalization from original
     # source-authorized before-DEV receipt, not recomputed from unseen labels.
     training={}
+    authentic_raw_FIT_records={}
     for ep in (0,1):
         locked=next(x for x in lock["fit_files"] if x["episode"]==ep)
         records,_=episode_data(ep,lock,cache,expected_sha=locked["sha256"])
+        authentic_raw_FIT_records[ep]=records
         training[ep]=encode_source_episode(records,first["normalization_FIT_only"])
     norm=first["normalization_FIT_only"]
     scale=torch.tensor(norm["train_delta_scale_normalized"],dtype=torch.float32)
@@ -130,10 +132,26 @@ def run(original_dir:Path, cache:Path, out:Path, *, seeds):
     partitions=audit_partitions({"FIT":list(FIT),"DEV":list(DEV),
          "TEST":list(range(35,50))},check="fit_dev_test_episode_identifiers")
     ledger_audit.add(partitions)
-    decision=samples["paired_genuine_FIT_episodes_0_and_1"]
-    true_y=training[0]["y"][11:12]
-    poisoned={"inputs":decision,"actual_future_outcome":true_y+11}
-    normal={"inputs":decision,"actual_future_outcome":true_y}
+    # Genuine-source FUTURE-ONLY perturbation. For 12 input positions
+    # observed raw frames1..12, the source target is raw frame13.
+    # Mutate raw frame13 state only, then rerun the ORIGINAL real-source
+    # FIT-only normalizer and episode-window encoder. This is stronger than
+    # poisoning a detached label dictionary after the pipeline has run.
+    import copy
+    source_clean=copy.deepcopy(authentic_raw_FIT_records[0])
+    source_poison=copy.deepcopy(authentic_raw_FIT_records[0])
+    fr,t,original_x,u=source_poison[13]
+    source_poison[13]=(fr,t,original_x+11.0,u)
+    clean_encoded=encode_source_episode(source_clean,norm)
+    poisoned_encoded=encode_source_episode(source_poison,norm)
+    normal={
+        "inputs":real_sample(clean_encoded),
+        "actual_future_outcome":clean_encoded["y"][11:12],
+    }
+    poisoned={
+        "inputs":real_sample(poisoned_encoded),
+        "actual_future_outcome":poisoned_encoded["y"][11:12],
+    }
     no_future=probe_future_invariance(normal,poisoned,
          lambda v:v["inputs"],lambda v:v["actual_future_outcome"],
          check="source_future_noninterference")
