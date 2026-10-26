@@ -1,0 +1,33 @@
+name: Ecosystem evidence boundary contract (no fit)
+
+on:
+  push:
+    branches:
+      - research/ecosystem-first-class-boundaries-2026-10-26
+  pull_request:
+    paths:
+      - "contracts/TACOSM-ECOSYSTEM-BOUNDARY-v1.json"
+      - "scripts/validate_ecosystem_boundary.py"
+      - "tests/test_ecosystem_boundary.py"
+      - "research/ECOSYSTEM_INTEROPERABILITY_AND_EVIDENCE_BOUNDARIES_2026-10-26.md"
+      - ".github/workflows/ecosystem-boundary-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-time-and-authority-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate constructed boundary reference
+        run: python scripts/validate_ecosystem_boundary.py contracts/TACOSM-ECOSYSTEM-BOUNDARY-v1.json
+      - name: Test hostile source and verification fixtures
+        run: python -m unittest discover -s tests -p "test_ecosystem_boundary.py" -v
+      - name: Compile interop validator and unit tests
+        run: python -m py_compile scripts/validate_ecosystem_boundary.py tests/test_ecosystem_boundary.py
