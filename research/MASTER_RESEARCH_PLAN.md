@@ -2993,3 +2993,59 @@ proof. NoTransformer/SSMconversion, newactivefamily, newtraining or gatewaiver.
 ME110fullqualificationFAIL0/5remains. Alloriginalsourceclosurehashes unchanged.
 
 [Draft audit PR#433](https://github.com/FPC-effortless/TAC-OSM/pull/433). Full1178localtests and76targetedchecksPASS; original76ME110payloadhashes/sourceclosurePASS. DedicatedremoteCIstatuspending; no newmodelqualification.
+
+### ME111 — conditional belief/state reconstruction: sharper forecasts, outage calibration still fails (2026-10-26)
+
+[Draft TACPR442](https://github.com/FPC-effortless/TAC-OSM/pull/442) completed five
+new104663parameter native Temporal models,1536additional updates each. The source
+fixes DIAGBELIEF001's two measured restrictions: no unsupported pooled-difference
+hard width floor in the new law, and explicit hidden-current mean supervision on
+696existing coordinates. Native fast/slow/8x8affine scan,152FP32primary payload and
+six model families retained; noTransformer/SSMconversion or newfamily.
+
+| Original exposed2015 metric | ME110 | ME111 |
+|---|---:|---:|
+| GapPMMAE↓ |34.815926|34.762480|
+| GeneralPMMAE↓ |30.972970|30.637195|
+| Gap six-channel NLL↓ |5.075791|5.000335|
+| GapPM90intervalscore↓ |401.850403|196.633594|
+| GapPM90width↓ |396.649622|115.168202|
+| GapPM90coverage |96.6434%|86.4336%|
+
+Intervalscore51.0680%lower and width70.9648%lower; intervalgates5/5PASS. Gap point
+mean essentially unchanged, only1/5pairedseed improves; ordinarypoint4/5improves.
+**Full legacy gateFAIL0/5; stricter all-channel jointgateFAIL0/5.** Gapcoverage
+fails all5, NO2gapcoverage mean71.1594%; seed111003alsofails oldgappointlimit.
+No rounding/waiver or promotion. No moreME111fits. Targets143natural-gap+4288general
+queries, sameoutcomes acrossseeds, retrospective2015;2016–2017numericrowsclosed.
+Additional parent+newtraining means no matched architectural-superiority claim.
+
+A posthoc descriptive check on identical320ancestor-exposedFITorigins/recorded
+artificiallyhidden currentvalues yields meanstandardized-log reconstructionMAE
+0.525913to0.507204 (3.5573%lower), sixchannelmeans improve. Not independent,
+physical-unit recovery, natural-gaptruth or attribution to onecomponent. Fixed
+monitor0/512/1024/1536gapPMMAE24.145534/23.960646/23.852308/23.519529. FinalFITgap
+coverage96.5625%versusREPORT86.4336% exposes a calibration/generalization gap;
+moreepochs alone is not an established solution.
+
+All15originaltrainedmodel/optimizer/RNG checkpoints frozen26ccea9beforeREPORT;
+originalscores/arrays823a60b. Detached clean823a60b restored398790REPORT+115200FIT
+forecastscalars,20views,10finalFP32/64sourcegradientchecks and originalgates/summary.
+GitHuboriginal finalreplay40418385349PASS. Full1181localpre/posttestsPASS; live
+countsall104663;7680updates/122880exampledraws;99840conditionalblockcertificates,
+0fallbacks. No universalfinite-stepcalibration or IEEEproof. AlloriginalsGitowned.
+
+[Draft PNDS PR37](https://github.com/FPC-effortless/pnds-lean/pull/37): actual-real
+scalar positivity/order and limited role algebra, Python/source masks/VJPs all
+coordinates. Source-pinned Leanbuild/axiomaudit+11Python tests40415435779PASS;
+initialnoncomputable compileerror preserved/fixed beforetraining. Full neural,
+causal, calibration and independent realcapability qualification remainOPEN.
+
+This implements master P0statecorrection/coherentuncertainty and uses the existing
+Observatory, consistent with [companyintake#441](https://github.com/FPC-effortless/TAC-OSM/issues/441)
+and [INT-001#437](https://github.com/FPC-effortless/TAC-OSM/issues/437); noissueclosed.
+Nextcapabilitytarget: transferable conditional tail calibration under authentic
+outage/site/age regimes while retaining state/point gains, with a new prospective
+protocol. Do not reinstate an unjustified floor, tuneagainstprotecteddata or
+expandvision/mobile/control complexity as a substitute for this failure.
+Otherfivefamilies and product/decision utility remain separately unqualified.
