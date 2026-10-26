@@ -2824,3 +2824,32 @@ All model weights, optimizer/RNG, source/TEST hashes, actual real results and ne
 For all architecture variants and input-to-output computation graph changes, the compulsory rule is [PNDS MATHEMATICAL_ENGINEERING_RULE.md](https://github.com/FPC-effortless/pnds-lean/blob/research/unified-tac-osm-mathematical-foundation-v1-2026-10-24/foundation/v1/MATHEMATICAL_ENGINEERING_RULE.md), mirrored here as [research/PNDS-MATHEMATICAL-ENGINEERING-RULE.md](PNDS-MATHEMATICAL-ENGINEERING-RULE.md). PNDS is the source of versioned mathematical representations, **both Lean 4 and Python reference formulations**, proof premises and open proof obligations; TAC-OSM remains the actual PyTorch/training/authentic-score/checkpoint authority. Every version must appear in the reciprocal [source-pinned variant links](pnds-variant-math-links.json); historical negative findings must never disappear.
 
 Engineering-gate levels are distinct: source-linked/partial math, kernel-verified exact theorem, tested Python math, actual original-source numerical/gradient equivalence, then independent authentic experimental capability. The first three do NOT imply the last two. No completed whole-model verification is claimed for the 17 historic indexed versions. The prospective capability-first and fair parameter/data/training-compute rules remain unchanged; **equal CPU seconds are not required**.
+
+### DIAGTRAIN001 — observed objective drift and unresolved training sufficiency (2026-10-26)
+
+No new fits. [Draft research PR #425](https://github.com/FPC-effortless/TAC-OSM/pull/425)
+records the five original ME109 models, all4,096saved losses/seed and three
+authenticated original FIT batches. Source/results live on `research/diagtrain001-training-sufficiency-2026-10-26`.
+No REPORT/protected rows, weights or optimizer states changed; ME109FAIL0/5 stays.
+
+Within each8/64/256hcontext, early/late matched256record windows show point loss
+rising7.7364%/11.6322%/9.7917%, while interval score falls34.1899%/38.0027%/36.8682%
+(five-seed means). All15seed/contextpairs improve fullobjective but worsenpoint;
+last-halfobjective slopes improve11/15, pointslopes worsen12/15. StochasticFIT
+curves cannot establish validation convergence or causality.65,536neworigin draws
+per model cover30,284–30,388unique station/hourorigins, not65,536independentlabels.
+Onlyfinalcheckpointswere saved; insufficienttraining remainsUNRESOLVED.
+
+Fifteen read-only original-rate proposals evaluated functionally: average-point
+guard improves totalandaveragepoint on15/15originatingbatches but worsensgapPM
+on10/15; onnextfixedFITbatch, gapPMworsens12/15. Unguardedoriginatinggap worsens11/15;
+removingguardisunsupported. No optimizerstep orcandidatecheckpoint waswritten.
+Theseactualfinite effects extend priorgradientdots but are local, correlated,
+posthoc observations. Nextsubstantivetraining must protectavailability/channel
+regimes and savefixedvalidationcurves/intermediateweights atregisteredbudgets;
+merelytrainingtheoldrecipe longer is not an evidenced remedy.
+
+ActualME109Observatory/anti-cheat replay passes scopedprobes; completeintegrity
+remainsINCONCLUSIVE.81relevanttool/optimizer/contracttestsPASS. Separate nofitCI
+replaysoriginalcurves andfiniteproposals. Noarchitecturechange, newLeanproof,
+newcapability/superiorityclaim, deployment, merge or protectedqualification.

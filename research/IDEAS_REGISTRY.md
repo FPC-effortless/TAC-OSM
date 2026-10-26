@@ -1417,3 +1417,32 @@ before the frozen complete-model study. Keep source-specific channel selection,
 multi-horizon sensor paths, typed enterprise event heads and optional useful CED
 in the shared queue. These are proposals, not new trained capabilities. Do not
 consume protected TEST in selection or rerun the failed ME101 protocol.
+
+### DIAGTRAIN001 — observed objective drift and unresolved training sufficiency (2026-10-26)
+
+No new fits. [Draft research PR #425](https://github.com/FPC-effortless/TAC-OSM/pull/425)
+records the five original ME109 models, all4,096saved losses/seed and three
+authenticated original FIT batches. Source/results live on `research/diagtrain001-training-sufficiency-2026-10-26`.
+No REPORT/protected rows, weights or optimizer states changed; ME109FAIL0/5 stays.
+
+Within each8/64/256hcontext, early/late matched256record windows show point loss
+rising7.7364%/11.6322%/9.7917%, while interval score falls34.1899%/38.0027%/36.8682%
+(five-seed means). All15seed/contextpairs improve fullobjective but worsenpoint;
+last-halfobjective slopes improve11/15, pointslopes worsen12/15. StochasticFIT
+curves cannot establish validation convergence or causality.65,536neworigin draws
+per model cover30,284–30,388unique station/hourorigins, not65,536independentlabels.
+Onlyfinalcheckpointswere saved; insufficienttraining remainsUNRESOLVED.
+
+Fifteen read-only original-rate proposals evaluated functionally: average-point
+guard improves totalandaveragepoint on15/15originatingbatches but worsensgapPM
+on10/15; onnextfixedFITbatch, gapPMworsens12/15. Unguardedoriginatinggap worsens11/15;
+removingguardisunsupported. No optimizerstep orcandidatecheckpoint waswritten.
+Theseactualfinite effects extend priorgradientdots but are local, correlated,
+posthoc observations. Nextsubstantivetraining must protectavailability/channel
+regimes and savefixedvalidationcurves/intermediateweights atregisteredbudgets;
+merelytrainingtheoldrecipe longer is not an evidenced remedy.
+
+ActualME109Observatory/anti-cheat replay passes scopedprobes; completeintegrity
+remainsINCONCLUSIVE.81relevanttool/optimizer/contracttestsPASS. Separate nofitCI
+replaysoriginalcurves andfiniteproposals. Noarchitecturechange, newLeanproof,
+newcapability/superiorityclaim, deployment, merge or protectedqualification.
