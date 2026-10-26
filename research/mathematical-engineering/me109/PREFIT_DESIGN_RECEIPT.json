@@ -1,0 +1,892 @@
+{
+  "parent_hashes": {
+    "109001": {
+      "checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+      "fit_receipt_sha256": "2792536b25f413c5fdcc1c48743472bacb5d7eda954e46f6a0a781968128af6f",
+      "runtime_receipt_sha256": "abacedf7111096da4ab62063fa8af88d392cb64457b774270a1fd406c5fb80a8"
+    },
+    "109002": {
+      "checkpoint_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+      "fit_receipt_sha256": "ea56790b026e13565c5462e9b1a73e3745af8b224ad053120705035a413408d0",
+      "runtime_receipt_sha256": "d2261664208a718280a7dfbef8d86c6fc281385329f7ce9728731ee3b1d4136c"
+    },
+    "109003": {
+      "checkpoint_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+      "fit_receipt_sha256": "b7e795a4efc11bdc4d4f603e8f25aeafdd15c1aa9b4bfcebfcde46fc060170e8",
+      "runtime_receipt_sha256": "9cd4b3a42fd245524595407a5e90e9797780d58ebcf1f8c63c03f36ff4b31885"
+    },
+    "109004": {
+      "checkpoint_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+      "fit_receipt_sha256": "d11af0dd0d02a9a2f20a971d90c50a1a0d23b9f07adfddbc92dc357902d3082d",
+      "runtime_receipt_sha256": "6cd25da21625241dcdf58bd783cf489dabf0879aa6c4bc4757977364a31e6492"
+    },
+    "109005": {
+      "checkpoint_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+      "fit_receipt_sha256": "cd6a1ef9f2a51161d9f7d830878e462566ecf2661f705ea5d41577ba2e4468a3",
+      "runtime_receipt_sha256": "f888ecf110a805a4b7af8601df6fe9d4f505d83c4d26e79892e3b9a00afaaca0"
+    }
+  },
+  "plan_sha256": {
+    "109001": "13023038ed3e78f73be2c6762218d44c1ca3206aec7512549e2eb296c364c61d",
+    "109002": "cd272cbe203833ecb0a66fde811132d6c4112da21080b9f9a6f325d2cfdf33d8",
+    "109003": "0e24df4efd6f4587a7a52700778dea4f5da291d3e548b746b0271db664625261",
+    "109004": "9d56e07ad945fd6309e46369802915483d024f0165062d66557e77d71006901d",
+    "109005": "900bb60c4b6ed6936d3c07eb3abf3c3961263335b1d24054a0b402401df37c85"
+  },
+  "audits": [
+    {
+      "seed": 109001,
+      "parent_seed": 102001,
+      "parent_checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+      "dropped_parent_tensors": [],
+      "initial_forecast_preservation": {
+        "forecast_bit_exact": true,
+        "state_bit_exact": true,
+        "inherited_trace_bit_exact": true,
+        "input_sha256": "a3962390385e719627a26e389d82c12336a6409064df250460806d983c116a18",
+        "no_optimizer_step": true
+      },
+      "initial_residual_gradients": {
+        "current_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "width_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "median_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        }
+      },
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "parameter_tensors": 45,
+      "loss": 6.4941086769104,
+      "point_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 0.34457662219118135
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.009439834785763442
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.16313372920644037
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.023883842191482752
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.036181105947656785
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.17069932330742976
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.018051999191231398
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.037282007568418186
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 0.44705715152969056
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 1,
+          "norm": 0.008018817320999459
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.3320260923490573
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 0,
+          "norm": 0.0
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.11390912550687657
+        }
+      },
+      "total_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 2.415675043224786
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.07589146292944887
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 1.1146543588615068
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.15008918835417462
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.18133962950414226
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.867230166007473
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.08155739445033289
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.10876753941101318
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 2.94884090145263
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.048449147369172205
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 3.083921540459339
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 2.389742029592963
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.1254043110723354
+        }
+      },
+      "no_optimizer_step": true
+    },
+    {
+      "seed": 109002,
+      "parent_seed": 102002,
+      "parent_checkpoint_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+      "dropped_parent_tensors": [],
+      "initial_forecast_preservation": {
+        "forecast_bit_exact": true,
+        "state_bit_exact": true,
+        "inherited_trace_bit_exact": true,
+        "input_sha256": "ae97f7ce07edaadf50408bc898968ca4fd851e85ee03602a0493a0dae20d947c",
+        "no_optimizer_step": true
+      },
+      "initial_residual_gradients": {
+        "current_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "width_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "median_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        }
+      },
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "parameter_tensors": 45,
+      "loss": 7.127954959869385,
+      "point_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 0.37932071723229316
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.006934956636732182
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.16886439235215614
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.027297147565703107
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.06774349168143394
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.16438993507423982
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.02349379143339826
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.06727316843234532
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 0.3631987330119827
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 1,
+          "norm": 0.005375312537347394
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.3077295551824718
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 0,
+          "norm": 0.0
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.1271794778637095
+        }
+      },
+      "total_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 5.176556902546184
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.09637710615031139
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 1.987661943532576
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.30769757189170005
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.9088183204028125
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 2.1593573857272323
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.42230440073831316
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.7175388882770171
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 3.7960511230089176
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.0894749080756138
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 3.691541272270111
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 3.789172992450894
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.14215626821371388
+        }
+      },
+      "no_optimizer_step": true
+    },
+    {
+      "seed": 109003,
+      "parent_seed": 102003,
+      "parent_checkpoint_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+      "dropped_parent_tensors": [],
+      "initial_forecast_preservation": {
+        "forecast_bit_exact": true,
+        "state_bit_exact": true,
+        "inherited_trace_bit_exact": true,
+        "input_sha256": "7cd05f0fdb9dd0779f6f88c3b41af21d6daf8e26b57b7b3da6e20f9e9013a731",
+        "no_optimizer_step": true
+      },
+      "initial_residual_gradients": {
+        "current_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "width_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "median_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        }
+      },
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "parameter_tensors": 45,
+      "loss": 7.064317226409912,
+      "point_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 1.0843635300190202
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.01549120951844273
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.3671745781435297
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.063344796308649
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.09280060016194405
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.7510247209613498
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.022738023907666046
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.06304537455104069
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 0.6038918163129338
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 1,
+          "norm": 0.0065722950326774325
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.4830180546180467
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 0,
+          "norm": 0.0
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.21860410765587776
+        }
+      },
+      "total_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 2.757077176888273
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.08193847031670828
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 1.3919219884521974
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.23117594295374175
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.2066520063583972
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 1.1408130356188408
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.040731761076926006
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.22625285172419246
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 3.2379270141135024
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.06891576567187699
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 2.7420098260004977
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 2.22209291457934
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.24909891289382716
+        }
+      },
+      "no_optimizer_step": true
+    },
+    {
+      "seed": 109004,
+      "parent_seed": 102004,
+      "parent_checkpoint_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+      "dropped_parent_tensors": [],
+      "initial_forecast_preservation": {
+        "forecast_bit_exact": true,
+        "state_bit_exact": true,
+        "inherited_trace_bit_exact": true,
+        "input_sha256": "784fa3585beb5782e78cb37a5c687ad43c15e4f736ca9698d8194f1af5e14cf6",
+        "no_optimizer_step": true
+      },
+      "initial_residual_gradients": {
+        "current_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "width_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "median_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        }
+      },
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "parameter_tensors": 45,
+      "loss": 6.236443519592285,
+      "point_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 0.45823061704164114
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.014142749656387114
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.2573054176849117
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.0643813493661194
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.11171623204497791
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.15617952080500583
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.0043305218044042346
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.11894671861957776
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 0.45171154355741555
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 1,
+          "norm": 0.006765733892918656
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.35330159011300305
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 0,
+          "norm": 0.0
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.16519158780521778
+        }
+      },
+      "total_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 1.5058658467549793
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.06449903185751805
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.8586664778694351
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.17647335977748518
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.30132610095657664
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.630695335123579
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.023370627627800514
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.3054270001658267
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 1.7448358241440425
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.04236676147910579
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 1.8667135058862048
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 2.1896268787790674
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.19266362974927306
+        }
+      },
+      "no_optimizer_step": true
+    },
+    {
+      "seed": 109005,
+      "parent_seed": 102005,
+      "parent_checkpoint_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+      "dropped_parent_tensors": [],
+      "initial_forecast_preservation": {
+        "forecast_bit_exact": true,
+        "state_bit_exact": true,
+        "inherited_trace_bit_exact": true,
+        "input_sha256": "e3b732597defce22322551e91aceb2674c5bed094269af91090428d92dd793cd",
+        "no_optimizer_step": true
+      },
+      "initial_residual_gradients": {
+        "current_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "width_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        },
+        "median_residual": {
+          "hidden_gradients_zero": true,
+          "output_gradient_nonzero": true
+        }
+      },
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "parameter_tensors": 45,
+      "loss": 7.4387407302856445,
+      "point_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 0.2997788740069886
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.018365446763684894
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.1942714461900415
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.03130939910365359
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.06698852446176187
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.09818890986973593
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.006743034894880015
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.047500484061695006
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 0.3513519663404495
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 1,
+          "norm": 0.007234946351532532
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.2759410546678608
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 0,
+          "norm": 0.0
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.13155647489295463
+        }
+      },
+      "total_gradient": {
+        "source_encoder": {
+          "tensors": 3,
+          "nonzero": 3,
+          "norm": 5.985384628739608
+        },
+        "source_admission": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.3089141696777842
+        },
+        "fast": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 3.8751505883429163
+        },
+        "slow": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.6248614004072341
+        },
+        "address": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.7573904441846901
+        },
+        "content": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 1.8094827492238443
+        },
+        "memory_gates": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.08443338441677055
+        },
+        "query": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.5728760104414025
+        },
+        "future_decoder": {
+          "tensors": 8,
+          "nonzero": 8,
+          "norm": 8.480087122191835
+        },
+        "belief": {
+          "tensors": 2,
+          "nonzero": 2,
+          "norm": 0.14339852851936885
+        },
+        "reconstruction": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 8.006295898184701
+        },
+        "width": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 13.71247057412303
+        },
+        "median": {
+          "tensors": 6,
+          "nonzero": 4,
+          "norm": 0.15215955082497395
+        }
+      },
+      "no_optimizer_step": true
+    }
+  ],
+  "trainable_parameters": 104663,
+  "deployed_parameters": 104663,
+  "parameter_tensors": 45,
+  "profiles": {
+    "8": {
+      "dense_flops": 132640952,
+      "flops_scope": "partial_forward_backward; optimizer and unsupported operators excluded",
+      "aten_signature": "d4d9428c1d15e73ed556fbb371cf04568c257bca84fa88e7bd8c3291974b6f79",
+      "aten_calls": 8280
+    },
+    "64": {
+      "dense_flops": 948991928,
+      "flops_scope": "partial_forward_backward; optimizer and unsupported operators excluded",
+      "aten_signature": "dbc95af1b174aa13be01101ff855fbd09c8b82c72eaff30b7c4ada3cc178b07b",
+      "aten_calls": 10004
+    },
+    "256": {
+      "dense_flops": 3747909560,
+      "flops_scope": "partial_forward_backward; optimizer and unsupported operators excluded",
+      "aten_signature": "62466913d549ccd51abfa137e2e2be13c36a6cf78d45055bebbf082315b92dfd",
+      "aten_calls": 11192
+    }
+  },
+  "no_optimizer_updates": true
+}

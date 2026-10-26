@@ -1,0 +1,108 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME109-IDENTITY-PRESERVING-RESIDUAL-ROLES",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "name": "UCI501 Beijing Multi-Site Air Quality",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "license": "CC-BY-4.0",
+    "observed_real_outcomes": true
+  },
+  "models": [
+    {
+      "architecture": "residual_guarded",
+      "seed": 109001,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    },
+    {
+      "architecture": "residual_guarded",
+      "seed": 109002,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    },
+    {
+      "architecture": "residual_guarded",
+      "seed": 109003,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    },
+    {
+      "architecture": "residual_guarded",
+      "seed": 109004,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    },
+    {
+      "architecture": "residual_guarded",
+      "seed": 109005,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663
+    }
+  ],
+  "protocol": {
+    "question": "Can a single integrated native TAC with exactly parent-preserving residual FFNs conditioned on causal current availability and source age meet unchanged point and uncertainty gates?",
+    "fit": "2013-2014 authentic FIT only, 6h targets; contexts8/64/256; B16, half natural-gap and half general origins; original causal random masking/current reconstruction.",
+    "report": "Already exposed2015 only, same original143natural-gap and4288general queries,256h histories; no independent confirmation claim.",
+    "protected": "2016-2017 numeric rows remain closed, no parsing/scoring or model selection.",
+    "seeds": [
+      109001,
+      109002,
+      109003,
+      109004,
+      109005
+    ],
+    "parent": "All five ME103 strong_reconstruction parents102001..102005; retain EVERY original learned tensor including current affine head. Width and median affines zero-initialized as in ME105, and three108-to12-to12/12/6 residual FFNs output weights/bias zero. Exact original parent forecast/state identity checked on original FIT before first update.",
+    "updates": 4096,
+    "batch_size": 16,
+    "supervised_examples_per_model": 65536,
+    "history_events_per_model": 7163648,
+    "loss": "NLL+.5rawmedianMAE/FITstd+.1standardized-logMSE+.3masked-currentGaussianNLL+.25proper90intervalscore/FITstd; inherited uncertainty view removes direct median-correction tangent from NLL/interval.",
+    "optimizer": "Fresh BlockProtectedAdamW beta(.9,.999),eps1e-8,weight_decay.001;33 inherited affine/backbone tensors lr3e-5;12 new residual tensors lr3e-4. No schedule. Global combined clip1. Point role unclipped .5point gradients;13 exhaustive mapped blocks. Local guard not a population forecast guarantee.",
+    "moment_semantics": "Moments track clipped raw combined gradients even if a weight move is projected/rejected. Complete rate/decay/preconditioned displacement is guarded before parameter mutation. Round/recheck both displacement and actual candidate weights; reject opposing protected-coordinate moves, leaving zero-point-gradient coordinates free. No first-order/coverage/finite-step guarantee is equated with predictive success.",
+    "exposure": "Residual heads4096updates; retained ME103 backbone/current3072parent+4096new=7168ownlineage. Original zero width/median affine heads4096updates. No ME108 fitted weights reused.",
+    "compute": "One fixed candidate, no new trained rival or superiority claim. CPU and partial profiled FLOPs measured, not matched to historical studies. Maximum2one-thread local workers; no external paid compute.",
+    "gates": "Exactly ME106 perseed gates with mappedME101andME103 references: gapPM90coverage[.90,.98]; gapPMMAE<=min(1.05ME101,1.05ownparent); ordinaryPMMAE<=min(1.05LOCF,1.05ownparent); gap6chNLL<=min(6.234504261016846,1.05ownparent); gapPMintervalscore<=min(1.05ME101,.90ownparent). Allfive seeds must pass allgates.",
+    "stop": "Exactly five original4096-update fits. Freeze all models/optimizer/RNG/receipts in Git BEFORE any REPORT scores. No retries, favorable-seed selection, threshold changes, extra fits or protected2016-2017 numeric access. Any failure remains failure.",
+    "prior_art": "He et al2016 Deep Residual Learning https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html (identity-preserving learned residuals); Che et al2018 GRU-D https://doi.org/10.1038/s41598-018-24271-9 (explicit missingness/elapsed-time inputs); Caruana1997 task-specific heads; AdamW and gradient-surgery lineage inherited. No architecture novelty or superiority claim from familiar components.",
+    "initialization_limit": "Zero residual output implies zero initial hidden-layer gradients but allows finite output-layer gradients. This expected staged activation is audited; every tensor remains trainable. Identity is an INITIALIZATION guarantee, not persistent parent preservation after training."
+  },
+  "source_files": {
+    "scripts/me102_reconstruction_panel.py": "7ef36d9195ff4b040f6300994f20ef061e16f69260d43666a258e74ec3ebfadc",
+    "scripts/me102_graph_reference.py": "5d8babb005d28877f3e01cd46d32f4b79b9af055b518a09a4690468457d92918",
+    "scripts/me102_gap_data.py": "fff07eface039eff6458399ff1ab33db4b268a71d2adcc6e1ebca6b451cac324",
+    "scripts/me100_sensor_data.py": "57f4d9086251d6dd8f12feb675ebe96de1223b3016906ad867cf3795fd0c74cc",
+    "scripts/me101_graph_reference.py": "ab4f70a83aa28f9ba0fd05749d2cf8cd6c3ff7880dcc3d25ec0728d955bba9d3",
+    "scripts/me100_graph_reference.py": "5923f55cf718aee6d73723dfc60bf82162880fbeb41c462d4575cdc91f4f64ff",
+    "src/tac_osm/variants/reconstruction_sensor_world.py": "55855ed04835af42758bcbd1170b384841e8d17ea5c0dbe7916cca0892987593",
+    "src/tac_osm/variants/belief_sensor_world.py": "618fa4a6dd53c0c3128081d4990fcd66f40593e9b875ca8983b475035245fb88",
+    "src/tac_osm/variants/entity_sensor_world.py": "c26c2b15e99c5f8238bc49dc4eb0a6ebdfb4b62dfe566ee400a044cebead6282",
+    "src/tac_osm/variants/parallel_affine_memory.py": "e3a0732b17acfa7505952b5229573099edc7f1dbe65604f4f3f516e05652baeb",
+    "src/tac_osm/variants/retention_controlled_world.py": "eead543fc0d87d0c77d4f36758115168beb591b31e53e3d251714c076da0e970",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "scripts/me101_belief_sensor.py": "c51c03ed7cd4db0ee721daa339d42ede34afe8d5242d61fed07995eba701b14f",
+    "src/tac_osm/variants/median_split_sensor_world.py": "c7d71d7a0fc23e8849e69edf35b5e555dbc0e567ad93406a0e4bcc2186ccd0ad",
+    "src/tac_osm/variants/protected_sensor_world.py": "9fbfa64878daf48189786d50ea975571f4832bea95b00f3bdf3444075b022a20",
+    "src/tac_osm/variants/point_priority_sensor_world.py": "34ce48400a462f40aa3f1023ef9c21d52389a8754fd54cbb4c59f34bc2c0d8e7",
+    "scripts/me105_protected_panel.py": "239d19936ce88e06cea5c4946893032b32b09567a18ed72b44a8b2a0a76f2c62",
+    "scripts/me105_graph_reference.py": "775c13a7437f99c353911105f21afb23ce4e7478b51d5968c56aa4978c60ca45",
+    "scripts/me106_gradient_roles.py": "9dea6fb17d473f686672f5a225ccbb08a3a7845c35b93305fcb42a441401ae73",
+    "scripts/me104_graph_reference.py": "930a117e2b0d5198e6666be639c613020a1ef8570cbaeab778d43176c4da3a62",
+    "scripts/me106_graph_reference.py": "fde76eb9dc9a72618b3c7813017051176ec4f681fbaf3d6c087508204e6274ae",
+    "scripts/me106_priority_panel.py": "c1a5abfa2c9aa20da6e41012bbf204e41fd542526991cbb868630fbc90ac4bad",
+    "scripts/me109_residual_training.py": "bba847d2ca08f8f27b79f5eedc76585582febab3128271dcc49f6e278495e16c",
+    "scripts/me109_graph_reference.py": "72d10ccf71077047bfef7732b96ecb3bdd7e137c7332af504d30f4fdcb9fd4fe",
+    "scripts/me108_optimizer_reference.py": "d3ea41f844e257323ec67b8ad82b7d7cf03c81e19bae8787f64eefbe86a7e705",
+    "src/tac_osm/role_optimizer.py": "27140502225513db4523df893f6e1a5c8c52f9e3147c361a7aed23f280f928ee",
+    "src/tac_osm/role_update_contract.py": "88c01a49f4ad324b4c37b44026591461d8b236b90856618657ede38ea6e61f27",
+    "scripts/diaggrad001_loss_flow.py": "28ad2943f132a475e9ff7e61099a428896fc0aed485ac8a0cedacea2b3d705fa",
+    "scripts/me107_graph_reference.py": "3f25718ff6a9adcae62799c60e86fc08da113bb2260bf6a8d015d4714f8de2eb",
+    "src/tac_osm/variants/residual_role_sensor_world.py": "28a38f7eded88e22966327663c16d9c04721e38586903c8ebdc50ab3b81a767b"
+  },
+  "fit_plans_sha256": "25a4cf9cbafdc24948b950b2eccf53d271fcc7e873aeaa02543e7aadbea81dd0",
+  "prefit_design_sha256": "330e055d7c41c03e3caaff4aa276432803251f3274b0285aaab83db5e76a05e2",
+  "prefit_profiles_sha256": "f303c3bac8cc54df936132f32c52718e99538c5bc958d4ed23e7162d1e3cae73",
+  "parent_fit_index_sha256": "586218572938a9a9da96607be371e258c86fb45833558d23b445e97bc9e6814e",
+  "parent_registration_sha256": "583da81703becdbcc52e59757e04e3eb6a94081de10d1d5af403ebd3d41007b7"
+}
