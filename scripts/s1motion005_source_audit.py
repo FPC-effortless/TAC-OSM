@@ -11,6 +11,7 @@ import numpy as np
 import pyarrow.parquet as pq
 
 SOURCE="lerobot/aloha_static_screw_driver"
+REV="0b873be59c9702f8d3de89022617121970db112f"
 FIT=tuple(range(25)); DEV=tuple(range(25,35))
 DATA_PATH="data/chunk-000/episode_{episode:06d}.parquet"
 FIELDS=("episode_index","frame_index","timestamp","observation.state","action")
@@ -22,8 +23,10 @@ def download(url):
 
 def audit(source_cache:Path):
     source_cache.mkdir(parents=True,exist_ok=True)
-    api=json.loads(download(f"https://huggingface.co/api/datasets/{SOURCE}"))
+    api=json.loads(download(f"https://huggingface.co/api/datasets/{SOURCE}/revision/{REV}"))
     sha=api.get("sha","")
+    if sha!=REV:
+        raise ValueError("specific approved immutable v2 revision unavailable")
     if len(sha)!=40 or any(ch not in "0123456789abcdef" for ch in sha):
         raise ValueError("unresolved publisher immutable revision")
     license_id=str(api.get("cardData",{}).get("license","")).lower()
@@ -34,10 +37,7 @@ def audit(source_cache:Path):
         or info.get("fps")!=50 or info.get("data_path")!=
             "data/chunk-{episode_chunk:03d}/episode_{episode_index:06d}.parquet"):
         raise ValueError(f"unqualified recorded source info: {info.get('codebase_version')}")
-    revision=json.loads(download(f"https://huggingface.co/api/datasets/{SOURCE}/revision/{sha}"))
-    if revision.get("sha")!=sha:
-        raise RuntimeError("publisher source revision changed")
-    known_paths={x["rfilename"] for x in revision.get("siblings",[])}
+    known_paths={x["rfilename"] for x in api.get("siblings",[])}
     if any(DATA_PATH.format(episode=ep) not in known_paths for ep in FIT):
         raise RuntimeError("required original FIT source episode missing")
     receipts=[]
@@ -64,6 +64,8 @@ def audit(source_cache:Path):
                              observed_state_dim=14,recorded_action_dim=14))
     manifest=dict(study="S1MOTION005",dataset=SOURCE,license=license_id,
         revision_sha=sha,source_codebase=info.get("codebase_version"),
+        historical_v2_release_explicitly_pinned=True,
+        original_live_source_revision_rejected_as_unapproved_v3=True,
         publisher_frames=20000,publisher_episodes=50,
         publisher_fps=50,episode_frame_count=400,
         FIT=list(FIT),DEV=list(DEV),protected_TEST=list(range(35,50)),
