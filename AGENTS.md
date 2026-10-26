@@ -57,3 +57,20 @@ an architecture or unseal TEST on these grounds. Real-world, matched-budget,
 100k and PNDS rules remain binding. Audit existing physical-window adapters
 using src/tac_osm/robot_anticheat.py; other variants MUST integrate their
 own actual graph interfaces before claiming end-to-end information isolation.
+
+
+## Mandatory architecture-agnostic diagnostics contract (2026-10-26)
+
+The anti-cheat, architecture introspection, memory, gradient, information-flow,
+entity-isolation, timing and evidence comparison tools are **cross-version
+research infrastructure**, NOT native architecture features. For every new
+model family/version, register a source-reviewed `ResearchProbeAdapter` from
+`src/tac_osm/research_probe.py` declaring actual source-time inputs,
+state ownership, prediction heads, optional legal candidate semantics,
+per-entity splitting and local AD graph. Never infer or reuse native
+fast/slow/matrix shapes for another model. Missing adapters or unimplemented
+probe dimensions are **INCONCLUSIVE**, never PASS. The native and robot
+specific entrypoints remain clearly labeled compatibility adapters. Run
+`tests/test_research_probe_agnostic.py` in automatic research CI.
+Do not equate cross-model fixture coverage with trained-checkpoint or real-data
+qualification; these require direct source-to-output end-to-end audits.
