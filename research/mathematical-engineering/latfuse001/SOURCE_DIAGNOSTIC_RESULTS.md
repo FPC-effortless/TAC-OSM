@@ -57,3 +57,33 @@ Single-session CPU reference calculation of 64-step signed affine state sequence
 **Do not promote or fit LATFUSE001 yet.** First conduct model source design review: target matching 95k–105k real trainable parameters; data cutoff and legitimate future-known conditioning (if air quality: calendar, not synthetic "action"); source-authorized station IDs; forecast shape/mask/time; independent audit; preregistered original real cohort/splits/outcome/seed budget; repository-owned checkpoints before any TEST; fair matched baseline if claiming superiority. Continue separately with original native architecture diagnosis after this candidate's capability test is either qualified or honestly blocked.
 
 All historical ME110 FAIL0/5 results and active ME111 drafts remain unchanged. No code, source, checkpoint or negative findings were overwritten.
+
+
+## Extension: H80/96,199-parameter genuine FIT forward/backward preflight (2026-10-26)
+
+**Pass:** https://github.com/FPC-effortless/TAC-OSM/actions/runs/40414352512 (source no-fit CI, exact commit f85da1b324734d87533129742284dec3f3dfa06f).
+**Earlier failed attempt, preserved rather than hidden:** https://github.com/FPC-effortless/TAC-OSM/actions/runs/40414207796 failed only because the prefit script passed a string path to the source reader's Path.read_bytes method. No training ran; the exact parser-type defect was fixed and rerun PASS. The numerical source/research protocol did not change.
+
+The same untrained LATFUSE001 graph, configured as H80, key16, value16, 16 entity slots, 13 original source input channels and 6 **future-known calendar** (not do(action)) covariates, produced:
+
+| Real-source no-fit preflight | Result |
+|---|---|
+| Genuine source SHA256 | original UCI501 archive, independently checked |
+| Source time | 2013 March, historical input hours256..319, source cutoff319 |
+| Legal future calendar conditioning | deterministic 2013 hour325 (+6), not intervention |
+| Future targets | 156 actually observed FIT-only channels accessed **after** forecast |
+| Instantiated trainable/deployed parameters | **96,199/96,199** |
+| Absolute 100k target 95k–105k | **PASS (size only)** |
+| Active autograd tensors | **32/32**, all finite measured source gradients |
+| Weights before/after probe | **bit-exact unchanged**, no optimizer |
+| Read-only candidate forecasts independent of actual future labels | **PASS (scoped source call order only)** |
+| Actual training updates | **0** |
+| Independently reviewed full-source anti-cheat | **INCONCLUSIVE / NOT DONE** |
+| Actual future-outcome capability / calibration | **NOT MEASURED** |
+| Fair matched-architecture comparative parity | **NOT REGISTERED** |
+| Checkpoint publication and independent replay | **NOT AVAILABLE (no fits)** |
+| Entire-model PNDS/AD/IEEE/probability-law refinement | **OPEN** |
+
+This establishes source-grounded **trainability** of the widened graph, not scientific performance. It does not retroactively qualify default H32, nor permit model training merely because the parameter count passes. Any actual fit needs a prospectively source-controlled and independently audited source-specific training protocol, all required receipts, protected eval seal, checkpoint publication/replay strategy, and an appropriate fair comparator for architecture-superiority claims. The 6D exogenous calendar is *not* action-conditioned causal control; do not market forecasts as identified counterfactuals.
+
+**User-defined sequencing:** LATFUSE001 remains a separate candidate until a genuinely qualified predictive test or an explicit blocker conclusion. Return to the **original native architecture diagnosis** after candidate evaluation, tracked by https://github.com/FPC-effortless/TAC-OSM/issues/444. Do not conflate LATFUSE001 randomized memory weaknesses with trained native ME110 failures.
