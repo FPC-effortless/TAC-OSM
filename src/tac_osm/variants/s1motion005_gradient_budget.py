@@ -129,13 +129,13 @@ def compute_gradients(model:nn.Module, batch, *, arm:str):
                                           for n in base))
     for n in head:
         actual[n]=ga[n]
-    return point,aux,actual,meta
+    return point,aux,actual,meta,gp
 
 
 def step_model(model, optimizer, batch, *, arm):
     """FIT-only empirical AdamW update audit; identical two-pass AD budgets."""
     optimizer.zero_grad(set_to_none=True)
-    point,aux,grads,meta=compute_gradients(model,batch,arm=arm)
+    point,aux,grads,meta,point_gradients=compute_gradients(model,batch,arm=arm)
     params=dict(model.named_parameters())
     # First-order actual optimizer preconditioned update is measured below,
     # not inferred from ideal-SGD projection positivity.
@@ -145,9 +145,12 @@ def step_model(model, optimizer, batch, *, arm):
     torch.nn.utils.clip_grad_norm_(model.parameters(),1.0)
     optimizer.step()
     actual_point_dot=sum(float(
+        (point_gradients[n].detach().double()*(params[n].detach()-before[n]).double()).sum())
+        for n in params if not n.startswith("core.reactive_head."))
+    applied_combined_dot=sum(float(
         (grads[n].detach().double()*(params[n].detach()-before[n]).double()).sum())
         for n in params if not n.startswith("core.reactive_head."))
-    if not math.isfinite(actual_point_dot):
+    if not math.isfinite(actual_point_dot) or not math.isfinite(applied_combined_dot):
         raise ValueError("nonfinite actual source step")
     with torch.no_grad():
         x,u,y,event,previous=batch
@@ -155,7 +158,8 @@ def step_model(model, optimizer, batch, *, arm):
         post=(pred-y).square().mean().item()
     outcome=dict(meta,
         pre_point_fit=float(point.detach()),post_point_fit=float(post),
-        actual_grad_dot_parameter_delta=float(actual_point_dot),
+        actual_point_gradient_dot_parameter_delta=float(actual_point_dot),
+        actual_combined_gradient_dot_parameter_delta=float(applied_combined_dot),
         optimizer_preconditioned_step_verified_finite=True,
         number_of_core_weights=sum(params[n].numel() for n in params
                                    if not n.startswith("core.reactive_head.")))
