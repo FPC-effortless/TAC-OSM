@@ -11,6 +11,8 @@ on:
       - "tests/test_ecosystem_boundary.py"
       - "scripts/woyengi_projection_adapter.py"
       - "tests/test_woyengi_projection_adapter.py"
+      - "scripts/validate_woyengi_predictive_export.py"
+      - "tests/test_woyengi_predictive_export.py"
       - "research/ECOSYSTEM_INTEROPERABILITY_AND_EVIDENCE_BOUNDARIES_2026-10-26.md"
       - ".github/workflows/ecosystem-boundary-gate.yml"
   workflow_dispatch:
@@ -33,5 +35,7 @@ jobs:
         run: python -m unittest discover -s tests -p "test_ecosystem_boundary.py" -v
       - name: Test real Woyengi projection shape adapter with constructed native records
         run: python -m unittest discover -s tests -p "test_woyengi_projection_adapter.py" -v
+      - name: Validate Woyengi-owned predictive export structure and fail closed
+        run: python -m unittest discover -s tests -p "test_woyengi_predictive_export.py" -v
       - name: Compile interop validator and unit tests
-        run: python -m py_compile scripts/validate_ecosystem_boundary.py tests/test_ecosystem_boundary.py scripts/woyengi_projection_adapter.py tests/test_woyengi_projection_adapter.py
+        run: python -m py_compile scripts/validate_ecosystem_boundary.py tests/test_ecosystem_boundary.py scripts/woyengi_projection_adapter.py tests/test_woyengi_projection_adapter.py scripts/validate_woyengi_predictive_export.py tests/test_woyengi_predictive_export.py
