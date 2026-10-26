@@ -1,5 +1,20 @@
 # TAC-OSM — Unified Master Research Plan
 
+
+## 2026-10-27 — Binding on-device inference company strategy (prospective only)
+
+**Owner-approved strategic scope, not trained capability evidence:** all company-built AI models intended for customers shall perform **complete inference locally on their target devices**, first Android phones, then supported iOS/desktop/embedded systems. No required cloud prediction, remote embedding, hidden hosted preprocessing, or cloud fallback is permitted for a claimed offline model feature. Cloud training, CI, dataset engineering, signed model delivery and consented account/sync services may remain; they must not be needed for the model's local predictions, recurrent state updates, uncertainty, typed decisions or local perception encoders. Remote Woyengi authoritative state/irreversible transaction permissions are a separate execution boundary: offline local model advice does **not** authorize a remote action.
+
+**Binding companion policy:** [Company Strategy and Daily Operating System — all-model on-device inference rule](COMPANY_STRATEGY_AND_DAILY_OPERATING_SYSTEM.md#binding-company-deployment-principle--all-company-built-model-inference-is-on-device-2026-10-27). This governs company/product model release decisions across the **same six** TAC-OSM families (System 1, Enterprise, Temporal, Physical, Edge-Lite, Counterfactual), not only Edge-Lite. Preserve existing source-backed CED/native-memory history, PNDS mathematical obligations, 95k–105k active/deployed parameter policy for new TAC research, source/time access protections, original checkpoint/negative results and matched architecture-comparison budgets. Larger task-specific mobile utility models require separate explicit prospective policy and provenance, not hidden parameters in flagship comparisons.
+
+**Target architectural capabilities:** (i) source-authorized structured persistent state with bounded inference memory and local entity/event retrieval; (ii) parallel-compatible training where *mathematically justified* and true incremental event-by-event execution; (iii) measured action-conditioned temporal/state forecasts and calibrated uncertainty; (iv) machine-native typed predicate/choice/score/forecast/defer heads with explicit schema and independent permission boundary; (v) local task-specific perception encoders without remote embeddings; (vi) exact input-to-output export/numerical/FP32-quantization contracts and verified CPU/GPU/NPU behavior; (vii) non-authoritative local inference coupled to Veritas verification and Woyengi authorization. These are **research objectives**, not achieved claims.
+
+**Release and daily-work acceptance:** each proposed flagship capability must name a real device/reference SoC and offline user story; show real trained checkpoint identity, export/run operator coverage and correct recurrent reset/state/outputs; measure quantization impact, source-aware multi-step numerical parity, cold/warm p50/p95, peak RAM including activations/runtime/cache, energy and airplane-mode behavior; verify independent real-data scientific gates and software security/licensing. The first tooling milestone [draft PR #432](https://github.com/FPC-effortless/TAC-OSM/pull/432) only checks artifact metadata/integrity and receipt formatting, **not** physical device execution or actual model qualification. Daily three-priority briefs must include local-inference proof or explicit BLOCKED/NOT RUN for model product work. Existing research prototypes can continue in desktop/server **training and validation**, but cannot be called shipping on-device models until these gates pass.
+
+Commercial focus: open weights and offline-first developer SDKs, mobile/embedded optimization, deployable model packages, integration support and evaluation services—not per-call cloud model inference. No inferred sales, paying customers, or device-qualified models.
+
+---
+
 ## 2026-10-26 — ME109 trained residual roles: full gate FAIL; average protection misses gap objectives
 
 [Draft TAC PR419](https://github.com/FPC-effortless/TAC-OSM/pull/419) and
