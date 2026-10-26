@@ -344,7 +344,7 @@ def main():
     manifest = dict(protocol="research/parallel-six/S1MOTION001-PROTOCOL.md",
         source=source, fitted_only_real_source=True,
         trained_seeds=list(SEEDS), fit_records=fit_records,
-        train_and_dev_actor_disjoint=True,
+        train_and_dev_episode_disjoint=True,
         blind_external_site=False, actual_adverse_label_available=False,
         proxy_definition="FIT_90th_percentile_next_measured_joint_motion",
         new_merged_model_family=False, normalization=norm,
@@ -377,7 +377,7 @@ def main():
     for record in fit_records:
         record["training_flops_partial"] = flop_proxy(
             trained[(record["seed"], record["arm"])], train)
-    result = dict(**manifest, fit_records=fit_records,
+    result = dict(manifest, fit_records=fit_records,
                   dev_original_first_scores=results,
                   full_three_seed_predictive_gate_pass=all(
                       z["registered_predictive_gate_pass"] for z in results),
