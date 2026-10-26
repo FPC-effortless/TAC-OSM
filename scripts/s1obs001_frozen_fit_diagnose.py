@@ -168,10 +168,10 @@ def run(original_dir:Path, cache:Path, out:Path, *, seeds):
                 episode_ids=(0,1) if id_.startswith("paired_") else (0,)
                 x=sample["observation_history"]
                 u=sample["prior_logged_action_history"]
-                y=torch.cat((training[e]["y"][:length][None]
-                             for e in episode_ids),dim=0)
-                event=torch.cat((training[e]["event"][:length][None]
-                                 for e in episode_ids),dim=0)
+                y=torch.cat([training[e]["y"][:length][None]
+                             for e in episode_ids],dim=0)
+                event=torch.cat([training[e]["event"][:length][None]
+                                 for e in episode_ids],dim=0)
                 prev=sample["preceding_measured_observation"]
                 gradients=loss_gradient_diagnosis(model,x,u,y,event,prev)
                 # Meaningfully separate point forecast from trivially strong
