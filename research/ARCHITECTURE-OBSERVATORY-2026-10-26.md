@@ -1,6 +1,6 @@
 # TAC-OSM Research Observatory — architecture comprehension & interpretation
 
-**Status: no-fit engineering tools.** This suite extends, rather than
+**Status: no-fit engineering tools with a model-agnostic core.** This suite extends, rather than
 replaces, the anti-cheat gates introduced in PR #417. It neither changes model
 weights nor makes claims about intelligence, state-of-the-art performance,
 generalization, formal correctness, or real-world autonomy.
@@ -35,6 +35,22 @@ architectural variant.
 | Evidence Comparator | compare_evidence | exact paired sample match, hashes, resource and seed checks, per-group error changes, blocked/compatible status | Matching self-reported receipts is NOT independent validation, significance, capability or architectural superiority |
 | Interpretation Rules | interpret_snapshot | narrow investigation hypotheses when probes reveal suspected issues | Heuristic hypotheses, not causal diagnoses |
 | CLI | scripts/run_research_observatory.py | reproducible JSON reports with no raw observations or weights | Never auto-opens TEST, authenticates publisher or trains |
+
+### Model-agnostic core and native compatibility
+
+The authoritative cross-version API is `ResearchProbeAdapter` and
+`inspect_variant` in `src/tac_osm/research_probe.py`. Its state keys,
+number of heads, phase graph, replay length and input shapes are defined
+solely by the reviewed adapter. Explicit alternate-recurrent and stateless
+tests guard against reintroducing native assumptions. See
+`research/MODEL-AGNOSTIC-DIAGNOSTICS-CONTRACT-2026-10-26.md`.
+
+The original `memory_tomography`, `input_dependency_map`,
+`entity_isolation_probe`, and `profile_native_runtime` functions are
+retained for historical native scripts, but **each also accepts
+`adapter=...` and an arbitrary sample**. Universal orchestration and the
+safe native CLI now use the generic engine. Do not interpret default native
+behavior as coverage of another family.
 
 ### Native model audited
 
