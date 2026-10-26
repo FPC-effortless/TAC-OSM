@@ -1,0 +1,23 @@
+name: DIAGBELIEF001 source and mathematics checks (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/diagbelief001*'
+      - 'tests/test_diagbelief001*'
+      - 'research/mathematical-engineering/diagbelief001/**'
+      - '.github/workflows/diagbelief001-audit.yml'
+permissions:
+  contents: read
+jobs:
+  source-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy==2.3.5 pytest
+      - run: PYTHONPATH=src:. pytest -q tests/test_diagbelief001_boundary.py tests/test_diagbelief001_math.py tests/test_research_anticheat.py tests/test_research_observatory.py tests/test_me110_sampling.py tests/test_me102_gap_data.py
+      - run: PYTHONPATH=src:. python -c 'from scripts.me110_typed_training import verify_prefit; verify_prefit()'
