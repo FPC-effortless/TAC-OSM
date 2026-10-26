@@ -1,0 +1,23 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "DIAGGRAD001",
+  "study_type": "noncomparative_diagnostic",
+  "no_architecture_superiority_claim": true,
+  "no_new_model_fits": true,
+  "scientific_purpose": "Measure actual per-objective layer gradients and read-only optimizer-direction algebra in all 15 original frozen ME106 models on authentic FIT observations only.",
+  "protocol": {
+    "checkpoints": "All ME106 balanced, point_guard, point_strong seeds106001..106005; unchanged original hashes",
+    "cohort": "UCI501 2013-2014 FIT only; no REPORT or protected 2016-2017 numerical conversion",
+    "contexts": [8, 64, 256],
+    "origin_populations": ["general", "gap"],
+    "batches_per_cell": 2,
+    "batch_size": 16,
+    "total_probes": 180,
+    "rng": "default_rng(107000+context+1000*repeat+(10000 if gap else 0)); same selection/masking across all models",
+    "augmentation": "Unchanged ME102 causal FIT masking; population gap denotes natural PM2.5-gap origins, not every channel missing. Reconstruction targets exist only for actually recorded hidden current readings.",
+    "measurements": "Five unweighted objective gradients; weighted norms; ten pairwise cosines in 13 exhaustive parameter blocks and whole model; point/NLL cosine by observed/missing target channel; floor activity; global point/aux projection; hypothetical next direction with saved AdamW moments, clipping, group rates and decay.",
+    "analysis": "Descriptive fractions, medians by history/population. Undefined zero-gradient cosine=null. No significance, independent predictive improvement, causal attribution, or new gate-pass claim.",
+    "optimizer": "No optimizer.step or weight update; read-only FP64 analytic hypothetical next direction. It is not an actual training step or a measured finite-step loss change.",
+    "stopping": "Exactly one original no-fit panel plus replay; no parameter/loss/gate tuning. Any subsequent training requires a new frozen protocol."
+  }
+}
