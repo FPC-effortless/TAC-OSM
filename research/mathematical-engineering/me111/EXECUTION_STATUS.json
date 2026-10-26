@@ -1,0 +1,45 @@
+{
+  "status": "PREFIT_GATES_PASS_READY_TO_START",
+  "created_before_first_ME111_optimizer_step": true,
+  "source_commit": "0e712a798ce943b9f25c306bec1250e0b1e29031",
+  "source_and_reciprocal_freeze": "6e01290ddf3f10d298c4bcf463a219c9728c0565",
+  "registration": "FAIR_COMPARISON.json",
+  "full_local_tests": "1181_PASS",
+  "targeted_local_tests": "69_PASS",
+  "actual_initial_source_fp32_fp64_forward_backward_checks": 10,
+  "actual_five_model_parameters": 104663,
+  "PNDS_python_source_reference_tests": "11_PASS",
+  "PNDS_Lean_and_axiom_audit": {
+    "run": 40415435779,
+    "status": "PASS",
+    "commit": "72461c77a5f8197af08d0ac58404aefa61c7920c"
+  },
+  "PNDS_generic_CI": {
+    "run": 40415435880,
+    "status": "PASS"
+  },
+  "TAC_source_CI": {
+    "run": 40404896526,
+    "status": "PASS"
+  },
+  "training": {
+    "seeds": [
+      111001,
+      111002,
+      111003,
+      111004,
+      111005
+    ],
+    "updates_each": 1536,
+    "max_local_workers": 2
+  },
+  "no_report_or_protected_scoring_yet": true,
+  "complete_integrity": "INCONCLUSIVE",
+  "mathematical_scope": "Limited exactreal scale/mask/order and actual source Python checks; fullNN/IEEE/calibration proof OPEN",
+  "incidents": [
+    "First source prepare rejected copied ME110 DOC path before receipts or updates; corrected to ME111",
+    "Independent prefit review corrected inherited two-VJP and zero-output-head metadata before fitting; original and amended registration commits retained",
+    "Initial PNDS real role definition failed compilation because noncomputable was missing; corrected, complete dedicated gate passed before training",
+    "CLI GitHub token expired; repository writes now use authenticated GitHub connector; no tokens extracted or disclosed"
+  ]
+}
