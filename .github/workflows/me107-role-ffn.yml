@@ -1,0 +1,27 @@
+name: ME107 native role FFN source contracts (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/tac_osm/variants/role_specialized_sensor_world.py'
+      - 'src/tac_osm/role_update_contract.py'
+      - 'scripts/me107*'
+      - 'tests/test_role_specialized_sensor_world.py'
+      - 'research/ARCHITECTURE-INVARIANTS.json'
+      - 'research/mathematical-engineering/me107/**'
+      - '.github/workflows/me107-role-ffn.yml'
+permissions:
+  contents: read
+jobs:
+  role-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy==2.3.5 pytest
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me107/FAIR_COMPARISON.json --phase preflight
+      - run: PYTHONPATH=src:. pytest -q tests/test_role_specialized_sensor_world.py
+      - run: PYTHONPATH=src:. python scripts/me107_source_audit.py
