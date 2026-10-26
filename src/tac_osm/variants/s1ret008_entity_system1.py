@@ -45,9 +45,8 @@ class SourceEntityTACWorld(ParallelTACWorld):
             raise ValueError("actual source continuous 14D observed state/action needed")
         B,T,_=obs.shape
         e=self.encoder(torch.cat((obs,action),dim=-1)).tanh()
-        # Native address weights retained even if direct source ID selects row.
-        # In identity mode these trained address matrices receive no gradient:
-        # count trainable *registered* params separately from active params.
+        # Source slot fixes the row, while learned address shapes the row read.
+        k=F.normalize(self.address(e),dim=-1,eps=1e-6)
         v=F.normalize(self.content(e),dim=-1,eps=1e-6)
         zf=e.new_zeros(B,T,self.width)
         zr=e.new_zeros(B,T,8)
@@ -59,12 +58,13 @@ class SourceEntityTACWorld(ParallelTACWorld):
         pf=torch.lerp(context,p.tanh(),g.sigmoid())
         d,g=self.slow_map(torch.cat((pf,context,zr),-1)).chunk(2,-1)
         ps=torch.lerp(context,(context+d.tanh()).tanh(),.25*g.sigmoid())
-        _,beta=self.memory_gates(torch.cat((e,pf,ps),-1)).sigmoid().chunk(2,-1)
+        alpha,beta=self.memory_gates(torch.cat((e,pf,ps),-1)).sigmoid().chunk(2,-1)
+        admitted_gain=beta*(1-alpha/4)
         history,_,_=entity_affine_prefix(
-            v,beta,source_slot,observed_priority,self.entity_mode)
+            v,admitted_gain,source_slot,observed_priority,self.entity_mode)
         previous=torch.cat((history.new_zeros(B,1,SLOTS,8),
                             history[:,:-1]),dim=1)
-        old_read=source_row_read(previous,source_slot)
+        old_read=source_row_read(previous,source_slot)*k
         f,g=self.fast_map(torch.cat((e,pf,old_read),-1)).chunk(2,-1)
         fast=torch.lerp(pf,f.tanh(),g.sigmoid())
         d,g=self.slow_map(torch.cat((fast,ps,old_read),-1)).chunk(2,-1)
@@ -88,6 +88,7 @@ def entity_source_step(model,state,observed,prior_action,slot,priority,*,return_
         raise ValueError("invalid source-timestamped state")
     x=observed[:,None];u=prior_action[:,None]
     e=model.encoder(torch.cat((x,u),-1)).tanh()
+    k=F.normalize(model.address(e),dim=-1,eps=1e-6)
     v=F.normalize(model.content(e),dim=-1,eps=1e-6)
     zf=e.new_zeros(B,1,88);zr=e.new_zeros(B,1,8)
     basis,_=model.fast_map(torch.cat((e,zf,zr),-1)).chunk(2,-1)
@@ -97,9 +98,10 @@ def entity_source_step(model,state,observed,prior_action,slot,priority,*,return_
     pf=torch.lerp(ctx,p.tanh(),g.sigmoid())
     d,g=model.slow_map(torch.cat((pf,ctx,zr),-1)).chunk(2,-1)
     ps=torch.lerp(ctx,(ctx+d.tanh()).tanh(),.25*g.sigmoid())
-    _,beta=model.memory_gates(torch.cat((e,pf,ps),-1)).sigmoid().chunk(2,-1)
-    old_read=source_row_read(state.memory,slot)[:,None]
-    updated=entity_row_step(state.memory,v[:,0],beta[:,0],slot,
+    alpha,beta=model.memory_gates(torch.cat((e,pf,ps),-1)).sigmoid().chunk(2,-1)
+    admitted_gain=beta*(1-alpha/4)
+    old_read=(source_row_read(state.memory,slot)[:,None]*k)
+    updated=entity_row_step(state.memory,v[:,0],admitted_gain[:,0],slot,
                             priority,model.entity_mode)
     fast,g=model.fast_map(torch.cat((e,pf,old_read),-1)).chunk(2,-1)
     fast=torch.lerp(pf,fast.tanh(),g.sigmoid())
