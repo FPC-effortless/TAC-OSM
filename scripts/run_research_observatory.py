@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""No-fit TAC-OSM research observatory.
+"""No-fit TAC-OSM research observatory (native-model CLI adapter).
 
 Fixture (unit/engineering only):
   python scripts/run_research_observatory.py --fixture
@@ -10,7 +10,7 @@ Checkpoint on an independently verified FIT/DEV input export:
 Compare paired original-run receipts (never opens sealed TEST itself):
   python scripts/run_research_observatory.py --compare left.json right.json
 
-No model fitting. No automatic heldout data access. No accuracy claims.
+Other model types use research_probe.inspect_variant with an explicit, trusted\nadapter. No model fitting. No automatic heldout data access. No accuracy claims.
 """
 from __future__ import annotations
 
@@ -25,10 +25,9 @@ sys.path.insert(0, str(ROOT / "src"))
 
 import torch  # noqa: E402
 from tac_osm.predictive_state_agent import PredictiveStateAgent  # noqa: E402
-from tac_osm.research_observatory import (  # noqa: E402
-    architecture_inventory, memory_tomography, input_dependency_map,
-    interpret_snapshot, entity_isolation_probe, profile_native_runtime,
-)
+from tac_osm.research_observatory import interpret_snapshot  # noqa: E402
+from tac_osm.research_probe import inspect_variant  # noqa: E402
+from tac_osm.research_probe_adapters import native_predictive_adapter  # noqa: E402
 from tac_osm.research_evidence import compare_evidence  # noqa: E402
 
 
@@ -42,37 +41,19 @@ def pinned_bytes(path: Path, expected: str) -> bytes:
 
 
 def snapshot(model, history, candidates, run_id, *, profile=False, isolation=False):
-    if history.ndim != 3 or candidates.ndim != 3:
-        raise ValueError("expected source BxTxC and candidate BxAxD arrays")
-    def observe_phase(m):
-        return m.observe(m.initial(len(history)), history[:, 0])
-    def predict_phase(m):
-        s = m.initial(len(history))
-        for t in range(history.shape[1]):
-            s = m.observe(s, history[:, t])
-        return m.predict(s, history[:, -1], candidates)
-    result = {
-        "schema": "tac-osm-observatory/report-v1",
-        "run_id": run_id,
-        "architecture": architecture_inventory(model, invocations={
-            "observe": observe_phase,
-            "predict": predict_phase,
-        }),
-        "memory": memory_tomography(model, history, candidates),
-        "dependencies": input_dependency_map(model, history, candidates),
-        "gradient_conflicts": {
-            "status": "NOT_RUN_NO_AUTHENTIC_SUPERVISED_LOSSES",
-            "requirement": "supply genuine FIT/DEV loss tensors to gradient_conflict_atlas",
-        },
-        "qualification": "diagnostics_only_not_evidence_of_world_model_intelligence",
+    """Native CLI compatibility wrapper; generic core executes every probe.
+
+    Other architectures call inspect_variant() with their own trusted adapter.
+    The CLI intentionally never guesses model types from an untrusted state_dict.
+    """
+    result = inspect_variant(
+        model, {"history": history, "candidates": candidates},
+        native_predictive_adapter, isolation=isolation, profile=profile)
+    result["run_id"] = run_id
+    result["gradient_conflicts"] = {
+        "status": "NOT_RUN_NO_AUTHENTIC_SUPERVISED_LOSSES",
+        "requirement": "pass genuine FIT/DEV loss tensors to gradient_conflict_atlas",
     }
-    if isolation:
-        result["entity_isolation"] = (
-            entity_isolation_probe(model, history, candidates)
-            if len(history) >= 2 else
-            {"status": "INCONCLUSIVE_ONE_ENTITY", "reason": "need >=2 independent source entities"})
-    if profile:
-        result["runtime"] = profile_native_runtime(model, history, candidates)
     result["interpretation"] = interpret_snapshot(result)
     return result
 
