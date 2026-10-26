@@ -53,8 +53,8 @@ class WoyengiShapeAdapterTests(unittest.TestCase):
     def setUp(self):
         self.p = projection()
         self.accessed = []
-        def authorize(subject, predicate, ids, cutoff):
-            self.accessed.append((subject, predicate, ids, cutoff))
+        def authorize(principal, purpose, subject, predicate, ids, cutoff):
+            self.accessed.append((principal, purpose, subject, predicate, ids, cutoff))
             return True
         self.authorize = authorize
         self.features = lambda c: {"entity": c["object"]["entity"]}
