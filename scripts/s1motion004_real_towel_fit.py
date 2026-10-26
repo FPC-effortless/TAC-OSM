@@ -25,7 +25,7 @@ import torch
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/"src")]
 from scripts.s1motion003_real_tape_fit import (
-    prepare, windows, batch, score, sha256
+    windows, batch, score, sha256
 )
 from tac_osm.variants.s1motion004_gradient_routes import (
     IsolatedVelocitySystem1, VelocityGRUControl, losses, outputs
@@ -53,7 +53,7 @@ def retrieve(url):
         return h.read()
 
 
-def real_source(cache):
+def real_source(cache, *, release_dev=False):
     cache=Path(cache);cache.mkdir(parents=True,exist_ok=True)
     info=json.loads(retrieve(
         f"https://huggingface.co/api/datasets/{SOURCE}/revision/{REV}"))
@@ -75,9 +75,10 @@ def real_source(cache):
     # Exclude ALL protected TEST rows before building individual Python records.
     # DEV permitted only after ALL original model weights are frozen below.
     fit_table=t.filter(pc.less(t["episode_index"],pa.scalar(25)))
-    dev_table=t.filter(pc.and_(
+    dev_table=(t.filter(pc.and_(
         pc.greater_equal(t["episode_index"],pa.scalar(25)),
         pc.less(t["episode_index"],pa.scalar(35))))
+        if release_dev else None)
     def parse(filtered,range_ids):
         d=filtered.to_pydict()
         rows={ep:[] for ep in range_ids}
@@ -102,12 +103,56 @@ def real_source(cache):
     # This method retrieves both partitions in the same method, but DEV scoring
     # is deferred until all train checkpoints are saved; no statistic uses DEV.
     fit_src=parse(fit_table,FIT)
-    dev_src=parse(dev_table,DEV)
+    dev_src=parse(dev_table,DEV) if release_dev else None
     return fit_src,dev_src,dict(
         name=SOURCE,revision=REV,parquet_sha256=digest,rows=t.num_rows,
         publisher_episode_count=50,fit_episode_ids=list(FIT),
         dev_episode_ids=list(DEV),test_episode_ids_excluded=list(range(35,50)),
         real_observations=True,whole_publisher_file_downloaded=True)
+
+
+def prepare_fit_only(real_fit_source):
+    """FIT statistics: cannot obtain DEV/TEST rows from this API."""
+    fit_x=np.concatenate([np.stack([r[2] for r in real_fit_source[e]])
+                          for e in FIT],axis=0)
+    fit_u=np.concatenate([np.stack([r[3] for r in real_fit_source[e]])
+                          for e in FIT],axis=0)
+    xm=fit_x.mean(0); xs=np.maximum(fit_x.std(0),1e-3)
+    um=fit_u.mean(0); us=np.maximum(fit_u.std(0),1e-3)
+    motion=np.concatenate([
+        ((np.diff(np.stack([r[2] for r in real_fit_source[e]]),axis=0))**2).mean(-1)
+        for e in FIT])
+    threshold=float(np.quantile(motion,.90))
+    ds=np.concatenate([
+        np.diff(np.stack([r[2] for r in real_fit_source[e]]),axis=0)/xs
+        for e in FIT])
+    delta=np.maximum(np.quantile(np.abs(ds),.95,axis=0),1e-4)
+    if threshold <=0 or not np.isfinite(threshold) or not np.isfinite(delta).all():
+        raise RuntimeError("invalid FIT-only normalizers; experiment blocked")
+    norm=dict(state_mean=xm.tolist(),state_sd=xs.tolist(),
+              action_mean=um.tolist(),action_sd=us.tolist(),
+              high_motion_threshold_raw_squared_units=threshold,
+              train_delta_scale_normalized=delta.tolist())
+    train={e:encode_source_episode(real_fit_source[e],norm) for e in FIT}
+    return train,norm
+
+
+def encode_source_episode(rows,norm):
+    """Only called on explicitly source-authorized episode rows."""
+    x=np.stack([r[2] for r in rows]).astype(np.float64)
+    u=np.stack([r[3] for r in rows]).astype(np.float64)
+    xm=np.asarray(norm["state_mean"]); xs=np.asarray(norm["state_sd"])
+    um=np.asarray(norm["action_mean"]);us=np.asarray(norm["action_sd"])
+    xn=(x-xm)/xs; un=(u-um)/us
+    threshold=norm["high_motion_threshold_raw_squared_units"]
+    event=((x[2:257]-x[1:256])**2).mean(-1)>=threshold
+    return dict(x=torch.from_numpy(xn[1:256]).float(),
+                previous_x=torch.from_numpy(xn[0:255]).float(),
+                prior_u=torch.from_numpy(un[0:255]).float(),
+                y=torch.from_numpy(xn[2:257]).float(),
+                event=torch.from_numpy(event.astype(np.float32)),
+                target_physical=x[2:257],observed_physical=x[1:256],
+                preceding_physical=x[0:255],episode_frames=255)
 
 
 def initialization(seed,scale):
@@ -220,8 +265,10 @@ def main():
     a=parser.parse_args()
     torch.set_num_threads(1)
     torch.use_deterministic_algorithms(True)
-    fitsrc,devsrc,source=real_source(a.cache)
-    fit,dev,norm=prepare(fitsrc,devsrc)
+    fitsrc,devsrc,source=real_source(a.cache,release_dev=False)
+    if devsrc is not None:
+        raise RuntimeError("DEV rows became visible before model freeze")
+    fit,norm=prepare_fit_only(fitsrc)
     output=ROOT/a.out;output.mkdir(parents=True,exist_ok=True)
     delta=torch.tensor(norm["train_delta_scale_normalized"],dtype=torch.float32)
     trained={}
@@ -251,6 +298,13 @@ def main():
     (output/"before-dev-score.json").write_text(
         json.dumps(manifest,indent=2,sort_keys=True)+"\n")
     print("S1MOTION004_ALL_TWELVE_MODELS_SHA_FROZEN_BEFORE_DEV=YES",flush=True)
+    # Load DEV outcomes ONLY after every original optimizer/checkpoint/RNG
+    # has been archived and the pre-DEV source receipt written.
+    _,devsrc,dev_source=real_source(a.cache,release_dev=True)
+    if (dev_source["parquet_sha256"]!=source["parquet_sha256"]
+        or dev_source["revision"]!=source["revision"]):
+        raise RuntimeError("publisher source revision changed before score")
+    dev={e:encode_source_episode(devsrc[e],norm) for e in DEV}
     result=[]
     for seed in SEEDS:
         scored={}
@@ -304,10 +358,7 @@ def main():
         source_is_genuine_recorded_real_joint_states=True,
         full_training_FLOP_parity_UNPROVEN=True,
         heldout_robot_site_and_task_safety_qualification=False,
-        no_autonomous_policy=False)
-    # no_autonomous_policy=False would misleadingly indicate autonomous policy;
-    # explicit positive flag below is the truthful statement.
-    report["no_autonomous_policy"]=True
+        no_autonomous_policy=True)
     (output/"first-dev-scores.json").write_text(
         json.dumps(report,indent=2,sort_keys=True)+"\n")
     print("S1MOTION004_ORIGINAL_DEV_DONE=YES",flush=True)
