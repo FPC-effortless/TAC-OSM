@@ -1,0 +1,30 @@
+name: S1RET008 source typed identity admission model contracts
+on:
+  push:
+    branches: [research/s1ret008-entity-source-admission-2026-10-26]
+    paths:
+      - 'src/tac_osm/variants/s1ret008_entity_affine.py'
+      - 'src/tac_osm/variants/s1ret008_entity_system1.py'
+      - 'tests/test_s1ret008_source_entity.py'
+      - '.github/workflows/s1ret008-contract.yml'
+  pull_request:
+    paths:
+      - 'src/tac_osm/variants/s1ret008_entity_affine.py'
+      - 'src/tac_osm/variants/s1ret008_entity_system1.py'
+      - 'tests/test_s1ret008_source_entity.py'
+permissions:
+  contents: read
+jobs:
+  matched-source-identity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - run: |
+          python -m py_compile src/tac_osm/variants/s1ret008_entity_affine.py src/tac_osm/variants/s1ret008_entity_system1.py
+          PYTHONPATH=src:. python -m unittest tests.test_s1ret008_source_entity -v
+          PYTHONPATH=src:. python -m unittest tests.test_s1temp007_multiscale_memory -v
