@@ -18,11 +18,21 @@ def average(rows):
 def execute(replay=False):
     if OUT.exists() and not replay:raise RuntimeError('original summary exists')
     index=run.budget_audit();scores=json.loads((run.OUT/'RESULTS.json').read_text())
-    means={name:average([r['scores'][name] for r in scores['models']]) for name in ('gap','general')}
+    forecasts=np.load(run.OUT/'FORECASTS.npz')
+    def with_width(metrics,q,mask):
+        result=dict(metrics)
+        result['interval_width_by_channel']=[float((q[:,c,2]-q[:,c,0])[mask[:,c]].mean()) for c in range(6)]
+        return result
+    means={name:average([with_width(r['scores'][name],forecasts[f"{name}_{run.ARCH}_{r['seed']}"],forecasts[name+'_observed']) for r in scores['models']]) for name in ('gap','general')}
     curves={}
     for step in (0,*run.CHECKPOINTS):
-        rows=[json.loads((run.OUT/run.ARCH/f"seed-{s}"/f'MONITOR-{step}.json').read_text()) for s in run.SEEDS]
-        curves[str(step)]={name:average([r['cohorts'][name] for r in rows]) for name in ('gap','general')}
+        rows=[]
+        for seed in run.SEEDS:
+            folder=run.OUT/run.ARCH/f'seed-{seed}'
+            row=json.loads((folder/f'MONITOR-{step}.json').read_text())
+            arrays=np.load(folder/f'monitor-{step}.npz')
+            rows.append({name:with_width(row['cohorts'][name],arrays[name+'_quantiles'],arrays[name+'_observed']) for name in ('gap','general')})
+        curves[str(step)]={name:average([r[name] for r in rows]) for name in ('gap','general')}
     curves_per_seed=[]
     for seed in run.SEEDS:
         stages={str(step):json.loads((run.OUT/run.ARCH/f'seed-{seed}'/f'MONITOR-{step}.json').read_text())['cohorts'] for step in (0,*run.CHECKPOINTS)}
