@@ -172,10 +172,11 @@ def probe_memory(model: nn.Module, sample: Any,
         names = _state(adapter, state)
         deltas: dict[str, Any] = {}
         for name, tensor in names.items():
+            # Snapshot BEFORE calling adapter patch, to detect in-place mutation.
+            original = _snapshot(_state(adapter, state))
             patch = adapter.patch_state(state, name, torch.zeros_like(tensor))
             # Protect original against a bug in patch_state even if forecast
             # on the patched state completes successfully.
-            original = _snapshot(names)
             altered, _ = _forecast_pure(adapter, replica, patch, sample)
             if not _unchanged(original, _state(adapter, state)):
                 raise ValueError("adapter patch_state mutated original caller-owned state")
