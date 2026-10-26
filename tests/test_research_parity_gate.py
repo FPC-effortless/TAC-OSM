@@ -4,6 +4,9 @@ All generated numbers below are strictly software fixtures, NOT actual model
 fits or real-world evidence. Any failing condition disqualifies science claims.
 """
 from copy import deepcopy
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
 import pytest
 from scripts.validate_research_parity import (
     check_manifest as _actual_check_manifest,
