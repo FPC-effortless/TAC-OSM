@@ -60,3 +60,17 @@ This decomposition explains the **observed error arithmetic**, not the cause of 
 - Source-only provenance, genuine observations, FIT-only statistics, same-seed identical initial weights, isolated gradient graph, chronological prior-action admission, stream/batch parity, original weights SHA before DEV, fixed first score: **PASS engineering/CI**.
 - Original published **full predictive/robustness/proxy gate FAIL 2/3 seeds**, though point-only paired learning improved 3/3. **Do NOT promote System1** to achieved real-world general low-latency intelligent autonomy or production policy.
 - The next research needs **partially decoupled auxiliary training**, not indiscriminately shared or indiscriminately detached: preserve classification signal without sacrificing source-world residual alignment. Test a *controlled* auxiliary gradient budget and its actual AdamW applied effect, jointly against unchanged original shared/isolated baselines, with equal active parameters, exact source/time train budgets and source-agnostic evaluation on an authenticated NEW real robot task. New source/splits preregistered before any scoring; keep towel DEV and towel TEST sealed for further tuning. Add independent genuine adverse/success decision costs, cold replay, full compute budgets and PNDS numerical refinement.
+
+
+## Independent original 12-checkpoint forensic verification — complete
+
+A wholly read-only [original cold-replay run #40281149614](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40281149614) **CI PASS** restored **ALL 12 SHA-pinned original model/optimizer/RNG artifacts** from the first training run, verified the exact publisher file checksum and exact FIT-only normalization, replayed already-opened original DEV, and separately inspected a genuine FIT batch's gradient pathways **without any optimizer update or re-fitting**. All twelve original high-motion AUPRC values reproduced exactly; maximum observed physical source-unit MSE drift was **5.0673e-14** across original models. This is not a proof of bitwise deterministic operation on every CPU, nor an independent new real-data test. [Read-only audit artifact #12631069872](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40281149614/artifacts/12631069872) preserves per-model source-gradient and replay drift receipts. Original scientific gate unchanged.
+
+**Actual frozen FIT gradient diagnosis**, same first source window per seed, for the **TAC associative memory-gate parameter**:
+| Original seed | Shared point gradient norm | Shared auxiliary gradient norm | Auxiliary/point norm | Isolated auxiliary reach | Isolated point reach |
+|:--|--:|--:|--:|:--|:--|
+| 28001 | 6.46e-8 | 1.78e-5 | ~276× | **none** | nonzero |
+| 28002 | 2.12e-7 | 2.47e-4 | ~1,168× | **none** | nonzero |
+| 28003 | 1.55e-8 | 9.15e-5 | ~5,886× | **none** | nonzero |
+
+These are **weighted auxiliary objective gradient magnitudes on a single frozen real FIT batch**, not a proof that AdamW's applied preconditioned update is antagonistic, and not representative of every time/window. The gradient separation is independently verified in the live source through actual `torch.autograd.grad`: head gradients continue, auxiliary-to-memory gradients are absent, point-to-memory gradients continue. This turns the prior abstract suspicion of a competing auxiliary gradient pathway into a verified *local architectural mechanism* with observed benefits and classification tradeoffs, while the strict original full success gate stays failed.
