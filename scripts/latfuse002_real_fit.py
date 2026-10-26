@@ -34,7 +34,7 @@ SOURCE_SHA="d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8"
 SITES=("Aotizhongxin","Changping","Dingling","Dongsi","Guanyuan","Gucheng",
        "Huairou","Nongzhanguan","Shunyi","Tiantan","Wanliu","Wanshouxigong")
 CHANNELS=("PM2.5","PM10","SO2","NO2","CO","O3","TEMP","PRES","DEWP","RAIN","WSPM")
-WIND=("N","NNE","NE","ENE","E","ESE","SE","S","SSW","SW","WSW","W","WNW","NW","NNW")
+WIND=("N","NNE","NE","ENE","E","ESE","SE","SSE","S","SSW","SW","WSW","W","WNW","NW","NNW")
 START=dt.datetime(2013,3,1)
 TRAIN_END=dt.datetime(2014,9,1)
 VAL_END=dt.datetime(2015,1,1)
