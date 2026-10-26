@@ -74,3 +74,22 @@ specific entrypoints remain clearly labeled compatibility adapters. Run
 `tests/test_research_probe_agnostic.py` in automatic research CI.
 Do not equate cross-model fixture coverage with trained-checkpoint or real-data
 qualification; these require direct source-to-output end-to-end audits.
+
+
+## Binding model-independent reward-hacking prevention (effective 2026-10-26)
+
+For every new TAC-OSM model, policy, training loop, benchmark or evaluation
+that optimizes a reward/proxy metric, read
+`research/REWARD-HACKING-GATE-2026-10-26.md`. Define an independently
+sourced external goal and actor-vs-evaluator trust boundary BEFORE fit.
+Do NOT treat increased proxy score as improved intelligence/real outcomes.
+Recompute reward and goal independently, poison postdecision reward inputs,
+verify protected evaluator files against externally frozen hashes and
+out-of-band actual writer ACLs, and test aligned real outcomes including
+per-group/horizon safety and decision costs. All five checks in
+`research_reward_integrity.reward_audit_ledger` MUST be present and PASS
+before model-improvement/safety claims or reward-based checkpoint promotion;
+any FAIL, INCONCLUSIVE or missing check BLOCKS promotion. Fix the scorer,
+leakage or harm before rerunning. Never claim no reward hacking from synthetic
+CI fixtures; actual source-verified real FIT/DEV audit integration remains
+a distinct prerequisite. Keep sealed TEST unopened for iterative debugging.
