@@ -1494,36 +1494,58 @@ ME109fits, newtrainedmodel or protectedcohort access. Reproducible script and
 EXPOSURE_COVERAGE.json live in draftTACPR425. PNDS inward source/math CI40290225913
 and Lean40290225790PASS; original guard replay failure stays preserved.
 
-### ME110 — coordinate-typed learning and measured training curves (2026-10-26)
+### ME110 — coordinate-typed learning: real point gains, uncertainty qualification failed (2026-10-26)
 
-[Draft TAC PR#431](https://github.com/FPC-effortless/TAC-OSM/pull/431) proceeds
-from DIAGTRAIN001 to actual capability training. Same104663parameter native
-ME109forward graph: noTransformer/SSM or newfamilies/parameters.100253point/state
-coordinates receive availability-balanced point gradients;4410variance/width
-coordinates receive likelihood/interval/reconstruction gradients. Separate
-roleclipping prevents uncertaintymagnitudes rescaling pointgradients. Full raw
-AdamW proposals use the source-verified inward conditional certificate.
+[Draft TAC PR#431](https://github.com/FPC-effortless/TAC-OSM/pull/431) completed
+five original104663parameter models,4096updates each (20480total). The native
+ME109forward graph/primary152FP32state and six families are unchanged.100253
+point/state coordinates and4410uncertainty coordinates receive separately clipped,
+coordinate-routed gradients. No Transformer/SSM, new parameters or component
+attribution claim. Diverse2gap+14general sampling visits57344distinct general
+update origins/model, with ancestor-exposed fixed320caseFITmonitoring.
 
-Five4096update runs preregistered with2natural-gap+14general B16draws, original
-causal artificial-gap augmentation and8/64/256histories.57344distinctgeneral
-updateorigins/model; fixed64gap+256general FITmonitor targets excluded fromnew
-updates butancestor/stats-exposed, withoverlappinghistories: NOTindependent.
-Full original optimizer/RNG/models saved at1024/2048/4096, fixedmonitor0/1024/2048/
-4096, noselection/earlystopping. Onlyfinal models may score exposed2015 afterall
-five originals areGitfrozen. Protected2016–2017numericrows stayclosed.
+Original exposed2015 REPORT, same143natural-gap+4288general queries:
 
-[Draft PNDS PR#35](https://github.com/FPC-effortless/pnds-lean/pull/35) provides
-binary-mask routing/conditional decoder congruence and source-pinned Python;
-CI40374187754PASS includes3actual-source paritytests, Leanbuild andaxiomaudit.
-Fiveactualpreflight parent forecasts/native states preservebitidentity;
-uncertainty-only changes leave medians unchanged. Full1171localtestsPASS.
-Scopedanti-cheat/gradient/activation/poisonchecksPASS; fullintegrityINCONCLUSIVE.
-Alloldnegativegates, snapshotsand17legacyrecords preserved. Fullneural/AD/IEEE,
-calibration, independentmemory/capability andcommercialqualification remainOPEN.
+| Metric | ME103 parents | ME109 | ME110 |
+|---|---:|---:|---:|
+| Gap PMMAE↓ |37.524168|44.437162|34.815926|
+| General PMMAE↓ |33.403120|32.014751|30.972970|
+| Gap six-channel NLL↓ |5.151004|5.127208|5.075791|
+| General six-channel NLL↓ |4.944393|4.891830|4.865349|
+| Gap PM90 interval score↓ |379.623199|222.612326|401.850403|
+| Gap PM90 interval width↓ |369.909332|197.248291|396.649622|
 
-Trainingunderway atthisregistration update; nofinalME110REPORTscoreornew
-predictivesuccessclaim yet. Exactlyfivefits, noretries/thresholdchanges/additional
-ME110updates. Preserveworkspace-reset/sparse-checkout/Leaninitialization/download
-andPNDSancestry-correction incidents; allactualfitting source/registration/preflight
-receipts frozenbeforefirstupdate. Supplementaloperationalmetadata waspost-start
-and isexplicitlynot a retrospectively claimedprefit gate.
+All5seeds improve gap and general point scores versus their ownparents; mean
+7.2173%/7.2752%lower. All5beat the frozen practicalLOCF/ridge point references.
+These are system-development comparisons with additional/different training,
+not parameter/data/compute-matched architecture superiority or independent proof.
+
+**Complete registered gateFAIL0/5.** Passcounts coverage4, gappoint4, ordinarypoint5,
+gapNLL5, intervalscore0. Seed110003gapMAE35.709831 exceeds35.684479limit;
+coverage98.601399%exceeds98%ceiling. No rounding/waiver. GapPMmean96.6434%coverage
+cannot override per-seed failure or NO2gap75.0725%coverage. No promotion or more
+ME110fits. Protected2016–2017numeric rows remainclosed.
+
+Saved0/1024/2048/4096monitor gapPMMAE28.717729/24.888126/24.825922/24.145534;
+general35.599698/30.866501/30.659743/30.585923. Late2048→4096point gains2.7406%gap,
+0.2408%general (4/5each), while gapintervalscore worsens3.8191%. Moretimealone is
+unsupported as a fix; long-runconvergence remainsunmeasured. Monitors exclude new
+update targetorigins but ancestors/stats sawFIT and historiesoverlap: notfresh.
+No earlystopping/checkpointselection. Retain improved point learning; next work
+must engineer conditional uncertainty/current-belief versus future-residual
+semantics while preserving safeguards and testing intervalscore/calibration.
+
+All15trained stagecheckpoints/optimizer/RNG and monitor arrays frozen6389521before
+REPORT; originalscores/arrays/postfit/summary c8e25cc. Detached clean restoration
+reproduced398790REPORTquantile scalars,115200FITmonitor scalars across20views
+(15trained+5initial), all original gates/summary and10fittedFP32/FP64forward/backward
+checks, no fits/updates. Full1171postfitlocaltestsPASS; GitHuboriginalfinalreplay
+40377943112PASS.266240conditionalinwardblockcertificates,0fallbacks.
+
+[Draft PNDS PR#35](https://github.com/FPC-effortless/pnds-lean/pull/35) preserves
+source-pinned Python and limited Lean routing/mask/conditional-congruence proofs;
+40374187754PASS includes3sourceparitytests/build/axiomaudit. Fullneural/AD/IEEE,
+all-channelcalibration, independentmemory/decision/customerqualification remainOPEN.
+Scopedanti-cheat/activation/poison/gradientchecksPASS; completeintegrityINCONCLUSIVE.
+Originalnegative results, all17legacy mappings and setupincidents remainvisible.
+No merge/deployment. Modeloriginals are repository-owned, not a local-only archive.
