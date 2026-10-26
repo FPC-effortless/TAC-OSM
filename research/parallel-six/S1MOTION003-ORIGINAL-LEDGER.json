@@ -1,0 +1,91 @@
+{
+  "study": "S1MOTION003",
+  "original_action_run": 40277450986,
+  "original_run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40277450986",
+  "original_head_sha": "2ebd67eced868a5d9f134cc6b08bcfb05ddc2582",
+  "original_artifact": 12630707934,
+  "source_snapshot": "92955878beb0da15eee5d4d869841577f87e903e",
+  "source_parquet_sha256": "ff4e1640f3ab7586863332f333dc9341e3cf86b919664c6be90110d37e0ad6d4",
+  "train_episodes": "0-24",
+  "dev_episodes": "25-34",
+  "test_episodes_not_scored": "35-49",
+  "per_model_eval_real_frames": 2550,
+  "fit_steps": 192,
+  "batch_size": 8,
+  "window": 32,
+  "seeds": [
+    27001,
+    27002,
+    27003
+  ],
+  "parameters": {
+    "tac_system1": 95907,
+    "matched_gru": 95869
+  },
+  "original_scientific_gate": "FAIL",
+  "seed_passes": 0,
+  "observed_motion_proxy_prevalence": 0.10196078431372549,
+  "constant_velocity_mse": 0.0000029410397069246924,
+  "persistence_mse": 0.00004148133466434843,
+  "constant_velocity_high_motion_mse": 0.000007989946077303707,
+  "original_source_logged_scores": [
+    {
+      "seed": 27001,
+      "system1": {
+        "checkpoint_sha256": "07a2d152da9cfa80d4375ec45541918a6dd6a000e2df2b65d3edc6d5549ff7ea",
+        "mse": 0.0000030490341042993868,
+        "high_motion_mse": 0.000008501653717949871,
+        "proxy_AUPRC": 0.3137039832927361,
+        "proxy_AUROC": 0.8439318105475311,
+        "proxy_Brier": 0.08251136819513236
+      },
+      "gru": {
+        "checkpoint_sha256": "a741e3625e1beaebd3da8ae0e9e445409e32c3f6577869790dcac9030b9ff700",
+        "mse": 0.000002925720421765796,
+        "high_motion_mse": 0.000007882481892375982,
+        "proxy_AUPRC": 0.6218561341481831,
+        "proxy_AUROC": 0.9063066845817938,
+        "proxy_Brier": 0.05824175948992101
+      }
+    },
+    {
+      "seed": 27002,
+      "system1": {
+        "checkpoint_sha256": "7507291920430c06c883ccd929f291c8542c1f18be0868e811496502b5c94266",
+        "mse": 0.000003146931110499112,
+        "high_motion_mse": 0.000008858035969153451,
+        "proxy_AUPRC": 0.29655863615014655,
+        "proxy_AUROC": 0.807351360429963,
+        "proxy_Brier": 0.08948311962873481
+      },
+      "gru": {
+        "checkpoint_sha256": "d844a122bb74784abaa319ca41c2c4411defa77ad88f43fa1dcac32c5955e277",
+        "mse": 0.0000029220689253784727,
+        "high_motion_mse": 0.000007865184547322767,
+        "proxy_AUPRC": 0.6292831906935702,
+        "proxy_AUROC": 0.9061101780315755,
+        "proxy_Brier": 0.05996606328514399
+      }
+    },
+    {
+      "seed": 27003,
+      "system1": {
+        "checkpoint_sha256": "21ba5dc360a6780dd1f6eb29c188d3c7096b3e6173ec5748c7e5119195187db1",
+        "mse": 0.0000030189165904858478,
+        "high_motion_mse": 0.000008144979594570644,
+        "proxy_AUPRC": 0.3039333540744201,
+        "proxy_AUROC": 0.8693147463889822,
+        "proxy_Brier": 0.09134133405817625
+      },
+      "gru": {
+        "checkpoint_sha256": "177ad4c658cfa4fe2768420b31dcadd79f2a6c91684e962cec6b8152fd56a712",
+        "mse": 0.000002918860480919073,
+        "high_motion_mse": 0.000007857464001176087,
+        "proxy_AUPRC": 0.6054051837676658,
+        "proxy_AUROC": 0.9016190796103459,
+        "proxy_Brier": 0.061935561593211334
+      }
+    }
+  ],
+  "comments": "All original model+optimizer+RNG checkpoints were frozen before first DEV score. No synthetic capability labels; high joint motion is a real measured proxy, not an actual adverse event. Same robot source across train and DEV. Equal update/data exposure and 0.04% param gap, but full matched training FLOPs unverified; any claimed fair architecture win would be invalid. Original run/score preservation."
+}
