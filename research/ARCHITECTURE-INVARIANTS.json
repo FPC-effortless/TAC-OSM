@@ -57,10 +57,10 @@
     {
       "id": "NUM-001",
       "failure": "Cross-host floating arithmetic and preprocessing drift can break replay.",
-      "evidence": "DIAGGRAD001 FP32 raw-dot exception; separate FP64 replay passed with pinned NumPy2.3.5/Torch2.14.1+cpu",
+      "evidence": "ME109diagnosticV1rebuilt inputSHAfailedcrosshost. Normalizedbatch0maxabs1.430511e-6; immutableoriginaltensors remainbit-authenticated; V2separateproducer numericcomparison+sourcecheckpointreplayCI40284891806PASS.",
       "contract": "Pin environment, preserve failures and immutable artifacts/tolerances; independent precision-specific reference tests.",
       "status": "PARTIAL_NUMERICAL_VERIFICATION",
-      "open": "No universal FP32 cross-host equivalence or overflow theorem."
+      "open": "Exact primitive cause of preprocessing drift and universal IEEE source refinement remainOPEN. Frozenoriginal tensor identity is distinct from freshly recomputed numerical agreement."
     },
     {
       "id": "STATE-001",

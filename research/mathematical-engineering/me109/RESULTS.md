@@ -118,3 +118,24 @@ proposals; all recorded results reproduce under their declared contracts, with
 no optimizer step and clean worktree. Full1151local tests PASS after integration
 and registry metadata update. Replay does not upgrade INCONCLUSIVE full-integrity
 status or FAIL0/5 predictive qualification.
+
+## Versioned cross-host diagnostic repair; original prediction failure unchanged
+
+DiagnosticV1 failed rebuilt-input bit identity in CI40283071768/40284177624; both
+failures are preserved. Fieldwise evidence measured normalized-value drift up to
+1.430511474609375e-6 and current reconstruction labels1.1920928955078125e-7 in
+batch0. The combined pre-existing relative1e-5/absolute1e-6 contract passes; the
+first error is not below absolute1e-6. Primitive cause is OPEN, not presumedlibm.
+
+Authenticated original FIT exports match ALL previously recorded ten-field
+input hashes exactly. V2 runs model/atlas replay on those original tensors and
+separately checks39fresh producer fields plus fresh/frozen model outputs under
+unchanged tolerances and exact discrete identities. Actual original producer
+poison comparisons remain exact within-run; current/frozen producer fingerprints
+are disclosed separately. Original JSON, weights, forecast tolerances, labels and
+scientific gates are unchanged. Full anti-cheat status remains INCONCLUSIVE.
+
+Clean V2 replay atfa186595 PASS; GitHub40284891806 on the same source PASS; full
+1151local tests PASS. Extended26payload hashes include frozen FIT exports and
+separate V2 evidence. This reproduction correction does not establish a cause
+for or fix of the18.42%gap-point regression.
