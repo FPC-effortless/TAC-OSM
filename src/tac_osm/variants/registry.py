@@ -63,8 +63,8 @@ VARIANTS: Mapping[Variant, VariantSpec] = {
                            "tac_osm.variants.role_specialized_sensor_world"),
         "persistent sensor histories; proposed as-known-at/as-valid-at corrections",
         "six-pollutant sensor distribution; separate proposed governance dual-clock input",
-        "ME106 primary gap coverage passes15/15;5/15fullseedgates but noall5recipe qualifies; multichannel calibration and bitemporal correction remain unqualified",
-        ("ME069", "ME071", "ME073", "ME100", "ME101", "ME102", "ME103", "ME104", "ME105", "ME106"),
+        "ME108 five trained role-FFN models improve ordinary point/interval development scores but fail every gap-point gate; all5qualificationFAIL, calibration/bitemporal correction unqualified",
+        ("ME069", "ME071", "ME073", "ME100", "ME101", "ME102", "ME103", "ME104", "ME105", "ME106", "ME107", "ME108"),
     ),
     Variant.EDGE_LITE: VariantSpec(
         Variant.EDGE_LITE, ("tac_osm.parameter_budget",),
