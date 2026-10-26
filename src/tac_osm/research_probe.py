@@ -18,6 +18,7 @@ import torch
 from torch import nn
 
 from .research_torch_basics import architecture_inventory, gradient_conflict_atlas
+from .research_interpretation import interpret_snapshot
 
 
 Named = Mapping[str, torch.Tensor]
@@ -359,6 +360,7 @@ def inspect_variant(model: nn.Module, sample: Any,
         "runtime": report["runtime"].get("status", "MEASURED"),
     }
     report["coverage"] = coverage
+    report["interpretation"] = interpret_snapshot(report)
     report["integrity_status"] = (
         "FAIL" if "FAIL" in coverage.values() else
         "INCONCLUSIVE" if any(k.startswith(("INCONCLUSIVE", "UNKNOWN"))
