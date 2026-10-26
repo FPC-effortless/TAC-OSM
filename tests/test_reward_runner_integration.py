@@ -211,3 +211,106 @@ def test_cli_prefit_operator_key_verifies_signed_fixture(tmp_path):
                          cwd=ROOT, env=child_env, capture_output=True, text=True)
     assert res.returncode == 0, res.stderr
     assert json.loads(res.stdout)["reward_integrity"]["variant_seed_count"] == 6
+
+
+
+def _supervisor_args(manifest, signer):
+    from tac_osm.research_anticheat import Finding
+    from tac_osm.research_reward_supervisor import issue_privileged_runner_attestation
+    protected = {"external/reward.py": b"trusted reward scorer",
+                 "external/goal.py": b"trusted real outcome evaluator",
+                 "external/acl.json": b"operator verified boundary"}
+    digests = {p: __import__("hashlib").sha256(v).hexdigest()
+               for p, v in protected.items()}
+    h = lambda label: __import__("hashlib").sha256(label.encode()).hexdigest()
+    kwargs = dict(
+        manifest=manifest,
+        verified_source=Finding("source_provenance", "PASS", "fixture_source_only", {}),
+        verified_actor_access=Finding("actor_access_isolation", "PASS",
+                                      "fixture_inspector_only", {}),
+        independently_verified_goals=Finding("goal_evaluator_separation", "PASS",
+                                              "fixture_goals_only", {}),
+        read_protected_artifact=protected.__getitem__,
+        actual_actor_write_paths=["model/weights"],
+        external_protected_assets_sha256=digests,
+        reward_scorer_sha256=h("reward-scorer"),
+        goal_evaluator_sha256=h("true-goal"),
+        access_policy_sha256=h("ACL"),
+        evaluation_policy_sha256=h("preregistered-policy"),
+        sign_external=signer.sign,
+    )
+    return issue_privileged_runner_attestation, kwargs
+
+
+def test_privileged_prefit_harness_signs_only_external_fixture_checks():
+    signer = Ed25519PrivateKey.generate()
+    m = make_manifest()
+    issue, kw = _supervisor_args(m, signer)
+    cert = issue(phase="preflight", **kw)
+    pub = signer.public_key().public_bytes(Encoding.Raw, PublicFormat.Raw).hex()
+    assert verify_reward_attestation(
+        m, "preflight", cert,
+        trusted_public_key_hex=pub)["variant_seed_count"] == 6
+
+
+def test_privileged_evaluator_refuses_writable_reward_assets_before_signing():
+    signer = Ed25519PrivateKey.generate()
+    issue, kw = _supervisor_args(make_manifest(), signer)
+    kw["actual_actor_write_paths"] = ["external"]
+    with pytest.raises(RewardEvidenceError, match="protected_assets"):
+        issue(phase="preflight", **kw)
+
+
+def test_privileged_final_recomputes_real_fields_and_binds_all_checkpoints():
+    signer = Ed25519PrivateKey.generate()
+    m = make_manifest()
+    issue, kw = _supervisor_args(m, signer)
+    h = lambda label: __import__("hashlib").sha256(label.encode()).hexdigest()
+    fields = dict(source_sha256=h("real source"), cohort_sha256=h("cohort"),
+                  reward_scorer_sha256=h("reward"), goal_evaluator_sha256=h("goal"),
+                  goal_contract_sha256=h("goal contract"),
+                  outcome_authority="external_source")
+    def row(reward, goal):
+        return {"id_sha256": h("episode"), "group": "difficult", "horizon": "512",
+                "reward": reward, "goal": goal, "decision_cost": .1,
+                "safety_violation": False}
+    def rec(runid, reward, goal):
+        return {"schema": "tac-osm-reward-audit/v1", "run_id": runid, **fields,
+                "rows": [row(reward, goal)]}
+    policy = {
+        "min_proxy_gain": .01, "min_goal_gain": .01,
+        "max_goal_regression": .0, "max_added_safety_violations": 0,
+        "max_added_decision_cost": .1, "goal_direction": "higher",
+        "min_group_samples": 1, "required_groups": ["difficult"],
+    }
+    kw.update(
+        actual_reward_rows=[{"id_sha256": h("episode"), "recorded_reward": .7,
+                             "evaluator_payload": {"trusted_reward": .7}}],
+        actual_goal_rows=[{"id_sha256": h("episode"), "recorded_goal": .8,
+                           "evaluator_payload": {"trusted_goal": .8}}],
+        score_reward_independently=lambda p: p["trusted_reward"],
+        score_goal_independently=lambda p: p["trusted_goal"],
+        predict_at_fixed_checkpoint=lambda x: x["observation"] * 2,
+        clean_decision_row={"observation": 4, "reward": 0},
+        future_reward_poison={"observation": 4, "reward": 9000},
+        original_baseline=rec("base", .4, .5),
+        candidate_receipt=rec("current", .7, .8),
+        preregistered_policy=policy,
+        source_verified_model_outcomes=[
+            {"variant": x["variant"], "seed": x["seed"],
+             "checkpoint_sha256": x["measured"]["checkpoint_sha256"],
+             "outcome_evidence_sha256": h("verified:" + x["variant"]),
+             "observation_count": 1}
+            for x in m["models"]],
+    )
+    public = signer.public_key().public_bytes(
+        Encoding.Raw, PublicFormat.Raw).hex()
+    final = issue(phase="final", **kw)
+    result = verify_reward_attestation(
+        m, "final", final, trusted_public_key_hex=public)
+    assert result["variant_seed_count"] == 6
+    # A fabricated "1.0" reward rather than independently recomputed .7
+    # must stop the privileged signer, even with otherwise matched claims.
+    kw["actual_reward_rows"][0]["recorded_reward"] = 1.
+    with pytest.raises(RewardEvidenceError, match="reward_recomputation"):
+        issue(phase="final", **kw)
