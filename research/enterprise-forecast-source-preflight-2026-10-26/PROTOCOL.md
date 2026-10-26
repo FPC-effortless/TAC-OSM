@@ -9,6 +9,11 @@ Falsifier: if the purported historical features cannot be reconstructed from
 versions actually published before a forecast cutoff, the historical task fails
 qualification regardless of model scores.
 
+## New October 27 source-acquisition addendum: real prospective cohort, still BLOCKED
+
+The [first authentic 100-open-case acquisition-time NYC311 cohort evidence](../ENTERPRISE_PROSPECTIVE_OPEN_SOURCE_COHORT_2026-10-27.md) is now recorded with original publisher response bytes, exact case-ID-list hashes and time cutoff in Forge PR #423. This is a different **prospective candidate** from the archived-history restoration track in this document. The first published-record acquisition source qualifies only the existence of those 100 publisher-reported open requests at the capture time. It does **not** establish historic availability, later case resolution, an independent verified label, protected REPORT eligibility or a frozen scientific experiment. The source-only Forge code can request the *same IDs* no earlier than seven days after capture, but no automatic follow-up is running, no target observation tolerance is registered, and no model training/scoring authorization is granted. No prior DESIGN_ONLY blocker in the companion machine protocol has been lifted.
+
+---
 ## Original source evidence acquired
 
 Original public metadata bytes, URLs, retrieval intervals, byte counts and SHA-256
