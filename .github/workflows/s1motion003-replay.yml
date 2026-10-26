@@ -1,0 +1,46 @@
+name: S1MOTION003 frozen checkpoint cold replay and gradient diagnostics
+on:
+  push:
+    branches:
+      - research/s1motion003-tape-preregister-2026-10-26
+    paths:
+      - research/parallel-six/S1MOTION003-REPLAY-*.marker
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-read-only-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install CPU replay runtime
+        run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Download SIX SHA-identified original models and optimizer/RNG records
+        run: |
+          gh run download 40277450986 --repo FPC-effortless/TAC-OSM \
+            --name s1motion003-original-real-tape-frozen-scores --dir /tmp/s1motion003-frozen-original
+      - name: Independent source-aligned score and FIT-gradient-only analysis without fitting
+        run: |
+          ORIGINAL_FILE="$(find /tmp/s1motion003-frozen-original -name before-dev-score.json -print -quit)"
+          test -n "$ORIGINAL_FILE"
+          PYTHONPATH=src:. python scripts/s1motion003_checkpoint_replay.py \
+            --original-dir "$(dirname "$ORIGINAL_FILE")"
+      - name: Preserve read-only score replay and bounded diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1motion003-cold-replay-and-fit-gradient-audit
+          path: research/diagnostics/s1motion003-read-only-replay/**
+          if-no-files-found: warn

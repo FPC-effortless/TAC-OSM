@@ -1,0 +1,28 @@
+name: S1MOTION003 source-only tape publisher audit
+on:
+  push:
+    branches:
+      - research/s1motion003-tape-preregister-2026-10-26
+    paths:
+      - research/parallel-six/S1MOTION003-AUDIT-001.marker
+permissions:
+  contents: read
+jobs:
+  authentic-source-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+      - name: Pin SHA and confirm real FIT-only schema; NO optimizer
+        run: python scripts/s1motion003_source_audit.py
+      - name: Preserve source receipt before model fit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1motion003-authentic-publisher-source
+          path: research/diagnostics/s1motion003-source-audit.json
+          if-no-files-found: warn
