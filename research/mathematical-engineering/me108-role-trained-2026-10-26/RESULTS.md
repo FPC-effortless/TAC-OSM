@@ -28,6 +28,15 @@ graph/proposal/input assertions, forecast arrays/scores/gates and summary with
 no retraining; passed. Dedicated GitHub original-model replay40257702125 passed.
 Original predictive failure remains distinct from successful verification.
 
+The repository-wide scanner initially failed because it discovers registrations
+under `research/mathematical-engineering/me108/`, while the runner's original
+registration is in the dated directory. Canonical byte-identical registration
+and postfit index copies were added AFTER scoring at00fe1965, with explicit
+`INDEX_PROVENANCE.json`. Original source/registration hashes, live pre/post-update
+guards, weights, budgets and predictive gates are unchanged. Explicit CI
+final-phase validation is also wired. This indexing correction does not backdate
+a new registration; the original local preflight passed before real updates.
+
 ## Real-data results
 
 UCI501 CC-BY-4.0 original archiveSHA256
