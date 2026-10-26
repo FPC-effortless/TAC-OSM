@@ -124,13 +124,13 @@ def run(original_dir:Path, cache:Path, out:Path, *, seeds):
         "source_prior_only","fit_dev_test_episode_identifiers","source_future_noninterference",
         "original_checkpoint_integrity","read_only_probe",
     ])
-    boundary=audit_input_boundary(samples["first_genuine_FIT_episode"],
+    boundary=audit_input_boundary(samples["paired_genuine_FIT_episodes_0_and_1"],
                                   sorted(SOURCE_FIELDS),check="source_prior_only")
     ledger_audit.add(boundary)
     partitions=audit_partitions({"FIT":list(FIT),"DEV":list(DEV),
          "TEST":list(range(35,50))},check="fit_dev_test_episode_identifiers")
     ledger_audit.add(partitions)
-    decision=samples["first_genuine_FIT_episode"]
+    decision=samples["paired_genuine_FIT_episodes_0_and_1"]
     true_y=training[0]["y"][11:12]
     poisoned={"inputs":decision,"actual_future_outcome":true_y+11}
     normal={"inputs":decision,"actual_future_outcome":true_y}
