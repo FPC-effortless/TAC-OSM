@@ -6,12 +6,12 @@
     {
       "id": "GRAD-001",
       "failure": "Global gradient projection can leave local opposition and AdamW can rotate the update.",
-      "evidence": "ME109266240actualblockchecks,maxcomputedapplieddot0. PosthocFIT15read-only proposals: gapPMdirectionpositive10of15overall/75of195blocks, while averagepointnonepositive.",
+      "evidence": "ME109266240actualblockchecks,maxcomputedapplieddot0. PosthocFIT15read-only proposals: gapPMdirectionpositive10of15overall/75of195blocks, while averagepointnonepositive. DIAGTRAIN001 actual finite original-host updates improve average15/15 but worsen gap10/15; inward numerical candidate gap11/15. No optimizer step.",
       "contract": "Guard complete proposed displacement per exhaustive block; recheck after rounding; fail closed.",
       "implementation": "src/tac_osm/role_optimizer.py",
       "proof": "PNDS.RoleSpecializedFFN.protected_dot_nonpos",
       "status": "TRAINED_COMPUTED_UPDATE_CONTRACT_PASSED_PREDICTIVE_GATE_FAILED",
-      "open": "Average protection does not protect each channel/regime. Observed local opposition is not proof of finite-step or held-out causation. Per-regime optimization remains open."
+      "open": "Average protection does not protect each channel/regime. Observed local opposition is not proof of finite-step or held-out causation. Per-regime optimization remains open. Same-batch protection does not ensure cross-batch or cumulative point improvement; all15context/seed endpoint point losses worsen while total improves."
     },
     {
       "id": "ROLE-001",
@@ -57,10 +57,10 @@
     {
       "id": "NUM-001",
       "failure": "Cross-host floating arithmetic and preprocessing drift can break replay.",
-      "evidence": "ME109diagnosticV1rebuilt inputSHAfailedcrosshost. Normalizedbatch0maxabs1.430511e-6; immutableoriginaltensors remainbit-authenticated; V2separateproducer numericcomparison+sourcecheckpointreplayCI40284891806PASS.",
+      "evidence": "ME109diagnosticV1rebuilt inputSHAfailedcrosshost. Normalizedbatch0maxabs1.430511e-6; immutableoriginaltensors remainbit-authenticated; V2separateproducer numericcomparison+sourcecheckpointreplayCI40284891806PASS. DIAGTRAIN001 original guard host replay FAIL40287673335/40289295662: 27 fallback-flag disagreements and guarded norm12.86percent discrepancy. Inward candidate195/195conditional certificates and0fallbacks; cross-host inward job40289990676PASS, old-guard job remainsFAIL.",
       "contract": "Pin environment, preserve failures and immutable artifacts/tolerances; independent precision-specific reference tests.",
       "status": "PARTIAL_NUMERICAL_VERIFICATION",
-      "open": "Exact primitive cause of preprocessing drift and universal IEEE source refinement remainOPEN. Frozenoriginal tensor identity is distinct from freshly recomputed numerical agreement."
+      "open": "Exact primitive cause of preprocessing drift and universal IEEE source refinement remainOPEN. Frozenoriginal tensor identity is distinct from freshly recomputed numerical agreement. Inward utility is prospective, not trained; exact-real PNDS projection plus conditional rounding proof is not full IEEE implementation verification."
     },
     {
       "id": "STATE-001",
@@ -81,7 +81,7 @@
       "failure": "Parameter padding or unmatched models can create false architectural wins.",
       "contract": "Live trainable/deployed95k-105k; matched trained alternatives within1percent, identical data/exposure/compute/tuning. New training needs new validated registration.",
       "status": "ME109_LIVE_PREFIT_POSTFIT_COUNTS_PASS_104663",
-      "open": "All5original budget receipts and checkpointcounts verified. No matched architecture comparison or independent capability qualification; full predictive gateFAIL0of5."
+      "open": "All5original budget receipts and checkpointcounts verified. No matched architecture comparison or independent capability qualification; full predictive gateFAIL0of5. Saved curves cannot establish sufficient training: only final checkpoints; need fixed-validation intermediate checkpoints in new registered budget study."
     }
   ]
 }

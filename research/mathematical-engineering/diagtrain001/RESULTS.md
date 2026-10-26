@@ -113,3 +113,28 @@ not an established primitive cause. No threshold or original result is changed.
 A versioned diagnostic now exports current-host reports and lists every failed
 field before still failing strict replay. This is additional instrumentation,
 not a replay pass or model fix.
+
+## Implemented numerical correction and remaining predictive failure
+
+The new prospective inward candidate in `src/tac_osm/inward_role_guard.py`
+projects with a precision-derived interior margin, casts parameters once, and
+checks a conditional error-bounded realized dot. It does not replace the old
+optimizer, train a model, or add model parameters.195/195blockcertificates pass
+with0fallbacks on the original FIT probes. Small FP32fixtures pass an independent
+exact-rational dot oracle. The unchanged forward computational graph remains
+native TAC, including fixed primary state and affine scan.
+
+Independent GitHub inward job40289990676 passes the unchanged replay tolerances,
+including all15actual functional probes. The same workflow's historical-guard
+job still FAILS; the overall workflow is not green. Expanded old-guard run
+40289295662 records144out-of-contract fields, including27fallbackdecision flags.
+Original artifacts and tolerances remain unchanged.
+
+The numerical candidate still worsens gapPM on11/15originating and12/15next FIT
+batches. It corrects the tested numerical instability, not the measured
+per-regime learning weakness or predictive qualification failure. Details and
+new original outputs are in INWARD_MATHEMATICS.md/INWARD_RESULTS.json and
+INWARD_CI40289990676.json. Full1156local regression tests PASS; PNDSsource-reference
+3tests, limited Lean projection/conditional-certificate proofs and axiom audit
+PASS. Reciprocal source-pinned mathematical manifests match; full IEEE/neural
+refinement remains OPEN. Draft PNDS PR#30 accompanies TAC PR#425. No merges.
