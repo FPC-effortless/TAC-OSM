@@ -333,11 +333,19 @@ def check_changed(base_head,root):
             demand(bool(workflows),
                 f"{study}: training workflow missing (preflight must run before fitting)")
             combined="\n".join(p.read_text() for p in workflows)
-            demand("validate_research_parity.py --manifest" in combined
-                   and "--phase preflight" in combined and "--phase final" in combined
-                   and combined.count("--reward-evidence") >= 2
+            independent_stage_hooks = (
+                "validate_research_parity.py --manifest" in combined
+                and "--phase preflight" in combined and "--phase final" in combined
+                and combined.count("--reward-evidence") >= 2)
+            audited_launcher = (
+                "scripts/run_qualified_research.py" in combined
+                and "--prefit-evidence" in combined and "--final-evidence" in combined
+                and "--prefit-manifest" in combined and "--final-manifest" in combined)
+            demand((independent_stage_hooks or audited_launcher)
                    and "TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX" in combined,
-                   f"{study}: workflow must gate before first fit AND after actual compute measurement")
+                   f"{study}: runner must block optimizer on signed independent "
+                   "source/reward/ACL prefit evidence and block postfit promotion "
+                   "without signed factual goal/reward/checkpoint evidence")
         print(json.dumps({"study":study,"preflight":result},sort_keys=True))
     return studies
 
