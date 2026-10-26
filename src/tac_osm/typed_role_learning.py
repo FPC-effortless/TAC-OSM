@@ -43,12 +43,14 @@ def routed_gradients(model,point_loss,auxiliary_loss):
     auxiliary=[torch.zeros_like(p) for p in params]
     for i,g in zip(ids,ugrads):
         if g is not None: auxiliary[i]=torch.where(masks[i],g.detach(),torch.zeros_like(g))
+    outside=sum(int(torch.count_nonzero(a[~mask])) for a,mask in zip(auxiliary,masks))
+    if outside: raise RuntimeError('uncertainty loss reached point-only coordinates')
     pc,pnorm=clip_role(point);uc,unorm=clip_role(auxiliary)
     for p,g,u,mask in zip(params,pc,uc,masks):
         p.grad=torch.where(mask,u,g)
         if not torch.isfinite(p.grad).all(): raise RuntimeError('nonfinite routed gradient')
     return point,dict(point_preclip_norm=pnorm,uncertainty_preclip_norm=unorm,
-        point_on_uncertainty_nonzero=forbidden,auxiliary_on_point_nonzero=0,
+        point_on_uncertainty_nonzero=forbidden,auxiliary_on_point_nonzero=outside,
         point_coordinates=sum(int((~m).sum()) for m in masks),
         uncertainty_coordinates=sum(int(m.sum()) for m in masks))
 
