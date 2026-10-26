@@ -2853,3 +2853,36 @@ ActualME109Observatory/anti-cheat replay passes scopedprobes; completeintegrity
 remainsINCONCLUSIVE.81relevanttool/optimizer/contracttestsPASS. Separate nofitCI
 replaysoriginalcurves andfiniteproposals. Noarchitecturechange, newLeanproof,
 newcapability/superiorityclaim, deployment, merge or protectedqualification.
+
+### DIAGTRAIN001 numerical correction — original replay FAIL preserved (2026-10-26)
+
+Update to the preceding diagnosis: original-host clean replay was not portable.
+GitHub40287673335FAIL; expanded40289295662shows144out-of-contract fields,27changed
+fallbackflags and12.86%guardednorm discrepancy. Original exact-boundary projection
+can discard entire protected-coordinate blocks after tiny rounding sign changes.
+The previous numerical proposal tables are original-host observations, not
+portable exact results; original same-gap10/15 and next-gap12/15 counts persist
+in this observed second host, but some other counts/magnitudes differ.
+
+[Draft TAC PR#425](https://github.com/FPC-effortless/TAC-OSM/pull/425) implements
+an isolated prospective inward-margin candidate utility; historical optimizer,
+all weights, original scores/gates and protected cohorts remain unchanged.
+FP64 correction, precision-derived FP32 parameter-rounding margin and conditional
+realized-dot certificate avoid exact-zero boundary projection.195/195blockchecks
+pass with0fallbacks locally. Independent GitHub inward job40289990676PASS under
+unchanged relative1e-5/absolute1e-6; historicalguard job and overallworkflowFAIL.
+This is an observed numerical repair, not a global platform/IEEE proof.
+
+[Draft PNDS PR#30](https://github.com/FPC-effortless/pnds-lean/pull/30) contains
+source-pinned executable Python and Lean exact-real projection plus conditional
+rounding-certificate proofs.3source-reference tests and Leanaxiom auditPASS.
+Reciprocal manifests match and preserve17legacyrows. Full1156local regression
+suitePASS. No optimizersteps, fits, modelarchitecture/parameterchanges or merges.
+The candidate is not installed in any historical training runner.
+
+The corrected candidate still worsensgapPM11/15originating and12/15nextFITbatch
+probes. Numerical stability does not resolve objective/regime tradeoffs. Training
+sufficiency remainsUNRESOLVED: no intermediatevalidationmodels were saved. Next
+substantivestudy must jointly evaluate regime-specific optimization and fixed
+learning curves atregisteredbudgets, retaining native TAC parallel state and role
+FFNs. Do not claim predictive improvement or silently repeat ME109.
