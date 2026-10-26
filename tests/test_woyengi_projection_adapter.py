@@ -62,6 +62,7 @@ class WoyengiShapeAdapterTests(unittest.TestCase):
     def adapt(self):
         return adapt_native_projection(
             self.p, model_cutoff="2026-02-15T00:00:00Z",
+            principal="user:authorized-researcher", purpose="predict:read-only",
             source_artifact_sha256="a" * 64,
             read_authorized=self.authorize,
             feature_allowlist=self.features
@@ -76,7 +77,8 @@ class WoyengiShapeAdapterTests(unittest.TestCase):
         self.assertEqual(result["governing_authority"], "NOT_GRANTED")
         self.assertEqual(result["trusted_source_authentication"], "NOT_VERIFIED_BY_ADAPTER")
         self.assertEqual(len(self.accessed), 1)
-        self.assertEqual(self.accessed[0][2], ["claim:daniel-leads-alpha", "claim:priya-leads-alpha"])
+        self.assertEqual(self.accessed[0][0:2], ("user:authorized-researcher", "predict:read-only"))
+        self.assertEqual(self.accessed[0][4], ["claim:daniel-leads-alpha", "claim:priya-leads-alpha"])
         self.assertEqual([o["available_at"] for o in result["observations"]],
             ["2026-02-01T00:00:00Z", "2026-02-10T00:00:00Z"])
         self.assertTrue(all(o["conflicts_preserved"] for o in result["observations"]))
@@ -89,6 +91,7 @@ class WoyengiShapeAdapterTests(unittest.TestCase):
     def test_no_default_or_untrusted_feature_selector(self):
         with self.assertRaises(BoundaryError):
             adapt_native_projection(self.p, model_cutoff="2026-02-15T00:00:00Z",
+                principal="user:authorized-researcher", purpose="predict:read-only",
                 source_artifact_sha256="a"*64,
                 read_authorized=None, feature_allowlist=self.features)
 
