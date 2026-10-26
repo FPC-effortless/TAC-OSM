@@ -1,0 +1,109 @@
+{
+  "actual_training_updates": 256,
+  "competitive_architecture_claim": false,
+  "fit_pipeline_wall_seconds": 21.346138699000022,
+  "independent_TEST_qualification": false,
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "phase": "exposed_2015_DEV_only",
+  "research_category": "real-world observational forecasting; no causal policy",
+  "results": [
+    {
+      "batch_size": 8,
+      "changed_param_tensors": 34,
+      "development_2015": {
+        "n_origins": 312,
+        "n_valid_channels": 4024,
+        "nll": 5.8295674324035645,
+        "nominal_90_coverage": 0.8712723851203918,
+        "normalized_mae": 0.5874320864677429,
+        "persistence_normalized_mae": 0.5598021745681763,
+        "persistence_pm25_mae": 33.3725471496582,
+        "pm25_mae": 29.53652572631836
+      },
+      "live_state": {
+        "deployed_learned_parameters": 98775,
+        "dtype": "torch.float32",
+        "float_values": 1696,
+        "nominal_fp32_bytes": 6800,
+        "occupancy_flags": 16,
+        "trainable_parameters": 98775
+      },
+      "original_checkpoint_sha256": "7b05fbd3226167b4f31b81cf3d235fd0dbbc2a33637957df6da3f872f70d215d",
+      "scored_DEV_persisted_original": true,
+      "seed": 202601,
+      "steps": 128,
+      "train_loss_first": 1.4577269554138184,
+      "train_loss_last": 11.957072257995605,
+      "train_plan_sha256": "3cb3fc74acf37de4059d887945d865dcd81e73f88054fa637b4a441a57184a7c",
+      "training_finished_before_DEV": true,
+      "validation_2014": {
+        "n_origins": 108,
+        "n_valid_channels": 1392,
+        "nll": 1.1157102584838867,
+        "nominal_90_coverage": 0.8829023241996765,
+        "normalized_mae": 0.5727453827857971,
+        "persistence_normalized_mae": 0.4750080406665802,
+        "persistence_pm25_mae": 33.1037712097168,
+        "pm25_mae": 42.74380111694336
+      }
+    },
+    {
+      "batch_size": 8,
+      "changed_param_tensors": 34,
+      "development_2015": {
+        "n_origins": 312,
+        "n_valid_channels": 4024,
+        "nll": 2.908264398574829,
+        "nominal_90_coverage": 0.906312108039856,
+        "normalized_mae": 0.5448033809661865,
+        "persistence_normalized_mae": 0.5598021745681763,
+        "persistence_pm25_mae": 33.3725471496582,
+        "pm25_mae": 26.17728042602539
+      },
+      "live_state": {
+        "deployed_learned_parameters": 98775,
+        "dtype": "torch.float32",
+        "float_values": 1696,
+        "nominal_fp32_bytes": 6800,
+        "occupancy_flags": 16,
+        "trainable_parameters": 98775
+      },
+      "original_checkpoint_sha256": "5fd3e162653ccdc23ca9bb343e5ab4262c149953e00b548e5e80e0eedd30f0a0",
+      "scored_DEV_persisted_original": true,
+      "seed": 202602,
+      "steps": 128,
+      "train_loss_first": 1.5510003566741943,
+      "train_loss_last": 0.7094399929046631,
+      "train_plan_sha256": "ccdd255feea6f5adf8022430e7d492c07955a0b44be9b5fd034c934fdad2bfaa",
+      "training_finished_before_DEV": true,
+      "validation_2014": {
+        "n_origins": 108,
+        "n_valid_channels": 1392,
+        "nll": 0.9499297738075256,
+        "nominal_90_coverage": 0.9159482717514038,
+        "normalized_mae": 0.5206858515739441,
+        "persistence_normalized_mae": 0.4750080406665802,
+        "persistence_pm25_mae": 33.1037712097168,
+        "pm25_mae": 30.3670654296875
+      }
+    }
+  ],
+  "source_files_sha256": {
+    "scripts/latfuse002_real_fit.py": "bdc64c96b6ea5210d2a23d81accfdbfade3175672819ed233f149d6670c7b8ab",
+    "scripts/validate_research_parity.py": "3d6fb7ee22615f5fb5ef3f6340b4c1686ecc67f197b69e30d24f0057fffd95cd",
+    "src/tac_osm/latent_fusion_001.py": "a8fe9a33ac79beebfc356b9d94e8d36765624de91d88524027d6cbbf364d8cb6",
+    "src/tac_osm/latent_fusion_002.py": "7da93cd4d9dabe629d94f621a27f36c8a9b1a8319c23f38fdbe05618d9dc2c06"
+  },
+  "source_time_cutoffs": {
+    "DEV_before": "2016-01-01 00:00:00",
+    "FIT_start": "2013-03-01 00:00:00",
+    "protected_2016_2017": "never parsed",
+    "training_before": "2014-09-01 00:00:00",
+    "validation_before": "2015-01-01 00:00:00"
+  },
+  "study_id": "LATFUSE002-REAL-PREDICTION-SINGLE",
+  "trained_seeds": [
+    202601,
+    202602
+  ]
+}
