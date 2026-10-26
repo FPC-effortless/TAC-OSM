@@ -265,3 +265,17 @@ def test_dependency_missing_graph_is_explicit_not_misattributed():
     result = probe_dependencies(GatedEpisode(), episode(),
                                 replace(gated_adapter(), gradient_graph=None))
     assert result["status"] == "INCONCLUSIVE_UNINSTRUMENTED"
+
+
+
+def test_historical_observatory_api_accepts_non_native_adapter_without_retyping_model():
+    from tac_osm.research_observatory import (
+        memory_tomography, input_dependency_map, entity_isolation_probe,
+        profile_native_runtime,
+    )
+    m, sample, adapter = GatedEpisode(), episode(), gated_adapter()
+    assert memory_tomography(m, sample, adapter=adapter)["state_components"] == ["cell_state"]
+    assert input_dependency_map(m, sample, adapter=adapter)["status"] == "MEASURED"
+    assert entity_isolation_probe(m, sample, adapter=adapter)["status"] == "PASS"
+    assert profile_native_runtime(m, sample, adapter=adapter,
+                                  warmups=0, repeats=2)["state_bytes_batch"] == 72
