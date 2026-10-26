@@ -55,9 +55,25 @@ def execute(replay=False):
             mu,left,right,ss,sm,es,memory,_=serial(model,*x[:5])
             for a,b in zip((actual.log_location,actual.left_scale,actual.right_scale,state.source_sum,state.source_mass,state.evidence_sum,state.memory),(mu,left,right,ss,sm,es,memory)):
                 torch.testing.assert_close(a,b,rtol=2e-5,atol=2e-6)
+        for dtype,rtol,atol in [(torch.float32,2e-5,2e-6),(torch.float64,1e-9,1e-10)]:
+            m=run.initialize(d,seed).to(dtype);m.load_state_dict(cp['model'],strict=True)
+            actual_inputs=[v.to(dtype).detach().clone() if v.is_floating_point() else v.clone() for v in x]
+            reference_inputs=[v.detach().clone() for v in actual_inputs]
+            for i in (0,2,3):actual_inputs[i].requires_grad_();reference_inputs[i].requires_grad_()
+            f,_,trace=m(*actual_inputs[:6],return_trace=True)
+            mu,left,right,*_,reftrace=serial(m,*reference_inputs[:5])
+            scale=run.raw_scale(d).to(dtype)
+            p,u,_=losses(m,f,trace,actual_inputs,scale)
+            rp,ru,_=losses(m,type(f)(mu,left,right),reftrace,reference_inputs,scale)
+            params=tuple(m.parameters())
+            gradients=torch.autograd.grad(p+u,params+tuple(actual_inputs[i] for i in (0,2,3)),allow_unused=True)
+            reference_gradients=torch.autograd.grad(rp+ru,params+tuple(reference_inputs[i] for i in (0,2,3)),allow_unused=True)
+            for original,reference in zip(gradients,reference_gradients):
+                assert (original is None)==(reference is None)
+                if original is not None:torch.testing.assert_close(original,reference,rtol=rtol,atol=atol)
         assert run.sha(path)==identity['checkpoint_sha256']
     result=dict(status='ORIGINAL_ME110_CHECKPOINT_MONITOR_REPLAY_PASS',scope='FIT_ONLY_NO_UPDATES',
-        checkpoint_views=20,forecast_scalars=scalar_replays,checks=rows,original_final_serial_reference_models=5,
+        checkpoint_views=20,forecast_scalars=scalar_replays,checks=rows,original_final_serial_reference_models=5,final_forward_backward_fp32_fp64_checks=10,
         protected_or_report_access=False,whole_neural_ieee_proof=False)
     if replay: run._compare_numeric(result,json.loads(OUT.read_text()))
     else: run.write(OUT,result)
