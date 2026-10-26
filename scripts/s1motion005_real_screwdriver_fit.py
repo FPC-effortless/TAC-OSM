@@ -136,7 +136,7 @@ def fit_arm(arm,model,seed,train,windows0,output,lock):
     output.mkdir(parents=True,exist_ok=True)
     (output/f"{arm}-{seed}.pt").write_bytes(raw)
     before=sum(1 for x in inspect if x.get("post_point_fit",0.) <= x.get("pre_point_fit",float("inf")))
-    descending=sum(1 for x in inspect if x.get("actual_grad_dot_parameter_delta",0.)<0)
+    descending=sum(1 for x in inspect if x.get("actual_point_gradient_dot_parameter_delta",0.)<0)
     record=dict(arm=arm,seed=seed,params=sum(p.numel() for p in model.parameters()),
         training_seconds=elapsed,model_SHA256=sha256(raw),
         updates=UPDATES,frames_exposed=UPDATES*BATCH*WINDOW,
