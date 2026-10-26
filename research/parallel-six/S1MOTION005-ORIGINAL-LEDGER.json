@@ -1,0 +1,552 @@
+{
+  "study": "S1MOTION005",
+  "real_data_source": "lerobot/aloha_static_screw_driver",
+  "original_fit_run": 40283616062,
+  "original_fit_run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40283616062",
+  "original_commit_sha": "a45f22534fa19ee5cb2ecd82869a07de92b3629b",
+  "original_checkpoint_artifact_id": 12632762763,
+  "source_only_audit_success_run": 40282959710,
+  "source_only_audit_failed_runs": [
+    40282597080,
+    40282810894
+  ],
+  "historical_source_revision": "0b873be59c9702f8d3de89022617121970db112f",
+  "original_fit_episodes": "0-24 (only FIT file downloads until all 15 frozen)",
+  "original_dev_episodes": "25-34 (opened after all 15 model/optimizer/RNG checkpoint SHAs frozen)",
+  "protected_test_episodes": "35-49 (never downloaded)",
+  "original_scientific_full_gate_pass": false,
+  "passed_original_seed_count": 2,
+  "five_arm_parameter_counts": {
+    "tac": 95907,
+    "gru": 95869
+  },
+  "epochs_or_updates_per_arm": 192,
+  "recorded_training_frames_per_arm": 49152,
+  "all_original_model_fit_receipts": [
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": 145,
+      "actual_FIT_poststep_point_improvement_steps": 135,
+      "arm": "tac_shared",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": 0.005829783156514168,
+      "mean_FIT_poststep_point_delta": -1.4175990751634041e-8,
+      "model_SHA256": "1a60d35d558348b07012995c8b30b69300771666c92e2b558576a2e335fe5cfe",
+      "params": 95907,
+      "seed": 29001,
+      "training_seconds": 3.3342311829999858,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": true
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": 186,
+      "actual_FIT_poststep_point_improvement_steps": 180,
+      "arm": "tac_isolated",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": 0.02360313944518566,
+      "mean_FIT_poststep_point_delta": -0.000002375671101617627,
+      "model_SHA256": "ee746761dbd5d706bb34b9d29a2c64fa71bf8778131c9871d9b4ea23099e79ae",
+      "params": 95907,
+      "seed": 29001,
+      "training_seconds": 3.3634040689999836,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": true
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": 181,
+      "actual_FIT_poststep_point_improvement_steps": 173,
+      "arm": "tac_projected",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": 0.01773199439048767,
+      "mean_FIT_poststep_point_delta": -0.0000023044100695794136,
+      "model_SHA256": "2a01a872ad0e506e9a2c7ebc8f3c7f70dc20068801e2516b9e274ba795aa28ea",
+      "params": 95907,
+      "seed": 29001,
+      "training_seconds": 3.656999964000022,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": true
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": null,
+      "actual_FIT_poststep_point_improvement_steps": 178,
+      "arm": "gru_shared",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": -0.008565356954932213,
+      "mean_FIT_poststep_point_delta": -8.246418777465199e-8,
+      "model_SHA256": "a5b16c542cfb87fd64c9460bc955ed0939a52aa583b07c96be5a281ddb20d5e7",
+      "params": 95869,
+      "seed": 29001,
+      "training_seconds": 2.1183149379999975,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": false
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": null,
+      "actual_FIT_poststep_point_improvement_steps": 192,
+      "arm": "gru_isolated",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": 0.025172198191285133,
+      "mean_FIT_poststep_point_delta": -2.1670378676693267e-7,
+      "model_SHA256": "d496e2de3d22703d2ef0715d89c67b463613da453a6986b4ffac9c61bd12549a",
+      "params": 95869,
+      "seed": 29001,
+      "training_seconds": 2.0816366640000012,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": false
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": 138,
+      "actual_FIT_poststep_point_improvement_steps": 123,
+      "arm": "tac_shared",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": -0.009774250909686089,
+      "mean_FIT_poststep_point_delta": -3.085187927354127e-8,
+      "model_SHA256": "9f2988d3491fa98bbf28ab73d5104e9161e42559aa9b24030d0cdfed6f053459",
+      "params": 95907,
+      "seed": 29002,
+      "training_seconds": 3.336933674999983,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": true
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": 182,
+      "actual_FIT_poststep_point_improvement_steps": 176,
+      "arm": "tac_isolated",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": 0.006109962705522776,
+      "mean_FIT_poststep_point_delta": -0.0000023658764500093334,
+      "model_SHA256": "cbdc35bc9e1e3d50920ece93629a0bdbbaed5a58dd0949072d08c66ca1499146",
+      "params": 95907,
+      "seed": 29002,
+      "training_seconds": 3.304263270000007,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": true
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": 181,
+      "actual_FIT_poststep_point_improvement_steps": 171,
+      "arm": "tac_projected",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": -0.0039843106642365456,
+      "mean_FIT_poststep_point_delta": -0.000002327270218908476,
+      "model_SHA256": "3def4cd4525c233f8ccbe1bd586442e88e86dd6c9ef8b57d7f5f33e757019d51",
+      "params": 95907,
+      "seed": 29002,
+      "training_seconds": 3.649802479000016,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": true
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": null,
+      "actual_FIT_poststep_point_improvement_steps": 170,
+      "arm": "gru_shared",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": -0.005588380619883537,
+      "mean_FIT_poststep_point_delta": -7.958897185744718e-8,
+      "model_SHA256": "8cea47f8366d861c1359a82ba2b1faca4ce1a9da8e2dd63c53959f8d51647b78",
+      "params": 95869,
+      "seed": 29002,
+      "training_seconds": 2.073343442999999,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": false
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": null,
+      "actual_FIT_poststep_point_improvement_steps": 192,
+      "arm": "gru_isolated",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": 0.041482653468847275,
+      "mean_FIT_poststep_point_delta": -1.8541231838753447e-7,
+      "model_SHA256": "9ee07d89a7f0d9ba6d1b5c8a1b3c9e6e12223fca703e1ffc170c487bb582527e",
+      "params": 95869,
+      "seed": 29002,
+      "training_seconds": 2.071683562000004,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": false
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": 129,
+      "actual_FIT_poststep_point_improvement_steps": 117,
+      "arm": "tac_shared",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": -0.0254792682826519,
+      "mean_FIT_poststep_point_delta": -3.843554926182454e-8,
+      "model_SHA256": "94ce461e166570d3b18bf5ddcca8bd10739c5c4917f1e65969670eb5c1fe1929",
+      "params": 95907,
+      "seed": 29003,
+      "training_seconds": 3.3774597739999876,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": true
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": 187,
+      "actual_FIT_poststep_point_improvement_steps": 179,
+      "arm": "tac_isolated",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": -0.01065311674028635,
+      "mean_FIT_poststep_point_delta": -0.0000025313993319286965,
+      "model_SHA256": "bb750e6034e92616bfde306bf8ee0e51df10efa1ae588013c81f72bc5a9c4212",
+      "params": 95907,
+      "seed": 29003,
+      "training_seconds": 3.3048537909999993,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": true
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": 186,
+      "actual_FIT_poststep_point_improvement_steps": 182,
+      "arm": "tac_projected",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": -0.018119066953659058,
+      "mean_FIT_poststep_point_delta": -0.0000021848597195154675,
+      "model_SHA256": "7f2cc1f786369f2805b15486c4597d277bc82afa4c0ac44d347c34ab2c8a7e62",
+      "params": 95907,
+      "seed": 29003,
+      "training_seconds": 3.9091044509999904,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": true
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": null,
+      "actual_FIT_poststep_point_improvement_steps": 179,
+      "arm": "gru_shared",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": -0.02923513948917389,
+      "mean_FIT_poststep_point_delta": -8.712292280203353e-8,
+      "model_SHA256": "1b203a94ceb673e9c61dd4ae53c08bc06a3af870aa1c3ba9b01d48e0f90368fa",
+      "params": 95869,
+      "seed": 29003,
+      "training_seconds": 2.087325128999993,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": false
+    },
+    {
+      "actual_FIT_AdamW_gradient_descent_direction_steps": null,
+      "actual_FIT_poststep_point_improvement_steps": 192,
+      "arm": "gru_isolated",
+      "frames_exposed": 49152,
+      "identical_FIT_source_plan": true,
+      "last_loss": 0.006303355097770691,
+      "mean_FIT_poststep_point_delta": -2.0835523173445836e-7,
+      "model_SHA256": "f346e682288c8e87de8f378369e40d39011806d552a35f8ed50afaf7e280c25a",
+      "params": 95869,
+      "seed": 29003,
+      "training_seconds": 2.1038365459999966,
+      "updates": 192,
+      "within_Tac_equal_two_autograd_calls": false
+    }
+  ],
+  "original_first_DEV_scores": [
+    {
+      "arm": "tac_shared",
+      "high_motion_MSE": {
+        "tac": 0.000007335801968473471,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.32570462234544517,
+      "proxy_AUROC": 0.7780818274843377,
+      "proxy_Brier": 0.07093719954639295,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.000003571564094178958,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29001
+    },
+    {
+      "arm": "tac_isolated",
+      "high_motion_MSE": {
+        "tac": 0.000007060319748526916,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.0872070662770261,
+      "proxy_AUROC": 0.5469570512659924,
+      "proxy_Brier": 0.08195754337895458,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000034636846088537716,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29001
+    },
+    {
+      "arm": "tac_projected",
+      "high_motion_MSE": {
+        "tac": 0.0000070791252023833665,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.17338603629722352,
+      "proxy_AUROC": 0.6959922608643705,
+      "proxy_Brier": 0.0772046525301571,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000034525895997678115,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29001
+    },
+    {
+      "arm": "gru_shared",
+      "high_motion_MSE": {
+        "tac": 0.00000721641836325016,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.49986488241943655,
+      "proxy_AUROC": 0.8956045332526531,
+      "proxy_Brier": 0.05658459357501754,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000035136297113297275,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29001
+    },
+    {
+      "arm": "gru_isolated",
+      "high_motion_MSE": {
+        "tac": 0.000007031167904125008,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.08211688626865953,
+      "proxy_AUROC": 0.5239757111390752,
+      "proxy_Brier": 0.11922608624302529,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000034468368971965892,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29001
+    },
+    {
+      "arm": "tac_shared",
+      "high_motion_MSE": {
+        "tac": 0.0000073705673360206,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.22816428214915854,
+      "proxy_AUROC": 0.7173230607356419,
+      "proxy_Brier": 0.07782609989852458,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000035224311711070773,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29002
+    },
+    {
+      "arm": "tac_isolated",
+      "high_motion_MSE": {
+        "tac": 0.000007046666603635873,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.0955693256692232,
+      "proxy_AUROC": 0.58432593785952,
+      "proxy_Brier": 0.0822410038118397,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.000003463920865803602,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29002
+    },
+    {
+      "arm": "tac_projected",
+      "high_motion_MSE": {
+        "tac": 0.000007048711883999029,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.2380436219889919,
+      "proxy_AUROC": 0.710291161853153,
+      "proxy_Brier": 0.0758044836373326,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.000003446751907243465,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29002
+    },
+    {
+      "arm": "gru_shared",
+      "high_motion_MSE": {
+        "tac": 0.000007342024887554985,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.46089369884033315,
+      "proxy_AUROC": 0.878811996431056,
+      "proxy_Brier": 0.06001448093173891,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000035441145089784944,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29002
+    },
+    {
+      "arm": "gru_isolated",
+      "high_motion_MSE": {
+        "tac": 0.000007012162086087961,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.08659322299518646,
+      "proxy_AUROC": 0.531996199806907,
+      "proxy_Brier": 0.13250850107790904,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000034509227662477276,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29002
+    },
+    {
+      "arm": "tac_shared",
+      "high_motion_MSE": {
+        "tac": 0.000008045063064505478,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.2410685071946746,
+      "proxy_AUROC": 0.7574255040748014,
+      "proxy_Brier": 0.12128436793490285,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.000003933416276557094,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29003
+    },
+    {
+      "arm": "tac_isolated",
+      "high_motion_MSE": {
+        "tac": 0.000007085394961651292,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.11032072370262254,
+      "proxy_AUROC": 0.6081831338488903,
+      "proxy_Brier": 0.07985814695652622,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000034492967956077826,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29003
+    },
+    {
+      "arm": "tac_projected",
+      "high_motion_MSE": {
+        "tac": 0.000007114102600993144,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.23242104284963153,
+      "proxy_AUROC": 0.7567683712935109,
+      "proxy_Brier": 0.07519503314415332,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000034447150774013252,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29003
+    },
+    {
+      "arm": "gru_shared",
+      "high_motion_MSE": {
+        "tac": 0.000007225328049212161,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.5136169947514568,
+      "proxy_AUROC": 0.8767230464752823,
+      "proxy_Brier": 0.05736872501552068,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.000003503012575420647,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29003
+    },
+    {
+      "arm": "gru_isolated",
+      "high_motion_MSE": {
+        "tac": 0.000007034503179280367,
+        "velocity": 0.000007283606088300123
+      },
+      "proxy_AUPRC": 0.0706950858871698,
+      "proxy_AUROC": 0.4332085230699856,
+      "proxy_Brier": 0.108824519634806,
+      "proxy_prevalence": 0.08745098039215686,
+      "raw_joint_MSE": {
+        "persistence": 0.000056045259041756296,
+        "tac": 0.0000034383345517891694,
+        "velocity": 0.000003559536459698993
+      },
+      "seed": 29003
+    }
+  ],
+  "per_seed_registered_gates": [
+    {
+      "seed": 29001,
+      "gates": {
+        "beats_velocity_one_percent": true,
+        "beats_both_TAC_controls": true,
+        "high_motion_within_five_percent": true,
+        "event_AUPRC_retained_ninety_percent": false
+      },
+      "seed_full_gate_pass": false
+    },
+    {
+      "seed": 29002,
+      "gates": {
+        "beats_velocity_one_percent": true,
+        "beats_both_TAC_controls": true,
+        "high_motion_within_five_percent": true,
+        "event_AUPRC_retained_ninety_percent": true
+      },
+      "seed_full_gate_pass": true
+    },
+    {
+      "seed": 29003,
+      "gates": {
+        "beats_velocity_one_percent": true,
+        "beats_both_TAC_controls": true,
+        "high_motion_within_five_percent": true,
+        "event_AUPRC_retained_ninety_percent": true
+      },
+      "seed_full_gate_pass": true
+    }
+  ],
+  "group_means_source_unit_MSE": {
+    "tac_shared": 0.000003675803847281043,
+    "tac_isolated": 0.000003458967423421719,
+    "tac_projected": 0.0000034480188614708673,
+    "gru_shared": 0.000003520252265242956,
+    "gru_isolated": 0.0000034453647384111624
+  },
+  "velocity_baseline_source_unit_MSE": 0.000003559536459698993,
+  "real_motion_proxy_is_not_actual_harm": true,
+  "same_robot_source_no_independent_site": true,
+  "full_training_FLOPs_matched": false
+}
