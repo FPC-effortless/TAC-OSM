@@ -61,7 +61,7 @@ class SourceEntityTACWorld(ParallelTACWorld):
         alpha,beta=self.memory_gates(torch.cat((e,pf,ps),-1)).sigmoid().chunk(2,-1)
         admitted_gain=beta*(1-alpha/4)
         history,_,_=entity_affine_prefix(
-            v,admitted_gain,source_slot,observed_priority,self.entity_mode)
+            v,admitted_gain.squeeze(-1),source_slot,observed_priority,self.entity_mode)
         previous=torch.cat((history.new_zeros(B,1,SLOTS,8),
                             history[:,:-1]),dim=1)
         old_read=source_row_read(previous,source_slot)*k
@@ -101,7 +101,7 @@ def entity_source_step(model,state,observed,prior_action,slot,priority,*,return_
     alpha,beta=model.memory_gates(torch.cat((e,pf,ps),-1)).sigmoid().chunk(2,-1)
     admitted_gain=beta*(1-alpha/4)
     old_read=(source_row_read(state.memory,slot)[:,None]*k)
-    updated=entity_row_step(state.memory,v[:,0],admitted_gain[:,0],slot,
+    updated=entity_row_step(state.memory,v[:,0],admitted_gain[:,0,0],slot,
                             priority,model.entity_mode)
     fast,g=model.fast_map(torch.cat((e,pf,old_read),-1)).chunk(2,-1)
     fast=torch.lerp(pf,fast.tanh(),g.sigmoid())
