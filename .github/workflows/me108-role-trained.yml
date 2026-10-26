@@ -27,6 +27,7 @@ jobs:
           set -e
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me108-role-trained-2026-10-26/FAIR_COMPARISON.json --phase preflight
           if test -f research/replay-bundles/ME108/RESULTS.json; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me108-role-trained-2026-10-26/POSTFIT.json --phase final
             PYTHONPATH=src:. python scripts/me108_fitted_audit.py replay
             PYTHONPATH=src:. python scripts/me108_input_audit.py replay
             PYTHONPATH=src:. python scripts/me108_role_training.py replay
