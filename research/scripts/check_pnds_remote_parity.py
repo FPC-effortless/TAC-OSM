@@ -6,7 +6,7 @@ from pathlib import Path
 
 LOCAL = Path(__file__).resolve().parents[2] / "research/pnds-variant-math-links.json"
 REMOTE = ("https://raw.githubusercontent.com/FPC-effortless/pnds-lean/"
-          "1da7f36744c8e100e99e27078b2f9c5343d02231/"
+          "086a52cf9467d99d81942da57af5a77b78945aff/"
           "foundation/v1/variant-math-links.json")
 
 
