@@ -1,0 +1,48 @@
+name: S1RET008 archive original real FIT daily SHA manifest in research branch
+on:
+  push:
+    branches: [research/s1ret008-entity-source-admission-2026-10-26]
+    paths: ['research/parallel-six/S1RET008-FREEZE-001.marker']
+permissions:
+  actions: read
+  contents: write
+jobs:
+  source-manifest-only-no-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Retrieve immutable pretraining original source receipt
+        run: |
+          gh run download 40308232087 --repo FPC-effortless/TAC-OSM \
+            --name s1ret008-original-backblaze-2013-fit-source-identity-audit \
+            --dir /tmp/s1ret008-source
+      - name: Fail-closed reproduce original declared archive and date census
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          source=json.loads(Path('/tmp/s1ret008-source/FIT-ORIGINAL-AUTHORITY-LOCK.json').read_text())
+          assert source["original_FIT_archive_sha256"]=="7f5a53e79b16e695b4b034955806bb3bb194534b169f6eca460dfd3dc48096fe"
+          assert source["original_FIT_day_count"]==266
+          assert source["original_real_failure_indicators"]==724
+          assert source["DEV_archive_downloaded"] is False
+          assert source["TEST_archive_downloaded"] is False
+          assert len(source["member_source_date_receipts"])==266
+          print('S1RET008_UNALTERED_FIT_SOURCE_RECEIPT=PASS')
+          PY
+      - name: Commit original FIT source ledger without new data access
+        run: |
+          DEST="research/parallel-six/S1RET008-BACKBLAZE-FIT-SOURCE-LOCK.json"
+          if gh api "repos/FPC-effortless/TAC-OSM/contents/$DEST?ref=research/s1ret008-entity-source-admission-2026-10-26" >/dev/null 2>&1; then
+            echo "FIT SHA receipt already exists, refusing overwrite"
+            exit 1
+          fi
+          CONTENT="$(base64 -w0 /tmp/s1ret008-source/FIT-ORIGINAL-AUTHORITY-LOCK.json)"
+          gh api --method PUT "repos/FPC-effortless/TAC-OSM/contents/$DEST" \
+            -f message="research(source): freeze original 266 daily Backblaze FIT file SHA checksums before any model training" \
+            -f content="$CONTENT" \
+            -f branch="research/s1ret008-entity-source-admission-2026-10-26" >/dev/null
+          echo "S1RET008_REPRODUCIBLE_SOURCE_MANIFEST_GIT_FROZEN=PASS"
