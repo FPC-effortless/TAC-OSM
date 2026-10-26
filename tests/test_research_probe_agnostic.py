@@ -279,3 +279,28 @@ def test_historical_observatory_api_accepts_non_native_adapter_without_retyping_
     assert entity_isolation_probe(m, sample, adapter=adapter)["status"] == "PASS"
     assert profile_native_runtime(m, sample, adapter=adapter,
                                   warmups=0, repeats=2)["state_bytes_batch"] == 72
+
+
+
+def test_interpretation_understands_arbitrary_memory_and_head_names():
+    from tac_osm.research_interpretation import interpret_snapshot
+    report = {"memory": {
+        "query_does_not_write_state": True,
+        "candidate_permutation": {"status": "PASS"},
+        "interventions": {
+            "entity_slot_k": {"head_mean_absolute_change": {
+                "policy_scores": 0., "physical_residual": 0.}},
+            "<reset_all>": {"head_mean_absolute_change": {
+                "policy_scores": 0., "physical_residual": 0.}},
+        }}}
+    result = interpret_snapshot(report)
+    assert {x["area"] for x in result["alerts"]} == {"memory"}
+    assert "named-state" in result["alerts"][0]["hypothesis"]
+
+
+def test_interpretation_does_not_invent_memory_for_stateless_model():
+    report = inspect_variant(
+        StatelessNet(), {"features": torch.randn(2, 4)},
+        stateless_adapter(), isolation=True)
+    assert "interpretation" in report
+    assert not any(x["area"] == "memory" for x in report["interpretation"]["alerts"])
