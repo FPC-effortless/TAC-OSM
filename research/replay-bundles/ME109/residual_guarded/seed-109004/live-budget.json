@@ -1,0 +1,469 @@
+{
+  "architecture": "residual_guarded",
+  "checkpoints": [
+    {
+      "deployed_parameters": 104663,
+      "parameter_values_sha256": "c82f4919bd5c727a801c1cc7e1531503504e5ee63b4dd9d020497aca82db71b9",
+      "path": "/tmp/tac-me106/research/replay-bundles/ME109/residual_guarded/seed-109004/final.pt",
+      "sha256": "e72b9a9435b99911023bfcaa258992c7bb071ad326bb2091e7e67168d76c1b86",
+      "state_key_path": [
+        "model"
+      ],
+      "successful_optimizer_steps": 4096,
+      "trainable_parameters": 104663
+    }
+  ],
+  "last_post_update": {
+    "deployed_parameters": 104663,
+    "trainable_parameters": 104663
+  },
+  "last_pre_update": {
+    "deployed_parameters": 104663,
+    "successful_optimizer_steps": 4095,
+    "trainable_parameters": 104663
+  },
+  "manifest_path": "/tmp/tac-me106/research/mathematical-engineering/me109/FAIR_COMPARISON.json",
+  "manifest_sha256": "47eb9df8fc7495d6350cf3e59d462530132cb490b550c4dd885381ed9ee10152",
+  "model_class": "tac_osm.variants.residual_role_sensor_world.ResidualRoleSensorWorld",
+  "preflight": {
+    "deployed_parameters": 104663,
+    "optimizer_steps_before_check": 0,
+    "parameter_inventory": [
+      {
+        "dtype": "torch.float32",
+        "name": "state_noise",
+        "numel": 18,
+        "requires_grad": true,
+        "shape": [
+          3,
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "state_response",
+        "numel": 6,
+        "requires_grad": true,
+        "shape": [
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "station.weight",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          12,
+          4
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.weight",
+        "numel": 2352,
+        "requires_grad": true,
+        "shape": [
+          48,
+          49
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "encoder.bias",
+        "numel": 48,
+        "requires_grad": true,
+        "shape": [
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "address.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          8,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "content.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "source_admission.weight",
+        "numel": 624,
+        "requires_grad": true,
+        "shape": [
+          13,
+          48
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "source_admission.bias",
+        "numel": 13,
+        "requires_grad": true,
+        "shape": [
+          13
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.weight",
+        "numel": 25344,
+        "requires_grad": true,
+        "shape": [
+          176,
+          144
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "fast_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.weight",
+        "numel": 32384,
+        "requires_grad": true,
+        "shape": [
+          176,
+          184
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "slow_map.bias",
+        "numel": 176,
+        "requires_grad": true,
+        "shape": [
+          176
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.weight",
+        "numel": 448,
+        "requires_grad": true,
+        "shape": [
+          2,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "memory_gates.inner_linear.bias",
+        "numel": 2,
+        "requires_grad": true,
+        "shape": [
+          2
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.weight",
+        "numel": 1792,
+        "requires_grad": true,
+        "shape": [
+          8,
+          224
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "query.bias",
+        "numel": 8,
+        "requires_grad": true,
+        "shape": [
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.weight",
+        "numel": 30624,
+        "requires_grad": true,
+        "shape": [
+          132,
+          232
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.0.bias",
+        "numel": 132,
+        "requires_grad": true,
+        "shape": [
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.weight",
+        "numel": 1584,
+        "requires_grad": true,
+        "shape": [
+          12,
+          132
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "readout.2.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.weight",
+        "numel": 256,
+        "requires_grad": true,
+        "shape": [
+          32,
+          8
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.0.bias",
+        "numel": 32,
+        "requires_grad": true,
+        "shape": [
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.weight",
+        "numel": 384,
+        "requires_grad": true,
+        "shape": [
+          12,
+          32
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "retrieved_delta.2.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_head.weight",
+        "numel": 1224,
+        "requires_grad": true,
+        "shape": [
+          12,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_head.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_head.weight",
+        "numel": 1224,
+        "requires_grad": true,
+        "shape": [
+          12,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_head.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_head.weight",
+        "numel": 612,
+        "requires_grad": true,
+        "shape": [
+          6,
+          102
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_head.bias",
+        "numel": 6,
+        "requires_grad": true,
+        "shape": [
+          6
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_residual.input.weight",
+        "numel": 1296,
+        "requires_grad": true,
+        "shape": [
+          12,
+          108
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_residual.input.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_residual.output.weight",
+        "numel": 144,
+        "requires_grad": true,
+        "shape": [
+          12,
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "current_residual.output.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_residual.input.weight",
+        "numel": 1296,
+        "requires_grad": true,
+        "shape": [
+          12,
+          108
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_residual.input.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_residual.output.weight",
+        "numel": 144,
+        "requires_grad": true,
+        "shape": [
+          12,
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "width_residual.output.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_residual.input.weight",
+        "numel": 1296,
+        "requires_grad": true,
+        "shape": [
+          12,
+          108
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_residual.input.bias",
+        "numel": 12,
+        "requires_grad": true,
+        "shape": [
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_residual.output.weight",
+        "numel": 72,
+        "requires_grad": true,
+        "shape": [
+          6,
+          12
+        ]
+      },
+      {
+        "dtype": "torch.float32",
+        "name": "median_residual.output.bias",
+        "numel": 6,
+        "requires_grad": true,
+        "shape": [
+          6
+        ]
+      }
+    ],
+    "trainable_parameters": 104663
+  },
+  "run_id": "48d7f01c381d464795f64910ca64db07",
+  "schema": "tac.live-parameter-budget.v1",
+  "seed": 109004,
+  "status": "CHECKPOINT_VERIFIED",
+  "study_id": "ME109-IDENTITY-PRESERVING-RESIDUAL-ROLES",
+  "successful_optimizer_steps": 4096
+}

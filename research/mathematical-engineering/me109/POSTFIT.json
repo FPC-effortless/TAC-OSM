@@ -1,0 +1,1743 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "ME109-IDENTITY-PRESERVING-RESIDUAL-ROLES",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "name": "UCI501 Beijing Multi-Site Air Quality",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "license": "CC-BY-4.0",
+    "observed_real_outcomes": true
+  },
+  "models": [
+    {
+      "architecture": "residual_guarded",
+      "seed": 109001,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "measured": {
+        "architecture": "residual_guarded",
+        "seed": 109001,
+        "trainable_parameters": 104663,
+        "deployed_parameters": 104663,
+        "actual_steps": 4096,
+        "checkpoint_sha256": "f86a12dd3de02c2595daa733e8108657437c664203d7a62bef26a9c75004d23b",
+        "parent_checkpoint_sha256": "af963e4eb60575cdcfdab428c3827571b29d94a60a055a8601d79d1a1d246792",
+        "dropped_parent_tensors": [],
+        "actual_sample_order_sha256": "13023038ed3e78f73be2c6762218d44c1ca3206aec7512549e2eb296c364c61d",
+        "augmented_inputs_sha256": "f6ff323eb035bf34e52909e6cb8107912e3da131cadf7e3cb15a9630bd22ed0c",
+        "optimizer_state_tensors": 45,
+        "parameter_tensors": 45,
+        "first_gradient_receipt": {
+          "parameters": {
+            "state_noise": {
+              "norm": 0.02599768526852131,
+              "nonzero": true
+            },
+            "state_response": {
+              "norm": 0.040883250534534454,
+              "nonzero": true
+            },
+            "station.weight": {
+              "norm": 0.08787787705659866,
+              "nonzero": true
+            },
+            "encoder.weight": {
+              "norm": 2.343904733657837,
+              "nonzero": true
+            },
+            "encoder.bias": {
+              "norm": 0.5778183341026306,
+              "nonzero": true
+            },
+            "address.weight": {
+              "norm": 0.1764659881591797,
+              "nonzero": true
+            },
+            "address.bias": {
+              "norm": 0.04175899550318718,
+              "nonzero": true
+            },
+            "content.weight": {
+              "norm": 0.7845859527587891,
+              "nonzero": true
+            },
+            "content.bias": {
+              "norm": 0.3694767355918884,
+              "nonzero": true
+            },
+            "source_admission.weight": {
+              "norm": 0.07068774849176407,
+              "nonzero": true
+            },
+            "source_admission.bias": {
+              "norm": 0.027618037536740303,
+              "nonzero": true
+            },
+            "fast_map.weight": {
+              "norm": 1.0385061502456665,
+              "nonzero": true
+            },
+            "fast_map.bias": {
+              "norm": 0.40491244196891785,
+              "nonzero": true
+            },
+            "slow_map.weight": {
+              "norm": 0.14282052218914032,
+              "nonzero": true
+            },
+            "slow_map.bias": {
+              "norm": 0.04614129662513733,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.weight": {
+              "norm": 0.07821855694055557,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.bias": {
+              "norm": 0.023096870630979538,
+              "nonzero": true
+            },
+            "query.weight": {
+              "norm": 0.10678135603666306,
+              "nonzero": true
+            },
+            "query.bias": {
+              "norm": 0.020691072568297386,
+              "nonzero": true
+            },
+            "readout.0.weight": {
+              "norm": 0.7159397006034851,
+              "nonzero": true
+            },
+            "readout.0.bias": {
+              "norm": 0.19095973670482635,
+              "nonzero": true
+            },
+            "readout.2.weight": {
+              "norm": 2.630247116088867,
+              "nonzero": true
+            },
+            "readout.2.bias": {
+              "norm": 0.7243069410324097,
+              "nonzero": true
+            },
+            "retrieved_delta.0.weight": {
+              "norm": 0.028517790138721466,
+              "nonzero": true
+            },
+            "retrieved_delta.0.bias": {
+              "norm": 0.08408279716968536,
+              "nonzero": true
+            },
+            "retrieved_delta.2.weight": {
+              "norm": 0.4138861298561096,
+              "nonzero": true
+            },
+            "retrieved_delta.2.bias": {
+              "norm": 0.7243069410324097,
+              "nonzero": true
+            },
+            "current_head.weight": {
+              "norm": 2.805511236190796,
+              "nonzero": true
+            },
+            "current_head.bias": {
+              "norm": 0.822020411491394,
+              "nonzero": true
+            },
+            "width_head.weight": {
+              "norm": 2.1371495723724365,
+              "nonzero": true
+            },
+            "width_head.bias": {
+              "norm": 0.6750715374946594,
+              "nonzero": true
+            },
+            "median_head.weight": {
+              "norm": 0.12122460454702377,
+              "nonzero": true
+            },
+            "median_head.bias": {
+              "norm": 0.015326438471674919,
+              "nonzero": true
+            },
+            "current_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.output.weight": {
+              "norm": 0.5368832945823669,
+              "nonzero": true
+            },
+            "current_residual.output.bias": {
+              "norm": 0.822020411491394,
+              "nonzero": true
+            },
+            "width_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.output.weight": {
+              "norm": 0.4816802740097046,
+              "nonzero": true
+            },
+            "width_residual.output.bias": {
+              "norm": 0.6750715374946594,
+              "nonzero": true
+            },
+            "median_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.output.weight": {
+              "norm": 0.023686204105615616,
+              "nonzero": true
+            },
+            "median_residual.output.bias": {
+              "norm": 0.015326438471674919,
+              "nonzero": true
+            }
+          },
+          "point": {
+            "source_encoder": {
+              "tensors": 3,
+              "nonzero": 3,
+              "norm": 0.34457662219118135
+            },
+            "source_admission": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.009439834785763442
+            },
+            "fast": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.16313372920644037
+            },
+            "slow": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.023883842191482752
+            },
+            "address": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.036181105947656785
+            },
+            "content": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.17069932330742976
+            },
+            "memory_gates": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.018051999191231398
+            },
+            "query": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.037282007568418186
+            },
+            "future_decoder": {
+              "tensors": 8,
+              "nonzero": 8,
+              "norm": 0.44705715152969056
+            },
+            "belief": {
+              "tensors": 2,
+              "nonzero": 1,
+              "norm": 0.008018817320999459
+            },
+            "reconstruction": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.3320260923490573
+            },
+            "width": {
+              "tensors": 6,
+              "nonzero": 0,
+              "norm": 0.0
+            },
+            "median": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.11390912550687657
+            }
+          }
+        },
+        "guard_aggregate": {
+          "source_encoder.projected": 1551,
+          "source_encoder.rounding_fallback": 791,
+          "source_encoder.applied_rounding_fallback": 394,
+          "source_encoder.max_applied_dot": 0.0,
+          "source_admission.projected": 1164,
+          "source_admission.rounding_fallback": 589,
+          "source_admission.applied_rounding_fallback": 292,
+          "source_admission.max_applied_dot": 0.0,
+          "fast.projected": 1257,
+          "fast.rounding_fallback": 655,
+          "fast.applied_rounding_fallback": 348,
+          "fast.max_applied_dot": 0.0,
+          "slow.projected": 1285,
+          "slow.rounding_fallback": 634,
+          "slow.applied_rounding_fallback": 349,
+          "slow.max_applied_dot": 0.0,
+          "address.projected": 823,
+          "address.rounding_fallback": 427,
+          "address.applied_rounding_fallback": 205,
+          "address.max_applied_dot": 0.0,
+          "content.projected": 1945,
+          "content.rounding_fallback": 973,
+          "content.applied_rounding_fallback": 520,
+          "content.max_applied_dot": 0.0,
+          "memory_gates.projected": 1543,
+          "memory_gates.rounding_fallback": 788,
+          "memory_gates.applied_rounding_fallback": 383,
+          "memory_gates.max_applied_dot": 0.0,
+          "query.projected": 901,
+          "query.rounding_fallback": 447,
+          "query.applied_rounding_fallback": 229,
+          "query.max_applied_dot": 0.0,
+          "future_decoder.projected": 1620,
+          "future_decoder.rounding_fallback": 826,
+          "future_decoder.applied_rounding_fallback": 426,
+          "future_decoder.max_applied_dot": 0.0,
+          "belief.projected": 2572,
+          "belief.rounding_fallback": 1319,
+          "belief.applied_rounding_fallback": 655,
+          "belief.max_applied_dot": 0.0,
+          "reconstruction.projected": 2538,
+          "reconstruction.rounding_fallback": 1261,
+          "reconstruction.applied_rounding_fallback": 635,
+          "reconstruction.max_applied_dot": 0.0,
+          "width.projected": 0,
+          "width.rounding_fallback": 0,
+          "width.applied_rounding_fallback": 0,
+          "width.max_applied_dot": 0.0,
+          "median.projected": 553,
+          "median.rounding_fallback": 269,
+          "median.applied_rounding_fallback": 142,
+          "median.max_applied_dot": 0.0,
+          "guard_seconds": 54.78952974299318
+        },
+        "optimizer_cpu_seconds": 281.466781185,
+        "wall_seconds": 282.61072312199394,
+        "peak_memory_bytes": 500805632,
+        "actual_examples": 65536,
+        "actual_tokens": 7163648,
+        "training_flops": 6592458071552,
+        "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+      }
+    },
+    {
+      "architecture": "residual_guarded",
+      "seed": 109002,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "measured": {
+        "architecture": "residual_guarded",
+        "seed": 109002,
+        "trainable_parameters": 104663,
+        "deployed_parameters": 104663,
+        "actual_steps": 4096,
+        "checkpoint_sha256": "2e52fdd743e0ce7dcbe3b534fd13129b4aafd0953337466f0e907dc3177030d9",
+        "parent_checkpoint_sha256": "bcb552e015413716ebf17b21b6e879a9e88b34d29317de728d71f006296bdee4",
+        "dropped_parent_tensors": [],
+        "actual_sample_order_sha256": "cd272cbe203833ecb0a66fde811132d6c4112da21080b9f9a6f325d2cfdf33d8",
+        "augmented_inputs_sha256": "22913d6900bd9dd767826e4c7c35d749fd4bf06fe4cf9ea02249a9a6455f2b29",
+        "optimizer_state_tensors": 45,
+        "parameter_tensors": 45,
+        "first_gradient_receipt": {
+          "parameters": {
+            "state_noise": {
+              "norm": 0.05038917064666748,
+              "nonzero": true
+            },
+            "state_response": {
+              "norm": 0.0739370733499527,
+              "nonzero": true
+            },
+            "station.weight": {
+              "norm": 0.17522256076335907,
+              "nonzero": true
+            },
+            "encoder.weight": {
+              "norm": 5.039468765258789,
+              "nonzero": true
+            },
+            "encoder.bias": {
+              "norm": 1.170379400253296,
+              "nonzero": true
+            },
+            "address.weight": {
+              "norm": 0.8036852478981018,
+              "nonzero": true
+            },
+            "address.bias": {
+              "norm": 0.42431211471557617,
+              "nonzero": true
+            },
+            "content.weight": {
+              "norm": 1.9728220701217651,
+              "nonzero": true
+            },
+            "content.bias": {
+              "norm": 0.8779507279396057,
+              "nonzero": true
+            },
+            "source_admission.weight": {
+              "norm": 0.08609680086374283,
+              "nonzero": true
+            },
+            "source_admission.bias": {
+              "norm": 0.04331151023507118,
+              "nonzero": true
+            },
+            "fast_map.weight": {
+              "norm": 1.81516432762146,
+              "nonzero": true
+            },
+            "fast_map.bias": {
+              "norm": 0.8099139332771301,
+              "nonzero": true
+            },
+            "slow_map.weight": {
+              "norm": 0.291114866733551,
+              "nonzero": true
+            },
+            "slow_map.bias": {
+              "norm": 0.09964761137962341,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.weight": {
+              "norm": 0.3988015949726105,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.bias": {
+              "norm": 0.13891838490962982,
+              "nonzero": true
+            },
+            "query.weight": {
+              "norm": 0.686161994934082,
+              "nonzero": true
+            },
+            "query.bias": {
+              "norm": 0.2098660171031952,
+              "nonzero": true
+            },
+            "readout.0.weight": {
+              "norm": 1.0448496341705322,
+              "nonzero": true
+            },
+            "readout.0.bias": {
+              "norm": 0.3109738528728485,
+              "nonzero": true
+            },
+            "readout.2.weight": {
+              "norm": 3.2463505268096924,
+              "nonzero": true
+            },
+            "readout.2.bias": {
+              "norm": 1.0784085988998413,
+              "nonzero": true
+            },
+            "retrieved_delta.0.weight": {
+              "norm": 0.0430908240377903,
+              "nonzero": true
+            },
+            "retrieved_delta.0.bias": {
+              "norm": 0.14933139085769653,
+              "nonzero": true
+            },
+            "retrieved_delta.2.weight": {
+              "norm": 0.5768097639083862,
+              "nonzero": true
+            },
+            "retrieved_delta.2.bias": {
+              "norm": 1.0784085988998413,
+              "nonzero": true
+            },
+            "current_head.weight": {
+              "norm": 3.422532081604004,
+              "nonzero": true
+            },
+            "current_head.bias": {
+              "norm": 0.9144843220710754,
+              "nonzero": true
+            },
+            "width_head.weight": {
+              "norm": 3.3943610191345215,
+              "nonzero": true
+            },
+            "width_head.bias": {
+              "norm": 1.073028802871704,
+              "nonzero": true
+            },
+            "median_head.weight": {
+              "norm": 0.13176894187927246,
+              "nonzero": true
+            },
+            "median_head.bias": {
+              "norm": 0.03234025463461876,
+              "nonzero": true
+            },
+            "current_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.output.weight": {
+              "norm": 0.4911077916622162,
+              "nonzero": true
+            },
+            "current_residual.output.bias": {
+              "norm": 0.9144843220710754,
+              "nonzero": true
+            },
+            "width_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.output.weight": {
+              "norm": 0.730316698551178,
+              "nonzero": true
+            },
+            "width_residual.output.bias": {
+              "norm": 1.073028802871704,
+              "nonzero": true
+            },
+            "median_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.output.weight": {
+              "norm": 0.027451125904917717,
+              "nonzero": true
+            },
+            "median_residual.output.bias": {
+              "norm": 0.03234025463461876,
+              "nonzero": true
+            }
+          },
+          "point": {
+            "source_encoder": {
+              "tensors": 3,
+              "nonzero": 3,
+              "norm": 0.37932071723229316
+            },
+            "source_admission": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.006934956636732182
+            },
+            "fast": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.16886439235215614
+            },
+            "slow": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.027297147565703107
+            },
+            "address": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.06774349168143394
+            },
+            "content": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.16438993507423982
+            },
+            "memory_gates": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.02349379143339826
+            },
+            "query": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.06727316843234532
+            },
+            "future_decoder": {
+              "tensors": 8,
+              "nonzero": 8,
+              "norm": 0.3631987330119827
+            },
+            "belief": {
+              "tensors": 2,
+              "nonzero": 1,
+              "norm": 0.005375312537347394
+            },
+            "reconstruction": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.3077295551824718
+            },
+            "width": {
+              "tensors": 6,
+              "nonzero": 0,
+              "norm": 0.0
+            },
+            "median": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.1271794778637095
+            }
+          }
+        },
+        "guard_aggregate": {
+          "source_encoder.projected": 1772,
+          "source_encoder.rounding_fallback": 894,
+          "source_encoder.applied_rounding_fallback": 464,
+          "source_encoder.max_applied_dot": 0.0,
+          "source_admission.projected": 1137,
+          "source_admission.rounding_fallback": 564,
+          "source_admission.applied_rounding_fallback": 282,
+          "source_admission.max_applied_dot": 0.0,
+          "fast.projected": 1636,
+          "fast.rounding_fallback": 813,
+          "fast.applied_rounding_fallback": 424,
+          "fast.max_applied_dot": 0.0,
+          "slow.projected": 1738,
+          "slow.rounding_fallback": 815,
+          "slow.applied_rounding_fallback": 522,
+          "slow.max_applied_dot": 0.0,
+          "address.projected": 1192,
+          "address.rounding_fallback": 581,
+          "address.applied_rounding_fallback": 318,
+          "address.max_applied_dot": 0.0,
+          "content.projected": 1755,
+          "content.rounding_fallback": 905,
+          "content.applied_rounding_fallback": 455,
+          "content.max_applied_dot": 0.0,
+          "memory_gates.projected": 1573,
+          "memory_gates.rounding_fallback": 762,
+          "memory_gates.applied_rounding_fallback": 435,
+          "memory_gates.max_applied_dot": 0.0,
+          "query.projected": 1435,
+          "query.rounding_fallback": 690,
+          "query.applied_rounding_fallback": 387,
+          "query.max_applied_dot": 0.0,
+          "future_decoder.projected": 1674,
+          "future_decoder.rounding_fallback": 865,
+          "future_decoder.applied_rounding_fallback": 429,
+          "future_decoder.max_applied_dot": 0.0,
+          "belief.projected": 2380,
+          "belief.rounding_fallback": 1175,
+          "belief.applied_rounding_fallback": 627,
+          "belief.max_applied_dot": 0.0,
+          "reconstruction.projected": 2563,
+          "reconstruction.rounding_fallback": 1271,
+          "reconstruction.applied_rounding_fallback": 652,
+          "reconstruction.max_applied_dot": 0.0,
+          "width.projected": 0,
+          "width.rounding_fallback": 0,
+          "width.applied_rounding_fallback": 0,
+          "width.max_applied_dot": 0.0,
+          "median.projected": 519,
+          "median.rounding_fallback": 250,
+          "median.applied_rounding_fallback": 134,
+          "median.max_applied_dot": 0.0,
+          "guard_seconds": 54.34725229155447
+        },
+        "optimizer_cpu_seconds": 279.388284794,
+        "wall_seconds": 280.55315182200866,
+        "peak_memory_bytes": 501346304,
+        "actual_examples": 65536,
+        "actual_tokens": 7163648,
+        "training_flops": 6592458071552,
+        "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+      }
+    },
+    {
+      "architecture": "residual_guarded",
+      "seed": 109003,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "measured": {
+        "architecture": "residual_guarded",
+        "seed": 109003,
+        "trainable_parameters": 104663,
+        "deployed_parameters": 104663,
+        "actual_steps": 4096,
+        "checkpoint_sha256": "e1eafe6a22810e35ce3a3b9410fbfa27009f757adfa0d53bc9caad9e6b0cc8aa",
+        "parent_checkpoint_sha256": "51ebdea1363e857cb0ed449d38c21c2cf2c2cff3b0774a3595a0bba940dce454",
+        "dropped_parent_tensors": [],
+        "actual_sample_order_sha256": "0e24df4efd6f4587a7a52700778dea4f5da291d3e548b746b0271db664625261",
+        "augmented_inputs_sha256": "f4fe4c38cbced1a003d5a3cc1ecb1e37809c9f8633d24312a2037b77daf92267",
+        "optimizer_state_tensors": 45,
+        "parameter_tensors": 45,
+        "first_gradient_receipt": {
+          "parameters": {
+            "state_noise": {
+              "norm": 0.02750042825937271,
+              "nonzero": true
+            },
+            "state_response": {
+              "norm": 0.06319104880094528,
+              "nonzero": true
+            },
+            "station.weight": {
+              "norm": 0.08042469620704651,
+              "nonzero": true
+            },
+            "encoder.weight": {
+              "norm": 2.6855618953704834,
+              "nonzero": true
+            },
+            "encoder.bias": {
+              "norm": 0.6186797618865967,
+              "nonzero": true
+            },
+            "address.weight": {
+              "norm": 0.1988256722688675,
+              "nonzero": true
+            },
+            "address.bias": {
+              "norm": 0.056333016604185104,
+              "nonzero": true
+            },
+            "content.weight": {
+              "norm": 1.0484427213668823,
+              "nonzero": true
+            },
+            "content.bias": {
+              "norm": 0.44969111680984497,
+              "nonzero": true
+            },
+            "source_admission.weight": {
+              "norm": 0.08049467951059341,
+              "nonzero": true
+            },
+            "source_admission.bias": {
+              "norm": 0.015314032323658466,
+              "nonzero": true
+            },
+            "fast_map.weight": {
+              "norm": 1.318985939025879,
+              "nonzero": true
+            },
+            "fast_map.bias": {
+              "norm": 0.4446534812450409,
+              "nonzero": true
+            },
+            "slow_map.weight": {
+              "norm": 0.22061412036418915,
+              "nonzero": true
+            },
+            "slow_map.bias": {
+              "norm": 0.06907680630683899,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.weight": {
+              "norm": 0.04032416269183159,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.bias": {
+              "norm": 0.005747910123318434,
+              "nonzero": true
+            },
+            "query.weight": {
+              "norm": 0.22044065594673157,
+              "nonzero": true
+            },
+            "query.bias": {
+              "norm": 0.05095361918210983,
+              "nonzero": true
+            },
+            "readout.0.weight": {
+              "norm": 0.8991248607635498,
+              "nonzero": true
+            },
+            "readout.0.bias": {
+              "norm": 0.22353877127170563,
+              "nonzero": true
+            },
+            "readout.2.weight": {
+              "norm": 2.7110841274261475,
+              "nonzero": true
+            },
+            "readout.2.bias": {
+              "norm": 0.9917051196098328,
+              "nonzero": true
+            },
+            "retrieved_delta.0.weight": {
+              "norm": 0.029515668749809265,
+              "nonzero": true
+            },
+            "retrieved_delta.0.bias": {
+              "norm": 0.08266174048185349,
+              "nonzero": true
+            },
+            "retrieved_delta.2.weight": {
+              "norm": 0.5487591624259949,
+              "nonzero": true
+            },
+            "retrieved_delta.2.bias": {
+              "norm": 0.9917051196098328,
+              "nonzero": true
+            },
+            "current_head.weight": {
+              "norm": 2.4797019958496094,
+              "nonzero": true
+            },
+            "current_head.bias": {
+              "norm": 0.755458652973175,
+              "nonzero": true
+            },
+            "width_head.weight": {
+              "norm": 2.061227321624756,
+              "nonzero": true
+            },
+            "width_head.bias": {
+              "norm": 0.5232574939727783,
+              "nonzero": true
+            },
+            "median_head.weight": {
+              "norm": 0.22659625113010406,
+              "nonzero": true
+            },
+            "median_head.bias": {
+              "norm": 0.06895183771848679,
+              "nonzero": true
+            },
+            "current_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.output.weight": {
+              "norm": 0.47776761651039124,
+              "nonzero": true
+            },
+            "current_residual.output.bias": {
+              "norm": 0.755458652973175,
+              "nonzero": true
+            },
+            "width_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.output.weight": {
+              "norm": 0.3760877549648285,
+              "nonzero": true
+            },
+            "width_residual.output.bias": {
+              "norm": 0.5232574939727783,
+              "nonzero": true
+            },
+            "median_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.output.weight": {
+              "norm": 0.034578803926706314,
+              "nonzero": true
+            },
+            "median_residual.output.bias": {
+              "norm": 0.06895183771848679,
+              "nonzero": true
+            }
+          },
+          "point": {
+            "source_encoder": {
+              "tensors": 3,
+              "nonzero": 3,
+              "norm": 1.0843635300190202
+            },
+            "source_admission": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.01549120951844273
+            },
+            "fast": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.3671745781435297
+            },
+            "slow": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.063344796308649
+            },
+            "address": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.09280060016194405
+            },
+            "content": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.7510247209613498
+            },
+            "memory_gates": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.022738023907666046
+            },
+            "query": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.06304537455104069
+            },
+            "future_decoder": {
+              "tensors": 8,
+              "nonzero": 8,
+              "norm": 0.6038918163129338
+            },
+            "belief": {
+              "tensors": 2,
+              "nonzero": 1,
+              "norm": 0.0065722950326774325
+            },
+            "reconstruction": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.4830180546180467
+            },
+            "width": {
+              "tensors": 6,
+              "nonzero": 0,
+              "norm": 0.0
+            },
+            "median": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.21860410765587776
+            }
+          }
+        },
+        "guard_aggregate": {
+          "source_encoder.projected": 1615,
+          "source_encoder.rounding_fallback": 806,
+          "source_encoder.applied_rounding_fallback": 400,
+          "source_encoder.max_applied_dot": 0.0,
+          "source_admission.projected": 1181,
+          "source_admission.rounding_fallback": 567,
+          "source_admission.applied_rounding_fallback": 290,
+          "source_admission.max_applied_dot": 0.0,
+          "fast.projected": 1465,
+          "fast.rounding_fallback": 732,
+          "fast.applied_rounding_fallback": 424,
+          "fast.max_applied_dot": 0.0,
+          "slow.projected": 1625,
+          "slow.rounding_fallback": 833,
+          "slow.applied_rounding_fallback": 448,
+          "slow.max_applied_dot": 0.0,
+          "address.projected": 1135,
+          "address.rounding_fallback": 567,
+          "address.applied_rounding_fallback": 288,
+          "address.max_applied_dot": 0.0,
+          "content.projected": 2135,
+          "content.rounding_fallback": 1085,
+          "content.applied_rounding_fallback": 522,
+          "content.max_applied_dot": 0.0,
+          "memory_gates.projected": 1088,
+          "memory_gates.rounding_fallback": 530,
+          "memory_gates.applied_rounding_fallback": 280,
+          "memory_gates.max_applied_dot": 0.0,
+          "query.projected": 1254,
+          "query.rounding_fallback": 615,
+          "query.applied_rounding_fallback": 316,
+          "query.max_applied_dot": 0.0,
+          "future_decoder.projected": 1497,
+          "future_decoder.rounding_fallback": 748,
+          "future_decoder.applied_rounding_fallback": 401,
+          "future_decoder.max_applied_dot": 0.0,
+          "belief.projected": 2482,
+          "belief.rounding_fallback": 1300,
+          "belief.applied_rounding_fallback": 569,
+          "belief.max_applied_dot": 0.0,
+          "reconstruction.projected": 2644,
+          "reconstruction.rounding_fallback": 1336,
+          "reconstruction.applied_rounding_fallback": 659,
+          "reconstruction.max_applied_dot": 0.0,
+          "width.projected": 0,
+          "width.rounding_fallback": 0,
+          "width.applied_rounding_fallback": 0,
+          "width.max_applied_dot": 0.0,
+          "median.projected": 502,
+          "median.rounding_fallback": 264,
+          "median.applied_rounding_fallback": 110,
+          "median.max_applied_dot": 0.0,
+          "guard_seconds": 54.30444655845349
+        },
+        "optimizer_cpu_seconds": 278.73986885,
+        "wall_seconds": 279.0675082929956,
+        "peak_memory_bytes": 501346304,
+        "actual_examples": 65536,
+        "actual_tokens": 7163648,
+        "training_flops": 6592458071552,
+        "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+      }
+    },
+    {
+      "architecture": "residual_guarded",
+      "seed": 109004,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "measured": {
+        "architecture": "residual_guarded",
+        "seed": 109004,
+        "trainable_parameters": 104663,
+        "deployed_parameters": 104663,
+        "actual_steps": 4096,
+        "checkpoint_sha256": "e72b9a9435b99911023bfcaa258992c7bb071ad326bb2091e7e67168d76c1b86",
+        "parent_checkpoint_sha256": "2d0e4b7f294fe648dba8f41c986ee94fc788a9368dcc0d2ee3b1c7adf20c18fb",
+        "dropped_parent_tensors": [],
+        "actual_sample_order_sha256": "9d56e07ad945fd6309e46369802915483d024f0165062d66557e77d71006901d",
+        "augmented_inputs_sha256": "60ee180ac211d0e5f1249d86a3267dab0c9d4dd2f7d1b2881877aa00c85e17c7",
+        "optimizer_state_tensors": 45,
+        "parameter_tensors": 45,
+        "first_gradient_receipt": {
+          "parameters": {
+            "state_noise": {
+              "norm": 0.026602542027831078,
+              "nonzero": true
+            },
+            "state_response": {
+              "norm": 0.032973431050777435,
+              "nonzero": true
+            },
+            "station.weight": {
+              "norm": 0.053531862795352936,
+              "nonzero": true
+            },
+            "encoder.weight": {
+              "norm": 1.4665106534957886,
+              "nonzero": true
+            },
+            "encoder.bias": {
+              "norm": 0.3378066122531891,
+              "nonzero": true
+            },
+            "address.weight": {
+              "norm": 0.2895162105560303,
+              "nonzero": true
+            },
+            "address.bias": {
+              "norm": 0.08353305608034134,
+              "nonzero": true
+            },
+            "content.weight": {
+              "norm": 0.5915147066116333,
+              "nonzero": true
+            },
+            "content.bias": {
+              "norm": 0.21883095800876617,
+              "nonzero": true
+            },
+            "source_admission.weight": {
+              "norm": 0.06209158897399902,
+              "nonzero": true
+            },
+            "source_admission.bias": {
+              "norm": 0.01745736598968506,
+              "nonzero": true
+            },
+            "fast_map.weight": {
+              "norm": 0.8006957769393921,
+              "nonzero": true
+            },
+            "fast_map.bias": {
+              "norm": 0.31014764308929443,
+              "nonzero": true
+            },
+            "slow_map.weight": {
+              "norm": 0.1690235137939453,
+              "nonzero": true
+            },
+            "slow_map.bias": {
+              "norm": 0.050732482224702835,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.weight": {
+              "norm": 0.022416923195123672,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.bias": {
+              "norm": 0.006608161609619856,
+              "nonzero": true
+            },
+            "query.weight": {
+              "norm": 0.29383084177970886,
+              "nonzero": true
+            },
+            "query.bias": {
+              "norm": 0.0833611935377121,
+              "nonzero": true
+            },
+            "readout.0.weight": {
+              "norm": 0.5428413152694702,
+              "nonzero": true
+            },
+            "readout.0.bias": {
+              "norm": 0.15925852954387665,
+              "nonzero": true
+            },
+            "readout.2.weight": {
+              "norm": 1.4009684324264526,
+              "nonzero": true
+            },
+            "readout.2.bias": {
+              "norm": 0.5654196739196777,
+              "nonzero": true
+            },
+            "retrieved_delta.0.weight": {
+              "norm": 0.016689615324139595,
+              "nonzero": true
+            },
+            "retrieved_delta.0.bias": {
+              "norm": 0.07943201810121536,
+              "nonzero": true
+            },
+            "retrieved_delta.2.weight": {
+              "norm": 0.34016627073287964,
+              "nonzero": true
+            },
+            "retrieved_delta.2.bias": {
+              "norm": 0.5654196739196777,
+              "nonzero": true
+            },
+            "current_head.weight": {
+              "norm": 1.7014081478118896,
+              "nonzero": true
+            },
+            "current_head.bias": {
+              "norm": 0.4798174798488617,
+              "nonzero": true
+            },
+            "width_head.weight": {
+              "norm": 1.9340693950653076,
+              "nonzero": true
+            },
+            "width_head.bias": {
+              "norm": 0.6882328391075134,
+              "nonzero": true
+            },
+            "median_head.weight": {
+              "norm": 0.1741202473640442,
+              "nonzero": true
+            },
+            "median_head.bias": {
+              "norm": 0.05302673205733299,
+              "nonzero": true
+            },
+            "current_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.output.weight": {
+              "norm": 0.3596947491168976,
+              "nonzero": true
+            },
+            "current_residual.output.bias": {
+              "norm": 0.4798174798488617,
+              "nonzero": true
+            },
+            "width_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.output.weight": {
+              "norm": 0.32636263966560364,
+              "nonzero": true
+            },
+            "width_residual.output.bias": {
+              "norm": 0.6882328391075134,
+              "nonzero": true
+            },
+            "median_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.output.weight": {
+              "norm": 0.034318264573812485,
+              "nonzero": true
+            },
+            "median_residual.output.bias": {
+              "norm": 0.05302673205733299,
+              "nonzero": true
+            }
+          },
+          "point": {
+            "source_encoder": {
+              "tensors": 3,
+              "nonzero": 3,
+              "norm": 0.45823061704164114
+            },
+            "source_admission": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.014142749656387114
+            },
+            "fast": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.2573054176849117
+            },
+            "slow": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.0643813493661194
+            },
+            "address": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.11171623204497791
+            },
+            "content": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.15617952080500583
+            },
+            "memory_gates": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.0043305218044042346
+            },
+            "query": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.11894671861957776
+            },
+            "future_decoder": {
+              "tensors": 8,
+              "nonzero": 8,
+              "norm": 0.45171154355741555
+            },
+            "belief": {
+              "tensors": 2,
+              "nonzero": 1,
+              "norm": 0.006765733892918656
+            },
+            "reconstruction": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.35330159011300305
+            },
+            "width": {
+              "tensors": 6,
+              "nonzero": 0,
+              "norm": 0.0
+            },
+            "median": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.16519158780521778
+            }
+          }
+        },
+        "guard_aggregate": {
+          "source_encoder.projected": 1720,
+          "source_encoder.rounding_fallback": 853,
+          "source_encoder.applied_rounding_fallback": 444,
+          "source_encoder.max_applied_dot": 0.0,
+          "source_admission.projected": 1201,
+          "source_admission.rounding_fallback": 589,
+          "source_admission.applied_rounding_fallback": 310,
+          "source_admission.max_applied_dot": 0.0,
+          "fast.projected": 1693,
+          "fast.rounding_fallback": 829,
+          "fast.applied_rounding_fallback": 483,
+          "fast.max_applied_dot": 0.0,
+          "slow.projected": 1843,
+          "slow.rounding_fallback": 924,
+          "slow.applied_rounding_fallback": 512,
+          "slow.max_applied_dot": 0.0,
+          "address.projected": 853,
+          "address.rounding_fallback": 427,
+          "address.applied_rounding_fallback": 226,
+          "address.max_applied_dot": 0.0,
+          "content.projected": 2300,
+          "content.rounding_fallback": 1123,
+          "content.applied_rounding_fallback": 575,
+          "content.max_applied_dot": 0.0,
+          "memory_gates.projected": 1503,
+          "memory_gates.rounding_fallback": 751,
+          "memory_gates.applied_rounding_fallback": 412,
+          "memory_gates.max_applied_dot": 0.0,
+          "query.projected": 911,
+          "query.rounding_fallback": 448,
+          "query.applied_rounding_fallback": 204,
+          "query.max_applied_dot": 0.0,
+          "future_decoder.projected": 1695,
+          "future_decoder.rounding_fallback": 846,
+          "future_decoder.applied_rounding_fallback": 485,
+          "future_decoder.max_applied_dot": 0.0,
+          "belief.projected": 2588,
+          "belief.rounding_fallback": 1276,
+          "belief.applied_rounding_fallback": 637,
+          "belief.max_applied_dot": 0.0,
+          "reconstruction.projected": 2679,
+          "reconstruction.rounding_fallback": 1355,
+          "reconstruction.applied_rounding_fallback": 674,
+          "reconstruction.max_applied_dot": 0.0,
+          "width.projected": 0,
+          "width.rounding_fallback": 0,
+          "width.applied_rounding_fallback": 0,
+          "width.max_applied_dot": 0.0,
+          "median.projected": 547,
+          "median.rounding_fallback": 278,
+          "median.applied_rounding_fallback": 141,
+          "median.max_applied_dot": 0.0,
+          "guard_seconds": 54.95001226763998
+        },
+        "optimizer_cpu_seconds": 280.37584737699996,
+        "wall_seconds": 280.7173385479982,
+        "peak_memory_bytes": 500805632,
+        "actual_examples": 65536,
+        "actual_tokens": 7163648,
+        "training_flops": 6592458071552,
+        "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+      }
+    },
+    {
+      "architecture": "residual_guarded",
+      "seed": 109005,
+      "trainable_parameters": 104663,
+      "deployed_parameters": 104663,
+      "measured": {
+        "architecture": "residual_guarded",
+        "seed": 109005,
+        "trainable_parameters": 104663,
+        "deployed_parameters": 104663,
+        "actual_steps": 4096,
+        "checkpoint_sha256": "7250357f8dbd5d175f2cc3617ed5f1c4d19c0d6a8ef462e8036f58de96662256",
+        "parent_checkpoint_sha256": "411d00a7a42811c047291e3cbb8f58d2ec582992cf4eb410066ff902fa49421f",
+        "dropped_parent_tensors": [],
+        "actual_sample_order_sha256": "900bb60c4b6ed6936d3c07eb3abf3c3961263335b1d24054a0b402401df37c85",
+        "augmented_inputs_sha256": "87677e43c0d5c7a34532c03faf3891ad5a670682dc96ce5728500a0372412c8c",
+        "optimizer_state_tensors": 45,
+        "parameter_tensors": 45,
+        "first_gradient_receipt": {
+          "parameters": {
+            "state_noise": {
+              "norm": 0.0468253456056118,
+              "nonzero": true
+            },
+            "state_response": {
+              "norm": 0.13553790748119354,
+              "nonzero": true
+            },
+            "station.weight": {
+              "norm": 0.1867201328277588,
+              "nonzero": true
+            },
+            "encoder.weight": {
+              "norm": 5.863526344299316,
+              "nonzero": true
+            },
+            "encoder.bias": {
+              "norm": 1.18702232837677,
+              "nonzero": true
+            },
+            "address.weight": {
+              "norm": 0.7301543951034546,
+              "nonzero": true
+            },
+            "address.bias": {
+              "norm": 0.20128333568572998,
+              "nonzero": true
+            },
+            "content.weight": {
+              "norm": 1.7372630834579468,
+              "nonzero": true
+            },
+            "content.bias": {
+              "norm": 0.5061075091362,
+              "nonzero": true
+            },
+            "source_admission.weight": {
+              "norm": 0.29751139879226685,
+              "nonzero": true
+            },
+            "source_admission.bias": {
+              "norm": 0.08315598964691162,
+              "nonzero": true
+            },
+            "fast_map.weight": {
+              "norm": 3.683540105819702,
+              "nonzero": true
+            },
+            "fast_map.bias": {
+              "norm": 1.2034319639205933,
+              "nonzero": true
+            },
+            "slow_map.weight": {
+              "norm": 0.6005476713180542,
+              "nonzero": true
+            },
+            "slow_map.bias": {
+              "norm": 0.17260640859603882,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.weight": {
+              "norm": 0.08196823298931122,
+              "nonzero": true
+            },
+            "memory_gates.inner_linear.bias": {
+              "norm": 0.02025352045893669,
+              "nonzero": true
+            },
+            "query.weight": {
+              "norm": 0.559669554233551,
+              "nonzero": true
+            },
+            "query.bias": {
+              "norm": 0.12229848653078079,
+              "nonzero": true
+            },
+            "readout.0.weight": {
+              "norm": 1.7903398275375366,
+              "nonzero": true
+            },
+            "readout.0.bias": {
+              "norm": 0.46612775325775146,
+              "nonzero": true
+            },
+            "readout.2.weight": {
+              "norm": 7.519331932067871,
+              "nonzero": true
+            },
+            "readout.2.bias": {
+              "norm": 2.2589974403381348,
+              "nonzero": true
+            },
+            "retrieved_delta.0.weight": {
+              "norm": 0.021142389625310898,
+              "nonzero": true
+            },
+            "retrieved_delta.0.bias": {
+              "norm": 0.19426529109477997,
+              "nonzero": true
+            },
+            "retrieved_delta.2.weight": {
+              "norm": 1.3056033849716187,
+              "nonzero": true
+            },
+            "retrieved_delta.2.bias": {
+              "norm": 2.2589974403381348,
+              "nonzero": true
+            },
+            "current_head.weight": {
+              "norm": 7.41829252243042,
+              "nonzero": true
+            },
+            "current_head.bias": {
+              "norm": 1.8961944580078125,
+              "nonzero": true
+            },
+            "width_head.weight": {
+              "norm": 12.757302284240723,
+              "nonzero": true
+            },
+            "width_head.bias": {
+              "norm": 3.195641040802002,
+              "nonzero": true
+            },
+            "median_head.weight": {
+              "norm": 0.14684538543224335,
+              "nonzero": true
+            },
+            "median_head.bias": {
+              "norm": 0.02138209156692028,
+              "nonzero": true
+            },
+            "current_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "current_residual.output.weight": {
+              "norm": 1.3706212043762207,
+              "nonzero": true
+            },
+            "current_residual.output.bias": {
+              "norm": 1.8961944580078125,
+              "nonzero": true
+            },
+            "width_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "width_residual.output.weight": {
+              "norm": 2.2042765617370605,
+              "nonzero": true
+            },
+            "width_residual.output.bias": {
+              "norm": 3.195641040802002,
+              "nonzero": true
+            },
+            "median_residual.input.weight": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.input.bias": {
+              "norm": 0.0,
+              "nonzero": false
+            },
+            "median_residual.output.weight": {
+              "norm": 0.025972632691264153,
+              "nonzero": true
+            },
+            "median_residual.output.bias": {
+              "norm": 0.02138209156692028,
+              "nonzero": true
+            }
+          },
+          "point": {
+            "source_encoder": {
+              "tensors": 3,
+              "nonzero": 3,
+              "norm": 0.2997788740069886
+            },
+            "source_admission": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.018365446763684894
+            },
+            "fast": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.1942714461900415
+            },
+            "slow": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.03130939910365359
+            },
+            "address": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.06698852446176187
+            },
+            "content": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.09818890986973593
+            },
+            "memory_gates": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.006743034894880015
+            },
+            "query": {
+              "tensors": 2,
+              "nonzero": 2,
+              "norm": 0.047500484061695006
+            },
+            "future_decoder": {
+              "tensors": 8,
+              "nonzero": 8,
+              "norm": 0.3513519663404495
+            },
+            "belief": {
+              "tensors": 2,
+              "nonzero": 1,
+              "norm": 0.007234946351532532
+            },
+            "reconstruction": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.2759410546678608
+            },
+            "width": {
+              "tensors": 6,
+              "nonzero": 0,
+              "norm": 0.0
+            },
+            "median": {
+              "tensors": 6,
+              "nonzero": 4,
+              "norm": 0.13155647489295463
+            }
+          }
+        },
+        "guard_aggregate": {
+          "source_encoder.projected": 1655,
+          "source_encoder.rounding_fallback": 833,
+          "source_encoder.applied_rounding_fallback": 404,
+          "source_encoder.max_applied_dot": 0.0,
+          "source_admission.projected": 1233,
+          "source_admission.rounding_fallback": 616,
+          "source_admission.applied_rounding_fallback": 297,
+          "source_admission.max_applied_dot": 0.0,
+          "fast.projected": 1704,
+          "fast.rounding_fallback": 870,
+          "fast.applied_rounding_fallback": 482,
+          "fast.max_applied_dot": 0.0,
+          "slow.projected": 1669,
+          "slow.rounding_fallback": 875,
+          "slow.applied_rounding_fallback": 421,
+          "slow.max_applied_dot": 0.0,
+          "address.projected": 1014,
+          "address.rounding_fallback": 478,
+          "address.applied_rounding_fallback": 261,
+          "address.max_applied_dot": 0.0,
+          "content.projected": 1847,
+          "content.rounding_fallback": 949,
+          "content.applied_rounding_fallback": 479,
+          "content.max_applied_dot": 0.0,
+          "memory_gates.projected": 1237,
+          "memory_gates.rounding_fallback": 633,
+          "memory_gates.applied_rounding_fallback": 316,
+          "memory_gates.max_applied_dot": 0.0,
+          "query.projected": 1823,
+          "query.rounding_fallback": 948,
+          "query.applied_rounding_fallback": 441,
+          "query.max_applied_dot": 0.0,
+          "future_decoder.projected": 1662,
+          "future_decoder.rounding_fallback": 835,
+          "future_decoder.applied_rounding_fallback": 449,
+          "future_decoder.max_applied_dot": 0.0,
+          "belief.projected": 2543,
+          "belief.rounding_fallback": 1284,
+          "belief.applied_rounding_fallback": 613,
+          "belief.max_applied_dot": 0.0,
+          "reconstruction.projected": 2586,
+          "reconstruction.rounding_fallback": 1330,
+          "reconstruction.applied_rounding_fallback": 636,
+          "reconstruction.max_applied_dot": 0.0,
+          "width.projected": 0,
+          "width.rounding_fallback": 0,
+          "width.applied_rounding_fallback": 0,
+          "width.max_applied_dot": 0.0,
+          "median.projected": 555,
+          "median.rounding_fallback": 283,
+          "median.applied_rounding_fallback": 127,
+          "median.max_applied_dot": 0.0,
+          "guard_seconds": 53.94742664274236
+        },
+        "optimizer_cpu_seconds": 276.60985869700005,
+        "wall_seconds": 276.6184368039976,
+        "peak_memory_bytes": 501346304,
+        "actual_examples": 65536,
+        "actual_tokens": 7163648,
+        "training_flops": 6592458071552,
+        "flops_scope": "partial model forward/backward profiler estimate; excludes optimizer and unsupported operators"
+      }
+    }
+  ],
+  "protocol": {
+    "question": "Can a single integrated native TAC with exactly parent-preserving residual FFNs conditioned on causal current availability and source age meet unchanged point and uncertainty gates?",
+    "fit": "2013-2014 authentic FIT only, 6h targets; contexts8/64/256; B16, half natural-gap and half general origins; original causal random masking/current reconstruction.",
+    "report": "Already exposed2015 only, same original143natural-gap and4288general queries,256h histories; no independent confirmation claim.",
+    "protected": "2016-2017 numeric rows remain closed, no parsing/scoring or model selection.",
+    "seeds": [
+      109001,
+      109002,
+      109003,
+      109004,
+      109005
+    ],
+    "parent": "All five ME103 strong_reconstruction parents102001..102005; retain EVERY original learned tensor including current affine head. Width and median affines zero-initialized as in ME105, and three108-to12-to12/12/6 residual FFNs output weights/bias zero. Exact original parent forecast/state identity checked on original FIT before first update.",
+    "updates": 4096,
+    "batch_size": 16,
+    "supervised_examples_per_model": 65536,
+    "history_events_per_model": 7163648,
+    "loss": "NLL+.5rawmedianMAE/FITstd+.1standardized-logMSE+.3masked-currentGaussianNLL+.25proper90intervalscore/FITstd; inherited uncertainty view removes direct median-correction tangent from NLL/interval.",
+    "optimizer": "Fresh BlockProtectedAdamW beta(.9,.999),eps1e-8,weight_decay.001;33 inherited affine/backbone tensors lr3e-5;12 new residual tensors lr3e-4. No schedule. Global combined clip1. Point role unclipped .5point gradients;13 exhaustive mapped blocks. Local guard not a population forecast guarantee.",
+    "moment_semantics": "Moments track clipped raw combined gradients even if a weight move is projected/rejected. Complete rate/decay/preconditioned displacement is guarded before parameter mutation. Round/recheck both displacement and actual candidate weights; reject opposing protected-coordinate moves, leaving zero-point-gradient coordinates free. No first-order/coverage/finite-step guarantee is equated with predictive success.",
+    "exposure": "Residual heads4096updates; retained ME103 backbone/current3072parent+4096new=7168ownlineage. Original zero width/median affine heads4096updates. No ME108 fitted weights reused.",
+    "compute": "One fixed candidate, no new trained rival or superiority claim. CPU and partial profiled FLOPs measured, not matched to historical studies. Maximum2one-thread local workers; no external paid compute.",
+    "gates": "Exactly ME106 perseed gates with mappedME101andME103 references: gapPM90coverage[.90,.98]; gapPMMAE<=min(1.05ME101,1.05ownparent); ordinaryPMMAE<=min(1.05LOCF,1.05ownparent); gap6chNLL<=min(6.234504261016846,1.05ownparent); gapPMintervalscore<=min(1.05ME101,.90ownparent). Allfive seeds must pass allgates.",
+    "stop": "Exactly five original4096-update fits. Freeze all models/optimizer/RNG/receipts in Git BEFORE any REPORT scores. No retries, favorable-seed selection, threshold changes, extra fits or protected2016-2017 numeric access. Any failure remains failure.",
+    "prior_art": "He et al2016 Deep Residual Learning https://openaccess.thecvf.com/content_cvpr_2016/html/He_Deep_Residual_Learning_CVPR_2016_paper.html (identity-preserving learned residuals); Che et al2018 GRU-D https://doi.org/10.1038/s41598-018-24271-9 (explicit missingness/elapsed-time inputs); Caruana1997 task-specific heads; AdamW and gradient-surgery lineage inherited. No architecture novelty or superiority claim from familiar components.",
+    "initialization_limit": "Zero residual output implies zero initial hidden-layer gradients but allows finite output-layer gradients. This expected staged activation is audited; every tensor remains trainable. Identity is an INITIALIZATION guarantee, not persistent parent preservation after training."
+  },
+  "source_files": {
+    "scripts/me102_reconstruction_panel.py": "7ef36d9195ff4b040f6300994f20ef061e16f69260d43666a258e74ec3ebfadc",
+    "scripts/me102_graph_reference.py": "5d8babb005d28877f3e01cd46d32f4b79b9af055b518a09a4690468457d92918",
+    "scripts/me102_gap_data.py": "fff07eface039eff6458399ff1ab33db4b268a71d2adcc6e1ebca6b451cac324",
+    "scripts/me100_sensor_data.py": "57f4d9086251d6dd8f12feb675ebe96de1223b3016906ad867cf3795fd0c74cc",
+    "scripts/me101_graph_reference.py": "ab4f70a83aa28f9ba0fd05749d2cf8cd6c3ff7880dcc3d25ec0728d955bba9d3",
+    "scripts/me100_graph_reference.py": "5923f55cf718aee6d73723dfc60bf82162880fbeb41c462d4575cdc91f4f64ff",
+    "src/tac_osm/variants/reconstruction_sensor_world.py": "55855ed04835af42758bcbd1170b384841e8d17ea5c0dbe7916cca0892987593",
+    "src/tac_osm/variants/belief_sensor_world.py": "618fa4a6dd53c0c3128081d4990fcd66f40593e9b875ca8983b475035245fb88",
+    "src/tac_osm/variants/entity_sensor_world.py": "c26c2b15e99c5f8238bc49dc4eb0a6ebdfb4b62dfe566ee400a044cebead6282",
+    "src/tac_osm/variants/parallel_affine_memory.py": "e3a0732b17acfa7505952b5229573099edc7f1dbe65604f4f3f516e05652baeb",
+    "src/tac_osm/variants/retention_controlled_world.py": "eead543fc0d87d0c77d4f36758115168beb591b31e53e3d251714c076da0e970",
+    "src/tac_osm/parameter_budget.py": "5af0aad308b1742a6663e1bba09cbd1130db338659811d41169f2cc6cbbe83ad",
+    "scripts/me101_belief_sensor.py": "c51c03ed7cd4db0ee721daa339d42ede34afe8d5242d61fed07995eba701b14f",
+    "src/tac_osm/variants/median_split_sensor_world.py": "c7d71d7a0fc23e8849e69edf35b5e555dbc0e567ad93406a0e4bcc2186ccd0ad",
+    "src/tac_osm/variants/protected_sensor_world.py": "9fbfa64878daf48189786d50ea975571f4832bea95b00f3bdf3444075b022a20",
+    "src/tac_osm/variants/point_priority_sensor_world.py": "34ce48400a462f40aa3f1023ef9c21d52389a8754fd54cbb4c59f34bc2c0d8e7",
+    "scripts/me105_protected_panel.py": "239d19936ce88e06cea5c4946893032b32b09567a18ed72b44a8b2a0a76f2c62",
+    "scripts/me105_graph_reference.py": "775c13a7437f99c353911105f21afb23ce4e7478b51d5968c56aa4978c60ca45",
+    "scripts/me106_gradient_roles.py": "9dea6fb17d473f686672f5a225ccbb08a3a7845c35b93305fcb42a441401ae73",
+    "scripts/me104_graph_reference.py": "930a117e2b0d5198e6666be639c613020a1ef8570cbaeab778d43176c4da3a62",
+    "scripts/me106_graph_reference.py": "fde76eb9dc9a72618b3c7813017051176ec4f681fbaf3d6c087508204e6274ae",
+    "scripts/me106_priority_panel.py": "c1a5abfa2c9aa20da6e41012bbf204e41fd542526991cbb868630fbc90ac4bad",
+    "scripts/me109_residual_training.py": "bba847d2ca08f8f27b79f5eedc76585582febab3128271dcc49f6e278495e16c",
+    "scripts/me109_graph_reference.py": "72d10ccf71077047bfef7732b96ecb3bdd7e137c7332af504d30f4fdcb9fd4fe",
+    "scripts/me108_optimizer_reference.py": "d3ea41f844e257323ec67b8ad82b7d7cf03c81e19bae8787f64eefbe86a7e705",
+    "src/tac_osm/role_optimizer.py": "27140502225513db4523df893f6e1a5c8c52f9e3147c361a7aed23f280f928ee",
+    "src/tac_osm/role_update_contract.py": "88c01a49f4ad324b4c37b44026591461d8b236b90856618657ede38ea6e61f27",
+    "scripts/diaggrad001_loss_flow.py": "28ad2943f132a475e9ff7e61099a428896fc0aed485ac8a0cedacea2b3d705fa",
+    "scripts/me107_graph_reference.py": "3f25718ff6a9adcae62799c60e86fc08da113bb2260bf6a8d015d4714f8de2eb",
+    "src/tac_osm/variants/residual_role_sensor_world.py": "28a38f7eded88e22966327663c16d9c04721e38586903c8ebdc50ab3b81a767b"
+  },
+  "fit_plans_sha256": "25a4cf9cbafdc24948b950b2eccf53d271fcc7e873aeaa02543e7aadbea81dd0",
+  "prefit_design_sha256": "330e055d7c41c03e3caaff4aa276432803251f3274b0285aaab83db5e76a05e2",
+  "prefit_profiles_sha256": "f303c3bac8cc54df936132f32c52718e99538c5bc958d4ed23e7162d1e3cae73",
+  "parent_fit_index_sha256": "586218572938a9a9da96607be371e258c86fb45833558d23b445e97bc9e6814e",
+  "parent_registration_sha256": "583da81703becdbcc52e59757e04e3eb6a94081de10d1d5af403ebd3d41007b7"
+}

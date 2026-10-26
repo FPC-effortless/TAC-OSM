@@ -1,0 +1,239 @@
+original-model-contract	Run set -e	﻿2026-10-26T07:11:41.6771942Z ##[group]Run set -e
+original-model-contract	Run set -e	2026-10-26T07:11:41.6772237Z [36;1mset -e[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6772820Z [36;1mpython scripts/validate_research_parity.py --manifest research/mathematical-engineering/me109/FAIR_COMPARISON.json --phase preflight[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6773853Z [36;1mif test -f research/replay-bundles/ME109/RESULTS.json; then[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6774553Z [36;1m  python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me109/POSTFIT.json --phase final[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6775241Z [36;1m  PYTHONPATH=src:. python scripts/me109_fitted_audit.py replay[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6775717Z [36;1m  PYTHONPATH=src:. python scripts/me109_residual_training.py replay[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6776164Z [36;1m  PYTHONPATH=src:. python scripts/me109_summary.py[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6776621Z [36;1m  if test -f research/replay-bundles/ME109/OBSERVATORY_ANTICHEAT.json; then[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6777143Z [36;1m    PYTHONPATH=src:. python scripts/me109_observatory_adapter.py replay[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6777550Z [36;1m  fi[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6777741Z [36;1melse[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6778121Z [36;1m  echo 'Original five-model scores not yet available; no training or new scoring performed.'[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6778569Z [36;1mfi[0m
+original-model-contract	Run set -e	2026-10-26T07:11:41.6840793Z shell: /usr/bin/bash -e {0}
+original-model-contract	Run set -e	2026-10-26T07:11:41.6841051Z env:
+original-model-contract	Run set -e	2026-10-26T07:11:41.6841323Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+original-model-contract	Run set -e	2026-10-26T07:11:41.6841809Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+original-model-contract	Run set -e	2026-10-26T07:11:41.6842262Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-model-contract	Run set -e	2026-10-26T07:11:41.6842648Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-model-contract	Run set -e	2026-10-26T07:11:41.6843035Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+original-model-contract	Run set -e	2026-10-26T07:11:41.6843685Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+original-model-contract	Run set -e	2026-10-26T07:11:41.6844012Z ##[endgroup]
+original-model-contract	Run set -e	2026-10-26T07:11:41.7324811Z {"eligible_for_architecture_superiority": false, "phase": "preflight", "status": "PASS_PREFIT_SINGLE_MODEL", "study_id": "ME109-IDENTITY-PRESERVING-RESIDUAL-ROLES"}
+original-model-contract	Run set -e	2026-10-26T07:11:41.7753819Z {"eligible_for_architecture_superiority": false, "phase": "final", "status": "PASS_SINGLE_MODEL", "study_id": "ME109-IDENTITY-PRESERVING-RESIDUAL-ROLES"}
+original-model-contract	Run set -e	2026-10-26T07:11:53.1033920Z ME109_FITTED_GRAPH_AND_PROPOSAL_REPLAY_PASS
+original-model-contract	Run set -e	2026-10-26T07:12:52.9787955Z ME109_SUMMARY_REPLAY_PASS
+original-model-contract	Run set -e	2026-10-26T07:13:01.1342188Z Traceback (most recent call last):
+original-model-contract	Run set -e	2026-10-26T07:13:01.1352077Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me109_observatory_adapter.py", line 179, in <module>
+original-model-contract	Run set -e	2026-10-26T07:13:01.1352717Z {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1352984Z   "status": "ORIGINAL_INPUT_DIGEST_MISMATCH",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1354005Z   "seed": 109001,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1354474Z   "current_input_sha256": "156c476334e391c1608d4e5d221a82d6ea681e4c860d24b20c238099d9c413bc",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1355249Z   "original_input_sha256": "e8d143c7e33daebbd00315d21c8dd3d64e69e71a0292a2c5ee2e74c47c9616d5",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1355812Z   "fields": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1356028Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1356254Z       "field": "batch0_values",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1356745Z       "current_sha256": "2b6336f9ac1d53822debd694de32091dcf0daee20ff29fed0ee98f8e0e5c783e",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1357471Z       "original_sha256": "43f0450ef317bf1e6cc6b845b85c56a93a64a7330715c182af2fc49566aeae6f",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1357907Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1358124Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1358301Z         256,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1358476Z         13
+original-model-contract	Run set -e	2026-10-26T07:13:01.1358652Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1358835Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1359048Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1359219Z         256,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1359400Z         13
+original-model-contract	Run set -e	2026-10-26T07:13:01.1359573Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1359761Z       "current_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1360013Z       "original_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1360264Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1360733Z       "exact": false,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1360954Z       "max_abs_error": 1.430511474609375e-06,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1361233Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1361448Z     },
+original-model-contract	Run set -e	2026-10-26T07:13:01.1361621Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1361807Z       "field": "batch0_observed",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1362158Z     execute(p.parse_args().mode == 'replay')
+original-model-contract	Run set -e	2026-10-26T07:13:01.1362709Z   File "/home/runner/work/TAC-OSM/TAC-OSM/scripts/me109_observatory_adapter.py", line 94, in execute
+original-model-contract	Run set -e	2026-10-26T07:13:01.1363453Z     assert rebuilt_digest == batch['input_sha256']
+original-model-contract	Run set -e	2026-10-26T07:13:01.1363797Z            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+original-model-contract	Run set -e	2026-10-26T07:13:01.1364061Z AssertionError
+original-model-contract	Run set -e	2026-10-26T07:13:01.1364431Z       "current_sha256": "8b127ee4d71480e77dcd155f85efbe9839fc20349ad6d15ab563accf0f195c35",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1365036Z       "original_sha256": "8b127ee4d71480e77dcd155f85efbe9839fc20349ad6d15ab563accf0f195c35",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1365484Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1365707Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1365885Z         256,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1366064Z         13
+original-model-contract	Run set -e	2026-10-26T07:13:01.1366234Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1366417Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1366630Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1366802Z         256,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1366979Z         13
+original-model-contract	Run set -e	2026-10-26T07:13:01.1367153Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1367339Z       "current_dtype": "bool",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1367581Z       "original_dtype": "bool",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1367832Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1368104Z       "exact": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1368312Z       "max_abs_error": 0.0,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1368537Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1368751Z     },
+original-model-contract	Run set -e	2026-10-26T07:13:01.1368922Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1369107Z       "field": "batch0_ages",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1369498Z       "current_sha256": "70f890999fe53e5f32cd2ec0663b2d7d7452ef7c780d346a04b415f73fc73d2c",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1370082Z       "original_sha256": "70f890999fe53e5f32cd2ec0663b2d7d7452ef7c780d346a04b415f73fc73d2c",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1370513Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1370728Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1370901Z         256,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1371075Z         13
+original-model-contract	Run set -e	2026-10-26T07:13:01.1371253Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1371433Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1371673Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1371921Z         256,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1372096Z         13
+original-model-contract	Run set -e	2026-10-26T07:13:01.1372268Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1372453Z       "current_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1372705Z       "original_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1372958Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1373624Z       "exact": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1374038Z       "max_abs_error": 0.0,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1374273Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1374490Z     },
+original-model-contract	Run set -e	2026-10-26T07:13:01.1374659Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1374843Z       "field": "batch0_clock",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1375235Z       "current_sha256": "3563a47c3bdae5ab06f9b989a7569d4a02576ba9294d005dd8b6d722a517d48b",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1375834Z       "original_sha256": "3563a47c3bdae5ab06f9b989a7569d4a02576ba9294d005dd8b6d722a517d48b",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1376274Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1376485Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1376656Z         256,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1376831Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1377003Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1377183Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1377405Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1377574Z         256,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1377747Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1377938Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1378125Z       "current_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1378373Z       "original_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1378635Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1378868Z       "exact": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1379081Z       "max_abs_error": 0.0,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1379310Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1379523Z     },
+original-model-contract	Run set -e	2026-10-26T07:13:01.1379834Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1380021Z       "field": "batch0_owners",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1380410Z       "current_sha256": "005c09ffde11da3093d0fbb928f0c555512d8e4d01436497bdeb8514de83e8f1",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1380987Z       "original_sha256": "005c09ffde11da3093d0fbb928f0c555512d8e4d01436497bdeb8514de83e8f1",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1381409Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1381615Z         32
+original-model-contract	Run set -e	2026-10-26T07:13:01.1381790Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1382011Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1382225Z         32
+original-model-contract	Run set -e	2026-10-26T07:13:01.1382393Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1382573Z       "current_dtype": "int64",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1382811Z       "original_dtype": "int64",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1383057Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1383589Z       "exact": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1383805Z       "max_abs_error": 0.0,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1384028Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1384238Z     },
+original-model-contract	Run set -e	2026-10-26T07:13:01.1384406Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1384594Z       "field": "batch0_hours",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1384982Z       "current_sha256": "cbab903e358381b5f57630936f061936b3ec091d9d6173bcc6c4eb55c05beda6",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1385551Z       "original_sha256": "cbab903e358381b5f57630936f061936b3ec091d9d6173bcc6c4eb55c05beda6",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1385971Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1386180Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1386355Z         256
+original-model-contract	Run set -e	2026-10-26T07:13:01.1386528Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1386708Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1386915Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1387085Z         256
+original-model-contract	Run set -e	2026-10-26T07:13:01.1387259Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1387451Z       "current_dtype": "int64",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1387694Z       "original_dtype": "int64",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1387940Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1388168Z       "exact": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1388375Z       "max_abs_error": 0.0,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1388597Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1388812Z     },
+original-model-contract	Run set -e	2026-10-26T07:13:01.1388987Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1389177Z       "field": "batch0_future_truth",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1389593Z       "current_sha256": "21ee299f3ce04efa6417ea48bfb5eff00bcbe3c21035e4713055465f3446e152",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1390182Z       "original_sha256": "21ee299f3ce04efa6417ea48bfb5eff00bcbe3c21035e4713055465f3446e152",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1390617Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1390830Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1391005Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1391176Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1391356Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1391569Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1391737Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1391902Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1392084Z       "current_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1392478Z       "original_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1392729Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1392969Z       "exact": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1393175Z       "max_abs_error": 0.0,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1393781Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1394150Z     },
+original-model-contract	Run set -e	2026-10-26T07:13:01.1394430Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1394676Z       "field": "batch0_future_mask",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1395081Z       "current_sha256": "091bcc2763d9d35578ce5b2a1e43c6f4ee8059633857e0d3d8318c1fe3559f95",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1395650Z       "original_sha256": "091bcc2763d9d35578ce5b2a1e43c6f4ee8059633857e0d3d8318c1fe3559f95",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1396070Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1396279Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1396457Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1396627Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1396808Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1397017Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1397187Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1397369Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1397556Z       "current_dtype": "bool",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1397796Z       "original_dtype": "bool",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1398042Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1398278Z       "exact": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1398485Z       "max_abs_error": 0.0,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1398857Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1399082Z     },
+original-model-contract	Run set -e	2026-10-26T07:13:01.1399249Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1399436Z       "field": "batch0_current_truth",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1399851Z       "current_sha256": "6a8e8c325856e07cf1da52cf07824d5287a5a1d75a44119bb9bf4d0e7392ffb4",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1400438Z       "original_sha256": "38bf3fb082c7f82ef99f4455c0787459d96c9b4a6167342fa6d2c1edd5046e47",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1400861Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1401068Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1401241Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1401415Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1401600Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1401819Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1401994Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1402163Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1402347Z       "current_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1402597Z       "original_dtype": "float32",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1402847Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1403084Z       "exact": false,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1403582Z       "max_abs_error": 1.1920928955078125e-07,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1403878Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1404092Z     },
+original-model-contract	Run set -e	2026-10-26T07:13:01.1404260Z     {
+original-model-contract	Run set -e	2026-10-26T07:13:01.1404459Z       "field": "batch0_reconstruction_mask",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1404892Z       "current_sha256": "2204a29b9695b323b89356025addd51041bba85512a2cd338f3d43a695703b9f",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1405473Z       "original_sha256": "2204a29b9695b323b89356025addd51041bba85512a2cd338f3d43a695703b9f",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1405897Z       "current_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1406108Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1406291Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1406462Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1406643Z       "original_shape": [
+original-model-contract	Run set -e	2026-10-26T07:13:01.1406858Z         32,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1407029Z         6
+original-model-contract	Run set -e	2026-10-26T07:13:01.1407200Z       ],
+original-model-contract	Run set -e	2026-10-26T07:13:01.1407384Z       "current_dtype": "bool",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1407621Z       "original_dtype": "bool",
+original-model-contract	Run set -e	2026-10-26T07:13:01.1407862Z       "shape_dtype_equal": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1408103Z       "exact": true,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1408312Z       "max_abs_error": 0.0,
+original-model-contract	Run set -e	2026-10-26T07:13:01.1408542Z       "contract_pass": true
+original-model-contract	Run set -e	2026-10-26T07:13:01.1408753Z     }
+original-model-contract	Run set -e	2026-10-26T07:13:01.1408921Z   ]
+original-model-contract	Run set -e	2026-10-26T07:13:01.1409090Z }
+original-model-contract	Run set -e	2026-10-26T07:13:01.3844305Z ##[error]Process completed with exit code 1.

@@ -1,0 +1,42 @@
+name: ME109 original role-model replay (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'src/tac_osm/role_optimizer.py'
+      - 'scripts/me109*'
+      - 'tests/test_role_optimizer.py'
+      - 'tests/test_me109*'
+      - 'tests/test_residual_role_sensor_world.py'
+      - 'src/tac_osm/variants/residual_role_sensor_world.py'
+      - 'research/mathematical-engineering/me109/**'
+      - 'research/replay-bundles/ME109/**'
+      - '.github/workflows/me109-residual-roles.yml'
+permissions:
+  contents: read
+jobs:
+  original-model-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy==2.3.5 pytest
+      - run: PYTHONPATH=src:. pytest -q tests/test_role_optimizer.py tests/test_me109_residual_training.py tests/test_residual_role_sensor_world.py tests/test_me109_graph_reference.py
+      - run: PYTHONPATH=src:. pytest -q tests/test_research_anticheat.py tests/test_robot_anticheat.py tests/test_research_observatory.py tests/test_research_ci_automation.py
+      - run: |
+          set -e
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me109/FAIR_COMPARISON.json --phase preflight
+          if test -f research/replay-bundles/ME109/RESULTS.json; then
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me109/POSTFIT.json --phase final
+            PYTHONPATH=src:. python scripts/me109_fitted_audit.py replay
+            PYTHONPATH=src:. python scripts/me109_residual_training.py replay
+            PYTHONPATH=src:. python scripts/me109_summary.py
+            if test -f research/replay-bundles/ME109/OBSERVATORY_ANTICHEAT.json; then
+              PYTHONPATH=src:. python scripts/me109_observatory_adapter.py replay
+            fi
+          else
+            echo 'Original five-model scores not yet available; no training or new scoring performed.'
+          fi

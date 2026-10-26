@@ -804,6 +804,29 @@
       "trained_and_deployed_parameters": 102713,
       "active_model_families_added": 0,
       "preflight_revision": "v2 corrects plan validation before any optimizer step; initial95cfd29e and zero-step incident preserved; optimizer/forward equations unchanged."
+    },
+    {
+      "id": "SHARED-RESIDUAL-ROLE-ME109",
+      "family": "temporal",
+      "parent_id": "SHARED-POINT-PRIORITY-ME106",
+      "tac_source_commit": "452a1a977275823d21b3f04265a26ff836518ce6",
+      "tac_source_path": "src/tac_osm/variants/residual_role_sensor_world.py",
+      "tac_spec": "research/mathematical-engineering/me109/MATHEMATICS.md",
+      "lean_path": "PNDS/ResidualRoleFFN.lean",
+      "lean_symbols": [
+        "PNDS.ResidualRoleFFN.corrected_parent_identity",
+        "PNDS.ResidualRoleFFN.final_forecast_parent_identity",
+        "PNDS.ResidualRoleFFN.parameter_count_exact"
+      ],
+      "python_path": "foundation/v1/residual_role_reference.py",
+      "python_symbol": "serial;ffn;ReferenceView",
+      "source_parity_test": "tests/test_residual_role_source.py",
+      "formalization_status": "LIMITED_EXACT_RESIDUAL_IDENTITY_BOUND_AND_CONDITIONAL_DECODER_CONGRUENCE",
+      "full_neural_float_refinement": "OPEN",
+      "actual_source_forward_backward": "FP32_FP64_SOURCE_REFERENCE_FORWARD_STATE_ALL45_PARAMETER_AND_INPUT_GRADIENT_TESTED",
+      "real_world_capability_at_registration": "NOT_TRAINED",
+      "trained_and_deployed_parameters": 104663,
+      "active_model_families_added": 0
     }
   ]
 }

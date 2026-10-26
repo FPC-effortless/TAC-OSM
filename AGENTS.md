@@ -62,3 +62,21 @@ real evidence, following the current master plan; attribution and CPU tuning are
 secondary. The current primitive mean law uses recorded frame counts, not proven
 irregular-time physics. No Mamba performance equivalence, whole-network proof,
 new active family, authority, deployment or automatic merge is established.
+
+
+## Binding research anti-cheat and diagnosis policy (effective 2026-10-26)
+
+Every NEW TAC-OSM variant/training/evaluation must register an explicit
+prediction-time information boundary and a source-to-output leakage threat
+model. Read research/ANTICHEAT-DIAGNOSTICS-PROTOCOL-2026-10-26.md and run the
+appropriate data partition, transform-fit, future-target poison, deterministic
+prediction, checkpoint, gradient, and activation checks at each actually
+implemented pipeline boundary. Preserve per-check PASS / FAIL / INCONCLUSIVE
+records and output identities/receipts. Missing, inapplicable, unstable or
+uninstrumented checks are UNKNOWN/INCONCLUSIVE, never automatically PASS.
+A passed constructed fixture or source file hash is engineering evidence, not
+proof of real-world model intelligence or source authenticity. Do not promote
+an architecture or unseal TEST on these grounds. Real-world, matched-budget,
+100k and PNDS rules remain binding. Audit existing physical-window adapters
+using src/tac_osm/robot_anticheat.py; other variants MUST integrate their
+own actual graph interfaces before claiming end-to-end information isolation.
