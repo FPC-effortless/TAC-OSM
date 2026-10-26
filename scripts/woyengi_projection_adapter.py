@@ -72,8 +72,10 @@ def adapt_native_projection(
     projection: Mapping[str, Any],
     *,
     model_cutoff: str,
+    principal: str,
+    purpose: str,
     source_artifact_sha256: str,
-    read_authorized: Callable[[str, str, list[str], str], bool],
+    read_authorized: Callable[[str, str, str, str, list[str], str], bool],
     feature_allowlist: Callable[[Mapping[str, Any]], Mapping[str, Any]],
 ) -> dict:
     """Convert one Woyengi StateProjection into bounded, read-only research features.
@@ -84,6 +86,8 @@ def adapt_native_projection(
     only a structural transformation and never upgrades scientific trust.
     No single 'selected' projection can suppress a competing candidate.
     """
+    _text(principal, "authorized principal")
+    _text(purpose, "authorized purpose")
     p = _obj(projection, "Woyengi StateProjection")
     if set(p) != {"subject", "predicate", "validAt", "recordedAt", "selected",
                   "candidates", "conflicts", "trace"}:
@@ -137,7 +141,7 @@ def adapt_native_projection(
     # Explicit read authorization on all candidates, not just selected one.
     # The host's policy must account for exact principal/purpose; this adapter
     # cannot independently verify the callback's provenance.
-    if read_authorized(p["subject"], p["predicate"], ids, model_cutoff) is not True:
+    if read_authorized(principal, purpose, p["subject"], p["predicate"], ids, model_cutoff) is not True:
         raise BoundaryError("Woyengi source read not authorized by host callback")
     observations = []
     for cid in ids:
@@ -161,6 +165,8 @@ def adapt_native_projection(
         })
     return {
         "adapter": "woyengi-claim-projection-v1",
+        "requested_principal": principal,
+        "requested_purpose": purpose,
         "status": "STRUCTURAL_ONLY",
         "original_source_artifact_sha256": source_artifact_sha256,
         "derived_hash_kind": "SHA256_WOYENGI_CLAIM_JSON_NOT_PUBLISHER_AUTHENTICATION",
