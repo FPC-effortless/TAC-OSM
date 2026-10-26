@@ -56,6 +56,7 @@ class MobileEdgePackageTests(unittest.TestCase):
             [sys.executable, str(SCRIPT), str(self.root), *extra],
             capture_output=True, text=True, check=False, timeout=20,
         )
+        self.assertTrue(run.stdout.strip(), f"validator produced no JSON; stderr={run.stderr!r}")
         return run.returncode, json.loads(run.stdout)
 
     def test_constructed_identity_pass_not_scientific_or_device(self):
