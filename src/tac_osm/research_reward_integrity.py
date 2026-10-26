@@ -22,7 +22,7 @@ from .research_anticheat import AuditLedger, Finding, fingerprint
 HASH = re.compile(r"^[a-fA-F0-9]{64}$")
 SCHEMA = "tac-osm-reward-audit/v1"
 REQUIRED = ("protected_assets", "reward_recomputation",
-            "reward_noninterference", "proxy_goal_alignment")
+            "goal_recomputation", "reward_noninterference", "proxy_goal_alignment")
 FIELDS = ("source_sha256", "cohort_sha256", "reward_scorer_sha256",
           "goal_evaluator_sha256", "goal_contract_sha256")
 FIELDS_ROWS = ("id_sha256", "group", "horizon", "reward", "goal",
@@ -133,6 +133,32 @@ def audit_reward_recomputation(
     except (ValueError, TypeError, KeyError, RuntimeError, AssertionError) as exc:
         return Finding(check, "INCONCLUSIVE",
                        "recomputation unavailable/invalid: " + type(exc).__name__, {})
+
+
+def audit_goal_recomputation(
+        observations: Sequence[Mapping[str, Any]],
+        independent_goal: Callable[[Any], float] | None,
+        *, tolerance: float = 1e-8,
+        check: str = "goal_recomputation") -> Finding:
+    """Recompute terminal goal scores independently from frozen real outcomes.
+
+    Source records are authorized and verified *outside* this module. This
+    function accepts id_sha256, recorded_goal and evaluator_payload. The
+    evaluator must not be the model's optimized reward producer. Like any
+    callback, its provenance cannot be authenticated by Python alone.
+    """
+    converted = []
+    try:
+        for row in observations:
+            converted.append({
+                "id_sha256": row["id_sha256"],
+                "recorded_reward": row["recorded_goal"],
+                "evaluator_payload": row["evaluator_payload"],
+            })
+    except (TypeError, KeyError):
+        return Finding(check, "INCONCLUSIVE", "goal evidence missing", {})
+    return audit_reward_recomputation(
+        converted, independent_goal, tolerance=tolerance, check=check)
 
 
 def probe_reward_noninterference(
