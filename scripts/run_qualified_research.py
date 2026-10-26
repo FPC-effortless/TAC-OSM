@@ -26,12 +26,41 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT))
 
-from tac_osm.research_reward_runner import binding  # noqa: E402
+from tac_osm.research_reward_runner import binding, verify_stage_continuity  # noqa: E402
 from scripts.validate_research_parity import check_manifest  # noqa: E402
 
 
 def _read(path: Path):
     return json.loads(path.read_bytes())
+
+
+def _registration_without_measured(manifest: dict) -> dict:
+    """Only actual resource/outcome measurement receipts may be added postfit.
+
+    Budget, source, splits, model names, seeds, policies and optimizer design
+    cannot be changed after the first training decision.
+    """
+    frozen = json.loads(json.dumps(manifest, sort_keys=True, allow_nan=False))
+    rows = frozen.get("models") if frozen.get(
+        "study_type") == "single_model_training" else frozen.get("arms")
+    if not isinstance(rows, list):
+        raise ValueError("invalid registered model arm list")
+    for row in rows:
+        if not isinstance(row, dict):
+            raise ValueError("invalid model arm")
+        row.pop("measured", None)
+    return frozen
+
+
+# Actor subprocess receives no GitHub, cloud, evaluator, training-coordinator,
+# source-secret or signing credentials from the invoking audit runner. Genuine
+# source access must be separately granted with least privilege by an isolated
+# actor environment, never inherited from evaluator.
+_ACTOR_ENV_ALLOWLIST = frozenset((
+    "PATH", "PYTHONPATH", "VIRTUAL_ENV", "HOME", "LANG", "LC_ALL",
+    "TMPDIR", "TEMP", "TMP", "OMP_NUM_THREADS", "MKL_NUM_THREADS",
+    "OPENBLAS_NUM_THREADS", "ATEN_CPU_CAPABILITY", "CUDA_VISIBLE_DEVICES",
+))
 
 
 def guarded_execute(args) -> dict:
@@ -50,12 +79,11 @@ def guarded_execute(args) -> dict:
     if not command or command[0] != "--" or len(command) < 2:
         raise ValueError("explicit -- command required; shell invocation forbidden")
     executable = command[1:]
-    # Do not expose supervisor signing material to the trainer: the verifier
-    # key itself is public, but any credential-shaped env variable is removed.
-    clean_env = dict(os.environ)
-    for key in list(clean_env):
-        if key.startswith("TAC_OSM_REWARD_SIGNING_"):
-            clean_env.pop(key, None)
+    # Default-deny: inherited CI/host/cloud variables may contain signing,
+    # evaluator, source, repository or scoring credentials. No model receives
+    # any of them through this launcher.
+    clean_env = {key: value for key, value in os.environ.items()
+                 if key in _ACTOR_ENV_ALLOWLIST}
     finished = subprocess.run(executable, check=False, shell=False, env=clean_env,
                               cwd=ROOT)
     if finished.returncode:
@@ -65,12 +93,15 @@ def guarded_execute(args) -> dict:
     final = _read(args.final_manifest)
     if binding(final) != binding(frozen):
         raise ValueError("postfit model/source/seed set differs from frozen preflight")
+    if _registration_without_measured(final) != _registration_without_measured(frozen):
+        raise ValueError("postfit preregistration changed outside actual measured receipts")
     post = check_manifest(
         final, "final",
         reward_attestation=_read(args.final_evidence),
         trusted_reward_public_key_hex=public)
     if post["reward_integrity"]["status"] != "PASS_SIGNED_EXTERNAL_AUDIT":
         raise ValueError("postfit reward gate not qualified")
+    verify_stage_continuity(_read(args.prefit_evidence), _read(args.final_evidence))
     return {"status": "PASS_SIGNED_PREFIT_AND_POSTFIT",
             "study_id": frozen["study_id"],
             "registered_variant_seeds": len(binding(frozen)["variant_seeds"]),
