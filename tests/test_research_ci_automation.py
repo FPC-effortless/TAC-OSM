@@ -46,3 +46,13 @@ def test_ci_artifacts_are_explicitly_no_fit_and_workflows_have_read_only_permiss
         assert "retention-days: 14" in text
         assert "retention-days: 14" in text
         assert "--fixture" in text
+
+
+
+def test_reward_hacking_negative_controls_are_compulsory_in_automatic_anticheat_ci():
+    text = workflow("research-anticheat.yml")
+    assert "tests/test_research_reward_integrity.py tests/test_run_reward_integrity.py" in text
+    assert "scripts/run_reward_integrity.py --fixture" in text
+    assert "ci-artifacts/reward-hacking-negative-control.json" in text
+    assert "assert r['hacked_case_status'] == 'FAIL'" in text
+    assert "assert r['reward_promotion_status'] == 'FAIL'" in text
