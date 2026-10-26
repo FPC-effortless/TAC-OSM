@@ -26,7 +26,7 @@ import torch
 import torch.nn.functional as F
 
 ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT/"src"))
+sys.path[:0]=[str(ROOT),str(ROOT/"src")]
 from tac_osm.latent_fusion_002 import FusedLatentFixedState,state_contract
 from scripts.validate_research_parity import check_manifest
 
@@ -362,13 +362,48 @@ def replay(source):
         "source_and_code_require_pinned_checkout":True},sort_keys=True))
 
 
+
+
+def run_prefit(source):
+    """Real source/shape/gradient preflight; no optimizer, no score-driven tuning."""
+    plan=registered_plan()
+    d=source_frames(source)
+    model=FusedLatentFixedState()
+    contract=strict_budget(model)
+    if plan["real_world_source"]["sha256"]!=SOURCE_SHA:
+        raise RuntimeError("manifest source authenticity mismatch")
+    if not all(p.dtype==torch.float32 for p in model.parameters()):
+        raise RuntimeError("FP32-only training preregistration violated")
+    before=[p.detach().clone() for p in model.parameters()]
+    original=sample_origins(SEEDS[0])
+    if len(original)!=STEPS*BATCH:
+        raise RuntimeError("wrong sampler exposure length")
+    loss=step_batch(model,d,original[:BATCH])
+    loss.backward()
+    if (not torch.isfinite(loss) or
+        not all(p.grad is not None and torch.isfinite(p.grad).all() for p in model.parameters())):
+        raise RuntimeError("original source prefit gradient not finite/complete")
+    if any(not torch.equal(p.detach(),b) for p,b in zip(model.parameters(),before)):
+        raise RuntimeError("prefit changed weights")
+    ret=dict(status="PASS_PREFIT_NO_OPTIMIZER",source_sha256=SOURCE_SHA,
+             authorized_stations=len(SITES),train_until=str(TRAIN_END),
+             validation_until=str(VAL_END),development_until=str(DEV_END),
+             history=H,horizon=HORIZON,steps_per_seed=STEPS,
+             seed_count=len(SEEDS),actual_state=contract,loss=float(loss.detach()),
+             src_valid_training_channels=int(d["valid"][:,:hour(TRAIN_END)].sum()),
+             sampled_training_origin_digest=hashlib.sha256(json.dumps(
+                 original,separators=(",",":")).encode()).hexdigest(),
+             weights_unchanged=True,optimizer_steps=0)
+    print("LATFUSE002_PREFIT_JSON="+json.dumps(ret,sort_keys=True),flush=True)
+
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument("--mode",choices=("fit","replay"),required=True)
+    p.add_argument("--mode",choices=("prefit","fit","replay"),required=True)
     p.add_argument("--source",type=Path,required=True)
     a=p.parse_args()
     torch.set_num_threads(1)
-    if a.mode=="fit":run_fit(a.source)
+    if a.mode=="prefit":run_prefit(a.source)
+    elif a.mode=="fit":run_fit(a.source)
     else:replay(a.source)
 
 
