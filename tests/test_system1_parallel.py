@@ -86,6 +86,39 @@ class System1ParallelTests(unittest.TestCase):
             self.assertGreater(p.grad.abs().sum().item(), 0)
         self.assertTrue(torch.isfinite(x.grad).all().item())
 
+    def test_batch_and_stream_loss_gradients_agree_fp64(self):
+        import copy
+        x, a = self.inputs(length=5)
+        batch_model = copy.deepcopy(self.model)
+        step_model = copy.deepcopy(self.model)
+
+        z = batch_model(x, a)
+        loss_batch = (0.003 * z.next_observation.square().sum() +
+                      z.adverse_event_logit.square().mean() +
+                      z.residual_scale.square().mean())
+        loss_batch.backward()
+
+        state = step_model.initial_state(2)
+        seq = []
+        for t in range(5):
+            y, state = step_model.step(state, x[:, t], a[:, t])
+            seq.append(y)
+        y_observed = torch.stack([u.next_observation for u in seq], 1)
+        y_logit = torch.stack([u.adverse_event_logit for u in seq], 1)
+        y_scale = torch.stack([u.residual_scale for u in seq], 1)
+        loss_stream = (0.003 * y_observed.square().sum() +
+                       y_logit.square().mean() +
+                       y_scale.square().mean())
+        loss_stream.backward()
+
+        torch.testing.assert_close(loss_batch, loss_stream, atol=1e-8, rtol=1e-8)
+        for (name, p), (name2, q) in zip(batch_model.named_parameters(),
+                                         step_model.named_parameters()):
+            self.assertEqual(name, name2)
+            self.assertIsNotNone(p.grad, name)
+            self.assertIsNotNone(q.grad, name)
+            torch.testing.assert_close(p.grad, q.grad, atol=1e-7, rtol=1e-6)
+
     def test_fail_closed_invalid_or_mismatched_inputs(self):
         x, a = self.inputs()
         bad = x.clone(); bad[0, 0, 0] = float("nan")
