@@ -23,12 +23,13 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install no-fit test dependencies
-        run: python -m pip install --quiet 'pytest>=8' 'numpy==2.3.3' 'torch'
+        run: python -m pip install --quiet 'pytest>=8' 'numpy==2.3.3' 'torch' 'cryptography'
       - name: Reject known answer side-channels and dead paths
         run: |
           mkdir -p ci-artifacts
           python -m pytest -q tests/test_research_anticheat.py tests/test_robot_anticheat.py \
             tests/test_research_reward_integrity.py tests/test_run_reward_integrity.py \
+            tests/test_reward_runner_integration.py \
             --junitxml=ci-artifacts/anticheat-tests.xml
       - name: Exercise physical input-contract poison probes with fixture-only evidence
         run: |
