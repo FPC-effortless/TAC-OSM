@@ -1,34 +1,80 @@
 # TAC-OSM — Unified Master Research Plan
 
-## 2026-10-26 — ME109 identity-preserving residual TAC: real training underway
+## 2026-10-26 — ME109 trained residual roles: full gate FAIL; average protection misses gap objectives
 
-ME108's original full qualification remains FAIL0/5; no originals or thresholds
-changed. [Draft TAC PR419](https://github.com/FPC-effortless/TAC-OSM/pull/419)
-builds one integrated native candidate that retains every ME103 learned tensor,
-including current-state affine predictions, and adds three zero-output residual
-FFNs conditioned on actual current-observation masks and source age. The shared
-native recurrent scan and six families are unchanged; no Transformer/SSM switch.
+[Draft TAC PR419](https://github.com/FPC-effortless/TAC-OSM/pull/419) and
+[PNDS PR27](https://github.com/FPC-effortless/pnds-lean/pull/27) remain unmerged.
+All five104,663-parameter native models completed4,096updates each. The actual
+parent's learned affine current map is retained; three zero-output108→12→12/12/6
+residual FFNs condition on real availability masks and source age. Initial parent
+forecasts/state are bit-exact in tested original FIT cases; native recurrence,
+608-byte primary FP32 payload plus metadata, and six active families unchanged.
+No Transformer/SSM conversion, separately trained experts or model promotion.
 
-104,663 live trainable/deployed parameters;45tensors; no added recurrent payload.
-Five seeds109001–109005 x4096updates, same6h targets,8/64/256history,B16,original
-loss weights and full per-seed gates. No new trained rival or architectural
-superiority claim. All5 initial parent forward/state predictions are bit-exact;
-10independent real-FIT FP32/64 graph/45parameter/input-gradient checks and1087local
-tests pass. Setup-index/workflow/count failures were fixed and preserved before
-any fit. Source452a1a977275823d21b3f04265a26ff836518ce6; prefit6cbcd6c3.
+All original models/optimizer/RNG/receipts frozen65e2f817 BEFORE original REPORT;
+source452a1a977275823d21b3f04265a26ff836518ce6; prefit6cbcd6c3;
+original scoresa68121d8. Authentic UCI5012013–2014FIT; exposed2015REPORT143gap/
+4288general queries,6hours ahead with256hours context. Protected2016–2017 numerical
+rows remain closed. Same original losses and thresholds; no extraME109fits.
 
-[PNDS draft PR27](https://github.com/FPC-effortless/pnds-lean/pull/27) provides
-source-pinned independent Python equations and seven limited Lean residual
-identity/role/bound/count contracts. Entire neural/AD/IEEE/probability source
-refinement and calibration remain OPEN. Parent identity is at initialization,
-not a promise that training preserves every old forecast. Actual mathematical
-updates protect a minibatch average, not per-channel/population capability.
+| Five-seed metric | ME103 parent | ME108 | ME109 |
+| --- | ---: | ---: | ---: |
+| Gap PM2.5 MAE ↓ |37.524168|41.132003|44.437162|
+| General PM2.5 MAE ↓ |33.403120|31.572055|32.014751|
+| Gap PM90 interval score ↓ |379.623199|241.566815|222.612326|
+| Gap PM90 coverage |95.6643%|96.6434%|93.7063%|
+| General PM90 coverage |89.8647%|88.6707%|89.1931%|
 
-Training launched on authentic2013–2014FIT; no ME109REPORT result yet. All5original
-models,optimizer,RNG,receipts must be Git-frozen before exposed2015REPORT scores.
-Protected2016–2017 numerical rows remain closed. Exactlyfive bounded fits, no
-retry/best-seed selection/gate changes. Current status is implementation and
-training progress, not intelligence, control, product or independent qualification.
+ME109 general-point error improves4.1564% and gap interval score41.3597% versus
+parents, but gap-point error worsens18.4228%. GapPMcoveragepasses5/5; gapPMpoint
+passes0/5; generalpoint/NLL/interval gatespass5/5 each. **Full gate FAIL0/5**.
+Only1/5gap point scores beats frozen ridge (43.915070), though all5beatLOCF
+(56.076923). All5general scoresbeatLOCF/ridge. These historical comparisons are
+UNMATCHED development references, not architectural superiority. GapNO2coverage
+75.3623% exposes continuing all-channel uncertainty failure despite PM-only gate
+success. No independent capability, useful associative retrieval, control or
+commercial readiness claim.
+
+All266,240actual blockwise computed average-point constraints pass,maxdot0;
+94,810projections and24,443actual-rounding rejected blocks. Aggregate new-update
+CPU1396.580641s excludes preprocessing and parent training; FLOPs are partial.
+Ten original fitted FP32/64 forward/state/45parameter/input-gradient and read-only
+optimizer-proposal checks pass. Clean restoration at5b2f5fb2 replays all originals,
+398,790saved quantile scalars, scores/gates, summary and diagnostics without fit.
+23payload hashes preserved. Seven limited Lean identity/role/count/bound theorems
+and independent Python reference pass; full neural/AD/IEEE/source-law refinement
+remains OPEN. Original-score GitHub replay40280842012 and science40280842069 PASS.
+
+**Measured local optimization weakness, not causal attribution:**15posthoc FIT-only
+candidate updates (5frozen models×3B32batches) preserve the six-channel average
+point direction, but gap-PM direction is positive10/15overall and75/195blocks;
+general-PM positive0/15overall. NLL versus interval gradients oppose13/15batches;
+point versus interval also13/15; gap versus generalPM11/15. No weight/moment was
+applied, counters stay4096; this is a local gradient/proposal observation, not a
+realized finite-step or held-out causal explanation. Parent-preserving
+initialization alone did not fix the trained gap-point trade-off.
+
+**New master tools adopted honestly:** merged PR417/420anti-cheat/Observatory
+source ada32393651614eeb60cf4f3a69f1aad44449e55 restored byte-for-byte for15files;
+64new tool/automation tests, full1151local tests PASS. Adoption is AFTER fitting
+and original scoring, not claimed as retrospective preflight. The native CLI is
+incompatible with this Temporal model. A genuine FIT-specific adapter applies
+generic inventory, activation, weighted-gradient and poison/noninterference APIs
+to all5original checkpoints. Scoped local findings PASS and independently replay;
+full anti-cheat ledger **INCONCLUSIVE**5/5 for uninstrumented CSV/joins,
+partition/preprocessing provenance, nuisance/shuffle controls and native-state
+adapters. The raw-future-target probe holds normalizer caches fixed. Fixtures
+and call order are not model intelligence or a complete computational DAG.
+Automatic tool workflows are preserved; branch protection is not asserted.
+
+**Next capability target:** source-availability-conditioned, per-channel/per-regime
+optimization rather than another larger shared FFN or scalar loss-weight sweep.
+The next protocol should retain native parallel state and identity-preserving
+roles while tracking multiple relevant task directions explicitly. A protected
+average cannot be promoted as protection of every task. This is a PROPOSED new
+training contract, not an implemented/fittedME110 or a guaranteed fix. Preserve
+all negative results, source-boundaries, real-data gates, checkpoint/independent
+replay and source-pinned PNDS Python/Lean obligations; no moreME109fits.
 
 ## 2026-10-26 — ME108 source head complete joint-adjoint proof + physical CDF/atom event bridge: formally checked PARTIAL refinement
 
