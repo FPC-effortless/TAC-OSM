@@ -1,0 +1,48 @@
+name: S1MOTION004 no-fit original 12-checkpoint source replay
+on:
+  push:
+    branches: [research/s1motion004-point-gradient-isolation-2026-10-26]
+    paths:
+      - research/parallel-six/S1MOTION004-REPLAY-001.marker
+permissions:
+  contents: read
+  actions: read
+jobs:
+  protected-replay-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install source reader and CPU verification tensor runtime
+        run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify strict replay source syntax before opening source/weights
+        run: python -m py_compile scripts/s1motion004_original_cold_replay.py
+      - name: Fetch EXACT original run/weight/optimizer/RNG artifact; never fit
+        run: |
+          gh run download 40280359434 --repo FPC-effortless/TAC-OSM \
+            --name s1motion004-original-first-real-towel-fits --dir /tmp/s1motion004-original-frozen
+      - name: Compare all original 12 SHA + real FIT-gradient routing and first DEV scores
+        run: |
+          SOURCE_FILE="$(find /tmp/s1motion004-original-frozen -name before-dev-score.json -print -quit)"
+          test -n "$SOURCE_FILE"
+          PYTHONPATH=src:. python scripts/s1motion004_original_cold_replay.py \
+            --original-dir "$(dirname "$SOURCE_FILE")"
+      - name: Archive read-only real-data replay and source-linked evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1motion004-twelve-frozen-checkpoint-audit
+          path: research/diagnostics/s1motion004-cold-replay/**
+          if-no-files-found: warn
+          retention-days: 90

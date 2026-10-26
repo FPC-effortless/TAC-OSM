@@ -1,0 +1,43 @@
+name: S1MOTION004 original four-arm real towel fit and freeze
+# One and only registered original FIT marker; NO implicit re-training on edits.
+on:
+  push:
+    branches: [research/s1motion004-point-gradient-isolation-2026-10-26]
+    paths:
+      - research/parallel-six/S1MOTION004-FIT-001.marker
+permissions:
+  contents: read
+jobs:
+  original-twelve-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install real publisher Parquet and CPU torch
+        run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Preflight actual neural gradient directions and FIT-only source contracts
+        run: |
+          python -m py_compile scripts/s1motion004_real_towel_fit.py
+          PYTHONPATH=src:. python -m unittest tests.test_s1motion004_gradient_routes -v
+          PYTHONPATH=src:. python -m unittest tests.test_s1motion004_real_fit_contract -v
+      - name: Fit four genuine arms x3 and FREEZE all optimizer and RNG before DEV score
+        run: |
+          PYTHONPATH=src:. python scripts/s1motion004_real_towel_fit.py
+      - name: Preserve original full-model checkpoints, SHA and first original scores
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1motion004-original-first-real-towel-fits
+          path: research/diagnostics/s1motion004-original/**
+          if-no-files-found: warn
+          retention-days: 90
