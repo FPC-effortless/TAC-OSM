@@ -17,7 +17,7 @@ from typing import Any
 import torch
 from torch import nn
 
-from .research_observatory import architecture_inventory, gradient_conflict_atlas
+from .research_torch_basics import architecture_inventory, gradient_conflict_atlas
 
 
 Named = Mapping[str, torch.Tensor]
