@@ -1,4 +1,14 @@
 # TAC-OSM — Investor readiness and capability-led research roadmap
+
+## Company-strategy update, 2026-10-27 (supersedes product-only emphasis, not historical findings)
+
+The owner now targets **commercially useful specialist AI models** delivered as (a) verified offline/on-device inference or (b) verified fast, cost-efficient cloud inference; neither route is compulsory for every model. The prior enterprise workflow-advisory and Veritas agent-verification wedges remain **candidate** first customers/use cases, alongside a first mobile or cloud typed-decision/anomaly/event product. Validate the buyer, real data access, existing alternatives, task quality, measurable unit economics, actual integration and payment willingness before choosing a wedge. No customer conversations, revenue, deployment or market fit are implied. Details: [company strategy](COMPANY_STRATEGY_AND_DAILY_OPERATING_SYSTEM.md), [catalog issue #450](https://github.com/FPC-effortless/TAC-OSM/issues/450) and [Edge #440](https://github.com/FPC-effortless/TAC-OSM/issues/440).
+
+The company's separate **ARC-AGI-3 agent research aspiration** targets new-environment interactive adaptation and action economy, not AGI or general business capability; [ARC3 issue #451](https://github.com/FPC-effortless/TAC-OSM/issues/451) holds eval/anti-shortcut gates. An ARC score, even a perfect one, cannot replace the genuine operational-data and buyer validation demanded below. Avoid framing this as superintelligence fundraising or silently increasing TAC comparative budgets.
+
+**Disclosure:** All pre-2026-10-27 roadmap metrics below are immutable historical research evidence. Their release, finance and research gates remain unchanged. Policy work is not a trained model or deployed commercial product.
+
+---
 **Owner direction effective 2026-10-23.** Governance and prioritization document, **not** evidence of commercialization, an investor commitment, fundraising success, or a trained capability improvement.
 
 ## Investment thesis and honest current position
