@@ -1,0 +1,30 @@
+name: ME110 source, role isolation and original replay (no training)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/me110*'
+      - 'src/tac_osm/typed_role_learning.py'
+      - 'tests/test_me110*'
+      - 'research/mathematical-engineering/me110/**'
+      - 'research/replay-bundles/ME110/**'
+      - '.github/workflows/me110-typed-role-learning.yml'
+permissions:
+  contents: read
+jobs:
+  source-and-role-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy==2.3.5 pytest
+      - run: PYTHONPATH=src:. pytest -q tests/test_me110_sampling.py tests/test_me110_typed_learning.py tests/test_inward_role_guard.py tests/test_research_anticheat.py tests/test_research_observatory.py
+      - run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me110/FAIR_COMPARISON.json --phase preflight
+      - run: |
+          if test -f research/replay-bundles/ME110/RESULTS.json; then
+            PYTHONPATH=src:. python scripts/me110_typed_training.py replay
+            python scripts/validate_research_parity.py --manifest research/mathematical-engineering/me110/POSTFIT.json --phase final
+          fi

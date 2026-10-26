@@ -849,6 +849,29 @@
       "real_world_capability_at_registration": "NO_FIT_DIAGNOSTIC; HISTORICAL_ME109_FAIL0/5",
       "trained_and_deployed_parameters": 104663,
       "active_model_families_added": 0
+    },
+    {
+      "id": "SHARED-TYPED-ROLE-TRAINING-ME110",
+      "family": "temporal",
+      "parent_id": "SHARED-RESIDUAL-ROLE-ME109",
+      "tac_source_commit": "449a3677998e81c647d518df1ef25a2b0e112b36",
+      "tac_source_path": "src/tac_osm/typed_role_learning.py",
+      "tac_spec": "research/mathematical-engineering/me110/MATHEMATICS.md",
+      "lean_path": "PNDS/TypedRoleTraining.lean",
+      "lean_symbols": [
+        "PNDS.TypedRoleTraining.point_masked_coordinate",
+        "PNDS.TypedRoleTraining.uncertainty_masked_coordinate",
+        "PNDS.TypedRoleTraining.decoder_congruent_under_uncertainty_update"
+      ],
+      "python_path": "foundation/v1/typed_role_training_reference.py",
+      "python_symbol": "route_gradients;me110_semantic_masks",
+      "source_parity_test": "tests/test_typed_role_training_source.py",
+      "formalization_status": "LIMITED_BINARY_MASK_ROUTING_AND_CONDITIONAL_DECODER_CONGRUENCE",
+      "full_neural_float_refinement": "OPEN",
+      "actual_source_forward_backward": "UNCHANGED_ME109_FORWARD; ACTUAL_ROLE_GRADIENT_AND_UNCERTAINTY_ONLY_MEDIAN_INVARIANCE_TESTED",
+      "real_world_capability_at_registration": "NOT_TRAINED",
+      "trained_and_deployed_parameters": 104663,
+      "active_model_families_added": 0
     }
   ]
 }

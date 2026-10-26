@@ -1,12 +1,12 @@
 {
   "schema": "tac-osm.invariants.v1",
   "purpose": "Explicit failure ledger: distinguish enforced structural contracts, limited real theorems, numerical tests and empirical claims. No promise to prevent every statistical failure mathematically.",
-  "current_candidate": "ME109 trained parent-preserving residual Temporal candidate; complete predictive gateFAIL0/5; six families unchanged",
+  "current_candidate": "ME110 typed-role native Temporal candidate; point gains, complete predictive gateFAIL0/5; six families unchanged",
   "issues": [
     {
       "id": "GRAD-001",
       "failure": "Global gradient projection can leave local opposition and AdamW can rotate the update.",
-      "evidence": "ME109266240actualblockchecks,maxcomputedapplieddot0. PosthocFIT15read-only proposals: gapPMdirectionpositive10of15overall/75of195blocks, while averagepointnonepositive. DIAGTRAIN001 actual finite original-host updates improve average15/15 but worsen gap10/15; inward numerical candidate gap11/15. No optimizer step.",
+      "evidence": "ME109266240actualblockchecks,maxcomputedapplieddot0. PosthocFIT15read-only proposals: gapPMdirectionpositive10of15overall/75of195blocks, while averagepointnonepositive. DIAGTRAIN001 actual finite original-host updates improve average15/15 but worsen gap10/15; inward numerical candidate gap11/15. No optimizer step. ME11020480updates enforce zero cross-role gradients;266240inward conditional certificates,0fallbacks. All5gap/general point scores improve ownparent. Per-regime and finite-step guarantees remainOPEN.",
       "contract": "Guard complete proposed displacement per exhaustive block; recheck after rounding; fail closed.",
       "implementation": "src/tac_osm/role_optimizer.py",
       "proof": "PNDS.RoleSpecializedFFN.protected_dot_nonpos",
@@ -19,8 +19,8 @@
       "contract": "ME109 retains all parent affine heads plus learned108\u219212\u219212/12/6 residual roles conditioned on real mask+age. Exact zero residual outputs preserve initial parent forecast/state; bounds inherited.",
       "implementation": "src/tac_osm/variants/residual_role_sensor_world.py",
       "tests": "tests/test_residual_role_sensor_world.py",
-      "status": "TRAINED_MIXED_TRADEOFF",
-      "open": "All5original fitted; generalPMMAE4.16percentlower and gapintervalscore41.36percentlower vsparents, but gapPMMAE18.42percentworse. Initialization preservation did not fix trained gap-point failure; no causal attribution."
+      "status": "TYPED_ROLE_POINT_GAINS_UNCERTAINTY_FAIL",
+      "open": "All5original fitted; generalPMMAE4.16percentlower and gapintervalscore41.36percentlower vsparents, but gapPMMAE18.42percentworse. Initialization preservation did not fix trained gap-point failure; no causal attribution. ME110 gap/generalPMMAE34.815926/30.972970, all5betterthanparents; uncertainty remains coupled through evolving point features. Current belief versus future residual semantics need further engineering."
     },
     {
       "id": "UNC-001",
@@ -28,7 +28,7 @@
       "evidence": "ME100/101/104 failures, ME105/106 protected-floor recovery",
       "contract": "Retain nonnegative FIT-derived source floors and missing-current scale floor; positive scales and coherent censored marginal law.",
       "status": "EXACT_SCALE_BOUND_PROVED_NOT_COVERAGE",
-      "open": "ME109all5gapPMcoveragepass[90,98]percent; generalPMmean89.1931percent below90; gapNO2mean75.3623percent. Scale bounds and PM-only gates do not prove all-channel calibration.",
+      "open": "ME109all5gapPMcoveragepass[90,98]percent; generalPMmean89.1931percent below90; gapNO2mean75.3623percent. Scale bounds and PM-only gates do not prove all-channel calibration. ME110PMgapmean96.6434percent, seed11000398.6014above98ceiling; NO2gapmean75.0725percent. Intervalscore401.8504, all5intervalgatesFAIL.",
       "proof": "PNDS.RoleSpecializedFFN.roleProtect_left_floor_lower_bound; right and missing-floor analogues"
     },
     {
@@ -57,7 +57,7 @@
     {
       "id": "NUM-001",
       "failure": "Cross-host floating arithmetic and preprocessing drift can break replay.",
-      "evidence": "ME109diagnosticV1rebuilt inputSHAfailedcrosshost. Normalizedbatch0maxabs1.430511e-6; immutableoriginaltensors remainbit-authenticated; V2separateproducer numericcomparison+sourcecheckpointreplayCI40284891806PASS. DIAGTRAIN001 original guard host replay FAIL40287673335/40289295662: 27 fallback-flag disagreements and guarded norm12.86percent discrepancy. Inward candidate195/195conditional certificates and0fallbacks; cross-host inward job40289990676PASS, old-guard job remainsFAIL.",
+      "evidence": "ME109diagnosticV1rebuilt inputSHAfailedcrosshost. Normalizedbatch0maxabs1.430511e-6; immutableoriginaltensors remainbit-authenticated; V2separateproducer numericcomparison+sourcecheckpointreplayCI40284891806PASS. DIAGTRAIN001 original guard host replay FAIL40287673335/40289295662: 27 fallback-flag disagreements and guarded norm12.86percent discrepancy. Inward candidate195/195conditional certificates and0fallbacks; cross-host inward job40289990676PASS, old-guard job remainsFAIL. ME110actualtrainedinwardguard266240certificates,0fallbacks; fullIEEEproofstillOPEN.",
       "contract": "Pin environment, preserve failures and immutable artifacts/tolerances; independent precision-specific reference tests.",
       "status": "PARTIAL_NUMERICAL_VERIFICATION",
       "open": "Exact primitive cause of preprocessing drift and universal IEEE source refinement remainOPEN. Frozenoriginal tensor identity is distinct from freshly recomputed numerical agreement. Inward utility is prospective, not trained; exact-real PNDS projection plus conditional rounding proof is not full IEEE implementation verification."
@@ -81,7 +81,7 @@
       "failure": "Parameter padding or unmatched models can create false architectural wins.",
       "contract": "Live trainable/deployed95k-105k; matched trained alternatives within1percent, identical data/exposure/compute/tuning. New training needs new validated registration.",
       "status": "ME109_LIVE_PREFIT_POSTFIT_COUNTS_PASS_104663",
-      "open": "All5original budget receipts and checkpointcounts verified. No matched architecture comparison or independent capability qualification; full predictive gateFAIL0of5. Saved curves cannot establish sufficient training: only final checkpoints; need fixed-validation intermediate checkpoints in new registered budget study."
+      "open": "All5original budget receipts and checkpointcounts verified. No matched architecture comparison or independent capability qualification; full predictive gateFAIL0of5. Saved curves cannot establish sufficient training: only final checkpoints; need fixed-validation intermediate checkpoints in new registered budget study. ME1105x4096fitsactual104663parameters; saved1024/2048/4096states andfixedmonitorcurves. Lateordinarypointgain0.2408percent, gap2.7406percent; uncertaintyworsens, so moretimealoneunsupported."
     }
   ]
 }
