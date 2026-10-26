@@ -1,0 +1,30 @@
+name: Edge mobile artifact contract (no model training)
+
+on:
+  push:
+    branches:
+      - research/edge-mobile-capability-gates-2026-10-26
+  pull_request:
+    paths:
+      - "scripts/validate_mobile_edge_package.py"
+      - "tests/test_mobile_edge_package.py"
+      - "research/NEXT_CAPABILITY_AND_MOBILE_GATE_2026-10-26.md"
+      - ".github/workflows/mobile-edge-package-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mobile-package-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Constructed identity and tamper regression tests
+        run: python -m unittest discover -s tests -p "test_mobile_edge_package.py" -v
+      - name: Syntax check
+        run: python -m py_compile scripts/validate_mobile_edge_package.py tests/test_mobile_edge_package.py
