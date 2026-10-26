@@ -143,7 +143,8 @@ def validate_package(root: Path, require_device: bool = False) -> dict:
         "artifact_bytes": artifact.stat().st_size,
         "hardware_evidence": "BLOCKED_NO_DEVICE_REPORT",
         "numerical_export_equivalence": "NOT_VERIFIED_BY_THIS_TOOL",
-        "scientific_qualification": scientific["status"],
+        "scientific_claim_declared": scientific["status"],
+        "scientific_qualification": "NOT_VERIFIED_BY_THIS_TOOL",
         "deployment_qualification": "NOT_ESTABLISHED",
     }
     measurement = manifest.get("device_measurement")
