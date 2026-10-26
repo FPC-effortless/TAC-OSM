@@ -54,6 +54,13 @@ jobs:
           ref: c2a93c5534878cab616ac298d37e63343c345c46
           path: woyengi-source
           persist-credentials: false
+      - name: Check out exact Forge source
+        uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/veritas
+          ref: b6d4261ce3eee7b78197c8d4087c6e2b29ec2599
+          path: veritas-forge-source
+          persist-credentials: false
       - name: Set up pinned Node
         uses: actions/setup-node@v4
         with:
@@ -93,3 +100,50 @@ jobs:
             echo "FAIL: fake source authority accepted"; exit 1
           fi
           echo "PASS: forged source authority rejected"
+
+      - name: Same Woyengi fixture through TAC consumer and Forge with release hard-stop
+        env:
+          PYTHONPATH: veritas-forge-source/integrations/forge/src
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import sys
+          import tempfile
+          from forge_data.woyengi import convert_export_candidate
+          from forge_data.core import point_in_time, ForgeError, release
+          sys.path.insert(0, str(Path("scripts").resolve()))
+          from validate_woyengi_predictive_export import adapt_predictive_read_export
+          src = json.loads(Path("/tmp/woyengi-source-constructed.json").read_text())
+          tac = adapt_predictive_read_export(src)
+          forge = convert_export_candidate(src, source_id="constructed-software-integration-only")
+          assert tac["status"] == "STRUCTURAL_ONLY"
+          assert forge["conversion"] == "STRUCTURAL_ONLY"
+          assert tac["observation_count"] == len(forge["rows"]) == 2
+          assert all(r["outcome"]["status"] == "unknown" for r in forge["rows"])
+          assert all(point_in_time(r, "2026-02-14T23:59:59Z") is None for r in forge["rows"])
+          assert all(point_in_time(r, "2026-02-15T00:00:00Z") is not None for r in forge["rows"])
+          # An operator cannot launder this constructed projection into a Forge dataset release
+          # merely by asserting rights/spec booleans.
+          with tempfile.TemporaryDirectory() as d:
+              root = Path(d)
+              input_rows = root / "input.jsonl"
+              input_rows.write_text("".join(json.dumps(x) + "\n" for x in forge["rows"]))
+              spec = root / "spec.json"
+              spec.write_text(json.dumps({
+                  "dataset_id":"CONSTRUCTED_NOT_REAL","source_id":"constructed-software-integration-only",
+                  "source_version":"constructed-v1","license_id":"fixture-only",
+                  "provenance_uri":"fixture://woyengi", "ai_use_allowed":True,
+                  "redistribution_allowed":True,"privacy_reviewed":True,
+                  "adapter":"operations-jsonl","split_salt":"constructed-only"
+              }))
+              try:
+                  release(input_rows, spec, root / "release")
+              except ForgeError as error:
+                  assert "UNATTESTED" in str(error)
+              else:
+                  raise AssertionError("Untrusted Woyengi candidate was released")
+              assert not (root / "release").exists()
+          print("PASS Woyengi -> TAC + Forge with as-of protection and release hard stop")
+          print("EVIDENCE TIER: constructed software only; NOT model, publisher, or real reward evidence")
+          PY
