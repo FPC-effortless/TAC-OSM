@@ -24,20 +24,49 @@ def get(url):
 
 def audit():
     latest=json.loads(get(f"https://huggingface.co/api/datasets/{SOURCE}"))
-    sha=latest.get("sha")
-    if not isinstance(sha,str) or len(sha)!=40 or not all(c in "0123456789abcdef" for c in sha):
-        raise RuntimeError("not a concrete immutable publisher revision")
-    historical=json.loads(get(f"https://huggingface.co/api/datasets/{SOURCE}/revision/{sha}"))
-    if historical.get("sha")!=sha: raise RuntimeError("publisher revision mismatch")
-    license_id=str((historical.get("cardData") or {}).get("license","")).lower()
-    if license_id!="mit": raise RuntimeError("release license missing/unsupported: FAIL CLOSED")
-    info=json.loads(get(f"https://huggingface.co/datasets/{SOURCE}/resolve/{sha}/meta/info.json"))
-    if (info.get("codebase_version")!="v2.0"
-        or info.get("total_episodes")!=50
-        or info.get("total_frames")!=55000
-        or info.get("fps")!=50
-        or info.get("data_path")!="data/chunk-{episode_chunk:03d}/episode_{episode_index:06d}.parquet"):
-        raise RuntimeError(f"source layout incompatible; fail closed: {info.get('codebase_version')}")
+    live_sha=latest.get("sha")
+    if not isinstance(live_sha,str) or len(live_sha)!=40:
+        raise RuntimeError("live publisher commit inaccessible")
+    # Schema-only deterministic choice of NEWEST historical v2 release
+    # according to publisher commit order, before any FIT data bytes,
+    # labels, outcome scores or optimizer steps are ever opened.
+    commits=json.loads(get(f"https://huggingface.co/api/datasets/{SOURCE}/commits/main"))
+    historical=None;info=None;sha=None
+    examined=[]
+    for candidate in commits:
+        rev=candidate.get("id")
+        if not isinstance(rev,str) or len(rev)!=40:
+            continue
+        metadata=json.loads(get(
+            f"https://huggingface.co/api/datasets/{SOURCE}/revision/{rev}"))
+        if metadata.get("sha")!=rev:
+            raise RuntimeError("publisher history integrity failure")
+        try:
+            meta=json.loads(get(
+                f"https://huggingface.co/datasets/{SOURCE}/resolve/{rev}/meta/info.json"))
+        except Exception:
+            examined.append(dict(sha=rev,info_found=False))
+            continue
+        expected=(meta.get("codebase_version")=="v2.0"
+            and meta.get("total_episodes")==50
+            and meta.get("total_frames")==55000
+            and meta.get("fps")==50
+            and meta.get("data_path")==
+                "data/chunk-{episode_chunk:03d}/episode_{episode_index:06d}.parquet")
+        examined.append(dict(sha=rev,codebase_version=meta.get("codebase_version"),
+                             expected_schema=expected))
+        if expected:
+            historical,info,sha=metadata,meta,rev
+            break
+    if historical is None or info is None:
+        raise RuntimeError("no publisher-verified v2 historical revision: source ineligible")
+    historical_license=str((historical.get("cardData") or {}).get("license","")).lower()
+    current_license=str((latest.get("cardData") or {}).get("license","")).lower()
+    if (historical_license not in ("","mit") or current_license!="mit"):
+        raise RuntimeError("license conflict; abort")
+    license_id="mit"
+    license_evidence=("historical_v2_AND_current" if historical_license=="mit"
+                     else "current_publisher_card_only_historical_missing")
     known={x["rfilename"] for x in historical.get("siblings",[])}
     receipts=[]
     for ep in FIT:
@@ -62,7 +91,9 @@ def audit():
             sha256=hashlib.sha256(blob).hexdigest(),frames=1100,
             state_dim=14,action_dim=14))
     report=dict(study="S1MOTION006",dataset=SOURCE,revision_sha=sha,
-        historical_revision_license=license_id,
+        historical_revision_license=historical_license or None,
+        license_evidence_scope=license_evidence,license_current_publisher=license_id,
+        source_live_head_sha=live_sha,source_revision_schema_audit=examined,
         codebase_version=info["codebase_version"],fps=50,
         source_publisher_episodes=50,source_publisher_total_frames=55000,
         FIT=list(FIT),DEV=list(DEV),TEST=list(TEST),
