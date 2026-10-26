@@ -1,5 +1,17 @@
 # Authentic operational data candidate: NYC 311 service requests (2026-10-26)
-**Status:** PUBLIC SOURCE IDENTIFIED, NOT DOWNLOADED OR SCIENTIFICALLY QUALIFIED. No new train/DEV/TEST cohorts registered; no training/scoring/checkpoint/publisher rights or independent outcome attestation reported.
+**Status as of 2026-10-26 22:46 UTC:** PUBLIC SOURCE IDENTIFIED AND LIMITED ORIGINAL API SNAPSHOT ACQUIRED, NOT SCIENTIFICALLY QUALIFIED. No historical as-of eligibility, independently verified publisher revisions, train/DEV/TEST release, verified outcomes, training/scoring/checkpoints, or legal/privacy signoff.
+
+## First controlled publisher-byte capture — authentic source, not trainable
+
+- Original NYC API endpoint: https://data.cityofnewyork.us/resource/erm2-nwe9.json.
+- Capturing code: [Forge NYC311 snapshot module](https://github.com/FPC-effortless/veritas/blob/feature/forge-woyengi-asof-handoff-2026-10-26/integrations/forge/src/forge_data/nyc311_snapshot.py) in [draft PR #422](https://github.com/FPC-effortless/veritas/pull/422).
+- **Original publisher-byte capture:** [GitHub Actions run #40415024422](https://github.com/FPC-effortless/veritas/actions/runs/40415024422), acquisition complete 2026-10-26T22:46:49.993605Z; 25 public source rows, minimal six fields (case ID, created/closed dates, agency, complaint type and current status).
+- Original response bytes SHA-256: **79f8aebfea1c389f82d5c94468fb1e91f6e53413249d9ecdf98375026488ad23**; [source bytes and receipt artifact #12694317198](https://github.com/FPC-effortless/veritas/actions/runs/40415024422/artifacts/12694317198). Artifact retention is initially 14 days, so this is not guaranteed permanent storage.
+- The workflow passed 15 constructed negative/source-integrity tests and a genuine public API acquisition. The receipt forces flags for historical field availability, privacy/rights, outcome verification, and training/scoring eligibility to remain **false**.
+- This is **actual publisher-source data** but a contemporary record snapshot. It does not prove how a case's status or agency looked at any historic creation date; a late correction may overwrite history. Do not infer interventions or mark the observed closure automatically independent-verified.
+- **NO TRAIN / NO SCORE / NO SOURCE-QUALIFIED RELEASE.** A prospective qualification requires independently preserved longitudinal snapshots or immutable publisher events with observation/knowledge clocks, source rights and independent outcomes, protected chronological/groups split, and Veritas evaluation separation.
+
+---
 
 ## Publisher and authoritative public references
 
