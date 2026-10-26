@@ -45,6 +45,7 @@ require additional independent evidence.
 | Longitudinal split | audit_forward_time | Entity time reversal and insufficient embargo |
 | Learning graph | torch_gradient_diagnostics | Disconnected, zero and nonfinite parameter gradients by module |
 | Runtime data path | trace_torch_modules | Per-layer output shape, maximum magnitude and NaN/Inf origin |
+| Hidden graph influence | trace_torch_noninterference | Fixed-checkpoint, paired source poison: first divergent leaf module or untraced functional path |
 | Actual physical causal interface | audit_robot_windows | Every RealLoggedWindow input allowlist, chronological order and future mutation |
 
 The hash comparisons are content fingerprints of values passed into the
