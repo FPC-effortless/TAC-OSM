@@ -1,0 +1,44 @@
+name: ME108 five original neural gradient / probability refinement audit (read-only)
+on:
+  push:
+    branches:
+      - research/neural-refinement-2026-10-26
+    paths:
+      - 'scripts/me108_neural_refinement_audit.py'
+      - 'research/mathematical-engineering/neural-refinement/**'
+      - '.github/workflows/me108-neural-refinement.yml'
+  pull_request:
+    paths:
+      - 'scripts/me108_neural_refinement_audit.py'
+      - 'research/mathematical-engineering/neural-refinement/**'
+      - '.github/workflows/me108-neural-refinement.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-precision-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin actual-source independent gradient environment
+        run: |
+          python -m pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install numpy==2.3.5 pytest
+      - name: Verify all original ME108 trained weights and 30 role VJPs on genuine FIT source
+        run: |
+          PYTHONPATH=src:. python scripts/me108_neural_refinement_audit.py
+      - name: Preserve original reproducible source-check receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: me108-neural-refinement-five-trained-original-source-checks
+          path: research/mathematical-engineering/neural-refinement/ME108_SOURCE_AUDIT.json
+          if-no-files-found: warn
