@@ -1,4 +1,6 @@
 from unittest.mock import patch
+import json
+from pathlib import Path
 
 import pytest
 import torch
@@ -97,3 +99,20 @@ def test_blockwise_actual_displacement_contract(dtype):
 def test_update_guard_fails_closed_on_invalid_partitions_or_nonfinite_data():
     with pytest.raises(ValueError):protect_displacement([torch.ones(2)],[torch.ones(2)],[[0],[0]])
     with pytest.raises(ValueError):protect_displacement([torch.ones(2)],[torch.tensor([float('nan'),1.])],[[0]])
+    with pytest.raises(ValueError):protect_displacement([torch.ones(2)],[torch.ones(2)],[[0.0]])
+    # A one-shot iterable must not be exhausted by partition validation and
+    # silently bypass the actual protection loop.
+    out,receipt=protect_displacement([torch.ones(2)],[torch.ones(2)],(b for b in [[0]]))
+    assert len(receipt)==1 and receipt[0]['after']<=0
+
+
+def test_failure_ledger_keeps_unproved_capabilities_open_and_links_real_source():
+    root=Path(__file__).resolve().parents[1]
+    ledger=json.loads((root/'research/ARCHITECTURE-INVARIANTS.json').read_text())
+    ids=[row['id'] for row in ledger['issues']]
+    assert len(ids)==len(set(ids))==10
+    assert {'GRAD-001','UNC-001','UNC-002','MEM-001','NUM-001','STATE-001'} <= set(ids)
+    for row in ledger['issues']:
+        assert row['open'] and row['status'] != 'SOLVED'
+        for name in ('implementation','tests'):
+            if name in row:assert (root/row[name]).is_file()

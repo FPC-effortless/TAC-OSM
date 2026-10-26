@@ -12,8 +12,9 @@ import torch
 def protect_displacement(point_gradients, proposed, blocks):
     if not point_gradients or len(point_gradients) != len(proposed):
         raise ValueError('nonempty matching gradient/displacement lists required')
+    blocks = tuple(tuple(block) for block in blocks)
     indices = [i for block in blocks for i in block]
-    if sorted(indices) != list(range(len(proposed))) or any(not b for b in blocks):
+    if any(type(i) is not int for i in indices) or sorted(indices) != list(range(len(proposed))) or any(not b for b in blocks):
         raise ValueError('blocks must partition every parameter exactly once')
     for g, d in zip(point_gradients, proposed):
         if g.shape != d.shape or g.dtype != d.dtype or g.device != d.device or not g.is_floating_point():
