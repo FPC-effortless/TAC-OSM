@@ -1,0 +1,42 @@
+name: S1TEMP007 original real FIT-only four-rate compartment forensics
+on:
+  push:
+    branches: [research/s1temp007-multiscale-state-2026-10-26]
+    paths: ['research/parallel-six/S1TEMP007-FORENSIC-001.marker']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  genuine-original-no-fit-memory-lesions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - run: python -m py_compile scripts/s1temp007_original_fit_compartment_diagnose.py
+      - run: |
+          gh run download 40297263363 --repo FPC-effortless/TAC-OSM \
+            --name s1temp007-9-original-mobile-real-first-score-and-weights \
+            --dir /tmp/s1temp007-first-original
+      - run: |
+          MANIFEST="$(find /tmp/s1temp007-first-original -name BEFORE-DEV-SHA-FREEZE.json -print -quit)"
+          test -n "$MANIFEST"
+          PYTHONPATH=src:. python -u scripts/s1temp007_original_fit_compartment_diagnose.py \
+             --original-dir "$(dirname "$MANIFEST")"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: s1temp007-three-original-trained-multirate-real-FIT-compartment-lesions
+          path: research/diagnostics/s1temp007-FIT-original/**
+          if-no-files-found: warn
+          retention-days: 90
