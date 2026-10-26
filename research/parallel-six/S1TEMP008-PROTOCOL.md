@@ -35,3 +35,10 @@ Architecture-independent Observatory MUST inspect adapter's true entity slots an
 (4) full native System1 source-indexed model with identical learned parameters and batch/stream graph;
 (5) equal-compute real FIT training and prereg heldout outcome scoring;
 (6) independent original SHA checkpoint score replay plus PNDS full formalization. Earlier stages DO NOT authorize scientific claims. **This PR may remain at stages1–2 until a genuine source fit and outcome task is ready.**
+
+
+### Mandatory memory-budget and source-entity semantics qualification
+
+**664 nominal FP32 bytes cover only the learned recurrent floating state for ONE active case.** They EXCLUDE the outside-model **per-case `OfferID`→slot mapping**, case key, source timestamp, validation metadata, input buffers, model weights and runtime allocation. Keeping seven original entity identifiers and their slot mapping is nonzero external memory; nominal 664B is NOT the total RAM needed to run an operational tracker. A real deployment serving C concurrent cases requires at least C×664B recurrent floats PLUS case index and source-ID mapping, bounded input/action history buffers and weights; no universal device memory SLA established. A valid comparator must give the learned-address model the SAME already-observed source IDs in its input interface, even if it chooses not to use them, and report any extra external metadata overhead. Track overflow (>7 historical offers/case) and source-ID missingness as exclusions or inconclusive cases, **never hash into one of seven slots** or silently reuse a slot. A slot assignment may be first-seen source-chronological; it is NOT a model-inferred entity or permitted causal offer intervention.
+
+The original single XES archive contains ALL case traces. Source partitioner reads complete raw archive and declares this truth; TRAIN-only source-feature and vocabulary files must be a separately authorized output inaccessible to held-out source labels until registered freeze. Current publisher metadata and engine contracts do NOT demonstrate that complete separation; they cannot authorize training merely because a hashed case split exists.
