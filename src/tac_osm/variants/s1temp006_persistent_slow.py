@@ -27,7 +27,8 @@ FAST_DIM=72
 SLOW_DIM=16
 ALPHA=0.0625
 CHUNK=32
-MODES=("additive","slow16")
+MODES=("additive","slow16","multiscale16")
+MULTISCALE_RATES=(1/16,1/64,1/256,1/1024)
 
 def slow_scan(basis:torch.Tensor,alpha:float=ALPHA):
     """Exact recurrence up to float rounding; [B,T,16] -> [B,T,16]."""
@@ -48,6 +49,30 @@ def slow_scan(basis:torch.Tensor,alpha:float=ALPHA):
         prev=states[:,-1]
     return torch.cat(stages,dim=1)
 
+
+def multiscale_scan(basis:torch.Tensor):
+    """Stable four groups of four causal channels, only 16D persistent state.
+
+    Equal physical state footprint and weight matrices. 32-frame bounded
+    parallel prefix blocks carry only the final state across block boundaries.
+    """
+    if (basis.ndim!=3 or basis.shape[-1]!=SLOW_DIM or
+        basis.shape[1]<1 or not torch.isfinite(basis).all().item()):
+        raise ValueError("invalid multiscale causal basis")
+    rates=basis.new_tensor(MULTISCALE_RATES).repeat_interleave(4)
+    q=1-rates
+    prev=basis.new_zeros(basis.shape[0],SLOW_DIM)
+    chunks=[]
+    for block in basis.split(CHUNK,dim=1):
+        n=block.shape[1]
+        exponents=torch.arange(1,n+1,device=basis.device,dtype=basis.dtype)
+        powers=q[None,:]**exponents[:,None]
+        prefix=torch.cumsum(block*(rates[None,None,:]/powers[None,:,:]),dim=1)
+        states=powers[None,:,:]*(prev[:,None,:]+prefix)
+        chunks.append(states)
+        prev=states[:,-1]
+    return torch.cat(chunks,dim=1)
+
 def temporal_previous_context(basis:torch.Tensor,mode:str):
     if mode not in MODES or basis.ndim!=3 or basis.shape[-1]!=88:
         raise ValueError("invalid 88D matched temporal memory")
@@ -58,7 +83,8 @@ def temporal_previous_context(basis:torch.Tensor,mode:str):
         return prior_sum/divider,basis.cumsum(dim=1)
     fast_sum=basis[:,:,:FAST_DIM].cumsum(dim=1)
     prior_fast=F.pad(fast_sum[:,:-1],(0,0,1,0))/divider
-    slow=slow_scan(basis[:,:,FAST_DIM:])
+    slow=(multiscale_scan(basis[:,:,FAST_DIM:]) if mode=="multiscale16"
+          else slow_scan(basis[:,:,FAST_DIM:]))
     prior_slow=F.pad(slow[:,:-1],(0,0,1,0))
     return torch.cat((prior_fast,prior_slow),dim=-1),torch.cat((fast_sum,slow),dim=-1)
 
@@ -145,9 +171,11 @@ def temporal_world_stream_step(model, state, obs, action, *,return_trace=False):
     slow_feature=torch.lerp(ps,(ps+d.tanh()).tanh(),.25*g.sigmoid())
     correction=model.readout(torch.cat((f,slow_feature,read,e),-1)).tanh()[:,0]
     forecast=obs+model.delta_scale*correction
+    rate=(obs.new_tensor(MULTISCALE_RATES).repeat_interleave(4)
+          if model.temporal_mode=="multiscale16" else ALPHA)
     next_bank=torch.cat((
         state.fast_sum[:,:FAST_DIM]+basis[:,0,:FAST_DIM],
-        (1-ALPHA)*prev_slow+ALPHA*basis[:,0,FAST_DIM:]),-1)
+        (1-rate)*prev_slow+rate*basis[:,0,FAST_DIM:]),-1)
     next_state=WorldStreamState(next_bank,memory,state.count+1)
     if return_trace:
         return forecast,next_state,dict(memory=memory,old_read=read[:,0],
