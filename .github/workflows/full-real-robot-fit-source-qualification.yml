@@ -4,6 +4,9 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - scripts/audit_full_real_robot_fit.py
+      - scripts/check_real_robot_reward_readiness.py
+      - tests/test_real_robot_reward_readiness.py
+      - src/tac_osm/research_reward_runner.py
       - tests/test_full_real_robot_fit_audit.py
       - research/real-robot-full-fit-capability-gate-2026-10-22.md
       - docs/TACOSM-BASELINE-001.md
@@ -62,6 +65,23 @@ jobs:
           assert not r['full_DEV_TEST_physical_source_qualified']
           print('ORIGINAL_FULL_325_REAL_ROBOT_FIT_SOURCE_QUALIFIED_NOT_A_MODEL_RESULT')
           PY
+      - name: Independently flag reward readiness unavailable from actual physical FIT source
+        run: |
+          python scripts/check_real_robot_reward_readiness.py \
+            --fit-receipt results/all-original-real-robot-FIT-only-receipt.json \
+            --output results/real-robot-reward-readiness-blocker.json
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          evidence = json.loads(Path("results/real-robot-reward-readiness-blocker.json").read_text())
+          assert evidence["status"] == "BLOCKED_NO_INDEPENDENT_REAL_REWARD_OR_TASK_GOAL"
+          assert evidence["reward_checkpoint_promotion_eligible"] is False
+          assert evidence["model_training_authorized_by_reward_integrity"] is False
+          assert evidence["verified_fit_episodes"] == 325
+          assert evidence["independent_reward_evaluator"] == "UNAVAILABLE"
+          assert evidence["verified_external_task_goal"] == "UNAVAILABLE"
+          print("ORIGINAL_REAL_FIT_SOURCE_VALID_REWARD_PROMOTION_BLOCKED")
+          PY
       - name: Archive only FIT original hashes, real source counts and stage receipt
         if: always()
         uses: actions/upload-artifact@v4
@@ -70,5 +90,6 @@ jobs:
           path: |
             results/all-original-real-robot-FIT-only-receipt.json
             original-robot-FIT-audit.log
+            results/real-robot-reward-readiness-blocker.json
           if-no-files-found: ignore
           retention-days: 90
