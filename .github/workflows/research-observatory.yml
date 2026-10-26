@@ -26,7 +26,7 @@ jobs:
       - name: Audit research observation mechanisms
         run: |
           mkdir -p ci-artifacts
-          python -m pytest -q tests/test_research_observatory.py \
+          python -m pytest -q tests/test_research_observatory.py tests/test_research_probe_agnostic.py \
             --junitxml=ci-artifacts/observatory-tests.xml
       - name: Emit fixture-only architecture, memory, entity and runtime diagnostics
         run: |
