@@ -93,7 +93,7 @@ def replay(original:Path,cache:Path,out:Path):
         original_dev_source_SHA_verified=True,full_original_gate="FAIL",
         no_training_optimizer_calls=True,source_TEST_never_downloaded=True,
         independent_external_robot_site=False,
-        12_original_arm_seed_horizon_scores_verified=verified)
+        original_12_arm_seed_horizon_scores_verified=verified)
     (out/"READONLY-ORIGINAL-REPLAY.json").write_text(
         json.dumps(receipt,indent=2,sort_keys=True)+"\n")
     print("S1TEMP006_ORIGINAL_TWELVE_SCORES_COLD_REPLAY=PASS",flush=True)
