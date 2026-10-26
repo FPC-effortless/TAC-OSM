@@ -414,3 +414,73 @@ def trace_torch_modules(model: Any) -> Iterator[list[dict[str, Any]]]:
     finally:
         for handle in handles:
             handle.remove()
+
+
+def trace_torch_noninterference(model: Any,
+                                forward: Callable[[Any, Any], Any],
+                                legal_input: Any, denied_only_changed: Any,
+                                *, check: str = "graph_noninterference") -> Finding:
+    """Locate FIRST leaf module whose output depends on forbidden information.
+
+    Operates on fresh model copies at fixed checkpoint under eval/no_grad.
+    The caller must poison *only* illegal metadata, use a deterministic
+    forward, and avoid external uncaptured state/global side effects.
+    Functional operations outside a module are reported as untraced paths.
+    This diagnostic copies tensor values to hash them: do not run it in
+    production inference or over private raw logs without authorization.
+    """
+    try:
+        import torch
+    except ImportError:
+        return Finding(check, "INCONCLUSIVE", "torch unavailable", {})
+
+    def execute(sample: Any) -> tuple[str, list[tuple[str, str]]]:
+        replica = copy.deepcopy(model)
+        replica.eval()
+        observations: list[tuple[str, str]] = []
+        handles = []
+        for name, module in replica.named_modules():
+            if not name or any(module.children()):
+                continue
+
+            def hook(_module: Any, _inputs: Any, output: Any,
+                     label: str = name) -> None:
+                observations.append((label, fingerprint(output)))
+
+            handles.append(module.register_forward_hook(hook))
+        try:
+            with torch.no_grad():
+                result = forward(replica, copy.deepcopy(sample))
+            return fingerprint(result), observations
+        finally:
+            for handle in handles:
+                handle.remove()
+
+    try:
+        a = execute(legal_input)
+        repeat = execute(legal_input)
+        b = execute(denied_only_changed)
+    except (ValueError, TypeError, RuntimeError, AttributeError) as exc:
+        return Finding(check, "INCONCLUSIVE", "graph probe unavailable: " +
+                       type(exc).__name__, {})
+    if a != repeat:
+        return Finding(check, "INCONCLUSIVE", "repeated legal forward differs; RNG/cache not sealed", {})
+    first = None
+    for index in range(max(len(a[1]), len(b[1]))):
+        if index >= len(a[1]) or index >= len(b[1]):
+            first = "<changed_call_schedule>"
+            break
+        if a[1][index] != b[1][index]:
+            first = b[1][index][0]
+            break
+    if first is None and a[0] != b[0]:
+        first = "<untraced_functional_or_external_path>"
+    clean = first is None
+    return Finding(check, "PASS" if clean else "FAIL",
+                   "no traced forbidden-data dependency" if clean
+                   else "forbidden-data dependence first observed at " + first,
+                   {"first_changed_module": first,
+                    "legal_output_sha256": a[0],
+                    "poison_output_sha256": b[0],
+                    "leaf_calls": len(a[1]),
+                    "poison_leaf_calls": len(b[1])})
