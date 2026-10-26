@@ -56,8 +56,8 @@ unchanged2e-5/2e-6 and1e-9/1e-10. One registered authentic2013–2014FIT minibat
 finite nonzero composite-objective gradients in all39 tensors; maximum gradient
 errors9.54e-7/7.78e-16. Streaming and structural role-gradient tests pass. Dedicated
 GitHub TAC source40251245492 and initial PNDS source/math40251245108/generalLean
-40251243841 pass; subsequent scale-proof changes compile locally and their latest
-CI must be checked separately.
+40251243841 pass; final source/math40251495439 and generalLean40251495515 also pass on
+PNDS5e50d297, including both new left/right scale-floor lower-bound proofs.
 
 **No new models fitted or optimizer steps. No REPORT/protected2016–2017 numerical
 access.** This no-fit registration cannot authorize future training. ME106 failed
