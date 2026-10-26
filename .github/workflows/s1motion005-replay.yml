@@ -1,0 +1,45 @@
+name: S1MOTION005 immutable 15-checkpoint genuine source replay (NO TRAIN)
+on:
+  push:
+    branches: [research/s1motion005-gradient-budget-2026-10-26]
+    paths: ['research/parallel-six/S1MOTION005-REPLAY-001.marker']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-no-optimizer-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      PYTHONHASHSEED: '0'
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Download original 15 SHA frozen model/optimizer/RNG assets; NEVER fit
+        run: |
+          gh run download 40283616062 --repo FPC-effortless/TAC-OSM \
+            --name s1motion005-original-15-checkpoint-real-first-score \
+            --dir /tmp/s1motion005-15-original
+      - name: Verify pinned original source and already-open DEV against all 15 original scores
+        run: |
+          ORIGINAL="$(find /tmp/s1motion005-15-original -name BEFORE-DEV-ALL-FROZEN.json -print -quit)"
+          test -n "$ORIGINAL"
+          PYTHONPATH=src:. python scripts/s1motion005_original_replay.py \
+            --original-dir "$(dirname "$ORIGINAL")"
+      - name: Archive immutable checkpoint forensic report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: s1motion005-15-original-no-fit-source-replay
+          path: research/diagnostics/s1motion005-cold-replay/**
+          if-no-files-found: warn
+          retention-days: 90
