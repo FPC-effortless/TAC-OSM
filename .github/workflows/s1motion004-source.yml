@@ -1,0 +1,25 @@
+name: S1MOTION004 genuine towel source only
+on:
+  push:
+    branches: [research/s1motion004-point-gradient-isolation-2026-10-26]
+    paths: ['research/parallel-six/S1MOTION004-AUDIT-001.marker']
+permissions:
+  contents: read
+jobs:
+  source-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --quiet 'numpy<2' 'pyarrow==17.0.0'
+      - name: Source eligibility, provenance, license and FIT chronology — NO FIT
+        run: python scripts/s1motion004_towel_source_audit.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: s1motion004-original-source-only
+          path: research/diagnostics/s1motion004-source-audit.json
+          if-no-files-found: warn
