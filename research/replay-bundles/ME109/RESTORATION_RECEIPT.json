@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "clean_checkout": "a68121d80506d3f2143655dfeb24c5dc7a827004",
+  "directory": "/tmp/tac-me106-replay",
+  "original_five_models_restored": true,
+  "optimizer_steps_unchanged": 4096,
+  "no_retraining": true,
+  "commands": [
+    "PYTHONPATH=src:. python scripts/me109_fitted_audit.py replay",
+    "PYTHONPATH=src:. python scripts/me109_residual_training.py replay",
+    "PYTHONPATH=src:. python scripts/me109_summary.py"
+  ],
+  "forecasts_replayed": 398790,
+  "forward_parameter_input_gradient_and_readonly_proposal_checks": 10,
+  "git_worktree_clean_after_replay": true,
+  "rtol": 1e-05,
+  "atol": 1e-06,
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "torch": "2.14.1+cpu",
+  "numpy": "2.3.5",
+  "predictive_gate": "FAIL",
+  "predictive_full_seed_passes": 0,
+  "protected_test_scored": false
+}

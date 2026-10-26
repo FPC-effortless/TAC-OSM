@@ -57,3 +57,57 @@ Actual updates20480; block checks266240; maximum computed applied point dot0.0; 
 The guard protects the current-minibatch six-channel average, not each held-out channel/missingness regime or finite-step population loss. Seven limited new Lean identities/role/bound/count contracts and independent executable equations pass. Full neural/AD/IEEE/censored-law source refinement, useful associative retrieval, transfer, intervention intelligence, control and product safety remain OPEN.
 
 Independent clean restoration and final replay evidence are recorded separately in the original bundle when completed. No further ME109 fits or changed thresholds are permitted.
+
+Clean detached restoration at a68121d8 PASS: all5 original models,10 fitted graph/input/proposal checks,398790 saved quantile scalars, original scores/gates and summary replayed; no retraining, clean worktree. Full1087local tests PASS after scoring. GitHub original-score replay is pending at this receipt.
+
+## Post-hoc FIT-only loss and regime trace; no new fit
+
+A separate deterministic read-only audit used three original-augmentation B32,
+256h FIT batches (16natural-gap+16general origins) for each of the five frozen
+models. All candidate proposals used the original4096-step AdamW moments, original
+objective/clip and original average-point guard; no weight or moment was applied.
+All15average-point directional dots and195block dots stayed nonpositive. However,
+gap-PM2.5 directional dots were POSITIVE in10/15whole proposals and75/195blocks;
+general-PM2.5 dots were positive in0/15whole proposals and12/195blocks.
+
+This is a concrete limitation of protecting an averaged task: it permits local
+opposition to the gap-PM task. It is not proof of the cause of the held-out
+regression, nor a measurement of realized finite-step losses. No REPORT/protected
+rows were accessed by this audit. All weights, checkpoint hashes, model versions,
+optimizer moment tensors and4096step counters were unchanged. The script and
+original full gradient norms/pairwise cosines live beside the immutable results.
+A task/regime-specific optimization contract is a proposed NEXT protocol, not
+a changed ME109 loss, threshold or additional fit.
+
+## Merged upstream anti-cheat and observatory tools adopted after fitting
+
+PR417/420master tooling was restored byte-for-byte from
+ada32393651614eeb60cf4f3a69f1aad44449e55; UPSTREAM_TOOLS.json records all15file
+identities. Original training/model source and scores are unchanged. These tools
+were integrated AFTER fitting/scoring, not claimed as retrospective preflight.
+The native CLI targets PredictiveStateAgent, so a real ME109 adapter uses the
+generic APIs rather than reformatting sensor data as fictitious native inputs.
+
+All5 original final checkpoints are examined on genuine FIT only: architecture
+inventory, actual module activation trace, weighted loss gradient atlas and
+gradient health; one actual FIT origin per model has only its raw six-hour future
+PM target poisoned before the original augmentation producer. Input-boundary,
+that specific future-target invariance, deterministic forecast invariance, traced
+noninterference and gradient-health findings PASS5/5; replay also PASS.
+
+The overall anti-cheat ledger deliberately remains **INCONCLUSIVE**5/5: source
+CSV/joins, full partition/preprocessing provenance, nuisance-ID/shuffle controls
+and incompatible native-state tomography/dependency/entity/runtime adapters
+are not verified by these probes. The poison holds normalization caches fixed;
+it does not certify their upstream fitting. Runtime call order is not a tensor
+DAG. These are no-fit engineering observations, not real capability evidence
+or proof of no possible leakage. No optimizer was created or stepped; no
+REPORT/protected dataset was loaded by this adapter.
+
+GitHub original-score replay40280842012 and scientific preflight40280842069 PASS.
+After adopting the15upstream tool files,64new tool/automation tests and full1151
+local tests PASS. Additional adapter replay compares input/checkpoint identities
+and finding statuses exactly, and requires exact clean-vs-poison output hash
+equality within each run. Only four runtime prediction digest fields are
+normalized across runs; all numerical summaries retain the existing1e-5/1e-6
+contract. Saved original JSON/model/score bytes are not overwritten.
