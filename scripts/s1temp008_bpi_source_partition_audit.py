@@ -21,7 +21,9 @@ from collections import Counter
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 LOCK=ROOT/"research/parallel-six/S1TEMP008-PUBLISHER-LOCK.json"
-URL="https://data.4tu.nl/file/34c3f44b-3101-4ea9-8281-e38905c68b8d/f3aec4f7-d52c-4217-82f4-57d719a8298c"\n# Original direct 4TU publisher URL, independently reported by skpm.\n# Still REQUIRE Figshare ORIGINAL MD5 and byte count before parsing.
+URL="https://data.4tu.nl/file/34c3f44b-3101-4ea9-8281-e38905c68b8d/f3aec4f7-d52c-4217-82f4-57d719a8298c"
+# Original direct 4TU publisher URL, independently reported by skpm.
+# Still REQUIRE Figshare ORIGINAL MD5 and byte count before parsing.
 EXPECTED_BYTES=29658747
 MD5="10b37a2f78e870d78406198403ff13d2"
 SALT="S1TEMP008-BPIC2017-CASE-SPLIT-V1"
