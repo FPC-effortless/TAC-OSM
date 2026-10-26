@@ -1,5 +1,15 @@
 # TAC-OSM Roadmap
 
+## Current company and release overlay — 2026-10-27
+
+**This is an additive forward-looking company/product overlay**; the older M1/M2/M3 architecture and measurement roadmap below remains historical research context. Consult the [canonical master plan](../research/MASTER_RESEARCH_PLAN.md) and [company strategy](../research/COMPANY_STRATEGY_AND_DAILY_OPERATING_SYSTEM.md) before choosing work. Current founder direction: **useful specialist AI with genuine offline/on-device inference or exceptionally fast cloud inference**, **not superintelligence**. The [model catalog and dual deployment issue #450](https://github.com/FPC-effortless/TAC-OSM/issues/450), [Edge #440](https://github.com/FPC-effortless/TAC-OSM/issues/440) and [ARC-AGI-3 #451](https://github.com/FPC-effortless/TAC-OSM/issues/451) are the current action plans.
+
+**Proof-of-value order:** (1) validated user need + legal real data + baseline and calibrated output quality; (2) actual device numerical/parity/latency/RAM/energy/offline evidence **or** cloud end-to-end tail latency, throughput, real serving cost and availability; (3) open SDK/model card plus independent developer evidence. Forge/TrainLab/Veritas/Woyengi support provenance, reproduction, trustworthy evaluation and authorized action boundaries. Status until proven otherwise: **hypothesis/proposal, not released**.
+
+ARC-AGI-3 is a bounded interactive adaptability research challenge, evaluated against permitted public-development and separate official held-out tasks with source-locked game/action history, blind scoring and action efficiency. Benchmarks are not real-world operational proofs, and benchmark success is not superintelligence. Existing six TAC model families, CED/math/PNDS, 95k–105k research parameter scale, fair budgets and historical failed gates remain binding.
+
+---
+
 Derived from a review of public research and evaluation infrastructure
 (OLMo/OLMES, lm-evaluation-harness, OpenAI Evals, Anthropic agent evaluation,
 Harbor/Terminal-Bench, HELM, DeepMind research code, Karpathy's autoresearch),
