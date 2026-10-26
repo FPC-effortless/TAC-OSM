@@ -1,5 +1,72 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-26 — ME107: typed role FFNs and a mathematical failure ledger
+
+[Draft TAC PR410](https://github.com/FPC-effortless/TAC-OSM/pull/410),
+[PNDS PR21](https://github.com/FPC-effortless/pnds-lean/pull/21),
+[invariant ledger](https://github.com/FPC-effortless/TAC-OSM/blob/research/me107-role-specialized-2026-10-26/research/ARCHITECTURE-INVARIANTS.json),
+[full formulation](https://github.com/FPC-effortless/TAC-OSM/blob/research/me107-role-specialized-2026-10-26/research/mathematical-engineering/me107/MATHEMATICS.md).
+Owner requested mathematical prevention and role-specialized FFN computation,
+retaining TAC rather than replacing it with a Transformer/SSM. A bounded untrained
+prototype is implemented, not merely proposed and not a new predictive result.
+
+The existing native masked encoder, source/evidence state, fast/slow proposals,
+8x8 associative schedule/read, input-only parallel scan and streaming memory stay
+intact. Three independently learned102→16→output tanh FFNs replace linear heads:
+current-state reconstruction12, uncertainty shape12, bounded point innovation6.
+Roles hard-assign allowed outputs/computation, NOT correct answers or oracle
+regimes. The shared102-feature state supplies these decoder branches. This is
+standard task-specific nonlinear-head engineering, not a novel FFN invention or
+proof that specialization has been learned. Shared ancestors still can conflict.
+
+The actual model has102713trainable/deployed values/39tensors, within95k–105k;
+no padding, frozen encoder or new recurrent payload. Primary state remains152FP32
+floats=608B/sample plus existing integer/provenance metadata, excluding full model
+and runtime RAM. Fresh head initialization is not an identical parent warm start.
+The size differs from ME106 by more than1percent, so an old/new matched
+architectural-superiority claim would require new matched controls.
+
+A pure proposed-displacement guard checks each exhaustive parameter block AFTER
+all optimizer effects: if <g_point,delta> is positive, remove that component;
+FP64 accumulation, rounded-output recheck and fail-closed fallback retain free
+zero-gradient coordinates. A one-shot iterable-validation bypass was caught and
+fixed before any fit; regression tests cover it. **The guard is not integrated
+into a trained optimizer.** Its exact-real first-order bound does not prove
+finite-step loss descent, behavior at MAE kinks, uncertainty quality or capability.
+
+The versioned ledger tracks10 failure classes: gradient/optimizer conflict,
+role coupling, missing-data coverage, scale-floor/location coupling, unused memory,
+scan legality, numerical/preprocessing drift, state-count/age limits, leakage and
+parameter/resource fairness. Each has a contract/status/evidence or explicit open
+obligation. Fixed-size storage does not prove bounded cumulative sums/counts or
+unlimited age resolution. No statistical failure is labeled mathematically solved
+just because a related kernel theorem compiles.
+
+Source ddf04323, reciprocal row18295b69, PNDS5e50d297. Full typed Lean role-forward
+formulation, independent Python chronological reference and source-pinned tests
+are linked in both repositories. Fifteen limited Lean declarations compile with
+standard axioms only, including exact left/right source and missing-scale bounds,
+parameter arithmetic and generic finite-vector displacement properties. Whole
+neural/AD/IEEE and normal-law implementation refinement remainOPEN; median bound
+is analytically specified/tested, not separately Lean-proved here.
+
+Validation:1045full Python testsPASS;9dedicated tests;6pinned PNDS source tests;
+actual-source/reference outputs/state/parameter gradients match FP32/64 under
+unchanged2e-5/2e-6 and1e-9/1e-10. One registered authentic2013–2014FIT minibatch has
+finite nonzero composite-objective gradients in all39 tensors; maximum gradient
+errors9.54e-7/7.78e-16. Streaming and structural role-gradient tests pass. Dedicated
+GitHub TAC source40251245492 and initial PNDS source/math40251245108/generalLean
+40251243841 pass; subsequent scale-proof changes compile locally and their latest
+CI must be checked separately.
+
+**No new models fitted or optimizer steps. No REPORT/protected2016–2017 numerical
+access.** This no-fit registration cannot authorize future training. ME106 failed
+qualification, original checkpoints and DIAGGRAD001 FP32 exceptions stay intact.
+Six families unchanged; no merge, deployment, Mamba-speed parity or intelligence
+claim. The next capability study must register and train the integrated candidate
+on real data, wire the proposed-update semantics explicitly, preserve original
+checkpoints/replay and test actual predictive gates. Attribution stays secondary.
+
 ## 2026-10-26 — DIAGGRAD001: measured interval/point conflict and optimizer-direction limits
 
 [Draft TAC PR409](https://github.com/FPC-effortless/TAC-OSM/pull/409),
