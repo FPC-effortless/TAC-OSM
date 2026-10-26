@@ -1,5 +1,18 @@
 # TAC-OSM — Unified Master Research Plan
 
+## 2026-10-26 — ME108 exact-real neural/AD and censored Gaussian refinement: PARTIAL proof, full source correctness OPEN
+
+[Native TAC draft PR412](https://github.com/FPC-effortless/TAC-OSM/pull/412), [PNDS proof draft PR23](https://github.com/FPC-effortless/pnds-lean/pull/23), [source-scope report](https://github.com/FPC-effortless/TAC-OSM/blob/research/neural-refinement-2026-10-26/research/mathematical-engineering/neural-refinement/REPORT.md), [formal proof obligations](https://github.com/FPC-effortless/pnds-lean/blob/research/neural-refinement-2026-10-26/foundation/v1/ME108_NEURAL_REFINEMENT_PROOF_BOUNDARY.md).
+
+User's requested final target is **complete, compositional source-to-Lean neural correctness**, including exact finite-tensor forward/backward, honest IEEE FP32/64 and automatic-differentiation semantics for every PyTorch operator, and actual Gaussian measure/CDF/log-density/quantile correctness after censoring. This target is NOT currently achieved; no unproved primitive is declared solved. Existing ME108 typed whole-graph specification, original pretrained five SHA-frozen 102,713-parameter models and FAIL0/5 real-data qualification are unchanged.
+
+This research increment proves in Lean exact-real two-layer 102→16→12/12/6 FFN input VJP/JVP adjoint laws and linear parameter-gradient algebra; adds scalar tanh derivative proof, conditional two-operation numerical roundoff bound; constructs the actual censored source-shaped probability measure as a pushforward and proves normalization and zero negative-support mass, including a genuine standard Gaussian measure instantiation. Native model source verification extends with a separate read-only original trained checkpoint audit: five original ME108 seeds ×three role heads×FP32/FP64=30 full input/weight/bias Torch-vs-NumPy derivative checks on genuine UCI501 2013–14 FIT samples. [Original audit GitHub CI40268747906](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40268747906) PASS, original source receipts artifact12626708917. No optimizer/training step or sealed2016–2017 target opened. All original research gates retained.
+
+**Scientific/formal limits:** Full-input masked scan/decoder source proof, all five objective AD including stop-gradient/max/clamp subgradient conventions, bit-level IEEE arithmetic/transcendental/reduction order and error propagation to outputs/gradients, equality of the mathematical Gaussian pushforward to actual torch.special.ndtr/log_ndtr/ndtri CDF/quantile/NLL kernels, and optimizer/model composition theorem remain **OPEN**. Local scalar error bound assumes roundoff premises; pushforward normalization alone is not an NN probability-law implementation refinement and cannot prove calibration. Full IEEE source equivalence or deployed control is not claimed. Dedicated PNDS proof build/axiom audit must remain passing under pinned Lean4.14/mathlib before any next promotion; preserve historical failed preflights and failed predictive gates. Six-family shared parallel architecture and CPU/parameter/data/compute fairness rules unchanged.
+
+---
+
+
 ## 2026-10-26 — ME108 trained role models: ordinary/interval gains, gap-point failure
 
 [Draft TAC PR411](https://github.com/FPC-effortless/TAC-OSM/pull/411),
