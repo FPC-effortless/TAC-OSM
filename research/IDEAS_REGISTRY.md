@@ -1,5 +1,13 @@
 # Research Ideas Registry — TAC-OSM and related programs
 
+## 2026-10-27 — Practical device/cloud specialist models and ARC-AGI-3 adaptation (policy/intake only)
+
+**Origin:** owner's company direction after Desert Ant Labs and TypeSafe AI research; binding [company strategy](COMPANY_STRATEGY_AND_DAILY_OPERATING_SYSTEM.md), [master plan](MASTER_RESEARCH_PLAN.md). This is a research idea/prioritization index, **not a trained/checkpoint result**. [MODEL-PRODUCT-001 #450](https://github.com/FPC-effortless/TAC-OSM/issues/450) owns useful typed decision/classification, event/anomaly, forecasting, privacy and optional audio/vision specialist products via either offline devices or fast cloud. [EDGE-001 #440](https://github.com/FPC-effortless/TAC-OSM/issues/440) owns physical mobile/edge validation. [ARC3-001 #451](https://github.com/FPC-effortless/TAC-OSM/issues/451) owns benchmark-specific interactive unseen-environment world-state learning/goal discovery/planning with genuine held-out isolation, human-normalized action efficiency, wall time and compute accounting. [COMPANY intake #441](https://github.com/FPC-effortless/TAC-OSM/issues/441) maps to PNDS, Forge/TrainLab, Veritas and Woyengi.
+
+**Scientific caution:** no superintelligence objective or seventh model family; official ARC-AGI-3 success cannot prove authentic real-world performance; no offline-device benchmark, cloud deployed model, official ARC-AGI-3 score or commercial adoption is verified by these documents. Retain the compulsory original TAC 100k/<=1% neural comparisons, real data, protected TEST, mathematical/anti-cheat gates, failed results and immutable history. Product specialist models can require separately authorized resource scales.
+
+---
+
 ## 2026-10-26 — ME109 trained residual roles: full gate FAIL; average protection misses gap objectives
 
 [Draft TAC PR419](https://github.com/FPC-effortless/TAC-OSM/pull/419) and
