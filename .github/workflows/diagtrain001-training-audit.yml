@@ -1,0 +1,52 @@
+name: DIAGTRAIN001 original-model training audit (no fitting)
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'scripts/diagtrain001*'
+      - 'research/mathematical-engineering/diagtrain001/**'
+      - '.github/workflows/diagtrain001-training-audit.yml'
+permissions:
+  contents: read
+jobs:
+  original-fit-diagnosis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy==2.3.5 pytest
+      - run: PYTHONPATH=src:. pytest -q tests/test_research_anticheat.py tests/test_robot_anticheat.py tests/test_research_observatory.py tests/test_research_ci_automation.py tests/test_role_optimizer.py tests/test_me109_residual_training.py
+      - run: PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --replay --observed-output /tmp/diagtrain001-current.json
+      - run: |
+          PYTHONPATH=src:. python scripts/diagtrain001_curves.py > /tmp/curves.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          assert json.loads(Path('/tmp/curves.json').read_text()) == json.loads(Path('research/mathematical-engineering/diagtrain001/CURVES.json').read_text())
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: diagtrain001-current-host
+          path: /tmp/diagtrain001-current.json
+          retention-days: 14
+  inward-guard-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install numpy==2.3.5 pytest
+      - run: PYTHONPATH=src:. pytest -q tests/test_inward_role_guard.py
+      - run: PYTHONPATH=src:. python scripts/diagtrain001_training_audit.py --inward --replay --observed-output /tmp/inward-current.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: inward-guard-current-host
+          path: /tmp/inward-current.json
+          retention-days: 14

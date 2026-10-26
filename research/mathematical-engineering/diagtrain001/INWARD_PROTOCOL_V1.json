@@ -1,0 +1,12 @@
+{
+  "id": "DIAGTRAIN001-INWARD001",
+  "study_type": "no_fit_numerical_correction",
+  "motivation": "Preserved original cross-host optimizer-proposal replay failure",
+  "candidate": "FP64 inward projection with precision-derived FP32 parameter-rounding margin and conditional realized-dot certificate",
+  "inputs": "Same five original checkpoints, three authenticated FIT-only batches, original moments and original-rate AdamW proposals",
+  "comparison": "One inward candidate per original proposal; no LR or margin sweep, candidate selection, optimizer step or trained checkpoint",
+  "checks": ["Exact rational dot oracle on small FP32 fixtures", "Conditional realized dot upper bound <=0", "Model/moment/version immutability", "Functional actual losses, no finite-loss guarantee assumed", "Cross-host original result agreement with unchanged tolerances; disclose mismatch"],
+  "mathematics": "PNDS InwardRoleGuard pending source binding; full IEEE, gradient, loss-descent and whole-model refinement OPEN",
+  "protected_data": "unopened",
+  "original_results": "Immutable; original strict replay failure remains FAIL"
+}
