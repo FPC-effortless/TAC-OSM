@@ -1,0 +1,48 @@
+name: Model02 hypothetical source risk review break-even thresholds, not ROI
+on:
+  push:
+    branches:
+      - research/model02-censor-inclusive-decision-2026-10-27
+    paths:
+      - 'specialist_models/model02_review_cost_envelope.py'
+      - 'tests/test_model02_review_cost_envelope.py'
+      - '.github/workflows/model02-review-cost-envelope.yml'
+      - 'research/source-evidence/MODEL02-CENSOR-INCLUSIVE-001-ORIGINAL.json'
+  pull_request:
+    paths:
+      - 'specialist_models/model02_review_cost_envelope.py'
+      - 'tests/test_model02_review_cost_envelope.py'
+      - '.github/workflows/model02-review-cost-envelope.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-conditional-cost-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify no fictional ROI and exact original source mathematics
+        run: python -m unittest discover -s tests -p test_model02_review_cost_envelope.py -v
+      - name: Run reproducible avoided-loss cost thresholds from Git original real-source receipt
+        run: python specialist_models/model02_review_cost_envelope.py --out model02_conditional_break_even.json
+      - name: Reassert hypothetical, unqualified scientific status
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('model02_conditional_break_even.json'))
+          assert x['actual_business_costs_measured'] is False
+          assert x['source_has_verified_prevention_rate'] is False
+          assert x['qualified_operator_recommendation'] is False
+          print('REAL_SOURCE_HYPOTHETICAL_COST_ENVELOPE=PASS_NOT_ROI')
+          print('ORIGINAL_CASE_BREAK_EVEN='+json.dumps(x['review_budgets'],sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model02-review-cost-hypothetical-original-source
+          path: model02_conditional_break_even.json
+          if-no-files-found: error
+          retention-days: 14
