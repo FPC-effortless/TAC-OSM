@@ -1,5 +1,7 @@
 # TAC-OSM — Unified Master Research Plan
 
+> **2026-10-27 historical memory remedy reconciliation:** Before proposing another persistent-memory addressing/retention redesign, review [the original DIAGKEY004/ME100/LATFUSE004–018 implementation and evidence addendum](MASTER_MEMORY_IMPLEMENTATION_REUSE_ADDENDUM.md). It identifies mechanisms already built and distinguishes genuine failures of later narrowed variants from problems solved in older software diagnostics. Original checkpoints and research/validation gates are unchanged.
+
 ## Binding company mission and model-delivery research direction — 2026-10-27
 
 **Authority and source:** [Company Strategy and Daily Operating System](COMPANY_STRATEGY_AND_DAILY_OPERATING_SYSTEM.md) (merged [PR #448](https://github.com/FPC-effortless/TAC-OSM/pull/448)) governs **daily product/research prioritization**, subordinate to this plan's scientific, mathematical, information-security, data-access, source-replay, and owner authorization rules. [Useful model catalog issue #450](https://github.com/FPC-effortless/TAC-OSM/issues/450), [ARC-AGI-3 adaptation issue #451](https://github.com/FPC-effortless/TAC-OSM/issues/451), [Edge deployment issue #440](https://github.com/FPC-effortless/TAC-OSM/issues/440), and [cross-repo company index #441](https://github.com/FPC-effortless/TAC-OSM/issues/441) are the living action registers. This section **does not change prior model/checkpoint results, original failed gates, or release authority**.
