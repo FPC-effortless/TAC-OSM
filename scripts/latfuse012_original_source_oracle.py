@@ -282,7 +282,7 @@ def main():
         no_optimizer_updates=True,
         read_keys_and_value_oracle_are_diagnostic_privileged=True,
         null_query_physical_shuffled_not_independent_random_isotropic=True,
-        95pct_bootstrap_source_station_blocks_not_full_independent_episode_population=True,
+        bootstrap_95pct_source_station_blocks_not_full_independent_episode_population=True,
         no_original_2015DEV_or_protected_2016_17_numeric=True,
         full_original_weight_SHAs_unchanged=True,
         models=evidence,untrained_controls=untrained)
