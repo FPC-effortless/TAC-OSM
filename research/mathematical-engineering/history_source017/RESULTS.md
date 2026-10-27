@@ -21,7 +21,7 @@ The source-pinned writer encoder takes physical observations, observation masks,
 |26017:assoc_historic_query|258|0.753929|0.273308|45.885659|0.015988|
 |26017:fast_slow_historic_query|258|0.691603|0.022231|48.423934|0.012597|
 
-Cosine, rank and apparent key collapse are mechanism observations, not ground-truth reconstruction or a usefulness gate. Temporal signal could be inferred indirectly from physical context; missing an explicit writer clock does not prove impossibility. No geometry value rescues the prior failed real-data usefulness gates.
+For the fastslow control, the historical head reads a transient fast/slow feature product rather than the persistent associative matrix; its query/write cosine is only a geometric reference. Cosine and rank are mechanism observations, not ground-truth reconstruction or a usefulness gate. Temporal signal could be inferred indirectly from physical context; missing an explicit writer clock does not prove impossibility. No geometry value rescues the prior failed real-data usefulness gates.
 
 ## Durable source and limits
 
