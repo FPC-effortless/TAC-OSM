@@ -109,10 +109,10 @@ def step(model,opt,d,rows,source):
 def setup(args):
     import torch
     recipe=json.loads((DIR/'RECIPE.json').read_text())
-    verify_implementation(args.implementation_root,recipe['implementation_commit'])
+    root=verify_implementation(args.implementation_root,recipe['implementation_commit'])
     if sha_file(args.source)!=recipe['source_sha256']:
         raise ValueError('original source hash differs')
-    source,original=load_original_modules(args.implementation_root)
+    source,original=load_original_modules(root)
     torch.set_num_threads(1)
     torch.use_deterministic_algorithms(True)
     d=original.source_observations(args.source)

@@ -51,3 +51,13 @@ def test_reduction_bound_and_matmul():
     assert signature_work(s)==128
     s=op('aten::bmm.',[[2,3,4],[2,4,5]], [[2,3,5]])['signature']
     assert signature_work(s)==240
+
+
+def test_relative_original_root_resolves_before_load():
+    # Runner must pass the verified absolute return value to module isolation.
+    import ast
+    from pathlib import Path
+    tree=ast.parse(Path('scripts/train_history_query_diverse.py').read_text())
+    setup=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='setup')
+    load=next(n for n in ast.walk(setup) if isinstance(n,ast.Call) and getattr(n.func,'id',None)=='load_original_modules')
+    assert isinstance(load.args[0],ast.Name) and load.args[0].id=='root'
