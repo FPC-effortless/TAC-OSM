@@ -73,6 +73,17 @@ class LanguageContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"period"):
             session.step(torch.tensor([1],dtype=torch.int64))
 
+    def test_layer_norm_positive_deployed_epsilon_guard(self):
+        model=ParallelTACLanguage(decoder=75,post=10,
+            position_mode="multiscale",gate_mode="silu")
+        validate_model(model)
+        model.norm.eps=0.0
+        with self.assertRaisesRegex(ValueError,"LayerNorm eps"):
+            validate_model(model)
+        model.norm.eps=-1e-5
+        with self.assertRaisesRegex(ValueError,"LayerNorm eps"):
+            validate_model(model)
+
     def test_stable_log_probabilities_under_fp32_underflow(self):
         logits=torch.zeros((1,128),dtype=torch.float32)
         logits[0,0]=-1000.0
