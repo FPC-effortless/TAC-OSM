@@ -35,3 +35,16 @@ The following changes are **additive to the checked inference adapter**, never c
 - **Fail-closed proof audits**: the original workflow had a stale theorem-count comparison and could permit unknown axioms via over-broad grep. The new `scripts/audit_language_lean.py` compares every declaration requested in `AuditLanguage.lean` against Lean output and checks the exact admitted axiom set `{propext, Quot.sound, Classical.choice}`. Adversarial parser tests reject missing/duplicate declarations, unknown axioms and `sorryAx`.
 
 This is a strict iterative proof project. All new theorems require green Lean build **and** the corrected axiom-audit job before they may be counted as verified. Even after these tests, the global Torch/IEEE, full AD, optimizer and real-world retrieval claims remain open.
+
+
+## Language AD and memory-stability continuation (TAC-LANG-AD-009/010/011)
+
+The new PNDS proof files are `LanguageLossAD.lean`, `LanguageMemoryAD.lean`, and `LanguageMemoryStability.lean`. Their source version is the five-seed 100,680-parameter gate experiment, **not a new model family**.
+
+- **128-way loss terminal cotangent**. The exact-real directional derivative of the full categorical negative-log-likelihood is `sum_i softmax(logits)[i] * dlogit[i] - dlogit[target]`. The theorem covers an arbitrary differentiable curve of all 128 logits; it does not claim every upstream Torch operation is automatically verified.
+- **Two memory derivative refinements**. Actual 8×8 native corrective writes and both 16×8 aligned banks are definitionally mapped to the earlier kernel-proven PNDS `writeRow`. Each coordinate's source JVP includes variations of memory, address, value, retention and write strength, including all 16 rows and both aligned heads.
+- **Prior-memory sensitivity**. A new language-specific stability theorem applies the source's epsilon-normalized address, sigmoid retention and two-head routed write strength to prove nonexpansive squared row norms for **two states receiving the same key/value/gate input**. This is not a bound on total memory values or a guarantee of reliable historical recall.
+- **Independent numerical falsifiers**. `test_language_finite_difference.py` independently checks central function-value differences against PyTorch AD across all 36 trainable tensor groups, including a 64-character historical loss. This is a constructed diagnostic only, not a claim of real-text quality. An additional test perturbs native/aligned memory across two streams and compares row energy before/after the same source input.
+- **Strict limitation**. Mathematical `HasDerivAt` proofs are exact real; branch points of source `F.normalize` and FP32 numerics, layernorm/softmax backward kernels, entire training optimizer, and whole-graph source-to-Lean lowering all still require separate proofs and/or restricted numerical checks.
+
+The dedicated PNDS CI must successfully build and axiom-audit **44 scoped theorem declarations** before that number can be called verified. Historical checkpoints have not been changed or retrained.
