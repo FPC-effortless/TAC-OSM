@@ -1,0 +1,57 @@
+name: PAR-MEM-008 independent original source writer-key effective-rank replay NO FIT
+on:
+  push:
+    branches: [research/parmem008-real-writer-address-rank-2026-10-27]
+    paths:
+      - '.github/workflows/parmem008-independent-replay.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/parmem008-independent-replay.yml'
+      - 'research/parallel-six/PAR-MEM-008-RESULTS.json'
+      - 'scripts/parmem008_real_writer_key_rank.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-true-source-geometry-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU Tensor backend without GPU or training
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Assert five original real-trained source checkpoints and frozen results
+        run: |
+          set -euo pipefail
+          test -s research/parallel-six/PAR-MEM-008-PROTOCOL.json
+          test -s research/parallel-six/PAR-MEM-008-RESULTS.json
+          test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
+          test -s research/parallel-six/PAR-MEM-006-FROZEN-PLAN.json
+          test "$(find research/replay-bundles/PAR-TIME-005 -name 'seed-*-original-continuous.pt' | wc -l)" -eq 5
+          python -m py_compile scripts/parmem008_real_writer_key_rank.py
+      - name: Fetch pinned immutable original observed source ZIP from prior repo history
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem008-independent
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem008-independent/source.zip
+          test "$(sha256sum /tmp/parmem008-independent/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Recompute all five original frozen real source writer keys, rank spectra and lag distances
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.parmem008_real_writer_key_rank --mode replay \
+            --source /tmp/parmem008-independent/source.zip
+          echo 'ORIGINAL_FIVE_SEED_REAL_SOURCE_KEY_RANK_REPLAY_PASS'
+      - name: Confirm no original model, protected source or report bytes were changed
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          echo 'No model training or independent TEST claim.'
