@@ -102,6 +102,25 @@ class ParallelResidualWorldNoFitTests(unittest.TestCase):
         after = self.model(altered_obs, altered_action)
         torch.testing.assert_close(before[:, :3], after[:, :3], atol=1e-6, rtol=0)
 
+    def test_only_six_family_factory_can_build_untrained_residual(self):
+        from tac_osm.variants.parallel_six import (
+            instantiate_untrained_postscan_core,
+        )
+        for family in ("physical", "temporal", "system1", "enterprise",
+                       "edge_lite", "counterfactual"):
+            model = instantiate_untrained_postscan_core(
+                family, state_dim=14, action_dim=14,
+            )
+            self.assertIsInstance(model, ParallelResidualWorld)
+            self.assertEqual(
+                sum(p.numel() for p in model.parameters() if p.requires_grad),
+                96303,
+            )
+        with self.assertRaises(ValueError):
+            instantiate_untrained_postscan_core(
+                "ced_seventh_family", state_dim=14, action_dim=14,
+            )
+
     def test_input_validation_and_stream_input_nonmutation(self):
         with self.assertRaises(ValueError):
             self.model(torch.randn(2, 14), self.action)
