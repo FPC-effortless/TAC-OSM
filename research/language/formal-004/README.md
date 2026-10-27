@@ -181,8 +181,7 @@ The companion PNDS mathematical contract
 `LanguageSelectiveRetrieval.lean` proves exact trained-delay selection,
 positive and normalized fallback and convex mixture mass/floor; it is
 an exact-real source contract, not model calibration or IEEE validation.
-The expanded 73-theorem audit must be green before reporting it
-as verified. Real-text independently reserved TEST and matched training
+The current 82-theorem targeted audit has passed; this remains a scoped exact-real proof, not a complete PyTorch model verification. Real-text independently reserved TEST and matched training
 for genuine 96-lag retrieval remain open.
 
 
@@ -228,8 +227,62 @@ See `MLAG001_REAL_DEV_REPORT.md` for methodology, seed-by-seed
 measures and the five-independent-seed-block uncertainty. The companion
 PNDS module `LanguageMultiLagObjective.lean` formalizes 0.30 weight
 parity, exact-real objective derivative and past-only query ordinals.
-The source-specific Lean audit targets 78 declarations (check latest CI).
+The source-specific PNDS Lean audit now passes 82 declarations after adding raw-gradient projection contracts; the corresponding full root Lean build passes.
 
 See `LANGUAGE_COMPETITIVE_ADVANTAGES_PROTOCOL.md` for the research
 benchmark ladder and near-term memory SDK evidence requirements, including
 LongMemEval-V2, NoLiMa and the actual Mamba-3/RWKV-7 competition.
+
+
+## MLAG002–004: What aligned memory does, optimization trade-off, and context cliff
+
+**Read [MLAG002_003_REAL_REPORT.md](MLAG002_003_REAL_REPORT.md)** for
+per-arm and seed measurements, and [MLAG004_LONG_CONTEXT_REPORT.md](MLAG004_LONG_CONTEXT_REPORT.md)
+for the longer-context extrapolation and registered context320 controls.
+
+- Frozen original/dual 20-checkpoint next-character lesions:
+  native memory read contributes **+0.1329/+0.1330 nats** when removed;
+  aligned memory read contributes **+0.0034/+0.0027 nats**.
+  However the historical classifier uses **aligned memory only**. For
+  dual-horizon lag96, its correct-address NLL **3.1276** increases to
+  **4.8520** when aligned memory is zeroed. Therefore it is **not
+  redundant** for source-specific historical reconstruction, even
+  though its normal next-token contribution is small.
+- Authentic FIT-only frozen gradient audit shows mean shared-source
+  encoder gradient L2 for main/historical96 of **0.03494/1.08308**
+  on dual-horizon models, with cosine **−0.07166**. Large historical
+  influence and mild gradient opposition motivated a targeted,
+  parameter-neutral optimization diagnostic.
+- Five matched SiLU seeds of source-only gradient projection, same
+  original data/sample order and **120 updates**, change exposed DEV
+  next NLL **2.827523→2.826805**, but historical64 NLL
+  **3.375578→3.387505** and historical96 **3.112097→3.126281**.
+  All five history96 losses worsen. Extra autograd work increases training
+  compute, and this is **not promoted**.
+- Crucially, frozen 128-context-trained checkpoints on **320-character
+  real DEV windows** show the dual-horizon lag96 NLL **4.648** versus
+  FIT prior **3.565**. Same lag, stratified by prediction position:
+  **3.329 at t96–127**, then **4.811 at t128–191** and **5.029 at
+  t192–255**. Frozen lag256 NLL is **6.048** vs FIT prior **3.640**.
+  Therefore the 96-character training gain did not establish
+  length extrapolation. Position-specific training effects, memory
+  interference and accumulated-state drift are competing explanations,
+  not yet isolated causes. It is incorrect to attribute a cliff at 128
+  to the 155701-step Fourier cycle.
+- Research scripts are source/hash-gated:
+  `audit_memory_paths.py`, `audit_memory_gradients.py`,
+  `train_gradient_guard_real_fit.py`, `preflight_long_context.py`
+  and `audit_lag96_position_buckets.py`. Synthetic CI separately guards
+  differentiability and causal 320-context source invocation.
+  Local archive of five new full gradient-guard checkpoints + receipts
+  has SHA256 `92610c5cb3acb190ec1c38278bb7a160f176b019865b76d1dec633baeff9587e`.
+  Independent cold GitHub replay of real checkpoints/data remains OPEN.
+
+**Decision:** retain both banks; treat the source-aligned bank as a
+historical-memory specialist; do not promote the gradient guard. The next
+valid 256-character experiment needs **fresh context320 training of
+both** a 64+96 control and a 64+128+256 candidate, five paired seeds,
+matched parameters/data/update budgets, actual computational-cost
+receipts, newly replayable checkpoints and independent real-document TEST.
+Do not describe this 128-token-context model as a lifelong or 256-event
+recall system.
