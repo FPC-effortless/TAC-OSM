@@ -1,0 +1,94 @@
+name: PAR-MEM-014 original EPA AQS 2024 metadata-only public source intake
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/parmem014-epa-original-metadata-intake.yml'
+      - 'scripts/parmem014_epa_metadata_admission.py'
+      - 'tests/test_parmem014_epa_metadata_admission.py'
+      - 'research/parallel-six/PAR-MEM-014-PROTOCOL.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: parmem014-epa-original-metadata-sha-source-admission
+  cancel-in-progress: false
+jobs:
+  genuine-publisher-metadata-without-numeric-physical-target:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    env:
+      SOURCE_BRANCH: ${{ github.event.pull_request.head.ref }}
+      PYTHONPATH: '.:src'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify schema legality and metadata-only unit fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/parallel-six/PAR-MEM-014-PROTOCOL.json
+          python -m py_compile scripts/parmem014_epa_metadata_admission.py
+          python -m unittest discover -s tests -p 'test_parmem014_epa_metadata_admission.py' -v
+          if test -s research/source-bundles/PAR-MEM-014/EPA2024-METADATA-RECEIPT.json; then
+            echo 'SOURCE_REPLAY=true' >> "$GITHUB_ENV"
+          else
+            test ! -e research/source-bundles/PAR-MEM-014/EPA2024-METADATA-RECEIPT.json
+            echo 'SOURCE_REPLAY=false' >> "$GITHUB_ENV"
+          fi
+      - name: Fetch publisher-original EPA 2024 measured archive without examining concentration fields
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem014-original-epa
+          curl --retry 4 --retry-all-errors --retry-delay 6 --fail --location \
+            --max-time 900 --connect-timeout 35 --silent --show-error \
+            'https://aqs.epa.gov/aqsweb/airdata/hourly_88101_2024.zip' \
+            --output /tmp/parmem014-original-epa/hourly_88101_2024.zip
+          test -s /tmp/parmem014-original-epa/hourly_88101_2024.zip
+          python - <<'PY'
+          from zipfile import ZipFile
+          p='/tmp/parmem014-original-epa/hourly_88101_2024.zip'
+          with ZipFile(p) as z:
+              print('EPA_PUBLISHER_ORIGINAL_ARCHIVE_ZIP_MEMBERS=',[i.filename for i in z.infolist()])
+          PY
+      - name: Read original publisher monitor identity and source timestamp metadata only
+        if: env.SOURCE_REPLAY == 'false'
+        run: |
+          python -m scripts.parmem014_epa_metadata_admission --mode intake \
+            --source /tmp/parmem014-original-epa/hourly_88101_2024.zip
+          test -s research/source-bundles/PAR-MEM-014/EPA2024-METADATA-RECEIPT.json
+      - name: Commit source-provenance SHA and eligible monitor split BEFORE any numerical target access
+        if: env.SOURCE_REPLAY == 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$SOURCE_BRANCH" = research/parmem014-epa-original-source-admission-2026-10-27
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/source-bundles/PAR-MEM-014/EPA2024-METADATA-RECEIPT.json
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: freeze original EPA hourly PM25 publisher SHA, owner source-time metadata and untouched heldout monitors'
+          git push origin "HEAD:refs/heads/$SOURCE_BRANCH"
+      - name: Independently re-download-validation-compatible metadata against immutable original source receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --single-branch --branch "$SOURCE_BRANCH" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/parmem014-source-independent
+          cd /tmp/parmem014-source-independent
+          PYTHONPATH='.:src' python -m scripts.parmem014_epa_metadata_admission --mode replay \
+            --source /tmp/parmem014-original-epa/hourly_88101_2024.zip
+          echo 'EPA_SOURCE_METADATA_ONLY_FIRST_ADMISSION_AND_INDEPENDENT_REPLAY_PASS'
+      - name: Scientific source and test-value boundary
+        run: |
+          echo 'No sample concentration, MDL or uncertainty accessed as parsed Python values.'
+          echo 'No 2024 DEV/TEST numerical target was opened or learned from.'
+          echo 'Publisher source might be retrospectively updated. Re-download SHA mismatch MUST FAIL.'
+          echo 'No new model fitted, test metric computed or TAC capability claimed.'

@@ -1,0 +1,81 @@
+{
+  "study_id": "PAR-MEM-014-EPA-AQS-2024-INDEPENDENT-SOURCE-ADMISSION",
+  "status": "PUBLISHER_ORIGINAL_METADATA_ONLY_INTAKE_NO_TARGET_VALUE_ACCESS",
+  "date_registered_utc": "2026-10-27",
+  "publisher": "US Environmental Protection Agency Air Quality System AirData",
+  "publisher_primary_data_url": "https://aqs.epa.gov/aqsweb/airdata/hourly_88101_2024.zip",
+  "publisher_download_catalog_url": "https://aqs.epa.gov/aqsweb/airdata/download_files.html",
+  "publisher_file_format_url": "https://aqs.epa.gov/aqsweb/airdata/FileFormats.html",
+  "publisher_parameter_code": "88101",
+  "publisher_year": "2024",
+  "publisher_catalog_as_of": "2026-06-25",
+  "publisher_catalog_rows": "8139551",
+  "publisher_catalog_compressed_kb": 64793,
+  "original_archive_sha256": "UNKNOWN_UNTIL_FIRST_ORIGINAL_GITHUB_CPU_DOWNLOAD",
+  "source_visibility": "historical bulk data retrospectively published; NOT contemporaneous live availability; no observed action/policy",
+  "source_owner_fields": [
+    "State Code",
+    "County Code",
+    "Site Num",
+    "Parameter Code",
+    "POC"
+  ],
+  "source_clock_fields": [
+    "Date GMT",
+    "Time GMT"
+  ],
+  "source_metadata_fields": [
+    "Units of Measure",
+    "Qualifier",
+    "Method Type",
+    "Method Code",
+    "Date of Last Change"
+  ],
+  "forbidden_numeric_fields_during_intake": [
+    "Sample Measurement",
+    "MDL",
+    "Uncertainty",
+    "Latitude",
+    "Longitude"
+  ],
+  "monitor_split": "integer SHA256 of exact zero-padded canonical owner ID first 16 hex digits modulo 100; train 0..69, dev 70..84, sealed_test 85..99",
+  "temporal_split_utc": {
+    "train": [
+      "2024-01-01",
+      "2024-09-01"
+    ],
+    "dev": [
+      "2024-09-01",
+      "2024-11-01"
+    ],
+    "sealed_test": [
+      "2024-11-01",
+      "2025-01-01"
+    ]
+  },
+  "minimum_source_hour_metadata_count_per_monitor_in_its_assigned_phase": 160,
+  "source_event_identity": "one owner-qualified observed GMT clock hour, NOT row order; unobserved hours never fabricated",
+  "duplicate_policy": "if owner+GMT clock appears more than once in assigned phase, exclude that event from eligible count; count collisions and freeze their number without consulting numerical readings",
+  "source_quality_policy": "record all observed method, qualifier and units metadata only, freeze acceptable unit and qualifier list before training; default reject qualified nonblank or uncertain units/method; do not score any target while this is unresolved",
+  "source_month_selection": "fixed calendar phases regardless of numeric PM2.5 and prior model results",
+  "metadata_only_eligibility": "site/POC/source-clock counts, not target concentration/variance/retention score",
+  "training_features": "one actual observed PM2.5 measurement plus source-known event clock; other 13 Beijing physical channels NOT fabricated and not silently zeroed into pretrained model",
+  "source_adaptation_gate": "implement source-specific common input and retrain ~100k models / same source train/holdout; no raw Beijing checkpoint cross-source score promotion",
+  "strong_controls": [
+    "recent-observation and seasonal baselines",
+    "trained source-context-only TAC",
+    "trained no-sidecar-read TAC",
+    "qualified stateless neural model",
+    "GRU",
+    "SSM"
+  ],
+  "required_learned_parameters": "95000..105000 per model, <=1% between trained architectures, all live weights",
+  "training_compare_budget": "equal actual source observations/target splits/optimizer budgets, complete forward/backward/optimizer mathematical FLOPs; CPU time need NOT match",
+  "preserve_checkpoint": "all original model weights, optimizer state, RNG source order/state, real source SHA, site IDs, replay inputs and independent fixed real holdout audit",
+  "seal_policy": "no numeric Sample Measurement field read during intake, nor in DEV/TEST until appropriate preregistered future stage and original model freeze",
+  "intake_receipt": "research/source-bundles/PAR-MEM-014/EPA2024-METADATA-RECEIPT.json committed ONCE, subsequent runs source SHA and receipt exact replay",
+  "real_test_performance_claim": false,
+  "new_neural_training_or_test_eval": false,
+  "new_model_family": false,
+  "no_new_model_family": true
+}
