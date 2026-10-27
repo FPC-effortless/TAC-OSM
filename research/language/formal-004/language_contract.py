@@ -66,6 +66,10 @@ def validate_model(model) -> None:
         raise ValueError("frozen checkpoint used the shared rectangular scan")
     if getattr(model,"gate_mode",None) not in ("tanh","silu"):
         raise ValueError("unrecognized historical training arm")
+    # Positive, source-exact LayerNorm epsilon is a precondition of the
+    # exact-real proof that sqrt(variance + eps) cannot vanish.
+    if not hasattr(model,"norm") or model.norm.eps != 1e-5:
+        raise ValueError("frozen source requires LayerNorm eps=1e-5")
     observed={name:tuple(p.shape) for name,p in model.named_parameters()}
     if observed != EXPECTED_PARAMETER_SHAPES:
         raise ValueError("language trainable tensor shapes/names differ from typed PNDS source graph")
