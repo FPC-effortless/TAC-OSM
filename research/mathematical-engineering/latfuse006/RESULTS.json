@@ -1,0 +1,1905 @@
+{
+  "external_sidecar_ridge_weights_trained_on_real_source": true,
+  "forecast_model_immutable": true,
+  "frozen_model_updated": false,
+  "genuine_source_archive_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "historical_anchors_source_authorized": true,
+  "historical_event_recall_is_NOT_original_model_native_capability": true,
+  "model_query_never_received_oracle_anchor_write_key": true,
+  "models": [
+    {
+      "arm": "4h-hard",
+      "checkpoint_sha256": "abb1ffbab0ee17c1d84d9997d68bbf5f9d777d845177b5556b0cdc588833668f",
+      "delays": {
+        "128": {
+          "current": {
+            "balanced_accuracy": 0.3958333432674408,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0625,
+            "mean_predicted_event_probability": 0.38236892223358154,
+            "mean_predicted_ordinary_probability": 0.5467237234115601,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.39997339248657227,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.013282328844070435,
+          "delta_pair_order_learned_query_minus_nonassoc": -0.041666656732559204,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.7291666865348816,
+            "mean_predicted_event_probability": 0.9851961135864258,
+            "mean_predicted_ordinary_probability": 0.9260454177856445,
+            "physical_source_pair_ordering_accuracy": 0.6458333134651184,
+            "real_event_Brier": 0.438873291015625,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.6875,
+            "mean_predicted_event_probability": 0.9336659908294678,
+            "mean_predicted_ordinary_probability": 0.9706012606620789,
+            "physical_source_pair_ordering_accuracy": 0.4375,
+            "real_event_Brier": 0.4828830063343048,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.625,
+            "mean_predicted_event_probability": 0.9530295729637146,
+            "mean_predicted_ordinary_probability": 0.9617608189582825,
+            "physical_source_pair_ordering_accuracy": 0.4791666567325592,
+            "real_event_Brier": 0.4696006774902344,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "16": {
+          "current": {
+            "balanced_accuracy": 0.4791666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.5161941647529602,
+            "mean_predicted_ordinary_probability": 0.6592954993247986,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.3744121789932251,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.031525880098342896,
+          "delta_pair_order_learned_query_minus_nonassoc": -0.041666626930236816,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.8541666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.7583050727844238,
+            "mean_predicted_ordinary_probability": 0.4221445620059967,
+            "physical_source_pair_ordering_accuracy": 1.0,
+            "real_event_Brier": 0.13980261981487274,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.6041666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.3541666567325592,
+            "mean_predicted_event_probability": 0.9675138592720032,
+            "mean_predicted_ordinary_probability": 0.673730194568634,
+            "physical_source_pair_ordering_accuracy": 0.9166666865348816,
+            "real_event_Brier": 0.25595733523368835,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.6458333283662796,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.3333333432674408,
+            "mean_predicted_event_probability": 0.964610755443573,
+            "mean_predicted_ordinary_probability": 0.6295940279960632,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.22443145513534546,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "512": {
+          "current": {
+            "balanced_accuracy": 0.4791666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.0783657506108284,
+            "mean_predicted_ordinary_probability": 0.16041423380374908,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4559311866760254,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.002868741750717163,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0625,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.375,
+            "mean_predicted_event_probability": 0.06371983885765076,
+            "mean_predicted_ordinary_probability": 0.07702421396970749,
+            "physical_source_pair_ordering_accuracy": 0.5208333134651184,
+            "real_event_Brier": 0.44894030690193176,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.7916666865348816,
+            "mean_predicted_event_probability": 0.0032237719278782606,
+            "mean_predicted_ordinary_probability": 0.03417952358722687,
+            "physical_source_pair_ordering_accuracy": 0.3333333432674408,
+            "real_event_Brier": 0.4993061125278473,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.75,
+            "mean_predicted_event_probability": 0.0005813042516820133,
+            "mean_predicted_ordinary_probability": 0.04009605571627617,
+            "physical_source_pair_ordering_accuracy": 0.2708333432674408,
+            "real_event_Brier": 0.5021748542785645,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "64": {
+          "current": {
+            "balanced_accuracy": 0.1875,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.46264520287513733,
+            "mean_predicted_ordinary_probability": 0.6749417185783386,
+            "physical_source_pair_ordering_accuracy": 0.1666666716337204,
+            "real_event_Brier": 0.39930054545402527,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.024625509977340698,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.6666666716337204,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.1875,
+            "mean_predicted_event_probability": 0.9237456321716309,
+            "mean_predicted_ordinary_probability": 0.5958666205406189,
+            "physical_source_pair_ordering_accuracy": 0.9375,
+            "real_event_Brier": 0.22159944474697113,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.625,
+            "mean_predicted_event_probability": 0.9639574885368347,
+            "mean_predicted_ordinary_probability": 0.9573872685432434,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.46429935097694397,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.9375,
+            "mean_predicted_event_probability": 0.9971919655799866,
+            "mean_predicted_ordinary_probability": 0.9867734909057617,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.48892486095428467,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        }
+      },
+      "seed": 40401
+    },
+    {
+      "arm": "4h-soft",
+      "checkpoint_sha256": "abf412826840cbfa0270b6215719e5e11d7d22145a0c66970cff4b8ca82f8dd2",
+      "delays": {
+        "128": {
+          "current": {
+            "balanced_accuracy": 0.3958333432674408,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0625,
+            "mean_predicted_event_probability": 0.38236892223358154,
+            "mean_predicted_ordinary_probability": 0.5467237234115601,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.39997339248657227,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.012753605842590332,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0625,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5416666679084301,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.5,
+            "mean_predicted_event_probability": 0.9603574872016907,
+            "mean_predicted_ordinary_probability": 0.836260974407196,
+            "physical_source_pair_ordering_accuracy": 0.6458333134651184,
+            "real_event_Brier": 0.37357351183891296,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.4791666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.4791666567325592,
+            "mean_predicted_event_probability": 0.9260092377662659,
+            "mean_predicted_ordinary_probability": 0.9450692534446716,
+            "physical_source_pair_ordering_accuracy": 0.5625,
+            "real_event_Brier": 0.45890283584594727,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.625,
+            "mean_predicted_event_probability": 0.9534375071525574,
+            "mean_predicted_ordinary_probability": 0.9638147354125977,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.4716564416885376,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "16": {
+          "current": {
+            "balanced_accuracy": 0.4791666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.5161941647529602,
+            "mean_predicted_ordinary_probability": 0.6592954993247986,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.3744121789932251,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.035757437348365784,
+          "delta_pair_order_learned_query_minus_nonassoc": -0.08333331346511841,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.7291666716337204,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.8127946257591248,
+            "mean_predicted_ordinary_probability": 0.4977952241897583,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.16075892746448517,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.6041666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.3958333432674408,
+            "mean_predicted_event_probability": 0.9739812016487122,
+            "mean_predicted_ordinary_probability": 0.6767334342002869,
+            "physical_source_pair_ordering_accuracy": 0.9166666865348816,
+            "real_event_Brier": 0.26494261622428894,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.625,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.3958333432674408,
+            "mean_predicted_event_probability": 0.9673538208007812,
+            "mean_predicted_ordinary_probability": 0.636364758014679,
+            "physical_source_pair_ordering_accuracy": 1.0,
+            "real_event_Brier": 0.22918517887592316,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "512": {
+          "current": {
+            "balanced_accuracy": 0.4791666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.0783657506108284,
+            "mean_predicted_ordinary_probability": 0.16041423380374908,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4559311866760254,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.002563655376434326,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.020833343267440796,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.25,
+            "mean_predicted_event_probability": 0.06528620421886444,
+            "mean_predicted_ordinary_probability": 0.1347677856683731,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.4558134078979492,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.7708333134651184,
+            "mean_predicted_event_probability": 0.005392313003540039,
+            "mean_predicted_ordinary_probability": 0.04515235498547554,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.49892354011535645,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.7291666865348816,
+            "mean_predicted_event_probability": 0.001248324871994555,
+            "mean_predicted_ordinary_probability": 0.04021778702735901,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.5014871954917908,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "64": {
+          "current": {
+            "balanced_accuracy": 0.1875,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.46264520287513733,
+            "mean_predicted_ordinary_probability": 0.6749417185783386,
+            "physical_source_pair_ordering_accuracy": 0.1666666716337204,
+            "real_event_Brier": 0.39930054545402527,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.019101500511169434,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.125,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.625,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.625,
+            "mean_predicted_event_probability": 0.9957194328308105,
+            "mean_predicted_ordinary_probability": 0.7305192947387695,
+            "physical_source_pair_ordering_accuracy": 0.8333333134651184,
+            "real_event_Brier": 0.30127811431884766,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.7916666865348816,
+            "mean_predicted_event_probability": 0.989500105381012,
+            "mean_predicted_ordinary_probability": 0.9666582942008972,
+            "physical_source_pair_ordering_accuracy": 0.625,
+            "real_event_Brier": 0.4704448878765106,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.9583333134651184,
+            "mean_predicted_event_probability": 0.9996092915534973,
+            "mean_predicted_ordinary_probability": 0.987741231918335,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.48954638838768005,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        }
+      },
+      "seed": 40401
+    },
+    {
+      "arm": "2h-hard",
+      "checkpoint_sha256": "8d612a0ff4c2753b6cdf08b59890804bfa1c2c610ef8dc674c553dc805e0b70e",
+      "delays": {
+        "128": {
+          "current": {
+            "balanced_accuracy": 0.3958333432674408,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0625,
+            "mean_predicted_event_probability": 0.38236892223358154,
+            "mean_predicted_ordinary_probability": 0.5467237234115601,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.39997339248657227,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.02439892292022705,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.041666656732559204,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5625,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.1041666641831398,
+            "mean_predicted_event_probability": 0.8321780562400818,
+            "mean_predicted_ordinary_probability": 0.7066948413848877,
+            "physical_source_pair_ordering_accuracy": 0.7916666865348816,
+            "real_event_Brier": 0.28470245003700256,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.375,
+            "mean_predicted_event_probability": 0.891320526599884,
+            "mean_predicted_ordinary_probability": 0.9135459065437317,
+            "physical_source_pair_ordering_accuracy": 0.5208333134651184,
+            "real_event_Brier": 0.43571290373802185,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.5208333134651184,
+            "mean_predicted_event_probability": 0.9364240169525146,
+            "mean_predicted_ordinary_probability": 0.9489629864692688,
+            "physical_source_pair_ordering_accuracy": 0.4791666567325592,
+            "real_event_Brier": 0.4601118266582489,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "16": {
+          "current": {
+            "balanced_accuracy": 0.4791666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.5161941647529602,
+            "mean_predicted_ordinary_probability": 0.6592954993247986,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.3744121789932251,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.00993722677230835,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.04166668653488159,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.8541666865348816,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.6300693154335022,
+            "mean_predicted_ordinary_probability": 0.3101026713848114,
+            "physical_source_pair_ordering_accuracy": 0.9166666865348816,
+            "real_event_Brier": 0.13927499949932098,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.6458333283662796,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.3125,
+            "mean_predicted_event_probability": 0.9577138423919678,
+            "mean_predicted_ordinary_probability": 0.5992016792297363,
+            "physical_source_pair_ordering_accuracy": 1.0,
+            "real_event_Brier": 0.20479227602481842,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.6458333283662796,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.3541666567325592,
+            "mean_predicted_event_probability": 0.9605463147163391,
+            "mean_predicted_ordinary_probability": 0.6116874814033508,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.21472950279712677,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "512": {
+          "current": {
+            "balanced_accuracy": 0.4791666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.0783657506108284,
+            "mean_predicted_ordinary_probability": 0.16041423380374908,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4559311866760254,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.00626412034034729,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0833333432674408,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.2083333283662796,
+            "mean_predicted_event_probability": 0.0695514976978302,
+            "mean_predicted_ordinary_probability": 0.08319587260484695,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4419727027416229,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.7708333134651184,
+            "mean_predicted_event_probability": 0.0074224225245416164,
+            "mean_predicted_ordinary_probability": 0.04412165656685829,
+            "physical_source_pair_ordering_accuracy": 0.375,
+            "real_event_Brier": 0.49624958634376526,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.7916666865348816,
+            "mean_predicted_event_probability": 0.0,
+            "mean_predicted_ordinary_probability": 0.0373225100338459,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.5025137066841125,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "64": {
+          "current": {
+            "balanced_accuracy": 0.1875,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.46264520287513733,
+            "mean_predicted_ordinary_probability": 0.6749417185783386,
+            "physical_source_pair_ordering_accuracy": 0.1666666716337204,
+            "real_event_Brier": 0.39930054545402527,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.003428161144256592,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.020833313465118408,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.6666666716337204,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0833333358168602,
+            "mean_predicted_event_probability": 0.8436509966850281,
+            "mean_predicted_ordinary_probability": 0.6212205290794373,
+            "physical_source_pair_ordering_accuracy": 0.75,
+            "real_event_Brier": 0.23309487104415894,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.9166666865348816,
+            "mean_predicted_event_probability": 0.9934782981872559,
+            "mean_predicted_ordinary_probability": 0.9814126491546631,
+            "physical_source_pair_ordering_accuracy": 0.5208333134651184,
+            "real_event_Brier": 0.4844719469547272,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.8958333134651184,
+            "mean_predicted_event_probability": 0.991927444934845,
+            "mean_predicted_ordinary_probability": 0.9848863482475281,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.48790010809898376,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        }
+      },
+      "seed": 40401
+    },
+    {
+      "arm": "2h-soft",
+      "checkpoint_sha256": "cfb6e08060f92cdc50babff349c3c067d6f14edda1d62b9b06543d1d72ae5504",
+      "delays": {
+        "128": {
+          "current": {
+            "balanced_accuracy": 0.3958333432674408,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0625,
+            "mean_predicted_event_probability": 0.38236892223358154,
+            "mean_predicted_ordinary_probability": 0.5467237234115601,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.39997339248657227,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.061012476682662964,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.1041666567325592,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5624999925494194,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0416666679084301,
+            "mean_predicted_event_probability": 0.7966739535331726,
+            "mean_predicted_ordinary_probability": 0.6347718834877014,
+            "physical_source_pair_ordering_accuracy": 0.7916666865348816,
+            "real_event_Brier": 0.2422398179769516,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.2291666716337204,
+            "mean_predicted_event_probability": 0.863137423992157,
+            "mean_predicted_ordinary_probability": 0.8648123741149902,
+            "physical_source_pair_ordering_accuracy": 0.5833333134651184,
+            "real_event_Brier": 0.3997310698032379,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.5,
+            "mean_predicted_event_probability": 0.9373465180397034,
+            "mean_predicted_ordinary_probability": 0.9493682384490967,
+            "physical_source_pair_ordering_accuracy": 0.4791666567325592,
+            "real_event_Brier": 0.4607435464859009,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "16": {
+          "current": {
+            "balanced_accuracy": 0.4791666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.5161941647529602,
+            "mean_predicted_ordinary_probability": 0.6592954993247986,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.3744121789932251,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.00924670696258545,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.8541666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.7377622723579407,
+            "mean_predicted_ordinary_probability": 0.3763967454433441,
+            "physical_source_pair_ordering_accuracy": 0.9166666865348816,
+            "real_event_Brier": 0.13105806708335876,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.6458333283662796,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.3333333432674408,
+            "mean_predicted_event_probability": 0.9562957286834717,
+            "mean_predicted_ordinary_probability": 0.6154188513755798,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.2158547043800354,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.625,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.375,
+            "mean_predicted_event_probability": 0.9642238020896912,
+            "mean_predicted_ordinary_probability": 0.6301541328430176,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.22510141134262085,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "512": {
+          "current": {
+            "balanced_accuracy": 0.4791666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.0783657506108284,
+            "mean_predicted_ordinary_probability": 0.16041423380374908,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4559311866760254,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.004094511270523071,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.04166668653488159,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.8125,
+            "mean_predicted_event_probability": 0.001969762146472931,
+            "mean_predicted_ordinary_probability": 0.03726625069975853,
+            "physical_source_pair_ordering_accuracy": 0.3541666567325592,
+            "real_event_Brier": 0.5008230805397034,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.7083333134651184,
+            "mean_predicted_event_probability": 0.009002621285617352,
+            "mean_predicted_ordinary_probability": 0.07317789644002914,
+            "physical_source_pair_ordering_accuracy": 0.3333333432674408,
+            "real_event_Brier": 0.49818286299705505,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.7916666865348816,
+            "mean_predicted_event_probability": 0.0,
+            "mean_predicted_ordinary_probability": 0.03541793301701546,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.5022773742675781,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "64": {
+          "current": {
+            "balanced_accuracy": 0.1875,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.46264520287513733,
+            "mean_predicted_ordinary_probability": 0.6749417185783386,
+            "physical_source_pair_ordering_accuracy": 0.1666666716337204,
+            "real_event_Brier": 0.39930054545402527,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.0019408464431762695,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5625,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.2916666567325592,
+            "mean_predicted_event_probability": 0.9259869456291199,
+            "mean_predicted_ordinary_probability": 0.7443498969078064,
+            "physical_source_pair_ordering_accuracy": 0.6666666865348816,
+            "real_event_Brier": 0.30695971846580505,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.9375,
+            "mean_predicted_event_probability": 0.9983065724372864,
+            "mean_predicted_ordinary_probability": 0.988720715045929,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.49028119444847107,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.9375,
+            "mean_predicted_event_probability": 0.9945237040519714,
+            "mean_predicted_ordinary_probability": 0.9857006669044495,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.4883403480052948,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        }
+      },
+      "seed": 40401
+    },
+    {
+      "arm": "4h-hard",
+      "checkpoint_sha256": "6e517de5bc3cd5ab6815a075613414268afb8c5e78e7afde0bf9940a597135c7",
+      "delays": {
+        "128": {
+          "current": {
+            "balanced_accuracy": 0.3958333432674408,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0625,
+            "mean_predicted_event_probability": 0.38236892223358154,
+            "mean_predicted_ordinary_probability": 0.5467237234115601,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.39997339248657227,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.13157156109809875,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.20833337306976318,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 1.0,
+            "mean_predicted_event_probability": 1.0,
+            "mean_predicted_ordinary_probability": 1.0,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.5,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5833333358168602,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.1458333283662796,
+            "mean_predicted_event_probability": 0.8425323367118835,
+            "mean_predicted_ordinary_probability": 0.7214207053184509,
+            "physical_source_pair_ordering_accuracy": 0.7916666865348816,
+            "real_event_Brier": 0.29452741146087646,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.9397008419036865,
+            "mean_predicted_ordinary_probability": 0.913745105266571,
+            "physical_source_pair_ordering_accuracy": 0.5833333134651184,
+            "real_event_Brier": 0.4260989725589752,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "16": {
+          "current": {
+            "balanced_accuracy": 0.4791666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.5161941647529602,
+            "mean_predicted_ordinary_probability": 0.6592954993247986,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.3744121789932251,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.007616832852363586,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.7083333134651184,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.5188833475112915,
+            "mean_predicted_ordinary_probability": 0.3302948474884033,
+            "physical_source_pair_ordering_accuracy": 0.8333333134651184,
+            "real_event_Brier": 0.1842578500509262,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.8125,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.7881639003753662,
+            "mean_predicted_ordinary_probability": 0.461578369140625,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.145814910531044,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.7708333134651184,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.8055019378662109,
+            "mean_predicted_ordinary_probability": 0.48580262064933777,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.1534317433834076,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "512": {
+          "current": {
+            "balanced_accuracy": 0.4791666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.0783657506108284,
+            "mean_predicted_ordinary_probability": 0.16041423380374908,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4559311866760254,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.010060995817184448,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.1458333134651184,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.4166666567325592,
+            "mean_predicted_event_probability": 0.022567445412278175,
+            "mean_predicted_ordinary_probability": 0.08405235409736633,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.48476746678352356,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.6041666865348816,
+            "mean_predicted_event_probability": 0.02955661155283451,
+            "mean_predicted_ordinary_probability": 0.08255402743816376,
+            "physical_source_pair_ordering_accuracy": 0.4166666567325592,
+            "real_event_Brier": 0.48105108737945557,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.2708333432674408,
+            "mean_predicted_event_probability": 0.0416911244392395,
+            "mean_predicted_ordinary_probability": 0.1192879006266594,
+            "physical_source_pair_ordering_accuracy": 0.2708333432674408,
+            "real_event_Brier": 0.4709900915622711,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "64": {
+          "current": {
+            "balanced_accuracy": 0.1875,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.46264520287513733,
+            "mean_predicted_ordinary_probability": 0.6749417185783386,
+            "physical_source_pair_ordering_accuracy": 0.1666666716337204,
+            "real_event_Brier": 0.39930054545402527,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.1253850758075714,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0416666716337204,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0416666679084301,
+            "mean_predicted_event_probability": 0.8532920479774475,
+            "mean_predicted_ordinary_probability": 0.7733960151672363,
+            "physical_source_pair_ordering_accuracy": 0.75,
+            "real_event_Brier": 0.31915274262428284,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.6875,
+            "mean_predicted_event_probability": 0.9230117201805115,
+            "mean_predicted_ordinary_probability": 0.9840011596679688,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.494380384683609,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.520833333954215,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.0833333358168602,
+            "mean_predicted_event_probability": 0.717430830001831,
+            "mean_predicted_ordinary_probability": 0.7900872826576233,
+            "physical_source_pair_ordering_accuracy": 0.2083333283662796,
+            "real_event_Brier": 0.3689953088760376,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        }
+      },
+      "seed": 40402
+    },
+    {
+      "arm": "4h-soft",
+      "checkpoint_sha256": "68826e2542e665caf8bd8d442e14097b9b4f7a31f490d4938f741d92e56aeec7",
+      "delays": {
+        "128": {
+          "current": {
+            "balanced_accuracy": 0.3958333432674408,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0625,
+            "mean_predicted_event_probability": 0.38236892223358154,
+            "mean_predicted_ordinary_probability": 0.5467237234115601,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.39997339248657227,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.03039693832397461,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.020833373069763184,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.5833333134651184,
+            "mean_predicted_event_probability": 0.981495201587677,
+            "mean_predicted_ordinary_probability": 0.9546780586242676,
+            "physical_source_pair_ordering_accuracy": 0.6041666865348816,
+            "real_event_Brier": 0.4593276083469391,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.2708333432674408,
+            "mean_predicted_event_probability": 0.904495894908905,
+            "mean_predicted_ordinary_probability": 0.865504264831543,
+            "physical_source_pair_ordering_accuracy": 0.6041666865348816,
+            "real_event_Brier": 0.3899003565311432,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.3958333432674408,
+            "mean_predicted_event_probability": 0.9348723292350769,
+            "mean_predicted_ordinary_probability": 0.9062643051147461,
+            "physical_source_pair_ordering_accuracy": 0.5833333134651184,
+            "real_event_Brier": 0.4202972948551178,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "16": {
+          "current": {
+            "balanced_accuracy": 0.4791666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.5161941647529602,
+            "mean_predicted_ordinary_probability": 0.6592954993247986,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.3744121789932251,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.025251075625419617,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.04166668653488159,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5416666679084301,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.4007919728755951,
+            "mean_predicted_ordinary_probability": 0.2474454641342163,
+            "physical_source_pair_ordering_accuracy": 0.7916666865348816,
+            "real_event_Brier": 0.2215418964624405,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.6458333283662796,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.1458333283662796,
+            "mean_predicted_event_probability": 0.9125482439994812,
+            "mean_predicted_ordinary_probability": 0.5655617117881775,
+            "physical_source_pair_ordering_accuracy": 1.0,
+            "real_event_Brier": 0.17819325625896454,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.7916666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.809984028339386,
+            "mean_predicted_ordinary_probability": 0.4855588376522064,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.15294218063354492,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "512": {
+          "current": {
+            "balanced_accuracy": 0.4791666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.0783657506108284,
+            "mean_predicted_ordinary_probability": 0.16041423380374908,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4559311866760254,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.012601971626281738,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.6041666865348816,
+            "mean_predicted_event_probability": 0.023058393970131874,
+            "mean_predicted_ordinary_probability": 0.09428844600915909,
+            "physical_source_pair_ordering_accuracy": 0.2708333432674408,
+            "real_event_Brier": 0.48914921283721924,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.5,
+            "mean_predicted_event_probability": 0.027982866391539574,
+            "mean_predicted_ordinary_probability": 0.10726990550756454,
+            "physical_source_pair_ordering_accuracy": 0.2708333432674408,
+            "real_event_Brier": 0.4845491349697113,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.3125,
+            "mean_predicted_event_probability": 0.0401015542447567,
+            "mean_predicted_ordinary_probability": 0.11527819186449051,
+            "physical_source_pair_ordering_accuracy": 0.2708333432674408,
+            "real_event_Brier": 0.47194716334342957,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "64": {
+          "current": {
+            "balanced_accuracy": 0.1875,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.46264520287513733,
+            "mean_predicted_ordinary_probability": 0.6749417185783386,
+            "physical_source_pair_ordering_accuracy": 0.1666666716337204,
+            "real_event_Brier": 0.39930054545402527,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.11727643013000488,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.020833343267440796,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.625,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.7232968807220459,
+            "mean_predicted_ordinary_probability": 0.5854088068008423,
+            "physical_source_pair_ordering_accuracy": 0.8333333134651184,
+            "real_event_Brier": 0.2253267616033554,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.4791666567325592,
+            "mean_predicted_event_probability": 0.8555957674980164,
+            "mean_predicted_ordinary_probability": 0.9571605324745178,
+            "physical_source_pair_ordering_accuracy": 0.2291666716337204,
+            "real_event_Brier": 0.4813252389431,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.520833333954215,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.0833333358168602,
+            "mean_predicted_event_probability": 0.7134580612182617,
+            "mean_predicted_ordinary_probability": 0.7822275161743164,
+            "physical_source_pair_ordering_accuracy": 0.2083333283662796,
+            "real_event_Brier": 0.3640488088130951,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        }
+      },
+      "seed": 40402
+    },
+    {
+      "arm": "2h-hard",
+      "checkpoint_sha256": "f50e2d509c6397f10a262215bde67998dc71612177c12d53b9c002a26669c0ae",
+      "delays": {
+        "128": {
+          "current": {
+            "balanced_accuracy": 0.3958333432674408,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0625,
+            "mean_predicted_event_probability": 0.38236892223358154,
+            "mean_predicted_ordinary_probability": 0.5467237234115601,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.39997339248657227,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.003937870264053345,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 1.0,
+            "mean_predicted_event_probability": 1.0,
+            "mean_predicted_ordinary_probability": 1.0,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.5,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.9481480717658997,
+            "mean_predicted_ordinary_probability": 0.9261642098426819,
+            "physical_source_pair_ordering_accuracy": 0.5833333134651184,
+            "real_event_Brier": 0.43535423278808594,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.5,
+            "mean_predicted_event_probability": 0.9596659541130066,
+            "mean_predicted_ordinary_probability": 0.9311203956604004,
+            "physical_source_pair_ordering_accuracy": 0.5833333134651184,
+            "real_event_Brier": 0.4392921030521393,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "16": {
+          "current": {
+            "balanced_accuracy": 0.4791666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.5161941647529602,
+            "mean_predicted_ordinary_probability": 0.6592954993247986,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.3744121789932251,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.0038385242223739624,
+          "delta_pair_order_learned_query_minus_nonassoc": -0.041666626930236816,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.9075958132743835,
+            "mean_predicted_ordinary_probability": 0.7644193768501282,
+            "physical_source_pair_ordering_accuracy": 0.875,
+            "real_event_Brier": 0.30430325865745544,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.7708333134651184,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.8106247782707214,
+            "mean_predicted_ordinary_probability": 0.4983215630054474,
+            "physical_source_pair_ordering_accuracy": 0.9166666865348816,
+            "real_event_Brier": 0.15902872383594513,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.7708333134651184,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.8162978291511536,
+            "mean_predicted_ordinary_probability": 0.4924674332141876,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.15519019961357117,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "512": {
+          "current": {
+            "balanced_accuracy": 0.4791666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.0783657506108284,
+            "mean_predicted_ordinary_probability": 0.16041423380374908,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4559311866760254,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.009126663208007812,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0833333432674408,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.2708333432674408,
+            "mean_predicted_event_probability": 0.06832899153232574,
+            "mean_predicted_ordinary_probability": 0.16658855974674225,
+            "physical_source_pair_ordering_accuracy": 0.2291666716337204,
+            "real_event_Brier": 0.4609057605266571,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.4166666567325592,
+            "mean_predicted_event_probability": 0.02697909064590931,
+            "mean_predicted_ordinary_probability": 0.08180881291627884,
+            "physical_source_pair_ordering_accuracy": 0.2708333432674408,
+            "real_event_Brier": 0.4801427125930786,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.2916666567325592,
+            "mean_predicted_event_probability": 0.042187970131635666,
+            "mean_predicted_ordinary_probability": 0.12196580320596695,
+            "physical_source_pair_ordering_accuracy": 0.1875,
+            "real_event_Brier": 0.4710160493850708,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "64": {
+          "current": {
+            "balanced_accuracy": 0.1875,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.46264520287513733,
+            "mean_predicted_ordinary_probability": 0.6749417185783386,
+            "physical_source_pair_ordering_accuracy": 0.1666666716337204,
+            "real_event_Brier": 0.39930054545402527,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.0011994540691375732,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.1250000149011612,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.49999999068677425,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.7047701478004456,
+            "mean_predicted_ordinary_probability": 0.7094132304191589,
+            "physical_source_pair_ordering_accuracy": 0.4583333432674408,
+            "real_event_Brier": 0.3142493963241577,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.520833333954215,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.1041666641831398,
+            "mean_predicted_event_probability": 0.7301872372627258,
+            "mean_predicted_ordinary_probability": 0.8015095591545105,
+            "physical_source_pair_ordering_accuracy": 0.3333333432674408,
+            "real_event_Brier": 0.3744395971298218,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.520833333954215,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.1041666641831398,
+            "mean_predicted_event_probability": 0.7372145056724548,
+            "mean_predicted_ordinary_probability": 0.8021462559700012,
+            "physical_source_pair_ordering_accuracy": 0.2083333283662796,
+            "real_event_Brier": 0.3732401430606842,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        }
+      },
+      "seed": 40402
+    },
+    {
+      "arm": "2h-soft",
+      "checkpoint_sha256": "1f13ff70115723e12e5e4cef1301c1a2ac31cfbf591ef77b4736d249131d2903",
+      "delays": {
+        "128": {
+          "current": {
+            "balanced_accuracy": 0.3958333432674408,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0625,
+            "mean_predicted_event_probability": 0.38236892223358154,
+            "mean_predicted_ordinary_probability": 0.5467237234115601,
+            "physical_source_pair_ordering_accuracy": 0.25,
+            "real_event_Brier": 0.39997339248657227,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.0413794219493866,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.10416668653488159,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.9375,
+            "mean_predicted_event_probability": 1.0,
+            "mean_predicted_ordinary_probability": 0.9957578778266907,
+            "physical_source_pair_ordering_accuracy": 0.5625,
+            "real_event_Brier": 0.4958743155002594,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.3541666567325592,
+            "mean_predicted_event_probability": 0.9360365867614746,
+            "mean_predicted_ordinary_probability": 0.8844985365867615,
+            "physical_source_pair_ordering_accuracy": 0.6666666865348816,
+            "real_event_Brier": 0.4011409282684326,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.5208333134651184,
+            "mean_predicted_event_probability": 0.9604194164276123,
+            "mean_predicted_ordinary_probability": 0.9349374175071716,
+            "physical_source_pair_ordering_accuracy": 0.5625,
+            "real_event_Brier": 0.4425203502178192,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "16": {
+          "current": {
+            "balanced_accuracy": 0.4791666641831398,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.5161941647529602,
+            "mean_predicted_ordinary_probability": 0.6592954993247986,
+            "physical_source_pair_ordering_accuracy": 0.2916666567325592,
+            "real_event_Brier": 0.3744121789932251,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": -0.0019468963146209717,
+          "delta_pair_order_learned_query_minus_nonassoc": -0.041666626930236816,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.75,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.523109495639801,
+            "mean_predicted_ordinary_probability": 0.37872114777565,
+            "physical_source_pair_ordering_accuracy": 0.7916666865348816,
+            "real_event_Brier": 0.19414615631103516,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.7916666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.7833595871925354,
+            "mean_predicted_ordinary_probability": 0.4839135706424713,
+            "physical_source_pair_ordering_accuracy": 0.9166666865348816,
+            "real_event_Brier": 0.15762536227703094,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.7291666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.8206415772438049,
+            "mean_predicted_ordinary_probability": 0.5037476420402527,
+            "physical_source_pair_ordering_accuracy": 0.9583333134651184,
+            "real_event_Brier": 0.15957225859165192,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "512": {
+          "current": {
+            "balanced_accuracy": 0.4791666567325592,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.4375,
+            "mean_predicted_event_probability": 0.0783657506108284,
+            "mean_predicted_ordinary_probability": 0.16041423380374908,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4559311866760254,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.026256978511810303,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.0833333283662796,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.0625,
+            "mean_predicted_event_probability": 0.08727776259183884,
+            "mean_predicted_ordinary_probability": 0.2419474720954895,
+            "physical_source_pair_ordering_accuracy": 0.125,
+            "real_event_Brier": 0.45570555329322815,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.6666666865348816,
+            "mean_predicted_event_probability": 0.006842499133199453,
+            "mean_predicted_ordinary_probability": 0.0537930466234684,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4974583089351654,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.2916666567325592,
+            "mean_predicted_event_probability": 0.04157008230686188,
+            "mean_predicted_ordinary_probability": 0.11950360983610153,
+            "physical_source_pair_ordering_accuracy": 0.2291666716337204,
+            "real_event_Brier": 0.4712013304233551,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        },
+        "64": {
+          "current": {
+            "balanced_accuracy": 0.1875,
+            "evaluation_n": 48,
+            "feature_dim": 70,
+            "fraction_prob_clipped": 0.0,
+            "mean_predicted_event_probability": 0.46264520287513733,
+            "mean_predicted_ordinary_probability": 0.6749417185783386,
+            "physical_source_pair_ordering_accuracy": 0.1666666716337204,
+            "real_event_Brier": 0.39930054545402527,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "delta_Brier_learned_query_minus_nonassoc": 0.036121666431427,
+          "delta_pair_order_learned_query_minus_nonassoc": 0.1041666716337204,
+          "entire_memory_matrix": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 566,
+            "fraction_prob_clipped": 0.02083333395421505,
+            "mean_predicted_event_probability": 0.8339896202087402,
+            "mean_predicted_ordinary_probability": 0.7460547089576721,
+            "physical_source_pair_ordering_accuracy": 0.6666666865348816,
+            "real_event_Brier": 0.30368301272392273,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "event_truth_chance_baseline": {
+            "balanced_accuracy": 0.5,
+            "physical_source_pair_ordering_accuracy": 0.5,
+            "real_event_Brier": 0.25
+          },
+          "learned_associative_read": {
+            "balanced_accuracy": 0.5,
+            "evaluation_n": 48,
+            "feature_dim": 326,
+            "fraction_prob_clipped": 0.25,
+            "mean_predicted_event_probability": 0.79555344581604,
+            "mean_predicted_ordinary_probability": 0.8633615374565125,
+            "physical_source_pair_ordering_accuracy": 0.3125,
+            "real_event_Brier": 0.4151606857776642,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          },
+          "nonassoc": {
+            "balanced_accuracy": 0.520833333954215,
+            "evaluation_n": 48,
+            "feature_dim": 310,
+            "fraction_prob_clipped": 0.1041666641831398,
+            "mean_predicted_event_probability": 0.7401864528656006,
+            "mean_predicted_ordinary_probability": 0.8108083605766296,
+            "physical_source_pair_ordering_accuracy": 0.2083333283662796,
+            "real_event_Brier": 0.3790390193462372,
+            "ridge_lambda": 1.0,
+            "training_n": 192
+          }
+        }
+      },
+      "seed": 40402
+    }
+  ],
+  "neural_model_optimization_steps": 0,
+  "no_2015_DEV_or_2016_17_protected_numeric_read": true,
+  "observed_original_event_labels": "trained FIT-normalized actual physical PM2.5 >=1.25 or abs<=.25",
+  "observed_source_eval_cohort_sha256": "bf243ace45bebe73417c7a4962fafb220fd053f6214b1de401efd4c43a90665d",
+  "observed_source_train_cohort_sha256": "2a1dfb5ba83699df632e11974b1d4ad2f76b6fbc1c98c40d397d2a4d08dc0332",
+  "original_fit_source_starts_before_2014_and_trained_original_models_saw_ALL_FIT_periods": true,
+  "original_pretrained_model_count": 8,
+  "sidecar_probes_are_not_deployed_6800_B_architectures": true,
+  "source_eval_is_not_independent_pretrained_model_holdout": true,
+  "source_eval_matched_pairs": 24,
+  "source_eval_period": "2014-07-01 <= event <2014-08-01",
+  "source_train_matched_pairs": 96,
+  "source_train_period": "2014-03-01 <= event <2014-04-18",
+  "study_id": "LATFUSE006-REAL-LAGGED-EVENT-READOUT-001"
+}
