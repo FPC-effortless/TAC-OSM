@@ -1,0 +1,50 @@
+name: Model01 Git-owned original classical checkpoint independent replay (no refitting)
+on:
+  push:
+    branches:
+      - product/sensor-forecast-reliability-2026-10-27
+    paths:
+      - 'research/replay-bundles/PRODUCT-MODEL01-UCI374-CLASSICAL/**'
+      - 'specialist_models/uci_appliances_real_dev.py'
+      - 'specialist_models/uci_appliances_ridge_dev.py'
+      - '.github/workflows/model01-original-ridge-replay.yml'
+  pull_request:
+    paths:
+      - 'research/replay-bundles/PRODUCT-MODEL01-UCI374-CLASSICAL/**'
+      - 'specialist_models/uci_appliances_real_dev.py'
+      - 'specialist_models/uci_appliances_ridge_dev.py'
+      - '.github/workflows/model01-original-ridge-replay.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-checkpoint-replay-no-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore exact original Git-backed weights and score genuine exposed DEV without fitting
+        run: |
+          python specialist_models/uci_appliances_ridge_dev.py --replay-only \
+            --out-checkpoint research/replay-bundles/PRODUCT-MODEL01-UCI374-CLASSICAL/ORIGINAL_CHECKPOINT.json \
+            --out-report ./replay_original_dev.json
+      - name: Verify entire original metrics/case counts/checkpoint identity
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          parent=Path("research/replay-bundles/PRODUCT-MODEL01-UCI374-CLASSICAL")
+          original=json.loads((parent/"ORIGINAL_DEV_RESULTS.json").read_text())
+          replay=json.loads(Path("replay_original_dev.json").read_text())
+          weights=json.loads((parent/"ORIGINAL_CHECKPOINT.json").read_text())
+          assert original==replay, "original development scores fail full exact replay"
+          assert original["source_zip_sha256"]==weights["source_zip_sha256"]
+          assert weights["fit_examples"]==9717
+          assert replay["dev"]["n"]==1968
+          print("ORIGINAL_GIT_CHECKPOINT_EXPOSED_DEV_REPLAY=PASS")
+          print("ORIGINAL_CHECKPOINT_SHA256="+hashlib.sha256((parent/"ORIGINAL_CHECKPOINT.json").read_bytes()).hexdigest())
+          PY
