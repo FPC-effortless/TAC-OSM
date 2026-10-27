@@ -74,6 +74,13 @@ def main(argv=None) -> int:
     report.add_argument("--runs", type=Path, default=DEFAULT_RUNS)
     report.add_argument("--output", type=Path,
                         default=DEFAULT_RUNS / "dashboard.html")
+    plans = sub.add_parser("plan", help="Read-only recipe for optional MLOps, cluster, dataset or collaboration providers")
+    plans.add_argument("--provider", required=True)
+    plans.add_argument("--receipt", type=Path)
+    plans.add_argument("--minutes", type=int, default=30)
+    plans.add_argument("--cpus", type=int, default=1)
+    plans.add_argument("--gpus", type=int, default=0)
+    plans.add_argument("--output", type=Path)
     options = p.parse_args(argv)
     try:
         if options.action == "record":
@@ -91,6 +98,18 @@ def main(argv=None) -> int:
                               "path": str(dest),
                               "source_sha256": receipt["source_report"]["sha256"]},
                              sort_keys=True))
+        elif options.action == "plan":
+            from tac_osm.research_lab_integrations import plan, read_one_receipt
+            recipe = plan(
+                options.provider,
+                receipt=read_one_receipt(options.receipt) if options.receipt else None,
+                limit_minutes=options.minutes, cpus=options.cpus, gpus=options.gpus,
+            )
+            text = json.dumps(recipe, indent=2, sort_keys=True) + "\n"
+            if options.output:
+                options.output.parent.mkdir(parents=True, exist_ok=True)
+                options.output.write_text(text, encoding="utf-8")
+            print(text, end="")
         elif options.action == "status":
             index = summary(options.runs)
             print(json.dumps({"total_runs": index["total_runs"],
