@@ -1,0 +1,55 @@
+{
+  "models": [
+    {
+      "architecture": "LATFUSE003-four-16x4-top2-gated-delta",
+      "deployed_parameters": 99747,
+      "measured": {
+        "checkpoint_sha256": "ad6fa79d9cb4392d3b4b316ece30979fbd085a88732ae640f66c771a8e8f375d",
+        "deployed_parameters": 99747,
+        "trainable_parameters": 99747
+      },
+      "seed": 310301,
+      "trainable_parameters": 99747
+    },
+    {
+      "architecture": "LATFUSE003-four-16x4-top2-gated-delta",
+      "deployed_parameters": 99747,
+      "measured": {
+        "checkpoint_sha256": "3783f8deffd9d763dbc14275db0848e715fbdb8eae4e46a23aa6f35ccc9cc0b3",
+        "deployed_parameters": 99747,
+        "trainable_parameters": 99747
+      },
+      "seed": 310302,
+      "trainable_parameters": 99747
+    }
+  ],
+  "protocol": {
+    "anti_cheat": "Source SHA and phase FIT until both original checkpoint files frozen; target read only after model prediction; no invented labels; scoped source boundary and gradient checks, full independent outcome/reward verification still OPEN.",
+    "artifacts": "Commit two original final.pt weights, original AdamW optimizer/RNG/normalization, training order SHA, original source/coded hashed inputs, trained 2014 validation and already-exposed 2015 DEV prediction arrays. Clean-checkout no-optimizer replay required before marking verified.",
+    "comparisons": "No equal-compute neural head-to-head: no architecture win or practical superiority attribution to multihead or key loss. Compare to last-observation practical reference for descriptive context; old LATFUSE002 is not matched compute (preflight 61.71M vs58.64M incomplete supported operator flops).",
+    "development": "Already exposed 2015-01-01 through 2015-12-31 original real DEV, all 312 original station-hour queries. Parse numeric DEV only AFTER BOTH original trained checkpoints SHA persisted. Treat only as descriptive exposed development evidence, not independent qualification.",
+    "optimizer": "AdamW lr=0.0005,wd=0.001; global gradient clip=1.0; losses Gaussian normalized NLL0.8+MAE0.2 +0.25 selected-head sensor-distinct key-separation hinge abs cosine>.85 +0.03 mean soft-head-probability imbalance; all declared before any training. No 2015-driven tuning.",
+    "original_input": "Exact original UCI501 source SHA. Chronological station-specific available values, masks, age and last-value only in the 24 history. Future-known calendar only at +6 as exogenous time conditioning. No future measured weather/outcome/action in predictors.",
+    "original_source_rule": "Fresh weights per seed, unaltered base LATFUSE002 parameter constructors for inherited modules; 4 additional head parameters groups and temperature. Original LATFUSE002 historical checkpoints and results unchanged.",
+    "parameters": "99,747 active & deployed original FP32 parameters, within required 95k-105k; difference to old 98,775 is 0.9745%, but overall train FLOPs are not matched, so no architecture superiority claim.",
+    "protected": "Original 2016\u20132017 numeric observations not parsed, never test-scored.",
+    "readout": "All four read heads are mixed by a learned content-conditioned head softmax. Temperature applies to head competition only; query/calendar not a causal intervention. Key/query L2 normalization per head, no attention KV history cache.",
+    "scientific_limits": "No SOTA or causal control claim, no accuracy or calibration qualification without prospective new source/venue; all tool diagnostics honest even if scores worsen.",
+    "scientific_question": "Can LATFUSE003's 4 disjoint key subspaces, conditional top-two writes, limited supervised real-source key-separation penalty and calibrated head competition learn source FIT six-hour forecasts while retaining exactly the H80 6800-byte FP32 state? Do not infer matched architecture superiority.",
+    "state": "Exactly fast80 +slow80 +4x(16x4) gated matrix +16 source slots x80 =1696 FP32 scalars +16 bool flags, nominal6800 bytes, exactly same state as LATFUSE002.",
+    "stop": "Exactly 128 optimizer updates per seed, two seeds, no restarts/retries or extra updates based on 2014/2015 scores. Fail closed on source hash, provenance, live param or recurrent state mismatch, missing/nonfinite gradients, failed clean replay or checkpoint SHA. If fail before a complete saved checkpoint, record failure and design new registration; no hidden reruns.",
+    "train_period": "2013-03-01 through 2014-08-31. Per-channel FIT-period-only normalization based only on observed channels, six measured pollutant features log1p. Missing target excluded. Sampler python.Random(seed), 8 random original station-hour draws per step; no target-conditioned selection.",
+    "training_budget": "2 seeds, each exactly 128 original real FIT optimizer steps, batch8, history24 observed hours, origin+6 measured real target; 1024 draws/seed, no tuning trials or automatic restarts.",
+    "validation": "Original real 2014-09-01 through 2014-12-31; fixed station-hour origin every 336 hours as in historic LATFUSE002, report all seeds with raw PM2.5 MAE, 13-channel normalized MAE/NLL/nominal90 pooled coverage and unmatched last-seen practical baseline. No selecting checkpoints."
+  },
+  "real_world_source": {
+    "license": "CC-BY-4.0",
+    "name": "UCI501 Beijing Multi-Site Air Quality original genuine observational data, 12 stations",
+    "observed_real_outcomes": true,
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8"
+  },
+  "registered_before_first_fit": true,
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE003-REAL-SINGLE-001",
+  "study_type": "single_model_training"
+}
