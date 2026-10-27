@@ -1,0 +1,89 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE004-REAL-FACTORIAL-EXPLORATORY",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "name": "UCI501 Beijing Multi-Site Air Quality licensed original recorded 12 stations, non-synthetic",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "license": "CC-BY-4.0",
+    "observed_real_outcomes": true
+  },
+  "models": [
+    {
+      "architecture": "4h-hard",
+      "seed": 40401,
+      "trainable_parameters": 99747,
+      "deployed_parameters": 99747
+    },
+    {
+      "architecture": "4h-soft",
+      "seed": 40401,
+      "trainable_parameters": 99747,
+      "deployed_parameters": 99747
+    },
+    {
+      "architecture": "2h-hard",
+      "seed": 40401,
+      "trainable_parameters": 99261,
+      "deployed_parameters": 99261
+    },
+    {
+      "architecture": "2h-soft",
+      "seed": 40401,
+      "trainable_parameters": 99261,
+      "deployed_parameters": 99261
+    },
+    {
+      "architecture": "4h-hard",
+      "seed": 40402,
+      "trainable_parameters": 99747,
+      "deployed_parameters": 99747
+    },
+    {
+      "architecture": "4h-soft",
+      "seed": 40402,
+      "trainable_parameters": 99747,
+      "deployed_parameters": 99747
+    },
+    {
+      "architecture": "2h-hard",
+      "seed": 40402,
+      "trainable_parameters": 99261,
+      "deployed_parameters": 99261
+    },
+    {
+      "architecture": "2h-soft",
+      "seed": 40402,
+      "trainable_parameters": 99261,
+      "deployed_parameters": 99261
+    }
+  ],
+  "protocol": {
+    "scope": "EXPLORATORY 2x2 factorial descriptive mechanism study with all eight fresh models. DOES NOT MEET strict FAIR architecture comparison because measured supported-op FLOPs max 62,072,899 / min 61,376,965 gap 1.121% > 1%; full AdamW FLOPs not independently verified. Do not claim architectural superiority.",
+    "independent_axes": "head count 2 or4; key widths8 or4 with 256 persistent FP32 matrix cells in both; hard top-half write routing versus soft differentiable all-head writing; read router always soft",
+    "state": "all arms identical source-limited state fast80+slow80+16x16 matrix+16 x80 source slots=1696 FP32 scalars and16 Boolean occupancy flags=6800 nominal bytes",
+    "weights": "4head trained+deployed 99747,2head 99261, pair gap0.487%, no dummy/frozen parameter padding, all live FP32 trained modules",
+    "train": "Two prespecified distinct seeds 40401/40402, SAME original sampled station-hour ID order and training schedule across ALL FOUR arms within each seed; exactly 128 AdamW steps ×8 cases per arm. Each source case 24 historical genuine observed hourly readings, FIT period March2013-Aug2014, +6 original measured target only after model prediction. Sequential fits do not share trained weights, optimizer or RNG between arms.",
+    "loss": "identical in all arms: 0.8 genuine observed-only masked standardized Gaussian NLL +0.2 absolute error +0.25 same-source sensor-distinct weighted per-head key collision hinge abs cosine>.85 +0.03 soft probability head-balance penalty; no future-label-derived key targets. Fixed before any fit. No stochastic head sampler, learned log temperature clamped [-0.693147,0.693147].",
+    "optim": "AdamW learning_rate0.0005,weight_decay0.001,grad_norm_clip1.0, no warm start/pretrained weights, no hyperparameter selection or additional tries based on out-of-time metrics",
+    "source": "Original source SHA256 pinned exact UCI501 original ZIP; chronological station IDs and actually observed 13 channels masks + elapsed since observation + causal last-seen; future query 6D time-of-day/week/year known calendar, NOT control action, do() or physical weather values; normalization from training FIT original measured coordinates only",
+    "timecuts": "training before 2014-09-01; chronological 2014-09 to Dec validation using original fixed station-hour every336 hours; previously-exposed DEV 2015 numerical loaded only after ALL eight checkpoint original byte hashes frozen; 2016-2017 original numeric protected rows NEVER parsed",
+    "evidence": "Preserve all 8 original full weights/optimizer/RNG/FIT normalization/sampler SHA/entire training loss trace, 2014 validation and 2015 DEV original prediction arrays and scores; independent clean Git checkout reload original checkpoints and bit-exact array/score replay without optimizer",
+    "metrics": "All-channel normalized MAE and Gaussian NLL, pooled90 coverage and per-channel risk, raw PM2.5 MAE vs unmatched practical persistence. All eight outcomes, mean by two seeds, no cherry picking. Model-comparison results purely DESCRIPTIVE due unmet strict 1% complete compute criterion and reused exposed 2015 development.",
+    "stop": "Exactly 8 trained models and 1024 total optimizer updates. Fail closed on source hash, data order, nonfinite/partial gradients, model/state shape, unexpected parameter count, source leak, checkpoint replay mismatch, protected-data access. No retries or tuner iterations under this registration; preserve failures and create new registration only after independent justification.",
+    "scientific_boundary": "Cannot claim Mamba/Transformer language intelligence, associative recall correctness, causal action policy, qualified calibrated probability or mathematically proven entire FP32/AD graph. Local operator math separate PNDS.",
+    "training_compute_caveat": {
+      "prefit_partial_flops": {
+        "4h-hard": 62072899,
+        "4h-soft": 62072323,
+        "2h-hard": 61376965,
+        "2h-soft": 61376965
+      },
+      "relative_gap": 0.01121155949233175,
+      "max_allowed_for_fair_claim": 0.01,
+      "fully_verified": false
+    },
+    "audit": "Model remains in own isolated draft branch, LATFUSE002+003 original checkpoints and results unmodified; external independent reward/outcome/source rights attestation still inconclusive. Synthetic only for unit tests."
+  }
+}
