@@ -1,0 +1,79 @@
+name: GP-UNC-006 original ME111 FIT residual prequential diagnostic (IN-SAMPLE)
+on:
+  push:
+    branches: [research/gp-unc-001-six-family-nofit-2026-10-27]
+    paths:
+      - 'src/tac_osm/gp_historical_fit_diagnostic.py'
+      - 'src/tac_osm/gp_rankone_nofit.py'
+      - 'scripts/gp_unc006_me111_fit_residual.py'
+      - 'tests/test_gp_historical_fit_diagnostic.py'
+      - '.github/workflows/gp-unc-006-historical-fit-residual.yml'
+  pull_request:
+    paths:
+      - 'src/tac_osm/gp_historical_fit_diagnostic.py'
+      - 'src/tac_osm/gp_rankone_nofit.py'
+      - 'scripts/gp_unc006_me111_fit_residual.py'
+      - 'tests/test_gp_historical_fit_diagnostic.py'
+      - '.github/workflows/gp-unc-006-historical-fit-residual.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  historical-fit-in-sample:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Original native trained ME111 source and five checkpoints, immutable
+        uses: actions/checkout@v4
+        with:
+          ref: 77c753a69f10fa13cd7fdf849edb12bc53f03e6d
+          path: original_me111_checkout
+          persist-credentials: false
+      - name: Enforce exact original frozen ME111 checkout
+        run: |
+          test "$(git -C original_me111_checkout rev-parse HEAD)" = 77c753a69f10fa13cd7fdf849edb12bc53f03e6d
+          test -s original_me111_checkout/research/replay-bundles/ME111/FIT_INDEX.json
+          test -s original_me111_checkout/research/source-bundles/ME100/PRSA2017_original.zip
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical original-model CPU dependencies
+        run: python -m pip install --quiet numpy==2.3.3 torch
+      - name: Falsify separate label-event and source-state history contract
+        env:
+          PYTHONPATH: src
+        run: python -m unittest discover -s tests -p test_gp_historical_fit_diagnostic.py -v
+      - name: Score original already-trained FIT only, two fixed matched GP sidecars
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/gp_unc006_me111_fit_residual.py \
+            --pinned-native-checkout original_me111_checkout \
+            --out gp-unc-006-in-sample-real-fit.json
+          python - <<'PY'
+          import json
+          r=json.load(open('gp-unc-006-in-sample-real-fit.json'))
+          assert r['original_trained_native_checkpoint_count']==5
+          assert r['real_fit_issued_predictions']==5760
+          assert r['real_fit_observed_labels']>0
+          assert r['real_fit_posterior_update_events']>0
+          assert r['original_neural_models_trained_on_scored_fit_targets'] is True
+          assert r['new_neural_model_fit'] is False
+          assert r['protected_test_access'] is False
+          assert r['independent_cohort'] is False
+          assert r['probabilistic_calibration_tested'] is False
+          assert r['scientific_promotion']=='NOT_QUALIFIED'
+          assert all(m['original_native_learned_parameters']==104663
+                     and m['model_weight_optimizer_updates']==0
+                     and m['original_fit_issue_rows']==1152 for m in r['models'])
+          print('GP_UNC006_REAL_FIT_IN_SAMPLE_DIAGNOSTIC=COMPLETE_NOT_QUALIFIED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gp-unc-006-original-2014-fit-in-sample
+          path: gp-unc-006-in-sample-real-fit.json
+          if-no-files-found: error
+          retention-days: 14

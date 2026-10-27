@@ -1,0 +1,35 @@
+{
+  "schema": "tac-osm.pnds.candidate-math-link.v1",
+  "study_id": "GP-UNC-001",
+  "classification": "PARTIAL_COMPONENT_MATH_NOT_TRAINED_VARIANT",
+  "tac_source_repo": "FPC-effortless/TAC-OSM",
+  "tac_source_commit": "21a5ffef240024fe6d46e119d562d0db7281bdc8",
+  "source_files": [
+    "src/tac_osm/gp_uncertainty_nofit.py",
+    "src/tac_osm/gp_sparse_nofit.py"
+  ],
+  "tac_pr": 491,
+  "pnds_repo": "FPC-effortless/pnds-lean",
+  "pnds_pr": 45,
+  "pnds_branch": "research/gp-unc-001-probability-operators-2026-10-27",
+  "pnds_math_document": "foundation/v1/gp-unc-001/README.md",
+  "pnds_lean": "PNDS/GPUncertainty.lean",
+  "pnds_python": "foundation/v1/gp_uncertainty_math.py",
+  "proof_scope": "SCALAR_CONDITIONING_AND_PRECISION_ONLY",
+  "status": "OPEN_UNMERGED_PARTIAL_MATH",
+  "source_equivalent_full_model": false,
+  "finite_precision_refinement_proved": false,
+  "autodiff_equivalence_proved": false,
+  "real_data_gp_improvement_established": false,
+  "rankone_update": {
+    "source_commit": "7d8426ad60f6981850de935a3809842f90f9db54",
+    "source_path": "src/tac_osm/gp_rankone_nofit.py",
+    "prequential_path": "src/tac_osm/gp_prequential_nofit.py",
+    "pnds_draft_pr": 45,
+    "lean_file": "PNDS/GPUncertainty.lean",
+    "python_reference": "foundation/v1/gp_uncertainty_math.py",
+    "verified_scope": "CONDITIONAL_SCALAR_RANKONE_ONLY",
+    "multivariate_exact_and_fp_ad_refinement": "OPEN",
+    "trained_real_world_evidence": false
+  }
+}

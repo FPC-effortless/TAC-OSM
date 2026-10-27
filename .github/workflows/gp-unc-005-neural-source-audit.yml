@@ -1,0 +1,75 @@
+name: GP-UNC-005 actual ME111 native trained-model source bridge (NO FIT)
+on:
+  push:
+    branches: [research/gp-unc-001-six-family-nofit-2026-10-27]
+    paths:
+      - 'scripts/audit_gp_me111_neural_nofit.py'
+      - 'src/tac_osm/gp_event_boundary_nofit.py'
+      - '.github/workflows/gp-unc-005-neural-source-audit.yml'
+  pull_request:
+    paths:
+      - 'scripts/audit_gp_me111_neural_nofit.py'
+      - 'src/tac_osm/gp_event_boundary_nofit.py'
+      - '.github/workflows/gp-unc-005-neural-source-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-neural-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Retrieve ORIGINAL five trained ME111 native checkpoints and source by exact hash
+        uses: actions/checkout@v4
+        with:
+          ref: 77c753a69f10fa13cd7fdf849edb12bc53f03e6d
+          path: pinned_original_native
+          persist-credentials: false
+      - name: Verify original unchanged research source
+        run: |
+          test "$(git -C pinned_original_native rev-parse HEAD)" = 77c753a69f10fa13cd7fdf849edb12bc53f03e6d
+          test -s pinned_original_native/research/replay-bundles/ME111/FIT_INDEX.json
+          test -s pinned_original_native/scripts/native_latent_001_diagnosis.py
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install necessary no-training CPU inference dependencies
+        run: python -m pip install --quiet numpy==2.3.3 torch
+      - name: Replay original source-trained ME111 neural means and scales without outcomes
+        run: |
+          python scripts/audit_gp_me111_neural_nofit.py \
+            --pinned-native-checkout pinned_original_native \
+            --out gp-unc-005-original-me111-neural-no-fit.json
+          python - <<'PY'
+          import json
+          q=json.load(open('gp-unc-005-original-me111-neural-no-fit.json'))
+          assert q['original_native_models']==5
+          assert q['total_real_source_neural_issues']==720
+          assert q['original_fit_archive_preparsed_including_future_fit_values'] is True
+          assert q['future_numeric_target_extracted_for_bridge_scoring'] is False
+          assert q['native_original_source_future_only_poison_checks_total']==720
+          assert q['gp_residual_updates']==0
+          assert q['training_or_optimizer_steps']==0
+          assert q['protected_report_and_test_access'] is False
+          assert q['scientific_promotion']=='NOT_QUALIFIED'
+          assert all(v['trainable_parameters']==104663 and
+                     v['native_log_forecasts_exactly_preserved'] and
+                     v['native_gp_feature_dimensions']==64 and
+                     v['gp_inducing_coordinates']==2 and
+                     v['gp_sidecar_retained_numeric_scalars_per_entity']==137 and
+                     v['original_memory_nonzero_entries_across_24_station_frames']>0 and
+                     v['native_source_future_only_poison_checks']==144 and
+                     v['native_source_future_only_poison_changed_forecast'] is False and
+                     v['original_left_right_scales_positive_and_untouched'] and
+                     v['native_issuer_rows']==144 for v in q['models'])
+          print('ME111_NATIVE_TO_GP_NOFIT_SOURCE_BRIDGE=PASS_5_ORIGINAL_MODELS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gp-unc-005-me111-original-fit-neural-no-fit
+          path: gp-unc-005-original-me111-neural-no-fit.json
+          if-no-files-found: error
+          retention-days: 14

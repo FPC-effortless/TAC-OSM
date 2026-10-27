@@ -1,0 +1,65 @@
+name: GP-UNC-004 original UCI source-to-forecast event wiring (NO FIT)
+on:
+  push:
+    branches: [research/gp-unc-001-six-family-nofit-2026-10-27]
+    paths:
+      - 'src/tac_osm/gp_event_boundary_nofit.py'
+      - 'scripts/audit_gp_uci374_original_nofit.py'
+      - '.github/workflows/gp-unc-004-original-source-audit.yml'
+  pull_request:
+    paths:
+      - 'src/tac_osm/gp_event_boundary_nofit.py'
+      - 'scripts/audit_gp_uci374_original_nofit.py'
+      - '.github/workflows/gp-unc-004-original-source-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-source-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout reviewed GP-UNC-004 no-fit boundary
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Checkout ORIGINAL pre-existing classical model and publisher reader by immutable commit
+        uses: actions/checkout@v4
+        with:
+          ref: 66cc1ffc1935bad67118962091a016e04c2eff81
+          path: pinned_original_model01
+          persist-credentials: false
+      - name: Freeze exact classical source version, reject any ref drift
+        run: |
+          test "$(git -C pinned_original_model01 rev-parse HEAD)" = 66cc1ffc1935bad67118962091a016e04c2eff81
+          test -s pinned_original_model01/research/replay-bundles/PRODUCT-MODEL01-UCI374-CLASSICAL/ORIGINAL_CHECKPOINT.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run original publisher CAL-only read-only source-to-issue audit
+        env:
+          PYTHONPATH: src
+        run: |
+          python scripts/audit_gp_uci374_original_nofit.py \
+            --pinned-checkout pinned_original_model01 \
+            --output gp-unc-004-original-source-nofit.json
+          python - <<'PY'
+          import json
+          r=json.load(open('gp-unc-004-original-source-nofit.json'))
+          assert r['forecast_events']==64 and r['original_label_events']==64
+          assert r['source_anchored_future_only_label_poison_checks']==64
+          assert r['source_future_target_poison_changed_original_forecast'] is False
+          assert r['all_original_api_predictions_preserved']
+          assert r['gp_updated_on_real_labels'] is False
+          assert r['protected_test_parsed'] is False
+          assert r['scientific_promotion']=='NOT_QUALIFIED'
+          print('ORIGINAL_SOURCE_GP_EVENT_BOUNDARY=PASS_NO_FIT')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gp-unc-004-original-uci-exposed-cal-no-fit
+          path: gp-unc-004-original-source-nofit.json
+          if-no-files-found: error
+          retention-days: 14
