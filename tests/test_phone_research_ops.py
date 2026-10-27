@@ -180,7 +180,8 @@ def test_phone_scan_reports_both_queues_and_never_runs_gpu(tmp_path):
     assert data["dual-t4-readiness"]["backend"] == "kaggle_t4x2"
     audit = data["original-history-audit014"]
     assert audit["backend"] == "github_actions"
-    assert audit["state"] == "BLOCKED_EVIDENCE_OR_DESIGN"
+    assert audit["state"] == "READY_INTERNAL_RESEARCH_PLAN"
+    assert audit["execution_level"] == "internal_research"
     assert audit["approved_to_train"] is False
     assert "Kaggle 2× T4" in (tmp_path / "progress.md").read_text()
 

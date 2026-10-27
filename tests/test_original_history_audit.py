@@ -82,11 +82,12 @@ def test_independent_authorization_fails_closed(fault):
 def test_missing_authorization_blocks_before_any_source_or_model_import(tmp_path, monkeypatch):
     for name in ("TAC_OSM_SOURCE_VERIFIER_PUBLIC_KEY_HEX", "TAC_OSM_EVALUATOR_VERIFIER_PUBLIC_KEY_HEX"):
         monkeypatch.delenv(name, raising=False)
-    _, result = preflight()
+    _, result = preflight(requested_level="independent_qualification")
     assert result["status"] == "BLOCKED_INDEPENDENT_AUTHORIZATION"
     assert result["compute_decision"]["backend"] == "github_actions"
     output = tmp_path / "blocker.json"
     result = subprocess.run([sys.executable, str(ROOT / "scripts/audit_original_history.py"),
+        "--execution-level", "independent_qualification",
         "--execute", "--implementation-root", str(tmp_path / "NO_MODEL"),
         "--source", str(tmp_path / "NO_SOURCE"), "--output", str(output)],
         cwd=ROOT, capture_output=True, text=True)

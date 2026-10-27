@@ -23,7 +23,7 @@ from tac_osm.phone_research_ops import (  # noqa: E402
 
 SUITES = {
     "lab": ["tests/test_research_lab.py", "tests/test_historical_read_controls.py",
-            "tests/test_original_history_audit.py"],
+            "tests/test_original_history_audit.py", "tests/test_research_execution_levels.py"],
     "anticheat": ["tests/test_research_anticheat.py", "tests/test_robot_anticheat.py",
                   "tests/test_research_reward_integrity.py"],
     "observatory": ["tests/test_research_observatory.py", "tests/test_research_probe_agnostic.py"],

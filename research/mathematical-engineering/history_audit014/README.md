@@ -1,9 +1,11 @@
 # HISTORY-AUDIT014: original-source historical-memory audit
 
-**Status: PREREGISTERED / BLOCKED INDEPENDENT AUTHORIZATION.** The operator
-confirmed on 2026-10-27 that independent source/evaluator receipts do not exist.
-No original numerical data or trained checkpoint has been evaluated by this
-increment. No source download, neural training, TEST access or GPU use occurs.
+**Status: internal research authorized under the operator's 2026-10-27
+execution-level amendment.** Ordinary public FIT diagnostics do not require
+external signers. Independent qualification remains a distinct guarded level.
+The prior blocked receipt is historical evidence of the old policy, not the
+current internal prerequisite. No original data, model or historical result is
+rewritten by this authorization change.
 
 This follows [draft PR #477](https://github.com/FPC-effortless/TAC-OSM/pull/477).
 `FAIR_COMPARISON.json` preregisters a **noncomparative frozen diagnostic**,
@@ -52,8 +54,8 @@ case protocol; it does not audit uninterrupted multi-year streaming state.
 
 `scripts/original_history_trace.py` verifies the pinned checkout's Python files
 before importing the original graph. It rejects extra (including ignored),
-modified, missing and symlinked Python files. Only after independent permission
-does it authenticate source/checkpoint bytes and load original weights.
+modified, missing and symlinked Python files. After the internal public-source checks (or external permission in qualification
+mode), it authenticates source/checkpoint bytes and loads original weights.
 
 The audit rebuilds the source's permitted normalization/last/age prefix and
 compares it with the actual features. Both predictors receive a truncated
@@ -85,75 +87,63 @@ practical control, not a capacity-matched trained architecture. Historical
 binary-event prediction does not establish continuous PM2.5 reconstruction.
 Cosine geometry is secondary and cannot establish source-specific content.
 
-## Authorization and compute
+## Execution levels and CPU run
+
+[Execution-level policy](../../RESEARCH-EXECUTION-LEVELS-2026-10-27.md) applies.
+The operator explicitly authorized internally measured public FIT/DEV research
+without external signers. `PUBLIC_SOURCE_RECEIPT.json` records the UCI publisher
+page, CC-BY-4.0 license, DOI, official download bundle and exact nested original
+archive hash. Other bundle members are not opened. The FIT loader stops numeric
+source parsing before 2015, preserving protected 2016–17 TEST.
 
 ```sh
 python scripts/phone_lab.py plan research/phone_queue/original-history-audit014.json
 python scripts/validate_research_parity.py \
   --manifest research/mathematical-engineering/history_audit014/FAIR_COMPARISON.json \
   --phase preflight
-python scripts/audit_original_history.py --output /new/path/preflight.json
-```
-
-The compute router selects GitHub CPU, estimated 30 minutes, **zero GPU budget**,
-and reports evidence blockers. The parity gate returns `PASS_DIAGNOSTIC_ONLY`;
-that is not evaluation permission. Preflight returns exit 2 and an immutable
-`BLOCKED_INDEPENDENT_AUTHORIZATION` receipt before any original-data read,
-checkpoint deserialization or model import.
-
-For execution the independent source assessor and evaluator must each provide
-a distinct Ed25519-signed authorization, using separately operator-pinned
-`TAC_OSM_SOURCE_VERIFIER_PUBLIC_KEY_HEX` and
-`TAC_OSM_EVALUATOR_VERIFIER_PUBLIC_KEY_HEX`. Neither key is taken from the PR
-or a receipt. These are public verification keys; private signers must remain
-outside agent/model access. The CLI has no fixture/force bypass or signing API.
-
-Each signed envelope contains exactly `payload` and `signature_hex`. Payload:
-`schema: tac-osm.history-audit-authorization.v1`, role `source` or `evaluator`,
-the exact preflight `authorization_binding`, all role-specific `checks` in
-`history_audit_authorization.CHECKS` with `PASS`, and a timezone-aware future
-`expires_at`. The binding covers the full preregistration/proposal, execution
-file digests, original implementation/source and every arm/seed/checkpoint.
-The preflight artifact supplies the binding for independent review, not proof
-the assessor completed the investigation. Signatures alone do not establish
-real publisher provenance, actual ACL enforcement or evaluator independence.
-
-Only after that separate work, the trusted CPU runner may invoke:
-
-```sh
 python scripts/audit_original_history.py --execute \
-  --source-authorization /trusted/source-authorization.json \
-  --evaluator-authorization /trusted/evaluator-authorization.json \
   --implementation-root /clean/pinned-original-code \
-  --source /authorized/PRSA2017_original.zip \
-  --output /new/path/original-history-results.json
+  --source /authorized/PRSA2017-original.zip \
+  --output /new/path/RESULTS.json
 ```
 
-This narrow frozen diagnostic authorization does not replace the existing
-independent reward-runner signatures, 100k/parity gates or PNDS obligations for
-any new fit, graph change, checkpoint promotion or capability claim. Output
-always has `scientific_qualification: false`. Original source/evaluator
-attestation checks cannot be self-signed by this agent.
+The amended router selects GitHub CPU, 30-minute estimate, zero GPU budget.
+Internal preflight validates source/license metadata without keys; runtime
+checks the actual original source, implementation, frozen cohort and all
+checkpoint hashes before scoring. Output explicitly records `internal_research`
+and `internally_measured_not_independently_qualified`; scientific qualification
+and checkpoint promotion remain false. No neural fitting or model graph change.
 
-## Verification and unresolved checks
+`--execution-level independent_qualification` retains external source/evaluator
+receipt verification, using independently pinned public keys and the exact
+plan/code/source/checkpoint binding. Existing reward-integrity certification,
+safety and promotion gates remain strict. Internal mode is rejected for
+protected evaluation, TEST, reward certification, safety claims or promotion.
+No signatures are fabricated or needed for the ordinary internal run.
 
-The dedicated read-only CI checks the **original code** with constructed
-inputs and ephemeral test-only signatures. It never downloads the source ZIP,
-deserializes original checkpoints or executes the original-source audit.
-Tests exercise actual projection capture, native decomposition, selected-key
-resolution, absent-write rejection, future feature poison, tampered/missing
-authorizations, code/plan/checkpoint binding, and altered code checkouts.
-Fixture PASS is engineering evidence only.
+The dedicated workflow separates constructed engineering tests from the actual
+internal source evaluation. On this PR branch it downloads the publisher's
+original archive, verifies its frozen hash, runs the frozen CPU diagnostic,
+then repeats it from a fresh Python process and requires byte-identical output.
+Full source traces and replay evidence are retained as Actions artifacts;
+concise results belong in the final report. Any failure remains visible.
 
-Source-prefix reconstruction uses rtol 1e-6 / atol 2e-6 for normalized FP32
-values, exact masks and exact causal last/age comparisons. Full source-file
-reload with future-only source perturbations remains **INCONCLUSIVE**; a
-constructed downstream feature poison is not that upstream integration test.
-Source-qualified trace execution, fitted-checkpoint replay and source outcome
-comparisons remain **NOT RUN / BLOCKED** until independent authorization.
+## Limitations and preserved history
 
-The existing PNDS rules and reciprocal partial kernel records were inspected.
-No model graph or weight changes are introduced. Full original-model Lean /
-Python / IEEE / AD equivalence remains **OPEN**, and no kernel identity or
-fixture test in this PR is represented as completing it. Original checkpoint,
-data/compute parity and scientific failures remain immutable.
+`BLOCKED_PREFLIGHT.json`, `COMPUTE_DECISION.json` and the original static review
+are retained snapshots from the previous signer-only policy. The authorization
+amendment records the old plan hash/commit. It changes no scientific cases,
+metrics, seeds, control selection, primary threshold or original checkpoint.
+
+Prefix reconstruction uses rtol 1e-6 / atol 2e-6 for FP32 normalized values,
+exact masks and exact causal last/age comparisons. Full source-file reload with
+future-only perturbations remains **INCONCLUSIVE**; downstream feature-poison
+fixtures do not certify that upstream boundary. Mathematical whole-model Lean /
+Python / IEEE / AD equivalence remains **OPEN**, with no graph change here.
+
+The cohort is exposed FIT, label-selected and small. Full historical training
+FLOP parity is unestablished. Oracle keys carry historical observation content
+and are privileged; oracle scores/uncentered cosine alone cannot demonstrate
+stored information. Concurrent PRs #478–#480 are related prior research, not
+independent qualification. Preserve all negative results and qualify any
+reported memory benefit to this frozen internal diagnostic only.

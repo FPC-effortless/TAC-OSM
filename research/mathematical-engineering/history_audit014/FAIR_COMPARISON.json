@@ -9,7 +9,7 @@
   "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
   "publisher": "UCI Machine Learning Repository dataset 501 Beijing Multi-Site Air-Quality Data",
   "publisher_url": "https://archive.ics.uci.edu/dataset/501/beijing+multi+site+air+quality+data",
-  "source_license": "CC BY 4.0; independent source verifier must confirm release and authorized use",
+  "source_license": "CC-BY-4.0 verified from UCI publisher page; see PUBLIC_SOURCE_RECEIPT.json",
   "models": [
     {
       "arm": "assoc_historic_query",
@@ -83,10 +83,8 @@
     "secondary": "Report all control scores, trace reconstruction errors, native versus zero-read effect and key/value alignment; geometry alone is not factual-content proof."
   },
   "authorization": {
-    "source": "MISSING: independently signed publisher/source/split/protected-data authorization",
-    "evaluator": "MISSING: separately signed evaluation/ACL authorization tied to exact plan, code and checkpoint identities",
-    "private_keys": "never supplied to agent or stored in repository",
-    "execution": "BLOCK until both independent trusted receipts verify; no generic --force or fixture override"
+    "internal_research": "Authorized by operator on 2026-10-27: ordinary reproducible public licensed FIT/DEV diagnostics do not require external signers. All source/split/causal/checkpoint checks remain mandatory.",
+    "independent_qualification": "External verification remains required for protected evaluations, reward-integrity certification, safety claims and checkpoint promotion; no TEST access or certification here."
   },
   "pnds": {
     "graph_changed": false,
@@ -106,5 +104,36 @@
     "target and controls resolve to exact original nonzero writes",
     "unchanged original checkpoint bytes and model state_dict",
     "same original samples/parameters/seeds; preserve incomplete whole-training FLOP parity"
-  ]
+  ],
+  "execution_level": "internal_research",
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "real_world_source": {
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "publisher_url": "https://archive.ics.uci.edu/dataset/501/beijing+multi+site+air+quality+data",
+    "license": "CC-BY-4.0",
+    "license_evidence_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+    "source_receipt": "research/mathematical-engineering/history_audit014/PUBLIC_SOURCE_RECEIPT.json",
+    "observed_real_outcomes": true
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "5d28bf481ac489ccdbde3f2387fdc3367901f097e396672980c6f7fdc87a0b2a",
+    "source_numeric_stop_exclusive": "2015-01-01"
+  },
+  "causal_protocol": "Reconstruct original pre-March2014 normalization and causal caches; expose only feature prefixes through query; resolve actual owner/time keys; score after predictions. Uninstrumented upstream future-poison checks remain INCONCLUSIVE.",
+  "checkpoint_policy": "Verify all original checkpoint hashes before load and after frozen evaluation; strict state_dict load and unchanged parameter/buffer digests; preserve original source/seed/order receipts.",
+  "authorization_amendment": {
+    "previous_plan_sha256": "9dc59c710ff2eb24be0bbb761a67120831f53016cf2f990e3c1c6b37f8ce4c3c",
+    "previous_commit": "5953ad925ce25a1340d7aa38de179547b148afb2",
+    "reason": "Explicit operator instruction separates internal research and independent qualification; scientific cohort, metrics, seeds, control selection and thresholds unchanged."
+  }
 }
