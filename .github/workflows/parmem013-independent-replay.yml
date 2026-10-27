@@ -1,0 +1,57 @@
+name: PAR-MEM-013 independent read-only genuine-source ten model original predictions
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/parmem013-independent-replay.yml'
+      - 'research/replay-bundles/PAR-MEM-013/**'
+      - 'research/parallel-six/PAR-MEM-013-FROZEN-PLAN.json'
+      - 'scripts/parmem013_source_event_objective.py'
+      - 'scripts/parmem013_genuine_source_fit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-original-full-ten-model-pair-discrimination:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install only CPU tensor backend, no training
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Check original ten source model optimizer and original pair prediction receipts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/parmem013_source_event_objective.py scripts/parmem013_genuine_source_fit.py
+          test -s research/parallel-six/PAR-MEM-013-PROTOCOL.json
+          test -s research/parallel-six/PAR-MEM-013-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-MEM-013/TRAIN_RECEIPT.json
+          test -s research/replay-bundles/PAR-MEM-013/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-MEM-013 -maxdepth 1 -name 'seed-*-original.pt' | wc -l)" -eq 10
+          test "$(find research/replay-bundles/PAR-MEM-013 -maxdepth 1 -name 'seed-*-DEV_original.pt' | wc -l)" -eq 10
+      - name: Recover known true publisher hourly air archive and verify original SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem013-verify
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem013-verify/source.zip
+          test "$(sha256sum /tmp/parmem013-verify/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Independently rebuild all original source pair answers without optimizer steps
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.parmem013_genuine_source_fit --mode replay \
+            --source /tmp/parmem013-verify/source.zip
+          echo 'PAR_MEM_013_INDEPENDENT_ALL_TEN_GENUINE_SOURCE_PAIR_PREDICTIONS_REPLAY_PASS'
+      - name: Preserve original model/source integrity and no hidden retraining
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          echo 'Same source-trained frozen models and exposed DEV, never new independent TEST.'
