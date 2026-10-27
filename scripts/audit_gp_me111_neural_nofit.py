@@ -77,10 +77,33 @@ def main():
         all_events=[]
         all_base=[]
         all_scales=[]
+        future_only_poison_checked=0
         for t in ORIGINS:
             frame=forensic.read_frame(d,[(station,t) for station in range(SOURCE_STATIONS)],HISTORY)
             with torch.no_grad():
                 forecast,state=model(*frame[:6],return_trace=False)
+            # Original FIT loader pre-parses FIT, including future source
+            # records. Test the actual inference-frame producer rather than
+            # falsely claiming data was never loaded into source memory.
+            # Only original future t+6 values are poisoned, AFTER the frozen
+            # normalization/checkpoint and original frame are computed.
+            poisoned=dict(d)
+            poisoned["raw"]=d["raw"].copy()
+            poisoned["values"]=d["values"].copy()
+            poisoned["raw"][:,t+6,0] += 2500.
+            poisoned["values"][:,t+6,0] += 5.
+            poisoned_frame=forensic.read_frame(
+                poisoned,[(station,t) for station in range(SOURCE_STATIONS)],HISTORY)
+            if not all(torch.equal(clean,alternate)
+                       for clean,alternate in zip(frame[:6],poisoned_frame[:6])):
+                raise ValueError("future-only original FIT source values entered current inference inputs")
+            with torch.no_grad():
+                poisoned_forecast,_=model(*poisoned_frame[:6],return_trace=False)
+            if (not torch.equal(forecast.log_location,poisoned_forecast.log_location)
+                    or not torch.equal(forecast.left_scale,poisoned_forecast.left_scale)
+                    or not torch.equal(forecast.right_scale,poisoned_forecast.right_scale)):
+                raise ValueError("future-only source target poisoned original neural forecast")
+            future_only_poison_checked+=SOURCE_STATIONS*FORECAST_CHANNELS
             if (forecast.log_location.shape!=(SOURCE_STATIONS,FORECAST_CHANNELS)
                     or forecast.left_scale.shape!=(SOURCE_STATIONS,FORECAST_CHANNELS)
                     or forecast.right_scale.shape!=(SOURCE_STATIONS,FORECAST_CHANNELS)):
@@ -132,6 +155,8 @@ def main():
             "seed":seed,"checkpoint_sha256":actual,
             "trainable_parameters":sum(p.numel() for p in model.parameters()),
             "native_issuer_rows":len(output),
+            "native_source_future_only_poison_checks":future_only_poison_checked,
+            "native_source_future_only_poison_changed_forecast":False,
             "native_log_forecasts_exactly_preserved":True,
             "original_left_right_scales_positive_and_untouched":True,
             "native_state_carried_fp32_values":152,
@@ -155,7 +180,10 @@ def main():
         "original_forecast_channels":FORECAST_CHANNELS,
         "source_fit_hour_origins":list(ORIGINS),
         "original_context_hours":HISTORY,
-        "source_original_labels_read":False,
+        "original_fit_archive_preparsed_including_future_fit_values":True,
+        "future_numeric_target_extracted_for_bridge_scoring":False,
+        "native_original_source_future_only_poison_checks_total":sum(
+            row["native_source_future_only_poison_checks"] for row in rows),
         "gp_residual_updates":0,
         "protected_report_and_test_access":False,
         "training_or_optimizer_steps":0,
