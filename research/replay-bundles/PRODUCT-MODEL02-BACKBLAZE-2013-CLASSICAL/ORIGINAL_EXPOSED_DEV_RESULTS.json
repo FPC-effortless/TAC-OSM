@@ -1,0 +1,42 @@
+{
+  "cautions": [
+    "publication and original SMART available-at clock not independently verified",
+    "training/DEV both already exposed as part of preceding source-feasibility work",
+    "overlapping drive-day windows artificially increase sample counts",
+    "drive failure flags are publisher-reported and retirements are right-censored",
+    "an observed DEV metric does not guarantee future alert precision/utility",
+    "new model families must obey 100k neural parameter gate before comparative claims",
+    "original trained weights plus independent clean replay required for model evidence"
+  ],
+  "conclusion": "DEV_ONLY_NO_REAL_WORLD_QUALIFICATION",
+  "dev": {
+    "average_precision_OVERLAPPING_WINDOWS": 0.19053700838199006,
+    "brier": 0.001928342376544673,
+    "log_loss": 0.01259078687978418,
+    "n_scored_windows": 204373,
+    "positive_window_fraction": 0.0019425266546950917,
+    "positive_windows": 397
+  },
+  "dev_censored_windows_excluded": 180532,
+  "dev_unique_positive_physical_drives": 65,
+  "dev_unique_scored_physical_drives": 25649,
+  "fit_examples": 112115,
+  "fit_positive_windows": 167,
+  "fit_prevalence_reference_dev": {
+    "average_precision_OVERLAPPING_WINDOWS": 0.001855737084201071,
+    "brier": 0.0019389584399990274,
+    "log_loss": 0.014132219543851672,
+    "n_scored_windows": 204373,
+    "positive_window_fraction": 0.0019425266546950917,
+    "positive_windows": 397
+  },
+  "fit_unique_positive_physical_drives": 35,
+  "independent_evaluation": false,
+  "model_type": "CLASSICAL_NOT_TAC",
+  "publisher_source_original_days_parsed": 46,
+  "source_original_zip_sha256": "7f5a53e79b16e695b4b034955806bb3bb194534b169f6eca460dfd3dc48096fe",
+  "source_published_asof_verified": false,
+  "study": "MODEL02-2013-ORIGINAL-CLASSICAL-RISK-EXPOSED-DEV-001",
+  "tier": "GENUINE_PUBLISHER_SOURCE_TRAINED_CLASSICAL_EXPOSED_DEV_DIAGNOSTIC",
+  "trained_on_protected_TEST": false
+}

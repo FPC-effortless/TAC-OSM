@@ -1,0 +1,31 @@
+name: Model02 original Backblaze 2013 exposed source probe (no model fit)
+on:
+  push:
+    branches:
+      - product/backblaze-censored-risk-intake-2026-10-27
+    paths:
+      - 'specialist_models/backblaze_2013_source_probe.py'
+      - 'tests/test_backblaze_2013_source_probe.py'
+      - '.github/workflows/model02-backblaze-original-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Constructed ZIP malicious/identity/temporal tests
+        run: python -m unittest discover -s tests -p test_backblaze_2013_source_probe.py -v
+      - name: Read original publisher 2013 ZIP once (<=110 MB) and only 14 exposed CSV days
+        run: python specialist_models/backblaze_2013_source_probe.py --out original_2013_source_receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: original-backblaze-2013-exposed-schema-receipt
+          path: original_2013_source_receipt.json
+          if-no-files-found: error
+          retention-days: 14

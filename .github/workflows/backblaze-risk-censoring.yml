@@ -1,0 +1,27 @@
+name: Backblaze risk right-censoring and source contract (constructed only)
+on:
+  push:
+    branches:
+      - product/backblaze-censored-risk-intake-2026-10-27
+  pull_request:
+    paths:
+      - 'specialist_models/backblaze_censored_risk.py'
+      - 'tests/test_backblaze_censored_risk.py'
+      - 'docs/BACKBLAZE_CENSORED_RISK.md'
+      - '.github/workflows/backblaze-risk-censoring.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  censored-source-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify source identity, times, hashes and right-censoring (constructed files)
+        run: python -m unittest discover -s tests -p 'test_backblaze_censored_risk.py' -v
+      - name: Syntax check
+        run: python -m py_compile specialist_models/backblaze_censored_risk.py tests/test_backblaze_censored_risk.py
