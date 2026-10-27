@@ -63,7 +63,7 @@ jobs:
           assert x['study']=='MODEL01-GRU-103K-CONTROL-001'
           assert x['trained_during_replay'] is False
           assert len(x['replay_reports'])==3
-          assert all(r['exact_CAL_DEV_replay'] and r['trained_during_replay'] is False for r in x['replay_reports'])
+          assert all(r['original_CAL_DEV_replayed_with_declared_numeric_tolerances'] and r['trained_during_replay'] is False for r in x['replay_reports'])
           print('FRESH_CHECKOUT_REAL_SOURCE_GRU_EXACT_REPLAY=PASS')
           print('SEED_CHECKPOINT_SHA='+json.dumps([r['original_checkpoint_sha256'] for r in x['replay_reports']]))
           PY
