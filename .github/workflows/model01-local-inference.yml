@@ -1,0 +1,41 @@
+name: Model01 pinned typed local inference and loopback latency (NOT cloud production)
+on:
+  push:
+    branches:
+      - product/sensor-forecast-reliability-2026-10-27
+    paths:
+      - 'specialist_models/model01_reference_api.py'
+      - 'specialist_models/benchmark_model01_loopback.py'
+      - 'tests/test_model01_reference_api.py'
+      - '.github/workflows/model01-local-inference.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/model01_reference_api.py'
+      - 'specialist_models/benchmark_model01_loopback.py'
+      - 'tests/test_model01_reference_api.py'
+      - '.github/workflows/model01-local-inference.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-checkpoint-local-inference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify original checkpoint exact graph and malicious typed request protection
+        run: python -m unittest discover -s tests -p test_model01_reference_api.py -v
+      - name: Measure original checkpoint loopback server at serial and four-client load
+        run: python specialist_models/benchmark_model01_loopback.py > local_loopback_receipt.json
+      - name: Show measured, labeled loopback-only evidence
+        run: cat local_loopback_receipt.json
+      - name: Preserve receipt, no fake cloud qualification
+        uses: actions/upload-artifact@v4
+        with:
+          name: model01-local-loopback-http-receipt
+          path: local_loopback_receipt.json
+          if-no-files-found: error
+          retention-days: 14

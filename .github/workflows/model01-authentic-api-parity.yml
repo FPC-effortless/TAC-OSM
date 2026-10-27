@@ -1,0 +1,36 @@
+name: Model01 authentic DEV typed API numerical reference parity (no fitting)
+on:
+  push:
+    branches:
+      - product/sensor-forecast-reliability-2026-10-27
+    paths:
+      - 'specialist_models/model01_real_dev_api_parity.py'
+      - 'specialist_models/model01_reference_api.py'
+      - '.github/workflows/model01-authentic-api-parity.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/model01_real_dev_api_parity.py'
+      - 'specialist_models/model01_reference_api.py'
+      - '.github/workflows/model01-authentic-api-parity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-exposed-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recompute exposed real DEV predictions from immutable original checkpoint and compare API
+        run: |
+          python specialist_models/model01_real_dev_api_parity.py > original_api_parity_receipt.json
+      - run: cat original_api_parity_receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-original-source-api-numerical-parity
+          path: original_api_parity_receipt.json
+          retention-days: 14
+          if-no-files-found: error
