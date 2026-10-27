@@ -209,6 +209,11 @@ def make_rows(manifest, timelines, phase):
             if not begin <= d < end or timeline[d]["failed"]:
                 continue
             status, outcome, event_day = future_status(timeline, d, manifest["horizon_days"])
+            # Phase-cutoff isolation MUST hold even when an embedding caller
+            # supplies future DEV/TEST rows in memory. No horizon label may
+            # be learned from an observation at or after the phase boundary.
+            if event_day >= end:
+                status, outcome = "RIGHT_CENSORED", None
             descriptor = {"row_index": len(labeled), "entity_sha256": ident,
                           "model": model, "observation_day": d.isoformat(),
                           "outcome_day": event_day.isoformat(),
