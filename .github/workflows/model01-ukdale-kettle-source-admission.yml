@@ -1,0 +1,65 @@
+name: Model01 UK-DALE original-author five-house kettle metadata admission only
+on:
+  push:
+    branches:
+      - research/model01-ukdale-house-disjoint-source-admission-2026-10-27
+    paths:
+      - 'specialist_models/model01_ukdale_kettle_source_admission.py'
+      - 'tests/test_model01_ukdale_kettle_source_admission.py'
+      - 'research/registrations/MODEL01-UKDALE-KETTLE-ADMISSION-001.md'
+      - '.github/workflows/model01-ukdale-kettle-source-admission.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original-ukdale-publisher-metadata-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original publisher metadata YAML decoder only
+        run: python -m pip install --disable-pip-version-check --no-cache-dir 'PyYAML==6.0.2'
+      - name: Test synthetic/constructed source contracts only (no neural capability)
+        run: python -m unittest discover -s tests -p test_model01_ukdale_kettle_source_admission.py -v
+      - name: Verify genuine 5 original author YAML files only from pinned original revision
+        run: |
+          set -euo pipefail
+          OUT=research/source-evidence/MODEL01-UKDALE-2017-ORIGINAL-AUTHOR-METADATA-001.json
+          if [ -e "$OUT" ]; then
+            echo 'ORIGINAL_AUTHOR_METADATA_RECEIPT_EXISTS=TRUE'
+          else
+            python specialist_models/model01_ukdale_kettle_source_admission.py --metadata-audit-only --out "$OUT"
+            python - <<'PY'
+          import json
+          x=json.load(open('research/source-evidence/MODEL01-UKDALE-2017-ORIGINAL-AUTHOR-METADATA-001.json'))
+          assert x['schema']=='ukdale-kettle-five-house-2017-metadata-admission-v1'
+          assert x['metadata_commit']=='0d168958ea2e69b8bcb0dccc8a732adbfe085985'
+          assert x['2017_disaggregated_release_doi']=='10.5286/UKERC.EDC.000004'
+          assert x['original_UCI374_Appliances_target_equivalent'] is False
+          assert x['holdout_house5_power_rows_opened'] is False
+          assert x['source_archive_power_rows_downloaded'] is False
+          assert x['trained_model_evaluated'] is False
+          assert {h:x['eligible_source_meters'][h]['meter_channel'] for h in ('2','3','5')}=={'2':8,'3':2,'5':18}
+          assert set(x['excluded_meters'])=={'1','4'}
+          assert len(x['original_publisher_metadata_file_sha256'])==6
+          print('ACTUAL_FIVE_AUTHOR_UKDALE_METADATA_VERIFIED=PASS_NO_POWER_BYTES')
+          print('ORIGINAL_AUTHOR_METADATA_SHA256='+json.dumps(x['original_publisher_metadata_file_sha256'],sort_keys=True))
+          PY
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$OUT"
+            git commit -m 'research: preserve original UK-DALE five-house kettle source metadata with protected house5 closed'
+            git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-original-ukdale-author-kettle-metadata-only
+          path: research/source-evidence/MODEL01-UKDALE-2017-ORIGINAL-AUTHOR-METADATA-001.json
+          if-no-files-found: warn
+          retention-days: 14
