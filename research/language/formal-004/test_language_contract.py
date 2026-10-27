@@ -100,6 +100,19 @@ class LanguageContractTests(unittest.TestCase):
         gradient=torch.autograd.grad(-logp[0,10],model.embedding.weight)[0]
         self.assertTrue(torch.isfinite(gradient).all())
 
+    def test_per_event_fp32_accumulator_error_receipts(self):
+        from observe_fp32_sum_error import replay_fp32_additive_trace
+        for steps in (1,17,257,1024):
+            sample=torch.arange(steps*88,dtype=torch.float64).reshape(steps,88)
+            basis=torch.sin(sample/27.0)*0.999
+            receipt=replay_fp32_additive_trace(basis)
+            self.assertEqual(receipt["positions"],steps)
+            self.assertEqual(receipt["dim"],88)
+            self.assertLessEqual(receipt["max_final_error"],
+                receipt["maximum_certified_trace_bound"]+1e-11)
+        with self.assertRaisesRegex(ValueError,"FP64"):
+            replay_fp32_additive_trace(torch.ones(2,88,dtype=torch.float32))
+
     def test_rectangular_scan_matches_serial_corrective_write(self):
         generator=torch.Generator().manual_seed(9)
         for dtype,tol in ((torch.float64,1e-11),(torch.float32,2e-5)):
