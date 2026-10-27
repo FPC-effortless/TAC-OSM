@@ -1,0 +1,67 @@
+name: Model01 Monash321 original publisher client-disjoint source and no-fit benchmarks
+on:
+  push:
+    branches:
+      - research/model01-multiclient-holdout-2026-10-27
+    paths:
+      - 'specialist_models/model01_monash_multiclient_baselines.py'
+      - 'tests/test_model01_monash_multiclient_baselines.py'
+      - 'research/registrations/MODEL01-MONASH321-CLIENT-DISJOINT-001.md'
+      - '.github/workflows/model01-monash-multiclient-source.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  authentic-zenodo-multi-client-baselines:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check only constructed parser/censoring/DST/heldout isolation invariants
+        run: python -m unittest discover -s tests -p 'test_model01_monash_multiclient_baselines.py' -v
+      - name: Obtain original versioned Monash Zenodo hourly archive and compare true CAL DEV source baselines
+        run: |
+          set -euo pipefail
+          ORIGINAL=research/source-evidence/MODEL01-MONASH321-ORIGINAL-CAL-DEV-SOURCE-BASELINES.json
+          mkdir -p research/source-evidence
+          if [ -e "$ORIGINAL" ]; then
+            echo 'SOURCE_BASELINE_ALREADY_GIT_OWNED_NO_RESCORE'
+          else
+            python specialist_models/model01_monash_multiclient_baselines.py --out "$ORIGINAL"
+            python - <<'PY'
+          import json
+          d=json.load(open('research/source-evidence/MODEL01-MONASH321-ORIGINAL-CAL-DEV-SOURCE-BASELINES.json'))
+          assert d['source_zip_md5']=='18096614662b02640d265ad2a6a416bd'
+          assert len(d['source_zip_sha256'])==64
+          assert sum(d['source_arm_counts'].values())==321
+          assert not d['TEST_customer_numeric_targets_parsed']
+          assert not d['TEST_customer_targets_scored']
+          assert not d['model_trained']
+          assert d['CAL_DEV_are_exposed_from_this_source_audit']
+          assert not d['independent_test_claim']
+          assert set(d['macro_references'])=={'CAL','DEV'}
+          assert all(int(k) in (1,24) for k in d['macro_references']['DEV'])
+          print('AUTHENTIC_MONASH_SOURCE_PASS_WITH_TEST_NOT_PARSED')
+          print('SOURCE_SHA256='+d['source_zip_sha256'])
+          print('CUSTOMER_SPLITS='+json.dumps(d['source_arm_counts'],sort_keys=True))
+          print('GENUINE_NO_FIT_HOURLY_BASELINES='+json.dumps(d['macro_references'],sort_keys=True))
+          PY
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$ORIGINAL"
+            git commit -m 'research: retain publisher-verified Monash 321-client disjoint original CAL DEV baseline source receipt'
+            git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: model01-monash-321-authentic-publisher-original-baselines
+          path: research/source-evidence/MODEL01-MONASH321-ORIGINAL-CAL-DEV-SOURCE-BASELINES.json
+          if-no-files-found: warn
+          retention-days: 14

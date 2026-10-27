@@ -1,0 +1,59 @@
+name: Model01 Monash 321 publisher actual source baselines clean-checkout no-fit replay
+on:
+  push:
+    branches:
+      - research/model01-multiclient-holdout-2026-10-27
+    paths:
+      - '.github/workflows/model01-monash-source-clean-replay.yml'
+      - 'research/source-evidence/MODEL01-MONASH321-ORIGINAL-CAL-DEV-SOURCE-BASELINES.json'
+      - 'specialist_models/model01_monash_multiclient_baselines.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official-source-repro-no-sealed-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          clean: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently fetch same original Zenodo version and recompute only CAL and DEV baseline metrics
+        run: |
+          python specialist_models/model01_monash_multiclient_baselines.py --out /tmp/monash_source_baselines_original_replay.json
+      - name: Compare all original SHA/client/split and numeric metrics, never open numeric sealed labels
+        run: |
+          python - <<'PY'
+          import json, math
+          original=json.load(open('research/source-evidence/MODEL01-MONASH321-ORIGINAL-CAL-DEV-SOURCE-BASELINES.json'))
+          rerun=json.load(open('/tmp/monash_source_baselines_original_replay.json'))
+          def same(a,b,where='root'):
+            if type(a) is not type(b): raise AssertionError('source type mismatch '+where)
+            if isinstance(a,dict):
+              assert set(a)==set(b),where
+              for k in a:same(a[k],b[k],where+'/'+str(k))
+            elif isinstance(a,list):
+              assert len(a)==len(b),where
+              for i,(x,y) in enumerate(zip(a,b)):same(x,y,where+'/'+str(i))
+            elif isinstance(a,float):
+              assert math.isclose(a,b,rel_tol=1e-12,abs_tol=1e-9),(where,a,b)
+            else: assert a==b,(where,a,b)
+          same(original,rerun)
+          assert original['source_zip_sha256']=='eff447075dde68dca0105ab7e2851c5637967ae3bb21556fd8b931f196d5968c'
+          assert original['source_arm_counts']=={'FIT':176,'CAL':34,'DEV':36,'SEALED_TEST':75}
+          assert original['TEST_customer_numeric_targets_parsed'] is False
+          assert original['TEST_customer_targets_scored'] is False
+          assert not original['model_trained'] and not original['independent_test_claim']
+          print('ORIGINAL_MONASH_PUBLISHER_BASELINES_FRESH_SOURCE_REPLAY=PASS')
+          print('SEALED_TEST_NUMERIC_LABELS_UNPARSED=TRUE')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-monash-original-source-clean-no-fit-replay
+          path: /tmp/monash_source_baselines_original_replay.json
+          if-no-files-found: error
+          retention-days: 14
