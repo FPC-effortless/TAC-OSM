@@ -38,6 +38,15 @@ def model_pair():
     a=ParallelResidualWorld()
     torch.manual_seed(SEED)
     b=TimeAwareParallelResidualWorld()
+    # Parent and treatment must have identical shared learned weights at
+    # first prediction. TimeAware's subclass construction additionally
+    # initializes an expanded core, so repeating a seed alone is NOT enough.
+    state=b.core.load_state_dict(a.core.state_dict(),strict=False)
+    if state.unexpected_keys or state.missing_keys!=["time_projection.weight"]:
+        raise RuntimeError("parent-to-treatment common learned weight map changed")
+    b.residual_ffn.load_state_dict(a.residual_ffn.state_dict(),strict=True)
+    with torch.no_grad():
+        b.residual_logit.copy_(a.residual_logit)
     for model in (a,b):
         model.train()
         if any(not p.requires_grad or p.dtype!=torch.float32 for p in model.parameters()):
