@@ -32,13 +32,15 @@ def proposal(**changes):
     return base
 
 def kaggle_plan(**changes):
-    return proposal(
+    values = dict(
         run_id="reviewed-gpu-test", variant="Physical",
         estimated_cpu_minutes=120, requires_cuda=True,
         gpu_speedup_expected=True, estimated_gpu_minutes=30,
         gpu_strategy="seed_shard", seeds=[111, 222],
         workload="research/kaggle_workloads/dual_t4_smoke.py",
-        diagnostic=None, budget_gpu_minutes=30, **changes)
+        diagnostic=None, budget_gpu_minutes=30)
+    values.update(changes)
+    return proposal(**values)
 
 
 @pytest.mark.parametrize("name", FAMILIES)
