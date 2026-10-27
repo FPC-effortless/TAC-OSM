@@ -34,6 +34,14 @@ def validate_token(token: torch.Tensor, batch: int | None = None) -> None:
 def validate_model(model) -> None:
     if getattr(model,"decoder",None) != 75 or getattr(model,"post",None) != 10:
         raise ValueError("frozen experiment needs decoder=75, post=10")
+    # Source train_gate.py: make(mode) explicitly uses multiscale, NOT the
+    # class default multiscale_relative. Both have identical parameter counts.
+    if getattr(model,"position_mode",None) != "multiscale":
+        raise ValueError("frozen checkpoint used multiscale (one-lag) positional mode")
+    if getattr(model,"optimized_scan",None) is not True:
+        raise ValueError("frozen checkpoint used the shared rectangular scan")
+    if getattr(model,"gate_mode",None) not in ("tanh","silu"):
+        raise ValueError("unrecognized historical training arm")
     n=sum(p.numel() for p in model.parameters())
     if n != EXPECTED_ACTIVE_PARAMETERS:
         raise ValueError(f"wrong graph parameter count: {n}")
