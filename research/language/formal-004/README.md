@@ -184,3 +184,52 @@ an exact-real source contract, not model calibration or IEEE validation.
 The expanded 73-theorem audit must be green before reporting it
 as verified. Real-text independently reserved TEST and matched training
 for genuine 96-lag retrieval remain open.
+
+
+## MLAG001: real source-matched dual-horizon training (new experimental evidence)
+
+The original 100,680-active-parameter, 408-float-core language architecture
+was trained afresh for five paired seeds × two existing gate modes using **the
+same authentic Vim9.1 FIT chapters and byte-identical per-seed source sample
+order**, still **120 optimizer updates**. We replaced the auxiliary objective
+`0.30 * L_history64` with `0.15 * L_history64 +
+0.15 * L_history96`; main next-character loss, architecture and optimizer
+configuration were unchanged. The original binary checkpoints were frozen.
+
+On the **already-exposed original six DEV chapters** the new 96-character
+historical NLL was **3.127606** versus original **5.219261** across ten paired
+checkpoints, and exact character recall was **24.740%** vs **5.514%**.
+Every one of the ten comparisons improved. However next-character NLL
+**worsened** from **2.824216** to **2.827443**, and this is an objective
+ablation rather than demonstrated superiority to GRU, Transformer, RWKV,
+Mamba or external RAG. 96 is inside a 128-character observation window,
+**NOT** large-context or lifelong memory.
+
+Source control checks at lag96: new correct-key NLL **3.127606**; FIT-only
+unigram **3.542343**; history read removed **4.852031**; adjacent wrong-key
+**3.222506**, 8-step wrong-key **7.629065** (wrong-key evaluations use
+shorter common-target intersections). Evidence for use of the address,
+not proof of robust semantic/temporal world memory.
+
+Source and checkpoint hashes, ten complete new model+optimizer+RNG
+checkpoints and numerical cold reloads, full individual results,
+per-ordinal controls and exact training/replay source are bundled in
+the research conversation export, sha256
+`b19e026e49c06093850fafa6ca63bffd84f1153aa947f8cae67938d66a4c5bfd`.
+The binary files are **not yet committed into GitHub** and the byte-identical
+Vim manual is not mounted in GitHub CI: **independent cold repo replay is still
+OPEN and this cannot be promoted**. The GitHub branch includes the exact
+`train_multilag_real_fit.py`, `audit_multilag_memory_controls.py` and
+`test_multilag_protocol.py` code, and CI asserts source geometry,
+parameter budget, target alignment and source-causal differentiability
+on labeled diagnostics only.
+
+See `MLAG001_REAL_DEV_REPORT.md` for methodology, seed-by-seed
+measures and the five-independent-seed-block uncertainty. The companion
+PNDS module `LanguageMultiLagObjective.lean` formalizes 0.30 weight
+parity, exact-real objective derivative and past-only query ordinals.
+The source-specific Lean audit targets 78 declarations (check latest CI).
+
+See `LANGUAGE_COMPETITIVE_ADVANTAGES_PROTOCOL.md` for the research
+benchmark ladder and near-term memory SDK evidence requirements, including
+LongMemEval-V2, NoLiMa and the actual Mamba-3/RWKV-7 competition.
