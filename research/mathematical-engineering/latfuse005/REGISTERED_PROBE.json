@@ -1,0 +1,23 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE005-GENUINE-EVENT-LONG-DELAY-FROZEN-AUDIT",
+  "study_type": "noncomparative_diagnostic",
+  "scientific_purpose": "On frozen source-trained LATFUSE004 eight checkpoints, test whether source-real high PM2.5 events versus same-source same-hour ordinary observations leave retrievable content traces in the actual 16x16 associative matrix after 16/64/128/512 further genuine readings and whether prefix-associative memory helps or hurts genuine six-hour future outcome forecasts. No optimizer, no new architectures.",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "source_archive_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "authoritative_checkpoint_family": "research/replay-bundles/LATFUSE004/seed-{40401,40402}/{4h-hard,4h-soft,2h-hard,2h-soft}/final.pt SHA against original RESULTS.json",
+  "source_population": "12 original UCI501 Beijing stations source-original FIT July 2014, sensor readings through August before FIT boundary 2014-09-01; no numerical previously-exposed 2015 DEV or protected 2016-2017 data parsed",
+  "event_definition": "Anchors are physically observed PM2.5 normalized using TRAIN-FIT center/spread. Source spike threshold PM2.5 z>=1.25, not selected by trained score or future outcomes; at most 2 earliest spaced >=24 real hourly observations per station. Matched same source hour-of-day ordinary anchor abs(PM2.5 z)<=0.25, >=24 hours from spike, earliest nearest by absolute date; no future outcome selection.",
+  "cohort_bounds": "Original anchor dates July1-July31 2014 only; horizon set16/64/128/512 hours since anchor. All 24 preanchor inputs and continuation observed, source-true chronological. Real+6 future measured target evaluated only AFTER frozen model prediction.",
+  "probes": {
+    "explicit_anchor_key": "Source-trained learned key_map at recorded anchor (headwise L2) used to test content-addressed matrix trace M_{t+L} k_anchor vs actual source-trained learned value_map(u_anchor); this is a diagnostic WRITE-key probe, not the model's learned forecast query and not decoding event truth.",
+    "retention": "Same original source-conditioned suffix for two identical states except one earlier associated [16x16] matrix set to ZERO at anchor; compare actual matrix differences, projected event-key differences and forecasts at delays. Other fast/slow/entity state exactly identical across variants.",
+    "forecast_scoring": "Read source true +6h 13-channel outcomes only after model.forecast. Compare unchanged full memory versus its isolated earlier-memory zero lesion and last-observed persistence, source-conditioned event/control, missing-label masking, paired delta in physical PM2.5 and normalized 13-channel MAE; no causal intervention claim from out-of-distribution matrix lesion.",
+    "null_control": "same-source and same-hour-of-day ordinary physical PM2.5 anchor; independent of trained model or future targets. Not a substitute for independently heldout event labels.",
+    "identity": "all original checkpoint byte SHA and source archive SHA verified before/after, original 6800-byte recurrent state, 8 frozen model variants, 0 optimizer steps",
+    "interpretation_limit": "Event-conditioned association trace is not factual recalled PM2.5 from a learned past-value query; neither high write-key reconstruction nor local out-of-distribution zero-lesion forecast sensitivity establishes useful event recall. Two prior seeds and FIT-era data; no architecture superiority or real action policy."
+  },
+  "restricted_evidence": "No source 2015 numerical targets or protected 2016-17 original rows. Synthetic only for unit tests. No new trained original/ablation modules or loss tuning.",
+  "source_frozen_future": "Separate subsequent exact affine forgetting audit only if these authentic event-conditioned source probes show meaningful differentiable memory transport or identify no causal forecasting value; do not infer improvements from key cosines alone."
+}
