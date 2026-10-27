@@ -1,0 +1,20 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE008-QUERY-CONTROL-SOURCE-PREFIT",
+  "study_type": "noncomparative_diagnostic",
+  "no_architecture_superiority_claim": true,
+  "no_new_model_fits": true,
+  "scientific_purpose": "Check strict weight/state/label-no-leak/source-index parity and genuine full observed-source 88-step forward/BCE+masked forecast-backward supported operator FLOP proximity of LATFUSE007 memory-read historical query versus equal-parameter fast/slow multiplicative nonassociative query control. Gate any comparative training until complete training computation audited.",
+  "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "model_arms": [
+    "SourceTimedEventQuery stored associative",
+    "SourceTimedNonassociativeQuery current fast/slow cross features"
+  ],
+  "parameter_budget_per_arm": 99390,
+  "fp32_state_bytes_per_stream": 6800,
+  "physical_source": "original March-April2014 source matched observed high/ordinary PM2.5 station/hour pairs, source SHA-gated FIT, 8 cases 24 preanchor+64 continuation, genuine historic event label and forecast +6 outcome only after predictions",
+  "matching": "identical original weights initialization per seed, original source history and masked outcome labels, loss sum historic source BCE + genuine +6 source-masked NLL/MAE, head query dims and learned count, same original writer and regular future forecast",
+  "scientific_boundary": "No native TAC training, no model score, no checkpoint mutation, original future numerical protected unopened. Profile Torch supported-op FLOPs and independently account optimizer only in prospective training; do not pretend profiled operator count is full real optimizer compute.",
+  "negative_controls": "noassoc historical path must be bit-exactly invariant to any associative-state edit, while associative historical path must respond to its 256 state-cell modifications; ordinary original future forecast remains identical under paired equal initial weights",
+  "stop": "fail closed if live 100k/state budget, gradient availability, true source hash/time/provenance, any source labels/targets before model prediction, or pairwise FLOP tolerance not within 1% on this supported-op source preflight; if fails, no paired training is permitted."
+}
