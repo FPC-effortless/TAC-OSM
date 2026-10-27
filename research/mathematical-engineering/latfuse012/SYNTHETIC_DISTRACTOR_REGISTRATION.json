@@ -1,0 +1,24 @@
+{
+  "schema_version": "tac-osm.synthetic-diagnostic.v1",
+  "study_id": "LATFUSE012-SYNTHETIC-FIXED-512-WRITE-COUNT-SWEEP",
+  "study_type": "synthetic_only_diagnostic",
+  "synthetic_only": true,
+  "no_real_world_claim": true,
+  "no_new_model_fits": true,
+  "original_source_archive_used": false,
+  "protected_source_used": false,
+  "original_model_count": 2,
+  "model_source": "Original SHA-pinned 11801/11802 LATFUSE011 synthetic trained unchanged SourceTimedEventQuery checkpoints, same 99390 real active params and 6800B original carried state, no new optimizer, zero new synthetic training.",
+  "fixed_delay_hours": 512,
+  "intervening_write_counts": [
+    0,
+    8,
+    32,
+    128,
+    512
+  ],
+  "selection": "All observations, masks, age, owner and fast/slow/source state updated identically; at chosen 512-step suffix, suppress ONLY associative write/decay by copying matrix from prior step for 512-N nonselected source steps. Selected time steps uniformly spread using floor(i*N/512)>floor((i-1)*N/512), exactly N. No delayed future query label or source anchor event signal inserted.",
+  "task": "Source-fabricated 13-channel label-balanced 32 heldout synthetic groups of 2 positive/2 negative synthetic rows each. Original synthetic generator step indexes3000..3031; event at step23, exactly512 suffix steps; same fake nuisance input for all arms, unchanged original source-known anchor clocks.",
+  "metrics": "Original trained synthetic model Brier, paired ordering, balanced accuracy at 512-step fixed delay versus count of enabled associative future writes; true original full-write count512 must reproduce stored original LATFUSE011 heldout run within tolerance. Record zero-matrix read ablation, possible fast/slow covariate equality across all count variants.",
+  "limitations": "Changing memory write eligibility after training is out-of-distribution memory-only intervention; source input and time constant but alpha and beta both canceled on skipped write steps. Not independent architecture, not proof of native memory capacity or real-world recall. No original UCI501 source, no protected numeric, no model training."
+}
