@@ -61,7 +61,9 @@ def scan(zip_bytes):
         selected={}
         for info in archive.infolist():
             parts=PurePosixPath(info.filename)
-            if info.is_dir() or ".." in parts.parts or info.filename.startswith("/"):
+            if info.is_dir():
+                continue  # normal publisher archive folder, never extracted
+            if ".." in parts.parts or info.filename.startswith("/"):
                 raise SourceError("unsafe ZIP entry")
             if parts.name in wanted:
                 if info.file_size>MAX_MEMBER:
