@@ -22,7 +22,7 @@ from scripts.partime005_continuous_real_training import (
     source_and_times, observed_source_step, SEEDS
 )
 from scripts.parmem006_source_history_query import (
-    original_frozen_core, frozen_original_queries, ROOT
+    original_frozen_core, fixed_plan as frozen_original_queries, ROOT
 )
 
 PROTO=ROOT/"research/parallel-six/PAR-MEM-008-PROTOCOL.json"
