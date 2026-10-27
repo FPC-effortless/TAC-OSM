@@ -1,0 +1,121 @@
+name: PAR-MEM-006 original genuine historical retrieval matched head source fit
+on:
+  push:
+    branches: [research/parmem006-source-history-query-2026-10-27]
+    paths:
+      - '.github/workflows/parmem006-source-query-fit.yml'
+      - 'scripts/parmem006_source_history_query.py'
+      - 'research/parallel-six/PAR-MEM-006-PROTOCOL.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: parmem006-original-history-source-query
+  cancel-in-progress: false
+jobs:
+  true-physical-history-query:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU tensor backend
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Strict preflight for real pretrained base, no accidental original overwrite
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/parmem006_source_history_query.py
+          test ! -e research/parallel-six/PAR-MEM-006-FROZEN-PLAN.json
+          test ! -e research/replay-bundles/PAR-MEM-006
+          test -s research/parallel-six/PAR-TIME-005-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
+          test "$(find research/replay-bundles/PAR-TIME-005 -maxdepth 1 -name 'seed-*-original-continuous.pt' | wc -l)" -eq 5
+      - name: Immutable existing UCI publisher original source, no protected numeric fields read
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem006-genuine
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem006-genuine/source.zip
+          test "$(sha256sum /tmp/parmem006-genuine/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Register real source target clock, target lag, legal query history and all ten head optimizer sample orders
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m scripts.parmem006_source_history_query --mode plan \
+            --source /tmp/parmem006-genuine/source.zip
+      - name: Commit exact query clock and optimizer order BEFORE any retrieval head fit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/parmem006-source-history-query-2026-10-27
+          test -s research/parallel-six/PAR-MEM-006-FROZEN-PLAN.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/parallel-six/PAR-MEM-006-FROZEN-PLAN.json
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: freeze original 16/64/128-event true historical PM2.5 retrieval case order before head fitting'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Train matched genuine-source memory-enabled and history-blind query heads against fixed original source-core
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m scripts.parmem006_source_history_query --mode fit \
+            --source /tmp/parmem006-genuine/source.zip
+      - name: Freeze all ten trained head checkpoint+optimizer+RNG files before historical DEV labels
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/replay-bundles/PAR-MEM-006/TRAIN_RECEIPT.json
+          test ! -e research/replay-bundles/PAR-MEM-006/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-MEM-006 -maxdepth 1 -name 'seed-*-*.pt' | wc -l)" -eq 10
+          git add research/replay-bundles/PAR-MEM-006
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: preserve ten original true-source historic-query neural heads optimizer and source SHA before DEV'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Score original 16/64/128 genuine past-value queries on previously exposed real source DEV
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m scripts.parmem006_source_history_query --mode eval \
+            --source /tmp/parmem006-genuine/source.zip
+      - name: Freeze every real original historical query prediction and negative/positive outcome
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/replay-bundles/PAR-MEM-006/DEV_RESULTS.json
+          git add research/replay-bundles/PAR-MEM-006
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: preserve genuine original historical source retrieval forecasts, all memory failures'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Independent clone and replay the original history-query results
+        shell: bash
+        env:
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --single-branch --branch "$GITHUB_REF_NAME" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/parmem006-clean
+          cd /tmp/parmem006-clean
+          PYTHONPATH='.:src' python -m scripts.parmem006_source_history_query --mode replay \
+            --source /tmp/parmem006-genuine/source.zip
+      - name: Honest research qualification
+        run: |
+          echo 'No numerical protected 2015-2017 data opened; 2014 DEV historically exposed.'
+          echo 'Same learned head parameter budget and optimizer sample orders; full training-FLOP parity NOT certified.'
+          echo 'No fair trained-architecture superiority, no new family, no robotics or agent skill claim.'
