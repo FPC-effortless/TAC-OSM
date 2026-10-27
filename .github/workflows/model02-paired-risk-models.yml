@@ -37,6 +37,8 @@ jobs:
           print('PAIRED_EXPOSED_DEV_NO_FIT=PASS')
           print('PAIR_SUMMARY='+json.dumps(d['paired_results'],sort_keys=True))
           PY
+      - name: Publish complete source-only comparison including post-hoc sensitivity
+        run: cat model02_paired_dev_receipt.json
       - uses: actions/upload-artifact@v4
         with:
           name: model02-paired-frozen-exposed-classical-reference-diagnostic
