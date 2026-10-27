@@ -1,0 +1,53 @@
+{
+  "schema": "tac-osm.history-static-source-review.v1",
+  "implementation_commit": "0d9c9fbc8c5ed94762c9da129379158d36125e7f",
+  "file_sha256": {
+    "scripts/latfuse002_real_fit.py": "bdc64c96b6ea5210d2a23d81accfdbfade3175672819ed233f149d6670c7b8ab",
+    "scripts/latfuse008_paired_real_training.py": "4efe2138913140a345e7db72219d7cc55cd719d4092d450fd6fb5dde18ed635e",
+    "src/tac_osm/latent_fusion_004_factorial.py": "c36eb31af571313dac9bf64e65445a2991f52583ed8f8a6952dc3edd87aab8e3",
+    "src/tac_osm/latent_fusion_007_historic_query.py": "8a39eec48f4b0c40e69e78a5d87dcf36aca585d011fcfd604cb4b74fe5968085",
+    "src/tac_osm/latent_fusion_008_nonassoc_control.py": "06b0c59d6f46be5b1ac18e36028dc86ebb7cb1f357b2c1df2b1179ded48ca518",
+    "scripts/latfuse011_real_memory_falsifiers.py": "b54ff5160283a8878bb310520591b02d6d5cf9fa0891cee6813b8b296fb2776f",
+    "scripts/latfuse013_real_pm25_content_probe.py": "095aa2924c9dd248a2c756bc818c77710d912230cb300c9cc50bc5506c9b7f06"
+  },
+  "review_scope": "Source-code inspection only; not original-data observation or checkpoint evaluation",
+  "data_flow": [
+    "source archive checksum and station/time parsing",
+    "FIT-only raw observations and pre-March2014 final normalization",
+    "causal observed-mask, previous-value and age caches",
+    "actual source encode, key/value projections and bounded routed delta update",
+    "current fast/slow plus requested past clock forms native query",
+    "headwise associative contraction and historic event logit",
+    "factual original historical label and future outcomes scored after predictions"
+  ],
+  "findings": [
+    {
+      "status": "CONFIRMED_IN_SOURCE",
+      "finding": "LATFUSE013 wrong_key uses flip(1) across high/ordinary label-selected pairs; comparator is label-correlated"
+    },
+    {
+      "status": "CONFIRMED_IN_SOURCE",
+      "finding": "Hour existence is insufficient writer identity: observed.any(-1) gates memory update"
+    },
+    {
+      "status": "CONFIRMED_IN_SOURCE",
+      "finding": "LATFUSE008 final normalizer recomputes from original raw with cutoff2014-03-01; earlier loader normalized values are not used"
+    },
+    {
+      "status": "CONFIRMED_IN_SOURCE",
+      "finding": "Native historical query uses past calendar/current belief; stored historic write-key is privileged offline diagnostic"
+    },
+    {
+      "status": "CONFIRMED_IN_SOURCE",
+      "finding": "May-June2014 cohort is label-selected exposed FIT, and each case resets state23hours before anchor; no unseen or uninterrupted streaming qualification"
+    }
+  ],
+  "original_source_trace": "NOT_RUN_INDEPENDENT_AUTHORIZATION_MISSING",
+  "historical_key_identities_on_real_data": "INCONCLUSIVE_NOT_MEASURED",
+  "associative_information_gain": "UNKNOWN_NOT_EVALUATED",
+  "protected_TEST_numeric_access": false,
+  "training_executed": false,
+  "gpu_minutes": 0,
+  "pnds_full_model_equivalence": "OPEN",
+  "scientific_qualification": false
+}

@@ -1,0 +1,208 @@
+{
+  "artifact_sha256": "04195fafda9ff25b8a79862f06162f60bf870c068d7d2694fdc01093f43b3fca",
+  "artifact_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40471346707/artifacts/12719300524",
+  "checkpoint_promotion": false,
+  "checks": {
+    "actual_write_and_native_read_correspondence": "PASS",
+    "checkpoint_immutability": "PASS",
+    "end_to_end_reloaded_source_future_poison": "INCONCLUSIVE_NOT_IMPLEMENTED",
+    "raw_labels_and_future_features_absent_from_inference_mapping": "PASS",
+    "source_prefix_normalizer_and_last_age": "PASS",
+    "whole_model_PNDS_IEEE_AD_equivalence": "OPEN"
+  },
+  "distinct_source_cases": 48,
+  "evidence_level": "internally_measured_not_independently_qualified",
+  "execution_level": "internal_research",
+  "full_results_sha256": "99e67e0e5b2391f6f6d1326dcc22626b640b2c66b9ed2f41b64afcea91988163",
+  "gpu_minutes": 0,
+  "interpretation": "Native H64 associative historical readout fails the preregistered benefit gate for both seeds. It loses to the constant prior and same-checkpoint zero-read control. Native/nonassociative differences vary by seed. +6h all-channel forecasts lose to persistence. This is not proof of information-theoretic absence of historical content, and privileged keys can themselves contain target information.",
+  "lag_hours": 64,
+  "matched_pairs": 24,
+  "models": [
+    {
+      "Brier": {
+        "current_last": 0.5208333333333334,
+        "native": 0.3700057401599845,
+        "nonassoc": 0.35075472929823404,
+        "prior": 0.25,
+        "zero_read": 0.2518631270295124
+      },
+      "all_selected_keys_resolve_to_actual_same_owner_intervening_writes": true,
+      "comparisons": {
+        "current_last": {
+          "exploratory_gate_pass": true,
+          "relative_brier_gain": 0.2895889788928298,
+          "station_bootstrap_95_loss_gain": [
+            0.09549574939278571,
+            0.20381715810662018
+          ]
+        },
+        "nonassoc": {
+          "exploratory_gate_pass": false,
+          "relative_brier_gain": -0.05488453683936511,
+          "station_bootstrap_95_loss_gain": [
+            -0.07630713799606492,
+            0.036429367418170114
+          ]
+        },
+        "prior": {
+          "exploratory_gate_pass": false,
+          "relative_brier_gain": -0.480022960639938,
+          "station_bootstrap_95_loss_gain": [
+            -0.17043794067639492,
+            -0.07174885300303867
+          ]
+        },
+        "zero_read": {
+          "exploratory_gate_pass": false,
+          "relative_brier_gain": -0.4690746697376967,
+          "station_bootstrap_95_loss_gain": [
+            -0.1685748136468825,
+            -0.06988572597352626
+          ]
+        }
+      },
+      "legacy_H64_Brier_absolute_difference": {
+        "native": 1.645660790972059e-08,
+        "nonassoc": 2.1246552517339978e-08
+      },
+      "maximum_native_logit_reconstruction_error": 0.0,
+      "maximum_write_reconstruction_error": 0.0,
+      "original_plus6_forecast_normalized_MAE": {
+        "native": 0.6817138738663266,
+        "nonassoc": 0.6764907798083675,
+        "persistence": 0.5387707424474462
+      },
+      "privileged_Brier_not_native_skill": {
+        "control_0": 0.3637477881177478,
+        "control_1": 0.3614396414414158,
+        "control_2": 0.348005844434122,
+        "control_3": 0.361753387224031,
+        "oracle": 0.35278951789656765
+      },
+      "registered_all_baseline_benefit_gate_pass": false,
+      "seed": 80701,
+      "source_cases": 48,
+      "source_write_steps": 4224,
+      "unchanged_checkpoints": {
+        "assoc_historic_query": {
+          "arm": "assoc_historic_query",
+          "parameters": 99390,
+          "path": "research/replay-bundles/LATFUSE008/seed-80701/assoc_historic_query/final.pt",
+          "sample_order_sha256": "c11d2803fea6befccbe02287259766acffabfa1facfd7fcbe5d348d257a44485",
+          "seed": 80701,
+          "sha256": "a0fb24eea9535e8fba9b2892c1a8bb41c015dbdbd8b1745c49d6d71fddf068b8"
+        },
+        "fast_slow_historic_query": {
+          "arm": "fast_slow_historic_query",
+          "parameters": 99390,
+          "path": "research/replay-bundles/LATFUSE008/seed-80701/fast_slow_historic_query/final.pt",
+          "sample_order_sha256": "c11d2803fea6befccbe02287259766acffabfa1facfd7fcbe5d348d257a44485",
+          "seed": 80701,
+          "sha256": "e591c2c75598ed017b1f4ce06e835ee609da7dded4301b5b4c75bf1442202d66"
+        }
+      }
+    },
+    {
+      "Brier": {
+        "current_last": 0.5208333333333334,
+        "native": 0.2742531091480853,
+        "nonassoc": 0.3170049457129862,
+        "prior": 0.25,
+        "zero_read": 0.25296332656995446
+      },
+      "all_selected_keys_resolve_to_actual_same_owner_intervening_writes": true,
+      "comparisons": {
+        "current_last": {
+          "exploratory_gate_pass": true,
+          "relative_brier_gain": 0.4734340304356762,
+          "station_bootstrap_95_loss_gain": [
+            0.22243791951643566,
+            0.2864296771322877
+          ]
+        },
+        "nonassoc": {
+          "exploratory_gate_pass": true,
+          "relative_brier_gain": 0.13486173368288099,
+          "station_bootstrap_95_loss_gain": [
+            0.01301323965379392,
+            0.06978928743257574
+          ]
+        },
+        "prior": {
+          "exploratory_gate_pass": false,
+          "relative_brier_gain": -0.09701243659234127,
+          "station_bootstrap_95_loss_gain": [
+            -0.0333862482165461,
+            -0.015973586994981803
+          ]
+        },
+        "zero_read": {
+          "exploratory_gate_pass": false,
+          "relative_brier_gain": -0.08416153782767155,
+          "station_bootstrap_95_loss_gain": [
+            -0.030422921646591643,
+            -0.013010260425027342
+          ]
+        }
+      },
+      "legacy_H64_Brier_absolute_difference": {
+        "native": 8.991301259086981e-09,
+        "nonassoc": 3.141460203082147e-09
+      },
+      "maximum_native_logit_reconstruction_error": 0.0,
+      "maximum_write_reconstruction_error": 0.0,
+      "original_plus6_forecast_normalized_MAE": {
+        "native": 0.6652922152696292,
+        "nonassoc": 0.7164257854126176,
+        "persistence": 0.5387707424474462
+      },
+      "privileged_Brier_not_native_skill": {
+        "control_0": 0.2658521957101139,
+        "control_1": 0.26552859070286894,
+        "control_2": 0.2558929660583258,
+        "control_3": 0.26958756064968287,
+        "oracle": 0.29092276577722714
+      },
+      "registered_all_baseline_benefit_gate_pass": false,
+      "seed": 80702,
+      "source_cases": 48,
+      "source_write_steps": 4224,
+      "unchanged_checkpoints": {
+        "assoc_historic_query": {
+          "arm": "assoc_historic_query",
+          "parameters": 99390,
+          "path": "research/replay-bundles/LATFUSE008/seed-80702/assoc_historic_query/final.pt",
+          "sample_order_sha256": "cdb4746e2fff999d9dbf950d509a59a379db263459723a4cefa0f27b959fa5e0",
+          "seed": 80702,
+          "sha256": "9b51387abaf8939b75529a35a40b99ac9fb58c7362281c5c9c0fd490922c0673"
+        },
+        "fast_slow_historic_query": {
+          "arm": "fast_slow_historic_query",
+          "parameters": 99390,
+          "path": "research/replay-bundles/LATFUSE008/seed-80702/fast_slow_historic_query/final.pt",
+          "sample_order_sha256": "cdb4746e2fff999d9dbf950d509a59a379db263459723a4cefa0f27b959fa5e0",
+          "seed": 80702,
+          "sha256": "285bec2527e54c1fff1f016a5a53b42e65af65d602ac1cd78eec0aa301d0517c"
+        }
+      }
+    }
+  ],
+  "original_implementation_commit": "0d9c9fbc8c5ed94762c9da129379158d36125e7f",
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "protected_TEST_numeric_access": false,
+  "registered_benefit_gate_pass": false,
+  "run_commit": "b4ccc28e488e832315b5e2d89dfa9e755b762b44",
+  "run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40471346707",
+  "schema": "tac-osm.history-audit014-internal-results.v1",
+  "scientific_qualification": false,
+  "seeds": [
+    80701,
+    80702
+  ],
+  "source_attribution": "Chen, S. (2017). Beijing Multi-Site Air Quality. UCI Machine Learning Repository. https://doi.org/10.24432/C5RK5G",
+  "source_eval_cohort_sha256": "5d28bf481ac489ccdbde3f2387fdc3367901f097e396672980c6f7fdc87a0b2a",
+  "source_license": "CC-BY-4.0",
+  "status": "MEASURED_NEGATIVE_RESULT",
+  "training_executed": false
+}

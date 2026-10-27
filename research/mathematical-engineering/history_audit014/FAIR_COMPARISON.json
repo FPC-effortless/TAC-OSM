@@ -1,0 +1,139 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "HISTORY-AUDIT014-ORIGINAL-FROZEN-H64",
+  "study_type": "noncomparative_diagnostic",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Trace original UCI501 observation-to-writer identity, delta update, causal retrieval and historic prediction on frozen LATFUSE008; replace opposite-label wrong keys with original same-owner label-blind writes, quantify paired Brier differences against frozen nonassociative and source controls without claiming matched full-training-FLOP architecture superiority.",
+  "implementation_commit": "0d9c9fbc8c5ed94762c9da129379158d36125e7f",
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "publisher": "UCI Machine Learning Repository dataset 501 Beijing Multi-Site Air-Quality Data",
+  "publisher_url": "https://archive.ics.uci.edu/dataset/501/beijing+multi+site+air+quality+data",
+  "source_license": "CC-BY-4.0 verified from UCI publisher page; see PUBLIC_SOURCE_RECEIPT.json",
+  "models": [
+    {
+      "arm": "assoc_historic_query",
+      "seed": 80701,
+      "path": "research/replay-bundles/LATFUSE008/seed-80701/assoc_historic_query/final.pt",
+      "sha256": "a0fb24eea9535e8fba9b2892c1a8bb41c015dbdbd8b1745c49d6d71fddf068b8",
+      "sample_order_sha256": "c11d2803fea6befccbe02287259766acffabfa1facfd7fcbe5d348d257a44485",
+      "parameters": 99390
+    },
+    {
+      "arm": "fast_slow_historic_query",
+      "seed": 80701,
+      "path": "research/replay-bundles/LATFUSE008/seed-80701/fast_slow_historic_query/final.pt",
+      "sha256": "e591c2c75598ed017b1f4ce06e835ee609da7dded4301b5b4c75bf1442202d66",
+      "sample_order_sha256": "c11d2803fea6befccbe02287259766acffabfa1facfd7fcbe5d348d257a44485",
+      "parameters": 99390
+    },
+    {
+      "arm": "assoc_historic_query",
+      "seed": 80702,
+      "path": "research/replay-bundles/LATFUSE008/seed-80702/assoc_historic_query/final.pt",
+      "sha256": "9b51387abaf8939b75529a35a40b99ac9fb58c7362281c5c9c0fd490922c0673",
+      "sample_order_sha256": "cdb4746e2fff999d9dbf950d509a59a379db263459723a4cefa0f27b959fa5e0",
+      "parameters": 99390
+    },
+    {
+      "arm": "fast_slow_historic_query",
+      "seed": 80702,
+      "path": "research/replay-bundles/LATFUSE008/seed-80702/fast_slow_historic_query/final.pt",
+      "sha256": "285bec2527e54c1fff1f016a5a53b42e65af65d602ac1cd78eec0aa301d0517c",
+      "sample_order_sha256": "cdb4746e2fff999d9dbf950d509a59a379db263459723a4cefa0f27b959fa5e0",
+      "parameters": 99390
+    }
+  ],
+  "source_eval_cohort_sha256": "5d28bf481ac489ccdbde3f2387fdc3367901f097e396672980c6f7fdc87a0b2a",
+  "cohort": {
+    "selection": "Frozen LATFUSE008 high>=150/ordinary<=35 same-station same-clock 24 pairs; do not reselect from scores",
+    "start": "2014-05-01",
+    "stop_exclusive": "2014-06-10",
+    "expected_rows": 48,
+    "label_selected": true,
+    "independent_model_holdout": false
+  },
+  "normalizer": {
+    "start": "2013-03-01",
+    "stop_exclusive": "2014-03-01"
+  },
+  "lags": [
+    64
+  ],
+  "history_hours": 24,
+  "control_count": 4,
+  "control_seed": 14014,
+  "source_numeric_stop_exclusive": "2015-01-01",
+  "primary_metric": "Mean Brier loss for authentic source-observed historical PM2.5 >=150 label; all 48 frozen cases and both seeds; source targets consulted after predictions",
+  "baselines": [
+    "original matched-parameter/nonassociative checkpoint",
+    "same-associative-checkpoint zero-read diagnostic (OOD lesion)",
+    "constant prior 0.5 (balanced frozen cohort)",
+    "query-time last-observed PM2.5 >=150 deterministic baseline"
+  ],
+  "controls": "Four actual same-owner nonzero directional writes selected strictly between target and query by PR477 identity-only selector; record full pool and selected-hour receipts. Fail absent/duplicate/nonwrite keys, never substitute opposite pair.",
+  "read_scope": "Native query receives requested past clock and current fast/slow only. Historical target key is privileged offline control; never native input.",
+  "analysis": {
+    "primary_lag": 64,
+    "paired_relative_brier_gain_threshold": 0.05,
+    "bootstrap_samples": 4000,
+    "bootstrap_seed": 14014,
+    "cluster": "station, preserving complete original matched pairs; regional dependence remains",
+    "gate": "For each seed native Brier must improve >=5% over every baseline, with positive lower station-bootstrap 95% paired-loss-gain bound; exploratory only, no source-independent architecture promotion",
+    "secondary": "Report all control scores, trace reconstruction errors, native versus zero-read effect and key/value alignment; geometry alone is not factual-content proof."
+  },
+  "authorization": {
+    "internal_research": "Authorized by operator on 2026-10-27: ordinary reproducible public licensed FIT/DEV diagnostics do not require external signers. All source/split/causal/checkpoint checks remain mandatory.",
+    "independent_qualification": "External verification remains required for protected evaluations, reward-integrity certification, safety claims and checkpoint promotion; no TEST access or certification here."
+  },
+  "pnds": {
+    "graph_changed": false,
+    "full_source_Lean_Python_IEEE_AD_equivalence": "OPEN; this diagnostic does not close whole-model mathematical obligations"
+  },
+  "runtime": {
+    "backend": "github_actions",
+    "maximum_cpu_minutes": 30,
+    "gpu_minutes": 0
+  },
+  "checks": [
+    "actual key_map invocation binds source owner/hour and encoded inputs",
+    "reconstruct actual delta memory update from captured original module outputs",
+    "actual historical native read agrees with original decoder logits",
+    "causal raw-to-input normalization/age/last-cache verification",
+    "future-only raw and feature poison leaves current predictions unchanged",
+    "target and controls resolve to exact original nonzero writes",
+    "unchanged original checkpoint bytes and model state_dict",
+    "same original samples/parameters/seeds; preserve incomplete whole-training FLOP parity"
+  ],
+  "execution_level": "internal_research",
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "real_world_source": {
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "publisher_url": "https://archive.ics.uci.edu/dataset/501/beijing+multi+site+air+quality+data",
+    "license": "CC-BY-4.0",
+    "license_evidence_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+    "source_receipt": "research/mathematical-engineering/history_audit014/PUBLIC_SOURCE_RECEIPT.json",
+    "observed_real_outcomes": true
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "5d28bf481ac489ccdbde3f2387fdc3367901f097e396672980c6f7fdc87a0b2a",
+    "source_numeric_stop_exclusive": "2015-01-01"
+  },
+  "causal_protocol": "Reconstruct original pre-March2014 normalization and causal caches; expose only feature prefixes through query; resolve actual owner/time keys; score after predictions. Uninstrumented upstream future-poison checks remain INCONCLUSIVE.",
+  "checkpoint_policy": "Verify all original checkpoint hashes before load and after frozen evaluation; strict state_dict load and unchanged parameter/buffer digests; preserve original source/seed/order receipts.",
+  "authorization_amendment": {
+    "previous_plan_sha256": "9dc59c710ff2eb24be0bbb761a67120831f53016cf2f990e3c1c6b37f8ce4c3c",
+    "previous_commit": "5953ad925ce25a1340d7aa38de179547b148afb2",
+    "reason": "Explicit operator instruction separates internal research and independent qualification; scientific cohort, metrics, seeds, control selection and thresholds unchanged."
+  }
+}

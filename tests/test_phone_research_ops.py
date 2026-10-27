@@ -174,10 +174,15 @@ def test_phone_scan_reports_both_queues_and_never_runs_gpu(tmp_path):
                        cwd=ROOT, capture_output=True, text=True)
     assert p.returncode == 0, p.stderr
     status = json.loads((tmp_path / "progress.json").read_text())
-    assert status["total"] == 2
+    assert status["total"] == len(list((ROOT / "research/phone_queue").glob("*.json")))
     data = {r["run_id"]: r for r in status["runs"]}
     assert data["phone-lab-diagnostics"]["backend"] == "github_actions"
     assert data["dual-t4-readiness"]["backend"] == "kaggle_t4x2"
+    audit = data["original-history-audit014"]
+    assert audit["backend"] == "github_actions"
+    assert audit["state"] == "READY_INTERNAL_RESEARCH_PLAN"
+    assert audit["execution_level"] == "internal_research"
+    assert audit["approved_to_train"] is False
     assert "Kaggle 2× T4" in (tmp_path / "progress.md").read_text()
 
 

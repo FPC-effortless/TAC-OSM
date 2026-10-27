@@ -1,0 +1,97 @@
+{
+  "authorization_binding": {
+    "TEST_permitted": false,
+    "checkpoints": [
+      {
+        "arm": "assoc_historic_query",
+        "seed": 80701,
+        "sha256": "a0fb24eea9535e8fba9b2892c1a8bb41c015dbdbd8b1745c49d6d71fddf068b8"
+      },
+      {
+        "arm": "fast_slow_historic_query",
+        "seed": 80701,
+        "sha256": "e591c2c75598ed017b1f4ce06e835ee609da7dded4301b5b4c75bf1442202d66"
+      },
+      {
+        "arm": "assoc_historic_query",
+        "seed": 80702,
+        "sha256": "9b51387abaf8939b75529a35a40b99ac9fb58c7362281c5c9c0fd490922c0673"
+      },
+      {
+        "arm": "fast_slow_historic_query",
+        "seed": 80702,
+        "sha256": "285bec2527e54c1fff1f016a5a53b42e65af65d602ac1cd78eec0aa301d0517c"
+      }
+    ],
+    "execution_files_sha256": "d740efaa814ca94e15606b89704c811831b8705032538d8f2b513ee83202d540",
+    "execution_level": "internal_research",
+    "implementation_commit": "0d9c9fbc8c5ed94762c9da129379158d36125e7f",
+    "plan_sha256": "c7ba65181fd8aa41a739d447613cd57b896b80009781ed9e5cc3b3318d5c50a0",
+    "proposal_sha256": "08118b6812addaff3d356b3e7889790cf387317909f544b4a2a6e88a6d1748cc",
+    "scope": "frozen_FIT_historical_memory_diagnostic_only",
+    "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "study_id": "HISTORY-AUDIT014-ORIGINAL-FROZEN-H64",
+    "training_permitted": false
+  },
+  "compute_decision": {
+    "accelerator": null,
+    "approved_to_open_test": false,
+    "approved_to_train": false,
+    "automatic_submissions": false,
+    "backend": "github_actions",
+    "blockers": [],
+    "cpu_estimate_minutes": 30,
+    "execution_level": "internal_research",
+    "gpu_budget_minutes": 0,
+    "gpu_devices_required": 0,
+    "issue_number": 472,
+    "kind": "evaluation",
+    "reasons": [
+      "CPU or diagnostic workload fits small GitHub runner budget"
+    ],
+    "run_id": "original-history-audit014",
+    "schema": "tac-osm.compute-decision.v1",
+    "source_contract_fingerprint": "08118b6812addaff3d356b3e7889790cf387317909f544b4a2a6e88a6d1748cc",
+    "state": "READY_INTERNAL_RESEARCH_PLAN",
+    "variant": "System 1"
+  },
+  "evaluation_executed": false,
+  "evidence_level": "internally_measured_not_independently_qualified",
+  "execution_files": {
+    "scripts/audit_original_history.py": "0ae8e47f3d687e2daded5c906e2b8b646312d42092602763b3b7733f40ee4a1c",
+    "scripts/original_history_trace.py": "6302f9ae4a528ae41527a4c37876a533a746f6dee408dd57346f83694fca5fc7",
+    "src/tac_osm/historical_read_controls.py": "d7e5cb3a64bc65f2b7ea33092bdf748df929e4e872a6b8d1bc81ad3ab32c07ac",
+    "src/tac_osm/history_audit_authorization.py": "5ba2266dc0de77aed85f62a44d1a00332dddf578b218face24b55bd9ff883cf0",
+    "src/tac_osm/phone_research_ops.py": "bbf34515454784b0297cfcbdfff7e58246a585e001254fa55e584c606905f167",
+    "src/tac_osm/research_execution.py": "b2ff2d92a2ff98d54d94e8cf0a8c0f33c3bcc66cda401f06f418f8e829a31f9a"
+  },
+  "execution_level": "internal_research",
+  "runtime_prerequisites": "Verify pinned implementation, archive, cohort and checkpoint bytes before scoring",
+  "schema": "tac-osm.original-history-preflight.v1",
+  "scientific_qualification": false,
+  "source_receipt": {
+    "archive_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "authorized_partitions": [
+      "FIT"
+    ],
+    "creator": "Song Chen",
+    "dataset_doi": "10.24432/C5RK5G",
+    "dataset_id": 501,
+    "dataset_title": "Beijing Multi-Site Air Quality",
+    "download_bundle_sha256": "b04da438b2f331ac0ffd45aebdfec0d20d2367feb5f6948c4b1f7ce1191e33c4",
+    "download_url": "https://archive.ics.uci.edu/static/public/501/beijing+multi+site+air+quality+data.zip",
+    "extracted_member": "PRSA2017_Data_20130301-20170228.zip",
+    "license": "CC-BY-4.0",
+    "license_text": "This dataset is licensed under a Creative Commons Attribution 4.0 International (CC BY 4.0) license.",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+    "other_bundle_members_not_opened": true,
+    "protected_numeric_TEST_access": false,
+    "publisher": "UCI Machine Learning Repository",
+    "publisher_page_sha256": "22aa57b14d9d829712ae91de59488b73eca082d78d865e9daff08235cfe623d0",
+    "publisher_url": "https://archive.ics.uci.edu/dataset/501/beijing+multi+site+air+quality+data",
+    "retrieved_at": "2026-10-27T07:52:53.231149+00:00",
+    "schema": "tac-osm.public-source-receipt.v1",
+    "verification": "internally_verified_from_HTTPS_publisher_not_independent_certification"
+  },
+  "status": "READY_INTERNAL_RESEARCH"
+}

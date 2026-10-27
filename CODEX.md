@@ -1,3 +1,19 @@
+## Execution-level amendment — operator instruction, 2026-10-27
+
+Ordinary exploratory research on genuine, publicly licensed, authorized FIT/DEV
+records may run as **internal_research** without independent cryptographic
+signers. Require recorded publisher/license and hashes, frozen splits, causal
+correctness, replayable original checkpoints, honest metrics and all existing
+100k/parameter/data/training-budget comparison gates. Findings must be labeled
+**internally measured, not independently qualified**. This supersedes earlier
+blanket signer requirements for ordinary internal research only.
+
+**independent_qualification** retains external verification for protected
+evaluations, reward-integrity certification, safety claims and checkpoint
+promotion. No internal flag authorizes protected TEST, certification or
+promotion. Preserve failures and historical work; never fabricate signatures.
+See `research/RESEARCH-EXECUTION-LEVELS-2026-10-27.md`.
+
 # CODEX — phone-first autonomous research instructions
 
 This is a short operator/agent index, not a replacement for AGENTS.md.

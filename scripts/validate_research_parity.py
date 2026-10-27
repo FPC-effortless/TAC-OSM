@@ -277,14 +277,22 @@ def _check_manifest_parity_only(m,phase="preflight"):
 
 def check_manifest(m, phase="preflight", *, reward_attestation=None,
                    trusted_reward_public_key_hex=None):
-    """Canonical prospective gate: resource parity PLUS independently signed
-    per-variant reward/outcome/access evidence. Historical studies unchanged.
+    """Always enforce parity; separate internal measurement from qualification.
 
-    No argument can turn enforcement off. Test-only constructed receipts are
-    not genuine source evidence. For CLI runs the public key comes exclusively
-    from the operator-provisioned environment, never the model manifest.
+    Explicit public FIT/DEV internal studies need reproducibility metadata, not
+    external signatures. Qualification retains signed outcome/access evidence.
+    Test-only receipts never establish real source evidence or certification.
     """
     report = _check_manifest_parity_only(m, phase)
+    from tac_osm.research_execution import execution_level, validate_internal_research, INTERNAL
+    if execution_level(m) == INTERNAL:
+        try:
+            report["research_execution"] = validate_internal_research(m)
+        except ValueError as exc:
+            raise ParityError(str(exc)) from exc
+        report["reward_integrity"] = "NOT_INDEPENDENTLY_CERTIFIED_INTERNAL_RESEARCH"
+        report["eligible_for_architecture_superiority"] = False
+        return report
     if m["study_type"] == "noncomparative_diagnostic" or not requires_100k_policy(m["study_id"]):
         report["reward_integrity"] = "NOT_APPLICABLE_HISTORICAL_OR_NO_FIT"
         return report
@@ -341,8 +349,14 @@ def check_changed(base_head,root):
                 "scripts/run_qualified_research.py" in combined
                 and "--prefit-evidence" in combined and "--final-evidence" in combined
                 and "--prefit-manifest" in combined and "--final-manifest" in combined)
-            demand((independent_stage_hooks or audited_launcher)
-                   and "TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX" in combined,
+            internal = manifest.get("execution_level") == "internal_research"
+            if internal:
+                from tac_osm.research_execution import validate_internal_research
+                validate_internal_research(manifest)
+            internal_resource_hooks = (internal and "validate_research_parity.py --manifest" in combined
+                                       and "--phase preflight" in combined and "--phase final" in combined)
+            demand(internal_resource_hooks or ((independent_stage_hooks or audited_launcher)
+                   and "TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX" in combined),
                    f"{study}: runner must block optimizer on signed independent "
                    "source/reward/ACL prefit evidence and block postfit promotion "
                    "without signed factual goal/reward/checkpoint evidence")

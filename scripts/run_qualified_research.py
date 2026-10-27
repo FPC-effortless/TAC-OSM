@@ -10,7 +10,7 @@ No model fitting is performed by this wrapper itself. No shell expansion.
 The operator supplies the independently pinned public key in
 TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX (never supplied via the actor manifest).
 Postfit evidence must be generated independently AFTER genuine outcomes;
-this wrapper cannot manufacture or sign it. No key = no training.
+this wrapper cannot manufacture or sign it. No key = no qualified execution.
 """
 from __future__ import annotations
 
@@ -69,6 +69,8 @@ def guarded_execute(args) -> dict:
         raise ValueError("trusted operator public key missing; optimizer forbidden")
     raw = args.prefit_manifest.read_bytes()
     frozen = json.loads(raw)
+    if frozen.get("execution_level") == "internal_research":
+        raise ValueError("internal research cannot use the independent qualification launcher")
     prefit = check_manifest(
         frozen, "preflight",
         reward_attestation=_read(args.prefit_evidence),
