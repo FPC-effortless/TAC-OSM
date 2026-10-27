@@ -25,3 +25,8 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_arc3_public_baseline.py' -v
       - name: Verify code compiles
         run: python -m py_compile scripts/arc3_public_baseline.py tests/test_arc3_public_baseline.py
+      - name: Verify pinned official SDK interface without loading any game
+        run: |
+          python -m pip install 'arc-agi==0.9.9'
+          python -c "from arc_agi import Arcade, OperationMode; from arcengine import GameAction; assert hasattr(OperationMode, 'OFFLINE'); assert GameAction.ACTION1.is_complex() is False; print('Official SDK imports and basic action API: PASS; actual game NOT RUN')"
+
