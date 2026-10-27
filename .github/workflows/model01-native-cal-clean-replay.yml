@@ -1,0 +1,70 @@
+name: MODEL01 native CAL-only original interval clean-checkout reproduction
+on:
+  push:
+    branches:
+      - research/model01-cal-only-interval-refinement-2026-10-27
+    paths:
+      - '.github/workflows/model01-native-cal-clean-replay.yml'
+      - 'research/source-evidence/MODEL01-TAC-CAL-ONLY-UNCERTAINTY-001-ORIGINAL.json'
+      - 'specialist_models/model01_native_cal_only_intervals.py'
+  pull_request:
+    paths:
+      - '.github/workflows/model01-native-cal-clean-replay.yml'
+      - 'research/source-evidence/MODEL01-TAC-CAL-ONLY-UNCERTAINTY-001-ORIGINAL.json'
+      - 'specialist_models/model01_native_cal_only_intervals.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  clean-original-source-no-neural-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Prepare exact CPU scientific replay environment
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir 'numpy==2.2.6'
+          python -m pip install --disable-pip-version-check --no-cache-dir 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Recompute original source CAL and exposed DEV with frozen original neural weights; NO optimizer updates
+        run: python specialist_models/model01_native_cal_only_intervals.py --out /tmp/native_cal_only_replayed.json
+      - name: Check all original scores, chosen intervals, source hashes and coverage veto
+        run: |
+          python - <<'PY'
+          import json,math
+          from pathlib import Path
+          original=json.loads(Path('research/source-evidence/MODEL01-TAC-CAL-ONLY-UNCERTAINTY-001-ORIGINAL.json').read_bytes())
+          rerun=json.loads(Path('/tmp/native_cal_only_replayed.json').read_bytes())
+          def same(x,y,loc='root'):
+            if type(x) is not type(y): raise AssertionError('TYPE MISMATCH '+loc)
+            if isinstance(x,dict):
+              assert set(x)==set(y),loc
+              for k in x:same(x[k],y[k],loc+'/'+str(k))
+            elif isinstance(x,list):
+              assert len(x)==len(y),loc
+              for i,(a,b) in enumerate(zip(x,y)):same(a,b,loc+'/'+str(i))
+            elif isinstance(x,float):
+              assert math.isclose(x,y,rel_tol=1e-5,abs_tol=1e-4),(loc,x,y)
+            else: assert x==y,(loc,x,y)
+          same(original,rerun)
+          assert original['model_training_performed'] is False
+          assert original['protected_future_source_parsed'] is False
+          assert original['independent_scientific_qualification'] is False
+          assert len(original['runs'])==3
+          assert all(r['DEV_selected_CAL_only_candidate']['n']==1968 for r in original['runs'])
+          assert all(r['DEV_selected_CAL_only_candidate']['coverage90']<.9 for r in original['runs'])
+          assert all(r['DEV_selected_CAL_only_candidate']['interval_score90']<r['DEV_original_full_CAL_symmetric']['interval_score90'] for r in original['runs'])
+          print('FRESH_CHECKOUT_ORIGINAL_NATIVE_CAL_ONLY_SCORE_REPLAY=PASS')
+          print('SCIENTIFIC_VERDICT=EXPOSED_DEVELOPMENT_MIXED_TRADEOFF_COVERAGE_FAIL')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-native-original-cal-only-clean-no-fit-replay
+          path: /tmp/native_cal_only_replayed.json
+          if-no-files-found: error
+          retention-days: 14
