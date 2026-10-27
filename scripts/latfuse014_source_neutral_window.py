@@ -36,6 +36,7 @@ def extract(m,d,rows,*,split):
     # source offsets, with NO source target high/low selection.
     pack={k:[] for k in KINDS}
     allkeys=[];allvalues=[];ys=[];sites=[];eligible=[]
+    original_matrices=[];original_read_routes=[]
     persistence=[];original_site=[]
     for start in range(0,len(rows),12):
         batch=rows[start:start+12]
@@ -72,6 +73,8 @@ def extract(m,d,rows,*,split):
                m.belief_query(joint)[:,None,:]).reshape(b,8,2,8),dim=-1,eps=1e-8)
         route,_=head_weights(m.read_router(joint),m.log_head_temperature,
                             head_count=2,soft=True)
+        original_matrices.append(s.associative.clone())
+        original_read_routes.append(route.clone())
         random=[]
         for sid,at in zip(src.tolist(),ts.tolist()):
             many=[]
@@ -126,6 +129,8 @@ def extract(m,d,rows,*,split):
     return dict(reads={k:pack[k] for k in ("native","oracle","next8_wrong","random")},
         source=pack["source_only"],nonassoc=pack["nonassoc"],
         values=torch.cat(allvalues),keys=torch.cat(allkeys),
+        original_query_matrices=torch.cat(original_matrices),
+        original_native_read_routes=torch.cat(original_read_routes),
         true_y=torch.cat(ys),eligible=torch.cat(eligible),
         persistence=torch.cat(persistence),cases=len(rows),
         station=torch.tensor(sites),site_target=torch.tensor(original_site))
