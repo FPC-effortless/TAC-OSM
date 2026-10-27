@@ -1,0 +1,62 @@
+{
+  "study_id": "PAR-MEM-012-FROZEN-REAL-HISTORICAL-READ-ATTRIBUTION",
+  "source_code": "scripts/parmem012_frozen_real_read_attribution.py",
+  "status": "PREREGISTERED_READ_ONLY_CHECKPOINT_INTERVENTION_NO_FIT",
+  "parent_study": "PAR-MEM-011-REAL-SOURCE-TRAINED-SHARED-WRITE-READ",
+  "parent_branch": "research/parmem011-real-historic-content-trained-2026-10-27",
+  "source_zip_SHA256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "seed_ids": [
+    271028,
+    271029,
+    271030,
+    271031,
+    271032
+  ],
+  "original_trained_checkpoint_arms": [
+    "correct_shared_source_key",
+    "adjacent_wrong_source_key"
+  ],
+  "inference_interventions": [
+    "correct_historic_index",
+    "adjacent_later_historic_index",
+    "distant_later_historic_index",
+    "zero_associative_read"
+  ],
+  "target_lags": [
+    16,
+    64,
+    128
+  ],
+  "real_DEV_anchors": [
+    160,
+    224,
+    288,
+    352,
+    416,
+    480,
+    544,
+    608,
+    672,
+    736
+  ],
+  "real_source_sites": 12,
+  "real_queries_per_lag_per_checkpoint": 120,
+  "original_2014_DEV_exposed": true,
+  "original_publisher_years_protected": "2015/2016/2017 numeric data excluded by source adapter",
+  "source_known_queries_only": true,
+  "correct_query": "source-observed index at anchor-lag",
+  "adjacent_query": "source-observed index at anchor-lag+1, known before anchor, wrong target",
+  "distant_query": "source-observed index at anchor-lag+max(2, floor(lag/2)), known before anchor, wrong target",
+  "zero_intervention": "hold original model/optimizer/source/encoder/writer/source input/matrix/bias constant; feed 16 exactly zero FP32 values to original trained historical_content decoder and predictive_memory_delta for current query only",
+  "full_train_no_memory_comparator": false,
+  "training_or_optimizer_steps": 0,
+  "primary_metrics": "paired per-seed and per-lag authentic historical PM2.5 MAE, absolute change in decoded prediction vs read-zero and relative to other existing events, paired 120 source cases, original prior native checkpoint prediction identity",
+  "secondary_metrics": "true versus wrong read/key cosine, mean 16D read L2, next-hour genuine PM2.5 forecasts by query type; current-value baseline",
+  "evaluation_order": "all authentic source queries previously fixed and originally committed by PAR-MEM-011, not selected using labels",
+  "checkpoint_provenance": "original 10 complete pretrained checkpoints frozen and SHA checked; no model weights are modified, no backprop, no GPU, no new training",
+  "scientific_scope": "causal intervention on FROZEN inference computation conditional on already trained checkpoint; cannot identify whether original training had fair source generalization, cannot estimate missing-feature retraining potential; not independent virgin TEST",
+  "original_predictions_file": "research/replay-bundles/PAR-MEM-011/seed-{seed}-{arm}-original_DEV_tensors.pt",
+  "source_model_weights_not_changed": true,
+  "validation_gate": "original native arm point predictions match precommitted original DEV arrays, clean checkout replay all intervention arrays and metrics",
+  "future_promotion_prohibited": true
+}
