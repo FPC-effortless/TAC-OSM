@@ -1,0 +1,97 @@
+{
+  "actual_business_costs_measured": false,
+  "actual_source_asof_available_at_verified": false,
+  "assumed_action_success_for_displayed_threshold": 1,
+  "assumed_all_known_recorded_failures_preventable": true,
+  "denominator": "one first eligible original physical drive; all unknown labels retained",
+  "evidence_tier": "POST_EXPOSURE_DESCRIPTIVE_HYPOTHETICAL_BREAK_EVEN_ONLY",
+  "fitted_any_model": false,
+  "independent_evaluation": false,
+  "original_first_eligible_drive_count": 26311,
+  "qualified_operator_recommendation": false,
+  "review_budgets": [
+    {
+      "models": {
+        "eight_feature_logistic": {
+          "actual_cost_of_technician_review": "UNKNOWN",
+          "actual_prevented_failures": "UNKNOWN",
+          "benefit_per_prevented_event_over_review_cost_break_even_best_case": 15.470588235294118,
+          "benefit_per_prevented_event_over_review_cost_break_even_if_all_unknown_negative": 16.4375,
+          "break_even_for_actual_intervention_effectiveness": "divide either threshold by independently proven prevented-failure fraction, if positive",
+          "economic_net_benefit": "NOT_MEASURABLE",
+          "known_source_negative": 246,
+          "known_source_positive": 16,
+          "potential_preventable_failure_count_at_perfect_effect_max": 17,
+          "potential_preventable_failure_count_at_perfect_effect_min": 16,
+          "reviews": 263,
+          "unknown_censored": 1
+        },
+        "two_feature_lookup": {
+          "actual_cost_of_technician_review": "UNKNOWN",
+          "actual_prevented_failures": "UNKNOWN",
+          "benefit_per_prevented_event_over_review_cost_break_even_best_case": 26.3,
+          "benefit_per_prevented_event_over_review_cost_break_even_if_all_unknown_negative": 26.3,
+          "break_even_for_actual_intervention_effectiveness": "divide either threshold by independently proven prevented-failure fraction, if positive",
+          "economic_net_benefit": "NOT_MEASURABLE",
+          "known_source_negative": 253,
+          "known_source_positive": 10,
+          "potential_preventable_failure_count_at_perfect_effect_max": 10,
+          "potential_preventable_failure_count_at_perfect_effect_min": 10,
+          "reviews": 263,
+          "unknown_censored": 0
+        }
+      },
+      "review_fraction": 0.01,
+      "reviewed_drives": 263
+    },
+    {
+      "models": {
+        "eight_feature_logistic": {
+          "actual_cost_of_technician_review": "UNKNOWN",
+          "actual_prevented_failures": "UNKNOWN",
+          "benefit_per_prevented_event_over_review_cost_break_even_best_case": 57.17391304347826,
+          "benefit_per_prevented_event_over_review_cost_break_even_if_all_unknown_negative": 59.77272727272727,
+          "break_even_for_actual_intervention_effectiveness": "divide either threshold by independently proven prevented-failure fraction, if positive",
+          "economic_net_benefit": "NOT_MEASURABLE",
+          "known_source_negative": 1292,
+          "known_source_positive": 22,
+          "potential_preventable_failure_count_at_perfect_effect_max": 23,
+          "potential_preventable_failure_count_at_perfect_effect_min": 22,
+          "reviews": 1315,
+          "unknown_censored": 1
+        },
+        "two_feature_lookup": {
+          "actual_cost_of_technician_review": "UNKNOWN",
+          "actual_prevented_failures": "UNKNOWN",
+          "benefit_per_prevented_event_over_review_cost_break_even_best_case": 82.1875,
+          "benefit_per_prevented_event_over_review_cost_break_even_if_all_unknown_negative": 87.66666666666667,
+          "break_even_for_actual_intervention_effectiveness": "divide either threshold by independently proven prevented-failure fraction, if positive",
+          "economic_net_benefit": "NOT_MEASURABLE",
+          "known_source_negative": 1299,
+          "known_source_positive": 15,
+          "potential_preventable_failure_count_at_perfect_effect_max": 16,
+          "potential_preventable_failure_count_at_perfect_effect_min": 15,
+          "reviews": 1315,
+          "unknown_censored": 1
+        }
+      },
+      "review_fraction": 0.05,
+      "reviewed_drives": 1315
+    }
+  ],
+  "schema": "model02-backblaze-exposed-action-cost-threshold-v1",
+  "source_has_verified_prevention_rate": false,
+  "source_zip_sha256": "7f5a53e79b16e695b4b034955806bb3bb194534b169f6eca460dfd3dc48096fe",
+  "unit": "hypothetical expected avoided failure loss / cost per individual technician review",
+  "warnings": [
+    "historical publisher failure flag does not prove replacement would have prevented loss",
+    "assume all known positives preventable and perfect action, so actual thresholds can be much higher",
+    "unknown/censored drive outcomes lead to best/worst *label* scenario bounds, not credible uncertainty intervals",
+    "salaries, intervention expenses, adverse side effects, hardware prices and customer benefits are not measured",
+    "not a causal effect or evidence of saved drives, revenue, ROI, paying customers or TAC memory",
+    "no protected TEST, newly trained model or independent source used"
+  ],
+  "actual_original_source_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40485708597",
+  "original_stdout_recovery": true,
+  "scientific_claim": "HYPOTHETICAL_PERFECT_PREVENTION_ONLY"
+}
