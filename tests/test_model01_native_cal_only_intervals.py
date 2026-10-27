@@ -54,10 +54,10 @@ class IntervalRefinementTests(unittest.TestCase):
         original=m.immutable_checkpoints()
         # No fit optimizer is invoked in candidate selection.
         with patch.object(m.native,"NativeTAC",side_effect=AssertionError("weights touched")):
-            xs=np.arange(1024)
+            xs=np.arange(1800)
             residuals=np.sin(xs/10.)
-            chosen,schemes,metrics=m.select(np.zeros(700),residuals[:700],xs[:700],
-                                             np.zeros(324),residuals[700:],xs[700:])
+            chosen,schemes,metrics=m.select(np.zeros(1400),residuals[:1400],xs[:1400],
+                                             np.zeros(400),residuals[1400:],xs[1400:])
             self.assertIn(chosen,schemes)
             self.assertIn("symmetric_CAL_60",metrics)
         self.assertEqual(original["runs"][0]["checkpoint_sha256"],m.RESULTS_SHA[1701])
