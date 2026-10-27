@@ -1,0 +1,52 @@
+name: Model01 REFIT original raw publisher README observability truth audit
+on:
+  push:
+    branches:
+      - research/model01-refit-source-compatibility-2026-10-27
+    paths:
+      - 'specialist_models/model01_refit_original_readme_audit.py'
+      - 'tests/test_model01_refit_original_readme_audit.py'
+      - '.github/workflows/model01-refit-original-readme-truth.yml'
+      - 'research/registrations/MODEL01-REFIT-SOURCE-QUAL-001.md'
+  pull_request:
+    paths:
+      - 'specialist_models/model01_refit_original_readme_audit.py'
+      - 'tests/test_model01_refit_original_readme_audit.py'
+      - '.github/workflows/model01-refit-original-readme-truth.yml'
+      - 'research/registrations/MODEL01-REFIT-SOURCE-QUAL-001.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-only-original-readme-truth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test constructed publisher caveats and no sampling equivalence
+        run: python -m unittest discover -s tests -p test_model01_refit_original_readme_audit.py -v
+      - name: Fetch only original publisher REFIT README and hash original content
+        run: python specialist_models/model01_refit_original_readme_audit.py --out original_refit_readme_observability.json
+      - name: Assert interpolation and changing appliances block raw 8s truth
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('original_refit_readme_observability.json'))
+          assert all(d['verified_publisher_text_flags'].values())
+          assert d['eight_second_interval_represents_independent_observation'] is False
+          assert d['native_8second_actually_observed_mask_in_plain_CSV'] is False
+          assert d['per_appliance_identity_unchanged_proven'] is False
+          assert d['model_fitted_or_evaluated'] is False
+          assert d['scientific_qualification']=='BLOCKED'
+          print('ACTUAL_REFIT_PUBLISHER_README_OBSERVABILITY=PASS_SOURCE_ONLY')
+          print('ORIGINAL_README_SHA256='+d['original_unmodified_README_sha256'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-refit-original-publisher-readme-no-model-fit
+          path: original_refit_readme_observability.json
+          if-no-files-found: error
+          retention-days: 14
