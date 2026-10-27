@@ -96,3 +96,19 @@ Official guidance:
 - https://help.openai.com/en/articles/20001545-using-codex-cloud
 - https://help.openai.com/en/articles/11369540-using-codex-with-your-chatgpt-plan
 - https://help.openai.com/en/articles/20001275-chatgpt-work-and-codex
+
+## Operator-authorized daily research continuation
+
+On 2026-10-27 the operator requested both immediate research and automatic
+continuation. An enabled Codex/Work task named **Continue TAC-OSM research**
+was created with a daily flexible schedule. This is external account state,
+not a schedule provisioned by this repository; inspect the task in ChatGPT
+to manage its timing or pause it. It requests implementation and draft PRs,
+not merely a reminder, and requires reading current repository rules, Issue
+#472 and open PRs on each run to avoid duplicate work. Creation was confirmed;
+a successful future execution has not yet been observed.
+
+Each run must preserve scientific gates and report actual tools/access
+blockers. Independent evaluator credentials and GPU approval remain separate.
+The first bounded investigation is documented in
+[label-blind history controls](LABEL-BLIND-HISTORY-CONTROLS-2026-10-27.md).
