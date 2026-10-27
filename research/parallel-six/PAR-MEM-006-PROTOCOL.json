@@ -1,0 +1,54 @@
+{
+  "study_id": "PAR-MEM-006-GENUINE-HISTORIC-QUERY",
+  "phase": "EXPLORATORY_REAL_SOURCE_HEAD_TRAINING",
+  "design": "source-observed station event history -> frozen trained long-stream TAC state -> query(source-known past event time and lag) -> source-measured past PM2.5",
+  "original_source_archive_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "pretrained_base_study": "PAR-TIME-005-CONTINUOUS-SOURCE-STREAMS",
+  "pretrained_model_reference": "research/replay-bundles/PAR-TIME-005/seed-<seed>-original-continuous.pt",
+  "pretrained_base_active_parameters": 96639,
+  "retrieval_head_input": "frozen 88D prefix, frozen 8x8 associative matrix projected by query key derived only from event source time, 14D present source measurements/valid fraction, 8D query metadata",
+  "trainable_head_parameter_budget": 3913,
+  "total_deployed_model_parameters": 100552,
+  "seeds": [
+    271028,
+    271029,
+    271030,
+    271031,
+    271032
+  ],
+  "arms": [
+    "associative_read",
+    "history_blind"
+  ],
+  "train_and_development": "same genuine preexisting original training and formerly exposed source DEV times as PAR-TIME-005",
+  "training_query_lags": [
+    16,
+    64,
+    128
+  ],
+  "training_query_anchor_start": 144,
+  "training_query_stride": 8,
+  "evaluation_query_anchor_start": 144,
+  "evaluation_query_stride": 8,
+  "source_stream_admission": "frozen trained base updates only at source-observed current events; query target from already observed event t-lag",
+  "target_hidden_from_head": "past measured normalized PM2.5 is NEVER passed via query metadata, never a current head input",
+  "target_clock_known": "source observed target event timestamp and relative ordinal index and lag; no target numeric",
+  "source_query_metadata": "cos/sin target timestamp hour/day and target ordinal position, lag, current stream age",
+  "no_memory_arm": "same entire query head trainable params and same frozen base processing; masked pre-query associative matrix input, key still used directly in head",
+  "samples_each_step": 64,
+  "training_steps": 64,
+  "head_optimizer": "AdamW learning_rate 0.002 weight_decay 0.001, clip_norm 1, FP32",
+  "no_memory_learned_parameter_dummies": false,
+  "physical_baselines": [
+    "current observed PM2.5 (no history)",
+    "train-set PM2.5 mean",
+    "exact historical source oracle (NOT model, larger storage)"
+  ],
+  "primary_metric": "per-lag source-measured original normalized PM2.5 MAE and source-observed no-memory comparator",
+  "scientific_status": "EXPLORATORY; FULL_TRAIN_OPERATOR_FLOP_COMPARABILITY_NOT_ESTABLISHED; NO FAIR LEARNED SUPERIORITY CLAIM",
+  "real_data_not_independent_holdout": true,
+  "future_data_leakage_disallowed": true,
+  "data_normalized_prior_to_March2014": true,
+  "protected_2015_2017_numeric_untouched": true,
+  "original_checkpoints_optimizer_rng_and_source_order_in_Git": true
+}
