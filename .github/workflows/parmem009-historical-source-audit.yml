@@ -1,0 +1,58 @@
+name: PAR-MEM-009 historical master plan and original memory implementation source audit
+on:
+  push:
+    branches:
+      - research/parmem009-historical-memory-reuse-audit-2026-10-27
+    paths:
+      - '.github/workflows/parmem009-historical-source-audit.yml'
+      - 'research/parallel-six/PAR-MEM-009-*'
+      - 'scripts/audit_prior_memory_solutions.py'
+  pull_request:
+    paths:
+      - '.github/workflows/parmem009-historical-source-audit.yml'
+      - 'research/parallel-six/PAR-MEM-009-*'
+      - 'scripts/audit_prior_memory_solutions.py'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: parmem009-master-original-history-source-audit
+  cancel-in-progress: false
+jobs:
+  authoritative-existing-source-provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Read-only source audit code syntax and pre-existing master manifest contract
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/audit_prior_memory_solutions.py
+          test -s research/parallel-six/PAR-MEM-009-PRIOR-SOURCE-MANIFEST.json
+          test -s research/parallel-six/PAR-MEM-009-PRIOR-SOLUTIONS-REVIEW.md
+      - name: Validate original Git SHA historical remedies from actual source branches
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -e research/parallel-six/PAR-MEM-009-SOURCE-AUDIT.json; then
+            python -m scripts.audit_prior_memory_solutions --mode replay
+          else
+            python -m scripts.audit_prior_memory_solutions --mode audit
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/parallel-six/PAR-MEM-009-SOURCE-AUDIT.json
+            git diff --cached --quiet && exit 1
+            git commit -m 'research: freeze source-blob-verified prior TAC memory remedies and current omissions'
+            git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          fi
+      - name: Explicit scientific boundary
+        run: |
+          echo 'Old source implementations verified; not retroactively merged or promoted.'
+          echo 'No model trained, any original checkpoint modified, or protected real data evaluated.'
+          echo 'Existing six families and all historical failures remain.'
