@@ -87,3 +87,21 @@ def instantiate_untrained_postscan_core(
         state_dim=state_dim, action_dim=action_dim,
         width=width, decoder=decoder, ffn_hidden=ffn_hidden,
     )
+
+
+def instantiate_untrained_time_age_core(
+    name: str | Variant, *, state_dim: int, action_dim: int,
+    width: int = 88, decoder: int = 132, ffn_hidden: int = 12,
+):
+    """Opt-in explicit source-time/sequence-age encoding on postscan TAC.
+
+    Not a seventh active family. Real delta units, source-owned bool write
+    masks, and legal at-prediction-time availability are caller obligations.
+    All six domain/task heads remain UNQUALIFIED; no checkpoint is fitted.
+    """
+    parallel_family(name)
+    from .parallel_time_age_world import TimeAwareParallelResidualWorld
+    return TimeAwareParallelResidualWorld(
+        state_dim=state_dim, action_dim=action_dim,
+        width=width, decoder=decoder, ffn_hidden=ffn_hidden,
+    )
