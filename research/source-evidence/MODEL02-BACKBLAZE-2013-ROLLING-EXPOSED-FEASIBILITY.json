@@ -1,0 +1,45 @@
+{
+  "schema": "model02-backblaze-post-exposure-rolling-admission-summary-v1",
+  "study": "POST_EXPOSURE_ROLLING_ENTITY_ADMISSION_DIAGNOSTIC",
+  "action_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40471363459",
+  "source_original_zip_sha256": "7f5a53e79b16e695b4b034955806bb3bb194534b169f6eca460dfd3dc48096fe",
+  "dates_exposed": [
+    "2013-10-01",
+    "2013-11-15"
+  ],
+  "heldout_start_not_parsed": "2013-11-16",
+  "allowed_historical_observation": "7 consecutive observed nonfailure days including current day",
+  "selected_horizon_days": 7,
+  "all_original_source_drive_day_rows": 832041,
+  "all_original_source_unique_drive_id_model_pairs": 26815,
+  "all_original_publisher_failure_flags": 134,
+  "fit_exposed": {
+    "source_eligible_seven_day_warmup_windows": 287772,
+    "observed_future_failure_windows": 167,
+    "complete_observed_nonfailure_windows": 111948,
+    "right_censored_windows": 175657,
+    "unique_drives_with_future_failure_windows": 35,
+    "unique_admitted_drives": 25304
+  },
+  "dev_exposed": {
+    "source_eligible_seven_day_warmup_windows": 384905,
+    "observed_future_failure_windows": 397,
+    "complete_observed_nonfailure_windows": 203976,
+    "right_censored_windows": 180532,
+    "unique_drives_with_future_failure_windows": 65,
+    "unique_admitted_drives": 26311
+  },
+  "comparison_fixed_first_day": {
+    "originally_enrolled_drives": 900,
+    "fixed_fit_positive_windows": 16,
+    "fixed_fit_failure_drives": 4,
+    "fixed_dev_positive_windows": 0
+  },
+  "status": "SOURCE_ELIGIBILITY_DIAGNOSTIC_ONLY",
+  "real_time_source_available_at_verified": false,
+  "trained_model": false,
+  "independent_evaluation": false,
+  "source_rights_and_original_failure_adjudication_verified": false,
+  "risk": "Source membership expands sharply beyond day one; future failure flags do not automatically imply source-trained causal early warning or independent effective label count. Rolling rule chosen after exposure, not independent preregistration.",
+  "next": "Freeze a new authorized enrollment/source-time protocol, identify genuinely distinct failure events and censoring, train simple baseline on approved development source, retain original checkpoint and keep heldout data sealed."
+}
