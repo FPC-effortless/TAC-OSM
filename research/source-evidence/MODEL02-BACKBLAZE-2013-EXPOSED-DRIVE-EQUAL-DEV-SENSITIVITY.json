@@ -1,0 +1,122 @@
+{
+  "distinct_dev_drives_with_matured_windows": 25649,
+  "distinct_dev_drives_with_positive_windows": 65,
+  "equal_drive_weighted": {
+    "difference_brier": {
+      "max": 0.0041106389108444205,
+      "mean": -0.00006343208197319207,
+      "min": -0.1211647214676902,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.000018547789569122388
+    },
+    "difference_logloss": {
+      "max": 0.7687888542928034,
+      "mean": -0.0031103501690289315,
+      "min": -3.7594889895320507,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.0006137376082986007
+    },
+    "lookup_brier": {
+      "max": 0.9986153307800659,
+      "mean": 0.001945444297750082,
+      "min": 4.796593544486397e-7,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.00024508474739818226
+    },
+    "lookup_logloss": {
+      "max": 7.275094831608638,
+      "mean": 0.01147671595643311,
+      "min": 0.000692814380112361,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.001359841652733464
+    },
+    "prior_brier": {
+      "max": 0.9970142552628692,
+      "mean": 0.0020088763797232742,
+      "min": 0.00000223200124727217,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.00025648965125177353
+    },
+    "prior_logloss": {
+      "max": 6.506305977315836,
+      "mean": 0.014587066125462043,
+      "min": 0.001495105482587606,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.0016734168024545996
+    }
+  },
+  "fit_performed_this_run": false,
+  "independent_evaluation": false,
+  "observed_matured_windows_per_drive": {
+    "max": 13,
+    "mean": 7.968068930562595,
+    "min": 1
+  },
+  "one_earliest_matured_window_per_drive": {
+    "difference_brier": {
+      "max": 0.0041106389108444205,
+      "mean": -0.000017106804737612548,
+      "min": -0.1211647214676902,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.000015145408566238036
+    },
+    "difference_logloss": {
+      "max": 0.7687888542928034,
+      "mean": -0.0017082564459661043,
+      "min": -3.7594889895320502,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.0005018339823244288
+    },
+    "lookup_brier": {
+      "max": 0.9986153307800658,
+      "mean": 0.0011901379736592671,
+      "min": 4.796593544486397e-7,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.0002076655636114691
+    },
+    "lookup_logloss": {
+      "max": 7.275094831608638,
+      "mean": 0.007648720338692953,
+      "min": 0.000692814380112361,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.0011599856136567661
+    },
+    "prior_brier": {
+      "max": 0.9970142552628692,
+      "mean": 0.0012072447783968796,
+      "min": 0.00000223200124727217,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.0002163000715696769
+    },
+    "prior_logloss": {
+      "max": 6.506305977315835,
+      "mean": 0.009356976784659058,
+      "min": 0.001495105482587606,
+      "n_distinct_drives": 25649,
+      "standard_error_by_drive": 0.0014112077129440402
+    }
+  },
+  "original_exposed_dev_censored_windows": 180532,
+  "original_exposed_dev_eligible_windows": 384905,
+  "original_exposed_dev_matured_windows": 204373,
+  "original_exposed_dev_positive_windows": 397,
+  "original_model_source": "ORIGINAL_CHECKPOINT.json",
+  "original_overlapping_window_brier_fit_prior": 0.001938954431484456,
+  "original_overlapping_window_brier_lookup": 0.0018760174392051907,
+  "original_overlapping_window_logloss_fit_prior": 0.014130873984874108,
+  "original_overlapping_window_logloss_lookup": 0.011056599371985628,
+  "protected_future_member_contents_parsed": false,
+  "schema": "model02-drive-equal-source-dev-sensitivity-v1",
+  "scientific_qualification": "NOT_QUALIFIED",
+  "source_original_zip_sha256": "7f5a53e79b16e695b4b034955806bb3bb194534b169f6eca460dfd3dc48096fe",
+  "source_period": "EXPOSED_ORIGINAL_2013_DEV_NOV1_15",
+  "trained_tac_model": false,
+  "warning": [
+    "These are post-exposure sensitivity scores, not prospective prediction validity",
+    "Within-drive means only equalize case weights; retention/censoring and selection bias remain",
+    "Earliest matured window is selected by future label maturity, not a validated prospective sampling design",
+    "Drive-level SEs treat drives as independent but may miss shared model/site/operation correlations",
+    "Source historical available-at and adjudicated outcomes unverified; no TAC neural training or superiority"
+  ],
+  "original_run_url": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40478889145"
+}
