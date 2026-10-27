@@ -1,0 +1,68 @@
+name: PAR-MEM-010 source-aligned two-head parallel TAC original source / no-fit test
+on:
+  push:
+    branches:
+      - research/parmem010-source-aligned-parallel-memory-2026-10-27
+    paths:
+      - '.github/workflows/parmem010-source-aligned-nofit.yml'
+      - 'src/tac_osm/variants/source_aligned_parallel_world.py'
+      - 'tests/test_source_aligned_parallel_world.py'
+      - 'scripts/parmem010_real_source_nofit.py'
+      - 'research/parallel-six/PAR-MEM-010-*'
+  pull_request:
+    paths:
+      - '.github/workflows/parmem010-source-aligned-nofit.yml'
+      - 'src/tac_osm/variants/source_aligned_parallel_world.py'
+      - 'tests/test_source_aligned_parallel_world.py'
+      - 'scripts/parmem010_real_source_nofit.py'
+      - 'research/parallel-six/PAR-MEM-010-*'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-identity-geometry-and-batch-stream-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install real original CPU Torch and pytest
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --quiet pytest
+      - name: Run genuine two-head source-owned no-fit software invariants
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          python -m py_compile src/tac_osm/variants/source_aligned_parallel_world.py
+          python -m py_compile scripts/parmem010_real_source_nofit.py
+          python -m pytest tests/test_source_aligned_parallel_world.py -q
+          python -m pytest tests/test_parallel_time_age_world.py -q
+      - name: Recover publisher-original non-heldout source ZIP with original SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem010-real
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem010-real/original.zip
+          test "$(sha256sum /tmp/parmem010-real/original.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Real authentic 12 station no-fit source stream / parallel scan verification
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.parmem010_real_source_nofit --source /tmp/parmem010-real/original.zip
+          echo 'NO NEURAL TRAINING OR FUTURE SENSOR LABEL SCORING OCCURRED'
+      - name: Verify only test/science preflight and preserve original checkpoints
+        run: |
+          set -euo pipefail
+          test -s research/parallel-six/PAR-MEM-010-PROTOCOL.json
+          test -z "$(git status --porcelain)"
+          echo 'MATH / SOURCE OPERATOR CONTRACT ONLY. No qualified new model and no sealed test access.'
