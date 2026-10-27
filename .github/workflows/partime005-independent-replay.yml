@@ -1,0 +1,58 @@
+name: PAR-TIME-005 independent immutable long-stream source checkpoint replay
+on:
+  push:
+    branches:
+      - research/partime005-long-continuous-state-training-2026-10-27
+    paths:
+      - '.github/workflows/partime005-independent-replay.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/partime005-independent-replay.yml'
+      - 'research/replay-bundles/PAR-TIME-005/**'
+      - 'research/parallel-six/PAR-TIME-005-FROZEN-PLAN.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay-original-genuine-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install source-trained CPU Torch dependency
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Require all preserved source and original model replay materials
+        run: |
+          set -euo pipefail
+          test -s research/parallel-six/PAR-TIME-005-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
+          test -s research/replay-bundles/PAR-TIME-005/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-TIME-005 -maxdepth 1 -name 'seed-*-original-continuous.pt' | wc -l)" -eq 5
+          test "$(find research/replay-bundles/PAR-TIME-005 -maxdepth 1 -name 'seed-*-DEV-original-predictions.pt' | wc -l)" -eq 5
+          python -m py_compile scripts/partime005_continuous_real_training.py
+      - name: Verify and restore original immutable 12-station publisher source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/par-time005-replay
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/par-time005-replay/PRSA2017.zip
+          test "$(sha256sum /tmp/par-time005-replay/PRSA2017.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Independently reconstruct each full 830-step original source forecast trajectory
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.partime005_continuous_real_training --mode replay \
+            --source /tmp/par-time005-replay/PRSA2017.zip
+          echo 'COLD_LONG_SOURCE_REPLAY_PASSED'
+      - name: Verify immutable working copy, no model/optimizer changes
+        run: |
+          set -e
+          test -z "$(git status --porcelain)"
+          echo 'Five trained models immutable; previously exposed DEV, no independent qualification.'
