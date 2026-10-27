@@ -28,9 +28,9 @@ jobs:
     name: Mandatory compute decision first
     runs-on: ubuntu-latest
     outputs:
-      backend: \${{ steps.policy.outputs.backend }}
-      kind: \${{ steps.policy.outputs.kind }}
-      manifest: \${{ steps.policy.outputs.manifest }}
+      backend: ${{ steps.policy.outputs.backend }}
+      kind: ${{ steps.policy.outputs.kind }}
+      manifest: ${{ steps.policy.outputs.manifest }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -39,7 +39,7 @@ jobs:
       - name: Decide GitHub CPU versus Kaggle GPU and inspect blockers
         id: policy
         env:
-          PROPOSAL: \${{ inputs.proposal }}
+          PROPOSAL: ${{ inputs.proposal }}
         run: |
           python scripts/phone_lab.py plan "$PROPOSAL" > compute-decision.json
           python - <<'PY'
@@ -69,12 +69,12 @@ jobs:
           python-version: '3.12'
       - name: Require operator enablement, Kaggle auth, and independent trained-run preflight
         env:
-          PROPOSAL: \${{ inputs.proposal }}
-          GPU_ENABLED: \${{ secrets.PHONE_LAB_GPU_EXECUTION_ENABLED }}
-          KAGGLE_API_TOKEN: \${{ secrets.KAGGLE_API_TOKEN }}
-          KAGGLE_USERNAME: \${{ vars.KAGGLE_USERNAME }}
-          TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX: \${{ secrets.TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX }}
-          PREFIT_SIGNED_EVIDENCE: \${{ secrets.TAC_OSM_PREFIT_ATTESTATION_JSON }}
+          PROPOSAL: ${{ inputs.proposal }}
+          GPU_ENABLED: ${{ secrets.PHONE_LAB_GPU_EXECUTION_ENABLED }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+          TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX: ${{ secrets.TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX }}
+          PREFIT_SIGNED_EVIDENCE: ${{ secrets.TAC_OSM_PREFIT_ATTESTATION_JSON }}
         run: |
           test "$GPU_ENABLED" = "true" || { echo "Operator has not enabled the protected GPU environment"; exit 2; }
           test -n "$KAGGLE_API_TOKEN" || { echo "Missing Kaggle token"; exit 2; }
@@ -100,9 +100,9 @@ jobs:
           PY
       - name: Submit private Kaggle notebook requesting T4×2 exclusively
         env:
-          PROPOSAL: \${{ inputs.proposal }}
-          KAGGLE_USERNAME: \${{ vars.KAGGLE_USERNAME }}
-          KAGGLE_API_TOKEN: \${{ secrets.KAGGLE_API_TOKEN }}
+          PROPOSAL: ${{ inputs.proposal }}
+          KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
         run: |
           python -m pip install --quiet kaggle
           python scripts/stage_kaggle_research.py --proposal "$PROPOSAL" \
