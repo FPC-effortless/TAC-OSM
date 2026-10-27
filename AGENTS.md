@@ -1,3 +1,24 @@
+
+
+## Phone-first autonomous research lab compute and status contracts (2026-10-27)
+
+Read CHARTER.md, CODEX.md and research/PHONE-FIRST-AUTONOMOUS-LAB-2026-10-27.md.
+For ALL proposed training/evaluation experiments, agents MUST preregister a
+reviewed research/phone_queue protocol and run scripts/phone_lab.py plan to
+choose GitHub Actions for bounded CPU/no-fit tasks or Kaggle NvidiaTeslaT4
+(EXACTLY TWO T4s) for justified CUDA/GPU speedup tasks. Never claim that
+the planner authorizes training or reward evaluation. The Kaggle staging path
+must be private, no internet, with approved source-provenance and explicit
+two-way seed-shard/DDP; runtime must reject fewer than two physically observed
+T4s. The user approves actual quota through the protected GitHub environment,
+which is not configured by source control. Do not silently substitute other
+accelerators or consume Kaggle minutes. Training and promotion still require
+trusted independently signed source/outcome/reward/ACL attestations and full
+checkpoint/replay, 100k scale, data/compute parity and sealed TEST policy.
+Research agents may draft PRs but MUST NOT autonomously merge novel-model
+research or represent no-fit diagnostics as intelligence. GitHub Issues and
+Actions provide compact phone-first progress, blockers, and result evidence.
+
 # Agent guidance
 
 For substantive engineering, product or research tasks, read `.agents/skills/fpc-universal/SKILL.md` and then the relevant repository-local instructions, specs, README, workflows and tests. Repository-specific safety, release, data, science and architecture requirements always override general skill guidance. Never assume a skill grants permission to access secrets, incur compute costs, deploy, merge or make external changes. Use a task branch and verify before submitting a PR.
