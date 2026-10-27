@@ -60,8 +60,10 @@ def preflight(source:Path, *, replay:bool):
     receipt=json.loads((OLD_OUT/"TRAIN_RECEIPT.json").read_text())
     if receipt["original_model_count"]!=10:
         raise RuntimeError("source query head family missing original checkpoint receipt")
-    if p["fixed_train_source_query_clock_SHA256"]!=
-           __import__("scripts.parmem006_source_history_query",fromlist=["digest"]).digest(trainq):
+    source_index_digest=hashlib.sha256(json.dumps(
+        trainq,sort_keys=True,separators=(",",":")
+    ).encode()).hexdigest()
+    if p["fixed_train_source_query_clock_SHA256"]!=source_index_digest:
         raise RuntimeError("original genuine source query chronology changed")
     data,_,_=source_and_times(source)
     if len(trainq)<100 or len(devq)<100:
