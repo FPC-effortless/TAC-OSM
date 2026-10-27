@@ -1,0 +1,27 @@
+name: Model01 authenticated edge gateway (local-only security tests)
+on:
+  push:
+    branches:
+      - product/model01-auth-gateway-2026-10-27
+  pull_request:
+    paths:
+      - 'specialist_models/model01_authenticated_gateway.py'
+      - 'tests/test_model01_authenticated_gateway.py'
+      - '.github/workflows/model01-auth-gateway.yml'
+      - 'docs/MODEL01_CLOUD_GATEWAY_PREQUALIFICATION.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  authenticated-local-reference:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify original-checkpoint auth, quota, input security and source prediction parity
+        run: python -m unittest discover -s tests -p 'test_model01_authenticated_gateway.py' -v
+      - name: Syntax and dependency checks (no secret or public service)
+        run: python -m py_compile specialist_models/model01_authenticated_gateway.py tests/test_model01_authenticated_gateway.py
