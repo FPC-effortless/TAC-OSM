@@ -28,4 +28,6 @@ jobs:
           OMP_NUM_THREADS: '1'
           MKL_NUM_THREADS: '1'
         working-directory: research/language/formal-004
-        run: python -m unittest -v test_language_contract.py
+        run: |
+          python -m py_compile verify_original_archive.py
+          python -m unittest -v test_language_contract.py
