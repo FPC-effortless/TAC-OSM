@@ -2,7 +2,7 @@
 
 The trained language checkpoints optimize the historical target at lag=64.
 This pure adapter NEVER changes their weights or claims longer retrieval.
-For lag>64 it reports ABSTENTION and, when a categorical distribution is
+For any lag other than exactly 64 it reports ABSTENTION and, when a categorical distribution is
 required, returns a smoothed FIT-only frequency prior.
 
 Routing depends ONLY on the requested lag and the frozen training horizon.
@@ -66,12 +66,12 @@ def query_selective_history(model, tokens: torch.Tensor, trace: dict, lag: int,
         raise ValueError("strictly positive prior mandatory")
     if abs(float(fit_prior.double().sum()) - 1.) > 1e-8:
         raise ValueError("baseline must sum to one")
-    if lag <= TRAINED_HISTORICAL_LAG:
+    if lag == TRAINED_HISTORICAL_LAG:
         logits, _ = model.historical_logits(tokens, trace, lag)
         logp = torch.log_softmax(logits, dim=-1)
         if not bool(torch.isfinite(logp).all()):
             raise ValueError("nonfinite trained history logits")
-        return HistoricalDecision(logp, False, True, lag, "within_frozen_training_horizon")
+        return HistoricalDecision(logp, False, True, lag, "exact_frozen_trained_delay")
     # No model history read, no target or DEV score, no additional training.
     dtype = model.embedding.weight.dtype
     prior = fit_prior.to(device=tokens.device, dtype=dtype)
@@ -79,4 +79,4 @@ def query_selective_history(model, tokens: torch.Tensor, trace: dict, lag: int,
         tokens.shape[0], tokens.shape[1] - lag, VOCAB)
     if not bool(torch.isfinite(logp).all()):
         raise ValueError("nonfinite fallback")
-    return HistoricalDecision(logp, True, False, lag, "untrained_historical_delay")
+    return HistoricalDecision(logp, True, False, lag, "unqualified_historical_delay")
