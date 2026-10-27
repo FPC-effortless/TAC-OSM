@@ -1,0 +1,94 @@
+name: LATFUSE014 original genuine-source 8-write label-neutral centered content/identity audit
+
+on:
+  push:
+    branches:
+      - research/latfuse014-label-independent-window-retrieval-2026-10-27
+    paths:
+      - ".github/workflows/latfuse014-real-source-window.yml"
+      - "scripts/latfuse014_source_neutral_window.py"
+      - "tests/test_latfuse014_source_window_math.py"
+      - "research/mathematical-engineering/latfuse014/REGISTERED_WINDOW_CONTENT.json"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: latfuse014-original-real-source-neutral-windows
+  cancel-in-progress: false
+
+jobs:
+  two-original-checkpoints-eight-write-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Original CPU Torch and mathematical/source test dependencies
+        run: |
+          python -m pip install --quiet pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Require preregistration and replayable original checkpoint before any source evaluation
+        run: |
+          set -e
+          python -m py_compile scripts/latfuse014_source_neutral_window.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse014/REGISTERED_WINDOW_CONTENT.json \
+            --phase preflight
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE008/POSTFIT_PARITY.json \
+            --phase final
+          python scripts/sync_test_count.py --check
+          test -s research/replay-bundles/LATFUSE008/RESULTS.json
+          test ! -e research/mathematical-engineering/latfuse014/RESULTS.json
+      - name: Local math and current original model tensor guard regression
+        env:
+          PYTHONPATH: ".:src"
+        run: |
+          python -m pytest -q \
+            tests/test_latfuse014_source_window_math.py \
+            tests/test_latent_fusion_007_historic_query.py \
+            tests/test_latfuse011_memory_falsifiers.py
+      - name: Recover original authorized UCI501 sensor source archive from immutable signed research commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse014-physical
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse014-physical/PRSA2017_original.zip
+      - name: 64h same-source label-neutral 8-write key window, centered top1 and true physical PM value original read-only test
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse014_source_neutral_window.py \
+            --source /tmp/latfuse014-physical/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse014/RESULTS.json
+      - name: Preserve original-source test outcome on independent unmerged branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse014-label-independent-window-retrieval-2026-10-27
+          test -s research/mathematical-engineering/latfuse014/RESULTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse014/RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: preserve genuine 8-write neutral-key centered identity and continuous source PM decoding, negative outcomes included"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Evidence limitations
+        run: |
+          echo "Original source true labels withheld until after model read; oracle keys only offline, no original optimizer fits."
+          echo "FIT-era original source and 24 evaluated pairs exposed. Site/time windows are correlated and source-targets can be missing."
+          echo "External ridge adds coefficients outside original deployed 99390 parameters; not independently verified native retrieval."
+          echo "No 2015 previously exposed /2016-17 protected numerical source rows parsed."
