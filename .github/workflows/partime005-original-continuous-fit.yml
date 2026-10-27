@@ -1,0 +1,119 @@
+name: PAR-TIME-005 real 12-site continuous 768-event streams five trained seeds and cold replay
+on:
+  push:
+    branches:
+      - research/partime005-long-continuous-state-training-2026-10-27
+    paths:
+      - '.github/workflows/partime005-original-continuous-fit.yml'
+      - 'scripts/partime005_continuous_real_training.py'
+      - 'research/parallel-six/PAR-TIME-005-PROTOCOL.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: partime005-frozen-long-source-state-training
+  cancel-in-progress: false
+jobs:
+  original-long-stream-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU PyTorch
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Reject preexisting genuine source long-run snapshots; code syntax
+        run: |
+          test ! -e research/parallel-six/PAR-TIME-005-FROZEN-PLAN.json
+          test ! -e research/replay-bundles/PAR-TIME-005
+          python -m py_compile scripts/partime005_continuous_real_training.py
+      - name: Restore source from already-committed immutable original UCI archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/partime005-publisher
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/partime005-publisher/source.zip
+          test "$(sha256sum /tmp/partime005-publisher/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Build exact station/site source-chronological plan, still no weights optimized
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m scripts.partime005_continuous_real_training --mode plan \
+            --source /tmp/partime005-publisher/source.zip
+      - name: Git commit all original independent entity clock sequences BEFORE any neural fit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/partime005-long-continuous-state-training-2026-10-27
+          test -s research/parallel-six/PAR-TIME-005-FROZEN-PLAN.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/parallel-six/PAR-TIME-005-FROZEN-PLAN.json
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: preregister each true station source clock and five long persistent streams'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Fit FIVE original genuine station streams with state carried over 24 optimizer blocks
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m scripts.partime005_continuous_real_training --mode fit \
+            --source /tmp/partime005-publisher/source.zip
+      - name: Freeze original long-stream trained models and optimizer/RNG/state histories BEFORE DEV
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
+          test ! -e research/replay-bundles/PAR-TIME-005/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-TIME-005 -maxdepth 1 -name 'seed-*-original-continuous.pt' | wc -l)" -eq 5
+          git add research/replay-bundles/PAR-TIME-005
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: freeze five real-trained 768-event persistent TAC states, weights and optimizer'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Score genuine real but previously examined May-Jun 2014 development clocks by state age
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m scripts.partime005_continuous_real_training --mode eval \
+            --source /tmp/partime005-publisher/source.zip
+      - name: Freeze every original full true-source prediction array and developmental scores
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/replay-bundles/PAR-TIME-005/DEV_RESULTS.json
+          git add research/replay-bundles/PAR-TIME-005
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: preserve original negative-positive genuine source age-banded forecast outputs'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Independent clean checkout of all five frozen source-trained continuous models
+        shell: bash
+        env:
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --branch "$GITHUB_REF_NAME" --single-branch \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/partime005-clean
+          cd /tmp/partime005-clean
+          PYTHONPATH='.:src' python -m scripts.partime005_continuous_real_training --mode replay \
+            --source /tmp/partime005-publisher/source.zip
+      - name: Research claims boundary
+        run: |
+          echo 'Source-authentic continuous 768-event state TRAINING; five seeds, original checkpoint replay.'
+          echo 'No fair two-neural-model comparison: complete training compute parity unverified.'
+          echo 'No independent untouched cohort: 2014 May-June DEV previously viewed.'
+          echo 'No protected 2015-2017 numerical access, safety claims, action intervention or GPU use.'
