@@ -28,7 +28,7 @@ def fake_zip(*,nov_failure=True,invalid_hidden=True,missing_day=None):
             if i<=12:
                 w.writerow([str(d),"A","A-MODEL",int(i==12),"3" if i>8 else "0","0"])
             w.writerow([str(d),"B","B-MODEL",0,"0","0"])
-            if i>=23:
+            if i>=23 and (not nov_failure or i<=41):
                 w.writerow([str(d),"C","C-MODEL",int(nov_failure and i==41),"2",""])
             z.writestr("publisher/"+str(d)+".csv",f.getvalue())
         if invalid_hidden:z.writestr("publisher/2013-11-16.csv","not even a CSV")
