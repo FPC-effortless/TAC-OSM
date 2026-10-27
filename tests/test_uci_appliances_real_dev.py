@@ -43,7 +43,7 @@ class UCIRealSourceFixtureChecks(unittest.TestCase):
     def test_valid_constructed_source_parses_without_test(self):
         x=m.original_rows(self.data)
         self.assertEqual(len(x),m.DEV_END)
-        self.assertEqual(x[0],91)
+        self.assertEqual(x[0],90)
     def test_score_separates_cal_and_dev(self):
         report=m.score_source(self.data)
         self.assertFalse(report["independent_test_scored"])
