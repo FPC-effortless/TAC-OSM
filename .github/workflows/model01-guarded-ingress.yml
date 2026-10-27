@@ -6,6 +6,7 @@ on:
     paths:
       - 'specialist_models/model01_guarded_ingress.py'
       - 'tests/test_model01_guarded_ingress.py'
+      - 'specialist_models/benchmark_model01_guarded_ingress.py'
       - '.github/workflows/model01-guarded-ingress.yml'
   pull_request:
     paths:
@@ -28,3 +29,13 @@ jobs:
         run: python -m unittest discover -s tests -p test_model01_guarded_ingress.py -v
       - name: Syntax checks
         run: python -m py_compile specialist_models/model01_guarded_ingress.py tests/test_model01_guarded_ingress.py
+      - name: Real local bounded/authenticated HTTP latency, constructed inputs only
+        run: python specialist_models/benchmark_model01_guarded_ingress.py > authenticated_local_benchmark.json
+      - name: Show label-preserving authenticated local receipt
+        run: cat authenticated_local_benchmark.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-authenticated-local-loopback-benchmark
+          path: authenticated_local_benchmark.json
+          if-no-files-found: error
+          retention-days: 14
