@@ -93,14 +93,14 @@ def produce_plan(source_path):
         training_rows=train,development_rows=evalrows,
         full_training_orders=ordered,
         each_seed_sample_order_sha256={s:digest_rows(v) for s,v in ordered.items()},
-        original_2_seed_2_arm_matrix=true,
+        original_2_seed_2_arm_matrix=True,
         per_arm_steps=STEPS,per_arm_batch=BATCH,recorded_history_hours=88,
         original_params=99390,original_recurrent_bytes=6800,
         original_math_FLOP_registered_upper_diff_bound=max(
             q["strictly_conservative_relative_math_FLOP_gap_upper_bound"]
             for q in proof["each_seed"]),
         original_past_PM25_only_source_after_query=True,
-        evaluation_source_exposed_and_NOT_virgin=true,
+        evaluation_source_exposed_and_NOT_virgin=True,
         no_protected_2015_2017_numerics=true)
     PLAN.write_text(json.dumps(plan,indent=2,sort_keys=True)+"\n")
     print("LATFUSE018_REGISTERED_BEFORE_FIRST_NEURAL_FIT="+json.dumps({
