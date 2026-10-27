@@ -1,0 +1,516 @@
+{
+  "schema": "parmem010.complete_execution_checks.v1",
+  "source_commit": "63ea0aa67904fa946b9baa69d2e4b0cc23dc1c9a",
+  "source_sha256": {
+    "src/tac_osm/variants/source_aligned_parallel_world.py": "7ae1956091d19636526ee8ef42bb0c6211a6b7ca52264b85d4f4970537bfdaa2",
+    "src/tac_osm/variants/parallel_time_age_world.py": "a400b8607a22bfe54b0be03a814454a6a5e31bc6be519b22181460dea45ffa82",
+    "src/tac_osm/variants/parallel_residual_world.py": "c58ea88b720d6672ce5494e16665b73119a77cee14ae3ea45580cbb4e15e80e5",
+    "src/tac_osm/variants/parallel_continuous_world.py": "a2f043f75530a1966fa2a704c09edc205d17fd033d4d64278a53f2bb63b6e4b1",
+    "src/tac_osm/variants/parallel_affine_memory.py": "dc415571310b7fc84b2d05edadbeb93220c002e03a86c4ad7dbddc169909b6ce"
+  },
+  "status": "PASS_NUMERICAL_NOT_BACKEND_FORMAL_PROOF",
+  "optimizer_steps": 0,
+  "checks": [
+    {
+      "check": "float32/T1/none/whole_graph",
+      "max_absolute_error": 2.3283064365386963e-10,
+      "max_actual_magnitude": 0.5943601131439209,
+      "max_reference_magnitude": 0.5943601131439209,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/native_prefixes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/aligned_prefixes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/native_step_writes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/aligned_step_writes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/whole_graph",
+      "max_absolute_error": 9.313225746154785e-10,
+      "max_actual_magnitude": 0.5891748070716858,
+      "max_reference_magnitude": 0.5891748070716858,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/native_prefixes",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.31044963002204895,
+      "max_reference_magnitude": 0.31044960021972656,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/aligned_prefixes",
+      "max_absolute_error": 3.725290298461914e-09,
+      "max_actual_magnitude": 0.02021673694252968,
+      "max_reference_magnitude": 0.02021673321723938,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/native_step_writes",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.31044960021972656,
+      "max_reference_magnitude": 0.31044960021972656,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/aligned_step_writes",
+      "max_absolute_error": 1.862645149230957e-09,
+      "max_actual_magnitude": 0.02021673321723938,
+      "max_reference_magnitude": 0.02021673321723938,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/all/whole_graph",
+      "max_absolute_error": 3.725290298461914e-09,
+      "max_actual_magnitude": 0.7322284579277039,
+      "max_reference_magnitude": 0.7322284579277039,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/all/native_prefixes",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.3616044819355011,
+      "max_reference_magnitude": 0.3616044223308563,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/all/aligned_prefixes",
+      "max_absolute_error": 9.313225746154785e-09,
+      "max_actual_magnitude": 0.0360993817448616,
+      "max_reference_magnitude": 0.0360993817448616,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/all/native_step_writes",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.36160439252853394,
+      "max_reference_magnitude": 0.3616044223308563,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/all/aligned_step_writes",
+      "max_absolute_error": 3.725290298461914e-09,
+      "max_actual_magnitude": 0.036099378019571304,
+      "max_reference_magnitude": 0.0360993817448616,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/mixed/whole_graph",
+      "max_absolute_error": 7.450580596923828e-09,
+      "max_actual_magnitude": 0.6105376482009888,
+      "max_reference_magnitude": 0.6105376482009888,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/mixed/native_prefixes",
+      "max_absolute_error": 8.940696716308594e-08,
+      "max_actual_magnitude": 0.3784945607185364,
+      "max_reference_magnitude": 0.3784945607185364,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/mixed/aligned_prefixes",
+      "max_absolute_error": 1.1175870895385742e-08,
+      "max_actual_magnitude": 0.02841957099735737,
+      "max_reference_magnitude": 0.02841956354677677,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/mixed/native_step_writes",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.37849459052085876,
+      "max_reference_magnitude": 0.3784945607185364,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/mixed/aligned_step_writes",
+      "max_absolute_error": 5.587935447692871e-09,
+      "max_actual_magnitude": 0.02841956354677677,
+      "max_reference_magnitude": 0.02841956354677677,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/none/whole_graph",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.6489419341087341,
+      "max_reference_magnitude": 0.6489419341087341,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/none/native_prefixes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/none/aligned_prefixes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/none/native_step_writes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/none/aligned_step_writes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/whole_graph",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.685731053352356,
+      "max_reference_magnitude": 0.685731053352356,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/native_prefixes",
+      "max_absolute_error": 1.4156103134155273e-07,
+      "max_actual_magnitude": 0.3150176405906677,
+      "max_reference_magnitude": 0.31501758098602295,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/aligned_prefixes",
+      "max_absolute_error": 3.166496753692627e-08,
+      "max_actual_magnitude": 0.04999128729104996,
+      "max_reference_magnitude": 0.04999129846692085,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/native_step_writes",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.31501758098602295,
+      "max_reference_magnitude": 0.31501758098602295,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/aligned_step_writes",
+      "max_absolute_error": 1.1175870895385742e-08,
+      "max_actual_magnitude": 0.04999129846692085,
+      "max_reference_magnitude": 0.04999129846692085,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float64/T1/none/whole_graph",
+      "max_absolute_error": 1.3877787807814457e-17,
+      "max_actual_magnitude": 0.5770462911350744,
+      "max_reference_magnitude": 0.5770462911350744,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/native_prefixes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/aligned_prefixes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/native_step_writes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/aligned_step_writes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/whole_graph",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.6045639953824434,
+      "max_reference_magnitude": 0.6045639953824434,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/native_prefixes",
+      "max_absolute_error": 1.6653345369377348e-16,
+      "max_actual_magnitude": 0.2415085315293269,
+      "max_reference_magnitude": 0.24150853152932672,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/aligned_prefixes",
+      "max_absolute_error": 1.3877787807814457e-17,
+      "max_actual_magnitude": 0.021571675566044658,
+      "max_reference_magnitude": 0.021571675566044664,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/native_step_writes",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.24150853152932672,
+      "max_reference_magnitude": 0.24150853152932672,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/aligned_step_writes",
+      "max_absolute_error": 3.469446951953614e-18,
+      "max_actual_magnitude": 0.021571675566044668,
+      "max_reference_magnitude": 0.021571675566044664,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/all/whole_graph",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.5238893469174508,
+      "max_reference_magnitude": 0.5238893469174508,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/all/native_prefixes",
+      "max_absolute_error": 1.3877787807814457e-16,
+      "max_actual_magnitude": 0.34889357156802336,
+      "max_reference_magnitude": 0.34889357156802336,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/all/aligned_prefixes",
+      "max_absolute_error": 1.6479873021779667e-17,
+      "max_actual_magnitude": 0.033189284054152154,
+      "max_reference_magnitude": 0.033189284054152154,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/all/native_step_writes",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.34889357156802336,
+      "max_reference_magnitude": 0.34889357156802336,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/all/aligned_step_writes",
+      "max_absolute_error": 8.673617379884035e-18,
+      "max_actual_magnitude": 0.03318928405415216,
+      "max_reference_magnitude": 0.033189284054152154,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/mixed/whole_graph",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.7198892869793947,
+      "max_reference_magnitude": 0.7198892869793947,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/mixed/native_prefixes",
+      "max_absolute_error": 1.3877787807814457e-16,
+      "max_actual_magnitude": 0.27839948971471473,
+      "max_reference_magnitude": 0.2783994897147148,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/mixed/aligned_prefixes",
+      "max_absolute_error": 1.734723475976807e-17,
+      "max_actual_magnitude": 0.022377267876011995,
+      "max_reference_magnitude": 0.022377267876011995,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/mixed/native_step_writes",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.27839948971471484,
+      "max_reference_magnitude": 0.2783994897147148,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/mixed/aligned_step_writes",
+      "max_absolute_error": 1.0408340855860843e-17,
+      "max_actual_magnitude": 0.022377267876011995,
+      "max_reference_magnitude": 0.022377267876011995,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/none/whole_graph",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.7791696921969703,
+      "max_reference_magnitude": 0.7791696921969703,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/none/native_prefixes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/none/aligned_prefixes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/none/native_step_writes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/none/aligned_step_writes",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/whole_graph",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.7308558502240738,
+      "max_reference_magnitude": 0.7308558502240738,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/native_prefixes",
+      "max_absolute_error": 1.6653345369377348e-16,
+      "max_actual_magnitude": 0.392869061741569,
+      "max_reference_magnitude": 0.39286906174156894,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/aligned_prefixes",
+      "max_absolute_error": 6.938893903907228e-17,
+      "max_actual_magnitude": 0.051790814339245914,
+      "max_reference_magnitude": 0.051790814339245886,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/native_step_writes",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.39286906174156894,
+      "max_reference_magnitude": 0.39286906174156894,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/aligned_step_writes",
+      "max_absolute_error": 3.469446951953614e-17,
+      "max_actual_magnitude": 0.05179081433924589,
+      "max_reference_magnitude": 0.051790814339245886,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "normalizer_zero_jacobian",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 1000000.0,
+      "max_reference_magnitude": 1000000.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    }
+  ],
+  "torch_version": "2.14.1+cpu",
+  "numpy_version": "2.3.5",
+  "device": "cpu",
+  "reference_sha256": {
+    "foundation/v1/source_aligned_model_math.py": "c1e039c5f0e7c00bbe3351dffafe2419774d3ee0303b5a54146630c8ae265472",
+    "foundation/v1/source_aligned_execution_math.py": "ac40f5c2bfcebbae042f1199a3f3f0351213bc0eb400abbb46619b2a449a0c8e"
+  },
+  "mathematical_boundary_witnesses": {
+    "clamp_tie_torch_selected_derivative": 0.0,
+    "zero_key_derivative_is_identity_over_epsilon": true,
+    "all_finite_parameters_do_not_prevent_overflow": true,
+    "fp32_clock_2pow24_plus_one_stagnates": true
+  }
+}
