@@ -1,0 +1,118 @@
+name: LATFUSE018 original real-source historical continuous content B0 pair 2x2 trained and replayed
+
+on:
+  push:
+    branches: [research/latfuse018-real-source-content-training-2026-10-27]
+    paths:
+      - ".github/workflows/latfuse018-real-content-fit.yml"
+      - "scripts/latfuse018_real_content_training.py"
+      - "research/mathematical-engineering/latfuse018/REGISTERED_REAL_FIT.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: latfuse018-real-only-frozen-original-paired-content-training
+  cancel-in-progress: false
+
+jobs:
+  train-original-genuine-source-with-frozen-plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: CPU source-trained original FP32 Torch, original exact optimizer implementation
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate original prospective 2arm 2seed genuine-source study and math compute before any optimization
+        run: |
+          set -e
+          python -m py_compile scripts/latfuse018_real_content_training.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse018/REGISTERED_REAL_FIT.json \
+            --phase preflight
+          test -s research/mathematical-engineering/latfuse017/MATH_PARITY.json
+          test ! -e research/mathematical-engineering/latfuse018/PLAN.json
+          test ! -e research/replay-bundles/LATFUSE018
+      - name: Original authorized true physical source ZIP via immutable Git source SHA, not protected numeric cohorts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse018-genuine
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse018-genuine/PRSA2017_original.zip
+      - name: Source-first freeze original true train episodes, open-development cases, BOTH seed source sample sequences
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse018_real_content_training.py --mode plan \
+            --source /tmp/latfuse018-genuine/PRSA2017_original.zip
+      - name: COMMIT exact source sample order before first neural optimizer step
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse018-real-source-content-training-2026-10-27
+          test -s research/mathematical-engineering/latfuse018/PLAN.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse018/PLAN.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: preregister exact genuine source sample order and exposed dev episodes BEFORE original B0 optimization"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Authentic source 2 trained seeds x2 controls 64 identical optimizer updates, legally sourced past content+future forecast
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse018_real_content_training.py --mode fit \
+            --source /tmp/latfuse018-genuine/PRSA2017_original.zip
+      - name: Replay all original checkpoint genuine development predictions before commit
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse018_real_content_training.py --mode replay \
+            --source /tmp/latfuse018-genuine/PRSA2017_original.zip
+      - name: Preserve original source trained models, AdamW optimizer, RNG and complete negative/positive metrics
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse018-real-source-content-training-2026-10-27
+          test -s research/replay-bundles/LATFUSE018/RESULTS.json
+          git add research/replay-bundles/LATFUSE018
+          git diff --cached --quiet && exit 1
+          git commit -m "research: preserve 4 real-source historical B0 models, optimizer+RNG/source hashes and exposed-development results"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Independent clean checkout of trained originals and source data replay (never 2015/2016–2017)
+        shell: bash
+        env:
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --branch "$GITHUB_REF_NAME" --single-branch \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/latfuse018-clean
+          cd /tmp/latfuse018-clean
+          PYTHONPATH=".:src" python scripts/latfuse018_real_content_training.py --mode replay \
+            --source /tmp/latfuse018-genuine/PRSA2017_original.zip
+      - name: No unsafe scientific qualification
+        run: |
+          echo "All genuine original source case/order hashes prereg before first fit. No protected source opened."
+          echo "Original 64-step batch16 operator math FLOP parity is <=1%, but hardware backend independence remains unproved."
+          echo "Previously examined May-Jun real source is developmental only, NOT an independent trained architecture holdout."
+          echo "Four original checkpoint optimizer/RNG states saved, all original prior checkpoints remain unchanged."

@@ -1,0 +1,58 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE018-CONTENT-RECONSTRUCTION-EXPLORATORY-REAL",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "real_world_source": {
+    "name": "UCI501 PRSA2017 authentic hourly Beijing 12 station observed PM2.5 actual physical data, source original approved archive and 2014 FIT only",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "observed_real_outcomes": true
+  },
+  "models": [
+    {
+      "architecture": "assoc_historic_query",
+      "seed": 18018,
+      "trainable_parameters": 99390,
+      "deployed_parameters": 99390
+    },
+    {
+      "architecture": "fast_slow_historic_query",
+      "seed": 18018,
+      "trainable_parameters": 99390,
+      "deployed_parameters": 99390
+    },
+    {
+      "architecture": "assoc_historic_query",
+      "seed": 18019,
+      "trainable_parameters": 99390,
+      "deployed_parameters": 99390
+    },
+    {
+      "architecture": "fast_slow_historic_query",
+      "seed": 18019,
+      "trainable_parameters": 99390,
+      "deployed_parameters": 99390
+    }
+  ],
+  "research_status": "EXPLORATORY REAL SOURCE, no independent previously unseen protected holdout; May–June 2014 already examined in older studies. NO ARCHITECTURE SUPERIORITY CLAIM or commercial deployable factual recall.",
+  "hypothesis": "Can a legal past-timestamp query with source-real continuous PM2.5 reconstruction loss train an original 2-head native writer and associative reader to beat SAME trained 99,390-param fastslow-only control, real last observation/prior and ablated matrix? Compare real H64 historical content accuracy and +6 physical forecasting without privileged target-derived source writer key at query.",
+  "training": "64 AdamW updates/seed/arm, batch16, 88 original physical observation hours from anchor-23 to+64, source+6 recorded future target, original source train March1-Apr18 2014 at 12-hour source station grid with actually observed historic PM2.5 target; sample with replacement from frozen eligible training case list using Python random.Random(seed) and 1024 indexed source examples; training exactly same ordered source IDs/time, masks, normalized log target, optimizer hyperparams across arms; source must physically exist and be station owner authorized.",
+  "training_optimizer": {
+    "name": "AdamW",
+    "lr": 0.0005,
+    "weight_decay": 0.001,
+    "foreach": false,
+    "fused": false,
+    "steps": 64,
+    "batch": 16,
+    "grad_clip_norm": 1
+  },
+  "loss": "existing LATFUSE016 true-source historical PM2.5 continuous standardized log1p SmoothL1(beta1) plus original future+6 masked all-channel .8 Gaussian NLL+.2 MAE, targets read only after model outputs; legal past clock6 and current observed-only source state, NOT privileged historical write key or target in query.",
+  "train_grid": "Source site0..11, UTC original FIT Mar01-Apr18 2014 every12 recorded hours, PM2.5 observed at anchor, anchor+64+6 future available only for loss/forecast, original masks/age/last full chronological, no false synthetic cases. Exclude any case without actual PM anchor/at least one true future sensor observation. Train normals from physical sources before 2014-03-01 only.",
+  "evaluation": "Source authentic May01-Jun10 2014 every96 hours per site, future until source original FIT 2014-12 (no numerical2015+). H64 PRIMARY, H16/128/512 zero-shot descriptive, 12 stations and fixed hour grid, actual source target only after output, no model-selection on May; May–June was previously exposed to architecture research thus NOT VIRGIN trained model evaluation. No protected original rows opened.",
+  "metrics": "Historical original observed standardized log1p PM2.5 MAE/physical logged and original raw µg/m3 MAE, source prior original training mean, last valid PM at query, zeroed-associative matrix loss diagnostic, true+6 all-channel physically observed normalized MAE/NLL/nominal90 coverage/persistence; report each seed, all four lags, source-station and dates.",
+  "capacity_and_fairness": "Each 99390 active/deployed weights, exactly1696 FP32+16bool=6800 source stream. Original H64 batch16 88-hour whole-ATen operator mathematical FLOP difference <=0.0065% via LATFUSE017 registered trace/independent proof (MATH_PARITY.json), including backward clipping and AdamW-lr0; learned training optimizer lr .0005 same ATen static kernel shape as audited, but kernel/hardware and other eval shapes not certified. Do NOT claim independent qualified architecture superiority based on this internal developmental source.",
+  "integrity": "PLAN.json includes exact true source train/May eval grid IDs and per-seed ordered training sample hashes committed BEFORE first fit. Exact original source SHA, training code hash, optimizer/RNG full checkpoint per seed per arm and CI clean checkout replay from source original archive, no late hyperparam tuning, failed seeds preserved, do not merge.",
+  "future_gate": "Do not promote to qualified superiority without new independent real world authorized source episodes with observed decisions/outcomes and sealed evaluation; proper source station/hour splitting, uncertainty calibration, fully recorded checkpoint replay and no original protected rows or posthoc source selection.",
+  "one_time_prohibition": "No earlier trained checkpoint overwritten; no actual benchmark claims from synthetic, May–June exploratory only; if parity plan/source hashes mismatch reject fit before any optimizer."
+}
