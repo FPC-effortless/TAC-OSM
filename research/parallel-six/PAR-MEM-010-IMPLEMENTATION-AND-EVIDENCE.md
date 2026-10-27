@@ -81,9 +81,16 @@ historical content retrieval accuracy, improved forecasting, calibrated
 uncertainty, physical action consequences or independent model
 generalization.
 
-The registry-adapter tests added after the original run must also pass
-their own updated CI to count as verified. Full Lean/PNDS CI for PR #49
-must likewise pass separately.
+**Updated after source-family factory integration:** [second original-source
+CI #40518623458](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40518623458)
+PASSED **11 new source-aligned tests plus 9 original time-aware regressions =
+20 software invariants**. The same 192 genuine source observations again
+passed the real FIT no-fit parity preflight.
+
+[PNDS mathematical-engineering CI #40518404453](https://github.com/FPC-effortless/pnds-lean/actions/runs/40518404453)
+also PASSED full Lean imports / exact-real theorem axiom audit and independent
+scalar Python tests. This proves only the specified narrow operator statements,
+not end-to-end Torch FP32/AD/probability or source memory capability.
 
 ### Lawful source-memory semantics
 
