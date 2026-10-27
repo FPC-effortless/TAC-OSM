@@ -33,11 +33,27 @@ jobs:
         run: |
           set -euo pipefail
           test -s research/parallel-six/PAR-MEM-011-PROTOCOL.json
-          test ! -e research/parallel-six/PAR-MEM-011-FROZEN-PLAN.json
-          test ! -e research/replay-bundles/PAR-MEM-011
           test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
           test "$(find research/replay-bundles/PAR-TIME-005 -maxdepth 1 -name 'seed-*-original-continuous.pt' | wc -l)" -eq 5
           python -m py_compile scripts/parmem011_genuine_source_train.py scripts/parmem011_real_train_operator_preflight.py
+      - name: Detect original trained source artifact and enforce immutable replay-only reruns
+        id: original
+        shell: bash
+        run: |
+          set -euo pipefail
+          if test -s research/replay-bundles/PAR-MEM-011/DEV_RESULTS.json; then
+            test -s research/parallel-six/PAR-MEM-011-FROZEN-PLAN.json
+            test -s research/replay-bundles/PAR-MEM-011/TRAIN_RECEIPT.json
+            test "$(find research/replay-bundles/PAR-MEM-011 -maxdepth 1 -name 'seed-*-original.pt' | wc -l)" -eq 10
+            test "$(find research/replay-bundles/PAR-MEM-011 -maxdepth 1 -name 'seed-*-original_DEV_tensors.pt' | wc -l)" -eq 10
+            echo 'frozen=true' >> "$GITHUB_OUTPUT"
+            echo 'READ-ONLY: original trained source and development records are already frozen'
+          else
+            test ! -e research/parallel-six/PAR-MEM-011-FROZEN-PLAN.json
+            test ! -e research/replay-bundles/PAR-MEM-011
+            echo 'frozen=false' >> "$GITHUB_OUTPUT"
+            echo 'ORIGINAL CASE PRE-REGISTRATION: no optimizer and no result already exist'
+          fi
       - name: Restore SHA-pinned original real publisher Beijing PRSA ZIP
         shell: bash
         run: |
@@ -48,6 +64,7 @@ jobs:
           git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem011-real/source.zip
           test "$(sha256sum /tmp/parmem011-real/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
       - name: Freeze original site owner + physical event index + lag + actual training case order WITHOUT FIT
+        if: steps.original.outputs.frozen == 'false'
         env:
           PYTHONPATH: '.:src'
           OMP_NUM_THREADS: '1'
@@ -57,6 +74,7 @@ jobs:
           python -m scripts.parmem011_genuine_source_train --mode plan \
             --source /tmp/parmem011-real/source.zip
       - name: Git commit source schedule before profiler optimizer or any experimental fit
+        if: steps.original.outputs.frozen == 'false'
         shell: bash
         run: |
           set -euo pipefail
@@ -69,6 +87,7 @@ jobs:
           git commit -m 'research: preregister real owner clock 129-event source windows and all five optimizer sampling orders'
           git push origin "HEAD:refs/heads/$TRAIN_BRANCH"
       - name: Fail-closed actual full training ATen operator trace parity prior to learned comparisons
+        if: steps.original.outputs.frozen == 'false'
         env:
           PYTHONPATH: '.:src'
           OMP_NUM_THREADS: '1'
@@ -78,6 +97,7 @@ jobs:
           python -m scripts.parmem011_real_train_operator_preflight \
             --source /tmp/parmem011-real/source.zip
       - name: Fit ten original real neural checkpoints with five seeds and two source-query arms
+        if: steps.original.outputs.frozen == 'false'
         env:
           PYTHONPATH: '.:src'
           OMP_NUM_THREADS: '1'
@@ -87,6 +107,7 @@ jobs:
           python -m scripts.parmem011_genuine_source_train --mode fit \
             --source /tmp/parmem011-real/source.zip
       - name: Freeze 10 original full model + AdamW + RNG + publisher SHA checkpoint files BEFORE DEV metrics
+        if: steps.original.outputs.frozen == 'false'
         shell: bash
         run: |
           set -euo pipefail
@@ -98,6 +119,7 @@ jobs:
           git commit -m 'research: freeze original 10 genuine long-history source TAC trained models optimizer RNG'
           git push origin "HEAD:refs/heads/$TRAIN_BRANCH"
       - name: Only now score formerly exposed May-Jun 2014 DEV real historical lags
+        if: steps.original.outputs.frozen == 'false'
         env:
           PYTHONPATH: '.:src'
           OMP_NUM_THREADS: '1'
@@ -107,6 +129,7 @@ jobs:
           python -m scripts.parmem011_genuine_source_train --mode eval \
             --source /tmp/parmem011-real/source.zip
       - name: Save original real measured historical content forecasts for all 10 trained models
+        if: steps.original.outputs.frozen == 'false'
         shell: bash
         run: |
           set -euo pipefail
