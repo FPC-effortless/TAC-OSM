@@ -14,6 +14,30 @@ FORCED_KEY_PERIOD = math.lcm(*PERIODS)
 EXPECTED_ACTIVE_PARAMETERS = 100_680
 EXPECTED_FLOAT_STATE = 88 + 8*8 + 2*16*8
 
+# Complete source-to-mathematics live tensor-shape manifest (36 tensor groups).
+# Flattened parameter totals alone cannot detect swapped or inactive layers.
+EXPECTED_PARAMETER_SHAPES = {
+    "rotation": (2,8,8), "res_logit": (),
+    "embedding.weight": (128,48), "time_proj.weight": (48,7),
+    "key_native.weight": (8,48), "key_native.bias": (8,),
+    "value_native.weight": (8,48), "value_native.bias": (8,),
+    "fast_map.weight": (176,144), "fast_map.bias": (176,),
+    "slow_map.weight": (176,184), "slow_map.bias": (176,),
+    "native_gates.weight": (2,224), "native_gates.bias": (2,),
+    "source_content.weight": (16,48), "source_content.bias": (16,),
+    "source_router.weight": (2,48), "source_router.bias": (2,),
+    "source_retention.weight": (2,48), "source_retention.bias": (2,),
+    "source_strength.weight": (2,48), "source_strength.bias": (2,),
+    "source_silu_mod.weight": (2,48),
+    "hist_project.weight": (48,16),
+    "read_router.weight": (2,8), "read_router.bias": (2,),
+    "norm.weight": (248,), "norm.bias": (248,),
+    "read_in.weight": (75,248), "read_in.bias": (75,),
+    "read_out.weight": (128,75), "read_out.bias": (128,),
+    "res_in.weight": (10,248), "res_in.bias": (10,),
+    "res_out.weight": (128,10), "res_out.bias": (128,),
+}
+
 def require_ordinal_range(first: int, count: int) -> None:
     """No forced modulo cycle wrap; NOT a proof of unique learned keys."""
     if not isinstance(first,int) or isinstance(first,bool) or first < 0:
@@ -42,6 +66,9 @@ def validate_model(model) -> None:
         raise ValueError("frozen checkpoint used the shared rectangular scan")
     if getattr(model,"gate_mode",None) not in ("tanh","silu"):
         raise ValueError("unrecognized historical training arm")
+    observed={name:tuple(p.shape) for name,p in model.named_parameters()}
+    if observed != EXPECTED_PARAMETER_SHAPES:
+        raise ValueError("language trainable tensor shapes/names differ from typed PNDS source graph")
     n=sum(p.numel() for p in model.parameters())
     if n != EXPECTED_ACTIVE_PARAMETERS:
         raise ValueError(f"wrong graph parameter count: {n}")
