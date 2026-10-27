@@ -1,0 +1,58 @@
+name: PAR-MEM-007 read-only original privileged writer-key diagnostic replay
+on:
+  push:
+    branches:
+      - research/parmem007-privileged-key-audit-2026-10-27
+    paths:
+      - '.github/workflows/parmem007-independent-replay.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/parmem007-independent-replay.yml'
+      - 'research/parallel-six/PAR-MEM-007-RESULTS.json'
+      - 'scripts/parmem007_oracle_writer_key.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-original-source-write-key-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original CPU tensor dependency
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Require original frozen source and diagnostic evidence
+        run: |
+          set -euo pipefail
+          test -s research/parallel-six/PAR-MEM-007-PROTOCOL.json
+          test -s research/parallel-six/PAR-MEM-007-RESULTS.json
+          test -s research/parallel-six/PAR-MEM-006-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-MEM-006/TRAIN_RECEIPT.json
+          test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
+          python -m py_compile scripts/parmem007_oracle_writer_key.py
+      - name: Restore immutable source-original publisher ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem007-original
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem007-original/source.zip
+          test "$(sha256sum /tmp/parmem007-original/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Recompute all original real write keys and five-seed true/wrong/time/no-read ridge diagnostics
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.parmem007_oracle_writer_key --mode replay \
+            --source /tmp/parmem007-original/source.zip
+          echo 'SOURCE_ORIGINAL_PRIVILEGED_WRITER_KEY_REPLAY_PASS'
+      - name: Assert no modified checkpoint source or report files
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          echo 'The true write-key query remains privileged, not a deployed model capability.'
