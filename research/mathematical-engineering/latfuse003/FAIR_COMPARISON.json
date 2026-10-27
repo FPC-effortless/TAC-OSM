@@ -1,0 +1,17 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE003-NOFIT-OPERATORS-001",
+  "study_type": "noncomparative_diagnostic",
+  "no_architecture_superiority_claim": true,
+  "no_new_model_fits": true,
+  "scientific_purpose": "Preflight a prospective four-key-subspace top-2 gated delta alternative to original LATFUSE002 using genuine historical source observations and actual gradient/FLOP probes before any training registration.",
+  "original_real_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "recurrent_fp32_state": "Original H80 fast80 slow80 16x16 memory 16 entity slots x80 =1696 FP32 plus16 bool flags =6800 nominal bytes unchanged",
+  "candidate_trainable_params": 99747,
+  "reference_params": 98775,
+  "engineering_qualification": "Initial parameter parity (<1%) only; compute, optimizer/matched sample order, genuine outcome learning and retained-life accuracy not yet validated. Do not perform model fitting under this diagnostic.",
+  "key_separation_loss": "Only same-source authentic sensor-distinct pairs (3+ co-observed coordinates, observed normalized RMS>=1), hinge abs cosine>.85 in head when both observations selected same head. No arbitrary all-key orthogonality or synthetic capability labels.",
+  "selective_memory": "Per-head 16x4 matrix exactly 256 cells; unselected heads are byte-identical across source steps, no history cache, original source-registered slots unaffected.",
+  "parallel_claim": "Each head update right affine under fixed input-conditioned schedules; sequential no-source irregular encoding and key router inputs do not demonstrate whole model parallel time execution.",
+  "closed_evaluation": "No heldout accuracy and no numeric protected 2016-2017 data; source-specific FIT forward+autograd only"
+}
