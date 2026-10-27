@@ -130,10 +130,6 @@ def create_model(seed,name):
     torch.manual_seed(seed)
     model=ARMS[name]()
     c=model.original_state_and_weight_contract()
-    if (c["trainable_parameters"]!=c["deployed_parameters"]!=99390 or
-        c["original_nominal_memory_bytes"]!=6800):
-        # chained inequality would reject equal counts: use correct guard below
-        pass
     if not(c["trainable_parameters"]==c["deployed_parameters"]==99390 and
            c["original_nominal_memory_bytes"]==6800):
         raise RuntimeError("pretrained H80 FP32 and live 99,390 parameter budget violation")
