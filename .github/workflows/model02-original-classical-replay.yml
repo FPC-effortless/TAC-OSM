@@ -1,0 +1,52 @@
+name: Model02 original Backblaze classical source checkpoint independent no-fit replay
+on:
+  push:
+    branches:
+      - product/backblaze-censored-risk-intake-2026-10-27
+    paths:
+      - 'research/replay-bundles/PRODUCT-MODEL02-BACKBLAZE-2013-CLASSICAL/**'
+      - 'specialist_models/backblaze_2013_classical_dev_fit.py'
+      - '.github/workflows/model02-original-classical-replay.yml'
+  pull_request:
+    paths:
+      - 'research/replay-bundles/PRODUCT-MODEL02-BACKBLAZE-2013-CLASSICAL/**'
+      - 'specialist_models/backblaze_2013_classical_dev_fit.py'
+      - '.github/workflows/model02-original-classical-replay.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  checkpoint-original-source-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Use Git original learned coefficients, no optimizer, and rescore exposed source
+        run: |
+          python specialist_models/backblaze_2013_classical_dev_fit.py --replay \
+            --out-model research/replay-bundles/PRODUCT-MODEL02-BACKBLAZE-2013-CLASSICAL/ORIGINAL_CHECKPOINT.json \
+            --out-report ./model02_replay_dev.json
+      - name: Exact original full-score equality and original FIT model byte hash
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          root=Path("research/replay-bundles/PRODUCT-MODEL02-BACKBLAZE-2013-CLASSICAL")
+          original=json.loads((root/"ORIGINAL_EXPOSED_DEV_RESULTS.json").read_text())
+          actual=json.loads(Path("model02_replay_dev.json").read_text())
+          checkpoint=(root/"ORIGINAL_CHECKPOINT.json").read_bytes()
+          model=json.loads(checkpoint)
+          assert original==actual, "Original whole DEV result mismatch, not a successful replay"
+          assert model["fit_examples"]==112115
+          assert actual["dev"]["n_scored_windows"]==204373
+          assert actual["dev_unique_positive_physical_drives"]==65
+          assert actual["source_published_asof_verified"] is False
+          assert actual["independent_evaluation"] is False
+          assert actual["model_type"]=="CLASSICAL_NOT_TAC"
+          print("ORIGINAL_SOURCE_CLASSICAL_EXPOSED_DEV_NO_FIT_REPLAY=PASS")
+          print("ORIGINAL_CHECKPOINT_SHA256="+hashlib.sha256(checkpoint).hexdigest())
+          PY
