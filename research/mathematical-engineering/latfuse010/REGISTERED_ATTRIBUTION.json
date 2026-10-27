@@ -1,0 +1,22 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE010-REAL-EVENT-WRITE-READ-ATTRIBUTION",
+  "study_type": "noncomparative_diagnostic",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "On original four immutable real-source LATFUSE008 trained checkpoints, test whether gradient from the true physically observed past PM2.5 event supervision actually reaches the key/value activations of the original event write, whether its learned historical read query aligns to the original write key, and whether selectively omitting ONLY the exact event-time associative write changes the historical-event prediction on genuine intervening source observations.",
+  "original_source_archive_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "population": "Original real Beijing UCI501 FIT May1-Jun10 2014, exactly first four matched source-station/hour highPM2.5 >=150 ug/m3 vs ordinary <=35 ug/m3 source PAIRS from previously frozen LATFUSE008 original evaluation cohort, original past-only 2013Mar-2014Mar normalization, no heldout claims.",
+  "checkpoint_binding": "LATFUSE008 RESULTS.json SHA256 recorded for two seed80701/80702 × two architectures associative-history-query and fast-slow current-only historic query, strict original 99390 active model params and original 1696 FP32 values+16 flags (6800B), no parameter update, checkpoint SHA checked before/after.",
+  "lags_hours": [
+    16,
+    64,
+    128,
+    512
+  ],
+  "actual_write_gradient": "Original source stream 24 observed previous hours under no_grad, detach only pre-event recurrent state. At event source hour t permit derivative through its actual original key_map and val_map outputs by setting source observation tensor requires_grad=True and capture original event layer outputs, but keep ALL pretrained model parameters requires_grad=False and no optimizer. Then run real intervening source through t+L and genuine BCE target obtained only after original logged prediction. Per-example l2 mean gradients dBCE/d raw key_map and dBCE/d raw val_map at physical anchor; control historically nonassoc should have no such gradient. This tests source-activation sensitivity, not trained original param tensor optimizer updates, not independently passing evaluation.",
+  "source_event_write_lesion": "Same source-observed original event step and identical original fast/slow/entity fields, but at exact event anchor replace ONLY new associative matrix with its immediate pre-write value. Advance both histories with exactly identical genuine source suffix; no source-future targets read by either branch. Compare historic event logits/probabilities (absolute/mean), event-vs-matched ordinary ranking and true-source BCE. This is a physically source-anchored model state intervention, not an actually observed alternate world, not an event-only factual deletion because original matrix update includes decay plus write.",
+  "query_alignment": "Compute exact source-trained event key normalized each 8D head, exact historic model query normalized from past-known 6D source clock and present belief at requested t+L, and trained read_router soft weights; compare per-head cosine angles and weighted mean signed/absolute cos on physically observed high vs ordinary anchor pairs. Record source beta/routing/alpha at actual event. Read key for nonassoc control has similar tensor shape but is applied to fast×slow pseudo-memory, not associative M; no retrieval inference from this geometry.",
+  "access_leakage_and_interpretation": "Training history includes legitimate event sensor x at t as ordinary observation, so measured event target is not a new future action. Calendar is periodic and may alias history times; query timestamp is legal known but not event label. Never use past recorded event key as an oracle query, current model receives only historic time as usual. No source FIT future normalization, no synthetic primary results, no 2015 exposed DEV/2016-17 protected numeric records. Four source pairs/two seeds are forensic, not generalization.",
+  "fixed_stopping_rule": "Run original frozen checkpoint family once, no tuning/retrying to improve scores. Preserve negative/zero/key-similarity results and precise source/optimizer=0/weights untouched. No full model formal IEEE/AD proof or fairness comparison claim."
+}
