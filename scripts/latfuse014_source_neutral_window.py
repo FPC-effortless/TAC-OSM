@@ -86,7 +86,7 @@ def extract(m,d,rows,*,split):
         # 16D output in identical value basis and scaling.
         heads=prev.headview(s.associative)
         def read(k):
-            each=torch.einsum("bhvk,bt hk->bt hv",heads,k)
+            each=torch.einsum("bhvk,bthk->bthv",heads,k)
             return (each*route[:,None,:,None]).sum(2)
         # No target physical sensor value is supplied to native query.
         for mode,k in (("native",query),("oracle",key),
@@ -131,7 +131,8 @@ def extract(m,d,rows,*,split):
         station=torch.tensor(sites),site_target=torch.tensor(original_site))
 
 def fit_probe(tx,ty,mask,vx):
-    # Fully predeclared fixed lambda1 source-only dual ridge, no held-out tuning.
+    # Same predeclared fixed lambda1 dual ridge estimator computed via
+    # exact primal identity (X'X+I)^-1 X'y, no held-out tuning.
     train=tx[mask]
     y=ty[mask]
     if len(y)<80:raise RuntimeError("too few observed true training source targets")
@@ -140,7 +141,7 @@ def fit_probe(tx,ty,mask,vx):
     x=((train-center)/spread).clamp(-6,6)/math.sqrt(train.shape[-1])
     z=((vx-center)/spread).clamp(-6,6)/math.sqrt(train.shape[-1])
     mu=y.mean();sd=y.std(unbiased=False).clamp_min(1e-4)
-    out=z@x.T@torch.linalg.solve(x@x.T+torch.eye(len(x)),((y-mu)/sd)[:,None])
+    out=z@torch.linalg.solve(x.T@x+torch.eye(x.shape[-1]),x.T@((y-mu)/sd)[:,None])
     result=(out[:,0]*sd+mu).clamp(0,9)
     if not bool(torch.isfinite(result).all()):raise RuntimeError("ridge source numeric invalid")
     return result,len(y),len(tx[0])
