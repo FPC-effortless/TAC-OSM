@@ -6,12 +6,12 @@
 
 Official open [ARC-AGI toolkit](https://github.com/arcprize/ARC-AGI) exposes `Arcade(operation_mode=OperationMode.OFFLINE, environments_dir=...)`, `make(game_id)`, `env.observation_space`, `env.action_space`, and `env.step(action, data=...)`. Use legitimately obtained **public development** game files only; no hidden games, evaluation API, credentials, guessed objectives or hardcoded per-game routes. Pin the toolkit version in your run's evidence.
 
-1. Install the official toolkit in a separate Python 3.12 environment: `python -m pip install arc-agi`.
+1. Install the official toolkit in a separate Python 3.12 environment: `python -m pip install arc-agi==0.9.9`.
 2. Put legitimately available public local environments in a dedicated directory (required by the CLI). No network fallback.
 3. Run `python scripts/arc3_public_baseline.py --game YOUR_PUBLIC_ID --environments /path/to/public_games --out /tmp/arc3_run.json --max-actions 80`.
 4. Run constructed unit tests with `python -m unittest discover -s tests -p 'test_arc3_public_baseline.py' -v`.
 
-The agent selects non-RESET legal actions using bounded visible-frame state-action visit counts; complex-action coordinates default to the middle of the first observed grid. This is an intentionally weak **blind** baseline; it does not learn hidden rules, optimize scores, or generate planned trajectories. It stops on WIN or GAME_OVER or a hard action budget. No repeated game reset retries.
+GitHub CI installs and checks this exact toolkit version and its action enum interface **without opening any public or hidden game**. This is an API compatibility check, not a performance result.\n\nThe agent selects non-RESET legal actions using bounded visible-frame state-action visit counts; complex-action coordinates default to the middle of the first observed grid. This is an intentionally weak **blind** baseline; it does not learn hidden rules, optimize scores, or generate planned trajectories. It stops on WIN or GAME_OVER or a hard action budget. No repeated game reset retries.
 
 ## Evidence and anti-cheat
 
