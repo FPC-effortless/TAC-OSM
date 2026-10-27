@@ -31,3 +31,12 @@ jobs:
         run: |
           python -m py_compile verify_original_archive.py
           python -m unittest -v test_language_contract.py test_fullgraph_correspondence.py test_language_finite_difference.py test_language_nonlinear_derivatives.py test_language_tensor_rounding.py
+          python generate_tensor_rounding_receipt.py --output tensor_rounding_receipt.json
+
+      - name: Preserve pinned constructed FP32 tensor receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tac-language-fp32-rational-receipt
+          path: research/language/formal-004/tensor_rounding_receipt.json
+          if-no-files-found: warn
