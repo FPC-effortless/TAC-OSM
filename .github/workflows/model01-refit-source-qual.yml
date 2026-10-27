@@ -1,0 +1,45 @@
+name: MODEL01 REFIT genuine publisher metadata and strict source target gate
+on:
+  push:
+    branches:
+      - research/model01-refit-source-compatibility-2026-10-27
+  pull_request:
+    paths:
+      - 'specialist_models/model01_refit_metadata_and_target_gate.py'
+      - 'tests/test_model01_refit_metadata_and_target_gate.py'
+      - 'research/registrations/MODEL01-REFIT-SOURCE-QUAL-001.md'
+      - '.github/workflows/model01-refit-source-qual.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  metadata-only-source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Constructed legal source and 8-second meter continuity tests
+        run: python -m unittest discover -s tests -p 'test_model01_refit_metadata_and_target_gate.py' -v
+      - name: Acquire publisher Zenodo metadata ONLY, do not download REFIT data
+        run: python specialist_models/model01_refit_metadata_and_target_gate.py --out refit_source_metadata_only.json
+      - name: Assert no falsely identical target or trained inference
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('refit_source_metadata_only.json'))
+          assert d['target_equivalence_to_uci374'] is False
+          assert d['original_refit_raw_appliances_loaded'] is False
+          assert d['model_fitted_or_scored'] is False
+          print('SOURCE_METADATA_VERIFIED_NO_TRAINING=PASS')
+          print('PUBLISHER_FILES='+str(len(d['source_files'])))
+          print('LICENSE_METADATA='+d['license_metadata_check'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-refit-publisher-metadata-only-audit
+          path: refit_source_metadata_only.json
+          if-no-files-found: error
+          retention-days: 14
