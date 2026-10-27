@@ -37,7 +37,8 @@ jobs:
           python -m py_compile scripts/partime004_frozen_fit_lesions.py
           test -s research/replay-bundles/PAR-TIME-003/TRAIN_RECEIPT.json
           test -s research/parallel-six/PAR-TIME-003-FROZEN-PLAN.json
-          test ! -e research/parallel-six/PAR-TIME-004-RESULTS.json
+          # An existing original receipt is immutable and must be REPLAYED,
+          # never overwritten on subsequent CI runs.
           test "$(find research/replay-bundles/PAR-TIME-003 -maxdepth 1 -name 'seed-*-full-original.pt' | wc -l)" -eq 5
       - name: Restore SHA-verified publisher data already acquired for genuine earlier research
         shell: bash
@@ -48,18 +49,28 @@ jobs:
           test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
           git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/partime004-genuine-source/PRSA2017.zip
           test "$(sha256sum /tmp/partime004-genuine-source/PRSA2017.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
-      - name: Frozen five-checkpoint genuine March-April 2014 FIT source diagnostics only
+      - name: Frozen five-checkpoint true source attribution or frozen result replay
+        id: source_audit
+        shell: bash
         env:
           PYTHONPATH: '.:src'
           OMP_NUM_THREADS: '1'
           MKL_NUM_THREADS: '1'
           PYTHONUNBUFFERED: '1'
         run: |
-          python -m scripts.partime004_frozen_fit_lesions --mode audit \
-            --source /tmp/partime004-genuine-source/PRSA2017.zip
+          set -euo pipefail
+          if [ -e research/parallel-six/PAR-TIME-004-RESULTS.json ]; then
+            python -m scripts.partime004_frozen_fit_lesions --mode replay \
+              --source /tmp/partime004-genuine-source/PRSA2017.zip
+            echo "created=false" >> "$GITHUB_OUTPUT"
+          else
+            python -m scripts.partime004_frozen_fit_lesions --mode audit \
+              --source /tmp/partime004-genuine-source/PRSA2017.zip
+            echo "created=true" >> "$GITHUB_OUTPUT"
+          fi
           test -s research/parallel-six/PAR-TIME-004-RESULTS.json
       - name: Preserve original FIT-only negative or positive diagnostic receipt, no checkpoint writes
-        if: github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request' && steps.source_audit.outputs.created == 'true'
         shell: bash
         run: |
           set -euo pipefail
