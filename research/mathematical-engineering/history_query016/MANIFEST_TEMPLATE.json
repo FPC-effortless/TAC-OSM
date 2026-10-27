@@ -1,0 +1,54 @@
+{
+  "arms": [],
+  "causal_protocol": "Use original FIT-only pre-March2014 source normalization and causal last/age caches. Replay each original owner from anchor-23 through query=anchor+64. Both predictors receive only feature prefixes, never raw/targets/future feature rows. Query only original timestamps anchor+0,8,16,24,32,40,48,56. Scoring targets/masks are consulted after both model outputs. No oracle source WRITE keys.",
+  "checkpoint_policy": "New immutable HISTORY-QUERY016 checkpoints include optimizer/RNG/source/order/recipe/losses/operator fingerprints; fresh-process actual-source replay.",
+  "compute_accounting": "complete_matched_operator_ledger",
+  "execution_level": "internal_research",
+  "literature_gap": {
+    "established_work": [
+      {
+        "established_result": "Content-addressable external memory is established; actual source time/owner utility must still be tested.",
+        "paper": "Graves et al. (2016), Hybrid computing using a neural network with dynamic external memory",
+        "url": "https://doi.org/10.1038/nature20101"
+      },
+      {
+        "established_result": "Reconstruction objectives for temporal memory are established; reconstruction alone does not prove query-specific real-data utility.",
+        "paper": "Rae et al. (2020), Compressive Transformers for Long-Range Sequence Modelling",
+        "url": "https://openreview.net/forum?id=SylKikSYDH"
+      }
+    ],
+    "unresolved_TAConly_question": "Does query-diverse physical historical-content supervision recover timestamp-specific useful original associative memory beyond matched fastslow and label-blind clock controls?",
+    "what_is_not_being_rediscovered": "Dense historical-query regression and masked losses are established. This is a preregistered falsification of this original recurrent memory, not a new architecture claim."
+  },
+  "operator_profile_path": "PENDING",
+  "operator_profile_sha256": "PENDING",
+  "real_world_source": {
+    "license": "CC-BY-4.0",
+    "license_evidence_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+    "name": "UCI501 original Beijing station physical air-quality observations",
+    "observed_real_outcomes": true,
+    "publisher_url": "https://archive.ics.uci.edu/dataset/501/beijing+multi+site+air+quality+data",
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "source_receipt": "research/mathematical-engineering/history_audit014/PUBLIC_SOURCE_RECEIPT.json"
+  },
+  "registered_before_first_fit": true,
+  "research_scope": {
+    "checkpoint_promotion": false,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "publicly_licensed": true,
+    "reward_integrity_certification": false,
+    "safety_claim": false
+  },
+  "schema_version": "tac-osm.parity.v1",
+  "split_policy": {
+    "cohort_sha256": "PENDING_SOURCE_ONLY_PREPARATION",
+    "frozen": true,
+    "source_numeric_stop_exclusive": "2015-01-01"
+  },
+  "study_id": "HISTORY-QUERY016-DIVERSE-CONTENT-TRAINING",
+  "study_type": "architecture_comparison",
+  "training_recipe_sha256": "PENDING_SOURCE_PREFLIGHT"
+}
