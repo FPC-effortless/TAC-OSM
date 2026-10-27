@@ -1,0 +1,49 @@
+name: Model02 original source censor-inclusive first-alert bounds, no refit
+on:
+  push:
+    branches:
+      - research/model02-censor-inclusive-decision-2026-10-27
+  pull_request:
+    paths:
+      - 'specialist_models/model02_censor_inclusive_alert_bounds.py'
+      - 'tests/test_model02_censor_inclusive_alert_bounds.py'
+      - '.github/workflows/model02-censor-inclusive-first-alert.yml'
+      - 'research/registrations/MODEL02-CENSOR-INCLUSIVE-001.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-no-fit-bounds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Constructed exact outcome and precision-bound invariants
+        run: python -m unittest discover -s tests -p test_model02_censor_inclusive_alert_bounds.py -v
+      - name: Genuine original publisher cases, first eligible DEV per drive, include censored
+        run: python specialist_models/model02_censor_inclusive_alert_bounds.py --out model02_censor_inclusive_original.json
+      - name: Verify no reference fitting or unwarranted qualification
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('model02_censor_inclusive_original.json'))
+          assert d['fitting_or_calibration_during_evaluation'] is False
+          assert d['independent_evaluation'] is False
+          assert d['first_decision_outcomes']['CENSORED']>=1
+          for b in d['budgets']:
+            for x in b['models'].values():
+              assert x['known_positive']+x['known_negative']+x['unknown_censored']==x['reviewed_drives']
+              assert x['precision_lower_bound_if_unknown_negative']<=x['precision_upper_bound_if_unknown_positive']
+          print('CENSOR_INCLUSIVE_ORIGINAL_SOURCE_BOUNDS=PASS')
+          print('COUNTS='+json.dumps(d['first_decision_outcomes'],sort_keys=True))
+          print('ALERTS='+json.dumps(d['budgets'],sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model02-real-exposed-censor-inclusive-first-drive-bounds
+          path: model02_censor_inclusive_original.json
+          if-no-files-found: error
+          retention-days: 14
