@@ -12,6 +12,8 @@ on:
       - 'scripts/benchmark_gp_rankone_nofit.py'
       - 'src/tac_osm/gp_prequential_nofit.py'
       - 'src/tac_osm/gp_event_boundary_nofit.py'
+      - 'src/tac_osm/gp_historical_fit_diagnostic.py'
+      - 'tests/test_gp_historical_fit_diagnostic.py'
       - 'tests/test_gp_event_boundary_nofit.py'
       - 'tests/test_gp_prequential_nofit.py'
       - 'tests/test_gp_rankone_nofit.py'
@@ -28,6 +30,8 @@ on:
       - 'scripts/benchmark_gp_rankone_nofit.py'
       - 'src/tac_osm/gp_prequential_nofit.py'
       - 'src/tac_osm/gp_event_boundary_nofit.py'
+      - 'src/tac_osm/gp_historical_fit_diagnostic.py'
+      - 'tests/test_gp_historical_fit_diagnostic.py'
       - 'tests/test_gp_event_boundary_nofit.py'
       - 'tests/test_gp_prequential_nofit.py'
       - 'tests/test_gp_rankone_nofit.py'
@@ -67,7 +71,9 @@ jobs:
         run: python -m unittest discover -s tests -p test_gp_prequential_nofit.py -v
       - name: Reject truth-bearing issue events and premature feedback in a streaming replay
         run: python -m unittest discover -s tests -p test_gp_event_boundary_nofit.py -v
+      - name: Falsify chronological FIT-only GP residual matching and original outcome boundaries
+        run: python -m unittest discover -s tests -p test_gp_historical_fit_diagnostic.py -v
       - name: Enforce scientific no-fit study receipt
         run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/gp-unc-001/REGISTERED_NOFIT.json --phase preflight
       - name: Compile mathematical reference
-        run: python -m py_compile src/tac_osm/gp_uncertainty_nofit.py src/tac_osm/gp_sparse_nofit.py src/tac_osm/gp_rankone_nofit.py src/tac_osm/gp_prequential_nofit.py src/tac_osm/gp_event_boundary_nofit.py scripts/benchmark_gp_rankone_nofit.py tests/test_gp_event_boundary_nofit.py tests/test_gp_prequential_nofit.py tests/test_gp_rankone_nofit.py tests/test_gp_uncertainty_nofit.py tests/test_gp_sparse_nofit.py
+        run: python -m py_compile src/tac_osm/gp_uncertainty_nofit.py src/tac_osm/gp_sparse_nofit.py src/tac_osm/gp_rankone_nofit.py src/tac_osm/gp_prequential_nofit.py src/tac_osm/gp_event_boundary_nofit.py src/tac_osm/gp_historical_fit_diagnostic.py scripts/benchmark_gp_rankone_nofit.py tests/test_gp_historical_fit_diagnostic.py tests/test_gp_event_boundary_nofit.py tests/test_gp_prequential_nofit.py tests/test_gp_rankone_nofit.py tests/test_gp_uncertainty_nofit.py tests/test_gp_sparse_nofit.py
