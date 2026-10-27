@@ -25,8 +25,8 @@ jobs:
           python-version: '3.12'
       - name: Verify the fairness gate itself fails closed
         run: |
-          python -m pip install 'pytest==9.1.1'
-          python -m pytest -q tests/test_research_parity_gate.py
+          python -m pip install 'pytest==9.1.1' 'cryptography'
+          python -m pytest -q tests/test_research_parity_gate.py tests/test_reward_runner_integration.py
       - name: Reject newly changed ME/DEV experiments lacking fair preregistration and pre/post-fit hooks
         run: |
           git fetch --no-tags origin "${{ github.base_ref }}"

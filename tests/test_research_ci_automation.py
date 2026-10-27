@@ -46,3 +46,27 @@ def test_ci_artifacts_are_explicitly_no_fit_and_workflows_have_read_only_permiss
         assert "retention-days: 14" in text
         assert "retention-days: 14" in text
         assert "--fixture" in text
+
+
+
+def test_reward_hacking_negative_controls_are_compulsory_in_automatic_anticheat_ci():
+    text = workflow("research-anticheat.yml")
+    assert "tests/test_research_reward_integrity.py tests/test_run_reward_integrity.py" in text
+    assert "scripts/run_reward_integrity.py --fixture" in text
+    assert "ci-artifacts/reward-hacking-negative-control.json" in text
+    assert "assert r['hacked_case_status'] == 'FAIL'" in text
+    assert "assert r['reward_promotion_status'] == 'FAIL'" in text
+
+
+
+def test_signed_reward_runner_attestations_remain_mandatory_in_ci():
+    anticheat = workflow("research-anticheat.yml")
+    science = workflow("research-scientific-gate.yml")
+    assert "tests/test_reward_runner_integration.py" in anticheat
+    assert "tests/test_reward_runner_integration.py" in science
+    assert "cryptography" in anticheat
+    assert "cryptography" in science
+    parity_source = (ROOT / "scripts" / "validate_research_parity.py").read_text()
+    assert "verify_reward_attestation" in parity_source
+    assert "TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX" in parity_source
+    assert "scripts/run_qualified_research.py" in parity_source

@@ -76,6 +76,43 @@ Do not equate cross-model fixture coverage with trained-checkpoint or real-data
 qualification; these require direct source-to-output end-to-end audits.
 
 
+## Binding model-independent reward-hacking prevention (effective 2026-10-26)
+
+For every new TAC-OSM model, policy, training loop, benchmark or evaluation
+that optimizes a reward/proxy metric, read
+`research/REWARD-HACKING-GATE-2026-10-26.md`. Define an independently
+sourced external goal and actor-vs-evaluator trust boundary BEFORE fit.
+Do NOT treat increased proxy score as improved intelligence/real outcomes.
+Recompute reward and goal independently, poison postdecision reward inputs,
+verify protected evaluator files against externally frozen hashes and
+out-of-band actual writer ACLs, and test aligned real outcomes including
+per-group/horizon safety and decision costs. All five checks in
+`research_reward_integrity.reward_audit_ledger` MUST be present and PASS
+before model-improvement/safety claims or reward-based checkpoint promotion;
+any FAIL, INCONCLUSIVE or missing check BLOCKS promotion. Fix the scorer,
+leakage or harm before rerunning. Never claim no reward hacking from synthetic
+CI fixtures; actual source-verified real FIT/DEV audit integration remains
+a distinct prerequisite. Keep sealed TEST unopened for iterative debugging.
+
+### Independent verifier required for ALL prospective reward-based study runners
+
+The prospective `scripts/validate_research_parity.py --phase preflight` and
+`--phase final` gates now require `--reward-evidence` plus an operator-injected
+`TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX`. This applies to single-model and
+architecture-comparison registrations **for any TAC-OSM family or seed**.
+Each registered model/seed must have signed, externally verified outcome
+evidence tied to its exact trained checkpoint. Before fit, independently
+verify original source, separated goal evaluator, protected scorer artifacts
+and actual trainer-vs-evaluator ACL boundaries. After fit, independently
+recompute proxy reward AND factual goals and check leakage, harm and costs,
+then have an access-separated evaluator sign the complete findings. Missing
+trusted signatures, real original outcomes, denied assessor access, changed
+checkpoint, or incomplete family/seed coverage must BLOCK training/promotion.
+Never sign inside the trainer or put the signing private key in repo secrets
+visible to model agents. See
+`research/REWARD-INDEPENDENT-RUNNER-GATE-2026-10-26.md`. No synthetic test
+signature implies any of six variants has achieved real-world qualification.
+
 ## Optional simplified experiment lab (2026-10-27)
 
 New and historical TAC-OSM workflows MAY index existing authorized FIT/DEV/diagnostic report files using `scripts/lab.py record` and view a static, offline dashboard using `scripts/lab.py report`. Use `research/LIGHTWEIGHT-LAB-2026-10-27.md` for the default GitHub/Python approach. The immutable lab receipt is *metadata only*, never a standalone source authority, checkpoint archive, fair-comparison gate, model capability result or reward-hacking certificate. Optional vendor/cloud adapters are disabled by default and must not upload originals, open TEST or incur compute charges without authorization. Preserve all existing experimental commands, source-attestation prerequisites, checkpoint-replay and PNDS Lean/Python rules. The native CI runs only no-fit fixture indexing.
