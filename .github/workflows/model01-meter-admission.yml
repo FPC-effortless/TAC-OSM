@@ -1,0 +1,32 @@
+name: Model01 strict genuine-meter source admission (no model promotion)
+on:
+  push:
+    branches:
+      - research/model01-independent-household-transfer-2026-10-27
+    paths:
+      - 'specialist_models/model01_meter_admission.py'
+      - 'tests/test_model01_meter_admission.py'
+      - '.github/workflows/model01-meter-admission.yml'
+      - 'docs/MODEL01_SOURCE_ADMISSION_AND_DEFER.md'
+  pull_request:
+    paths:
+      - 'specialist_models/model01_meter_admission.py'
+      - 'tests/test_model01_meter_admission.py'
+      - '.github/workflows/model01-meter-admission.yml'
+      - 'docs/MODEL01_SOURCE_ADMISSION_AND_DEFER.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  strict-meter-source-protocol:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Strict source time, units, freshness and safe fallback checks (constructed only)
+        run: python -m unittest discover -s tests -p 'test_model01_meter_admission.py' -v
+      - name: Static source and tests compile
+        run: python -m py_compile specialist_models/model01_meter_admission.py tests/test_model01_meter_admission.py
