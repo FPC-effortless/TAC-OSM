@@ -1,0 +1,3756 @@
+{
+  "schema": "parmem010.math_correspondence.v1",
+  "source_commit": "63ea0aa67904fa946b9baa69d2e4b0cc23dc1c9a",
+  "source_sha256": {
+    "src/tac_osm/variants/source_aligned_parallel_world.py": "7ae1956091d19636526ee8ef42bb0c6211a6b7ca52264b85d4f4970537bfdaa2",
+    "src/tac_osm/variants/parallel_time_age_world.py": "a400b8607a22bfe54b0be03a814454a6a5e31bc6be519b22181460dea45ffa82",
+    "src/tac_osm/variants/parallel_residual_world.py": "c58ea88b720d6672ce5494e16665b73119a77cee14ae3ea45580cbb4e15e80e5",
+    "src/tac_osm/variants/parallel_continuous_world.py": "a2f043f75530a1966fa2a704c09edc205d17fd033d4d64278a53f2bb63b6e4b1",
+    "src/tac_osm/variants/parallel_affine_memory.py": "dc415571310b7fc84b2d05edadbeb93220c002e03a86c4ad7dbddc169909b6ce"
+  },
+  "reference_sha256": "c1e039c5f0e7c00bbe3351dffafe2419774d3ee0303b5a54146630c8ae265472",
+  "torch_version": "2.14.1+cpu",
+  "numpy_version": "2.3.5",
+  "device": "cpu",
+  "optimizer_steps": 0,
+  "real_data_evaluation": false,
+  "status": "PASS_NUMERICAL_FIXTURES_NOT_FORMAL_REFINEMENT",
+  "checks": [
+    {
+      "check": "float32/T1/none/numpy_output",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.4317888021469116,
+      "max_reference_magnitude": 0.4317888021469116,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/stream_output",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.4317888021469116,
+      "max_reference_magnitude": 0.4317888021469116,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/embedding",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.4630456268787384,
+      "max_reference_magnitude": 0.4630456566810608,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/time_features",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 1.0,
+      "max_reference_magnitude": 1.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/fast",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.1768752932548523,
+      "max_reference_magnitude": 0.1768752783536911,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/slow",
+      "max_absolute_error": 3.725290298461914e-09,
+      "max_actual_magnitude": 0.02840946987271309,
+      "max_reference_magnitude": 0.028409471735358238,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/old_read",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/aligned_old_read",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/aligned_write_key",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.5,
+      "max_reference_magnitude": 0.5,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/aligned_retention",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.9952091574668884,
+      "max_reference_magnitude": 0.9952091574668884,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/aligned_strength",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.06265784800052643,
+      "max_reference_magnitude": 0.06265784800052643,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/aligned_write_route",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.5092343688011169,
+      "max_reference_magnitude": 0.5092343688011169,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/aligned_before_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_trace/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T1/none/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T1/none/stream_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_state/fast_sum",
+      "max_absolute_error": 4.470348358154297e-08,
+      "max_actual_magnitude": 0.24569188058376312,
+      "max_reference_magnitude": 0.24569188058376312,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_state/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.3613378703594208,
+      "max_reference_magnitude": 0.3613378703594208,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_state/aligned",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T1/none/numpy_history",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.24637162685394287,
+      "max_reference_magnitude": 0.24637162685394287,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_output",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.500677764415741,
+      "max_reference_magnitude": 0.500677764415741,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/stream_output",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.500677764415741,
+      "max_reference_magnitude": 0.500677764415741,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/embedding",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.4351859390735626,
+      "max_reference_magnitude": 0.4351859390735626,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/time_features",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 1.1249853372573853,
+      "max_reference_magnitude": 1.1249854564666748,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/fast",
+      "max_absolute_error": 4.470348358154297e-08,
+      "max_actual_magnitude": 0.20500220358371735,
+      "max_reference_magnitude": 0.20500218868255615,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/slow",
+      "max_absolute_error": 3.3527612686157227e-08,
+      "max_actual_magnitude": 0.2229849100112915,
+      "max_reference_magnitude": 0.2229849398136139,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/old_read",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.19941286742687225,
+      "max_reference_magnitude": 0.19941283762454987,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/aligned_old_read",
+      "max_absolute_error": 2.7939677238464355e-09,
+      "max_actual_magnitude": 0.010483095422387123,
+      "max_reference_magnitude": 0.010483098216354847,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/aligned_write_key",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.5,
+      "max_reference_magnitude": 0.5,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/aligned_retention",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.995220959186554,
+      "max_reference_magnitude": 0.995220959186554,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/aligned_strength",
+      "max_absolute_error": 7.450580596923828e-09,
+      "max_actual_magnitude": 0.07327501475811005,
+      "max_reference_magnitude": 0.07327502220869064,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/aligned_write_route",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.6080948114395142,
+      "max_reference_magnitude": 0.6080948114395142,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/aligned_memory",
+      "max_absolute_error": 7.450580596923828e-09,
+      "max_actual_magnitude": 0.020245376974344254,
+      "max_reference_magnitude": 0.02024538442492485,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/aligned_before_write",
+      "max_absolute_error": 4.6566128730773926e-09,
+      "max_actual_magnitude": 0.012406784109771252,
+      "max_reference_magnitude": 0.012406786903738976,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_trace/memory",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.24968503415584564,
+      "max_reference_magnitude": 0.24968501925468445,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T2/all/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T2/all/stream_memory",
+      "max_absolute_error": 3.725290298461914e-09,
+      "max_actual_magnitude": 0.020245376974344254,
+      "max_reference_magnitude": 0.020245380699634552,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_state/fast_sum",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.4139460325241089,
+      "max_reference_magnitude": 0.4139460325241089,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_state/memory",
+      "max_absolute_error": 2.2351741790771484e-08,
+      "max_actual_magnitude": 0.24968503415584564,
+      "max_reference_magnitude": 0.24968501925468445,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 2.080171823501587,
+      "max_reference_magnitude": 2.080171823501587,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 2.080171823501587,
+      "max_reference_magnitude": 2.080171823501587,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_state/aligned",
+      "max_absolute_error": 3.725290298461914e-09,
+      "max_actual_magnitude": 0.020245380699634552,
+      "max_reference_magnitude": 0.02024538442492485,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T2/all/numpy_history",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.23441649973392487,
+      "max_reference_magnitude": 0.23441649973392487,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_output",
+      "max_absolute_error": 1.862645149230957e-09,
+      "max_actual_magnitude": 0.5553856492042542,
+      "max_reference_magnitude": 0.5553856492042542,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/stream_output",
+      "max_absolute_error": 9.313225746154785e-10,
+      "max_actual_magnitude": 0.5553856492042542,
+      "max_reference_magnitude": 0.5553856492042542,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/embedding",
+      "max_absolute_error": 4.470348358154297e-08,
+      "max_actual_magnitude": 0.4403693675994873,
+      "max_reference_magnitude": 0.4403693675994873,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/time_features",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 1.2475532293319702,
+      "max_reference_magnitude": 1.2475532293319702,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/fast",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.20330694317817688,
+      "max_reference_magnitude": 0.20330695807933807,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/slow",
+      "max_absolute_error": 4.470348358154297e-08,
+      "max_actual_magnitude": 0.2058476060628891,
+      "max_reference_magnitude": 0.2058476209640503,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/old_read",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.2753544747829437,
+      "max_reference_magnitude": 0.27535444498062134,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/aligned_old_read",
+      "max_absolute_error": 1.3969838619232178e-09,
+      "max_actual_magnitude": 0.00898250937461853,
+      "max_reference_magnitude": 0.008982508443295956,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/aligned_write_key",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.5,
+      "max_reference_magnitude": 0.5,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 0.9951410293579102,
+      "max_reference_magnitude": 0.9951410889625549,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/aligned_strength",
+      "max_absolute_error": 1.1175870895385742e-08,
+      "max_actual_magnitude": 0.06614294648170471,
+      "max_reference_magnitude": 0.06614294648170471,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/aligned_write_route",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.5429420471191406,
+      "max_reference_magnitude": 0.5429420471191406,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/aligned_memory",
+      "max_absolute_error": 2.7939677238464355e-09,
+      "max_actual_magnitude": 0.012969544157385826,
+      "max_reference_magnitude": 0.012969546020030975,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/aligned_before_write",
+      "max_absolute_error": 1.862645149230957e-09,
+      "max_actual_magnitude": 0.008153332397341728,
+      "max_reference_magnitude": 0.008153331466019154,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_trace/memory",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.2652696371078491,
+      "max_reference_magnitude": 0.26526960730552673,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.20358219742774963,
+      "max_reference_magnitude": 0.20358219742774963,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T3/mixed/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.008153332397341728,
+      "max_reference_magnitude": 0.008153332397341728,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T3/mixed/stream_memory",
+      "max_absolute_error": 2.7939677238464355e-09,
+      "max_actual_magnitude": 0.012969544157385826,
+      "max_reference_magnitude": 0.0129695450887084,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_state/fast_sum",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.4666329026222229,
+      "max_reference_magnitude": 0.4666329026222229,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_state/memory",
+      "max_absolute_error": 3.3527612686157227e-08,
+      "max_actual_magnitude": 0.26526960730552673,
+      "max_reference_magnitude": 0.26526960730552673,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 2.4818131923675537,
+      "max_reference_magnitude": 2.4818131923675537,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 2.4818131923675537,
+      "max_reference_magnitude": 2.4818131923675537,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_state/aligned",
+      "max_absolute_error": 2.7939677238464355e-09,
+      "max_actual_magnitude": 0.0129695450887084,
+      "max_reference_magnitude": 0.012969546020030975,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T3/mixed/numpy_history",
+      "max_absolute_error": 7.450580596923828e-09,
+      "max_actual_magnitude": 0.24779272079467773,
+      "max_reference_magnitude": 0.24779272079467773,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_output",
+      "max_absolute_error": 3.725290298461914e-09,
+      "max_actual_magnitude": 0.5476096868515015,
+      "max_reference_magnitude": 0.5476096868515015,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/stream_output",
+      "max_absolute_error": 3.725290298461914e-09,
+      "max_actual_magnitude": 0.5476096868515015,
+      "max_reference_magnitude": 0.5476096868515015,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/embedding",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.5382930040359497,
+      "max_reference_magnitude": 0.5382930040359497,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/time_features",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 1.945910096168518,
+      "max_reference_magnitude": 1.9459102153778076,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/fast",
+      "max_absolute_error": 8.940696716308594e-08,
+      "max_actual_magnitude": 0.21223387122154236,
+      "max_reference_magnitude": 0.21223391592502594,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/slow",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.21399198472499847,
+      "max_reference_magnitude": 0.21399199962615967,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/old_read",
+      "max_absolute_error": 4.470348358154297e-08,
+      "max_actual_magnitude": 0.26113587617874146,
+      "max_reference_magnitude": 0.26113590598106384,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/aligned_old_read",
+      "max_absolute_error": 3.259629011154175e-09,
+      "max_actual_magnitude": 0.011098239570856094,
+      "max_reference_magnitude": 0.011098237708210945,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/aligned_write_key",
+      "max_absolute_error": 2.9802322387695312e-08,
+      "max_actual_magnitude": 0.5,
+      "max_reference_magnitude": 0.5,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 0.9953006505966187,
+      "max_reference_magnitude": 0.9953007102012634,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/aligned_strength",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.07311185449361801,
+      "max_reference_magnitude": 0.07311185449361801,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/aligned_write_route",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.6169847249984741,
+      "max_reference_magnitude": 0.6169847249984741,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/aligned_memory",
+      "max_absolute_error": 7.450580596923828e-09,
+      "max_actual_magnitude": 0.031109444797039032,
+      "max_reference_magnitude": 0.031109437346458435,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/aligned_before_write",
+      "max_absolute_error": 7.450580596923828e-09,
+      "max_actual_magnitude": 0.025571266189217567,
+      "max_reference_magnitude": 0.025571271777153015,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_trace/memory",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.292881041765213,
+      "max_reference_magnitude": 0.2928810715675354,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.2270730882883072,
+      "max_reference_magnitude": 0.2270730882883072,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T7/mixed/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0203632153570652,
+      "max_reference_magnitude": 0.0203632153570652,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T7/mixed/stream_memory",
+      "max_absolute_error": 3.725290298461914e-09,
+      "max_actual_magnitude": 0.031109444797039032,
+      "max_reference_magnitude": 0.031109441071748734,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_state/fast_sum",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 1.0248433351516724,
+      "max_reference_magnitude": 1.0248433351516724,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_state/memory",
+      "max_absolute_error": 4.470348358154297e-08,
+      "max_actual_magnitude": 0.28300321102142334,
+      "max_reference_magnitude": 0.2830032408237457,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 4.073032855987549,
+      "max_reference_magnitude": 4.073032855987549,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 4.073032855987549,
+      "max_reference_magnitude": 4.073032855987549,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_state/aligned",
+      "max_absolute_error": 6.984919309616089e-09,
+      "max_actual_magnitude": 0.031109441071748734,
+      "max_reference_magnitude": 0.031109437346458435,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T7/mixed/numpy_history",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.23317651450634003,
+      "max_reference_magnitude": 0.23317652940750122,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_output",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.7542452812194824,
+      "max_reference_magnitude": 0.7542452812194824,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/stream_output",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.7542452812194824,
+      "max_reference_magnitude": 0.7542452812194824,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/embedding",
+      "max_absolute_error": 8.940696716308594e-08,
+      "max_actual_magnitude": 0.6411064267158508,
+      "max_reference_magnitude": 0.6411064863204956,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/time_features",
+      "max_absolute_error": 2.384185791015625e-07,
+      "max_actual_magnitude": 2.7725887298583984,
+      "max_reference_magnitude": 2.7725887298583984,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/fast",
+      "max_absolute_error": 1.043081283569336e-07,
+      "max_actual_magnitude": 0.25729742646217346,
+      "max_reference_magnitude": 0.25729745626449585,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/slow",
+      "max_absolute_error": 4.0978193283081055e-08,
+      "max_actual_magnitude": 0.22954972088336945,
+      "max_reference_magnitude": 0.22954970598220825,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/old_read",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/aligned_old_read",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/aligned_write_key",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.5000000596046448,
+      "max_reference_magnitude": 0.5000000596046448,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 0.9951842427253723,
+      "max_reference_magnitude": 0.9951842427253723,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/aligned_strength",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.07539684325456619,
+      "max_reference_magnitude": 0.075396828353405,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/aligned_write_route",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.6309912800788879,
+      "max_reference_magnitude": 0.6309912204742432,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/aligned_before_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_trace/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T16/none/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T16/none/stream_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_state/fast_sum",
+      "max_absolute_error": 2.384185791015625e-07,
+      "max_actual_magnitude": 2.515995979309082,
+      "max_reference_magnitude": 2.515995979309082,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_state/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 10.822166442871094,
+      "max_reference_magnitude": 10.822166442871094,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_state/aligned",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T16/none/numpy_history",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.24783840775489807,
+      "max_reference_magnitude": 0.24783840775489807,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_output",
+      "max_absolute_error": 7.450580596923828e-09,
+      "max_actual_magnitude": 0.6813351511955261,
+      "max_reference_magnitude": 0.6813351511955261,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/stream_output",
+      "max_absolute_error": 7.450580596923828e-09,
+      "max_actual_magnitude": 0.6813351511955261,
+      "max_reference_magnitude": 0.6813351511955261,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/embedding",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 0.6675047874450684,
+      "max_reference_magnitude": 0.6675048470497131,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/time_features",
+      "max_absolute_error": 1.430511474609375e-06,
+      "max_actual_magnitude": 3.4965076446533203,
+      "max_reference_magnitude": 3.4965076446533203,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/fast",
+      "max_absolute_error": 8.940696716308594e-08,
+      "max_actual_magnitude": 0.2897948622703552,
+      "max_reference_magnitude": 0.2897948920726776,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/slow",
+      "max_absolute_error": 4.470348358154297e-08,
+      "max_actual_magnitude": 0.18736597895622253,
+      "max_reference_magnitude": 0.18736594915390015,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/old_read",
+      "max_absolute_error": 1.043081283569336e-07,
+      "max_actual_magnitude": 0.33972781896591187,
+      "max_reference_magnitude": 0.33972781896591187,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/aligned_old_read",
+      "max_absolute_error": 1.210719347000122e-08,
+      "max_actual_magnitude": 0.029825586825609207,
+      "max_reference_magnitude": 0.029825586825609207,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/aligned_write_key",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.5000000596046448,
+      "max_reference_magnitude": 0.5000000596046448,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 0.9954784512519836,
+      "max_reference_magnitude": 0.9954784512519836,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/aligned_strength",
+      "max_absolute_error": 2.2351741790771484e-08,
+      "max_actual_magnitude": 0.07534521073102951,
+      "max_reference_magnitude": 0.0753452256321907,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/aligned_write_route",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.6422201991081238,
+      "max_reference_magnitude": 0.6422201991081238,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/aligned_memory",
+      "max_absolute_error": 2.2351741790771484e-08,
+      "max_actual_magnitude": 0.040413111448287964,
+      "max_reference_magnitude": 0.040413111448287964,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/aligned_before_write",
+      "max_absolute_error": 2.2351741790771484e-08,
+      "max_actual_magnitude": 0.035802211612463,
+      "max_reference_magnitude": 0.035802211612463,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_trace/memory",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 0.3284374475479126,
+      "max_reference_magnitude": 0.328437477350235,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T33/all/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T33/all/stream_memory",
+      "max_absolute_error": 1.30385160446167e-08,
+      "max_actual_magnitude": 0.040413111448287964,
+      "max_reference_magnitude": 0.04041312262415886,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_state/fast_sum",
+      "max_absolute_error": 9.5367431640625e-07,
+      "max_actual_magnitude": 5.612278938293457,
+      "max_reference_magnitude": 5.612278938293457,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_state/memory",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.24066762626171112,
+      "max_reference_magnitude": 0.24066758155822754,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 24.114131927490234,
+      "max_reference_magnitude": 24.114131927490234,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 24.114131927490234,
+      "max_reference_magnitude": 24.114131927490234,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_state/aligned",
+      "max_absolute_error": 1.7695128917694092e-08,
+      "max_actual_magnitude": 0.04041312262415886,
+      "max_reference_magnitude": 0.040413111448287964,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T33/all/numpy_history",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.24172478914260864,
+      "max_reference_magnitude": 0.24172478914260864,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_output",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.7227776646614075,
+      "max_reference_magnitude": 0.7227776646614075,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/stream_output",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.7227776646614075,
+      "max_reference_magnitude": 0.7227776646614075,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/embedding",
+      "max_absolute_error": 4.470348358154297e-07,
+      "max_actual_magnitude": 0.7995898127555847,
+      "max_reference_magnitude": 0.7995898127555847,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/time_features",
+      "max_absolute_error": 6.362795829772949e-06,
+      "max_actual_magnitude": 4.859812259674072,
+      "max_reference_magnitude": 4.859812259674072,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/fast",
+      "max_absolute_error": 1.341104507446289e-07,
+      "max_actual_magnitude": 0.2658480107784271,
+      "max_reference_magnitude": 0.26584798097610474,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/slow",
+      "max_absolute_error": 8.940696716308594e-08,
+      "max_actual_magnitude": 0.1945492923259735,
+      "max_reference_magnitude": 0.1945493221282959,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/old_read",
+      "max_absolute_error": 4.470348358154297e-07,
+      "max_actual_magnitude": 0.41240745782852173,
+      "max_reference_magnitude": 0.4124074876308441,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/aligned_old_read",
+      "max_absolute_error": 2.491287887096405e-08,
+      "max_actual_magnitude": 0.041143737733364105,
+      "max_reference_magnitude": 0.0411437563598156,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/aligned_write_key",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.5000000596046448,
+      "max_reference_magnitude": 0.5000000596046448,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1920928955078125e-07,
+      "max_actual_magnitude": 0.995361864566803,
+      "max_reference_magnitude": 0.9953617453575134,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/aligned_strength",
+      "max_absolute_error": 2.2351741790771484e-08,
+      "max_actual_magnitude": 0.06844306737184525,
+      "max_reference_magnitude": 0.06844306737184525,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/aligned_write_route",
+      "max_absolute_error": 8.940696716308594e-08,
+      "max_actual_magnitude": 0.6093198657035828,
+      "max_reference_magnitude": 0.6093198657035828,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/aligned_memory",
+      "max_absolute_error": 3.91155481338501e-08,
+      "max_actual_magnitude": 0.05613953247666359,
+      "max_reference_magnitude": 0.056139521300792694,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/aligned_before_write",
+      "max_absolute_error": 3.91155481338501e-08,
+      "max_actual_magnitude": 0.05613953247666359,
+      "max_reference_magnitude": 0.056139521300792694,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_trace/memory",
+      "max_absolute_error": 1.7881393432617188e-07,
+      "max_actual_magnitude": 0.40035346150398254,
+      "max_reference_magnitude": 0.40035343170166016,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.40035346150398254,
+      "max_reference_magnitude": 0.40035346150398254,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T129/mixed/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.05613953247666359,
+      "max_reference_magnitude": 0.05613953247666359,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float32/T129/mixed/stream_memory",
+      "max_absolute_error": 2.421438694000244e-08,
+      "max_actual_magnitude": 0.046393632888793945,
+      "max_reference_magnitude": 0.04639362171292305,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_state/fast_sum",
+      "max_absolute_error": 2.86102294921875e-06,
+      "max_actual_magnitude": 22.384883880615234,
+      "max_reference_magnitude": 22.384885787963867,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_state/memory",
+      "max_absolute_error": 5.960464477539063e-08,
+      "max_actual_magnitude": 0.23186910152435303,
+      "max_reference_magnitude": 0.2318691611289978,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 76.79476165771484,
+      "max_reference_magnitude": 76.79476165771484,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 76.79476165771484,
+      "max_reference_magnitude": 76.79476165771484,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_state/aligned",
+      "max_absolute_error": 2.60770320892334e-08,
+      "max_actual_magnitude": 0.04639362171292305,
+      "max_reference_magnitude": 0.04639364778995514,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float32/T129/mixed/numpy_history",
+      "max_absolute_error": 1.4901161193847656e-08,
+      "max_actual_magnitude": 0.24380207061767578,
+      "max_reference_magnitude": 0.24380207061767578,
+      "atol": 2e-05,
+      "rtol": 0.0002
+    },
+    {
+      "check": "float64/T1/none/numpy_output",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.539138233767308,
+      "max_reference_magnitude": 0.539138233767308,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/stream_output",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.539138233767308,
+      "max_reference_magnitude": 0.539138233767308,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/embedding",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.44459283006611955,
+      "max_reference_magnitude": 0.4445928300661195,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/time_features",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 1.0,
+      "max_reference_magnitude": 1.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/fast",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.15729922923213274,
+      "max_reference_magnitude": 0.15729922923213274,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/slow",
+      "max_absolute_error": 8.673617379884035e-18,
+      "max_actual_magnitude": 0.02730359241489575,
+      "max_reference_magnitude": 0.027303592414895758,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/old_read",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/aligned_old_read",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/aligned_write_key",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.5,
+      "max_reference_magnitude": 0.5,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.9951374505336129,
+      "max_reference_magnitude": 0.9951374505336129,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/aligned_strength",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.06434582291091653,
+      "max_reference_magnitude": 0.06434582291091655,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/aligned_write_route",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.5471171513075294,
+      "max_reference_magnitude": 0.5471171513075294,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/aligned_before_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_trace/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T1/none/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T1/none/stream_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_state/fast_sum",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.19688108067851065,
+      "max_reference_magnitude": 0.19688108067851065,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_state/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.3099777296246444,
+      "max_reference_magnitude": 0.3099777296246444,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_state/aligned",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T1/none/numpy_history",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.24637162685394287,
+      "max_reference_magnitude": 0.24637162685394287,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_output",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.4095717455708324,
+      "max_reference_magnitude": 0.4095717455708324,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/stream_output",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.4095717455708324,
+      "max_reference_magnitude": 0.4095717455708324,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/embedding",
+      "max_absolute_error": 2.498001805406602e-16,
+      "max_actual_magnitude": 0.5747518867358445,
+      "max_reference_magnitude": 0.5747518867358443,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/time_features",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 1.0,
+      "max_reference_magnitude": 1.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/fast",
+      "max_absolute_error": 8.326672684688674e-17,
+      "max_actual_magnitude": 0.20253025538712457,
+      "max_reference_magnitude": 0.20253025538712466,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/slow",
+      "max_absolute_error": 8.326672684688674e-17,
+      "max_actual_magnitude": 0.18829951210928003,
+      "max_reference_magnitude": 0.18829951210928,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/old_read",
+      "max_absolute_error": 8.326672684688674e-17,
+      "max_actual_magnitude": 0.20416905049101683,
+      "max_reference_magnitude": 0.20416905049101688,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/aligned_old_read",
+      "max_absolute_error": 3.469446951953614e-18,
+      "max_actual_magnitude": 0.005635320787074375,
+      "max_reference_magnitude": 0.005635320787074375,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/aligned_write_key",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.5000000000000001,
+      "max_reference_magnitude": 0.5,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.995076517795821,
+      "max_reference_magnitude": 0.9950765177958208,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/aligned_strength",
+      "max_absolute_error": 2.0816681711721685e-17,
+      "max_actual_magnitude": 0.06654207537080871,
+      "max_reference_magnitude": 0.06654207537080871,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/aligned_write_route",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.5534639300681403,
+      "max_reference_magnitude": 0.5534639300681402,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/aligned_memory",
+      "max_absolute_error": 1.0408340855860843e-17,
+      "max_actual_magnitude": 0.014127712254962562,
+      "max_reference_magnitude": 0.014127712254962552,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/aligned_before_write",
+      "max_absolute_error": 2.8189256484623115e-18,
+      "max_actual_magnitude": 0.005676994377748537,
+      "max_reference_magnitude": 0.005676994377748537,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_trace/memory",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.25479611672059105,
+      "max_reference_magnitude": 0.25479611672059094,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T2/all/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T2/all/stream_memory",
+      "max_absolute_error": 6.938893903907228e-18,
+      "max_actual_magnitude": 0.014127712254962562,
+      "max_reference_magnitude": 0.014127712254962562,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_state/fast_sum",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.39540159736221014,
+      "max_reference_magnitude": 0.39540159736221003,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_state/memory",
+      "max_absolute_error": 8.326672684688674e-17,
+      "max_actual_magnitude": 0.25085270186561215,
+      "max_reference_magnitude": 0.2508527018656121,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 1.3299668829986824,
+      "max_reference_magnitude": 1.3299668829986824,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 1.3299668829986824,
+      "max_reference_magnitude": 1.3299668829986824,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_state/aligned",
+      "max_absolute_error": 1.0408340855860843e-17,
+      "max_actual_magnitude": 0.014127712254962562,
+      "max_reference_magnitude": 0.014127712254962552,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T2/all/numpy_history",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.2334405120274794,
+      "max_reference_magnitude": 0.2334405120274794,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_output",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.6746415534458429,
+      "max_reference_magnitude": 0.6746415534458429,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/stream_output",
+      "max_absolute_error": 3.469446951953614e-18,
+      "max_actual_magnitude": 0.6746415534458429,
+      "max_reference_magnitude": 0.6746415534458429,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/embedding",
+      "max_absolute_error": 1.6653345369377348e-16,
+      "max_actual_magnitude": 0.543680323649543,
+      "max_reference_magnitude": 0.5436803236495431,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/time_features",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 1.0986122886681098,
+      "max_reference_magnitude": 1.0986122886681098,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/fast",
+      "max_absolute_error": 1.3877787807814457e-16,
+      "max_actual_magnitude": 0.23348199636349773,
+      "max_reference_magnitude": 0.23348199636349778,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/slow",
+      "max_absolute_error": 1.6653345369377348e-16,
+      "max_actual_magnitude": 0.2369661270860399,
+      "max_reference_magnitude": 0.2369661270860399,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/old_read",
+      "max_absolute_error": 8.326672684688674e-17,
+      "max_actual_magnitude": 0.2188321690408938,
+      "max_reference_magnitude": 0.21883216904089375,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/aligned_old_read",
+      "max_absolute_error": 5.204170427930421e-18,
+      "max_actual_magnitude": 0.009528354782731664,
+      "max_reference_magnitude": 0.009528354782731664,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/aligned_write_key",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.5000000000000001,
+      "max_reference_magnitude": 0.5,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.9951657366829035,
+      "max_reference_magnitude": 0.9951657366829035,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/aligned_strength",
+      "max_absolute_error": 2.0816681711721685e-17,
+      "max_actual_magnitude": 0.06785912021445228,
+      "max_reference_magnitude": 0.06785912021445228,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/aligned_write_route",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.5688050323784215,
+      "max_reference_magnitude": 0.5688050323784215,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/aligned_memory",
+      "max_absolute_error": 6.071532165918825e-18,
+      "max_actual_magnitude": 0.014050900368800395,
+      "max_reference_magnitude": 0.014050900368800393,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/aligned_before_write",
+      "max_absolute_error": 5.637851296924623e-18,
+      "max_actual_magnitude": 0.008524348079450348,
+      "max_reference_magnitude": 0.008524348079450348,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_trace/memory",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.2716922818163068,
+      "max_reference_magnitude": 0.2716922818163068,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.22167991222464511,
+      "max_reference_magnitude": 0.22167991222464511,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T3/mixed/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.008524348079450348,
+      "max_reference_magnitude": 0.008524348079450348,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T3/mixed/stream_memory",
+      "max_absolute_error": 5.204170427930421e-18,
+      "max_actual_magnitude": 0.014050900368800395,
+      "max_reference_magnitude": 0.014050900368800391,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_state/fast_sum",
+      "max_absolute_error": 1.3877787807814457e-16,
+      "max_actual_magnitude": 0.5846656543154009,
+      "max_reference_magnitude": 0.5846656543154007,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_state/memory",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.2716922818163067,
+      "max_reference_magnitude": 0.2716922818163068,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 1.635149888533128,
+      "max_reference_magnitude": 1.635149888533128,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 1.635149888533128,
+      "max_reference_magnitude": 1.635149888533128,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_state/aligned",
+      "max_absolute_error": 5.204170427930421e-18,
+      "max_actual_magnitude": 0.014050900368800391,
+      "max_reference_magnitude": 0.014050900368800393,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T3/mixed/numpy_history",
+      "max_absolute_error": 1.3877787807814457e-17,
+      "max_actual_magnitude": 0.250991867737924,
+      "max_reference_magnitude": 0.250991867737924,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_output",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.592036913398074,
+      "max_reference_magnitude": 0.592036913398074,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/stream_output",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.592036913398074,
+      "max_reference_magnitude": 0.592036913398074,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/embedding",
+      "max_absolute_error": 1.6653345369377348e-16,
+      "max_actual_magnitude": 0.611415877846196,
+      "max_reference_magnitude": 0.6114158778461959,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/time_features",
+      "max_absolute_error": 1.3877787807814457e-17,
+      "max_actual_magnitude": 1.9459101490553132,
+      "max_reference_magnitude": 1.9459101490553132,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/fast",
+      "max_absolute_error": 1.6653345369377348e-16,
+      "max_actual_magnitude": 0.2637708583026017,
+      "max_reference_magnitude": 0.2637708583026017,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/slow",
+      "max_absolute_error": 8.326672684688674e-17,
+      "max_actual_magnitude": 0.22254415480142897,
+      "max_reference_magnitude": 0.22254415480142897,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/old_read",
+      "max_absolute_error": 1.3877787807814457e-16,
+      "max_actual_magnitude": 0.40234352469106144,
+      "max_reference_magnitude": 0.40234352469106155,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/aligned_old_read",
+      "max_absolute_error": 6.938893903907228e-18,
+      "max_actual_magnitude": 0.01545262370252663,
+      "max_reference_magnitude": 0.015452623702526624,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/aligned_write_key",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.5000000000000001,
+      "max_reference_magnitude": 0.5,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.9952732084816303,
+      "max_reference_magnitude": 0.9952732084816301,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/aligned_strength",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.0684754808947733,
+      "max_reference_magnitude": 0.06847548089477329,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/aligned_write_route",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.5793895312615026,
+      "max_reference_magnitude": 0.5793895312615026,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/aligned_memory",
+      "max_absolute_error": 1.9081958235744878e-17,
+      "max_actual_magnitude": 0.02845572916353349,
+      "max_reference_magnitude": 0.02845572916353349,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/aligned_before_write",
+      "max_absolute_error": 1.0408340855860843e-17,
+      "max_actual_magnitude": 0.02691923104698664,
+      "max_reference_magnitude": 0.026919231046986642,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_trace/memory",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.3176982395558038,
+      "max_reference_magnitude": 0.31769823955580384,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.2537136077956317,
+      "max_reference_magnitude": 0.2537136077956317,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T7/mixed/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.02397160908731897,
+      "max_reference_magnitude": 0.02397160908731897,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T7/mixed/stream_memory",
+      "max_absolute_error": 1.3877787807814457e-17,
+      "max_actual_magnitude": 0.02845572916353349,
+      "max_reference_magnitude": 0.02845572916353349,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_state/fast_sum",
+      "max_absolute_error": 4.440892098500626e-16,
+      "max_actual_magnitude": 1.175580411306589,
+      "max_reference_magnitude": 1.1755804113065889,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_state/memory",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.3095855474084023,
+      "max_reference_magnitude": 0.3095855474084024,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 4.5778329493275285,
+      "max_reference_magnitude": 4.5778329493275285,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 4.5778329493275285,
+      "max_reference_magnitude": 4.5778329493275285,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_state/aligned",
+      "max_absolute_error": 8.673617379884035e-18,
+      "max_actual_magnitude": 0.02845572916353349,
+      "max_reference_magnitude": 0.02845572916353349,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T7/mixed/numpy_history",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.2349117866255548,
+      "max_reference_magnitude": 0.2349117866255548,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_output",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.6432185311763505,
+      "max_reference_magnitude": 0.6432185311763505,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/stream_output",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.6432185311763505,
+      "max_reference_magnitude": 0.6432185311763505,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/embedding",
+      "max_absolute_error": 2.220446049250313e-16,
+      "max_actual_magnitude": 0.5416397336596173,
+      "max_reference_magnitude": 0.5416397336596172,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/time_features",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 2.772588722239781,
+      "max_reference_magnitude": 2.772588722239781,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/fast",
+      "max_absolute_error": 1.6653345369377348e-16,
+      "max_actual_magnitude": 0.24411761112212157,
+      "max_reference_magnitude": 0.2441176111221215,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/slow",
+      "max_absolute_error": 1.3877787807814457e-16,
+      "max_actual_magnitude": 0.19870282213004012,
+      "max_reference_magnitude": 0.19870282213004017,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/old_read",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/aligned_old_read",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/aligned_write_key",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.5000000000000001,
+      "max_reference_magnitude": 0.5000000000000001,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.9951814468201191,
+      "max_reference_magnitude": 0.9951814468201192,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/aligned_strength",
+      "max_absolute_error": 3.469446951953614e-17,
+      "max_actual_magnitude": 0.07544296102922743,
+      "max_reference_magnitude": 0.07544296102922743,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/aligned_write_route",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.6232775279886198,
+      "max_reference_magnitude": 0.6232775279886198,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/aligned_before_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_trace/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T16/none/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T16/none/stream_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_state/fast_sum",
+      "max_absolute_error": 6.661338147750939e-16,
+      "max_actual_magnitude": 2.6489459341310972,
+      "max_reference_magnitude": 2.6489459341310977,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_state/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 10.834019246227328,
+      "max_reference_magnitude": 10.834019246227328,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_state/aligned",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T16/none/numpy_history",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.24783840775489807,
+      "max_reference_magnitude": 0.24783840775489807,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_output",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.8499721295157935,
+      "max_reference_magnitude": 0.8499721295157935,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/stream_output",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.8499721295157935,
+      "max_reference_magnitude": 0.8499721295157935,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/embedding",
+      "max_absolute_error": 2.220446049250313e-16,
+      "max_actual_magnitude": 0.6535304945507188,
+      "max_reference_magnitude": 0.6535304945507188,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/time_features",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 3.4965075614664802,
+      "max_reference_magnitude": 3.4965075614664802,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/fast",
+      "max_absolute_error": 1.942890293094024e-16,
+      "max_actual_magnitude": 0.25890993155150466,
+      "max_reference_magnitude": 0.2589099315515046,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/slow",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.22312731757742607,
+      "max_reference_magnitude": 0.22312731757742602,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/old_read",
+      "max_absolute_error": 2.7755575615628914e-16,
+      "max_actual_magnitude": 0.48289573553878934,
+      "max_reference_magnitude": 0.48289573553878934,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/aligned_old_read",
+      "max_absolute_error": 2.0816681711721685e-17,
+      "max_actual_magnitude": 0.03292295269087427,
+      "max_reference_magnitude": 0.03292295269087425,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/aligned_write_key",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.5000000000000001,
+      "max_reference_magnitude": 0.5000000000000001,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.9953034895906974,
+      "max_reference_magnitude": 0.9953034895906973,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/aligned_strength",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.07758723014213065,
+      "max_reference_magnitude": 0.07758723014213065,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/aligned_write_route",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.6112583769299136,
+      "max_reference_magnitude": 0.6112583769299136,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/aligned_memory",
+      "max_absolute_error": 4.163336342344337e-17,
+      "max_actual_magnitude": 0.040618031667561914,
+      "max_reference_magnitude": 0.040618031667561914,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/aligned_before_write",
+      "max_absolute_error": 4.163336342344337e-17,
+      "max_actual_magnitude": 0.040618031667561914,
+      "max_reference_magnitude": 0.040618031667561914,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_trace/memory",
+      "max_absolute_error": 2.7755575615628914e-16,
+      "max_actual_magnitude": 0.41387336023873394,
+      "max_reference_magnitude": 0.4138733602387342,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T33/all/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T33/all/stream_memory",
+      "max_absolute_error": 3.469446951953614e-17,
+      "max_actual_magnitude": 0.03631190640414469,
+      "max_reference_magnitude": 0.03631190640414465,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_state/fast_sum",
+      "max_absolute_error": 8.881784197001252e-16,
+      "max_actual_magnitude": 4.843824008775465,
+      "max_reference_magnitude": 4.843824008775465,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_state/memory",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.2287591417126482,
+      "max_reference_magnitude": 0.22875914171264825,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 22.237728711150325,
+      "max_reference_magnitude": 22.237728711150325,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 22.237728711150325,
+      "max_reference_magnitude": 22.237728711150325,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_state/aligned",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.03631190640414465,
+      "max_reference_magnitude": 0.03631190640414465,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T33/all/numpy_history",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.24353984136407117,
+      "max_reference_magnitude": 0.24353984136407117,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_output",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.7616483153962971,
+      "max_reference_magnitude": 0.7616483153962971,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/stream_output",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.7616483153962971,
+      "max_reference_magnitude": 0.7616483153962971,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/embedding",
+      "max_absolute_error": 2.220446049250313e-16,
+      "max_actual_magnitude": 0.8083937706541263,
+      "max_reference_magnitude": 0.8083937706541262,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/time_features",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 4.859812404361672,
+      "max_reference_magnitude": 4.859812404361672,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/fast",
+      "max_absolute_error": 2.498001805406602e-16,
+      "max_actual_magnitude": 0.3213320151160428,
+      "max_reference_magnitude": 0.3213320151160428,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/slow",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.21755482796331407,
+      "max_reference_magnitude": 0.2175548279633141,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/old_read",
+      "max_absolute_error": 2.220446049250313e-16,
+      "max_actual_magnitude": 0.47899360722437107,
+      "max_reference_magnitude": 0.4789936072243711,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/aligned_old_read",
+      "max_absolute_error": 3.469446951953614e-17,
+      "max_actual_magnitude": 0.03879146169283605,
+      "max_reference_magnitude": 0.03879146169283606,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/aligned_write_key",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.5000000000000001,
+      "max_reference_magnitude": 0.5000000000000001,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/aligned_retention",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.9954416570124447,
+      "max_reference_magnitude": 0.9954416570124448,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/aligned_strength",
+      "max_absolute_error": 3.469446951953614e-17,
+      "max_actual_magnitude": 0.07386676462340476,
+      "max_reference_magnitude": 0.07386676462340477,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/aligned_write_route",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.6200482748148816,
+      "max_reference_magnitude": 0.6200482748148816,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/aligned_memory",
+      "max_absolute_error": 6.591949208711867e-17,
+      "max_actual_magnitude": 0.049076288850977104,
+      "max_reference_magnitude": 0.04907628885097713,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/aligned_before_write",
+      "max_absolute_error": 6.591949208711867e-17,
+      "max_actual_magnitude": 0.049076288850977104,
+      "max_reference_magnitude": 0.04907628885097713,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_trace/memory",
+      "max_absolute_error": 1.3877787807814457e-16,
+      "max_actual_magnitude": 0.3154032290619619,
+      "max_reference_magnitude": 0.3154032290619619,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/bitwise_nonwrite/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.2941290724950487,
+      "max_reference_magnitude": 0.2941290724950487,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T129/mixed/bitwise_nonwrite/aligned_memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.049076288850977104,
+      "max_reference_magnitude": 0.049076288850977104,
+      "atol": 0.0,
+      "rtol": 0.0
+    },
+    {
+      "check": "float64/T129/mixed/stream_memory",
+      "max_absolute_error": 3.469446951953614e-17,
+      "max_actual_magnitude": 0.04452496018065154,
+      "max_reference_magnitude": 0.04452496018065155,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_state/fast_sum",
+      "max_absolute_error": 3.552713678800501e-15,
+      "max_actual_magnitude": 19.97085859443447,
+      "max_reference_magnitude": 19.97085859443447,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_state/memory",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 0.2272702382419289,
+      "max_reference_magnitude": 0.2272702382419289,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_state/clock",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 78.85438711166366,
+      "max_reference_magnitude": 78.85438711166366,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_state/last_write",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 78.85438711166366,
+      "max_reference_magnitude": 78.85438711166366,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_state/aligned",
+      "max_absolute_error": 3.5561831257524545e-17,
+      "max_actual_magnitude": 0.04452496018065155,
+      "max_reference_magnitude": 0.04452496018065154,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "float64/T129/mixed/numpy_history",
+      "max_absolute_error": 2.7755575615628914e-17,
+      "max_actual_magnitude": 0.23191110999463238,
+      "max_reference_magnitude": 0.23191110999463238,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/False/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 2.6909902755046926,
+      "max_reference_magnitude": 2.6909902755046926,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/False/key",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/False/value",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/False/alpha",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/False/beta",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/True/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 2.5026209562193644,
+      "max_reference_magnitude": 2.5026209562193644,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/True/key",
+      "max_absolute_error": 5.551115123125783e-16,
+      "max_actual_magnitude": 3.1621033994697756,
+      "max_reference_magnitude": 3.1621033994697756,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/True/value",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/True/alpha",
+      "max_absolute_error": 2.6645352591003757e-15,
+      "max_actual_magnitude": 2.1811852019510605,
+      "max_reference_magnitude": 2.181185201951063,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/0/True/beta",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/False/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 2.7506581152195495,
+      "max_reference_magnitude": 2.7506581152195495,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/False/key",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/False/value",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/False/alpha",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/False/beta",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/True/memory",
+      "max_absolute_error": 4.440892098500626e-16,
+      "max_actual_magnitude": 2.716956890527084,
+      "max_reference_magnitude": 2.716956890527084,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/True/key",
+      "max_absolute_error": 1.7763568394002505e-15,
+      "max_actual_magnitude": 9.7940447117546,
+      "max_reference_magnitude": 9.794044711754598,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/True/value",
+      "max_absolute_error": 2.220446049250313e-16,
+      "max_actual_magnitude": 1.2971785257576305,
+      "max_reference_magnitude": 1.2971785257576303,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/True/alpha",
+      "max_absolute_error": 1.3322676295501878e-15,
+      "max_actual_magnitude": 3.9497696586690694,
+      "max_reference_magnitude": 3.949769658669068,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/1/True/beta",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 33.466519098071664,
+      "max_reference_magnitude": 33.466519098071664,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/False/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 2.7901074615479646,
+      "max_reference_magnitude": 2.7901074615479646,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/False/key",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/False/value",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/False/alpha",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/False/beta",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/True/memory",
+      "max_absolute_error": 2.220446049250313e-16,
+      "max_actual_magnitude": 2.412899547872506,
+      "max_reference_magnitude": 2.412899547872506,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/True/key",
+      "max_absolute_error": 8.881784197001252e-16,
+      "max_actual_magnitude": 3.736176522706609,
+      "max_reference_magnitude": 3.7361765227066086,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/True/value",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 0.8850794286553576,
+      "max_reference_magnitude": 0.8850794286553576,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/True/alpha",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 30.76539752652716,
+      "max_reference_magnitude": 30.76539752652716,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/2/True/beta",
+      "max_absolute_error": 2.6645352591003757e-15,
+      "max_actual_magnitude": 7.10029853560834,
+      "max_reference_magnitude": 7.100298535608343,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/False/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 2.1894522515200623,
+      "max_reference_magnitude": 2.1894522515200623,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/False/key",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/False/value",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/False/alpha",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/False/beta",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/True/memory",
+      "max_absolute_error": 4.440892098500626e-16,
+      "max_actual_magnitude": 2.1151015314727637,
+      "max_reference_magnitude": 2.1151015314727633,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/True/key",
+      "max_absolute_error": 1.7763568394002505e-15,
+      "max_actual_magnitude": 3.981655473564353,
+      "max_reference_magnitude": 3.981655473564353,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/True/value",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 1.2651746264103443,
+      "max_reference_magnitude": 1.2651746264103443,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/True/alpha",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 8.195525071636148,
+      "max_reference_magnitude": 8.195525071636148,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/3/True/beta",
+      "max_absolute_error": 2.6645352591003757e-15,
+      "max_actual_magnitude": 4.608202769493789,
+      "max_reference_magnitude": 4.608202769493786,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/False/memory",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 1.7702861731183914,
+      "max_reference_magnitude": 1.7702861731183914,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/False/key",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/False/value",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/False/alpha",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/False/beta",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.0,
+      "max_reference_magnitude": 0.0,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/True/memory",
+      "max_absolute_error": 4.440892098500626e-16,
+      "max_actual_magnitude": 1.7660393647399983,
+      "max_reference_magnitude": 1.7660393647399983,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/True/key",
+      "max_absolute_error": 6.661338147750939e-16,
+      "max_actual_magnitude": 3.6782954235902148,
+      "max_reference_magnitude": 3.6782954235902143,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/True/value",
+      "max_absolute_error": 1.1102230246251565e-16,
+      "max_actual_magnitude": 1.0039457971836203,
+      "max_reference_magnitude": 1.0039457971836203,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/True/alpha",
+      "max_absolute_error": 1.7763568394002505e-15,
+      "max_actual_magnitude": 5.306390172989303,
+      "max_reference_magnitude": 5.306390172989305,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "analytic_vjp/4/True/beta",
+      "max_absolute_error": 7.105427357601002e-15,
+      "max_actual_magnitude": 3.4957012804632033,
+      "max_reference_magnitude": 3.495701280463196,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "batch_stream_gradient/observation",
+      "max_absolute_error": 5.551115123125783e-17,
+      "max_actual_magnitude": 2.9517679662065848,
+      "max_reference_magnitude": 2.9517679662065848,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/action",
+      "max_absolute_error": 4.336808689942018e-18,
+      "max_actual_magnitude": 0.009361090921596624,
+      "max_reference_magnitude": 0.009361090921596624,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/elapsed_dt",
+      "max_absolute_error": 4.336808689942018e-19,
+      "max_actual_magnitude": 0.000832058104512887,
+      "max_reference_magnitude": 0.0008320581045128867,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/source_key_rotations",
+      "max_absolute_error": 6.938893903907228e-18,
+      "max_actual_magnitude": 0.018666316163073463,
+      "max_reference_magnitude": 0.018666316163073467,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/predictive_memory_logit",
+      "max_absolute_error": 1.2705494208814505e-21,
+      "max_actual_magnitude": 1.40967922763276e-06,
+      "max_reference_magnitude": 1.4096792276327588e-06,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.residual_logit",
+      "max_absolute_error": 1.5585406229479126e-19,
+      "max_actual_magnitude": 5.629532550554482e-05,
+      "max_reference_magnitude": 5.629532550554498e-05,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.encoder.weight",
+      "max_absolute_error": 8.673617379884035e-18,
+      "max_actual_magnitude": 0.018373103286630995,
+      "max_reference_magnitude": 0.01837310328663099,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.encoder.bias",
+      "max_absolute_error": 1.0408340855860843e-17,
+      "max_actual_magnitude": 0.028207976870113203,
+      "max_reference_magnitude": 0.028207976870113206,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.address.weight",
+      "max_absolute_error": 3.5236570605778894e-19,
+      "max_actual_magnitude": 0.0004597078841578346,
+      "max_reference_magnitude": 0.00045970788415783447,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.address.bias",
+      "max_absolute_error": 7.589415207398531e-19,
+      "max_actual_magnitude": 0.0004997371186603997,
+      "max_reference_magnitude": 0.000499737118660399,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.content.weight",
+      "max_absolute_error": 2.168404344971009e-18,
+      "max_actual_magnitude": 0.0027156045684593555,
+      "max_reference_magnitude": 0.002715604568459354,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.content.bias",
+      "max_absolute_error": 6.071532165918825e-18,
+      "max_actual_magnitude": 0.006686161181714378,
+      "max_reference_magnitude": 0.006686161181714377,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.fast_map.weight",
+      "max_absolute_error": 1.734723475976807e-18,
+      "max_actual_magnitude": 0.003378458290906193,
+      "max_reference_magnitude": 0.0033784582909061915,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.fast_map.bias",
+      "max_absolute_error": 3.469446951953614e-18,
+      "max_actual_magnitude": 0.008864294101108422,
+      "max_reference_magnitude": 0.008864294101108419,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.slow_map.weight",
+      "max_absolute_error": 1.4568966692773966e-19,
+      "max_actual_magnitude": 0.00019400219740115546,
+      "max_reference_magnitude": 0.00019400219740115548,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.slow_map.bias",
+      "max_absolute_error": 8.267041565201971e-19,
+      "max_actual_magnitude": 0.0014511125605285028,
+      "max_reference_magnitude": 0.0014511125605285028,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.memory_gates.weight",
+      "max_absolute_error": 1.0842021724855044e-19,
+      "max_actual_magnitude": 0.00018207728010838462,
+      "max_reference_magnitude": 0.00018207728010838462,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.memory_gates.bias",
+      "max_absolute_error": 2.168404344971009e-19,
+      "max_actual_magnitude": 0.0003323448883492558,
+      "max_reference_magnitude": 0.0003323448883492556,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.readout.0.weight",
+      "max_absolute_error": 2.0227146780432692e-18,
+      "max_actual_magnitude": 0.0046538942719922035,
+      "max_reference_magnitude": 0.0046538942719922035,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.readout.0.bias",
+      "max_absolute_error": 3.469446951953614e-18,
+      "max_actual_magnitude": 0.011463245961812479,
+      "max_reference_magnitude": 0.011463245961812477,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.readout.2.weight",
+      "max_absolute_error": 8.673617379884035e-18,
+      "max_actual_magnitude": 0.00923269674921992,
+      "max_reference_magnitude": 0.009232696749219924,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.readout.2.bias",
+      "max_absolute_error": 1.3877787807814457e-17,
+      "max_actual_magnitude": 0.10699764059767393,
+      "max_reference_magnitude": 0.10699764059767393,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.core.time_projection.weight",
+      "max_absolute_error": 1.0842021724855044e-17,
+      "max_actual_magnitude": 0.030205801627873625,
+      "max_reference_magnitude": 0.030205801627873632,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.residual_ffn.0.weight",
+      "max_absolute_error": 8.131516293641283e-20,
+      "max_actual_magnitude": 0.00031022680611996384,
+      "max_reference_magnitude": 0.0003102268061199638,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.residual_ffn.0.bias",
+      "max_absolute_error": 1.0842021724855044e-19,
+      "max_actual_magnitude": 0.0008447600662461514,
+      "max_reference_magnitude": 0.0008447600662461515,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.residual_ffn.2.weight",
+      "max_absolute_error": 6.776263578034403e-20,
+      "max_actual_magnitude": 9.300227495091356e-05,
+      "max_reference_magnitude": 9.300227495091356e-05,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/backbone.residual_ffn.2.bias",
+      "max_absolute_error": 4.336808689942018e-19,
+      "max_actual_magnitude": 0.0019047813153024863,
+      "max_reference_magnitude": 0.0019047813153024867,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/source_content.weight",
+      "max_absolute_error": 1.3877787807814457e-17,
+      "max_actual_magnitude": 0.04967542937428237,
+      "max_reference_magnitude": 0.049675429374282355,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/source_content.bias",
+      "max_absolute_error": 2.0816681711721685e-17,
+      "max_actual_magnitude": 0.1294040822321943,
+      "max_reference_magnitude": 0.1294040822321943,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/write_router.weight",
+      "max_absolute_error": 2.168404344971009e-18,
+      "max_actual_magnitude": 0.004232319026207031,
+      "max_reference_magnitude": 0.004232319026207032,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/write_router.bias",
+      "max_absolute_error": 5.204170427930421e-18,
+      "max_actual_magnitude": 0.0067550814729454515,
+      "max_reference_magnitude": 0.006755081472945457,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/read_router.weight",
+      "max_absolute_error": 3.1170812458958252e-19,
+      "max_actual_magnitude": 5.665712788842048e-05,
+      "max_reference_magnitude": 5.665712788842078e-05,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/read_router.bias",
+      "max_absolute_error": 3.049318610115481e-19,
+      "max_actual_magnitude": 4.646101295884346e-05,
+      "max_reference_magnitude": 4.646101295884346e-05,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/retention.weight",
+      "max_absolute_error": 2.0328790734103208e-20,
+      "max_actual_magnitude": 2.0152018473365618e-05,
+      "max_reference_magnitude": 2.0152018473365598e-05,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/retention.bias",
+      "max_absolute_error": 4.743384504624082e-20,
+      "max_actual_magnitude": 4.067019200575608e-05,
+      "max_reference_magnitude": 4.067019200575603e-05,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/write_strength.weight",
+      "max_absolute_error": 2.8189256484623115e-18,
+      "max_actual_magnitude": 0.005685712609708721,
+      "max_reference_magnitude": 0.005685712609708723,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/write_strength.bias",
+      "max_absolute_error": 6.938893903907228e-18,
+      "max_actual_magnitude": 0.008326168598646315,
+      "max_reference_magnitude": 0.008326168598646322,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/historical_content.weight",
+      "max_absolute_error": 3.903127820947816e-18,
+      "max_actual_magnitude": 0.011347071474060976,
+      "max_reference_magnitude": 0.011347071474060975,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/historical_content.bias",
+      "max_absolute_error": 0.0,
+      "max_actual_magnitude": 0.6616413161512966,
+      "max_reference_magnitude": 0.6616413161512966,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "batch_stream_gradient/predictive_memory_delta.weight",
+      "max_absolute_error": 6.776263578034403e-21,
+      "max_actual_magnitude": 1.5022279731387437e-05,
+      "max_reference_magnitude": 1.502227973138744e-05,
+      "atol": 1e-10,
+      "rtol": 1e-07
+    },
+    {
+      "check": "independent_loss",
+      "max_absolute_error": 3.0531133177191805e-16,
+      "max_actual_magnitude": 0.24080372946279863,
+      "max_reference_magnitude": 0.24080372946279832,
+      "atol": 2e-12,
+      "rtol": 2e-10
+    },
+    {
+      "check": "independent_directional_derivative/observation",
+      "max_absolute_error": 1.3558931755142112e-11,
+      "max_actual_magnitude": 1.3802716153348404,
+      "max_reference_magnitude": 1.3802716153483994,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/action",
+      "max_absolute_error": 2.3650617055059886e-11,
+      "max_actual_magnitude": 0.004106401938683371,
+      "max_reference_magnitude": 0.0041064019150327535,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/elapsed_dt",
+      "max_absolute_error": 4.834214842666662e-12,
+      "max_actual_magnitude": 0.0006456736791290733,
+      "max_reference_magnitude": 0.0006456736839632882,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/source_key_rotations",
+      "max_absolute_error": 1.7423195265015012e-11,
+      "max_actual_magnitude": 0.0029669846406881403,
+      "max_reference_magnitude": 0.002966984623264945,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/predictive_memory_logit",
+      "max_absolute_error": 4.246114337890747e-12,
+      "max_actual_magnitude": 9.181536135850489e-08,
+      "max_reference_magnitude": 9.181960747284278e-08,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.residual_logit",
+      "max_absolute_error": 2.482026307301221e-11,
+      "max_actual_magnitude": 5.629532550554482e-05,
+      "max_reference_magnitude": 5.6295350325807896e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.encoder.weight",
+      "max_absolute_error": 9.832589820471527e-12,
+      "max_actual_magnitude": 0.0005039133123481037,
+      "max_reference_magnitude": 0.0005039133221806935,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.encoder.bias",
+      "max_absolute_error": 2.652444323208991e-11,
+      "max_actual_magnitude": 0.007188597228747866,
+      "max_reference_magnitude": 0.007188597202223423,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.address.weight",
+      "max_absolute_error": 9.558450127862723e-12,
+      "max_actual_magnitude": 0.00011931687181666983,
+      "max_reference_magnitude": 0.00011931688137511996,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.address.bias",
+      "max_absolute_error": 6.311111884287589e-12,
+      "max_actual_magnitude": 4.818533690437806e-05,
+      "max_reference_magnitude": 4.8185343215489944e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.content.weight",
+      "max_absolute_error": 3.8659836508296574e-12,
+      "max_actual_magnitude": 0.00041782583405055413,
+      "max_reference_magnitude": 0.0004178258301845705,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.content.bias",
+      "max_absolute_error": 2.6958851058640765e-11,
+      "max_actual_magnitude": 0.000757306535434237,
+      "max_reference_magnitude": 0.0007573065084753859,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.fast_map.weight",
+      "max_absolute_error": 1.7502236910205832e-12,
+      "max_actual_magnitude": 0.00012868376467027725,
+      "max_reference_magnitude": 0.00012868376642050094,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.fast_map.bias",
+      "max_absolute_error": 1.1014056203531575e-11,
+      "max_actual_magnitude": 0.0010235346925062895,
+      "max_reference_magnitude": 0.0010235347035203457,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.slow_map.weight",
+      "max_absolute_error": 3.689306896277351e-12,
+      "max_actual_magnitude": 1.8478376247985392e-05,
+      "max_reference_magnitude": 1.847837993729229e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.slow_map.bias",
+      "max_absolute_error": 4.26605024092877e-12,
+      "max_actual_magnitude": 0.0003113124266346428,
+      "max_reference_magnitude": 0.0003113124223685926,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.memory_gates.weight",
+      "max_absolute_error": 5.706850560150377e-12,
+      "max_actual_magnitude": 8.085420650752572e-05,
+      "max_reference_magnitude": 8.085421221437628e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.memory_gates.bias",
+      "max_absolute_error": 7.123169092873756e-12,
+      "max_actual_magnitude": 8.545598099598501e-05,
+      "max_reference_magnitude": 8.54559881191541e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.readout.0.weight",
+      "max_absolute_error": 2.0128922400414195e-11,
+      "max_actual_magnitude": 0.0007083253310341779,
+      "max_reference_magnitude": 0.0007083253109052555,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.readout.0.bias",
+      "max_absolute_error": 1.7682591502143907e-12,
+      "max_actual_magnitude": 0.009464444024645295,
+      "max_reference_magnitude": 0.009464444026413554,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.readout.2.weight",
+      "max_absolute_error": 1.5117454163493527e-11,
+      "max_actual_magnitude": 0.00400040353606034,
+      "max_reference_magnitude": 0.004000403520942886,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.readout.2.bias",
+      "max_absolute_error": 1.5001826170202293e-11,
+      "max_actual_magnitude": 0.046549795137698566,
+      "max_reference_magnitude": 0.04654979512269674,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.core.time_projection.weight",
+      "max_absolute_error": 2.0719899754273463e-11,
+      "max_actual_magnitude": 0.005271840366236432,
+      "max_reference_magnitude": 0.005271840345516532,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.residual_ffn.0.weight",
+      "max_absolute_error": 1.1504408184556322e-11,
+      "max_actual_magnitude": 1.3658478542657158e-07,
+      "max_reference_magnitude": 1.3659628983475613e-07,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.residual_ffn.0.bias",
+      "max_absolute_error": 2.337502945110731e-11,
+      "max_actual_magnitude": 0.0007869397302636084,
+      "max_reference_magnitude": 0.0007869397536386379,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.residual_ffn.2.weight",
+      "max_absolute_error": 1.2044289138999048e-12,
+      "max_actual_magnitude": 3.523527486611753e-06,
+      "max_reference_magnitude": 3.5235286910406667e-06,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/backbone.residual_ffn.2.bias",
+      "max_absolute_error": 1.0552915637694615e-11,
+      "max_actual_magnitude": 0.0005311508297136906,
+      "max_reference_magnitude": 0.000531150819160775,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/source_content.weight",
+      "max_absolute_error": 4.098815037378856e-12,
+      "max_actual_magnitude": 0.0027398608603478136,
+      "max_reference_magnitude": 0.0027398608562489986,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/source_content.bias",
+      "max_absolute_error": 1.4679125970307183e-11,
+      "max_actual_magnitude": 0.03121082334789717,
+      "max_reference_magnitude": 0.031210823362576297,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/write_router.weight",
+      "max_absolute_error": 4.128375809611673e-12,
+      "max_actual_magnitude": 0.00026293318775737445,
+      "max_reference_magnitude": 0.00026293319188575026,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/write_router.bias",
+      "max_absolute_error": 4.444584457419243e-12,
+      "max_actual_magnitude": 0.0024259804544365096,
+      "max_reference_magnitude": 0.002425980458881094,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/read_router.weight",
+      "max_absolute_error": 3.722243724997489e-12,
+      "max_actual_magnitude": 5.1422084204831946e-05,
+      "max_reference_magnitude": 5.142208048258822e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/read_router.bias",
+      "max_absolute_error": 6.525233749599818e-12,
+      "max_actual_magnitude": 5.290784574608415e-05,
+      "max_reference_magnitude": 5.29078392208504e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/retention.weight",
+      "max_absolute_error": 1.0751889538472646e-11,
+      "max_actual_magnitude": 1.868762749053105e-05,
+      "max_reference_magnitude": 1.868763824242059e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/retention.bias",
+      "max_absolute_error": 1.9464813758406758e-11,
+      "max_actual_magnitude": 1.3186232003354444e-05,
+      "max_reference_magnitude": 1.3186212538540685e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/write_strength.weight",
+      "max_absolute_error": 1.3135675598456575e-11,
+      "max_actual_magnitude": 2.018904701021646e-05,
+      "max_reference_magnitude": 2.0189060145892057e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/write_strength.bias",
+      "max_absolute_error": 5.867643176893367e-12,
+      "max_actual_magnitude": 0.003588414145311417,
+      "max_reference_magnitude": 0.0035884141394437736,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/historical_content.weight",
+      "max_absolute_error": 1.7486387805679213e-12,
+      "max_actual_magnitude": 2.3594832004907073e-05,
+      "max_reference_magnitude": 2.3594830256268292e-05,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/historical_content.bias",
+      "max_absolute_error": 1.5923651286442464e-12,
+      "max_actual_magnitude": 0.21081892560677684,
+      "max_reference_magnitude": 0.2108189256083692,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    },
+    {
+      "check": "independent_directional_derivative/predictive_memory_delta.weight",
+      "max_absolute_error": 2.7201839149074337e-12,
+      "max_actual_magnitude": 1.265176213656346e-06,
+      "max_reference_magnitude": 1.2651789338402608e-06,
+      "atol": 5e-08,
+      "rtol": 5e-05
+    }
+  ]
+}

@@ -30,6 +30,7 @@ from torch.nn import functional as F
 from .parallel_continuous_world import ParallelTACWorld
 from .parallel_affine_memory import (
     associative_affine_schedule, work_efficient_affine_prefix,
+    preserve_nonwrite_prefix,
 )
 from .parallel_residual_world import ParallelResidualWorld
 
@@ -81,10 +82,14 @@ def _time_features(index, dt, now, last_clock, had_prior):
 class TimeAwareParallelCore(ParallelTACWorld):
     """Reuse original learned scan operators; add input-only temporal projection."""
 
-    def __init__(self, *, state_dim=14, action_dim=14, width=88, decoder=132):
+    def __init__(self, *, state_dim=14, action_dim=14, width=88, decoder=132,
+                 preserve_masked_prefix_bytes=False):
         super().__init__(state_dim=state_dim, action_dim=action_dim,
                          width=width, decoder=decoder)
         self.time_projection = nn.Linear(7, 48, bias=False)
+        # Opt-in numerical refinement for PAR-MEM-010. Earlier instances and
+        # checkpoint replays keep their original batch arithmetic by default.
+        self.preserve_masked_prefix_bytes = preserve_masked_prefix_bytes
         # This creates an EXACT initial no-effect temporal path for the parent,
         # with live gradients to the projection on backward.
         nn.init.zeros_(self.time_projection.weight)
@@ -111,6 +116,8 @@ class TimeAwareParallelCore(ParallelTACWorld):
         alpha=alpha*(1-beta/4.0)
         P,Q=associative_affine_schedule(k,v,alpha,beta,writable.unsqueeze(-1))
         memory=work_efficient_affine_prefix(P,Q)
+        if self.preserve_masked_prefix_bytes:
+            memory=preserve_nonwrite_prefix(memory,writable)
         prev=torch.cat((memory.new_zeros(B,1,8,8),memory[:,:-1]),1)
         r=(prev@k.unsqueeze(-1)).squeeze(-1)
         f,fg=self.fast_map(torch.cat((e,pf,r),-1)).chunk(2,-1)
@@ -219,11 +226,13 @@ class TimeAwareParallelCore(ParallelTACWorld):
 class TimeAwareParallelResidualWorld(ParallelResidualWorld):
     """Optional temporal encoding; unchanged parent FFN and loss contract."""
 
-    def __init__(self, state_dim=14,action_dim=14,width=88,decoder=132,ffn_hidden=12):
+    def __init__(self, state_dim=14,action_dim=14,width=88,decoder=132,ffn_hidden=12,
+                 preserve_masked_prefix_bytes=False):
         super().__init__(state_dim=state_dim,action_dim=action_dim,
                          width=width,decoder=decoder,ffn_hidden=ffn_hidden)
         self.core=TimeAwareParallelCore(
-            state_dim=state_dim,action_dim=action_dim,width=width,decoder=decoder)
+            state_dim=state_dim,action_dim=action_dim,width=width,decoder=decoder,
+            preserve_masked_prefix_bytes=preserve_masked_prefix_bytes)
 
     def _post_read(self,trace):
         z=torch.cat((trace["fast"],trace["slow"],

@@ -1,0 +1,116 @@
+{
+  "id": "PAR-MEM-010",
+  "schema": "pnds.source_aligned_formal_contract.v1",
+  "source": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "commit": "63ea0aa67904fa946b9baa69d2e4b0cc23dc1c9a",
+    "pull_request": 520,
+    "sha256": {
+      "src/tac_osm/variants/source_aligned_parallel_world.py": "7ae1956091d19636526ee8ef42bb0c6211a6b7ca52264b85d4f4970537bfdaa2",
+      "src/tac_osm/variants/parallel_time_age_world.py": "a400b8607a22bfe54b0be03a814454a6a5e31bc6be519b22181460dea45ffa82",
+      "src/tac_osm/variants/parallel_residual_world.py": "c58ea88b720d6672ce5494e16665b73119a77cee14ae3ea45580cbb4e15e80e5",
+      "src/tac_osm/variants/parallel_continuous_world.py": "a2f043f75530a1966fa2a704c09edc205d17fd033d4d64278a53f2bb63b6e4b1",
+      "src/tac_osm/variants/parallel_affine_memory.py": "dc415571310b7fc84b2d05edadbeb93220c002e03a86c4ad7dbddc169909b6ce"
+    },
+    "previous_implementation_commit": "0c97e852cbdee1655a139e9ac203114ec6c692d6",
+    "revision": "PAR-MEM-010-NUM-001",
+    "initial_numerical_fix_commit": "3b278acc9daf587fd20892e470c857bfc933248e"
+  },
+  "ancestry": [
+    "PAR-TIME-001",
+    "DIAGKEY004",
+    "ME100",
+    "LATFUSE004",
+    "LATFUSE018"
+  ],
+  "default_geometry": {
+    "observation": 14,
+    "observed_action": 14,
+    "embedding": 48,
+    "fast_sum": 88,
+    "native_memory": [
+      8,
+      8
+    ],
+    "aligned_memory": [
+      2,
+      16,
+      8
+    ],
+    "persistent_float_values": 410,
+    "trainable_parameters": 98326
+  },
+  "lean": {
+    "specification": "PNDS/SourceAlignedModel.lean",
+    "operator_proofs": "PNDS/SourceAlignedVerification.lean",
+    "inherited_contracts": "PNDS/SourceAlignedMemory.lean",
+    "audit": "AuditSourceAligned.lean",
+    "balanced_scan": "PNDS/SourceAlignedScan.lean",
+    "complete_execution": "PNDS/SourceAlignedExecution.lean",
+    "differentiation": "PNDS/SourceAlignedDifferentiation.lean",
+    "symbolic_compiler": "PNDS/SourceAlignedPrograms.lean",
+    "error_propagation": "PNDS/SourceAlignedRoundoff.lean"
+  },
+  "python": {
+    "complete_forward_reference": "foundation/v1/source_aligned_model_math.py",
+    "exact_operator_reference": "foundation/v1/source_aligned_memory_math.py",
+    "exact_tests": "tests/test_source_aligned_verification_math.py",
+    "source_correspondence_runner": "scripts/verify_parmem010_math.py",
+    "source_correspondence_receipt": "research/parallel-six/PAR-MEM-010-MATH-CORRESPONDENCE.json",
+    "forward_reference_sha256": "c1e039c5f0e7c00bbe3351dffafe2419774d3ee0303b5a54146630c8ae265472",
+    "execution_reference": "foundation/v1/source_aligned_execution_math.py",
+    "scalar_ad_reference": "foundation/v1/source_aligned_program_math.py",
+    "execution_source_runner": "scripts/verify_parmem010_execution.py",
+    "execution_source_receipt": "research/parallel-six/PAR-MEM-010-EXECUTION-CORRESPONDENCE.json"
+  },
+  "mathematical_status": "FULL_REAL_GRAPH_SCAN_AND_REGULAR_POINT_JVP_VJP_PROVED_WITH_CONDITIONAL_ROUNDOFF_BOUNDS",
+  "complete_formal_verification": false,
+  "known_limits": [
+    "ordinal address and router repeat every 155701 events",
+    "chronology guard does not attest observation membership",
+    "masked writes preserve associative memories, not all stream metadata or fast sum",
+    "fixed-size state cannot promise arbitrary exact historical recall",
+    "parallel masked-write roundoff corrected by last-admitted-prefix gather in source revision NUM-001"
+  ],
+  "open_obligations": [
+    "formal refinement of actual Python/Torch tensor and control-flow execution to the proved complete mathematical graph",
+    "verified backend-specific local IEEE/kernel/transcendental accuracy on an explicit bounded deployment domain, including exceptional behavior",
+    "formal refinement of Torch autograd implementation to the proved JVP/VJP and recorded nonsmooth selection rules",
+    "external source observation membership and access permission attestations",
+    "empirical trained genuine historical retrieval and forecasting qualification"
+  ],
+  "training_done": false,
+  "real_world_capability_inferred": false,
+  "initial_open_obligations": [
+    "formal refinement of concrete Torch Blelloch upsweep/downsweep and tensor strides",
+    "machine-checked IEEE/transcendental error bounds over specified deployment ranges and backends",
+    "whole-graph automatic-differentiation proof including epsilon and clamp boundaries",
+    "independently attested source observation membership and permissions",
+    "trained genuine historical-content retrieval and forecasting advantage",
+    "probability calibration or causal-intervention semantics (not provided by this point regressor)"
+  ],
+  "proof_extension": {
+    "id": "PAR-MEM-010-FORMAL-002",
+    "exact_full_state_scan": "PROVED",
+    "exact_full_output_scan": "PROVED",
+    "every_blelloch_prefix_and_padding": "PROVED",
+    "full_graph_scalar_compiler": "PROVED",
+    "all_history_jvp_and_vjp": "PROVED_AT_REGULAR_POINTS",
+    "normalization_zero_key": "PROVED_DIFFERENTIABLE_WITH_IDENTITY_OVER_EPSILON_JACOBIAN",
+    "clamp_ties": "PROVED_NOT_CLASSICALLY_DIFFERENTIABLE_ONE_SIDED_RULES_EXPLICIT",
+    "nonlinear_forward_error_and_accumulation": "PROVED_CONDITIONAL_ON_EXPLICIT_LOCAL_BACKEND_ACCURACY_AND_DOMAIN",
+    "torch_runtime_formally_refined": false,
+    "local_kernel_and_transcendental_accuracy_formally_proved": false,
+    "source_checks": {
+      "original_comparisons": 467,
+      "additional_full_execution_comparisons": 61,
+      "actual_finite_parameter_overflow_witness": true,
+      "actual_fp32_clock_stagnation_witness": true
+    },
+    "reference_sha256": {
+      "foundation/v1/source_aligned_execution_math.py": "ac40f5c2bfcebbae042f1199a3f3f0351213bc0eb400abbb46619b2a449a0c8e",
+      "foundation/v1/source_aligned_program_math.py": "f788b0db91a5d2b3fdf1baeae468755c93139ac6e454786aab82de39ff822ff1"
+    },
+    "report": "foundation/v1/PAR-MEM-010-FULL-MODEL-PROOFS.md"
+  }
+}

@@ -18,4 +18,4 @@ jobs:
       - name: Validate every original source-pinned variant and dual formulation reference
         run: python3 research/scripts/check_pnds_math_links.py
       - name: Verify byte-equivalent semantic JSON in PNDS remote draft branch
-        run: python3 research/scripts/check_pnds_remote_parity.py
+        run: python3 research/scripts/check_pnds_remote_parity.py --peer-ref a7af5758bbb1ee90da006a0a61416d4061f23e64
