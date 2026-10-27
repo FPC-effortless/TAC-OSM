@@ -1,0 +1,103 @@
+name: LATFUSE011 synthetic-only 16-512 step algorithmic trainability positive control
+
+on:
+  push:
+    branches:
+      - research/latfuse011-synthetic-positive-control-2026-10-27
+    paths:
+      - ".github/workflows/latfuse011-synthetic-trainability.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: LATFUSE011-SYNTHETIC-ONLY-FIRST-ARCH-POSITIVE
+  cancel-in-progress: false
+
+jobs:
+  original-model-synthetic-diagnostic-checkpoints:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install CPU-only source-independent torch; no real source download
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate explicit synthetic-only diagnostic and original model budget — forbid real-world claims
+        run: |
+          set -e
+          python -m py_compile scripts/latfuse011_synthetic_trainability.py
+          test ! -e research/replay-bundles/LATFUSE011-SYNTHETIC
+          python - <<'PY'
+          import json
+          p="research/mathematical-engineering/latfuse011/SYNTHETIC_DIAGNOSTIC_REGISTRATION.json"
+          j=json.load(open(p))
+          assert j["schema_version"]=="tac-osm.synthetic-diagnostic.v1"
+          assert j["study_type"]=="synthetic_only_diagnostic_training"
+          assert j["synthetic_only"] is True and j["no_real_world_claim"] is True
+          assert j["original_source_archive_used"] is False
+          assert j["protected_source_used"] is False
+          assert [m["seed"] for m in j["models"]]==[11801,11802]
+          PY
+      - name: Train synthetic paired delayed-event task on unchanged real-model architecture (two seeds)
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse011_synthetic_trainability.py --mode fit
+      - name: Check point count, original weights, true synthetic-only metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path("research/replay-bundles/LATFUSE011-SYNTHETIC")
+          d=json.loads((p/"RESULTS.json").read_text())
+          assert d["source_archive_used"] is False and d["total_optimizer_updates"]==320
+          assert {r["seed"] for r in d["records"]}=={11801,11802}
+          for r in d["records"]:
+              name=p/f"seed-{r['seed']}"/"final.pt"
+              assert hashlib.sha256(name.read_bytes()).hexdigest()==r["original_checkpoint_sha256"]
+          PY
+      - name: Replay heldout synthetic-only predictions WITHOUT optimizer
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse011_synthetic_trainability.py --mode replay
+      - name: Preserve diagnostic-trained synthetic-only weights optimizer RNG & negative evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse011-synthetic-positive-control-2026-10-27
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/replay-bundles/LATFUSE011-SYNTHETIC
+          git diff --cached --quiet && exit 1
+          git commit -m "research: archive clearly synthetic-only 16-512 step original-model trainability checks and replay"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Independent clean checkout synthetic-only verification
+        shell: bash
+        env:
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --single-branch --branch "$GITHUB_REF_NAME" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/latfuse011-synth-clean
+          cd /tmp/latfuse011-synth-clean
+          PYTHONPATH=".:src" python scripts/latfuse011_synthetic_trainability.py --mode replay
+      - name: Scientific warning
+        run: |
+          echo "STRICTLY SYNTHETIC DIAGNOSTIC TRAINING, not actual real-world performance or genuine data."
+          echo "Even a successful synthetic benchmark does NOT qualify source-truth memory recall, parameter/FLOP fairness, or architecture superiority."
+          echo "This workflow never downloads original sensor source or opens protected numbers."
