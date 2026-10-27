@@ -1,7 +1,8 @@
 # HISTORY-AUDIT014: original-source historical-memory audit
 
-**Status: internal research authorized under the operator's 2026-10-27
-execution-level amendment.** Ordinary public FIT diagnostics do not require
+**Status: internally measured, not independently qualified. The H64 benefit gate failed for both seeds; source trace checks and byte-identical replay passed.**
+
+[Measured results and limits](INTERNAL_RESULTS.md). Internal research runs under the operator's 2026-10-27 execution-level amendment. Ordinary public FIT diagnostics do not require
 external signers. Independent qualification remains a distinct guarded level.
 The prior blocked receipt is historical evidence of the old policy, not the
 current internal prerequisite. No original data, model or historical result is
