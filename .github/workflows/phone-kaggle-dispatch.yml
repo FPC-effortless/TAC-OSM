@@ -109,6 +109,17 @@ jobs:
             --kaggle-user "$KAGGLE_USERNAME" --out ci-artifacts/kaggle-stage --submit
           echo "Kaggle submission requested; GPU device verification occurs INSIDE the remote notebook." >> "$GITHUB_STEP_SUMMARY"
           echo "No capability or reward claim from submission alone." >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish first remote Kaggle status to phone Issue
+        env:
+          PROPOSAL: ${{ inputs.proposal }}
+          KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python scripts/monitor_phone_kaggle.py \
+            --proposal "$PROPOSAL" --username "$KAGGLE_USERNAME" \
+            --out ci-artifacts/kaggle-stage/monitor --post-issue
       - name: Retain compute choice and nonsecret submission receipt
         if: always()
         uses: actions/upload-artifact@v4
