@@ -1,0 +1,33 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE006-REAL-LAGGED-EVENT-READOUT-001",
+  "study_type": "noncomparative_diagnostic",
+  "scientific_purpose": "Test if information about a genuinely measured 2014 physical PM2.5 high-event at t-L is linearly decodable from genuine frozen trained LATFUSE004 recurrent state at t+L, and whether associative-memory features add any information beyond current input/calendar and nonassociative fast/slow/source slots. Real source-only binary historical facts, no fabricated labels.",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "original_checkpoint_family": "All 8 saved LATFUSE004 two-seed by four-architecture trained original .pt model checkpoints, restore strict state_dict and unchanged SHA; no new TAC-OSM optimizer / no modification to FP32 model.",
+  "original_physical_event_target": "Source recorded PM2.5 FIT standardized z >= +1.25 (event class1) versus <=abs .25 (matched ordinary class0) at original historic anchor. At least24h between positive anchors/site, same station/hour-of-day controlled ordinary anchor >=24h away from positive, source and previous matched normals. Source-event target is recorded observed earlier PM2.5, NOT future observed target and NOT a synthetic benchmark.",
+  "cohort_train": "2014-03-01 through 2014-04-18 exclusive, maximum eight matched pairs/site selected chronologically using SOURCE MEASUREMENTS ONLY. Every training anchor+512 hours must precede validation/test anchors; original trained full FIT source is already observed to those original checkpoints.",
+  "cohort_eval": "2014-07-01 through 2014-08-01 exclusive, maximum two matched source-clock pairs/site. This reuses the already examined FIT-era July cohort and is NOT an independent trained-model holdout. No tuning or calibrating using its labels, all original models trained across this FIT era historically.",
+  "delays_hours": [
+    16,
+    64,
+    128,
+    512
+  ],
+  "history_source_hours_before_anchor": 24,
+  "source_input_authority": "For each source pair, all past observed values/masks/last readings/elapsed age and authorized physical station input through t+L; at prediction decoder readout NO anchor ground-truth PM2.5/event bit supplied, only lag is known cue. Source archive original historical observation cut before 2015 numeric. Calendar at t+L+6 future-known, not true future weather or action.",
+  "feature_arms": [
+    "nuisance_current: current observed sensor+mask+age+last+calendar+station onehot without original neural state",
+    "nuisance_plus_fast_slow_entity: same current source features plus frozen trained fast80 slow80 and actually authorized source slot80",
+    "nuisance_plus_actual_forecast_associative_read: same + exact original model calendar/belief-query soft weighted associative retrieval 16D; query is NOT an event-specific oracle",
+    "nuisance_plus_entire_associative_matrix: same + original frozen 256 matrix coordinates, upper bound for LINEAR EXTERNAL DECODABILITY, NOT online compact model parameter parity; trainable probe weights out-of-model"
+  ],
+  "probe_fitting": "Frozen deterministic dual-ridge sidecar training only; on authentic March-April source paired event labels, fit least-squares lag-specific decoder using training-only per-column mean/variance, clipping standardized columns ±6, scale by sqrt(feature dimension) to avoid extra-dimension norm freebie, ridge penalty lambda=1.0 fixed before running; seed-independent original chronological matched source order; no grid-search or July score-driven adjustments; 4 lag-specific decoders, one per feature arm per trained checkpoint.",
+  "metrics": "For each 8 original checkpoints and four lags report authentic July observed-event 0.5 threshold balanced accuracy, Brier score, within-pair ordering accuracy (same-station/hour controls), and improvement/deterioration when adding the model's ACTUAL read to its nonassociative features. Record baseline constant 0.5 Brier 0.25, balanced accuracy0.5, pair ordering 0.5. Positive reading must beat nonassociative and nuisance controls, not only a chance label baseline.",
+  "anti_leak": "Source cohort label is computed only for fixed anchor selection; feature builder must consume no source anchor label, no true future after query and no calibration from July fit labels. Last observed source at t+L includes genuine sequence and can predict event persistence, so nuisance baseline mandatory. Never construct query from original recorded anchor or original write key for primary decoder. Strictly independent source station pairs after time separation but all original pretrained models were historically fit on full 2014 FIT; no independent model-test claim.",
+  "performance_and_state": "Parent pretrained model 6800 nominal recurrent bytes, unchanged. Sidecar ridge decoder is diagnostic ONLY and has out-of-model learned coefficients, therefore this is not an online 6800-byte deployable architecture or proof of model factual recollection. For a qualified architecture it must be integrated and trained with full FLOP, active param and state parity.",
+  "stop": "No original optimizer updates and no model fitting. Fail closed source SHA/checkpoint SHA, insufficient >=12 authentic pairs per split, invalid time boundaries, cross-split source-overlap, nonfinite decoder, or any attempted protected numerical data access. Do not rerun with retroactively adjusted threshold, cohort, λ or metric if negative.",
+  "scientific_limit": "Source-real classification tests at pre-specified lags measure ex-post linear decodability after external real-data supervised head fitting, not the existing model's unsupervised factual query ability. No action-conditioned control, no confidence-qualified generalization claim."
+}
