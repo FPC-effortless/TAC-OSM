@@ -82,9 +82,6 @@ def assert_contract(cfg):
            "all_time_features":[0,1,2,3,4,5,6],
         }):
         raise RuntimeError("precommitted real FIT-only attribution contract changed")
-    if OUT.exists():
-        raise RuntimeError("original real-source attribution receipt already exists; no overwrite")
-
 def predict_batch(model,batch, *,return_trace=False):
     observation,covariates,delta,admit,*_=batch
     return model(observation,covariates,elapsed_dt=delta,
@@ -189,7 +186,7 @@ def source_probe(model,batch):
                  clock_mean_hours=float(restored.elapsed_clock.mean()),
                  source_current_age_equals_delta_max_discrepancy=time_dupe))
 
-def run(original_source:Path):
+def run(original_source:Path, *, replay:bool=False):
     torch.set_num_threads(1)
     cfg=json.loads(REG.read_text())
     assert_contract(cfg)
@@ -296,9 +293,34 @@ def run(original_source:Path):
        "per_seed":baseline_per_seed,
        "average_by_arm":mean_by_arm,
     }
-    if OUT.exists():
-        raise RuntimeError("original attribution artifact was created concurrently; no overwrite")
-    OUT.write_text(json.dumps(out,indent=2,sort_keys=True,allow_nan=False)+"\n")
+    if replay:
+        if not OUT.exists():
+            raise RuntimeError("committed initial read-only FIT diagnostic receipt missing")
+        previous=json.loads(OUT.read_text())
+        def compare_exact_schema(original, restored, name=""):
+            if type(original) is not type(restored):
+                raise RuntimeError("read-only source receipt schema changed: "+name)
+            if isinstance(original,dict):
+                if set(original)!=set(restored):
+                    raise RuntimeError("read-only source receipt keys changed: "+name)
+                for k in original:
+                    compare_exact_schema(original[k],restored[k],name+"."+str(k))
+            elif isinstance(original,list):
+                if len(original)!=len(restored):
+                    raise RuntimeError("read-only source receipt length changed: "+name)
+                for j,(a,b) in enumerate(zip(original,restored)):
+                    compare_exact_schema(a,b,name+"."+str(j))
+            elif isinstance(original,float):
+                if abs(original-restored)>1e-5*max(1.,abs(original)):
+                    raise RuntimeError("source replay numerical result changed: "+name)
+            elif original!=restored:
+                raise RuntimeError("original source replay identity changed: "+name)
+        compare_exact_schema(previous,out)
+        print("PAR_TIME_004_FROZEN_FIT_REPLAY_SUCCESS=5_original_models_64_real_source_cases")
+    else:
+        if OUT.exists():
+            raise RuntimeError("original attribution artifact was created concurrently; no overwrite")
+        OUT.write_text(json.dumps(out,indent=2,sort_keys=True,allow_nan=False)+"\n")
     print("PAR_TIME_004_FIT_DIAGNOSTIC_COMPLETE="+json.dumps({
          "arm_mean":mean_by_arm,"original_model_count":5,
          "mean_matrix_norm":sum(s["mean_associative_matrix_abs_after_12_observations"]
@@ -309,5 +331,6 @@ def run(original_source:Path):
 if __name__=="__main__":
     p=argparse.ArgumentParser()
     p.add_argument("--source",type=Path,required=True)
+    p.add_argument("--mode",choices=("audit","replay"),required=True)
     args=p.parse_args()
-    run(args.source)
+    run(args.source,replay=args.mode=="replay")
