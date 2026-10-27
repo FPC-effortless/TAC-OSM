@@ -6,17 +6,26 @@ permissions:
   contents: read
 jobs:
   source-prefit:
-    if: github.head_ref == 'research/query-diverse-history-training-2026-10-27' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/research/query-diverse-history-training-2026-10-27')
+    permissions:
+      contents: write
+    if: (github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'research/query-diverse-history-training-2026-10-27') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/research/query-diverse-history-training-2026-10-27')
     runs-on: ubuntu-latest
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
         with:
-          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: true
       - uses: actions/checkout@v4
         with:
           ref: fd201207cb76b30470f64e1fc1baecf9de44560d
           path: original-content-code
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: FPC-effortless/pnds-lean
+          ref: 4d6c1cb8c378ef7965339ef25e15b8dc23880655
+          path: pnds-math-source
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -28,6 +37,8 @@ jobs:
       - name: Accounting falsifiers and compute route
         env:
           PYTHONPATH: .:src
+          TAC_OSM_CONTENT_QUERY_SOURCE: ${{ github.workspace }}/original-content-code
+          TAC_OSM_HISTORY_MATH_SOURCE: ${{ github.workspace }}/pnds-math-source
         run: |
           mkdir -p ci-artifacts/history-query016
           python -m ruff check --select E9,F63,F7,F82 scripts/train_history_query_diverse.py src/tac_osm/research_operator_budget.py tests/test_research_operator_budget.py
@@ -50,14 +61,36 @@ jobs:
         if: hashFiles('research/mathematical-engineering/history_query016/FROZEN_PLAN.json') == ''
         run: |
           python scripts/train_history_query_diverse.py --mode prepare --implementation-root original-content-code --source /tmp/history-query016-original.zip --output ci-artifacts/history-query016
-      - name: Validate committed resource plan (no fit in this stage)
+      - name: Validate committed resource plan before fitting
         if: hashFiles('research/mathematical-engineering/history_query016/FROZEN_PLAN.json') != ''
         run: |
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/history_query016/FAIR_COMPARISON.json --phase preflight
+      - name: Fit only after committed complete matched preflight, no tuning
+        if: hashFiles('research/mathematical-engineering/history_query016/FROZEN_PLAN.json') != '' && hashFiles('research/replay-bundles/HISTORY-QUERY016/RESULTS.json') == ''
+        run: |
+          python scripts/train_history_query_diverse.py --mode fit --implementation-root original-content-code --source /tmp/history-query016-original.zip --output ci-artifacts/history-query016
+      - name: Fresh-process original-source checkpoint replay
+        if: hashFiles('research/replay-bundles/HISTORY-QUERY016/RESULTS.json') != ''
+        run: |
+          python scripts/train_history_query_diverse.py --mode replay --implementation-root original-content-code --source /tmp/history-query016-original.zip --output ci-artifacts/history-query016
+      - name: Preserve new replayed checkpoints on this research branch only
+        if: hashFiles('research/replay-bundles/HISTORY-QUERY016/RESULTS.json') != ''
+        run: |
+          test "${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}" = 'research/query-diverse-history-training-2026-10-27'
+          if ! git ls-files --error-unmatch research/replay-bundles/HISTORY-QUERY016/RESULTS.json >/dev/null 2>&1; then
+            cp ci-artifacts/history-query016/REPLAY_RECEIPT.json research/replay-bundles/HISTORY-QUERY016/
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/replay-bundles/HISTORY-QUERY016/
+            git commit -m 'Preserve query-diverse original FIT checkpoints, resource receipts and replayed results'
+            git push origin HEAD:refs/heads/research/query-diverse-history-training-2026-10-27
+          fi
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: history-query016-source-prefit
-          path: ci-artifacts/history-query016/
+          path: |
+            ci-artifacts/history-query016/
+            research/replay-bundles/HISTORY-QUERY016/
           if-no-files-found: warn
           retention-days: 30

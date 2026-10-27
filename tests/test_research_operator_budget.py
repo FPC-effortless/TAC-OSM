@@ -52,3 +52,59 @@ def test_reduction_bound_and_matmul():
     s=op('aten::bmm.',[[2,3,4],[2,4,5]], [[2,3,5]])['signature']
     assert signature_work(s)==240
 
+
+
+def test_actual_original_graph_loss_mask_and_gradients():
+    import os
+    from pathlib import Path
+    import subprocess
+    import sys
+    root=os.environ.get('TAC_OSM_CONTENT_QUERY_SOURCE')
+    if not root:pytest.skip('dedicated CPU job supplies pinned original implementation')
+    code=r'''
+from pathlib import Path
+import sys
+sys.path[:0]=[str(Path.cwd()),str(Path.cwd()/'src')]
+import torch
+import importlib.util,os
+from scripts.original_history_trace import verify_implementation,load_original_modules
+from scripts.train_history_query_diverse import full_loss
+root=verify_implementation(Path(sys.argv[1]),'fd201207cb76b30470f64e1fc1baecf9de44560d')
+source,original=load_original_modules(root)
+torch.set_num_threads(1);torch.manual_seed(19)
+d=dict(values=torch.randn(2,200,13),valid=torch.ones(2,200,13,dtype=torch.bool),age=torch.zeros(2,200,13),last=torch.zeros(2,200,13))
+d['valid'][0,48,0]=False
+d['valid'][1,118,2]=False
+d['values'][~d['valid']]=float('nan')
+for arm in ('assoc_historic_query','fast_slow_historic_query'):
+ m=original.create_model(26016,arm)
+ # Actual missing values passed to original step are sanitized as source loader does.
+ d['values']=torch.nan_to_num(d['values'])
+ captured={}
+ oldpast,oldfuture=m.historic_event_logits,m.forecast
+ def past(*args):
+  out=oldpast(*args);out.retain_grad();captured['past']=out;return out
+ def future(*args):
+  mu,sd=oldfuture(*args);mu.retain_grad();sd.retain_grad();captured['mu']=mu;captured['sd']=sd;return mu,sd
+ m.historic_event_logits=past;m.forecast=future
+ loss=full_loss(m,d,[[0,40],[1,48]],source)
+ loss.backward()
+ assert captured['past'].grad[0,1]==0
+ assert captured['mu'].grad[1,0,2]==0 and captured['sd'].grad[1,0,2]==0
+ peer=os.environ.get('TAC_OSM_HISTORY_MATH_SOURCE')
+ if peer:
+  spec=importlib.util.spec_from_file_location('pnds_loss',Path(peer)/'foundation/v1/history_query016.py')
+  ref=importlib.util.module_from_spec(spec);spec.loader.exec_module(ref)
+  owners=torch.tensor([0,1]);anchors=torch.tensor([40,48]);times=anchors[:,None]+torch.arange(0,64,8)[None,:]
+  hist=ref.historical_loss(captured['past'].detach().flatten().tolist(),d['values'][owners[:,None],times,0].flatten().tolist(),d['valid'][owners[:,None],times,0].flatten().tolist())
+  futureval=ref.forecast_loss(captured['mu'].detach().flatten().tolist(),captured['sd'].detach().flatten().tolist(),d['values'][owners,anchors+70].flatten().tolist(),d['valid'][owners,anchors+70].flatten().tolist())
+  assert abs(float(loss.detach())-hist-futureval)<1e-6
+
+ assert torch.isfinite(loss)
+ assert sum(p.numel() for p in m.parameters())==99390
+ assert all(p.grad is not None and torch.isfinite(p.grad).all() for p in m.parameters())
+ print('PASS_CONSTRUCTED_ORIGINAL_GRAPH',arm)
+'''
+    p=subprocess.run([sys.executable,'-c',code,root],cwd=Path.cwd(),capture_output=True,text=True)
+    assert p.returncode==0,p.stdout+p.stderr
+    assert p.stdout.count('PASS_CONSTRUCTED_ORIGINAL_GRAPH')==2

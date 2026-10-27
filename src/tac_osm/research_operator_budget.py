@@ -123,10 +123,14 @@ def validate_comparison(manifest, phase):
     proofs = verify_profile(profile)
     if profile["recipe_sha256"] != manifest["training_recipe_sha256"] or profile["source_sha256"] != manifest["real_world_source"]["sha256"]:
         raise ValueError("source/recipe operator binding mismatch")
+    if phase not in ("preflight","final"):
+        raise ValueError("unknown resource phase")
     rows = manifest["arms"]
     seeds = sorted({r["seed"] for r in rows})
     if len(rows)!=len(seeds)*2 or len(seeds)<2:
         raise ValueError("matched two-arm seeded training matrix required")
+    if seeds!=sorted({p["seed"] for p in profile["profiles"]}):
+        raise ValueError("profile and fitted seed matrix differ")
     contracts = ("dataset_sha256","train_split_sha256","dev_split_sha256","test_split_sha256",
         "training_sample_order_sha256","feature_contract_sha256","target_contract_sha256",
         "optimizer_schedule_sha256","tuning_policy_sha256","selection_policy_sha256","evaluation_contract_sha256")
@@ -151,6 +155,8 @@ def validate_comparison(manifest, phase):
                 raise ValueError("unmatched actual training exposure budget")
             if any(budget[f]<=0 for f in budget_fields if f!="tuning_trials") or budget["tuning_trials"]!=0:
                 raise ValueError("positive fixed workload and no tuning required")
+            if budget!={"steps":64,"examples_seen":1024,"tokens_seen":90112,"batch_size":16,"history_events":88,"queries_per_window":8,"tuning_trials":0}:
+                raise ValueError("fixed preregistered full operator workload differs")
             if budget["examples_seen"]!=budget["steps"]*budget["batch_size"] or budget["tokens_seen"]!=budget["examples_seen"]*budget["history_events"]:
                 raise ValueError("inconsistent source exposure counts")
             if phase=="final":

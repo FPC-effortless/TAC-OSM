@@ -18,4 +18,9 @@ jobs:
       - name: Validate every original source-pinned variant and dual formulation reference
         run: python3 research/scripts/check_pnds_math_links.py
       - name: Verify byte-equivalent semantic JSON in PNDS remote draft branch
-        run: python3 research/scripts/check_pnds_remote_parity.py
+        run: |
+          if [ "$GITHUB_HEAD_REF" = 'research/query-diverse-history-training-2026-10-27' ]; then
+            python3 research/scripts/check_pnds_remote_parity.py --peer-ref 25d774bd9bf8cbbfaec132460e83cf836965cba3
+          else
+            python3 research/scripts/check_pnds_remote_parity.py
+          fi

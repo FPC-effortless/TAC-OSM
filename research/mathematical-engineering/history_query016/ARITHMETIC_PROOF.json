@@ -1,0 +1,406 @@
+[
+  {
+    "common_matmul_flops_lower_bound": 410553056,
+    "complete_unequal_operators": [
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "assoc",
+        "calls": 1,
+        "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 2560,
+        "arm": "fastslow",
+        "calls": 2,
+        "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,80]],[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,80]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 2,
+        "signature": "[\"aten::slice_backward.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,80]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,1]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 2,
+        "signature": "[\"aten::slice.Tensor\",[[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+        "stage": "forward"
+      }
+    ],
+    "differing_arithmetic_upper_bound": 27136,
+    "kind": "first",
+    "relative_full_math_gap_upper_bound": 6.60962075508214e-05,
+    "scope": "CPU FP32 ATen mathematical operator signatures; not hardware FLOPs or equal elapsed time",
+    "seed": 26016
+  },
+  {
+    "common_matmul_flops_lower_bound": 25864842528,
+    "complete_unequal_operators": [
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "assoc",
+        "calls": 63,
+        "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 161280,
+        "arm": "fastslow",
+        "calls": 126,
+        "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,80]],[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,80]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 126,
+        "signature": "[\"aten::slice_backward.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,80]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,1]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 126,
+        "signature": "[\"aten::slice.Tensor\",[[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+        "stage": "forward"
+      }
+    ],
+    "differing_arithmetic_upper_bound": 1709568,
+    "kind": "warm",
+    "relative_full_math_gap_upper_bound": 6.60962075508214e-05,
+    "scope": "CPU FP32 ATen mathematical operator signatures; not hardware FLOPs or equal elapsed time",
+    "seed": 26016
+  },
+  {
+    "common_matmul_flops_lower_bound": 410553056,
+    "complete_unequal_operators": [
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "assoc",
+        "calls": 1,
+        "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 2560,
+        "arm": "fastslow",
+        "calls": 2,
+        "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,80]],[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,80]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 2,
+        "signature": "[\"aten::slice_backward.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,80]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 4096,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,1]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 2,
+        "signature": "[\"aten::slice.Tensor\",[[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 1,
+        "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+        "stage": "forward"
+      }
+    ],
+    "differing_arithmetic_upper_bound": 27136,
+    "kind": "first",
+    "relative_full_math_gap_upper_bound": 6.60962075508214e-05,
+    "scope": "CPU FP32 ATen mathematical operator signatures; not hardware FLOPs or equal elapsed time",
+    "seed": 26017
+  },
+  {
+    "common_matmul_flops_lower_bound": 25864842528,
+    "complete_unequal_operators": [
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "assoc",
+        "calls": 63,
+        "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 161280,
+        "arm": "fastslow",
+        "calls": 126,
+        "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,80]],[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,80]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 126,
+        "signature": "[\"aten::slice_backward.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,80]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+        "stage": "backward"
+      },
+      {
+        "arithmetic_upper_bound": 258048,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,1]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 126,
+        "signature": "[\"aten::slice.Tensor\",[[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+        "stage": "forward"
+      },
+      {
+        "arithmetic_upper_bound": 0,
+        "arm": "fastslow",
+        "calls": 63,
+        "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+        "stage": "forward"
+      }
+    ],
+    "differing_arithmetic_upper_bound": 1709568,
+    "kind": "warm",
+    "relative_full_math_gap_upper_bound": 6.60962075508214e-05,
+    "scope": "CPU FP32 ATen mathematical operator signatures; not hardware FLOPs or equal elapsed time",
+    "seed": 26017
+  }
+]

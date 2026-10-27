@@ -204,6 +204,12 @@ def frozen(args):
         if p[key]!=rows_for(d,source,start,stop,every):raise ValueError('frozen source split differs')
     m=json.loads((DIR/'FAIR_COMPARISON.json').read_text())
     check_manifest(m,'preflight')
+    for row in m['arms']:
+        samples=p['orders'][str(row['seed'])]
+        rng=random.Random(row['seed'])
+        if samples!=[p['training'][rng.randrange(len(p['training']))] for _ in range(1024)]:raise ValueError('source training order not preregistered')
+        for key,value in (('training_sample_order_sha256',samples),('train_split_sha256',p['training']),('dev_split_sha256',p['primary']),('evaluation_contract_sha256',recipe['evaluation'])):
+            if row[key]!=digest(value):raise ValueError('resource contract differs from actual source plan')
     return recipe,source,original,d,p,m
 
 
@@ -239,6 +245,9 @@ def fit(args):
     for row in m['arms']:
         seed,arm=row['seed'],row['architecture'];samples=p['orders'][str(seed)]
         model=original.create_model(seed,arm)
+        contract=model.original_state_and_weight_contract()
+        if contract['trainable_parameters']!=99390 or contract['deployed_parameters']!=99390 or contract['original_nominal_memory_bytes']!=6800:
+            raise ValueError('live prefit original parameter/state contract changed')
         opt=torch.optim.AdamW(model.parameters(),lr=.0005,weight_decay=.001,foreach=False,fused=False)
         fingerprints=[];losses=[];start=time.monotonic()
         for i in range(64):
@@ -254,8 +263,9 @@ def fit(args):
         torch.save(dict(model=model.state_dict(),optimizer=opt.state_dict(),torch_rng=torch.get_rng_state(),
             python_rng=random.getstate(),seed=seed,architecture=arm,steps=64,examples_seen=1024,
             sample_order_sha256=digest(samples),recipe_sha256=digest(recipe),source_sha256=recipe['source_sha256'],
-            training_script_sha256=sha_file(Path(__file__)),losses=losses,actual_operator_step_sha256=fingerprints),path)
+            training_script_sha256=sha_file(Path(__file__)),torch_version=str(torch.__version__),losses=losses,actual_operator_step_sha256=fingerprints),path)
         count=sum(t.numel() for t in model.parameters())
+        if model.original_state_and_weight_contract()!=contract:raise ValueError('postfit state/weight contract changed')
         row['measured']=dict(actual_steps=64,actual_sample_order_sha256=digest(samples),actual_operator_step_sha256=fingerprints,
             trainable_parameters=count,deployed_parameters=count,checkpoint_sha256=sha_file(path),cpu_elapsed_seconds=time.monotonic()-start)
         results.append(dict(seed=seed,arm=arm,checkpoint=str(path.relative_to(ROOT)),sha256=sha_file(path),losses=losses))
@@ -293,6 +303,13 @@ def replay(args):
         c=torch.load(path,map_location='cpu',weights_only=False)
         if c['recipe_sha256']!=digest(recipe) or c['sample_order_sha256']!=digest(p['orders'][str(row['seed'])]) or c['training_script_sha256']!=sha_file(Path(__file__)):
             raise ValueError('source/order/script checkpoint binding differs')
+        receipt=next(r['measured'] for r in m['arms'] if r['seed']==row['seed'] and r['architecture']==row['arm'])
+        if (c['seed']!=row['seed'] or c['architecture']!=row['arm'] or c['steps']!=64 or c['examples_seen']!=1024
+            or c['source_sha256']!=recipe['source_sha256'] or len(c['losses'])!=64 or c['losses']!=row['losses']
+            or c['actual_operator_step_sha256']!=receipt['actual_operator_step_sha256'] or receipt['checkpoint_sha256']!=row['sha256']):
+            raise ValueError('actual checkpoint training/source/resource matrix differs')
+        if len(c['optimizer']['state'])!=43 or any(float(v['step'])!=64 for v in c['optimizer']['state'].values()):
+            raise ValueError('original AdamW replay states incomplete')
         model=original.create_model(row['seed'],row['arm']);model.load_state_dict(c['model'],strict=True)
         for cohort in ('primary','secondary'):
             if digest(evaluate(model,d,p[cohort],source))!=digest(row[cohort]):raise ValueError('fresh source/checkpoint replay differs')
