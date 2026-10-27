@@ -1,0 +1,75 @@
+name: Model01 original 103k GRU fresh-checkout no-refit source replay
+on:
+  push:
+    branches:
+      - research/model01-103k-gru-control-2026-10-27
+    paths:
+      - '.github/workflows/model01-103k-gru-clean-replay.yml'
+      - 'research/replay-bundles/MODEL01-GRU-103K-CONTROL-001/**'
+      - 'specialist_models/model01_matched_gru_control.py'
+  pull_request:
+    paths:
+      - '.github/workflows/model01-103k-gru-clean-replay.yml'
+      - 'research/replay-bundles/MODEL01-GRU-103K-CONTROL-001/**'
+      - 'specialist_models/model01_matched_gru_control.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-public-uci-source-independent-no-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          clean: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact original CPU model-reader environment
+        run: |
+          python -m pip install --no-cache-dir --disable-pip-version-check 'numpy==2.2.6'
+          python -m pip install --no-cache-dir --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check original immutable native and GRU source FIT sample parity
+        run: |
+          python - <<'PY'
+          import json
+          a=json.load(open('research/replay-bundles/MODEL01-TAC-REAL-FIT-001/ORIGINAL_FIT.json'))
+          b=json.load(open('research/replay-bundles/MODEL01-GRU-103K-CONTROL-001/ORIGINAL_FIT.json'))
+          assert b['gru_learned_parameters']==102883
+          assert a['trainable_params']==103252
+          assert b['relative_parameter_gap']<.01
+          assert not b['training_FLOPs_matched']
+          assert b['protected_future_test_rows_parsed'] is False
+          assert b['source_zip_sha256']==a['source_zip_sha256']
+          assert len(b['runs'])==len(a['runs'])==3
+          for x,y in zip(a['runs'],b['runs']):
+            assert x['seed']==y['seed']
+            assert x['sample_order_sha256']==y['sample_order_sha256']
+            assert x['checkpoint_sha256']==y['matched_native_checkpoint_sha256']
+            assert len(y['checkpoint_b64_gzip'])>100_000
+            assert x['dev']['n']==y['dev']['n']==1968
+          print('ORIGINAL_FIT_DATA_SAMPLE_ORDER_PARAMETER_PARITY=PASS')
+          PY
+      - name: Replay all original GRU seed checkpoints against real original UCI374 CAL DEV without fitting
+        run: |
+          python specialist_models/model01_matched_gru_control.py \
+            --replay-from research/replay-bundles/MODEL01-GRU-103K-CONTROL-001/ORIGINAL_FIT.json \
+            --out model01_gru_original_fresh_checkout_replay.json
+          python - <<'PY'
+          import json
+          x=json.load(open('model01_gru_original_fresh_checkout_replay.json'))
+          assert x['study']=='MODEL01-GRU-103K-CONTROL-001'
+          assert x['trained_during_replay'] is False
+          assert len(x['replay_reports'])==3
+          assert all(r['exact_CAL_DEV_replay'] and r['trained_during_replay'] is False for r in x['replay_reports'])
+          print('FRESH_CHECKOUT_REAL_SOURCE_GRU_EXACT_REPLAY=PASS')
+          print('SEED_CHECKPOINT_SHA='+json.dumps([r['original_checkpoint_sha256'] for r in x['replay_reports']]))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-original-gru-103k-fresh-checkout-no-fit
+          path: model01_gru_original_fresh_checkout_replay.json
+          if-no-files-found: error
+          retention-days: 14
