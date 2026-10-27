@@ -1,0 +1,96 @@
+{
+  "budgets": [
+    {
+      "models": {
+        "eight_feature_logistic": {
+          "false_alerts_lower_bound": 246,
+          "false_alerts_upper_bound": 247,
+          "known_negative": 246,
+          "known_positive": 16,
+          "positive_capture_among_all_known_first_decisions": 0.5161290322580645,
+          "precision_lower_bound_if_unknown_negative": 0.060836501901140684,
+          "precision_upper_bound_if_unknown_positive": 0.06463878326996197,
+          "recall_over_all_physical_failures": "NOT_IDENTIFIABLE_FROM_CENSORING",
+          "reviewed_drives": 263,
+          "unknown_censored": 1
+        },
+        "two_feature_lookup": {
+          "false_alerts_lower_bound": 253,
+          "false_alerts_upper_bound": 253,
+          "known_negative": 253,
+          "known_positive": 10,
+          "positive_capture_among_all_known_first_decisions": 0.3225806451612903,
+          "precision_lower_bound_if_unknown_negative": 0.03802281368821293,
+          "precision_upper_bound_if_unknown_positive": 0.03802281368821293,
+          "recall_over_all_physical_failures": "NOT_IDENTIFIABLE_FROM_CENSORING",
+          "reviewed_drives": 263,
+          "unknown_censored": 0
+        }
+      },
+      "review_capacity_drives": 263,
+      "review_fraction": 0.01
+    },
+    {
+      "models": {
+        "eight_feature_logistic": {
+          "false_alerts_lower_bound": 1292,
+          "false_alerts_upper_bound": 1293,
+          "known_negative": 1292,
+          "known_positive": 22,
+          "positive_capture_among_all_known_first_decisions": 0.7096774193548387,
+          "precision_lower_bound_if_unknown_negative": 0.016730038022813688,
+          "precision_upper_bound_if_unknown_positive": 0.01749049429657795,
+          "recall_over_all_physical_failures": "NOT_IDENTIFIABLE_FROM_CENSORING",
+          "reviewed_drives": 1315,
+          "unknown_censored": 1
+        },
+        "two_feature_lookup": {
+          "false_alerts_lower_bound": 1299,
+          "false_alerts_upper_bound": 1300,
+          "known_negative": 1299,
+          "known_positive": 15,
+          "positive_capture_among_all_known_first_decisions": 0.4838709677419355,
+          "precision_lower_bound_if_unknown_negative": 0.011406844106463879,
+          "precision_upper_bound_if_unknown_positive": 0.012167300380228136,
+          "recall_over_all_physical_failures": "NOT_IDENTIFIABLE_FROM_CENSORING",
+          "reviewed_drives": 1315,
+          "unknown_censored": 1
+        }
+      },
+      "review_capacity_drives": 1315,
+      "review_fraction": 0.05
+    }
+  ],
+  "exposed_development_only": true,
+  "first_decision_outcomes": {
+    "CENSORED": 662,
+    "NEGATIVE": 25618,
+    "POSITIVE": 31
+  },
+  "first_decision_rule": "earliest chronologically eligible DEV day, no future outcome gating",
+  "first_eligible_distinct_drives": 26311,
+  "fitting_or_calibration_during_evaluation": false,
+  "independent_evaluation": false,
+  "interpretation": "worst/best labels of outcome-unknown reviewed drives, not confidence interval, identified survival probability, or utility",
+  "original_git_checkpoint_sha256": {
+    "logistic": "4c4cd931a8ec19aba67ea4a3e6a51e16941c7ad21632eec86f81cbd834d81d63",
+    "lookup": "5f8b731ddebaf0704637a9e070835317a04d38b215c579f53ca47c7e7684a8fd"
+  },
+  "prospective_prediction_time_visibility_proven": false,
+  "schema": "model02-original-censor-inclusive-first-decision-bounds-v1",
+  "scientific_qualification": "NOT_QUALIFIED",
+  "source_zip_sha256": "7f5a53e79b16e695b4b034955806bb3bb194534b169f6eca460dfd3dc48096fe",
+  "tie_breaking": "source-owned physical identity SHA256, no label access",
+  "warnings": [
+    "source and models have already been inspected during prior DEV experiments",
+    "censoring is unresolved and could depend strongly on manufacturer, age and model",
+    "first eligible DEV decision is no longer filtered for future completeness",
+    "unknown future outcomes are never silently relabeled negative",
+    "rankings reflect historical publisher records, no live alert or intervention",
+    "original publisher available-at and legal source-time semantics unverified",
+    "binary best-worst bounds can be broad and are not probabilistic estimates",
+    "no TAC neural architecture comparison or proof of useful long memory"
+  ],
+  "original_source_evidence_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40483393103",
+  "provenance": "Git-owned rendering of original CI JSON stdout; not a new fitted result"
+}
