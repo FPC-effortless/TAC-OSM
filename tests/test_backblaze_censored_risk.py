@@ -64,6 +64,32 @@ class BackblazeFixtureTests(unittest.TestCase):
         self.assertTrue(any(x["model"]=="MODEL-C" for x in censored))
         self.assertFalse(any(x["model"]=="MODEL-C" for x in idx))
         self.assertTrue(all(e["outcome"] in (0,1) for e in examples))
+    def test_censored_source_rows_train_and_score_through_typed_risk_baseline(self):
+        """Constructed E2E integration: no actual Backblaze record or capability evidence."""
+        typed_path=Path(__file__).resolve().parents[1]/"specialist_models"/"typed_event_risk.py"
+        typed_spec=importlib.util.spec_from_file_location("typed_event_risk",typed_path)
+        typed=importlib.util.module_from_spec(typed_spec)
+        sys.modules[typed_spec.name]=typed
+        typed_spec.loader.exec_module(typed)
+        history,_=self.load("dev")
+        fit_rows,fit_index,fit_censored=m.make_rows(self.manifest,history,"fit")
+        dev_rows,dev_index,dev_censored=m.make_rows(self.manifest,history,"dev")
+        self.assertTrue(any(x["outcome"]==1 for x in fit_rows))
+        self.assertTrue(any(x["outcome"]==0 for x in fit_rows))
+        source={"features":sorted(fit_rows[0]["features"]),
+                "status":"source-claimed-not-independently-audited",
+                "fit_cutoff":"2026-01-08T00:00:00Z",
+                "source_url":"https://example.org/CONSTRUCTED_NOT_REAL",
+                "dataset_license":"constructed test only",
+                "data_steward":"constructed test only"}
+        model=typed.fit(fit_rows,source,"a"*64)
+        self.assertEqual(model["qualification"],"DEVELOPMENT_ONLY_NOT_CALIBRATED")
+        report=typed.evaluate(model,dev_rows)
+        self.assertEqual(report["qualification"],"DEV_ONLY_NOT_INDEPENDENT_TEST")
+        self.assertEqual(report["cases"],len(dev_index))
+        self.assertTrue(0 <= report["brier"] <= 1)
+        self.assertTrue(dev_censored)
+        self.assertTrue(fit_censored)
     def test_first_positive_label_is_after_prediction(self):
         timelines,_=self.load()
         examples,idx,_=m.make_rows(self.manifest,timelines,"fit")
