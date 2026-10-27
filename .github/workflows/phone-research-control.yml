@@ -1,0 +1,57 @@
+name: Phone Research Lab • automatic planning and progress
+
+# GitHub is the phone-friendly lab status board. This scheduler performs
+# source-only engineering diagnostics; it never trains or submits GPU kernels.
+on:
+  schedule:
+    - cron: '17 5,13,21 * * *'
+  workflow_dispatch:
+    inputs:
+      run_diagnostics:
+        description: 'Run bounded no-fit laboratory checks (not model training)'
+        type: boolean
+        default: true
+  push:
+    branches: [master, main]
+    paths:
+      - 'research/phone_queue/**'
+      - 'scripts/phone_lab.py'
+      - 'src/tac_osm/phone_research_ops.py'
+      - '.github/workflows/phone-research-control.yml'
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: phone-lab-issue-status
+  cancel-in-progress: true
+
+jobs:
+  research-progress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install bounded no-fit science dependencies
+        run: python -m pip install --quiet pytest numpy==2.3.3 torch cryptography
+      - name: Inspect every reviewed proposal, choose compute and run safe source-only checks
+        env:
+          GH_TOKEN: \${{ github.token }}
+          GITHUB_REPOSITORY: \${{ github.repository }}
+        run: |
+          python scripts/phone_lab.py scan \
+            --out ci-artifacts/phone-lab \
+            --post-issues --run-safe-diagnostics
+          cat ci-artifacts/phone-lab/progress.md
+      - name: Keep downloadable mobile-ready progress receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phone-research-progress
+          path: ci-artifacts/phone-lab/
+          if-no-files-found: warn
+          retention-days: 14
