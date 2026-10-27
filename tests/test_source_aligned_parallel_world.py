@@ -136,6 +136,9 @@ class HistoricalReuseNoFitTests(unittest.TestCase):
         # A longer tree exposes regrouping roundoff missed by a one-step
         # zero-state fixture. Differentiate through the reused admitted prefix.
         torch.manual_seed(9023)
+        from tac_osm.variants.parallel_time_age_world import TimeAwareParallelResidualWorld
+        self.assertFalse(TimeAwareParallelResidualWorld().core.preserve_masked_prefix_bytes)
+        self.assertTrue(self.m.backbone.core.preserve_masked_prefix_bytes)
         for dtype in (torch.float32,torch.float64):
             model=SourceAlignedParallelWorld().to(dtype=dtype)
             count=129

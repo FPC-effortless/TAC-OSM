@@ -73,6 +73,7 @@ class SourceAlignedParallelWorld(nn.Module):
         self.backbone = TimeAwareParallelResidualWorld(
             state_dim=state_dim, action_dim=action_dim, width=width,
             decoder=decoder, ffn_hidden=ffn_hidden,
+            preserve_masked_prefix_bytes=True,
         )
         self.source_key_rotations = nn.Parameter(torch.stack(
             (torch.eye(KEY_WIDTH),torch.roll(torch.eye(KEY_WIDTH),shifts=1,dims=1)),0))
