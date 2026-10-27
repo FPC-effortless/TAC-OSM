@@ -1,0 +1,4547 @@
+{
+  "compare_trained_original_full_FLOPs_qualifies": false,
+  "method": "TorchDispatchMode captures ALL invoked ATen tensor calls by stage and full input/output shape signature, explicit exact matmul FLOP inventory and remaining elementary/transcendental/unknown cost tallies. Zero-learning-rate optimizer states updated but original weights not changed.",
+  "models": [
+    {
+      "actual_source_time_case_SHA": "7aa0d9d313d9800cf5196a6669aa1d746eacf56744221860af2f5041389c2607",
+      "arm": "assoc_historic_query",
+      "categorized_operator_tallies": [
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 99390,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 99390,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 129,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 15497737,
+          "stage": "backward"
+        },
+        {
+          "category": "exact_matmul_multiply_add_2x",
+          "proxy_or_exact": 272985088,
+          "stage": "backward"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 482280,
+          "stage": "backward"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 4528,
+          "stage": "backward"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 8260947,
+          "stage": "forward"
+        },
+        {
+          "category": "exact_matmul_multiply_add_2x",
+          "proxy_or_exact": 137340272,
+          "stage": "forward"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 519261,
+          "stage": "forward"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 5558,
+          "stage": "forward"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 4,
+          "stage": "grad_clip"
+        }
+      ],
+      "full_operator_shape_receipt_SHA256": "587a45198cb27b3741074c65d2710b7d638111a6fdb7084cff43caec03f025f2",
+      "historical_hour_steps": 88,
+      "live_params": 99390,
+      "operations": [
+        {
+          "calls": 43,
+          "float_output_elements": 0,
+          "op": "aten::_local_scalar_dense",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 99433,
+          "op": "aten::add_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::addcdiv_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::addcmul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::div",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::lerp_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 43,
+          "op": "aten::lift_fresh",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 198780,
+          "op": "aten::mul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::sqrt",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 198780,
+          "op": "aten::zeros_like",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_enter_new",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_exit",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::_softmax_backward_data",
+          "stage": "backward"
+        },
+        {
+          "calls": 3772,
+          "float_output_elements": 7447245,
+          "op": "aten::add",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 391680,
+          "op": "aten::bmm",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 416,
+          "op": "aten::cat",
+          "stage": "backward"
+        },
+        {
+          "calls": 1107,
+          "float_output_elements": 601458,
+          "op": "aten::detach",
+          "stage": "backward"
+        },
+        {
+          "calls": 635,
+          "float_output_elements": 101633,
+          "op": "aten::div",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::eq",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "float_output_elements": 1232,
+          "op": "aten::expand",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 227840,
+          "op": "aten::gelu_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 0,
+          "op": "aten::gt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::logical_and_",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::lt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 23040,
+          "op": "aten::masked_fill_",
+          "stage": "backward"
+        },
+        {
+          "calls": 2128,
+          "float_output_elements": 5666448,
+          "op": "aten::mm",
+          "stage": "backward"
+        },
+        {
+          "calls": 2307,
+          "float_output_elements": 5758532,
+          "op": "aten::mul",
+          "stage": "backward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 126720,
+          "op": "aten::native_layer_norm_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 534,
+          "float_output_elements": 1872808,
+          "op": "aten::neg",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 20480,
+          "op": "aten::new_zeros",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::ones_like",
+          "stage": "backward"
+        },
+        {
+          "calls": 187,
+          "float_output_elements": 743424,
+          "op": "aten::permute",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::pow",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "float_output_elements": 356,
+          "op": "aten::scalar_tensor",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 20480,
+          "op": "aten::scatter_add",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "float_output_elements": 432,
+          "op": "aten::select_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::sgn",
+          "stage": "backward"
+        },
+        {
+          "calls": 264,
+          "float_output_elements": 4224,
+          "op": "aten::sigmoid_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 273,
+          "float_output_elements": 64384,
+          "op": "aten::slice",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 16,
+          "op": "aten::smooth_l1_loss_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 1352,
+          "op": "aten::softplus_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1159,
+          "float_output_elements": 231076,
+          "op": "aten::squeeze",
+          "stage": "backward"
+        },
+        {
+          "calls": 2303,
+          "float_output_elements": 293339,
+          "op": "aten::sum",
+          "stage": "backward"
+        },
+        {
+          "calls": 4258,
+          "float_output_elements": 13571808,
+          "op": "aten::t",
+          "stage": "backward"
+        },
+        {
+          "calls": 442,
+          "float_output_elements": 473600,
+          "op": "aten::tanh_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 391680,
+          "op": "aten::transpose",
+          "stage": "backward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 1808,
+          "op": "aten::unsqueeze",
+          "stage": "backward"
+        },
+        {
+          "calls": 1613,
+          "float_output_elements": 1250535,
+          "op": "aten::view",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "float_output_elements": 24180,
+          "op": "aten::where",
+          "stage": "backward"
+        },
+        {
+          "calls": 1714,
+          "float_output_elements": 0,
+          "op": "aten::_local_scalar_dense",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::_softmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 441,
+          "float_output_elements": 45072,
+          "op": "aten::_to_copy",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 413696,
+          "op": "aten::_unsafe_view",
+          "stage": "forward"
+        },
+        {
+          "calls": 1152,
+          "float_output_elements": 922900,
+          "op": "aten::abs",
+          "stage": "forward"
+        },
+        {
+          "calls": 571,
+          "float_output_elements": 2407617,
+          "op": "aten::add",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 844656,
+          "op": "aten::addmm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1240,
+          "float_output_elements": 0,
+          "op": "aten::all",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::aminmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "float_output_elements": 0,
+          "op": "aten::any",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_and",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_not",
+          "stage": "forward"
+        },
+        {
+          "calls": 530,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_or",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 46080,
+          "op": "aten::bmm",
+          "stage": "forward"
+        },
+        {
+          "calls": 91,
+          "float_output_elements": 64384,
+          "op": "aten::cat",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 180,
+          "op": "aten::clamp",
+          "stage": "forward"
+        },
+        {
+          "calls": 91,
+          "float_output_elements": 2880,
+          "op": "aten::clamp_min",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 368640,
+          "op": "aten::clone",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 502276,
+          "op": "aten::detach",
+          "stage": "forward"
+        },
+        {
+          "calls": 182,
+          "float_output_elements": 26129,
+          "op": "aten::div",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "float_output_elements": 0,
+          "op": "aten::eq",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 18484,
+          "op": "aten::exp",
+          "stage": "forward"
+        },
+        {
+          "calls": 358,
+          "float_output_elements": 412672,
+          "op": "aten::expand",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 1280,
+          "op": "aten::gather",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 0,
+          "op": "aten::ge",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 227840,
+          "op": "aten::gelu",
+          "stage": "forward"
+        },
+        {
+          "calls": 352,
+          "float_output_elements": 0,
+          "op": "aten::gt",
+          "stage": "forward"
+        },
+        {
+          "calls": 532,
+          "float_output_elements": 73440,
+          "op": "aten::index",
+          "stage": "forward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 192,
+          "op": "aten::lift_fresh",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::linalg_vector_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::log",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 18304,
+          "op": "aten::log1p",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "float_output_elements": 0,
+          "op": "aten::lt",
+          "stage": "forward"
+        },
+        {
+          "calls": 2391,
+          "float_output_elements": 2993936,
+          "op": "aten::mul",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 115456,
+          "op": "aten::native_layer_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "float_output_elements": 0,
+          "op": "aten::ne",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 1144,
+          "op": "aten::neg",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 2816,
+          "op": "aten::ones_like",
+          "stage": "forward"
+        },
+        {
+          "calls": 188,
+          "float_output_elements": 747520,
+          "op": "aten::permute",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::pow",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 25344,
+          "op": "aten::rsub",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::scatter_",
+          "stage": "forward"
+        },
+        {
+          "calls": 5,
+          "float_output_elements": 193680,
+          "op": "aten::select",
+          "stage": "forward"
+        },
+        {
+          "calls": 264,
+          "float_output_elements": 4224,
+          "op": "aten::sigmoid",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::smooth_l1_loss",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 1352,
+          "op": "aten::softplus",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 416,
+          "op": "aten::split",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 23824,
+          "op": "aten::squeeze",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 1847712,
+          "op": "aten::sub",
+          "stage": "forward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 513,
+          "op": "aten::sum",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 4242448,
+          "op": "aten::t",
+          "stage": "forward"
+        },
+        {
+          "calls": 442,
+          "float_output_elements": 473600,
+          "op": "aten::tanh",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 0,
+          "op": "aten::unbind",
+          "stage": "forward"
+        },
+        {
+          "calls": 1601,
+          "float_output_elements": 260836,
+          "op": "aten::unsqueeze",
+          "stage": "forward"
+        },
+        {
+          "calls": 375,
+          "float_output_elements": 788336,
+          "op": "aten::view",
+          "stage": "forward"
+        },
+        {
+          "calls": 353,
+          "float_output_elements": 57936,
+          "op": "aten::where",
+          "stage": "forward"
+        },
+        {
+          "calls": 93,
+          "float_output_elements": 27136,
+          "op": "aten::zeros",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 36608,
+          "op": "aten::zeros_like",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_enter_new",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_exit",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "aten::_foreach_mul_",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 43,
+          "op": "aten::_foreach_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::add",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::clamp",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::linalg_vector_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::mul",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::reciprocal",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 43,
+          "op": "aten::stack",
+          "stage": "grad_clip"
+        }
+      ],
+      "operator_shape_count": 709,
+      "optimizer_foreach": false,
+      "optimizer_fused": false,
+      "optimizer_lr": 0,
+      "optimizer_state_tensors": 43,
+      "original_recurrent_nominal_bytes": 6800,
+      "original_same_true_source_recorded_objective": 2.9951510429382324,
+      "parameters_bitwise_unchanged": true,
+      "real_source_examples": 16,
+      "seed": 16016,
+      "unclassified_operator_names": [
+        {
+          "calls": 43,
+          "floating_result_elements": 0,
+          "name": "aten::_local_scalar_dense",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "floating_result_elements": 99433,
+          "name": "aten::add_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::addcdiv_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::addcmul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::lerp_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "floating_result_elements": 198780,
+          "name": "aten::mul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_enter_new",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_exit",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::eq",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "floating_result_elements": 227840,
+          "name": "aten::gelu_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "floating_result_elements": 0,
+          "name": "aten::gt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::logical_and_",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::lt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 23040,
+          "name": "aten::masked_fill_",
+          "stage": "backward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 126720,
+          "name": "aten::native_layer_norm_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 20480,
+          "name": "aten::new_zeros",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "floating_result_elements": 356,
+          "name": "aten::scalar_tensor",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 20480,
+          "name": "aten::scatter_add",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "floating_result_elements": 432,
+          "name": "aten::select_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 208,
+          "name": "aten::sgn",
+          "stage": "backward"
+        },
+        {
+          "calls": 4258,
+          "floating_result_elements": 13571808,
+          "name": "aten::t",
+          "stage": "backward"
+        },
+        {
+          "calls": 1714,
+          "floating_result_elements": 0,
+          "name": "aten::_local_scalar_dense",
+          "stage": "forward"
+        },
+        {
+          "calls": 1240,
+          "floating_result_elements": 0,
+          "name": "aten::all",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 0,
+          "name": "aten::aminmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "floating_result_elements": 0,
+          "name": "aten::any",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_and",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_not",
+          "stage": "forward"
+        },
+        {
+          "calls": 530,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_or",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "floating_result_elements": 0,
+          "name": "aten::eq",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "floating_result_elements": 0,
+          "name": "aten::ge",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "floating_result_elements": 227840,
+          "name": "aten::gelu",
+          "stage": "forward"
+        },
+        {
+          "calls": 352,
+          "floating_result_elements": 0,
+          "name": "aten::gt",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 2880,
+          "name": "aten::linalg_vector_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "floating_result_elements": 0,
+          "name": "aten::lt",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 115456,
+          "name": "aten::native_layer_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "floating_result_elements": 0,
+          "name": "aten::ne",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "floating_result_elements": 25344,
+          "name": "aten::rsub",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "floating_result_elements": 4242448,
+          "name": "aten::t",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_enter_new",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_exit",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "aten::_foreach_mul_",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 43,
+          "name": "aten::_foreach_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 1,
+          "name": "aten::linalg_vector_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 43,
+          "name": "aten::stack",
+          "stage": "grad_clip"
+        }
+      ]
+    },
+    {
+      "actual_source_time_case_SHA": "7aa0d9d313d9800cf5196a6669aa1d746eacf56744221860af2f5041389c2607",
+      "arm": "fast_slow_historic_query",
+      "categorized_operator_tallies": [
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 99390,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 99390,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 129,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 15504905,
+          "stage": "backward"
+        },
+        {
+          "category": "exact_matmul_multiply_add_2x",
+          "proxy_or_exact": 272985088,
+          "stage": "backward"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 482280,
+          "stage": "backward"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 4530,
+          "stage": "backward"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 8265043,
+          "stage": "forward"
+        },
+        {
+          "category": "exact_matmul_multiply_add_2x",
+          "proxy_or_exact": 137340272,
+          "stage": "forward"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 519261,
+          "stage": "forward"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 5562,
+          "stage": "forward"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 4,
+          "stage": "grad_clip"
+        }
+      ],
+      "full_operator_shape_receipt_SHA256": "c043962ab2e67837ad87adf9dc871384c5039431991142f5d06aaed0571ef61d",
+      "historical_hour_steps": 88,
+      "live_params": 99390,
+      "operations": [
+        {
+          "calls": 43,
+          "float_output_elements": 0,
+          "op": "aten::_local_scalar_dense",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 99433,
+          "op": "aten::add_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::addcdiv_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::addcmul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::div",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::lerp_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 43,
+          "op": "aten::lift_fresh",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 198780,
+          "op": "aten::mul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::sqrt",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 198780,
+          "op": "aten::zeros_like",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_enter_new",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_exit",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::_softmax_backward_data",
+          "stage": "backward"
+        },
+        {
+          "calls": 3773,
+          "float_output_elements": 7445709,
+          "op": "aten::add",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 391680,
+          "op": "aten::bmm",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 416,
+          "op": "aten::cat",
+          "stage": "backward"
+        },
+        {
+          "calls": 1107,
+          "float_output_elements": 601458,
+          "op": "aten::detach",
+          "stage": "backward"
+        },
+        {
+          "calls": 635,
+          "float_output_elements": 101633,
+          "op": "aten::div",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::eq",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "float_output_elements": 1232,
+          "op": "aten::expand",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 227840,
+          "op": "aten::gelu_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 0,
+          "op": "aten::gt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::logical_and_",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::lt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 23040,
+          "op": "aten::masked_fill_",
+          "stage": "backward"
+        },
+        {
+          "calls": 2128,
+          "float_output_elements": 5666448,
+          "op": "aten::mm",
+          "stage": "backward"
+        },
+        {
+          "calls": 2309,
+          "float_output_elements": 5766724,
+          "op": "aten::mul",
+          "stage": "backward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 126720,
+          "op": "aten::native_layer_norm_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 534,
+          "float_output_elements": 1872808,
+          "op": "aten::neg",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 20480,
+          "op": "aten::new_zeros",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::ones_like",
+          "stage": "backward"
+        },
+        {
+          "calls": 187,
+          "float_output_elements": 743424,
+          "op": "aten::permute",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::pow",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "float_output_elements": 356,
+          "op": "aten::scalar_tensor",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 20480,
+          "op": "aten::scatter_add",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "float_output_elements": 432,
+          "op": "aten::select_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::sgn",
+          "stage": "backward"
+        },
+        {
+          "calls": 264,
+          "float_output_elements": 4224,
+          "op": "aten::sigmoid_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 273,
+          "float_output_elements": 64384,
+          "op": "aten::slice",
+          "stage": "backward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 2560,
+          "op": "aten::slice_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 16,
+          "op": "aten::smooth_l1_loss_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 1352,
+          "op": "aten::softplus_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1161,
+          "float_output_elements": 231588,
+          "op": "aten::squeeze",
+          "stage": "backward"
+        },
+        {
+          "calls": 2305,
+          "float_output_elements": 293851,
+          "op": "aten::sum",
+          "stage": "backward"
+        },
+        {
+          "calls": 4258,
+          "float_output_elements": 13571808,
+          "op": "aten::t",
+          "stage": "backward"
+        },
+        {
+          "calls": 442,
+          "float_output_elements": 473600,
+          "op": "aten::tanh_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 391680,
+          "op": "aten::transpose",
+          "stage": "backward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 1808,
+          "op": "aten::unsqueeze",
+          "stage": "backward"
+        },
+        {
+          "calls": 1613,
+          "float_output_elements": 1250535,
+          "op": "aten::view",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "float_output_elements": 24180,
+          "op": "aten::where",
+          "stage": "backward"
+        },
+        {
+          "calls": 1714,
+          "float_output_elements": 0,
+          "op": "aten::_local_scalar_dense",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::_softmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 441,
+          "float_output_elements": 45072,
+          "op": "aten::_to_copy",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 413696,
+          "op": "aten::_unsafe_view",
+          "stage": "forward"
+        },
+        {
+          "calls": 1152,
+          "float_output_elements": 922900,
+          "op": "aten::abs",
+          "stage": "forward"
+        },
+        {
+          "calls": 571,
+          "float_output_elements": 2407617,
+          "op": "aten::add",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 844656,
+          "op": "aten::addmm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1240,
+          "float_output_elements": 0,
+          "op": "aten::all",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::aminmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "float_output_elements": 0,
+          "op": "aten::any",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_and",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_not",
+          "stage": "forward"
+        },
+        {
+          "calls": 530,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_or",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 46080,
+          "op": "aten::bmm",
+          "stage": "forward"
+        },
+        {
+          "calls": 91,
+          "float_output_elements": 64384,
+          "op": "aten::cat",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 180,
+          "op": "aten::clamp",
+          "stage": "forward"
+        },
+        {
+          "calls": 91,
+          "float_output_elements": 2880,
+          "op": "aten::clamp_min",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 368640,
+          "op": "aten::clone",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 502276,
+          "op": "aten::detach",
+          "stage": "forward"
+        },
+        {
+          "calls": 182,
+          "float_output_elements": 26129,
+          "op": "aten::div",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "float_output_elements": 0,
+          "op": "aten::eq",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 18484,
+          "op": "aten::exp",
+          "stage": "forward"
+        },
+        {
+          "calls": 358,
+          "float_output_elements": 412672,
+          "op": "aten::expand",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 1280,
+          "op": "aten::gather",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 0,
+          "op": "aten::ge",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 227840,
+          "op": "aten::gelu",
+          "stage": "forward"
+        },
+        {
+          "calls": 352,
+          "float_output_elements": 0,
+          "op": "aten::gt",
+          "stage": "forward"
+        },
+        {
+          "calls": 532,
+          "float_output_elements": 73440,
+          "op": "aten::index",
+          "stage": "forward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 192,
+          "op": "aten::lift_fresh",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::linalg_vector_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::log",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 18304,
+          "op": "aten::log1p",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "float_output_elements": 0,
+          "op": "aten::lt",
+          "stage": "forward"
+        },
+        {
+          "calls": 2392,
+          "float_output_elements": 2998032,
+          "op": "aten::mul",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 115456,
+          "op": "aten::native_layer_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "float_output_elements": 0,
+          "op": "aten::ne",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 1144,
+          "op": "aten::neg",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 2816,
+          "op": "aten::ones_like",
+          "stage": "forward"
+        },
+        {
+          "calls": 188,
+          "float_output_elements": 747520,
+          "op": "aten::permute",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::pow",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 25344,
+          "op": "aten::rsub",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::scatter_",
+          "stage": "forward"
+        },
+        {
+          "calls": 5,
+          "float_output_elements": 193680,
+          "op": "aten::select",
+          "stage": "forward"
+        },
+        {
+          "calls": 264,
+          "float_output_elements": 4224,
+          "op": "aten::sigmoid",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 512,
+          "op": "aten::slice",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::smooth_l1_loss",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 1352,
+          "op": "aten::softplus",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 416,
+          "op": "aten::split",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 23824,
+          "op": "aten::squeeze",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 1847712,
+          "op": "aten::sub",
+          "stage": "forward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 513,
+          "op": "aten::sum",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 4242448,
+          "op": "aten::t",
+          "stage": "forward"
+        },
+        {
+          "calls": 442,
+          "float_output_elements": 473600,
+          "op": "aten::tanh",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 0,
+          "op": "aten::unbind",
+          "stage": "forward"
+        },
+        {
+          "calls": 1603,
+          "float_output_elements": 261348,
+          "op": "aten::unsqueeze",
+          "stage": "forward"
+        },
+        {
+          "calls": 375,
+          "float_output_elements": 788336,
+          "op": "aten::view",
+          "stage": "forward"
+        },
+        {
+          "calls": 353,
+          "float_output_elements": 57936,
+          "op": "aten::where",
+          "stage": "forward"
+        },
+        {
+          "calls": 93,
+          "float_output_elements": 27136,
+          "op": "aten::zeros",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 36608,
+          "op": "aten::zeros_like",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_enter_new",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_exit",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "aten::_foreach_mul_",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 43,
+          "op": "aten::_foreach_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::add",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::clamp",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::linalg_vector_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::mul",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::reciprocal",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 43,
+          "op": "aten::stack",
+          "stage": "grad_clip"
+        }
+      ],
+      "operator_shape_count": 716,
+      "optimizer_foreach": false,
+      "optimizer_fused": false,
+      "optimizer_lr": 0,
+      "optimizer_state_tensors": 43,
+      "original_recurrent_nominal_bytes": 6800,
+      "original_same_true_source_recorded_objective": 2.8697967529296875,
+      "parameters_bitwise_unchanged": true,
+      "real_source_examples": 16,
+      "seed": 16016,
+      "unclassified_operator_names": [
+        {
+          "calls": 43,
+          "floating_result_elements": 0,
+          "name": "aten::_local_scalar_dense",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "floating_result_elements": 99433,
+          "name": "aten::add_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::addcdiv_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::addcmul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::lerp_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "floating_result_elements": 198780,
+          "name": "aten::mul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_enter_new",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_exit",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::eq",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "floating_result_elements": 227840,
+          "name": "aten::gelu_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "floating_result_elements": 0,
+          "name": "aten::gt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::logical_and_",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::lt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 23040,
+          "name": "aten::masked_fill_",
+          "stage": "backward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 126720,
+          "name": "aten::native_layer_norm_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 20480,
+          "name": "aten::new_zeros",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "floating_result_elements": 356,
+          "name": "aten::scalar_tensor",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 20480,
+          "name": "aten::scatter_add",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "floating_result_elements": 432,
+          "name": "aten::select_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 208,
+          "name": "aten::sgn",
+          "stage": "backward"
+        },
+        {
+          "calls": 2,
+          "floating_result_elements": 2560,
+          "name": "aten::slice_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 4258,
+          "floating_result_elements": 13571808,
+          "name": "aten::t",
+          "stage": "backward"
+        },
+        {
+          "calls": 1714,
+          "floating_result_elements": 0,
+          "name": "aten::_local_scalar_dense",
+          "stage": "forward"
+        },
+        {
+          "calls": 1240,
+          "floating_result_elements": 0,
+          "name": "aten::all",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 0,
+          "name": "aten::aminmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "floating_result_elements": 0,
+          "name": "aten::any",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_and",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_not",
+          "stage": "forward"
+        },
+        {
+          "calls": 530,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_or",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "floating_result_elements": 0,
+          "name": "aten::eq",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "floating_result_elements": 0,
+          "name": "aten::ge",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "floating_result_elements": 227840,
+          "name": "aten::gelu",
+          "stage": "forward"
+        },
+        {
+          "calls": 352,
+          "floating_result_elements": 0,
+          "name": "aten::gt",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 2880,
+          "name": "aten::linalg_vector_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "floating_result_elements": 0,
+          "name": "aten::lt",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 115456,
+          "name": "aten::native_layer_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "floating_result_elements": 0,
+          "name": "aten::ne",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "floating_result_elements": 25344,
+          "name": "aten::rsub",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "floating_result_elements": 4242448,
+          "name": "aten::t",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_enter_new",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_exit",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "aten::_foreach_mul_",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 43,
+          "name": "aten::_foreach_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 1,
+          "name": "aten::linalg_vector_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 43,
+          "name": "aten::stack",
+          "stage": "grad_clip"
+        }
+      ]
+    },
+    {
+      "actual_source_time_case_SHA": "7aa0d9d313d9800cf5196a6669aa1d746eacf56744221860af2f5041389c2607",
+      "arm": "assoc_historic_query",
+      "categorized_operator_tallies": [
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 99390,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 99390,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 129,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 15497737,
+          "stage": "backward"
+        },
+        {
+          "category": "exact_matmul_multiply_add_2x",
+          "proxy_or_exact": 272985088,
+          "stage": "backward"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 482280,
+          "stage": "backward"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 4528,
+          "stage": "backward"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 8260947,
+          "stage": "forward"
+        },
+        {
+          "category": "exact_matmul_multiply_add_2x",
+          "proxy_or_exact": 137340272,
+          "stage": "forward"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 519261,
+          "stage": "forward"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 5558,
+          "stage": "forward"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 4,
+          "stage": "grad_clip"
+        }
+      ],
+      "full_operator_shape_receipt_SHA256": "587a45198cb27b3741074c65d2710b7d638111a6fdb7084cff43caec03f025f2",
+      "historical_hour_steps": 88,
+      "live_params": 99390,
+      "operations": [
+        {
+          "calls": 43,
+          "float_output_elements": 0,
+          "op": "aten::_local_scalar_dense",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 99433,
+          "op": "aten::add_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::addcdiv_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::addcmul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::div",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::lerp_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 43,
+          "op": "aten::lift_fresh",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 198780,
+          "op": "aten::mul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::sqrt",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 198780,
+          "op": "aten::zeros_like",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_enter_new",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_exit",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::_softmax_backward_data",
+          "stage": "backward"
+        },
+        {
+          "calls": 3772,
+          "float_output_elements": 7447245,
+          "op": "aten::add",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 391680,
+          "op": "aten::bmm",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 416,
+          "op": "aten::cat",
+          "stage": "backward"
+        },
+        {
+          "calls": 1107,
+          "float_output_elements": 601458,
+          "op": "aten::detach",
+          "stage": "backward"
+        },
+        {
+          "calls": 635,
+          "float_output_elements": 101633,
+          "op": "aten::div",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::eq",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "float_output_elements": 1232,
+          "op": "aten::expand",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 227840,
+          "op": "aten::gelu_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 0,
+          "op": "aten::gt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::logical_and_",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::lt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 23040,
+          "op": "aten::masked_fill_",
+          "stage": "backward"
+        },
+        {
+          "calls": 2128,
+          "float_output_elements": 5666448,
+          "op": "aten::mm",
+          "stage": "backward"
+        },
+        {
+          "calls": 2307,
+          "float_output_elements": 5758532,
+          "op": "aten::mul",
+          "stage": "backward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 126720,
+          "op": "aten::native_layer_norm_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 534,
+          "float_output_elements": 1872808,
+          "op": "aten::neg",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 20480,
+          "op": "aten::new_zeros",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::ones_like",
+          "stage": "backward"
+        },
+        {
+          "calls": 187,
+          "float_output_elements": 743424,
+          "op": "aten::permute",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::pow",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "float_output_elements": 356,
+          "op": "aten::scalar_tensor",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 20480,
+          "op": "aten::scatter_add",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "float_output_elements": 432,
+          "op": "aten::select_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::sgn",
+          "stage": "backward"
+        },
+        {
+          "calls": 264,
+          "float_output_elements": 4224,
+          "op": "aten::sigmoid_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 273,
+          "float_output_elements": 64384,
+          "op": "aten::slice",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 16,
+          "op": "aten::smooth_l1_loss_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 1352,
+          "op": "aten::softplus_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1159,
+          "float_output_elements": 231076,
+          "op": "aten::squeeze",
+          "stage": "backward"
+        },
+        {
+          "calls": 2303,
+          "float_output_elements": 293339,
+          "op": "aten::sum",
+          "stage": "backward"
+        },
+        {
+          "calls": 4258,
+          "float_output_elements": 13571808,
+          "op": "aten::t",
+          "stage": "backward"
+        },
+        {
+          "calls": 442,
+          "float_output_elements": 473600,
+          "op": "aten::tanh_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 391680,
+          "op": "aten::transpose",
+          "stage": "backward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 1808,
+          "op": "aten::unsqueeze",
+          "stage": "backward"
+        },
+        {
+          "calls": 1613,
+          "float_output_elements": 1250535,
+          "op": "aten::view",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "float_output_elements": 24180,
+          "op": "aten::where",
+          "stage": "backward"
+        },
+        {
+          "calls": 1714,
+          "float_output_elements": 0,
+          "op": "aten::_local_scalar_dense",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::_softmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 441,
+          "float_output_elements": 45072,
+          "op": "aten::_to_copy",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 413696,
+          "op": "aten::_unsafe_view",
+          "stage": "forward"
+        },
+        {
+          "calls": 1152,
+          "float_output_elements": 922900,
+          "op": "aten::abs",
+          "stage": "forward"
+        },
+        {
+          "calls": 571,
+          "float_output_elements": 2407617,
+          "op": "aten::add",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 844656,
+          "op": "aten::addmm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1240,
+          "float_output_elements": 0,
+          "op": "aten::all",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::aminmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "float_output_elements": 0,
+          "op": "aten::any",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_and",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_not",
+          "stage": "forward"
+        },
+        {
+          "calls": 530,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_or",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 46080,
+          "op": "aten::bmm",
+          "stage": "forward"
+        },
+        {
+          "calls": 91,
+          "float_output_elements": 64384,
+          "op": "aten::cat",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 180,
+          "op": "aten::clamp",
+          "stage": "forward"
+        },
+        {
+          "calls": 91,
+          "float_output_elements": 2880,
+          "op": "aten::clamp_min",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 368640,
+          "op": "aten::clone",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 502276,
+          "op": "aten::detach",
+          "stage": "forward"
+        },
+        {
+          "calls": 182,
+          "float_output_elements": 26129,
+          "op": "aten::div",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "float_output_elements": 0,
+          "op": "aten::eq",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 18484,
+          "op": "aten::exp",
+          "stage": "forward"
+        },
+        {
+          "calls": 358,
+          "float_output_elements": 412672,
+          "op": "aten::expand",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 1280,
+          "op": "aten::gather",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 0,
+          "op": "aten::ge",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 227840,
+          "op": "aten::gelu",
+          "stage": "forward"
+        },
+        {
+          "calls": 352,
+          "float_output_elements": 0,
+          "op": "aten::gt",
+          "stage": "forward"
+        },
+        {
+          "calls": 532,
+          "float_output_elements": 73440,
+          "op": "aten::index",
+          "stage": "forward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 192,
+          "op": "aten::lift_fresh",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::linalg_vector_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::log",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 18304,
+          "op": "aten::log1p",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "float_output_elements": 0,
+          "op": "aten::lt",
+          "stage": "forward"
+        },
+        {
+          "calls": 2391,
+          "float_output_elements": 2993936,
+          "op": "aten::mul",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 115456,
+          "op": "aten::native_layer_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "float_output_elements": 0,
+          "op": "aten::ne",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 1144,
+          "op": "aten::neg",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 2816,
+          "op": "aten::ones_like",
+          "stage": "forward"
+        },
+        {
+          "calls": 188,
+          "float_output_elements": 747520,
+          "op": "aten::permute",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::pow",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 25344,
+          "op": "aten::rsub",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::scatter_",
+          "stage": "forward"
+        },
+        {
+          "calls": 5,
+          "float_output_elements": 193680,
+          "op": "aten::select",
+          "stage": "forward"
+        },
+        {
+          "calls": 264,
+          "float_output_elements": 4224,
+          "op": "aten::sigmoid",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::smooth_l1_loss",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 1352,
+          "op": "aten::softplus",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 416,
+          "op": "aten::split",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 23824,
+          "op": "aten::squeeze",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 1847712,
+          "op": "aten::sub",
+          "stage": "forward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 513,
+          "op": "aten::sum",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 4242448,
+          "op": "aten::t",
+          "stage": "forward"
+        },
+        {
+          "calls": 442,
+          "float_output_elements": 473600,
+          "op": "aten::tanh",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 0,
+          "op": "aten::unbind",
+          "stage": "forward"
+        },
+        {
+          "calls": 1601,
+          "float_output_elements": 260836,
+          "op": "aten::unsqueeze",
+          "stage": "forward"
+        },
+        {
+          "calls": 375,
+          "float_output_elements": 788336,
+          "op": "aten::view",
+          "stage": "forward"
+        },
+        {
+          "calls": 353,
+          "float_output_elements": 57936,
+          "op": "aten::where",
+          "stage": "forward"
+        },
+        {
+          "calls": 93,
+          "float_output_elements": 27136,
+          "op": "aten::zeros",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 36608,
+          "op": "aten::zeros_like",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_enter_new",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_exit",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "aten::_foreach_mul_",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 43,
+          "op": "aten::_foreach_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::add",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::clamp",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::linalg_vector_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::mul",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::reciprocal",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 43,
+          "op": "aten::stack",
+          "stage": "grad_clip"
+        }
+      ],
+      "operator_shape_count": 709,
+      "optimizer_foreach": false,
+      "optimizer_fused": false,
+      "optimizer_lr": 0,
+      "optimizer_state_tensors": 43,
+      "original_recurrent_nominal_bytes": 6800,
+      "original_same_true_source_recorded_objective": 2.6891255378723145,
+      "parameters_bitwise_unchanged": true,
+      "real_source_examples": 16,
+      "seed": 16017,
+      "unclassified_operator_names": [
+        {
+          "calls": 43,
+          "floating_result_elements": 0,
+          "name": "aten::_local_scalar_dense",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "floating_result_elements": 99433,
+          "name": "aten::add_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::addcdiv_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::addcmul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::lerp_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "floating_result_elements": 198780,
+          "name": "aten::mul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_enter_new",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_exit",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::eq",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "floating_result_elements": 227840,
+          "name": "aten::gelu_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "floating_result_elements": 0,
+          "name": "aten::gt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::logical_and_",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::lt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 23040,
+          "name": "aten::masked_fill_",
+          "stage": "backward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 126720,
+          "name": "aten::native_layer_norm_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 20480,
+          "name": "aten::new_zeros",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "floating_result_elements": 356,
+          "name": "aten::scalar_tensor",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 20480,
+          "name": "aten::scatter_add",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "floating_result_elements": 432,
+          "name": "aten::select_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 208,
+          "name": "aten::sgn",
+          "stage": "backward"
+        },
+        {
+          "calls": 4258,
+          "floating_result_elements": 13571808,
+          "name": "aten::t",
+          "stage": "backward"
+        },
+        {
+          "calls": 1714,
+          "floating_result_elements": 0,
+          "name": "aten::_local_scalar_dense",
+          "stage": "forward"
+        },
+        {
+          "calls": 1240,
+          "floating_result_elements": 0,
+          "name": "aten::all",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 0,
+          "name": "aten::aminmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "floating_result_elements": 0,
+          "name": "aten::any",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_and",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_not",
+          "stage": "forward"
+        },
+        {
+          "calls": 530,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_or",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "floating_result_elements": 0,
+          "name": "aten::eq",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "floating_result_elements": 0,
+          "name": "aten::ge",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "floating_result_elements": 227840,
+          "name": "aten::gelu",
+          "stage": "forward"
+        },
+        {
+          "calls": 352,
+          "floating_result_elements": 0,
+          "name": "aten::gt",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 2880,
+          "name": "aten::linalg_vector_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "floating_result_elements": 0,
+          "name": "aten::lt",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 115456,
+          "name": "aten::native_layer_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "floating_result_elements": 0,
+          "name": "aten::ne",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "floating_result_elements": 25344,
+          "name": "aten::rsub",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "floating_result_elements": 4242448,
+          "name": "aten::t",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_enter_new",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_exit",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "aten::_foreach_mul_",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 43,
+          "name": "aten::_foreach_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 1,
+          "name": "aten::linalg_vector_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 43,
+          "name": "aten::stack",
+          "stage": "grad_clip"
+        }
+      ]
+    },
+    {
+      "actual_source_time_case_SHA": "7aa0d9d313d9800cf5196a6669aa1d746eacf56744221860af2f5041389c2607",
+      "arm": "fast_slow_historic_query",
+      "categorized_operator_tallies": [
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 99390,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 99390,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 129,
+          "stage": "adamw_lr0"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 15504905,
+          "stage": "backward"
+        },
+        {
+          "category": "exact_matmul_multiply_add_2x",
+          "proxy_or_exact": 272985088,
+          "stage": "backward"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 482280,
+          "stage": "backward"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 4530,
+          "stage": "backward"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 8265043,
+          "stage": "forward"
+        },
+        {
+          "category": "exact_matmul_multiply_add_2x",
+          "proxy_or_exact": 137340272,
+          "stage": "forward"
+        },
+        {
+          "category": "transcendental_result_elements_UNKNOWN_implementation_flops",
+          "proxy_or_exact": 519261,
+          "stage": "forward"
+        },
+        {
+          "category": "view_or_storage_or_index_ops",
+          "proxy_or_exact": 5562,
+          "stage": "forward"
+        },
+        {
+          "category": "elementary_float_result_elements_NOT_strict_flops",
+          "proxy_or_exact": 4,
+          "stage": "grad_clip"
+        }
+      ],
+      "full_operator_shape_receipt_SHA256": "c043962ab2e67837ad87adf9dc871384c5039431991142f5d06aaed0571ef61d",
+      "historical_hour_steps": 88,
+      "live_params": 99390,
+      "operations": [
+        {
+          "calls": 43,
+          "float_output_elements": 0,
+          "op": "aten::_local_scalar_dense",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 99433,
+          "op": "aten::add_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::addcdiv_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::addcmul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::div",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::lerp_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 43,
+          "op": "aten::lift_fresh",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 198780,
+          "op": "aten::mul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "float_output_elements": 99390,
+          "op": "aten::sqrt",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "float_output_elements": 198780,
+          "op": "aten::zeros_like",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_enter_new",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_exit",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::_softmax_backward_data",
+          "stage": "backward"
+        },
+        {
+          "calls": 3773,
+          "float_output_elements": 7445709,
+          "op": "aten::add",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 391680,
+          "op": "aten::bmm",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 416,
+          "op": "aten::cat",
+          "stage": "backward"
+        },
+        {
+          "calls": 1107,
+          "float_output_elements": 601458,
+          "op": "aten::detach",
+          "stage": "backward"
+        },
+        {
+          "calls": 635,
+          "float_output_elements": 101633,
+          "op": "aten::div",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::eq",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "float_output_elements": 1232,
+          "op": "aten::expand",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 227840,
+          "op": "aten::gelu_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 0,
+          "op": "aten::gt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::logical_and_",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 0,
+          "op": "aten::lt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 23040,
+          "op": "aten::masked_fill_",
+          "stage": "backward"
+        },
+        {
+          "calls": 2128,
+          "float_output_elements": 5666448,
+          "op": "aten::mm",
+          "stage": "backward"
+        },
+        {
+          "calls": 2309,
+          "float_output_elements": 5766724,
+          "op": "aten::mul",
+          "stage": "backward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 126720,
+          "op": "aten::native_layer_norm_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 534,
+          "float_output_elements": 1872808,
+          "op": "aten::neg",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 20480,
+          "op": "aten::new_zeros",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::ones_like",
+          "stage": "backward"
+        },
+        {
+          "calls": 187,
+          "float_output_elements": 743424,
+          "op": "aten::permute",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::pow",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "float_output_elements": 356,
+          "op": "aten::scalar_tensor",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 20480,
+          "op": "aten::scatter_add",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "float_output_elements": 432,
+          "op": "aten::select_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::sgn",
+          "stage": "backward"
+        },
+        {
+          "calls": 264,
+          "float_output_elements": 4224,
+          "op": "aten::sigmoid_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 273,
+          "float_output_elements": 64384,
+          "op": "aten::slice",
+          "stage": "backward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 2560,
+          "op": "aten::slice_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 16,
+          "op": "aten::smooth_l1_loss_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 1352,
+          "op": "aten::softplus_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1161,
+          "float_output_elements": 231588,
+          "op": "aten::squeeze",
+          "stage": "backward"
+        },
+        {
+          "calls": 2305,
+          "float_output_elements": 293851,
+          "op": "aten::sum",
+          "stage": "backward"
+        },
+        {
+          "calls": 4258,
+          "float_output_elements": 13571808,
+          "op": "aten::t",
+          "stage": "backward"
+        },
+        {
+          "calls": 442,
+          "float_output_elements": 473600,
+          "op": "aten::tanh_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "float_output_elements": 391680,
+          "op": "aten::transpose",
+          "stage": "backward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 1808,
+          "op": "aten::unsqueeze",
+          "stage": "backward"
+        },
+        {
+          "calls": 1613,
+          "float_output_elements": 1250535,
+          "op": "aten::view",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "float_output_elements": 24180,
+          "op": "aten::where",
+          "stage": "backward"
+        },
+        {
+          "calls": 1714,
+          "float_output_elements": 0,
+          "op": "aten::_local_scalar_dense",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::_softmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 441,
+          "float_output_elements": 45072,
+          "op": "aten::_to_copy",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 413696,
+          "op": "aten::_unsafe_view",
+          "stage": "forward"
+        },
+        {
+          "calls": 1152,
+          "float_output_elements": 922900,
+          "op": "aten::abs",
+          "stage": "forward"
+        },
+        {
+          "calls": 571,
+          "float_output_elements": 2407617,
+          "op": "aten::add",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 844656,
+          "op": "aten::addmm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1240,
+          "float_output_elements": 0,
+          "op": "aten::all",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::aminmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "float_output_elements": 0,
+          "op": "aten::any",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_and",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_not",
+          "stage": "forward"
+        },
+        {
+          "calls": 530,
+          "float_output_elements": 0,
+          "op": "aten::bitwise_or",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 46080,
+          "op": "aten::bmm",
+          "stage": "forward"
+        },
+        {
+          "calls": 91,
+          "float_output_elements": 64384,
+          "op": "aten::cat",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 180,
+          "op": "aten::clamp",
+          "stage": "forward"
+        },
+        {
+          "calls": 91,
+          "float_output_elements": 2880,
+          "op": "aten::clamp_min",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 368640,
+          "op": "aten::clone",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 502276,
+          "op": "aten::detach",
+          "stage": "forward"
+        },
+        {
+          "calls": 182,
+          "float_output_elements": 26129,
+          "op": "aten::div",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "float_output_elements": 0,
+          "op": "aten::eq",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 18484,
+          "op": "aten::exp",
+          "stage": "forward"
+        },
+        {
+          "calls": 358,
+          "float_output_elements": 412672,
+          "op": "aten::expand",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 1280,
+          "op": "aten::gather",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 0,
+          "op": "aten::ge",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 227840,
+          "op": "aten::gelu",
+          "stage": "forward"
+        },
+        {
+          "calls": 352,
+          "float_output_elements": 0,
+          "op": "aten::gt",
+          "stage": "forward"
+        },
+        {
+          "calls": 532,
+          "float_output_elements": 73440,
+          "op": "aten::index",
+          "stage": "forward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 192,
+          "op": "aten::lift_fresh",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 2880,
+          "op": "aten::linalg_vector_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::log",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 18304,
+          "op": "aten::log1p",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "float_output_elements": 0,
+          "op": "aten::lt",
+          "stage": "forward"
+        },
+        {
+          "calls": 2392,
+          "float_output_elements": 2998032,
+          "op": "aten::mul",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 115456,
+          "op": "aten::native_layer_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "float_output_elements": 0,
+          "op": "aten::ne",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 1144,
+          "op": "aten::neg",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 2816,
+          "op": "aten::ones_like",
+          "stage": "forward"
+        },
+        {
+          "calls": 188,
+          "float_output_elements": 747520,
+          "op": "aten::permute",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 208,
+          "op": "aten::pow",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 25344,
+          "op": "aten::rsub",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "float_output_elements": 0,
+          "op": "aten::scatter_",
+          "stage": "forward"
+        },
+        {
+          "calls": 5,
+          "float_output_elements": 193680,
+          "op": "aten::select",
+          "stage": "forward"
+        },
+        {
+          "calls": 264,
+          "float_output_elements": 4224,
+          "op": "aten::sigmoid",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 512,
+          "op": "aten::slice",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::smooth_l1_loss",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "float_output_elements": 1352,
+          "op": "aten::softplus",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 416,
+          "op": "aten::split",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "float_output_elements": 23824,
+          "op": "aten::squeeze",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "float_output_elements": 1847712,
+          "op": "aten::sub",
+          "stage": "forward"
+        },
+        {
+          "calls": 4,
+          "float_output_elements": 513,
+          "op": "aten::sum",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "float_output_elements": 4242448,
+          "op": "aten::t",
+          "stage": "forward"
+        },
+        {
+          "calls": 442,
+          "float_output_elements": 473600,
+          "op": "aten::tanh",
+          "stage": "forward"
+        },
+        {
+          "calls": 2,
+          "float_output_elements": 0,
+          "op": "aten::unbind",
+          "stage": "forward"
+        },
+        {
+          "calls": 1603,
+          "float_output_elements": 261348,
+          "op": "aten::unsqueeze",
+          "stage": "forward"
+        },
+        {
+          "calls": 375,
+          "float_output_elements": 788336,
+          "op": "aten::view",
+          "stage": "forward"
+        },
+        {
+          "calls": 353,
+          "float_output_elements": 57936,
+          "op": "aten::where",
+          "stage": "forward"
+        },
+        {
+          "calls": 93,
+          "float_output_elements": 27136,
+          "op": "aten::zeros",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "float_output_elements": 36608,
+          "op": "aten::zeros_like",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_enter_new",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "profiler::_record_function_exit",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 0,
+          "op": "aten::_foreach_mul_",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 43,
+          "op": "aten::_foreach_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::add",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::clamp",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::linalg_vector_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::mul",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 1,
+          "op": "aten::reciprocal",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "float_output_elements": 43,
+          "op": "aten::stack",
+          "stage": "grad_clip"
+        }
+      ],
+      "operator_shape_count": 716,
+      "optimizer_foreach": false,
+      "optimizer_fused": false,
+      "optimizer_lr": 0,
+      "optimizer_state_tensors": 43,
+      "original_recurrent_nominal_bytes": 6800,
+      "original_same_true_source_recorded_objective": 2.8117618560791016,
+      "parameters_bitwise_unchanged": true,
+      "real_source_examples": 16,
+      "seed": 16017,
+      "unclassified_operator_names": [
+        {
+          "calls": 43,
+          "floating_result_elements": 0,
+          "name": "aten::_local_scalar_dense",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "floating_result_elements": 99433,
+          "name": "aten::add_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::addcdiv_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::addcmul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 43,
+          "floating_result_elements": 99390,
+          "name": "aten::lerp_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 86,
+          "floating_result_elements": 198780,
+          "name": "aten::mul_",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_enter_new",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_exit",
+          "stage": "adamw_lr0"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::eq",
+          "stage": "backward"
+        },
+        {
+          "calls": 89,
+          "floating_result_elements": 227840,
+          "name": "aten::gelu_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 180,
+          "floating_result_elements": 0,
+          "name": "aten::gt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::logical_and_",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 0,
+          "name": "aten::lt",
+          "stage": "backward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 23040,
+          "name": "aten::masked_fill_",
+          "stage": "backward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 126720,
+          "name": "aten::native_layer_norm_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 20480,
+          "name": "aten::new_zeros",
+          "stage": "backward"
+        },
+        {
+          "calls": 356,
+          "floating_result_elements": 356,
+          "name": "aten::scalar_tensor",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 20480,
+          "name": "aten::scatter_add",
+          "stage": "backward"
+        },
+        {
+          "calls": 3,
+          "floating_result_elements": 432,
+          "name": "aten::select_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 208,
+          "name": "aten::sgn",
+          "stage": "backward"
+        },
+        {
+          "calls": 2,
+          "floating_result_elements": 2560,
+          "name": "aten::slice_backward",
+          "stage": "backward"
+        },
+        {
+          "calls": 4258,
+          "floating_result_elements": 13571808,
+          "name": "aten::t",
+          "stage": "backward"
+        },
+        {
+          "calls": 1714,
+          "floating_result_elements": 0,
+          "name": "aten::_local_scalar_dense",
+          "stage": "forward"
+        },
+        {
+          "calls": 1240,
+          "floating_result_elements": 0,
+          "name": "aten::all",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 0,
+          "name": "aten::aminmax",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "floating_result_elements": 0,
+          "name": "aten::any",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_and",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_not",
+          "stage": "forward"
+        },
+        {
+          "calls": 530,
+          "floating_result_elements": 0,
+          "name": "aten::bitwise_or",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "floating_result_elements": 0,
+          "name": "aten::eq",
+          "stage": "forward"
+        },
+        {
+          "calls": 178,
+          "floating_result_elements": 0,
+          "name": "aten::ge",
+          "stage": "forward"
+        },
+        {
+          "calls": 89,
+          "floating_result_elements": 227840,
+          "name": "aten::gelu",
+          "stage": "forward"
+        },
+        {
+          "calls": 352,
+          "floating_result_elements": 0,
+          "name": "aten::gt",
+          "stage": "forward"
+        },
+        {
+          "calls": 90,
+          "floating_result_elements": 2880,
+          "name": "aten::linalg_vector_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 354,
+          "floating_result_elements": 0,
+          "name": "aten::lt",
+          "stage": "forward"
+        },
+        {
+          "calls": 88,
+          "floating_result_elements": 115456,
+          "name": "aten::native_layer_norm",
+          "stage": "forward"
+        },
+        {
+          "calls": 1151,
+          "floating_result_elements": 0,
+          "name": "aten::ne",
+          "stage": "forward"
+        },
+        {
+          "calls": 176,
+          "floating_result_elements": 25344,
+          "name": "aten::rsub",
+          "stage": "forward"
+        },
+        {
+          "calls": 1065,
+          "floating_result_elements": 4242448,
+          "name": "aten::t",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_enter_new",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "profiler::_record_function_exit",
+          "stage": "forward"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 0,
+          "name": "aten::_foreach_mul_",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 43,
+          "name": "aten::_foreach_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 1,
+          "name": "aten::linalg_vector_norm",
+          "stage": "grad_clip"
+        },
+        {
+          "calls": 1,
+          "floating_result_elements": 43,
+          "name": "aten::stack",
+          "stage": "grad_clip"
+        }
+      ]
+    }
+  ],
+  "optimizer_update_lr0_only": true,
+  "original_checkpoint_modified": false,
+  "original_model_weights_bitwise_unchanged": true,
+  "original_seed_pair_audit": [
+    {
+      "full_operator_shape_signature_excess_in_each_arm_preview": [
+        {
+          "assoc_only_calls": 1,
+          "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 2,
+          "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,80]],[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,80]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 2,
+          "signature": "[\"aten::slice_backward.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,80]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 2,
+          "signature": "[\"aten::slice.Tensor\",[[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,16]]]]",
+          "stage": "forward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,1]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+          "stage": "forward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+          "stage": "forward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+          "stage": "forward"
+        }
+      ],
+      "full_training_FLOPs_PARITY_VERIFIED": false,
+      "reason": "Operator inventory covers forward/back/gradient clip/AdamW, but exact FLOPs of transcendental, custom kernels and backend optimizer operations cannot be derived from count/shape signatures alone.",
+      "seed": 16016,
+      "stage_exact_category_proxies": {
+        "adamw_lr0:elementary_float_result_elements_NOT_strict_flops": {
+          "assoc": 99390,
+          "fastslow": 99390,
+          "relative_gap": 0.0
+        },
+        "adamw_lr0:transcendental_result_elements_UNKNOWN_implementation_flops": {
+          "assoc": 99390,
+          "fastslow": 99390,
+          "relative_gap": 0.0
+        },
+        "adamw_lr0:view_or_storage_or_index_ops": {
+          "assoc": 129,
+          "fastslow": 129,
+          "relative_gap": 0.0
+        },
+        "backward:elementary_float_result_elements_NOT_strict_flops": {
+          "assoc": 15497737,
+          "fastslow": 15504905,
+          "relative_gap": 0.00046230531564043766
+        },
+        "backward:exact_matmul_multiply_add_2x": {
+          "assoc": 272985088,
+          "fastslow": 272985088,
+          "relative_gap": 0.0
+        },
+        "backward:transcendental_result_elements_UNKNOWN_implementation_flops": {
+          "assoc": 482280,
+          "fastslow": 482280,
+          "relative_gap": 0.0
+        },
+        "backward:view_or_storage_or_index_ops": {
+          "assoc": 4528,
+          "fastslow": 4530,
+          "relative_gap": 0.0004415011037527594
+        },
+        "forward:elementary_float_result_elements_NOT_strict_flops": {
+          "assoc": 8260947,
+          "fastslow": 8265043,
+          "relative_gap": 0.0004955812087124047
+        },
+        "forward:exact_matmul_multiply_add_2x": {
+          "assoc": 137340272,
+          "fastslow": 137340272,
+          "relative_gap": 0.0
+        },
+        "forward:transcendental_result_elements_UNKNOWN_implementation_flops": {
+          "assoc": 519261,
+          "fastslow": 519261,
+          "relative_gap": 0.0
+        },
+        "forward:view_or_storage_or_index_ops": {
+          "assoc": 5558,
+          "fastslow": 5562,
+          "relative_gap": 0.000719165767709457
+        },
+        "grad_clip:elementary_float_result_elements_NOT_strict_flops": {
+          "assoc": 4,
+          "fastslow": 4,
+          "relative_gap": 0.0
+        }
+      },
+      "unmatched_operator_signature_counts": {
+        "assoc_excess": 1,
+        "fastslow_excess": 15
+      },
+      "unsupported_operator_counts_or_elements_differ": [
+        {
+          "assoc": null,
+          "fastslow": [
+            2,
+            2560
+          ],
+          "op": "aten::slice_backward",
+          "stage": "backward"
+        }
+      ]
+    },
+    {
+      "full_operator_shape_signature_excess_in_each_arm_preview": [
+        {
+          "assoc_only_calls": 1,
+          "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 2,
+          "signature": "[\"aten::add.Tensor\",[[\"torch.float32\",[16,80]],[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,80]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 2,
+          "signature": "[\"aten::slice_backward.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,80]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 2,
+          "signature": "[\"aten::slice.Tensor\",[[\"torch.float32\",[16,80]]],[[\"torch.float32\",[16,16]]]]",
+          "stage": "forward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,16]],[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::squeeze.dim\",[[\"torch.float32\",[16,16,1]]],[[\"torch.float32\",[16,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::sum.dim_IntList\",[[\"torch.float32\",[16,16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+          "stage": "backward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::mul.Tensor\",[[\"torch.float32\",[16,16,1]],[\"torch.float32\",[16,1,16]]],[[\"torch.float32\",[16,16,16]]]]",
+          "stage": "forward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,1,16]]]]",
+          "stage": "forward"
+        },
+        {
+          "fastslow_only_calls": 1,
+          "signature": "[\"aten::unsqueeze.\",[[\"torch.float32\",[16,16]]],[[\"torch.float32\",[16,16,1]]]]",
+          "stage": "forward"
+        }
+      ],
+      "full_training_FLOPs_PARITY_VERIFIED": false,
+      "reason": "Operator inventory covers forward/back/gradient clip/AdamW, but exact FLOPs of transcendental, custom kernels and backend optimizer operations cannot be derived from count/shape signatures alone.",
+      "seed": 16017,
+      "stage_exact_category_proxies": {
+        "adamw_lr0:elementary_float_result_elements_NOT_strict_flops": {
+          "assoc": 99390,
+          "fastslow": 99390,
+          "relative_gap": 0.0
+        },
+        "adamw_lr0:transcendental_result_elements_UNKNOWN_implementation_flops": {
+          "assoc": 99390,
+          "fastslow": 99390,
+          "relative_gap": 0.0
+        },
+        "adamw_lr0:view_or_storage_or_index_ops": {
+          "assoc": 129,
+          "fastslow": 129,
+          "relative_gap": 0.0
+        },
+        "backward:elementary_float_result_elements_NOT_strict_flops": {
+          "assoc": 15497737,
+          "fastslow": 15504905,
+          "relative_gap": 0.00046230531564043766
+        },
+        "backward:exact_matmul_multiply_add_2x": {
+          "assoc": 272985088,
+          "fastslow": 272985088,
+          "relative_gap": 0.0
+        },
+        "backward:transcendental_result_elements_UNKNOWN_implementation_flops": {
+          "assoc": 482280,
+          "fastslow": 482280,
+          "relative_gap": 0.0
+        },
+        "backward:view_or_storage_or_index_ops": {
+          "assoc": 4528,
+          "fastslow": 4530,
+          "relative_gap": 0.0004415011037527594
+        },
+        "forward:elementary_float_result_elements_NOT_strict_flops": {
+          "assoc": 8260947,
+          "fastslow": 8265043,
+          "relative_gap": 0.0004955812087124047
+        },
+        "forward:exact_matmul_multiply_add_2x": {
+          "assoc": 137340272,
+          "fastslow": 137340272,
+          "relative_gap": 0.0
+        },
+        "forward:transcendental_result_elements_UNKNOWN_implementation_flops": {
+          "assoc": 519261,
+          "fastslow": 519261,
+          "relative_gap": 0.0
+        },
+        "forward:view_or_storage_or_index_ops": {
+          "assoc": 5558,
+          "fastslow": 5562,
+          "relative_gap": 0.000719165767709457
+        },
+        "grad_clip:elementary_float_result_elements_NOT_strict_flops": {
+          "assoc": 4,
+          "fastslow": 4,
+          "relative_gap": 0.0
+        }
+      },
+      "unmatched_operator_signature_counts": {
+        "assoc_excess": 1,
+        "fastslow_excess": 15
+      },
+      "unsupported_operator_counts_or_elements_differ": [
+        {
+          "assoc": null,
+          "fastslow": [
+            2,
+            2560
+          ],
+          "op": "aten::slice_backward",
+          "stage": "backward"
+        }
+      ]
+    }
+  ],
+  "original_source_March_only_no_exposed_2015_or_protected_2016_17_numeric": true,
+  "original_source_case_sha256": "7aa0d9d313d9800cf5196a6669aa1d746eacf56744221860af2f5041389c2607",
+  "original_source_cases": 16,
+  "real_source_zip_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "study_id": "LATFUSE017-AUTHENTIC-WHOLE-TRAIN-OP-INVENTORY",
+  "trained_models_created": 0
+}

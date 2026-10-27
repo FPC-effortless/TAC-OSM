@@ -1,0 +1,26 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE017-AUTHENTIC-WHOLE-TRAIN-OP-INVENTORY",
+  "study_type": "noncomparative_diagnostic",
+  "scientific_purpose": "Audit full forward/backward/gradient norm clip/AdamW training-step operators on exact same genuine source histories and masks for original99,390-param associative versus fastslow query; capture operator signatures/shape and multiplication-addition FLOPs versus scalar ops, unsupported math and actual optimizer, while lr0 guarantees no model FIT or weight change. Do not certify FLOP parity unless complete scalar-op semantics proven with conservative interval.",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "actual_source_SHA_correct": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "both_arms": [
+    "assoc_historic_query",
+    "fast_slow_historic_query"
+  ],
+  "seeds": [
+    16016,
+    16017
+  ],
+  "recurrent_nominal_bytes": 6800,
+  "trainable_deployed_parameters_each": 99390,
+  "source_case_protocol": "Exact source LATFUSE016 first16 physically real PM2.5 observed original March05–March14 2014 station-hour times, source24 preanchor+64 continuation and source+6 target same station+mask, no selected model scoring",
+  "objective": "Exact original source LATFUSE016 authentic SmoothL1 historical legal-clock and source +6 masked Gaussian NLL/.2 MAE forecaster; original physics real labels only after outputs.",
+  "optimizer": "AdamW original .0005 LR value used for FUTURE extrapolation; here lr=0 and weight_decay.001, foreach=False,fused=False; norm clipping max1.0. Use original tensors with all 43 finite gradients. Optimizer step with lr0 still updates AdamW internal states, BUT no trained weights. Report every forward/back/clip/optimizer ATen tensor operation shape signature, and supported torch matmul FLOP inventory; invalid to call this an authentic optimizer fit.",
+  "audited_ops": "Capture TorchDispatchMode native Aten calls and in/out tensor shapes for all four stages, per-seed and arm; summarize input/output numeric element counts and source-code operator identity. Compute matmul/bmm/addmm FLOPs, exact elementwise primitive operation counts only for explicitly recognized aten arithmetic, mark transcendental and other operations with unknown implementation-dependent FLOP counts separately; gate remains open if significant uncontrolled differences or unclassified ops prevent conservative <=1% full-operation bound.",
+  "parity_claim_policy": "Do not report full actual training FLOP parity unless exhaustive semantic scalar operation counts cover every op including backward/AdamW and identical full training runtime configuration. A partial supported-operator count plus comparison of all Aten tensor operation signatures is an operational diagnostic and nonqualifying. No synthetic capability evaluation or source-native trained model superiority.",
+  "source_guards": "Same real-original source archive, no 2015 previously exposed or protected2016–17 original numerical source, original FIT normalization before March2014, original model checkpoints unchanged, all updates ephemeral and zero parameter delta, no new training artifacts. Unexposed evaluation still needed, no hidden heldout access."
+}
