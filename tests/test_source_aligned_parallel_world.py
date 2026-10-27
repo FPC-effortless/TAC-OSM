@@ -36,6 +36,22 @@ class HistoricalReuseNoFitTests(unittest.TestCase):
                       query_event_index=queries,
                       return_trace=True)
 
+    def test_shared_six_family_registry_exposes_untrained_source_aligned_option(self):
+        from tac_osm.variants.parallel_six import (
+            PARALLEL_FAMILIES, instantiate_untrained_source_aligned_core,
+            require_qualified_domain_head,
+        )
+        self.assertEqual(len(PARALLEL_FAMILIES),6)
+        for name in ("system1","enterprise","temporal","physical",
+                     "edge_lite","counterfactual"):
+            model=instantiate_untrained_source_aligned_core(name)
+            self.assertIsInstance(model,SourceAlignedParallelWorld)
+            self.assertEqual(model.contract()["total_fp32_per_stream"],410)
+            with self.assertRaises(RuntimeError):
+                require_qualified_domain_head(name)
+        with self.assertRaises(ValueError):
+            instantiate_untrained_source_aligned_core("seventh-model")
+
     def test_size_active_params_and_full_state_memory_accounting(self):
         c=self.m.contract()
         self.assertGreaterEqual(c["learned_trainable_parameters"],95000)
