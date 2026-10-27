@@ -114,7 +114,14 @@ def raw_smart_history(payload, allowed_entities):
                 selected.add(key)
                 history[key][day]={k:row.get(k) for k in FIELDS}
                 for field in FIELDS:
-                    feature({field:row.get(field)}, None) if field==FIELDS[0] else None
+                    value = row.get(field)
+                    if value not in ("", None):
+                        try:
+                            parsed = float(value)
+                        except (TypeError, ValueError) as error:
+                            raise StudyError("invalid source SMART numeric field") from error
+                        if not math.isfinite(parsed) or parsed < 0:
+                            raise StudyError("nonfinite/negative original source SMART value")
     return history
 
 def cohorts(payload):
