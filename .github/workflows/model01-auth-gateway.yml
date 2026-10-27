@@ -25,3 +25,13 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_model01_authenticated_gateway.py' -v
       - name: Syntax and dependency checks (no secret or public service)
         run: python -m py_compile specialist_models/model01_authenticated_gateway.py tests/test_model01_authenticated_gateway.py
+      - name: Measure authenticated localhost HTTP+JSON with ephemeral nonlogged test credential
+        run: python specialist_models/benchmark_model01_authenticated.py > model01_auth_local_perf.json
+      - name: Present labeled local-only benchmark result
+        run: cat model01_auth_local_perf.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-auth-gateway-local-perf
+          path: model01_auth_local_perf.json
+          if-no-files-found: error
+          retention-days: 14
