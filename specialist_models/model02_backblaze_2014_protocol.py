@@ -48,6 +48,8 @@ def fate(history,day):
     Cross-split follow-up is forbidden by definition.
     """
     part=phase(day)
+    if part=="PROTECTED_TEST":
+        raise ProtocolError("protected TEST case scoring is not authorized by protocol")
     limit={"FIT":FIT[1],"CAL":CAL[1],"EXPOSED_DEV":DEV[1],
            "PROTECTED_TEST":PROTECTED_TEST[1]}[part]
     if not admitted(history,day):
