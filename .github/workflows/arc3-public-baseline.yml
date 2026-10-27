@@ -1,0 +1,27 @@
+name: ARC3 public-development baseline contract (fixture only)
+on:
+  push:
+    branches:
+      - research/arc3-public-development-baseline-2026-10-27
+  pull_request:
+    paths:
+      - 'scripts/arc3_public_baseline.py'
+      - 'tests/test_arc3_public_baseline.py'
+      - 'docs/ARC3_PUBLIC_BASELINE.md'
+      - '.github/workflows/arc3-public-baseline.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  arc3-fixture-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Constructed harness tests, no hidden scoring
+        run: python -m unittest discover -s tests -p 'test_arc3_public_baseline.py' -v
+      - name: Verify code compiles
+        run: python -m py_compile scripts/arc3_public_baseline.py tests/test_arc3_public_baseline.py
