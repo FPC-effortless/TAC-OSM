@@ -1,0 +1,23 @@
+# TAC-LANG-FORMAL-004: Language source math and guard contracts
+
+Date: 2026-10-27. Status: **exploratory source restoration and proof development, no model promotion**.
+
+This stacked draft preserves original five-seed TAC-LANG-GATE-003 source as `parallel_tac_language_gate_original.py`. The original human-authored Vim manual and binary checkpoints are intentionally not republished here. The source is pinned to the experiments documented in [TAC Issue #525](https://github.com/FPC-effortless/TAC-OSM/issues/525). An unmodified architecture is required for frozen checkpoint replay, so strict checks are in a **separate adapter** and the bounded-mean idea is an untrained mathematical alternative, not a silently changed model.
+
+## Five confirmed weaknesses and fixes
+
+1. **Constructor/parameter mismatch.** The source defaults (`decoder=92,post=10`) instantiate 107,089 learned coordinates. The reported experiment's 100,680 require `decoder=75,post=10`, which the wrapper now enforces. Unqualified default instances cannot be mistaken for the originally reported model.
+2. **Guaranteed ordinal-key alias.** Fourier periods (7,13,29,59) repeat after **155,701** steps. The checked streaming adapter rejects steps past the first period. This excludes one *guaranteed* alias source in the restricted runtime; it is **not** a proof of collision-free or accurate retrieval within that period.
+3. **Unbounded stored source sum.** The actual 88-dimension `state['sum']` accumulates bounded per-token `tanh` features but can grow linearly with stream length. The decoder consumes `sum/max(n,1)` instead. We supply an exact-real mean recurrence `m_(n+1)=m_n+(basis_n-m_n)/(n+1)` and local numerical test. No changes to checkpoint computation, trained results, or 408-float count are made; replacement would need source-specific full replay, numerical bounds and independent evaluation.
+4. **Stateless forward nonzero-offset misuse.** `forward(tokens,offset>0)` changes positional and ordinal codes without accepting previous state, so it does not implement session continuation. `CheckedLanguageSession` enforces the true owner-locked streaming path, exact counter step and valid 128-character IDs. Unchecked original forward stays untouched.
+5. **Missing language semantics.** Source-aligned PNDS model proofs apply to continuous R14 output, not this 128-character categorical emission, SiLU modulation, 64-lag reconstruction or language tokenization. Companion PNDS draft adds *scoped* exact-real categorical and affine lemmas; completed full implementation verification remains unproven.
+
+## Evidence, tests and open obligations
+
+`python -m unittest -v test_language_contract.py` runs seven local source numerical test groups using Torch. Tested locally on CPU with **7/7 passing**, including model parameter identity, forced-ordinal cycle, batch/stream future-causal prefix, owner and invalid token refusals, corrective write equivalence, AD gradient agreement between serial and rectangular scans, and the alternative bounded mean. These are finite numerical tests and are **not** IEEE or all-weights proofs. The PR workflow re-runs them with clean CPU dependencies.
+
+Companion `FPC-effortless/pnds-lean` draft `research/tac-lang-formal-004-2026-10-27` adds `PNDS/LanguageCategorical.lean` plus dedicated Lake build and theorem-axiom inspection. Kernel status is **pending CI**, and no full model proof is claimed.
+
+Still **OPEN**: a typed full 100,680-parameter language forward computational graph and full source-to-Lean proof; float32 tensor kernel, exp/log/tanh/sin/cos and normalization refinement; complete backward/AdamW derivatives; trained checkpoint cold replay from GitHub; source ownership across document boundaries; no-leak historical loss derivation; stochastic/learned probability calibration; long-distance fact fidelity; held-out independent real-text evaluation. Synthetic tests do not validate user-level language intelligence.
+
+No new seventh model family, no changes to the original six-family register or historical gates. No training or protected source TEST occurred here.
