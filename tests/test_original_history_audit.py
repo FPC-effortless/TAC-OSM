@@ -174,7 +174,12 @@ def test_actual_original_graph_trace_with_constructed_inputs_only():
     code = r'''
 import sys
 from pathlib import Path
-sys.path[:0] = [str(Path.cwd()), str(Path.cwd() / "src")]
+import runpy
+current = Path.cwd()
+# Reproduce python scripts/audit_original_history.py, which initially has the
+# scripts directory (not the repository package root) on sys.path.
+sys.path = [str(current / "scripts")] + [p for p in sys.path if p and Path(p).resolve() not in (current, current / "src")]
+runpy.run_path(str(current / "scripts/audit_original_history.py"))
 from scripts.original_history_trace import verify_implementation, load_original_modules, trace_case
 from tac_osm.historical_read_controls import select_intervening_writes
 import torch
