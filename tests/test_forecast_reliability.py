@@ -91,9 +91,9 @@ class ForecastReliabilityFixtureTests(unittest.TestCase):
         a=contract();a["alpha"]=.001
         with self.assertRaises(m.EvidenceError):m.calibrate(a,calibration_rows(),"b"*64)
     def test_unknown_field_and_unsafe_replay_denied(self):
-        row=calibration_rows()[0]
-        row["future_target_cache"]=42
-        with self.assertRaises(m.EvidenceError):m.calibrate(contract(),calibration_rows(),"b"*64)
+        rows=calibration_rows()
+        rows[0]["future_target_cache"]=42
+        with self.assertRaises(m.EvidenceError):m.calibrate(contract(),rows,"b"*64)
 
 if __name__=="__main__":
     unittest.main()
