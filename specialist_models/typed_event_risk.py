@@ -51,6 +51,9 @@ def read_rows(path):
 def parse_observation(row, features, label=False, cutoff=None):
     if not isinstance(row, dict):
         raise EvidenceError("observation must be object")
+    expected = {"observed_at", "features"} | ({"outcome", "outcome_at"} if label else set())
+    if set(row) != expected:
+        raise EvidenceError("unexpected/hidden source fields or labels rejected")
     t = utc(row.get("observed_at"))
     if cutoff and not t < cutoff:
         raise EvidenceError("FIT observation must precede source cutoff")
