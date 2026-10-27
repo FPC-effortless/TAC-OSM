@@ -39,7 +39,7 @@ def phase_code(ordinal:int,dtype:torch.dtype=torch.float64,
     # Integer remainders BEFORE float conversion to avoid lost low bits.
     parts=[]
     for p in PERIODS:
-        a=torch.tensor((ordinal%p)*(2*math.pi/p),dtype=dtype,device=device)
+        a=torch.tensor(ordinal%p,dtype=dtype,device=device)*(2*math.pi/p)
         parts.extend((torch.cos(a),torch.sin(a)))
     return torch.stack(parts,-1)
 
