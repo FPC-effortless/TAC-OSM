@@ -77,7 +77,7 @@ jobs:
         run: |
           python -m scripts.parmem011_real_train_operator_preflight \
             --source /tmp/parmem011-real/source.zip
-      - name: Fit ten real neural checkpoint originals: five seeds, paired same-shape event queries
+      - name: Fit ten original real neural checkpoints with five seeds and two source-query arms
         env:
           PYTHONPATH: '.:src'
           OMP_NUM_THREADS: '1'
