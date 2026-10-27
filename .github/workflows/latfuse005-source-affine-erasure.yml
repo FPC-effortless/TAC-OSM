@@ -1,0 +1,76 @@
+name: LATFUSE005 exact source-trained alpha-retention versus beta-overwrite numerical audit
+
+on:
+  push:
+    branches: [research/latfuse005-source-event-delay-audit-2026-10-27]
+    paths:
+      - "scripts/latfuse005_source_affine_erasure_audit.py"
+      - "research/mathematical-engineering/latfuse005/REGISTERED_ERASURE_DECOMPOSITION.json"
+      - ".github/workflows/latfuse005-source-affine-erasure.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: LATFUSE005-AFFINE-ORIGINAL-TRAINED-JULY-2014
+  cancel-in-progress: false
+
+jobs:
+  eight-original-weights-no-fit-matrix-transport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install original source FP32 Torch CPU
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Require completed genuine event source evidence and no-fit preregistration
+        run: |
+          python -m py_compile scripts/latfuse005_source_affine_erasure_audit.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse005/REGISTERED_ERASURE_DECOMPOSITION.json \
+            --phase preflight
+          test -s research/mathematical-engineering/latfuse005/RESULTS.json
+          test -s research/replay-bundles/LATFUSE004/RESULTS.json
+          test ! -e research/mathematical-engineering/latfuse005/ERASURE_OPERATOR_RESULTS.json
+      - name: Restore source-owned original licensed UCI501 archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse005-affine-source
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse005-affine-source/PRSA2017_original.zip
+      - name: Independently reconstruct original trained source conditioned affine FP32 transport for all eight models
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse005_source_affine_erasure_audit.py \
+            --source /tmp/latfuse005-affine-source/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse005/ERASURE_OPERATOR_RESULTS.json
+      - name: Commit read-only genuine-source numeric evidence, not models
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse005-source-event-delay-audit-2026-10-27
+          test -s research/mathematical-engineering/latfuse005/ERASURE_OPERATOR_RESULTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse005/ERASURE_OPERATOR_RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: preserve original trained source affine alpha retention and beta overwrite decomposition"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Scientific boundaries
+        run: |
+          echo "No optimizer/training, no future original target labels, no 2015 numeric DEV or 2016-17 original protected."
+          echo "Scoped source-conditioned memory-difference algebra is not historical event knowledge or causal utility."

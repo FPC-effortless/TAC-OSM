@@ -1,0 +1,81 @@
+name: LATFUSE005 genuine-source long-delay recorded events — original checkpoint no-fit audit
+
+on:
+  push:
+    branches: [research/latfuse005-source-event-delay-audit-2026-10-27]
+    paths:
+      - "scripts/latfuse005_source_event_delay.py"
+      - "research/mathematical-engineering/latfuse005/REGISTERED_PROBE.json"
+      - ".github/workflows/latfuse005-source-event-delay.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: latfuse005-original-2014-source-event-audit
+  cancel-in-progress: false
+
+jobs:
+  original-checkpoint-source-grounded-event-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install original registered CPU read-only source dependencies
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Enforce preregistered no-optimizer mechanism experiment
+        run: |
+          set -e
+          python -m py_compile scripts/latfuse005_source_event_delay.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse005/REGISTERED_PROBE.json \
+            --phase preflight
+          test ! -e research/mathematical-engineering/latfuse005/RESULTS.json
+          test -s research/replay-bundles/LATFUSE004/RESULTS.json
+          test -s research/replay-bundles/LATFUSE004/POSTFIT_PARITY.json
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE004/POSTFIT_PARITY.json \
+            --phase final
+      - name: Recover immutable original licensed source exact SHA pinned historical commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse005-authentic
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse005-authentic/PRSA2017_original.zip
+      - name: Eight frozen models x four genuine event time delays, same sources and zero-prefix comparisons
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse005_source_event_delay.py \
+            --source /tmp/latfuse005-authentic/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse005/RESULTS.json
+      - name: Persist observed source conditional result only on isolated unmerged diagnostic branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse005-source-event-delay-audit-2026-10-27
+          test -s research/mathematical-engineering/latfuse005/RESULTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse005/RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: preserve real observed FIT event-conditioned frozen 16-512h key and outcome forensic evidence"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Scientific boundary
+        run: |
+          echo "Original source events, outcome truth only after prediction; no new optimizer."
+          echo "Past-write-key read != model's future forecast query; entire prefix matrix erase OOD, not event deletion."
+          echo "No independent fitted data/test qualification, no source-protected numeric 2016-17 parsing."
