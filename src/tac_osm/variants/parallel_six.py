@@ -105,3 +105,29 @@ def instantiate_untrained_time_age_core(
         state_dim=state_dim, action_dim=action_dim,
         width=width, decoder=decoder, ffn_hidden=ffn_hidden,
     )
+
+
+def instantiate_untrained_source_aligned_core(
+    name: str | Variant, *, state_dim: int = 14, action_dim: int = 14,
+    width: int = 88, decoder: int = 132, ffn_hidden: int = 12,
+):
+    """Opt-in DIAGKEY/ME100/LATFUSE-informed historical source memory.
+
+    Same SIX model families; no additional training or qualified domain
+    interface. Caller supplies authenticated entity owner and source
+    event ordinal; previous event measurements are NEVER query inputs.
+
+    The original 154-float time-aware engine is preserved and 256 new
+    source-addressed floats are added (410 total per-stream FP32), plus
+    owner/ordinal/count/Boolean metadata. Do NOT misrepresent this as
+    the original 154-float core or the full 1,696-float LATFUSE variant.
+    """
+    parallel_family(name)
+    if any(type(d) is not int or d <= 0 for d in
+           (state_dim, action_dim, width, decoder, ffn_hidden)):
+        raise ValueError("source aligned dimensions must be positive integers")
+    from .source_aligned_parallel_world import SourceAlignedParallelWorld
+    return SourceAlignedParallelWorld(
+        state_dim=state_dim, action_dim=action_dim,
+        width=width, decoder=decoder, ffn_hidden=ffn_hidden,
+    )
