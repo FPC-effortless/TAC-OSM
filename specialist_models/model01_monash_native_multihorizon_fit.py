@@ -36,10 +36,33 @@ class MultiHorizonTAC(ancestral.NativeTAC):
         super().__init__()
         self.head[-1]=nn.Linear(128,len(HORIZONS))
     def forward(self,x):
-        y=super().forward(x)
-        if y.ndim!=2 or y.shape[1]!=len(HORIZONS):
-            raise CapabilityError("native 1h and 24h heads not aligned")
-        return y
+        # Preserve original native recurrence exactly; only expand persistence
+        # residual for the explicitly two-output source-time forecasting task.
+        if x.ndim!=3 or x.shape[1:]!=(HISTORY,3):
+            raise CapabilityError("expected causal 48-hour source history")
+        z=self.norm(self.emb(x)+self.ff(self.emb(x)))
+        n=len(x);fast=x.new_zeros((n,32));slow=x.new_zeros((n,32))
+        memory=x.new_zeros((n,8,8));key=None
+        for t in range(HISTORY):
+            h=z[:,t]
+            fast=self.fast(h,fast)
+            inp=torch.cat([h,fast,slow],-1)
+            gate=torch.sigmoid(self.sgate(inp))
+            slow=gate*slow+(1-gate)*torch.tanh(self.sstep(inp))
+            r=torch.cat([h,fast],-1)
+            key=F.normalize(self.key(r),p=2,dim=-1,eps=1e-6)
+            value=torch.tanh(self.value(r))
+            beta=.5*torch.sigmoid(self.write(r))
+            alpha=.9+.099*torch.sigmoid(self.retain(r))
+            old_read=torch.bmm(memory,key.unsqueeze(-1)).squeeze(-1)
+            memory=(alpha.unsqueeze(-1)*memory+
+                    beta.unsqueeze(-1)*(value-old_read).unsqueeze(-1)*key.unsqueeze(1)).clamp(-5,5)
+        read_gate=torch.sigmoid(self.readgate(torch.cat([z[:,-1],fast],-1)))
+        read=read_gate*torch.bmm(memory,key.unsqueeze(-1)).squeeze(-1)
+        result=x[:,-1,0].unsqueeze(-1)+self.head(torch.cat([z[:,-1],fast,slow,read],-1))
+        if result.shape!=(n,len(HORIZONS)):
+            raise CapabilityError("native two-horizon forecasts misaligned")
+        return result
 
 def source_data():
     frozen=json.loads(ORIGINAL_SOURCE.read_bytes())
