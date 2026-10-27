@@ -41,3 +41,9 @@ python specialist_models/backblaze_2013_classical_dev_fit.py --replay \
 5. No cloud or physical-device serving of this risk model has occurred. Woyengi remains authoritative for actual decisions, and Veritas must independently qualify outcomes and access rules before a controlled commercial pilot.
 
 **Evidence status:** ORIGINAL_SOURCE_FIT=PASS; ORIGINAL_CHECKPOINT_IN_GIT=PASS; NO_FIT_REPLAY=CHECK_WORKFLOW; INDEPENDENT_TEST=NOT_RUN; REAL_TIME_AVAILABLE_AT=UNVERIFIED; PRODUCTION=NOT_DEPLOYED.
+
+## Independently checked Git original checkpoint replay
+
+[Original source no-fit clean Git checkout replay #40476364314](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40476364314) **PASS**. Source archive contents were SHA-locked, FIT optimizer skipped, original Git-learned coefficients restored, and *the complete original DEV JSON result* matched exact. Original Git checkpoint file SHA256 `4c4cd931a8ec19aba67ea4a3e6a51e16941c7ad21632eec86f81cbd834d81d63`. This proves deterministic original-software result reproduction for the already exposed historical cohort, not operational credibility, independent future validation, source-as-of legality, or new neural TAC skill.
+
+**Evidence status:** `REPO_REPLAY=PASS` for this classical original checkpoint; `INDEPENDENT_TEST=NOT_RUN`; `REAL_TIME_AVAILABLE_AT=UNVERIFIED`; `PRODUCTION=NOT_DEPLOYED`.
