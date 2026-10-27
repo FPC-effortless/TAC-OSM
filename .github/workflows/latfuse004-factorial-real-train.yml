@@ -1,0 +1,138 @@
+name: LATFUSE004 2x2 original real-source exploratory training and clean evidence replay
+
+on:
+  push:
+    branches: [research/latfuse004-factorial-routing-capacity-2026-10-27]
+    paths: [".github/workflows/latfuse004-factorial-real-train.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: LATFUSE004-FIRST-ORIGINAL-REAL-FACTORIAL-FITS
+  cancel-in-progress: false
+
+jobs:
+  original-observed-training-and-clean-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: CPU original-source engineering dependencies
+        run: |
+          python -m pip install --quiet numpy pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Prospective source/8-model prerequisite and frozen registered budget before optimizer
+        run: |
+          set -e
+          test ! -e research/replay-bundles/LATFUSE004
+          python -m py_compile scripts/latfuse004_factorial_training.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse004/REAL_FIT_REGISTRATION.json \
+            --phase preflight
+          python scripts/sync_test_count.py --check
+      - name: Check 2x2 recurrent state/AD isolation with original trained-control equivalence
+        env:
+          PYTHONPATH: "src"
+        run: |
+          python -m pytest -q tests/test_latent_fusion_002.py tests/test_latent_fusion_003.py \
+            tests/test_latent_fusion_004_factorial.py
+      - name: Restore source SHA-pinned original licensed historical observations
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse004-real-fits
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse004-real-fits/PRSA2017_original.zip
+      - name: Registered real FIT-only no-update source gradients for all four architectures
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse004_factorial_training.py --mode prefit \
+            --source /tmp/latfuse004-real-fits/PRSA2017_original.zip
+      - name: Train exact 2 seeds x4 original observed fixed-state arms; no score selection
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse004_factorial_training.py --mode fit \
+            --source /tmp/latfuse004-real-fits/PRSA2017_original.zip
+      - name: Validate actual original checkpoint hashes/parameters/budget with postfit receipts
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          reg=json.loads(Path("research/mathematical-engineering/latfuse004/REAL_FIT_REGISTRATION.json").read_text())
+          report=json.loads(Path("research/replay-bundles/LATFUSE004/RESULTS.json").read_text())
+          assert report["total_original_optimizer_updates"]==1024
+          assert report["source_sha256"]==reg["real_world_source"]["sha256"]
+          by={(r["arm"],r["seed"]):r for r in report["models"]}
+          assert len(by)==len(reg["models"])==8
+          for candidate in reg["models"]:
+              r=by[(candidate["architecture"],candidate["seed"])]
+              n=r["state_contract"]["active_parameters"]
+              assert n==candidate["trainable_parameters"]==candidate["deployed_parameters"]
+              assert r["state_contract"]["per_stream_nominal_bytes"]==6800
+              assert r["optimizer_steps"]==128 and r["original_training_examples"]==1024
+              path=Path("research/replay-bundles/LATFUSE004")/f"seed-{r['seed']}"/r["arm"]/"final.pt"
+              sha=hashlib.sha256(path.read_bytes()).hexdigest()
+              assert sha==r["original_checkpoint_sha256"]
+              candidate["measured"]={"trainable_parameters":n,"deployed_parameters":n,
+                                      "checkpoint_sha256":sha}
+          Path("research/replay-bundles/LATFUSE004/POSTFIT_PARITY.json").write_text(
+              json.dumps(reg,sort_keys=True,indent=2)+"\n")
+          PY
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE004/POSTFIT_PARITY.json --phase final
+      - name: Original real-source 2015 exposed DEV arrays/metrics restored without any new optimizer
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse004_factorial_training.py --mode replay \
+            --source /tmp/latfuse004-real-fits/PRSA2017_original.zip
+      - name: Preserve exact eight original weight/optimizer/RNG sources in isolated research branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse004-factorial-routing-capacity-2026-10-27
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/replay-bundles/LATFUSE004/
+          git diff --cached --quiet && { echo "No original eight-model evidence produced"; exit 1; }
+          git commit -m "research: preserve registered LATFUSE004 8 real-trained FP32 models, full optimizer RNG and source forecasts"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Independent clean checkout checkpoint hash and bitwise source prediction replay
+        shell: bash
+        env:
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          git clone --depth 1 --single-branch --branch "$GITHUB_REF_NAME" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/latfuse004-clean
+          cd /tmp/latfuse004-clean
+          PYTHONPATH=".:src" python scripts/latfuse004_factorial_training.py --mode replay \
+            --source /tmp/latfuse004-real-fits/PRSA2017_original.zip
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE004/POSTFIT_PARITY.json --phase final
+      - name: Never overclaim unequal compute as scientific architecture superiority
+        run: |
+          echo "Four-arm real-source training/descriptive results only."
+          echo "Pre-profile max FLOP gap 1.121% (>1%) and full optimizer FLOPs unverified."
+          echo "Already exposed 2015 only. Protected 2016-17 original numeric source untouched."
