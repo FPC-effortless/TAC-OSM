@@ -61,6 +61,7 @@ def audit(checkout: Path):
     if stop + uci.H > uci.CAL_END or start < 144:
         raise ValueError("must remain strictly inside exposed CAL label range")
     issued = {}
+    poison_checked = set()
     def events():
         for index in range(start, stop + uci.H):
             if index < stop:
@@ -70,6 +71,20 @@ def audit(checkout: Path):
                     "last_145_energy_wh": values[index-144:index+1],
                 }
                 prediction = api.predict(model, original_calibration_q, request)
+                # Source-anchored negative control: poison ONLY the future
+                # original outcome before re-running the true request producer.
+                # This tests source -> encoder noninterference, not model skill.
+                poison = list(values)
+                poison[index + uci.H] += 37_000.0
+                poison_request = {
+                    "schema": "model01-energy-source-aligned-v1",
+                    "source_aligned_step_index": index,
+                    "last_145_energy_wh": poison[index-144:index+1],
+                }
+                poisoned_prediction = api.predict(model, original_calibration_q, poison_request)
+                if (poison_request != request or poisoned_prediction != prediction):
+                    raise ValueError("future-only target poison changed predecision producer or frozen output")
+                poison_checked.add(index)
                 if (prediction["model_checkpoint_sha256"] != CHECKPOINT_SHA256 or
                         prediction["reference_source_sha256"] != SOURCE_SHA256):
                     raise ValueError("original frozen forecast identity mismatch")
@@ -92,7 +107,7 @@ def audit(checkout: Path):
         events(), {"single-original-household": [[0.0], [0.5], [1.0]]},
         checkpoint_sha256=CHECKPOINT_SHA256,
         adaptive_feedback=False, max_pending=16, max_records=CASES)
-    if len(records) != CASES or len(issued) != CASES:
+    if len(records) != CASES or len(issued) != CASES or len(poison_checked) != CASES:
         raise ValueError("original source did not produce the frozen case count")
     for row in records:
         index = int(row.row_id)
@@ -113,6 +128,8 @@ def audit(checkout: Path):
         "label_indices": [start+uci.H, stop+uci.H],
         "forecast_events": CASES,
         "original_label_events": CASES,
+        "source_anchored_future_only_label_poison_checks": len(poison_checked),
+        "source_future_target_poison_changed_original_forecast": False,
         "gp_updated_on_real_labels": False,
         "gp_prior_mean_correction_zero": True,
         "all_original_api_predictions_preserved": True,
