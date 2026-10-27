@@ -68,7 +68,20 @@ def real_batch(source_path):
     d=read_source(source_path)
     train,exposed=chronology(d)
     rng=random.Random(SEED)
-    selected=[train[rng.randrange(len(train))] for _ in range(BATCH)]
+    # Source-time-only stratification for DIAGNOSTIC profiling. We do not
+    # select on future outcomes, score or any model prediction. The
+    # original random sample accidentally consisted solely of 1h gaps.
+    def largest_observed_gap(case):
+        site,ix,_=case
+        prior=d["events"][site][ix-HISTORY+1:ix+1]
+        return max(b-a for a,b in zip(prior,prior[1:]))
+    irregular=[case for case in train if largest_observed_gap(case)>1]
+    if len(irregular)<2:
+        raise RuntimeError("real irregular clock cases unavailable: age study must stop")
+    regular=[case for case in train if largest_observed_gap(case)==1]
+    if len(regular)<2:
+        raise RuntimeError("genuine regular source contrast unavailable")
+    selected=rng.sample(irregular,2)+rng.sample(regular,2)
     batch=batch_from_cases(d,selected)
     # 2014 exposed development cases are counted through authenticated
     # known-at-time timestamps, but outcomes are NEVER scored here.
@@ -78,6 +91,9 @@ def real_batch(source_path):
        "train_case_digest":sha_bytes(train),
        "exposed_case_digest":sha_bytes(exposed),
        "source_selected_case_digest":sha_bytes(selected),
+       "source_diag_irregular_case_count":len(irregular),
+       "source_diag_regular_case_count":len(regular),
+       "source_diag_selected_irregular_histories":2,
        "source_physical_elapsed_delta_min":float(batch[2][:,1:].min()),
        "source_physical_elapsed_delta_max":float(batch[2][:,1:].max()),
        "source_actions_are_only_availability_and_known_clock":True,
