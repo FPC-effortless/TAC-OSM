@@ -77,6 +77,7 @@ def main():
         all_events=[]
         all_base=[]
         all_scales=[]
+        native_memory_nonzero=0
         future_only_poison_checked=0
         for t in ORIGINS:
             frame=forensic.read_frame(d,[(station,t) for station in range(SOURCE_STATIONS)],HISTORY)
@@ -98,10 +99,12 @@ def main():
                        for clean,alternate in zip(frame[:6],poisoned_frame[:6])):
                 raise ValueError("future-only original FIT source values entered current inference inputs")
             with torch.no_grad():
-                poisoned_forecast,_=model(*poisoned_frame[:6],return_trace=False)
+                poisoned_forecast,poisoned_state=model(*poisoned_frame[:6],return_trace=False)
             if (not torch.equal(forecast.log_location,poisoned_forecast.log_location)
                     or not torch.equal(forecast.left_scale,poisoned_forecast.left_scale)
-                    or not torch.equal(forecast.right_scale,poisoned_forecast.right_scale)):
+                    or not torch.equal(forecast.right_scale,poisoned_forecast.right_scale)
+                    or any(not torch.equal(getattr(state,field),getattr(poisoned_state,field))
+                           for field in ("source_sum","source_mass","evidence_sum","memory"))):
                 raise ValueError("future-only source target poisoned original neural forecast")
             future_only_poison_checked+=SOURCE_STATIONS*FORECAST_CHANNELS
             if (forecast.log_location.shape!=(SOURCE_STATIONS,FORECAST_CHANNELS)
@@ -114,6 +117,10 @@ def main():
                     or (forecast.left_scale<=0).any()
                     or (forecast.right_scale<=0).any()):
                 raise ValueError("fitted neural output is nonfinite/nonpositive scale")
+            if state.memory.shape!=(SOURCE_STATIONS,8,8) or not torch.isfinite(state.memory).all():
+                raise ValueError("native original associative memory not 12x8x8 finite")
+            native_memory_nonzero+=int(torch.count_nonzero(state.memory))
+            state_vectors=state.memory.detach().cpu().reshape(SOURCE_STATIONS,64).tolist()
             # Frozen original 6-channel normalized-log forecast, not physical
             # arithmetic and NOT a new distribution conversion.
             predicted=forecast.log_location.detach().cpu().tolist()
@@ -127,7 +134,7 @@ def main():
                         "kind":"issue",
                         "row_id":f"{seed}:{station}:{channel}:{t}",
                         "entity_id":entity,
-                        "features":(v,),
+                        "features":tuple(float(x) for x in state_vectors[station]),
                         "base_prediction":v,
                         "feature_at":float(t),
                         "issued_at":float(t),
@@ -135,7 +142,7 @@ def main():
                     all_base.append(v)
                     all_scales.append((float(lscale[station][channel]),
                                        float(rscale[station][channel])))
-        inducing={f"station-{s:02d}-channel-{c}":[[0.0],[1.0]]
+        inducing={f"station-{s:02d}-channel-{c}":[[0.0]*64,[1.0]*64]
                   for s in range(SOURCE_STATIONS) for c in range(FORECAST_CHANNELS)}
         output=replay_truth_isolated_constructed(
             all_events,inducing,checkpoint_sha256=actual,
@@ -155,6 +162,11 @@ def main():
             "seed":seed,"checkpoint_sha256":actual,
             "trainable_parameters":sum(p.numel() for p in model.parameters()),
             "native_issuer_rows":len(output),
+            "native_gp_feature_dimensions":64,
+            "native_gp_feature_origin":"original_trained_associative_memory_8x8",
+            "gp_inducing_coordinates":2,
+            "gp_sidecar_retained_numeric_scalars_per_entity":137,
+            "original_memory_nonzero_entries_across_24_station_frames":native_memory_nonzero,
             "native_source_future_only_poison_checks":future_only_poison_checked,
             "native_source_future_only_poison_changed_forecast":False,
             "native_log_forecasts_exactly_preserved":True,
