@@ -1,0 +1,38 @@
+name: Model01 authentic UCI374 source DEV baseline (no TAC neural fit)
+on:
+  push:
+    branches:
+      - product/sensor-forecast-reliability-2026-10-27
+    paths:
+      - 'specialist_models/uci_appliances_real_dev.py'
+      - 'tests/test_uci_appliances_real_dev.py'
+      - '.github/workflows/model01-uci-real-dev.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/uci_appliances_real_dev.py'
+      - 'tests/test_uci_appliances_real_dev.py'
+      - '.github/workflows/model01-uci-real-dev.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-dev-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source/holdout invariants on constructed data (not capability evidence)
+        run: python -m unittest discover -s tests -p test_uci_appliances_real_dev.py -v
+      - name: Acquire official CC BY 4.0 original UCI374 ZIP (<=25 MB) and compute exposed DEV metrics only
+        run: |
+          python specialist_models/uci_appliances_real_dev.py --out uci374_dev_receipt.json
+      - name: Publish research-only source and DEV score receipt (not raw data)
+        uses: actions/upload-artifact@v4
+        with:
+          name: uci374-authentic-source-dev-receipt
+          path: uci374_dev_receipt.json
+          if-no-files-found: error
+          retention-days: 14
