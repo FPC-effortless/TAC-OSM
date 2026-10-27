@@ -8,6 +8,7 @@ No protected numeric rows are parsed or copied into control archives.
 from __future__ import annotations
 
 from contextlib import contextmanager
+import csv
 import datetime as dt
 import hashlib
 import io
@@ -29,16 +30,16 @@ def read_fit_members(path, expected_sha):
         for name in sorted(z.namelist()):
             if not name.endswith('.csv'):continue
             with z.open(name) as f:
-                header=f.readline();cols=header.decode('utf-8-sig').strip().split(',')
+                header=f.readline();cols=next(csv.reader([header.decode('utf-8-sig')]))
                 if not set(('year','month','day','hour','station','wd',*NUMERIC))<=set(cols):raise ValueError('unknown source header')
                 if cols[:5]!=['No','year','month','day','hour']:raise ValueError('source date prefix changed')
                 rows=[]
                 for line in f:
                     # Date prefix only: never parse protected numeric fields.
                     prefix=line.split(b',',5)
-                    year=int(prefix[1])
+                    year=int(prefix[1].strip(b'"'))
                     if year>=2015:break
-                    when=dt.datetime(*(int(x) for x in prefix[1:5]))
+                    when=dt.datetime(*(int(x.strip(b'"')) for x in prefix[1:5]))
                     rows.append((when,line))
                 if not rows:raise ValueError('empty FIT source')
                 # Stops original reader before numeric parsing; never an observed row.
@@ -65,17 +66,19 @@ def make_control(members,path,*,cutoff=None,mode='identity',positive=None):
                 rewritten=line
                 if future or visible_positive:
                     # Only authorized pre2015 rows reach this branch.
-                    fields=line.rstrip(b'\r\n').split(b',')
+                    fields=next(csv.reader([line.decode('utf-8')]))
                     if visible_positive:
-                        fields[cols.index('PM2.5')]=b'50000'
+                        fields[cols.index('PM2.5')]='50000'
                     elif mode in ('values','missingness'):
                         for k in NUMERIC:
                             j=cols.index(k)
-                            if mode=='values':fields[j]=b'1000000' if fields[j]!=b'NA' else b'NA'
-                            else:fields[j]=b'NA' if fields[j]!=b'NA' else b'1000000'
+                            if mode=='values':fields[j]='1000000' if fields[j]!='NA' else 'NA'
+                            else:fields[j]='NA' if fields[j]!='NA' else '1000000'
                         j=cols.index('wd')
-                        fields[j]=(b'E' if fields[j]!=b'NA' else b'NA') if mode=='values' else (b'NA' if fields[j]!=b'NA' else b'E')
-                    rewritten=b','.join(fields)+b'\n'
+                        fields[j]=('E' if fields[j]!='NA' else 'NA') if mode=='values' else ('NA' if fields[j]!='NA' else 'E')
+                    encoded=io.StringIO(newline='')
+                    csv.writer(encoded,lineterminator='\n').writerow(fields)
+                    rewritten=encoded.getvalue().encode('utf-8')
                 if future:
                     future_before.update(name.encode()+line);future_after.update(name.encode()+rewritten)
                 else:

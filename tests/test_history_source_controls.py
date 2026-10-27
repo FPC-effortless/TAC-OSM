@@ -1,4 +1,6 @@
 """Constructed source and original-code fixtures; never capability evidence."""
+import csv
+import io
 import hashlib
 from pathlib import Path
 from types import SimpleNamespace
@@ -11,7 +13,7 @@ import pytest
 from tac_osm.history_source_controls import NUMERIC,read_fit_members,make_control,declared_control_reader
 
 
-def fixture_source(tmp_path):
+def fixture_source(tmp_path,quoted=False):
     p=tmp_path/'original.zip'
     cols=['No','year','month','day','hour',*NUMERIC,'wd','station']
     with zipfile.ZipFile(p,'w') as z:
@@ -19,7 +21,15 @@ def fixture_source(tmp_path):
             lines=[','.join(cols)]
             for hour in (0,1):lines.append(','.join(map(str,[hour+1,2014,5,1,hour,*([5]*len(NUMERIC)),'N',f'S{site}'])))
             lines.append(','.join(map(str,[3,2015,1,1,0,*(['DO_NOT_PARSE_PROTECTED']*len(NUMERIC)),'NA',f'S{site}'])))
-            z.writestr(f'PRSA_Data_S{site}_20130301-20170228.csv','\n'.join(lines)+'\n')
+            if quoted:
+                out=io.StringIO(newline='');writer=csv.writer(out,quoting=csv.QUOTE_ALL,lineterminator='\r\n')
+                for i,line in enumerate(lines):
+                    fields=line.split(',')
+                    if i==2:fields[5]='NA'
+                    writer.writerow(fields)
+                data=out.getvalue()
+            else:data='\n'.join(lines)+'\n'
+            z.writestr(f'PRSA_Data_S{site}_20130301-20170228.csv',data)
     return p,hashlib.sha256(p.read_bytes()).hexdigest()
 
 
@@ -112,3 +122,17 @@ def test_positive_source_edit_uses_exact_owner_not_substring(tmp_path):
     assert r['changed_FIT_rows']==1
     with zipfile.ZipFile(out) as z:
         assert z.read('PRSA_Data_S10_20130301-20170228.csv').splitlines()[1]==members['PRSA_Data_S10_20130301-20170228.csv'][2][0][1].strip()
+
+
+@pytest.mark.parametrize('mode',['values','missingness'])
+def test_publisher_quoted_csv_header_dates_wind_and_missing_cells(tmp_path,mode):
+    p,h=fixture_source(tmp_path,quoted=True);members=read_fit_members(p,h)
+    out=tmp_path/'quoted-control.zip'
+    make_control(members,out,cutoff=dt.datetime(2014,5,1),mode=mode)
+    with zipfile.ZipFile(out) as z:
+        n='PRSA_Data_S0_20130301-20170228.csv'
+        lines=z.read(n).splitlines(keepends=True)
+        assert lines[0]==members[n][0] and lines[1]==members[n][2][0][1]
+        row=next(csv.reader([lines[2].decode()]))
+        assert row[5]==('NA' if mode=='values' else '1000000')
+        assert row[-2]==('E' if mode=='values' else 'NA')
