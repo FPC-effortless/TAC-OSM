@@ -72,7 +72,10 @@ class LanguageNonlinearDerivativeTests(unittest.TestCase):
                     return (F.layer_norm(v,(248,),gamma,bias,eps)*upstream).sum()
                 observed=(objective_at(z+step*direction)-
                           objective_at(z-step*direction))/(2*step)
-            self.assertAlmostEqual(float(observed),float(closed),delta=2e-7)
+            # Central differences carry O(h^2) truncation amplified by small
+            # sqrt(variance+eps); retain strict Torch-vs-analytic check.
+            self.assertAlmostEqual(float(observed),float(closed),
+                                   delta=5e-7+1e-8*abs(float(closed)))
 
 if __name__=="__main__":
     unittest.main()
