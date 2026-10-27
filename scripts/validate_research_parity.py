@@ -25,6 +25,9 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+# Required for universal signed-evidence gate on all prospective model fits.
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
 HEX64 = re.compile(r"^[a-fA-F0-9]{64}$")
 STUDY_FILE = re.compile(r"(?:^|/)(?:me|dev)(\d{2,3})(?:[-_./]|$)",re.I)
 SCHEMA = "tac-osm.parity.v1"
@@ -98,7 +101,7 @@ def shared(rows,key,seed):
     demand(all(v==values[0] for v in values),
         f"seed {seed}: {key} differs across architecture arms")
 
-def check_manifest(m,phase="preflight"):
+def _check_manifest_parity_only(m,phase="preflight"):
     demand(isinstance(m,dict),"manifest JSON object required")
     demand(m.get("schema_version")==SCHEMA,"unsupported parity schema")
     text_field(m.get("study_id"),"study_id")
@@ -271,6 +274,32 @@ def check_manifest(m,phase="preflight"):
             "status":"PASS","eligible_for_architecture_superiority":phase=="final"}
 
 
+
+def check_manifest(m, phase="preflight", *, reward_attestation=None,
+                   trusted_reward_public_key_hex=None):
+    """Canonical prospective gate: resource parity PLUS independently signed
+    per-variant reward/outcome/access evidence. Historical studies unchanged.
+
+    No argument can turn enforcement off. Test-only constructed receipts are
+    not genuine source evidence. For CLI runs the public key comes exclusively
+    from the operator-provisioned environment, never the model manifest.
+    """
+    report = _check_manifest_parity_only(m, phase)
+    if m["study_type"] == "noncomparative_diagnostic" or not requires_100k_policy(m["study_id"]):
+        report["reward_integrity"] = "NOT_APPLICABLE_HISTORICAL_OR_NO_FIT"
+        return report
+    from tac_osm.research_reward_runner import (
+        RewardEvidenceError, verify_reward_attestation)
+    try:
+        receipt = verify_reward_attestation(
+            m, phase, reward_attestation,
+            trusted_public_key_hex=trusted_reward_public_key_hex)
+    except RewardEvidenceError as exc:
+        raise ParityError("independent reward/outcome/access runner gate: " + str(exc)) from exc
+    report["reward_integrity"] = receipt
+    return report
+
+
 def find_changed_studies(base_head):
     command=["git","diff","--name-only",base_head]
     check=subprocess.run(command,check=True,capture_output=True,text=True)
@@ -291,16 +320,32 @@ def check_changed(base_head,root):
         demand(file.exists(),
             f"{study}: missing preregistered FAIR_COMPARISON.json; no new experiment permitted")
         manifest=json.loads(file.read_text())
-        result=check_manifest(manifest,"preflight")
+        # Registration records must not claim that an unsigned comparison
+        # qualifies for training: the trusted evaluator's preflight receipt is
+        # supplied to the runner at execution, not embedded in source files.
+        result=_check_manifest_parity_only(manifest,"preflight")
+        if manifest["study_type"] in ("architecture_comparison", "single_model_training"):
+            demand(requires_100k_policy(manifest["study_id"]) is True,
+                   "historical experiment registration is immutable")
         if manifest["study_type"] in ("architecture_comparison","single_model_training"):
             workflows=list((root/".github/workflows").glob(study+"*.yml"))
             workflows+=list((root/".github/workflows").glob(study+"*.yaml"))
             demand(bool(workflows),
                 f"{study}: training workflow missing (preflight must run before fitting)")
             combined="\n".join(p.read_text() for p in workflows)
-            demand("validate_research_parity.py --manifest" in combined
-                   and "--phase preflight" in combined and "--phase final" in combined,
-                   f"{study}: workflow must gate before first fit AND after actual compute measurement")
+            independent_stage_hooks = (
+                "validate_research_parity.py --manifest" in combined
+                and "--phase preflight" in combined and "--phase final" in combined
+                and combined.count("--reward-evidence") >= 2)
+            audited_launcher = (
+                "scripts/run_qualified_research.py" in combined
+                and "--prefit-evidence" in combined and "--final-evidence" in combined
+                and "--prefit-manifest" in combined and "--final-manifest" in combined)
+            demand((independent_stage_hooks or audited_launcher)
+                   and "TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX" in combined,
+                   f"{study}: runner must block optimizer on signed independent "
+                   "source/reward/ACL prefit evidence and block postfit promotion "
+                   "without signed factual goal/reward/checkpoint evidence")
         print(json.dumps({"study":study,"preflight":result},sort_keys=True))
     return studies
 
@@ -315,6 +360,7 @@ def main():
     cli.add_argument("--deployed-parameters",type=int,
                      help="Optional complete learned parameter count for standalone prefit/final guard")
     cli.add_argument("--phase",choices=("preflight","final"),default="preflight")
+    cli.add_argument("--reward-evidence", help="evaluator-signed attestation JSON; required for prospective fits")
     args=cli.parse_args()
     try:
         if args.model_parameters is not None:
@@ -324,13 +370,19 @@ def main():
                               "trainable_parameters":args.model_parameters,
                               "deployed_parameters":args.deployed_parameters},sort_keys=True))
         elif args.manifest:
-            r=check_manifest(json.loads(Path(args.manifest).read_text()),args.phase)
+            r=check_manifest(
+                json.loads(Path(args.manifest).read_text()), args.phase,
+                reward_attestation=(
+                    json.loads(Path(args.reward_evidence).read_text())
+                    if args.reward_evidence else None),
+                trusted_reward_public_key_hex=__import__("os").environ.get(
+                    "TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX"))
             print(json.dumps(r,sort_keys=True))
         else:
             studies=check_changed(args.check_changed,Path.cwd())
             print(json.dumps({"status":"PASS","registered_changed_studies":studies},
                              sort_keys=True))
-    except (ParityError,ValueError,KeyError,json.JSONDecodeError,subprocess.CalledProcessError) as e:
+    except (ParityError,ValueError,KeyError,OSError,json.JSONDecodeError,subprocess.CalledProcessError) as e:
         print("RESEARCH_PARITY_HARD_FAILURE: "+str(e),file=sys.stderr)
         return 2
     return 0

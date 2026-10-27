@@ -14,6 +14,12 @@ automatically on *every pull request* to `main` or `master`, and on
   architecture introspection, memory tomography, local autograd input
   dependencies, gradient-conflict and experiment-receipt falsifiers, plus
   batched-versus-single-entity isolation and local runtime instrumentation.
+- `.github/workflows/research-anticheat.yml` also runs a constructed
+  reward-hacking negative control and architecture-independent tests for
+  reward/goal recomputation, source and evaluator asset tampering, reward
+  noninterference, subgroup goal/cost/safety regressions, and missing
+  independent evidence. This **blocks reward-based scientific promotion**
+  only when a real runner supplies all five required verifiers.
 - Existing `.github/workflows/ci.yml` remains the complete Python test
   suite, including both suites and the provenance test-count checker.
 
