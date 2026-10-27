@@ -1,0 +1,80 @@
+name: PAR-TIME-002 genuine source and complete-training-step preflight NO FIT
+on:
+  push:
+    branches:
+      - research/partime002-authentic-compute-preflight-2026-10-27
+    paths:
+      - '.github/workflows/partime002-real-preflight.yml'
+      - 'scripts/partime002_real_source.py'
+      - 'scripts/partime002_real_compute_preflight.py'
+      - 'research/parallel-six/PAR-TIME-002-PROTOCOL.json'
+  pull_request:
+    paths:
+      - '.github/workflows/partime002-real-preflight.yml'
+      - 'scripts/partime002_real_source.py'
+      - 'scripts/partime002_real_compute_preflight.py'
+      - 'research/parallel-six/PAR-TIME-002-PROTOCOL.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: partime002-real-source-prefit-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  original-real-source-math-preflight-no-train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU PyTorch
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Read-only source and script syntax preflight
+        run: |
+          python -m py_compile scripts/partime002_real_source.py scripts/partime002_real_compute_preflight.py
+          test ! -e research/replay-bundles/PAR-TIME-002
+          test ! -e research/parallel-six/PAR-TIME-002-FIT-PLAN.json
+      - name: Retrieve original publisher ZIP from immutable existing repository commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/partime002-source
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/partime002-source/PRSA2017_original.zip
+          echo "Original SHA: $(sha256sum /tmp/partime002-source/PRSA2017_original.zip)"
+          test "$(sha256sum /tmp/partime002-source/PRSA2017_original.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: No-fit genuine source B4 T12 forward backward clipping and zero-rate AdamW audit
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.partime002_real_compute_preflight \
+            --source /tmp/partime002-source/PRSA2017_original.zip \
+            --output /tmp/partime002-real-source-preflight.json
+          python - <<'PY'
+          import json
+          p=json.load(open('/tmp/partime002-real-source-preflight.json'))
+          assert p['source']['authentic_source_verified']
+          assert p['params']==[96303,96639]
+          assert p['has_run_actual_training'] is False
+          assert p['new_checkpoint_count']==0
+          assert p['operator_comparison']['FULL_training_math_FLOP_parity_CERTIFIED'] is False
+          assert p['operator_comparison']['candidate_training_authorized'] is False
+          print('PREFIT_ORIGINAL_SOURCE_VALIDATED; TRAINING_NOT_AUTHORIZED')
+          PY
+      - name: Upload source-only trace without allowing silent model training
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: PAR-TIME-002-real-source-no-fit-profile
+          path: /tmp/partime002-real-source-preflight.json
+          if-no-files-found: warn
+      - name: Confirm no trained model or protected test artifacts
+        run: |
+          test ! -e research/replay-bundles/PAR-TIME-002
+          test ! -e research/parallel-six/PAR-TIME-002-FIT-PLAN.json
+          echo 'Training and 2015-2017 source target access remain disabled.'
