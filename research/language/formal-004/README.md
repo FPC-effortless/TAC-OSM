@@ -150,3 +150,37 @@ but are **not yet directly kernel-proven in Lean**.
 No branch changes the original PyTorch model, checkpoints, training budgets
 or historical negative experimental results. Real-text matched-parameter,
 matched-budget evidence is required before promoting any candidate.
+
+## TAC-LANG-REPAIR-018: empirical untrained-delay retrieval safety
+
+The original model's historical loss was trained for **exactly lag 64**.
+Earlier treating all lags <=64 as qualified was UNSUPPORTED and has been
+corrected. The source-exact adapter `selective_history.py` trusts
+**only lag=64**, abstains for every other delay, and if a categorical
+result is requested returns a strictly positive 128-token prior derived
+from the **FIT documents only** (Dirichlet-style add-0.5 smoothing).
+
+`audit_selective_history_dev.py` verifies all 36 genuine Vim9.1 chapter
+SHA256 digests, the original model source, 10 original checkpoint byte
+hashes, parameters and sample histories; it replays the **exact exposed
+DEV sampler** without retraining or accessing independent TEST.
+`REPAIR_018_DEV_REPLAY.md` contains the 10-pair results:
+mean original lag64 3.460926 nats vs FIT prior 3.531907;
+mean original lag96 5.219261 vs FIT prior 3.542343,
+with the FIT-only fallback ahead at lag96 for all 10 original checkpoints.
+The 96 improvement is 1.676918 nats on the *reused DEV*.
+
+The fallback is a source-derived **uncertainty safeguard**, not a new
+historical memory or evidence of long-context retrieval. Its 128
+nonlearned float32 probability values (512 bytes) are accounted for
+in addition to original 100,680 learned parameters and 408 persistent
+floating values. It cannot use the historical target, future tokens
+or DEV scores in its routing decision.
+
+The companion PNDS mathematical contract
+`LanguageSelectiveRetrieval.lean` proves exact trained-delay selection,
+positive and normalized fallback and convex mixture mass/floor; it is
+an exact-real source contract, not model calibration or IEEE validation.
+The expanded 73-theorem audit must be green before reporting it
+as verified. Real-text independently reserved TEST and matched training
+for genuine 96-lag retrieval remain open.
