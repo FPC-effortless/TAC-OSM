@@ -1,0 +1,32 @@
+name: ARC3 public-development baseline contract (fixture only)
+on:
+  push:
+    branches:
+      - research/arc3-public-development-baseline-2026-10-27
+  pull_request:
+    paths:
+      - 'scripts/arc3_public_baseline.py'
+      - 'tests/test_arc3_public_baseline.py'
+      - 'docs/ARC3_PUBLIC_BASELINE.md'
+      - '.github/workflows/arc3-public-baseline.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  arc3-fixture-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Constructed harness tests, no hidden scoring
+        run: python -m unittest discover -s tests -p 'test_arc3_public_baseline.py' -v
+      - name: Verify code compiles
+        run: python -m py_compile scripts/arc3_public_baseline.py tests/test_arc3_public_baseline.py
+      - name: Verify pinned official SDK interface without loading any game
+        run: |
+          python -m pip install 'arc-agi==0.9.9'
+          python -c "from arc_agi import Arcade, OperationMode; from arcengine import GameAction; assert hasattr(OperationMode, 'OFFLINE'); assert GameAction.ACTION1.is_complex() is False; print('Official SDK imports and basic action API: PASS; actual game NOT RUN')"
+
