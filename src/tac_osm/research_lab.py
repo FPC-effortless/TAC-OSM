@@ -23,7 +23,7 @@ SCHEMA = "tac-osm.lab-run.v1"
 _ALLOWED_STAGE = {"fixture", "source_audit", "training", "evaluation", "analysis", "literature"}
 _ALLOWED_EVIDENCE = {"constructed_fixture", "historical_unverified", "source_only", "runner_report"}
 _NAME = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,99}$")
-_SECRET = re.compile(r"(?i)(token|secret|password|api[_-]?key|credential|private[_-]?key|authorization)")
+_SECRET = re.compile(r"(?i)(access[_-]?token|auth[_-]?token|bearer|secret|password|api[_-]?key|credential|private[_-]?key|authorization)")
 
 
 class LabError(ValueError):
