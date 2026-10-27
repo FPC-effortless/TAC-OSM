@@ -1,0 +1,75 @@
+{
+  "id": "PAR-MEM-010",
+  "schema": "pnds.source_aligned_formal_contract.v1",
+  "source": {
+    "repository": "FPC-effortless/TAC-OSM",
+    "commit": "3b278acc9daf587fd20892e470c857bfc933248e",
+    "pull_request": 520,
+    "sha256": {
+      "src/tac_osm/variants/source_aligned_parallel_world.py": "b876211eafb011c25ce92620c84bd74de31128759b0d20e17b6550782657568f",
+      "src/tac_osm/variants/parallel_time_age_world.py": "09975f4bc0329d5effaa2959da52879d16cc14ff9c58be8ad419aa4aa6fdced2",
+      "src/tac_osm/variants/parallel_residual_world.py": "c58ea88b720d6672ce5494e16665b73119a77cee14ae3ea45580cbb4e15e80e5",
+      "src/tac_osm/variants/parallel_continuous_world.py": "a2f043f75530a1966fa2a704c09edc205d17fd033d4d64278a53f2bb63b6e4b1",
+      "src/tac_osm/variants/parallel_affine_memory.py": "dc415571310b7fc84b2d05edadbeb93220c002e03a86c4ad7dbddc169909b6ce"
+    },
+    "previous_implementation_commit": "0c97e852cbdee1655a139e9ac203114ec6c692d6",
+    "revision": "PAR-MEM-010-NUM-001"
+  },
+  "ancestry": [
+    "PAR-TIME-001",
+    "DIAGKEY004",
+    "ME100",
+    "LATFUSE004",
+    "LATFUSE018"
+  ],
+  "default_geometry": {
+    "observation": 14,
+    "observed_action": 14,
+    "embedding": 48,
+    "fast_sum": 88,
+    "native_memory": [
+      8,
+      8
+    ],
+    "aligned_memory": [
+      2,
+      16,
+      8
+    ],
+    "persistent_float_values": 410,
+    "trainable_parameters": 98326
+  },
+  "lean": {
+    "specification": "PNDS/SourceAlignedModel.lean",
+    "operator_proofs": "PNDS/SourceAlignedVerification.lean",
+    "inherited_contracts": "PNDS/SourceAlignedMemory.lean",
+    "audit": "AuditSourceAligned.lean"
+  },
+  "python": {
+    "complete_forward_reference": "foundation/v1/source_aligned_model_math.py",
+    "exact_operator_reference": "foundation/v1/source_aligned_memory_math.py",
+    "exact_tests": "tests/test_source_aligned_verification_math.py",
+    "source_correspondence_runner": "scripts/verify_parmem010_math.py",
+    "source_correspondence_receipt": "research/parallel-six/PAR-MEM-010-MATH-CORRESPONDENCE.json",
+    "forward_reference_sha256": "5970ee117af0669dd8cdcc07a669f1fc5dfccb694b8192a74cd936e26edf9862"
+  },
+  "mathematical_status": "EXACT_REAL_SPEC_AND_MEMORY_PROOFS_WITH_NUMERICAL_SOURCE_CHECKS",
+  "complete_formal_verification": false,
+  "known_limits": [
+    "ordinal address and router repeat every 155701 events",
+    "chronology guard does not attest observation membership",
+    "masked writes preserve associative memories, not all stream metadata or fast sum",
+    "fixed-size state cannot promise arbitrary exact historical recall",
+    "parallel masked-write roundoff corrected by last-admitted-prefix gather in source revision NUM-001"
+  ],
+  "open_obligations": [
+    "formal refinement of concrete Torch Blelloch upsweep/downsweep and tensor strides",
+    "machine-checked IEEE/transcendental error bounds over specified deployment ranges and backends",
+    "whole-graph automatic-differentiation proof including epsilon and clamp boundaries",
+    "independently attested source observation membership and permissions",
+    "trained genuine historical-content retrieval and forecasting advantage",
+    "probability calibration or causal-intervention semantics (not provided by this point regressor)"
+  ],
+  "training_done": false,
+  "real_world_capability_inferred": false
+}
