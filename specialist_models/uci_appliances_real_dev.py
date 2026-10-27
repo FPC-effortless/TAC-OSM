@@ -76,7 +76,7 @@ def original_rows(zip_bytes: bytes):
             if not {"date", "Appliances"}.issubset(fields):
                 raise SourceError("unexpected original dataset schema")
             # Use exactly the first 80% (including FIT/CAL/DEV). The untouched
-            # future TEST tail is not read, scored, printed or inspected.
+            # future TEST tail is not parsed, scored, printed or inspected.
             prior = None
             out = []
             for idx, row in enumerate(reader):
@@ -186,7 +186,7 @@ def score_source(zip_bytes):
         "original_case_count_publisher": ROWS,
         "fit_boundary_index_unused": FIT_END, "calibration_end_index": CAL_END,
         "exposed_dev_end_index": DEV_END, "protected_test_start_index": DEV_END,
-        "protected_test_read": False, "horizon_steps": H,
+        "protected_test_targets_parsed": False, "horizon_steps": H,
         "calibration_cases": len(cal), "dev_cases": len(dev),
         "selected_using_cal_only": selected, "calibration_mae_wh": cal_mae,
         "calibration_q_90_wh": q, "calibration_quantile_rank": rank,
