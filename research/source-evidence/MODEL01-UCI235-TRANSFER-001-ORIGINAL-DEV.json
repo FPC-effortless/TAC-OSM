@@ -1,0 +1,139 @@
+{
+  "complete_scored_examples": 2008,
+  "eval_window_end_exclusive": "2007-01-16T00:00:00",
+  "eval_window_start": "2007-01-01T00:00:00",
+  "external_persistence_mae_wh": 112.74709495351931,
+  "external_same_time_prev_day_mae_wh": 199.71221779548492,
+  "external_source_rows": {
+    "accepted_minute_rows": 43200,
+    "complete_ten_minute_blocks": 4317,
+    "missing_or_incomplete_ten_minute_blocks": 3,
+    "missing_power_minute_rows": 5,
+    "raw_timestamp_semantics": "original source naive local wall time, timezone not verified"
+  },
+  "frozen_original_ridge_mae_wh": 138.49431022867225,
+  "harmonization": "minute-average kilowatts integrated over ten minutes; NOT identical target",
+  "horizon_minutes": 60,
+  "independent_same_task_confirmation": false,
+  "interpretation": "out-of-domain transfer stress only; new target semantics and source origin prevent same-task superiority claim",
+  "observed_original_calibrated_90_interval_coverage": 0.5109561752988048,
+  "old_source": "UCI374 single-household appliances consumption Wh per 10min",
+  "original_calibrated_interval_halfwidth_wh": 92.532708685843,
+  "original_model_sha256": "cb756a734b026602bb13f6af11b08711e2029f78aad1e95bb469d55131bc6c82",
+  "per_day_means": [
+    {
+      "day": "2007-01-01",
+      "n": 144,
+      "persistence_mae_wh": 58.60277777777776,
+      "ridge_mae_wh": 154.90420193466556
+    },
+    {
+      "day": "2007-01-02",
+      "n": 144,
+      "persistence_mae_wh": 66.74444444444443,
+      "ridge_mae_wh": 67.4290669870176
+    },
+    {
+      "day": "2007-01-03",
+      "n": 144,
+      "persistence_mae_wh": 74.40995370370366,
+      "ridge_mae_wh": 84.4175476372676
+    },
+    {
+      "day": "2007-01-04",
+      "n": 144,
+      "persistence_mae_wh": 131.84513888888884,
+      "ridge_mae_wh": 200.03151678225396
+    },
+    {
+      "day": "2007-01-05",
+      "n": 144,
+      "persistence_mae_wh": 91.34236111111113,
+      "ridge_mae_wh": 152.32399163534814
+    },
+    {
+      "day": "2007-01-06",
+      "n": 144,
+      "persistence_mae_wh": 88.5032407407408,
+      "ridge_mae_wh": 87.44611326019398
+    },
+    {
+      "day": "2007-01-07",
+      "n": 144,
+      "persistence_mae_wh": 151.5032407407408,
+      "ridge_mae_wh": 148.78460553825343
+    },
+    {
+      "day": "2007-01-08",
+      "n": 144,
+      "persistence_mae_wh": 102.2780092592592,
+      "ridge_mae_wh": 133.00672987643324
+    },
+    {
+      "day": "2007-01-09",
+      "n": 144,
+      "persistence_mae_wh": 129.68935185185182,
+      "ridge_mae_wh": 126.59040599118254
+    },
+    {
+      "day": "2007-01-10",
+      "n": 144,
+      "persistence_mae_wh": 149.06759259259263,
+      "ridge_mae_wh": 153.91186733014845
+    },
+    {
+      "day": "2007-01-11",
+      "n": 144,
+      "persistence_mae_wh": 126.38194444444441,
+      "ridge_mae_wh": 145.6464221960612
+    },
+    {
+      "day": "2007-01-12",
+      "n": 144,
+      "persistence_mae_wh": 79.10624999999999,
+      "ridge_mae_wh": 89.78156073884702
+    },
+    {
+      "day": "2007-01-13",
+      "n": 144,
+      "persistence_mae_wh": 168.98124999999993,
+      "ridge_mae_wh": 224.3323696246541
+    },
+    {
+      "day": "2007-01-14",
+      "n": 110,
+      "persistence_mae_wh": 160.88121212121214,
+      "ridge_mae_wh": 176.20562711923893
+    },
+    {
+      "day": "2007-01-15",
+      "n": 26,
+      "persistence_mae_wh": 170.83205128205128,
+      "ridge_mae_wh": 155.1782470539294
+    }
+  ],
+  "schema": "model01-uci235-independent-source-transfer-stress-v1",
+  "scientific_promotion": "NOT_QUALIFIED",
+  "scored_days": 15,
+  "source_doi": "10.24432/C58K54",
+  "source_index_phase": "relative external START, unaligned to original household clock",
+  "source_license": "CC BY 4.0; original Hebrail & Berard attribution required",
+  "source_url": "https://archive.ics.uci.edu/static/public/235/individual+household+electric+power+consumption.zip",
+  "source_zip_sha256": "9f84b46ade8a2d8e1286ec4b2b6c2987a45a755c59f263be3b3b3d10dfbda3ff",
+  "study": "FROZEN_UCI374_MODEL_ON_DIFFERENT_HOUSEHOLD_AND_TARGET",
+  "target_equivalence": false,
+  "trained_or_calibrated_during_transfer": false,
+  "transfer_source": "UCI235 different-household total active energy Wh per 10min",
+  "warnings": [
+    "source is published retrospective data, operational available-at time unverified",
+    "all development choices frozen before opening source rows in this run; results now exposed",
+    "missing ten-minute blocks and any crossing 145-step input windows are dropped without imputation",
+    "naive local timestamps over December-January do not establish timezone mapping",
+    "new site, different target; no apples-to-apples model accuracy superiority",
+    "overlapping horizons, correlated minutes and 15 calendar days are not independent iid cases",
+    "original nominal-90 interval is not transfer-calibrated and no guarantee applies"
+  ],
+  "evidence_recovered_from": "Original Actions stdout full JSON rendered as Git-owned source receipt; not byte-identical Actions artifact",
+  "source_workflow": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40478750512",
+  "original_raw_source_committed": false
+}
