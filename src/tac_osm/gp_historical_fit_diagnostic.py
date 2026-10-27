@@ -61,6 +61,7 @@ class HistoricalFITSidecar:
         self.square_error={arm:0.0 for arm in ARMS}
         self.labels_missing=0
         self.updates=0
+        self._serial=0
         self.last_at=-math.inf
         self.last_issue_time=-math.inf
 
@@ -119,17 +120,19 @@ class HistoricalFITSidecar:
         rid=event["row_id"]
         if rid not in self.issued:
             raise ValueError("outcome lacks pre-existing original neural forecast")
-        entity,feat,base,issued_at,preds=self.issued.pop(rid)
+        entity,feat,base,issued_at,preds=self.issued[rid]
         if now<=issued_at:
             raise ValueError("label cannot become available at/before decision")
         y=self._num(event["truth"])
+        del self.issued[rid]
         for arm in ARMS:
             error=preds[arm]-y
             self.abs_error[arm]+=abs(error)
             self.square_error[arm]+=error*error
             self.counts[arm]+=1
         # The true residual cannot affect any prior evaluation output.
-        heapq.heappush(self.pending,(now,len(self.seen),entity,feat,y-base,issued_at))
+        heapq.heappush(self.pending,(now,self._serial,entity,feat,y-base,issued_at))
+        self._serial+=1
 
     def missing_label(self,row_id):
         """Explicitly report a missing original measured outcome; no GP update."""
