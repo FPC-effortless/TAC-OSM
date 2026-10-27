@@ -69,7 +69,7 @@ def main(a):
             if order.hexdigest()!=prior['sample_sha256']:raise ValueError('sample order mismatch with original')
             metrics=evaluate(net,dev);ck={'model':net.state_dict(),'optimizer':opt.state_dict(),'seed':seed,'mode':mode,'protocol':pp,'sample_sha256':order.hexdigest(),'torch_rng':torch.get_rng_state(),'numpy_rng':rng.bit_generator.state,'python_rng':random.getstate()}
             path=out/f'mlag_{mode}_{seed}.pt';torch.save(ck,path)
-            saved=torch.load(path,map_location='cpu',weights_only=False);check=ParallelTACLanguage(decoder=75,position_mode='multiscale',gate_mode=mode);check.load_state_dict(saved['model'],strict=True)
+            saved=torch.load(path,map_location='cpu',weights_only=True);check=ParallelTACLanguage(decoder=75,position_mode='multiscale',gate_mode=mode);check.load_state_dict(saved['model'],strict=True)
             other=evaluate(check,dev)
             if any(abs(metrics[k]-other[k])>1e-6 for k in metrics):raise ValueError('cold reload mismatch')
             baseline={'char_nll':prior['heldout']['nll_nats'],'hist64_nll':prior['historical']['64']['nll'],'hist96_nll':prior['historical']['96']['nll'],'hist64_acc':prior['historical']['64']['accuracy'],'hist96_acc':prior['historical']['96']['accuracy']}
