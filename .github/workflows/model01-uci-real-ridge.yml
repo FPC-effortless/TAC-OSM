@@ -1,0 +1,37 @@
+name: Model01 genuine UCI374 classical FIT/CAL/DEV original checkpoint (no TAC neural fit)
+on:
+  push:
+    branches:
+      - product/sensor-forecast-reliability-2026-10-27
+    paths:
+      - 'specialist_models/uci_appliances_ridge_dev.py'
+      - 'tests/test_uci_appliances_ridge_dev.py'
+      - '.github/workflows/model01-uci-real-ridge.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-classical-fit-dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify fixed FIT-only normalizer/weights and leakage regression (constructed only)
+        run: python -m unittest discover -s tests -p test_uci_appliances_ridge_dev.py -v
+      - name: Fit classical candidate only on pinned ORIGINAL UCI374 FIT, calibrate on CAL, score exposed DEV
+        run: |
+          python specialist_models/uci_appliances_ridge_dev.py \
+            --out-checkpoint original_product_ridge.json \
+            --out-report original_product_ridge_dev.json
+      - name: Preserve complete candidate checkpoint and DEV receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-uci374-classical-dev-checkpoint-and-score
+          path: |
+            original_product_ridge.json
+            original_product_ridge_dev.json
+          if-no-files-found: error
+          retention-days: 14
