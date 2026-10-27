@@ -129,6 +129,8 @@ class TimeAwareParallelCore(ParallelTACWorld):
             raise ValueError("typed source dimensions incorrect")
         B,T=elapsed_dt.shape
         now=elapsed_dt.cumsum(dim=1)
+        if not torch.isfinite(now).all().item():
+            raise ValueError("elapsed clock overflow")
         written_time=torch.where(write_mask,now,torch.zeros_like(now)).cummax(dim=1).values
         old_written=F.pad(written_time[:,:-1],(1,0))
         prior_count=F.pad(write_mask.to(torch.int64).cumsum(dim=1)[:,:-1],(1,0))
