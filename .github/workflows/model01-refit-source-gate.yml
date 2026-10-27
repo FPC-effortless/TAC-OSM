@@ -1,0 +1,32 @@
+name: Model01 REFIT publisher-shaped appliance source contract (no real data)
+on:
+  push:
+    branches:
+      - research/model01-refit-appliance-source-contract-2026-10-27
+    paths:
+      - 'specialist_models/model01_refit_source_gate.py'
+      - 'tests/test_model01_refit_source_gate.py'
+      - 'research/registrations/MODEL01-REFIT-SOURCE-001.md'
+      - '.github/workflows/model01-refit-source-gate.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/model01_refit_source_gate.py'
+      - 'tests/test_model01_refit_source_gate.py'
+      - 'research/registrations/MODEL01-REFIT-SOURCE-001.md'
+      - '.github/workflows/model01-refit-source-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  honest-refit-source-only-converter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify constructed IAM source and zero-imputation uncertainty gates
+        run: python -m unittest discover -s tests -p 'test_model01_refit_source_gate.py' -v
+      - name: Compile reference converter
+        run: python -m py_compile specialist_models/model01_refit_source_gate.py
