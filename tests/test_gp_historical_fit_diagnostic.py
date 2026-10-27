@@ -31,9 +31,9 @@ class GenuineFitContractFalsifiers(unittest.TestCase):
             r.issue(issue("first",0))
         a.label(label("first",1,2))
         b.label(label("first",1,2e6))
-        self.assertEqual(a.issue(issue("later",2,"a")),
-                         a.issue if False else a.issued["later"][4])
-        self.assertNotEqual(a.issued["later"][4]["native_memory_gp"],
+        later_a=a.issue(issue("later",2,"a"))
+        self.assertEqual(later_a,a.issued["later"][4])
+        self.assertNotEqual(later_a["native_memory_gp"],
                             b.issue(issue("later",2))["native_memory_gp"])
 
     def test_original_issue_has_no_truth_or_target_mask(self):
