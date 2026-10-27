@@ -50,7 +50,7 @@ class ReferenceModel01Tests(unittest.TestCase):
             c.close()
 
     def test_original_git_weights_and_frozen_uncertainty(self):
-        self.assertEqual(m.ORIGINAL_MODEL_SHA256,len(m.ORIGINAL_MODEL_SHA256)*"0" if False else m.ORIGINAL_MODEL_SHA256)
+        self.assertEqual(len(m.ORIGINAL_MODEL_SHA256),64)
         self.assertAlmostEqual(self.q,92.532708685843)
         self.assertEqual(self.model["fit_examples"],9717)
 
@@ -59,7 +59,8 @@ class ReferenceModel01Tests(unittest.TestCase):
         sample=req(i)
         actual=m.predict(self.model,self.q,sample)
         window=sample["last_145_energy_wh"]
-        true_original=original.forecast(self.model,window,i)  # requires i > 144; same 145 values
+        global_values=[0.]*(i-144)+window
+        true_original=original.forecast(self.model,global_values,i)  # same 145 available observations
         self.assertAlmostEqual(actual["prediction_wh"],true_original,places=12)
         self.assertEqual(actual["action_authority"],"ADVISORY_ONLY")
         self.assertEqual(actual["deployment_status"],"LOCAL_REFERENCE_ONLY")
