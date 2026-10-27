@@ -57,7 +57,7 @@ The secondary cohort does not rescue either associative specificity failure. No 
 - All four checkpoints and full per-case outputs/targets/masks preserved in new bundle HISTORY-QUERY016, commit e0aaf943eb704334bb8ee414c965152fb2129901. Historical LATFUSE018 and older checkpoints/results untouched. Fresh-process source/checkpoint inference replay PASS exactly. RESULTS SHA25688e2e765e5f6c20cfdbee9d1a2897c96972f85074ef3b94700032b545208b262.
 - Fit/replay artifact12730737461 SHA2561e2747a500883f7b8c0f1e1b8b4f934ef3d834ec13857e69b1dfbf0799e81b2f. Durable checkpoint commit is retained beyond artifact expiry.
 - PNDS draft48, formulation4d6c1cb8: Lean build/axiom inspection and Python loss equations/tests pass. Constructed original loss/reference agreement within1e-6 and absent-target loss gradients zero. Full original inference/write/read graph IEEE/AD/source equivalence remains OPEN; no mathematical or scientific completion inferred.
--1222 local engineering tests PASS, including unknown differing math, mismatched budget/recipe, actual batch-fingerprint tampering and genuine original graph constructed-input checks. These engineering tests are not performance evidence.
+- 1,222 local engineering tests PASS, including unknown differing math, mismatched budget/recipe, actual batch-fingerprint tampering and genuine original graph constructed-input checks. These engineering tests are not performance evidence.
 
 ## Limits and next capability blocker
 
@@ -75,3 +75,21 @@ python scripts/train_history_query_diverse.py --mode replay --implementation-roo
 ```
 
 See draft TAC PR505, PNDS PR48 and Issue472. No merge has occurred.
+
+## Cross-runner replay limitation and numerical profile
+
+The original training-job fresh-process replay passed exactly. A separate
+runner (run40496147640, code a7b7d15f) failed exact comparison before any
+result replacement or retraining. That original failure is preserved; its
+root cause has not been isolated. A subsequent separate-runner full-field
+diagnosis (run40496709592, code e7886d37) reproduced ALL source identities,
+input hashes, predictions, masks, targets and metrics exactly for all four
+models and both cohorts: zero mismatches, no tolerance introduced. Its full
+diagnostic receipt is CROSS_RUNNER_DIAGNOSIS.json (Torch2.14.1+cpu, AVX2).
+
+Future replay pins Ubuntu24.04, CPU Torch2.14.1, ATen/MKL/oneDNN AVX2 and
+single CPU threads, with explicit runtime assertions and fail-closed exact
+comparison. This constrains numerical execution rather than changing data,
+weights, code, scores or tolerances. General arbitrary-runner bitwise
+portability remains OPEN; a later exact pass does not erase the earlier
+failure. The negative scientific gates and original checkpoint hashes stand.
