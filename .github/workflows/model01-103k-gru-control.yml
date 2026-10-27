@@ -1,0 +1,87 @@
+name: MODEL01 original real UCI 102883p GRU reference vs trained 103252p TAC
+on:
+  push:
+    branches:
+      - research/model01-103k-gru-control-2026-10-27
+    paths:
+      - 'specialist_models/model01_matched_gru_control.py'
+      - 'tests/test_model01_matched_gru_control.py'
+      - 'research/registrations/MODEL01-GRU-103K-CONTROL-001.md'
+      - '.github/workflows/model01-103k-gru-control.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original-real-gru-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin CPU numerical model and source workflow dependencies
+        run: |
+          python -m pip install --no-cache-dir --disable-pip-version-check 'numpy==2.2.6'
+          python -m pip install --no-cache-dir --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate exact model size, parity sampler and original checkpoint restore mechanics
+        run: python -m unittest discover -s tests -p test_model01_matched_gru_control.py -v
+      - name: CPU-fit only original real exposed UCI374 source and commit three GRU originals
+        env:
+          MODEL01_GRU_REAL_FIT_ENABLE: EXPLICIT_CPU_DEV_CONTROL
+        run: |
+          set -euo pipefail
+          mkdir -p research/replay-bundles/MODEL01-GRU-103K-CONTROL-001
+          ORIGINAL=research/replay-bundles/MODEL01-GRU-103K-CONTROL-001/ORIGINAL_FIT.json
+          if [ -e "$ORIGINAL" ]; then
+            echo 'ORIGINAL_GIT_GRU_CONTROL_ALREADY_FITTED=TRUE (no refit)'
+          else
+            python specialist_models/model01_matched_gru_control.py --out "$ORIGINAL"
+            python - <<'PY'
+          import json
+          d=json.load(open('research/replay-bundles/MODEL01-GRU-103K-CONTROL-001/ORIGINAL_FIT.json'))
+          assert d['gru_learned_parameters']==102883
+          assert d['native_learned_parameters']==103252
+          assert d['relative_parameter_gap']<.01
+          assert d['training_steps']==160 and d['training_batch_size']==64
+          assert d['same_exact_source_minibatch_indices']
+          assert d['training_FLOPs_matched'] is False
+          assert d['protected_future_test_rows_parsed'] is False
+          assert len(d['runs'])==3
+          assert all(z['dev']['n']==1968 and len(z['checkpoint_b64_gzip'])>100000 for z in d['runs'])
+          print('THREE_REAL_MATCHED_SOURCE_GRU_CHECKPOINTS_GIT_READY')
+          print('ORIGINAL_GRU_DEV_SCORES='+json.dumps([
+          {'seed':z['seed'],'dev':z['dev'],'checkpoint_sha256':z['checkpoint_sha256']}
+          for z in d['runs']],sort_keys=True))
+          PY
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$ORIGINAL"
+            git commit -m "research: preserve three real source GRU 103k original control weights and scores"
+            git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}"
+          fi
+      - name: Original source replay of all 3 GRU checkpoints without fitting
+        run: |
+          python specialist_models/model01_matched_gru_control.py \
+            --replay-from research/replay-bundles/MODEL01-GRU-103K-CONTROL-001/ORIGINAL_FIT.json \
+            --out gru_original_no_fit_replay.json
+          python - <<'PY'
+          import json
+          d=json.load(open('gru_original_no_fit_replay.json'))
+          assert d['trained_during_replay'] is False
+          assert len(d['replay_reports'])==3
+          assert all(x['original_CAL_DEV_replayed_with_declared_numeric_tolerances'] and not x['trained_during_replay'] for x in d['replay_reports'])
+          print('THREE_ORIGINAL_REAL_GRU_CAL_DEV_NO_FIT_REPLAY=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: model01-original-source-gru-103k-parameter-sample-controlled
+          path: |
+            research/replay-bundles/MODEL01-GRU-103K-CONTROL-001/ORIGINAL_FIT.json
+            gru_original_no_fit_replay.json
+          if-no-files-found: warn
+          retention-days: 14
