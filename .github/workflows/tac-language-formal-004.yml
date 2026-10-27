@@ -32,7 +32,8 @@ jobs:
         working-directory: research/language/formal-004
         run: |
           python -m py_compile verify_original_archive.py
-          python -m unittest -v test_language_contract.py test_fullgraph_correspondence.py test_language_finite_difference.py test_language_nonlinear_derivatives.py test_language_tensor_rounding.py test_candidate_stable_address.py test_candidate_bounded_mean.py test_selective_history.py test_multilag_protocol.py test_gradient_guard.py
+          python -m unittest -v test_language_contract.py test_fullgraph_correspondence.py test_language_finite_difference.py test_language_nonlinear_derivatives.py test_language_tensor_rounding.py test_candidate_stable_address.py test_candidate_bounded_mean.py test_selective_history.py test_multilag_protocol.py test_gradient_guard.py test_long_context_preflight.py
+          python -m py_compile train_gradient_guard_real_fit.py audit_memory_paths.py audit_memory_gradients.py preflight_long_context.py audit_lag96_position_buckets.py
           python generate_tensor_rounding_receipt.py --output tensor_rounding_receipt.json
 
       - name: Preserve pinned constructed FP32 tensor receipt
