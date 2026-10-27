@@ -21,7 +21,7 @@ sys.path.insert(0,str(ROOT/"src"))
 from tac_osm.variants.source_aligned_parallel_world import SourceAlignedParallelWorld
 from tac_osm.variants.parallel_affine_memory import associative_affine_schedule
 
-SOURCE_SHA="3b278acc9daf587fd20892e470c857bfc933248e"
+SOURCE_SHA="63ea0aa67904fa946b9baa69d2e4b0cc23dc1c9a"
 SOURCE_FILES=["source_aligned_parallel_world.py","parallel_time_age_world.py",
               "parallel_residual_world.py","parallel_continuous_world.py",
               "parallel_affine_memory.py"]

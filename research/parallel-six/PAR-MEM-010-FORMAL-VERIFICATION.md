@@ -7,11 +7,13 @@ Those distinctions are recorded as OPEN obligations in
 `PAR-MEM-010-FORMAL-CONTRACT.json`; the record cannot be read as full-model
 mathematical completion.
 
-Source: TAC-OSM `3b278acc9daf587fd20892e470c857bfc933248e`
+Source: TAC-OSM `63ea0aa67904fa946b9baa69d2e4b0cc23dc1c9a`
 (`PAR-MEM-010-NUM-001`), descended from
 `0c97e852cbdee1655a139e9ac203114ec6c692d6` / draft PR #520.
 The numerical revision fixes masked-write byte preservation, without changing
 the exact-real equations, learned shapes, checkpoints or six-family registry.
+The native batch refinement is enabled only by the PAR-MEM-010 candidate; older
+time-aware model instances retain their original batch arithmetic by default.
 The independent executable reference pins this source SHA and the reciprocal
 contract pins SHA-256 hashes of all five contributing source files.
 
