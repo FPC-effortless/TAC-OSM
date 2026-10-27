@@ -1,0 +1,131 @@
+name: LATFUSE008 source-true two-seed paired historical-event exploratory training + independent replay
+
+on:
+  push:
+    branches: [research/latfuse008-matched-historic-query-control-2026-10-27]
+    paths: [".github/workflows/latfuse008-original-real-fit.yml"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: LATFUSE008-FIRST-SOURCE-TRUE-QUERY-CONTROL-PAIRED-FIT
+  cancel-in-progress: false
+
+jobs:
+  original-model-training-and-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: CPU PyTorch original physical-source reproducibility
+        run: |
+          python -m pip install --quiet pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Enforce ORIGINAL preregistration, no overwritten checkpoints and original source nofit
+        run: |
+          set -e
+          python -m py_compile scripts/latfuse008_paired_real_training.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse008/REAL_FIT_REGISTRATION.json \
+            --phase preflight
+          python scripts/sync_test_count.py --check
+          test ! -e research/replay-bundles/LATFUSE008
+          test -s research/mathematical-engineering/latfuse008/NOFIT_RESULTS.json
+      - name: Reconfirm source-visible paired model writer and no-memory read path
+        env:
+          PYTHONPATH: ".:src"
+        run: |
+          python -m pytest -q \
+            tests/test_latfuse008_noassoc_control.py \
+            tests/test_latent_fusion_007_historic_query.py
+      - name: Recover authentic legally original UCI501 source from exact pinned commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse008-original-fit
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse008-original-fit/PRSA2017_original.zip
+      - name: Original two seeds x two genuine physical historical query read-path arms, 32 real optimizer updates each
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse008_paired_real_training.py --mode fit \
+            --source /tmp/latfuse008-original-fit/PRSA2017_original.zip
+      - name: Independently check exact original checkpoint SHA/source/plans/updates and postfit single-study policy
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          root=Path("research/replay-bundles/LATFUSE008")
+          reg=json.loads(Path("research/mathematical-engineering/latfuse008/REAL_FIT_REGISTRATION.json").read_text())
+          report=json.loads((root/"RESULTS.json").read_text())
+          assert len(report["model_results"])==len(reg["models"])==4
+          assert report["total_optimizer_steps"]==128
+          assert report["source_sha256"]==reg["real_world_source"]["sha256"]
+          by={(r["seed"],r["arm"]):r for r in report["model_results"]}
+          for m in reg["models"]:
+              r=by[(m["seed"],m["architecture"])]
+              assert r["optimizer_updates"]==32
+              c=r["model_contract"]
+              assert c["trainable_parameters"]==m["trainable_parameters"]==99390
+              assert c["deployed_parameters"]==m["deployed_parameters"]==99390
+              assert c["original_nominal_memory_bytes"]==6800
+              pt=root/f"seed-{r['seed']}"/r["arm"]/"final.pt"
+              digest=hashlib.sha256(pt.read_bytes()).hexdigest()
+              assert digest==r["original_checkpoint_sha256"]
+              m["measured"]=dict(trainable_parameters=99390,deployed_parameters=99390,
+                                 checkpoint_sha256=digest)
+          (root/"POSTFIT_PARITY.json").write_text(json.dumps(reg,indent=2,sort_keys=True)+"\n")
+          PY
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE008/POSTFIT_PARITY.json --phase final
+      - name: No fit original read-only checkpoint reload and score/array replay
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse008_paired_real_training.py --mode replay \
+            --source /tmp/latfuse008-original-fit/PRSA2017_original.zip
+      - name: Commit original four model weights + AdamW/RNG/normalizer and real source predictions on isolated branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse008-matched-historic-query-control-2026-10-27
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/replay-bundles/LATFUSE008/
+          git diff --cached --quiet && exit 1
+          git commit -m "research: retain genuine paired historic query/noassoc original 2-seed real FIT, optimizer/RNG, source hash and arrays"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Truly independent Git checkout byte-perfect no-optimizer original replay
+        shell: bash
+        env:
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --single-branch --branch "$GITHUB_REF_NAME" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/latfuse008-original-clean
+          cd /tmp/latfuse008-original-clean
+          PYTHONPATH=".:src" python scripts/latfuse008_paired_real_training.py --mode replay \
+            --source /tmp/latfuse008-original-fit/PRSA2017_original.zip
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE008/POSTFIT_PARITY.json \
+            --phase final
+      - name: No architecture qualification claim
+        run: |
+          echo "Exploratory fit only. Full training+optimizer FLOP parity not independently audited."
+          echo "Original true station-hour outcomes/2014 internal eval; original 2015 DEV and 2016–17 numeric protected unopened."

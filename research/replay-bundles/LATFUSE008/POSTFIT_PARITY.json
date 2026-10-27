@@ -1,0 +1,79 @@
+{
+  "models": [
+    {
+      "architecture": "assoc_historic_query",
+      "deployed_parameters": 99390,
+      "measured": {
+        "checkpoint_sha256": "a0fb24eea9535e8fba9b2892c1a8bb41c015dbdbd8b1745c49d6d71fddf068b8",
+        "deployed_parameters": 99390,
+        "trainable_parameters": 99390
+      },
+      "seed": 80701,
+      "trainable_parameters": 99390
+    },
+    {
+      "architecture": "fast_slow_historic_query",
+      "deployed_parameters": 99390,
+      "measured": {
+        "checkpoint_sha256": "e591c2c75598ed017b1f4ce06e835ee609da7dded4301b5b4c75bf1442202d66",
+        "deployed_parameters": 99390,
+        "trainable_parameters": 99390
+      },
+      "seed": 80701,
+      "trainable_parameters": 99390
+    },
+    {
+      "architecture": "assoc_historic_query",
+      "deployed_parameters": 99390,
+      "measured": {
+        "checkpoint_sha256": "9b51387abaf8939b75529a35a40b99ac9fb58c7362281c5c9c0fd490922c0673",
+        "deployed_parameters": 99390,
+        "trainable_parameters": 99390
+      },
+      "seed": 80702,
+      "trainable_parameters": 99390
+    },
+    {
+      "architecture": "fast_slow_historic_query",
+      "deployed_parameters": 99390,
+      "measured": {
+        "checkpoint_sha256": "285bec2527e54c1fff1f016a5a53b42e65af65d602ac1cd78eec0aa301d0517c",
+        "deployed_parameters": 99390,
+        "trainable_parameters": 99390
+      },
+      "seed": 80702,
+      "trainable_parameters": 99390
+    }
+  ],
+  "protocol": {
+    "batch": 8,
+    "data_selection": "At most 8 distinct authentic high-PM2.5 event/same-site/hour ordinary pairs per train source, 2 per validation source. Greedy chronological original source-only deterministic raw thresholds, no model-dependent target selection, preserve full cohort hashes and original source sample-order hashes; fail if <12 train/eval pairs. Equal per-seed source cases and case order for both arms.",
+    "evaluation_period": "anchor May1-Jun10 2014, source-existing out-of-time 2014 FIT internal research diagnostic only; trained original prior/fact work has looked at some 2014 periods, not independent model qualification; 16/64/128/512-hour evaluation source outcomes all within original FIT Aug2014.",
+    "fairness": "same live parameter exactly, same state, same actual 88h training source/optimizer/data order and two seeds; supported-op FLOP gap0.00104%, but full training+optimizer FLOPs NOT proven. Must NOT claim a FAIR architecture comparison or promote superiority in absence of independently verified full FLOP equality.",
+    "loss": "single fixed observed-source full-history train loss: 0.8 masked normalized real +6 Gaussian NLL +0.2 absolute error + 1.0 genuine earlier event BCE, no key-angle or routing-head extra objective. Labels/targets after both model predictions, exactly same original source task/case order and model supervision per seed for both arms.",
+    "metrics": "balanced accuracy, source matched event-control pair ranking, Brier (constant prior0.25), per lag16/64/128/512, source-true+6 normalized 13-channel MAE/Gaussian NLL/persistence and PM2.5 physical MAE. No cherry picked seed, report all model checkpoint arrays and original metrics.",
+    "model_shas": "Original LATFUSE007 source historic clock event query; LATFUSE008 same exact inherited encoder/memory writer/forecast but historical query uses fast/slow multiplicative 16x16 features; all parameters active. Both start from independent-from-scratch exactly same seed initialization without imported prior checkpoints.",
+    "no_leak": "source known historical time and authorized station only at query; historic event class and future+6 outcomes never included in explicit query; all raw data normalized only from original 2013Mar..2014Feb source training predecessor, historic sensor at anchor legitimately flows through recurrent updates; no numeric 2015 DEV/2016-2017 protected parsing.",
+    "qualification": "Exploratory FIT only. Strict FULL training FLOPs not yet independently audited. Absolute architecture superiority/production gating forbidden even if observed head-to-head metrics appear stronger. Original controlled prefit genuine observed supported-operator FLOPs 209,663,861 versus209,666,037 (0.00104%), exact 99390 live parameters, identical 6800 bytes, identical read shape and source train/optimizer; these do NOT certify complete optimizer/other FLOPs.",
+    "real_labels": "Physical PM2.5 at anchor in original source >=150 ug/m3 denotes high event, <=35 ug/m3 ordinary. Matched same monitoring station and hour-of-day, source observed numeric raw, no future outcomes, >=24 hours separation. Current known historical calendar supplies date only, never event class or measured anchor concentration as an explicit query.",
+    "replay": "Save original per-step loss trace, all four final FP32 learned tensors/AdamW optimizer/RNG, source fixed past normalizer, source/code/case-order SHA256, 2014 eval prediction arrays and automatic no-refit clean checkout replay; do not retry based on results, preserve negative findings.",
+    "seeds": [
+      80701,
+      80702
+    ],
+    "stop": "No training if the source-only nofit original preflight or source-shape/model weight identity gates fail. Never parse previously exposed2015 or protected2016-2017 numeric rows. No second run/restart after first registered experimental fit.",
+    "total_optimizers": "four original 32-step AdamW fits, 128 total optimizer steps, 24 past preanchor observed +64 real continuation (88h total), real +6-hour target after forecast. AdamW lr0.0005, weight_decay0.001, grad_norm_clip1.0",
+    "training_period": "anchor March1-Apr18 2014, genuine source input final observation anchor+64, target+6 in original FIT before Sep1; March1 2014 FIT normalizer trained only on 2013Mar1..2014Mar1 previous historical source raw observed values, no May/July future statistics.",
+    "update_count": 32
+  },
+  "real_world_source": {
+    "license": "CC BY 4.0",
+    "name": "UCI Beijing Multi-Site Air Quality original physically recorded 12 monitoring stations 2013-2014",
+    "observed_real_outcomes": true,
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8"
+  },
+  "registered_before_first_fit": true,
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE008-PAIRED-REAL-SOURCE-EXPLORATORY-FIT",
+  "study_type": "single_model_training"
+}
