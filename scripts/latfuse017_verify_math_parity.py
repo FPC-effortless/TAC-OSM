@@ -37,7 +37,8 @@ def gate(j):
     for s in j["original_seed_pair_audit"]:
         differences=s["full_operator_shape_signature_excess_in_each_arm_preview"]
         excess=s["unmatched_operator_signature_counts"]
-        if len(differences)!=(excess["assoc_excess"]+excess["fastslow_excess"]):
+        if sum(item.get("assoc_only_calls",0)+item.get("fastslow_only_calls",0)
+               for item in differences)!=(excess["assoc_excess"]+excess["fastslow_excess"]):
             raise RuntimeError("TRUNCATED MISMATCH operator ledger; cannot bound")
         work={"assoc":0,"fastslow":0}
         for item in differences:
