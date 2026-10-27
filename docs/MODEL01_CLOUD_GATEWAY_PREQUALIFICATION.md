@@ -31,3 +31,14 @@ The server requires a >=32-character ASCII key from the environment; no default 
 Predecessor [localhost loopback measurement #40470088700](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40470088700) had 0.91ms p50 / 1.02ms p95 serial; these are **not** yet authenticated gateway or production cloud latency measurements.
 
 Implementation is stacked on [draft Model 1 #481](https://github.com/FPC-effortless/TAC-OSM/pull/481); original Git checkpoint and research failure/evaluation gates remain unchanged.
+
+## Actual authenticated loopback benchmark (October 27, 2026)
+
+[Source-pinned authenticated gateway CI #40476041423](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40476041423) passed **13 constructed security/auth tests** and ran a new end-to-end localhost HTTP+JSON measurement on the Linux x86_64, four reported CPUs GitHub Actions runner (Python 3.12.15), with a fresh ephemeral bearer token that was not printed or preserved.
+
+| Workload | Requests | p50 latency | p95 latency | p99 latency |
+| --- | ---: | ---: | ---: | ---: |
+| Authenticated, single client | 200 | 0.839 ms | 1.038 ms | 1.073 ms |
+| Authenticated, four concurrent clients | 300 | 4.241 ms | 6.323 ms | 7.117 ms |
+
+These are **measured local reference prototype results** and can change between GitHub virtual machines. They do not measure production network routing, TLS/auth proxy, real customer traffic, availability, server provisioning, egress costs, economic value or new-model predictive quality. The previous unauthenticated loopback measurements remain separately attributed to their older run.
