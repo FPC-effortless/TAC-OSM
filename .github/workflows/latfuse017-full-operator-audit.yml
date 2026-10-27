@@ -1,0 +1,76 @@
+name: LATFUSE017 original-source full forward backward optimizer tensor-operation parity inventory
+
+on:
+  push:
+    branches: [research/latfuse017-whole-training-op-audit-2026-10-27]
+    paths:
+      - ".github/workflows/latfuse017-full-operator-audit.yml"
+      - "scripts/latfuse017_full_aten_inventory.py"
+      - "research/mathematical-engineering/latfuse017/REGISTERED_OP_INVENTORY.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: latfuse017-source-fp32-no-fit-full-operator-audit
+  cancel-in-progress: false
+
+jobs:
+  original-genuine-source-full-aten-inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install CPU FP32 scientific tensor execution, no new neural fits
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Frozen original-source/no-fit scientific manifest before any data
+        run: |
+          python -m py_compile scripts/latfuse017_full_aten_inventory.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse017/REGISTERED_OP_INVENTORY.json \
+            --phase preflight
+          test ! -e research/mathematical-engineering/latfuse017/RESULTS.json
+      - name: Recover original genuine UCI501 source physical archive from exact prior authorized commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse017-authentic
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse017-authentic/PRSA2017_original.zip
+      - name: Same real source, two unmodified seeded original graphs full forward-back-clip-AdamW with zero learning rate
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse017_full_aten_inventory.py \
+            --source /tmp/latfuse017-authentic/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse017/RESULTS.json
+      - name: Preserve all source-real operator receipts and negative parity qualification boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse017-whole-training-op-audit-2026-10-27
+          test -s research/mathematical-engineering/latfuse017/RESULTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse017/RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: retain genuine source full ATen per-stage training operator inventory and optimizer lr0 receipts"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Honest parity boundary
+        run: |
+          echo "The full invoked tensor operator inventory includes forward, AD, clip and optimizer."
+          echo "Op shape and approximate primitive count are NOT exact backend FLOPs for transcendental kernels."
+          echo "No optimizer parameter update lr!=0, no actual neural training, no trained architecture superiority claim."
+          echo "Protected numeric source unopened, source owner and masks preserved."
