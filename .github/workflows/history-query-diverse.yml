@@ -1,0 +1,63 @@
+name: Query-diverse historical content research (internal CPU)
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-prefit:
+    if: github.head_ref == 'research/query-diverse-history-training-2026-10-27' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/research/query-diverse-history-training-2026-10-27')
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: fd201207cb76b30470f64e1fc1baecf9de44560d
+          path: original-content-code
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: CPU tools only
+        run: |
+          python -m pip install --quiet pytest numpy==2.3.3 ruff cryptography
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Accounting falsifiers and compute route
+        env:
+          PYTHONPATH: .:src
+        run: |
+          mkdir -p ci-artifacts/history-query016
+          python -m ruff check --select E9,F63,F7,F82 scripts/train_history_query_diverse.py src/tac_osm/research_operator_budget.py tests/test_research_operator_budget.py
+          python -m pytest -q tests/test_research_operator_budget.py
+          python scripts/phone_lab.py plan research/phone_queue/history-query016.json > ci-artifacts/history-query016/COMPUTE_DECISION.txt
+      - name: Download only original authorized source member
+        run: |
+          python - <<'PY'
+          import hashlib,io,json,urllib.request,zipfile
+          from pathlib import Path
+          r=json.loads(Path('research/mathematical-engineering/history_audit014/PUBLIC_SOURCE_RECEIPT.json').read_text())
+          with urllib.request.urlopen(r['download_url'],timeout=90) as response:
+              data=response.read()
+          with zipfile.ZipFile(io.BytesIO(data)) as z:
+              original=z.read(r['extracted_member'])
+          assert hashlib.sha256(original).hexdigest()==r['archive_sha256']
+          Path('/tmp/history-query016-original.zip').write_bytes(original)
+          PY
+      - name: Source-only freeze and unchanged-weight full budget preflight
+        if: hashFiles('research/mathematical-engineering/history_query016/FROZEN_PLAN.json') == ''
+        run: |
+          python scripts/train_history_query_diverse.py --mode prepare --implementation-root original-content-code --source /tmp/history-query016-original.zip --output ci-artifacts/history-query016
+      - name: Validate committed resource plan (no fit in this stage)
+        if: hashFiles('research/mathematical-engineering/history_query016/FROZEN_PLAN.json') != ''
+        run: |
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/history_query016/FAIR_COMPARISON.json --phase preflight
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: history-query016-source-prefit
+          path: ci-artifacts/history-query016/
+          if-no-files-found: warn
+          retention-days: 30

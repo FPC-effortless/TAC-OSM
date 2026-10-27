@@ -1,0 +1,39 @@
+{
+  "PNDS": "Inference graph unchanged original source. Revised objective companion Lean/Python; full graph IEEE/AD/source equivalence OPEN.",
+  "arms": [
+    "assoc_historic_query",
+    "fast_slow_historic_query"
+  ],
+  "causal_protocol": "Use original FIT-only pre-March2014 source normalization and causal last/age caches. Replay each original owner from anchor-23 through query=anchor+64. Both predictors receive only feature prefixes, never raw/targets/future feature rows. Query only original timestamps anchor+0,8,16,24,32,40,48,56. Scoring targets/masks are consulted after both model outputs. No oracle source WRITE keys.",
+  "checkpoint": "New immutable HISTORY-QUERY016 checkpoints include optimizer/RNG/source/order/recipe/losses/operator fingerprints; fresh-process actual-source replay.",
+  "evaluation": {
+    "bootstrap_draws": 4000,
+    "bootstrap_seed": 15015,
+    "gate": "BOTH seeds: positive centered skill AND >=5% all-query MAE gain vs collapsed clocks, circular wrong clocks, and matched fastslow; >=5% H64 MAE gain vs zero-matrix; each station-block-bootstrap95 lower gain>0.",
+    "no_tuning": true,
+    "primary": "2014-07-01..2014-08-15 exclusive, station96h grid, genuine H64 and forecast targets observed",
+    "score": "window weighted, genuine observed targets only",
+    "secondary": "original May1..June10 station96h grid"
+  },
+  "implementation_commit": "fd201207cb76b30470f64e1fc1baecf9de44560d",
+  "objective": "Dense observed-mask mean SmoothL1 beta1 over eight source PM25 historical queries at anchor+[0,8,16,24,32,40,48,56], queried at anchor64; plus unchanged .8 GaussianNLL+.2 absolute forecast loss at anchor70. Target and mask consulted only after outputs.",
+  "optimizer": {
+    "batch": 16,
+    "clip": 1.0,
+    "foreach": false,
+    "fused": false,
+    "lr": 0.0005,
+    "name": "AdamW",
+    "steps": 64,
+    "tuning_trials": 0,
+    "weight_decay": 0.001
+  },
+  "prefit": "Complete forward/backward/clip/AdamW ledger at lr0; first and warm optimizer states, both seeds/arms. Exact parameters unchanged. Unknown differing math operators BLOCK; complete math discrepancy bound <=1%. Commit frozen outputs before nonzero fit.",
+  "runtime": "GitHub CPU single-thread FP32; no GPU, no TEST, no promotion",
+  "seeds": [
+    26016,
+    26017
+  ],
+  "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "study_id": "HISTORY-QUERY016-DIVERSE-CONTENT-TRAINING"
+}

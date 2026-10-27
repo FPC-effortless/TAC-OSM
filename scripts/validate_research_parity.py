@@ -170,6 +170,12 @@ def _check_manifest_parity_only(m,phase="preflight"):
         text_field(p.get("established_result"),"literature established_result")
         demand(isinstance(p.get("url"),str) and p["url"].startswith("https://"),
             "prior work must have published source URL")
+    if m.get("compute_accounting") == "complete_matched_operator_ledger":
+        from tac_osm.research_operator_budget import validate_comparison
+        try:
+            return validate_comparison(m, phase)
+        except (ValueError,KeyError,OSError) as exc:
+            raise ParityError("complete operator budget gate: "+str(exc)) from exc
     rows=m.get("arms")
     demand(isinstance(rows,list) and len(rows)>=4,"need >=2 architecture arms x >=2 seeds")
     seed_sets=defaultdict(list)
