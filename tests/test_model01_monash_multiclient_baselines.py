@@ -100,7 +100,7 @@ class RealSourceContractFixture(unittest.TestCase):
         # The target is kW, no conversion to appliance Wh.
         source=m.run(example_tsf())
         self.assertIn("load kW",source["prediction_target"])
-        self.assertNotIn("Wh",source["prediction_target"])
+        self.assertIn("NOT UCI374 appliance Wh",source["prediction_target"])
         self.assertFalse(source["original_source_available_at_verified"])
 
     def test_MD5_publisher_version_is_original_not_model_output(self):
