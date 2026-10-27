@@ -114,10 +114,28 @@ class CheckedLanguageSession:
         return logits
 
     def categorical(self,token:torch.Tensor):
+        """Rounded FP categorical mass: zeros CAN occur by underflow.
+        Do not use torch.log(self.categorical(...)) for training or NLL.
+        """
         p=torch.softmax(self.step(token),dim=-1)
         if not torch.isfinite(p).all() or (p < 0).any():
             raise ValueError("nonfinite categorical output")
         return p
+
+    def log_categorical(self,token:torch.Tensor):
+        """Stable 128-character log law. Advance the stream exactly once.
+
+        Torch log_softmax uses a shifted log-sum-exp and avoids the
+        -inf produced by taking log of an underflowed softmax probability.
+        Returns log probabilities; not proof of exact FP mass or calibration.
+        """
+        logits=self.step(token)
+        if not torch.is_floating_point(logits):
+            raise ValueError("categorical logits must be floating")
+        logp=torch.log_softmax(logits,dim=-1)
+        if not torch.isfinite(logp).all():
+            raise ValueError("nonfinite stable categorical log probabilities")
+        return logp
 
 def running_mean_update(mean:torch.Tensor,basis:torch.Tensor,count:int)->torch.Tensor:
     """Proposed replacement for unbounded source sum, NOT checkpoint-qualified.
