@@ -1,0 +1,80 @@
+name: LATFUSE015 original source oracle-key content versus true, training-mean and other-station associative memory
+
+on:
+  push:
+    branches: [research/latfuse015-key-only-sham-memory-2026-10-27]
+    paths:
+      - ".github/workflows/latfuse015-key-sham-memory.yml"
+      - "scripts/latfuse015_oracle_key_only_sham_matrix.py"
+      - "scripts/latfuse014_source_neutral_window.py"
+      - "research/mathematical-engineering/latfuse015/REGISTERED_KEY_SHAM.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: latfuse015-original-source-key-only-falsifier
+  cancel-in-progress: false
+
+jobs:
+  authentic-source-key-vs-actual-matrix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Original FP32 PyTorch CPU library
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Freeze original source and compare prereg before original physical observations
+        run: |
+          python -m py_compile scripts/latfuse015_oracle_key_only_sham_matrix.py \
+            scripts/latfuse014_source_neutral_window.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse015/REGISTERED_KEY_SHAM.json \
+            --phase preflight
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE008/POSTFIT_PARITY.json \
+            --phase final
+          test ! -e research/mathematical-engineering/latfuse015/RESULTS.json
+      - name: Original physical UCI501 source immutable licensed original archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse015-original
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse015-original/PRSA2017_original.zip
+      - name: Original real source and nofit key-only vs real/sham associative store metrics
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse015_oracle_key_only_sham_matrix.py \
+            --source /tmp/latfuse015-original/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse015/RESULTS.json
+      - name: Persist original real source observed results in isolated unmerged draft branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse015-key-only-sham-memory-2026-10-27
+          test -s research/mathematical-engineering/latfuse015/RESULTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse015/RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: source real event-value oracle key-only/sham-memory causal attribution outcome"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Research restriction
+        run: |
+          echo "Original writer key is PRIVILEGED and contains target observation. No native model optimization."
+          echo "Original May-June source is already exposed and is not qualified independent generalization."
+          echo "Original protected2016-17 and exposed2015 source numerics unopened."

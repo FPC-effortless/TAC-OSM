@@ -1,0 +1,24 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE015-TRUE-SOURCE-KEY-ONLY-SHAM-MEMORY",
+  "study_type": "noncomparative_diagnostic",
+  "scientific_purpose": "Falsify LATFUSE014 possible target-content leakage through privileged original writer KEY itself: test whether genuine physically recorded PM2.5 can be decoded from historical true 2x8D key without matrix, versus correct key read from original native source matrix, same key applied to training-source average FROZEN matrix, and same key applied to another physical station's query-time matrix (source/time selected independently of target).",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "frozen_models": "same original two SHA-pinned trained LATFUSE008 associative checkpoints, seeds80701/80702, live 99,390 weights / original 6,800byte per-stream recurrence unchanged.",
+  "source_cohort": "EXACT original LATFUSE014 192 real March2014 source train windows and 48 May–June2014 original previously exposed source eval windows, each query delay64 and target eight deterministic recorded same stream write timestamps 0,8,...56; no dynamic case/subset/label selection",
+  "controls": [
+    "nuisance plus original native stored current-matrix true WRITE-key read16",
+    "nuisance plus input-derived privileged original event WRITE-key two8D dimensions flattened16, NO memory whatsoever",
+    "nuisance plus input-derived original WRITE-key applied to original training-only average real-source associative matrix, eliminating per-stream episodic state while preserving trained matrix basis",
+    "nuisance plus input-derived original WRITE-key applied to query-time matrix from OTHER physical source station, deterministic first next different station in ordered source records, independent of PM event categories",
+    "nuisance plus legal original native historical timestamp-only associative read",
+    "original fastslow/source-own entity only, no matrix",
+    "original current last observed PM2.5 physical persistence"
+  ],
+  "external_probe": "Exactly source-only original March genuine physically recorded observed continuous PM2.5 log1p values (eligible source targets), fixed lambda1 dual ridge via primal identity, train-only column scales, target standardization, same source-current/station/past-clock nuisance across all privileged key/memory comparator arms, no legal native past value input.",
+  "metrics": "original May-June real log1p(PM2.5) MAE, raw physical µg/m3 MAE, per-seed observed source case eligible counts and source-station grouped 2000 replicate CI seed15015, 8 target positions equal. No source label-conditioned key/memory swap.",
+  "predeclared_gate": "Only if original true-key REAL current matrix + nuisance reduces MAE by >=5% relative to EACH key-only+source, TRAIN_MEAN_MATRIX+key+source, and OTHER_STATION_MATRIX+key+source in BOTH models, AND site-block error gain 95% lower bound positive for each can we say this probe shows incremental episodic associative memory content beyond direct writer-key target encoding. Otherwise retire source-specific memory storage claim and focus encoder/key information leakage and alternate robust measured tasks.",
+  "guard": "Frozen original source trained weights unchanged, no new optimizer, actual key is privileged/source-content-dependent offline diagnostic (not legal native query). Average matrix computed from March training-source histories only, cross-station donor selected by distinct site ID and order only, no outcome/label selection. FIT-era previous exposed source, so no independent model scientific qualification. No original numeric 2015 or protected2016–17 read; do not compare different architecture training FLOPs here."
+}
