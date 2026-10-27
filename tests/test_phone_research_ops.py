@@ -80,7 +80,11 @@ def test_long_job_with_evidenced_gpu_speedup_selects_kaggle():
 def test_gpu_missing_two_device_plan_or_budget_blocks(change):
     p = kaggle_plan()
     p.update(change)
-    assert decide(p)["state"] == "BLOCKED_EVIDENCE_OR_DESIGN"
+    if p["gpu_strategy"] == "single_gpu":
+        with pytest.raises(ResearchPlanError, match="two-GPU"):
+            decide(p)
+    else:
+        assert decide(p)["state"] == "BLOCKED_EVIDENCE_OR_DESIGN"
 
 
 def test_training_on_github_cpu_needs_signed_source_and_replay_evidence():
