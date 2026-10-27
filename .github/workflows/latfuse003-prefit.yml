@@ -1,0 +1,65 @@
+name: LATFUSE003 fixed 6800-byte multihead source preflight (NO TRAINING)
+
+on:
+  push:
+    branches:
+      - research/latfuse003-multihead-selective-2026-10-27
+    paths:
+      - "src/tac_osm/latent_fusion_003.py"
+      - "scripts/latfuse003_source_prefit.py"
+      - "tests/test_latent_fusion_003.py"
+      - "research/mathematical-engineering/latfuse003/FAIR_COMPARISON.json"
+      - "docs/TACOSM-BASELINE-001.md"
+      - ".github/workflows/latfuse003-prefit.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-original-no-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: CPU-only engineering dependencies
+        run: |
+          python -m pip install --quiet pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Mandatory no-fit research manifest and exact test count
+        run: |
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse003/FAIR_COMPARISON.json \
+            --phase preflight
+          python scripts/sync_test_count.py --check
+      - name: LATFUSE001 002 and 003 original state/operator and gradient guards
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m pytest -q tests/test_latent_fusion_001.py \
+            tests/test_latent_fusion_002.py tests/test_latent_fusion_003.py
+      - name: Restore pinned original UCI501 physical source from historical commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse003-source
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse003-source/PRSA2017_original.zip
+      - name: Genuine-source source/parameter/FP32/AD/profiler no-update engineering
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse003_source_prefit.py \
+            --source /tmp/latfuse003-source/PRSA2017_original.zip
+      - name: Scientific status
+        run: |
+          echo "No optimizer, checkpoints, numeric 2015 DEV or protected 2016-17 source."
+          echo "Preflight passing cannot establish trained forecasting gains or equal complete training FLOPs."
