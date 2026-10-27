@@ -1,0 +1,44 @@
+name: Model02 registered 2014 original publisher cohort protocol (NO DATA ACQUISITION)
+on:
+  push:
+    branches:
+      - research/model02-2014-prospective-cohort-protocol-2026-10-27
+    paths:
+      - 'specialist_models/model02_backblaze_2014_protocol.py'
+      - 'tests/test_model02_backblaze_2014_protocol.py'
+      - 'research/registrations/MODEL02-BACKBLAZE-2014-001.md'
+      - '.github/workflows/model02-backblaze-2014-protocol.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/model02_backblaze_2014_protocol.py'
+      - 'tests/test_model02_backblaze_2014_protocol.py'
+      - 'research/registrations/MODEL02-BACKBLAZE-2014-001.md'
+      - '.github/workflows/model02-backblaze-2014-protocol.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  protected-source-freeze-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source phase admission and censoring tests — constructed inputs ONLY
+        run: python -m unittest discover -s tests -p 'test_model02_backblaze_2014_protocol.py' -v
+      - name: Verify no source acquired, training permission disabled and TEST denied
+        run: |
+          python - <<'PY'
+          import importlib.util
+          spec=importlib.util.spec_from_file_location("proto","specialist_models/model02_backblaze_2014_protocol.py")
+          mod=importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(mod)
+          x=mod.frozen_registration()
+          assert x['publisher_archive_sha256'] is None
+          assert x['original_publisher_source_acquired'] is False
+          assert x['heldout_TEST_access_authorized'] is False
+          assert mod.training_allowed(x) is False
+          print('2014_SOURCE_REGISTRATION_ONLY=PASS; REAL_SOURCE_AND_MODEL_UNOPENED')
+          PY
