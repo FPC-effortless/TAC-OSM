@@ -218,3 +218,15 @@ def test_gpu_runtime_checks_real_cuda_devices_before_workload():
     assert '"T4" not in name.upper()' in text
     assert 'CUDA_VISIBLE_DEVICES=str(gpu_id)' in text
     assert "COMPLETED_UNQUALIFIED_REQUIRES_INDEPENDENT_EVALUATION" in text
+
+
+def test_github_actions_expressions_are_not_literal_escaped_strings():
+    for name in ('phone-research-control.yml', 'phone-kaggle-dispatch.yml',
+                 'phone-kaggle-monitor.yml'):
+        content = (ROOT / '.github/workflows' / name).read_text()
+        assert "\\${{" not in content, name
+        assert "${{ github.token }}" in content
+        assert "${{ github.repository }}" in content
+    remote = (ROOT / '.github/workflows/phone-kaggle-dispatch.yml').read_text()
+    assert "${{ secrets.KAGGLE_API_TOKEN }}" in remote
+    assert "${{ vars.KAGGLE_USERNAME }}" in remote
