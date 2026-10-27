@@ -1,0 +1,16 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE007-HISTORIC-QUERY-NOFIT-001",
+  "study_type": "noncomparative_diagnostic",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "No-fit structural/source-leak test of an original-2head-soft native historical calendar/belief query head. Only historic-time source timestamp metadata as query, original past observation flows through recurrent memory; physically observed anchor PM2.5 high vs normal used ONLY after forward for loss. Test original writer/future forecast exact unchanged, state/params budgets and honest source gradients.",
+  "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "model_original_source_family": "source original 2h-soft LATFUSE004, 99261 params, original 1696 FP32+16 owner flags 6800 nominal bytes",
+  "candidate": "2head16value×8key unchanged delta writer/retention, encoder and current forecast; new historic_clock_query Linear6→16 and historic_event_head Linear16→1; 99390 live trained+deployed params, 129 more, no new carried state, no persistent history queue",
+  "ground_truth": "Recorded past PM2.5 z>=1.25 vs ordinary abs(z)<=0.25 from original March-Apr2014 FIT sources, station/hour matching and source history t-23..t+64; target event category read for BCE only after query performed, no historic measured value/label input to the query; 6D legal past timestamp only.",
+  "loss": "0.8 authentic +6h future GaussianNLL+0.2 masked MAE PLUS observed historic binary event BCE, all targets read only after forward. This differs from original LATFUSE004 training objectives, no fair architecture comparison.",
+  "probe_settings": "zero AdamW or other optimizer steps. 8 source cases representing four observed original matched source event/control pairs, 24 pre-event hours+64 observed continuation. Torch FP32 CPU single thread, full-source/model SHA, check real source gradients for every present parameter tensor.",
+  "source_split_limit": "Original UCI501 original FIT numerical only. No already-exposed 2015 numeric, protected2016–2017 numeric, or ungrounded synthetic ability tests.",
+  "scientific_boundary": "Does not demonstrate trained historical recall, usefulness of longer memory, full neural parallel time scan or finite-precision AD/probability-law proof. A full real training head-to-head requires separate prior registration, actual FULL-training-FLOP parity <=1%, parameter parity <=1%, exact matched genuine original source samples/seeds/optimizer and protected evaluation approval."
+}
