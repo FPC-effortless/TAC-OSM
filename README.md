@@ -1,5 +1,8 @@
 
 
+
+**Cloud Codex on your Android phone:** Use the existing ChatGPT Codex Cloud as your coding/research agent, not a second agent subscription. [Phone-to-Codex task instructions and a reusable research prompt](research/CODEX-CLOUD-PHONE-HANDOFF-2026-10-27.md). A published repository-connected Codex Cloud environment is required; the GitHub scheduled CI does not by itself launch Codex tasks.
+
 ## Research from a phone — autonomous planning and Kaggle T4 x2
 
 [Phone-first lab guide](research/PHONE-FIRST-AUTONOMOUS-LAB-2026-10-27.md):

@@ -151,3 +151,7 @@ Metadata:
 https://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels_metadata.md
 Kaggle token authentication:
 https://github.com/Kaggle/kaggle-cli/blob/main/skills/references/auth.md
+
+## Your existing ChatGPT Cloud Codex is the coding agent
+
+Use [the Codex Cloud mobile handoff](CODEX-CLOUD-PHONE-HANDOFF-2026-10-27.md) for the prepared prompt and one-time published environment check. You do not need Claude Code, CrewAI or another agent runtime on your phone. GitHub Actions remains a deterministic diagnostics/monitoring system; it is not automatically capable of creating Codex Cloud tasks without a separate integration and approval.

@@ -20,3 +20,7 @@ This is a short operator/agent index, not a replacement for AGENTS.md.
   spend quota, make provider accounts or claim completed trained results.
 - Always leave a short phone-readable Issue update: completed, in progress,
   blocked, next action, exact run link, dataset and review caveats.
+
+## Codex Cloud from ChatGPT mobile
+
+If the operator already has ChatGPT Codex Cloud on Android, that is the preferred coding/research agent. Use its published `FPC-effortless/TAC-OSM` environment to start and continue tasks and review proposed branches/PRs. Follow the repo-scoped prompt and scientific controls in `research/CODEX-CLOUD-PHONE-HANDOFF-2026-10-27.md`. Do not require a second coding-agent framework. The GitHub Actions schedule runs the no-fit checks and status reports, **not** generative Codex Cloud tasks until separately authorized scheduling is configured.
