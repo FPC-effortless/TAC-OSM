@@ -114,7 +114,7 @@ def main():
                original_physical_future_forecast_loss_before_training=float(forecast.detach()),
                source_trainable_tensors_with_finite_grad=len(grads),
                original_observation_target_only_in_loss_not_clock=True,
-               99390_active_source_parameters=True,
+               original_99390_active_source_parameters=True,
                recurrent_stream_6800_bytes=True,
                optimizer_steps=0,no_model_fit=True))
             print("LATFUSE016_REAL_SOURCE_NOFIT="+json.dumps(results[-1],sort_keys=True),flush=True)
