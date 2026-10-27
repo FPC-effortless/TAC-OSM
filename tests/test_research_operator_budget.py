@@ -108,3 +108,53 @@ for arm in ('assoc_historic_query','fast_slow_historic_query'):
     p=subprocess.run([sys.executable,'-c',code,root],cwd=Path.cwd(),capture_output=True,text=True)
     assert p.returncode==0,p.stdout+p.stderr
     assert p.stdout.count('PASS_CONSTRUCTED_ORIGINAL_GRAPH')==2
+
+
+@pytest.fixture
+def frozen_comparison(tmp_path,monkeypatch):
+    """Actual prefit resource JSON only; no labels, checkpoint or model fitting."""
+    from pathlib import Path
+    root=Path.cwd()
+    directory=root/'research/mathematical-engineering/history_query016'
+    manifest=json.loads((directory/'FAIR_COMPARISON.json').read_text())
+    profile=(directory/'OPERATOR_PROFILE.json').read_bytes()
+    path=tmp_path/manifest['operator_profile_path'];path.parent.mkdir(parents=True);path.write_bytes(profile)
+    monkeypatch.chdir(tmp_path)
+    return manifest,json.loads(profile)
+
+
+def test_full_frozen_source_schedule_meets_strict_math_bound(frozen_comparison):
+    from tac_osm.research_operator_budget import validate_comparison
+    manifest,_=frozen_comparison
+    r=validate_comparison(manifest,'preflight')
+    assert r['maximum_relative_math_compute_gap']<.0001
+    assert not r['eligible_for_architecture_superiority']
+    assert r['exact_hardware_training_flops']=='NOT_CLAIMED'
+
+
+def test_matching_but_unregistered_workload_cannot_bypass_gate(frozen_comparison):
+    from tac_osm.research_operator_budget import validate_comparison
+    manifest,_=frozen_comparison
+    for r in manifest['arms']:r['budget']['queries_per_window']=1
+    with pytest.raises(ValueError,match='fixed preregistered'):validate_comparison(manifest,'preflight')
+
+
+def test_profile_and_source_recipe_tampering_blocks(frozen_comparison):
+    from tac_osm.research_operator_budget import validate_comparison
+    manifest,_=frozen_comparison
+    manifest['training_recipe_sha256']='0'*64
+    with pytest.raises(ValueError,match='recipe'):validate_comparison(manifest,'preflight')
+
+
+def test_final_requires_each_actual_batch_fingerprint(frozen_comparison):
+    from tac_osm.research_operator_budget import validate_comparison
+    manifest,profile=frozen_comparison
+    for row in manifest['arms']:
+        entries=[p for p in profile['profiles'] if p['seed']==row['seed'] and p['arm']==row['architecture']]
+        expected=next(p['step_operator_sha256'] for p in entries if p['kind']=='first')+next(p['step_operator_sha256'] for p in entries if p['kind']=='warm')
+        row['measured']=dict(actual_operator_step_sha256=expected,actual_steps=64,
+            actual_sample_order_sha256=row['training_sample_order_sha256'],trainable_parameters=99390,
+            deployed_parameters=99390,checkpoint_sha256='0'*64)
+    assert validate_comparison(manifest,'final')['actual_step_ledgers_required']
+    manifest['arms'][0]['measured']['actual_operator_step_sha256'][42]='changed'
+    with pytest.raises(ValueError,match='actual full operator'):validate_comparison(manifest,'final')
