@@ -47,7 +47,7 @@ The new PNDS proof files are `LanguageLossAD.lean`, `LanguageMemoryAD.lean`, and
 - **Independent numerical falsifiers**. `test_language_finite_difference.py` independently checks central function-value differences against PyTorch AD across all 36 trainable tensor groups, including a 64-character historical loss. This is a constructed diagnostic only, not a claim of real-text quality. An additional test perturbs native/aligned memory across two streams and compares row energy before/after the same source input.
 - **Strict limitation**. Mathematical `HasDerivAt` proofs are exact real; branch points of source `F.normalize` and FP32 numerics, layernorm/softmax backward kernels, entire training optimizer, and whole-graph source-to-Lean lowering all still require separate proofs and/or restricted numerical checks.
 
-The dedicated PNDS CI **successfully built and axiom-audited 58 scoped theorem declarations** at [run #40591841884](https://github.com/FPC-effortless/pnds-lean/actions/runs/40591841884). This adds analytic SiLU/sigmoid and all-248-channel mean/variance LayerNorm derivatives beyond the verified 44-theorem baseline. This result is exact-real source-math verification, not full Torch/IEEE refinement. Historical checkpoints have not been changed or retrained.
+The dedicated PNDS CI **successfully built and axiom-audited 67 scoped theorem declarations** at [run #40594586314](https://github.com/FPC-effortless/pnds-lean/actions/runs/40594586314). This adds analytic SiLU/sigmoid and all-248-channel mean/variance LayerNorm derivatives beyond the verified 44-theorem baseline. This result is exact-real source-math verification, not full Torch/IEEE refinement. Historical checkpoints have not been changed or retrained.
 
 
 ## Further formal proof milestone: activation and complete LayerNorm JVP
@@ -107,3 +107,46 @@ flush-to-zero, transcendental accuracy, optimizer state and all backprop
 tensor operations still need explicit per-device/backend refinement.
 The original ten binary checkpoints are not yet downloadable
 from a cold GitHub workflow, despite complete verified local replay.
+
+## TAC-LANG-REPAIR-016/017: Research-only alternatives, no frozen model change
+
+See [REPAIR_016_RESEARCH.md](REPAIR_016_RESEARCH.md) for the mathematical
+derivations, failure modes, source-verified risk ranking and the preregistered
+real-data test gates.
+
+- `candidate_stable_address.py`: smooth 8D key normalization, 2×8×8
+  parameter-count-neutral bounded rotation and a position-era code. The
+  conditioned rotation prevents an aligned source key from collapsing to
+  zero in exact real arithmetic, while the era tag removes the **forced
+  exact 155,701-step address repeat** at the pre-projection level. Finite
+  FP32 era resolution, query interference and retraining remain open.
+- `test_candidate_stable_address.py`: no new dataset or training, only
+  operator diagnostics. Tests source identity in the first era, source
+  repeated-cycle aliasing, the smooth 8D Jacobian spectral bound, a
+  lower singular-value floor, and deliberate eventual FP32 era collision.
+- `candidate_bounded_mean.py` and `test_candidate_bounded_mean.py`:
+  an 88-value alternative cumulative mean update with exact-real
+  equality to source context, but *no guaranteed floating superiority*.
+  Includes a case where it improves accuracy and a counterexample
+  where the original source sum is more accurate.
+- `audit_fit_key_conditioning.py`: executable, source- and
+  checkpoint-hash-gated diagnostic of the original 10 frozen models
+  on actual Vim 9.1 FIT chapters; requires the original extracted
+  checkpoint archive and matching Vim manual. No TEST or training.
+  Initial diagnostic observed **native min norm 0.52088**, aligned
+  min norm **1.71583** across 2,048 positions per original checkpoint;
+  none reached the F.normalize epsilon floor. This rules out
+  *asserting an observed near-zero-key failure* in that sample,
+  not a general stability flaw.
+
+Companion PNDS `LanguageRepairCandidates.lean` has nine additional
+exact-real theorems for smooth-key denominator positivity, input relative
+amplitude, exact ordinal era/residue reconstruction and era monotonicity,
+raising the scoped audit to 67 results (compilation and axiom audit must
+remain green). Other math derivations (full 8D Jacobian/operator norm,
+conditioned learned rotation floor) are documented and numerically tested
+but are **not yet directly kernel-proven in Lean**.
+
+No branch changes the original PyTorch model, checkpoints, training budgets
+or historical negative experimental results. Real-text matched-parameter,
+matched-budget evidence is required before promoting any candidate.
