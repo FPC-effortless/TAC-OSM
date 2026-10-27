@@ -1,13 +1,8 @@
 {
-  "schema_version": "tac-osm.parity.v1",
+  "schema_version": "tac-osm.synthetic-diagnostic.v1",
   "study_id": "LATFUSE011-SYNTHETIC-ALGORITHMIC-POSITIVE-CONTROL",
-  "study_type": "single_model_training",
+  "study_type": "synthetic_only_diagnostic_training",
   "registered_before_first_fit": true,
-  "real_world_source": {
-    "name": "SYTHETIC ONLY — intentionally not real source capability evidence",
-    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
-    "observed_real_outcomes": true
-  },
   "models": [
     {
       "architecture": "unchanged original SourceTimedEventQuery - synthetic diagnostic only",
@@ -27,5 +22,9 @@
   "budget": "Exactly 160 AdamW updates/seed, batch4 (2 paired label-balanced events) cycling lags16,64,128,512; AdamW0.0005 weight_decay0.001 gradient clipping1.0; no reinitialization or hyperparameter sweep, genuine checkpoint and original optimizer/RNG/hash/case order saved. Freeze original 2014 source experiment. Two seeds; no baseline head trained.",
   "guard": "No original UCI501 or any real source data used. Explicit synthetic label creation allowed ONLY diagnostic. Source no future label leakage except event originally observed at step23, known historic clock is label-free. No synthetic success may qualify original model or design; synthetic failure may be undertraining and does NOT prove impossibility.",
   "metrics": "Original first versus last training BCE and genuine synthetic diagnostic heldout Brier, pair ranking, balanced accuracy at each16/64/128/512; chance. Must have sufficient actual finished updates for interpreting; positive-control failure only an OPEN diagnosis.",
-  "original_state": "99,390 live params; fast80 slow80 2x16x8 matrix256 and16x80 source slots ->1696 FP32+16 bool=6800 bytes; original existing unmodified model architecture."
+  "original_state": "99,390 live params; fast80 slow80 2x16x8 matrix256 and16x80 source slots ->1696 FP32+16 bool=6800 bytes; original existing unmodified model architecture.",
+  "synthetic_only": true,
+  "no_real_world_claim": true,
+  "original_source_archive_used": false,
+  "protected_source_used": false
 }
