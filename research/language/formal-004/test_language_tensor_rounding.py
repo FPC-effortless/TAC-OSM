@@ -65,6 +65,28 @@ class LanguageTensorRoundingTests(unittest.TestCase):
             # The observation is kept even if the backend flushes
             # subnormals and DOES NOT satisfy the candidate budget.
 
+    def test_source_key_normalization_tiny_input_sensitivity(self):
+        eps=1e-6
+        zeros=torch.zeros(8,dtype=torch.float64,requires_grad=True)
+        k0=F.normalize(zeros,dim=0,eps=eps)
+        grad=torch.autograd.grad(k0[0],zeros)[0]
+        self.assertAlmostEqual(float(grad[0]),1e6,delta=1e-5)
+        perturbed=torch.zeros(8,dtype=torch.float64)
+        perturbed[0]=5e-7
+        k1=F.normalize(perturbed,dim=0,eps=eps)
+        self.assertAlmostEqual(float(k1[0]),0.5,delta=1e-14)
+        # At the clamp boundary the one-sided slopes disagree, so
+        # classical differentiability cannot be silently assumed.
+        def first_key(value):
+            z=torch.zeros(8,dtype=torch.float64)
+            z[0]=value
+            return float(F.normalize(z,dim=0,eps=eps)[0])
+        h=1e-8
+        left=(first_key(eps)-first_key(eps-h))/h
+        right=(first_key(eps+h)-first_key(eps))/h
+        self.assertAlmostEqual(left,1e6,delta=1e-4)
+        self.assertAlmostEqual(right,0.0,delta=1e-6)
+
     def test_reject_finite_precision_misuse(self):
         with self.assertRaisesRegex(ValueError,"float32"):
             exact_rational_dot(torch.ones(8,dtype=torch.float64),
