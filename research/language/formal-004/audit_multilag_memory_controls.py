@@ -29,7 +29,7 @@ def audit(a):
       file=(archive/row['checkpoint_file'] if arm=='original_64only' else out/row['checkpoint'])
       expected=(row['checkpoint_sha256'])
       if sha(file)!=expected:raise ValueError('checkpoint hash drift')
-      ck=torch.load(file,weights_only=False,map_location='cpu')
+      ck=torch.load(file,weights_only=True,map_location='cpu')
       net=ParallelTACLanguage(decoder=75,position_mode='multiscale',gate_mode=mode).eval()
       net.load_state_dict(ck['state'] if arm=='original_64only' else ck['model'],strict=True)
       measure={'arm':arm,'seed':seed,'mode':mode,'checkpoint_sha256':expected,'lag':{}}
