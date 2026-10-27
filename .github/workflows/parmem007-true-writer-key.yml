@@ -1,0 +1,86 @@
+name: PAR-MEM-007 privileged original writer-key diagnosis real-source NO NEW NEURAL FIT
+on:
+  push:
+    branches:
+      - research/parmem007-privileged-key-audit-2026-10-27
+    paths:
+      - '.github/workflows/parmem007-true-writer-key.yml'
+      - 'scripts/parmem007_oracle_writer_key.py'
+      - 'research/parallel-six/PAR-MEM-007-PROTOCOL.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: parmem007-original-privileged-writer-key-research
+  cancel-in-progress: false
+jobs:
+  authentic-source-frozen-write-key-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU-only original tensor backend
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Strict source and original prior checkpoint preflight
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/parmem007_oracle_writer_key.py
+          test ! -e research/parallel-six/PAR-MEM-007-RESULTS.json
+          test -s research/parallel-six/PAR-MEM-007-PROTOCOL.json
+          test -s research/parallel-six/PAR-MEM-006-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-MEM-006/TRAIN_RECEIPT.json
+          test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
+          test "$(find research/replay-bundles/PAR-MEM-006 -name 'seed-*-associative_read.pt' | wc -l)" -eq 5
+          test "$(find research/replay-bundles/PAR-TIME-005 -name 'seed-*-original-continuous.pt' | wc -l)" -eq 5
+      - name: Restore source-original publisher PRSA ZIP pinned in existing Git history
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem007-real
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem007-real/source.zip
+          test "$(sha256sum /tmp/parmem007-real/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Recompute genuine 5-seed frozen writer-key histories and train-only equal-width RIDGE probes
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m scripts.parmem007_oracle_writer_key --mode audit \
+            --source /tmp/parmem007-real/source.zip
+          test -s research/parallel-six/PAR-MEM-007-RESULTS.json
+      - name: Preserve first original privileged diagnostic result (including negatives)
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/parmem007-privileged-key-audit-2026-10-27
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/parallel-six/PAR-MEM-007-RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: preserve five-seed original real privileged writer-key diagnostics and negatives'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Cold clone exact Git-frozen source results; independent no-fit replay
+        shell: bash
+        env:
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --single-branch --branch "$GITHUB_REF_NAME" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/parmem007-cold
+          cd /tmp/parmem007-cold
+          PYTHONPATH='.:src' python -m scripts.parmem007_oracle_writer_key --mode replay \
+            --source /tmp/parmem007-real/source.zip
+      - name: Preserve honest science gate
+        run: |
+          echo 'Historical true-writer keys are PRIVILEGED external trace; NOT a deployable fixed-state address.'
+          echo 'These are previously viewed 2014 development source labels; no independent TEST or superiority.'
+          echo 'No protected 2015-2017 source numeric access and no new neural model trained.'
