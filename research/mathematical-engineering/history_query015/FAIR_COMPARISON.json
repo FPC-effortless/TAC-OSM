@@ -1,0 +1,148 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "HISTORY-QUERY015-FROZEN-CONTENT-TIME-SPECIFICITY",
+  "study_type": "noncomparative_diagnostic",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Determine whether source-trained LATFUSE018 continuous historical-content models distinguish the requested original past timestamp, rather than predict an episode pollution level from current context. Use unchanged real source/checkpoints, correct versus wrong legitimate historical clocks at the same state, and within-window content discrimination.",
+  "execution_level": "internal_research",
+  "research_scope": {
+    "publicly_licensed": true,
+    "partitions": [
+      "FIT"
+    ],
+    "protected_evaluation": false,
+    "reward_integrity_certification": false,
+    "safety_claim": false,
+    "checkpoint_promotion": false
+  },
+  "real_world_source": {
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+    "publisher_url": "https://archive.ics.uci.edu/dataset/501/beijing+multi+site+air+quality+data",
+    "license": "CC-BY-4.0",
+    "license_evidence_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+    "source_receipt": "research/mathematical-engineering/history_audit014/PUBLIC_SOURCE_RECEIPT.json",
+    "observed_real_outcomes": true
+  },
+  "split_policy": {
+    "frozen": true,
+    "cohort_sha256": "267be774a3b608a561a1f2e752ec9790c4ff3ee760a883e35a83b39758fc1327",
+    "source_numeric_stop_exclusive": "2015-01-01"
+  },
+  "causal_protocol": "Use original FIT-only pre-March2014 source normalization and causal last/age caches. Replay each original owner from anchor-23 through query=anchor+64. Both predictors receive only feature prefixes, never raw/targets/future feature rows. Query only original timestamps anchor+0,8,16,24,32,40,48,56. Scoring targets/masks are consulted after both model outputs. No oracle source WRITE keys.",
+  "checkpoint_policy": "Pin original code, original PLAN/RESULTS and all four LATFUSE018 checkpoint hashes; verify checkpoint source/seed/order/steps and original state_dict before/after; no optimizer or weight changes; reproduce exact results in a fresh Python process.",
+  "implementation_commit": "fd201207cb76b30470f64e1fc1baecf9de44560d",
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "original_plan_path": "research/mathematical-engineering/latfuse018/PLAN.json",
+  "original_plan_sha256": "a5b5a1340ab2613971995a4dadaf14fe42e3bad469fec1a00aa15b79ef3987fb",
+  "original_results_path": "research/replay-bundles/LATFUSE018/RESULTS.json",
+  "original_results_sha256": "acc7e17094586a4825836840f5c2889a7d096d8fa3c5e6fd0c17ac135446faa8",
+  "models": [
+    {
+      "arm": "assoc_historic_query",
+      "seed": 18018,
+      "path": "research/replay-bundles/LATFUSE018/seed-18018/assoc_historic_query/final.pt",
+      "sha256": "c568434ee2654c340b9b60fd37d7924984a97850740aa6a554a8533645af0ea2",
+      "sample_order_sha256": "27a01fee856e986c468c7cd7a95f4ebde1acc67e1e3378b9f0c97b2f3812c9fa",
+      "parameters": 99390,
+      "legacy_H64_normalized_MAE": 0.3900668824839796
+    },
+    {
+      "arm": "fast_slow_historic_query",
+      "seed": 18018,
+      "path": "research/replay-bundles/LATFUSE018/seed-18018/fast_slow_historic_query/final.pt",
+      "sha256": "8b659163bb97ecf94f2736ab8dfc0b17233a2796fc3c53d8a2b9176cf6294d0e",
+      "sample_order_sha256": "27a01fee856e986c468c7cd7a95f4ebde1acc67e1e3378b9f0c97b2f3812c9fa",
+      "parameters": 99390,
+      "legacy_H64_normalized_MAE": 0.40853115839835924
+    },
+    {
+      "arm": "assoc_historic_query",
+      "seed": 18019,
+      "path": "research/replay-bundles/LATFUSE018/seed-18019/assoc_historic_query/final.pt",
+      "sha256": "19582f54900604044915e993d0203edf30ffcec9e21987462050a906b269a7f4",
+      "sample_order_sha256": "e94c7e73fb871902f3922391837f72ac4c65d21f176d20aa5ef4665cae8756fd",
+      "parameters": 99390,
+      "legacy_H64_normalized_MAE": 0.32960440766098154
+    },
+    {
+      "arm": "fast_slow_historic_query",
+      "seed": 18019,
+      "path": "research/replay-bundles/LATFUSE018/seed-18019/fast_slow_historic_query/final.pt",
+      "sha256": "9c8020aba2d053de1cef70cd977777c070db1e611825d85bbe27f87afe2ea270",
+      "sample_order_sha256": "e94c7e73fb871902f3922391837f72ac4c65d21f176d20aa5ef4665cae8756fd",
+      "parameters": 99390,
+      "legacy_H64_normalized_MAE": 0.730591048542251
+    }
+  ],
+  "cohort": {
+    "expected_windows": 117,
+    "start": "2014-05-01",
+    "stop_exclusive": "2014-06-10",
+    "previously_exposed": true,
+    "original_plan_rows": "development_rows",
+    "selection": "Exactly original station/96-hour grid rows and original missingness; no score-based selection or new cohort"
+  },
+  "query_offsets_hours": [
+    0,
+    8,
+    16,
+    24,
+    32,
+    40,
+    48,
+    56
+  ],
+  "query_lag_hours": 64,
+  "history_hours": 24,
+  "batch_size": 16,
+  "seed_count": 2,
+  "primary": {
+    "question": "At original trained H64 lag, is the correct legal past-clock prediction more accurate than wrong past-clock predictions or their timestamp-average, at identical current state?",
+    "controls": [
+      "mean absolute target error of seven other legal historical clocks (diagnostic mismatched query-target control)",
+      "absolute target error of mean of all eight legal clock predictions (target-free episode-constant readout)"
+    ],
+    "gate": "For BOTH original associative model seeds: >=5% lower H64 normalized absolute error versus EACH control with strictly positive lower station-block-bootstrap95 mean error-gain interval. Also positive within-window centered skill and >=5% lower centered MSE than original trained fastslow control with positive lower station-block-bootstrap95 error-gain bound."
+  },
+  "secondary": {
+    "metrics": [
+      "H64 original normalized/log1p PM2.5 MAE and prior/zero-read/current-last baselines",
+      "centered skill = 1 - mean_window(mean_observed(((p-p_mean_observed)-(y-y_mean_observed))**2)) / mean_window(mean_observed((y-y_mean_observed)**2)); target means used only for scoring",
+      "centered skill = 1 - sum((p-mean(p_observed))-(y-mean(y_observed)))^2/sum((y-mean(y_observed))^2), window weighted",
+      "prediction versus true physical within-window range and centered error",
+      "correct versus circular-next timestamp MAE",
+      "original N=1 versus first N=8 query output equivalence"
+    ],
+    "missingness": "Predict all eight legal queries. Score only genuinely observed original PM2.5 targets. Preserve masks/counts. Centered metrics require >=2 observed values; undefined/zero target variance is INCONCLUSIVE, never PASS."
+  },
+  "bootstrap": {
+    "draws": 4000,
+    "seed": 15015,
+    "unit": "physical source station, retaining all windows/query targets per selected station; regional dependence remains"
+  },
+  "limitations": [
+    "Only H64 was trained. Within-window lags8..56 and wrong-clock queries are out-of-training-lag diagnostics, not independent generalization proof.",
+    "Repeatedly exposed FIT and only two checkpoints per arm; do not pool seeds as independent source windows.",
+    "Zero-matrix intervention is OOD. Demeaning uses factual targets only in scoring, never model inputs or a deployed predictor.",
+    "No architecture or parameter change, no retraining, no new calibration. Full PNDS whole-model IEEE/AD/Lean equivalence remains OPEN."
+  ],
+  "prior_art_reuse": [
+    "LATFUSE014 PR478: same-window real timestamp controls; no novelty claimed for that method",
+    "LATFUSE018 PR484: existing source-real continuous content objective and frozen matched controls",
+    "PR483: actual-source causal prefix/checkpoint verification and internal-research levels"
+  ],
+  "runtime": {
+    "backend": "github_actions",
+    "maximum_cpu_minutes": 20,
+    "gpu_minutes": 0
+  },
+  "numeric_tolerances": {
+    "N1_vs_N8_logit_atol": 2e-06,
+    "legacy_H64_MAE_atol": 2e-06
+  },
+  "pnds": {
+    "graph_changed": false,
+    "full_source_Lean_Python_IEEE_AD_equivalence": "OPEN; unchanged original SourceTimedEventQuery/SourceTimedNonassociativeQuery, no mathematical completion claimed"
+  }
+}
