@@ -1,0 +1,53 @@
+{
+  "study_id": "PAR-TIME-003-SINGLE-ARM-REAL-DEV",
+  "status": "SINGLE_ARM_DEVELOPMENT_NOT_ARCHITECTURE_COMPARISON",
+  "inherits_studies": [
+    "PAR-FFN-001",
+    "PAR-TIME-001",
+    "PAR-TIME-002"
+  ],
+  "repository": "FPC-effortless/TAC-OSM",
+  "original_real_dataset": "UCI PRSA 2017 Beijing 12-station atmospheric measurements",
+  "source_original_zip_SHA256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "source_git_commit": "6e01290ddf3f10d298c4bcf463a219c9728c0565",
+  "source_filename": "research/source-bundles/ME100/PRSA2017_original.zip",
+  "source_numeric_read_limit": "year 2014 inclusive; 2015–2017 numeric fields NOT parsed",
+  "source_train_only_normalizer": "2013-03-01 until before 2014-03-01",
+  "genuine_training_window": "2014-03-01/2014-04-18",
+  "exposed_development_window": "2014-05-01/2014-06-10",
+  "development_external_originally_unseen": false,
+  "source_legal_event_admission": "source-current PM2.5 and at least 12/13 source-current measurement channels observed",
+  "source_conditioning": "13 actually recorded observation availability flags and known hour-of-day; not motor actions",
+  "genuine_target": "next recorded clock-hour 13 observed physical channel readings (mask unavailable) plus true source fraction present",
+  "source_prediction_loss": "SmoothL1 over genuine observed next-hour 13 physical channels plus 0.1 MSE predicting physically observed next-hour available fraction",
+  "time_aware_feature_basis": "PAR-TIME-001 index, log physical elapsed, prior admissible write age and source-read-only flag",
+  "model_name": "TimeAwareParallelResidualWorld",
+  "active_model_parameters": 96639,
+  "per_entity_FP32_floats": 154,
+  "seeds": [
+    271028,
+    271029,
+    271030,
+    271031,
+    271032
+  ],
+  "optimizer_steps_per_model": 64,
+  "batch": 4,
+  "history": 12,
+  "lr": 0.0003,
+  "weight_decay": 0.001,
+  "optimizer": "CPU FP32 AdamW foreach=False fused=False grad_clip_norm1",
+  "real_examples_each_seed": 256,
+  "performance_metrics": [
+    "normalized 13-channel MAE",
+    "real persistence 13-channel MAE",
+    "raw PM2.5 ug/m3 MAE",
+    "raw PM2.5 persistence ug/m3 MAE"
+  ],
+  "checkpoint_protocol": "SHA verified weights AdamW optimizer and all RNG schedule frozen in Git before development scoring; clean checkout numerical forecast replay",
+  "attempted_comparator_architecture_models": 0,
+  "complete_matched_training_FLOPs_not_authorized": "PAR-TIME-002 only partial profiler supported FLOPs, so NO architecture comparison",
+  "qualified_ability_claim": false,
+  "protected_TEST_access": false,
+  "real_robot_control_or_action_policy": false
+}
