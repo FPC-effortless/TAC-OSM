@@ -48,13 +48,17 @@ jobs:
           q=json.load(open('gp-unc-005-original-me111-neural-no-fit.json'))
           assert q['original_native_models']==5
           assert q['total_real_source_neural_issues']==720
-          assert q['source_original_labels_read'] is False
+          assert q['original_fit_archive_preparsed_including_future_fit_values'] is True
+          assert q['future_numeric_target_extracted_for_bridge_scoring'] is False
+          assert q['native_original_source_future_only_poison_checks_total']==720
           assert q['gp_residual_updates']==0
           assert q['training_or_optimizer_steps']==0
           assert q['protected_report_and_test_access'] is False
           assert q['scientific_promotion']=='NOT_QUALIFIED'
           assert all(v['trainable_parameters']==104663 and
                      v['native_log_forecasts_exactly_preserved'] and
+                     v['native_source_future_only_poison_checks']==144 and
+                     v['native_source_future_only_poison_changed_forecast'] is False and
                      v['original_left_right_scales_positive_and_untouched'] and
                      v['native_issuer_rows']==144 for v in q['models'])
           print('ME111_NATIVE_TO_GP_NOFIT_SOURCE_BRIDGE=PASS_5_ORIGINAL_MODELS')
