@@ -1,0 +1,37 @@
+name: Model02 original 46-day rolling enrollment exploration (NO FIT)
+on:
+  push:
+    branches:
+      - product/backblaze-censored-risk-intake-2026-10-27
+    paths:
+      - 'specialist_models/backblaze_rolling_admission_feasibility.py'
+      - 'tests/test_backblaze_rolling_admission_feasibility.py'
+      - '.github/workflows/model02-rolling-admission-diagnostic.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/backblaze_rolling_admission_feasibility.py'
+      - 'tests/test_backblaze_rolling_admission_feasibility.py'
+      - '.github/workflows/model02-rolling-admission-diagnostic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  exposed-rolling-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Constructed past-only admissions and publisher cohort safety
+        run: python -m unittest discover -s tests -p test_backblaze_rolling_admission_feasibility.py -v
+      - name: Audit ONLY original previously exposed 46-day data, no model training
+        run: python specialist_models/backblaze_rolling_admission_feasibility.py --out source_rolling_feasibility.json
+      - name: Save source census receipt (no raw serials)
+        uses: actions/upload-artifact@v4
+        with:
+          name: model02-source-only-post-exposure-rolling-admission
+          path: source_rolling_feasibility.json
+          if-no-files-found: error
+          retention-days: 14
