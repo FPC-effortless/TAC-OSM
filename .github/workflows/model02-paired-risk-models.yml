@@ -1,0 +1,43 @@
+name: MODEL02-PAIRED-EXPOSED-001 frozen classical predictors on identical source cases
+on:
+  push:
+    branches:
+      - research/model02-paired-evaluation-2026-10-27
+    paths:
+      - 'specialist_models/model02_paired_exposed_dev.py'
+      - 'tests/test_model02_paired_exposed_dev.py'
+      - 'research/registrations/MODEL02-PAIRED-EXPOSED-001.md'
+      - '.github/workflows/model02-paired-risk-models.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-paired-no-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Constructed paired-case, maturity and no-fit tests
+        run: python -m unittest discover -s tests -p 'test_model02_paired_exposed_dev.py' -v
+      - name: Score two frozen classical checkpoints on genuine identical exposed cases
+        run: python specialist_models/model02_paired_exposed_dev.py --out model02_paired_dev_receipt.json
+      - name: Show summary without individual publisher drive identities
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('model02_paired_dev_receipt.json'))
+          assert d['independent_evaluation'] is False
+          assert d['fit_performed_during_comparison'] is False
+          assert d['source_denominators']['matured_windows']==204373
+          print('PAIRED_EXPOSED_DEV_NO_FIT=PASS')
+          print('PAIR_SUMMARY='+json.dumps(d['paired_results'],sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model02-paired-frozen-exposed-classical-reference-diagnostic
+          path: model02_paired_dev_receipt.json
+          if-no-files-found: error
+          retention-days: 14
