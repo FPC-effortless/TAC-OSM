@@ -58,3 +58,28 @@ Model features are current `log1p` SMART raw values with explicit observed/missi
 5. No protected TEST, Woyengi action authority, production safety, source-run CI or third-party adoption is implied by passing constructed tests.
 
 Current gap: no legal raw daily source bytes have been materialized into this repo; no prospective model fitted; no independent evaluation. Model 01 work lives separately in `docs/FORECAST_RELIABILITY.md`; six research families and historical ME111/negative results are unchanged.
+
+
+## Authentic 46-day source audit and rolling-enrollment finding — October 27, 2026
+
+[Original 46-day fixed-day-cohort audit #40470483261](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40470483261) fetched the SHA-locked Backblaze 2013 publisher original archive; exact publisher ZIP SHA256 `7f5a53e79b16e695b4b034955806bb3bb194534b169f6eca460dfd3dc48096fe`. The exposed October 1–November 15 source contains 134 original publisher failure flags, but only **four distinct failures of the 900 drives present and functioning on October 1**. The fixed-first-day cohort's seven-day FIT had only 16 positive overlapping observation windows and **zero positive DEV observation windows**. Those 134 source-wide flags cannot legitimately be inserted into the fixed cohort's labels.
+
+To diagnose this sampling limitation, an alternative **past-only rolling admission** rule was implemented: an entity is eligible once its current and six previous *observed* daily records are continuously present and contain no failure, regardless of whether it appeared on day one. The rule was proposed **after seeing** the original fixed-cohort census and is explicitly POST-EXPOSURE development, not independent confirmation or real-time prospective admission evidence. No protected source members dated November 16 or later were parsed; the publisher compressed archive was downloaded in full.
+
+[Actual original source rolling-admission diagnostic #40471363459](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40471363459) passed seven constructed safety regression tests and audited 832,041 publisher drive-day records (26,815 distinct source physical ID/model pairs).
+
+| Exposed phase | Admitted drives in phase | Seven-day positive windows | Distinct drives associated with those windows | Observed negative windows | Censored windows |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| FIT Oct 1–31 | 25,304 | 167 | 35 | 111,948 | 175,657 |
+| DEV Nov 1–15 | 26,311 | 397 | 65 | 203,976 | 180,532 |
+
+These figures are *provisional publisher-recorded event eligibility* only, not independent confirmed disk failure outcomes, model predictions, trained capability, risk calibration or commercial viability. A seven-day window can overlap another window for the same failing drive; the 397 DEV positive **windows are not 397 independent failures**. Missing future source days are censored and cannot be treated as safe negatives. Substantial source population expansion from the first-day 900 drives and loss of follow-up can distort apparent survival probabilities, source-time priors and group comparisons.
+
+Original result receipts are now committed in `research/source-evidence/MODEL02-BACKBLAZE-2013-46DAY-FEASIBILITY.json` and `research/source-evidence/MODEL02-BACKBLAZE-2013-ROLLING-EXPOSED-FEASIBILITY.json` with Actions links, source SHA, aggregated eligible counts and strict nonqualification labels. The former source 14-day per-file hash receipt remains preserved separately.
+
+### Next scientific gate (not an unconditional training approval)
+
+1. Resolve Backblaze original per-day record availability relative to an actual operational prediction point, archival licensing/attribution, data rights and original source-reported failure semantics; preserve source-visible timestamps and group ownership.
+2. Freeze independent source enrollment and model-family/manufacturer-specific censoring policy before further source/evaluation exposure. Distinguish initial/day-late admission, seven-day warmup, left truncation, retirements and entity discontinuities. Do not use source-wide failure flag count as eligible positive cases.
+3. Fit simple snapshot/history/rule/survival controls on **lawfully authorized, source-time-qualified** original FIT. Record exact original weights/checkpoints and replay in Git; report source cohort and unique physical-drive effective denominators, calibration, PR-AUC, Brier and lead time as appropriate. An actual classical model must precede any claimed trained memory skill.
+4. If real separate DEV confirms value and frozen scientific constraints permit, test the source-owned native ~100k TAC memory model and fair matched recurrent/gated-delta controls with exactly equal effective history and identity information. No protected TEST opening, release promotion or customer claims based solely on these audits.
