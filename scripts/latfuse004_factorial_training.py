@@ -166,8 +166,8 @@ def fitting(source_path):
                 fit_CPU_wall_seconds=elapsed,
                 sampled_train_loss_first=losses[0],
                 sampled_train_loss_last=losses[-1],
-                2014_validation=val_metrics,
-                2014_channel_calibration=channel_calibration(val_arrays))
+                validation_2014=val_metrics,
+                channel_calibration_2014=channel_calibration(val_arrays))
             (folder/"FIT_RECEIPT.json").write_text(json.dumps(receipt,indent=2,sort_keys=True)+"\n")
             report.append(receipt)
             print("LATFUSE004_ORIGINAL_FIT_ARM="+json.dumps({
