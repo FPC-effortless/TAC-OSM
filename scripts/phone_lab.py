@@ -137,7 +137,7 @@ def main(argv=None) -> int:
             route = "Kaggle 2× T4" if row["backend"] == "kaggle_t4x2" else "GitHub CPU"
             status = row.get("diagnostic_status", row["state"])
             lines.append(f"| {row['run_id']} | {row['variant']} | {row['kind']} | {route} | {status} |")
-            if args.post_issues and row.get("backend") != "kaggle_t4x2":
+            if args.post_issues and row.get("backend") == "github_actions":
                 # Remote notebook status is owned by the Kaggle monitor;
                 # don't overwrite it with a generic "ready to plan" message.
                 token, repo = os.environ.get("GH_TOKEN"), os.environ.get("GITHUB_REPOSITORY")
