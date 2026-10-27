@@ -1,0 +1,90 @@
+name: PAR-TIME-004 original real FIT time/memory lesion & persistent state replay
+on:
+  push:
+    branches:
+      - research/partime004-frozen-fit-state-lesions-2026-10-27
+    paths:
+      - '.github/workflows/partime004-real-fit-lesions.yml'
+      - 'scripts/partime004_frozen_fit_lesions.py'
+      - 'research/parallel-six/PAR-TIME-004-PROTOCOL.json'
+  pull_request:
+    paths:
+      - '.github/workflows/partime004-real-fit-lesions.yml'
+      - 'scripts/partime004_frozen_fit_lesions.py'
+      - 'research/parallel-six/PAR-TIME-004-PROTOCOL.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: partime004-original-frozen-fit-lesions
+  cancel-in-progress: false
+jobs:
+  read-only-original-weight-attribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU tensor compute without accelerator
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Guard exact original fitted models and absence of attribution overwrite
+        run: |
+          set -e
+          python -m py_compile scripts/partime004_frozen_fit_lesions.py
+          test -s research/replay-bundles/PAR-TIME-003/TRAIN_RECEIPT.json
+          test -s research/parallel-six/PAR-TIME-003-FROZEN-PLAN.json
+          test ! -e research/parallel-six/PAR-TIME-004-RESULTS.json
+          test "$(find research/replay-bundles/PAR-TIME-003 -maxdepth 1 -name 'seed-*-full-original.pt' | wc -l)" -eq 5
+      - name: Restore SHA-verified publisher data already acquired for genuine earlier research
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/partime004-genuine-source
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/partime004-genuine-source/PRSA2017.zip
+          test "$(sha256sum /tmp/partime004-genuine-source/PRSA2017.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Frozen five-checkpoint genuine March-April 2014 FIT source diagnostics only
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m scripts.partime004_frozen_fit_lesions --mode audit \
+            --source /tmp/partime004-genuine-source/PRSA2017.zip
+          test -s research/parallel-six/PAR-TIME-004-RESULTS.json
+      - name: Preserve original FIT-only negative or positive diagnostic receipt, no checkpoint writes
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/partime004-frozen-fit-state-lesions-2026-10-27
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/parallel-six/PAR-TIME-004-RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: record frozen original FIT temporal and associative lesions incl negative outcomes'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Independently replay original attribution from committed source and immutable checkpoint copies
+        if: github.event_name != 'pull_request'
+        shell: bash
+        env:
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --branch "$GITHUB_REF_NAME" --single-branch \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/partime004-clean
+          cd /tmp/partime004-clean
+          PYTHONPATH='.:src' python -m scripts.partime004_frozen_fit_lesions --mode replay \
+            --source /tmp/partime004-genuine-source/PRSA2017.zip
+      - name: Categorical research conclusion
+        run: |
+          echo 'Only frozen source-FIT temporal columns and associative state intervention.'
+          echo 'No original model retraining and no 2014 exposed DEV scores analyzed.'
+          echo 'No independent model qualification or whole-memory proof.'
