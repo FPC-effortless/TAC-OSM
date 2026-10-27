@@ -1,0 +1,137 @@
+name: PAR-MEM-013 original real source five-seed content-order discrimination full trained models
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/parmem013-original-real-source-fit.yml'
+      - 'scripts/parmem013_source_event_objective.py'
+      - 'scripts/parmem013_genuine_source_fit.py'
+      - 'scripts/parmem013_source_operator_preflight.py'
+      - 'research/parallel-six/PAR-MEM-013-PROTOCOL.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: parmem013-original-pair-content-source-experiment
+  cancel-in-progress: false
+jobs:
+  source-legal-full-model-fits:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      TRAIN_BRANCH: ${{ github.event.pull_request.head.ref }}
+      PYTHONPATH: '.:src'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original CPU Torch
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate source original model, 2014 recorded clock protocol and replay-only rerun status
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/parmem013_source_event_objective.py scripts/parmem013_genuine_source_fit.py scripts/parmem013_source_operator_preflight.py
+          test -s research/parallel-six/PAR-MEM-013-PROTOCOL.json
+          test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
+          test "$(find research/replay-bundles/PAR-TIME-005 -name 'seed-*-original-continuous.pt' | wc -l)" -eq 5
+          if test -s research/replay-bundles/PAR-MEM-013/DEV_RESULTS.json; then
+            test -s research/replay-bundles/PAR-MEM-013/TRAIN_RECEIPT.json
+            test -s research/parallel-six/PAR-MEM-013-FROZEN-PLAN.json
+            test "$(find research/replay-bundles/PAR-MEM-013 -maxdepth 1 -name 'seed-*-original.pt' | wc -l)" -eq 10
+            test "$(find research/replay-bundles/PAR-MEM-013 -maxdepth 1 -name 'seed-*-DEV_original.pt' | wc -l)" -eq 10
+            echo 'REPLAY_ONLY=true' >> "$GITHUB_ENV"
+            echo 'Old original real-source trained models must never be overwritten'
+          else
+            test ! -e research/parallel-six/PAR-MEM-013-FROZEN-PLAN.json
+            test ! -e research/replay-bundles/PAR-MEM-013
+            echo 'REPLAY_ONLY=false' >> "$GITHUB_ENV"
+          fi
+      - name: Restore exact publisher-original true real measured ZIP source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem013-genuine
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem013-genuine/original.zip
+          test "$(sha256sum /tmp/parmem013-genuine/original.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Register actual paired historic source event identity and all source training schedules before optimizer
+        if: env.REPLAY_ONLY == 'false'
+        run: |
+          python -m scripts.parmem013_genuine_source_fit --mode plan \
+            --source /tmp/parmem013-genuine/original.zip
+      - name: Git freeze all source owner clock and sample schedules before real source optimization
+        if: env.REPLAY_ONLY == 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$TRAIN_BRANCH" = research/parmem013-source-event-discrimination-2026-10-27
+          test -s research/parallel-six/PAR-MEM-013-FROZEN-PLAN.json
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/parallel-six/PAR-MEM-013-FROZEN-PLAN.json
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: freeze real old paired event source IDs and optimizer order before training'
+          git push origin "HEAD:refs/heads/$TRAIN_BRANCH"
+      - name: Fail-closed source-matched complete ATen forward backward clip AdamW signature audit
+        if: env.REPLAY_ONLY == 'false'
+        run: |
+          python -m scripts.parmem013_source_operator_preflight \
+            --source /tmp/parmem013-genuine/original.zip
+      - name: Fit ten original full real-source neural models on genuine historical content pairs
+        if: env.REPLAY_ONLY == 'false'
+        run: |
+          python -m scripts.parmem013_genuine_source_fit --mode fit \
+            --source /tmp/parmem013-genuine/original.zip
+      - name: Commit ten original full neural model optimizer RNG files BEFORE accessing development labels
+        if: env.REPLAY_ONLY == 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/replay-bundles/PAR-MEM-013/TRAIN_RECEIPT.json
+          test ! -e research/replay-bundles/PAR-MEM-013/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-MEM-013 -maxdepth 1 -name 'seed-*-original.pt' | wc -l)" -eq 10
+          git add research/replay-bundles/PAR-MEM-013
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: freeze ten complete trained real historical content discriminator originals before DEV'
+          git push origin "HEAD:refs/heads/$TRAIN_BRANCH"
+      - name: Original genuine previously exposed 2014 DEV old-content discrimination diagnostic
+        if: env.REPLAY_ONLY == 'false'
+        run: |
+          python -m scripts.parmem013_genuine_source_fit --mode eval \
+            --source /tmp/parmem013-genuine/original.zip
+      - name: Preserve original physical paired labels and every true source forecast including negative outcomes
+        if: env.REPLAY_ONLY == 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/replay-bundles/PAR-MEM-013/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-MEM-013 -maxdepth 1 -name 'seed-*-DEV_original.pt' | wc -l)" -eq 10
+          git add research/replay-bundles/PAR-MEM-013
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: preserve all real source paired-event true versus blind original DEV prediction metrics'
+          git push origin "HEAD:refs/heads/$TRAIN_BRANCH"
+      - name: Independently replay all ten original source-trained model predictions with no new optimization
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --single-branch --branch "$TRAIN_BRANCH" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/parmem013-clean
+          cd /tmp/parmem013-clean
+          python -m scripts.parmem013_genuine_source_fit --mode replay \
+            --source /tmp/parmem013-genuine/original.zip
+          echo 'PAR_MEM_013_FULL_ORIGINAL_REAL_SOURCE_PAIRED_DISCRIMINATOR_REPLAY_PASS'
+      - name: Limit original trained result interpretation and source visibility
+        run: |
+          echo 'Genuine 2014 source real measurements; previously exposed DEV is not independent TEST.'
+          echo 'Sidecar-matrix-blind control retains original TAC temporal/8x8 memory, not fully stateless.'
+          echo 'Complete nonlinear train FLOP math and new genuine independent cohort remain OPEN.'
+          echo 'No qualified superior model or physical robotics success.'
