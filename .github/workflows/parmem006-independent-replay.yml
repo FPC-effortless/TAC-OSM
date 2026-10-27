@@ -1,0 +1,56 @@
+name: PAR-MEM-006 original real 16-64-128 historical query checkpoint replay
+on:
+  push:
+    branches: [research/parmem006-source-history-query-2026-10-27]
+    paths:
+      - '.github/workflows/parmem006-independent-replay.yml'
+  pull_request:
+    paths:
+      - '.github/workflows/parmem006-independent-replay.yml'
+      - 'research/replay-bundles/PAR-MEM-006/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-original-measured-history-retrieval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original CPU tensor library
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify immutable source replay material exists
+        run: |
+          set -euo pipefail
+          test -s research/parallel-six/PAR-MEM-006-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-MEM-006/TRAIN_RECEIPT.json
+          test -s research/replay-bundles/PAR-MEM-006/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-MEM-006 -maxdepth 1 -name 'seed-*-associative_read.pt' | wc -l)" -eq 5
+          test "$(find research/replay-bundles/PAR-MEM-006 -maxdepth 1 -name 'seed-*-history_blind.pt' | wc -l)" -eq 5
+          test "$(find research/replay-bundles/PAR-MEM-006 -maxdepth 1 -name 'seed-*-DEV_original.pt' | wc -l)" -eq 10
+          python -m py_compile scripts/parmem006_source_history_query.py
+      - name: Recover source-authentic publisher ZIP with exact SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem006-replay
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem006-replay/source.zip
+          test "$(sha256sum /tmp/parmem006-replay/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Recompute all original real historical source observations and forecasts with zero training
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.parmem006_source_history_query --mode replay \
+            --source /tmp/parmem006-replay/source.zip
+          echo 'SOURCE_REAL_QUERY_HEADS_ORIGINAL_INDEPENDENT_REPLAY_SUCCESS'
+      - name: Confirm all checkpoint/optimizer/source receipts unchanged
+        run: |
+          test -z "$(git status --porcelain)"
+          echo 'May-Jun 2014 historically exposed DEV only; no 2015-2017 numeric fields.'
