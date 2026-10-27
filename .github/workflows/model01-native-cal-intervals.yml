@@ -1,0 +1,61 @@
+name: MODEL01 authentic native frozen-CAL-only interval correction (no refit)
+on:
+  push:
+    branches:
+      - research/model01-cal-only-interval-refinement-2026-10-27
+    paths:
+      - 'specialist_models/model01_native_cal_only_intervals.py'
+      - 'tests/test_model01_native_cal_only_intervals.py'
+      - 'research/registrations/MODEL01-TAC-CAL-ONLY-UNCERTAINTY-001.md'
+      - '.github/workflows/model01-native-cal-intervals.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  cal-only-original-native-source-evaluation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned CPU-only scientific dependencies
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir 'numpy==2.2.6'
+          python -m pip install --disable-pip-version-check --no-cache-dir 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Check source/selection invariants and untouched Git checkpoint contracts
+        run: python -m unittest discover -s tests -p test_model01_native_cal_only_intervals.py -v
+      - name: Evaluate only frozen originals with CAL-only selection and previously exposed DEV
+        run: |
+          mkdir -p research/source-evidence
+          if [ -e research/source-evidence/MODEL01-TAC-CAL-ONLY-UNCERTAINTY-001-ORIGINAL.json ]; then
+            echo 'ORIGINAL_INTERVAL_AUDIT_ALREADY_RECORDED=TRUE'
+          else
+            python specialist_models/model01_native_cal_only_intervals.py \
+              --out research/source-evidence/MODEL01-TAC-CAL-ONLY-UNCERTAINTY-001-ORIGINAL.json
+            python - <<'PY'
+          import json
+          d=json.load(open('research/source-evidence/MODEL01-TAC-CAL-ONLY-UNCERTAINTY-001-ORIGINAL.json'))
+          assert len(d['runs'])==3 and d['model_training_performed'] is False
+          assert d['independent_scientific_qualification'] is False
+          assert d['protected_future_source_parsed'] is False
+          assert all(r['DEV_selected_CAL_only_candidate']['n']==1968 for r in d['runs'])
+          print('ORIGINAL_FROZEN_CAL_INTERVAL_EVALUATION=PASS_NOT_INDEPENDENT')
+          print('ORIGINAL_EXPOSED_CAL_ONLY_RESULTS='+json.dumps([{'seed':r['seed'],'selected':r['chosen_without_DEV'],'DEV':r['DEV_selected_CAL_only_candidate'],'OLD_DEV':r['DEV_original_full_CAL_symmetric']} for r in d['runs']],sort_keys=True))
+          PY
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add research/source-evidence/MODEL01-TAC-CAL-ONLY-UNCERTAINTY-001-ORIGINAL.json
+            git commit -m 'research: preserve original CAL-selected native uncertainty findings (exposed DEV)'
+            git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-authentic-native-cal-interval-original-results
+          path: research/source-evidence/MODEL01-TAC-CAL-ONLY-UNCERTAINTY-001-ORIGINAL.json
+          if-no-files-found: warn
+          retention-days: 14
