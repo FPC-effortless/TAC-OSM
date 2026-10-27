@@ -111,7 +111,7 @@ class FrozenMatchedGRUTests(unittest.TestCase):
                       "checkpoint_sha256":original["runs"][0]["checkpoint_sha256"]}
             bundle=m.fit_seed(seed,fit,cal,dev,30.,10.,expected)
             restored=m.replay_seed(bundle,cal,dev,30.,10.,expected)
-            self.assertTrue(restored["exact_CAL_DEV_replay"])
+            self.assertTrue(restored["original_CAL_DEV_replayed_with_declared_numeric_tolerances"])
             self.assertFalse(restored["trained_during_replay"])
         finally:
             m.tac.UPDATES=old
