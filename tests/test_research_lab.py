@@ -20,7 +20,8 @@ from tac_osm.research_lab_integrations import PROVIDERS, plan
 
 def source(tmp_path: Path):
     p = tmp_path / "untrained-fixture.json"
-    p.write_text('{"source_provenance":"constructed_fixture"}')
+    if not p.exists():
+        p.write_text('{"source_provenance":"constructed_fixture"}')
     return p
 
 
