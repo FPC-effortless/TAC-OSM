@@ -1,3 +1,17 @@
+
+
+## Research from a phone — autonomous planning and Kaggle T4 x2
+
+[Phone-first lab guide](research/PHONE-FIRST-AUTONOMOUS-LAB-2026-10-27.md):
+GitHub Issues are the progress board, GitHub Actions runs no-fit science
+checks and tracks source-controlled studies, and permissioned Kaggle workloads
+request NvidiaTeslaT4 (exactly two Tesla T4 devices). The research agents
+follow CHARTER.md/CODEX.md, preregister a compute decision, and cannot
+silently train, spend GPU minutes, change the original TEST protocol or grant
+their own independent evaluator approval. Original GitHub/Python research
+tooling remains fully supported. Remote Kaggle authentication/quotas and a
+live coding agent still require operator connection and authorization.
+
 ## Lightweight Research Lab (no new platform required)
 
 Existing experiment scripts and source-qualified scientific gates remain unchanged. The optional [research lab quickstart](research/LIGHTWEIGHT-LAB-2026-10-27.md) provides a zero-dependency run ledger, report/checkpoint SHA256 provenance, an offline metrics dashboard, CI artifacts, and read-only recipes for MLflow, W&B, Comet, DVC, Hugging Face, Docker, Slurm, Ray, Kubernetes, Jupyter, GitHub, and notifications. Run your existing experiments first; then index a source file with `python scripts/lab.py record`. Logging a metric is never a capability or reward-integrity qualification.

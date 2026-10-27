@@ -1,0 +1,130 @@
+name: Phone Research Lab • approved Kaggle dual T4 execution
+
+# Phone: Actions → Run workflow → choose a reviewed protocol.
+# GPU costs/quota must be explicitly enabled outside PR-controlled code.
+on:
+  workflow_dispatch:
+    inputs:
+      proposal:
+        description: 'Reviewed path under research/phone_queue/'
+        required: true
+        default: 'research/phone_queue/kaggle-dual-t4-smoke.json'
+        type: string
+      confirm:
+        description: 'Type APPROVE_T4_X2 to approve this quota-consuming submission'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: kaggle-phone-research
+  cancel-in-progress: false
+
+jobs:
+  compute-decision:
+    name: Mandatory compute decision first
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.policy.outputs.backend }}
+      kind: ${{ steps.policy.outputs.kind }}
+      manifest: ${{ steps.policy.outputs.manifest }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Decide GitHub CPU versus Kaggle GPU and inspect blockers
+        id: policy
+        env:
+          PROPOSAL: ${{ inputs.proposal }}
+        run: |
+          python scripts/phone_lab.py plan "$PROPOSAL" > compute-decision.json
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = json.loads(Path("compute-decision.json").read_text())
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write("backend=" + p["backend"] + "\n")
+              out.write("kind=" + p["kind"] + "\n")
+          if p["backend"] != "kaggle_t4x2":
+              raise SystemExit("Plan selected GitHub CPU; refusing an inappropriate GPU request")
+          print("Requested fixed accelerator:", p["accelerator"])
+          print("Blockers requiring trusted evaluator:", p["blockers"])
+          PY
+
+  kaggle-dual-t4:
+    name: Permissioned Kaggle NvidiaTeslaT4 (exact 2 GPUs)
+    needs: compute-decision
+    if: needs.compute-decision.outputs.backend == 'kaggle_t4x2' && inputs.confirm == 'APPROVE_T4_X2'
+    environment: kaggle-research
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require operator enablement, Kaggle auth, and independent trained-run preflight
+        env:
+          PROPOSAL: ${{ inputs.proposal }}
+          GPU_ENABLED: ${{ secrets.PHONE_LAB_GPU_EXECUTION_ENABLED }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+          TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX: ${{ secrets.TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX }}
+          PREFIT_SIGNED_EVIDENCE: ${{ secrets.TAC_OSM_PREFIT_ATTESTATION_JSON }}
+        run: |
+          test "$GPU_ENABLED" = "true" || { echo "Operator has not enabled the protected GPU environment"; exit 2; }
+          test -n "$KAGGLE_API_TOKEN" || { echo "Missing Kaggle token"; exit 2; }
+          test -n "$KAGGLE_USERNAME" || { echo "Missing Kaggle username"; exit 2; }
+          python - <<'PY'
+          import json, os, pathlib, subprocess, sys, tempfile
+          sys.path.insert(0, 'src')
+          from tac_osm.phone_research_ops import load_proposal
+          proposal = load_proposal(pathlib.Path(os.environ["PROPOSAL"]), pathlib.Path.cwd())
+          if proposal["kind"] in ("training", "evaluation"):
+              if not os.environ.get("PREFIT_SIGNED_EVIDENCE") or not os.environ.get("TAC_OSM_REWARD_VERIFIER_PUBLIC_KEY_HEX"):
+                  raise SystemExit("Real training/evaluation cannot start without external signed prefit evidence")
+              with tempfile.TemporaryDirectory() as td:
+                  signed = pathlib.Path(td) / 'signed.json'
+                  signed.write_text(os.environ["PREFIT_SIGNED_EVIDENCE"])
+                  subprocess.run(
+                      [sys.executable, "scripts/validate_research_parity.py",
+                       "--manifest", proposal["study_manifest"], "--phase", "preflight",
+                       "--reward-evidence", str(signed)], check=True)
+          elif proposal["kind"] != "no_fit":
+              raise SystemExit("GPU source audits/replay require a reviewed authorized runner")
+          print("Independent source/preflight boundary checked; still no scientific qualification")
+          PY
+      - name: Submit private Kaggle notebook requesting T4×2 exclusively
+        env:
+          PROPOSAL: ${{ inputs.proposal }}
+          KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          python -m pip install --quiet kaggle
+          python scripts/stage_kaggle_research.py --proposal "$PROPOSAL" \
+            --kaggle-user "$KAGGLE_USERNAME" --out ci-artifacts/kaggle-stage --submit
+          echo "Kaggle submission requested; GPU device verification occurs INSIDE the remote notebook." >> "$GITHUB_STEP_SUMMARY"
+          echo "No capability or reward claim from submission alone." >> "$GITHUB_STEP_SUMMARY"
+      - name: Publish first remote Kaggle status to phone Issue
+        env:
+          PROPOSAL: ${{ inputs.proposal }}
+          KAGGLE_USERNAME: ${{ vars.KAGGLE_USERNAME }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          python scripts/monitor_phone_kaggle.py \
+            --proposal "$PROPOSAL" --username "$KAGGLE_USERNAME" \
+            --out ci-artifacts/kaggle-stage/monitor --post-issue
+      - name: Retain compute choice and nonsecret submission receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaggle-dual-t4-submission-receipt
+          path: ci-artifacts/kaggle-stage/staging-receipt.json
+          if-no-files-found: warn
+          retention-days: 14

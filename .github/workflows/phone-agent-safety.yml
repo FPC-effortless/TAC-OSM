@@ -1,0 +1,58 @@
+name: Phone Research Lab • source and agent safety
+
+on:
+  pull_request:
+    branches: [master, main]
+  push:
+    branches: [master, main]
+    paths:
+      - 'src/tac_osm/phone_research_ops.py'
+      - 'scripts/phone_lab.py'
+      - 'scripts/stage_kaggle_research.py'
+      - 'scripts/kaggle_dual_t4_entry.py'
+      - 'scripts/monitor_phone_kaggle.py'
+      - 'research/phone_queue/**'
+      - 'tests/test_phone_research_ops.py'
+      - '.github/workflows/phone-*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bounded-no-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install lightweight research policy toolchain
+        run: python -m pip install --quiet pytest ruff
+      - name: Check high-confidence syntax and undefined-name errors in new mobile lab code
+        run: |
+          python -m ruff check --select E9,F63,F7,F82 \
+            src/tac_osm/phone_research_ops.py \
+            scripts/phone_lab.py \
+            scripts/stage_kaggle_research.py \
+            scripts/kaggle_dual_t4_entry.py \
+            scripts/monitor_phone_kaggle.py \
+            research/kaggle_workloads/dual_t4_smoke.py
+      - name: Test all venue, quota, data permission, source path and two-T4 falsifiers
+        run: |
+          mkdir -p ci-artifacts/phone-lab
+          python -m pytest -q tests/test_phone_research_ops.py \
+            --junitxml=ci-artifacts/phone-lab/unit-tests.xml
+      - name: Publish reviewed compute decisions without any Kaggle API
+        run: |
+          python scripts/phone_lab.py scan --out ci-artifacts/phone-lab
+          cat ci-artifacts/phone-lab/progress.md
+      - name: Preserve phone-friendly decision receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phone-agent-safety-gates
+          path: ci-artifacts/phone-lab/
+          if-no-files-found: warn
+          retention-days: 14
