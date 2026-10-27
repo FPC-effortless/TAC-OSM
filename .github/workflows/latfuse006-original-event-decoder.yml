@@ -1,0 +1,87 @@
+name: LATFUSE006 source-authentic historical-event linear decodability versus memoryless controls
+
+on:
+  push:
+    branches: [research/latfuse006-real-event-decoding-2026-10-27]
+    paths:
+      - "scripts/latfuse006_event_decoder.py"
+      - "tests/test_latfuse006_event_decoder.py"
+      - "research/mathematical-engineering/latfuse006/REGISTERED_REAL_EVENT_DECODER.json"
+      - ".github/workflows/latfuse006-original-event-decoder.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: LATFUSE006-FIRST-REAL-EVENT-EXTERNAL-READOUT
+  cancel-in-progress: false
+
+jobs:
+  train-sidecar-only-no-tac-model-updates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install original-source FP32 Torch and control tests
+        run: |
+          python -m pip install --quiet pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Validate prospective true-source dated event/decode protocol and original suite gates
+        run: |
+          set -e
+          python -m py_compile scripts/latfuse006_event_decoder.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse006/REGISTERED_REAL_EVENT_DECODER.json \
+            --phase preflight
+          python scripts/sync_test_count.py --check
+          test -s research/replay-bundles/LATFUSE004/RESULTS.json
+          test ! -e research/mathematical-engineering/latfuse006/RESULTS.json
+      - name: Diagnostic source-time/sample controls, no synthetic scientific claims
+        env:
+          PYTHONPATH: ".:src"
+        run: |
+          python -m pytest -q tests/test_latfuse006_event_decoder.py \
+            tests/test_latent_fusion_004_factorial.py
+      - name: Retrieve legally original historical UCI501 source ZIP at fixed git commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse006-real-observed
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse006-real-observed/PRSA2017_original.zip
+      - name: Fit EXTERNAL original-source ridge-only historical event decoders against frozen TAC memory
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse006_event_decoder.py \
+            --source /tmp/latfuse006-real-observed/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse006/RESULTS.json
+      - name: Preserve complete 8x4x4 true-event decoder outcomes, no checkpoint or sidecar promotion
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse006-real-event-decoding-2026-10-27
+          test -s research/mathematical-engineering/latfuse006/RESULTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse006/RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: preserve genuine historical event decodability vs source nuisance and model nonmemory controls"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Critical scientific and resource qualification
+        run: |
+          echo "Only source-target sidecar ridge decoders fit, pretrained original TAC-OSM parameters unchanged."
+          echo "Pretrained model saw ALL original FIT; July test split is sidecar-temporal only, NOT virgin model test."
+          echo "No 2015 exposed DEV or protected 2016–17 numeric source, no native event-specific retrieval/100k fair comparison claim."
