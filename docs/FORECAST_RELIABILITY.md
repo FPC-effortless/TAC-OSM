@@ -61,3 +61,21 @@ All commands are standard-library only. No network, protected source retrieval, 
 5. Only after a model genuinely wins its required gates, measure physical-device or fast-cloud inference including the cost of the calibration wrapper.
 
 **Fixture CI tests verify schema/timestamps/finite-sample mechanics only**. Current model status: not independently qualified; real external forecast reliability improvement: NOT RUN. See [ME111 draft #442](https://github.com/FPC-effortless/TAC-OSM/pull/442), [native diagnosis #453](https://github.com/FPC-effortless/TAC-OSM/pull/453), [product issue #450](https://github.com/FPC-effortless/TAC-OSM/issues/450) and [company strategy](../research/MASTER_RESEARCH_PLAN.md).
+
+
+## First original-source Model 01 baseline: UCI374 (2026-10-27)
+
+**Reproducible genuine data + exposed DEV evidence; NOT a trained TAC-OSM improvement.**
+[GitHub Actions source and score run #40466514610](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40466514610) downloaded the original [UCI Appliances Energy Prediction](https://archive.ics.uci.edu/dataset/374/appliances+energy+prediction) archive (CC BY 4.0, DOI 10.24432/C5VC8G).
+Original ZIP SHA256: 2fccf354445d886e7917620b0195db1f3e3e34d5a067a93b844694a4c561255a. Compressed 11,979,507 bytes.
+
+The baseline uses original date and Appliances fields only for a one-hour-ahead forecast. Candidate methods: last observation and same time previous day. Selection occurred on earlier CAL observations, not DEV. Row indexes: unused FIT [0,9867), exposed CAL [9867,13814), exposed DEV [13814,15788). The protected tail [15788,19735) was not parsed or used for scoring or model selection, although original compressed ZIP bytes necessarily were downloaded.
+
+| Baseline | Real DEV cases | MAE (Wh) | Observed nominal 90% coverage | Width (Wh) | Interval score |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Last observation (CAL-selected) | 1,968 | 50.9400 | 90.9045% | 360.0 | 620.7724 |
+| Same time previous day (unselected reference) | 1,968 | 56.9207 | 91.8699% | 420.0 | 663.1911 |
+
+CAL n=3,941 observations and a finite-sample nominal 90% calibration residual quantile q=180 Wh for last-observation. 11 constructed input/holdout regression tests passed in the source workflow. These are real *DEV* scores only; the subsequently exposed DEV must not be reused as an independent confirmation population. Single household, serially correlated samples and overlapping future horizons limit nominal interval guarantees. Historical timestamps are naive original site-local readings, not proven publisher live available-at times.
+
+**No original TAC-OSM training, ME111 forecasting improvement, cloud/mobile benchmark, independently validated customer demand or protected TEST scoring** was performed by this baseline. Do not conflate UCI energy persistence intervals with ME111's all-channel sensor uncertainty failures. Continue with original frozen model/source qualification and a newly authorized, truly untouched cohort for independent scientific claims.
