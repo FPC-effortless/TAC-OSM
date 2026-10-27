@@ -1,0 +1,21 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE011-PRE-ARCH-FALSIFIERS",
+  "study_type": "noncomparative_diagnostic",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "original_checkpoint_family": "all 4 trained LATFUSE008 seed80701/80702 × assoc-historic/nonassoc historic event model SHA from prior original RESULTS.json; model params99390 and recurrent bytes6800 unchanged",
+  "source_cohort": "EXACT original 24 genuine May–June2014 matched event/control pairs across monitoring sites; high raw physical PM2.5 >=150 ug/m3 and ordinary <=35 ug/m3; same station hour-of-day matching; no resampling, no tuning or new fitting, 2015 DEV and 2016-2017 protected numeric unopened",
+  "lags": [
+    16,
+    64,
+    128,
+    512
+  ],
+  "check1": "For same exact source cases, report paired ranking sign and confidence Wilson95 for each trained model at each lag; exact two-sided binomial probability under p=.5, show label polarity by probability class means, compare flipped ranking WITHOUT promoting it, same-source current raw PM2.5 and causal last-observed PM2.5 at query time; report pair differences and source-month/date confounds. Source labels used for diagnostics only AFTER model query.",
+  "check2": "Source trained each true anchor's normalized two 8D write keys vs actual learned historic query; exact isotropic unit sphere E abs cosine=Gamma(d/2)/(sqrt(pi)Gamma((d+1)/2)) for d=8, versus asymptotic sqrt(2/(pi*d)). Compare signed and abs to station-hour physically matched other anchor wrong-key as source-grounded null; key alignment is not proven by cosine only.",
+  "check4": "At each lag save original post-event writer matrix and bypass event-step original matrix; process identical recorded suffix; full historic matrix READ lesion by zeroing entire current matrix, measure event probability/logit response. Exact per-head source-conditioned key/routing source recurrence P=alpha(I-beta kk^T) verified for event-step difference. Query event signal Delta_r = weighted old event-step matrix difference propagated to query and projected with actual read key, interference r_withoutEvent, relative SNR norms, and exact output effect. Labels/event truth NOT used for key/queries or source writer.",
+  "synthetic_check3": "Separate deterministic synthetic task diagnostic on same unmodified 99390-param architecture, not in this source-only workflow. Synthetic model training MUST be openly labeled as diagnostic, never evidence of real-world performance or fair comparison.",
+  "analysis_gate": "No model optimizer, zero new checkpoints, same source SHA, 24 cohort pre-selected, strict frozen model SHA, original source masks and source slot, source timestamp only as query, record negative findings; original FIT-era internal split not unseen model holdout."
+}
