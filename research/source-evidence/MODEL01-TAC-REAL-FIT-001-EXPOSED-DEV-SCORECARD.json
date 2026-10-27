@@ -1,0 +1,98 @@
+{
+  "schema": "MODEL01-TAC-REAL-FIT-001-EXPOSED-DEV-SCORECARD-v1",
+  "study": "MODEL01-TAC-REAL-FIT-001",
+  "original_model_source_sha256": "2fccf354445d886e7917620b0195db1f3e3e34d5a067a93b844694a4c561255a",
+  "original_training_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40488233306",
+  "original_model_replay_git_path": "research/replay-bundles/MODEL01-TAC-REAL-FIT-001/ORIGINAL_FIT.json",
+  "original_native_actual_learned_params": 103252,
+  "original_native_git_original_checkpoint_count": 3,
+  "original_test_rows_opened": false,
+  "exact_same_dev_cases_per_model": 1968,
+  "horizon_minutes": 60,
+  "existing_ridge_original": {
+    "model": "ORIGINAL_SOURCE_FITTED_CLASSICAL_RIDGE",
+    "dev": {
+      "n": 1968,
+      "mae_wh": 44.79225268659299,
+      "rmse_wh": 84.9138909041799,
+      "observed_nominal90_coverage": 0.9059959349593496,
+      "interval_width_wh": 185.065417371686,
+      "interval_score_90": 412.5286886865046
+    },
+    "source_ref": "research/replay-bundles/PRODUCT-MODEL01-UCI374-CLASSICAL/ORIGINAL_DEV_RESULTS.json"
+  },
+  "native_three_original_source_seeds": [
+    {
+      "seed": 1701,
+      "dev": {
+        "n": 1968,
+        "mae_wh": 35.424163818359375,
+        "rmse_wh": 86.66381072998047,
+        "observed_nominal90_coverage": 0.9120934959349594,
+        "interval_width_wh": 146.42901611328125,
+        "interval_score_90": 447.20489501953125
+      },
+      "checkpoint_sha256": "2d33226a652304ad69770a2509be33b221cacfc424b5ad6b6c79dce3570b4d4f",
+      "vs_ridge": {
+        "mae_relative_change": -0.20914529424945905,
+        "rmse_relative_change": 0.020608169136605126,
+        "interval_score_relative_change": 0.08405768443265371,
+        "coverage_pp_change": 0.6097560975609762
+      }
+    },
+    {
+      "seed": 1702,
+      "dev": {
+        "n": 1968,
+        "mae_wh": 39.14076232910156,
+        "rmse_wh": 86.10452270507812,
+        "observed_nominal90_coverage": 0.9054878048780488,
+        "interval_width_wh": 153.39144897460938,
+        "interval_score_90": 440.34429931640625
+      },
+      "checkpoint_sha256": "9a37e4afb7cd9cc59912e437a4d706faecb393cb177dce0da5f6ea4837c5e0b9",
+      "vs_ridge": {
+        "mae_relative_change": -0.1261711572542321,
+        "rmse_relative_change": 0.01402163754622654,
+        "interval_score_relative_change": 0.06742709390337631,
+        "coverage_pp_change": -0.050813008130079496
+      }
+    },
+    {
+      "seed": 1703,
+      "dev": {
+        "n": 1968,
+        "mae_wh": 39.22958755493164,
+        "rmse_wh": 83.60126495361328,
+        "observed_nominal90_coverage": 0.9039634146341463,
+        "interval_width_wh": 157.83575439453125,
+        "interval_score_90": 422.9428405761719
+      },
+      "checkpoint_sha256": "86fbb16d42c697582a885891bc80274f2af26ae1e9c9f4cd2cf531f6e4e544d4",
+      "vs_ridge": {
+        "mae_relative_change": -0.12418810838969796,
+        "rmse_relative_change": -0.01545831826323718,
+        "interval_score_relative_change": 0.025244673098557158,
+        "coverage_pp_change": -0.20325203252032908
+      }
+    }
+  ],
+  "three_seed_mean_dev_mae_wh": 37.931504567464195,
+  "three_seed_mean_mae_fractional_reduction_vs_ridge": 0.15316818663112963,
+  "native_interval_score_worse_than_ridge_all_seeds": true,
+  "native_mae_better_than_ridge_all_seeds": true,
+  "native_rmse_better_than_ridge_some_not_all": true,
+  "claim_tier": "DEVELOPMENT_MIXED_TRADEOFF_NOT_INDEPENDENT",
+  "scientific_promotion": "BLOCKED",
+  "claim_specificity": "MAE lower on reused exposed same-household DEV; interval scores worse; no independent capability or architecture superiority",
+  "disclosures": [
+    "No neural architecture matched-compute comparator was trained",
+    "Old classical ridge and new 103k native TAC differ enormously in parameters, data presentation and compute; no fair architecture superiority",
+    "Same household exposed development, overlapping forecast horizons, and source as-of time unverified",
+    "Nominal 90% interval point coverage alone does not neutralize worse interval score, tail uncertainty or deployment failures",
+    "48-step history with 8x8 delta matrix does not prove new long-retention memory",
+    "Three development seeds do not establish independent-entity uncertainty or a 5-seed qualified gate",
+    "No novel gated-delta matrix algebra claimed; relevant published prior art acknowledged",
+    "No production service, customer pilot, actual device/mobile benchmark or true economic decision outcome"
+  ]
+}
