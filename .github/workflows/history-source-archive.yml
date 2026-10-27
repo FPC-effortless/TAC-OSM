@@ -1,0 +1,68 @@
+name: Preserve verified original-source audit evidence
+on:
+  pull_request:
+    paths:
+      - .github/workflows/history-source-archive.yml
+      - scripts/archive_history_source_audit.py
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  archive-verified-source-result:
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'research/source-reloaded-history-audit-2026-10-27'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: true
+      - name: Verify archival utility and unchanged scientific implementation
+        run: |
+          python -m py_compile scripts/archive_history_source_audit.py
+          git fetch --depth=1 origin b472476dabd7bb7648ec8e0af653896d1382a0f0
+          git diff --exit-code b472476dabd7bb7648ec8e0af653896d1382a0f0 HEAD -- scripts/audit_history_source_reload.py scripts/original_history_trace.py src/tac_osm/history_source_controls.py src/tac_osm/history_source_probe.py research/mathematical-engineering/history_source017/FAIR_COMPARISON.json research/mathematical-engineering/history_source017/PREREGISTRATION.md research/phone_queue/history-source017.json research/replay-bundles/HISTORY-QUERY016/
+      - name: Download only completed, pinned-source original audit artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/FPC-effortless/TAC-OSM/actions/runs/40502062403 > /tmp/source-run.json
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12734235522 > /tmp/source-artifact.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('/tmp/source-run.json').read_text())
+          a=json.loads(Path('/tmp/source-artifact.json').read_text())
+          assert r['status']=='completed' and r['conclusion']=='success'
+          assert r['head_sha']=='b472476dabd7bb7648ec8e0af653896d1382a0f0'
+          assert a['workflow_run']['id']==40502062403 and not a['expired']
+          assert a['name']=='history-source017-source-audit'
+          assert a['digest']=='sha256:8677ae78bbbe29cf225269f3d6f5acfa55eb588b98aaaadc93c0683bdefd7ca1'
+          PY
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12734235522/zip > /tmp/source-audit.zip
+      - name: Preserve original bytes, exact replay and honest scoped summary
+        run: |
+          python scripts/archive_history_source_audit.py --archive /tmp/source-audit.zip --archive-sha256 8677ae78bbbe29cf225269f3d6f5acfa55eb588b98aaaadc93c0683bdefd7ca1 --run-id 40502062403 --artifact-id 12734235522 --output research/mathematical-engineering/history_source017
+      - name: Commit evidence only to this draft research branch
+        run: |
+          test "$GITHUB_HEAD_REF" = 'research/source-reloaded-history-audit-2026-10-27'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/mathematical-engineering/history_source017/ORIGINAL_RESULTS.json.gz research/mathematical-engineering/history_source017/SUMMARY.json research/mathematical-engineering/history_source017/REPLAY_RECEIPT.json research/mathematical-engineering/history_source017/RESULTS.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'Preserve exact original source-reload audit and scoped historical-key geometry'
+            git push origin HEAD:refs/heads/research/source-reloaded-history-audit-2026-10-27
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: history-source017-durable-evidence
+          path: |
+            research/mathematical-engineering/history_source017/ORIGINAL_RESULTS.json.gz
+            research/mathematical-engineering/history_source017/SUMMARY.json
+            research/mathematical-engineering/history_source017/REPLAY_RECEIPT.json
+            research/mathematical-engineering/history_source017/RESULTS.md
+          if-no-files-found: warn
