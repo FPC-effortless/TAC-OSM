@@ -1,0 +1,36 @@
+{
+  "study": "PAR-MEM-007",
+  "phase": "PRIVILEGED_DIAGNOSTIC_REAL_SOURCE_NOT_DEPLOYABLE",
+  "base_model": "5 original PAR-TIME-005 768-event source-trained TAC checkpoints, unchanged",
+  "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "seeds": [
+    271028,
+    271029,
+    271030,
+    271031,
+    271032
+  ],
+  "registered_genuine_queries": "Original PAR-MEM-006 query clocks, lags 16,64,128, train-only Mar-Apr 2014 and previously exposed May-Jun 2014 development",
+  "arms": [
+    "privileged_true_writer_key",
+    "privileged_adjacent_wrong_writer_key",
+    "original_006_learned_timestamp_key",
+    "no_matrix_read"
+  ],
+  "controls": "Same real observed source stream, same current 14 observations and 8 source-time query features, equally dimensioned 8 read feature. 31 features total plus bias.",
+  "writer_key_formula": "F.normalize(model.core.address(embedding_t),dim=-1,eps=1e-6), embedding_t from original frozen core step trace at the actual past source writer event",
+  "privileged_key_caveat": "TRUE and ADJACENT writer keys require retaining historical source-informed per-event key outside the 154-float persistent stream. Such oracle keys are impossible to recreate from timestamp only without training shared addresses. NEVER promote diagnostic to deployable model capability",
+  "original_timestamp_key": "PAR-MEM-006 associative_read trained query head: F.normalize(head.query_key(metadata),dim=-1)",
+  "frozen_memory_read": "state.matrix_at_query @ preselected key; AFTER source event query processing, no future write or labels",
+  "labels": "Earlier historical physically recorded normalized PM2.5 read ONLY after key/history feature computation",
+  "wrong_key": "Adjacent source event target_ordinal+1, which was strictly before current query for lags>=16",
+  "study_training": "Ridge regressor fitted ONLY on original real source training query answers. Scalar lambda=1.0, unpenalized intercept, float64 CPU linear solve",
+  "ridge_lambda": 1,
+  "source_train_queries": "Original PAR-MEM-006 preregistered train queries, no query-tuned subsampling",
+  "source_dev_queries": "Original PAR-MEM-006 already viewed 2014 development queries, NO independent qualification",
+  "expected_feature_dimension_including_intercept": 31,
+  "supervised_model_comparison": "NOT matched training compute / architecture claim: ridge feature-intervention diagnostic, privileged exact key never deployable",
+  "study_metrics": "mean genuine source historical PM2.5 MAE by 16/64/128 lag, paired difference on identical original source labels; correct vs wrong writer key cosine and memory read separation",
+  "original_source_protection": "2015/2016/2017 numerical years never parsed, original checkpoint SHA verified, no GPU and no change to trained weight",
+  "no_new_neural_model_fitting": true
+}
