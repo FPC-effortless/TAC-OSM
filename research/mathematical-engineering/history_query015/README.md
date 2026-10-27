@@ -1,3 +1,5 @@
+**Measured result:** both seeds failed the registered time-specific retrieval gate. Source/checkpoint checks and byte-identical replay passed. See [RESULTS.md](RESULTS.md).
+
 # Frozen content-model historical query specificity
 
 Question: after real historical-content training, does the native predictor
