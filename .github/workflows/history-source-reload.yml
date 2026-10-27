@@ -18,6 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           persist-credentials: false
       - uses: actions/checkout@v4
         with:
@@ -27,6 +28,28 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Reuse immutable source evidence only when scientific files are unchanged
+        id: scope
+        run: |
+          git fetch --depth=1 origin b472476dabd7bb7648ec8e0af653896d1382a0f0
+          if git diff --quiet b472476dabd7bb7648ec8e0af653896d1382a0f0 HEAD -- src scripts/audit_history_source_reload.py scripts/original_history_trace.py scripts/validate_research_parity.py scripts/phone_lab.py research/mathematical-engineering/history_source017/FAIR_COMPARISON.json research/mathematical-engineering/history_source017/PREREGISTRATION.md research/phone_queue/history-source017.json research/mathematical-engineering/history_query016/FROZEN_PLAN.json research/replay-bundles/HISTORY-QUERY016/ && [ -f research/mathematical-engineering/history_source017/ORIGINAL_RESULTS.json.gz ]; then
+            python - <<'PY'
+          import gzip,hashlib,json
+          from pathlib import Path
+          p=Path('research/mathematical-engineering/history_source017')
+          data=(p/'ORIGINAL_RESULTS.json.gz').read_bytes()
+          assert hashlib.sha256(data).hexdigest()=='f99e042a2054a49c4f7b795addc381b255820f4216f2b3435274b7566aa38ecb'
+          raw=gzip.decompress(data)
+          assert hashlib.sha256(raw).hexdigest()=='bfe78a170573430c8a6e14c9024c759385f7eec97ee17db80a138b4b695b5d93'
+          r=json.loads(raw)
+          assert r['all_exercised_end_to_end_invariance_checks_pass']
+          assert r['training_steps']==0 and not r['protected_TEST']
+          print('NO_NEW_SOURCE_EXECUTION: unchanged scientific code, cohort and checkpoints; reused exact source audit40502062403')
+          PY
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Pinned CPU execution profile and engineering tools
         run: |
           python -m pip install --quiet pytest cryptography numpy==2.3.3 ruff
@@ -49,6 +72,7 @@ jobs:
           python scripts/phone_lab.py plan research/phone_queue/history-source017.json > ci-artifacts/history-source017/COMPUTE_DECISION.txt
           python scripts/validate_research_parity.py --manifest research/mathematical-engineering/history_source017/FAIR_COMPARISON.json --phase preflight
       - name: Verified publisher archive, original member only
+        if: steps.scope.outputs.needed == 'true'
         run: |
           python - <<'PY'
           import hashlib,io,json,urllib.request,zipfile
@@ -63,9 +87,11 @@ jobs:
           Path('/tmp/history-source017-original.zip').write_bytes(original)
           PY
       - name: Actual source reload, future-only controls and native writer/read trace
+        if: steps.scope.outputs.needed == 'true'
         run: |
           python scripts/audit_history_source_reload.py --implementation-root original-content-code --source /tmp/history-source017-original.zip --output ci-artifacts/history-source017/first
       - name: Fresh-process exact source-control/checkpoint audit replay
+        if: steps.scope.outputs.needed == 'true'
         run: |
           python scripts/audit_history_source_reload.py --implementation-root original-content-code --source /tmp/history-source017-original.zip --output ci-artifacts/history-source017/replay
           python - <<'PY'

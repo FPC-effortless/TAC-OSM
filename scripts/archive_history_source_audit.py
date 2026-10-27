@@ -110,13 +110,14 @@ def main():
     for n,s in sorted(geometry.items()):
         fmt=lambda v:'INCONCLUSIVE' if v is None else f'{v:.6f}'
         lines.append('|'+n+'|'+str(s['windows'])+'|'+fmt(s['mean_native_query_different_clock_cosine'])+'|'+fmt(s['mean_target_key_cosine'])+'|'+fmt(s['mean_strict_rank_lower_bound'])+'|'+fmt(s['unique_best_target_key_fraction'])+'|')
-    lines+=['','Cosine, rank and apparent key collapse are mechanism observations, not ground-truth reconstruction or a usefulness gate. Temporal signal could be inferred indirectly from physical context; missing an explicit writer clock does not prove impossibility. No geometry value rescues the prior failed real-data usefulness gates.','',
+    lines+=['','For the fastslow control, the historical head reads a transient fast/slow feature product rather than persistent associative memory; its query/write cosine is only a geometric reference. Cosine and rank are mechanism observations, not ground-truth reconstruction or a usefulness gate. Temporal signal could be inferred indirectly from physical context; missing an explicit writer clock does not prove impossibility. No geometry value rescues the prior failed real-data usefulness gates.','',
         '## Durable source and limits','',
         'Source run: https://github.com/FPC-effortless/TAC-OSM/actions/runs/'+str(a.run_id)+'. Code head b472476dabd7bb7648ec8e0af653896d1382a0f0; original inference/reader source fd201207cb76b30470f64e1fc1baecf9de44560d. UCI501 original publisher archive/license receipt and frozen source identities/checkpoint hashes remain in FAIR_COMPARISON.json and history_audit014.','',
         'ORIGINAL_RESULTS.json.gz decompresses to the exact full original RESULT JSON; SHA256 '+sha(first)+'. It retains per-window real key geometry, all derived source hashes, mutation counts, prefix receipts, positive control and actual trace fingerprints. The publisher parent hash is distinct from every declared derived hash; the default original checksum guard rejected undeclared derivatives.','',
         'The first implementation run 40501595685 stopped on quoted CSV headers before model inference; proper CSV handling and regression fixtures fixed it. That failure is preserved. Prior HISTORY-QUERY016 negative scores and arbitrary-runner replay failure remain unchanged. Whole-model PNDS IEEE/AD and local probe AD are OPEN/INCONCLUSIVE. These scoped synthetic source tests cannot establish absence of every hidden information channel, reward certification, safety or real-world capability.','',
         'Source-reloaded future-poison is now exercised for this exact frozen cohort and pipeline; historical INCONCLUSIVE records remain immutable. No subsequent model fit is authorized by this receipt alone.']
-    (a.output/'RESULTS.md').write_text('\n'.join(lines)+'\n')
+    if not (a.output/'RESULTS.md').exists():
+        (a.output/'RESULTS.md').write_text('\n'.join(lines)+'\n')
     print(json.dumps(summary,indent=2,sort_keys=True))
 
 
