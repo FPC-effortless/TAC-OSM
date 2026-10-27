@@ -1,0 +1,90 @@
+name: MODEL01 authentic 176-client 103381p native TAC 1h+24h original training
+on:
+  push:
+    branches:
+      - research/model01-monash-native-multihorizon-fit-2026-10-27
+    paths:
+      - 'specialist_models/model01_monash_native_multihorizon_fit.py'
+      - 'specialist_models/model01_monash_native_checkpoint_replay.py'
+      - 'tests/test_model01_monash_native_multihorizon_fit.py'
+      - 'research/registrations/MODEL01-MONASH-NATIVE-MULTIHORIZON-001.md'
+      - '.github/workflows/model01-monash-native-multihorizon.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  native-original-monash-real-client-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 33
+    concurrency:
+      group: model01-monash-original-neural-3seed-fit
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Pin CPU-only real-source training dependencies
+        run: |
+          python -m pip install --no-cache-dir --disable-pip-version-check 'numpy==2.2.6'
+          python -m pip install --no-cache-dir --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Original model parameter count, source split, causal history and fail-closed FIT tests
+        run: python -m unittest discover -s tests -p 'test_model01_monash_native_multihorizon_fit.py' -v
+      - name: Actual publisher 176 FIT clients and 34 CAL 36 DEV genuine two-horizon training
+        env:
+          MODEL01_MONASH_REAL_FIT_ENABLE: EXPLICIT_CPU_CUSTOMER_FIT
+        run: |
+          set -euo pipefail
+          mkdir -p research/replay-bundles/MODEL01-MONASH-NATIVE-MULTIHORIZON-001
+          ORIGINAL=research/replay-bundles/MODEL01-MONASH-NATIVE-MULTIHORIZON-001/ORIGINAL_FIT.json
+          if [ -e "$ORIGINAL" ]; then
+            echo 'ORIGINAL_MULTI_CLIENT_NEURAL_CHECKPOINTS_EXIST_NO_REFIT'
+          else
+            python specialist_models/model01_monash_native_multihorizon_fit.py --out "$ORIGINAL"
+            python - <<'PY'
+          import json
+          p='research/replay-bundles/MODEL01-MONASH-NATIVE-MULTIHORIZON-001/ORIGINAL_FIT.json'
+          d=json.load(open(p))
+          assert d['native_learned_deployed_parameters']==103381
+          assert (d['training_clients'],d['cal_clients'],d['dev_clients'],d['sealed_test_clients'])==(176,34,36,75)
+          assert d['sealed_test_target_values_parsed'] is False
+          assert d['prediction_horizons_hours']==[1,24]
+          assert d['optimizer_updates_per_seed']==160 and d['batch_size']==64
+          assert d['seeds']==[1801,1802,1803] and len(d['runs'])==3
+          assert all(set(r['dev_macro'])=={'1','24'} and len(r['checkpoint_b64_gzip'])>100_000 for r in d['runs'])
+          assert d['independent_confirmatory_test_performed'] is False
+          print('ORIGINAL_MONASH_NATIVE_3_SEED_TRAINED_CHECKPOINTS_SAVED')
+          print('REAL_DEV_NEW_CUSTOMERS='+json.dumps([{'seed':r['seed'],'source_sha':r['checkpoint_sha256'],'dev':r['dev_macro']} for r in d['runs']],sort_keys=True))
+          PY
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add "$ORIGINAL"
+            git commit -m 'research: preserve three authentic customer FIT native TAC originals, optimizer and per-client scores'
+            git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}"
+          fi
+      - name: Same-run no-fit restore authentic original weights and reproduce real CAL and DEV
+        run: |
+          python specialist_models/model01_monash_native_checkpoint_replay.py \
+            --from-original research/replay-bundles/MODEL01-MONASH-NATIVE-MULTIHORIZON-001/ORIGINAL_FIT.json \
+            --out original_monash_native_no_fit_replay.json
+          python - <<'PY'
+          import json
+          d=json.load(open('original_monash_native_no_fit_replay.json'))
+          assert d['training_steps_executed']==0
+          assert d['sealed_test_customer_targets_parsed'] is False
+          assert len(d['reports'])==3
+          assert all(x['CAL_DEV_replayed_within_0p005_kw_absolute'] for x in d['reports'])
+          print('ORIGINAL_REAL_NEURAL_CAL_DEV_NO_FIT_REPLAY=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: model01-monash-native-3-seed-original-model-and-replay
+          path: |
+            research/replay-bundles/MODEL01-MONASH-NATIVE-MULTIHORIZON-001/ORIGINAL_FIT.json
+            original_monash_native_no_fit_replay.json
+          if-no-files-found: warn
+          retention-days: 14
