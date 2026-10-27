@@ -1,0 +1,76 @@
+name: Model01 Monash native original three-seed 103381p independent no-fit replay
+on:
+  push:
+    branches:
+      - research/model01-monash-native-multihorizon-fit-2026-10-27
+    paths:
+      - '.github/workflows/model01-monash-native-clean-replay.yml'
+      - 'specialist_models/model01_monash_native_checkpoint_replay.py'
+      - 'research/replay-bundles/MODEL01-MONASH-NATIVE-MULTIHORIZON-001/**'
+      - 'specialist_models/model01_monash_native_multihorizon_fit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-original-physical-client-no-fit-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 19
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: true
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned original CPU numerical reader
+        run: |
+          python -m pip install --no-cache-dir --disable-pip-version-check 'numpy==2.2.6'
+          python -m pip install --no-cache-dir --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify original exact Git learned model, optimizer and source identity and practical failure conditions
+        run: |
+          python - <<'PY'
+          import json
+          path='research/replay-bundles/MODEL01-MONASH-NATIVE-MULTIHORIZON-001/ORIGINAL_FIT.json'
+          d=json.load(open(path))
+          original=json.load(open('research/source-evidence/MODEL01-MONASH321-ORIGINAL-CAL-DEV-SOURCE-BASELINES.json'))
+          assert d['native_learned_deployed_parameters']==103381
+          assert d['source_zip_sha256']==original['source_zip_sha256']=='eff447075dde68dca0105ab7e2851c5637967ae3bb21556fd8b931f196d5968c'
+          assert (d['training_clients'],d['cal_clients'],d['dev_clients'],d['sealed_test_clients'])==(176,34,36,75)
+          assert d['sealed_test_target_values_parsed'] is False
+          assert d['independent_confirmatory_test_performed'] is False
+          assert d['seeds']==[1801,1802,1803] and len(d['runs'])==3
+          assert d['optimizer_updates_per_seed']==160
+          for h in ('1','24'):
+            b=min(row['mean_client_mae_kw'] for row in original['macro_references']['DEV'][h].values())
+            actual=[r['dev_macro'][h]['mean_client_mae_kw'] for r in d['runs']]
+            assert all(r['dev_macro'][h]['customers']==36 for r in d['runs'])
+            assert all(r['dev_macro'][h]['total_decisions']==12096 for r in d['runs'])
+            print('ORIGINAL_REAL_HORIZON_STATUS='+json.dumps({'horizon_hours':h,'best_reference':b,'original_three_native_errors':actual}))
+            if h=='24':
+              assert all(m>b for m in actual), 'previously exposed real baseline failure must not be hidden'
+          assert all(r['dev_macro']['1']['mean_client_coverage90']<.90 for r in d['runs'])
+          assert all(r['dev_macro']['24']['mean_client_coverage90']<.90 for r in d['runs'])
+          print('REAL_CLIENT_FORECASTING_VERDICT=DEV_FAILS_LONG_HORIZON_AND_COVERAGE')
+          PY
+      - name: Independent original Zenodo re-fetch and re-run native checkpoint/optimizer restore without any fitting
+        run: |
+          python specialist_models/model01_monash_native_checkpoint_replay.py \
+            --from-original research/replay-bundles/MODEL01-MONASH-NATIVE-MULTIHORIZON-001/ORIGINAL_FIT.json \
+            --out /tmp/model01_multiclient_new_source_no_fit_replay.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/model01_multiclient_new_source_no_fit_replay.json'))
+          assert x['training_steps_executed']==0 and x['sealed_test_customer_targets_parsed'] is False
+          assert not x['independent_scientific_test_performed']
+          assert len(x['reports'])==3
+          assert all(s['original_weights_and_optimizer_SHA256_verified'] for s in x['reports'])
+          assert all(s['CAL_DEV_replayed_within_0p005_kw_absolute'] for s in x['reports'])
+          print('MONASH_NATIVE_SOURCE_FRESH_CHECKOUT_NO_TRAINING_REPLAY=PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-monash-176fit-34cal-36dev-native-original-clean-replay
+          path: /tmp/model01_multiclient_new_source_no_fit_replay.json
+          if-no-files-found: error
+          retention-days: 14
