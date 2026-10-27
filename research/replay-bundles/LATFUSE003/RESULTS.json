@@ -1,0 +1,118 @@
+{
+  "actual_total_optimizer_steps": 256,
+  "development_scope": "2015 source already-exposed DEV, all numerical targets parsed only AFTER original trained checkpoints saved",
+  "evidence_status": "SINGLE_CANDIDATE_ORIGINAL_REAL_DATA_ONLY_NO_MATCHED_COMPUTE_ARCH_WIN",
+  "fp32_recurrent_state_bytes": 6800,
+  "original_source_2016_2017": "numeric records NEVER parsed",
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "original_training_data_scope": "2013-03 to 2014-08 source FIT original",
+  "out_of_time_validation_scope": "2014-09 to 2014-12 source original",
+  "parameters": 99747,
+  "prefit_partial_forward_backward_flops_candidate_with_aux": 61714798,
+  "prefit_partial_forward_backward_flops_parent": 58640568,
+  "relative_compute_to_Latfuse002_not_equal": true,
+  "results": [
+    {
+      "actual_contract": {
+        "deployed_parameters": 99747,
+        "fp32_values": 1696,
+        "head_count": 4,
+        "head_key_dim": 4,
+        "head_value_dim": 16,
+        "historical_recurrent_state_unchanged": true,
+        "matrix_cells": 256,
+        "nominal_bytes": 6800,
+        "occupancy_flags": 16,
+        "top_k_writes": 2,
+        "trainable_parameters": 99747
+      },
+      "actual_training_cases": 1024,
+      "all_parameter_tensors_updated": 39,
+      "development_2015": {
+        "n_origins": 312,
+        "n_valid_channels": 4024,
+        "nll": 5.585484981536865,
+        "nominal_90_coverage": 0.8881709575653076,
+        "normalized_mae": 0.576911985874176,
+        "persistence_normalized_mae": 0.5598021745681763,
+        "persistence_pm25_mae": 33.3725471496582,
+        "pm25_mae": 26.4292049407959
+      },
+      "final_sampled_training_loss": 0.7593513131141663,
+      "first_training_loss": 1.469525694847107,
+      "original_checkpoint_sha256": "ad6fa79d9cb4392d3b4b316ece30979fbd085a88732ae640f66c771a8e8f375d",
+      "previously_exposed_dev_only": true,
+      "seed": 310301,
+      "train_source_plan_sha256": "a2d2d703c8a8d81cc9ceeff2c9e9ffb7edb42913ad562310a750ba39f04969ed",
+      "training_steps": 128,
+      "validation_2014": {
+        "n_origins": 108,
+        "n_valid_channels": 1392,
+        "nll": 1.2411824464797974,
+        "nominal_90_coverage": 0.9022988677024841,
+        "normalized_mae": 0.5503100752830505,
+        "persistence_normalized_mae": 0.4750080406665802,
+        "persistence_pm25_mae": 33.1037712097168,
+        "pm25_mae": 31.010601043701172
+      }
+    },
+    {
+      "actual_contract": {
+        "deployed_parameters": 99747,
+        "fp32_values": 1696,
+        "head_count": 4,
+        "head_key_dim": 4,
+        "head_value_dim": 16,
+        "historical_recurrent_state_unchanged": true,
+        "matrix_cells": 256,
+        "nominal_bytes": 6800,
+        "occupancy_flags": 16,
+        "top_k_writes": 2,
+        "trainable_parameters": 99747
+      },
+      "actual_training_cases": 1024,
+      "all_parameter_tensors_updated": 39,
+      "development_2015": {
+        "n_origins": 312,
+        "n_valid_channels": 4024,
+        "nll": 6.207954406738281,
+        "nominal_90_coverage": 0.8762425184249878,
+        "normalized_mae": 0.5599401593208313,
+        "persistence_normalized_mae": 0.5598021745681763,
+        "persistence_pm25_mae": 33.3725471496582,
+        "pm25_mae": 24.236886978149414
+      },
+      "final_sampled_training_loss": 0.714798629283905,
+      "first_training_loss": 1.3895022869110107,
+      "original_checkpoint_sha256": "3783f8deffd9d763dbc14275db0848e715fbdb8eae4e46a23aa6f35ccc9cc0b3",
+      "previously_exposed_dev_only": true,
+      "seed": 310302,
+      "train_source_plan_sha256": "6c480587617e28def18f3bcd68b984b6e09dcbd306105d432a5de1b9a3ab1d49",
+      "training_steps": 128,
+      "validation_2014": {
+        "n_origins": 108,
+        "n_valid_channels": 1392,
+        "nll": 1.031097412109375,
+        "nominal_90_coverage": 0.8965517282485962,
+        "normalized_mae": 0.5465041995048523,
+        "persistence_normalized_mae": 0.4750080406665802,
+        "persistence_pm25_mae": 33.1037712097168,
+        "pm25_mae": 32.727962493896484
+      }
+    }
+  ],
+  "source_files_sha256": {
+    "scripts/latfuse002_real_fit.py": "bdc64c96b6ea5210d2a23d81accfdbfade3175672819ed233f149d6670c7b8ab",
+    "scripts/latfuse003_real_training.py": "bc56f5c21dacfaef8e36046cdfd5834925d65edfb86292aa95699af7f2179717",
+    "scripts/validate_research_parity.py": "3d6fb7ee22615f5fb5ef3f6340b4c1686ecc67f197b69e30d24f0057fffd95cd",
+    "src/tac_osm/latent_fusion_001.py": "a8fe9a33ac79beebfc356b9d94e8d36765624de91d88524027d6cbbf364d8cb6",
+    "src/tac_osm/latent_fusion_002.py": "7da93cd4d9dabe629d94f621a27f36c8a9b1a8319c23f38fdbe05618d9dc2c06",
+    "src/tac_osm/latent_fusion_003.py": "f20981d42da33609e87fc7acf1b56f9626f8bbec40653aaddb1c1c04340a063b"
+  },
+  "study_id": "LATFUSE003-REAL-SINGLE-001",
+  "total_fit_pipeline_wall_seconds": 27.126599817,
+  "trained_seeds": [
+    310301,
+    310302
+  ]
+}
