@@ -1,0 +1,48 @@
+name: PAR-TIME-003 independent source-trained checkpoint replay (read-only)
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/partime003-original-replay.yml'
+      - 'research/replay-bundles/PAR-TIME-003/**'
+      - 'research/parallel-six/PAR-TIME-003-FROZEN-PLAN.json'
+      - 'scripts/partime003_single_model_fit.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-origin-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exact original environment compatible CPU Torch
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Required committed source train and original DEV evidence
+        run: |
+          set -e
+          test -s research/parallel-six/PAR-TIME-003-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-TIME-003/TRAIN_RECEIPT.json
+          test -s research/replay-bundles/PAR-TIME-003/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-TIME-003 -maxdepth 1 -name 'seed-*-full-original.pt' | wc -l)" -eq 5
+          test "$(find research/replay-bundles/PAR-TIME-003 -maxdepth 1 -name 'seed-*-DEV_arrays.pt' | wc -l)" -eq 5
+      - name: Restore SHA-verified original licensed physical source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/par-time003-replay
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/par-time003-replay/source.zip
+          test "$(sha256sum /tmp/par-time003-replay/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Replay all five originals, 235 genuine historical development forecasts and original metrics
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.partime003_single_model_fit --mode replay \
+            --source /tmp/par-time003-replay/source.zip
+          echo 'READ_ONLY_REPLAY_PASSED; never trained/refitted/relabeled or opened 2015-2017.'
