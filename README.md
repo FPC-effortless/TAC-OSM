@@ -1,3 +1,7 @@
+## Lightweight Research Lab (no new platform required)
+
+Existing experiment scripts and source-qualified scientific gates remain unchanged. The optional [research lab quickstart](research/LIGHTWEIGHT-LAB-2026-10-27.md) provides a zero-dependency run ledger, report/checkpoint SHA256 provenance, an offline metrics dashboard, CI artifacts, and read-only recipes for MLflow, W&B, Comet, DVC, Hugging Face, Docker, Slurm, Ray, Kubernetes, Jupyter, GitHub, and notifications. Run your existing experiments first; then index a source file with `python scripts/lab.py record`. Logging a metric is never a capability or reward-integrity qualification.
+
 # TAC-OSM v0.1
 
 > **A controlled experimental environment for studying persistent-state-
