@@ -132,7 +132,7 @@ def make_server(model, q):
             self.send_header("X-Content-Type-Options","nosniff")
             self.end_headers()
             self.wfile.write(raw)
-    return ThreadingHTTPServer(("127.0.0.1",0), Handler)
+    return Handler
 
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
@@ -149,16 +149,8 @@ def main(argv=None):
         else:
             if not 1 <= args.port <= 65535:
                 raise InputError("invalid loopback port")
-            class H(make_server(model,q).RequestHandlerClass):
-                pass
-            # Only bind loopback, NEVER public interfaces; the factory's
-            # ephemeral socket gets explicitly closed before real listen.
-            temp=make_server(model,q)
-            try:
-                handler=temp.RequestHandlerClass
-            finally:
-                temp.server_close()
-            with ThreadingHTTPServer(("127.0.0.1",args.port),handler) as server:
+            # This reference intentionally supports loopback only.
+            with ThreadingHTTPServer(("127.0.0.1",args.port),make_server(model,q)) as server:
                 print(canonical({"status":"LOCAL_DEV_SERVER_ONLY","host":"127.0.0.1",
                                  "port":args.port, "no_auth_tls":"DO_NOT_EXPOSE"}),flush=True)
                 server.serve_forever(poll_interval=.1)
