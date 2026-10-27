@@ -49,7 +49,7 @@ def checked_protocol():
         "publisher_parameter_code":"88101",
         "publisher_year":"2024",
         "minimum_source_hour_metadata_count_per_monitor_in_its_assigned_phase":160,
-        "no_new_model_family":False,
+        "no_new_model_family":True,
     }
     for k,v in expected.items():
         if cfg.get(k)!=v:
