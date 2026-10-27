@@ -1,0 +1,53 @@
+{
+  "schema": "model02-backblaze-46day-original-source-feasibility-summary-v1",
+  "source_name": "Backblaze 2013 original daily drive telemetry",
+  "source_original_zip_sha256": "7f5a53e79b16e695b4b034955806bb3bb194534b169f6eca460dfd3dc48096fe",
+  "original_source_url": "https://f001.backblazeb2.com/file/Backblaze-Hard-Drive-Data/data_2013.zip",
+  "original_actions_run": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40470483261",
+  "experiment_kind": "SOURCE_ONLY_RETROSPECTIVE_COHORT_FEASIBILITY",
+  "enrollment_rule": "first-day publisher-present nonfailed physical identity, fixed from 2013-10-01",
+  "enrolled_initial_drives": 900,
+  "date_range_exposed": [
+    "2013-10-01",
+    "2013-11-15"
+  ],
+  "future_test_member_contents_parsed": false,
+  "fit_range": [
+    "2013-10-01",
+    "2013-10-31"
+  ],
+  "exposed_dev_range": [
+    "2013-11-01",
+    "2013-11-15"
+  ],
+  "horizon_days": 7,
+  "publisher_failure_flags_all_original_source_rows": 134,
+  "eligible_fixed_cohort_unique_drives_with_failure": 4,
+  "exposed_fit": {
+    "source_observation_windows": 27816,
+    "provisional_positive_windows": 16,
+    "complete_negative_windows": 21528,
+    "right_censored_windows": 6272,
+    "unique_drives_with_positive_windows": 4
+  },
+  "exposed_dev": {
+    "source_observation_windows": 13440,
+    "provisional_positive_windows": 0,
+    "complete_negative_windows": 7168,
+    "right_censored_windows": 6272,
+    "unique_drives_with_positive_windows": 0
+  },
+  "statistical_concern": "Only 4 distinct fixed-enrollment physical drive failures during whole exposed period and no held-out DEV positive windows. Overlapping drive-days are not independent events. Original source failure flags include out-of-cohort drives and must NOT be used as enrolled-cohort labels.",
+  "reference_original_source_history": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40467078367",
+  "previous_14_day_exposure": {
+    "source_days": 14,
+    "observed_original_drive_days": 12600,
+    "recorded_failure_flags": 3
+  },
+  "original_publisher_source_time_independent_attestation": false,
+  "real_time_publisher_availability_qualified": false,
+  "real_world_prediction_qualification": "BLOCKED",
+  "next_action": "Source-authorized prospective-style rolling enrollment and explicit warm-up without future-informed inclusion; preregister and audit its entity/prediction-time data rights before fit. Do not train failure model on fixed initial 900-drive case, and do not open later protected source months for informal tuning.",
+  "synthetic_unit_tests_only": 8,
+  "status": "ORIGINAL_PUBLISHER_SOURCE_FEASIBILITY_ONLY_NO_MODEL_FIT"
+}
