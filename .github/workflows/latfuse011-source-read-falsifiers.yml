@@ -1,0 +1,93 @@
+name: LATFUSE011 independent genuine-source sign, cosine and read/erase falsifiers
+
+on:
+  push:
+    branches:
+      - research/latfuse011-real-retrieval-falsifiers-2026-10-27
+    paths:
+      - "scripts/latfuse011_real_memory_falsifiers.py"
+      - "tests/test_latfuse011_memory_falsifiers.py"
+      - "research/mathematical-engineering/latfuse011/REGISTERED_FALSIFIERS.json"
+      - ".github/workflows/latfuse011-source-read-falsifiers.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: LATFUSE011-SOURCE-ORIGINAL-READONLY-24PAIRS
+  cancel-in-progress: false
+
+jobs:
+  eight-scored-source-paths-no-original-weight-changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install CPU original source PyTorch and unit-test runner
+        run: |
+          python -m pip install --quiet pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Strict original preregistration and prior checkpoint source integrity, BEFORE new labels
+        run: |
+          python -m py_compile scripts/latfuse011_real_memory_falsifiers.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse011/REGISTERED_FALSIFIERS.json \
+            --phase preflight
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE008/POSTFIT_PARITY.json \
+            --phase final
+          python scripts/sync_test_count.py --check
+          test -s research/replay-bundles/LATFUSE008/RESULTS.json
+          test ! -e research/mathematical-engineering/latfuse011/RESULTS.json
+      - name: Original historic model and mathematical projection guard checks
+        env:
+          PYTHONPATH: ".:src"
+        run: |
+          python -m pytest -q \
+            tests/test_latfuse011_memory_falsifiers.py \
+            tests/test_latfuse008_noassoc_control.py \
+            tests/test_latent_fusion_007_historic_query.py
+      - name: Recover original source-owned UCI501 physical sensor ZIP with exact authorized commit SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse011-source
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse011-source/PRSA2017_original.zip
+      - name: Truthful source original 24-pair polarity, exact d8 cosine and entire learned-read/event-lesion diagnostics
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse011_real_memory_falsifiers.py \
+            --source /tmp/latfuse011-source/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse011/RESULTS.json
+      - name: Preserve original frozen-model empirical positive and negative evidence in draft branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse011-real-retrieval-falsifiers-2026-10-27
+          test -s research/mathematical-engineering/latfuse011/RESULTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse011/RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: freeze original true-source rank sign, isotropic 8D null and historic full read/event lesion attribution"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Accurate inference boundary
+        run: |
+          echo "No original source-model optimizer, original 2015 DEV or protected 2016–17 numeric."
+          echo "24 physical source pairs/seed are NOT independent multiple-seed repetitions."
+          echo "Same source per-station/current sensor baselines, event-specific matrix write and full-read lesion are mechanistic, not event factual deletion."
+          echo "Synthetic 16-512h learning positive control separate and diagnostic ONLY."
