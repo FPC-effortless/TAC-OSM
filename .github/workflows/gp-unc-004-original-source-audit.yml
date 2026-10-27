@@ -49,6 +49,8 @@ jobs:
           import json
           r=json.load(open('gp-unc-004-original-source-nofit.json'))
           assert r['forecast_events']==64 and r['original_label_events']==64
+          assert r['source_anchored_future_only_label_poison_checks']==64
+          assert r['source_future_target_poison_changed_original_forecast'] is False
           assert r['all_original_api_predictions_preserved']
           assert r['gp_updated_on_real_labels'] is False
           assert r['protected_test_parsed'] is False
