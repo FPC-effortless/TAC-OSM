@@ -1,0 +1,32 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE004-FACTORIAL-READONLY-PREFLIGHT",
+  "study_type": "noncomparative_diagnostic",
+  "no_architecture_superiority_claim": true,
+  "no_new_model_fits": true,
+  "scientific_purpose": "Check independent 2 vs4 fixed-cell head widths and hard vs fully differentiable source-conditioned soft routing on original authenticated FIT observations, exact 6800-byte FP32 recurrence, 95k-105k parameter and <=1% paired gap, exact source-available forward/backward gradient connection, source/labels leakage prevention and profiler budget before any training.",
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "matrix_storage": "256 FP32 cells in each arm",
+  "state_bytes": 6800,
+  "experimental_design": {
+    "heads": [
+      2,
+      4
+    ],
+    "write_routing": [
+      "hard-top-half",
+      "soft-differentiable-all-heads"
+    ],
+    "arms": [
+      "4h-hard",
+      "4h-soft",
+      "2h-hard",
+      "2h-soft"
+    ],
+    "controls": "4h-hard forward and forecast exact original LATFUSE003 model, no changed stored checkpoints",
+    "common_loss": "genuine FIT masked .8 Gaussian NLL+.2 MAE, .25 physical-source-distinct key hinge, .03 soft probability load balance. Future measured target used only after forecast. No fabricated facts.",
+    "hardware": "CPU PyTorch graph 1 thread; source-only fixed station-hour origins, per-arm 2 seeds planned only after matched compute/params eligible",
+    "parity": "All arms 95k-105k and <=1% params across registered shapes; FLOPs must be measured, not presumed equal or padded; if forward/backward/optimizer FULL FLOP >1% mismatch no fair comparative FIT promoted.",
+    "stop": "No optimizer in this diagnostic. No source report 2015, no protected 2016-2017, no future target injected into model, no synthetic task capability assertion. Training requires separate frozen preregistration."
+  }
+}

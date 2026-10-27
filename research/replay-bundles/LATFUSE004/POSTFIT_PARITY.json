@@ -1,0 +1,129 @@
+{
+  "models": [
+    {
+      "architecture": "4h-hard",
+      "deployed_parameters": 99747,
+      "measured": {
+        "checkpoint_sha256": "abb1ffbab0ee17c1d84d9997d68bbf5f9d777d845177b5556b0cdc588833668f",
+        "deployed_parameters": 99747,
+        "trainable_parameters": 99747
+      },
+      "seed": 40401,
+      "trainable_parameters": 99747
+    },
+    {
+      "architecture": "4h-soft",
+      "deployed_parameters": 99747,
+      "measured": {
+        "checkpoint_sha256": "abf412826840cbfa0270b6215719e5e11d7d22145a0c66970cff4b8ca82f8dd2",
+        "deployed_parameters": 99747,
+        "trainable_parameters": 99747
+      },
+      "seed": 40401,
+      "trainable_parameters": 99747
+    },
+    {
+      "architecture": "2h-hard",
+      "deployed_parameters": 99261,
+      "measured": {
+        "checkpoint_sha256": "8d612a0ff4c2753b6cdf08b59890804bfa1c2c610ef8dc674c553dc805e0b70e",
+        "deployed_parameters": 99261,
+        "trainable_parameters": 99261
+      },
+      "seed": 40401,
+      "trainable_parameters": 99261
+    },
+    {
+      "architecture": "2h-soft",
+      "deployed_parameters": 99261,
+      "measured": {
+        "checkpoint_sha256": "cfb6e08060f92cdc50babff349c3c067d6f14edda1d62b9b06543d1d72ae5504",
+        "deployed_parameters": 99261,
+        "trainable_parameters": 99261
+      },
+      "seed": 40401,
+      "trainable_parameters": 99261
+    },
+    {
+      "architecture": "4h-hard",
+      "deployed_parameters": 99747,
+      "measured": {
+        "checkpoint_sha256": "6e517de5bc3cd5ab6815a075613414268afb8c5e78e7afde0bf9940a597135c7",
+        "deployed_parameters": 99747,
+        "trainable_parameters": 99747
+      },
+      "seed": 40402,
+      "trainable_parameters": 99747
+    },
+    {
+      "architecture": "4h-soft",
+      "deployed_parameters": 99747,
+      "measured": {
+        "checkpoint_sha256": "68826e2542e665caf8bd8d442e14097b9b4f7a31f490d4938f741d92e56aeec7",
+        "deployed_parameters": 99747,
+        "trainable_parameters": 99747
+      },
+      "seed": 40402,
+      "trainable_parameters": 99747
+    },
+    {
+      "architecture": "2h-hard",
+      "deployed_parameters": 99261,
+      "measured": {
+        "checkpoint_sha256": "f50e2d509c6397f10a262215bde67998dc71612177c12d53b9c002a26669c0ae",
+        "deployed_parameters": 99261,
+        "trainable_parameters": 99261
+      },
+      "seed": 40402,
+      "trainable_parameters": 99261
+    },
+    {
+      "architecture": "2h-soft",
+      "deployed_parameters": 99261,
+      "measured": {
+        "checkpoint_sha256": "1f13ff70115723e12e5e4cef1301c1a2ac31cfbf591ef77b4736d249131d2903",
+        "deployed_parameters": 99261,
+        "trainable_parameters": 99261
+      },
+      "seed": 40402,
+      "trainable_parameters": 99261
+    }
+  ],
+  "protocol": {
+    "audit": "Model remains in own isolated draft branch, LATFUSE002+003 original checkpoints and results unmodified; external independent reward/outcome/source rights attestation still inconclusive. Synthetic only for unit tests.",
+    "evidence": "Preserve all 8 original full weights/optimizer/RNG/FIT normalization/sampler SHA/entire training loss trace, 2014 validation and 2015 DEV original prediction arrays and scores; independent clean Git checkout reload original checkpoints and bit-exact array/score replay without optimizer",
+    "independent_axes": "head count 2 or4; key widths8 or4 with 256 persistent FP32 matrix cells in both; hard top-half write routing versus soft differentiable all-head writing; read router always soft",
+    "loss": "identical in all arms: 0.8 genuine observed-only masked standardized Gaussian NLL +0.2 absolute error +0.25 same-source sensor-distinct weighted per-head key collision hinge abs cosine>.85 +0.03 soft probability head-balance penalty; no future-label-derived key targets. Fixed before any fit. No stochastic head sampler, learned log temperature clamped [-0.693147,0.693147].",
+    "metrics": "All-channel normalized MAE and Gaussian NLL, pooled90 coverage and per-channel risk, raw PM2.5 MAE vs unmatched practical persistence. All eight outcomes, mean by two seeds, no cherry picking. Model-comparison results purely DESCRIPTIVE due unmet strict 1% complete compute criterion and reused exposed 2015 development.",
+    "optim": "AdamW learning_rate0.0005,weight_decay0.001,grad_norm_clip1.0, no warm start/pretrained weights, no hyperparameter selection or additional tries based on out-of-time metrics",
+    "scientific_boundary": "Cannot claim Mamba/Transformer language intelligence, associative recall correctness, causal action policy, qualified calibrated probability or mathematically proven entire FP32/AD graph. Local operator math separate PNDS.",
+    "scope": "EXPLORATORY 2x2 factorial descriptive mechanism study with all eight fresh models. DOES NOT MEET strict FAIR architecture comparison because measured supported-op FLOPs max 62,072,899 / min 61,376,965 gap 1.121% > 1%; full AdamW FLOPs not independently verified. Do not claim architectural superiority.",
+    "source": "Original source SHA256 pinned exact UCI501 original ZIP; chronological station IDs and actually observed 13 channels masks + elapsed since observation + causal last-seen; future query 6D time-of-day/week/year known calendar, NOT control action, do() or physical weather values; normalization from training FIT original measured coordinates only",
+    "state": "all arms identical source-limited state fast80+slow80+16x16 matrix+16 x80 source slots=1696 FP32 scalars and16 Boolean occupancy flags=6800 nominal bytes",
+    "stop": "Exactly 8 trained models and 1024 total optimizer updates. Fail closed on source hash, data order, nonfinite/partial gradients, model/state shape, unexpected parameter count, source leak, checkpoint replay mismatch, protected-data access. No retries or tuner iterations under this registration; preserve failures and create new registration only after independent justification.",
+    "timecuts": "training before 2014-09-01; chronological 2014-09 to Dec validation using original fixed station-hour every336 hours; previously-exposed DEV 2015 numerical loaded only after ALL eight checkpoint original byte hashes frozen; 2016-2017 original numeric protected rows NEVER parsed",
+    "train": "Two prespecified distinct seeds 40401/40402, SAME original sampled station-hour ID order and training schedule across ALL FOUR arms within each seed; exactly 128 AdamW steps \u00d78 cases per arm. Each source case 24 historical genuine observed hourly readings, FIT period March2013-Aug2014, +6 original measured target only after model prediction. Sequential fits do not share trained weights, optimizer or RNG between arms.",
+    "training_compute_caveat": {
+      "fully_verified": false,
+      "max_allowed_for_fair_claim": 0.01,
+      "prefit_partial_flops": {
+        "2h-hard": 61376965,
+        "2h-soft": 61376965,
+        "4h-hard": 62072899,
+        "4h-soft": 62072323
+      },
+      "relative_gap": 0.01121155949233175
+    },
+    "weights": "4head trained+deployed 99747,2head 99261, pair gap0.487%, no dummy/frozen parameter padding, all live FP32 trained modules"
+  },
+  "real_world_source": {
+    "license": "CC-BY-4.0",
+    "name": "UCI501 Beijing Multi-Site Air Quality licensed original recorded 12 stations, non-synthetic",
+    "observed_real_outcomes": true,
+    "sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8"
+  },
+  "registered_before_first_fit": true,
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE004-REAL-FACTORIAL-EXPLORATORY",
+  "study_type": "single_model_training"
+}

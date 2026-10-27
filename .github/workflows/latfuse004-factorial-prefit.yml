@@ -1,0 +1,64 @@
+name: LATFUSE004 four-arm original-real-data routing/capacity NO-FIT preflight
+
+on:
+  push:
+    branches: [research/latfuse004-factorial-routing-capacity-2026-10-27]
+    paths:
+      - "src/tac_osm/latent_fusion_004_factorial.py"
+      - "tests/test_latent_fusion_004_factorial.py"
+      - "scripts/latfuse004_factorial_prefit.py"
+      - "research/mathematical-engineering/latfuse004/FAIR_COMPARISON.json"
+      - ".github/workflows/latfuse004-factorial-prefit.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  true-source-zero-step-four-arm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install FP32 CPU PyTorch and test dependencies
+        run: |
+          python -m pip install --quiet pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Check nontraining preregistration and historical test integrity
+        run: |
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse004/FAIR_COMPARISON.json \
+            --phase preflight
+          python scripts/sync_test_count.py --check
+      - name: Four arm mathematical memory and gradient behavioral contracts
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m pytest -q tests/test_latent_fusion_002.py \
+            tests/test_latent_fusion_003.py tests/test_latent_fusion_004_factorial.py
+      - name: Restore exact original genuine air-quality source from pinned historical git commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse004-authentic
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse004-authentic/PRSA2017_original.zip
+      - name: Same 8 original real source station-hour cases, four exact parameter and AD profiles
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse004_factorial_prefit.py \
+            --source /tmp/latfuse004-authentic/PRSA2017_original.zip
+      - name: No training or false parity
+        run: |
+          echo "No optimizer, no 2015 DEV, no 2016-2017 numerical protected source, no trained claims."
+          echo "Profiler covers supported PyTorch ops only. Full compute equality must be measured before fair architecture wins."

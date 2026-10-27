@@ -1,0 +1,606 @@
+{
+  "head_collision_threshold": "absolute cosine >0.9 in actual per-head normalized subspace",
+  "interpretations": "Soft head probability balance and physically distinct cosine angles are proxies only, NOT direct historical event retrieval accuracy",
+  "models": [
+    {
+      "arm": "4h-hard",
+      "checkpoint_sha256": "abb1ffbab0ee17c1d84d9997d68bbf5f9d777d845177b5556b0cdc588833668f",
+      "diagnosis": {
+        "all_original_weights_unchanged": true,
+        "input_original_256_hourly_steps": 256,
+        "local_head_lesions": [
+          {
+            "head": 0,
+            "mean_abs_forecast_location_change": 0.010442463681101799,
+            "mean_abs_forecast_scale_change": 0.0030774937476962805
+          },
+          {
+            "head": 1,
+            "mean_abs_forecast_location_change": 0.0030368035659193993,
+            "mean_abs_forecast_scale_change": 0.000764580094255507
+          },
+          {
+            "head": 2,
+            "mean_abs_forecast_location_change": 0.0037131363060325384,
+            "mean_abs_forecast_scale_change": 0.0009686641278676689
+          },
+          {
+            "head": 3,
+            "mean_abs_forecast_location_change": 0.0015384904108941555,
+            "mean_abs_forecast_scale_change": 0.00031957641476765275
+          }
+        ],
+        "mean_read_head_weights": [
+          0.8242819905281067,
+          0.05237720534205437,
+          0.0753001943230629,
+          0.048040539026260376
+        ],
+        "normalized_write_entropy_mean": 0.4389738142490387,
+        "original_12_source_stations": 12,
+        "per_head": [
+          {
+            "co_selected_abs_cos_gt_0_9": 0.13232667744159698,
+            "head": 0,
+            "mean_actual_write_mass": 0.6486964821815491,
+            "original_distinct_co_selected_pairs": 6159,
+            "selected_source_step_fraction": 0.9602864384651184,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.13742434978485107,
+            "weighted_source_distinct_pair_mass": 2770.28662109375
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.09192825108766556,
+            "head": 1,
+            "mean_actual_write_mass": 0.11702286452054977,
+            "original_distinct_co_selected_pairs": 446,
+            "selected_source_step_fraction": 0.3157552182674408,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.0900038629770279,
+            "weighted_source_distinct_pair_mass": 53.231014251708984
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.20143884420394897,
+            "head": 2,
+            "mean_actual_write_mass": 0.17479117214679718,
+            "original_distinct_co_selected_pairs": 2780,
+            "selected_source_step_fraction": 0.6028645634651184,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.14869104325771332,
+            "weighted_source_distinct_pair_mass": 247.16705322265625
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.1428571492433548,
+            "head": 3,
+            "mean_actual_write_mass": 0.05948943272233009,
+            "original_distinct_co_selected_pairs": 7,
+            "selected_source_step_fraction": 0.12109375,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.14118269085884094,
+            "weighted_source_distinct_pair_mass": 1.4942737817764282
+          }
+        ],
+        "soft_writer_all_receives_nonzero_gradient_if_source_observed": false,
+        "source_distinct_recent_pairs": 6558,
+        "source_outcomes_not_scored": true,
+        "trained_head_log_temperatures": [
+          -0.014602690003812313,
+          0.0017331347335129976,
+          0.006866364739835262,
+          0.0024458556436002254
+        ],
+        "write_probability_concentration_mean": 0.5801895260810852
+      },
+      "seed": 40401
+    },
+    {
+      "arm": "4h-soft",
+      "checkpoint_sha256": "abf412826840cbfa0270b6215719e5e11d7d22145a0c66970cff4b8ca82f8dd2",
+      "diagnosis": {
+        "all_original_weights_unchanged": true,
+        "input_original_256_hourly_steps": 256,
+        "local_head_lesions": [
+          {
+            "head": 0,
+            "mean_abs_forecast_location_change": 0.005721727851778269,
+            "mean_abs_forecast_scale_change": 0.0023603742010891438
+          },
+          {
+            "head": 1,
+            "mean_abs_forecast_location_change": 0.0030682028736919165,
+            "mean_abs_forecast_scale_change": 0.0007297965930774808
+          },
+          {
+            "head": 2,
+            "mean_abs_forecast_location_change": 0.002659193007275462,
+            "mean_abs_forecast_scale_change": 0.0006908467039465904
+          },
+          {
+            "head": 3,
+            "mean_abs_forecast_location_change": 0.0028092190623283386,
+            "mean_abs_forecast_scale_change": 0.0006022598245181143
+          }
+        ],
+        "mean_read_head_weights": [
+          0.7560784816741943,
+          0.07708302140235901,
+          0.09146202355623245,
+          0.07537639886140823
+        ],
+        "normalized_write_entropy_mean": 0.84625244140625,
+        "original_12_source_stations": 12,
+        "per_head": [
+          {
+            "co_selected_abs_cos_gt_0_9": 0.10369014739990234,
+            "head": 0,
+            "mean_actual_write_mass": 0.4989248812198639,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.11390972882509232,
+            "weighted_source_distinct_pair_mass": 1628.940673828125
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.1338822841644287,
+            "head": 1,
+            "mean_actual_write_mass": 0.16664598882198334,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.1376590132713318,
+            "weighted_source_distinct_pair_mass": 173.84417724609375
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.08157975226640701,
+            "head": 2,
+            "mean_actual_write_mass": 0.20593290030956268,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.06506569683551788,
+            "weighted_source_distinct_pair_mass": 291.37664794921875
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.053522415459156036,
+            "head": 3,
+            "mean_actual_write_mass": 0.1284962296485901,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.05391842871904373,
+            "weighted_source_distinct_pair_mass": 84.96794891357422
+          }
+        ],
+        "soft_writer_all_receives_nonzero_gradient_if_source_observed": true,
+        "source_distinct_recent_pairs": 6558,
+        "source_outcomes_not_scored": true,
+        "trained_head_log_temperatures": [
+          -0.011138074100017548,
+          0.0004075312172062695,
+          0.006353538483381271,
+          0.0050155771896243095
+        ],
+        "write_probability_concentration_mean": 0.3691130578517914
+      },
+      "seed": 40401
+    },
+    {
+      "arm": "2h-hard",
+      "checkpoint_sha256": "8d612a0ff4c2753b6cdf08b59890804bfa1c2c610ef8dc674c553dc805e0b70e",
+      "diagnosis": {
+        "all_original_weights_unchanged": true,
+        "input_original_256_hourly_steps": 256,
+        "local_head_lesions": [
+          {
+            "head": 0,
+            "mean_abs_forecast_location_change": 0.011742249131202698,
+            "mean_abs_forecast_scale_change": 0.0040068840608000755
+          },
+          {
+            "head": 1,
+            "mean_abs_forecast_location_change": 0.005616487003862858,
+            "mean_abs_forecast_scale_change": 0.0013811737298965454
+          }
+        ],
+        "mean_read_head_weights": [
+          0.8230172991752625,
+          0.17698265612125397
+        ],
+        "normalized_write_entropy_mean": 0.0,
+        "original_12_source_stations": 12,
+        "per_head": [
+          {
+            "co_selected_abs_cos_gt_0_9": 0.030843665823340416,
+            "head": 0,
+            "mean_actual_write_mass": 0.6728515625,
+            "original_distinct_co_selected_pairs": 3307,
+            "selected_source_step_fraction": 0.6728515625,
+            "source_key_width": 8,
+            "source_weighted_abs_cos_gt_0_9": 0.030843665823340416,
+            "weighted_source_distinct_pair_mass": 3307.0
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.06603773683309555,
+            "head": 1,
+            "mean_actual_write_mass": 0.3271484375,
+            "original_distinct_co_selected_pairs": 424,
+            "selected_source_step_fraction": 0.3271484375,
+            "source_key_width": 8,
+            "source_weighted_abs_cos_gt_0_9": 0.06603773683309555,
+            "weighted_source_distinct_pair_mass": 424.0
+          }
+        ],
+        "soft_writer_all_receives_nonzero_gradient_if_source_observed": false,
+        "source_distinct_recent_pairs": 6558,
+        "source_outcomes_not_scored": true,
+        "trained_head_log_temperatures": [
+          0.012918363325297832,
+          0.018883291631937027
+        ],
+        "write_probability_concentration_mean": 1.0
+      },
+      "seed": 40401
+    },
+    {
+      "arm": "2h-soft",
+      "checkpoint_sha256": "cfb6e08060f92cdc50babff349c3c067d6f14edda1d62b9b06543d1d72ae5504",
+      "diagnosis": {
+        "all_original_weights_unchanged": true,
+        "input_original_256_hourly_steps": 256,
+        "local_head_lesions": [
+          {
+            "head": 0,
+            "mean_abs_forecast_location_change": 0.006796436384320259,
+            "mean_abs_forecast_scale_change": 0.0019976994954049587
+          },
+          {
+            "head": 1,
+            "mean_abs_forecast_location_change": 0.005694913677871227,
+            "mean_abs_forecast_scale_change": 0.0013019985053688288
+          }
+        ],
+        "mean_read_head_weights": [
+          0.7461106181144714,
+          0.2538893520832062
+        ],
+        "normalized_write_entropy_mean": 0.9689077138900757,
+        "original_12_source_stations": 12,
+        "per_head": [
+          {
+            "co_selected_abs_cos_gt_0_9": 0.02089051529765129,
+            "head": 0,
+            "mean_actual_write_mass": 0.5519956946372986,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 8,
+            "source_weighted_abs_cos_gt_0_9": 0.024809254333376884,
+            "weighted_source_distinct_pair_mass": 2050.1318359375
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.03842635080218315,
+            "head": 1,
+            "mean_actual_write_mass": 0.4480043351650238,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 8,
+            "source_weighted_abs_cos_gt_0_9": 0.03937565162777901,
+            "weighted_source_distinct_pair_mass": 1258.8157958984375
+          }
+        ],
+        "soft_writer_all_receives_nonzero_gradient_if_source_observed": true,
+        "source_distinct_recent_pairs": 6558,
+        "source_outcomes_not_scored": true,
+        "trained_head_log_temperatures": [
+          0.014490543864667416,
+          0.01742963306605816
+        ],
+        "write_probability_concentration_mean": 0.5211552381515503
+      },
+      "seed": 40401
+    },
+    {
+      "arm": "4h-hard",
+      "checkpoint_sha256": "6e517de5bc3cd5ab6815a075613414268afb8c5e78e7afde0bf9940a597135c7",
+      "diagnosis": {
+        "all_original_weights_unchanged": true,
+        "input_original_256_hourly_steps": 256,
+        "local_head_lesions": [
+          {
+            "head": 0,
+            "mean_abs_forecast_location_change": 0.0012729212176054716,
+            "mean_abs_forecast_scale_change": 0.00045523419976234436
+          },
+          {
+            "head": 1,
+            "mean_abs_forecast_location_change": 0.00017821553046815097,
+            "mean_abs_forecast_scale_change": 7.726634066784754e-05
+          },
+          {
+            "head": 2,
+            "mean_abs_forecast_location_change": 0.022067934274673462,
+            "mean_abs_forecast_scale_change": 0.006420308258384466
+          },
+          {
+            "head": 3,
+            "mean_abs_forecast_location_change": 0.01276538334786892,
+            "mean_abs_forecast_scale_change": 0.0038884126115590334
+          }
+        ],
+        "mean_read_head_weights": [
+          0.1335068941116333,
+          0.059180159121751785,
+          0.4588485062122345,
+          0.34846436977386475
+        ],
+        "normalized_write_entropy_mean": 0.4792916178703308,
+        "original_12_source_stations": 12,
+        "per_head": [
+          {
+            "co_selected_abs_cos_gt_0_9": 0.09453652799129486,
+            "head": 0,
+            "mean_actual_write_mass": 0.23214732110500336,
+            "original_distinct_co_selected_pairs": 1629,
+            "selected_source_step_fraction": 0.607421875,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.08374027162790298,
+            "weighted_source_distinct_pair_mass": 240.8668212890625
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": null,
+            "head": 1,
+            "mean_actual_write_mass": 0.008405383676290512,
+            "original_distinct_co_selected_pairs": 0,
+            "selected_source_step_fraction": 0.01888020895421505,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": null,
+            "weighted_source_distinct_pair_mass": 0.0
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.054835494607686996,
+            "head": 2,
+            "mean_actual_write_mass": 0.5671948790550232,
+            "original_distinct_co_selected_pairs": 6018,
+            "selected_source_step_fraction": 0.9576823115348816,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.05995661020278931,
+            "weighted_source_distinct_pair_mass": 2103.41552734375
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.06530214101076126,
+            "head": 3,
+            "mean_actual_write_mass": 0.19225244224071503,
+            "original_distinct_co_selected_pairs": 1026,
+            "selected_source_step_fraction": 0.416015625,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.07495106011629105,
+            "weighted_source_distinct_pair_mass": 200.26651000976562
+          }
+        ],
+        "soft_writer_all_receives_nonzero_gradient_if_source_observed": false,
+        "source_distinct_recent_pairs": 6558,
+        "source_outcomes_not_scored": true,
+        "trained_head_log_temperatures": [
+          -0.003974551800638437,
+          0.007055363617837429,
+          0.015024558641016483,
+          -0.0034602228552103043
+        ],
+        "write_probability_concentration_mean": 0.5281667113304138
+      },
+      "seed": 40402
+    },
+    {
+      "arm": "4h-soft",
+      "checkpoint_sha256": "68826e2542e665caf8bd8d442e14097b9b4f7a31f490d4938f741d92e56aeec7",
+      "diagnosis": {
+        "all_original_weights_unchanged": true,
+        "input_original_256_hourly_steps": 256,
+        "local_head_lesions": [
+          {
+            "head": 0,
+            "mean_abs_forecast_location_change": 0.002663924591615796,
+            "mean_abs_forecast_scale_change": 0.0008028110605664551
+          },
+          {
+            "head": 1,
+            "mean_abs_forecast_location_change": 0.0011288332752883434,
+            "mean_abs_forecast_scale_change": 0.0004606227739714086
+          },
+          {
+            "head": 2,
+            "mean_abs_forecast_location_change": 0.002812265884131193,
+            "mean_abs_forecast_scale_change": 0.0010096973273903131
+          },
+          {
+            "head": 3,
+            "mean_abs_forecast_location_change": 0.02112385258078575,
+            "mean_abs_forecast_scale_change": 0.006490939762443304
+          }
+        ],
+        "mean_read_head_weights": [
+          0.11600702255964279,
+          0.06663716584444046,
+          0.29346445202827454,
+          0.5238913893699646
+        ],
+        "normalized_write_entropy_mean": 0.9068253636360168,
+        "original_12_source_stations": 12,
+        "per_head": [
+          {
+            "co_selected_abs_cos_gt_0_9": 0.09911558032035828,
+            "head": 0,
+            "mean_actual_write_mass": 0.2254781872034073,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.09003328531980515,
+            "weighted_source_distinct_pair_mass": 326.9674377441406
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.07776761054992676,
+            "head": 1,
+            "mean_actual_write_mass": 0.09952708333730698,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.08095484972000122,
+            "weighted_source_distinct_pair_mass": 67.64325714111328
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.07029582560062408,
+            "head": 2,
+            "mean_actual_write_mass": 0.3820665180683136,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.08605168759822845,
+            "weighted_source_distinct_pair_mass": 924.2694091796875
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.08340957760810852,
+            "head": 3,
+            "mean_actual_write_mass": 0.29292818903923035,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 4,
+            "source_weighted_abs_cos_gt_0_9": 0.08630993217229843,
+            "weighted_source_distinct_pair_mass": 555.969970703125
+          }
+        ],
+        "soft_writer_all_receives_nonzero_gradient_if_source_observed": true,
+        "source_distinct_recent_pairs": 6558,
+        "source_outcomes_not_scored": true,
+        "trained_head_log_temperatures": [
+          -0.00960034504532814,
+          0.007169147487729788,
+          0.016090290620923042,
+          -0.00952023547142744
+        ],
+        "write_probability_concentration_mean": 0.3118315637111664
+      },
+      "seed": 40402
+    },
+    {
+      "arm": "2h-hard",
+      "checkpoint_sha256": "f50e2d509c6397f10a262215bde67998dc71612177c12d53b9c002a26669c0ae",
+      "diagnosis": {
+        "all_original_weights_unchanged": true,
+        "input_original_256_hourly_steps": 256,
+        "local_head_lesions": [
+          {
+            "head": 0,
+            "mean_abs_forecast_location_change": 0.0012381765991449356,
+            "mean_abs_forecast_scale_change": 0.0005020287353545427
+          },
+          {
+            "head": 1,
+            "mean_abs_forecast_location_change": 0.011222897097468376,
+            "mean_abs_forecast_scale_change": 0.003940800670534372
+          }
+        ],
+        "mean_read_head_weights": [
+          0.1508701592683792,
+          0.8491297364234924
+        ],
+        "normalized_write_entropy_mean": 0.0,
+        "original_12_source_stations": 12,
+        "per_head": [
+          {
+            "co_selected_abs_cos_gt_0_9": 0.005102040711790323,
+            "head": 0,
+            "mean_actual_write_mass": 0.7639973759651184,
+            "original_distinct_co_selected_pairs": 3724,
+            "selected_source_step_fraction": 0.7639973759651184,
+            "source_key_width": 8,
+            "source_weighted_abs_cos_gt_0_9": 0.005102040711790323,
+            "weighted_source_distinct_pair_mass": 3724.0
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.0347222238779068,
+            "head": 1,
+            "mean_actual_write_mass": 0.2360026091337204,
+            "original_distinct_co_selected_pairs": 288,
+            "selected_source_step_fraction": 0.2360026091337204,
+            "source_key_width": 8,
+            "source_weighted_abs_cos_gt_0_9": 0.0347222238779068,
+            "weighted_source_distinct_pair_mass": 288.0
+          }
+        ],
+        "soft_writer_all_receives_nonzero_gradient_if_source_observed": false,
+        "source_distinct_recent_pairs": 6558,
+        "source_outcomes_not_scored": true,
+        "trained_head_log_temperatures": [
+          0.009638655930757523,
+          0.005299847107380629
+        ],
+        "write_probability_concentration_mean": 1.0
+      },
+      "seed": 40402
+    },
+    {
+      "arm": "2h-soft",
+      "checkpoint_sha256": "1f13ff70115723e12e5e4cef1301c1a2ac31cfbf591ef77b4736d249131d2903",
+      "diagnosis": {
+        "all_original_weights_unchanged": true,
+        "input_original_256_hourly_steps": 256,
+        "local_head_lesions": [
+          {
+            "head": 0,
+            "mean_abs_forecast_location_change": 0.0012164688669145107,
+            "mean_abs_forecast_scale_change": 0.0005927975289523602
+          },
+          {
+            "head": 1,
+            "mean_abs_forecast_location_change": 0.010467130690813065,
+            "mean_abs_forecast_scale_change": 0.004967835266143084
+          }
+        ],
+        "mean_read_head_weights": [
+          0.21880073845386505,
+          0.7811992764472961
+        ],
+        "normalized_write_entropy_mean": 0.9801604151725769,
+        "original_12_source_stations": 12,
+        "per_head": [
+          {
+            "co_selected_abs_cos_gt_0_9": 0.009301616810262203,
+            "head": 0,
+            "mean_actual_write_mass": 0.5243571400642395,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 8,
+            "source_weighted_abs_cos_gt_0_9": 0.009690027683973312,
+            "weighted_source_distinct_pair_mass": 1815.5194091796875
+          },
+          {
+            "co_selected_abs_cos_gt_0_9": 0.00975907314568758,
+            "head": 1,
+            "mean_actual_write_mass": 0.4756428301334381,
+            "original_distinct_co_selected_pairs": 6558,
+            "selected_source_step_fraction": 1.0,
+            "source_key_width": 8,
+            "source_weighted_abs_cos_gt_0_9": 0.010354802012443542,
+            "weighted_source_distinct_pair_mass": 1466.423828125
+          }
+        ],
+        "soft_writer_all_receives_nonzero_gradient_if_source_observed": true,
+        "source_distinct_recent_pairs": 6558,
+        "source_outcomes_not_scored": true,
+        "trained_head_log_temperatures": [
+          0.010380249470472336,
+          0.009758340194821358
+        ],
+        "write_probability_concentration_mean": 0.5135241150856018
+      },
+      "seed": 40402
+    }
+  ],
+  "no_protected_numeric_read": true,
+  "optimizer_steps": 0,
+  "original_models": 8,
+  "original_models_modified": false,
+  "scope": "June2014 original FIT 12 source-authenticated physical station histories 256 prior hours, no label, protected TEST or exposed DEV targets",
+  "source_pair_difference": "at least three jointly observed standardized channels, original sensor normalized RMS >=1",
+  "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "study": "LATFUSE004-FROZEN-HEAD-ROUTING"
+}
