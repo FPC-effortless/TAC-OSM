@@ -132,6 +132,30 @@ class HistoricalReuseNoFitTests(unittest.TestCase):
         self.assertEqual(out.native.count,1)
         self.assertFalse(out.native.write_seen.any())
 
+    def test_parallel_nonwrites_preserve_previous_memory_bytes_after_real_writes(self):
+        # A longer tree exposes regrouping roundoff missed by a one-step
+        # zero-state fixture. Differentiate through the reused admitted prefix.
+        torch.manual_seed(9023)
+        for dtype in (torch.float32,torch.float64):
+            model=SourceAlignedParallelWorld().to(dtype=dtype)
+            count=129
+            x=torch.randn(2,count,14,dtype=dtype)*.2
+            a=torch.randn_like(x)*.3
+            mask=(torch.arange(count)[None,:].expand(2,count)%3!=1)
+            mask=mask.clone()
+            mask[:,:2]=False
+            _,trace=model(x,a,elapsed_dt=torch.ones(2,count,dtype=dtype),
+                          write_mask=mask,source_ids=self.owner,
+                          event_index=torch.arange(count)[None,:].expand(2,count),
+                          return_trace=True)
+            for key in ("memory","aligned_memory"):
+                states=trace[key]
+                self.assertTrue(torch.equal(states[:,:2],torch.zeros_like(states[:,:2])))
+                self.assertTrue(torch.equal(states[:,1:][~mask[:,1:]],
+                                            states[:,:-1][~mask[:,1:]]),key)
+            trace["aligned_memory"][:,-1].sum().backward()
+            self.assertGreater(model.source_content.weight.grad.abs().sum().item(),0)
+
     def test_zero_initial_predictive_memory_retains_previous_model_forecast(self):
         raw=self.m.backbone(self.x,self.c,elapsed_dt=self.dt,
                              write_mask=self.admitted)

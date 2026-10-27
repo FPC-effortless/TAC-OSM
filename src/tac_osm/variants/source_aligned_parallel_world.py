@@ -36,6 +36,7 @@ from torch.nn import functional as F
 
 from .parallel_affine_memory import (
     associative_affine_schedule, work_efficient_affine_prefix,
+    preserve_nonwrite_prefix,
 )
 from .parallel_time_age_world import TimeAwareParallelResidualWorld, TimeAwareStreamState
 
@@ -213,6 +214,7 @@ class SourceAlignedParallelWorld(nn.Module):
             B,HEADS,2,T,KEY_WIDTH,KEY_WIDTH)
         matrices=scanned.permute(0,3,1,2,4,5).reshape(
             B,T,HEADS,VALUE_WIDTH,KEY_WIDTH)
+        matrices=preserve_nonwrite_prefix(matrices,write_mask)
         before=torch.cat((matrices.new_zeros(B,1,HEADS,VALUE_WIDTH,KEY_WIDTH),
                           matrices[:,:-1]),dim=1)
         old_index,has_prior=self._query_ordinal(event_index,query_event_index)

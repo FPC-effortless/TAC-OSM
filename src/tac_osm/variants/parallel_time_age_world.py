@@ -30,6 +30,7 @@ from torch.nn import functional as F
 from .parallel_continuous_world import ParallelTACWorld
 from .parallel_affine_memory import (
     associative_affine_schedule, work_efficient_affine_prefix,
+    preserve_nonwrite_prefix,
 )
 from .parallel_residual_world import ParallelResidualWorld
 
@@ -110,7 +111,7 @@ class TimeAwareParallelCore(ParallelTACWorld):
         alpha,beta=self.memory_gates(torch.cat((e,pf,ps),-1)).sigmoid().chunk(2,-1)
         alpha=alpha*(1-beta/4.0)
         P,Q=associative_affine_schedule(k,v,alpha,beta,writable.unsqueeze(-1))
-        memory=work_efficient_affine_prefix(P,Q)
+        memory=preserve_nonwrite_prefix(work_efficient_affine_prefix(P,Q),writable)
         prev=torch.cat((memory.new_zeros(B,1,8,8),memory[:,:-1]),1)
         r=(prev@k.unsqueeze(-1)).squeeze(-1)
         f,fg=self.fast_map(torch.cat((e,pf,r),-1)).chunk(2,-1)

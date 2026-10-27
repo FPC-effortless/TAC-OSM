@@ -166,3 +166,24 @@ def work_efficient_affine_prefix(P,Q,initial=None):
 def scan_source_schedules(key,value,retention,strength,writable,initial=None):
     P,Q=associative_affine_schedule(key,value,retention,strength,writable)
     return parallel_affine_prefix(P,Q,initial)
+
+
+def preserve_nonwrite_prefix(memory, writable):
+    """Reuse the last admitted prefix bytes after a zero-initialized scan.
+
+    Identity operators alone give an exact-real identity. Different scan
+    groupings can round the same prefix differently at a nonwrite position.
+    Gathering the last admitted result makes nonwrites literal copies while
+    preserving autograd through admitted prefixes. This helper is for ZERO
+    initial memory, as used by the two PAR-MEM-010 batch memory paths.
+    """
+    if (memory.ndim < 3 or writable.shape != memory.shape[:2] or
+        writable.dtype != torch.bool or writable.device != memory.device or
+        memory.shape[1] < 1):
+        raise ValueError("memory requires nonempty [B,T,...] and boolean [B,T] mask")
+    position=torch.arange(memory.shape[1],device=memory.device).expand_as(writable)
+    last=torch.where(writable,position,torch.full_like(position,-1)).cummax(1).values
+    extra=(1,)*(memory.ndim-2)
+    index=last.clamp_min(0).reshape(*last.shape,*extra).expand_as(memory)
+    reused=memory.gather(1,index)
+    return torch.where((last>=0).reshape(*last.shape,*extra),reused,torch.zeros_like(reused))
