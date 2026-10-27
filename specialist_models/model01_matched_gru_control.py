@@ -198,7 +198,7 @@ def main(argv=None):
         return 0
     except (ControlError,tac.StudyError,tac.uci.SourceError,OSError,KeyError,
             ValueError,TypeError,RuntimeError) as exc:
-        print(json.dumps({"status":"BLOCKED_OR_FAILED","reason":str(exc)},file=sys.stderr))
+        print(json.dumps({"status":"BLOCKED_OR_FAILED","reason":str(exc)}),file=sys.stderr)
         return 2
 
 if __name__=="__main__":
