@@ -28,6 +28,8 @@ jobs:
         run: python -m unittest discover -s tests -p test_model02_drive_cluster_sensitivity.py -v
       - name: Original publisher ZIP pinned, source-only already-exposed DEV score sensitivity
         run: python specialist_models/model02_drive_cluster_sensitivity.py > model02_drive_cluster_dev_receipt.json
+      - name: Display source-verified drive-level sensitivity receipt without any drive identities
+        run: cat model02_drive_cluster_dev_receipt.json
       - name: Assert original model and unqualified proof scope
         run: |
           python - <<'PY'
