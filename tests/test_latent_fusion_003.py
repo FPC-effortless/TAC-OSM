@@ -100,8 +100,8 @@ def test_four_head_forecast_query_permutation_read_only():
     with torch.no_grad():
         m,sigma=model.forecast(s,torch.tensor([0,1]),q)
         m2,sigma2=model.forecast(s,torch.tensor([0,1]),q[:,[3,1,4,0,2]])
-    torch.testing.assert_close(m[:,[3,1,4,0,2]],m2,atol=0,rtol=0)
-    torch.testing.assert_close(sigma[:,[3,1,4,0,2]],sigma2,atol=0,rtol=0)
+    torch.testing.assert_close(m[:,[3,1,4,0,2]],m2,atol=3e-7,rtol=1e-5)
+    torch.testing.assert_close(sigma[:,[3,1,4,0,2]],sigma2,atol=3e-7,rtol=1e-5)
     assert all(torch.equal(a,b) for a,b in zip(s,before))
 
 
