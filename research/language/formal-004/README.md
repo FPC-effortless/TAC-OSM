@@ -47,7 +47,7 @@ The new PNDS proof files are `LanguageLossAD.lean`, `LanguageMemoryAD.lean`, and
 - **Independent numerical falsifiers**. `test_language_finite_difference.py` independently checks central function-value differences against PyTorch AD across all 36 trainable tensor groups, including a 64-character historical loss. This is a constructed diagnostic only, not a claim of real-text quality. An additional test perturbs native/aligned memory across two streams and compares row energy before/after the same source input.
 - **Strict limitation**. Mathematical `HasDerivAt` proofs are exact real; branch points of source `F.normalize` and FP32 numerics, layernorm/softmax backward kernels, entire training optimizer, and whole-graph source-to-Lean lowering all still require separate proofs and/or restricted numerical checks.
 
-The dedicated PNDS CI **successfully built and axiom-audited 52 scoped theorem declarations** at [run #40589193428](https://github.com/FPC-effortless/pnds-lean/actions/runs/40589193428). This adds analytic SiLU/sigmoid and all-248-channel mean/variance LayerNorm derivatives beyond the verified 44-theorem baseline. This result is exact-real source-math verification, not full Torch/IEEE refinement. Historical checkpoints have not been changed or retrained.
+The dedicated PNDS CI **successfully built and axiom-audited 58 scoped theorem declarations** at [run #40591841884](https://github.com/FPC-effortless/pnds-lean/actions/runs/40591841884). This adds analytic SiLU/sigmoid and all-248-channel mean/variance LayerNorm derivatives beyond the verified 44-theorem baseline. This result is exact-real source-math verification, not full Torch/IEEE refinement. Historical checkpoints have not been changed or retrained.
 
 
 ## Further formal proof milestone: activation and complete LayerNorm JVP
@@ -69,3 +69,41 @@ variance motivated a documented *finite-difference-only* tolerance correction;
 the independent analytical-vs-autograd agreement is stricter. None of these
 source-scoped proofs claims an IEEE-754, GPU, optimizer or checkpoint semantics
 refinement. The original trained model stays frozen.
+
+
+## TAC-LANG-FP-014/015: local tensor rounding receipts and key sensitivity
+
+**Added mathematics in PNDS #51.** `LanguageTensorFP.lean` proves, for
+arbitrary finite reductions, how coordinatewise input/product errors add
+and how **one separately accounted** tensor reduction error composes.
+Its eight-term source memory read law permits distinct quantization
+errors in the address and value row, distinct rounded multiplications
+and one rounded reduction. Every error term is a premise backed by a
+backend receipt; none is asserted for all CPU/GPU operations.
+
+`LanguageKeySensitivity.lean` proves that the actual epsilon-floor
+normalization branch can amplify small errors by `1/eps`. With
+`eps=1e-6`, an input coordinate change of 0.0000005 changes the
+normalized coordinate by 0.5 in the scalar witness. The source's
+`F.normalize` also has a clamp-boundary derivative kink, shown by
+the dedicated Python test. This is a **research weakness to measure
+on authentic records**, not grounds to alter the frozen checkpoints
+or claim a observed retrieval failure.
+
+**Replayable finite-precision diagnostic.**
+`audit_tensor_rounding.py` compares FP32 CPU tensor operation results
+against the exact binary-rational sum of the **actual FP32 operands**,
+not a potentially rounded FP64 surrogate. It records a candidate
+`gamma_(2n)*sum(abs(ai*bi))+8*n*2^-149` envelope and reports whether
+a given operation satisfies it. Shape coverage includes 8,16,48,88,128
+and 248; adversarial cancellation and subnormal cases are included
+as explicitly limited diagnostics. The suite and source-hash-pinned
+`generate_tensor_rounding_receipt.py` CI artifact pass in [TAC
+CI #40591297284](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40591297284).
+
+The observed envelope **is NOT a formally discharged general
+IEEE-754 or Torch-kernel axiom**. FP environment, FMA/reassociation,
+flush-to-zero, transcendental accuracy, optimizer state and all backprop
+tensor operations still need explicit per-device/backend refinement.
+The original ten binary checkpoints are not yet downloadable
+from a cold GitHub workflow, despite complete verified local replay.
