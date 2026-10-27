@@ -38,6 +38,11 @@ class ProductBaselineContractTests(unittest.TestCase):
         with self.assertRaises(m.EvidenceError):m.predict(self.model(),x)
     def test_labels_cannot_enter_inference(self):
         with self.assertRaises(m.EvidenceError):m.predict(self.model(),fixture(10,9,1))
+    def test_unknown_future_bearing_field_rejected(self):
+        obs = fixture(10,9)
+        obs["future_response_label"] = 1
+        with self.assertRaises(m.EvidenceError):
+            m.predict(self.model(), obs)
     def test_fit_outcomes_must_exist_at_cutoff(self):
         with self.assertRaises(m.EvidenceError):
             m.fit(self.rows+[fixture(8,7,1)],self.source,"a"*64)
