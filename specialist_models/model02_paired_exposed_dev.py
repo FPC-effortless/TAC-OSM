@@ -12,6 +12,7 @@ from datetime import timedelta
 import hashlib
 import json
 import math
+import random
 from pathlib import Path
 import sys
 
@@ -114,6 +115,35 @@ def per_drive_first_matured(cases):
             first[key]=row
     return list(first.values())
 
+def first_drive_bootstrap_posthoc(first, replicates=300, seed=20261027):
+    """POST-HOC exploratory paired drive resampling, not confidence proof.
+
+    One matured decision per source-owned drive. Assumes exchangeable physical
+    drives even though manufacturer, site and calendar clusters may matter.
+    """
+    if len(first)<2 or type(replicates) is not int or not 50<=replicates<=5000:
+        raise PairError("invalid first-drive bootstrap input")
+    diffs=[(r[4]-r[2])**2 - (r[3]-r[2])**2 for r in first]
+    mean=sum(diffs)/len(diffs)
+    rng=random.Random(seed)
+    sampled=[]
+    n=len(diffs)
+    for _ in range(replicates):
+        sampled.append(sum(diffs[rng.randrange(n)] for j in range(n))/n)
+    sampled.sort()
+    return {"status":"POST_HOC_EXPLORATORY_NOT_INDEPENDENT_CONFIRMATION",
+            "unit":"first matured labeled prediction per physical drive",
+            "sampled_drive_count":n,"positive_decisions":sum(c[2] for c in first),
+            "seed":seed,"replicates":replicates,
+            "delta_definition":"two_feature_lookup_brier_minus_eight_feature_logistic_brier",
+            "paired_delta":mean,
+            "percentile_95_bounds":[sampled[int((replicates-1)*.025)],
+                                    sampled[int((replicates-1)*.975)]],
+            "caveats":["added after inspecting initial paired exposed development results",
+                       "conditional on noncensored first mature cases, not censor-aware",
+                       "manufacturer/site/date correlated and unequal exposure, not iid proof",
+                       "not a fresh source or architecture-superiority uncertainty interval"]}
+
 def pair_report(cases, source_denominators, logistic, lookup_model):
     if source_denominators["matured_windows"]!=len(cases):
         raise PairError("source case count mismatch")
@@ -142,6 +172,7 @@ def pair_report(cases, source_denominators, logistic, lookup_model):
                                     "two_feature_lookup":LOOKUP_ORIGINAL_HASH},
         "source_denominators":source_denominators,
         "paired_results":paired,
+        "first_per_drive_brier_delta_exploratory_posthoc":first_drive_bootstrap_posthoc(first),
         "dev_day_metrics":[{"date":date,"n":len(subset),
                             "positive_windows":sum(c[2] for c in subset),
                             "logistic_brier":summarize(subset,3)["brier"],
