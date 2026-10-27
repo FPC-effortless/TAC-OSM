@@ -30,7 +30,7 @@ class SelectiveHistoryTests(unittest.TestCase):
         self.assertGreater(float(p[0]),float(p[2]))
         self.assertGreater(float(p[127]),float(p[42]))
 
-    def test_in_horizon_uses_trained_model_exactly(self):
+    def test_exact_trained_lag_uses_model_exactly(self):
         r=query_selective_history(self.model,self.tokens,{},64,self.fit_prior)
         self.assertFalse(r.abstained)
         self.assertTrue(r.used_trained_memory)
@@ -53,6 +53,13 @@ class SelectiveHistoryTests(unittest.TestCase):
         r2=query_selective_history(self.model,poison,{},96,self.fit_prior)
         self.assertTrue(torch.equal(r.log_probabilities,r2.log_probabilities))
         self.assertEqual(self.model.read_calls,0)
+
+    def test_shorter_untrained_lag_is_not_trusted(self):
+        result=query_selective_history(self.model,self.tokens,{},32,self.fit_prior)
+        self.assertTrue(result.abstained)
+        self.assertFalse(result.used_trained_memory)
+        self.assertEqual(self.model.read_calls,0)
+        self.assertEqual(tuple(result.log_probabilities.shape),(3,96,128))
 
     def test_fail_closed_bad_baseline_and_out_of_bounds_history(self):
         for invalid in (torch.zeros(128),torch.ones(128),
