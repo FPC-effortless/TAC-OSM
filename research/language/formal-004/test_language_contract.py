@@ -12,11 +12,13 @@ class LanguageContractTests(unittest.TestCase):
     def setUpClass(cls):
         torch.manual_seed(13)
         cls.model = ParallelTACLanguage(
-            decoder=75, post=10, position_mode="multiscale_relative",
+            decoder=75, post=10, position_mode="multiscale",
             gate_mode="silu").eval()
 
     def test_trained_geometry_not_constructor_default(self):
         validate_model(self.model)
+        with self.assertRaisesRegex(ValueError,"one-lag"):
+            validate_model(ParallelTACLanguage(decoder=75,post=10,position_mode="multiscale_relative",gate_mode="silu"))
         self.assertEqual(EXPECTED_FLOAT_STATE, 408)
         with self.assertRaises(ValueError):
             validate_model(ParallelTACLanguage())
