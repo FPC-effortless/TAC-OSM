@@ -1,0 +1,42 @@
+# LATFUSE007 — native historical-clock associative readout (UNTRAINED candidate)
+
+**2026-10-27. Implemented and source-preflighted. No new model trained, no accuracy claim or architecture promotion.** [Original genuine-source preflight CI #40443421696](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40443421696) SUCCESS: full original source archive hash, registered original-source 64h fact supervision and future forecast, true-source real gradient chain, all 43 learnable tensors received finite gradients under combined loss, old writer/future forecast equality, full 6800byte FP32 state. Original weights, checkpoints and numeric protected source untouched.
+
+## Scientific reason for a new QUERY first
+
+The preceding [LATFUSE005](https://github.com/FPC-effortless/TAC-OSM/pull/459) showed only4.0% earlier associative matrix difference norm and1.2% original write-key trace at512 real observed hours, very small benefit of keeping old prefix matrix on +6h original sensor forecasting. [LATFUSE006](https://github.com/FPC-effortless/TAC-OSM/pull/460) then fitted only EXTERNAL, NOT DEPLOYED supervised decoders on original March-Apr real PM2.5 event labels; 24 paired July real-source events held out from decoder fitting but NOT from parent source-model fitting. At64h, external decoder access to FULL256 FP32 associative matrix ranked authentic event over matched ordinary anchor73.7% versus just40.9% when accessing the model's actual 16D future-calendar/belief associative read; even external fullmatrix Brier0.278 > constant0.25. This suggests a historical readout bottleneck **without proving factual retrieval or calibrated prediction**.
+
+The existing forecast query is trained for current belief+known future calendar, not "was a measured event present at the requested t−L?" Earlier key-separation/soft-routing fixes improved geometry but not overall source forecast. Hence first change only historically known clock-conditioned query/decoder; DO NOT also tweak beta, gates, state slots, sources, etc., in this arm.
+
+## Exact source/operator changes
+
+New original experimental file src/tac_osm/latent_fusion_007_historic_query.py, class SourceTimedEventQuery inherits original LATFUSE004 **2h-soft**. Every ORIGINAL source-conditioned observation encoder, source-slot authorization, GatedDelta memory update with two value16×key8 independent heads and ALL256 matrix FP32 cells, fast80+slow80/source-slots16×80 recurrent state and normal six-hour forecast computation stays BITWISE unchanged at equal initial parameters/source.
+
+New parameters only:
+- historic_clock_query Linear(6→16), 112 FP32 trained weights/biases;
+- historic_event_head Linear(16→1), 17 FP32 trained weights/biases.
+- Original base2h-soft99261 +129 = **99390 live trained and deployed parameters**. Original carried state fast80+slow80+256 associative+16×80 entities =1696 FP32 scalars, plus16 source occupancy Boolean flags, exactly **6800 nominal bytes per original stream**. No KV/history cache, extra retained entity slots, tokens or source-future labels.
+- Decoder query: legal historic clock6 features of **requested past timestamp**, plus learned CURRENT fast/slow belief -> normalized separately in each original8D head; original current trained read-router controls two read-head weights; original16D associative result passed through the new Linear16→1 logit; no actual historic original PM2.5 value or event binary label is a query input. Station ID must be authorized; source stream is station-owned.
+- Original prefix event content must have passed through ordinary historical observations before query time. The supervised event truth is the authentic past source reading derived label, supplied ONLY to a BCE loss after output. A positive classification of genuinely source-observed PM2.5 FIT z>=+1.25 versus ordinary abs z<=0.25 requires learned predictive past readout, not a synthetic oracle lookup. No source label used during the read function call.
+- Original full model still has a nonlinear source-conditioned graph and finite precision, not formally verified end-to-end time-parallel scan.
+
+## Original true-source no-fit preflight
+
+[GitHub original FP32 CI #40443421696](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40443421696) SUCCESS. Six new typed source/no-leak/math operator tests, old 2/4-head regression suite and compulsory test count gate passed. Original physical UCI501 ZIP hash exact, four real event-control pairs (8 original source examples) selected SOURCE-ONLY from recorded March–April2014 FIT, observed true histories24 pre-anchor +64 more original source hourly updates, original source/time/NA masks and owner slots. Query 6D clock only for anchor, no observed anchor label passed to query; +6h forecast true physical target and historic PM2.5 event target read AFTER prediction for combined loss.
+
+- Observed original registered 64h historical event BCE pretraining value **0.6846326**: not accuracy or skill, just untrained valid source gradient. Masked real Gaussian future forecast loss **1.4621639**: also no evidence of trained performance.
+- All **43 learned parameter tensors** have finite source-gradient evidence from authentic combined loss; originals and new query tensors all reached.
+- Torch CPU profiled supported operations forward+autograd **209,663,885 FLOPs** on original 8 examples, history88 steps, with original future forecast and event query. Unsupported operations and optimizer not included; no matching trained baseline/event control profiled, **strict equal-compute training gate NOT MET**.
+- No model optimizer was instantiated; original state/time source bytes remain, only derived original-source nofit receipt in NOFIT_RESULTS.json.
+- Training and independent validation **NOT PERFORMED**; no 2015 already-exposed or protected2016–2017 numerical observations parsed.
+
+## Requirements BEFORE any new source-trained capability experiment
+
+1. Preregister historic event-time queries at H16/64/128/512 on genuine source future-chronological real observation targets. Do not use fake event labels or oracle event-specific retrieval keys; design train/past clock ranges and independent physical site/time evaluation, and preserve all source masks/elapsed/station IDs. Explicitly document original source FIT normalization partly computed over future relative individual anchors (not online at t).
+2. Build a **matched control** that predicts the SAME true historic event label from legal current/fast/slow/entity state but NO associative read. Match actual alive model parameters **<=1%** and complete actual forward+AD+optimizer FLOPs **<=1%**, same authentic source data & sample order, history lengths, target label masks, optimizer losses, two seeds and evaluation. Do not pad useless FLOPs, copy fake parameters or omit compute.
+3. Evaluate native event classification/real-valued original historical PM2.5 magnitude calibration at each delay, source-real paired event ranking, Brier and balanced accuracy; include negative controls for source clock/date shortcuts, currently observed sensor persistence, and pretrained FIT overlap. Compare true +6h physical forecast all-channel MAE/NLL/coverage against legitimate practical and matched model baselines.
+4. Source-target integrity: no history target/label as query inputs, historical events appear only as legally observed past sensor state updates; no future-label-conditioned sampling, no cross-source index/metadata leakage, no protected2016–17 numeric source until independent prospective authorization.
+5. Only AFTER a readout improvement survives source-grade controls, separately study original delta beta overwrite with source relevance admission while holding query fixed; this preserves causal identifiability of architectural mechanism. Avoid believing global retention alpha inflation alone fixes qualified recall.
+6. PNDS provides only exact integer state/weight and abstract no-label-argument interface assertions, **not** the entire Torch FP32 computation, actual noninterference of every source data path, AD, probabilistic calibration or intellectual "proof".
+
+**Status:** Actual native source event QUERY constructed, original fixed memory contract verified and real-source gradient path passes; all scientific model-training, matched full compute, historic event recall, confidence calibration and generalization gates still OPEN. Model is DRAFT/UNMERGED. Older source-trained results unchanged.
