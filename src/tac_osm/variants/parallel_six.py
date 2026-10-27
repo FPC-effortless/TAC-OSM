@@ -68,3 +68,22 @@ def require_qualified_domain_head(name: str | Variant) -> None:
         raise RuntimeError(
             f"{p.family.value}: domain head/independent real-world skill OPEN"
         )
+
+
+def instantiate_untrained_postscan_core(
+    name: str | Variant, *, state_dim: int, action_dim: int,
+    width: int = 88, decoder: int = 132, ffn_hidden: int = 12,
+):
+    """Opt-in shared parallel state core with bounded post-scan FFN.
+
+    This is still one of the SIX prospective families, never a seventh
+    architecture family or a qualified neural model. It has no fitted
+    checkpoints or certified domain-specific head. Separate authentic
+    source, equal-resource comparator and replay gates remain mandatory.
+    """
+    parallel_family(name)
+    from .parallel_residual_world import ParallelResidualWorld
+    return ParallelResidualWorld(
+        state_dim=state_dim, action_dim=action_dim,
+        width=width, decoder=decoder, ffn_hidden=ffn_hidden,
+    )
