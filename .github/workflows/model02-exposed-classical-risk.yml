@@ -1,0 +1,42 @@
+name: Model02 original-source exposed FIT and DEV classical diagnostic (NOT TAC)
+on:
+  push:
+    branches:
+      - product/backblaze-censored-risk-intake-2026-10-27
+    paths:
+      - 'specialist_models/backblaze_2013_classical_dev_fit.py'
+      - 'tests/test_backblaze_2013_classical_dev_fit.py'
+      - '.github/workflows/model02-exposed-classical-risk.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/backblaze_2013_classical_dev_fit.py'
+      - 'tests/test_backblaze_2013_classical_dev_fit.py'
+      - '.github/workflows/model02-exposed-classical-risk.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-classical-risk-dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Constructed source-time, eligibility, censor, original checkpoint replay tests
+        run: python -m unittest discover -s tests -p test_backblaze_2013_classical_dev_fit.py -v
+      - name: Genuine publisher source; original FIT classical coefficients and exposed DEV metrics only
+        run: |
+          python specialist_models/backblaze_2013_classical_dev_fit.py \
+            --out-model original_model02_classical.json \
+            --out-report original_model02_exposed_dev.json
+      - name: Preserve original weights and diagnostic scores until tracked in Git
+        uses: actions/upload-artifact@v4
+        with:
+          name: model02-original-source-classical-exposed-checkpoint-and-score
+          path: |
+            original_model02_classical.json
+            original_model02_exposed_dev.json
+          if-no-files-found: error
+          retention-days: 14
