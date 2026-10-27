@@ -17,7 +17,6 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
 import re
-import secrets
 import sys
 import threading
 import time
@@ -71,6 +70,10 @@ def authenticate(header, expected_hash):
 
 def make_handler(model, calibration_q, key_sha256, limiter, active):
     class Handler(BaseHTTPRequestHandler):
+        def setup(self):
+            super().setup()
+            self.connection.settimeout(3.0)
+
         server_version = SERVER_VERSION
         sys_version = ""
         protocol_version = "HTTP/1.0"
@@ -140,10 +143,21 @@ def make_handler(model, calibration_q, key_sha256, limiter, active):
                 raw=self.rfile.read(int(lengths[0]))
                 if len(raw) != int(lengths[0]):
                     raise reference.InputError("truncated body")
-                obj=json.loads(raw, parse_constant=lambda _: (_ for _ in ()).throw(reference.InputError("nonfinite JSON constant")),
-                               parse_float=float)
+                def no_duplicate_keys(pairs):
+                    obj = {}
+                    for key, value in pairs:
+                        if key in obj:
+                            raise reference.InputError("duplicate JSON field")
+                        obj[key] = value
+                    return obj
+                obj=json.loads(
+                    raw,
+                    object_pairs_hook=no_duplicate_keys,
+                    parse_constant=lambda _: (_ for _ in ()).throw(reference.InputError("nonfinite JSON constant")),
+                    parse_float=float,
+                )
                 response=reference.predict(model, calibration_q, obj)
-            except (ValueError, reference.InputError, UnicodeError, TypeError, json.JSONDecodeError):
+            except (ValueError, reference.InputError, UnicodeError, TypeError, TimeoutError):
                 self.respond(400, {"error": "INVALID_INPUT"})
                 return
             finally:
