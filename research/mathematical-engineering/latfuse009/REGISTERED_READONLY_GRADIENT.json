@@ -1,0 +1,15 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE009-REAL-EVENT-WRITE-GRADIENT-READONLY",
+  "study_type": "noncomparative_diagnostic",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "scientific_purpose": "Test using four SHA-pinned source-trained LATFUSE008 original FP32 models on genuine original May2014 observed high/ordinary PM2.5 event pairs if the genuine historic-event BCE gradient can traverse 16,64,128,512 recorded source hourly transitions to the event-time associative matrix or only recent fast/slow representations. No optimizer/model tuning or exposed/protected source values.",
+  "authentic_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "source_cohort": "Use deterministic first four genuine source pairs (8 real high/ordinary original PM2.5 anchors) of the frozen May1-Jun10 2014 LATFUSE008 registered internal evaluation cohort, exactly same original source-frozen past-only normalizer and sources. No outcome-based sample selection and no unseen model generalization claim.",
+  "evidence": "Original four trained checkpoints SHA against registered LATFUSE008 original RESULTS.json, all actual weights immutable, reuse trained original source-only cohort/normalizer and source masks/time after source SHA.",
+  "method": "Run 24 real pre-event source observations to event, freeze that original event-time state as independent differentiable leaf (NO learned parameter gradients); continue authentic 16/64/128/512 hourly source updates, issue the original legally known historical timestamp query. After historic event logits, construct recorded high/ordinary event BCE. Compare gradients wrt original event-time and end-of-suffix associative/fast/slow tensors; no source label or old write key in model query. The nonassoc control should have no historical-event loss dependency on associative memory at all. Report gradient norm ratio event-time/final and source cohort distribution, not architecture superiority.",
+  "interpretation": "This measures local learned end-to-end loss sensitivity to event-time source STATE, not gradients into actual input encoder/write key at event and not proof that higher gradients mean true recall. Full neural model is nonlinear/FP32, finite precision proof and sidecar calibration remain open.",
+  "source_permission": "Original UCI501 genuine 2014 FIT only, original 2015 exposed numeric and protected2016-17 never parsed. Check source-event label only after model historic output. No hidden optimizer, no reclassification of results.",
+  "stopping_rule": "Fail closed if fewer than four original source event/control pairs, live model weights/source SHA mismatch, invalid original source math or nonfinite gradients. Publish negative/zero gradient as observed; no new fitting or retrospective cohort changes."
+}

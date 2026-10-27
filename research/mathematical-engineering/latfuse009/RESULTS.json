@@ -1,0 +1,927 @@
+{
+  "interpretation": "Event-time STATE gradient from frozen original model historical event BCE versus query-time state gradient. It is not gradient into trained writer input at event; requires more mechanistic work.",
+  "models": [
+    {
+      "arm": "assoc_historic_query",
+      "original_checkpoint_sha256": "a0fb24eea9535e8fba9b2892c1a8bb41c015dbdbd8b1745c49d6d71fddf068b8",
+      "real_source_gradient_at_original_event_delays": {
+        "128": {
+          "delay": 128,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": 0.4919824107246871,
+            "event_associative": {
+              "connected": true,
+              "max_l2": 0.030647803097963333,
+              "mean_l2": 0.02246604487299919,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 4.420084920297995e-08,
+              "mean_l2": 7.60903251517675e-09,
+              "source_cases_with_nonzero_derivative": 6
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.004583947826176882,
+              "mean_l2": 0.00275862542912364,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 9.249389433571181e-07,
+            "query_associative": {
+              "connected": true,
+              "max_l2": 0.06491018086671829,
+              "mean_l2": 0.04566432535648346,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.013167993165552616,
+              "mean_l2": 0.008226524107158184,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.014289064332842827,
+              "mean_l2": 0.008507238700985909,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.3242680176358448
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 1.1076693534851074
+        },
+        "16": {
+          "delay": 16,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": 0.8247838793991207,
+            "event_associative": {
+              "connected": true,
+              "max_l2": 0.05246387794613838,
+              "mean_l2": 0.03736123442649841,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 0.000516614003572613,
+              "mean_l2": 0.00027837720699608326,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.008279046975076199,
+              "mean_l2": 0.005821897182613611,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.030242156603257395,
+            "query_associative": {
+              "connected": true,
+              "max_l2": 0.060174040496349335,
+              "mean_l2": 0.04529821127653122,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.013737233355641365,
+              "mean_l2": 0.009204939007759094,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.01461129728704691,
+              "mean_l2": 0.00967461708933115,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.6017702952847414
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 1.036177635192871
+        },
+        "512": {
+          "delay": 512,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": 0.09498839627306074,
+            "event_associative": {
+              "connected": true,
+              "max_l2": 0.006180977914482355,
+              "mean_l2": 0.004067160654813051,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 0.0,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.0038290556985884905,
+              "mean_l2": 0.001932827988639474,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.0,
+            "query_associative": {
+              "connected": true,
+              "max_l2": 0.05803867056965828,
+              "mean_l2": 0.04281744733452797,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.015177631750702858,
+              "mean_l2": 0.009962236508727074,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.015043308027088642,
+              "mean_l2": 0.010435820557177067,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.18521092596884514
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.9846251010894775
+        },
+        "64": {
+          "delay": 64,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": 0.6751741319629108,
+            "event_associative": {
+              "connected": true,
+              "max_l2": 0.04252636432647705,
+              "mean_l2": 0.031071921810507774,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 2.770569517451804e-05,
+              "mean_l2": 3.925942110072356e-06,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.005345216020941734,
+              "mean_l2": 0.0037079094909131527,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.0004663256058200429,
+            "query_associative": {
+              "connected": true,
+              "max_l2": 0.06466743350028992,
+              "mean_l2": 0.04602060467004776,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.011561775580048561,
+              "mean_l2": 0.008418885990977287,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.01190351601690054,
+              "mean_l2": 0.009097530506551266,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.4075731857390346
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 1.0394837856292725
+        }
+      },
+      "seed": 80701
+    },
+    {
+      "arm": "fast_slow_historic_query",
+      "original_checkpoint_sha256": "e591c2c75598ed017b1f4ce06e835ee609da7dded4301b5b4c75bf1442202d66",
+      "real_source_gradient_at_original_event_delays": {
+        "128": {
+          "delay": 128,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": null,
+            "event_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 5.71601674437261e-07,
+              "mean_l2": 1.3990103298056056e-07,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.013849725015461445,
+              "mean_l2": 0.005549375433474779,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 2.8791630339288847e-06,
+            "query_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.10587406158447266,
+              "mean_l2": 0.04859086871147156,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.5598542094230652,
+              "mean_l2": 0.2554425001144409,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.02172455809424274
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 2.21150541305542
+        },
+        "16": {
+          "delay": 16,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": null,
+            "event_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 0.0025404570624232292,
+              "mean_l2": 0.0011673362459987402,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.05434000492095947,
+              "mean_l2": 0.029056763276457787,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.049903584407369285,
+            "query_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.06109362840652466,
+              "mean_l2": 0.023391831666231155,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.22378838062286377,
+              "mean_l2": 0.12027021497488022,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.24159567090261388
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.870351254940033
+        },
+        "512": {
+          "delay": 512,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": null,
+            "event_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 6.483745598763743e-23,
+              "mean_l2": 8.10468199845468e-24,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.011826444417238235,
+              "mean_l2": 0.0029507821891456842,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 2.702073757480854e-22,
+            "query_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.07925129681825638,
+              "mean_l2": 0.029994303360581398,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.4330587685108185,
+              "mean_l2": 0.13009001314640045,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.022682618886546952
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 1.207434892654419
+        },
+        "64": {
+          "delay": 64,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": null,
+            "event_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 5.113212318974547e-05,
+              "mean_l2": 1.2018619599984959e-05,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.01452849991619587,
+              "mean_l2": 0.0032811106648296118,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.0004381168707522601,
+            "query_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.09013978391885757,
+              "mean_l2": 0.027432451024651527,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.5486915111541748,
+              "mean_l2": 0.14089295268058777,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.023287968648567355
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 1.0044701099395752
+        }
+      },
+      "seed": 80701
+    },
+    {
+      "arm": "assoc_historic_query",
+      "original_checkpoint_sha256": "9b51387abaf8939b75529a35a40b99ac9fb58c7362281c5c9c0fd490922c0673",
+      "real_source_gradient_at_original_event_delays": {
+        "128": {
+          "delay": 128,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": 0.44608869309605065,
+            "event_associative": {
+              "connected": true,
+              "max_l2": 0.015538496896624565,
+              "mean_l2": 0.012964137829840183,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 2.759419466335329e-16,
+              "mean_l2": 5.755134919872802e-17,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.0012088235234841704,
+              "mean_l2": 0.0006202467484399676,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 1.963098267618106e-14,
+            "query_associative": {
+              "connected": true,
+              "max_l2": 0.0313209667801857,
+              "mean_l2": 0.02906179428100586,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.006365128792822361,
+              "mean_l2": 0.002931659109890461,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.006107890512794256,
+              "mean_l2": 0.0029197707772254944,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.21242994596629114
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.7386223673820496
+        },
+        "16": {
+          "delay": 16,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": 0.8206325024587302,
+            "event_associative": {
+              "connected": true,
+              "max_l2": 0.027608659118413925,
+              "mean_l2": 0.024317072704434395,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 5.622383105219342e-05,
+              "mean_l2": 2.0949008103343658e-05,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.0032395529560744762,
+              "mean_l2": 0.0012344319839030504,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.009410813889352004,
+            "query_associative": {
+              "connected": true,
+              "max_l2": 0.03299357742071152,
+              "mean_l2": 0.02963211014866829,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.006288417149335146,
+              "mean_l2": 0.00222605699673295,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.005846790969371796,
+              "mean_l2": 0.0022235626820474863,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.5551595166934394
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.7438381314277649
+        },
+        "512": {
+          "delay": 512,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": 0.07342303433351799,
+            "event_associative": {
+              "connected": true,
+              "max_l2": 0.0031083947978913784,
+              "mean_l2": 0.0021161416079849005,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 0.0,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.0006536417058669031,
+              "mean_l2": 0.00033380388049408793,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.0,
+            "query_associative": {
+              "connected": true,
+              "max_l2": 0.0325654000043869,
+              "mean_l2": 0.028821222484111786,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.005680771544575691,
+              "mean_l2": 0.00271502579562366,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.005482255015522242,
+              "mean_l2": 0.002700451761484146,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.12361038447531167
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.7531604766845703
+        },
+        "64": {
+          "delay": 64,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": 0.6305353142156584,
+            "event_associative": {
+              "connected": true,
+              "max_l2": 0.022643284872174263,
+              "mean_l2": 0.01937420666217804,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 4.969652467323726e-10,
+              "mean_l2": 1.3728169989679628e-10,
+              "source_cases_with_nonzero_derivative": 6
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.00125714554451406,
+              "mean_l2": 0.0006131181144155562,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 6.670797055673959e-08,
+            "query_associative": {
+              "connected": true,
+              "max_l2": 0.035289496183395386,
+              "mean_l2": 0.0307266004383564,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.0047127376310527325,
+              "mean_l2": 0.0020579504780471325,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.004350985400378704,
+              "mean_l2": 0.002086190739646554,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.29389360366896833
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.7499070763587952
+        }
+      },
+      "seed": 80702
+    },
+    {
+      "arm": "fast_slow_historic_query",
+      "original_checkpoint_sha256": "285bec2527e54c1fff1f016a5a53b42e65af65d602ac1cd78eec0aa301d0517c",
+      "real_source_gradient_at_original_event_delays": {
+        "128": {
+          "delay": 128,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": null,
+            "event_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 2.021428713305795e-08,
+              "mean_l2": 3.0696960529041917e-09,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.0015321143437176943,
+              "mean_l2": 0.0010912269353866577,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 1.1040539665288079e-07,
+            "query_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.07341893017292023,
+              "mean_l2": 0.027803858742117882,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.10335540771484375,
+              "mean_l2": 0.08445724844932556,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.012920465151565943
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.7831288576126099
+        },
+        "16": {
+          "delay": 16,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": null,
+            "event_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 0.0004161583783570677,
+              "mean_l2": 0.00017739816394168884,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.04004000872373581,
+              "mean_l2": 0.021172253414988518,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.006483911562913436,
+            "query_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.06893214583396912,
+              "mean_l2": 0.027359744533896446,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.1986817568540573,
+              "mean_l2": 0.10434041917324066,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.20291516540522384
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.9327743649482727
+        },
+        "512": {
+          "delay": 512,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": null,
+            "event_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 0.0,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.0011659041047096252,
+              "mean_l2": 0.0004474077722989023,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.0,
+            "query_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.06814895570278168,
+              "mean_l2": 0.02435120940208435,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.1213630810379982,
+              "mean_l2": 0.06137852370738983,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.00728932117090062
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.6193636655807495
+        },
+        "64": {
+          "delay": 64,
+          "measured_gradient_norms": {
+            "associative_event_over_query_gradient_ratio": null,
+            "event_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "event_fast": {
+              "connected": true,
+              "max_l2": 6.808194484619889e-06,
+              "mean_l2": 2.1088212633912917e-06,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "event_slow": {
+              "connected": true,
+              "max_l2": 0.004120523575693369,
+              "mean_l2": 0.0018681308720260859,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "fast_event_over_query_gradient_ratio": 0.00010130079154525241,
+            "query_associative": {
+              "connected": false,
+              "mean_l2": 0.0,
+              "source_cases_with_nonzero_derivative": 0
+            },
+            "query_fast": {
+              "connected": true,
+              "max_l2": 0.05182370916008949,
+              "mean_l2": 0.02081742137670517,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "query_slow": {
+              "connected": true,
+              "max_l2": 0.22813217341899872,
+              "mean_l2": 0.10446582734584808,
+              "source_cases_with_nonzero_derivative": 8
+            },
+            "slow_event_over_query_gradient_ratio": 0.017882698289856922
+          },
+          "original_real_physical_source_cases": 8,
+          "sampled_true_source_labels": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          "true_event_BCE_at_frozen_checkpoint": 0.8594092130661011
+        }
+      },
+      "seed": 80702
+    }
+  ],
+  "no_architecture_performance_superiority_claim": true,
+  "no_original_model_parameter_updates_or_checkpoint_mutation": true,
+  "original_frozen_models": 4,
+  "original_horizon_hours": [
+    16,
+    64,
+    128,
+    512
+  ],
+  "original_internal_source_cohort_sha256": "5d28bf481ac489ccdbde3f2387fdc3367901f097e396672980c6f7fdc87a0b2a",
+  "original_phy_source_matched_pairs": 4,
+  "original_source_July_2015_or_protected_numeric_unopened": true,
+  "original_true_source_archive_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "study_id": "LATFUSE009-REAL-EVENT-WRITE-GRADIENT-READONLY"
+}

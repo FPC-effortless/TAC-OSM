@@ -1,0 +1,79 @@
+name: LATFUSE009 authentic original event-state gradient survival at 16/64/128/512h (no optimizer)
+
+on:
+  push:
+    branches: [research/latfuse009-event-time-gradient-diagnosis-2026-10-27]
+    paths:
+      - "scripts/latfuse009_original_event_gradient.py"
+      - "research/mathematical-engineering/latfuse009/REGISTERED_READONLY_GRADIENT.json"
+      - ".github/workflows/latfuse009-source-gradient.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: latfuse009-original-source-frozen-gradient
+  cancel-in-progress: false
+
+jobs:
+  real-source-original-event-derivative-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: CPU FP32 PyTorch
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Original nofit registration and immutable source-trained checkpoint preconditions
+        run: |
+          python -m py_compile scripts/latfuse009_original_event_gradient.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse009/REGISTERED_READONLY_GRADIENT.json \
+            --phase preflight
+          test ! -e research/mathematical-engineering/latfuse009/RESULTS.json
+          test -s research/replay-bundles/LATFUSE008/RESULTS.json
+          test -s research/replay-bundles/LATFUSE008/POSTFIT_PARITY.json
+          python scripts/validate_research_parity.py \
+            --manifest research/replay-bundles/LATFUSE008/POSTFIT_PARITY.json \
+            --phase final
+      - name: Restore authenticated physical UCI501 original source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse009-original
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse009-original/PRSA2017_original.zip
+      - name: Original physical event source gradients at historical memory and current read state
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse009_original_event_gradient.py \
+            --source /tmp/latfuse009-original/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse009/RESULTS.json
+      - name: Preserve source-grounded original trained read-only diagnostic only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse009-event-time-gradient-diagnosis-2026-10-27
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse009/RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: preserve genuine source event-time to query-time frozen memory and nonassoc gradients"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Scope of evidence
+        run: |
+          echo "Frozen original checkpoints and FP32 state only, no optimizer or model changes."
+          echo "Event-time STATE gradient not necessarily writer-parameter gradient or correct factual memory."
+          echo "No protected2016-17 or exposed2015 numeric rows; no hidden training or source edits."
