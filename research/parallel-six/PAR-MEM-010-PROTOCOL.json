@@ -1,0 +1,28 @@
+{
+  "study_id": "PAR-MEM-010-SOURCE-ALIGNED-PARALLEL-MEMORY-CANDIDATE",
+  "status": "UNTRAINED_OPTIONAL_MODEL_SOURCE_NOFIT_ONLY",
+  "historical_provenance": [
+    "research/parmem009-historical-memory-reuse-audit-2026-10-27",
+    "DIAGKEY004 write/read shared key, read-only query, tied values",
+    "ME100 owner/mask/station admission guards",
+    "LATFUSE004 soft 2-head 8D keys and 16D values",
+    "LATFUSE018 historical real-content head + meaningful controls"
+  ],
+  "architecture": "Original TimeAwareParallelResidualWorld unchanged (96,639 weights), plus source-known ordinal Fourier two-head 16x8 associative sidecar with gated-delta write and independent historical value content readout; original separate 8x8 matrix remains. For each source event known ordinal, writer and reader use same exact Fourier learned map, not content-conditioned address.",
+  "original_state_fp32": 154,
+  "extra_source_aligned_fp32": 256,
+  "total_state_fp32": 410,
+  "additional_runtime_memory": "one native Boolean, native integer count, source owner int64 and last source event ordinal int64; model weights and operational source provenance excluded",
+  "owners": "source-provided int64 identity per independent stream; no guessed entity identification",
+  "event_ordinals": "source-provided nonnegative strictly increasing int64 already known to legitimate observation and historical query; source must separately attest requested event occurred; no stored per-event keys",
+  "addresses": "sin/cos at fixed source-original ordinal periods 7,13,29,59, source-key map parameter shared EXACTLY for WRITE and READ",
+  "write_gate": "two independent source-conditioned retention sigmoids and strength sigmoids, plus differentiated 2-head softmax write routing; writable only source-provided observed bool; zero writes preserve sidecar matrix exactly",
+  "memory_affine_scan": "four blocks of original associative_affine_schedule and work_efficient_affine_prefix, with input-only coefficients; streaming uses identical row-value corrective delta updates, no same-scan read-fed gating",
+  "historical_query": "same source owner with previously observed source event ordinal, output per-channel normalized content (14 values) without original historical target in input. Source owner receipt, historical event eligibility and true target decoding NOT provided by untrusted model arguments.",
+  "forecaster": "same original source time-aware forecast at initialization, plus zero-initialized trainable direct aligned-read predictive residual",
+  "source_zip_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "real_nofit": "original 12 Beijing station FIT source records, genuine original source row ordinals, zero optimizer/test outcome scoring",
+  "scientific_gate": "not trained, no evidence of historical recall, source-only operator equivalence cannot establish real predictive advantage",
+  "next_required": "PNDS pinned Python and Lean identity/chronology/affine lemma; original whole-model FP32/grad parity; preregister new independent authentic labeled source with full forward/back/optimizer FLOP parity vs same-width no-memory, fastslow and modern recurrent baselines; 5 original frozen checkpoints and source/legal learning curriculum only if gate met",
+  "no_seventh_family": true
+}
