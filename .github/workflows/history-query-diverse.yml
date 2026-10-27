@@ -69,6 +69,10 @@ jobs:
         if: hashFiles('research/mathematical-engineering/history_query016/FROZEN_PLAN.json') != '' && hashFiles('research/replay-bundles/HISTORY-QUERY016/RESULTS.json') == ''
         run: |
           python scripts/train_history_query_diverse.py --mode fit --implementation-root original-content-code --source /tmp/history-query016-original.zip --output ci-artifacts/history-query016
+      - name: Diagnose cross-runner differences, preserve exact failure without changing results
+        if: hashFiles('research/replay-bundles/HISTORY-QUERY016/RESULTS.json') != ''
+        run: |
+          python scripts/diagnose_history_query_replay.py --implementation-root original-content-code --source /tmp/history-query016-original.zip --output ci-artifacts/history-query016
       - name: Fresh-process original-source checkpoint replay
         if: hashFiles('research/replay-bundles/HISTORY-QUERY016/RESULTS.json') != ''
         run: |
