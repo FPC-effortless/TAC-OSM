@@ -1,0 +1,52 @@
+name: PAR-TIME-004 read-only original FIT attribution replay
+on:
+  pull_request:
+    paths:
+      - 'research/parallel-six/PAR-TIME-004-RESULTS.json'
+      - 'scripts/partime004_frozen_fit_lesions.py'
+      - '.github/workflows/partime004-original-replay.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-attribution-clean-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original CPU tensor dependency
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Fail closed before touching real source
+        run: |
+          set -eu
+          test -s research/parallel-six/PAR-TIME-004-RESULTS.json
+          test -s research/parallel-six/PAR-TIME-004-PROTOCOL.json
+          test -s research/parallel-six/PAR-TIME-003-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-TIME-003/TRAIN_RECEIPT.json
+          test "$(find research/replay-bundles/PAR-TIME-003 -maxdepth 1 -name 'seed-*-full-original.pt' | wc -l)" -eq 5
+          python -m py_compile scripts/partime004_frozen_fit_lesions.py
+      - name: Restore immutable original publisher source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/partime004-clean
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/partime004-clean/source.zip
+          test "$(sha256sum /tmp/partime004-clean/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Recompute source FIT-only original frozen model lesion outputs and match preserved receipt
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.partime004_frozen_fit_lesions --mode replay \
+            --source /tmp/partime004-clean/source.zip
+          echo 'READ_ONLY_ORIGINAL_FIT_ATTRIBUTION_REPLAY_PASS'
+      - name: Assert no file mutations at all
+        run: |
+          test -z "$(git status --porcelain)"
+          echo 'No trained checkpoint or source-DATA file mutated.'

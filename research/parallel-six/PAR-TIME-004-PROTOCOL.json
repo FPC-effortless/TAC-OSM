@@ -1,0 +1,77 @@
+{
+  "study_id": "PAR-TIME-004-FROZEN-FIT-ONLY-TEMPORAL-AND-MEMORY-LESIONS",
+  "phase": "READ_ONLY_POST_TRAIN_ATTRIBUTION_NOT_QUALIFICATION",
+  "inherits": "PAR-TIME-003 authentic five-seed trained checkpoints (unaltered)",
+  "registered_before_first_attribution_execution": true,
+  "source_archive_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "source_numerical_years_allowed": [
+    2013,
+    2014
+  ],
+  "source_data_used": "March 1-April 18 2014 original FIT training window only",
+  "status": "ORIGINAL_WEIGHTS_FROZEN",
+  "cohort_selection": {
+    "seed": 271027,
+    "genuine_chronology_only": true,
+    "num_source_eligible_irregular_prior_gap_gt_hour": 32,
+    "num_source_eligible_regular_all_prior_gaps_one_hour": 32,
+    "fixed_case_count": 64,
+    "algorithm": "Filter registered source training case lists by largest preceding 12-record source time gap >1 or ==1, then random.Random(271027).sample(original_source_order,32) for each arm; concatenate irregular+regular",
+    "no_outcome_label_based_selection": true
+  },
+  "original_checkpoint_seeds": [
+    271028,
+    271029,
+    271030,
+    271031,
+    271032
+  ],
+  "forward_only": true,
+  "optimizer_steps": 0,
+  "checkpoint_mutations": 0,
+  "timing_columns": {
+    "position": [
+      0,
+      1,
+      2
+    ],
+    "elapsed_delta": [
+      3
+    ],
+    "since_sequence_origin": [
+      4
+    ],
+    "most_recent_previous_admitted_write_age_and_seen": [
+      5,
+      6
+    ],
+    "all_time_features": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  },
+  "ablations": "Zero corresponding columns of trained 7x48 time_projection on a temporary in-memory evaluation copy; restore immediately. This modifies feature inputs to the trained learned projection, not model state or original checkpoints.",
+  "associative_lesion": "Streaming: remove carried associative memory between consecutive observations, leaving all input, clocks, prefix statistics, learned weights and trained source masks unchanged; memory writes calculated but discarded for next event. No effect on current step's write-only information is claimed.",
+  "state_persistence_check": "Exact typed serialization to BytesIO, weights_only=True restoration at split=6, continue remaining 6 observed source events, compare to uninterrupted stream and batch on authentic source.",
+  "main_metrics": [
+    "FIT-only 13 observed channel normalized MAE",
+    "FIT-only PM2.5 normalized MAE",
+    "changed output magnitude relative to original prediction",
+    "source stream state norm and time clock",
+    "prediction frequency changed"
+  ],
+  "locked_failure_interpretation": "Effect on source-FIT training data does not show independent generalization or causation of better heldout forecasts; finite sample and no comparative architecture claims.",
+  "caveats": [
+    "Original model trained on 12-event windows and resets memory each window, not verified persistent beyond window.",
+    "Previous-write age and event duration are EXACT DUPLICATES when every source event is admitted to associative matrix; cannot attribute them independently.",
+    "The source covariate already includes known time-of-day sine.",
+    "No two matched learned architectures compared; full training-FLOP parity still open.",
+    "No 2014 exposed DEV outcomes used by this probe.",
+    "No training, new checkpoint, protected 2015-17 numeric access, GPU, policy or control."
+  ]
+}
