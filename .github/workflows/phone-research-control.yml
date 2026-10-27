@@ -43,9 +43,11 @@ jobs:
           GH_TOKEN: \${{ github.token }}
           GITHUB_REPOSITORY: \${{ github.repository }}
         run: |
-          python scripts/phone_lab.py scan \
-            --out ci-artifacts/phone-lab \
-            --post-issues --run-safe-diagnostics
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.run_diagnostics }}" = "false" ]; then
+            python scripts/phone_lab.py scan --out ci-artifacts/phone-lab --post-issues
+          else
+            python scripts/phone_lab.py scan --out ci-artifacts/phone-lab --post-issues --run-safe-diagnostics
+          fi
           cat ci-artifacts/phone-lab/progress.md
       - name: Keep downloadable mobile-ready progress receipts
         if: always()
