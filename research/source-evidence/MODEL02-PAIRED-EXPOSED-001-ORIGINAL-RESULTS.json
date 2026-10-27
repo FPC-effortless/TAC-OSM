@@ -1,0 +1,196 @@
+{
+  "architecture_superiority_claim": false,
+  "dev_day_metrics": [
+    {
+      "date": "2013-11-01",
+      "logistic_brier": 0.0012100074040866256,
+      "lookup_brier": 0.001199198765178859,
+      "n": 25448,
+      "positive_windows": 31
+    },
+    {
+      "date": "2013-11-02",
+      "logistic_brier": 0.0012094475905946897,
+      "lookup_brier": 0.0011945656588748122,
+      "n": 25448,
+      "positive_windows": 31
+    },
+    {
+      "date": "2013-11-03",
+      "logistic_brier": 0.0012052374592976451,
+      "lookup_brier": 0.0011910595762440193,
+      "n": 25537,
+      "positive_windows": 31
+    },
+    {
+      "date": "2013-11-04",
+      "logistic_brier": 0.0010106517181913085,
+      "lookup_brier": 0.0009975738757553936,
+      "n": 25532,
+      "positive_windows": 26
+    },
+    {
+      "date": "2013-11-05",
+      "logistic_brier": 0.0014399503014776876,
+      "lookup_brier": 0.001428566562690208,
+      "n": 25543,
+      "positive_windows": 37
+    },
+    {
+      "date": "2013-11-06",
+      "logistic_brier": 0.0015156385728453236,
+      "lookup_brier": 0.0014986645826294497,
+      "n": 25585,
+      "positive_windows": 39
+    },
+    {
+      "date": "2013-11-07",
+      "logistic_brier": 0.0015532512235511091,
+      "lookup_brier": 0.0015105593394265063,
+      "n": 25579,
+      "positive_windows": 40
+    },
+    {
+      "date": "2013-11-08",
+      "logistic_brier": 0.0013206849549293126,
+      "lookup_brier": 0.0012829621366557146,
+      "n": 25573,
+      "positive_windows": 34
+    },
+    {
+      "date": "2013-11-09",
+      "logistic_brier": 0.9913717589604533,
+      "lookup_brier": 0.9392860023514773,
+      "n": 34,
+      "positive_windows": 34
+    },
+    {
+      "date": "2013-11-10",
+      "logistic_brier": 0.991969779258104,
+      "lookup_brier": 0.945990162167894,
+      "n": 34,
+      "positive_windows": 34
+    },
+    {
+      "date": "2013-11-11",
+      "logistic_brier": 0.9919582013092674,
+      "lookup_brier": 0.945990162167894,
+      "n": 34,
+      "positive_windows": 34
+    },
+    {
+      "date": "2013-11-12",
+      "logistic_brier": 0.9896538555277308,
+      "lookup_brier": 0.9243204940476489,
+      "n": 17,
+      "positive_windows": 17
+    },
+    {
+      "date": "2013-11-13",
+      "logistic_brier": 0.9890730695043446,
+      "lookup_brier": 0.9274610908444156,
+      "n": 9,
+      "positive_windows": 9
+    }
+  ],
+  "earliest_decision_rule": "first chronologically matured noncensored eligible prediction per physical drive",
+  "evidence_tier": "ORIGINAL_EXPOSED_DEV_PAIRED_REFERENCE_DIAGNOSTIC_ONLY",
+  "first_per_drive_brier_delta_exploratory_posthoc": {
+    "caveats": [
+      "added after inspecting initial paired exposed development results",
+      "conditional on noncensored first mature cases, not censor-aware",
+      "manufacturer/site/date correlated and unequal exposure, not iid proof",
+      "not a fresh source or architecture-superiority uncertainty interval"
+    ],
+    "delta_definition": "two_feature_lookup_brier_minus_eight_feature_logistic_brier",
+    "paired_delta": -0.000010407088099824742,
+    "percentile_95_bounds": [
+      -0.000038339407680849894,
+      0.000012201806150341572
+    ],
+    "positive_decisions": 31,
+    "replicates": 300,
+    "sampled_drive_count": 25649,
+    "seed": 20261027,
+    "status": "POST_HOC_EXPLORATORY_NOT_INDEPENDENT_CONFIRMATION",
+    "unit": "first matured labeled prediction per physical drive"
+  },
+  "fit_performed_during_comparison": false,
+  "independent_evaluation": false,
+  "limitations": [
+    "the same November 2013 development cases were already exposed before model designs",
+    "two models have different original FIT capacities/features; not a matched TAC architecture comparison",
+    "daily windows strongly correlated and censoring selective; first-per-drive metric is only a sensitivity view",
+    "first mature decision is not an unbiased incident-based prospective hazard evaluation",
+    "publisher as-of time and true failure adjudication remain unverified",
+    "risk differences are descriptive without paired cluster uncertainty or held-out confirmation",
+    "no TAC memory model was trained or scored"
+  ],
+  "matched_observations_and_outcome_definitions": true,
+  "original_model_git_shas": {
+    "eight_feature_logistic": "4c4cd931a8ec19aba67ea4a3e6a51e16941c7ad21632eec86f81cbd834d81d63",
+    "two_feature_lookup": "5f8b731ddebaf0704637a9e070835317a04d38b215c579f53ca47c7e7684a8fd"
+  },
+  "paired_results": {
+    "all_matured_correlated_windows": {
+      "eight_feature_logistic": {
+        "brier": 0.001928342376544673,
+        "log_loss": 0.012590786879784181,
+        "n": 204373,
+        "observed_positive_fraction": 0.0019425266546950917,
+        "positive": 397
+      },
+      "fit_only_constant_prior": {
+        "brier": 0.0019389584399990274,
+        "log_loss": 0.014132219543851632,
+        "n": 204373,
+        "observed_positive_fraction": 0.0019425266546950917,
+        "positive": 397
+      },
+      "two_feature_smoothed_lookup": {
+        "brier": 0.001876017439205191,
+        "log_loss": 0.011056599371985628,
+        "n": 204373,
+        "observed_positive_fraction": 0.0019425266546950917,
+        "positive": 397
+      }
+    },
+    "first_matured_forecast_per_drive": {
+      "eight_feature_logistic": {
+        "brier": 0.001200545061759092,
+        "log_loss": 0.00841295361453972,
+        "n": 25649,
+        "observed_positive_fraction": 0.0012086241178993332,
+        "positive": 31
+      },
+      "fit_only_constant_prior": {
+        "brier": 0.0012072422604907844,
+        "log_loss": 0.009356131591357076,
+        "n": 25649,
+        "observed_positive_fraction": 0.0012086241178993332,
+        "positive": 31
+      },
+      "two_feature_smoothed_lookup": {
+        "brier": 0.0011901379736592671,
+        "log_loss": 0.007648720338692953,
+        "n": 25649,
+        "observed_positive_fraction": 0.0012086241178993332,
+        "positive": 31
+      }
+    }
+  },
+  "protected_future_after_2013_11_15_parsed": false,
+  "schema": "model02-paired-original-source-no-fit-references-v1",
+  "scientific_qualification": "NOT_QUALIFIED",
+  "source_archive_sha256": "7f5a53e79b16e695b4b034955806bb3bb194534b169f6eca460dfd3dc48096fe",
+  "source_denominators": {
+    "distinct_drives_with_positive_windows": 65,
+    "distinct_scored_drives": 25649,
+    "eligible_windows": 384905,
+    "matured_windows": 204373,
+    "positive_windows": 397,
+    "right_censored_windows": 180532
+  },
+  "evidence_restored_from": "Full original GitHub Actions stdout JSON; same field values, not original artifact-byte identity",
+  "source_workflow": "https://github.com/FPC-effortless/TAC-OSM/actions/runs/40479884791"
+}
