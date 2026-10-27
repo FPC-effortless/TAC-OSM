@@ -48,6 +48,16 @@ jobs:
           assert "constructed records ONLY" in text
           assert "Every uninstrumented boundary must remain UNKNOWN/INCONCLUSIVE" in text
           PY
+      - name: Index existing CI evidence without changing test execution
+        run: |
+          python scripts/lab.py record \
+            --run-id "ci-${{ github.run_id }}-anticheat" \
+            --experiment ANTICHEAT-CI --variant Robot-input-contract \
+            --stage fixture --evidence constructed_fixture \
+            --source ci-artifacts/anticheat-fixture.json \
+            --out ci-artifacts/lab
+          python scripts/lab.py report --runs ci-artifacts/lab \
+            --output ci-artifacts/lab/dashboard.html
       - name: Publish downloadable diagnostic and test reports
         if: always()
         uses: actions/upload-artifact@v4
