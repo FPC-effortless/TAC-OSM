@@ -59,6 +59,18 @@ class FullGraph(unittest.TestCase):
                         active+=1
                 self.assertGreater(active,20)
 
+    def test_actual_64_character_historical_query_graph(self):
+        # The registered research objective uses t-64, not merely short lags.
+        model=self.model("silu","multiscale_relative")
+        token=torch.randint(128,(1,65),generator=torch.Generator().manual_seed(99))
+        output,trace=model(token,return_trace=True)
+        expected,final,before=run(model,token,trace=True)
+        self.assertLess((output-expected).detach().abs().max().item(),1e-10)
+        found,target=model.historical_logits(token,trace,64)
+        ref,ref_target=historical(model,token,before,64)
+        self.assertTrue(torch.equal(target,ref_target))
+        self.assertLess((found-ref).detach().abs().max().item(),1e-10)
+
     def test_prefix_future_isolation(self):
         model=self.model("silu","multiscale_relative")
         token=torch.randint(128,(2,6))
