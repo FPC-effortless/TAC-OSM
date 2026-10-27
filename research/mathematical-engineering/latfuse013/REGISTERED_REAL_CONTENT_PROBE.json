@@ -1,0 +1,35 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE013-FROZEN-ORACLE-REAL-CONTENT-PROBE",
+  "study_type": "noncomparative_diagnostic",
+  "scientific_purpose": "Disentangle writer content vs native retrieval using authentically measured historical physical PM2.5 magnitude, fitted SIDE-CAR ridge on frozen original 2-head LATFUSE008 trained checkpoints and source-real normalized recorded values; oracle, physically matched wrong and random source keys, fastslow/entity and legal present-source nuisance controls. Decision before any Option B neural architecture changes.",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "trained_checkpoint_family": "2 original SHA-pinned LATFUSE008 assoc_historic_query models, seeds 80701,80702, 99390 active params and 6800 nominal recurrent bytes; original state_dict unchanged and original optimizer untouched.",
+  "physical_source": "Original UCI501 Beijing twelve genuine monitored stations, actual continuous PM2.5 in ug/m3 at recorded anchor, no synthetic label. Original source loader parses only original FIT numeric rows, prior train-only original strictly pre-2014-March normalization.",
+  "cohort_fit": "Source-only deterministic high>=150 and ordinary<=35 ug/m3 same station/same hour matched pairs (max8/site) earliest from 2014-03-01 through 2014-03-30 exclusive, must have >=12 pairs, and last queried hour (anchor+512) BEFORE the earliest evaluation anchor. No model-score selection.",
+  "cohort_eval": "EXACT previously frozen original LATFUSE008 24 May01-June10 2014 high-vs-ordinary same-station same-clock 48 physical anchors; SHA-pinned original original registered cohort without re-selection. FIT-era evaluation originally seen in architecture design; no independent model/test qualification.",
+  "read_lags": [
+    16,
+    64,
+    128,
+    512
+  ],
+  "features": [
+    "source_only: current legal source PM2.5 recorded/last, current 13 channel masks, source station indicator and legal requested historic clock six features; no target anchor value",
+    "nonassoc: source_only+trained fast80 slow80 and authorized source-entity80",
+    "native_read: source_only+trained 16D actual historic calendar/belief-conditioned matrix read",
+    "oracle_read: source_only+16D privileged original source event WRITE-key matrix read",
+    "wrong_key_read: source_only+16D matched other event/control anchor from same source pair WRITE-key read at the same queried memory",
+    "random_key_read: source_only+16D deterministic isotropic two-head8D key from SHA-seeded source anchor/time (not label or score)",
+    "oracle_only,wrong_only,random_only: respective 16D raw read vectors alone without nuisance",
+    "persistence: current original source true PM2.5 (last causally observed) and original source train-mean constant, no learned sidecar"
+  ],
+  "training_and_metric_protocol": "Fit external DUAL ridge linear regression ONLY (not TAC-OSM training) separately per trained original model/lag/feature arm, fixed lambda=1.0, source TRAIN-only mean and variance of columns and of y=log1p(original physical PM2.5), feature clipping ±6 and scaling 1/sqrt(input dimension); source-only no evaluation fit/tuning. Score evaluation log1p-PM MAE, normalized train-target MAE, raw PM2.5 MAE with expm1 clamp, MSE, R² against train-only target mean, paired high-magnitude-vs-low ranking. Training min12 physical pairs, eval exactly24 physical pairs. Report all negative values.",
+  "primary_H64_go_B_query_gate": "At original 64h: compared with wrong key and deterministic isotropic random key and fast/slow/entity control, oracle+source must reduce target log1p MAE by at least 5% relative to EACH control for BOTH checkpoint seeds, and original true source-station block-bootstrap95% interval of average paired absolute log-error improvement versus strongest competing control must have strictly positive lower bound. Correct oracle vs wrong signal evaluated on same target, no unlabeled geometry-only criterion.",
+  "nondecodable_interpretation": "Gate failure does NOT prove content entirely absent: linear ridge external probe is limited, 24 paired source evaluation episodes tiny, parent TAC checkpoint trained on full original FIT includes May-June, natural timestamp and source weather confounds. If oracle fails source-grounded controls, do not train query-only B as sole proven fix; review writer value encoding/target-specific relevance as a separate registrable intervention.",
+  "future_B_registration": "B0 genuine SOURCE-CONTENT RECONSTRUCTION ONLY; source-event binary + continuous real PM2.5 loss, no anchor value injected into legal read query, original alpha/beta writer held fixed. Train matched original-data fastslow nonassoc control with <=1% complete forward+AD+optimizer FLOPs and <=1% live params; same station+time source records, source split/optimizer seeds >=2, original 6800B recurrence and immutable checkpoint/clean replay. B1 contrastive within-window same-site real hard negatives and A write+read time coding are SEPARATE subsequent preregistered arms.",
+  "bootstrap": "4000 deterministic source-station resamples by physical station, not treating many pairs, seeds or nearby regional stations as independent; random seed 13013; exploratory 95% CI, no hypothesis-test multiplicity over 4 lags.",
+  "guards": "Original measured historical target and oracle WRITE key used only for diagnostic probe, never passed to native deployed query. Original numeric 2015 exposed/2016-17 protected not parsed. ZERO original neural model optimizer steps, 6800B/99390 active model intact. No synthetic real-world claim; learned external ridge coefficients NOT deployable without additional model parameter and full compute budget."
+}
