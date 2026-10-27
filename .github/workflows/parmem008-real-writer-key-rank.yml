@@ -1,0 +1,83 @@
+name: PAR-MEM-008 source-authentic 8D writer-address diversity and effective rank NO FIT
+on:
+  push:
+    branches: [research/parmem008-real-writer-address-rank-2026-10-27]
+    paths:
+      - '.github/workflows/parmem008-real-writer-key-rank.yml'
+      - 'scripts/parmem008_real_writer_key_rank.py'
+      - 'research/parallel-six/PAR-MEM-008-PROTOCOL.json'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: parmem008-real-original-source-address-rank
+  cancel-in-progress: false
+jobs:
+  original-writer-address-diversity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original CPU-only Torch
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Ensure frozen prior source originals and no duplicate original rank report
+        run: |
+          set -euo pipefail
+          python -m py_compile scripts/parmem008_real_writer_key_rank.py
+          test ! -e research/parallel-six/PAR-MEM-008-RESULTS.json
+          test -s research/parallel-six/PAR-MEM-008-PROTOCOL.json
+          test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
+          test -s research/parallel-six/PAR-MEM-006-FROZEN-PLAN.json
+          test "$(find research/replay-bundles/PAR-TIME-005 -name 'seed-*-original-continuous.pt' | wc -l)" -eq 5
+      - name: Restore immutable existing source-original UCI air sensor ZIP
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem008-real
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem008-real/source.zip
+          test "$(sha256sum /tmp/parmem008-real/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Genuine five-seed original frozen writer-key rank and recorded event-distance diagnostics
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          PYTHONUNBUFFERED: '1'
+        run: |
+          python -m scripts.parmem008_real_writer_key_rank --mode audit \
+            --source /tmp/parmem008-real/source.zip
+          test -s research/parallel-six/PAR-MEM-008-RESULTS.json
+      - name: Commit original source-derived key rank results and negative evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/parmem008-real-writer-address-rank-2026-10-27
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/parallel-six/PAR-MEM-008-RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: preserve original five-seed source-writer key rank and lag separation evidence'
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Independently clone frozen original source and replay original rank metrics
+        shell: bash
+        env:
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --single-branch --branch "$GITHUB_REF_NAME" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/parmem008-cold
+          cd /tmp/parmem008-cold
+          PYTHONPATH='.:src' python -m scripts.parmem008_real_writer_key_rank --mode replay \
+            --source /tmp/parmem008-real/source.zip
+      - name: Qualify scope
+        run: |
+          echo 'REAL source-key geometry only: no PM2.5 retrieval success or cross-model fit.'
+          echo 'Known ordinal Fourier key is a mathematical reference, not trained TAC candidate.'
+          echo 'No 2015–2017 numeric access; May–June 2014 is not new independent evaluation.'
