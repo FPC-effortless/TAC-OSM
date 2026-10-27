@@ -1,0 +1,44 @@
+name: Model02 original historical source fit-readiness audit (no training)
+on:
+  push:
+    branches:
+      - research/model02-source-qualification-2026-10-27
+  pull_request:
+    paths:
+      - 'specialist_models/model02_source_readiness.py'
+      - 'tests/test_model02_source_readiness.py'
+      - '.github/workflows/model02-source-readiness.yml'
+      - 'docs/MODEL02_SOURCE_QUALIFICATION_GATE.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-readiness-not-a-train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify original evidence case counts and fail-closed training gate
+        run: python -m unittest discover -s tests -p test_model02_source_readiness.py -v
+      - name: Record honest real-source readiness assessment (BLOCKED != CI failure)
+        run: python specialist_models/model02_source_readiness.py --out readiness_receipt.json
+      - name: Assert model-fitting remains explicitly blocked
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('readiness_receipt.json'))
+          assert d['status']=='BLOCKED_FOR_QUALIFIED_TRAINING'
+          assert d['qualified_fit_authorized'] is False
+          assert d['training_performed'] is False
+          assert len(d['blockers'])>0
+          print('SOURCE_READINESS_AUDIT_EXECUTED=PASS; QUALIFIED_FIT=BLOCKED')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model02-authentic-source-readiness-blocker-receipt
+          path: readiness_receipt.json
+          if-no-files-found: error
+          retention-days: 14

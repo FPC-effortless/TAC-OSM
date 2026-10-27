@@ -1,0 +1,45 @@
+name: Model02 Git-owned original classical checkpoint clean no-fit replay (exposed DEV)
+on:
+  push:
+    branches:
+      - research/model02-source-qualification-2026-10-27
+    paths:
+      - 'specialist_models/model02_replay_original.py'
+      - 'research/replay-bundles/PRODUCT-MODEL02-BACKBLAZE-CLASSICAL/**'
+      - '.github/workflows/model02-original-risk-replay.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/model02_replay_original.py'
+      - 'research/replay-bundles/PRODUCT-MODEL02-BACKBLAZE-CLASSICAL/**'
+      - '.github/workflows/model02-original-risk-replay.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  replay-original-source-no-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore original Git classical risk coefficients and recompute source-score only
+        run: python specialist_models/model02_replay_original.py > model02_original_replay_receipt.json
+      - name: Check transparent original DEV exact score replay
+        run: |
+          python - <<'PY'
+          import json
+          d=json.load(open('model02_original_replay_receipt.json'))
+          assert d['original_score_exactly_replayed'] is True
+          assert d['trained_during_replay'] is False
+          assert d['independent_qualification']=='NOT_ESTABLISHED'
+          print('MODEL02_GIT_OWNED_ORIGINAL_NO_FIT_REPLAY=PASS')
+          print('ORIGINAL_MODEL_CHECKPOINT_SHA256='+d['checkpoint_file_sha256'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model02-git-original-no-fit-replay-only
+          path: model02_original_replay_receipt.json
+          if-no-files-found: error
+          retention-days: 14

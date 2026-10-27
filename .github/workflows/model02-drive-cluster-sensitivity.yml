@@ -1,0 +1,50 @@
+name: Model02 authentic DEV physical-drive sensitivity (no fit, no protected TEST)
+on:
+  push:
+    branches:
+      - research/model02-source-qualification-2026-10-27
+    paths:
+      - 'specialist_models/model02_drive_cluster_sensitivity.py'
+      - 'tests/test_model02_drive_cluster_sensitivity.py'
+      - '.github/workflows/model02-drive-cluster-sensitivity.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/model02_drive_cluster_sensitivity.py'
+      - 'tests/test_model02_drive_cluster_sensitivity.py'
+      - '.github/workflows/model02-drive-cluster-sensitivity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-exposed-cluster-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Constructed clustered denominator and nonleakage regression tests
+        run: python -m unittest discover -s tests -p test_model02_drive_cluster_sensitivity.py -v
+      - name: Original publisher ZIP pinned, source-only already-exposed DEV score sensitivity
+        run: python specialist_models/model02_drive_cluster_sensitivity.py > model02_drive_cluster_dev_receipt.json
+      - name: Display source-verified drive-level sensitivity receipt without any drive identities
+        run: cat model02_drive_cluster_dev_receipt.json
+      - name: Assert original model and unqualified proof scope
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('model02_drive_cluster_dev_receipt.json'))
+          assert x['independent_evaluation'] is False
+          assert x['fit_performed_this_run'] is False
+          assert x['scientific_qualification']=='NOT_QUALIFIED'
+          assert x['original_exposed_dev_positive_windows']==397
+          assert x['distinct_dev_drives_with_positive_windows']==65
+          print('ORIGINAL_DRIVE_CLUSTER_SENSITIVITY=EVALUATED_ONLY')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model02-original-exposed-drive-cluster-sensitivity
+          path: model02_drive_cluster_dev_receipt.json
+          if-no-files-found: error
+          retention-days: 14
