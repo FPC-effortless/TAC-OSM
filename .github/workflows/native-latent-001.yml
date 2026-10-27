@@ -1,0 +1,67 @@
+name: NATIVELATENT001 original trained native ME111 memory diagnosis
+
+on:
+  push:
+    branches:
+      - research/native-latent-diagnosis-2026-10-27
+    paths:
+      - scripts/native_latent_001_diagnosis.py
+      - research/mathematical-engineering/nativelatent001/DIAGNOSTIC_REGISTRATION.json
+      - .github/workflows/native-latent-001.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nativelatent001-source-original-checkpoint-readonly
+  cancel-in-progress: false
+
+jobs:
+  original-checkpoint-frozen-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install original native model analysis CPU dependencies
+        run: |
+          python -m pip install --quiet numpy
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Enforce originally registered read-only native mechanism protocol
+        run: |
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/nativelatent001/DIAGNOSTIC_REGISTRATION.json \
+            --phase preflight
+          test ! -e research/mathematical-engineering/nativelatent001/RESULTS.json
+          test -f research/source-bundles/ME100/PRSA2017_original.zip
+          test -f research/replay-bundles/ME111/conditional_belief/seed-111001/final.pt
+      - name: Original authentic FIT-only no-update ME111 trained checkpoint forensic analysis
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/native_latent_001_diagnosis.py \
+            --phase fit \
+            --output research/mathematical-engineering/nativelatent001/RESULTS.json
+      - name: Publish read-only derived evidence only on isolated diagnosis branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/native-latent-diagnosis-2026-10-27
+          test -s research/mathematical-engineering/nativelatent001/RESULTS.json
+          git add research/mathematical-engineering/nativelatent001/RESULTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "research: preserve native trained ME111 read-only FIT memory forensics"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: No inference of protected qualification
+        run: |
+          echo "No new optimizer, no original checkpoint modification, no target labels, no protected cohort, no fitted superiority."
+          echo "State lesions are out-of-distribution sensitivity only; not accurate retrieval or causal information guarantees."
