@@ -1,0 +1,35 @@
+name: Model02 genuine historical source EXPLORATORY classical risk FIT (not qualified)
+on:
+  push:
+    branches:
+      - research/model02-source-qualification-2026-10-27
+    paths:
+      - 'specialist_models/model02_backblaze_exploratory.py'
+      - 'tests/test_model02_backblaze_exploratory.py'
+      - '.github/workflows/model02-exploratory-real-fit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  explicitly-exploratory-not-qualified:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run constructed source and censor regression tests before any real FIT
+        run: python -m unittest discover -s tests -p test_model02_backblaze_exploratory.py -v
+      - name: Fit only historical exposed FIT, score same already-exposed DEV — not qualified
+        run: |
+          python specialist_models/model02_backblaze_exploratory.py
+      - name: Preserve original trained classical coefficients and transparent DEV receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: model02-original-classical-exposed-fit-not-qualified
+          path: |
+            model02_original_exploratory_checkpoint.json
+            model02_original_exploratory_dev.json
+          if-no-files-found: error
+          retention-days: 14
