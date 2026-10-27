@@ -2,6 +2,7 @@
 import io,hashlib,json,os,sys,tempfile,unittest
 from pathlib import Path
 import numpy as np
+from unittest.mock import patch
 import torch
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/"specialist_models"))
@@ -47,7 +48,7 @@ class NativeTACSourceTests(unittest.TestCase):
     def test_no_training_without_explicit_cpu_fit_gate(self):
         # Keep preflight entirely offline: missing source must never be fetched.
         with tempfile.TemporaryDirectory() as directory:
-            with unittest.mock.patch.dict(os.environ,{},clear=True):
+            with patch.dict(os.environ,{},clear=True):
                 rc=m.main(["--out",str(Path(directory)/"receipt.json")])
                 self.assertEqual(rc,2)
 
