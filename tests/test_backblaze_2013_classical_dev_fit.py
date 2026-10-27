@@ -52,6 +52,11 @@ class ClassicalBackblazeFixtureTests(unittest.TestCase):
         cls.data=archive()
         a,b,c=patched_hash(cls.data)
         with a,b,c:
+            flags, _=m.admission.read_timeline(cls.data)
+            example=flags[("SERIAL-00","MODEL-A")]
+            expected=m.source.FIRST+timedelta(days=14)
+            if m.admission.label_future(example,expected,m.source.FIT_END)!="POSITIVE":
+                raise AssertionError("constructed FIT case should lead to publisher failure in 7 days")
             cls.cohorts,cls.days=m.cohorts(cls.data)
 
     def test_fit_and_dev_have_independent_calendar_phase_labels(self):
