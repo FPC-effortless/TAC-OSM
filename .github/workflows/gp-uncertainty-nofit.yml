@@ -8,6 +8,8 @@ on:
       - 'tests/test_gp_uncertainty_numpy.py'
       - 'tests/test_gp_sparse_nofit.py'
       - 'src/tac_osm/gp_sparse_nofit.py'
+      - 'src/tac_osm/gp_rankone_nofit.py'
+      - 'tests/test_gp_rankone_nofit.py'
       - 'research/mathematical-engineering/gp-unc-001/**'
       - '.github/workflows/gp-uncertainty-nofit.yml'
   pull_request:
@@ -17,6 +19,8 @@ on:
       - 'tests/test_gp_uncertainty_numpy.py'
       - 'tests/test_gp_sparse_nofit.py'
       - 'src/tac_osm/gp_sparse_nofit.py'
+      - 'src/tac_osm/gp_rankone_nofit.py'
+      - 'tests/test_gp_rankone_nofit.py'
       - 'research/mathematical-engineering/gp-unc-001/**'
       - '.github/workflows/gp-uncertainty-nofit.yml'
   workflow_dispatch:
@@ -39,7 +43,9 @@ jobs:
         run: python -m unittest discover -s tests -p test_gp_uncertainty_numpy.py -v
       - name: Check bounded inducing-process residual filter and causal update preflight
         run: python -m unittest discover -s tests -p test_gp_sparse_nofit.py -v
+      - name: Compare rank-one O(m^2) Bayesian updates to O(m^3) exact precision reference
+        run: python -m unittest discover -s tests -p test_gp_rankone_nofit.py -v
       - name: Enforce scientific no-fit study receipt
         run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/gp-unc-001/REGISTERED_NOFIT.json --phase preflight
       - name: Compile mathematical reference
-        run: python -m py_compile src/tac_osm/gp_uncertainty_nofit.py src/tac_osm/gp_sparse_nofit.py tests/test_gp_uncertainty_nofit.py tests/test_gp_sparse_nofit.py
+        run: python -m py_compile src/tac_osm/gp_uncertainty_nofit.py src/tac_osm/gp_sparse_nofit.py src/tac_osm/gp_rankone_nofit.py tests/test_gp_rankone_nofit.py tests/test_gp_uncertainty_nofit.py tests/test_gp_sparse_nofit.py
