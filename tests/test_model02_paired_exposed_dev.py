@@ -66,6 +66,16 @@ class Model02PairedContractTests(unittest.TestCase):
         self.assertEqual(lookup["fit_windows"],logistic["fit_examples"])
         self.assertEqual(len(logistic["coefficients"]),8)
 
+    def test_posthoc_uncertainty_is_deterministic_not_confirmation(self):
+        first=m.per_drive_first_matured(rows())
+        a=m.first_drive_bootstrap_posthoc(first,replicates=60,seed=3)
+        b=m.first_drive_bootstrap_posthoc(first,replicates=60,seed=3)
+        self.assertEqual(a,b)
+        self.assertIn("POST_HOC",a["status"])
+        self.assertEqual(a["positive_decisions"],1)
+        self.assertEqual(a["sampled_drive_count"],3)
+        self.assertEqual(len(a["percentile_95_bounds"]),2)
+
     def test_first_per_drive_representative_is_sorted_temporally(self):
         first=m.per_drive_first_matured(list(reversed(rows())))
         self.assertEqual({x[0]:x[1] for x in first}[A],D)
