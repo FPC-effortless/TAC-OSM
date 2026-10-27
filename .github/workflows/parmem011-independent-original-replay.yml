@@ -1,0 +1,55 @@
+name: PAR-MEM-011 independent read-only original real historical trained models replay
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/parmem011-independent-original-replay.yml'
+      - 'research/replay-bundles/PAR-MEM-011/**'
+      - 'research/parallel-six/PAR-MEM-011-FROZEN-PLAN.json'
+      - 'scripts/parmem011_genuine_source_train.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-five-seed-two-arm-source-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU tensor backend without optimization
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify source provenance, prefit clock schedule and all frozen originals exist
+        run: |
+          set -euo pipefail
+          test -s research/parallel-six/PAR-MEM-011-PROTOCOL.json
+          test -s research/parallel-six/PAR-MEM-011-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-MEM-011/TRAIN_RECEIPT.json
+          test -s research/replay-bundles/PAR-MEM-011/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-MEM-011 -maxdepth 1 -name 'seed-*-original.pt' | wc -l)" -eq 10
+          test "$(find research/replay-bundles/PAR-MEM-011 -maxdepth 1 -name 'seed-*-original_DEV_tensors.pt' | wc -l)" -eq 10
+          python -m py_compile scripts/parmem011_genuine_source_train.py
+      - name: Restore immutable original true measured source from original Git archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem011-independent-original
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem011-independent-original/source.zip
+          test "$(sha256sum /tmp/parmem011-independent-original/source.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Rebuild every original real source previous-event query output without any new optimizer update
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.parmem011_genuine_source_train --mode replay \
+            --source /tmp/parmem011-independent-original/source.zip
+          echo 'PAR_MEM_011_FIVE_SEED_TEN_MODEL_ORIGINAL_REAL_SOURCE_REPLAY_PASS'
+      - name: Explicit refusal to mutate source, previous results or trained models
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain)"
+          echo 'No historical source inference evidence promoted to untouched TEST or independent model superiority'

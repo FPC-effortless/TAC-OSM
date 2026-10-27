@@ -1,0 +1,63 @@
+name: PAR-MEM-011 PR preflight real source forward-backward-optimizer parity NO original checkpoint writes
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/parmem011-readonly-preflight.yml'
+      - 'scripts/parmem011_genuine_source_train.py'
+      - 'scripts/parmem011_real_train_operator_preflight.py'
+      - 'research/parallel-six/PAR-MEM-011-PROTOCOL.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-historical-head-graph-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install only CPU PyTorch
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Require exact original 5 pretrained genuine-source checkpoint bases
+        run: |
+          set -euo pipefail
+          test -s research/replay-bundles/PAR-TIME-005/TRAIN_RECEIPT.json
+          test "$(find research/replay-bundles/PAR-TIME-005 -maxdepth 1 -name 'seed-*-original-continuous.pt' | wc -l)" -eq 5
+          python -m py_compile scripts/parmem011_genuine_source_train.py scripts/parmem011_real_train_operator_preflight.py
+      - name: Restore SHA-pinned real physical FIT source without protected numeric years
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem011-pr-smoke
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem011-pr-smoke/original.zip
+          test "$(sha256sum /tmp/parmem011-pr-smoke/original.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Create TEMPORARY deterministic query plan for schema validation only
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          if test -e research/parallel-six/PAR-MEM-011-FROZEN-PLAN.json; then
+            echo 'FROZEN SOURCE PLAN EXISTS; preserve and inspect it'
+          else
+            python -m scripts.parmem011_genuine_source_train --mode plan \
+              --source /tmp/parmem011-pr-smoke/original.zip
+          fi
+      - name: Audit both real-trained-source ARM graphs through forward, backward, clip, optimizer
+        env:
+          PYTHONPATH: '.:src'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+        run: |
+          python -m scripts.parmem011_real_train_operator_preflight \
+            --source /tmp/parmem011-pr-smoke/original.zip
+          echo 'No original 5-seed research training was started in this PR verification'
+      - name: Original trained checkpoints must stay exactly untouched
+        run: |
+          test ! -e research/replay-bundles/PAR-MEM-011/TRAIN_RECEIPT.json || true
+          echo 'This workflow only validates the original source plan and two diagnostic training operator signatures.'
