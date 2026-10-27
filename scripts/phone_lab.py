@@ -119,7 +119,7 @@ def main(argv=None) -> int:
                                                for path, decision in rows]}
         if args.run_safe_diagnostics:
             for path, row in rows[:3]:
-                if row.get("state") != "READY_NO_FIT":
+                if row.get("state") != "READY_NO_FIT" or row.get("backend") != "github_actions":
                     continue
                 prop = load_proposal(Path(path), ROOT)
                 result = run_suite(prop["diagnostic"], out / (row["run_id"] + "-diagnostic.json"))
