@@ -66,6 +66,34 @@ class Model02PairedContractTests(unittest.TestCase):
         self.assertEqual(lookup["fit_windows"],logistic["fit_examples"])
         self.assertEqual(len(logistic["coefficients"]),8)
 
+    def test_operator_budget_applies_identical_alert_cost_to_both_models(self):
+        first=m.per_drive_first_matured(rows())
+        report=m.exploratory_budget_alerts(first,fractions=(.34,))
+        budget=report["budgets"][0]
+        self.assertEqual(budget["allowed_review_alerts"],1)
+        self.assertEqual(budget["positive_horizon_drive_cases"],1)
+        for item in budget["models"].values():
+            self.assertEqual(item["alerts"],1)
+            self.assertEqual(item["true_positive_seven_day_drive_cases"]+
+                             item["false_positive_alerts"],1)
+        self.assertIn("POST_HOC",report["status"])
+
+    def test_operator_budget_does_not_sort_by_outcomes(self):
+        # Both positive and negative have same probability; tie is source ID hash
+        # rather than using the target. Swapping labels does not reorder cases.
+        a=m.exploratory_budget_alerts(m.per_drive_first_matured(rows()),fractions=(.34,))
+        other=[tuple([row[0],row[1],1-row[2],row[3],row[4]]) for row in rows()]
+        b=m.exploratory_budget_alerts(m.per_drive_first_matured(other),fractions=(.34,))
+        self.assertEqual(a["budgets"][0]["allowed_review_alerts"],
+                         b["budgets"][0]["allowed_review_alerts"])
+
+    def test_operator_budget_requires_distinct_drive_and_valid_budget(self):
+        first=m.per_drive_first_matured(rows())
+        with self.assertRaises(m.PairError):
+            m.exploratory_budget_alerts(first+first[:1])
+        with self.assertRaises(m.PairError):
+            m.exploratory_budget_alerts(first,fractions=(0.0,))
+
     def test_posthoc_uncertainty_is_deterministic_not_confirmation(self):
         first=m.per_drive_first_matured(rows())
         a=m.first_drive_bootstrap_posthoc(first,replicates=60,seed=3)
