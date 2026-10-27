@@ -1,0 +1,62 @@
+name: Model01 original native-vs-GRU neural source truth scorecard
+on:
+  push:
+    branches:
+      - research/model01-103k-gru-control-2026-10-27
+    paths:
+      - 'specialist_models/model01_gru_control_scorecard.py'
+      - 'tests/test_model01_gru_control_scorecard.py'
+      - '.github/workflows/model01-gru-control-scorecard.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  original-git-neural-control-scorecard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify complete original source weights, same sampler and claim boundaries
+        run: python -m unittest discover -s tests -p test_model01_gru_control_scorecard.py -v
+      - name: Recalculate exact original three-seed native and GRU scorecard without any fitting
+        run: |
+          mkdir -p research/source-evidence
+          FILE=research/source-evidence/MODEL01-TAC-vs-103K-GRU-ORIGINAL-DEV.json
+          if [ -e "$FILE" ]; then
+            python specialist_models/model01_gru_control_scorecard.py --out /tmp/model01_control_replay.json
+            python - <<'PY'
+          import json
+          a=json.load(open('research/source-evidence/MODEL01-TAC-vs-103K-GRU-ORIGINAL-DEV.json'))
+          b=json.load(open('/tmp/model01_control_replay.json'))
+          assert a==b
+          print('PREVIOUS_SOURCE_SCORECARD_NO_FIT_REPRODUCED=PASS')
+          PY
+          else
+            python specialist_models/model01_gru_control_scorecard.py --out "$FILE"
+            python - <<'PY'
+          import json
+          d=json.load(open('research/source-evidence/MODEL01-TAC-vs-103K-GRU-ORIGINAL-DEV.json'))
+          assert d['relative_parameter_gap']<.01
+          assert not d['independent_qualification'] and not d['training_FLOPs_or_tuning_budget_equal']
+          assert d['mean_GRU_MAE_relative_to_TAC']<0
+          assert d['mean_GRU_interval_score_relative_to_TAC']>0
+          print('THREE_REAL_SEED_ORIGINAL_NEURAL_TRADEOFF=PASS_NO_SUPERIORITY_CLAIM')
+          PY
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "$FILE"
+            git commit -m 'research: preserve genuine 103k neural TAC vs GRU full source metric comparison'
+            git push origin "HEAD:refs/heads/${GITHUB_REF_NAME}"
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-original-real-source-neural-103k-controlled-scorecard
+          path: research/source-evidence/MODEL01-TAC-vs-103K-GRU-ORIGINAL-DEV.json
+          if-no-files-found: warn
+          retention-days: 14
