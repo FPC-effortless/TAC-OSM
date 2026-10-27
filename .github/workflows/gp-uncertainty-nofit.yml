@@ -5,6 +5,7 @@ on:
     paths:
       - 'src/tac_osm/gp_uncertainty_nofit.py'
       - 'tests/test_gp_uncertainty_nofit.py'
+      - 'tests/test_gp_uncertainty_numpy.py'
       - 'research/mathematical-engineering/gp-unc-001/**'
       - '.github/workflows/gp-uncertainty-nofit.yml'
   pull_request:
@@ -27,6 +28,10 @@ jobs:
           python-version: '3.12'
       - name: Test deterministic GP, conformal and causal boundary fixtures (no fit)
         run: python -m unittest discover -s tests -p test_gp_uncertainty_nofit.py -v
+      - name: Install numerical reference library (no neural training)
+        run: python -m pip install --quiet numpy==2.3.3
+      - name: Check 72 independent double-precision GP posterior references
+        run: python -m unittest discover -s tests -p test_gp_uncertainty_numpy.py -v
       - name: Enforce scientific no-fit study receipt
         run: python scripts/validate_research_parity.py --manifest research/mathematical-engineering/gp-unc-001/REGISTERED_NOFIT.json --phase preflight
       - name: Compile mathematical reference
