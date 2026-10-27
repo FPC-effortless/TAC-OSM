@@ -1,0 +1,38 @@
+{
+  "comparative_original_training_permitted": false,
+  "equal_identical_true_source_inputs_and_masks_and_labels": true,
+  "full_training_compute_parity_verified": false,
+  "models": [
+    {
+      "arm": "assoc_historic_query",
+      "carried_fp32_state_bytes": 6800,
+      "genuine_original_source_training_case_order_sha256": "059b06297422176b16c0f51c4e0cd2cc21c13fd9a966b5182c54ebb04f7458d1",
+      "live_params": 99390,
+      "optimizer_updates": 0,
+      "original_real_event_BCE_nofit": 0.6938298940658569,
+      "original_real_forecast_loss_nofit": 1.3010783195495605,
+      "real_source_gradient_tensors": 43,
+      "torch_CPU_supported_operator_forward_AD_flops": 209663861
+    },
+    {
+      "arm": "fast_slow_historic_query",
+      "carried_fp32_state_bytes": 6800,
+      "genuine_original_source_training_case_order_sha256": "059b06297422176b16c0f51c4e0cd2cc21c13fd9a966b5182c54ebb04f7458d1",
+      "live_params": 99390,
+      "optimizer_updates": 0,
+      "original_real_event_BCE_nofit": 0.6902855038642883,
+      "original_real_forecast_loss_nofit": 1.3010783195495605,
+      "real_source_gradient_tensors": 43,
+      "torch_CPU_supported_operator_forward_AD_flops": 209666037
+    }
+  ],
+  "optimizer_and_unsupported_ops_excluded": true,
+  "original_genuine_event_control_pairs": 4,
+  "original_parent_model_and_optimizers_untouched": true,
+  "partial_profiled_compute_within_one_pct": true,
+  "source_cohort_sha256": "059b06297422176b16c0f51c4e0cd2cc21c13fd9a966b5182c54ebb04f7458d1",
+  "source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "study": "LATFUSE008-QUERY-CONTROL-SOURCE-PREFIT",
+  "supported_ops_relative_flops_gap": 1.037840954660673e-05,
+  "two_models_identical_live_parameters_and_recurrent_state": true
+}
