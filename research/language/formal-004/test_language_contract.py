@@ -23,6 +23,19 @@ class LanguageContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_model(ParallelTACLanguage())
 
+    def test_all_named_tensor_shapes_are_covered(self):
+        from language_contract import EXPECTED_PARAMETER_SHAPES
+        self.assertEqual(len(EXPECTED_PARAMETER_SHAPES),36)
+        self.assertEqual({name:tuple(value.shape)
+            for name,value in self.model.named_parameters()},
+            EXPECTED_PARAMETER_SHAPES)
+        self.assertEqual(sum(p.numel() for p in self.model.parameters()),100680)
+        # Same total-parameter count is NOT a sufficient typed-graph contract.
+        replacement=ParallelTACLanguage(decoder=75,post=10,position_mode="multiscale")
+        replacement.time_proj.weight=torch.nn.Parameter(torch.zeros(24,14))
+        with self.assertRaisesRegex(ValueError,"tensor shapes"):
+            validate_model(replacement)
+
     def test_forced_ordinal_cycle_and_boundary(self):
         self.assertEqual(FORCED_KEY_PERIOD, 155701)
         for ordinal in (0, 127, FORCED_KEY_PERIOD):
