@@ -1,0 +1,39 @@
+name: Model02 frozen 46-day original Backblaze source feasibility (NO FIT)
+on:
+  push:
+    branches:
+      - product/backblaze-censored-risk-intake-2026-10-27
+    paths:
+      - 'specialist_models/backblaze_2013_cohort_feasibility.py'
+      - 'tests/test_backblaze_2013_cohort_feasibility.py'
+      - '.github/workflows/model02-backblaze-source-feasibility.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/backblaze_2013_cohort_feasibility.py'
+      - 'tests/test_backblaze_2013_cohort_feasibility.py'
+      - '.github/workflows/model02-backblaze-source-feasibility.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-archive-source-feasibility:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test constructed source chronology, enrolled cohort, censor and heldout guard
+        run: python -m unittest discover -s tests -p test_backblaze_2013_cohort_feasibility.py -v
+      - name: Download original SHA-pinned source; scan exactly 46 exposed development days
+        run: |
+          python specialist_models/backblaze_2013_cohort_feasibility.py \
+            --out backblaze_exposed_46_day_feasibility.json
+      - name: Keep aggregated counts; no source identities or labels
+        uses: actions/upload-artifact@v4
+        with:
+          name: backblaze-exposed-cohort-source-feasibility-only
+          path: backblaze_exposed_46_day_feasibility.json
+          if-no-files-found: error
+          retention-days: 14
