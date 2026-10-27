@@ -31,3 +31,20 @@ The DEV matured sample comprises **204,373 complete labeled seven-day windows** 
 `specialist_models/model02_source_readiness.py` continues to report **BLOCKED_FOR_QUALIFIED_TRAINING** on this original post-exposure source. This does not contradict an explicitly unqualified historical classical *development* fit. The retained rules ban claims of confirmed new real-world skill, TAC superiority, deployability and protected-source evaluation until actual legal rights, source-time availability, independent enrollment and censor-aware evaluation are established.
 
 Next full research step: independently authorize/freeze a newly sourced longitudinal cohort, include manufacturer/model/drive age and left truncation checks, use a proper censored survival estimator and strong tree/history-feature baselines. Only then examine matched native TAC neural memory with equal source history, identity and train/data/parameter compute.
+
+
+## Actual exposed source drive-weighted sensitivity (October 27, 2026)
+
+Previous 204,373 labeled DEV windows overlap within physical drives and can create misleading effective sample-size and confidence impressions. A **no-fit, publisher original ZIP SHA-pinned, source-DEV-only** diagnostic in `specialist_models/model02_drive_cluster_sensitivity.py` groups each original physical (serial, model) entity in-memory and reports only aggregate counts and scores. It does not print or commit drive IDs.
+
+[Actual original-source per-drive workflow #40478889145](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40478889145) **PASS** with 8 constructed numerator/case/group tests, original 25,649 physical drives with at least one matured DEV window, only 65 of which have positive windows. Comparison includes the immutable original FIT-only constant-probability reference.
+
+| Exposed DEV scoring definition | Original nine-cell model Brier | FIT prevalence reference Brier | Mean paired Brier difference (model minus reference) |
+| --- | ---: | ---: | ---: |
+| All overlapping windows (prior reported micro average) | 0.001876 | 0.001939 | -0.000063 |
+| Each physical drive equally weighted (macro average) | 0.001945 | 0.002009 | -0.000063 |
+| Only the earliest matured window per physical drive | 0.001190 | 0.001207 | **-0.000017** |
+
+On the last diagnostic, the mean drive-level Brier advantage of 0.000017 has descriptive standard error roughly **0.000015** from a naive independent-drive approximation; shared manufacturer/site correlations, left-truncation, informative right-censoring and post-exposure selection are uncorrected. The smallest-effect diagnostic therefore cannot justify qualified risk reduction. Even equal-weight macro scoring does not correct informative censoring.
+
+Full original published receipt retained at `research/source-evidence/MODEL02-BACKBLAZE-2013-EXPOSED-DRIVE-EQUAL-DEV-SENSITIVITY.json` including per-drive paired macro Brier/log-loss means, earliest-matured paired diagnostic, original denominators and clear NOT_QUALIFIED metadata. The original risk-model checkpoint and exposed DEV scores remain unchanged. Next experiment needs independently justified sampling and censor-aware outcome estimation, not another repetition of the same exposed cases.
