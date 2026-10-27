@@ -1,0 +1,36 @@
+name: Model01 authentic publisher timestamp-to-reference parity (DEV only)
+on:
+  push:
+    branches:
+      - product/model01-auth-gateway-2026-10-27
+    paths:
+      - 'specialist_models/model01_real_timestamp_parity.py'
+      - 'specialist_models/model01_source_timestamp_adapter.py'
+      - '.github/workflows/model01-authentic-timestamp-parity.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/model01_real_timestamp_parity.py'
+      - 'specialist_models/model01_source_timestamp_adapter.py'
+      - '.github/workflows/model01-authentic-timestamp-parity.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  genuine-source-temporal-wrapper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate original publisher row time and frozen model source graph on exposed DEV
+        run: python specialist_models/model01_real_timestamp_parity.py > original_timestamp_adapter_parity.json
+      - name: Print original source no-refit acceptance
+        run: cat original_timestamp_adapter_parity.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-authentic-timestamp-adapter-dev-parity
+          path: original_timestamp_adapter_parity.json
+          if-no-files-found: error
+          retention-days: 14

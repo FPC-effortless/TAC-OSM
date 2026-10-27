@@ -1,0 +1,32 @@
+name: Model01 original publisher time-grid adapter (source-only no refit)
+on:
+  push:
+    branches:
+      - product/model01-auth-gateway-2026-10-27
+    paths:
+      - 'specialist_models/model01_source_timestamp_adapter.py'
+      - 'tests/test_model01_source_timestamp_adapter.py'
+      - '.github/workflows/model01-source-time-grid.yml'
+  pull_request:
+    paths:
+      - 'specialist_models/model01_source_timestamp_adapter.py'
+      - 'tests/test_model01_source_timestamp_adapter.py'
+      - '.github/workflows/model01-source-time-grid.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  publisher-source-grid-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate timestamp to exact original model phase, no hidden targets
+        run: python -m unittest discover -s tests -p test_model01_source_timestamp_adapter.py -v
+      - name: Syntax and original checkpoint integrity
+        run: |
+          python -m py_compile specialist_models/model01_source_timestamp_adapter.py
+          python -m unittest discover -s tests -p test_model01_authenticated_gateway.py -v
