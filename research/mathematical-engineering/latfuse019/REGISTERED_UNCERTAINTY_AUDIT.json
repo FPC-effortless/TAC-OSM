@@ -1,0 +1,14 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LATFUSE019-FROZEN-REAL-FORECAST-CALIBRATION-FORENSICS",
+  "study_type": "noncomparative_diagnostic",
+  "scientific_purpose": "Diagnose very high H64 real-source Gaussian NLL and 90% interval undercoverage in exact frozen four trained LATFUSE018 checkpoint models using real measured source channel and station residuals, standardized log physical labels and scale, without fitting/tuning or touching original model weights.",
+  "no_new_model_fits": true,
+  "no_architecture_superiority_claim": true,
+  "original_source_sha256": "d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8",
+  "checkpoint_policy": "Four SHA-pinned previously real-trained LATFUSE018 seed18018/18019×assoc/fastslow original99,390 model params and 6800byte state; original optimizer and RNG checkpoints immutable, reconstruct original 117 exact May–June2014 already-exposed true station-hour evaluation IDs from committed source PLAN.json.",
+  "frozen_prospective_metrics": "H64 actual observed source future+6 Gaussian NLL and symmetric 90% coverage by all 13 physical source channels, 12 monitored stations, per checkpoint. Rank largest 10 observed (channel/station/hour) NLL terms without excluding data from main aggregate; report top1/top10 NLL fraction of full positive NLL denominator (NLL may negative; report sum positive NLL separately), standardized source target z, predicted mean and sd, residual/sd, missingness flags, nominal90% abs normalized error interval. Diagnostic trimmed top1% NLL average labelled after-the-fact not a calibrated score.",
+  "causality": "Only legal source numeric 2014 original FIT previously examined cohorts. Recover original actual source ZIP SHA, original trained checkpoint SHA and source evaluation plan SHA. No future label read until original forecasting output, no protected2016–17 or previously exposed2015 numerical source, no data-dependent model selection or hyperparameter update.",
+  "statistics": "No independent 2014 qualification, no empirical calibration fit: report source-station and physical channel NLL and coverage with actual denominators, >90th and 99th residual/scale ratios, top1/top10 tail counts and all observed masked source data. Extreme observations can be source data quality, variance miscalibration or rare real physical events; do not infer root cause without source provenance confirmation.",
+  "next_gate": "Only after source-only H64 tail attribution design independent new-source calibration method and source-heldout proper loss/coverage gates; do not temperature tune on repeatedly exposed original May–June observations. Future experiment must retain full model checkpoint replay, strict same param/compute source and safeguards."
+}
