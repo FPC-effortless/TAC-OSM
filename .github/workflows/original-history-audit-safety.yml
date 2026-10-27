@@ -1,0 +1,59 @@
+name: Original historical-memory audit boundaries (fixture only)
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-graph-and-authorization-fixtures:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: 0d9c9fbc8c5ed94762c9da129379158d36125e7f
+          path: original-code
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU-only engineering test tools
+        run: |
+          python -m pip install --quiet pytest cryptography numpy==2.3.3 ruff
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify registration and CPU routing (not evaluation permission)
+        run: |
+          python scripts/phone_lab.py plan research/phone_queue/original-history-audit014.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/history_audit014/FAIR_COMPARISON.json --phase preflight
+      - name: Real original CODE, constructed inputs only, no original data or checkpoint loading
+        env:
+          PYTHONPATH: .:src
+          TAC_OSM_ORIGINAL_HISTORY_SOURCE: ${{ github.workspace }}/original-code
+        run: |
+          python -m ruff check --select E9,F63,F7,F82 src/tac_osm/history_audit_authorization.py scripts/audit_original_history.py scripts/original_history_trace.py tests/test_original_history_audit.py
+          python -m pytest -q tests/
+      - name: Missing independent permission must block before source or checkpoint access
+        run: |
+          mkdir -p ci-artifacts/history-audit014
+          set +e
+          python scripts/audit_original_history.py --execute --source /unavailable/original.zip --implementation-root original-code --output ci-artifacts/history-audit014/BLOCKED.json
+          status=$?
+          set -e
+          test "$status" -eq 2
+          python - <<'PY'
+          import json
+          r = json.load(open('ci-artifacts/history-audit014/BLOCKED.json'))
+          assert r['status'] == 'BLOCKED_INDEPENDENT_AUTHORIZATION'
+          assert r['evaluation_executed'] is False
+          assert r['scientific_qualification'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-history-audit014-permission-blocker
+          path: ci-artifacts/history-audit014/
+          if-no-files-found: warn
