@@ -23,7 +23,7 @@ def contract():
             "horizons_hours": [6]}
 
 def record(i, channel="pm25", gap="gap", issued="2025-01-05T00:00:00Z", y=6.):
-    return {"row_id":f"row-{channel}-{gap}-{i}", "entity_id":f"site-{i}",
+    return {"row_id":f"row-{channel}-{gap}-{i}", "entity_id":f"site-{channel}-{gap}-{i}",
             "issued_at":issued,"model_sha256":"a"*64,"channel":channel,
             "gap_kind":gap,"horizon_hours":6,"point":5.,"lower":4.,"upper":6.,
             "truth":y,"outcome_available_at":"2025-01-06T00:00:00Z" if issued.startswith("2025-01")
