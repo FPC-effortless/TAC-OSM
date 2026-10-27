@@ -1,0 +1,96 @@
+name: PAR-MEM-012 frozen ten-trained-model real historical associative READ attribution
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/parmem012-frozen-read-attribution.yml'
+      - 'scripts/parmem012_frozen_real_read_attribution.py'
+      - 'research/parallel-six/PAR-MEM-012-*'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: parmem012-source-frozen-true-wrong-zero-read-lesion
+  cancel-in-progress: false
+jobs:
+  original-checkpoint-no-fit-interventions:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    env:
+      ATTR_BRANCH: ${{ github.event.pull_request.head.ref }}
+      PYTHONPATH: '.:src'
+      OMP_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU-only original PyTorch
+        run: python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify fixed source original ten models and all their original DEV prediction files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s research/parallel-six/PAR-MEM-012-PROTOCOL.json
+          test -s research/parallel-six/PAR-MEM-011-FROZEN-PLAN.json
+          test -s research/replay-bundles/PAR-MEM-011/TRAIN_RECEIPT.json
+          test -s research/replay-bundles/PAR-MEM-011/DEV_RESULTS.json
+          test "$(find research/replay-bundles/PAR-MEM-011 -maxdepth 1 -name 'seed-*-original.pt' | wc -l)" -eq 10
+          test "$(find research/replay-bundles/PAR-MEM-011 -maxdepth 1 -name 'seed-*-original_DEV_tensors.pt' | wc -l)" -eq 10
+          python -m py_compile scripts/parmem012_frozen_real_read_attribution.py
+          if test -s research/parallel-six/PAR-MEM-012-RESULTS.json; then
+            test -s research/parallel-six/PAR-MEM-012-ORIGINAL-PREDICTIONS.pt
+            echo 'READONLY_REPLAY=true' >> "$GITHUB_ENV"
+          else
+            test ! -e research/parallel-six/PAR-MEM-012-ORIGINAL-PREDICTIONS.pt
+            echo 'READONLY_REPLAY=false' >> "$GITHUB_ENV"
+          fi
+      - name: Recover original SHA-pinned publisher real-source 2014 ZIP without opening protected 2015-2017
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/parmem012-real-original
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip > /tmp/parmem012-real-original/publisher.zip
+          test "$(sha256sum /tmp/parmem012-real-original/publisher.zip | awk '{print $1}')" = d1b9261c54132f04c374f762f1e5e512af19f95c95fd6bfa1e8ac7e927e3b0b8
+      - name: Original real-source frozen correct/wrong/distant/zero READ intervention (NO optimizer)
+        if: env.READONLY_REPLAY == 'false'
+        run: |
+          python -m scripts.parmem012_frozen_real_read_attribution --mode audit \
+            --source /tmp/parmem012-real-original/publisher.zip
+          test -s research/parallel-six/PAR-MEM-012-RESULTS.json
+          test -s research/parallel-six/PAR-MEM-012-ORIGINAL-PREDICTIONS.pt
+      - name: Freeze all original real-source source-identified frozen model inference arrays before a replay
+        if: env.READONLY_REPLAY == 'false'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$ATTR_BRANCH" = research/parmem012-frozen-real-read-causal-attribution-2026-10-27
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/parallel-six/PAR-MEM-012-RESULTS.json research/parallel-six/PAR-MEM-012-ORIGINAL-PREDICTIONS.pt
+          git diff --cached --quiet && exit 1
+          git commit -m 'research: freeze genuine real-source original ten-model correct/wrong/zero read attribution and failures'
+          git push origin "HEAD:refs/heads/$ATTR_BRANCH"
+      - name: Independent original frozen real-source same case replay in clean checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --depth=1 --single-branch --branch "$ATTR_BRANCH" \
+            "https://github.com/$GITHUB_REPOSITORY.git" /tmp/parmem012-cold-readonly
+          cd /tmp/parmem012-cold-readonly
+          python -m scripts.parmem012_frozen_real_read_attribution --mode replay \
+            --source /tmp/parmem012-real-original/publisher.zip
+          echo 'PAR_MEM_012_INDEPENDENT_FROZEN_ORIGINAL_REAL_SOURCE_REPLAY_PASSED'
+      - name: Explicit original research boundary
+        run: |
+          echo 'Identical PREVIOUS real DEV source and SHA-frozen model weights; zero training.'
+          echo 'Zero read removes 16 associative values only at inference; does NOT retrain stateless network.'
+          echo '2014 May-June real source DEV already exposed; no untouched holdout or independent superiority.'
+          echo 'No original checkpoint or optimizer data changed; only original diagnostics are saved.'
