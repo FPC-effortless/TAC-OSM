@@ -1,0 +1,75 @@
+name: LATFUSE016 genuine-source historical continuous PM reconstruction legal-clock NO-FIT preflight
+
+on:
+  push:
+    branches: [research/latfuse016-content-loss-nofit-2026-10-27]
+    paths:
+      - ".github/workflows/latfuse016-original-content-nofit.yml"
+      - "scripts/latfuse016_authentic_content_nofit.py"
+      - "research/mathematical-engineering/latfuse016/REGISTERED_CONTENT_NOFIT.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: LATFUSE016-authentic-source-content-nofit-only
+  cancel-in-progress: false
+
+jobs:
+  source_legal_historic_PM25_content_loss_and_controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Original CPU FP32 Torch, zero new weights/checkpoints
+        run: |
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Enforce true-source nooptimizer scientific registration
+        run: |
+          python -m py_compile scripts/latfuse016_authentic_content_nofit.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse016/REGISTERED_CONTENT_NOFIT.json \
+            --phase preflight
+          test ! -e research/mathematical-engineering/latfuse016/NOFIT_RESULTS.json
+      - name: Immutable source archive from original lawful source commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse016-genuine
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse016-genuine/PRSA2017_original.zip
+      - name: Physical H64 historic clock source-time regression gradients original two source model architectures each seed
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse016_authentic_content_nofit.py \
+            --source /tmp/latfuse016-genuine/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse016/NOFIT_RESULTS.json
+      - name: Preserve genuine physical source H64 nofit 4-arm gradient evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse016-content-loss-nofit-2026-10-27
+          test -s research/mathematical-engineering/latfuse016/NOFIT_RESULTS.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse016/NOFIT_RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: preserve source-real native content loss + source future forecast original nofit equal-state gradient audit"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Clear research boundary
+        run: |
+          echo "No optimizer, no trained models, no full training-compute equality established."
+          echo "Source past measured PM2.5 and future recorded labels only consulted after query output."
+          echo "Original production source checkpoint families unchanged. Protected2016–17 original sensor numerics not parsed."
