@@ -1,0 +1,37 @@
+{
+  "id": "PAR-TIME-001",
+  "status": "NO_FIT_UNQUALIFIED",
+  "parent_study": "PAR-FFN-001",
+  "family_count": 6,
+  "source_versions": {
+    "tac_osm": {
+      "repository": "FPC-effortless/TAC-OSM",
+      "branch": "research/parallel-time-age-2026-10-27",
+      "path": "src/tac_osm/variants/parallel_time_age_world.py",
+      "git_blob_sha": "165698937f72d164a13cc1b5786ce28d3963e119",
+      "pull_request": "https://github.com/FPC-effortless/TAC-OSM/pull/501"
+    },
+    "pnds": {
+      "repository": "FPC-effortless/pnds-lean",
+      "branch": "research/parallel-time-age-math-2026-10-27",
+      "path": "PNDS/ParallelTimeAge.lean",
+      "git_blob_sha": "3c26f2b18498a6ad141e8829577ec7389708612f",
+      "pull_request": "https://github.com/FPC-effortless/pnds-lean/pull/47"
+    }
+  },
+  "default_trainable_parameters": 96639,
+  "stream_state": {
+    "fp32_scalars": 154,
+    "nominal_float_bytes": 616,
+    "boolean_flags": 1,
+    "integer_counts": 1,
+    "excludes_weights_and_runtime": true
+  },
+  "time_feature_scope": "position and elapsed duration since origin; age of most recent *prior admitted write*, not of arbitrary stored facts",
+  "source_time_rule": "caller-supplied finite nonnegative known-at-time deltas and source-owned write mask",
+  "math_scope": "exact-real local clock/age laws; whole Torch/AD/IEEE/scan proof OPEN",
+  "evidence_scope": "software constructed tests only; no real fit or generalization",
+  "full_train_compute_parity_verified": false,
+  "independently_qualified": false,
+  "trained_checkpoints_created": 0
+}
