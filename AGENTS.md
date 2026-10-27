@@ -112,3 +112,7 @@ Never sign inside the trainer or put the signing private key in repo secrets
 visible to model agents. See
 `research/REWARD-INDEPENDENT-RUNNER-GATE-2026-10-26.md`. No synthetic test
 signature implies any of six variants has achieved real-world qualification.
+
+## Optional simplified experiment lab (2026-10-27)
+
+New and historical TAC-OSM workflows MAY index existing authorized FIT/DEV/diagnostic report files using `scripts/lab.py record` and view a static, offline dashboard using `scripts/lab.py report`. Use `research/LIGHTWEIGHT-LAB-2026-10-27.md` for the default GitHub/Python approach. The immutable lab receipt is *metadata only*, never a standalone source authority, checkpoint archive, fair-comparison gate, model capability result or reward-hacking certificate. Optional vendor/cloud adapters are disabled by default and must not upload originals, open TEST or incur compute charges without authorization. Preserve all existing experimental commands, source-attestation prerequisites, checkpoint-replay and PNDS Lean/Python rules. The native CI runs only no-fit fixture indexing.

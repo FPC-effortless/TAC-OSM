@@ -1,0 +1,52 @@
+name: Research experiment
+description: Source-qualified preregistered TAC-OSM study and replay checklist
+title: "RESEARCH: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this issue as a research lab note, not as authorization to train or publish.
+        Real-data/parity/replay/reward-gate requirements remain binding.
+  - type: textarea
+    id: scientific-question
+    attributes:
+      label: Capability question and original research gap
+      description: Include prior art and why this is a TAC-OSM specific capability.
+    validations:
+      required: true
+  - type: textarea
+    id: datasets
+    attributes:
+      label: Original real-world dataset and source contract
+      description: Publisher, license, checksum, temporal entities, observed actions and independent outcome source.
+    validations:
+      required: true
+  - type: textarea
+    id: protocol
+    attributes:
+      label: Frozen splits, baseline, seeds, parameters, data, training compute and metrics
+      description: Specify exact PR preregistration and sample IDs before first optimizer step.
+    validations:
+      required: true
+  - type: textarea
+    id: checkpoints
+    attributes:
+      label: Checkpoint and independent replay plan
+      description: Verified hash, trained state, random seeds, reconstruction command and artifact retention.
+    validations:
+      required: true
+  - type: textarea
+    id: mathematical
+    attributes:
+      label: PNDS Lean + Python computational graph link
+      description: Formal operator contracts, source-to-output refinement and unresolved proof obligations.
+    validations:
+      required: true
+  - type: textarea
+    id: promotion
+    attributes:
+      label: Anti-cheat, independent goals, reward hacking and qualification blockers
+      description: Unqualified, missing or inconclusive evidence must not be marked PASS.
+    validations:
+      required: true

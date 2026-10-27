@@ -43,6 +43,16 @@ jobs:
           assert r["entity_isolation"]["within_tolerance"]
           assert r["runtime"]["state_bytes_batch"] > 0
           PY
+      - name: Index existing CI evidence without changing test execution
+        run: |
+          python scripts/lab.py record \
+            --run-id "ci-${{ github.run_id }}-observatory" \
+            --experiment OBSERVATORY-CI --variant Native-diagnostic \
+            --stage fixture --evidence constructed_fixture \
+            --source ci-artifacts/observatory-fixture.json \
+            --out ci-artifacts/lab
+          python scripts/lab.py report --runs ci-artifacts/lab \
+            --output ci-artifacts/lab/dashboard.html
       - name: Publish downloadable diagnostic and test reports
         if: always()
         uses: actions/upload-artifact@v4
