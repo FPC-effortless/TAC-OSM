@@ -1,0 +1,77 @@
+name: Model01 original frozen TAC buffered interval independent checkout replay
+on:
+  push:
+    branches:
+      - research/model01-cal-buffered-coverage-2026-10-27
+    paths:
+      - '.github/workflows/model01-cal-coverage-clean-replay.yml'
+      - 'specialist_models/model01_cal_coverage_buffer.py'
+      - 'research/source-evidence/MODEL01-TAC-CAL-COVERAGE-BUFFER-001-ORIGINAL.json'
+  pull_request:
+    paths:
+      - '.github/workflows/model01-cal-coverage-clean-replay.yml'
+      - 'specialist_models/model01_cal_coverage_buffer.py'
+      - 'research/source-evidence/MODEL01-TAC-CAL-COVERAGE-BUFFER-001-ORIGINAL.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  fresh-checkout-source-only-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          clean: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact CPU PyTorch original native checkpoint reader
+        run: |
+          python -m pip install --no-cache-dir --disable-pip-version-check 'numpy==2.2.6'
+          python -m pip install --no-cache-dir --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Recompute original source with pinned weights without any neural training
+        run: python specialist_models/model01_cal_coverage_buffer.py --out /tmp/original_model01_buffered_no_fit_replay.json
+      - name: Verify exact original Git evidence and hard nonpromotion gate
+        run: |
+          python - <<'PY'
+          import json,math
+          p='research/source-evidence/MODEL01-TAC-CAL-COVERAGE-BUFFER-001-ORIGINAL.json'
+          original=json.load(open(p))
+          rerun=json.load(open('/tmp/original_model01_buffered_no_fit_replay.json'))
+          def compare(a,b,location='root'):
+            if type(a) is not type(b): raise AssertionError('type mismatch '+location)
+            if isinstance(a,dict):
+              assert set(a)==set(b),location
+              for k in a:compare(a[k],b[k],location+'/'+str(k))
+            elif isinstance(a,list):
+              assert len(a)==len(b),location
+              for i,(x,y) in enumerate(zip(a,b)):compare(x,y,location+'/'+str(i))
+            elif isinstance(a,float):
+              assert math.isclose(a,b,rel_tol=1e-5,abs_tol=1e-4),(location,a,b)
+            else:assert a==b,(location,a,b)
+          compare(original,rerun)
+          assert original['source_zip_sha256']=='2fccf354445d886e7917620b0195db1f3e3e34d5a067a93b844694a4c561255a'
+          assert original['original_neural_trainable_params']==103252
+          assert original['no_model_fitting'] and original['no_dev_based_candidate_selection']
+          assert original['independent_qualification'] is False
+          assert original['global_release_coverage_gate_passed'] is False
+          assert original['source_protected_tail_parsed'] is False
+          assert len(original['runs'])==3
+          for r in original['runs']:
+            assert r['no_candidate_chosen'] is True and r['weights_unchanged']
+            assert set(r['per_preset_level'])=={'90','94','96'}
+            a=r['per_preset_level']['94']
+            assert a['EXPOSED_DEV_report_only']['n']==1968
+            assert a['EXPOSED_DEV_report_only']['coverage90']>=.90
+            assert a['CAL_AUDIT_report_only']['coverage90']>=.90
+          print('ORIGINAL_REAL_BUFFERED_CAL_RESULTS_FRESH_CHECKOUT_REPLAY=PASS')
+          print('INDEPENDENT_QUALIFICATION=BLOCKED_ALREADY_EXPOSED_SINGLE_SITE')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-fresh-checkout-no-fit-cal-buffer-replay
+          path: /tmp/original_model01_buffered_no_fit_replay.json
+          if-no-files-found: error
+          retention-days: 14
