@@ -101,7 +101,7 @@ def produce_plan(source_path):
             for q in proof["each_seed"]),
         original_past_PM25_only_source_after_query=True,
         evaluation_source_exposed_and_NOT_virgin=True,
-        no_protected_2015_2017_numerics=true)
+        no_protected_2015_2017_numerics=True)
     PLAN.write_text(json.dumps(plan,indent=2,sort_keys=True)+"\n")
     print("LATFUSE018_REGISTERED_BEFORE_FIRST_NEURAL_FIT="+json.dumps({
         "source_train_rows":len(train),"source_eval_rows":len(evalrows),
@@ -308,7 +308,7 @@ def replay(src):
                     if abs(again[k]-past[k])>1e-7:
                         raise RuntimeError("source trained checkpoint independent deterministic replay mismatch")
                 elif again[k]!=past[k]:
-                    raise RuntimeError("source model true label count/source replay mismatch")
+                    raise RuntimeError("source model True label count/source replay mismatch")
         print("LATFUSE018_REAL_SOURCE_CHECKPOINT_REPLAY_PASS="+json.dumps({
            "seed":row["seed"],"arm":row["architecture"],
            "original_checkpoint_sha256":sha(path)},sort_keys=True))
