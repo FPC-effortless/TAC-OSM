@@ -132,26 +132,6 @@ def timestamps(fit,dev):
         return records
     return construct(fit),construct(dev)
 
-def all_frozen_source_features(seed,original,stream_clocks,recorded,data):
-    """State features computed BEFORE reading historical target measurements.
-
-    Model legitimately observes historic sensor event in its stream.
-    At query time metadata must not contain its PM2.5 numerical value.
-    """
-    model=original_frozen_core(seed,recorded)
-    state=model.init_stream(12)
-    prev=None
-    eligible=[]
-    summaries=[];matrices=[];presents=[];metas=[];truths=[]
-    grouped={}
-    for i,(site,idx,lag,older,now) in enumerate(stream_clocks):
-        grouped.setdefault(idx,[]).append((i,site,lag,older,now))
-    times_by_site=[[] for _ in range(12)]
-    # 'stream_clocks' is a query collection. Recover the authorized
-    # source history from site index and explicit corpus source phase.
-    # Caller passes a complete original source timestamp sequence separately.
-    raise RuntimeError("must call features_from_timed_stream; query-only feature path disabled")
-
 def features_from_timed_stream(seed,rows,queries,receipt,data):
     core=original_frozen_core(seed,receipt)
     groups={}
