@@ -1,0 +1,47 @@
+name: LATFUSE017 independently verify fixed-source full ATen mathematical FLOP bound
+
+on:
+  push:
+    branches: [research/latfuse017-whole-training-op-audit-2026-10-27]
+    paths:
+      - "scripts/latfuse017_verify_math_parity.py"
+      - ".github/workflows/latfuse017-verify-parity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  closed-mathematical-differential:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Validate immutable original-source operator evidence
+        run: |
+          test -s research/mathematical-engineering/latfuse017/RESULTS.json
+          test ! -e research/mathematical-engineering/latfuse017/MATH_PARITY.json
+          python -m py_compile scripts/latfuse017_verify_math_parity.py
+      - name: Exact matching source-shape ATen math operation cancellation and conservative unmatched FLOP bound
+        run: |
+          python scripts/latfuse017_verify_math_parity.py \
+            --original research/mathematical-engineering/latfuse017/RESULTS.json \
+            --output research/mathematical-engineering/latfuse017/MATH_PARITY.json
+      - name: Original immutable parity proof receipt commit, not any original trained model
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse017/MATH_PARITY.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: prove conditional registered source-shape original ATen mathematical FLOP parity within1pct"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Scope
+        run: |
+          echo "Conservative complete ATen FLOP differential bound, not exact hardware FLOPs, latency, different train-shapes or independent dataset qualification."
