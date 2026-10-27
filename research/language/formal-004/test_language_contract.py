@@ -73,6 +73,33 @@ class LanguageContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"period"):
             session.step(torch.tensor([1],dtype=torch.int64))
 
+    def test_stable_log_probabilities_under_fp32_underflow(self):
+        logits=torch.zeros((1,128),dtype=torch.float32)
+        logits[0,0]=-1000.0
+        self.assertEqual(torch.softmax(logits,-1)[0,0].item(),0.)
+        self.assertTrue(torch.isneginf(torch.log(torch.softmax(logits,-1))[0,0]))
+        owner=torch.tensor([41],dtype=torch.int64)
+        session=CheckedLanguageSession(self.model,owner)
+        # Directly supply hostile but finite logits through the checked adapter:
+        # the source model itself stays unchanged, no model fit needed.
+        session.step=lambda token: logits
+        logp=session.log_categorical(torch.tensor([0],dtype=torch.int64))
+        self.assertTrue(torch.isfinite(logp).all())
+        self.assertGreater(-logp[0,0].item(),1000.)
+        self.assertLess(torch.logsumexp(logp,-1).abs().max().item(),1e-5)
+
+    def test_log_categorical_real_stream_advances_once_and_backprop(self):
+        model=ParallelTACLanguage(
+            decoder=75,post=10,position_mode="multiscale",gate_mode="silu")
+        session=CheckedLanguageSession(model,torch.tensor([37],dtype=torch.int64))
+        logp=session.log_categorical(torch.tensor([9],dtype=torch.int64))
+        self.assertEqual(session.state["count"],1)
+        self.assertEqual(tuple(logp.shape),(1,128))
+        self.assertTrue(torch.isfinite(logp).all())
+        self.assertLess(torch.logsumexp(logp,-1).abs().max().item(),1e-5)
+        gradient=torch.autograd.grad(-logp[0,10],model.embedding.weight)[0]
+        self.assertTrue(torch.isfinite(gradient).all())
+
     def test_rectangular_scan_matches_serial_corrective_write(self):
         generator=torch.Generator().manual_seed(9)
         for dtype,tol in ((torch.float64,1e-11),(torch.float32,2e-5)):
