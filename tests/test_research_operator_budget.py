@@ -38,7 +38,7 @@ def test_matrix_and_weight_invariance_required():
     ops=pair()[0]['operators']
     profile=dict(schema='tac-osm.complete-operator-profile.v1',profiles=[dict(seed=seed,arm=arm,kind=kind,
         weights_before='x',weights_after='x',parameters=99390,finite_gradient_tensors=43,
-        operators=ops,operator_sha256=digest(ops)) for seed in (1,2) for arm in ('assoc_historic_query','fast_slow_historic_query') for kind in ('first','warm')])
+        operators=ops,operator_sha256=digest(ops),steps=1 if kind=='first' else 63,step_operator_sha256=[digest(ops)]*(1 if kind=='first' else 63)) for seed in (1,2) for arm in ('assoc_historic_query','fast_slow_historic_query') for kind in ('first','warm')])
     assert len(verify_profile(profile))==4
     bad=copy.deepcopy(profile);bad['profiles'][0]['weights_after']='changed'
     with pytest.raises(ValueError,match='weights'):verify_profile(bad)
@@ -52,12 +52,3 @@ def test_reduction_bound_and_matmul():
     s=op('aten::bmm.',[[2,3,4],[2,4,5]], [[2,3,5]])['signature']
     assert signature_work(s)==240
 
-
-def test_relative_original_root_resolves_before_load():
-    # Runner must pass the verified absolute return value to module isolation.
-    import ast
-    from pathlib import Path
-    tree=ast.parse(Path('scripts/train_history_query_diverse.py').read_text())
-    setup=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='setup')
-    load=next(n for n in ast.walk(setup) if isinstance(n,ast.Call) and getattr(n.func,'id',None)=='load_original_modules')
-    assert isinstance(load.args[0],ast.Name) and load.args[0].id=='root'

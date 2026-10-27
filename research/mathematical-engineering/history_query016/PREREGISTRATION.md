@@ -50,3 +50,13 @@ certification, external signatures or external qualification in this experiment.
 Acceptance: preregistered budget passes, all four fits/replay retained, honest
 primary/secondary results and exact blockers in Issue472 and a draft PR. If the
 budget fails, retain the inventory and stop before fit rather than relax fairness.
+
+## Prefit coverage amendment (before all fitting)
+
+Initial lr0 two-batch inventory (run40492976455, code c97e2088) passes
+<=1% arithmetic: gap upper bound0.006609621%. This is preserved preliminary
+evidence only. Original observed-mask input validation has data-dependent
+shapes. Therefore prospectively inventory ALL64 scheduled batches per arm/seed,
+not extrapolate two batches. Aggregate complete first/warm ledgers and retain
+every step fingerprint; actual fitting must match each registered batch. No
+model training or evaluation occurred before this amendment. No score tuning.

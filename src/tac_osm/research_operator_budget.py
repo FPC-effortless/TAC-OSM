@@ -98,6 +98,9 @@ def verify_profile(profile):
             if len(pair)!=2 or {r["arm"] for r in pair}!={"assoc_historic_query","fast_slow_historic_query"}:
                 raise ValueError("incomplete original profile matrix")
             for row in pair:
+                expected_steps=1 if kind=="first" else 63
+                if row.get("steps")!=expected_steps or len(row.get("step_operator_sha256",[]))!=expected_steps:
+                    raise ValueError("full fixed 64 scheduled batch operator fingerprints required")
                 if row["weights_before"] != row["weights_after"] or row["parameters"] != 99390 or row["finite_gradient_tensors"] != 43:
                     raise ValueError("prefit profile changed weights or failed live parameter/gradient checks")
                 if row["operator_sha256"] != digest(row["operators"]):
@@ -154,7 +157,7 @@ def validate_comparison(manifest, phase):
                 m=row["measured"]
                 expected=[]
                 for step in range(budget["steps"]):
-                    expected.append(next(p["operator_sha256"] for p in profile["profiles"] if p["seed"]==seed and p["arm"]==row["architecture"] and p["kind"]==("first" if step==0 else "warm")))
+                    expected.append(next(p["step_operator_sha256"][0 if step==0 else step-1] for p in profile["profiles"] if p["seed"]==seed and p["arm"]==row["architecture"] and p["kind"]==("first" if step==0 else "warm")))
                 if m["actual_operator_step_sha256"]!=expected or m["actual_steps"]!=budget["steps"] or m["actual_sample_order_sha256"]!=row["training_sample_order_sha256"]:
                     raise ValueError("actual full operator/data/step receipts deviate from prefit")
                 for f in ("trainable_parameters","deployed_parameters"):

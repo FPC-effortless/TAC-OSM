@@ -154,14 +154,23 @@ def prepare(args):
             model=original.create_model(seed,arm)
             if sum(p.numel() for p in model.parameters())!=99390:raise ValueError('model size changed')
             opt=torch.optim.AdamW(model.parameters(),lr=0.,weight_decay=.001,foreach=False,fused=False)
-            for i,kind in enumerate(('first','warm')):
-                before=weight_hash(model)
+            grouped={kind:dict(counter=Counter(),fingerprints=[],losses=[]) for kind in ('first','warm')}
+            before=weight_hash(model)
+            for i in range(64):
+                kind='first' if i==0 else 'warm'
                 loss,ops=step(model,opt,d,orders[str(seed)][i*16:(i+1)*16],source)
+                if weight_hash(model)!=before:raise ValueError('lr0 profile changed original weights')
+                group=grouped[kind]
+                group['counter'].update({(r['stage'],r['signature']):r['calls'] for r in ops})
+                group['fingerprints'].append(digest(ops));group['losses'].append(loss)
+                if i%16==0:print('PROFILE',seed,arm,'batch',i+1,flush=True)
+            for kind,group in grouped.items():
+                ops=[dict(stage=stage,signature=sig,calls=n) for (stage,sig),n in sorted(group['counter'].items())]
                 profile['profiles'].append(dict(seed=seed,arm=arm,kind=kind,parameters=99390,
                     finite_gradient_tensors=sum(p.grad is not None for p in model.parameters()),
-                    weights_before=before,weights_after=weight_hash(model),loss=loss,
+                    weights_before=before,weights_after=weight_hash(model),losses=group['losses'],
+                    step_operator_sha256=group['fingerprints'],steps=len(group['fingerprints']),
                     operators=ops,operator_sha256=digest(ops)))
-                print('PROFILE',seed,arm,kind,'signatures',len(ops),flush=True)
     write(args.output/'OPERATOR_PROFILE.json',profile)
     # Preserve exact inventory even if proof blocks. No silent fallback.
     proof=verify_profile(profile)
@@ -235,8 +244,10 @@ def fit(args):
         for i in range(64):
             value,ops=step(model,opt,d,samples[i*16:(i+1)*16],source)
             fingerprint=digest(ops)
-            expected=next(r['operator_sha256'] for r in profile['profiles'] if r['seed']==seed and r['arm']==arm and r['kind']==('first' if i==0 else 'warm'))
-            if fingerprint!=expected:raise ValueError(f'actual workload differs at step {i}; stop and preserve failure')
+            expected=next(r['step_operator_sha256'][0 if i==0 else i-1] for r in profile['profiles'] if r['seed']==seed and r['arm']==arm and r['kind']==('first' if i==0 else 'warm'))
+            if fingerprint!=expected:
+                write(OUT/'FAILED_STEP.json',dict(seed=seed,arm=arm,step=i,expected=expected,actual=fingerprint,operators=ops))
+                raise ValueError(f'actual workload differs at step {i}; stop and preserve failure')
             fingerprints.append(fingerprint);losses.append(value)
             if i%16==0:print('FIT',seed,arm,'step',i+1,'loss',value,flush=True)
         path=OUT/f'seed-{seed}'/arm/'final.pt';path.parent.mkdir(parents=True)
