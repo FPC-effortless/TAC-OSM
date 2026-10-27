@@ -84,3 +84,26 @@ The native assistant still needs better next-character fluency; the slight NLL r
 3. Register longer 256/512/2048 event memory queries, alias/stale fact updates, wrong-key and no-memory controls, per-entity chronology, abstention and calibration; do not simulate these tasks as primary evidence.
 4. Demonstrate actual online streaming state parity, training throughput, per-token CPU/GPU inference cost, energy and external memory I/O. Distinguish the 408-float neural state from external source records.
 5. Archive every fitted checkpoint, code, optimizer, RNG, data authorization, sample hash and CI replay before considering superiority or commercial claims.
+
+## Paired-seed uncertainty (exploratory, NOT inferential TEST)
+
+Two gate modes under the same seed are correlated; aggregate within each of
+the **five independent seed blocks** before resampling, rather than treating
+ten checkpoint arms as ten independent draws. The paired new-minus-original
+lag96 NLL differences by seed are `[-2.017142, -1.630925, -2.232454,
+-2.416740, -2.161014]` nats. A deterministic 100,000-resample
+five-cluster percentile bootstrap (`np.random.default_rng(4018)`) yields an
+exploratory **95% interval [-2.300, -1.843] nats**. The corresponding
+new-minus-original next-character NLL mean is **+0.003226 nats** and
+five-cluster bootstrap interval is **[+0.001500, +0.004952] nats**.
+These intervals reflect variation across original training seeds on the
+**same already-examined DEV source**. They do not account for corpus
+selection, architecture-search adaptivity, independent unseen language
+domains or test-set uncertainty.
+
+Practical implication: two-lag training improved 96-character source
+retrieval in this study but introduced a small, consistent deterioration
+in next-character language quality. The next objective must explicitly
+constrain language-quality regression, and test any revised weighting
+on fresh independent evidence rather than choosing a winner by repeatedly
+tuning the same DEV chapters.
