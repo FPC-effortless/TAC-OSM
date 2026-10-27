@@ -111,6 +111,35 @@ class LanguageContractTests(unittest.TestCase):
         gradient=torch.autograd.grad(-logp[0,10],model.embedding.weight)[0]
         self.assertTrue(torch.isfinite(gradient).all())
 
+    def test_native_and_two_head_memory_difference_nonexpansive(self):
+        # Constructed numerical stability diagnostic, NOT long-context
+        # retrieval evidence; checks *same* token/write schedule on two
+        # arbitrary initial states in double precision.
+        for gate in ("silu","tanh"):
+            torch.manual_seed(610)
+            m=ParallelTACLanguage(decoder=75,post=10,
+                position_mode="multiscale",gate_mode=gate).double().eval()
+            generator=torch.Generator().manual_seed(610)
+            for count in (0,1,8,64):
+                owner=torch.tensor([1,2,3],dtype=torch.int64)
+                first=m.init_stream(3,owner=owner)
+                first["count"]=count
+                first["native"]=torch.randn((3,8,8),generator=generator,dtype=torch.float64)
+                first["aligned"]=torch.randn((3,2,16,8),generator=generator,dtype=torch.float64)
+                second={key:(val.clone() if isinstance(val,torch.Tensor) else val)
+                        for key,val in first.items()}
+                second["native"]+=torch.randn((3,8,8),generator=generator,dtype=torch.float64)*.5
+                second["aligned"]+=torch.randn((3,2,16,8),generator=generator,dtype=torch.float64)*.5
+                tokens=torch.randint(128,(3,),generator=generator,dtype=torch.int64)
+                with torch.no_grad():
+                    _,after_a=m.stream_step(tokens,first,owner=owner)
+                    _,after_b=m.stream_step(tokens,second,owner=owner)
+                for field in ("native","aligned"):
+                    old=(first[field]-second[field]).square().sum(-1)
+                    new=(after_a[field]-after_b[field]).square().sum(-1)
+                    self.assertTrue(torch.all(new <= old+1e-9),
+                        f"{gate}/{field}/position={count}")
+
     def test_per_event_fp32_accumulator_error_receipts(self):
         from observe_fp32_sum_error import replay_fp32_additive_trace
         for steps in (1,17,257,1024):
