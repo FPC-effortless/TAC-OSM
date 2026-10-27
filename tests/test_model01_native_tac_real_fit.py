@@ -38,7 +38,7 @@ class NativeTACSourceTests(unittest.TestCase):
         self.assertEqual(y.shape,(4,))
         self.assertTrue(torch.isfinite(y).all())
         y.square().mean().backward()
-        for name in ("fast.weight_ih","slow_gate.weight","key.weight","value.weight","readgate.weight"):
+        for name in ("fast.weight_ih","sgate.weight","key.weight","value.weight","readgate.weight"):
             self.assertIsNotNone(dict(net.named_parameters())[name].grad)
 
     def test_invalid_history_cannot_silently_truncate(self):
