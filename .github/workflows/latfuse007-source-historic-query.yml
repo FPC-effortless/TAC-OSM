@@ -1,0 +1,84 @@
+name: LATFUSE007 original 6800-byte historic-clock associative query genuine-source nofit preflight
+
+on:
+  push:
+    branches: [research/latfuse007-historic-query-candidate-2026-10-27]
+    paths:
+      - "src/tac_osm/latent_fusion_007_historic_query.py"
+      - "tests/test_latent_fusion_007_historic_query.py"
+      - "scripts/latfuse007_historic_source_prefit.py"
+      - "research/mathematical-engineering/latfuse007/REGISTERED_NOGAIN_NOMODELFIT.json"
+      - ".github/workflows/latfuse007-source-historic-query.yml"
+      - "docs/TACOSM-BASELINE-001.md"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  original-source-true-events-no-neural-fitting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: CPU FP32 scientific source prerequisites
+        run: |
+          python -m pip install --quiet pytest
+          python -m pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Before any real history sourced — mandatory nofit source/parameter prereg and baseline integrity
+        run: |
+          python -m py_compile scripts/latfuse007_historic_source_prefit.py \
+            src/tac_osm/latent_fusion_007_historic_query.py
+          python scripts/validate_research_parity.py \
+            --manifest research/mathematical-engineering/latfuse007/REGISTERED_NOGAIN_NOMODELFIT.json \
+            --phase preflight
+          python scripts/sync_test_count.py --check
+          test ! -e research/mathematical-engineering/latfuse007/NOFIT_RESULTS.json
+      - name: Original fixed state and writer equality plus authentic query source guard tests
+        env:
+          PYTHONPATH: ".:src"
+        run: |
+          python -m pytest -q \
+            tests/test_latent_fusion_004_factorial.py \
+            tests/test_latfuse006_event_decoder.py \
+            tests/test_latent_fusion_007_historic_query.py
+      - name: Retrieve true original licensed source ZIP via immutable archived commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/latfuse007-source-original
+          git fetch --no-tags --depth=1 origin 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          test "$(git rev-parse FETCH_HEAD)" = 6e01290ddf3f10d298c4bcf463a219c9728c0565
+          git show FETCH_HEAD:research/source-bundles/ME100/PRSA2017_original.zip \
+            > /tmp/latfuse007-source-original/PRSA2017_original.zip
+      - name: Real historical physical source target only AFTER 64h past-time query, zero optimizer
+        env:
+          PYTHONPATH: ".:src"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          PYTHONUNBUFFERED: "1"
+        run: |
+          python scripts/latfuse007_historic_source_prefit.py \
+            --source /tmp/latfuse007-source-original/PRSA2017_original.zip \
+            --output research/mathematical-engineering/latfuse007/NOFIT_RESULTS.json
+      - name: Freeze nofit, original source result only
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF_NAME" = research/latfuse007-historic-query-candidate-2026-10-27
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add research/mathematical-engineering/latfuse007/NOFIT_RESULTS.json
+          git diff --cached --quiet && exit 1
+          git commit -m "research: freeze true-source 64h historic event query and forecasting nofit gradient receipt"
+          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+      - name: Honest qualification boundary
+        run: |
+          echo "Original registered 2h soft delta writer and original future forecast unchanged exactly."
+          echo "New historic event query is UNTRAINED. No native source-factual retrieval success."
+          echo "No trained equal-FLOP architecture comparison, original 2015 numeric DEV and protected TEST unopened."
