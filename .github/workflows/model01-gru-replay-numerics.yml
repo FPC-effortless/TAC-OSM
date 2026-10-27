@@ -1,0 +1,47 @@
+name: Model01 real-source GRU original checkpoint CPU numeric replay diagnostic
+on:
+  push:
+    branches:
+      - research/model01-103k-gru-control-2026-10-27
+    paths:
+      - 'specialist_models/model01_gru_numeric_replay_probe.py'
+      - '.github/workflows/model01-gru-replay-numerics.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-no-fit-tolerance-investigation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          clean: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install same CPU numerical backend
+        run: |
+          python -m pip install --no-cache-dir --disable-pip-version-check 'numpy==2.2.6'
+          python -m pip install --no-cache-dir --disable-pip-version-check 'torch==2.6.0' --index-url https://download.pytorch.org/whl/cpu
+      - name: Run original source no-refit oneDNN on/off numeric drift probe
+        run: python specialist_models/model01_gru_numeric_replay_probe.py --out original_numeric_drift.json
+      - name: Report actual smallest and largest drift, without waiving replay gate
+        run: |
+          python - <<'PY'
+          import json
+          x=json.load(open('original_numeric_drift.json'))
+          assert x['trained_during_probe'] is False
+          assert x['original_strict_replay_requirement_weakened'] is False
+          assert len(x['results'])==6
+          print('ORIGINAL_CHECKPOINT_NUMERIC_DRIFT_DIAGNOSTIC=COMPLETE_NOT_AUTOMATICALLY_PASS')
+          for r in x['results']:
+            print('NUMERIC_RANKED_ERROR='+json.dumps({'seed':r['seed'],'mkldnn_enabled':r['mkldnn_enabled'],'delta_q90_wh':r['delta_q90_wh'],'relative_dev_deltas':r['relative_dev_deltas'],'exact_tolerance_passed':r['passes_existing_1e_minus_6_relative_tolerance']},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model01-source-gru-no-fit-original-cpu-numeric-drift
+          path: original_numeric_drift.json
+          if-no-files-found: error
+          retention-days: 14
