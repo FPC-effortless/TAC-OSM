@@ -1,8 +1,6 @@
 name: PAR-MEM-011 original real history-content paired full TAC fits and checkpoint replay
 on:
-  push:
-    branches:
-      - research/parmem011-real-historic-content-trained-2026-10-27
+  pull_request:
     paths:
       - '.github/workflows/parmem011-original-genuine-paired-fit.yml'
       - 'scripts/parmem011_genuine_source_train.py'
@@ -16,11 +14,15 @@ concurrency:
   cancel-in-progress: false
 jobs:
   source-original-five-seed-real-neural-training:
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
+    env:
+      TRAIN_BRANCH: ${{ github.event.pull_request.head.ref }}
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.pull_request.head.ref }}
           persist-credentials: true
       - uses: actions/setup-python@v5
         with:
@@ -58,14 +60,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$GITHUB_REF_NAME" = research/parmem011-real-historic-content-trained-2026-10-27
+          test "$TRAIN_BRANCH" = research/parmem011-real-historic-content-trained-2026-10-27
           test -s research/parallel-six/PAR-MEM-011-FROZEN-PLAN.json
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add research/parallel-six/PAR-MEM-011-FROZEN-PLAN.json
           git diff --cached --quiet && exit 1
           git commit -m 'research: preregister real owner clock 129-event source windows and all five optimizer sampling orders'
-          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          git push origin "HEAD:refs/heads/$TRAIN_BRANCH"
       - name: Fail-closed actual full training ATen operator trace parity prior to learned comparisons
         env:
           PYTHONPATH: '.:src'
@@ -94,7 +96,7 @@ jobs:
           git add research/replay-bundles/PAR-MEM-011
           git diff --cached --quiet && exit 1
           git commit -m 'research: freeze original 10 genuine long-history source TAC trained models optimizer RNG'
-          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          git push origin "HEAD:refs/heads/$TRAIN_BRANCH"
       - name: Only now score formerly exposed May-Jun 2014 DEV real historical lags
         env:
           PYTHONPATH: '.:src'
@@ -113,7 +115,7 @@ jobs:
           git add research/replay-bundles/PAR-MEM-011
           git diff --cached --quiet && exit 1
           git commit -m 'research: preserve first original real source 16-64-128 event results, successes and negatives'
-          git push origin "HEAD:refs/heads/$GITHUB_REF_NAME"
+          git push origin "HEAD:refs/heads/$TRAIN_BRANCH"
       - name: Independent clean-checkout original genuine source ten-model read-only replay
         shell: bash
         env:
@@ -121,7 +123,7 @@ jobs:
           MKL_NUM_THREADS: '1'
         run: |
           set -euo pipefail
-          git clone --depth=1 --single-branch --branch "$GITHUB_REF_NAME" \
+          git clone --depth=1 --single-branch --branch "$TRAIN_BRANCH" \
             "https://github.com/$GITHUB_REPOSITORY.git" /tmp/parmem011-cold
           cd /tmp/parmem011-cold
           PYTHONPATH='.:src' python -m scripts.parmem011_genuine_source_train --mode replay \
