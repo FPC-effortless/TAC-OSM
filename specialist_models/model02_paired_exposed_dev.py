@@ -144,6 +144,50 @@ def first_drive_bootstrap_posthoc(first, replicates=300, seed=20261027):
                        "manufacturer/site/date correlated and unequal exposure, not iid proof",
                        "not a fresh source or architecture-superiority uncertainty interval"]}
 
+def exploratory_budget_alerts(first, fractions=(.01,.05)):
+    """Post-exposure DEV-only alert workload at predetermined fractions.
+
+    Rank only FIRST matured 7-day decision per original drive; tied risk
+    scores are broken with a SHA256 source-identity hash, never an outcome.
+    Budget choices are retrospective diagnostics, NOT fitted thresholds or
+    externally validated workload policies. Each physical drive appears once.
+    """
+    if not first or len({case[0] for case in first})!=len(first):
+        raise PairError("budget analysis requires one matured case per drive")
+    positives=sum(case[2] for case in first)
+    n=len(first)
+    def tie_key(case):
+        return hashlib.sha256(("\x1f".join(case[0])).encode("utf-8")).hexdigest()
+    metrics=[]
+    for fraction in fractions:
+        if type(fraction) is not float or not 0<fraction<1:
+            raise PairError("invalid exploratory source ranking budget")
+        k=max(1,int(n*fraction))
+        record={"fraction_of_matured_drives":fraction,"allowed_review_alerts":k,
+                "matured_drives":n,"positive_horizon_drive_cases":positives,
+                "models":{}}
+        for label,column in (("eight_feature_logistic",3),
+                             ("two_feature_smoothed_lookup",4)):
+            ranked=sorted(first,key=lambda c:(-c[column],tie_key(c)))
+            tp=sum(c[2] for c in ranked[:k])
+            record["models"][label]={
+                "alerts":k,"true_positive_seven_day_drive_cases":tp,
+                "false_positive_alerts":k-tp,
+                "precision_at_review_budget":tp/k,
+                "recall_among_matured_positive_cases":tp/positives if positives else None,
+                "false_alerts_per_true_alert":(k-tp)/tp if tp else None}
+        metrics.append(record)
+    return {"status":"POST_HOC_EXPOSED_DEV_OPERATOR_WORKLOAD_DIAGNOSTIC",
+            "source_case_unit":"first matured forecast per distinct physical drive",
+            "ranking_ties":"original source identity SHA256 stable ordering; not outcome-ranked",
+            "budgets":metrics,
+            "warnings":["alert budgets/utility questions added after seeing existing exposed DEV scores",
+                        "only 31 first-matured DEV positives in recorded cohort",
+                        "source as-of and actual operations costs unknown; not decision utility",
+                        "complete-case selective censoring and correlation limit interpretation",
+                        "no actual live alerts or independently verified avoided failures"]}
+
+
 def pair_report(cases, source_denominators, logistic, lookup_model):
     if source_denominators["matured_windows"]!=len(cases):
         raise PairError("source case count mismatch")
@@ -172,6 +216,7 @@ def pair_report(cases, source_denominators, logistic, lookup_model):
                                     "two_feature_lookup":LOOKUP_ORIGINAL_HASH},
         "source_denominators":source_denominators,
         "paired_results":paired,
+        "first_per_drive_operator_alert_budget_posthoc":exploratory_budget_alerts(first),
         "first_per_drive_brier_delta_exploratory_posthoc":first_drive_bootstrap_posthoc(first),
         "dev_day_metrics":[{"date":date,"n":len(subset),
                             "positive_windows":sum(c[2] for c in subset),
