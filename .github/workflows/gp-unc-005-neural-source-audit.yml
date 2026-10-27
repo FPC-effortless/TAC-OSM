@@ -57,6 +57,10 @@ jobs:
           assert q['scientific_promotion']=='NOT_QUALIFIED'
           assert all(v['trainable_parameters']==104663 and
                      v['native_log_forecasts_exactly_preserved'] and
+                     v['native_gp_feature_dimensions']==64 and
+                     v['gp_inducing_coordinates']==2 and
+                     v['gp_sidecar_retained_numeric_scalars_per_entity']==137 and
+                     v['original_memory_nonzero_entries_across_24_station_frames']>0 and
                      v['native_source_future_only_poison_checks']==144 and
                      v['native_source_future_only_poison_changed_forecast'] is False and
                      v['original_left_right_scales_positive_and_untouched'] and
