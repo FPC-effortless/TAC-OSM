@@ -157,7 +157,7 @@ def cohorts(payload):
                 seen_drives.add(ident)
                 if y:
                     seen_positive.add(ident)
-        if not xs or len(set(ys)) != {0,1}:
+        if not xs or set(ys) != {0, 1}:
             raise StudyError(tag+": FIT/DEV has insufficient source-positive cases")
         result[tag]={"xs":xs,"ys":ys,"censored":censored,
                      "unique_scored_drives":len(seen_drives),
