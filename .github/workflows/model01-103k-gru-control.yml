@@ -73,7 +73,7 @@ jobs:
           d=json.load(open('gru_original_no_fit_replay.json'))
           assert d['trained_during_replay'] is False
           assert len(d['replay_reports'])==3
-          assert all(x['exact_CAL_DEV_replay'] and not x['trained_during_replay'] for x in d['replay_reports'])
+          assert all(x['original_CAL_DEV_replayed_with_declared_numeric_tolerances'] and not x['trained_during_replay'] for x in d['replay_reports'])
           print('THREE_ORIGINAL_REAL_GRU_CAL_DEV_NO_FIT_REPLAY=PASS')
           PY
       - uses: actions/upload-artifact@v4
