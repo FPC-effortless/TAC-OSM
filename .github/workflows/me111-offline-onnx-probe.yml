@@ -1,0 +1,40 @@
+name: ME111 frozen TAC 100k ONNX CPU feasibility (no fit, no Android qualification)
+on:
+  push:
+    branches:
+      - research/me111-cpu-mobile-export-probe-20261028
+    paths:
+      - 'scripts/probe_me111_offline_onnx.py'
+      - '.github/workflows/me111-offline-onnx-probe.yml'
+  pull_request:
+    paths:
+      - 'scripts/probe_me111_offline_onnx.py'
+      - '.github/workflows/me111-offline-onnx-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-me111-export-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install CPU exporter and runtime only (no training)
+        run: |
+          pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+          pip install 'numpy==2.3.5' 'onnx==1.19.1' 'onnxruntime==1.23.2'
+      - name: Run original checkpoint one-step streaming ONNX and 3-step state parity probe
+        run: PYTHONPATH=src:. python scripts/probe_me111_offline_onnx.py --out-dir /tmp/me111-export-probe
+      - name: Display complete truthful feasibility receipt
+        if: always()
+        run: test ! -f /tmp/me111-export-probe/FEASIBILITY.json || cat /tmp/me111-export-probe/FEASIBILITY.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: me111-frozen-onnx-feasibility-not-android
+          path: /tmp/me111-export-probe/FEASIBILITY.json
+          if-no-files-found: warn
+          retention-days: 14
