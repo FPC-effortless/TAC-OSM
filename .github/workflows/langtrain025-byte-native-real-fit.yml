@@ -1,11 +1,7 @@
 name: LANGTRAIN025 authentic 500K 256-byte native TAC five-seed CPU fit
+# The exact five-seed authentic first fit already completed in run 40756443660.
+# Disable automatic PR retraining; reproducible refits are explicit phone-requested dispatches.
 on:
-  pull_request:
-    paths:
-      - 'research/mathematical-engineering/langtrain025/**'
-      - 'research/phone_queue/langtrain025.json'
-      - 'scripts/validate_research_parity.py'
-      - '.github/workflows/langtrain025-byte-native-real-fit.yml'
   workflow_dispatch:
 permissions:
   contents: read
