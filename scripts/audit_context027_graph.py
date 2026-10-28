@@ -93,17 +93,20 @@ def audit(reference):
             result=one_case(m,reference,x,mask,**tolerance)
             results.append(dict(kind='AUTHENTIC_FIT_UNTRAINED_GRAPH_CHECK',owner=owner,source_sha256=hashlib.sha256(raw).hexdigest(),precision=precision,length=17,mask='all',**result))
         # Prefix poison checks both full implementations; no future labels exist.
-        x=torch.tensor([list(raw[:17]),list(raw[:17])]); changed=x.clone();changed[:,9:]^=255
+        owners=sorted(fit)[:2]
+        x=torch.tensor([list(fit[owner][:17]) for owner in owners])
+        changed=x.clone();changed[:,9:]^=255
+        other_owner=x.clone();other_owner[1]^=255
         for implementation in ('source','reference'):
             with torch.no_grad():
-                if implementation=='source': a=m(x);b=m(changed);single=m(x[:1])
+                if implementation=='source': a=m(x);b=m(changed);single=m(x[:1]);isolated=m(other_owner)
                 else:
-                    w=dict(m.named_parameters());a,_=reference.serial_graph(w,x);b,_=reference.serial_graph(w,changed);single,_=reference.serial_graph(w,x[:1])
+                    w=dict(m.named_parameters());a,_=reference.serial_graph(w,x);b,_=reference.serial_graph(w,changed);single,_=reference.serial_graph(w,x[:1]);isolated,_=reference.serial_graph(w,other_owner)
             controls.append(dict(implementation=implementation,precision=precision,
-                prefix=comparison(a[:,:9],b[:,:9],**tolerance),owner=comparison(a[:1],single,**tolerance)))
+                owners=owners,prefix=comparison(a[:,:9],b[:,:9],**tolerance),owner=comparison(a[:1],single,**tolerance),other_owner_poison=comparison(a[:1],isolated[:1],**tolerance)))
         if any(not torch.equal(before[n],p) for n,p in m.named_parameters()): raise ValueError('diagnostic changed model weights')
     failed=[i for i,r in enumerate(results) if r['failed']]
-    bad_controls=[r for r in controls if max(r['prefix']['scaled_error'],r['owner']['scaled_error'])>1]
+    bad_controls=[r for r in controls if max(r['prefix']['scaled_error'],r['owner']['scaled_error'],r['other_owner_poison']['scaled_error'])>1]
     return dict(study=protocol['study_id'],status='FAIL' if failed or bad_controls else 'PASS_FULL_FORWARD_AND_PARAMETER_VJP_NUMERICAL_CASES_ONLY',
         source_sha256=protocol['source_sha256'],cases=results,controls=controls,failed_cases=failed,
         learned_parameters=count,trained=False,optimizer_steps=0,DEV_NLL='NOT_RUN',protected_TEST=False,
