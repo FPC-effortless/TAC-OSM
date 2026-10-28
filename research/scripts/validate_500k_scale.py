@@ -41,7 +41,7 @@ def validate_study_counts(counts: Mapping[str, int], *,
         if type(count) is not int or count < MIN_ACTIVE or count > MAX_ACTIVE:
             raise ValueError(f"{model}: active learned count {count!r} outside [{MIN_ACTIVE},{MAX_ACTIVE}]")
     ordered = sorted(counts.values())
-    gap = (ordered[-1] - ordered[0]) / max(ordered)
+    gap = (ordered[-1] - ordered[0]) / min(ordered)
     if len(ordered) > 1 and gap > MAX_RELATIVE_GAP:
         raise ValueError(f"active model-parameter parity failed: {gap:.5%} > 1%")
     return BudgetResult(TARGET, MIN_ACTIVE, MAX_ACTIVE, dict(counts), gap)
