@@ -10,6 +10,7 @@ on:
       - 'scripts/create_me111_android_host_fixture.py'
       - 'scripts/verify_me111_256step_cpu.py'
       - 'scripts/create_me111_android_256step_fixture.py'
+      - 'scripts/verify_me111_source_input_parity.py'
       - '.github/workflows/model01-android-apk.yml'
   pull_request:
     paths:
@@ -87,6 +88,19 @@ jobs:
             --output mobile/android/model01/sample-app/app/src/androidTest/assets/me111_256_reference_vectors.json
       - name: Verify host JVM input/state guards and SHA256 state codec negatives
         run: python -m unittest discover -s tests -p 'test_me111_android*.py' -v
+      - name: Verify authentic original FIT source raw-to-Java feature transformation
+        run: |
+          python scripts/verify_me111_source_input_parity.py \
+            --source-root pinned-me111 \
+            --receipt /tmp/me111-source-fit-java-parity.json
+      - name: Retain FIT-only original-source preprocessing evidence even on failure
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: me111-fit-only-raw-feature-java-parity
+          path: /tmp/me111-source-fit-java-parity.json
+          if-no-files-found: warn
+          retention-days: 14
       - name: Verify preinstalled Android SDK
         run: |
           test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
