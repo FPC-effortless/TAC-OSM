@@ -21,6 +21,8 @@ import java.util.Locale;
  */
 public final class Me111Activity extends Activity {
     private Me111StateStore store;
+    // Warm session lives only inside this Activity; no network or external service.
+    private Me111LocalEngine localEngine;
     private Me111Contract.State state;
     private boolean stateCorrupt;
     private EditText owner, hour, values, mask, ages, clock;
@@ -149,10 +151,9 @@ public final class Me111Activity extends Activity {
                 ? Me111Contract.initial(stationId, sourceHour) : state;
             Me111Contract.validateStep(input, previous);
             // No internet/SDK remote endpoint. Full ONNX CPU graph and state are local.
-            Me111LocalEngine.Result predicted;
-            try (Me111LocalEngine engine = new Me111LocalEngine(getApplicationContext())) {
-                predicted = engine.predict(input, previous);
-            }
+            if (localEngine == null)
+                localEngine = new Me111LocalEngine(getApplicationContext());
+            Me111LocalEngine.Result predicted = localEngine.predict(input, previous);
             // Fail closed: advance RAM state only AFTER atomic private-disk commit.
             store.save(predicted.nextState);
             state = predicted.nextState;
@@ -175,5 +176,20 @@ public final class Me111Activity extends Activity {
             result.setText("ABSTAIN LOCALLY: " + error.getClass().getSimpleName()
                 + ". No fallback; observation/state not advanced.");
         }
+    }
+
+    @Override protected void onDestroy() {
+        if (localEngine != null) {
+            try {
+                localEngine.close();
+            } catch (Exception exception) {
+                // This is a local research demo; never contact an external service.
+                android.util.Log.w("TACLocalModel", "Local ONNX session close failed",
+                    exception);
+            } finally {
+                localEngine = null;
+            }
+        }
+        super.onDestroy();
     }
 }
