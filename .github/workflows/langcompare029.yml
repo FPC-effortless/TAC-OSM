@@ -6,6 +6,7 @@ on:
       - "scripts/langcompare029_sampling.py"
       - "scripts/langcompare029_checkpoint.py"
       - "scripts/langcompare029_train.py"
+      - "scripts/langcompare029_eval.py"
       - "scripts/langcompare029_mamba_ledger.py"
       - "scripts/langcompare029_source_pins.py"
       - "research/mathematical-engineering/langcompare029/**"
@@ -48,6 +49,8 @@ jobs:
           python scripts/langcompare029_train.py --mode dry-run \
             --arm tac_context026 --seed 1701 \
             --output langcompare029-results/FIT_LAUNCH_GATE.json
+          python scripts/langcompare029_eval.py --mode dry-run \
+            --output langcompare029-results/EVAL_COHORT_GATE.json
           python scripts/langcompare029_source_pins.py \
             --output langcompare029-results/OFFICIAL_SOURCE_IDENTITIES.json
           python -m pytest -q tests/test_langcompare029_preflight.py
@@ -69,6 +72,9 @@ jobs:
           gate=json.load(open("langcompare029-results/FIT_LAUNCH_GATE.json"))
           assert gate["status"]=="BLOCKED_NO_FIT"
           assert gate["gpu_minutes"]==0 and gate["optimizer_steps"]==0
+          scored=json.load(open("langcompare029-results/EVAL_COHORT_GATE.json"))
+          assert scored["status"]=="BLOCKED_NO_SCORING"
+          assert scored["DEV_NLL"]=="NOT_RUN"
           PY
       - name: Authentic FIT label backward probe on official BDH (no optimizer)
         run: |
