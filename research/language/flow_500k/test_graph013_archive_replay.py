@@ -28,6 +28,13 @@ class ReplayContracts(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"archive is absent"):
                 replay(Path(d)/"absent.zip",Path(d))
 
+    def test_wrong_archive_hash_fails_before_zip_parsing(self):
+        with tempfile.TemporaryDirectory() as d:
+            path=Path(d)/"changed.zip"
+            path.write_bytes(b"not the original archive")
+            with self.assertRaisesRegex(ValueError,"independently pinned SHA256"):
+                replay(path,Path(d))
+
     def test_original_model_has_499290_learned_parameters(self):
         model=WaveCED500K()
         self.assertEqual(model.parameter_count(),499290)
