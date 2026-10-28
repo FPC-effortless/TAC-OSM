@@ -6,6 +6,7 @@ on:
     paths:
       - 'mobile/android/model01/**'
       - 'tests/test_me111_android_contract.py'
+      - 'scripts/create_me111_android_host_fixture.py'
       - '.github/workflows/model01-android-apk.yml'
   pull_request:
     paths:
@@ -18,7 +19,7 @@ permissions:
 jobs:
   frozen-original-models-offline-apk:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Pin original ME111 training/replay/source and validated ONNX exporter
@@ -52,6 +53,11 @@ jobs:
           PY
           mkdir -p mobile/android/model01/sample-app/app/src/main/assets
           cp /tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx mobile/android/model01/sample-app/app/src/main/assets/tac_me111.onnx
+      - name: Generate original PyTorch two-step constructed reference for Android JNI parity
+        run: |
+          python scripts/create_me111_android_host_fixture.py \
+            --source-root pinned-me111 \
+            --output mobile/android/model01/sample-app/app/src/main/assets/me111_reference_vectors.json
       - name: Verify pure-Java typed source and recurrent-state guards
         run: python -m unittest discover -s tests -p test_me111_android_contract.py -v
       - name: Verify preinstalled Android SDK
@@ -94,11 +100,22 @@ jobs:
           path: mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 7
+      - name: Exercise actual Android ONNX JNI and local state on emulator only
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_2
+          disable-animations: true
+          emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
+          script: gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon
       - name: Truthful hardware/science gate
         if: always()
         run: |
           echo 'PHYSICAL_ANDROID=NOT_RUN'
           echo 'ANDROID_REAL_DEVICE_ONNX_EXECUTION=NOT_RUN'
+          echo 'ANDROID_EMULATOR_JNI=CHECK_STEP_CONCLUSION_NOT_PHYSICAL'
           echo 'AIRPLANE_MODE=NOT_RUN'
           echo 'P50_P95_RAM_ENERGY=NOT_RUN'
           echo 'RESTART_ON_PHONE=NOT_RUN'
