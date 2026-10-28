@@ -1,0 +1,42 @@
+name: CONTEXT027 full serial predictor and gradient correspondence
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/context027/**'
+      - 'research/phone_queue/context027.json'
+      - 'scripts/audit_context027_graph.py'
+      - 'tests/test_context027_graph_audit.py'
+      - '.github/workflows/context027.yml'
+permissions:
+  contents: read
+jobs:
+  full-graph-no-fit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install pytest numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Plan and source/graph audit; no optimizer or DEV scoring
+        run: |
+          mkdir -p context027-results
+          python scripts/phone_lab.py plan research/phone_queue/context027.json > context027-results/PLAN.txt
+          cmp context027-results/PLAN.txt research/mathematical-engineering/context027/COMPUTE_DECISION.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/context027/FAIR_COMPARISON.json --phase preflight > context027-results/PREFLIGHT.json
+          PYTHONPATH=src python -m pytest -q tests/test_context027_graph_audit.py tests/test_context_transition026.py tests/test_research_probe_agnostic.py tests/test_research_observatory.py
+          python scripts/audit_context027_graph.py --output context027-results/FULL_GRAPH.json
+          git diff --exit-code -- research/replay-bundles/LANGTRAIN025 research/source-bundles research/mathematical-engineering/context026/context_transition.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: CONTEXT027-full-graph-correspondence
+          path: context027-results/

@@ -1,0 +1,83 @@
+{
+  "status": "PASS_FULL_FORWARD_AND_PARAMETER_VJP_NUMERICAL_CASES_ONLY",
+  "local_receipt_sha256": "55c950a12b73f5cc7e1192984ee660c9b8e53af040476cdc33d558a4ec90fb19",
+  "full_receipt": "CI artifact CONTEXT027-full-graph-correspondence; local /tmp/CONTEXT027_FULL_GRAPH.json",
+  "parameter_tensors_checked": 42,
+  "authentic_fit_documents": 14,
+  "cases": 52,
+  "seed": 26027,
+  "trained": false,
+  "gradient_source": "label-blind deterministic sine-weighted full-logit scalar",
+  "precisions": {
+    "float64": {
+      "cases": 26,
+      "max_forward_error": 1.0547118733938987e-15,
+      "max_parameter_vjp_error": 2.6020852139652106e-18,
+      "max_tolerance_scaled_error": 3.5027047827623497e-06
+    },
+    "float32": {
+      "cases": 26,
+      "max_forward_error": 2.682209014892578e-07,
+      "max_parameter_vjp_error": 1.280568540096283e-09,
+      "max_tolerance_scaled_error": 0.00199133506976068
+    }
+  },
+  "controls": [
+    {
+      "implementation": "source",
+      "owner": {
+        "max_abs": 3.885780586188048e-16,
+        "scaled_error": 8.919718211599758e-07
+      },
+      "precision": "float64",
+      "prefix": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      }
+    },
+    {
+      "implementation": "reference",
+      "owner": {
+        "max_abs": 3.885780586188048e-16,
+        "scaled_error": 1.5370456486199994e-06
+      },
+      "precision": "float64",
+      "prefix": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      }
+    },
+    {
+      "implementation": "source",
+      "owner": {
+        "max_abs": 1.4901161193847656e-08,
+        "scaled_error": 8.271250408142805e-05
+      },
+      "precision": "float32",
+      "prefix": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      }
+    },
+    {
+      "implementation": "reference",
+      "owner": {
+        "max_abs": 1.4901161193847656e-07,
+        "scaled_error": 0.0010762008605524898
+      },
+      "precision": "float32",
+      "prefix": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      }
+    }
+  ],
+  "limits": [
+    "full Lean input-to-logit graph/proofs",
+    "global IEEE error bounds",
+    "formal AD proof",
+    "trained memory utility",
+    "parameter/data/compute matched SSM",
+    "new fit authorization"
+  ]
+}
