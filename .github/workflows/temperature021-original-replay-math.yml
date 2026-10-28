@@ -1,0 +1,37 @@
+name: TEMP021 original 500K exposed-DEV calibration source-only contracts
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/temperature021/**'
+      - '.github/workflows/temperature021-original-replay-math.yml'
+  push:
+    branches: [research/temperature021-original-exposed-dev-replay-2026-10-28]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mathematics-and-archive-fail-closed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install CPU PyTorch and original NumPy versions
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install numpy==2.3.5
+      - name: Run original-replay mathematical/negative software tests (NO authentic checkpoints in Git)
+        working-directory: research/mathematical-engineering/temperature021
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile replay_original_500k_calibration.py test_original_500k_calibration.py
+          python -m unittest -v test_original_500k_calibration.py
+      - name: State science/replay gates explicitly
+        run: |
+          echo "SOURCE_ONLY_CI=PASS does not imply original frozen neural checkpoint replay."
+          echo "Original author checkpoint/source archive not hosted in Git or Git LFS."
+          echo "REPO_REPLAY=BLOCKED; INDEPENDENT_TEST=NOT_RUN; NEW_LANGUAGE_SKILL=NOT_ESTABLISHED."
