@@ -1,3 +1,7 @@
+**PROSPECTIVE OWNER OVERRIDE — 2026-10-28:** New model budget is **500,000 active trainable/deployed learned parameters (475,000–525,000)**; architecture comparators differ by no more than **1%** with matched factual data/objective/training compute. Historical 95–105K study records remain unchanged. See [prospective 500K scale contract](PARAMETER_SCALE_500K_PROSPECTIVE.md). The six-family rule, real-data primary evidence, independent original checkpoint replay and full PNDS mathematical engineering remain compulsory.
+
+---
+
 # TAC-OSM — Unified Master Research Plan
 
 > **2026-10-27 historical memory remedy reconciliation:** Before proposing another persistent-memory addressing/retention redesign, review [the original DIAGKEY004/ME100/LATFUSE004–018 implementation and evidence addendum](MASTER_MEMORY_IMPLEMENTATION_REUSE_ADDENDUM.md). It identifies mechanisms already built and distinguishes genuine failures of later narrowed variants from problems solved in older software diagnostics. Original checkpoints and research/validation gates are unchanged.
