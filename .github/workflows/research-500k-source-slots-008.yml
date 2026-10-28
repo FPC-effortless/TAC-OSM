@@ -17,5 +17,7 @@ jobs:
         run: python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
       - name: Verify source-exact v4 modules and tests
         run: |
-          python -m py_compile research/language/flow_500k/source_slot_memory_v4.py research/language/flow_500k/tac_wave_ced_500k_v4.py research/language/flow_500k/historical_500k_v4.py
+          python -m py_compile research/language/flow_500k/source_slot_memory_v4.py research/language/flow_500k/tac_wave_ced_500k_v4.py research/language/flow_500k/historical_500k_v4.py research/language/flow_500k/causal_copy_mixture_v4.py
           OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python -m unittest discover -s research/language/flow_500k -p 'test_source_slot_memory_v4.py' -v
+
+          OMP_NUM_THREADS=2 MKL_NUM_THREADS=2 python -m unittest discover -s research/language/flow_500k -p 'test_causal_copy_v4.py' -v
