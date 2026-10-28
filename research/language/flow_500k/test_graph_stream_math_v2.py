@@ -92,6 +92,22 @@ class GraphStreamingRepairTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             m.forward(x,start=-1)
 
+    def test_corrupted_or_overlarge_carried_associative_state_is_rejected(self):
+        m=WaveCED500K().eval()
+        x=torch.randint(0,128,(1,4))
+        with torch.no_grad():
+            _,state=m(x,return_state=True)
+            bad={k:(v.clone() if isinstance(v,torch.Tensor) else v)
+                 for k,v in state.items()}
+            bad["native"][0,0,0]=1e4
+            with self.assertRaisesRegex(ValueError,"exceeds v2 bound"):
+                m(x,start=4,initial_state=bad)
+            corrupted={k:(v.clone() if isinstance(v,torch.Tensor) else v)
+                       for k,v in state.items()}
+            corrupted["aligned"][0,0,0,0]=float("nan")
+            with self.assertRaisesRegex(ValueError,"nonfinite carried"):
+                m(x,start=4,initial_state=corrupted)
+
     def test_write_coupling_preserves_uniform_state_bound_under_chunks(self):
         m=WaveCED500K().eval()
         state=None
