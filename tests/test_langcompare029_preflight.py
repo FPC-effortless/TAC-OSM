@@ -108,4 +108,4 @@ def test_500k_exception_exact_study_marker_and_scope():
     with pytest.raises(module.ParityError):
         module.check_500k_model_size(100000,100000,"invalid_100k_new_scale")
     with pytest.raises(module.ParityError):
-        module.check_model_parameter_target(500122,500122,"other_study")
+        module.check_model_parameter_target(500122,500122,label="other_study")
