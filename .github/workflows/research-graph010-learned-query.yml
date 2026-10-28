@@ -1,7 +1,7 @@
 name: GRAPH010 learned source query causal numerical contracts
 on:
   push:
-    branches: [research/graph010-learned-source-query-2026-10-28]
+    branches: [research/graph010-learned-source-query-2026-10-28, research/graph011-calibrated-query-external-2026-10-28]
   pull_request:
   workflow_dispatch:
 jobs:
@@ -18,7 +18,8 @@ jobs:
       - name: Graph009 original and Graph010 learned-source causal and gradient tests
         run: |
           set -euo pipefail
-          python -m py_compile research/language/flow_500k/learned_context_query_v6.py research/language/flow_500k/source_query_hybrid_v6.py research/language/flow_500k/fit_learned_query_v6.py
+          python -m py_compile research/language/flow_500k/learned_context_query_v6.py research/language/flow_500k/source_query_hybrid_v6.py research/language/flow_500k/fit_learned_query_v6.py research/language/flow_500k/source_query_hybrid_v7.py
           OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m unittest discover -s research/language/flow_500k -p 'test_calibrated_retrieval_v5.py' -v
           OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m unittest discover -s research/language/flow_500k -p 'test_learned_query_v6.py' -v
           OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m unittest discover -s research/language/flow_500k -p 'test_query_hybrid_v6.py' -v
+          OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m unittest discover -s research/language/flow_500k -p 'test_query_hybrid_v7.py' -v
