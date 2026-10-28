@@ -126,3 +126,52 @@ def test_frozen_source_schedule_matches_archived_original_all_five_seeds():
     assert actual==expected and len(actual)==5
     assert original["training_updates"]==plan["training_updates"]==320
     assert original["predicted_targets_per_seed"]==4096 # DEV exposures stay separated
+
+
+def test_official_siso_mamba3_independent_source_parameter_ledger():
+    from scripts.langcompare029_mamba_ledger import ledger
+    result=ledger()
+    assert result["individual_siso_mixer_parameters"]["in_proj.weight [407,80]"]==32560
+    assert result["per_layer_parameters"]==76794
+    assert result["analytical_total"]==501884
+    assert result["actual_cuda_model_count"]=="PENDING"
+
+def test_safe_untrained_model_optimizer_rng_checkpoint_replay():
+    from scripts.langcompare029_checkpoint import (
+        create_bytes,verify_bytes,compare_no_fit_logits,sha)
+    from scripts.langcompare029_sampling import fit_sources,iter_batches,schedule_receipt
+    import torch,copy
+    torch.manual_seed(1701)
+    model=p.load_tac().eval()
+    optimizer=torch.optim.AdamW(model.parameters(),lr=.001)
+    fit=fit_sources()
+    receipt=schedule_receipt(fit,1701)
+    raw=create_bytes(model=model,optimizer=optimizer,model_name="tac_context026",
+        seed=1701,source_order_sha=receipt["sample_order_sha256"],
+        updates=0,diagnostic_only=True)
+    replay=p.load_tac().eval()
+    opt2=torch.optim.AdamW(replay.parameters(),lr=.001)
+    x=verify_bytes(raw,fresh_model=replay,fresh_optimizer=opt2,
+        expected_name="tac_context026",seed=1701,
+        sample_order_sha=receipt["sample_order_sha256"],
+        expected_digest=sha(raw),diagnostic_only=True)
+    assert x["status"]=="PASS_SAME_SOURCE_COLD_LOAD_UNTRAINED"
+    _,batch=next(iter_batches(fit,1701,steps=1))
+    prefix=torch.tensor([list(batch[0][2][:9])],dtype=torch.long)
+    assert compare_no_fit_logits(model,replay,prefix,atol=0.)==0.
+    with pytest.raises(ValueError,match="SHA256 mismatch"):
+        verify_bytes(raw,fresh_model=p.load_tac(),
+            fresh_optimizer=torch.optim.AdamW(p.load_tac().parameters()),
+            expected_name="tac_context026",seed=1701,
+            sample_order_sha=receipt["sample_order_sha256"],expected_digest="0"*64,
+            diagnostic_only=True)
+    with pytest.raises(ValueError,match="metadata"):
+        verify_bytes(raw,fresh_model=p.load_tac(),
+            fresh_optimizer=torch.optim.AdamW(p.load_tac().parameters()),
+            expected_name="tac_context026",seed=1702,
+            sample_order_sha=receipt["sample_order_sha256"],
+            diagnostic_only=True)
+    with pytest.raises(ValueError,match="trained record"):
+        create_bytes(model=model,optimizer=optimizer,model_name="tac_context026",
+            seed=1701,source_order_sha=receipt["sample_order_sha256"],
+            updates=0,diagnostic_only=False)
