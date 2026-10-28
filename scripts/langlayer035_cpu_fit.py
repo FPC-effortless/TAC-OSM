@@ -68,7 +68,7 @@ def model_source_preflight():
     layered=(ROOT/"research/mathematical-engineering/langlayer034/layered_transition.py").read_bytes()
     if hashlib.sha256(source).hexdigest()!=SOURCE_MODEL_SHA256:
         raise ValueError("CONTEXT026 source differs from audited pinned original")
-    git_blob=hashlib.sha1(b"blob "+str(len(layered)).encode()+b"\\0"+layered).hexdigest()
+    git_blob=hashlib.sha1(b"blob "+str(len(layered)).encode()+b"\0"+layered).hexdigest()
     if git_blob!=LAYERED_MODEL_GIT_BLOB:
         raise ValueError("LANGLAYER034 source differs from pinned independent math reference")
 
