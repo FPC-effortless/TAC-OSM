@@ -22,9 +22,12 @@ class NewSSMContracts(unittest.TestCase):
             par=SelectiveDiagonalSSM500K.parallel_scan(a,b)
             ser=SelectiveDiagonalSSM500K.serial_scan(a,b)
             self.assertTrue(torch.allclose(par,ser,atol=2e-12,rtol=2e-12))
-            gp=torch.autograd.grad(par.square().sum(),(a,b),retain_graph=True)
-            gs=torch.autograd.grad(ser.square().sum(),(a,b))
-            for p,s in zip(gp,gs):
+            gp=torch.autograd.grad(par.square().sum(),(a,b),retain_graph=True,allow_unused=True)
+            gs=torch.autograd.grad(ser.square().sum(),(a,b),allow_unused=True)
+            for p,s,target in zip(gp,gs,(a,b)):
+                # At length=1, the initial decay is not on any nonzero-state path.
+                p=torch.zeros_like(target) if p is None else p
+                s=torch.zeros_like(target) if s is None else s
                 self.assertTrue(torch.allclose(p,s,atol=2e-10,rtol=2e-10))
 
     def test_source_causal_future_poison(self):
