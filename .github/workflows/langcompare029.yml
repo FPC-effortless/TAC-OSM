@@ -1,0 +1,104 @@
+name: LANGCOMPARE029 no-fit four-arm preflight (Mamba CUDA pending)
+on:
+  pull_request:
+    paths:
+      - "scripts/langcompare029_preflight.py"
+      - "scripts/langcompare029_sampling.py"
+      - "scripts/langcompare029_checkpoint.py"
+      - "scripts/langcompare029_train.py"
+      - "scripts/langcompare029_eval.py"
+      - "scripts/langcompare029_mamba_ledger.py"
+      - "scripts/langcompare029_source_pins.py"
+      - "research/mathematical-engineering/langcompare029/**"
+      - "tests/test_langcompare029_preflight.py"
+      - ".github/workflows/langcompare029.yml"
+permissions:
+  contents: read
+jobs:
+  cpu-source-and-parameter-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: |
+          python -m pip install numpy==2.3.5 pytest
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Fetch official BDH source (verify actual original Git blob in runner)
+        run: |
+          curl --fail --silent --show-error --location --retry 3 \
+            https://raw.githubusercontent.com/pathwaycom/bdh/2b0d7a45b058d4309c84a10e0768d541fe18bdc2/bdh.py \
+            --output /tmp/langcompare029_bdh.py
+      - name: No-fit source and model preflight — NOT four-way benchmark
+        run: |
+          mkdir -p langcompare029-results
+          python scripts/langcompare029_preflight.py \
+            --bdh-source /tmp/langcompare029_bdh.py \
+            --output langcompare029-results/NO_FIT_PREFLIGHT.json
+          python scripts/langcompare029_sampling.py \
+            --output langcompare029-results/FROZEN_TRAINING_SCHEDULE.json
+          python scripts/langcompare029_mamba_ledger.py \
+            --output langcompare029-results/MAMBA3_SISO_ANALYTICAL_LEDGER.json
+          python scripts/langcompare029_train.py --mode dry-run \
+            --arm tac_context026 --seed 1701 \
+            --output langcompare029-results/FIT_LAUNCH_GATE.json
+          python scripts/langcompare029_eval.py --mode dry-run \
+            --output langcompare029-results/EVAL_COHORT_GATE.json
+          python scripts/langcompare029_source_pins.py \
+            --output langcompare029-results/OFFICIAL_SOURCE_IDENTITIES.json
+          python -m pytest -q tests/test_langcompare029_preflight.py
+          python - <<'PY'
+          import json
+          r=json.load(open("langcompare029-results/NO_FIT_PREFLIGHT.json"))
+          assert r["optimizer_steps"]==0 and r["gpu_minutes"]==0
+          assert r["status"]=="NO_FIT_PARTIAL_PREFLIGHT_NOT_READY_TO_TRAIN"
+          assert r["models"]["mamba3_siso_official"]["status"].startswith("PENDING_")
+          assert r["models"]["tac_context026"]["status"]=="PARAMETER_COUNT_VERIFIED"
+          assert r["models"]["bdh_official"]["status"]=="PARAMETER_COUNT_VERIFIED"
+          assert r["models"]["causal_transformer"]["status"]=="PARAMETER_COUNT_VERIFIED"
+          sched=json.load(open("langcompare029-results/FROZEN_TRAINING_SCHEDULE.json"))
+          assert sched["optimizer_steps_performed"]==0
+          assert len(sched["by_seed"])==5
+          assert all(x["examples_seen"]==2560 for x in sched["by_seed"])
+          pins=json.load(open("langcompare029-results/OFFICIAL_SOURCE_IDENTITIES.json"))
+          assert pins["status"]=="OFFICIAL_SOURCE_IDENTITIES_VERIFIED_NO_FIT"
+          gate=json.load(open("langcompare029-results/FIT_LAUNCH_GATE.json"))
+          assert gate["status"]=="BLOCKED_NO_FIT"
+          assert gate["gpu_minutes"]==0 and gate["optimizer_steps"]==0
+          scored=json.load(open("langcompare029-results/EVAL_COHORT_GATE.json"))
+          assert scored["status"]=="BLOCKED_NO_SCORING"
+          assert scored["DEV_NLL"]=="NOT_RUN"
+          PY
+      - name: Authentic FIT label backward probe on official BDH (no optimizer)
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import torch
+          from torch.nn import functional as F
+          from scripts.langcompare029_preflight import load_bdh
+          from scripts.langcompare029_sampling import fit_sources,iter_batches
+          torch.manual_seed(1701)
+          model=load_bdh(Path("/tmp/langcompare029_bdh.py")).train()
+          _, batch=next(iter_batches(fit_sources(),1701,steps=1))
+          tokens=torch.tensor([list(batch[0][2][:13])],dtype=torch.long)
+          logits,_=model(tokens[:,:-1])
+          loss=F.cross_entropy(logits.reshape(-1,256),tokens[:,1:].reshape(-1))
+          loss.backward()
+          grad=[p.grad for p in model.parameters() if p.requires_grad]
+          assert all(g is not None and torch.isfinite(g).all() for g in grad)
+          assert torch.isfinite(loss) and sum(float(g.abs().sum()) for g in grad)>0
+          print("BDH genuine FIT source forward/backward finite; NO optimizer steps")
+
+      - name: Upload no-fit evidence (not prediction metrics)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGCOMPARE029-no-fit-CPU-source-and-model-audit
+          path: langcompare029-results/

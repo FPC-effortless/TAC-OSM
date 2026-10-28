@@ -1,0 +1,41 @@
+{
+  "study_id": "LANGCOMPARE029",
+  "source_status": "source-pinned-not-kernel-qualified",
+  "tac": {
+    "repo": "FPC-effortless/TAC-OSM",
+    "relative_path": "research/mathematical-engineering/context026/context_transition.py",
+    "sha256": "c88f3f7c1b628cb733a4a58dcd168a75411d8bb3d80e382068593713e887510a",
+    "actual_parameters": 500122
+  },
+  "bdh": {
+    "repo": "pathwaycom/bdh",
+    "commit": "2b0d7a45b058d4309c84a10e0768d541fe18bdc2",
+    "files": {
+      "bdh.py": "4cfff79df97fa6faafb33bf20739a027edd8f360"
+    },
+    "actual_parameters": 501504,
+    "cpu_preflight": "PASS"
+  },
+  "mamba3": {
+    "repo": "state-spaces/mamba",
+    "commit": "e9594ce1c732d97440f0332fdc43170a2294dbfa",
+    "files": {
+      "mamba_ssm/modules/mamba3.py": "34c119c2cd9052e82bd80d791afd1508285fa3be",
+      "mamba_ssm/models/mixer_seq_simple.py": "b178f48f99c5914436f33056796000558dd87e8a",
+      "mamba_ssm/ops/triton/mamba3/mamba3_siso_combined.py": "ca515200117db8e1d8438986aae32ea6e8effb78",
+      "mamba_ssm/modules/mlp.py": "33bab5c7cc21b96d5f5ccfe233e339cad12cfe2c",
+      "mamba_ssm/models/config_mamba.py": "646c9e1e8ac94b2e82974cc0d5dab83fcfea900c"
+    },
+    "analytical_parameters_only": 501884,
+    "official_cuda_instantiation": "PENDING_SM80_PLUS",
+    "t4_kernel_compatibility": "UNSUPPORTED_BF16_SM75"
+  },
+  "transformer": {
+    "source": "PyTorch 2.10.0 native TransformerEncoderLayer",
+    "actual_parameters": 496960,
+    "cpu_preflight": "PASS"
+  },
+  "no_fit": true,
+  "optimizer_steps": 0,
+  "scientific_status": "NO_MODEL_COMPARISON_RESULT"
+}

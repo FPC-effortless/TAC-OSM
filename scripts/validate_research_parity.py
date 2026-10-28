@@ -76,9 +76,8 @@ def check_model_parameter_target(trainable_parameters, deployed_parameters=None,
 # Owner's 2026-10-28 NEW language-model scale (old studies unchanged).
 # Explicit, narrow contract: no global relaxation of the historical 100K gate.
 def checked_new_scale(m):
-    if m.get("study_id")=="LANGTRAIN025" and m.get("parameter_budget_contract")=="owner-2026-10-28-500k":
-        return True
-    return False
+    return (m.get("study_id") in {"LANGTRAIN025", "LANGCOMPARE029"}
+            and m.get("parameter_budget_contract")=="owner-2026-10-28-500k")
 
 def check_500k_model_size(trainable,deployed,label):
     positive_num(trainable,label+".trainable_parameters",whole=True)
@@ -209,7 +208,10 @@ def _check_manifest_parity_only(m,phase="preflight"):
             else:positive_num(val,key,whole=True)
         demand(r["deployed_parameters"]>=r["trainable_parameters"],
             "trainable parameters cannot exceed total deployed parameters")
-        if requires_100k_policy(m["study_id"]):
+        if checked_new_scale(m):
+            check_500k_model_size(r["trainable_parameters"],r["deployed_parameters"],
+                                  f"arms[{i}] {r['architecture']}")
+        elif requires_100k_policy(m["study_id"]):
             check_model_parameter_target(r["trainable_parameters"], r["deployed_parameters"],
                                          label=f"arms[{i}] {r['architecture']}")
         for k in ("dataset_sha256","train_split_sha256","dev_split_sha256",
@@ -243,10 +245,14 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 positive_num(result.get(k),k,
                     whole=k in ("actual_steps","actual_examples","actual_tokens","peak_memory_bytes"))
             text_field(result.get("flops_profiler"),"independent training_flops profiler provenance")
-            if requires_100k_policy(m["study_id"]):
+            if checked_new_scale(m):
+                check_500k_model_size(result.get("trainable_parameters"),
+                    result.get("deployed_parameters"),f"postfit {r['architecture']} seed {r['seed']}")
+            elif requires_100k_policy(m["study_id"]):
                 check_model_parameter_target(
                     result.get("trainable_parameters"),result.get("deployed_parameters"),
                     label=f"postfit {r['architecture']} seed {r['seed']}")
+            if requires_100k_policy(m["study_id"]):
                 demand(result["trainable_parameters"]==r["trainable_parameters"] and
                        result["deployed_parameters"]==r["deployed_parameters"],
                        "postfit actual model parameter counts deviate from registered original prefit counts")

@@ -1,0 +1,81 @@
+{
+  "study_id": "LANGCOMPARE029",
+  "updated": "2026-10-28",
+  "goal": "four-arm official-source, 500K-matched next-original-byte language comparison",
+  "execution_level": "internal_research",
+  "parameter_budget_contract": "owner-2026-10-28-500k",
+  "research_scope": {
+    "protected_TEST": false,
+    "merge_or_promotion": false,
+    "training_started": false
+  },
+  "source": {
+    "publisher": "PSF CPython 3.13.0",
+    "commit": "60403a5409ff2c3f3b07dd2ca91a7a3e096839c7",
+    "fit_docs": 14,
+    "dev_docs_exposed": 4,
+    "source_audit": "PASS"
+  },
+  "models": [
+    {
+      "name": "CONTEXT026_TAC",
+      "parameters": 500122,
+      "count_status": "ACTUAL_VERIFIED",
+      "causal_probe": "PASS"
+    },
+    {
+      "name": "BDH_OFFICIAL",
+      "parameters": 501504,
+      "count_status": "ACTUAL_VERIFIED",
+      "causal_probe": "PASS"
+    },
+    {
+      "name": "TRANSFORMER",
+      "parameters": 496960,
+      "count_status": "ACTUAL_VERIFIED",
+      "causal_probe": "PASS"
+    },
+    {
+      "name": "MAMBA3_OFFICIAL_SISO",
+      "parameters": 501884,
+      "count_status": "ANALYTICAL_PENDING_ACTUAL",
+      "causal_probe": "NOT_RUN"
+    }
+  ],
+  "scheduled_train_exposure": {
+    "seeds": [
+      1701,
+      1702,
+      1703,
+      1704,
+      1705
+    ],
+    "steps_per_seed": 320,
+    "batch_size": 8,
+    "targets_per_window": 128,
+    "windows_per_seed": 2560,
+    "targets_per_seed": 327680,
+    "order_hash_verification": "MATCHES_5_OLD_LANGTRAIN025_SEEDS"
+  },
+  "compute": {
+    "actual_used_gpu_minutes": 0,
+    "comparator_mamba_required_sm": "SM80_or_newer",
+    "available_kaggle_T4": "SM75",
+    "mamba3_t4_status": "UNSUPPORTED_BY_OFFICIAL_BF16_KERNEL",
+    "alternate_accelerator": "NOT_AUTHORIZED_OR_AVAILABLE",
+    "actual_mamba_parameters": "NOT_MEASURED",
+    "matched_FLOPs": "NOT_MEASURED",
+    "gpu_execution_approval": "NOT_GRANTED"
+  },
+  "gates": {
+    "source_causal": "PASS_FOR_3_MODELS_AND_5_SEED_SAMPLING",
+    "official_mamba_cuda": "BLOCKED_UNSUPPORTED_HARDWARE",
+    "four_arm_actual_count": "BLOCKED",
+    "matched_training_compute": "BLOCKED_NOT_MEASURED",
+    "neural_training": "NOT_STARTED",
+    "checkpoint_replay": "NOT_RUN",
+    "DEV_four_arm_NLL": "NOT_RUN",
+    "protected_TEST": "NOT_ACCESSED"
+  },
+  "scientific_status": "RESEARCH_ENGINEERING_PREFLIGHT_ONLY_NO_SUPERIORITY_OR_CAPABILITY_CLAIM"
+}
