@@ -28,9 +28,26 @@ The current Kaggle fixed two-T4 SM75 route is **not compatible** with the offici
 
 The future launcher trains **one arm and one seed only** and never opens DEV or TEST; trained checkpoint status still requires a later independent clean Git replay, complete five-seed four-arm cohort and postfit matched compute receipts.
 
-## 3. Scientific interpretation
+## 3. Future complete-cohort evaluation — currently fail closed
 
-Historical older LANGTRAIN025 native NLL **2.099349221**, prior P3 **1.877306112** remains a 0/5-seed loss. Those weights do *not* represent CONTEXT026. A no-fit checkpoint and source/shape/casuality/gradient PASS do not imply language skill.
+`python scripts/langcompare029_eval.py --mode dry-run`
+
+The evaluation gate requires **exactly 20 checkpoint records** (four original
+model types × five frozen seeds), unique accessible original binary paths and
+SHA256 identities, original trained optimizer/RNG/source sample-order cold
+replay, actual full-model parameter counts and **postfit** matched-resource
+validation. Incomplete, unqualified or substituted model cohorts are
+**BLOCKED_NO_SCORING**, before any DEV source bytes are opened.
+
+Only after that may it read the four already-exposed original DEV documents
+and measure exactly 4096 next-byte targets per arm and seed: token NLL, bits
+per original byte, Brier, top1/top5 and per-document loss. CI verifies metric
+tensor arithmetic on genuine **FIT-only** documents without DEV access.
+The four-arm trained DEV scorer is not scheduled on GitHub CPU CI.
+
+## 4. Scientific interpretation
+
+Historical older LANGTRAIN025 native NLL **2.099349221**, prior P3 **1.877306112** remains a 0/5-seed loss. Those weights do *not* represent CONTEXT026. A no-fit checkpoint and source/shape/causality/gradient PASS do not imply language skill.
 
 The ultimate comparison must report authentic original-source pooled next-byte NLL, bits per byte, Brier, top-1, top-5, per-document NLL, memory, latency, actual training FLOPs and every failed run. The four DEV documents have **already been exposed**; they are internal development evaluation, not an independent generalization test.
 
