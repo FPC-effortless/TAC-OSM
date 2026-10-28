@@ -66,7 +66,7 @@ public final class Me111Contract {
     }
 
     public static State initial(int owner, long firstHour) {
-        if (owner < 0 || owner >= 12 || firstHour < 1 || firstHour > MAX_HOUR)
+        if (owner < 0 || owner >= 12 || firstHour < 0 || firstHour > MAX_HOUR)
             throw new IllegalArgumentException("unknown owner or source-hour origin");
         return new State(owner, firstHour - 1, 0,
             new float[CHANNELS], new float[CHANNELS], new float[EVIDENCE_DIM],
@@ -83,7 +83,7 @@ public final class Me111Contract {
     }
 
     private static void validateEvent(Event event) {
-        if (event.owner < 0 || event.owner >= 12 || event.hour < 1 || event.hour > MAX_HOUR)
+        if (event.owner < 0 || event.owner >= 12 || event.hour < 0 || event.hour > MAX_HOUR)
             throw new IllegalArgumentException("owner/hour source contract violated");
         for (int i = 0; i < CHANNELS; i++) {
             float value = event.values[i], age = event.ages[i];
@@ -102,7 +102,7 @@ public final class Me111Contract {
 
     private static void validateState(State state) {
         if (state.owner < 0 || state.owner >= 12
-                || state.lastHour < 0 || state.lastHour > MAX_HOUR
+                || state.lastHour < -1 || state.lastHour > MAX_HOUR
                 || state.count < 0 || state.count > MAX_HOUR)
             throw new IllegalArgumentException("invalid state owner/hour/count");
         for (int i = 0; i < CHANNELS; i++) {
