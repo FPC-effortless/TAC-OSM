@@ -52,3 +52,19 @@ GRAPH009's count-based source cache remains the baseline for useful retrieval. S
 - Never assume a universal time-space theorem establishes a practical architecture cost win. Full parameter-matched training, real external language TEST, semantic mismatch, GPU energy and complete machine-checkable IEEE/AD/PyTorch refinement remain OPEN.
 
 **Research decision:** preserve GRAPH009 and the negative GRAPH010 result; evaluate optional recomputation against full resident-state retention for latency and memory, not text accuracy. Keep it in the existing System-1/Language research family, not a seventh TAC variant.
+
+
+## First executed authentic-source CPU receipts (same frozen model)
+
+From [GitHub Actions run #40702444600](https://github.com/FPC-effortless/TAC-OSM/actions/runs/40702444600), artifact `graph011-real-source-space-time-receipts`. PyTorch 2.10 CPU, 1 thread, *actual 128-byte prefix of checked-in* `bayesian_cache_scan_v5.py`, SHA256 `ec5fadfd8826992b3da74ff7f487943d59a4f751a05e5801348456992f94eff1`. Nine common observed-prefix queries at 1,17,32,49,64,81,97,113,128. All models were frozen, original source/caches identical. No training or quality test.
+
+| Checkpoint block B | Snapshots | Serialized states (bytes) | Retained source (bytes) | Model weights (bytes) | Mean query CPU ms | Total replayed source tokens (9 queries) |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 (dense) | 128 | 5,513,500 | 128 | 1,997,160 | 3.751 | 9 |
+| 8 | 16 | 652,780 | 128 | 1,997,160 | 4.196 | 30 |
+| 32 | 4 | 132,000 | 128 | 1,997,160 | 5.088 | 166 |
+| 128 | 1 | 1,261 | 128 | 1,997,160 | 6.995 | 582 |
+
+At B=32, **serialized state+source** fell ~97.6% relative to the dense snapshot policy, and this saved most of the snapshot metadata and duplicate queues. But the backbone **still** consumes 1.997 MB weights, source bytes remain retained, and nine queries replay 166 source steps instead of 9. Mean per-query replay time increased about 35.6% (5.09 vs 3.75ms). These are observations from a tiny short-source single-threaded engineering diagnostic with serialization headers, not benchmarked resident process RSS or GPU energy. The float-output bytes differed across chunk strategies due to different operation schedules; `torch.allclose(atol=3e-4,rtol=3e-4)` to full uninterrupted inference was the actual acceptance test, **not byte equality**.
+
+The source replay facility is a selective I/O/latency mechanism, not a new neural parameter or learned memory breakthrough. Run 512/4096/longer genuine source and query-rate sweeps with process RSS and GPU measurements before claiming practical inference efficiency; model production source events cost much more than this 128-byte test.
