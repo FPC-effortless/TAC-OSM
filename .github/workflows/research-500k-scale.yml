@@ -10,4 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Prospective parameter band / comparator parity (legacy studies unchanged)
-        run: python3 research/scripts/test_validate_500k_scale.py
+        run: |
+          python3 research/scripts/test_validate_500k_scale.py
+          python3 -m py_compile research/language/flow_500k/tac_wave_ced_500k.py research/language/flow_500k/test_wave_500k.py research/language/flow_500k/train_real_text_feasibility.py
