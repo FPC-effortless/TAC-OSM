@@ -54,3 +54,12 @@ adb shell run-as org.tacosm.mobile.model01.demo cat files/me111-physical-cpu-ben
 ```
 
 The test records frozen model hashes, real device identity, model-load time, 20 warmups, 150 warm predictions, warm p50/p95/max, total app PSS before/peak, and atomic local state restore. It saves a JSON receipt only to app-private storage. The test leaves explicit **ENERGY=NOT_MEASURED**, independent network trace **NOT_CAPTURED**, radio isolation beyond airplane-mode setting **NOT_INDEPENDENTLY_VERIFIED**, and process restart **NOT_MEASURED**; these require separate independently observed measurements. The physical-only class is excluded from emulator CI.
+
+
+## On-phone, ADB-free CPU self-test (research diagnostic)
+
+The neural demo now has a user-triggered offline phone benchmark with no laptop required. It rejects emulators, requires the airplane-mode setting, and runs 20 warmups and 150 timed CPU predictions using CONSTRUCTED scratch-only observations. It does not read, reset, or modify persistent customer state. The result can be copied from the screen only after an explicit button tap. Reported metrics: model/session initialization, warm p50/p95/max latency, sampled total app PSS and exact frozen model/device identity. The app cannot independently verify all radios or measure energy, process restart, true cold process launch, or authentic forecast utility. These remain NOT_MEASURED/NOT_QUALIFIED. Airplane Mode is a prerequisite, not proof of network silence. This research debug APK is not a signed public deployment.
+
+## State integrity, limits and migration
+
+The bounded fixed-length 734-byte v2 persistent state includes model fingerprint, typed source/associative-memory state and SHA256 checksum. It rejects single-bit corruption even when altered float values remain finite and plausible. Android AtomicFile handles committed crash-safe writes and allowBackup=false prevents ordinary Android backup. The earlier unsigned v1 format is deliberately NOT silently imported or treated as new state: explicit reset or independently trusted source-event replay is required. Plain SHA256 is an accidental-corruption check, NOT encryption, a keyed authenticity guarantee, anti-rollback protection, or device attestation.
