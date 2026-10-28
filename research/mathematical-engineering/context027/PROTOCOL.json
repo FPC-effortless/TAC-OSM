@@ -1,0 +1,56 @@
+{
+  "study_id": "CONTEXT027-FULL-GRAPH-SERIAL-CORRESPONDENCE",
+  "source_commit": "8e3e0040052eea6c99c69b240e1623b2681ebf79",
+  "source_path": "research/mathematical-engineering/context026/context_transition.py",
+  "source_sha256": "c88f3f7c1b628cb733a4a58dcd168a75411d8bb3d80e382068593713e887510a",
+  "execution_level": "internal_research",
+  "no_new_model_fits": true,
+  "hypothesis": "Independent chronological serial formulation reproduces full untrained CONTEXT026 logits, reported state traces and all parameter vector-Jacobian products within frozen numeric tolerances.",
+  "implementation": "PNDS independent functional PyTorch; no candidate methods, scan helpers or native traces consumed as reference inputs. Same parameter tensors, independent graph.",
+  "seeds": [
+    26027
+  ],
+  "fixture_lengths": [
+    1,
+    3,
+    9,
+    17
+  ],
+  "fixture_batch": 2,
+  "masks": [
+    "all",
+    "none",
+    "alternating-owner-offset"
+  ],
+  "precisions": {
+    "float64": {
+      "atol": 1e-10,
+      "rtol": 1e-08
+    },
+    "float32": {
+      "atol": 0.0001,
+      "rtol": 0.001
+    }
+  },
+  "gradient_objective": "mean(logits * sin(arange(numel(logits))+1)); labels never used",
+  "gradient_parameters": "all named learned tensors, including matched zero VJPs; nonzero maximum error record; no claim of all weights useful",
+  "real_source": "all 14 existing authentic CPython FIT documents; first17 raw source bytes; no DEV labels or NLL; full original license/SHA verification",
+  "acceptance": "finite values and abs(source-reference) <= atol+rtol*max(abs(source),abs(reference)) for every logit/trace/parameter VJP; preserve failure and do not loosen tolerance",
+  "controls": [
+    "future-byte suffix poison",
+    "all-zero write admission only suppresses associative bank updates; waves/concept continue by design",
+    "batch-owner isolation",
+    "first-step and non-power-of-two serial/scan association"
+  ],
+  "not_run": [
+    "optimizer updates",
+    "new candidate DEV evaluation",
+    "new protected TEST",
+    "trained information survival",
+    "full IEEE error proof",
+    "full formal AD proof",
+    "architecture superiority"
+  ],
+  "parameter_policy": "candidate untrained500122; no scale exception or authorization for any new fit inferred",
+  "checkpoint_policy": "original025 binaries and negative numerical receipt unchanged; no optimizer invoked"
+}
