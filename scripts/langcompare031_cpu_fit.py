@@ -67,7 +67,7 @@ def prefit_registration(arm,seed,steps):
     if result.get("status")!="PASS_PREFIT_SINGLE_MODEL":
         raise ValueError("original single-model training preregistration failed")
     rows=m.get("models",[])
-    if set(x.get("name") for x in rows)!=set(ARMS) or len(rows)!=3:
+    if len(rows)!=15 or {(x.get("name"),x.get("seed")) for x in rows}!={(a,s) for a in ARMS for s in SEEDS}:
         raise ValueError("incomplete model matrix")
     if any(x["trainable_parameters"]!=ARMS[x["name"]] or
            x["deployed_parameters"]!=ARMS[x["name"]] for x in rows):
