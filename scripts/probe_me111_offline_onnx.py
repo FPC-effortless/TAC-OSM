@@ -116,6 +116,14 @@ def probe(output_dir):
     for original, specialized in zip(original_native, specialized_native):
         torch.testing.assert_close(original, specialized, rtol=1e-6, atol=1e-6)
     path = output_dir / "ME111_ONE_STEP_EXPLORATORY.onnx"
+    # Legacy ONNX tracer has no aten::expm1 translation for opset18.
+    # Exact real identity expm1(x)=exp(x)-1; float32 roundoff is assessed
+    # independently against original torch in the runtime parity loop.
+    from torch.onnx import register_custom_op_symbolic
+    def expm1_onnx(graph, x):
+        one = graph.op("Constant", value_t=torch.tensor(1.0, dtype=torch.float32))
+        return graph.op("Sub", graph.op("Exp", x), one)
+    register_custom_op_symbolic("aten::expm1", expm1_onnx, 18)
     torch.onnx.export(
         adapter, tuple(x), str(path), export_params=True,
         opset_version=18, do_constant_folding=True,
@@ -161,6 +169,7 @@ def probe(output_dir):
         "training_performed": False,
         "operator_backend": "ONNX Runtime CPU on GitHub runner, not Android",
         "opset": 18,
+        "expm1_operator": "EXPORT_ONLY_EXP_MINUS_ONE_WITH_FP32_PARITY_CHECK",
         "fixed_shape_B": 1, "fixed_shape_T": 1,
         "export_only_single_step_kernel_specialization": "CHECKED_AGAINST_ORIGINAL_T1_PYTORCH",
         "streaming_steps_parity_checked": 3,
