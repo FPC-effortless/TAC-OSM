@@ -31,6 +31,22 @@ jobs:
           distribution: temurin
           java-version: '17'
       - run: pip install 'numpy==2.3.5'
+      - name: Inspect original public publisher CSV header (no numeric rows printed)
+        run: |
+          python - <<'PY'
+          import zipfile, io, csv
+          from pathlib import Path
+          archive=Path('pinned-me111/research/source-bundles/ME100/PRSA2017_original.zip')
+          with zipfile.ZipFile(archive) as z:
+              names=[x for x in z.namelist() if x.endswith('PRSA_Data_Aotizhongxin_20130301-20170228.csv')]
+              assert len(names)==1
+              with io.TextIOWrapper(z.open(names[0]),encoding='utf-8-sig') as fp:
+                  line=next(fp).rstrip('\\n\\r')
+              header=next(csv.reader([line]))
+              print('ORIGINAL_ME111_CSV_HEADER_BYTES_REPR',repr(line[:300]))
+              print('ORIGINAL_ME111_CSV_HEADER_FIELD_NAMES',repr(header))
+              assert 'year' in header and 'station' in header
+          PY
       - name: Exact real FIT original raw->Java 13-channel mask/age/calendar parity
         run: |
           python scripts/verify_me111_source_input_parity.py \
