@@ -116,6 +116,8 @@ public final class Me111PhysicalBenchmarkAndroidTest {
             assertEquals(state.lastHour, restored.lastHour);
             for (int j = 0; j < 8; j++)
                 assertArrayEquals(state.memory[j], restored.memory[j], 0f);
+            // Dedicated test-only state: do not leave constructed data behind.
+            store.clear();
 
             JSONObject result = new JSONObject();
             result.put("status", "PHYSICAL_ANDROID_LOCAL_CPU_MEASURED");
