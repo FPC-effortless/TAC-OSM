@@ -81,8 +81,8 @@ public final class Me111OriginalFitReplay {
         StringBuilder out = new StringBuilder(160);
         int next;
         while ((next = reader.read()) != -1) {
-            if (next == '\\n') break;
-            if (next == '\\r') continue;
+            if (next == 10) break;
+            if (next == 13) continue;
             if (out.length() >= MAX_LINE_CHARS)
                 throw new IOException("overlong source CSV record");
             out.append((char) next);
