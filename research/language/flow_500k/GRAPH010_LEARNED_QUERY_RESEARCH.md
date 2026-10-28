@@ -62,3 +62,24 @@ Before any assertion that TAC benefits more than the same memory on a stronger m
 Companion `PNDS/LanguageQuery010.lean` adds nine scoped exact-real named theorems for strict-past source eligibility, no future target access, exact-cache priority, no-hit abstention, conditional approximate-only fusion, normalized output, positive and normalized smoothed weighted posterior. The 129-theorem strict audit must be green on the latest commit before it is called verified. These theorems do not prove PyTorch's topK, event queue identity, logsumexp/softmax FP32 gradients, learned model accuracy or user authentication.
 
 **Decision**: Preserve GRAPH009, mark GRAPH010 an untrained research candidate, and do not promote to a commercially differentiated semantic memory engine until genuine FIT and independent source-task results, fair SSM-cache parity, benchmark cost receipts and durable cold checkpoints support that conclusion.
+
+
+## Prior art and differentiation threshold
+
+- **kNN-LM (Khandelwal et al., ICLR 2020)** already combined a pretrained
+  neural model with nearest-neighbor next-token distributions:
+  https://ai.meta.com/research/publications/generalization-through-memorization-nearest-neighbor-language-models/
+  GRAPH010's embedded-context neighbor votes/interpolation are therefore
+  **not a novel semantic retrieval idea by themselves**.
+- **NoLiMa (ICML 2025)** evaluates correct retrieval under little literal
+  overlap: https://proceedings.mlr.press/v267/modarressi25a.html
+  GRAPH010's three-character key mismatch is a much weaker problem; do
+  not pass it off as a semantic-match or long-context reasoning success.
+- **LongMemEval-V2 (2026)** benchmarks real agent experience retrieval,
+  dynamic state, workflow and mistaken-premise awareness. The current
+  100K/500K byte-level models are not qualified to answer those tasks:
+  https://github.com/xiaowu0162/LongMemEval-V2
+
+Potential TAC-owned value must come from actual **cost-normalized, source
+owner/chronology-safe, continual update/retrieval advantages** not already
+supplied by kNN-LM, RAG, exact caches or equally cache-equipped SSMs.
