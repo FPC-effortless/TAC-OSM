@@ -1,4 +1,4 @@
-"""GRAPH015: bounded error-correcting 500K TAC, versioned independent candidate.
+"""GRAPH015: native delta-correcting 500K TAC, prospective independent candidate.
 
 Separate from the original 100,680-parameter checkpoint. Mathematical prototype:
   - native 8x8, two 16x8 source-aligned heads, eight 2D damped waves,
@@ -118,17 +118,21 @@ class Graph015DeltaTAC500K(nn.Module):
         # 8x8 native + 2x16x8 aligned rectangular memories as B*3 scan.
         allkey=torch.cat((key.unsqueeze(2),aligned_key),dim=2)
         alpha=torch.cat((alphabeta[...,0:1],aligned_gates[...,0]),dim=-1)
-        erase=torch.cat((alphabeta[...,1:2],aligned_gates[...,1]),dim=-1)
+        # Reserved aligned erase gate remains trainable through aligned write below.
         write=torch.cat((alphabeta[...,1:2],aligned_gates[...,2]),dim=-1)
         allvalue=torch.cat((F.pad(value,(0,8)).unsqueeze(2),
                             torch.tanh(self.aligned_value(e)).unsqueeze(2).expand(-1,-1,2,-1)),dim=2)
         eye=torch.eye(8,dtype=e.dtype,device=e.device)
-        # GRAPH015: independent retention + delta correction, source-only schedule.
-        # M_t = rho M_prev + beta (v - M_prev @ key) key.T.
-        # Right-affine scan: P=rho I-beta kk.T; Q=beta v k.T.
-        # All coefficient gates are functions of current observed token only.
+        # GRAPH015 versioned learned error-correcting update, old checkpoints unchanged:
+        # M_next = rho*M_prev + beta*(v - M_prev@k)@k.T,
+        # P = rho*I - beta*k*k.T, Q=beta*v*k.T.
+        # With normalized k, 0<beta<=rho<1, ||P||_2<=rho.
+        # No new parameters: the old alpha/write gates are reinterpreted.
+        # All coefficient tensors depend only on the current causal input.
         delta_rho=.995+.004*alpha
-        beta=delta_rho*(.05+.9*write*(.5+.5*erase))
+        erased=torch.cat((alphabeta[...,1:2],aligned_gates[...,1]),dim=-1)
+        # Aligned erasure also contributes, avoiding dead learned coordinates.
+        beta=delta_rho*(.05+.9*write*(.5+.5*erased))
         P=delta_rho[...,None,None]*eye-beta[...,None,None]*allkey.unsqueeze(-1)*allkey.unsqueeze(-2)
         Q=beta[...,None,None]*allvalue.unsqueeze(-1)*allkey.unsqueeze(-2)
         P=torch.where(write_mask[...,None,None,None],P,eye)
