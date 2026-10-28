@@ -109,3 +109,20 @@ def test_500k_exception_exact_study_marker_and_scope():
         module.check_500k_model_size(100000,100000,"invalid_100k_new_scale")
     with pytest.raises(module.ParityError):
         module.check_model_parameter_target(500122,500122,label="other_study")
+
+
+def test_frozen_source_schedule_matches_archived_original_all_five_seeds():
+    import importlib.util
+    import json
+    spec=importlib.util.spec_from_file_location(
+        "langcompare029_sampling_source_match",ROOT/"scripts/langcompare029_sampling.py")
+    sampler=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sampler)
+    plan=sampler.frozen_plan()
+    original=json.loads((ROOT/"research/replay-bundles/LANGTRAIN025/"
+          "LANGTRAIN025_AUTHENTIC_EXPOSED_DEV_RECEIPT.json").read_text())
+    expected={x["seed"]:x["training_samples_sha256"] for x in original["model_runs"]}
+    actual={x["seed"]:x["sample_order_sha256"] for x in plan["by_seed"]}
+    assert actual==expected and len(actual)==5
+    assert original["training_updates"]==plan["training_updates"]==320
+    assert original["predicted_targets_per_seed"]==4096 # DEV exposures stay separated
