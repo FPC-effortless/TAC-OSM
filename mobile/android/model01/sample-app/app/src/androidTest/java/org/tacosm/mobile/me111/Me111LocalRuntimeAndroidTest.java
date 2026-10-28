@@ -205,6 +205,18 @@ public final class Me111LocalRuntimeAndroidTest {
         }
     }
 
+    @Test public void testPhoneBenchmarkRejectsEmulatorBeforeLoadingModel()
+            throws Exception {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        try {
+            Me111DeviceSelfTest.run(context);
+            fail("emulator was presented as an independently measured physical phone");
+        } catch (IllegalStateException expected) {
+            assertTrue("must explicitly reject emulated hardware",
+                       expected.getMessage().contains("emulator refused"));
+        }
+    }
+
     @Test public void testAppHasNoInternetPermission() throws Exception {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         PackageInfo info = context.getPackageManager().getPackageInfo(
