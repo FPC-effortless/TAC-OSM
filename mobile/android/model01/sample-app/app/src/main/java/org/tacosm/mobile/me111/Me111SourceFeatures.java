@@ -93,6 +93,13 @@ public final class Me111SourceFeatures {
         long hour = ChronoUnit.HOURS.between(EPOCH, timestamp);
         if (hour < 0 || hour > 20_000_000 || hour <= history.lastHour)
             throw new IllegalArgumentException("source hours must strictly increase");
+        // The original UCI loader reads the full hourly archive from epoch
+        // zero. Without contiguous prior rows, channel ages cannot be derived
+        // faithfully; refuse an attractive but misleading partial replay.
+        if ((history.lastHour == -1 && hour != 0)
+                || (history.lastHour >= 0 && hour != history.lastHour + 1))
+            throw new IllegalArgumentException(
+                "complete original hourly source history required for exact ages");
 
         float[] raw = new float[Me111Contract.CHANNELS];
         boolean[] observed = new boolean[Me111Contract.CHANNELS];
