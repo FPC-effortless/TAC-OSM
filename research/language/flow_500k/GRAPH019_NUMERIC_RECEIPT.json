@@ -1,0 +1,86 @@
+{
+  "schema": "graph019-five-original-seed-local-replay",
+  "date": "2026-10-28",
+  "model_parameters": 512634,
+  "history_source": "original publisher Vim9.1 30 FIT and six PREVIOUSLY EXPOSED DEV documents",
+  "fit_samples_match_orig": true,
+  "source_doc_sha256_verified": 36,
+  "seed_count": 5,
+  "updates": 120,
+  "horizon_targets_per_seed": {
+    "1": 6144,
+    "4": 6000,
+    "16": 5424
+  },
+  "seeds": [
+    {
+      "seed": 1701,
+      "checkpoint_sha256": "3e0bf10a606d2b9171d9786ce0f9b0b1da3e2294270c0d1565b7f2d63e5016ef",
+      "h1": 2.591302,
+      "h4": 3.493648,
+      "h16": 3.572632
+    },
+    {
+      "seed": 1702,
+      "checkpoint_sha256": "0c1c63c8058364ed2009fbfdede5caafc11704c796ef4156fa204a4db7153dc4",
+      "h1": 2.537933,
+      "h4": 3.51036,
+      "h16": 3.535697
+    },
+    {
+      "seed": 1703,
+      "checkpoint_sha256": "8094576f1fb24188013243a7f6af5698db2b08876dc39ee2e9aa0c299f86c926",
+      "h1": 2.531459,
+      "h4": 3.534477,
+      "h16": 3.671065
+    },
+    {
+      "seed": 1704,
+      "checkpoint_sha256": "850aa7ea5be06d0cc4059b5764eb092b11c184e7b2f257ab71bdafd6a9898f02",
+      "h1": 2.528488,
+      "h4": 3.495183,
+      "h16": 3.530032
+    },
+    {
+      "seed": 1705,
+      "checkpoint_sha256": "25ca5e351c8580da34c14c4febab1500c46fd7e4f30e48f672d27c66113478aa",
+      "h1": 2.563201,
+      "h4": 3.502918,
+      "h16": 3.559962
+    }
+  ],
+  "mean": {
+    "h1": 2.5504767338434857,
+    "h4": 3.50731728515625,
+    "h16": 3.5738774302434777
+  },
+  "old_original_tac_h1": 2.537437987327576,
+  "graph017_joint": {
+    "h1": 2.550267783800761,
+    "h4": 3.5072452718098956,
+    "h16": 3.573828863183306
+  },
+  "practical_fit_reference": {
+    "h4": 2.6755178380453124,
+    "h16": 3.195463240828708
+  },
+  "training_timing_seconds_range": [
+    26.6,
+    30.75
+  ],
+  "gates": {
+    "original_local_checkpoint_replay": "PASS_5_OF_5",
+    "one_step_guard": "FAIL",
+    "h4_practical_reference": "FAIL",
+    "h16_practical_reference": "FAIL",
+    "complete_training_compute_parity": "NOT_ESTABLISHED",
+    "original_git_lfs_binary_replay": "BLOCKED",
+    "independent_test": "NOT_RUN",
+    "architectural_superiority": "NOT_ESTABLISHED"
+  },
+  "limitations": [
+    "trained model bytes user-downloaded and checksum-verified locally, not Git-tracked",
+    "same exposed 6 source documents; do not claim independent evaluation",
+    "source-only CI validates math, not real training results"
+  ]
+}
