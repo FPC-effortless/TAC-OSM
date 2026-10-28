@@ -1,0 +1,111 @@
+{
+  "schema": "GRAPH014_REAL_DEV_500K_PAIRED_CACHE_v1",
+  "date": "2026-10-28",
+  "source": "authentic Vim9.1 original publisher docs (30 FIT/6 exposed DEV); 48 x 128 targets per seed",
+  "evidence_status": "EXPOSED_DEV_ONLY_NOT_ARCHITECTURE_QUALIFIED",
+  "tac_params": 499290,
+  "ssm_params": 498288,
+  "query_params_each": 2816,
+  "training_seed_count": 5,
+  "training_updates_per_seed": 120,
+  "training_batch": 8,
+  "context": 128,
+  "source_hashes_verified": 36,
+  "fit_sample_sha_matches": 5,
+  "cache": {
+    "capacity": 512,
+    "order": 3,
+    "tau": 0.05,
+    "exact_weight": 0.6,
+    "approx_weight": 0.1,
+    "top_k": 8,
+    "temperature": 0.25
+  },
+  "per_seed": [
+    {
+      "seed": 1701,
+      "tac_native": 2.5843178033828735,
+      "ssm_native": 2.5354620615641275,
+      "tac_exact": 2.484399358431498,
+      "ssm_exact": 2.4455858071645102,
+      "tac_both": 2.4822123050689697,
+      "ssm_both": 2.442080815633138,
+      "ssm_checkpoint_sha256": "ad76813538fb29c261fd51905b3178d399ac4f4a9e6ead1ded031848013dc49d",
+      "fit_sample_sha256": "8071294fdc5e89989cca20c868304377b8c1ffeacc3eea4f3f2993de89c316cc"
+    },
+    {
+      "seed": 1702,
+      "tac_native": 2.5255473852157593,
+      "ssm_native": 2.5140302975972495,
+      "tac_exact": 2.424774448076884,
+      "ssm_exact": 2.425402601559957,
+      "tac_both": 2.4315878550211587,
+      "ssm_both": 2.428229649861654,
+      "ssm_checkpoint_sha256": "800b7d744a06ce5bc3efb1ea161c66fdd95714079264715a545ce99ecfe9d9f5",
+      "fit_sample_sha256": "fb6df34f252e7fb7af88dec9dbc6f712d6decf8800d6072fbb2c555912e58ae5"
+    },
+    {
+      "seed": 1703,
+      "tac_native": 2.518691301345825,
+      "ssm_native": 2.526799480120341,
+      "tac_exact": 2.428990284601847,
+      "ssm_exact": 2.4373064438501992,
+      "tac_both": 2.4345404307047525,
+      "ssm_both": 2.43866233030955,
+      "ssm_checkpoint_sha256": "4b037f286187fa2ca2e510ca29a6c6b0b16a84ba9812c370f0868bb24ad79faf",
+      "fit_sample_sha256": "56e7d1836119d4f6faa75083476a8757af46d1a78c03b5c155766e72b9f76ea5"
+    },
+    {
+      "seed": 1704,
+      "tac_native": 2.509428779284159,
+      "ssm_native": 2.4854697386423745,
+      "tac_exact": 2.4212177197138467,
+      "ssm_exact": 2.3991916179656982,
+      "tac_both": 2.42203160127004,
+      "ssm_both": 2.3984456062316895,
+      "ssm_checkpoint_sha256": "876afb927c8974bd56fea64f533f25d1ffdb490e920c44b6ed74c844f0a686aa",
+      "fit_sample_sha256": "e9599e54c248adfe9e4d2ea416daa95ec3bbe5f5dd200bc55bde3fd5b99ee2d0"
+    },
+    {
+      "seed": 1705,
+      "tac_native": 2.549204667409261,
+      "ssm_native": 2.531888564427694,
+      "tac_exact": 2.454916834831238,
+      "ssm_exact": 2.4436415831247964,
+      "tac_both": 2.4591346979141235,
+      "ssm_both": 2.4454684257507324,
+      "ssm_checkpoint_sha256": "b97d71d385bf0bfae64fcd9756bbc9571f2af240d50b54e4fd4b74fae25d7d57",
+      "fit_sample_sha256": "b6248a48961243ac4cfa62d0eff0ef25cbcbee774e86909c9a1525f56914b23f"
+    }
+  ],
+  "means": {
+    "tac_native": 2.537437987327576,
+    "ssm_native": 2.5187300284703573,
+    "tac_exact": 2.4428597291310625,
+    "ssm_exact": 2.4302256107330322,
+    "tac_both": 2.445901377995809,
+    "ssm_both": 2.430577365557353
+  },
+  "routing_per_seed": {
+    "exact": 809,
+    "approx": 5143,
+    "none": 192
+  },
+  "profiling": {
+    "torch_profiler_version": "2.10.0+cpu",
+    "original_tac_counted_op_flops_per_training_step": 3219040344,
+    "new_ssm_counted_op_flops_per_training_step": 2931397376,
+    "partial_coverage": true
+  },
+  "gates": {
+    "authentic_source_local": "PASS",
+    "fit_sample_matched_original": "PASS",
+    "new_ssm_local_fit_and_replay": "PASS",
+    "original_tac_local_replay": "PASS",
+    "equal_cache_local_dev": "PASS",
+    "equal_training_flops": "NOT_ESTABLISHED",
+    "replay_from_clean_github": "BLOCKED",
+    "untouched_test": "NOT_RUN",
+    "architecture_superiority": "NOT_ESTABLISHED"
+  }
+}
