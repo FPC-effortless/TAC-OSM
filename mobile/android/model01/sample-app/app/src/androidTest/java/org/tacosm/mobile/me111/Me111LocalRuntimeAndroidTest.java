@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.RandomAccessFile;
 import java.io.IOException;
 import android.util.AtomicFile;
 import java.io.InputStream;
@@ -159,6 +160,51 @@ public final class Me111LocalRuntimeAndroidTest {
         }
     }
 
+    @Test public void testInRangeStateBitFlipAndUnsignedLegacyFailClosed() throws Exception {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Me111StateStore store = new Me111StateStore(context);
+        store.clear();
+        File path = new File(context.getFilesDir(), "me111-state-v1.bin");
+        try {
+            Me111Contract.State original = Me111Contract.initial(0, 100);
+            store.save(original);
+            assertEquals(Me111StateCodec.BINARY_LENGTH, path.length());
+            assertNotNull(store.load());
+
+            // Flip just ONE lowest-order bit of the FINAL float32 memory cell:
+            // this remains numerically finite/in-range but changes the digest.
+            try (RandomAccessFile file = new RandomAccessFile(path, "rw")) {
+                long offset = file.length() - 33;
+                file.seek(offset);
+                int value = file.readUnsignedByte();
+                file.seek(offset);
+                file.writeByte(value ^ 1);
+            }
+            try {
+                store.load();
+                fail("in-range memory corruption bypassed SHA256 state check");
+            } catch (IOException expected) {
+                assertTrue(expected.getMessage().contains("checksum"));
+            }
+            // Check old unsigned v1 storage cannot be silently loaded as a
+            // fresh/reliable model state; explicit reset is required.
+            byte[] signed = Me111StateCodec.encode(original);
+            try (FileOutputStream output = new FileOutputStream(path)) {
+                output.write(signed, 0, signed.length - 32);
+                output.flush();
+            }
+            try {
+                store.load();
+                fail("unsigned legacy file silently accepted/reset");
+            } catch (IOException expected) { }
+            store.clear();
+            assertNull("only deliberate reset can restore initial-state admission",
+                       store.load());
+        } finally {
+            store.clear();
+        }
+    }
+
     @Test public void testAppHasNoInternetPermission() throws Exception {
         Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
         PackageInfo info = context.getPackageManager().getPackageInfo(
@@ -169,5 +215,7 @@ public final class Me111LocalRuntimeAndroidTest {
         }
         assertEquals(PackageManager.PERMISSION_DENIED,
             context.checkSelfPermission(Manifest.permission.INTERNET));
+        assertEquals("state must never be included in Android cloud backup", 0,
+            info.applicationInfo.flags & android.content.pm.ApplicationInfo.FLAG_ALLOW_BACKUP);
     }
 }
