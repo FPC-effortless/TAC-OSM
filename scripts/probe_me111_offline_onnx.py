@@ -35,6 +35,7 @@ def probe(output_dir):
     import onnx
     import onnxruntime as ort
     from torch import nn
+    import tac_osm.variants.entity_sensor_world as entity
     from tac_osm.variants.entity_sensor_world import EntityEvidenceState
     from tac_osm.variants.conditional_belief_sensor_world import ConditionalBeliefSensorWorld
 
@@ -86,7 +87,34 @@ def probe(output_dir):
         torch.tensor([99], dtype=torch.int64)
     ]
     with torch.no_grad():
-        native = adapter(*x)
+        original_native = adapter(*x)
+
+    # Export-only T=1 exact-algebra specialization. The original source
+    # functions compute (T-1).bit_length() from a symbolic shape and cannot
+    # be traced. Do not modify trained weights or original research source.
+    # Never reuse this adapter for T>1 or to bypass runtime input checks.
+    def diagonal_one_step(a, b, initial):
+        return a * initial[:, None, :] + b
+
+    def associative_one_step(key, value, retention, strength, writable):
+        keep = torch.where(writable, retention, torch.ones_like(retention))
+        beta = torch.where(writable, strength, torch.zeros_like(strength))
+        eye = torch.eye(8, dtype=key.dtype, device=key.device).view(1, 1, 8, 8)
+        outer = key.unsqueeze(-1) * key.unsqueeze(-2)
+        P = keep.unsqueeze(-1) * (eye - beta.unsqueeze(-1) * outer)
+        Q = beta.unsqueeze(-1) * value.unsqueeze(-1) * key.unsqueeze(-2)
+        return P, Q
+
+    def memory_one_step(P, Q, initial):
+        return initial[:, None, :, :] @ P + Q
+
+    entity.diagonal_affine_prefix = diagonal_one_step
+    entity.associative_affine_schedule = associative_one_step
+    entity.work_efficient_affine_prefix = memory_one_step
+    with torch.no_grad():
+        specialized_native = adapter(*x)
+    for original, specialized in zip(original_native, specialized_native):
+        torch.testing.assert_close(original, specialized, rtol=1e-6, atol=1e-6)
     path = output_dir / "ME111_ONE_STEP_EXPLORATORY.onnx"
     torch.onnx.export(
         adapter, tuple(x), str(path), export_params=True,
@@ -134,6 +162,7 @@ def probe(output_dir):
         "operator_backend": "ONNX Runtime CPU on GitHub runner, not Android",
         "opset": 18,
         "fixed_shape_B": 1, "fixed_shape_T": 1,
+        "export_only_single_step_kernel_specialization": "CHECKED_AGAINST_ORIGINAL_T1_PYTORCH",
         "streaming_steps_parity_checked": 3,
         "max_abs_error": abs_error, "max_reference_relative_error": rel_error,
         "per_output_shapes": all_output_shapes,
