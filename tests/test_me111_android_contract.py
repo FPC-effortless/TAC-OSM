@@ -37,8 +37,11 @@ public class Me111ContractHarness {
         ok(initial.memory.length == 8 && initial.evidenceSum.length == 62);
         ok(Me111Contract.MODEL_SHA256.length() == 64);
         reject(() -> Me111Contract.initial(12, 100));
-        reject(() -> Me111Contract.initial(0, 0));
-        reject(() -> event(0, 0));
+        Me111Contract.State originalEpoch = Me111Contract.initial(0, 0);
+        ok(originalEpoch.lastHour == -1);
+        Me111Contract.validateStep(event(0, 0), originalEpoch);
+        reject(() -> Me111Contract.initial(0, -1));
+        reject(() -> event(0, -1));
         reject(() -> event(-1, 100));
         reject(() -> Me111Contract.validateStep(event(1, 100), initial));
         reject(() -> Me111Contract.validateStep(event(0, 99), initial));
