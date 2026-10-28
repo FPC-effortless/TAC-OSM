@@ -41,7 +41,7 @@ jobs:
               names=[x for x in z.namelist() if x.endswith('PRSA_Data_Aotizhongxin_20130301-20170228.csv')]
               assert len(names)==1
               with io.TextIOWrapper(z.open(names[0]),encoding='utf-8-sig') as fp:
-                  line=next(fp).rstrip('\\n\\r')
+                  line=next(fp).strip()
               header=next(csv.reader([line]))
               print('ORIGINAL_ME111_CSV_HEADER_BYTES_REPR',repr(line[:300]))
               print('ORIGINAL_ME111_CSV_HEADER_FIELD_NAMES',repr(header))
