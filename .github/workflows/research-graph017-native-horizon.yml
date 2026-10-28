@@ -1,0 +1,39 @@
+name: GRAPH017 500K direct future horizon operator contracts (constructed tests ONLY)
+on:
+  push:
+    branches: [research/graph017-integrated-native-horizon-2026-10-28]
+  pull_request:
+    paths:
+      - 'research/language/flow_500k/graph017_*'
+      - 'research/language/flow_500k/test_graph017_*'
+      - 'research/language/flow_500k/GRAPH017_*'
+      - '.github/workflows/research-graph017-native-horizon.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-math-no-original-weights:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install reproducible CPU Torch and NumPy
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install numpy==2.3.5
+      - name: Verify source causality, target alignment and all trainable gradient paths
+        working-directory: research/language/flow_500k
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile graph017_native_horizon_tac.py graph017_train_native_horizons.py test_graph017_native_horizon.py
+          python -m unittest -v test_graph017_native_horizon.py
+      - name: Do not confuse constructed tests with model replay or learned skill
+        run: |
+          echo "GRAPH017 genuine exposed DEV five-seed results are negative."
+          echo "CI does NOT have original checkpoint binaries or legally provided publisher source."
+          echo "REPO_REPLAY=BLOCKED; SEALED_TEST=NOT_RUN; NEW_SKILL=NOT_DEMONSTRATED."
