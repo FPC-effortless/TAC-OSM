@@ -53,3 +53,18 @@ class Checks(unittest.TestCase):
    late=a(x[:,128:],start=128,source_ids=('A',),initial_state=state)
   self.assertTrue(torch.allclose(full[:,128:],late,rtol=2e-3,atol=2e-3))
 if __name__=='__main__':unittest.main()
+
+class WraparoundChecks(unittest.TestCase):
+ def test_wraparound_no_cross_slot_erase(self):
+  torch.set_num_threads(2)
+  m=SourceSlotMemory(32,16)
+  x=torch.linspace(-.99,.99,101).view(1,101,1).expand(1,101,16).contiguous()
+  q=torch.arange(101)[None,:]-31
+  q[:,:31]=-1
+  read,st,valid=m.step_chunk(x,start=0,owner_ids=('A',),queries=q)
+  self.assertTrue(torch.equal(read[:,31:],x[:,:70]))
+  self.assertTrue(bool(valid[:,31:].all()))
+  self.assertTrue(bool((st['ordinals'][st['ordinals']>=0]>=69).all()))
+  with self.assertRaisesRegex(ValueError,'strictly past'):
+   m.step_chunk(x[:,:1],start=101,owner_ids=('A',),initial_state=st,
+                queries=torch.tensor([[68]],dtype=torch.long))
