@@ -1,6 +1,8 @@
 package org.tacosm.mobile.model01.demo;
 
 import android.app.Activity;
+import android.content.Intent;
+import org.tacosm.mobile.me111.Me111Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -71,6 +73,11 @@ public final class MainActivity extends Activity {
         scroll.addView(panel);
         setContentView(scroll);
 
+        Button neural = new Button(this);
+        neural.setText("Open frozen 104,663-param TAC neural offline demo");
+        panel.addView(neural);
+        neural.setOnClickListener((View v) ->
+            startActivity(new Intent(this, Me111Activity.class)));
         panel.addView(label("OFFLINE RESEARCH DEMO — original UCI source phase only. "
             + "No independent new-household qualification; predictions are advisory."));
         panel.addView(label("Source-aligned 10-minute step index (not wall-clock time)"));
