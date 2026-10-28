@@ -39,3 +39,18 @@ First proposed physical device: Samsung Galaxy A15 4G (record verified exact mod
 | Independent real-source predictive/calibration suitability | **NOT QUALIFIED / historical ME111 full gate FAILED** |
 
 Never replace missing physical evidence with benchmark estimates, artifact hashes, emulator-only status, or reference source scores. iOS (iPhone 13) and embedded (Raspberry Pi 5 8GB) require separate actual platform builds, input/state boundaries and equivalent physical tests.
+
+## Repeatable on-phone CPU benchmark harness — IMPLEMENTED, NOT RUN
+
+The dedicated Android instrumentation class `org.tacosm.mobile.me111.Me111PhysicalBenchmarkAndroidTest` rejects emulator fingerprints and requires airplane mode before local inference. It uses **constructed numerical observations** to measure hardware CPU costs, not scientific predictive accuracy or source availability.
+
+On a named, authorized physical device connected by ADB, after the frozen-model asset is generated and the APK is built, enable airplane mode in Settings, then run:
+
+```sh
+adb devices -l
+adb shell settings get global airplane_mode_on
+gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111PhysicalBenchmarkAndroidTest
+adb shell run-as org.tacosm.mobile.model01.demo cat files/me111-physical-cpu-benchmark.json
+```
+
+The test records frozen model hashes, real device identity, model-load time, 20 warmups, 150 warm predictions, warm p50/p95/max, total app PSS before/peak, and atomic local state restore. It saves a JSON receipt only to app-private storage. The test leaves explicit **ENERGY=NOT_MEASURED**, independent network trace **NOT_CAPTURED**, radio isolation beyond airplane-mode setting **NOT_INDEPENDENTLY_VERIFIED**, and process restart **NOT_MEASURED**; these require separate independently observed measurements. The physical-only class is excluded from emulator CI.
