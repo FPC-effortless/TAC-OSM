@@ -175,3 +175,16 @@ def test_safe_untrained_model_optimizer_rng_checkpoint_replay():
         create_bytes(model=model,optimizer=optimizer,model_name="tac_context026",
             seed=1701,source_order_sha=receipt["sample_order_sha256"],
             updates=0,diagnostic_only=False)
+
+
+def test_guarded_training_entrypoint_denies_all_unapproved_models_on_cpu():
+    from scripts.langcompare029_train import run,blockers
+    assert "NO_APPROVED_SM80_PLUS_BF16_TWO_GPU_COMPARISON_VENUE" in blockers()
+    assert "FOUR_ARM_PARITY_MANIFEST_MISSING" in blockers()
+    for arm in p.ARM_ORDER:
+        r=run(mode="dry-run",arm=arm,seed=1701)
+        assert r["status"]=="BLOCKED_NO_FIT"
+        assert r["optimizer_steps"]==0 and r["gpu_minutes"]==0
+        assert r["DEV_NLL"]=="NOT_RUN" and r["protected_TEST"]=="NOT_ACCESSED"
+        with pytest.raises(PermissionError,match="no fit permitted"):
+            run(mode="fit",arm=arm,seed=1701)
