@@ -1,0 +1,50 @@
+name: TEMP020 scalar mathematics and original constructor audit
+on:
+  pull_request:
+    paths:
+      - 'src/tac_osm/scalar_calibration.py'
+      - 'tests/test_scalar_calibration.py'
+      - 'scripts/audit_language_parameter_budget.py'
+      - 'research/mathematical-engineering/temperature020/**'
+      - 'research/phone_queue/temperature020.json'
+      - '.github/workflows/scalar-calibration020.yml'
+permissions:
+  contents: read
+jobs:
+  math-and-source-counts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 2aeb631300f1465b5b62e7ffc966f8add8566f81
+          path: original-language-source
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install pytest
+          python -m pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu
+      - name: Reproduce prior compute decision
+        run: |
+          mkdir -p temp020-results
+          python scripts/phone_lab.py plan research/phone_queue/temperature020.json > temp020-results/COMPUTE_DECISION.json
+          cmp temp020-results/COMPUTE_DECISION.json research/mathematical-engineering/temperature020/COMPUTE_DECISION.json
+      - name: Mathematical fixtures and source-constructor counts only
+        run: |
+          python -m pytest -q tests/test_scalar_calibration.py tests/test_research_execution_levels.py tests/test_research_probe_agnostic.py
+          python scripts/audit_language_parameter_budget.py --original-root original-language-source --output temp020-results/PARAMETER_AUDIT.json
+          cmp temp020-results/PARAMETER_AUDIT.json research/mathematical-engineering/temperature020/PARAMETER_AUDIT.json
+          python scripts/check_temperature020_reference.py > temp020-results/REFERENCE.json
+          echo 'Engineering math/source counts only; original-language calibration BLOCKED, real score NOT RUN; no TEST/GPU/training.' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: temperature020-engineering-only
+          path: temp020-results/
