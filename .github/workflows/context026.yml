@@ -1,0 +1,123 @@
+name: CONTEXT026 source mathematics, original Git archival and cold replay
+on:
+  pull_request:
+    paths:
+      - 'research/mathematical-engineering/context026/**'
+      - 'research/phone_queue/context026.json'
+      - 'scripts/preserve_langtrain025.py'
+      - 'scripts/audit_context026_fit.py'
+      - 'scripts/check_context026_reference.py'
+      - 'tests/test_context_transition026.py'
+      - '.github/workflows/context026.yml'
+permissions:
+  contents: read
+jobs:
+  engineering:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      PYTHONPATH: src
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install pytest numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Plan and no-fit source/model graph checks
+        run: |
+          mkdir -p context026-results
+          python scripts/phone_lab.py plan research/phone_queue/context026.json > context026-results/PLAN.json
+          cmp context026-results/PLAN.json research/mathematical-engineering/context026/COMPUTE_DECISION.json
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/context026/FAIR_COMPARISON.json --phase preflight
+          python -m pytest -q tests/test_context_transition026.py tests/test_research_probe_agnostic.py
+          python scripts/audit_context026_fit.py --output context026-results/FIT_SOURCE_AUDIT.json
+          python scripts/check_context026_reference.py > context026-results/REFERENCE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: context026-no-fit-source-math
+          path: context026-results/
+  archive-originals:
+    if: github.head_ref == 'research/context-key026-math-engineering-2026-10-28' && github.event.pull_request.head.repo.full_name == github.repository
+    needs: engineering
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      actions: read
+    outputs:
+      commit: ${{ steps.preserve.outputs.commit }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Verify original run/artifact and preserve exact bytes on this draft only
+        id: preserve
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12846836297 > /tmp/archival-metadata.json
+          gh api repos/FPC-effortless/TAC-OSM/actions/runs/40756443660 > /tmp/original-run.json
+          python - <<'PY'
+          import json
+          a=json.load(open('/tmp/archival-metadata.json'));r=json.load(open('/tmp/original-run.json'))
+          assert a['id']==12846836297 and not a['expired']
+          assert a['digest']=='sha256:87ebc3e69dbf0526d8093b264c37fe0e6c8a65ff04c10c4f66b7bfe8233e31e5'
+          assert a['workflow_run']['id']==40756443660
+          assert r['status']=='completed' and r['conclusion']=='success'
+          assert r['head_sha']=='d55b32a2a34f6b5418adb0ae91f396f9fd725b11'
+          PY
+          gh api repos/FPC-effortless/TAC-OSM/actions/artifacts/12846836297/zip > /tmp/original025.zip
+          python scripts/preserve_langtrain025.py --archive /tmp/original025.zip --destination research/replay-bundles/LANGTRAIN025
+          git add -f research/replay-bundles/LANGTRAIN025
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Preserve five original LANGTRAIN025 model optimizer RNG binaries and receipt'
+            git push origin HEAD:refs/heads/research/context-key026-math-engineering-2026-10-28
+          fi
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  cold-git-replay:
+    needs: archive-originals
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.archive-originals.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Original source-locked five-seed Git checkpoint replay; no retraining
+        run: |
+          mkdir -p context026-cold-replay
+          python scripts/phone_lab.py plan research/phone_queue/context026.json > context026-cold-replay/PLAN.json
+          python research/replication/langtrain025/replay_new_byte_checkpoints.py --artifact-dir research/replay-bundles/LANGTRAIN025 --output context026-cold-replay/GIT_REPLAY.json
+          python - <<'PY'
+          import json,math
+          r=json.load(open('context026-cold-replay/GIT_REPLAY.json'))
+          assert r['new_trained_weights_checked']==5
+          assert math.isfinite(r['native_mean_NLL']) and abs(r['native_mean_NLL']-2.099349221)<1e-6
+          assert math.isfinite(r['same_case_P3_NLL']) and abs(r['same_case_P3_NLL']-1.877306112)<1e-6
+          assert r['model_vs_P3_decision']=='FAIL_0_OF_5_SEEDS'
+          assert all(math.isfinite(x['replayed_DEV_NLL']) for x in r['seeds'])
+          PY
+          git diff --exit-code -- research/replay-bundles/LANGTRAIN025 research/source-bundles
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: langtrain025-cold-GIT-original-replay
+          path: context026-cold-replay/

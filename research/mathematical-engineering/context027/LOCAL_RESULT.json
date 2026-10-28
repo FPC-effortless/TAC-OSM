@@ -1,0 +1,120 @@
+{
+  "status": "PASS_FULL_FORWARD_AND_PARAMETER_VJP_NUMERICAL_CASES_ONLY",
+  "local_receipt_sha256": "205a0c6005456d72f1d85e80765ed818f819104c943a3a3105ddc64a52679d10",
+  "full_receipt": "CI artifact CONTEXT027-full-graph-correspondence; local /tmp/CONTEXT027_ISOLATION_GRAPH.json",
+  "parameter_tensors_checked": 42,
+  "authentic_fit_documents": 14,
+  "cases": 52,
+  "seed": 26027,
+  "trained": false,
+  "gradient_source": "label-blind deterministic sine-weighted full-logit scalar",
+  "precisions": {
+    "float64": {
+      "cases": 26,
+      "max_forward_error": 1.0547118733938987e-15,
+      "max_parameter_vjp_error": 2.6020852139652106e-18,
+      "max_tolerance_scaled_error": 3.5027047827623497e-06
+    },
+    "float32": {
+      "cases": 26,
+      "max_forward_error": 2.682209014892578e-07,
+      "max_parameter_vjp_error": 1.280568540096283e-09,
+      "max_tolerance_scaled_error": 0.00199133506976068
+    }
+  },
+  "controls": [
+    {
+      "implementation": "source",
+      "other_owner_poison": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      },
+      "owner": {
+        "max_abs": 4.996003610813204e-16,
+        "scaled_error": 2.4458719528337287e-06
+      },
+      "owners": [
+        "Doc/howto/unicode.rst",
+        "Doc/tutorial/appendix.rst"
+      ],
+      "precision": "float64",
+      "prefix": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      }
+    },
+    {
+      "implementation": "reference",
+      "other_owner_poison": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      },
+      "owner": {
+        "max_abs": 3.3306690738754696e-16,
+        "scaled_error": 2.420694668195458e-06
+      },
+      "owners": [
+        "Doc/howto/unicode.rst",
+        "Doc/tutorial/appendix.rst"
+      ],
+      "precision": "float64",
+      "prefix": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      }
+    },
+    {
+      "implementation": "source",
+      "other_owner_poison": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      },
+      "owner": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      },
+      "owners": [
+        "Doc/howto/unicode.rst",
+        "Doc/tutorial/appendix.rst"
+      ],
+      "precision": "float32",
+      "prefix": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      }
+    },
+    {
+      "implementation": "reference",
+      "other_owner_poison": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      },
+      "owner": {
+        "max_abs": 1.4901161193847656e-07,
+        "scaled_error": 0.0010891412384808064
+      },
+      "owners": [
+        "Doc/howto/unicode.rst",
+        "Doc/tutorial/appendix.rst"
+      ],
+      "precision": "float32",
+      "prefix": {
+        "max_abs": 0.0,
+        "scaled_error": 0.0
+      }
+    }
+  ],
+  "limits": [
+    "full Lean input-to-logit graph/proofs",
+    "global IEEE error bounds",
+    "formal AD proof",
+    "trained memory utility",
+    "parameter/data/compute matched SSM",
+    "new fit authorization"
+  ],
+  "tests": {
+    "full_suite": "1310 passed,4 skipped",
+    "focused_after_count_fix": "79 passed",
+    "initial_full_suite": "1 failed (mutable test-count documentation),1309 passed,4 skipped; fixed current1314, historical327 unchanged"
+  }
+}
