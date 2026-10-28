@@ -1,3 +1,27 @@
+## CPU-only 500K language pilot amendment (2026-10-28)
+
+The owner explicitly requested dropping Mamba-3 from the currently active
+benchmark and running TAC-OSM, official BDH and the causal Transformer on
+GitHub Actions CPU runners. Only `LANGCOMPARE030`, with
+`parameter_budget_contract: owner-2026-10-28-500k`, may use the 500K
+language-model parameter band for these **three separately labeled
+single-model exploratory internal research fits**. All three instantiated
+trainable/deployed model counts must fall within 475K–525K and the
+three-arm gap must be <=1%; no unused/dummy padding. This does not change
+the existing LANGTRAIN025/LANGCOMPARE029 rule or the default 100K
+constraint for other new families.
+
+Initial preregistered pilot: seed 1701, 16 updates, batch 8, next 128
+original bytes, same archived source sampling and authorized FIT/DEV
+partitions. CPU runtime and trained-predictor numerical scores may be
+measured but **unknown/mismatched FLOPs prohibits architectural
+superiority**. This pilot uses `study_type: single_model_training` and
+`no_architecture_superiority_claim: true`, rather than claiming full
+four-arm architectural matched-compute comparability. Keep the earlier
+untrained 4-arm record and all original trained failures immutable.
+The 4 DEV files are already exposed and are never a protected TEST;
+no safety, product, or model promotion claim is permitted.
+
 ## Narrow language-model scale amendment (2026-10-28)
 
 The owner-directed language-model benchmark `LANGCOMPARE029` compares the
