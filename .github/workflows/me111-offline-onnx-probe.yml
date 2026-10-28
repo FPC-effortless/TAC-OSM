@@ -38,3 +38,14 @@ jobs:
           path: /tmp/me111-export-probe/FEASIBILITY.json
           if-no-files-found: warn
           retention-days: 14
+      - name: Preserve exact exported ONNX model and operator inventory (research only)
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: me111-original-100k-onnx-cpu-unqualified
+          path: |
+            /tmp/me111-export-probe/ME111_ONE_STEP_EXPLORATORY.onnx
+            /tmp/me111-export-probe/OPERATORS.json
+            /tmp/me111-export-probe/FEASIBILITY.json
+          if-no-files-found: error
+          retention-days: 7
