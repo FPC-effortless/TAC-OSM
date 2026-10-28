@@ -1,0 +1,26 @@
+plugins {
+    id 'com.android.application'
+}
+android {
+    namespace 'org.tacosm.mobile.model01.demo'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'org.tacosm.mobile.model01.demo'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '0.1-dev'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    sourceSets.main.java.srcDir("$buildDir/generated/source/model01/java")
+}
+// Take the *same generated frozen model* as the host JVM parity checks.
+// The Android APK cannot silently replace training weights.
+tasks.register('copyPinnedModel', Copy) {
+    from("$rootDir/../Model01OfflinePredictor.java")
+    into("$buildDir/generated/source/model01/java/org/tacosm/mobile/model01")
+}
+tasks.named('preBuild') { dependsOn('copyPinnedModel') }

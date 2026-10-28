@@ -1,0 +1,63 @@
+name: Model01 Android APK offline-permission build (NO DEVICE)
+on:
+  push:
+    branches:
+      - product/model01-android-offline-export-20261028
+    paths:
+      - 'mobile/android/model01/**'
+      - '.github/workflows/model01-android-apk.yml'
+  pull_request:
+    paths:
+      - 'mobile/android/model01/**'
+      - '.github/workflows/model01-android-apk.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  android-debug-apk-no-internet-permission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Verify preinstalled Android SDK on GitHub Ubuntu runner
+        run: |
+          test -d "$ANDROID_HOME" || exit 2
+          test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" || exit 2
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --list_installed
+      - name: Install Android SDK platform/build tools (build only)
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-35' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - name: Compile offline demo APK with locally embedded original fixed model
+        run: gradle -p mobile/android/model01/sample-app :app:assembleDebug --no-daemon
+      - name: Fail if merged APK contains INTERNET permission
+        run: |
+          APK=mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
+          test -s "$APK"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump permissions "$APK" | tee /tmp/model01-permissions.txt
+          if grep -q 'android.permission.INTERNET' /tmp/model01-permissions.txt; then
+            echo 'OFFLINE_APK_PERMISSION=FAIL'
+            exit 2
+          fi
+          echo 'OFFLINE_APK_PERMISSION=PASS (not physical airplane-mode evidence)'
+      - name: Debug APK artifact — not production approval
+        uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: model01-android-debug-unqualified-apk
+          path: mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 7
+      - name: Explicit physical gate
+        if: always()
+        run: |
+          echo 'APK_BUILD=CHECK_JOB_CONCLUSION'
+          echo 'PHYSICAL_ANDROID=NOT_RUN'
+          echo 'AIRPLANE_MODE=NOT_RUN'
+          echo 'ENERGY_RAM_P50_P95=NOT_RUN'
+          echo 'INDEPENDENT_SCIENTIFIC_QUALIFICATION=NOT_QUALIFIED'
