@@ -1,0 +1,81 @@
+{
+  "schema": "graph015-test001-cmake-first-open-v1",
+  "preregistration_commit": "e2dc905786d0b3a4299b0a8b175939a0326fb518",
+  "initial_file_results_sha256": "72ec468d2525d43aab8f537116415066ca3dfec04a462039a9967072b3e66ea5",
+  "source": "Kitware CMake 3.31.6 installed original CMake RST manuals; 8 fixed files, 8 windows/file, 128 targets/window",
+  "source_license": "Debian cmake-data copyright CMake main BSD-3-clause",
+  "source_count": 8,
+  "targets_per_seed_per_architecture": 8192,
+  "seeds": [
+    1701,
+    1702,
+    1703,
+    1704,
+    1705
+  ],
+  "model_type": "frozen historical old TAC / prospective 500K delta TAC / new 500K SSM",
+  "active_params": {
+    "old_tac": 499290,
+    "delta_tac": 499290,
+    "new_ssm": 498288
+  },
+  "source_sha256": {
+    "cmake-buildsystem.7.rst": "43a59fc95e9b85327dcc32732664ce3d899ea0f7393b7ab6a7dbad63d0917982",
+    "cmake-compile-features.7.rst": "961b4fc5c202d8c1230a75b1ff07fa724693d9381dd59244daa722ca0adbbd65",
+    "cmake-configure-log.7.rst": "3eda1853943ca5096ab7b8bd867d46287091940803496e1eb8a93e1045b7459e",
+    "cmake-developer.7.rst": "057e73143bf5b746fc240e75c94bf7c7db934fa00d58c5fb16a4db3c3e8be363",
+    "cmake-file-api.7.rst": "d2dbd5907e294169231336e07439b15ae68b0473fe776281dc7b53cac1d0111b",
+    "cmake-generator-expressions.7.rst": "2c1cc52ab08b5d1b8939d461b592643449c7507f9a7c819a8a62cf50165502c9",
+    "cmake-language.7.rst": "6151c106f1a9f90562674c085f1795d8eaaadb365b86427498808614f33eb1df",
+    "cmake-packages.7.rst": "3522aad1233e5263aa1d59b6ef5925939d3f3714f5550f66404f58ceca7ed502c9"
+  },
+  "average_nll": {
+    "old_tac": {
+      "native": 3.022614485025406,
+      "exact": 2.8122678697109222,
+      "both": 2.755119562149048
+    },
+    "delta_tac": {
+      "native": 3.0323465168476105,
+      "exact": 2.822099673748016,
+      "both": 2.765930050611496
+    },
+    "new_ssm": {
+      "native": 2.9582023322582245,
+      "exact": 2.770573544502258,
+      "both": 2.716341072320938
+    }
+  },
+  "native_metrics": {
+    "old_tac": {
+      "brier": 0.8611104220151902,
+      "accuracy": 0.280078125
+    },
+    "delta_tac": {
+      "brier": 0.8635335668921471,
+      "accuracy": 0.2731689453125
+    },
+    "new_ssm": {
+      "brier": 0.8568733721971512,
+      "accuracy": 0.2943603515625
+    }
+  },
+  "native_delta_minus_old_tac_mean": 0.009732031822204501,
+  "seed_direction_improved_count": 1,
+  "document_direction_improved_count": 0,
+  "descriptive_two_level_bootstrap_95pct": [
+    0.0008584976196289063,
+    0.01749719977378845
+  ],
+  "native_delta_precommitted_win": false,
+  "first_open_source_exposure_now": "EXPOSED_DO_NOT_RETUNE",
+  "gates": {
+    "fit_source_and_models_frozen": "LOCALLY_VERIFIED",
+    "publisher_source_sha256": "8_8_LOCALLY_VERIFIED",
+    "strict_training_flops": "NOT_ESTABLISHED",
+    "independent_clean_github_original_checkpoint_replay": "BLOCKED",
+    "third_party_source_and_test_attestation": "NOT_AVAILABLE",
+    "architecture_superiority": "NOT_ESTABLISHED",
+    "new_native_skill": "NOT_DEMONSTRATED"
+  }
+}
