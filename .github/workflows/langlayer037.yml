@@ -1,0 +1,136 @@
+name: LANGLAYER037 original-source CPU FFN-only depth controls 320x5
+on:
+  pull_request:
+    paths:
+      - "scripts/langlayer037_cpu_fit.py"
+      - "scripts/langlayer037_aggregate.py"
+      - "research/mathematical-engineering/langlayer037/**"
+      - "research/phone_queue/langlayer037.json"
+      - "tests/test_langlayer037.py"
+      - ".github/workflows/langlayer037.yml"
+      - "scripts/validate_research_parity.py"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-source-ffn-fits:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [tac_ffn2, tac_ffn3]
+        seed: [1701,1702,1703,1704,1705]
+    env:
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      CUDA_VISIBLE_DEVICES: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Pinned PyTorch CPU and scientific test runtime
+        run: |
+          python -m pip install numpy==2.3.5 pytest==8.4.2
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Original source, 500K scope, counts, causal/gradient test and frozen FIT plan
+        run: |
+          set -eo pipefail
+          mkdir -p langlayer037-results
+          PYTHONPATH=src:. python scripts/phone_lab.py plan research/phone_queue/langlayer037.json | tee langlayer037-results/PLAN.json
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langlayer037/FAIR_COMPARISON.json --phase preflight | tee langlayer037-results/PREFLIGHT.json
+          PYTHONPATH=src:. python -m pytest -q tests/test_langlayer037.py
+          PYTHONPATH=src:. python - <<'PY'
+          import json
+          from scripts.langlayer035_sampling import fit_sources,schedule_receipt
+          fit=fit_sources()
+          assert len(fit)==14
+          r=schedule_receipt(fit,1701,steps=320)
+          assert r["examples_seen"]==2560 and r["next_byte_targets_seen"]==327680
+          m=json.load(open("research/mathematical-engineering/langlayer037/FAIR_COMPARISON.json"))
+          assert m["study_type"]=="single_model_training" and m["study_id"]=="LANGLAYER037"
+          assert m["no_architecture_superiority_claim"] and len(m["models"])==10
+          PY
+      - name: Actual 320-step genuine FIT CPU model, protected TEST sealed
+        run: |
+          PYTHONPATH=src:. python scripts/langlayer037_cpu_fit.py \
+            --arm ${{ matrix.arm }} --seed ${{ matrix.seed }} --steps 320 \
+            --out "langlayer037-results/${{ matrix.arm }}_seed${{ matrix.seed }}"
+      - name: Validate each actual trained checkpoint, original RNG replay and exposed DEV
+        run: |
+          PYTHONPATH=src:. python - <<'PY'
+          import hashlib,json,glob
+          receipts=glob.glob("langlayer037-results/*/FIT_AND_EXPOSED_DEV_RECEIPT.json")
+          assert len(receipts)==1
+          r=json.load(open(receipts[0]))
+          assert r["study"]=="LANGLAYER037" and r["updates"]==320
+          assert r["target_bytes_seen"]==327680 and r["parameters"]["trainable"]==r["parameters"]["deployed"]
+          assert r["checkpoint_reloaded_identical_scored_DEV"] is True
+          assert r["DEV_EXPOSED_4096_ONLY"]["n"]==4096
+          assert r["matched_training_FLOPs"]=="NOT_VERIFIED"
+          assert r["GPU_minutes"]==0 and r["protected_TEST"]=="NOT_ACCESSED"
+          cps=glob.glob("langlayer037-results/*/*.pt")
+          assert len(cps)==1
+          assert hashlib.sha256(open(cps[0],"rb").read()).hexdigest()==r["checkpoint_sha256"]
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER037-CPU-${{ matrix.arm }}-seed${{ matrix.seed }}
+          path: langlayer037-results/
+          retention-days: 90
+          if-no-files-found: warn
+  aggregate-verified-cohort:
+    needs: real-source-ffn-fits
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install numpy==2.3.5
+      - name: Download every original trained checkpoint and frozen 15-seed reference
+        run: |
+          set -euo pipefail
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM --pattern "LANGLAYER037-CPU-*" --dir new-results
+          gh run download 40786118546 -R FPC-effortless/TAC-OSM --name "LANGLAYER035-verified-full-cohort-summary" --dir historical
+          mapfile -t old < <(find historical -name RESULTS.json -type f)
+          test "${#old[@]}" -eq 1
+          echo "OLD_RESULTS=${old[0]}" >> "$GITHUB_ENV"
+      - name: Validate 10 checkpoint hashes and independent source pairing before scores
+        run: |
+          set -eo pipefail
+          PYTHONPATH=src:. python scripts/langlayer037_aggregate.py \
+            --results new-results --original "$OLD_RESULTS" \
+            --output langlayer037-summary/RESULTS.json | tee langlayer037-summary.log
+      - name: Publish five-seed NLL and CPU evidence with unmatched FLOP caveat
+        run: |
+          python - <<'PY'
+          import json,os
+          m=json.load(open("langlayer037-summary/RESULTS.json"))
+          with open(os.environ["GITHUB_STEP_SUMMARY"],"a") as f:
+              print("# LANGLAYER037 original publisher-data FFN depth control",file=f)
+              print("Ten 320-update authentic CPython CPU jobs. Already exposed DEV only; no TEST. Training FLOPs not verified matched.",file=f)
+              print("| FFN arm | Parameters | Mean NLL ↓ | PPL ↓ | Top1 ↑ | CPU s |",file=f)
+              print("|---|---:|---:|---:|---:|---:|",file=f)
+              for k,v in m["mean_per_model"].items():
+                  print(f'| {k} | {v["parameter_count"]} | {v["nll_mean"]:.6f} | {v["perplexity_mean"]:.3f} | {100*v["top1_mean"]:.2f}% | {v["cpu_process_seconds_mean"]:.1f} |',file=f)
+                  for old,diff in m["paired_reference_differences"][k].items():
+                      print(f'  * {k} minus {old}: {diff["mean_ffn_minus_reference_nll"]:+.6f} NLL; {diff["ffn_wins"]}/5 seed wins (exploratory)',file=f)
+              print("No architecture superiority certified; all original checkpoint evidence preserved.",file=f)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER037-original-source-full-cohort
+          path: langlayer037-summary/
+          retention-days: 90
