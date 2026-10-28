@@ -10,6 +10,7 @@ android {
         targetSdk 35
         versionCode 1
         versionName '0.1-dev'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -28,6 +29,8 @@ tasks.named('preBuild') { dependsOn('copyPinnedModel', 'verifyFrozenTacOnnx') }
 dependencies {
     // Included as an APK-native local CPU runtime. Never fetched on user devices.
     implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.23.2'
+    androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
 }
 
 // Shipping an APK without the EXACT frozen trained TAC graph must fail the build.
