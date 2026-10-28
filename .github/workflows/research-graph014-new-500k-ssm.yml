@@ -1,0 +1,37 @@
+name: GRAPH014 prospective 500K SSM mathematics and source contracts
+on:
+  push:
+    branches: [research/graph014-500k-ssm-matched-source-2026-10-28]
+  pull_request:
+    paths:
+      - 'research/language/flow_500k/graph014_*'
+      - 'research/language/flow_500k/test_graph014_*'
+      - '.github/workflows/research-graph014-new-500k-ssm.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mathematical-software-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install CPU Torch NumPy
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install numpy==2.3.5
+      - name: Verify 498288 active params, causal scan, serial gradients, numerical conservation
+        working-directory: research/language/flow_500k
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile graph014_selective_ssm_500k.py graph014_train_real_ssm_500k.py test_graph014_selective_ssm_500k.py
+          python -m unittest -v test_graph014_selective_ssm_500k.py
+      - name: Clearly flag archive-dependent original checkpoint replay as blocked
+        run: |
+          echo "GRAPH014 original checkpoint binaries and authenticated source are NOT in CI"
+          echo "No training or real DEV performance claim is made by this workflow"
