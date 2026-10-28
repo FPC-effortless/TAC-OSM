@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -91,10 +93,53 @@ public final class Me111OriginalFitReplay {
         return out.toString();
     }
 
+    private static String[] parsePublisherCsvRow(String line) throws IOException {
+        // Original UCI PRSA files quote headers and source fields, including
+        // "year". String.split(",") would retain quotes and reject the
+        // authentic publisher schema. Use a bounded RFC4180-style row parser.
+        if (line == null || line.length() > MAX_LINE_CHARS)
+            throw new IOException("missing or oversized PRSA CSV line");
+        List<String> fields = new ArrayList<>();
+        StringBuilder value = new StringBuilder();
+        boolean inQuoted = false;
+        boolean closedQuote = false;
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+            if (inQuoted) {
+                if (c == '"') {
+                    if (i + 1 < line.length() && line.charAt(i + 1) == '"') {
+                        value.append('"');
+                        i++;
+                    } else {
+                        inQuoted = false;
+                        closedQuote = true;
+                    }
+                } else {
+                    value.append(c);
+                }
+            } else if (c == ',') {
+                fields.add(value.toString());
+                value.setLength(0);
+                closedQuote = false;
+            } else if (c == '"') {
+                if (value.length() != 0 || closedQuote)
+                    throw new IOException("unexpected quote inside PRSA CSV field");
+                inQuoted = true;
+            } else {
+                if (closedQuote)
+                    throw new IOException("trailing characters after quoted CSV field");
+                value.append(c);
+            }
+        }
+        if (inQuoted) throw new IOException("unterminated quoted PRSA CSV field");
+        fields.add(value.toString());
+        return fields.toArray(new String[0]);
+    }
+
     private static Map<String, Integer> header(String line) throws IOException {
         if (line == null || line.length() > MAX_LINE_CHARS)
             throw new IOException("missing/oversized original PRSA CSV header");
-        String[] cells = line.replace("\uFEFF", "").split(",", -1);
+        String[] cells = parsePublisherCsvRow(line.replace("\uFEFF", ""));
         Map<String, Integer> columns = new HashMap<>();
         Set<String> seen = new HashSet<>();
         for (int i = 0; i < cells.length; i++) {
@@ -143,10 +188,9 @@ public final class Me111OriginalFitReplay {
         int rowWidth = columns.size();
         for (int i = 0; i < EVENTS; i++) {
             String line = boundedLine(reader);
-            if (line == null || line.isEmpty() || line.length() > MAX_LINE_CHARS
-                    || line.indexOf('"') >= 0)
+            if (line == null || line.isEmpty() || line.length() > MAX_LINE_CHARS)
                 throw new IOException("missing/unsupported original hourly FIT row " + i);
-            String[] cells = line.split(",", -1);
+            String[] cells = parsePublisherCsvRow(line);
             if (cells.length != rowWidth)
                 throw new IOException("PRSA CSV row width mismatch");
             String station = cell(cells, columns, "station");
