@@ -1,0 +1,32 @@
+name: TEMP023 no-unpickle original transfer intake software contracts
+on:
+  pull_request:
+    paths:
+      - 'scripts/audit_temp023_original_transfer.py'
+      - 'tests/test_temp023_original_transfer_intake.py'
+      - 'research/mathematical-engineering/temperature023/**'
+      - '.github/workflows/temp023-original-transfer-intake.yml'
+  push:
+    branches: [research/temp023-transfer-intake-2026-10-28]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-only-safe-transfer-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Syntax-check original archive intake
+        run: python -m py_compile scripts/audit_temp023_original_transfer.py tests/test_temp023_original_transfer_intake.py
+      - name: Fail-closed archive safety and false-authorization regression
+        run: python -m unittest -v tests/test_temp023_original_transfer_intake.py
+      - name: State original checkpoint scientific gate truthfully
+        run: |
+          echo "Constructed software safety tests only. NO original ZIP in Git, no publisher docs, no model inference."
+          echo "ORIGINAL_LOCAL_SEPARATE_PROCESS_REPLAY=PASS_FROM_SEPARATE_WORKSPACE_RECEIPT"
+          echo "THIS_GITHUB_RUN_ORIGINAL_REPLAY=NOT_RUN; PUBLICATION_RIGHTS=PENDING; GIT_COLD_REPLAY=BLOCKED"
+          echo "NO new model, GPU training, protected TEST, or capability claim."
