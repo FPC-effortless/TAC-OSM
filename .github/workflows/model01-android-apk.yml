@@ -8,6 +8,7 @@ on:
       - 'tests/test_me111_android_contract.py'
       - 'scripts/create_me111_android_host_fixture.py'
       - 'scripts/verify_me111_256step_cpu.py'
+      - 'scripts/create_me111_android_256step_fixture.py'
       - '.github/workflows/model01-android-apk.yml'
   pull_request:
     paths:
@@ -77,6 +78,11 @@ jobs:
           python scripts/create_me111_android_host_fixture.py \
             --source-root pinned-me111 \
             --output mobile/android/model01/sample-app/app/src/main/assets/me111_reference_vectors.json
+      - name: Generate 2-owner 256-event original PyTorch Android JNI oracle
+        run: |
+          python scripts/create_me111_android_256step_fixture.py \
+            --source-root pinned-me111 \
+            --output mobile/android/model01/sample-app/app/src/androidTest/assets/me111_256_reference_vectors.json
       - name: Verify pure-Java typed source and recurrent-state guards
         run: python -m unittest discover -s tests -p test_me111_android_contract.py -v
       - name: Verify preinstalled Android SDK
@@ -143,7 +149,8 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect -no-snapshot -memory 2048
           # Emulator tests only; physical benchmark class requires real hardware.
-          script: gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111LocalRuntimeAndroidTest
+          # Only emulator tests; physical-only benchmarking remains explicitly excluded.
+          script: gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111LocalRuntimeAndroidTest,org.tacosm.mobile.me111.Me111LongStreamAndroidTest
       - name: Preserve Android instrumentation and emulator diagnostic evidence
         uses: actions/upload-artifact@v4
         if: always()
