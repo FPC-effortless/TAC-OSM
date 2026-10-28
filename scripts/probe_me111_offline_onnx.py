@@ -65,17 +65,18 @@ def probe(output_dir):
                       count, memory, owners, last_hour, id(self.m), self.m.versions())
             forecast, next_state = self.m(
                 values, observed, ages, clock, owners, hours, state=state)
+            chronology_ok = hours[:, 0] > last_hour
             return (forecast.log_location, forecast.left_scale, forecast.right_scale,
                     next_state.source_sum, next_state.source_mass,
                     next_state.evidence_sum, next_state.count,
-                    next_state.memory, next_state.last_hour)
+                    next_state.memory, next_state.last_hour, chronology_ok)
 
     adapter = OneStep(model).eval()
     names = ["values", "observed", "ages", "clock", "owners", "hours",
              "source_sum", "source_mass", "evidence_sum", "count", "memory", "last_hour"]
     output_names = ["log_location", "left_scale", "right_scale",
                     "next_source_sum", "next_source_mass", "next_evidence_sum",
-                    "next_count", "next_memory", "next_last_hour"]
+                    "next_count", "next_memory", "next_last_hour", "chronology_ok"]
     x = [
         torch.zeros(1, 1, 13), torch.ones(1, 1, 13, dtype=torch.bool),
         torch.zeros(1, 1, 13), torch.zeros(1, 1, 6),
@@ -154,13 +155,15 @@ def probe(output_dir):
             })
             for name, expected, got in zip(output_names, native, actual):
                 target = expected.detach().numpy()
-                if name in ("next_count", "next_last_hour"):
+                if name in ("next_count", "next_last_hour", "chronology_ok"):
                     np.testing.assert_array_equal(got, target)
                 else:
                     np.testing.assert_allclose(got, target, rtol=2e-4, atol=2e-5)
                     abs_error = max(abs_error, float(np.max(np.abs(got - target))))
                     rel_error = max(rel_error, float(np.max(np.abs(got - target) / (np.abs(target) + 1e-6))))
                 all_output_shapes[name] = list(got.shape)
+                if name == "chronology_ok" and not bool(np.all(got)):
+                    raise RuntimeError("streaming chronology check failed")
     return {
         "status": "HOST_ONNX_CPU_EXPLORATORY_PASS",
         "original_checkpoint_sha256": EXPECTED_SHA256,
