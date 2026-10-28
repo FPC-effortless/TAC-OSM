@@ -19,6 +19,14 @@ from graph014_selective_ssm_500k import SelectiveDiagonalSSM500K
 
 ARCHIVE_SHA256="cde9a91be40a4e613975c0bd8caa4c19ac24e3d1d0e993db5cacfbd002fecc32"
 SAMPLE_SEEDS=(1701,1702,1703,1704,1705)
+ORIGINAL_TAC_FIT_SAMPLE_SHA256={
+    1701: "8071294fdc5e89989cca20c868304377b8c1ffeacc3eea4f3f2993de89c316cc",
+    1702: "fb6df34f252e7fb7af88dec9dbc6f712d6decf8800d6072fbb2c555912e58ae5",
+    1703: "56e7d1836119d4f6faa75083476a8757af46d1a78c03b5c155766e72b9f76ea5",
+    1704: "e9599e54c248adfe9e4d2ea416daa95ec3bbe5f5dd200bc55bde3fd5b99ee2d0",
+    1705: "b6248a48961243ac4cfa62d0eff0ef25cbcbee774e86909c9a1525f56914b23f",
+}
+
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
@@ -96,6 +104,8 @@ def run(archive,source_root,output_dir,seeds,updates=120):
             torch.nn.utils.clip_grad_norm_(model.parameters(),1.)
             optimizer.step()
             last=float(loss.detach())
+        if sample_hash.hexdigest()!=ORIGINAL_TAC_FIT_SAMPLE_SHA256[seed]:
+            raise ValueError('sample order differs from original WaveCED500K source receipts')
         score=evaluate(model,dev)
         ck={"model":model.state_dict(),"optimizer":optimizer.state_dict(),
             "torch_rng":torch.get_rng_state(),"numpy_rng":np.random.get_state(),
