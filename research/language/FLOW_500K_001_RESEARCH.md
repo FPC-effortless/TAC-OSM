@@ -1,3 +1,5 @@
+**Repository integration update (2026-10-28):** The exact locally trained model source is now committed as [tac_wave_ced_500k.py](flow_500k/tac_wave_ced_500k.py), with [9 constructed math/numerical tests](flow_500k/test_wave_500k.py) and a configurable-source [pilot training script](flow_500k/train_real_text_feasibility.py). The original **binary** seed_1701/1702/1703 checkpoint/optimizer/RNG artifacts remain in the downloadable conversation archive only. Independent Git cold replay is still OPEN; none of the real DEV pilot scores is promoted.
+
 # TAC-LANG-FLOW-500K-001: prospective 500K-scale wave/CED language feasibility
 
 Date: 2026-10-28. Status: **local experimental candidate / 3 of 5 planned fits complete**, not qualified superiority, not verified as whole-model Lean/PyTorch refinement. Research within the existing six-family architecture. This report does not revise or upgrade the original 100K checkpoint results.
