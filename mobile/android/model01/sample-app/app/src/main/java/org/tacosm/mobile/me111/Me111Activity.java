@@ -2,6 +2,9 @@ package org.tacosm.mobile.me111;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Gravity;
@@ -14,6 +17,7 @@ import android.text.InputType;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Local source-aligned ME111 engineering demonstrator. No source authorization
  * or independent outcome validation. Prefilled zero input is CONSTRUCTED only.
@@ -21,6 +25,7 @@ import java.util.Locale;
  */
 public final class Me111Activity extends Activity {
     private Me111StateStore store;
+    private final AtomicBoolean deviceTestRunning = new AtomicBoolean(false);
     // Warm session lives only inside this Activity; no network or external service.
     private Me111LocalEngine localEngine;
     private Me111Contract.State state;
@@ -96,8 +101,23 @@ public final class Me111Activity extends Activity {
                 result.setText("Local state explicitly reset; next source-aligned event can initialize.");
             }).show());
 
+        Button benchmark = new Button(this);
+        benchmark.setText("Measure TAC locally on THIS phone (Airplane Mode required)");
+        panel.addView(benchmark);
+        benchmark.setOnClickListener((View v) -> runOfflineDeviceSelfTest());
+        Button copy = new Button(this);
+        copy.setText("Copy displayed local result (explicit action)");
+        panel.addView(copy);
+        copy.setOnClickListener((View v) -> {
+            ClipboardManager clipboard =
+                (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            if (clipboard != null)
+                clipboard.setPrimaryClip(ClipData.newPlainText(
+                    "TAC ME111 local diagnostic", result.getText().toString()));
+        });
         result = text("MODEL NOT SCIENTIFICALLY QUALIFIED. "
-            + "Physical Android p50/p95, peak RAM, energy and airplane-mode: NOT RUN.");
+            + "Phone p50/p95/RAM/energy/airplane-mode: NOT RUN until explicitly measured.");
+        result.setTextIsSelectable(true);
         panel.addView(result);
         try {
             state = store.load();
@@ -135,6 +155,28 @@ public final class Me111Activity extends Activity {
             result[i] = flag.equals("1");
         }
         return result;
+    }
+
+    private void runOfflineDeviceSelfTest() {
+        if (!deviceTestRunning.compareAndSet(false, true)) return;
+        result.setText("Running a CONSTRUCTED local CPU measurement. "
+            + "This never reads or modifies your stored source/model state.");
+        new Thread(() -> {
+            String report;
+            try {
+                report = Me111DeviceSelfTest.run(getApplicationContext());
+            } catch (Exception error) {
+                report = "LOCAL DEVICE SELF-TEST NOT QUALIFIED: "
+                    + error.getClass().getSimpleName() + ": " + error.getMessage()
+                    + ". No customer state was used or advanced.";
+            } finally {
+                deviceTestRunning.set(false);
+            }
+            final String displayed = report;
+            runOnUiThread(() -> {
+                if (!isFinishing() && !isDestroyed()) result.setText(displayed);
+            });
+        }, "me111-local-device-cpu-diagnostic").start();
     }
 
     private void runOnce() {
