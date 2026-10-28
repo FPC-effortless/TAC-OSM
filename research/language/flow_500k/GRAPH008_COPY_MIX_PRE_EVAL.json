@@ -1,0 +1,19 @@
+{
+  "study": "TAC-LANG-500K-008-COPY-MIX",
+  "status": "frozen before any no-fit reference prediction on these six manuals",
+  "documents": {
+    "develop.txt": "5dd50a4d0cf1e21b89bb3f942dd1ceca9225e716b89bac957c3d0090cd176847",
+    "filetype.txt": "867630f88ee30fd99911dbaff58b0f35fa23e43ed82584842a300181442f676a",
+    "fold.txt": "c370d4294bf5a66d5536400d07426b5603f4f8da35e6c1b4e99f6654515ccd92",
+    "gui.txt": "cbd008c322ef572034aa92b5ebc9a80040e577366485c7fdfc05a3ea585a661a",
+    "quickfix.txt": "0e09b5464548012a3100bdadcfd36f9ca59ff3c481d351c4e86cb265ff6fab4f",
+    "repeat.txt": "774908fc5f3fa296054d1a94bee8761f0e15fc0bc1aee7d401b5a523d4d81efc"
+  },
+  "window_selection": "Eight equally spaced 257-byte windows in each document; each window only observes 256 past characters for next-char prediction; 48 windows total",
+  "query": "At source time t, choose j+1 < t where the most recent prior four-character suffix at j exactly matches the observed suffix at t. Return source known char at j+1; never use x[t+1] or y in query. If no match, no retrieved candidate.",
+  "copy_distribution": "On hit, 0.95 probability mass at observed prior candidate character and 0.05 on FIT-only smoothed unigram distribution. Positive and normalized.",
+  "mixture": "On hit, p=(1-lambda)*p_TAC + lambda*p_copy; on no hit p_TAC. No trainable weights introduced.",
+  "calibration": "Choose lambda once from {0,0.1,0.2,0.3,0.4,0.5,0.6,0.7} by pooled five-seed NLL on four windows of each of the first eight FIT manuals usr_01.txt..usr_08.txt only; then freeze before scoring new manuals. No recalibration using DEV or new-manual metrics.",
+  "controls": "same ngram retrieval and FIT-only prior given to GRAPH007 next-only and GRAPH008 next-only; also stand-alone FIT smoothed unigram, same-source-index copy baseline and no-cache learned model",
+  "caveats": "Software-level retrieval hybrid baseline, not SSM superiority or learned model query discovery; same Vim publisher domain; original sealed TEST remains unopened"
+}
