@@ -1,0 +1,75 @@
+{
+  "schema_version": "tac-osm.parity.v1",
+  "study_id": "LANGTRAIN025",
+  "study_type": "single_model_training",
+  "registered_before_first_fit": true,
+  "execution_level": "internal_research",
+  "parameter_budget_contract": "owner-2026-10-28-500k",
+  "scientific_purpose": "Train a single 499978-parameter byte-complete TAC and compare its authentic exposed DEV next-byte prediction on identical cases to a frozen practical n-gram, without an architecture-superiority claim.",
+  "real_world_source": {
+    "observed_real_outcomes": true,
+    "name": "Original PSF CPython 3.13.0 publisher-authored document bytes (next observed byte)",
+    "sha256": "dd5aabf90646be409e3f18ecf763dbcefc84b6575e12ff54f4a7195f92ff150e",
+    "source_receipt": "research/mathematical-engineering/language_source023/SOURCE_RECEIPT.json",
+    "supplement_sha256": "c5cf5081618e2b06a519d2ede00fb52a53922c5a8d636c4be337810fed2bd17c",
+    "rights": "PSF2 and documented examples 0BSD"
+  },
+  "models": [
+    {
+      "name": "ByteWaveCED500K",
+      "seed": 1701,
+      "trainable_parameters": 499978,
+      "deployed_parameters": 499978,
+      "train_steps": 320,
+      "batch": 8,
+      "context": 128
+    },
+    {
+      "name": "ByteWaveCED500K",
+      "seed": 1702,
+      "trainable_parameters": 499978,
+      "deployed_parameters": 499978,
+      "train_steps": 320,
+      "batch": 8,
+      "context": 128
+    },
+    {
+      "name": "ByteWaveCED500K",
+      "seed": 1703,
+      "trainable_parameters": 499978,
+      "deployed_parameters": 499978,
+      "train_steps": 320,
+      "batch": 8,
+      "context": 128
+    },
+    {
+      "name": "ByteWaveCED500K",
+      "seed": 1704,
+      "trainable_parameters": 499978,
+      "deployed_parameters": 499978,
+      "train_steps": 320,
+      "batch": 8,
+      "context": 128
+    },
+    {
+      "name": "ByteWaveCED500K",
+      "seed": 1705,
+      "trainable_parameters": 499978,
+      "deployed_parameters": 499978,
+      "train_steps": 320,
+      "batch": 8,
+      "context": 128
+    }
+  ],
+  "source_split": {
+    "fit_docs": 13,
+    "unicode_fit_supplement_docs": 1,
+    "exposed_dev_docs": 4,
+    "protected_test": false,
+    "window": "8 windows/doc, length129",
+    "targets_per_dev_seed": 4096
+  },
+  "no_architecture_superiority_claim": true,
+  "no_protected_test": true,
+  "checkpoint_policy": "Original model + optimizer + torch/NumPy/Python/sampler RNG and replay SHA for all five seeds; no prior 128-byte model checkpoints altered."
+}
