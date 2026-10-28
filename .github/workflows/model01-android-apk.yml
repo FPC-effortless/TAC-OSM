@@ -1,32 +1,62 @@
-name: Model01 Android APK offline-permission build (NO DEVICE)
+name: Frozen Model01 and TAC ME111 offline Android APK (NO PHYSICAL DEVICE)
 on:
   push:
     branches:
-      - product/model01-android-offline-export-20261028
+      - product/tac-neural-android-local-runtime-20261028
     paths:
       - 'mobile/android/model01/**'
+      - 'tests/test_me111_android_contract.py'
       - '.github/workflows/model01-android-apk.yml'
   pull_request:
     paths:
       - 'mobile/android/model01/**'
+      - 'tests/test_me111_android_contract.py'
       - '.github/workflows/model01-android-apk.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  android-debug-apk-no-internet-permission:
+  frozen-original-models-offline-apk:
     runs-on: ubuntu-latest
-    timeout-minutes: 18
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
+      - name: Pin original ME111 training/replay/source and validated ONNX exporter
+        uses: actions/checkout@v4
+        with:
+          ref: 3fc2fbe8e4974491349caecd8d6171e738810b54
+          path: pinned-me111
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-      - name: Verify preinstalled Android SDK on GitHub Ubuntu runner
+      - name: Install pinned CPU no-fit ONNX export dependencies
         run: |
-          test -d "$ANDROID_HOME" || exit 2
-          test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" || exit 2
+          pip install torch==2.14.1+cpu --index-url https://download.pytorch.org/whl/cpu
+          pip install 'numpy==2.3.5' 'onnx==1.19.1' 'onnxruntime==1.23.2'
+      - name: Recreate frozen original 104663-parameter TAC ONNX and CPU state parity
+        run: |
+          PYTHONPATH=pinned-me111/src:pinned-me111 python pinned-me111/scripts/probe_me111_offline_onnx.py --out-dir /tmp/frozen-me111
+          test -s /tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          path=Path('/tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx')
+          digest=hashlib.sha256(path.read_bytes()).hexdigest()
+          assert digest=='dd65519a9e4f3388966538af53119b56e9292b46a9209d63ad4927b87f0a176b', digest
+          print('FROZEN_ME111_SHA256=PASS')
+          PY
+          mkdir -p mobile/android/model01/sample-app/app/src/main/assets
+          cp /tmp/frozen-me111/ME111_ONE_STEP_EXPLORATORY.onnx mobile/android/model01/sample-app/app/src/main/assets/tac_me111.onnx
+      - name: Verify pure-Java typed source and recurrent-state guards
+        run: python -m unittest discover -s tests -p test_me111_android_contract.py -v
+      - name: Verify preinstalled Android SDK
+        run: |
+          test -x "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --list_installed
       - name: Install Android SDK platform/build tools (build only)
         run: |
@@ -34,30 +64,42 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
-      - name: Compile offline demo APK with locally embedded original fixed model
+      - name: Compile Android APK with real ONNX Runtime AAR and frozen TAC bytes
         run: gradle -p mobile/android/model01/sample-app :app:assembleDebug --no-daemon
-      - name: Fail if merged APK contains INTERNET permission
+      - name: Verify merged Android permissions and packaged native graph/runtime
         run: |
           APK=mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
           test -s "$APK"
-          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump permissions "$APK" | tee /tmp/model01-permissions.txt
-          if grep -q 'android.permission.INTERNET' /tmp/model01-permissions.txt; then
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump permissions "$APK" | tee /tmp/me111-android-permissions.txt
+          if grep -q 'android.permission.INTERNET' /tmp/me111-android-permissions.txt; then
             echo 'OFFLINE_APK_PERMISSION=FAIL'
             exit 2
           fi
-          echo 'OFFLINE_APK_PERMISSION=PASS (not physical airplane-mode evidence)'
-      - name: Debug APK artifact — not production approval
-        uses: actions/upload-artifact@v4
+          python - "$APK" <<'PY'
+          import hashlib,sys,zipfile
+          with zipfile.ZipFile(sys.argv[1]) as z:
+              graph=z.read('assets/tac_me111.onnx')
+              digest=hashlib.sha256(graph).hexdigest()
+              assert digest=='dd65519a9e4f3388966538af53119b56e9292b46a9209d63ad4927b87f0a176b',digest
+              libs=[n for n in z.namelist() if n.startswith('lib/') and n.endswith('/libonnxruntime.so')]
+              assert libs, 'native ONNX runtime CPU library not packaged'
+              print('PACKAGED_FROZEN_ONNX=SHA256_PASS; ONNX_NATIVE_ABIS='+repr(libs))
+          PY
+          echo 'APK_OFFLINE_STATIC_PACKAGE=PASS; AIRPLANE_MODE=NOT_RUN'
+      - name: Preserve installable but unqualified debug APK
         if: success()
+        uses: actions/upload-artifact@v4
         with:
-          name: model01-android-debug-unqualified-apk
+          name: tac-me111-android-local-cpu-unqualified-debug
           path: mobile/android/model01/sample-app/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
           retention-days: 7
-      - name: Explicit physical gate
+      - name: Truthful hardware/science gate
         if: always()
         run: |
-          echo 'APK_BUILD=CHECK_JOB_CONCLUSION'
           echo 'PHYSICAL_ANDROID=NOT_RUN'
+          echo 'ANDROID_REAL_DEVICE_ONNX_EXECUTION=NOT_RUN'
           echo 'AIRPLANE_MODE=NOT_RUN'
-          echo 'ENERGY_RAM_P50_P95=NOT_RUN'
-          echo 'INDEPENDENT_SCIENTIFIC_QUALIFICATION=NOT_QUALIFIED'
+          echo 'P50_P95_RAM_ENERGY=NOT_RUN'
+          echo 'RESTART_ON_PHONE=NOT_RUN'
+          echo 'ME111_INDEPENDENT_SCIENTIFIC_GATE=FAIL_MIXED_TRADEOFF'
