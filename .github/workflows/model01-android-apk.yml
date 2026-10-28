@@ -153,6 +153,7 @@ jobs:
           # Emulator tests only; physical benchmark class requires real hardware.
           # Only emulator tests; physical-only benchmarking remains explicitly excluded.
           script: |
+            set -eu
             gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111LocalRuntimeAndroidTest,org.tacosm.mobile.me111.Me111LongStreamAndroidTest
             APP=org.tacosm.mobile.model01.demo
             adb shell am instrument -w -e class org.tacosm.mobile.me111.Me111ProcessSeedAndroidTest "${APP}.test/androidx.test.runner.AndroidJUnitRunner" | tee /tmp/me111-process-seed.txt
