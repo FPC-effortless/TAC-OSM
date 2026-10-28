@@ -23,9 +23,12 @@ public final class Me111StateStore {
     }
 
     public synchronized Me111Contract.State load() throws IOException {
-        // AtomicFile.exists() also detects a recoverable backup after interrupted write.
-        // Checking only the base path could silently discard surviving state.
-        if (!file.exists()) return null;
+        // Framework AtomicFile lacks exists(); inspect base, backup and temporary paths.
+        // openRead() repairs a recoverable backup on implementations using it.
+        File base = file.getBaseFile();
+        if (!base.exists()
+                && !new File(base.getPath() + ".bak").exists()
+                && !new File(base.getPath() + ".new").exists()) return null;
         try (DataInputStream in = new DataInputStream(file.openRead())) {
             if (in.readInt() != MAGIC || in.readInt() != VERSION
                     || !Me111Contract.MODEL_SHA256.equals(in.readUTF()))
