@@ -1,3 +1,18 @@
+## Narrow language-model scale amendment (2026-10-28)
+
+The owner-directed language-model benchmark `LANGCOMPARE029` compares the
+already-existing 500,122-parameter CONTEXT026 candidate with Mamba-3 SISO,
+BDH and a causal Transformer. For **only** `LANGCOMPARE029`, with
+`parameter_budget_contract: owner-2026-10-28-500k`, every prospective
+trained/deployed learned arm must be in 475,000–525,000 parameters and all
+four actual counts must match within 1%. The existing `LANGTRAIN025`
+exception remains unchanged. Every other prospective model remains under
+the standing 95,000–105,000 rule. Equal training source/exposure, measured
+compute, preregistration, strict causality, replay, and all other gates
+remain unchanged. This amendment is NOT GPU permission, training approval,
+or protected TEST access. See
+`research/mathematical-engineering/langcompare029/500K_SCALE_AMENDMENT.md`.
+
 ## Execution-level amendment — operator instruction, 2026-10-27
 
 Ordinary exploratory research on genuine, publicly licensed, authorized FIT/DEV
