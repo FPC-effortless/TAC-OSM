@@ -29,7 +29,7 @@ jobs:
           OMP_NUM_THREADS: '2'
           MKL_NUM_THREADS: '2'
         run: |
-          python -m py_compile graph014_selective_ssm_500k.py graph014_train_real_ssm_500k.py test_graph014_selective_ssm_500k.py
+          python -m py_compile graph014_selective_ssm_500k.py graph014_train_real_ssm_500k.py graph014_equal_cache_dev_runner.py test_graph014_selective_ssm_500k.py
           python -m unittest -v test_graph014_selective_ssm_500k.py
       - name: Clearly flag archive-dependent original checkpoint replay as blocked
         run: |
