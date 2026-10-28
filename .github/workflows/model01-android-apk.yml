@@ -109,7 +109,8 @@ jobs:
           profile: pixel_2
           disable-animations: true
           emulator-options: -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect
-          script: gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon
+          # Emulator tests only; physical benchmark class requires real hardware.
+          script: gradle -p mobile/android/model01/sample-app :app:connectedDebugAndroidTest --no-daemon -Pandroid.testInstrumentationRunnerArguments.class=org.tacosm.mobile.me111.Me111LocalRuntimeAndroidTest
       - name: Truthful hardware/science gate
         if: always()
         run: |
