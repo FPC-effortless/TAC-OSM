@@ -5,6 +5,10 @@ import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.Settings;
+import java.io.InputStream;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Gravity;
@@ -25,7 +29,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class Me111Activity extends Activity {
     private Me111StateStore store;
+    private static final int ORIGINAL_FIT_CSV_REQUEST = 4701;
     private final AtomicBoolean deviceTestRunning = new AtomicBoolean(false);
+    private final AtomicBoolean localSourceReplayRunning = new AtomicBoolean(false);
     // Warm session lives only inside this Activity; no network or external service.
     private Me111LocalEngine localEngine;
     private Me111Contract.State state;
@@ -105,6 +111,11 @@ public final class Me111Activity extends Activity {
         benchmark.setText("Measure TAC locally on THIS phone (Airplane Mode required)");
         panel.addView(benchmark);
         benchmark.setOnClickListener((View v) -> runOfflineDeviceSelfTest());
+        Button replay = new Button(this);
+        replay.setText("Replay 256 original PRSA FIT CSV rows offline (research only)");
+        panel.addView(replay);
+        replay.setOnClickListener((View v) -> chooseOriginalFitCsv());
+
         Button copy = new Button(this);
         copy.setText("Copy displayed local result (explicit action)");
         panel.addView(copy);
@@ -155,6 +166,66 @@ public final class Me111Activity extends Activity {
             result[i] = flag.equals("1");
         }
         return result;
+    }
+
+    private void chooseOriginalFitCsv() {
+        // The system document provider may be backed by a network service.
+        // Require the phone airplane-mode setting before invoking that provider
+        // and label this as a local user-selected, source-UNVERIFIED file.
+        if (Settings.Global.getInt(getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 1) {
+            result.setText("LOCAL FIT REPLAY NOT RUN: enable Airplane Mode and "
+                + "turn Wi-Fi/Bluetooth off before selecting a locally saved UCI CSV.");
+            return;
+        }
+        if (localSourceReplayRunning.get()) return;
+        Intent pick = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        pick.addCategory(Intent.CATEGORY_OPENABLE);
+        pick.setType("*/*");
+        pick.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false);
+        startActivityForResult(pick, ORIGINAL_FIT_CSV_REQUEST);
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent selected) {
+        super.onActivityResult(requestCode, resultCode, selected);
+        if (requestCode != ORIGINAL_FIT_CSV_REQUEST || resultCode != RESULT_OK
+                || selected == null || selected.getData() == null) return;
+        if (Settings.Global.getInt(getContentResolver(),
+                Settings.Global.AIRPLANE_MODE_ON, 0) != 1) {
+            result.setText("LOCAL FIT REPLAY ABSTAINED: Airplane Mode was disabled.");
+            return;
+        }
+        if (!localSourceReplayRunning.compareAndSet(false, true)) return;
+        Uri chosen = selected.getData();
+        if (!"content".equals(chosen.getScheme())) {
+            localSourceReplayRunning.set(false);
+            result.setText("LOCAL REPLAY ABSTAINED: unsupported source URI.");
+            return;
+        }
+        result.setText("Reading a user-selected, NOT publisher-hash-verified "
+            + "local CSV and running 256 scratch-only historical FIT predictions. "
+            + "No stored user state will be changed.");
+        new Thread(() -> {
+            String output;
+            try (InputStream stream = getContentResolver().openInputStream(chosen);
+                 Me111LocalEngine isolatedEngine =
+                    new Me111LocalEngine(getApplicationContext())) {
+                Me111OriginalFitReplay.Report completed =
+                    Me111OriginalFitReplay.run(stream, isolatedEngine);
+                output = completed.display();
+            } catch (Exception exception) {
+                output = "OFFLINE PRSA FIT REPLAY FAILED/ABSTAINED: "
+                    + exception.getClass().getSimpleName() + ": "
+                    + exception.getMessage()
+                    + ". No stored customer/source state was modified.";
+            } finally {
+                localSourceReplayRunning.set(false);
+            }
+            final String show = output;
+            runOnUiThread(() -> {
+                if (!isFinishing() && !isDestroyed()) result.setText(show);
+            });
+        }, "me111-user-selected-prsa-fit-replay").start();
     }
 
     private void runOfflineDeviceSelfTest() {
