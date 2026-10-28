@@ -128,6 +128,14 @@ class WaveCED500K(nn.Module):
             basis_initial=initial_state['basis'];native_initial=initial_state['native']
             aligned_initial=initial_state['aligned'];wave_initial=initial_state['waves']
             concept_initial=initial_state['concepts']
+            # The bounded-write invariant assumes finite and initially
+            # admissible state; reject corrupted/legacy overlarge carries.
+            if not all(bool(torch.isfinite(initial_state[name]).all())
+                       for name in expected):
+                raise ValueError('nonfinite carried state')
+            if bool((native_initial.norm(dim=(-2,-1)) > math.sqrt(8)+1e-3).any()) or bool(
+                (aligned_initial.norm(dim=(-2,-1)) > 4+1e-3).any()):
+                raise ValueError('carried associative memory exceeds v2 bound')
         tt=torch.arange(start,start+t,device=tokens.device).view(1,t).expand(b,t)
         e=torch.tanh(self.embedding(tokens)+self.pos(phi_position(tt,self.embedding.weight.dtype)))
         basis=torch.tanh(self.basis(e))
