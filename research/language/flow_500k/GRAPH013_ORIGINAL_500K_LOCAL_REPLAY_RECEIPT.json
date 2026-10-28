@@ -1,0 +1,57 @@
+{
+  "schema": "graph013-original-500k-tac-replay-v1",
+  "date": "2026-10-28",
+  "evidence_status": "LOCAL_FROZEN_REPLAY_EXPOSED_DEV_ONLY",
+  "archive_name": "tac_language_long003_replay.zip",
+  "archive_sha256": "cde9a91be40a4e613975c0bd8caa4c19ac24e3d1d0e993db5cacfbd002fecc32",
+  "model_source_sha256": "acf80cb9051b7f2d2c3900d1676eed212890208cd5213088c6751f9cfd24392c",
+  "model_parameters": 499290,
+  "source_documents_verified": 36,
+  "fit_documents": 30,
+  "exposed_dev_documents": 6,
+  "dev_targets_per_seed": 6144,
+  "torch_version": "2.10.0+cpu",
+  "mean_replayed_dev_nll": 2.5374379475911457,
+  "seeds": [
+    {
+      "seed": 1701,
+      "nll": 2.5843177239100137,
+      "checkpoint_sha256": "9f7225724243a8fce95cf323000f3f86d882357d0f0732cb893e577cb69e246d",
+      "accuracy": 0.3191731770833333
+    },
+    {
+      "seed": 1702,
+      "nll": 2.525547424952189,
+      "checkpoint_sha256": "e37af7884b540573067bcff274e0cf0142d9432c13648c90ec744ff1d95cda60",
+      "accuracy": 0.32275390625
+    },
+    {
+      "seed": 1703,
+      "nll": 2.518691142400106,
+      "checkpoint_sha256": "5bf3dee8f12feb3bf09374252506f9c0851a1668fa878110e6f750478756f730",
+      "accuracy": 0.3369140625
+    },
+    {
+      "seed": 1704,
+      "nll": 2.509428858757019,
+      "checkpoint_sha256": "d357cff9d2789606db39ccb467d536af4c12c6c42e44dce9bbccaa934123a7dc",
+      "accuracy": 0.3224283854166667
+    },
+    {
+      "seed": 1705,
+      "nll": 2.5492045879364014,
+      "checkpoint_sha256": "61289fb0189a218836e14e0bdd1ce7d55c18c68feccdae51e40b8316714e6f07",
+      "accuracy": 0.3277994791666667
+    }
+  ],
+  "max_original_nll_absolute_error": 7.947285940446136e-8,
+  "gates": {
+    "LOCAL_FROZEN_REPLAY": "PASS",
+    "REPO_COLD_REPLAY": "BLOCKED: checkpoint archive not GitHub-hosted",
+    "MATCHED_500K_SSM": "NOT_RUN",
+    "EQUAL_CACHE_HEAD_TO_HEAD": "NOT_RUN",
+    "SEALED_TEST": "NOT_RUN",
+    "TRAINING_COMPUTE_PARITY": "UNVERIFIED",
+    "ARCHITECTURAL_SUPERIORITY": "NOT_ESTABLISHED"
+  }
+}
