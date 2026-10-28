@@ -188,3 +188,32 @@ def test_guarded_training_entrypoint_denies_all_unapproved_models_on_cpu():
         assert r["DEV_NLL"]=="NOT_RUN" and r["protected_TEST"]=="NOT_ACCESSED"
         with pytest.raises(PermissionError,match="no fit permitted"):
             run(mode="fit",arm=arm,seed=1701)
+
+
+def test_full_four_arm_scoring_is_blocked_before_all_20_matched_checkpoints(monkeypatch):
+    from scripts.langcompare029_eval import cohort_readiness,evaluate
+    monkeypatch.delenv("PHONE_LAB_GPU_EXECUTION_ENABLED",raising=False)
+    r=cohort_readiness()
+    assert r["status"]=="BLOCKED_NO_SCORING"
+    assert "FINAL_RESOURCE_PARITY_MANIFEST" in r["missing"]
+    assert r["checkpoint_count"]==0 and r["DEV_NLL"]=="NOT_RUN"
+    with pytest.raises(PermissionError,match="operator GPU quota approval"):
+        evaluate(bdh_source=None)
+
+def test_next_byte_scoring_geometry_on_four_authentic_fit_documents_only():
+    from scripts.langcompare029_eval import authentic_dev_metrics
+    from scripts.langcompare029_sampling import fit_sources
+    import sys
+    from pathlib import Path
+    sys.path.insert(0,str(ROOT/"research/mathematical-engineering/langtrain025"))
+    from train_byte_native import windows
+    fit=fit_sources()
+    # No DEV: same scorer must work on original FIT-only windows as a diagnostic.
+    cases=windows({k:fit[k] for k in sorted(fit)[:4]})
+    m=p.ByteTransformer().eval()
+    output=authentic_dev_metrics(m,cases)
+    assert output["n"]==4096 and len(output["per_document"])==4
+    assert 0.<output["nll"]<15.
+    assert 0.<=output["top1"]<=1.
+    assert 0.<=output["top5"]<=1.
+    assert output["brier"]>0.
