@@ -88,3 +88,24 @@ def test_true_training_loss_backward_without_optimizer_or_metrics():
         assert all(par.grad is not None and torch.isfinite(par.grad).all()
                    for par in model.parameters() if par.requires_grad)
         assert sum(float(par.grad.abs().sum()) for par in model.parameters())>0
+
+
+def test_500k_exception_exact_study_marker_and_scope():
+    import importlib.util
+    spec=importlib.util.spec_from_file_location(
+        "langcompare029_parity_test",ROOT/"scripts/validate_research_parity.py")
+    module=importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    for sid in ("LANGTRAIN025","LANGCOMPARE029"):
+        assert module.checked_new_scale({
+            "study_id":sid,"parameter_budget_contract":"owner-2026-10-28-500k"})
+    for sid in ("LANGCOMPARE030","ME075","OTHER"):
+        assert not module.checked_new_scale({
+            "study_id":sid,"parameter_budget_contract":"owner-2026-10-28-500k"})
+    assert not module.checked_new_scale({"study_id":"LANGCOMPARE029"})
+    module.check_500k_model_size(500122,500122,"matched_TAC")
+    module.check_500k_model_size(496960,496960,"matched_Transformer")
+    with pytest.raises(module.ParityError):
+        module.check_500k_model_size(100000,100000,"invalid_100k_new_scale")
+    with pytest.raises(module.ParityError):
+        module.check_model_parameter_target(500122,500122,"other_study")
