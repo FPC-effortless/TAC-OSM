@@ -14,6 +14,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import android.util.AtomicFile;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -116,6 +120,40 @@ public final class Me111LocalRuntimeAndroidTest {
                 fail("foreign source station accepted");
             } catch (IllegalArgumentException expectedError) { }
             assertEquals(recorded.lastHour, store.load().lastHour);
+        } finally {
+            store.clear();
+        }
+    }
+
+    @Test public void testAtomicStateInterruptedWriteAndCorruptionFailClosed() throws Exception {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Me111StateStore store = new Me111StateStore(context);
+        store.clear();
+        try {
+            Me111Contract.State initial = Me111Contract.initial(0, 100);
+            store.save(initial);
+            File file = new File(context.getFilesDir(), "me111-state-v1.bin");
+            AtomicFile simulatedCrash = new AtomicFile(file);
+            // Simulate process death mid-write: do not commit the .new candidate.
+            try (FileOutputStream unfinished = simulatedCrash.startWrite()) {
+                unfinished.write(new byte[]{0x5, 0x6, 0x7, 0x8});
+                unfinished.flush();
+            }
+            // Reading must restore the last completely committed state.
+            Me111Contract.State restored = store.load();
+            assertNotNull(restored);
+            assertEquals(initial.lastHour, restored.lastHour);
+            assertEquals(initial.count, restored.count);
+
+            // Now emulate corrupted committed bytes; never substitute a zero state.
+            try (FileOutputStream corrupt = new FileOutputStream(file)) {
+                corrupt.write(new byte[]{0x1, 0x2, 0x3, 0x4});
+                corrupt.flush();
+            }
+            try {
+                store.load();
+                fail("corrupt persistent state was silently accepted/reset");
+            } catch (IOException expected) { }
         } finally {
             store.clear();
         }
