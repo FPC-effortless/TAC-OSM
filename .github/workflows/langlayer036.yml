@@ -1,0 +1,103 @@
+name: LANGLAYER036 trained layered TAC frozen real-text diagnostics
+on:
+  pull_request:
+    paths:
+      - "scripts/langlayer036_frozen_probe.py"
+      - "scripts/langlayer036_aggregate.py"
+      - "research/mathematical-engineering/langlayer036/**"
+      - ".github/workflows/langlayer036.yml"
+permissions:
+  contents: read
+  actions: read
+jobs:
+  frozen-source-lesions:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        arm: [tac_context026, tac_layer2, tac_layer3]
+        seed: [1701,1702,1703,1704,1705]
+    env:
+      OMP_NUM_THREADS: "2"
+      MKL_NUM_THREADS: "2"
+      OPENBLAS_NUM_THREADS: "2"
+      CUDA_VISIBLE_DEVICES: ""
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Pinned CPU-only dependencies
+        run: |
+          python -m pip install numpy==2.3.5
+          python -m pip install torch==2.10.0 --index-url https://download.pytorch.org/whl/cpu
+      - name: Qualify no-fit research metadata
+        run: |
+          PYTHONPATH=src:. python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langlayer036/FAIR_COMPARISON.json --phase preflight
+      - name: Acquire original frozen full-training checkpoint WITHOUT retraining
+        run: |
+          set -euo pipefail
+          gh run download 40785939365 -R FPC-effortless/TAC-OSM --name "LANGLAYER035-CPU-${{ matrix.arm }}-seed${{ matrix.seed }}" --dir original
+          mapfile -t bins < <(find original -type f -name '*.pt')
+          mapfile -t receipts < <(find original -type f -name FIT_AND_EXPOSED_DEV_RECEIPT.json)
+          test "${#bins[@]}" -eq 1
+          test "${#receipts[@]}" -eq 1
+          echo "CHECKPOINT=${bins[0]}" >> "$GITHUB_ENV"
+          echo "RECEIPT=${receipts[0]}" >> "$GITHUB_ENV"
+      - name: Run actual trained inference lesion and gradient probes on genuine FIT/exposed DEV
+        run: |
+          set -eo pipefail
+          PYTHONPATH=src:. python scripts/langlayer036_frozen_probe.py \
+            --arm ${{ matrix.arm }} --seed ${{ matrix.seed }} \
+            --checkpoint "$CHECKPOINT" --receipt "$RECEIPT" \
+            --output "langlayer036-results/${{ matrix.arm }}_seed${{ matrix.seed }}.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER036-frozen-${{ matrix.arm }}-seed${{ matrix.seed }}
+          path: langlayer036-results/
+          retention-days: 90
+          if-no-files-found: warn
+  complete-cohort-summary:
+    needs: frozen-source-lesions
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Download only this run's frozen results
+        run: |
+          gh run download "${{ github.run_id }}" -R FPC-effortless/TAC-OSM --pattern 'LANGLAYER036-frozen-*' --dir frozen-diagnostics
+      - name: Reject missing or duplicated seed, source/DEV and checkpoint identity
+        run: |
+          python scripts/langlayer036_aggregate.py --input frozen-diagnostics --output langlayer036-summary/RESULTS.json
+      - name: Summarize factual diagnostic results
+        run: |
+          python - <<'PY'
+          import json,os
+          r=json.load(open('langlayer036-summary/RESULTS.json'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
+              print('# LANGLAYER036 frozen checkpoint diagnostics',file=f)
+              print('**No new training; genuine publisher FIT and already-exposed DEV only.**',file=f)
+              print('| Arm | Seen FIT NLL | Exposed DEV NLL | DEV minus FIT |',file=f)
+              print('|---|---:|---:|---:|',file=f)
+              for a,s in r['arms'].items():
+                  print(f'| {a} | {s["fit_seen_nll_mean"]:.5f} | {s["exposed_dev_nll_mean"]:.5f} | {s["dev_minus_seen_fit_nll_mean"]:.5f} |',file=f)
+              print('Per-layer lesion and gradient metrics: RESULTS.json artifact. No TEST or new optimizer steps.',file=f)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: LANGLAYER036-complete-cohort-diagnostics
+          path: langlayer036-summary/
+          retention-days: 90
