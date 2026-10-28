@@ -75,6 +75,22 @@ public final class Me111OriginalFitReplay {
 
     private Me111OriginalFitReplay() { }
 
+    private static String boundedLine(BufferedReader reader) throws IOException {
+        // readLine() would allocate an unbounded string for a hostile selected
+        // document. Reject oversized rows while they are being read.
+        StringBuilder out = new StringBuilder(160);
+        int next;
+        while ((next = reader.read()) != -1) {
+            if (next == '\\n') break;
+            if (next == '\\r') continue;
+            if (out.length() >= MAX_LINE_CHARS)
+                throw new IOException("overlong source CSV record");
+            out.append((char) next);
+        }
+        if (next == -1 && out.length() == 0) return null;
+        return out.toString();
+    }
+
     private static Map<String, Integer> header(String line) throws IOException {
         if (line == null || line.length() > MAX_LINE_CHARS)
             throw new IOException("missing/oversized original PRSA CSV header");
@@ -118,7 +134,7 @@ public final class Me111OriginalFitReplay {
         // no app network permission or cloud inference is available.
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(source, StandardCharsets.UTF_8), 8192);
-        Map<String, Integer> columns = header(reader.readLine());
+        Map<String, Integer> columns = header(boundedLine(reader));
         Me111SourceFeatures encoder = Me111FrozenFitStats.newEncoder();
         Me111SourceFeatures.History history = null;
         Me111Contract.State state = null;
@@ -126,7 +142,7 @@ public final class Me111OriginalFitReplay {
         int owner = -1;
         int rowWidth = columns.size();
         for (int i = 0; i < EVENTS; i++) {
-            String line = reader.readLine();
+            String line = boundedLine(reader);
             if (line == null || line.isEmpty() || line.length() > MAX_LINE_CHARS
                     || line.indexOf('"') >= 0)
                 throw new IOException("missing/unsupported original hourly FIT row " + i);
