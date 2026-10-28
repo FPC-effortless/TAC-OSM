@@ -1,0 +1,37 @@
+name: GRAPH015 source-causal bounded delta math (no checkpoint binaries in CI)
+on:
+  push:
+    branches: [research/graph015-delta-native-math-and-parity-2026-10-28]
+  pull_request:
+    paths:
+      - 'research/language/flow_500k/graph015_*'
+      - 'research/language/flow_500k/test_graph015_*'
+      - '.github/workflows/research-graph015-delta-tac-500k.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  numerical-contracts-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install reproducible CPU PyTorch and NumPy
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install numpy==2.3.5
+      - name: Check causal update math and source-only script syntax
+        working-directory: research/language/flow_500k
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile graph015_delta_tac_500k.py graph015_train_real_delta_tac_500k.py graph015_equal_cache_dev_runner.py test_graph015_delta_tac_500k.py
+          python -m unittest -v test_graph015_delta_tac_500k.py
+      - name: Explicit scientific status
+        run: |
+          echo "Constructed operator tests only: no training and no real DEV or TEST evaluation in GitHub CI."
+          echo "REPO_REPLAY=BLOCKED; TRAINING_FLOP_PARITY=UNKNOWN; INDEPENDENT_TEST=NOT_RUN."
