@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - "scripts/langcompare029_preflight.py"
+      - "scripts/langcompare029_sampling.py"
       - "research/mathematical-engineering/langcompare029/**"
       - "tests/test_langcompare029_preflight.py"
       - ".github/workflows/langcompare029.yml"
@@ -36,6 +37,8 @@ jobs:
           python scripts/langcompare029_preflight.py \
             --bdh-source /tmp/langcompare029_bdh.py \
             --output langcompare029-results/NO_FIT_PREFLIGHT.json
+          python scripts/langcompare029_sampling.py \
+            --output langcompare029-results/FROZEN_TRAINING_SCHEDULE.json
           python -m pytest -q tests/test_langcompare029_preflight.py
           python - <<'PY'
           import json
@@ -46,6 +49,10 @@ jobs:
           assert r["models"]["tac_context026"]["status"]=="PARAMETER_COUNT_VERIFIED"
           assert r["models"]["bdh_official"]["status"]=="PARAMETER_COUNT_VERIFIED"
           assert r["models"]["causal_transformer"]["status"]=="PARAMETER_COUNT_VERIFIED"
+          sched=json.load(open("langcompare029-results/FROZEN_TRAINING_SCHEDULE.json"))
+          assert sched["optimizer_steps_performed"]==0
+          assert len(sched["by_seed"])==5
+          assert all(x["examples_seen"]==2560 for x in sched["by_seed"])
           PY
       - name: Upload no-fit evidence (not prediction metrics)
         if: always()
