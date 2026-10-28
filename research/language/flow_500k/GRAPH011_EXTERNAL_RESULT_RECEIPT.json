@@ -1,0 +1,125 @@
+{
+  "study": "GRAPH011_REAL_EXTERNAL_RESULT",
+  "date": "2026-10-28",
+  "source_frozen_before_scoring_commit": "f14a0a51ded44d1a6a75ec2eb9bacdc092c05352",
+  "source": "8 Python3.13 standard-library files listed and SHA pinned in GRAPH011_EXTERNAL_EVAL_PREREG.json",
+  "samples_per_seed": 8192,
+  "seeds": [
+    1701,
+    1702,
+    1703,
+    1704,
+    1705
+  ],
+  "context": 129,
+  "window_resets": true,
+  "fit_train_16_vim_chapters_unchanged": true,
+  "approx_lambda": 0.1,
+  "exact_cache_lambda": 0.6,
+  "learned_query_params": 2816,
+  "base_backbone_params_unloaded": 499290,
+  "mean_nll": {
+    "exact_only": 2.844104617834091,
+    "untrained_same_capacity_and_weight": 2.814644968509674,
+    "trained_same_capacity_and_weight": 2.7871041536331176
+  },
+  "seed_nll": {
+    "1701": [
+      2.844104617834091,
+      2.814171001315117,
+      2.78010356426239
+    ],
+    "1702": [
+      2.844104617834091,
+      2.8128827959299088,
+      2.7854668498039246
+    ],
+    "1703": [
+      2.844104617834091,
+      2.81781405210495,
+      2.791145831346512
+    ],
+    "1704": [
+      2.844104617834091,
+      2.8177303820848465,
+      2.792464554309845
+    ],
+    "1705": [
+      2.844104617834091,
+      2.8106266111135483,
+      2.786339968442917
+    ]
+  },
+  "wins_trained_over_both_seed_count": 5,
+  "wins_trained_over_both_file_count": 8,
+  "per_file_average_nll": {
+    "asyncio/tasks.py": [
+      2.89035,
+      2.85263,
+      2.83211
+    ],
+    "csv.py": [
+      2.65594,
+      2.62132,
+      2.59709
+    ],
+    "email/parser.py": [
+      2.9804,
+      2.95777,
+      2.92955
+    ],
+    "http/client.py": [
+      2.99988,
+      2.97362,
+      2.94091
+    ],
+    "logging/__init__.py": [
+      2.66426,
+      2.63848,
+      2.60908
+    ],
+    "re/_parser.py": [
+      2.67983,
+      2.65742,
+      2.63309
+    ],
+    "textwrap.py": [
+      3.05903,
+      3.01681,
+      2.97734
+    ],
+    "urllib/request.py": [
+      2.82313,
+      2.7991,
+      2.77764
+    ]
+  },
+  "per_file_column_order": [
+    "exact_only",
+    "untrained_query_weight_.1",
+    "FIT_trained_query_weight_.1"
+  ],
+  "extra_CPU_query_only": {
+    "device": "single thread CPU",
+    "batch": 4,
+    "context": 129,
+    "iterations": 250,
+    "median_ms": 2.074758,
+    "p95_ms": 2.488733,
+    "weight_float32_bytes": 11264,
+    "similarity_matrix_batch_bytes": 258064
+  },
+  "replay_bundle": {
+    "filename": "graph011_five_seed_external_evidence.zip",
+    "sha256": "1a5a0741e0ca9fd1e09ee763f7909df2aecdf005ee9c55858ff5e2ff24039a16",
+    "size_bytes": 219599
+  },
+  "qualifications": [
+    "not full TAC/SSM next-token likelihood",
+    "external test of component after weight selection on earlier FIT validation",
+    "same Python programming domain as GRAPH009 but distinct files",
+    "no 512-event memory stress in 129char windows",
+    "not independent GitHub cold checkpoint replay",
+    "no semantic query benchmark"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "study": "GRAPH011_INDEPENDENT_NEW_SOURCE_CALIBRATED_APPROX_QUERY",
+  "registration_status": "BEFORE EXTERNAL SCORING",
+  "date": "2026-10-28",
+  "source_root": "/usr/lib/python3.13",
+  "source_files": {
+    "email/parser.py": [
+      "88890ea9994c55ff7d6c1fd570fece2785f51ed407ee95df4aff946e250bcd66",
+      4975
+    ],
+    "urllib/request.py": [
+      "7353b9d47f51fa495839328f79c4f24bc1feaea70f7c3377c521159db34fa1aa",
+      102260
+    ],
+    "http/client.py": [
+      "a34fb28ab2cf55ed3a6a4ee4d78fc235d69f004afba7a6d3308d5bcb30f17dcc",
+      57304
+    ],
+    "logging/__init__.py": [
+      "dc42e5cf19a2dd03bd95ed3600803effa9c5f107927ab5f66cacf3eebcfd9a47",
+      83766
+    ],
+    "re/_parser.py": [
+      "c7a6c80b3b448f50684c320265a7b5efb5d0b1daf0a36fb5dee8dd83628359d7",
+      41237
+    ],
+    "asyncio/tasks.py": [
+      "821f2e08c8c33160250db98defbd5dc193b292ec057ae0565f372fbe6cfc5b5e",
+      39757
+    ],
+    "csv.py": [
+      "bd242c88ac4fd905cc64121e6fc9714c32b9e6031f52a03296aa8d28b32903df",
+      19178
+    ],
+    "textwrap.py": [
+      "26836f5c17cdb4ffdeaff1a5146ed61a262aa410bdf3ad204e2bd0792f010d5e",
+      19939
+    ]
+  },
+  "excluded_previously_scored": [
+    "argparse.py",
+    "ast.py",
+    "inspect.py",
+    "random.py",
+    "typing.py",
+    "doctest.py"
+  ],
+  "eval_policy": {
+    "windows_per_document": 8,
+    "context_characters": 129,
+    "offsets": "np.linspace(0, bytes_length-131, 8, dtype=np.int64)",
+    "byte_to_token": "bytes>=128 mapped to 63",
+    "labels": "next observed character at positions 1..128",
+    "reset_between_windows": true,
+    "events_per_owner": 512,
+    "owners": "unique per filename and window"
+  },
+  "frozen_model": "all five GRAPH010 FIT-only trained 2816-parameter query checkpoints, SHA-pinned before scoring; NO new training",
+  "mixing": {
+    "approximate_weight": 0.1,
+    "exact_cache_weight": 0.6,
+    "prior_tau": 0.05,
+    "topK": 8,
+    "query_temperature": 0.25,
+    "query_order": 3,
+    "approx_mix_selected": "posthoc already examined Vim FIT14 before new external scoring"
+  },
+  "controls": [
+    "FIT16 unigram",
+    "exact-only GRAPH009-style count cache",
+    "same cache+untrained query weight=.1",
+    "same cache+FIT-trained query weight=.1",
+    "old .6 negative baseline separately"
+  ],
+  "primary_gate": "trained-query better than exact-only and untrained-query at same .1 on all eight-file pooled NLL in >=4/5 seeds",
+  "scope": "independent of FIT source content and previous GRAPH009 Python six files, but not formal sealed TEST; no loaded 500K backbone or SSM"
+}
