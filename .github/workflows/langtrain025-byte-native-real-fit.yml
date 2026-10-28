@@ -1,0 +1,62 @@
+name: LANGTRAIN025 authentic 500K 256-byte native TAC five-seed CPU fit
+# The exact five-seed authentic first fit already completed in run 40756443660.
+# Disable automatic PR retraining; reproducible refits are explicit phone-requested dispatches.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-locked-five-seed-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install pinned CPU training stack and tests
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install numpy==2.3.5 pytest
+      - name: Validate preregistered single native model and phone CPU plan before fitting
+        run: |
+          python scripts/validate_research_parity.py --manifest research/mathematical-engineering/langtrain025/FAIR_COMPARISON.json --phase preflight
+          python scripts/phone_lab.py plan research/phone_queue/langtrain025.json > "$RUNNER_TEMP/LANGTRAIN025_COMPUTE_DECISION.json"
+          python - <<'PY'
+          import json,os
+          p=json.load(open(os.environ["RUNNER_TEMP"]+"/LANGTRAIN025_COMPUTE_DECISION.json"))
+          assert p["state"]=="READY_INTERNAL_RESEARCH_PLAN" and p["backend"]=="github_actions" and not p["blockers"]
+          assert p["gpu_budget_minutes"]==0 and p["approved_to_open_test"] is False
+          print("Authentic publisher source and internal CPU planning:",p["state"])
+          PY
+      - name: Run constructed active-graph causal byte and owner-boundary controls
+        working-directory: research/mathematical-engineering/langtrain025
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile byte_waveced_500k.py train_byte_native.py test_train_byte_native.py
+          python -m pytest -v -q test_train_byte_native.py
+      - name: Train five prespecified TAC seeds on original genuine FIT bytes and score exact DEV cases
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python research/mathematical-engineering/langtrain025/train_byte_native.py \
+            --output langtrain025-evidence \
+            --seeds 1701 1702 1703 1704 1705
+      - name: Preserve NEW model optimizer RNG checkpoint binaries and numerical receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGTRAIN025-new-500K-byte-TAC-five-seed-original-evidence
+          path: langtrain025-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Scientific boundary
+        if: always()
+        run: |
+          echo "Genuine PSF original FIT + registered Unicode FIT supplement; DEV already exposed."
+          echo "P3 trained on all FIT positions, TAC sampled positions; no matched compute claim."
+          echo "NEW model evidence only; original user-owned legacy weights never accessed."
+          echo "No protected TEST/independent gain; full PNDS proof and SSM comparison remain OPEN."

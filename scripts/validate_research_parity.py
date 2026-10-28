@@ -73,6 +73,19 @@ def check_model_parameter_target(trainable_parameters, deployed_parameters=None,
                f"{label}: 100k target requires 95,000..105,000 deployed learned parameters, got {deployed_parameters}")
 
 
+# Owner's 2026-10-28 NEW language-model scale (old studies unchanged).
+# Explicit, narrow contract: no global relaxation of the historical 100K gate.
+def checked_new_scale(m):
+    if m.get("study_id")=="LANGTRAIN025" and m.get("parameter_budget_contract")=="owner-2026-10-28-500k":
+        return True
+    return False
+
+def check_500k_model_size(trainable,deployed,label):
+    positive_num(trainable,label+".trainable_parameters",whole=True)
+    positive_num(deployed,label+".deployed_parameters",whole=True)
+    demand(475000 <= trainable <= 525000 and 475000 <= deployed <= 525000 and deployed>=trainable,
+           label+": owner-authorized new-scale model must be 475K..525K actual learned coordinates")
+
 class ParityError(ValueError): pass
 
 def demand(condition, message):
@@ -129,7 +142,9 @@ def _check_manifest_parity_only(m,phase="preflight"):
                "single-model training requires >=1 declared model/seed")
         for i,model in enumerate(models):
             demand(isinstance(model,dict),f"models[{i}] must be an object")
-            if requires_100k_policy(m["study_id"]):
+            if checked_new_scale(m):
+                check_500k_model_size(model.get("trainable_parameters"), model.get("deployed_parameters"), f"models[{i}]")
+            elif requires_100k_policy(m["study_id"]):
                 check_model_parameter_target(model.get("trainable_parameters"),
                                              model.get("deployed_parameters"),
                                              label=f"models[{i}]")
@@ -140,7 +155,9 @@ def _check_manifest_parity_only(m,phase="preflight"):
                 receipt=model.get("measured")
                 demand(isinstance(receipt,dict),
                        f"models[{i}] final actual measurement receipt required")
-                if requires_100k_policy(m["study_id"]):
+                if checked_new_scale(m):
+                    check_500k_model_size(receipt.get("trainable_parameters"),receipt.get("deployed_parameters"),f"models[{i}].measured")
+                elif requires_100k_policy(m["study_id"]):
                     check_model_parameter_target(receipt.get("trainable_parameters"),
                                                  receipt.get("deployed_parameters"),
                                                  label=f"models[{i}].measured")

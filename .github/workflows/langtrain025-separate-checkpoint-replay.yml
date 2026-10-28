@@ -1,0 +1,53 @@
+name: LANGTRAIN025 separate runner original checkpoint and source replay
+on:
+  pull_request:
+    paths:
+      - 'research/replication/langtrain025/**'
+      - '.github/workflows/langtrain025-separate-checkpoint-replay.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  independent-repository-runner-internal-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install exact original source CPU mathematics dependencies
+        run: |
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.10.0
+          python -m pip install numpy==2.3.5
+      - name: Fetch exact immutable first-fit original GitHub Actions NEW-checkpoint artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: LANGTRAIN025-new-500K-byte-TAC-five-seed-original-evidence
+          path: langtrain025-new-originals
+          run-id: 40756443660
+          github-token: ${{ github.token }}
+      - name: Independently reload each actual checkpoint and rescore real publisher windows
+        env:
+          OMP_NUM_THREADS: '2'
+          MKL_NUM_THREADS: '2'
+        run: |
+          python -m py_compile research/replication/langtrain025/replay_new_byte_checkpoints.py
+          python research/replication/langtrain025/replay_new_byte_checkpoints.py \
+            --artifact-dir langtrain025-new-originals \
+            --output LANGTRAIN025_SEPARATE_RUNNER_REPLAY.json
+      - name: Retain separate-runner replay evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANGTRAIN025-separated-five-seed-source-locked-replay
+          path: LANGTRAIN025_SEPARATE_RUNNER_REPLAY.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: State the actual qualification level
+        if: always()
+        run: |
+          echo "Fresh GitHub runner replays NEW user-authorized language weights only."
+          echo "Same-repository sources and previously EXPOSED DEV are not external qualification."
+          echo "Old/private legacy TAC archived checkpoint bytes untouched; no protected TEST."
